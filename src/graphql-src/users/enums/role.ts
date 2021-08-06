@@ -1,0 +1,5 @@
+export enum Role {
+  USER = 'USER',
+  CONTENT_ADMIN = 'CONTENT_ADMIN',
+  SCHEME_ADMIN = 'SCHEME_ADMIN',
+}

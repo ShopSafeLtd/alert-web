@@ -1,0 +1,131 @@
+import React, { useState } from 'react';
+import { useQuery, useMutation } from '@apollo/react-hooks';
+
+import MarkAsRead from '../../../graphql/chat/mutations/MarkAsRead';
+import ChatQuery from '../../../graphql/chat/queries/ChatQuery';
+import MessagesView from '../MessagesView/MessagesView';
+import query from '../../../graphql/chat/queries/MessagesQuery';
+import MoreQuery from '../../../graphql/chat/queries/MoreMessagesQuery';
+import MessageSubscription from '../../../graphql/chat/queries/MessageSubscription';
+import { useStoreActions, useStoreState } from '../../../state';
+
+const MessagesQuery = ({ id, match }) => {
+  const setTitle = useStoreActions(actions => actions.theme.setTitle);
+  const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
+  const setNavbarAction = useStoreActions(
+    actions => actions.theme.setNavbarAction
+  );
+  const user = useStoreState(state => state.user);
+  const userId = useStoreState(state => state.user.id);
+  const bottomNav = useStoreState(state => state.theme.bottomNav);
+
+  // state
+  const [loaded, setLoaded] = useState(false);
+  const [fetching, setFetching] = useState(false);
+  const [newReceived, setReceived] = useState(false);
+  const [refetched, setRefetched] = useState(false);
+
+  // queries
+  const { data: chatData } = useQuery(ChatQuery, {
+    variables: {
+      id: id !== undefined ? id : match.params.id,
+      userId
+    },
+    fetchPolicy: 'cache-and-network'
+  });
+  const {
+    data: messagesData,
+    loading: messagesLoading,
+    subscribeToMore,
+    refetch,
+    fetchMore
+  } = useQuery(query, {
+    variables: {
+      chatId: id !== undefined ? id : match.params.id
+    },
+    fetchPolicy: 'cache-and-network'
+  });
+
+  // mutations
+  const [markAsRead] = useMutation(MarkAsRead);
+
+  // functions
+  let cursor;
+  if (!messagesLoading && messagesData.messages.length > 0)
+    cursor = messagesData.messages[0].id;
+
+  const loadMore = async () => {
+    if (!loaded && !fetching) {
+      setFetching(true);
+      await fetchMore({
+        query: MoreQuery,
+        variables: {
+          cursor,
+          chatId: !!id ? id : match.params.id
+        },
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          fetchMoreResult.messages.length === 0 && setLoaded(true);
+          return {
+            messages: [...fetchMoreResult.messages, ...previousResult.messages]
+          };
+        }
+      });
+      setFetching(false);
+    }
+  };
+
+  return (
+    <MessagesView
+      messages={
+        !!messagesData && !!messagesData.messages ? messagesData.messages : []
+      }
+      chatId={!!chatData && !!chatData.chat && chatData.chat.id}
+      chat={!!chatData && !!chatData.chat ? chatData.chat : {}}
+      refetch={() => {
+        setFetching(true);
+        refetch();
+      }}
+      setNavbarAction={setNavbarAction}
+      setTitle={setTitle}
+      loadMore={loadMore}
+      allLoaded={loaded}
+      markAsRead={id =>
+        markAsRead({
+          variables: {
+            id
+          }
+        })
+      }
+      subscribeToMore={() => {
+        subscribeToMore({
+          document: MessageSubscription,
+          variables: {
+            chatId: !!id ? id : match.params.id
+          },
+          updateQuery: (prev, { subscriptionData }) => {
+            setReceived(true);
+            const test = prev.messages.find(({ id }) => {
+              return id === subscriptionData.data.newMessage.id;
+            });
+            if (test === undefined) {
+              return {
+                ...prev,
+                messages: [...prev.messages, subscriptionData.data.newMessage]
+              };
+            }
+          }
+        });
+      }}
+      newRecived={newReceived}
+      resetRecived={() => setReceived(true)}
+      resetRefetched={() => setRefetched(true)}
+      refetched={refetched}
+      setBottomNav={setBottomNav}
+      bottomNav={bottomNav}
+      fromId={userId}
+      user={user}
+    />
+  );
+};
+
+export default MessagesQuery;
