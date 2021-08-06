@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/client';
 
 import OffenderFeed from '../OffenderFeed/OffenderFeed';
-import DeleteOffender from '../../../../graphql/offenders/mutations/DeleteOffender';
-import ApproveOffender from '../../../../graphql/offenders/mutations/ApproveOffender';
-import MarkOffenderActive from '../../../../graphql/offenders/mutations/MarkOffenderActive';
+import {DeleteOffender} from 'graphql-src/offenders/mutations';
+import {ApproveOffender} from 'graphql-src/offenders/mutations';
+import {MarkOffenderActive} from 'graphql-src/offenders/mutations';
 import Offline from '../../../global/Offline/Offline';
-import { OffenderFeed as query } from '../../../../graphql/offenders/queries';
+import { OffenderFeed as query } from 'graphql-src/offenders/queries';
 import { useStoreActions, useStoreState } from '../../../../state';
 
 const ALL = 'ALL';

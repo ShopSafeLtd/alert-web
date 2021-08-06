@@ -12,7 +12,7 @@ import OffenderCardImage from '../OffenderCardImage/OffenderCardImage';
 import OffenderCardDescription from '../OffenderCardDescription/OffenderCardDescription';
 import OffenderCardIncidents from '../OffenderCardIncidents/OffenderCardIncidents';
 import OffenderCardExclusions from '../OffenderCardExclusions/OffenderCardExclusions';
-import isAuthorised from '../../../../helpers/isAuthorised';
+import { isAuthorised } from 'utils';
 import BannedBanner from '../BannedBanner/BannedBanner';
 import ActiveBanner from '../ActiveBanner/ActiveBanner';
 import { useStoreState } from '../../../../state';

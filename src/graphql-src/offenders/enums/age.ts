@@ -12,7 +12,7 @@ export enum Age  {
 
 export const ageValues = [
   {
-    value: 'UNKNOWN',
+    value: Age.UNKNOWN,
     label: 'Unknown'
   },
   {

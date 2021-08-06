@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import MediaQuery from 'react-responsive';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import moment from 'moment';
 
-import AddExclusion from '../../../../graphql/exclusions/mutations/AddExclusion';
-import { OffenderFeed } from '../../../../graphql/offenders/queries';
+import { CreateBan } from 'graphql-src/bans/mutations';
+import { OffenderFeed } from 'graphql-src/offenders/queries';
 import { PopOver, PopOverContainer } from '../../../global/layout';
 import { FullWidthButton, BackButton } from '../../../global/actions';
 import { ExclusionForm } from '../../../forms';
@@ -27,6 +27,7 @@ const AddExclusionPopover = ({
   close
 }) => {
   const createdById = useStoreState(state => state.user.id);
+  const schemeId = useStoreState(state => state.scheme.id);
 
   // state
   const [ban, setBan] = useState({
@@ -41,7 +42,7 @@ const AddExclusionPopover = ({
   const [submitting, setSubmitting] = useState(false);
 
   const variables = {
-    schemeId: window.localStorage.getItem('currentScheme'),
+    schemeId: schemeId,
     search: '',
     first: querySize,
     order: { createdAt: 'desc' },
@@ -50,7 +51,7 @@ const AddExclusionPopover = ({
   };
 
   // mutations
-  const [addBan] = useMutation(AddExclusion, {
+  const [addBan] = useMutation(CreateBan, {
     update: (store, { data: { createBan } }) => {
       let data = store.readQuery({
         OffenderFeed,
@@ -116,13 +117,15 @@ const AddExclusionPopover = ({
         } else {
           addBan({
             variables: {
-              location: ban.location,
-              description: ban.description,
-              startDate: ban.startDate,
-              endDate: ban.endDate,
-              offenderId,
-              schemeId: window.localStorage.getItem('currentScheme'),
-              createdById
+              data: {
+                location: ban.location,
+                description: ban.description,
+                startDate: ban.startDate,
+                endDate: ban.endDate,
+                offender: { connect: { id: offenderId } },
+                scheme: { connect: { id: schemeId } },
+                createdby: { connect: { id: createdById } }
+              }
             },
             optimisticResponse: {
               createBan: {

@@ -6,10 +6,10 @@ import MediaQuery from 'react-responsive';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import { PopOver, PopOverContainer } from '../../../global/layout';
-import ExclusionQuery from '../../../../graphql/exclusions/queries/Exclusion';
+import { Ban } from 'graphql-src/bans/queries';
 import { BackButton } from '../../../global/actions';
 import { ItemHeader } from '../../../global/typography';
 import { BanSkeleton } from '../../../global/skeletons';
@@ -34,8 +34,8 @@ const Container = styled.div`
 
 const ViewExclusionPopover = ({ visible, close, exclusionId, offenderId }) => {
   // queries
-  const { data, loading } = useQuery(ExclusionQuery, {
-    variables: { id: exclusionId },
+  const { data, loading } = useQuery(Ban, {
+    variables: { where: { id: exclusionId } },
     fetchPolicy: 'cache-and-network'
   });
 

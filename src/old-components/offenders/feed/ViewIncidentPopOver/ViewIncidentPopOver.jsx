@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import moment from 'moment';
 import MediaQuery from 'react-responsive';
 import Typography from '@material-ui/core/Typography';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import { PopOver, Item, Grow } from '../../../global/layout';
 import { ItemHeader, ItemText } from '../../../global/typography';
-import { IncidentQuery } from '../../../../graphql/incidents/queries';
+import { Incident } from 'graphql-src/incidents/queries';
 import AlertCardImages from '../../../incidents/feed/AlertCardImages/AlertCardImages';
 import { BackButton } from '../../../global/actions';
 
@@ -56,8 +56,8 @@ const Container = styled.div`
 
 const ViewIncidentPopOver = ({ visible, close, incidentId }) => {
   // queries
-  const { data, loading: loadingQuery } = useQuery(IncidentQuery, {
-    variables: { id: incidentId },
+  const { data, loading: loadingQuery } = useQuery(Incident, {
+    variables: { where: { id: incidentId } },
     fetchPolicy: 'cache-and-network',
     skip: !incidentId
   });

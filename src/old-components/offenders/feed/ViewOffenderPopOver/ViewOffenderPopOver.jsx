@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import { PopOver, Item } from '../../../global/layout';
 import { BackButton } from '../../../global/actions';
 import { ItemHeader, ItemText } from '../../../global/typography';
-import { ages, builds, genders, races } from '../../../../enums/';
+import { ageValues, buildValues, genderValues, raceValues } from 'graphql-src/offenders/enums';
 import { useStoreActions } from '../../../../state';
 
 const MultiImagesContainer = styled.div`
@@ -56,10 +56,10 @@ class ViewOffenderPopOver extends Component {
       close
     } = this.props;
 
-    const buildValue = builds.find(obj => obj.value === build);
-    const ageValue = ages.find(obj => obj.value === age);
-    const raceValue = races.find(obj => obj.value === race);
-    const genderValue = genders.find(obj => obj.value === gender);
+    const buildValue = buildValues.find(obj => obj.value === build);
+    const ageValue = ageValues.find(obj => obj.value === age);
+    const raceValue = raceValues.find(obj => obj.value === race);
+    const genderValue = genderValues.find(obj => obj.value === gender);
 
     return (
       <MediaQuery minDeviceWidth={1024}>

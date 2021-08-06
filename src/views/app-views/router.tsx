@@ -11,22 +11,22 @@ export const AppViews = () => {
     <Route
       key="settings"
       path={`${APP_PREFIX_PATH}/incidents`}
-      component={lazy(() => import(`./user-views/incidents/router`))}
+      component={lazy(() => import(`./incidents/router`))}
     />,
     <Route
       key="agreements"
       path={`${APP_PREFIX_PATH}/offenders`}
-      component={lazy(() => import(`./user-views/offenders/router`))}
+      component={lazy(() => import(`./offenders/router`))}
     />,
     <Route
       key="schemes"
       path={`${APP_PREFIX_PATH}/scheme`}
-      component={lazy(() => import(`./admin-views/scheme/router`))}
+      component={lazy(() => import(`./scheme/router`))}
     />,
     <Route
       key="schemes"
       path={`${APP_PREFIX_PATH}/user`}
-      component={lazy(() => import(`./admin-views/user/router`))}
+      component={lazy(() => import(`./user/router`))}
     />,
   ];
 

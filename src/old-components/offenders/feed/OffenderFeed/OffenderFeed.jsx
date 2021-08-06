@@ -27,15 +27,11 @@ import InactiveOffenderModal from '../InactiveOffenderModal/InactiveOffenderModa
 import OffenderSkeletonCard from '../OffenderSkeletonCard/OffenderSkeletonCard';
 import DeclineDialog from '../DeclineDialog/DeclineDialog';
 import Offenders from '../../../../images/Offenders';
-import { NavBarButton } from '../../../navigation';
 
 const EmptyContainer = styled.div`
   height: calc(100vh - 167px);
   display: flex;
   align-items: center;
-`;
-const FilterButton = styled(FilterIcon)`
-  color: #fff;
 `;
 
 class OffenderFeed extends React.Component {
@@ -79,30 +75,6 @@ class OffenderFeed extends React.Component {
       inactiveOffenderId: '',
       filterOpen: false
     };
-  }
-
-  componentDidMount() {
-    const isMobile = window.innerWidth < 1020;
-    !!this.props.setActions && isMobile
-      ? this.props.setActions([
-          <IconButton
-            key={Math.random()}
-            edge="start"
-            onClick={() => this.setState({ filterOpen: true })}
-            aria-label="filter"
-          >
-            <FilterIcon />
-          </IconButton>
-        ])
-      : this.props.setActions([
-          <NavBarButton
-            key={Math.random()}
-            onClick={() => this.setState({ filterOpen: true })}
-            aria-label="filter"
-          >
-            <FilterButton />
-          </NavBarButton>
-        ]);
   }
 
   componentDidUpdate() {
