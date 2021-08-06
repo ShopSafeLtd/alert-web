@@ -35,6 +35,7 @@ const useAuth = () => {
   const handleSignOut = useStoreActions((actions) => actions.auth.signOut);
   const setUser = useStoreActions((actions) => actions.user.setUser);
   const clearUser = useStoreActions((actions) => actions.user.clearUser);
+  const setRole = useStoreActions((actions) => actions.user.setRole);
   const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
   const setAuthMessage = useStoreActions(
     (actions) => actions.auth.setAuthMessage
@@ -51,6 +52,7 @@ const useAuth = () => {
     const handleNoValidScheme = () => {
       const schemeDetails = schemes[0].scheme
       window.localStorage.setItem("currentScheme", schemeDetails.id);
+      setRole({ role: schemes[0].role })
       setScheme({
          autoApproveIncidents: schemeDetails.autoApproveIncidents,
          autoApproveOffenders: schemeDetails.autoApproveOffenders,
@@ -61,13 +63,14 @@ const useAuth = () => {
 
     const scheme = window.localStorage.getItem('currentScheme')
     if (scheme) {
-      const schemeDetails = schemes.find(({ scheme: { id } }) => id === scheme)?.scheme
+      const schemeDetails = schemes.find(({ scheme: { id } }) => id === scheme)
       if (schemeDetails) {
+        setRole({ role: schemeDetails.role })
         setScheme({
-          autoApproveIncidents: schemeDetails.autoApproveIncidents,
-          autoApproveOffenders: schemeDetails.autoApproveOffenders,
-          id: schemeDetails.id,
-          name: schemeDetails.name,
+          autoApproveIncidents: schemeDetails.scheme.autoApproveIncidents,
+          autoApproveOffenders: schemeDetails.scheme.autoApproveOffenders,
+          id: schemeDetails.scheme.id,
+          name: schemeDetails.scheme.name,
        })
       } else {
         handleNoValidScheme()

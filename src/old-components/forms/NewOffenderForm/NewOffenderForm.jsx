@@ -11,7 +11,7 @@ import {
   Select
 } from '../../global/forms';
 import { Row } from '../../global/layout';
-import { ages, builds, races, genders } from '../../../enums';
+import { ageValues, buildValues, genderValues, raceValues } from 'graphql-src/offenders/enums';
 
 const Form = styled.div`
   width: 100%;
@@ -91,7 +91,7 @@ class OffenderForm extends PureComponent {
               name="gender"
               onChange={e => handleChange(e.target.value, 'gender')}
               disabled={disabled}
-              menuItems={genders}
+              menuItems={genderValues}
             />
           </Field>
           <Field row left>
@@ -104,7 +104,7 @@ class OffenderForm extends PureComponent {
               value={race}
               onChange={e => handleChange(e.target.value, 'race')}
               disabled={disabled}
-              menuItems={races}
+              menuItems={raceValues}
             />
           </Field>
         </Row>
@@ -167,7 +167,7 @@ class OffenderForm extends PureComponent {
                     name="age"
                     onChange={e => handleChange(e.target.value, 'age')}
                     disabled={disabled}
-                    menuItems={ages}
+                    menuItems={ageValues}
                   />
                 </Field>
               }
@@ -183,7 +183,7 @@ class OffenderForm extends PureComponent {
               value={build}
               onChange={e => handleChange(e.target.value, 'build')}
               disabled={disabled}
-              menuItems={builds}
+              menuItems={buildValues}
             />
           </Field>
         </Row>

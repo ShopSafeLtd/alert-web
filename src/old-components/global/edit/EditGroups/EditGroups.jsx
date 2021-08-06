@@ -63,7 +63,7 @@ class EditDescription extends Component {
   render() {
     const { loading, groups, addGroups, removeGroup } = this.props;
     const { confirmDelete, deleteId } = this.state;
-
+    console.log(groups)
     return (
       <Section width="50%" elevation={1}>
         {loading && <SectionLoading />}
@@ -86,7 +86,7 @@ class EditDescription extends Component {
           </EmptySection>
         ) : (
           <List>
-            {groups.map(({ id, name }) => {
+            {!!groups && groups.map(({ id, name }) => {
               return (
                 <ListItem key={id}>
                   <ItemText>{name}</ItemText>

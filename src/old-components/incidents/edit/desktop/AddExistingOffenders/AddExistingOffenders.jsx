@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import OffenderPreview from '../../../global/OffenderPreview/OffenderPreview';
 import SearchOffenders from '../SearchOffenders/SearchOffenders';
@@ -10,9 +10,9 @@ import OffenderSvg from '../../../../../images/Offenders';
 import { EmptyText } from '../../../../global/typography';
 import OffenderPreviewSkeleton from '../../../../global/skeletons/OffenderPreviewSkeleton/OffenderPreviewSkeleton';
 import {
-  AdminOffendersFiltered,
-  MoreFilteredOffenders
-} from '../../../../../graphql/offenders/queries';
+  Offenders
+} from 'graphql-src/offenders/queries';
+import { useStoreState } from 'state';
 
 const ListItem = styled.div`
   display: flex;
@@ -80,17 +80,21 @@ const EmptyList = styled.div`
 `;
 
 const AddExistingOffender = ({ current, setCurrentOffender, offendersIds }) => {
+  const scheme = useStoreState(state => state.scheme.id)
+
   // state
   const [search, setSearch] = useState('');
   const [allLoaded, setAllLoaded] = useState(false);
   const [fetching, setFetching] = useState(false);
 
   // queries
-  const { data, loading, fetchMore } = useQuery(AdminOffendersFiltered, {
+  const { data, loading, fetchMore } = useQuery(Offenders, {
     variables: {
-      offendersIds,
-      schemeId: window.localStorage.getItem('currentScheme'),
-      search
+      where: {
+        id: { notIn: offendersIds },
+        scheme: { id: { equals: scheme } },
+        name: { contains: search }
+      }
     },
     fetchPolicy: 'cache-and-network',
     onCompleted: data =>
@@ -106,12 +110,14 @@ const AddExistingOffender = ({ current, setCurrentOffender, offendersIds }) => {
     if (!allLoaded && !fetching) {
       setFetching(true);
       await fetchMore({
-        query: MoreFilteredOffenders,
+        query: Offenders,
         variables: {
-          cursor,
-          offendersIds,
-          schemeId: window.localStorage.getItem('currentScheme'),
-          search
+          where: {
+            id: { notIn: offendersIds },
+            scheme: { id: { equals: scheme } },
+            name: { contains: search }
+          },
+          after: { id: cursor }
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
           if (fetchMoreResult.offenders.length === 0) {

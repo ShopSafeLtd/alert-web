@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -10,12 +10,12 @@ import SearchOffenders from '../../../global/SearchOffenders/SearchOffenders';
 import { EmptyText } from '../../../../global/typography';
 import OffenderItem from './OffenderItem';
 import {
-  AllOffendersFiltered,
-  MoreFilteredOffenders
-} from '../../../../../graphql/offenders/queries';
+  Offenders
+} from 'graphql-src/offenders/queries';
 import OffendersList from './OffenderList';
 import { BackButton } from '../../../../global/actions';
 import { PopOver } from '../../../../global/layout';
+import { useStoreState } from 'state';
 
 const Page = styled.div`
   display: flex;
@@ -45,6 +45,8 @@ const ExistingOffender = ({
   addExistingOffenders,
   addNew
 }) => {
+  const scheme = useStoreState(state => state.scheme.id)
+
   // state
   const [current, setCurrent] = useState('');
   const [selected, setSelected] = useState([]);
@@ -54,12 +56,13 @@ const ExistingOffender = ({
   const [allLoaded, setAllLoaded] = useState(false);
 
   // queries
-  const { data, loading, fetchMore } = useQuery(AllOffendersFiltered, {
+  const { data, loading, fetchMore } = useQuery(Offenders, {
     variables: {
-      schemeId: window.localStorage.getItem('currentScheme'),
-      search,
-      offendersIds: existingOffenders,
-      userId: userId
+      where: {
+        scheme: { id: { equals: scheme.id } },
+        name: { contains: search },
+        id: { notIn: existingOffenders },
+      }
     },
     fetchPolicy: 'cache-and-network',
     onCompleted: data =>
@@ -76,12 +79,14 @@ const ExistingOffender = ({
     if (!allLoaded && !fetching) {
       setFetching(true);
       await fetchMore({
-        query: MoreFilteredOffenders,
+        query: Offenders,
         variables: {
-          cursor,
-          schemeId: window.localStorage.getItem('currentScheme'),
-          search,
-          userId: userId
+          after: { id: cursor },
+          where: {
+            scheme: { id: { equals: scheme.id } },
+            name: { contains: search },
+            id: { notIn: existingOffenders },
+          }
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
           fetchMoreResult.offenders.length === 0 && setAllLoaded(true);

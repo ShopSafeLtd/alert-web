@@ -10,7 +10,7 @@ import {
   FieldHeader,
   ControlledAgeField
 } from '../../../../global/forms';
-import { ages, builds, races, genders } from '../../../../../enums/';
+import { ageValues, buildValues, genderValues, raceValues } from 'graphql-src/offenders/enums';
 
 const HalfWidth = styled(Field)`
   width: 100%;
@@ -63,7 +63,7 @@ class AddNewOffender extends PureComponent {
             <FieldHeader>Gender</FieldHeader>
             <Select
               id="gender-subject"
-              menuItems={genders}
+              menuItems={genderValues}
               value={gender}
               onChange={e => handleChange(e.target.value, 'gender')}
             />
@@ -74,7 +74,7 @@ class AddNewOffender extends PureComponent {
             <FieldHeader>Ethnicity</FieldHeader>
             <Select
               id="races-subject"
-              menuItems={races}
+              menuItems={raceValues}
               value={race}
               onChange={e => handleChange(e.target.value, 'race')}
             />
@@ -83,7 +83,7 @@ class AddNewOffender extends PureComponent {
             <FieldHeader>Build</FieldHeader>
             <Select
               id="build-subject"
-              menuItems={builds}
+              menuItems={buildValues}
               value={build}
               onChange={e => handleChange(e.target.value, 'build')}
             />
@@ -126,7 +126,7 @@ class AddNewOffender extends PureComponent {
                 <Select
                   id="age-range"
                   name="age-range"
-                  menuItems={ages}
+                  menuItems={ageValues}
                   value={age}
                   onChange={e => handleChange(e.target.value, 'age')}
                 />

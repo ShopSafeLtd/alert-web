@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import { PopOver } from '../../layout';
 import { BackButton } from '../../actions';
-import FilteredGroups from '../../../../graphql/groups/queries/FilteredGroups';
-import OffendersImage from '../../../../images/Offenders';
+import { Groups } from 'graphql-src/groups/queries';
 import { EmptyText } from '../../typography';
+import { useStoreState } from 'state';
+import OffendersImage from 'images/Offender'
 
 const Grow = styled.div`
   flex: 1;
@@ -52,14 +53,18 @@ const PopOverContainer = styled.div`
 `;
 
 const AddGroups = ({ open, close, groups, addGroups }) => {
+  const scheme = useStoreState(state => state.scheme.id)
+
   // state
   const [selected, setSelected] = useState([]);
 
   // queries
-  const { data, loading } = useQuery(FilteredGroups, {
+  const { data, loading } = useQuery(Groups, {
     variables: {
-      schemeId: window.localStorage.getItem('currentScheme'),
-      groups: groups.map(({ id }) => id)
+      where: {
+        scheme: { id : { equals: scheme } },
+        id: { notIn: !!groups ? groups.map(({ id }) => id) : [] }
+      }
     },
     fetchPolicy: 'cache-and-network'
   });

@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
-import MediaQuery from 'react-responsive';
 import { withRouter } from 'react-router-dom';
 import update from 'immutability-helper';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 
 import IncidentWizard from '../desktop/IncidentWizard/IncidentWizard';
-import MobileForm from '../mobile/MobileForm/MobileForm';
-import { CreateIncident } from '../../../../graphql/incidents/mutations';
-import UserAddresses from '../../../../graphql/address/queries/PreviousAddresses';
-import AllGroups from '../../../../graphql/groups/AllGroupsQuery';
-import { IncidentFeed } from '../../../../graphql/incidents/queries';
-import { OffenderFeed } from '../../../../graphql/offenders/queries';
-import { Tags } from '../../../../graphql/tags/queries';
+import { CreateIncident } from 'graphql-src/incidents/mutations';
+import { PreviousAddresses } from 'graphql-src/address/queries';
+import { Tags } from 'graphql-src/tags/queries';
+import { Groups } from 'graphql-src/groups/queries';
+import { IncidentFeed } from 'graphql-src/incidents/queries';
+import { OffenderFeed } from 'graphql-src/offenders/queries';
 import { useStoreActions, useStoreState } from '../../../../state';
 
 let querySize = 10;
@@ -22,13 +20,10 @@ if (window.innerWidth > 1239 && window.innerWidth < 1800) {
 }
 
 const AddIncident = ({ history }) => {
-  const setTitle = useStoreActions(actions => actions.setTitle);
-  const setBottomNav = useStoreActions(actions => actions.setBottomNav);
-  const setNavbarAction = useStoreActions(actions => actions.setNavbarAction);
-  const setBackLinkTo = useStoreActions(actions => actions.setBackLinkTo);
   const toggleFetchIncidents = useStoreActions(
     actions => actions.toggleFetchIncidents
   );
+  const schemeId = useStoreState(state => state.scheme.id);
   const currentUser = useStoreState(state => state.user.id);
   const role = useStoreState(state => state.user.role);
   const schemeAdmin = role === 'SCHEME_ADMIN';
@@ -46,9 +41,7 @@ const AddIncident = ({ history }) => {
     timeError: null
   });
   const [crimeTypes, setCrimeTypes] = useState([]);
-  const [crimeTypeError, setCrimeTypeError] = useState([]);
   const [location, setLocation] = useState('ACCOUNT');
-  const [locationPristine, setLocationPristine] = useState('ACCOUNT');
   const [newLocation, setNewLocation] = useState({
     premises: '',
     building: '',
@@ -67,24 +60,25 @@ const AddIncident = ({ history }) => {
   const [groups, setGroups] = useState([]);
 
   // queries
-  const { data: userData, loading: userLoading } = useQuery(UserAddresses, {
+  const { data: userData, loading: userLoading } = useQuery(PreviousAddresses, {
     variables: {
       userId: currentUser
     },
     fetchPolicy: 'cache-and-network'
   });
-  const { data: groupsData, loading: groupsLoading } = useQuery(AllGroups, {
+  const { data: crimeTypesList, loading: crimeTypesLoading } = useQuery(Tags, {
     variables: {
-      schemeId: window.localStorage.getItem('currentScheme'),
-      user: schemeAdmin ? undefined : { some: { id: { equals: currentUser } } }
+      scheme: { id: { equals: schemeId } },
+      dataType: { equals: 'INCIDENT' }
     },
     fetchPolicy: 'cache-and-network'
   });
-  const { data: crimeTypesData, loading: crimeTypesLoading } = useQuery(Tags, {
+  const { data: groupsData, loading: groupsLoading } = useQuery(Groups, {
     variables: {
-      schemeId: window.localStorage.getItem('currentScheme'),
-      dataType: 'INCIDENT'
-    }
+      schemeId,
+      user: schemeAdmin ? undefined : { some: { id: { equals: currentUser } } }
+    },
+    fetchPolicy: 'cache-and-network'
   });
 
   // mutations
@@ -93,7 +87,7 @@ const AddIncident = ({ history }) => {
       let data = store.readQuery({
         query: IncidentFeed,
         variables: {
-          schemeId: window.localStorage.getItem('currentScheme'),
+          schemeId,
           search: '',
           order: { createdAt: 'desc' },
           first: querySize
@@ -105,7 +99,7 @@ const AddIncident = ({ history }) => {
           incidentFeed: [createIncident, ...data.incidentFeed]
         },
         variables: {
-          schemeId: window.localStorage.getItem('currentScheme'),
+          schemeId,
           search: '',
           order: { createdAt: 'desc' },
           first: querySize
@@ -118,7 +112,7 @@ const AddIncident = ({ history }) => {
             first: querySize,
             order: { createdAt: 'desc' },
             role,
-            schemeId: window.localStorage.getItem('currentScheme'),
+            schemeId,
             search: '',
             userId: currentUser
           }
@@ -132,7 +126,7 @@ const AddIncident = ({ history }) => {
           data: offenders,
           variables: {
             userId: currentUser,
-            schemeId: window.localStorage.getItem('currentScheme'),
+            schemeId,
             role,
             search: '',
             order: { createdAt: 'desc' },
@@ -149,11 +143,6 @@ const AddIncident = ({ history }) => {
       ...description,
       [name]: value
     });
-
-  const toggleCrimeTypes = type =>
-    crimeTypes.includes(type)
-      ? setCrimeTypes(crimeTypes.filter(crimeType => type !== crimeType))
-      : setCrimeTypes([...crimeTypes, type]);
 
   const handleLocationChange = (value, name) =>
     setNewLocation({
@@ -223,31 +212,6 @@ const AddIncident = ({ history }) => {
         file: file
       }))
     ]);
-  };
-
-  const addImageMobile = data => {
-    // @ts-expect-error
-    window.resolveLocalFileSystemURL(data, fileEntry => {
-      fileEntry.file(function(file) {
-        const reader = new FileReader();
-        reader.onloadend = async function(e) {
-          setImages([
-            ...images,
-            {
-              id: images.length,
-              url: window.URL.createObjectURL(
-                // @ts-expect-error
-                new Blob([new Uint8Array(this.result)], { type: 'image/jpeg' })
-              ),
-              offendersIds: [],
-              // @ts-expect-error
-              file: new Blob([this.result], { type: 'image/jpeg' })
-            }
-          ]);
-        };
-        reader.readAsArrayBuffer(file);
-      });
-    });
   };
 
   const removeImage = (image, removeOffenders) => {
@@ -362,14 +326,6 @@ const AddIncident = ({ history }) => {
       subjectValid && descriptionValid && dateValid && timeValid
         ? resolve()
         : reject();
-    });
-  const validateCrimeTypes = () =>
-    new Promise((resolve, reject) => {
-      const crimeTypesValid = crimeTypes.length > 0;
-      crimeTypesValid
-        ? setCrimeTypeError('')
-        : setCrimeTypeError('Please select at least one crime type.');
-      crimeTypesValid ? resolve() : reject();
     });
   const validateNewLocation = () =>
     new Promise((resolve, reject) => {
@@ -522,129 +478,60 @@ const AddIncident = ({ history }) => {
     });
     history.push('/incidents/');
   };
+
+  console.log(crimeTypesList, crimeTypesLoading)
   return (
-    <MediaQuery minDeviceWidth={1024}>
-      {matches =>
-        matches ? (
-          <IncidentWizard
-            // global values
-            handleSubmit={handleSubmit}
-            userId={currentUser}
-            admin={admin}
-            // description values
-            description={description}
-            handleDescChange={handleDescChange}
-            crimeTypes={crimeTypes}
-            crimeTypeError={crimeTypeError}
-            setCrimeTypes={setCrimeTypes}
-            validateDescription={validateDescription}
-            // location values
-            location={location}
-            newLocation={newLocation}
-            previousLocation={previousLocation}
-            primaryLocation={
-              !!userData
-                ? userData.addresses.find(({ primary }) => primary)
-                : []
-            }
-            previousLocations={
-              !!userData
-                ? userData.addresses.filter(({ primary }) => !primary)
-                : []
-            }
-            handleLocationChange={handleLocationChange}
-            setLocationOption={setLocation}
-            setPreviousLocation={setPreviousLocation}
-            validateLocation={validateLocation}
-            locationLoading={userLoading}
-            // offender values
-            offenders={offenders}
-            addExistingOffenders={addExistingOffenders}
-            addNewOffender={addNewOffender}
-            editNewOffender={editNewOffender}
-            removeOffender={removeOffender}
-            // image values
-            images={images}
-            uploadImage={addImage}
-            removeImage={removeImage}
-            assignImageToOffenders={assignImageToOffenders}
-            removeOffendersFromImage={removeOffendersFromImage}
-            validateImages={validateImages}
-            // groups values
-            groups={groups}
-            groupsList={!!groupsData ? groupsData.groups : []}
-            toggleGroups={toggleGroups}
-            groupsLoading={groupsLoading}
-            validateGroups={validateGroups}
-          />
-        ) : (
-          <MobileForm
-            // global values
-            setBottomNav={setBottomNav}
-            setNavbarAction={setNavbarAction}
-            setBackLinkTo={setBackLinkTo}
-            setTitle={setTitle}
-            userId={currentUser}
-            handleSubmit={handleSubmit}
-            history={history}
-            admin={admin}
-            schemeAdmin={schemeAdmin}
-            // description values
-            description={description}
-            handleDescChange={handleDescChange}
-            validateDescription={validateDescription}
-            // crime type values
-            crimeTypesList={!!crimeTypesData ? crimeTypesData.tags : []}
-            crimeTypesLoading={crimeTypesLoading}
-            crimeTypes={crimeTypes}
-            crimeTypeError={crimeTypeError}
-            toggleCrimeTypes={toggleCrimeTypes}
-            validateCrimeTypes={validateCrimeTypes}
-            // location values
-            locationOption={location}
-            newLocation={newLocation}
-            previousLocation={previousLocation}
-            primaryLocation={
-              !!userData
-                ? userData.addresses.find(({ primary }) => primary)
-                : []
-            }
-            previousLocations={
-              !!userData
-                ? userData.addresses.filter(({ primary }) => !primary)
-                : []
-            }
-            loadingAddresses={userLoading}
-            handleLocationChange={handleLocationChange}
-            setLocationOption={setLocation}
-            setPreviousLocation={setPreviousLocation}
-            validateLocation={validateLocation}
-            locationPristine={locationPristine}
-            setLocationPristine={setLocationPristine}
-            // offender values
-            offenders={offenders}
-            addExistingOffenders={addExistingOffenders}
-            addNewOffender={addNewOffender}
-            editNewOffender={editNewOffender}
-            removeOffender={removeOffender}
-            // images values
-            images={images}
-            uploadImage={addImage}
-            uploadMobileImage={addImageMobile}
-            removeImage={removeImage}
-            assignImageToOffenders={assignImageToOffenders}
-            removeOffendersFromImage={removeOffendersFromImage}
-            validateImages={validateImages}
-            // groups value
-            groups={groups}
-            groupsList={!!groupsData ? groupsData.groups : []}
-            toggleGroups={toggleGroups}
-            groupsLoading={groupsLoading}
-            validateGroups={validateGroups}
-          />
-        )
+    <IncidentWizard
+      // global values
+      handleSubmit={handleSubmit}
+      userId={currentUser}
+      admin={admin}
+      // description values
+      description={description}
+      handleDescChange={handleDescChange}
+      crimeTypesList={crimeTypesList ? crimeTypesList.tags : []}
+      crimeTypes={crimeTypes}
+      setCrimeTypes={setCrimeTypes}
+      validateDescription={validateDescription}
+      // location values
+      location={location}
+      newLocation={newLocation}
+      previousLocation={previousLocation}
+      primaryLocation={
+        !!userData
+          ? userData.addresses.find(({ primary }) => primary)
+          : []
       }
-    </MediaQuery>
+      previousLocations={
+        !!userData
+          ? userData.addresses.filter(({ primary }) => !primary)
+          : []
+      }
+      handleLocationChange={handleLocationChange}
+      setLocationOption={setLocation}
+      setPreviousLocation={setPreviousLocation}
+      validateLocation={validateLocation}
+      locationLoading={userLoading}
+      // offender values
+      offenders={offenders}
+      addExistingOffenders={addExistingOffenders}
+      addNewOffender={addNewOffender}
+      editNewOffender={editNewOffender}
+      removeOffender={removeOffender}
+      // image values
+      images={images}
+      uploadImage={addImage}
+      removeImage={removeImage}
+      assignImageToOffenders={assignImageToOffenders}
+      removeOffendersFromImage={removeOffendersFromImage}
+      validateImages={validateImages}
+      // groups values
+      groups={groups}
+      groupsList={!!groupsData ? groupsData.groups : []}
+      toggleGroups={toggleGroups}
+      groupsLoading={groupsLoading}
+      validateGroups={validateGroups}
+    />
   );
 };
 

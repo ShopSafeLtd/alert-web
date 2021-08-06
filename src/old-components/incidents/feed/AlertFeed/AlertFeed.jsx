@@ -165,7 +165,7 @@ class AlertFeed extends React.Component {
     return (
       <Fragment>
         <FeedContainer
-          to="/incidents/add"
+          to="/app/incidents/add"
           loadMore={loadMore}
           loading={loadingMore}
           networkError={networkError}
@@ -269,7 +269,7 @@ class AlertFeed extends React.Component {
                       variant="contained"
                       color="primary"
                       component={Link}
-                      to="/incidents/add"
+                      to="/app/incidents/add"
                     >
                       Add First Incident
                     </Button>

@@ -81,9 +81,11 @@ class AlertCard extends Component {
     } = this.props;
     const { activeTab } = this.state;
     let menuActions = [];
+    console.log(userRole)
+
     if (isAuthorised(userRole, ['SCHEME_ADMIN', 'CONTENT_ADMIN'])) {
       menuActions.push(
-        <MenuItem key="0" component={Link} to={`/incidents/edit/${id}`}>
+        <MenuItem key="0" component={Link} to={`/app/incidents/edit/${id}`}>
           <Svg viewBox="0 0 24 24">
             <path
               fill="#757575"

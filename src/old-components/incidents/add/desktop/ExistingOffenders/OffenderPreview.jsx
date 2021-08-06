@@ -1,10 +1,10 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 import Typography from '@material-ui/core/Typography';
 import { Container, CircularProgress } from '@material-ui/core';
 
-import { builds, races, genders, ages } from '../../../../../enums';
+import { ageValues, buildValues, genderValues, raceValues } from 'graphql-src/offenders/enums';
 import OffenderImage from '../../../global/OffenderImage/OffenderImage';
 import { ItemText } from '../../../../global/typography';
 import { useStoreActions } from '../../../../../state';
@@ -54,10 +54,10 @@ const OffenderPreview = ({ offender, actions, noPadding, fullHeight }) => {
 
   let buildValue, genderValue, raceValue, ageValue, lightBoxImages;
   if (!!offender) {
-    buildValue = builds.find(({ value }) => value === offender.build).label;
-    genderValue = genders.find(({ value }) => value === offender.gender).label;
-    raceValue = races.find(({ value }) => value === offender.race).label;
-    ageValue = ages.find(({ value }) => value === offender.age).label;
+    buildValue = buildValues.find(({ value }) => value === offender.build).label;
+    genderValue = genderValues.find(({ value }) => value === offender.gender).label;
+    raceValue = raceValues.find(({ value }) => value === offender.race).label;
+    ageValue = ageValues.find(({ value }) => value === offender.age).label;
   }
 
   if (!!offender) {

@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import MediaQuery from 'react-responsive';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/client';
 import update from 'immutability-helper';
 import { isEqual } from 'lodash-es';
 
-import { EditAlertQuery } from '../../../../graphql/incidents/queries';
-import UploadImage from '../../../../graphql/images/mutations/uploadImages';
-import { EditAlertMutation } from '../../../../graphql/incidents/mutations';
+import { EditIncident as Query } from 'graphql-src/incidents/queries';
+import { UploadImage } from 'graphql-src/images/mutations';
+import { UpdateIncident } from 'graphql-src/incidents/mutations';
 import EditDesktop from '../desktop/EditDesktop/EditDesktop';
-import EditMobile from '../mobile/EditMobile/EditMobile';
 import { useStoreActions, useStoreState } from '../../../../state';
 
 const EditIncident = ({
@@ -17,18 +15,10 @@ const EditIncident = ({
   }
 }) => {
   const userId = useStoreState(state => state.user.id);
-  const role = useStoreState(state => state.user.role);
-  const setTitle = useStoreActions(actions => actions.theme.setTitle);
-  const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
-  const setBackLinkTo = useStoreActions(actions => actions.theme.setBackLinkTo);
-  const setNavbarAction = useStoreActions(
-    actions => actions.theme.setNavbarAction
-  );
+  const schemeId = useStoreState(state => state.scheme.id);
   const setNavbarActionDisabled = useStoreActions(
     actions => actions.theme.setNavbarActionDisabled
   );
-  const schemeAdmin = role === 'SCHEME_ADMIN' ? true : false;
-
   // state
   const [description, setDescription] = useState({
     subject: '',
@@ -60,14 +50,14 @@ const EditIncident = ({
   const [groupsError, setGroupsError] = useState(false);
 
   // queries
-  const { data, loading } = useQuery(EditAlertQuery, {
+  const { data, loading } = useQuery(Query, {
     variables: { id },
     fetchPolicy: 'cache-and-network',
     onCompleted: ({ incident }) => updateState(incident)
   });
 
   // mutations
-  const [updateIncident] = useMutation(EditAlertMutation, {
+  const [updateIncident] = useMutation(UpdateIncident, {
     onCompleted: ({ updateIncident }) => updateState(updateIncident)
   });
   const [createImage] = useMutation(UploadImage, {
@@ -142,38 +132,11 @@ const EditIncident = ({
       await createImage({
         variables: {
           file,
-          scheme: localStorage.getItem('currentScheme')
+          scheme: schemeId
         }
       });
       setUploadingImage(false);
       setNavbarActionDisabled(false);
-    });
-  };
-  const uploadMobileImage = async data => {
-    setUploadingImage(true);
-    setNavbarActionDisabled(true);
-    setImages([
-      ...images,
-      {
-        id: 'UPLOADING',
-        offendersIds: []
-      }
-    ]);
-    window.resolveLocalFileSystemURL(data, fileEntry => {
-      fileEntry.file(function(file) {
-        const reader = new FileReader();
-        reader.onloadend = async function(e) {
-          await createImage({
-            variables: {
-              file: new Blob([this.result], { type: 'image/jpeg' }),
-              scheme: localStorage.getItem('currentScheme')
-            }
-          });
-          setUploadingImage(false);
-          setNavbarActionDisabled(false);
-        };
-        reader.readAsArrayBuffer(file);
-      });
     });
   };
   const assignOffendersToImage = (image, assignOffenders, removeOffenders) => {
@@ -313,7 +276,7 @@ const EditIncident = ({
           },
           scheme: {
             connect: {
-              id: window.localStorage.getItem('currentScheme')
+              id: schemeId
             }
           }
         })
@@ -327,7 +290,7 @@ const EditIncident = ({
         url,
         scheme: {
           connect: {
-            id: window.localStorage.getItem('currentScheme')
+            id: schemeId
           }
         }
       }));
@@ -370,126 +333,84 @@ const EditIncident = ({
       .map(({ id }) => ({ id }));
     updateIncident({
       variables: {
-        id,
-        subject: { set: description.subject },
-        description: { set: description.description },
-        date: { set: description.date },
-        time: { set: description.time },
-        location: {
-          update: {
-            premises: { set: location.premises },
-            building: { set: location.building },
-            street: { set: location.street },
-            townCity: { set: location.townCity },
-            county: { set: location.county },
-            postcode: { set: location.postcode }
+        where: { id },
+        data: {
+          subject: { set: description.subject },
+          description: { set: description.description },
+          date: { set: description.date },
+          time: { set: description.time },
+          location: {
+            update: {
+              premises: { set: location.premises },
+              building: { set: location.building },
+              street: { set: location.street },
+              townCity: { set: location.townCity },
+              county: { set: location.county },
+              postcode: { set: location.postcode }
+            }
+          },
+          crimeTypes: {
+            connect:
+              connectCrimeTypes.length > 0
+                ? connectCrimeTypes.map(({ id }) => ({ id }))
+                : undefined,
+            disconnect:
+              disconnectCrimeTypes.length > 0
+                ? disconnectCrimeTypes.map(({ id }) => ({ id }))
+                : undefined
+          },
+          offenders: {
+            connect: connectOffenders.length > 0 ? connectOffenders : undefined,
+            create: createOffenders.length > 0 ? createOffenders : undefined,
+            disconnect:
+              disconnectOffenders.length > 0 ? disconnectOffenders : undefined
+          },
+          images: {
+            create: createImages.length > 0 ? createImages : undefined,
+            disconnect:
+              disconnectImages.length > 0 ? disconnectImages : undefined,
+            update: updatedImages.length > 0 ? updatedImages : undefined
+          },
+          groups: {
+            connect: connectGroups.length > 0 ? connectGroups : undefined,
+            disconnect: disconnectGroups.length > 0 ? disconnectGroups : undefined
           }
-        },
-        crimeTypes: {
-          connect:
-            connectCrimeTypes.length > 0
-              ? connectCrimeTypes.map(({ id }) => ({ id }))
-              : undefined,
-          disconnect:
-            disconnectCrimeTypes.length > 0
-              ? disconnectCrimeTypes.map(({ id }) => ({ id }))
-              : undefined
-        },
-        offenders: {
-          connect: connectOffenders.length > 0 ? connectOffenders : undefined,
-          create: createOffenders.length > 0 ? createOffenders : undefined,
-          disconnect:
-            disconnectOffenders.length > 0 ? disconnectOffenders : undefined
-        },
-        images: {
-          create: createImages.length > 0 ? createImages : undefined,
-          disconnect:
-            disconnectImages.length > 0 ? disconnectImages : undefined,
-          update: updatedImages.length > 0 ? updatedImages : undefined
-        },
-        groups: {
-          connect: connectGroups.length > 0 ? connectGroups : undefined,
-          disconnect: disconnectGroups.length > 0 ? disconnectGroups : undefined
         }
       }
     });
   };
 
   return (
-    <MediaQuery minDeviceWidth={1024}>
-      {matches =>
-        matches ? (
-          <EditDesktop
-            loading={loading}
-            // state values
-            description={description}
-            crimeTypes={crimeTypes}
-            location={location}
-            offenders={offenders}
-            images={images}
-            groups={groups}
-            uploadingImage={uploadingImage}
-            groupsError={groupsError}
-            crimeTypeError={crimeTypeError}
-            // functions
-            handleDesChange={handleDesChange}
-            handleLocChange={handleLocChange}
-            setCrimeTypes={setCrimeTypes}
-            removeCrimeType={removeCrimeType}
-            removeOffender={removeOffender}
-            addOffender={addOffender}
-            removeImage={removeImage}
-            uploadImage={uploadImage}
-            assignOffendersToImage={assignOffendersToImage}
-            addGroups={addGroups}
-            removeGroup={removeGroup}
-            validateDescription={validateDescription}
-            validateCrimeTypes={validateCrimeTypes}
-            validateLocation={validateLocation}
-            validateGroups={validateGroups}
-            handleSave={handleSave}
-          />
-        ) : (
-          <EditMobile
-            incidentId={id}
-            setBottomNav={setBottomNav}
-            setBackLinkTo={setBackLinkTo}
-            setTitle={setTitle}
-            setNavbarAction={setNavbarAction}
-            setNavbarActionDisabled={setNavbarActionDisabled}
-            loading={loading}
-            userId={userId}
-            schemeAdmin={schemeAdmin}
-            // state values
-            description={description}
-            crimeTypes={crimeTypes}
-            crimeTypeError={crimeTypeError}
-            location={location}
-            offenders={offenders}
-            images={images}
-            groups={groups}
-            uploadingImage={uploadingImage}
-            // functions
-            handleDesChange={handleDesChange}
-            handleLocChange={handleLocChange}
-            setCrimeTypes={setCrimeTypes}
-            removeOffender={removeOffender}
-            addOffender={addOffender}
-            removeImage={removeImage}
-            uploadImage={uploadImage}
-            uploadMobileImage={uploadMobileImage}
-            assignOffendersToImage={assignOffendersToImage}
-            setGroups={setGroups}
-            validateDescription={validateDescription}
-            validateCrimeTypes={validateCrimeTypes}
-            validateLocation={validateLocation}
-            validateGroups={validateGroups}
-            handleSave={handleSave}
-            updateIncident={updateIncident}
-          />
-        )
-      }
-    </MediaQuery>
+    <EditDesktop
+      loading={loading}
+      // state values
+      description={description}
+      crimeTypes={crimeTypes}
+      location={location}
+      offenders={offenders}
+      images={images}
+      groups={groups}
+      uploadingImage={uploadingImage}
+      groupsError={groupsError}
+      crimeTypeError={crimeTypeError}
+      // functions
+      handleDesChange={handleDesChange}
+      handleLocChange={handleLocChange}
+      setCrimeTypes={setCrimeTypes}
+      removeCrimeType={removeCrimeType}
+      removeOffender={removeOffender}
+      addOffender={addOffender}
+      removeImage={removeImage}
+      uploadImage={uploadImage}
+      assignOffendersToImage={assignOffendersToImage}
+      addGroups={addGroups}
+      removeGroup={removeGroup}
+      validateDescription={validateDescription}
+      validateCrimeTypes={validateCrimeTypes}
+      validateLocation={validateLocation}
+      validateGroups={validateGroups}
+      handleSave={handleSave}
+    />
   );
 };
 

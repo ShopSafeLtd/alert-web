@@ -17,6 +17,7 @@ export const Groups = gql`
 export interface GroupsArgs {
   scheme: { id: { equals: string } };
   users?: { some: { id: { equals: string } } };
+  id?: { notIn: string[] }
   OR?: [
     { name: { contains: string } },
     { users: { some: { fullName: { contains: string } } } }

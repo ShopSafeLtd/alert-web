@@ -41,6 +41,9 @@ class CrimeTypeList extends PureComponent {
       crimeTypes,
       loading
     } = this.props;
+
+    console.log(crimeTypes)
+
     return (
       <List>
         {loading ? (
