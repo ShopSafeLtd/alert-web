@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import Add from '@material-ui/icons/Add';
-import Search from '@material-ui/icons/Search';
-import Edit from '@material-ui/icons/Edit';
-import Delete from '@material-ui/icons/Delete';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import Add from "@material-ui/icons/Add";
+import Search from "@material-ui/icons/Search";
+import Edit from "@material-ui/icons/Edit";
+import Delete from "@material-ui/icons/Delete";
 
-import OffendersImage from '../../../../../images/Offenders';
-import OffenderPreview from '../ExistingOffenders/OffenderPreview';
-import ExistingOffenders from '../ExistingOffenders/ExistingOffenders';
-import NewOffenderPopover from '../NewOffenderPopover/NewOffenderPopover';
-import EditOffenderPopover from '../EditOffenderPopover/EditOffenderPopover';
-import { Header, HeaderSubText } from '../../../../global/forms';
-import { EmptyText } from '../../../../global/typography';
-import ConfirmDialog from '../../../../global/ConfirmDialog/ConfirmDialog';
+import OffendersImage from "../../../../../images/Offenders";
+import OffenderPreview from "../ExistingOffenders/OffenderPreview";
+import ExistingOffenders from "../ExistingOffenders/ExistingOffenders";
+import NewOffenderPopover from "../NewOffenderPopover/NewOffenderPopover";
+import EditOffenderPopover from "../EditOffenderPopover/EditOffenderPopover";
+import { Header, HeaderSubText } from "../../../../global/forms";
+import { EmptyText } from "../../../../global/typography";
+import ConfirmDialog from "../../../../global/ConfirmDialog/ConfirmDialog";
 
 const PageContainer = styled.div`
   height: 100%;
@@ -60,7 +60,7 @@ const OffenderItem = styled.div`
   align-items: center;
   min-height: 60px;
   cursor: pointer;
-  ${({ current }) => current && 'background: rgba(0,0,0,0.04);'} &:hover {
+  ${({ current }) => current && "background: rgba(0,0,0,0.04);"} &:hover {
     background: rgba(0, 0, 0, 0.06);
   }
 `;
@@ -125,22 +125,19 @@ const AddOffenders = ({
   addNewOffender,
   editNewOffender,
   removeOffender,
-  userId
+  userId,
 }) => {
   // state
-  const [current, setCurrent] = useState('');
+  const [current, setCurrent] = useState("");
   const [existingOffender, setExistingOffender] = useState(false);
   const [newOffender, setNewOffender] = useState(false);
-  const [editOffender, setEditOffender] = useState('');
-  const [remove, setRemove] = useState('');
+  const [editOffender, setEditOffender] = useState("");
+  const [remove, setRemove] = useState("");
 
   // effects
-  useEffect(
-    () => {
-      offenders.length > 0 && setCurrent(offenders[0].id);
-    },
-    [offenders]
-  );
+  useEffect(() => {
+    offenders.length > 0 && setCurrent(offenders[0].id);
+  }, [offenders]);
 
   return (
     <PageContainer>
@@ -177,7 +174,7 @@ const AddOffenders = ({
                   current={current === id}
                   onClick={() => setCurrent(id)}
                 >
-                  {images.length > 0 ? (
+                  {images?.length > 0 ? (
                     <ItemImage url={images[0].url} />
                   ) : (
                     <ItemAvatar>
@@ -196,8 +193,8 @@ const AddOffenders = ({
             <Container>
               <OffenderPreview
                 offender={
-                  current !== ''
-                    ? offenders.find(({ id }) => id === current)
+                  current !== ""
+                    ? offenders?.find(({ id }) => id === current)
                     : {}
                 }
                 noPadding
@@ -244,11 +241,11 @@ const AddOffenders = ({
         addNewOffender={addNewOffender}
       />
       <EditOffenderPopover
-        open={editOffender !== ''}
-        close={() => setEditOffender('')}
+        open={editOffender !== ""}
+        close={() => setEditOffender("")}
         editNewOffender={editNewOffender}
         offender={
-          editOffender !== ''
+          editOffender !== ""
             ? offenders.find(({ id }) => id === editOffender)
             : {}
         }
@@ -265,14 +262,14 @@ const AddOffenders = ({
           <Button
             key={Math.random()}
             onClick={() => {
-              setCurrent('');
+              setCurrent("");
               removeOffender(current);
               setRemove(false);
             }}
             color="primary"
           >
             Remove Offender
-          </Button>
+          </Button>,
         ]}
       />
     </PageContainer>

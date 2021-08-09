@@ -1,11 +1,11 @@
 import { APP_PREFIX_PATH } from "configs/AppConfig";
 import { Roles } from "types";
-import {
-  faExclamationCircle,
-  faUsers,
-  faComments,
-  faCity
-} from "@fortawesome/pro-light-svg-icons";
+// import {
+//   faExclamationCircle,
+//   faUsers,
+//   faComments,
+//   faCity
+// } from "@fortawesome/pro-light-svg-icons";
 
 export interface MenuItem {
   key: string;
@@ -31,9 +31,10 @@ const userOnlyItems: NavItem[] = [
     key: "incidents",
     path: `${APP_PREFIX_PATH}/incidents`,
     title: "sidenav.incidents",
-    icon: faExclamationCircle,
+    // icon: faExclamationCircle,
     breadcrumb: false,
     submenu: [],
+    icon: undefined,
   },
 ];
 
@@ -42,25 +43,28 @@ const adminOnlyItems: NavItem[] = [
     key: "offenders",
     path: `${APP_PREFIX_PATH}/offenders`,
     title: "sidenav.offenders",
-    icon: faUsers,
+    // icon: faUsers,
     breadcrumb: true,
     submenu: [],
+    icon: undefined,
   },
   {
     key: "chat",
     path: `${APP_PREFIX_PATH}/chat`,
     title: "sidenav.chat",
-    icon: faComments,
+    // icon: faComments,
     breadcrumb: true,
     submenu: [],
+    icon: undefined,
   },
   {
     key: "scheme",
     path: `${APP_PREFIX_PATH}/scheme`,
     title: "sidenav.scheme",
-    icon: faCity,
+    // icon: faCity,
     breadcrumb: true,
     submenu: [],
+    icon: undefined,
   },
 ];
 

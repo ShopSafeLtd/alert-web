@@ -1,17 +1,14 @@
-import { gql } from '@apollo/client';
-import { Image, ImageType } from '../../images/fragments'
-import { Age, Build, Gender, Race } from '../enums'
+import { gql } from "@apollo/client";
+import { Image, ImageType } from "../../images/fragments";
+import { Age, Build, Gender, Race } from "../enums";
 
 export const Offenders = gql`
   query offenders(
     $where: OffenderWhereInput
     $after: OffenderWhereUniqueInput
+    $orderBy: [OffenderOrderByInput!]
   ) {
-    offenders(
-      where: $where
-      first: 20
-      after: $after
-    ) {
+    offenders(where: $where, first: 20, after: $after, orderBy: $orderBy) {
       id
       age
       build
@@ -32,12 +29,12 @@ export const Offenders = gql`
 
 export interface OffendersArgs {
   where: {
-    id?: { notIn: string[]; };
-    scheme: { id: { equals: string; }; };
-    approved: { equals: boolean; };
-    name?: { contains: string; };
-  }
-  after?: { id: string; };
+    id?: { notIn: string[] };
+    scheme: { id: { equals: string } };
+    approved: { equals: boolean };
+    name?: { contains: string };
+  };
+  after?: { id: string };
 }
 
 export interface OffendersRes {
@@ -51,5 +48,5 @@ export interface OffendersRes {
   race: Race;
   dateOfBirth: string;
   dateSource: string;
-  images: ImageType
+  images: ImageType;
 }

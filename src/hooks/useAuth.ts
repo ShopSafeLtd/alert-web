@@ -1,17 +1,10 @@
 import { useMutation, useLazyQuery } from "@apollo/client";
 import { useStoreActions, SetUserPayload } from "state";
 import jwtDecode from "jwt-decode";
-import LogRocket from 'logrocket';
+import LogRocket from "logrocket";
 
-import {
-  CurrentUser,
-  CurrentUserRes,
-} from "graphql-src/auth/queries";
-import {
-  SignIn,
-  SignInArgs,
-  SignInRes,
-} from "graphql-src/auth/mutations";
+import { CurrentUser, CurrentUserRes } from "graphql-src/auth/queries";
+import { SignIn, SignInArgs, SignInRes } from "graphql-src/auth/mutations";
 
 interface DecodedToken {
   aud: string;
@@ -41,42 +34,49 @@ const useAuth = () => {
     (actions) => actions.auth.setAuthMessage
   );
 
-
   interface HandleSuccessArgs extends SetUserPayload {
     accessToken: string;
   }
 
-  const handleSuccess = ({ id, accessToken, fullName, email, organisation, onboarded, schemes }: HandleSuccessArgs) => {
+  const handleSuccess = ({
+    id,
+    accessToken,
+    fullName,
+    email,
+    organisation,
+    onboarded,
+    schemes,
+  }: HandleSuccessArgs) => {
     window.localStorage.setItem("accessToken", accessToken);
 
     const handleNoValidScheme = () => {
-      const schemeDetails = schemes[0].scheme
+      const schemeDetails = schemes[0].scheme;
       window.localStorage.setItem("currentScheme", schemeDetails.id);
-      setRole({ role: schemes[0].role })
+      setRole({ role: schemes[0].role });
       setScheme({
-         autoApproveIncidents: schemeDetails.autoApproveIncidents,
-         autoApproveOffenders: schemeDetails.autoApproveOffenders,
-         id: schemeDetails.id,
-         name: schemeDetails.name,
-      })
-    }
+        autoApproveIncidents: schemeDetails.autoApproveIncidents,
+        autoApproveOffenders: schemeDetails.autoApproveOffenders,
+        id: schemeDetails.id,
+        name: schemeDetails.name,
+      });
+    };
 
-    const scheme = window.localStorage.getItem('currentScheme')
+    const scheme = window.localStorage.getItem("currentScheme");
     if (scheme) {
-      const schemeDetails = schemes.find(({ scheme: { id } }) => id === scheme)
+      const schemeDetails = schemes.find(({ scheme: { id } }) => id === scheme);
       if (schemeDetails) {
-        setRole({ role: schemeDetails.role })
+        setRole({ role: schemeDetails.role });
         setScheme({
           autoApproveIncidents: schemeDetails.scheme.autoApproveIncidents,
           autoApproveOffenders: schemeDetails.scheme.autoApproveOffenders,
           id: schemeDetails.scheme.id,
           name: schemeDetails.scheme.name,
-       })
+        });
       } else {
-        handleNoValidScheme()
+        handleNoValidScheme();
       }
     } else {
-      handleNoValidScheme()
+      handleNoValidScheme();
     }
 
     LogRocket.identify(id!, {
@@ -90,7 +90,7 @@ const useAuth = () => {
       fullName,
       organisation,
       onboarded,
-      schemes
+      schemes,
     });
     authenticated(accessToken);
   };
@@ -100,9 +100,7 @@ const useAuth = () => {
     if (!!accessToken) {
       let token: DecodedToken = jwtDecode(accessToken);
       if (new Date().getTime() < token.exp * 1000) {
-        if (
-          token.iss === "https://alert.eu.auth0.com/"
-        ) {
+        if (token.iss === "https://alert.eu.auth0.com/") {
           getCurrentUser();
         } else {
           expired();
@@ -119,12 +117,11 @@ const useAuth = () => {
     accessToken: string;
   }
 
-  const onLoginSuccess = (data:OnLoginSuccessArgs) => {
+  const onLoginSuccess = (data: OnLoginSuccessArgs) => {
     window.localStorage.setItem("accessToken", data.accessToken);
 
-    const scheme = window.localStorage.getItem('currentScheme')
+    const scheme = window.localStorage.getItem("currentScheme");
     if (scheme) {
-
     } else {
       window.localStorage.setItem("currentScheme", data.schemes[0].scheme.id);
     }
@@ -141,9 +138,9 @@ const useAuth = () => {
       fullName: data.fullName,
       onboarded: data.onboarded,
       organisation: data.organisation,
-      schemes: data.schemes
+      schemes: data.schemes,
     });
-  }
+  };
 
   const [handleLogin] = useMutation<SignInRes, SignInArgs>(SignIn, {
     onCompleted: ({ signIn }) => {
@@ -154,10 +151,13 @@ const useAuth = () => {
         id: signIn.id,
         onboarded: !signIn.newUser,
         organisation: signIn.organisation,
-        schemes: signIn.schemes
-      })
+        schemes: signIn.schemes,
+      });
     },
-    onError: (error) => setAuthMessage(error.message),
+    onError: (error) => {
+      console.log(error);
+      setAuthMessage(error.message);
+    },
   });
 
   const [getCurrentUser] = useLazyQuery<CurrentUserRes>(CurrentUser, {
@@ -169,7 +169,7 @@ const useAuth = () => {
         accessToken: window.localStorage.getItem("accessToken")!,
         organisation: currentUser?.organisation,
         onboarded: !currentUser.newUser,
-        schemes: currentUser.schemes
+        schemes: currentUser.schemes,
       });
     },
     onError: (error) => expired(),
@@ -181,6 +181,8 @@ const useAuth = () => {
   }
 
   const login = ({ email, password }: LoginArgs) => {
+    console.log(email, password);
+
     handleLogin({
       variables: {
         email,
@@ -200,7 +202,7 @@ const useAuth = () => {
     rehydrateAuth,
     signOut,
     onLoginSuccess,
-    getCurrentUser
+    getCurrentUser,
   };
 };
 

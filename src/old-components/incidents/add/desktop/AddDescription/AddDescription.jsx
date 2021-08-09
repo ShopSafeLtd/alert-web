@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
 
 import {
   Field,
@@ -11,11 +11,11 @@ import {
   DateField,
   TimeField,
   Header,
-  HeaderSubText
-} from '../../../../global/forms';
-import { Row } from '../../../../global/layout';
-import { ErrorText } from '../../../../global/typography';
-import CrimeTypePopOver from '../../../global/CrimeTypePopOver/CrimeTypePopOver';
+  HeaderSubText,
+} from "../../../../global/forms";
+import { Row } from "../../../../global/layout";
+import { ErrorText } from "../../../../global/typography";
+import CrimeTypePopOver from "../../../global/CrimeTypePopOver/CrimeTypePopOver";
 
 const CrimeTypes = styled.div`
   margin: 5px 0 20px;
@@ -55,12 +55,12 @@ const AddDescription = ({
     description,
     descriptionError,
     date,
-    time
+    time,
   },
   crimeTypes,
   crimeTypesError,
   crimeTypesList,
-  setCrimeTypes
+  setCrimeTypes,
 }) => {
   // state
   const [open, setOpen] = useState(false);
@@ -83,7 +83,7 @@ const AddDescription = ({
         <TextField
           id="subject-input"
           value={subject}
-          onChange={e => handleChange(e.target.value, 'subject')}
+          onChange={(e) => handleChange(e.target.value, "subject")}
           error={!!subjectError}
           helperText={subjectError}
           fullWidth
@@ -100,7 +100,7 @@ const AddDescription = ({
             fullWidth
             modal
             value={date}
-            onChange={value => handleChange(value, 'date')}
+            onChange={(value) => handleChange(value, "date")}
           />
         </Field>
         <Field row left>
@@ -112,7 +112,7 @@ const AddDescription = ({
             id="time-input"
             fullWidth
             value={time}
-            onChange={value => handleChange(value, 'time')}
+            onChange={(value) => handleChange(value, "time")}
           />
         </Field>
       </Row>
@@ -130,16 +130,14 @@ const AddDescription = ({
         </Row>
         <CrimeTypes>
           {crimeTypes.length > 0 ? (
-            crimeTypes.map(crimeType => (
+            crimeTypes.map((crimeType) => (
               <CrimeType component="div" key={crimeType}>
                 {crimeTypesList.find(({ id }) => crimeType === id).name}
                 <Svg
                   viewBox="0 0 24 24"
-                  onClick={() =>
-                    setCrimeTypes(
-                      crimeTypes.filter(({ id }) => crimeType !== id)
-                    )
-                  }
+                  onClick={() => {
+                    setCrimeTypes(crimeTypes.filter((id) => crimeType !== id));
+                  }}
                 >
                   <path
                     fill="#fff"
@@ -167,7 +165,7 @@ const AddDescription = ({
         <TextField
           id="description-input"
           value={description}
-          onChange={e => handleChange(e.target.value, 'description')}
+          onChange={(e) => handleChange(e.target.value, "description")}
           rows="5"
           multiline
           error={!!descriptionError}

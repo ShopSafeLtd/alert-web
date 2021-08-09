@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Menu } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+//import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 
 const { SubMenu } = Menu;
@@ -12,7 +12,7 @@ export interface SideMenuItem<T = void> {
   icon?: any;
   subMenu?: SideMenuItem[];
   onTitleClick?(): void;
-  data?: T
+  data?: T;
 }
 
 interface Props<T> {
@@ -22,7 +22,12 @@ interface Props<T> {
   layout?: (data: SideMenuItem<T>) => JSX.Element;
 }
 
-export const SideMenu: <T>(props: Props<T>) => JSX.Element = ({ selectedKey, menuItems, width, layout }) => {
+export const SideMenu: <T>(props: Props<T>) => JSX.Element = ({
+  selectedKey,
+  menuItems,
+  width,
+  layout,
+}) => {
   const [open] = useState<string[]>([]);
 
   // useEffect(() => {
@@ -36,24 +41,33 @@ export const SideMenu: <T>(props: Props<T>) => JSX.Element = ({ selectedKey, men
   //     : setOpen([...open, `${match.url}/statistics`]);
   // };
 
-
   return (
     <Menu
       defaultSelectedKeys={[]}
       mode="inline"
-      style={{ width: width ? width : 250, borderRight: '1px solid #edf2f9', flex: 1 }}
+      style={{
+        width: width ? width : 250,
+        borderRight: "1px solid #edf2f9",
+        flex: 1,
+      }}
       openKeys={open}
       selectedKeys={[selectedKey]}
     >
       {menuItems.map(({ icon, key, name, subMenu, onTitleClick, to }) => {
         return subMenu ? (
           <SubMenu
-            icon={icon &&
-              <span
-                style={{ width: 10, justifyContent: "center", marginRight: 10 }}
-              >
-                <FontAwesomeIcon icon={icon} style={{ fontSize: 18 }} />
-              </span>
+            icon={
+              icon && (
+                <span
+                  style={{
+                    width: 10,
+                    justifyContent: "center",
+                    marginRight: 10,
+                  }}
+                >
+                  {/* <FontAwesomeIcon icon={icon} style={{ fontSize: 18 }} /> */}
+                </span>
+              )
             }
             title={name}
             key={key}
@@ -61,16 +75,18 @@ export const SideMenu: <T>(props: Props<T>) => JSX.Element = ({ selectedKey, men
           >
             {subMenu.map(({ icon, key, name, to }) => (
               <Menu.Item key={key}>
-                {icon && <span
-                  style={{
-                    width: 15,
-                    display: "flex",
-                    justifyContent: "center",
-                    marginRight: 10,
-                  }}
-                >
-                  <FontAwesomeIcon icon={icon} style={{ fontSize: 18 }} />
-                </span>}
+                {icon && (
+                  <span
+                    style={{
+                      width: 15,
+                      display: "flex",
+                      justifyContent: "center",
+                      marginRight: 10,
+                    }}
+                  >
+                    {/* <FontAwesomeIcon icon={icon} style={{ fontSize: 18 }} /> */}
+                  </span>
+                )}
                 <span>{name}</span>
                 <Link to={to} />
               </Menu.Item>
@@ -83,20 +99,22 @@ export const SideMenu: <T>(props: Props<T>) => JSX.Element = ({ selectedKey, men
           </Menu.Item>
         ) : (
           <Menu.Item key={key}>
-            {icon && <span
-              style={{
-                width: 20,
-                display: "flex",
-                justifyContent: "center",
-                marginRight: 10,
-              }}
-            >
-              <FontAwesomeIcon icon={icon} style={{ fontSize: 18 }} />
-            </span>}
+            {icon && (
+              <span
+                style={{
+                  width: 20,
+                  display: "flex",
+                  justifyContent: "center",
+                  marginRight: 10,
+                }}
+              >
+                {/* <FontAwesomeIcon icon={icon} style={{ fontSize: 18 }} /> */}
+              </span>
+            )}
             <span>{name}</span>
             <Link to={to} />
           </Menu.Item>
-        )
+        );
       })}
     </Menu>
   );

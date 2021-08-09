@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { withRouter } from 'react-router-dom';
-import update from 'immutability-helper';
-import { useMutation, useQuery } from '@apollo/client';
+import React, { useState } from "react";
+import { withRouter } from "react-router-dom";
+import update from "immutability-helper";
+import { useMutation, useQuery } from "@apollo/client";
 
-import IncidentWizard from '../desktop/IncidentWizard/IncidentWizard';
-import { CreateIncident } from 'graphql-src/incidents/mutations';
-import { PreviousAddresses } from 'graphql-src/address/queries';
-import { Tags } from 'graphql-src/tags/queries';
-import { Groups } from 'graphql-src/groups/queries';
-import { IncidentFeed } from 'graphql-src/incidents/queries';
-import { OffenderFeed } from 'graphql-src/offenders/queries';
-import { useStoreActions, useStoreState } from '../../../../state';
+import IncidentWizard from "../desktop/IncidentWizard/IncidentWizard";
+import { CreateIncident } from "graphql-src/incidents/mutations";
+import { PreviousAddresses } from "graphql-src/address/queries";
+import { Tags } from "graphql-src/tags/queries";
+import { Groups } from "graphql-src/groups/queries";
+import { IncidentFeed } from "graphql-src/incidents/queries";
+import { OffenderFeed } from "graphql-src/offenders/queries";
+import { useStoreActions, useStoreState } from "../../../../state";
 
 let querySize = 10;
 if (window.innerWidth > 1239 && window.innerWidth < 1800) {
@@ -21,39 +21,39 @@ if (window.innerWidth > 1239 && window.innerWidth < 1800) {
 
 const AddIncident = ({ history }) => {
   const toggleFetchIncidents = useStoreActions(
-    actions => actions.toggleFetchIncidents
+    (actions) => actions.toggleFetchIncidents
   );
-  const schemeId = useStoreState(state => state.scheme.id);
-  const currentUser = useStoreState(state => state.user.id);
-  const role = useStoreState(state => state.user.role);
-  const schemeAdmin = role === 'SCHEME_ADMIN';
-  const admin = role === 'USER' ? false : true;
+  const schemeId = useStoreState((state) => state.scheme.id);
+  const currentUser = useStoreState((state) => state.user.id);
+  const role = useStoreState((state) => state.user.role);
+  const schemeAdmin = role === "SCHEME_ADMIN";
+  const admin = role === "USER" ? false : true;
 
   // state
   const [description, setDescription] = useState({
-    subject: '',
+    subject: "",
     subjectError: null,
-    description: '',
+    description: "",
     descriptionError: null,
     date: new Date(),
     dateError: null,
     time: new Date(),
-    timeError: null
+    timeError: null,
   });
   const [crimeTypes, setCrimeTypes] = useState([]);
-  const [location, setLocation] = useState('ACCOUNT');
+  const [location, setLocation] = useState("ACCOUNT");
   const [newLocation, setNewLocation] = useState({
-    premises: '',
-    building: '',
-    street: '',
+    premises: "",
+    building: "",
+    street: "",
     streetError: null,
-    townCity: '',
+    townCity: "",
     townCityError: null,
-    county: '',
-    postcode: '',
-    postcodeError: null
+    county: "",
+    postcode: "",
+    postcodeError: null,
   });
-  const [previousLocation, setPreviousLocation] = useState('');
+  const [previousLocation, setPreviousLocation] = useState("");
   const [offenders, setOffenders] = useState([]);
   const [images, setImages] = useState([]);
   const [imagesAssigned, setImagesAssigned] = useState(false);
@@ -62,23 +62,27 @@ const AddIncident = ({ history }) => {
   // queries
   const { data: userData, loading: userLoading } = useQuery(PreviousAddresses, {
     variables: {
-      userId: currentUser
+      where: {
+        userId: {
+          equals: currentUser,
+        },
+      },
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: "cache-and-network",
   });
   const { data: crimeTypesList, loading: crimeTypesLoading } = useQuery(Tags, {
     variables: {
       scheme: { id: { equals: schemeId } },
-      dataType: { equals: 'INCIDENT' }
+      dataType: { equals: "INCIDENT" },
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: "cache-and-network",
   });
   const { data: groupsData, loading: groupsLoading } = useQuery(Groups, {
     variables: {
       schemeId,
-      user: schemeAdmin ? undefined : { some: { id: { equals: currentUser } } }
+      user: schemeAdmin ? undefined : { some: { id: { equals: currentUser } } },
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: "cache-and-network",
   });
 
   // mutations
@@ -88,38 +92,38 @@ const AddIncident = ({ history }) => {
         query: IncidentFeed,
         variables: {
           schemeId,
-          search: '',
-          order: { createdAt: 'desc' },
-          first: querySize
-        }
+          search: "",
+          order: { createdAt: "desc" },
+          first: querySize,
+        },
       });
       store.writeQuery({
         query: IncidentFeed,
         data: {
-          incidentFeed: [createIncident, ...data.incidentFeed]
+          incidentFeed: [createIncident, ...data.incidentFeed],
         },
         variables: {
           schemeId,
-          search: '',
-          order: { createdAt: 'desc' },
-          first: querySize
-        }
+          search: "",
+          order: { createdAt: "desc" },
+          first: querySize,
+        },
       });
       if (createIncident.offenders.length > 0) {
         let offenders = store.readQuery({
           query: OffenderFeed,
           variables: {
             first: querySize,
-            order: { createdAt: 'desc' },
+            order: { createdAt: "desc" },
             role,
             schemeId,
-            search: '',
-            userId: currentUser
-          }
+            search: "",
+            userId: currentUser,
+          },
         });
         offenders.offenderFeed = [
           ...createIncident.offenders,
-          ...offenders.offenderFeed
+          ...offenders.offenderFeed,
         ];
         store.writeQuery({
           query: OffenderFeed,
@@ -128,76 +132,83 @@ const AddIncident = ({ history }) => {
             userId: currentUser,
             schemeId,
             role,
-            search: '',
-            order: { createdAt: 'desc' },
-            first: querySize
-          }
+            search: "",
+            order: { createdAt: "desc" },
+            first: querySize,
+          },
         });
       }
-    }
+    },
   });
 
   // functions
   const handleDescChange = (value, name) =>
     setDescription({
       ...description,
-      [name]: value
+      [name]: value,
     });
 
   const handleLocationChange = (value, name) =>
     setNewLocation({
       ...newLocation,
-      [name]: value
+      [name]: value,
     });
 
-  const addExistingOffenders = existing =>
-    setOffenders([
-      ...offenders,
-      ...existing.map(offender => ({
-        ...offender,
-        existing: true
-      }))
-    ]);
-  const addNewOffender = offender =>
+  const addExistingOffenders = (existing) => {
+    setOffenders((prev) => {
+      const prevIds = prev.map(({ id }) => id);
+      const newExisting = existing.filter(
+        (el) => el?.id && !prevIds.includes(el.id)
+      );
+      return [
+        ...prev,
+        ...newExisting.map((offender) => {
+          return { ...offender, existing: true };
+        }),
+      ];
+    });
+  };
+
+  const addNewOffender = (offender) =>
     setOffenders([
       ...offenders,
       {
         ...offender,
         id: offenders.length,
         create: true,
-        name: offender.name === '' ? 'Unidentified Offender' : offender.name,
-        gender: offender.gender === '' ? 'UNKNOWN' : offender.gender,
-        race: offender.race === '' ? 'UNKNOWN' : offender.race,
-        build: offender.build === '' ? 'UNKNOWN' : offender.build,
+        name: offender.name === "" ? "Unidentified Offender" : offender.name,
+        gender: offender.gender === "" ? "UNKNOWN" : offender.gender,
+        race: offender.race === "" ? "UNKNOWN" : offender.race,
+        build: offender.build === "" ? "UNKNOWN" : offender.build,
         age:
-          offender.age === '' && offender.dateOfBirth === ''
-            ? 'UNKNOWN'
+          offender.age === "" && offender.dateOfBirth === ""
+            ? "UNKNOWN"
             : offender.age,
         dateOfBirth: !!offender.dateOfBirth ? offender.dateOfBirth : undefined,
         imagesIds: [],
-        images: []
-      }
+        images: [],
+      },
     ]);
-  const editNewOffender = offender =>
+  const editNewOffender = (offender) =>
     setOffenders(
       update(offenders, {
         [offenders.map(({ id }) => id).indexOf(offender.id)]: {
           $set: {
             ...offender,
             name:
-              offender.name === '' ? 'Unidentified Offender' : offender.name,
-            gender: offender.gender === '' ? 'UNKNOWN' : offender.gender,
-            race: offender.race === '' ? 'UNKNOWN' : offender.race,
-            build: offender.build === '' ? 'UNKNOWN' : offender.build,
+              offender.name === "" ? "Unidentified Offender" : offender.name,
+            gender: offender.gender === "" ? "UNKNOWN" : offender.gender,
+            race: offender.race === "" ? "UNKNOWN" : offender.race,
+            build: offender.build === "" ? "UNKNOWN" : offender.build,
             age:
-              offender.age === '' && offender.dateOfBirth === ''
-                ? 'UNKNOWN'
-                : offender.age
-          }
-        }
+              offender.age === "" && offender.dateOfBirth === ""
+                ? "UNKNOWN"
+                : offender.age,
+          },
+        },
       })
     );
-  const removeOffender = offender =>
+  const removeOffender = (offender) =>
     setOffenders(offenders.filter(({ id }) => offender !== id));
 
   const addImage = ({ target: { files } }) => {
@@ -205,17 +216,17 @@ const AddIncident = ({ history }) => {
 
     setImages([
       ...images,
-      ...filesArray.map(file => ({
+      ...filesArray.map((file) => ({
         id: images.length,
         url: URL.createObjectURL(file),
         offendersIds: [],
-        file: file
-      }))
+        file: file,
+      })),
     ]);
   };
 
   const removeImage = (image, removeOffenders) => {
-    removeOffenders.forEach(offender =>
+    removeOffenders.forEach((offender) =>
       setOffenders(
         update(offenders, {
           [offenders.map(({ id }) => id).indexOf(offender)]: {
@@ -223,9 +234,9 @@ const AddIncident = ({ history }) => {
             [images]: {
               $set: offenders
                 .find(({ id }) => id === offender)
-                .images.filter(({ id }) => id !== image)
-            }
-          }
+                .images.filter(({ id }) => id !== image),
+            },
+          },
         })
       )
     );
@@ -233,7 +244,7 @@ const AddIncident = ({ history }) => {
   };
   const assignImageToOffenders = (image, assignOffenders, removeOffenders) => {
     let newOffenders = [...offenders];
-    assignOffenders.forEach(offender => {
+    assignOffenders.forEach((offender) => {
       if (
         !offenders
           .find(({ id }) => id === offender)
@@ -247,22 +258,22 @@ const AddIncident = ({ history }) => {
                 ...offenders.find(({ id }) => id === offender).images,
                 {
                   id: image.id,
-                  url: image.url
-                }
-              ]
-            }
-          }
+                  url: image.url,
+                },
+              ],
+            },
+          },
         });
     });
-    removeOffenders.forEach(offender => {
+    removeOffenders.forEach((offender) => {
       newOffenders = update(offenders, {
         [offenders.map(({ id }) => id).indexOf(offender)]: {
           images: {
             $set: offenders
               .find(({ id }) => id === offender)
-              .images.filter(({ id }) => id !== image.id)
-          }
-        }
+              .images.filter(({ id }) => id !== image.id),
+          },
+        },
       });
     });
     setOffenders(newOffenders);
@@ -271,26 +282,28 @@ const AddIncident = ({ history }) => {
         [images.map(({ id }) => id).indexOf(image.id)]: {
           offendersIds: {
             $set: [
-              ...image.offendersIds.filter(id => !removeOffenders.includes(id)),
-              ...assignOffenders.filter(id => !images.includes(id))
-            ]
-          }
-        }
+              ...image.offendersIds.filter(
+                (id) => !removeOffenders.includes(id)
+              ),
+              ...assignOffenders.filter((id) => !images.includes(id)),
+            ],
+          },
+        },
       })
     );
     setImagesAssigned(true);
   };
   const removeOffendersFromImage = (image, removeOffenders) => {
-    removeOffenders.forEach(offender =>
+    removeOffenders.forEach((offender) =>
       setOffenders(
         update(offenders, {
           [offenders.map(({ id }) => id).indexOf(offender)]: {
             [images]: {
               $set: offenders
                 .find(({ id }) => id === offender)
-                .images.filter(({ id }) => id !== image)
-            }
-          }
+                .images.filter(({ id }) => id !== image),
+            },
+          },
         })
       )
     );
@@ -300,15 +313,15 @@ const AddIncident = ({ history }) => {
           offendersIds: {
             $set: images
               .find(({ id }) => id === image)
-              .offenderIds.filter(id => !removeOffenders.includes(id))
-          }
-        }
+              .offenderIds.filter((id) => !removeOffenders.includes(id)),
+          },
+        },
       })
     );
   };
-  const toggleGroups = group =>
+  const toggleGroups = (group) =>
     groups.includes(group)
-      ? setGroups(groups.filter(id => id !== group))
+      ? setGroups(groups.filter((id) => id !== group))
       : setGroups([...groups, group]);
   const validateDescription = () =>
     new Promise((resolve, reject) => {
@@ -318,10 +331,10 @@ const AddIncident = ({ history }) => {
       const timeValid = !!description.time;
       setDescription({
         ...description,
-        subjectError: subjectValid ? '' : 'This is a required Field.',
-        descriptionError: descriptionValid ? '' : 'This is a required Field.',
-        dateError: dateValid ? '' : 'This is a required Field.',
-        timeError: timeValid ? '' : 'This is a required Field.'
+        subjectError: subjectValid ? "" : "This is a required Field.",
+        descriptionError: descriptionValid ? "" : "This is a required Field.",
+        dateError: dateValid ? "" : "This is a required Field.",
+        timeError: timeValid ? "" : "This is a required Field.",
       });
       subjectValid && descriptionValid && dateValid && timeValid
         ? resolve()
@@ -329,14 +342,14 @@ const AddIncident = ({ history }) => {
     });
   const validateNewLocation = () =>
     new Promise((resolve, reject) => {
-      const streetValid = location === 'NEW' && !!newLocation.street;
-      const townCityValid = location === 'NEW' && !!newLocation.townCity;
-      const postcodeValid = location === 'NEW' && !!newLocation.postcode;
+      const streetValid = location === "NEW" && !!newLocation.street;
+      const townCityValid = location === "NEW" && !!newLocation.townCity;
+      const postcodeValid = location === "NEW" && !!newLocation.postcode;
       setNewLocation({
         ...newLocation,
-        streetError: streetValid ? '' : 'This is a required Field.',
-        townCityError: townCityValid ? '' : 'This is a required Field.',
-        postcodeError: postcodeValid ? '' : 'This is a required Field.'
+        streetError: streetValid ? "" : "This is a required Field.",
+        townCityError: townCityValid ? "" : "This is a required Field.",
+        postcodeError: postcodeValid ? "" : "This is a required Field.",
       });
       streetValid && townCityValid && postcodeValid ? resolve() : reject();
     });
@@ -350,80 +363,83 @@ const AddIncident = ({ history }) => {
     });
   const validateLocation = () =>
     new Promise((resolve, reject) => {
-      location === 'NEW'
+      location === "NEW"
         ? validateNewLocation()
             .then(() => resolve())
-            .catch(() => reject('NEW'))
-        : location === 'PREVIOUS'
-          ? !!previousLocation
-            ? resolve()
-            : reject('PREVIOUS')
-          : resolve();
+            .catch(() => reject("NEW"))
+        : location === "PREVIOUS"
+        ? !!previousLocation
+          ? resolve()
+          : reject("PREVIOUS")
+        : resolve();
     });
   const validateGroups = () =>
-    new Promise(
-      (resolve, reject) => (groups.length > 0 ? resolve() : reject())
+    new Promise((resolve, reject) =>
+      groups.length > 0 ? resolve() : reject()
     );
   const handleSubmit = () => {
     toggleFetchIncidents(false);
-    console.log(images);
-    console.log('runs', images.map(({ file }) => ({ file })));
-    console.log('runs2');
+    console.log("images:", images);
+    console.log(
+      "mappedImages:",
+      images.map(({ file }) => ({ file }))
+    );
+    console.log("before create incident fired");
     createIncident({
       variables: {
         subject: description.subject,
         date: description.date,
         time: description.time,
         description: description.description,
-        crimeTypes: crimeTypes.map(id => ({ id })),
+        crimeTypes: crimeTypes.map((id) => ({ id })),
         location:
-          location === 'NEW'
+          location === "NEW"
             ? {
                 premises: newLocation.premises,
                 building: newLocation.building,
                 street: newLocation.street,
                 townCity: newLocation.townCity,
                 county: newLocation.county,
-                postcode: newLocation.postcode
+                postcode: newLocation.postcode,
               }
-            : location === 'PREVIOUS'
-              ? {
-                  premises: userData.addresses.find(
-                    ({ id }) => id === previousLocation
-                  ).premises,
-                  building: userData.addresses.find(
-                    ({ id }) => id === previousLocation
-                  ).building,
-                  street: userData.addresses.find(
-                    ({ id }) => id === previousLocation
-                  ).street,
-                  townCity: userData.addresses.find(
-                    ({ id }) => id === previousLocation
-                  ).townCity,
-                  county: userData.addresses.find(
-                    ({ id }) => id === previousLocation
-                  ).county,
-                  postcode: userData.addresses.find(
-                    ({ id }) => id === previousLocation
-                  ).postcode
-                }
-              : {
-                  premises: userData.addresses.find(({ primary }) => primary)
-                    .premises,
-                  building: userData.addresses.find(({ primary }) => primary)
-                    .building,
-                  street: userData.addresses.find(({ primary }) => primary)
-                    .street,
-                  townCity: userData.addresses.find(({ primary }) => primary)
-                    .townCity,
-                  county: userData.addresses.find(({ primary }) => primary)
-                    .county,
-                  postcode: userData.addresses.find(({ primary }) => primary)
-                    .postcode
-                },
-        newLocation: location === 'NEW' ? true : false,
+            : location === "PREVIOUS"
+            ? {
+                premises: userData.addresses.find(
+                  ({ id }) => id === previousLocation
+                ).premises,
+                building: userData.addresses.find(
+                  ({ id }) => id === previousLocation
+                ).building,
+                street: userData.addresses.find(
+                  ({ id }) => id === previousLocation
+                ).street,
+                townCity: userData.addresses.find(
+                  ({ id }) => id === previousLocation
+                ).townCity,
+                county: userData.addresses.find(
+                  ({ id }) => id === previousLocation
+                ).county,
+                postcode: userData.addresses.find(
+                  ({ id }) => id === previousLocation
+                ).postcode,
+              }
+            : {
+                premises: userData.addresses.find(({ primary }) => primary)
+                  .premises,
+                building: userData.addresses.find(({ primary }) => primary)
+                  .building,
+                street: userData.addresses.find(({ primary }) => primary)
+                  .street,
+                townCity: userData.addresses.find(({ primary }) => primary)
+                  .townCity,
+                county: userData.addresses.find(({ primary }) => primary)
+                  .county,
+                postcode: userData.addresses.find(({ primary }) => primary)
+                  .postcode,
+              },
+        newLocation: location === "NEW" ? true : false,
         userId: currentUser,
-        schemeId: window.localStorage.getItem('currentScheme'),
+        schemeId: window.localStorage.getItem("currentScheme"),
         offenders:
           offenders.filter(({ create }) => create).length === 0
             ? undefined
@@ -441,7 +457,7 @@ const AddIncident = ({ history }) => {
                     name,
                     peculiarities,
                     race,
-                    images
+                    images,
                   }) => ({
                     age: !!age ? age : undefined,
                     build,
@@ -452,7 +468,7 @@ const AddIncident = ({ history }) => {
                     name,
                     peculiarities,
                     race,
-                    localId: `${id}`
+                    localId: `${id}`,
                   })
                 ),
         existingOffenders: offenders
@@ -463,23 +479,30 @@ const AddIncident = ({ history }) => {
             images.length > 0
               ? images.map(({ file, offendersIds }) => ({
                   file,
-                  offenders: offendersIds.map(id => ({
+                  offenders: offendersIds.map((id) => ({
                     id: `${id}`,
-                    new: Number.isInteger(id)
-                  }))
+                    new: Number.isInteger(id),
+                  })),
                 }))
-              : undefined
+              : undefined,
         },
         groups:
           groups.length > 0
-            ? groups.map(id => ({ id }))
-            : groupsData.groups.map(({ id }) => ({ id }))
-      }
+            ? groups.map((id) => ({ id }))
+            : groupsData.groups.map(({ id }) => ({ id })),
+      },
     });
-    history.push('/incidents/');
+    history.push("/incidents/");
   };
 
-  console.log(crimeTypesList, crimeTypesLoading)
+  // console.log(
+  //   "crimetypes:",
+  //   crimeTypesList,
+  //   "crimetypesloading:",
+  //   crimeTypesLoading
+  // );
+
+  console.log(userData);
   return (
     <IncidentWizard
       // global values
@@ -498,14 +521,10 @@ const AddIncident = ({ history }) => {
       newLocation={newLocation}
       previousLocation={previousLocation}
       primaryLocation={
-        !!userData
-          ? userData.addresses.find(({ primary }) => primary)
-          : []
+        !!userData ? userData.addresses.find(({ primary }) => primary) : []
       }
       previousLocations={
-        !!userData
-          ? userData.addresses.filter(({ primary }) => !primary)
-          : []
+        !!userData ? userData.addresses.filter(({ primary }) => !primary) : []
       }
       handleLocationChange={handleLocationChange}
       setLocationOption={setLocation}
