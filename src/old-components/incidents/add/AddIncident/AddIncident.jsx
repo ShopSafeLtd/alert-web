@@ -72,21 +72,32 @@ const AddIncident = ({ history }) => {
   });
   const { data: crimeTypesList, loading: crimeTypesLoading } = useQuery(Tags, {
     variables: {
-      scheme: { id: { equals: schemeId } },
-      dataType: { equals: "INCIDENT" },
+      where: {
+        scheme: { id: { equals: schemeId } },
+        dataType: { equals: "INCIDENT" },
+      },
     },
     fetchPolicy: "cache-and-network",
   });
+
   const { data: groupsData, loading: groupsLoading } = useQuery(Groups, {
     variables: {
-      schemeId,
-      user: schemeAdmin ? undefined : { some: { id: { equals: currentUser } } },
+      where: {
+        schemeId: { equals: schemeId },
+        users: schemeAdmin
+          ? undefined
+          : { some: { id: { equals: currentUser } } },
+      },
     },
     fetchPolicy: "cache-and-network",
   });
 
   // mutations
   const [createIncident] = useMutation(CreateIncident, {
+    onError: (err) => {
+      console.log(err);
+    },
+
     update: (store, { data: { createIncident } }) => {
       let data = store.readQuery({
         query: IncidentFeed,
@@ -100,7 +111,7 @@ const AddIncident = ({ history }) => {
       store.writeQuery({
         query: IncidentFeed,
         data: {
-          incidentFeed: [createIncident, ...data.incidentFeed],
+          incidentFeed: [createIncident, ...data?.incidentFeed],
         },
         variables: {
           schemeId,
@@ -109,7 +120,7 @@ const AddIncident = ({ history }) => {
           first: querySize,
         },
       });
-      if (createIncident.offenders.length > 0) {
+      if (createIncident?.offenders?.length > 0) {
         let offenders = store.readQuery({
           query: OffenderFeed,
           variables: {
@@ -378,13 +389,8 @@ const AddIncident = ({ history }) => {
       groups.length > 0 ? resolve() : reject()
     );
   const handleSubmit = () => {
-    toggleFetchIncidents(false);
-    console.log("images:", images);
-    console.log(
-      "mappedImages:",
-      images.map(({ file }) => ({ file }))
-    );
-    console.log("before create incident fired");
+    //toggleFetchIncidents(false);
+
     createIncident({
       variables: {
         subject: description.subject,
@@ -392,99 +398,49 @@ const AddIncident = ({ history }) => {
         time: description.time,
         description: description.description,
         crimeTypes: crimeTypes.map((id) => ({ id })),
-        location:
-          location === "NEW"
-            ? {
-                premises: newLocation.premises,
-                building: newLocation.building,
-                street: newLocation.street,
-                townCity: newLocation.townCity,
-                county: newLocation.county,
-                postcode: newLocation.postcode,
-              }
-            : location === "PREVIOUS"
-            ? {
-                premises: userData.addresses.find(
-                  ({ id }) => id === previousLocation
-                ).premises,
-                building: userData.addresses.find(
-                  ({ id }) => id === previousLocation
-                ).building,
-                street: userData.addresses.find(
-                  ({ id }) => id === previousLocation
-                ).street,
-                townCity: userData.addresses.find(
-                  ({ id }) => id === previousLocation
-                ).townCity,
-                county: userData.addresses.find(
-                  ({ id }) => id === previousLocation
-                ).county,
-                postcode: userData.addresses.find(
-                  ({ id }) => id === previousLocation
-                ).postcode,
-              }
-            : {
-                premises: userData.addresses.find(({ primary }) => primary)
-                  .premises,
-                building: userData.addresses.find(({ primary }) => primary)
-                  .building,
-                street: userData.addresses.find(({ primary }) => primary)
-                  .street,
-                townCity: userData.addresses.find(({ primary }) => primary)
-                  .townCity,
-                county: userData.addresses.find(({ primary }) => primary)
-                  .county,
-                postcode: userData.addresses.find(({ primary }) => primary)
-                  .postcode,
-              },
-        newLocation: location === "NEW" ? true : false,
-        userId: currentUser,
-        schemeId: window.localStorage.getItem("currentScheme"),
-        offenders:
-          offenders.filter(({ create }) => create).length === 0
-            ? undefined
-            : offenders
-                .filter(({ create }) => create)
-                .map(
-                  ({
-                    id,
-                    age,
-                    build,
-                    dateOfBirth,
-                    dateSource,
-                    gender,
-                    hair,
-                    name,
-                    peculiarities,
-                    race,
-                    images,
-                  }) => ({
-                    age: !!age ? age : undefined,
-                    build,
-                    dateOfBirth,
-                    dateSource,
-                    gender,
-                    hair,
-                    name,
-                    peculiarities,
-                    race,
-                    localId: `${id}`,
-                  })
-                ),
-        existingOffenders: offenders
-          .filter(({ existing }) => existing)
-          .map(({ id }) => ({ id })),
-        images: {
-          upload:
-            images.length > 0
-              ? images.map(({ file, offendersIds }) => ({
-                  file,
-                  offenders: offendersIds.map((id) => ({
-                    id: `${id}`,
-                    new: Number.isInteger(id),
-                  })),
-                }))
+        location: {
+          create:
+            location === "NEW"
+              ? {
+                  premises: newLocation.premises,
+                  building: newLocation.building,
+                  street: newLocation.street,
+                  townCity: newLocation.townCity,
+                  county: newLocation.county,
+                  postcode: newLocation.postcode,
+                }
               : undefined,
+
+          previous:
+            location === "PREVIOUS"
+              ? { id: previousLocation }
+              : location === "ACCOUNT"
+              ? { id: userData.addresses.find((el) => el.primary).id }
+              : undefined,
+        },
+        scheme: schemeId,
+        offenders: {
+          connect:
+            offenders.length > 0
+              ? offenders.filter((el) => !el.create).map(({ id }) => ({ id }))
+              : undefined,
+          create: undefined,
+        },
+        images: {
+          // connect:
+          //   images.length > 0
+          //     ? images?.map((el) => {
+          //         return {
+          //           id: el?.id,
+          //           offenders: el?.offendersIds
+          //             ? el.offendersIds.map((e) => {
+          //                 return { id: e, localId: e.localId };
+          //               })
+          //             : undefined,
+          //         };
+          //       })
+          //     : undefined,
+          connect: undefined,
         },
         groups:
           groups.length > 0
@@ -492,17 +448,10 @@ const AddIncident = ({ history }) => {
             : groupsData.groups.map(({ id }) => ({ id })),
       },
     });
-    history.push("/incidents/");
+
+    history.push("/app/incidents/");
   };
 
-  // console.log(
-  //   "crimetypes:",
-  //   crimeTypesList,
-  //   "crimetypesloading:",
-  //   crimeTypesLoading
-  // );
-
-  console.log(userData);
   return (
     <IncidentWizard
       // global values

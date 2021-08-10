@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-import ImageGallery from '../../../../../images/ImageGallery';
-import AddOutline from '../../../../../images/AddOutline';
-import { FileButton } from '../../../../global/actions';
-import { Grow } from '../../../../global/layout';
-import ImageMenuItem from '../ImageMenuItem/ImageMenuItem';
-import AssignOffenderPopover from '../AssignOffenderPopover/AssignOffenderPopover';
-import { Header, HeaderSubText } from '../../../../global/forms';
-import { EmptyText } from '../../../../global/typography';
-import { useStoreActions } from '../../../../../state';
+import ImageGallery from "../../../../../images/ImageGallery";
+import AddOutline from "../../../../../images/AddOutline";
+import { FileButton } from "../../../../global/actions";
+import { Grow } from "../../../../global/layout";
+import ImageMenuItem from "../ImageMenuItem/ImageMenuItem";
+import AssignOffenderPopover from "../AssignOffenderPopover/AssignOffenderPopover";
+import { Header, HeaderSubText } from "../../../../global/forms";
+import { EmptyText } from "../../../../global/typography";
+import { useStoreActions } from "../../../../../state";
+import LightBox from "old-components/global/LightBox/LightBox";
 
 const PageContainer = styled.div`
   height: 100%;
@@ -111,7 +112,7 @@ const Image = styled.div`
 const AddItemText = styled.p`
   margin: 10px 0 0;
   font-size: 16px;
-  color: ${({ disabled }) => (disabled ? '#BDBDBD' : '#EF5350')};
+  color: ${({ disabled }) => (disabled ? "#BDBDBD" : "#EF5350")};
 `;
 const ImageMenu = styled.div`
   display: flex;
@@ -130,22 +131,22 @@ const AddImages = ({
   removeImage,
   uploading,
   assignImageToOffenders,
-  uploadImage
+  uploadImage,
 }) => {
   // refs
   let addImage = React.createRef();
 
-  const toggleLightbox = useStoreActions(
-    actions => actions.theme.toggleLightbox
+  const toggleLightBox = useStoreActions(
+    (actions) => actions.theme.toggleLightBox
   );
 
   // state
-  const [assign, setAssign] = useState('');
+  const [assign, setAssign] = useState("");
 
   // effects
   useEffect(
     () => {
-      if (addImage.value !== undefined) addImage.current.value = '';
+      if (addImage.value !== undefined) addImage.current.value = "";
     },
     // eslint-disable-next-line
     [images]
@@ -163,7 +164,7 @@ const AddImages = ({
         {images.length > 0 ? (
           <ImageGrid>
             {images.map(({ id, url, offendersIds }) => {
-              return id === 'UPLOADING' ? (
+              return id === "UPLOADING" ? (
                 <LoadingItem>
                   <CircularProgress />
                   <Typography>Uploading Image</Typography>
@@ -186,7 +187,7 @@ const AddImages = ({
                       <Grow />
                       <ImageMenuItem
                         onClick={() => {
-                          toggleLightbox([url]);
+                          toggleLightBox({ images: [url], index: 0 });
                         }}
                         tooltip="Full Size"
                       >
@@ -210,7 +211,7 @@ const AddImages = ({
               );
             })}
             <GridItem>
-              <AddItem onChange={value => uploadImage(value)}>
+              <AddItem onChange={(value) => uploadImage(value)}>
                 <FileButton
                   id="file-2"
                   type="file"
@@ -235,9 +236,9 @@ const AddImages = ({
         ) : (
           <Empty>
             <ImageGallery width="100px" height="100px" />
-            <EmptyText>You have not added any offenders yet</EmptyText>
+            <EmptyText>You have not added any images yet</EmptyText>
             <EmptyActions>
-              <div onChange={value => uploadImage(value)}>
+              <div onChange={(value) => uploadImage(value)}>
                 <FileButton
                   id="file-2"
                   type="file"
@@ -261,12 +262,13 @@ const AddImages = ({
         )}
       </Page>
       <AssignOffenderPopover
-        open={assign !== ''}
-        close={() => setAssign('')}
+        open={assign !== ""}
+        close={() => setAssign("")}
         image={images.find(({ id }) => id === assign)}
         offenders={offenders}
         assignImageToOffenders={assignImageToOffenders}
       />
+      <LightBox />
     </PageContainer>
   );
 };

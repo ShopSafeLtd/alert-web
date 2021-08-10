@@ -1,12 +1,8 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 
 export const Groups = gql`
-  query GroupsQuery(
-    $where: GroupWhereInput
-  ) {
-    groups(
-      where: $where
-    ) {
+  query GroupsQuery($where: GroupWhereInput) {
+    groups(where: $where) {
       id
       name
       description
@@ -15,13 +11,15 @@ export const Groups = gql`
 `;
 
 export interface GroupsArgs {
-  scheme: { id: { equals: string } };
-  users?: { some: { id: { equals: string } } };
-  id?: { notIn: string[] }
-  OR?: [
-    { name: { contains: string } },
-    { users: { some: { fullName: { contains: string } } } }
-  ]
+  where: {
+    scheme: { id: { equals: string } };
+    users?: { some: { id: { equals: string } } };
+    id?: { notIn: string[] };
+    OR?: [
+      { name: { contains: string } },
+      { users: { some: { fullName: { contains: string } } } }
+    ];
+  };
 }
 
 export interface GroupsRes {
@@ -29,5 +27,5 @@ export interface GroupsRes {
     id: string;
     name: string;
     description: string;
-  }
+  };
 }

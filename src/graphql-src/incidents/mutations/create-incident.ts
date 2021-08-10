@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
 import { FullIncident, FullIncidentType } from "../fragments";
-import { Age, Build, Gender, Race } from '../../offenders/enums'
+import { Age, Build, Gender, Race } from "../../offenders/enums";
 
 export const CreateIncident = gql`
   mutation createIncident(
@@ -74,16 +74,16 @@ export interface CreateIncidentArgs {
     }[];
   };
   images: {
-    connect?: {
+    connect: {
       id: string;
     }[];
-    create?: {
-      file: any;
-      offenders?: {
-        id: string;
-        new: boolean;
-      }[];
-    }[];
+    // create?: {
+    //   file: any;
+    //   offenders?: {
+    //     id: string;
+    //     new: boolean;
+    //   }[];
+    // }[];
   };
   groups: {
     id: string;

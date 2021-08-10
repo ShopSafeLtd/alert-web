@@ -57,8 +57,6 @@ const OffenderPreview = ({ offender, actions, noPadding, fullHeight }) => {
     (actions) => actions.theme.toggleLightBox
   );
 
-  console.log(offender.build);
-  console.log(offender.build === buildValues[1].value);
   let buildValue, genderValue, raceValue, ageValue, lightBoxImages;
   if (!!offender) {
     buildValue = buildValues.find(
@@ -76,8 +74,7 @@ const OffenderPreview = ({ offender, actions, noPadding, fullHeight }) => {
   } else {
     lightBoxImages = [];
   }
-  console.log(buildValue, genderValue, raceValue, ageValue, lightBoxImages);
-  console.log("offender:", offender);
+
   return !!offender ? (
     <Preview noPadding={noPadding} fullHeight={fullHeight}>
       <Actions>{actions}</Actions>

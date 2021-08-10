@@ -1,11 +1,11 @@
-import React from 'react';
-import styled from 'styled-components';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import RightIcon from '@material-ui/icons/ArrowForwardIos';
-import LeftIcon from '@material-ui/icons/ArrowBackIos';
-import PinchToZoom from 'react-pinch-and-zoom';
-import { useStoreActions, useStoreState } from '../../../state';
+import React from "react";
+import styled from "styled-components";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import RightIcon from "@material-ui/icons/ArrowForwardIos";
+import LeftIcon from "@material-ui/icons/ArrowBackIos";
+// import PinchToZoom from "react-pinch-and-zoom";
+import { useStoreActions, useStoreState } from "../../../state";
 
 const Container = styled.div`
   display: flex;
@@ -75,26 +75,35 @@ const LeftContainer = styled.div`
 const LeftButton = styled(LeftIcon)`
   color: #fff;
 `;
-const Zoom = styled(PinchToZoom)`
+// const Zoom = styled(PinchToZoom)`
+//   flex: 1;
+//   z-index: 1402;
+// `;
+
+const Zoom = styled.div`
   flex: 1;
   z-index: 1402;
 `;
 
 const LightBox = () => {
-  const open = useStoreState(state => state.theme.lightbox);
-  const images = useStoreState(state => state.theme.lightboxImages);
-  const index = useStoreState(state => state.theme.lightboxIndex);
-  const close = useStoreActions(actions => actions.theme.close);
+  const open = useStoreState((state) => state.theme.lightbox);
+  const images = useStoreState((state) => state.theme.lightboxImages);
+  const index = useStoreState((state) => state.theme.lightboxIndex);
+  const close = useStoreActions((actions) => actions.theme.toggleLightBox);
   const setLightboxIndex = useStoreActions(
-    actions => actions.theme.setLightboxIndex
+    (actions) => actions.theme.setLightboxIndex
   );
 
   return open ? (
     <Container>
-      <Background onClick={close} />
+      <Background
+        onClick={() => close({ images: undefined, index: undefined })}
+      />
       <Actions>
         <IconButton>
-          <CloseButton onClick={close} />
+          <CloseButton
+            onClick={() => close({ images: undefined, index: undefined })}
+          />
         </IconButton>
       </Actions>
       <Zoom>
@@ -104,22 +113,20 @@ const LightBox = () => {
           </ImageWrapper>
         </ImageContainer>
       </Zoom>
-      {images.length > 0 &&
-        index !== images.length - 1 && (
-          <RightContainer>
-            <IconButton onClick={() => setLightboxIndex({ index: index + 1 })}>
-              <RightButton />
-            </IconButton>
-          </RightContainer>
-        )}
-      {images.length > 0 &&
-        index !== 0 && (
-          <LeftContainer>
-            <IconButton onClick={() => setLightboxIndex({ index: index - 1 })}>
-              <LeftButton />
-            </IconButton>
-          </LeftContainer>
-        )}
+      {images?.length > 0 && index !== images?.length - 1 && (
+        <RightContainer>
+          <IconButton onClick={() => setLightboxIndex({ index: index + 1 })}>
+            <RightButton />
+          </IconButton>
+        </RightContainer>
+      )}
+      {images.length > 0 && index !== 0 && (
+        <LeftContainer>
+          <IconButton onClick={() => setLightboxIndex({ index: index - 1 })}>
+            <LeftButton />
+          </IconButton>
+        </LeftContainer>
+      )}
     </Container>
   ) : null;
 };
