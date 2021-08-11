@@ -1,9 +1,9 @@
-import React, { PureComponent, Fragment } from 'react';
-import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
+import React, { PureComponent, Fragment } from "react";
+import styled from "styled-components";
+import Typography from "@material-ui/core/Typography";
 
-import { HelpButton } from '../../../global/actions';
-import { SkeletonText } from '../../../global/skeletons';
+import { HelpButton } from "../../../global/actions";
+import { SkeletonText } from "../../../global/skeletons";
 
 const List = styled.div`
   flex: 1;
@@ -34,15 +34,8 @@ const Svg = styled.svg`
 
 class CrimeTypeList extends PureComponent {
   render() {
-    const {
-      selected,
-      toggleSelected,
-      disabled,
-      crimeTypes,
-      loading
-    } = this.props;
-
-    console.log(crimeTypes)
+    const { selected, toggleSelected, disabled, crimeTypes, loading } =
+      this.props;
 
     return (
       <List>
@@ -51,7 +44,7 @@ class CrimeTypeList extends PureComponent {
             <ListItem>
               <Svg viewBox="0 0 24 24">
                 <path
-                  fill={'#E0E0E0'}
+                  fill={"#E0E0E0"}
                   d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M11,16.5L18,9.5L16.59,8.09L11,13.67L7.91,10.59L6.5,12L11,16.5Z"
                 />
               </Svg>
@@ -60,7 +53,7 @@ class CrimeTypeList extends PureComponent {
             <ListItem>
               <Svg viewBox="0 0 24 24">
                 <path
-                  fill={'#E0E0E0'}
+                  fill={"#E0E0E0"}
                   d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M11,16.5L18,9.5L16.59,8.09L11,13.67L7.91,10.59L6.5,12L11,16.5Z"
                 />
               </Svg>
@@ -76,7 +69,7 @@ class CrimeTypeList extends PureComponent {
                   viewBox="0 0 24 24"
                 >
                   <path
-                    fill={selected.includes(id) ? '#1E88E5' : '#E0E0E0'}
+                    fill={selected.includes(id) ? "#1E88E5" : "#E0E0E0"}
                     d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M11,16.5L18,9.5L16.59,8.09L11,13.67L7.91,10.59L6.5,12L11,16.5Z"
                   />
                 </Svg>

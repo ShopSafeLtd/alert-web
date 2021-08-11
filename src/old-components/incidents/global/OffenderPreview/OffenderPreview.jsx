@@ -122,7 +122,6 @@ const OffenderPreview = ({
   const toggleLightbox = useStoreActions(
     (actions) => actions.theme.toggleLightBox
   );
-  // console.log(offender, build, gender, race, age);
   let buildValue, genderValue, raceValue, ageValue, lightBoxImages;
   if (build !== undefined)
     buildValue = buildValues.find(({ value }) => value === build).label;
@@ -188,18 +187,12 @@ const OffenderPreview = ({
         </Row>
         <Row>
           <FieldContainer>
-            <ItemHeader variant="subtitle2">Height</ItemHeader>
-            <ItemText>Unknown</ItemText>
-          </FieldContainer>
-          <FieldContainer>
             <ItemHeader variant="subtitle2">Age</ItemHeader>
             <ItemText>
-              {!!age && !!dateOfBirth
-                ? ageValue !== "UNKNOWN"
+              {!!age || !!dateOfBirth
+                ? ageValue
                   ? ageValue
-                  : dateOfBirth === null
-                  ? "Unknown"
-                  : moment(dateOfBirth).format("DD/MM/YYYY")
+                  : `${moment().diff(moment(dateOfBirth), "years")}`
                 : "Unknown"}
             </ItemText>
           </FieldContainer>
@@ -209,11 +202,11 @@ const OffenderPreview = ({
               {!!hair ? (hair !== "" ? hair : "Unknown") : "Unknown"}
             </ItemText>
           </FieldContainer>
+          <FieldContainer>
+            <ItemHeader variant="subtitle2">peculiarities</ItemHeader>
+            <ItemText>{!!peculiarities ? peculiarities : "Unknown"}</ItemText>
+          </FieldContainer>
         </Row>
-        <FieldContainer>
-          <ItemHeader variant="subtitle2">peculiarities</ItemHeader>
-          <ItemText>{!!peculiarities ? peculiarities : "Unknown"}</ItemText>
-        </FieldContainer>
       </Container>
     </Preview>
   );

@@ -181,8 +181,6 @@ const useAuth = () => {
   }
 
   const login = ({ email, password }: LoginArgs) => {
-    console.log(email, password);
-
     handleLogin({
       variables: {
         email,

@@ -1,47 +1,48 @@
-import React, { useState } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
-import update from 'immutability-helper';
-import { isEqual } from 'lodash-es';
+import React, { useState } from "react";
+import { useQuery, useMutation } from "@apollo/client";
+import update from "immutability-helper";
+import { isEqual } from "lodash-es";
 
-import { EditIncident as Query } from 'graphql-src/incidents/queries';
-import { UploadImage } from 'graphql-src/images/mutations';
-import { UpdateIncident } from 'graphql-src/incidents/mutations';
-import EditDesktop from '../desktop/EditDesktop/EditDesktop';
-import { useStoreActions, useStoreState } from '../../../../state';
+import { EditIncident as Query } from "../../../../graphql-src/incidents/queries";
+import { UploadImage } from "../../../../graphql-src/images/mutations";
+import { UpdateIncident } from "../../../../graphql-src/incidents/mutations";
+import EditDesktop from "../desktop/EditDesktop/EditDesktop";
+import { useStoreActions, useStoreState } from "../../../../state";
 
 const EditIncident = ({
   match: {
-    params: { id }
-  }
+    params: { id },
+  },
+  history,
 }) => {
-  const userId = useStoreState(state => state.user.id);
-  const schemeId = useStoreState(state => state.scheme.id);
-  const setNavbarActionDisabled = useStoreActions(
-    actions => actions.theme.setNavbarActionDisabled
+  const userId = useStoreState((state) => state.user.id);
+  const schemeId = useStoreState((state) => state.scheme.id);
+  const setNavBarActionDisabled = useStoreActions(
+    (actions) => actions.theme.setNavBarActionDisabled
   );
   // state
   const [description, setDescription] = useState({
-    subject: '',
-    subjectError: '',
-    description: '',
-    descriptionError: '',
+    subject: "",
+    subjectError: "",
+    description: "",
+    descriptionError: "",
     date: null,
-    dateError: '',
+    dateError: "",
     time: null,
-    timeError: ''
+    timeError: "",
   });
   const [crimeTypes, setCrimeTypes] = useState([]);
   const [crimeTypeError, setCrimeTypeError] = useState(false);
   const [location, setLocation] = useState({
-    id: '',
-    building: '',
-    street: '',
-    streetError: '',
-    townCity: '',
-    townError: '',
-    county: '',
-    postcode: '',
-    postcodeError: ''
+    id: "",
+    building: "",
+    street: "",
+    streetError: "",
+    townCity: "",
+    townError: "",
+    county: "",
+    postcode: "",
+    postcodeError: "",
   });
   const [offenders, setOffenders] = useState([]);
   const [images, setImages] = useState([]);
@@ -52,39 +53,44 @@ const EditIncident = ({
   // queries
   const { data, loading } = useQuery(Query, {
     variables: { id },
-    fetchPolicy: 'cache-and-network',
-    onCompleted: ({ incident }) => updateState(incident)
+    fetchPolicy: "cache-and-network",
+    onCompleted: ({ incident }) => {
+      updateState(incident);
+    },
   });
 
   // mutations
   const [updateIncident] = useMutation(UpdateIncident, {
-    onCompleted: ({ updateIncident }) => updateState(updateIncident)
+    onCompleted: ({ updateIncident }) => {
+      updateState(updateIncident);
+      history.push("/app/incidents");
+    },
   });
   const [createImage] = useMutation(UploadImage, {
-    onCompleted: data =>
+    onCompleted: (data) =>
       updateIncident({
         variables: {
           id,
           images: {
-            connect: [{ id: data.uploadImage.id }]
-          }
-        }
-      })
+            connect: [{ id: data.uploadImage.id }],
+          },
+        },
+      }),
   });
 
   // functions
-  const updateState = incident => {
+  const updateState = (incident) => {
     setDescription({
       ...description,
       subject: incident.subject,
       description: incident.description,
       date: incident.date,
-      time: incident.time
+      time: incident.time,
     });
     setCrimeTypes(incident.crimeTypes);
     setLocation({
       ...location,
-      ...incident.location
+      ...incident.location,
     });
     setOffenders(incident.offenders);
     setImages(incident.images);
@@ -93,55 +99,57 @@ const EditIncident = ({
   const handleDesChange = (value, field) =>
     setDescription({
       ...description,
-      [field]: value
+      [field]: value,
     });
   const handleLocChange = (value, field) =>
     setLocation({
       ...location,
-      [field]: value
+      [field]: value,
     });
-  const removeCrimeType = crimeType =>
+  const removeCrimeType = (crimeType) =>
     setCrimeTypes(crimeTypes.filter(({ id }) => id !== crimeType));
-  const removeOffender = offender =>
+  const removeOffender = (offender) =>
     setOffenders(offenders.filter(({ id }) => id !== offender));
   const addOffender = (offender, type) =>
-    setOffenders([
-      ...offenders,
-      {
-        ...offender,
-        type,
-        id: type === 'NEW' ? offenders.length : offender.id,
-        images: type === 'NEW' ? [] : offender.images,
-        name: !!offender.name ? offender.name : 'Unidentified Offender'
-      }
-    ]);
-  const removeImage = image =>
+    setOffenders((prev) => {
+      return [
+        ...prev,
+        {
+          ...offender,
+          type,
+          id: type === "NEW" ? offenders.length : offender.id,
+          images: type === "NEW" ? [] : offender.images,
+          name: !!offender.name ? offender.name : "Unidentified Offender",
+        },
+      ];
+    });
+  const removeImage = (image) =>
     setImages(images.filter(({ id }) => id !== image));
   const uploadImage = async ({ target: { files } }) => {
     setUploadingImage(true);
-    setNavbarActionDisabled(true);
+    setNavBarActionDisabled(true);
     setImages([
       ...images,
       {
-        id: 'UPLOADING',
-        offendersIds: []
-      }
+        id: "UPLOADING",
+        offendersIds: [],
+      },
     ]);
     // create request for every files
-    [...files].forEach(async file => {
+    [...files].forEach(async (file) => {
       await createImage({
         variables: {
           file,
-          scheme: schemeId
-        }
+          scheme: schemeId,
+        },
       });
       setUploadingImage(false);
-      setNavbarActionDisabled(false);
+      setNavBarActionDisabled(false);
     });
   };
   const assignOffendersToImage = (image, assignOffenders, removeOffenders) => {
     let newOffenders = [...offenders];
-    assignOffenders.forEach(offender => {
+    assignOffenders.forEach((offender) => {
       if (
         !offenders
           .find(({ id }) => id === offender)
@@ -155,22 +163,22 @@ const EditIncident = ({
                 ...offenders.find(({ id }) => id === offender).images,
                 {
                   id: image.id,
-                  url: image.url
-                }
-              ]
-            }
-          }
+                  url: image.url,
+                },
+              ],
+            },
+          },
         });
     });
-    removeOffenders.forEach(offender => {
+    removeOffenders.forEach((offender) => {
       newOffenders = update(offenders, {
         [offenders.map(({ id }) => id).indexOf(offender)]: {
           images: {
             $set: offenders
               .find(({ id }) => id === offender)
-              .images.filter(({ id }) => id !== image.id)
-          }
-        }
+              .images.filter(({ id }) => id !== image.id),
+          },
+        },
       });
     });
     setOffenders(newOffenders);
@@ -183,16 +191,16 @@ const EditIncident = ({
                 ({ id }) => !removeOffenders.includes(id)
               ),
               ...assignOffenders
-                .filter(id => !images.includes(id))
-                .map(id => ({ id, added: true }))
-            ]
-          }
-        }
+                .filter((id) => !images.includes(id))
+                .map((id) => ({ id, added: true })),
+            ],
+          },
+        },
       })
     );
   };
-  const addGroups = newGroups => setGroups([...groups, ...newGroups]);
-  const removeGroup = remove =>
+  const addGroups = (newGroups) => setGroups([...groups, ...newGroups]);
+  const removeGroup = (remove) =>
     setGroups(groups.filter(({ id }) => id !== remove));
   const validateDescription = () =>
     new Promise((resolve, reject) => {
@@ -202,10 +210,10 @@ const EditIncident = ({
       const timeValid = !!description.time;
       setDescription({
         ...description,
-        subjectError: subjectValid ? '' : 'This is a required field.',
-        descriptionError: descriptionValid ? '' : 'This is a required field.',
-        dateError: dateValid ? '' : 'This is a required field.',
-        timeError: timeValid ? '' : 'This is a required field.'
+        subjectError: subjectValid ? "" : "This is a required field.",
+        descriptionError: descriptionValid ? "" : "This is a required field.",
+        dateError: dateValid ? "" : "This is a required field.",
+        timeError: timeValid ? "" : "This is a required field.",
       });
       subjectValid && descriptionValid && dateValid && timeValid
         ? resolve()
@@ -224,9 +232,9 @@ const EditIncident = ({
       const postcodeValid = !!location.postcode;
       setLocation({
         ...location,
-        streetError: streetValid ? '' : 'This is a required field',
-        townError: townValid ? '' : 'This is a required field',
-        postcodeError: postcodeValid ? '' : 'This is a required field'
+        streetError: streetValid ? "" : "This is a required field",
+        townError: townValid ? "" : "This is a required field",
+        postcodeError: postcodeValid ? "" : "This is a required field",
       });
       streetValid && townValid && postcodeValid ? resolve() : reject();
     });
@@ -244,10 +252,12 @@ const EditIncident = ({
       ({ id }) => !crimeTypes.map(({ id }) => id).includes(id)
     );
     const connectOffenders = offenders
-      .filter(({ type }) => type === 'EXISTING')
+      .filter(({ type }) => type !== "NEW")
       .map(({ id }) => ({ id }));
     const createOffenders = offenders
-      .filter(({ type }) => type === 'NEW')
+      .filter(({ type }) => {
+        return type === "NEW";
+      })
       .map(
         ({
           age,
@@ -258,28 +268,32 @@ const EditIncident = ({
           hair,
           name,
           peculiarities,
-          race
-        }) => ({
-          age,
-          build,
-          dateOfBirth,
-          dateSource,
-          gender,
-          hair,
-          name,
-          peculiarities,
           race,
-          createdBy: {
-            connect: {
-              id: userId
-            }
-          },
-          scheme: {
-            connect: {
-              id: schemeId
-            }
-          }
-        })
+          id,
+        }) => {
+          return {
+            age,
+            build,
+            dateOfBirth: dateOfBirth !== "" ? dateOfBirth : undefined,
+            dateSource: dateSource !== "" ? dateSource : undefined,
+            gender,
+            hair,
+            name,
+            peculiarities,
+            race,
+            createdBy: {
+              connect: {
+                id: userId,
+              },
+            },
+            scheme: {
+              connect: {
+                id: schemeId,
+              },
+            },
+            localId: `${id}`,
+          };
+        }
       );
     const disconnectOffenders = data.incident.offenders
       .filter(({ id }) => !offenders.map(({ id }) => id).includes(id))
@@ -290,9 +304,9 @@ const EditIncident = ({
         url,
         scheme: {
           connect: {
-            id: schemeId
-          }
-        }
+            id: schemeId,
+          },
+        },
       }));
     const disconnectImages = data.incident.images
       .filter(({ id }) => !images.map(({ id }) => id).includes(id))
@@ -302,7 +316,7 @@ const EditIncident = ({
         ({ id, offenders }) =>
           !isEqual(
             offenders,
-            data.incident.images.find(image => id === image.id).offenders
+            data.incident.images.find((image) => id === image.id).offenders
           )
       )
       .map(({ id, offenders }) => {
@@ -310,7 +324,7 @@ const EditIncident = ({
           .filter(({ added }) => added)
           .map(({ id }) => ({ id }));
         const disconnect = data.incident.images
-          .find(image => id === image.id)
+          .find((image) => id === image.id)
           .offenders.filter(({ id }) => !offenders.includes(id))
           .map(({ id }) => ({ id }));
         return {
@@ -318,9 +332,9 @@ const EditIncident = ({
           data: {
             offenders: {
               connect: connect.length > 0 ? connect : undefined,
-              disconnect: disconnect.length > 0 ? disconnect : undefined
-            }
-          }
+              disconnect: disconnect.length > 0 ? disconnect : undefined,
+            },
+          },
         };
       });
     const connectGroups = groups
@@ -346,8 +360,8 @@ const EditIncident = ({
               street: { set: location.street },
               townCity: { set: location.townCity },
               county: { set: location.county },
-              postcode: { set: location.postcode }
-            }
+              postcode: { set: location.postcode },
+            },
           },
           crimeTypes: {
             connect:
@@ -357,26 +371,27 @@ const EditIncident = ({
             disconnect:
               disconnectCrimeTypes.length > 0
                 ? disconnectCrimeTypes.map(({ id }) => ({ id }))
-                : undefined
+                : undefined,
           },
           offenders: {
             connect: connectOffenders.length > 0 ? connectOffenders : undefined,
             create: createOffenders.length > 0 ? createOffenders : undefined,
             disconnect:
-              disconnectOffenders.length > 0 ? disconnectOffenders : undefined
+              disconnectOffenders.length > 0 ? disconnectOffenders : undefined,
           },
-          images: {
-            create: createImages.length > 0 ? createImages : undefined,
-            disconnect:
-              disconnectImages.length > 0 ? disconnectImages : undefined,
-            update: updatedImages.length > 0 ? updatedImages : undefined
-          },
+          // images: {
+          //   create: createImages.length > 0 ? createImages : undefined,
+          //   disconnect:
+          //     disconnectImages.length > 0 ? disconnectImages : undefined,
+          //   update: updatedImages.length > 0 ? updatedImages : undefined,
+          // },
           groups: {
             connect: connectGroups.length > 0 ? connectGroups : undefined,
-            disconnect: disconnectGroups.length > 0 ? disconnectGroups : undefined
-          }
-        }
-      }
+            disconnect:
+              disconnectGroups.length > 0 ? disconnectGroups : undefined,
+          },
+        },
+      },
     });
   };
 

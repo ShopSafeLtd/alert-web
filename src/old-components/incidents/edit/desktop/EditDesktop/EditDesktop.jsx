@@ -1,24 +1,27 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import MediaQuery from 'react-responsive';
-import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import styled from "styled-components";
+import MediaQuery from "react-responsive";
+import Button from "@material-ui/core/Button";
+import { Link } from "react-router-dom";
+import { useQuery } from "@apollo/client";
 
-import { Row, Section } from '../../../../global/layout';
-import CrimeTypePopOver from '../../../global/CrimeTypePopOver/CrimeTypePopOver';
-import NewOffenderPopOver from '../NewOffenderPopOver/NewOffenderPopOver';
-import ExistingOffenderPopOver from '../ExistingOffenderPopOver/ExistingOffenderPopOver';
-import EditDescription from '../EditDescription/EditDescription';
-import EditLocation from '../EditLocation/EditLocation';
-import EditOffenders from '../EditOffenders/EditOffenders';
-import EditImages from '../../../../global/edit/EditImages/EditImages';
-import AssignOffenderPopOver from '../AssignOffendersPopOver/AssignOffendersPopOver';
-import { BackButton } from '../../../../global/actions';
-import { PageHeader } from '../../../../global/typography';
-import EditOffenderPopOver from '../EditOffenderPopOver/EditOffenderPopOver';
-import EditGroups from '../../../../global/edit/EditGroups/EditGroups';
-import AddGroups from '../../../../global/edit/AddGroups/AddGroups';
-import ConfirmDialog from '../../../../global/ConfirmDialog/ConfirmDialog';
+import { Row, Section } from "../../../../global/layout";
+import CrimeTypePopOver from "../../../global/CrimeTypePopOver/CrimeTypePopOver";
+import NewOffenderPopOver from "../NewOffenderPopOver/NewOffenderPopOver";
+import ExistingOffenderPopOver from "../ExistingOffenderPopOver/ExistingOffenderPopOver";
+import EditDescription from "../EditDescription/EditDescription";
+import EditLocation from "../EditLocation/EditLocation";
+import EditOffenders from "../EditOffenders/EditOffenders";
+import EditImages from "../../../../global/edit/EditImages/EditImages";
+import AssignOffenderPopOver from "../AssignOffendersPopOver/AssignOffendersPopOver";
+import { BackButton } from "../../../../global/actions";
+import { PageHeader } from "../../../../global/typography";
+import EditOffenderPopOver from "../EditOffenderPopOver/EditOffenderPopOver";
+import EditGroups from "../../../../global/edit/EditGroups/EditGroups";
+import AddGroups from "../../../../global/edit/AddGroups/AddGroups";
+import ConfirmDialog from "../../../../global/ConfirmDialog/ConfirmDialog";
+import { useStoreState } from "../../../../../state";
+import { Tags } from "../../../../../graphql-src/tags/queries";
 
 const Page = styled.div`
   width: 100%;
@@ -59,16 +62,28 @@ const EditDesktop = ({
   validateCrimeTypes,
   validateLocation,
   validateGroups,
-  handleSave
+  handleSave,
 }) => {
   // state
   const [crimeTypesOpen, setCrimeTypesOpen] = useState(false);
   const [newOffendersOpen, setNewOffendersOpen] = useState(false);
   const [existingOffendersOpen, setExistingOffendersOpen] = useState(false);
-  const [editOffenderOpen, setEditOffender] = useState('');
-  const [assignOffenders, setAssignOffenders] = useState('');
+  const [editOffenderOpen, setEditOffender] = useState("");
+  const [assignOffenders, setAssignOffenders] = useState("");
   const [addGroupsOpen, setAddGroupsOpen] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
+
+  const schemeId = useStoreState((state) => state.scheme.id);
+
+  const { data: crimeTypesList, loading: crimeTypesLoading } = useQuery(Tags, {
+    variables: {
+      where: {
+        scheme: { id: { equals: schemeId } },
+        dataType: { equals: "INCIDENT" },
+      },
+    },
+    fetchPolicy: "cache-and-network",
+  });
 
   // functions
   const save = () => {
@@ -84,24 +99,24 @@ const EditDesktop = ({
                   })
                   .catch(() =>
                     setError(
-                      'Please select at least one group for the incident.'
+                      "Please select at least one group for the incident."
                     )
                   )
               )
               .catch(() =>
-                setError('There are some missing fields in the location.')
+                setError("There are some missing fields in the location.")
               )
           )
-          .catch(() => setError('Please select at least one crime type.'))
+          .catch(() => setError("Please select at least one crime type."))
       )
       .catch(() =>
-        setError('There are some missing fields in the description')
+        setError("There are some missing fields in the description")
       );
   };
 
   return (
     <MediaQuery minDeviceWidth={1024}>
-      {matches => (
+      {(matches) => (
         <Page>
           {matches && (
             <Section width="100%" elevation={1}>
@@ -111,7 +126,15 @@ const EditDesktop = ({
           <Row>
             <EditDescription
               description={description}
-              crimeTypes={crimeTypes}
+              crimeTypes={
+                crimeTypesList &&
+                crimeTypes.map((el) => {
+                  console.log(crimeTypesList.tags, crimeTypes);
+                  return crimeTypesList.tags.find(
+                    (e) => el.id === e.id || el === el.id
+                  );
+                })
+              }
               handleChange={handleDesChange}
               removeCrimeType={removeCrimeType}
               openCrimeTypes={() => setCrimeTypesOpen(true)}
@@ -168,7 +191,7 @@ const EditDesktop = ({
             open={crimeTypesOpen}
             close={() => setCrimeTypesOpen(false)}
             setCrimeTypes={setCrimeTypes}
-            crimeTypesList={[]}
+            crimeTypesList={crimeTypesList ? crimeTypesList.tags : []}
           />
           <NewOffenderPopOver
             open={newOffendersOpen}
@@ -178,22 +201,22 @@ const EditDesktop = ({
           <ExistingOffenderPopOver
             open={existingOffendersOpen}
             close={() => setExistingOffendersOpen(false)}
-            addOffender={addOffender}
-            offendersIds={offenders
-              .filter(({ id }) => !Number.isInteger(id))
+            addExistingOffenders={addOffender}
+            existingsOffenders={offenders
+              .filter((el) => el.type !== "NEW")
               .map(({ id }) => id)}
           />
           <AssignOffenderPopOver
-            open={assignOffenders !== ''}
-            close={() => setAssignOffenders('')}
+            open={assignOffenders !== ""}
+            close={() => setAssignOffenders("")}
             offenders={offenders}
             image={images.find(({ id }) => id === assignOffenders)}
             assign={assignOffendersToImage}
           />
           <EditOffenderPopOver
             removeOffender={removeOffender}
-            open={editOffenderOpen !== ''}
-            close={() => setEditOffender('')}
+            open={editOffenderOpen !== ""}
+            close={() => setEditOffender("")}
             offender={offenders.find(({ id }) => id === editOffenderOpen)}
           />
           <AddGroups
@@ -203,18 +226,18 @@ const EditDesktop = ({
             addGroups={addGroups}
           />
           <ConfirmDialog
-            open={error !== ''}
-            handleClose={() => setError('')}
+            open={error !== ""}
+            handleClose={() => setError("")}
             title="Something is missing!"
             description={error}
             actions={[
               <Button
                 key={Math.random()}
-                onClick={() => setError('')}
+                onClick={() => setError("")}
                 color="primary"
               >
                 Close
-              </Button>
+              </Button>,
             ]}
           />
         </Page>

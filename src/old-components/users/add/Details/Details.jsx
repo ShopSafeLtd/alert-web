@@ -1,16 +1,16 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import TextField from '@material-ui/core/TextField';
+import React, { PureComponent } from "react";
+import styled from "styled-components";
+import TextField from "@material-ui/core/TextField";
 
 import {
   HeaderText,
   HeaderSubText,
   Field,
   FieldHeader,
-  Select
-} from '../../../global/forms';
-import { Row } from '../../../global/layout';
-import { SubHeader } from '../../../global/typography';
+  Select,
+} from "../../../global/forms";
+import { Row } from "../../../global/layout";
+import { SubHeader } from "../../../global/typography";
 
 const Page = styled.div`
   width: 100%;
@@ -28,8 +28,8 @@ const Header = styled.div`
 
 class Details extends PureComponent {
   componentDidMount() {
-    this.props.setNavbarAction('backLink');
-    this.props.setBackLinkTo('/admin/users');
+    this.props.setNavbarAction("backLink");
+    this.props.setBackLinkTo("/admin/users");
     this.props.setActiveStep(0);
   }
 
@@ -50,10 +50,9 @@ class Details extends PureComponent {
         street,
         townCity,
         county,
-        postcode
-      }
+        postcode,
+      },
     } = this.props;
-    console.log(roleError);
     return (
       <Page>
         <Header>
@@ -68,8 +67,8 @@ class Details extends PureComponent {
             <FieldHeader required>Full Name</FieldHeader>
             <TextField
               value={fullName}
-              onChange={handleChange('fullName')}
-              error={fullNameError !== ''}
+              onChange={handleChange("fullName")}
+              error={fullNameError !== ""}
               helperText={fullNameError}
               fullWidth
             />
@@ -78,8 +77,8 @@ class Details extends PureComponent {
             <FieldHeader required>Organisation</FieldHeader>
             <TextField
               value={organisation}
-              onChange={handleChange('organisation')}
-              error={organisationError !== ''}
+              onChange={handleChange("organisation")}
+              error={organisationError !== ""}
               helperText={organisationError}
               fullWidth
             />
@@ -90,8 +89,8 @@ class Details extends PureComponent {
             <FieldHeader required>Email Address</FieldHeader>
             <TextField
               value={email}
-              onChange={handleChange('email')}
-              error={emailError !== ''}
+              onChange={handleChange("email")}
+              error={emailError !== ""}
               helperText={emailError}
               fullWidth
             />
@@ -100,13 +99,13 @@ class Details extends PureComponent {
             <FieldHeader required>User Role</FieldHeader>
             <Select
               value={role}
-              onChange={handleChange('role')}
+              onChange={handleChange("role")}
               error={!!roleError}
               helperText={roleError}
               menuItems={[
-                { value: 'USER', label: 'User' },
-                { value: 'CONTENT_ADMIN', label: 'Content Admin' },
-                { value: 'SCHEME_ADMIN', label: 'Scheme Admin' }
+                { value: "USER", label: "User" },
+                { value: "CONTENT_ADMIN", label: "Content Admin" },
+                { value: "SCHEME_ADMIN", label: "Scheme Admin" },
               ]}
             />
           </Field>
@@ -117,7 +116,7 @@ class Details extends PureComponent {
             <FieldHeader>Premise</FieldHeader>
             <TextField
               value={premises}
-              onChange={handleChange('premises')}
+              onChange={handleChange("premises")}
               fullWidth
             />
           </Field>
@@ -125,7 +124,7 @@ class Details extends PureComponent {
             <FieldHeader>Building</FieldHeader>
             <TextField
               value={building}
-              onChange={handleChange('building')}
+              onChange={handleChange("building")}
               fullWidth
             />
           </Field>
@@ -135,7 +134,7 @@ class Details extends PureComponent {
             <FieldHeader>Street</FieldHeader>
             <TextField
               value={street}
-              onChange={handleChange('street')}
+              onChange={handleChange("street")}
               fullWidth
             />
           </Field>
@@ -143,7 +142,7 @@ class Details extends PureComponent {
             <FieldHeader>Town City</FieldHeader>
             <TextField
               value={townCity}
-              onChange={handleChange('townCity')}
+              onChange={handleChange("townCity")}
               fullWidth
             />
           </Field>
@@ -153,7 +152,7 @@ class Details extends PureComponent {
             <FieldHeader>County</FieldHeader>
             <TextField
               value={county}
-              onChange={handleChange('county')}
+              onChange={handleChange("county")}
               fullWidth
             />
           </Field>
@@ -161,7 +160,7 @@ class Details extends PureComponent {
             <FieldHeader>Postcode</FieldHeader>
             <TextField
               value={postcode}
-              onChange={handleChange('postcode')}
+              onChange={handleChange("postcode")}
               fullWidth
             />
           </Field>
@@ -171,8 +170,8 @@ class Details extends PureComponent {
   }
 
   componentWillUnmount() {
-    this.props.setNavbarAction('default');
-    this.props.setBackLinkTo('');
+    this.props.setNavbarAction("default");
+    this.props.setBackLinkTo("");
   }
 }
 

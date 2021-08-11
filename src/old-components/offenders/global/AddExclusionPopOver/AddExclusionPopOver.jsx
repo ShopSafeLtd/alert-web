@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
-import MediaQuery from 'react-responsive';
-import { useMutation } from '@apollo/client';
-import moment from 'moment';
+import React, { useState } from "react";
+import Button from "@material-ui/core/Button";
+import MediaQuery from "react-responsive";
+import { useMutation } from "@apollo/client";
+import moment from "moment";
 
-import { CreateBan } from 'graphql-src/bans/mutations';
-import { OffenderFeed } from 'graphql-src/offenders/queries';
-import { PopOver, PopOverContainer } from '../../../global/layout';
-import { FullWidthButton, BackButton } from '../../../global/actions';
-import { ExclusionForm } from '../../../forms';
-import { useStoreState } from '../../../../state';
+import { CreateBan } from "graphql-src/bans/mutations";
+import { OffenderFeed } from "graphql-src/offenders/queries";
+import { PopOver, PopOverContainer } from "../../../global/layout";
+import { FullWidthButton, BackButton } from "../../../global/actions";
+import { ExclusionForm } from "../../../forms";
+import { useStoreState } from "../../../../state";
 
 let querySize = 10;
 if (window.innerWidth > 1239 && window.innerWidth < 1800) {
@@ -24,30 +24,30 @@ const AddExclusionPopover = ({
   onSubmit,
   offenderId,
   visible,
-  close
+  close,
 }) => {
-  const createdById = useStoreState(state => state.user.id);
-  const schemeId = useStoreState(state => state.scheme.id);
+  const createdById = useStoreState((state) => state.user.id);
+  const schemeId = useStoreState((state) => state.scheme.id);
 
   // state
   const [ban, setBan] = useState({
-    location: '',
+    location: "",
     locationError: null,
-    description: '',
+    description: "",
     startDate: new moment(),
     startDateError: null,
     endDate: new moment(),
-    endDateError: null
+    endDateError: null,
   });
   const [submitting, setSubmitting] = useState(false);
 
   const variables = {
     schemeId: schemeId,
-    search: '',
+    search: "",
     first: querySize,
-    order: { createdAt: 'desc' },
+    order: { createdAt: "desc" },
     userId,
-    role
+    role,
   };
 
   // mutations
@@ -55,38 +55,37 @@ const AddExclusionPopover = ({
     update: (store, { data: { createBan } }) => {
       let data = store.readQuery({
         OffenderFeed,
-        variables
+        variables,
       });
       let index = data.offenderFeed.map(({ id }) => id).indexOf(offenderId);
       data.offenderFeed[index].bans = [
         ...data.offenderFeed[index].bans,
-        createBan
+        createBan,
       ];
       store.writeQuery({
         OffenderFeed,
         data,
-        variables
+        variables,
       });
-    }
+    },
   });
 
   // functions
   const handleChange = (value, field) => {
-    console.log(value, field);
     setBan({
       ...ban,
-      [field]: value
+      [field]: value,
     });
   };
   const handleClose = () => {
     setBan({
-      location: '',
+      location: "",
       locationError: null,
-      description: '',
+      description: "",
       startDate: new Date(),
       startDateError: null,
       endDate: new Date(),
-      endDateError: null
+      endDateError: null,
     });
     setSubmitting(false);
     close();
@@ -98,9 +97,9 @@ const AddExclusionPopover = ({
       const endDateValid = !!ban.endDate;
       setBan({
         ...ban,
-        locationError: locationValid ? '' : 'This is a required field.',
-        startDateError: startDateValid ? '' : 'This is a required field',
-        endDateError: endDateValid ? '' : 'This is a required field'
+        locationError: locationValid ? "" : "This is a required field.",
+        startDateError: startDateValid ? "" : "This is a required field",
+        endDateError: endDateValid ? "" : "This is a required field",
       });
       locationValid && startDateValid && endDateValid ? resolve() : reject();
     });
@@ -112,7 +111,7 @@ const AddExclusionPopover = ({
             location: ban.location,
             description: ban.description,
             startDate: ban.startDate,
-            endDate: ban.endDate
+            endDate: ban.endDate,
           });
         } else {
           addBan({
@@ -124,15 +123,15 @@ const AddExclusionPopover = ({
                 endDate: ban.endDate,
                 offender: { connect: { id: offenderId } },
                 scheme: { connect: { id: schemeId } },
-                createdby: { connect: { id: createdById } }
-              }
+                createdby: { connect: { id: createdById } },
+              },
             },
             optimisticResponse: {
               createBan: {
                 active: true,
                 createdBy: {
-                  id: 'cjhc60xdr955a01762blztukg',
-                  __typename: 'User'
+                  id: "cjhc60xdr955a01762blztukg",
+                  __typename: "User",
                 },
                 id: Math.random(),
                 description: ban.description,
@@ -141,11 +140,11 @@ const AddExclusionPopover = ({
                 location: ban.location,
                 offender: {
                   id: offenderId,
-                  __typename: 'Offender'
+                  __typename: "Offender",
                 },
-                __typename: 'Ban'
-              }
-            }
+                __typename: "Ban",
+              },
+            },
           });
         }
         handleClose();
@@ -155,13 +154,13 @@ const AddExclusionPopover = ({
 
   return (
     <MediaQuery minDeviceWidth={1024}>
-      {matches => (
+      {(matches) => (
         <PopOver
           noPadding
           open={visible}
           width={matches ? 500 : window.innerWidth - 15}
           handleClose={handleClose}
-          title={'Add Ban'}
+          title={"Add Ban"}
           actions={[
             <BackButton
               key={Math.random()}
@@ -178,7 +177,7 @@ const AddExclusionPopover = ({
               onClick={() => handleSubmit()}
             >
               Add Ban
-            </Button>
+            </Button>,
           ]}
           mobileAction={[
             <FullWidthButton
@@ -187,7 +186,7 @@ const AddExclusionPopover = ({
               onClick={handleSubmit}
               position="ABSOLUTE"
               disabled={submitting}
-            />
+            />,
           ]}
         >
           <PopOverContainer>
@@ -200,7 +199,7 @@ const AddExclusionPopover = ({
                 endDateError: ban.endDateError,
                 location: ban.location,
                 locationError: ban.locationError,
-                description: ban.description
+                description: ban.description,
               }}
             />
           </PopOverContainer>

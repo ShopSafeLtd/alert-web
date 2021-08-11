@@ -132,7 +132,11 @@ const AddDescription = ({
           {crimeTypes.length > 0 ? (
             crimeTypes.map((crimeType) => (
               <CrimeType component="div" key={crimeType}>
-                {crimeTypesList.find(({ id }) => crimeType === id).name}
+                {
+                  crimeTypesList.find(({ id }) => {
+                    return crimeType?.id === id || crimeType === id;
+                  })?.name
+                }
                 <Svg
                   viewBox="0 0 24 24"
                   onClick={() => {
@@ -174,11 +178,10 @@ const AddDescription = ({
         />
       </Field>
       <CrimeTypePopOver
-        crimeTypes={crimeTypes}
+        crimeTypes={crimeTypes.map(({ id }) => id)}
         open={open}
         close={() => setOpen(false)}
         setCrimeTypes={setCrimeTypes}
-        selected={crimeTypes}
         crimeTypesList={crimeTypesList}
       />
     </div>

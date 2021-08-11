@@ -1,5 +1,5 @@
-import { gql } from '@apollo/client';
-import { FullIncident, FullIncidentType } from '../fragments'
+import { gql } from "@apollo/client";
+import { FullIncident, FullIncidentType } from "../fragments";
 
 export const EditIncident = gql`
   query incident($id: String!) {
@@ -15,5 +15,5 @@ export interface EditIncidentArgs {
 }
 
 export interface EditIncidentRes {
-  incident: FullIncidentType
+  incident: FullIncidentType;
 }

@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import MediaQuery from 'react-responsive';
-import { isEqual } from 'lodash-es';
-import onClickOutside from 'react-onclickoutside';
+import React, { Component } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import MediaQuery from "react-responsive";
+import { isEqual } from "lodash-es";
+import onClickOutside from "react-onclickoutside";
 
-import { PopOver, PopOverContainer } from '../../../global/layout/';
-import { BackButton } from '../../../global/actions';
-import CrimeTypeList from '../CrimeTypeList/CrimeTypeList';
+import { PopOver, PopOverContainer } from "../../../global/layout/";
+import { BackButton } from "../../../global/actions";
+import CrimeTypeList from "../CrimeTypeList/CrimeTypeList";
 
 const Grow = styled.div`
   flex: 1;
@@ -18,7 +18,7 @@ class CrimeTypePopOver extends Component {
     super(props);
     this.state = {
       selected: [],
-      pristine: true
+      pristine: true,
     };
   }
 
@@ -34,56 +34,62 @@ class CrimeTypePopOver extends Component {
     if (!prevProps.open && this.props.open) {
       if (!isEqual(this.props.crimeTypes, this.state.selected)) {
         this.setState({
-          selected: [...this.props.crimeTypes]
+          selected: [...this.props.crimeTypes],
         });
       }
     }
   }
 
-  handleClickOutside = evt => {
+  handleClickOutside = (evt) => {
     if (this.props.open) {
       this.props.close();
     }
   };
 
-  toggleSelected = id => {
+  toggleSelected = (id) => {
     const { selected } = this.state;
     !selected.includes(id)
       ? this.setState({
-          selected: [...selected, id]
+          selected: [...selected, id],
         })
       : this.setState({
-          selected: selected.filter(crimeType => crimeType !== id)
+          selected: selected.filter((crimeType) => crimeType !== id),
         });
   };
 
   render() {
     const { selected } = this.state;
     const { open, close, setCrimeTypes, crimeTypesList } = this.props;
+    const crimeTypes = this.props.crimeTypes;
 
     const submit = () => {
       this.setState({
-        pristine: true
+        pristine: true,
       });
-      setCrimeTypes(selected);
+      setCrimeTypes((prev) => {
+        const input = selected.map((id) => {
+          return crimeTypesList?.find((el) => el?.id === id || el === id);
+        });
+        return input;
+      });
       close();
     };
 
     return (
       <MediaQuery minDeviceWidth={1024}>
-        {matches => (
+        {(matches) => (
           <PopOver
             open={open}
             noPadding
             width={matches ? 400 : window.innerWidth - 15}
             handleClose={close}
-            title={'Crime Types'}
+            title={"Crime Types"}
             actions={[
               <BackButton
                 key={0}
                 onClick={() => {
                   this.setState({
-                    pristine: true
+                    pristine: true,
                   });
                   close();
                 }}
@@ -97,7 +103,7 @@ class CrimeTypePopOver extends Component {
                 onClick={submit}
               >
                 Save
-              </Button>
+              </Button>,
             ]}
           >
             <Grow>
@@ -105,7 +111,9 @@ class CrimeTypePopOver extends Component {
                 <CrimeTypeList
                   selected={selected}
                   toggleSelected={this.toggleSelected}
-                  crimeTypes={crimeTypesList}
+                  crimeTypes={crimeTypesList.filter(
+                    ({ id }) => !crimeTypes.includes(id)
+                  )}
                 />
               </PopOverContainer>
             </Grow>
