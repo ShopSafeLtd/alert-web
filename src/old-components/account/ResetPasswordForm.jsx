@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { Mutation } from 'react-apollo';
-import Paper from '@material-ui/core/Paper';
-import MediaQuery from 'react-responsive';
-import TextField from '@material-ui/core/TextField';
-import validate from 'validate.js';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+// import { Mutation } from 'react-apollo';
+import Paper from "@material-ui/core/Paper";
+import MediaQuery from "react-responsive";
+import TextField from "@material-ui/core/TextField";
+// import validate from "validate.js";
+import { useMutation } from "@apollo/client";
 
-import ResetPasswordMutation from '../../graphql/account/mutations/ResetPasswordMutation';
-import { FullWidthButton, ProgressButton } from '../global/actions';
-import { HeaderText, HeaderSubText, Field, FieldHeader } from '../global/forms';
-import { useStoreActions } from '../../state';
+// import ResetPasswordMutation from '../../graphql/account/mutations/ResetPasswordMutation';
+import { UpdatePassword } from "graphql-src/users/mutations";
+import { FullWidthButton, ProgressButton } from "../global/actions";
+import { HeaderText, HeaderSubText, Field, FieldHeader } from "../global/forms";
+import { useStoreActions, useStoreState } from "../../state";
 
 const Container = styled.div`
   min-height: calc(100vh - 56px);
@@ -72,172 +74,194 @@ const StyledTextField = styled(TextField)`
   }
 `;
 
-const ResetPassword = ({ auth, history }) => {
-  const setTitle = useStoreActions(actions => actions.theme.setTitle);
+const ResetPassword = ({ auth, setAuth, history }) => {
+  const setTitle = useStoreActions((actions) => actions.theme.setTitle);
   const setNavbarAction = useStoreActions(
-    actions => actions.theme.setNavbarAction
+    (actions) => actions.theme.setNavbarAction
   );
-  const setBackLinkTo = useStoreActions(actions => actions.theme.setBackLinkTo);
-  const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
+  const setBackLinkTo = useStoreActions(
+    (actions) => actions.theme.setBackLinkTo
+  );
+  const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
+  const userId = useStoreState((state) => state.user.id);
 
   const [passwords, setPassword] = useState({
-    password: '',
-    passwordError: '',
-    passwordConfirmation: '',
-    passwordConfirmationError: ''
+    password: "",
+    passwordError: "",
+    passwordConfirmation: "",
+    passwordConfirmationError: "",
   });
   const [disabled, setDisabled] = useState(false);
 
+  // mutations
+  const [updatePassword] = useMutation(UpdatePassword, {
+    onCompleted: (res) => {
+      setDisabled(false);
+      setAuth("");
+      history.push(`/`);
+    },
+  });
+
   useEffect(() => {
-    setTitle('Reset Password');
-    setNavbarAction('backLink');
-    setBackLinkTo('/account-settings');
+    setTitle("Reset Password");
+    // setNavbarAction("backLink");
+    setBackLinkTo("/account-settings");
     setBottomNav(false);
-    !auth && history.push('/account-settings/reset-password');
+    // !auth && history.push("/account-settings/reset-password");
     return () => {
-      setNavbarAction('default');
+      // setNavbarAction("default");
       setBottomNav(true);
-      setBackLinkTo('');
+      setBackLinkTo("");
     };
     // eslint-disable-next-line
   }, []);
 
-  const handleChange = data => {
+  const handleChange = (data) => {
     setPassword({
       ...passwords,
-      ...data
+      ...data,
     });
   };
 
-  const validatePassword = () =>
-    new Promise((resolve, reject) => {
-      const regExp = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/;
-      if (
-        validate(
-          { password: passwords.password },
-          { password: { length: { minimum: 8 } } }
-        ) === undefined
-      ) {
-        handleChange({ passwordError: '' });
-        if (regExp.test(passwords.password)) {
-          handleChange({ passwordError: '' });
-          if (passwords.password === passwords.passwordConfirmation) {
-            handleChange({ passwordConfirmationError: '' });
-            resolve();
-          } else {
-            handleChange({
-              passwordConfirmationError: 'Passwords do not match.'
-            });
-            reject();
-          }
-        } else {
-          handleChange({
-            passwordError:
-              'Password must contain at least one number and upper case letter.'
-          });
-          reject();
-        }
-      } else {
-        handleChange({
-          passwordError: 'Password must be at least 8 characters long.'
-        });
-        reject();
-      }
+  const validatePassword = () => {
+    const password = passwords.password;
+    const confirmation = passwords.passwordConfirmation;
+    const regExp = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/;
+
+    if (password === "" || confirmation === "") {
+      handleChange({
+        passwordConfirmationError: "Please enter a new password",
+      });
+      return false;
+    }
+    if (password !== confirmation) {
+      handleChange({ passwordConfirmationError: "Passwords do not match" });
+      return false;
+    }
+    if (!regExp.test(password)) {
+      handleChange({
+        passwordConfirmationError:
+          "Password must contain at least one number and upper case letter",
+      });
+      return false;
+    }
+    if (password.length < 8) {
+      handleChange({
+        passwordConfirmationError:
+          "Password must be at least 8 characters long",
+      });
+      return false;
+    }
+
+    handleChange({
+      passwordConfirmationError: "",
     });
+    return true;
+  };
+
+  const handleResetPassword = () => {
+    const valid = validatePassword();
+    if (!valid) return null;
+    setDisabled(true);
+    updatePassword({
+      variables: {
+        id: userId,
+        currentPassword: auth,
+        newPassword: passwords.password,
+      },
+    });
+  };
 
   return (
-    <Mutation mutation={ResetPasswordMutation}>
-      {resetPassword => {
-        const handleSave = () => {
-          validatePassword()
-            .then(async () => {
-              setDisabled(true);
-              await resetPassword({
-                variables: {
-                  password: passwords.password
-                }
-              });
-              setDisabled(false);
-              history.push('/account-settings');
-            })
-            .catch(() => {});
-        };
+    // <Mutation mutation={ResetPasswordMutation}>
+    //   {(resetPassword) => {
+    //     const handleSave = () => {
+    //       validatePassword()
+    //         .then(async () => {
+    //           setDisabled(true);
+    //           await resetPassword({
+    //             variables: {
+    //               password: passwords.password,
+    //             },
+    //           });
+    //           setDisabled(false);
+    //           history.push("/account-settings");
+    //         })
+    //         .catch(() => {});
+    //     };
 
-        return (
-          <MediaQuery minDeviceWidth={1024}>
-            {matches => (
-              <Container>
-                <Page>
-                  <FormContainer elevation={1}>
-                    <Content>
-                      <Form>
-                        <Header>
-                          {matches && <HeaderText>Reset Password</HeaderText>}
-                          <HeaderSubText>
-                            Your new password must be at least 8 characters long
-                            and contain an uppercase letter, lowercase letter
-                            and a number.
-                          </HeaderSubText>
-                        </Header>
-                        <Field>
-                          <FieldHeader required>New Password</FieldHeader>
-                          <StyledTextField
-                            value={passwords.password}
-                            onChange={e =>
-                              handleChange({ password: e.target.value })
-                            }
-                            error={passwords.passwordError !== ''}
-                            helperText={passwords.passwordError}
-                            fullWidth={!matches}
-                            type="password"
-                          />
-                        </Field>
-                        <Field>
-                          <FieldHeader required>
-                            Confirm New Password
-                          </FieldHeader>
-                          <StyledTextField
-                            value={passwords.passwordConfirmation}
-                            onChange={e =>
-                              handleChange({
-                                passwordConfirmation: e.target.value
-                              })
-                            }
-                            error={passwords.passwordConfirmationError !== ''}
-                            helperText={passwords.passwordConfirmationError}
-                            fullWidth={!matches}
-                            type="password"
-                          />
-                        </Field>
-                      </Form>
-                    </Content>
-                    {matches && (
-                      <Actions>
-                        <ProgressButton
-                          variant="contained"
-                          color="primary"
-                          onClick={handleSave}
-                          disabled={disabled}
-                        >
-                          Reset Password
-                        </ProgressButton>
-                      </Actions>
-                    )}
-                    {!matches && (
-                      <FullWidthButton
-                        text="Reset Password"
-                        onClick={handleSave}
-                        disabled={disabled}
-                      />
-                    )}
-                  </FormContainer>
-                </Page>
-              </Container>
-            )}
-          </MediaQuery>
-        );
-      }}
-    </Mutation>
+    //     return (
+    //       <MediaQuery minDeviceWidth={1024}>
+    //         {(matches) => (
+    <Container>
+      <Page>
+        <FormContainer elevation={1}>
+          <Content>
+            <Form>
+              <Header>
+                {/* {matches &&  */}
+                <HeaderText>Reset Password</HeaderText>
+                {/* } */}
+                <HeaderSubText>
+                  Your new password must be at least 8 characters long and
+                  contain an uppercase letter, lowercase letter and a number.
+                </HeaderSubText>
+              </Header>
+              <Field>
+                <FieldHeader required>New Password</FieldHeader>
+                <StyledTextField
+                  value={passwords.password}
+                  onChange={(e) => handleChange({ password: e.target.value })}
+                  error={passwords.passwordError !== ""}
+                  helperText={passwords.passwordError}
+                  fullWidth={false} //!matches}
+                  type="password"
+                />
+              </Field>
+              <Field>
+                <FieldHeader required>Confirm New Password</FieldHeader>
+                <StyledTextField
+                  value={passwords.passwordConfirmation}
+                  onChange={(e) =>
+                    handleChange({
+                      passwordConfirmation: e.target.value,
+                    })
+                  }
+                  error={passwords.passwordConfirmationError !== ""}
+                  helperText={passwords.passwordConfirmationError}
+                  fullWidth={false} //!matches}
+                  type="password"
+                />
+              </Field>
+            </Form>
+          </Content>
+          {/* {matches && ( */}
+          <Actions>
+            <ProgressButton
+              variant="contained"
+              color="primary"
+              onClick={handleResetPassword}
+              disabled={disabled}
+            >
+              Reset Password
+            </ProgressButton>
+          </Actions>
+          {/* )} */}
+          {/* {!matches && (
+            <FullWidthButton
+              text="Reset Password"
+              onClick={handleSave}
+              disabled={disabled}
+            />
+          )} */}
+        </FormContainer>
+      </Page>
+    </Container>
+    //           )}
+    //         </MediaQuery>
+    //       );
+    //     }}
+    //   </Mutation>
   );
 };
 

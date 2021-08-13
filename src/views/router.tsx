@@ -7,8 +7,8 @@ import { IntlProvider } from "react-intl";
 import { ConfigProvider } from "antd";
 import { APP_PREFIX_PATH, AUTH_PREFIX_PATH } from "configs/AppConfig";
 import { useStoreState } from "state";
-import Loading from './auth-views/authentication/loading'
-import useAuth from 'hooks/useAuth'
+import Loading from "./auth-views/authentication/loading";
+import { useAuth } from "hooks";
 
 interface Props {
   location: any;
@@ -23,14 +23,12 @@ export const Views = (props: Props) => {
   // @ts-expect-error
   const currentAppLocale = AppLocale[locale];
 
-  const {
-    rehydrateAuth
-  } = useAuth()
+  const { rehydrateAuth } = useAuth();
 
   useEffect(() => {
-    rehydrateAuth()
+    rehydrateAuth();
     // eslint-disable-next-line
-  }, [])
+  }, []);
 
   return (
     <IntlProvider
@@ -47,17 +45,16 @@ export const Views = (props: Props) => {
               <AuthLayout />
             </Route>
             <Route path={APP_PREFIX_PATH}>
-              {!loggedIn
-                ? <Redirect to={AUTH_PREFIX_PATH} />
-                : <AppLayout location={location} />
-              } 
+              {!loggedIn ? (
+                <Redirect to={AUTH_PREFIX_PATH} />
+              ) : (
+                <AppLayout location={location} />
+              )}
             </Route>
           </Switch>
         ) : (
           <Loading />
         )}
-
-        
       </ConfigProvider>
     </IntlProvider>
   );

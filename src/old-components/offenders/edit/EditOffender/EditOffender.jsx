@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
-import MediaQuery from 'react-responsive';
+import React, { Component } from "react";
+import MediaQuery from "react-responsive";
 
-import EditDesktop from '../desktop/EditDesktop/EditDesktop';
-import EditMobile from '../mobile/EditMobile/EditMobile';
+import EditDesktop from "../desktop/EditDesktop/EditDesktop";
 
 class EditOffender extends Component {
   render() {
@@ -27,41 +26,13 @@ class EditOffender extends Component {
       setNavbarActionDisabled,
       toggleNotificationBar,
       setActions,
-      history
+      history,
+      match: {
+        params: { id },
+      },
     } = this.props;
 
-    return (
-      <MediaQuery minDeviceWidth={1024}>
-        {matches =>
-          matches ? (
-            <EditDesktop id={offenderId} userId={userId} history={history} />
-          ) : (
-            <EditMobile
-              offenderId={offenderId}
-              setBackLinkTo={setBackLinkTo}
-              setBottomNav={setBottomNav}
-              setNavbarAction={setNavbarAction}
-              setTitle={setTitle}
-              offender={offender}
-              loading={loading}
-              editOffender={editOffender}
-              offenderLabels={allOffenderWarnings}
-              labelsLoading={labelsLoading}
-              addWarningLabel={addWarningLabel}
-              addImage={addImage}
-              removeImage={removeImage}
-              createImage={createImage}
-              setNavbarActionDisabled={setNavbarActionDisabled}
-              setStatusBar={setStatusBar}
-              addExclusion={addExclusion}
-              userId={userId}
-              toggleNotificationBar={toggleNotificationBar}
-              setActions={setActions}
-            />
-          )
-        }
-      </MediaQuery>
-    );
+    return <EditDesktop id={id} userId={userId} history={history} />;
   }
 }
 

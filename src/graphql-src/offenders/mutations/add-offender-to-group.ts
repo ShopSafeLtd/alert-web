@@ -1,11 +1,8 @@
-import gql from 'graphql-tag';
+import { gql } from "@apollo/client";
 
 export const AddOffenderToGroup = gql`
   mutation addToOffenderOnGroup($data: GroupUpdateInput!, $where: UniqueId!) {
-    updateOffender(
-      where: $where
-      data: $data
-    ) {
+    updateOffender(where: $where, data: $data) {
       id
       groups {
         id
@@ -16,8 +13,8 @@ export const AddOffenderToGroup = gql`
 `;
 
 export interface AddOffenderToGroupsArgs {
-  where: { id: string; };
-  data: { groups: { connect: { id: string; }; }; };
+  where: { id: string };
+  data: { groups: { connect: { id: string } } };
 }
 
 export interface AddOffenderToGroupsRes {
@@ -25,5 +22,5 @@ export interface AddOffenderToGroupsRes {
   groups: {
     id: string;
     name: string;
-  }
+  };
 }

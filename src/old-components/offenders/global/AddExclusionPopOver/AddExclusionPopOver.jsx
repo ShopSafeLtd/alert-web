@@ -52,22 +52,22 @@ const AddExclusionPopover = ({
 
   // mutations
   const [addBan] = useMutation(CreateBan, {
-    update: (store, { data: { createBan } }) => {
-      let data = store.readQuery({
-        OffenderFeed,
-        variables,
-      });
-      let index = data.offenderFeed.map(({ id }) => id).indexOf(offenderId);
-      data.offenderFeed[index].bans = [
-        ...data.offenderFeed[index].bans,
-        createBan,
-      ];
-      store.writeQuery({
-        OffenderFeed,
-        data,
-        variables,
-      });
-    },
+    // update: (store, { data: { createBan } }) => {
+    //   let data = store.readQuery({
+    //     OffenderFeed,
+    //     variables,
+    //   });
+    //   let index = data.offenderFeed.map(({ id }) => id).indexOf(offenderId);
+    //   data.offenderFeed[index].bans = [
+    //     ...data.offenderFeed[index].bans,
+    //     createBan,
+    //   ];
+    //   store.writeQuery({
+    //     OffenderFeed,
+    //     data,
+    //     variables,
+    //   });
+    // },
   });
 
   // functions
@@ -123,7 +123,7 @@ const AddExclusionPopover = ({
                 endDate: ban.endDate,
                 offender: { connect: { id: offenderId } },
                 scheme: { connect: { id: schemeId } },
-                createdby: { connect: { id: createdById } },
+                createdBy: { connect: { id: createdById } },
               },
             },
             optimisticResponse: {

@@ -1,72 +1,72 @@
-import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import React, { useState, useEffect } from "react";
+import { useQuery, useMutation } from "@apollo/client";
 
-import { IncidentFeed } from 'graphql-src/incidents/queries';
-import AlertFeed from '../AlertFeed/AlertFeed';
+import { IncidentFeed } from "graphql-src/incidents/queries";
+import AlertFeed from "../AlertFeed/AlertFeed";
 import {
   AddIncidentToGroup,
   ApproveIncident,
-  RemoveIncident
-} from 'graphql-src/incidents/mutations';
-import { AddOffenderToGroup, ApproveOffender } from 'graphql-src/offenders/mutations';
-import Offline from '../../../global/Offline/Offline';
-import { useStoreActions, useStoreState } from '../../../../state';
+  RecycleIncident,
+} from "graphql-src/incidents/mutations";
+import {
+  AddOffenderToGroup,
+  ApproveOffender,
+} from "graphql-src/offenders/mutations";
+import Offline from "../../../global/Offline/Offline";
+import { useStoreActions, useStoreState } from "../../../../state";
 
 const AlertFeedQuery = () => {
-  const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
-  const setAppBar = useStoreActions(actions => actions.theme.setAppBar);
-  const setTitle = useStoreActions(
-    actions => actions.theme.setTitle
+  const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
+  const setAppBar = useStoreActions((actions) => actions.theme.setAppBar);
+  const setTitle = useStoreActions((actions) => actions.theme.setTitle);
+  const setStatusBar = useStoreActions((actions) => actions.theme.setStatusBar);
+  const setSearch = useStoreActions((actions) => actions.theme.setBottomNav);
+  const setSearchText = useStoreActions(
+    (actions) => actions.theme.setBottomNav
   );
-  const setStatusBar = useStoreActions(actions => actions.theme.setStatusBar);
-  const setSearch = useStoreActions(actions => actions.theme.setBottomNav);
-  const setSearchText = useStoreActions(actions => actions.theme.setBottomNav);
   const toggleFetchIncidents = useStoreActions(
-    actions => actions.theme.setBottomNav
+    (actions) => actions.theme.setBottomNav
   );
-  const scheme = useStoreState(state => state.scheme.id);
-  const role = useStoreState(state => state.user.role);
-  const userId = useStoreState(state => state.user.id);
-  const search = useStoreState(state => state.theme.search);
-  const fetchIncidents = useStoreState(state => state.theme.fetchIncidents);
-  const admin = role === 'USER' ? true : false;
+  const scheme = useStoreState((state) => state.scheme.id);
+  const role = useStoreState((state) => state.user.role);
+  const userId = useStoreState((state) => state.user.id);
+  const search = useStoreState((state) => state.theme.search);
+  const fetchIncidents = useStoreState((state) => state.theme.fetchIncidents);
+  const admin = role === "USER" ? true : false;
 
-  const [order, setOrder] = useState('desc')
-  const [allLoaded, setAllLoaded] = useState(false)
-  const [fetching, setFetching] = useState(false)
-  const [networkError, setNetworkError] = useState('')
-  const [crimeTypes, setCrimeTypes] = useState([])
-  const [filterSet, setFilterSet] = useState(false)
-  
+  const [order, setOrder] = useState("desc");
+  const [allLoaded, setAllLoaded] = useState(false);
+  const [fetching, setFetching] = useState(false);
+  const [networkError, setNetworkError] = useState("");
+  const [crimeTypes, setCrimeTypes] = useState([]);
+  const [filterSet, setFilterSet] = useState(false);
+
   useEffect(() => {
     setBottomNav(true);
-    setTitle('Incidents');
+    setTitle("Incidents");
     setAppBar(true);
     setSearch(true);
-    setSearchText('Search for incidents...');
+    setSearchText("Search for incidents...");
     return () => {
       setSearch(false);
-      setSearchText('');
+      setSearchText("");
       toggleFetchIncidents(true);
-    }
-  }, [])
+    };
+  }, []);
 
   useEffect(() => {
-    if (allLoaded)
-      setAllLoaded(false)
-  }, [search])
+    if (allLoaded) setAllLoaded(false);
+  }, [search]);
 
+  const changeOrder = (order) => {
+    setOrder(order);
+    setAllLoaded(false);
+  };
 
-  const changeOrder = order => {
-    setOrder(order)
-    setAllLoaded(false)
-
-  }
-
-  const changeCrimeTypes = crimeTypes => {
-    setCrimeTypes(crimeTypes)
-    setFilterSet(true)
-    setAllLoaded(false)
+  const changeCrimeTypes = (crimeTypes) => {
+    setCrimeTypes(crimeTypes);
+    setFilterSet(true);
+    setAllLoaded(false);
   };
 
   // Set queries based on users role
@@ -80,50 +80,39 @@ const AlertFeedQuery = () => {
   const variables = {
     userId,
     schemeId: scheme,
-    search,
+    search: "",
     order: { createdAt: order },
     first: querySize,
-    crimeTypes: crimeTypes.length > 0 ? crimeTypes : undefined
+    crimeTypes: crimeTypes.length > 0 ? crimeTypes : undefined,
   };
 
   const { data, loading, fetchMore, refetch, error } = useQuery(IncidentFeed, {
     variables,
-    fetchPolicy: 'cache-and-network'
-  })
-  const [addIncidentToGroup] = useMutation(AddIncidentToGroup)
-  const [approveIncident] = useMutation(ApproveIncident)
-  const [addOffenderToGroup] = useMutation(AddOffenderToGroup)
-  const [approveOffender] = useMutation(ApproveOffender)
-  const [deleteIncident] = useMutation(RemoveIncident, {
-    update: async (store, { data: { deleteIncident } }) => {
-      const response = store.readQuery({
-        query: IncidentFeed,
-        variables: {
-          cursor,
-          ...variables,
-          first: 1
-        }
-      });
-
+    fetchPolicy: "cache-and-network",
+  });
+  const [addIncidentToGroup] = useMutation(AddIncidentToGroup);
+  const [approveIncident] = useMutation(ApproveIncident);
+  const [addOffenderToGroup] = useMutation(AddOffenderToGroup);
+  const [approveOffender] = useMutation(ApproveOffender);
+  const [deleteIncident] = useMutation(RecycleIncident, {
+    update: async (store, { data: { recycleIncident } }) => {
       const data = store.readQuery({
         query: IncidentFeed,
-        variables
+        variables,
       });
-      data.incidentFeed = data.incidentFeed.filter(
-        alert => alert.id !== deleteIncident.id
-      );
-      if (response.incidentFeed.length > 0) {
-        data.incidentFeed.push(
-          response.incidentFeed[0]
-        );
-      }
+
       store.writeQuery({
         query: IncidentFeed,
-        data,
-        variables
+        data: {
+          ...data,
+          incidentFeed: data.incidentFeed.filter(
+            (alert) => alert.id !== recycleIncident.id
+          ),
+        },
+        variables,
       });
-    }
-  })
+    },
+  });
 
   let cursor;
   if (
@@ -138,48 +127,45 @@ const AlertFeedQuery = () => {
   const loadMore = async () => {
     if (!allLoaded && !fetching) {
       // Set fetching state
-      setFetching(true)
+      setFetching(true);
       // Do not fetch more if currently fetching or all records have been fetched
       await fetchMore({
-          query: IncidentFeed,
-          variables: {
-            cursor,
-            ...variables
-          },
-          updateQuery: (previousResult, { fetchMoreResult }) => {
-            let newAlerts = [];
-            fetchMoreResult.incidentFeed.length === 1 &&
-              fetchMoreResult.incidentFeed[0].id === cursor &&
-              setAllLoaded(true)
+        query: IncidentFeed,
+        variables: {
+          cursor,
+          ...variables,
+        },
+        updateQuery: (previousResult, { fetchMoreResult }) => {
+          let newAlerts = [];
+          fetchMoreResult.incidentFeed.length === 1 &&
+            fetchMoreResult.incidentFeed[0].id === cursor &&
+            setAllLoaded(true);
 
-            fetchMoreResult.incidentFeed.forEach(alert => {
-              !previousResult.incidentFeed
-                .map(({ id }) => id)
-                .includes(alert.id) && newAlerts.push(alert);
-            });
+          fetchMoreResult.incidentFeed.forEach((alert) => {
+            !previousResult.incidentFeed
+              .map(({ id }) => id)
+              .includes(alert.id) && newAlerts.push(alert);
+          });
 
-            return {
-              incidentFeed: [
-                ...previousResult.incidentFeed,
-                ...newAlerts
-              ]
-            };
-          }
-        })
+          return {
+            incidentFeed: [...previousResult.incidentFeed, ...newAlerts],
+          };
+        },
+      })
         .then(() => {
-          setFetching(false)
+          setFetching(false);
         })
-        .catch(error => {
-          setFetching(false)
+        .catch((error) => {
+          setFetching(false);
           if (error.networkError !== undefined) {
-            setNetworkError(true)
+            setNetworkError(true);
           }
         });
     }
   };
 
   const retryLoad = () => {
-    setNetworkError(false)
+    setNetworkError(false);
     loadMore();
   };
 
@@ -188,11 +174,7 @@ const AlertFeedQuery = () => {
   ) : (
     <AlertFeed
       loading={loading}
-      alerts={
-        !!data
-          ? data.incidentFeed
-          : []
-      }
+      alerts={!!data ? data.incidentFeed : []}
       refetch={refetch}
       setOrder={changeOrder}
       search={search}
@@ -209,15 +191,13 @@ const AlertFeedQuery = () => {
       networkError={networkError}
       retryLoad={retryLoad}
       fetchIncidents={fetchIncidents}
-      toggleFetchIncidents={
-        toggleFetchIncidents
-      }
+      toggleFetchIncidents={toggleFetchIncidents}
       order={order}
       crimeTypes={crimeTypes}
       setCrimeTypes={changeCrimeTypes}
       filterSet={filterSet}
     />
-  )
-}
+  );
+};
 
 export default AlertFeedQuery;

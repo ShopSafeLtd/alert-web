@@ -1,21 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Typography from '@material-ui/core/Typography';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import MediaQuery from 'react-responsive';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Typography from "@material-ui/core/Typography";
+// import { useQuery, useMutation } from '@apollo/react-hooks';
+import MediaQuery from "react-responsive";
+import { Link } from "react-router-dom";
+import { useQuery, useMutation } from "@apollo/client";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
 
-import { Header, HeaderText, HeaderSubText } from '../global/forms';
-import { PageHeader } from '../global/typography';
-import { FullWidthButton, BackButton } from '../global/actions';
-import mutation from '../../graphql/account/mutations/UpdateNotifications';
-import { Row, Section } from '../global/layout';
-import query from '../../graphql/account/queries/Notifications';
-import { useStoreActions, useStoreState } from '../../state';
+import { Header, HeaderText, HeaderSubText } from "../global/forms";
+import { PageHeader } from "../global/typography";
+import { FullWidthButton, BackButton } from "../global/actions";
+// import mutation from '../../graphql/account/mutations/UpdateNotifications';
+import { Row, Section } from "../global/layout";
+// import query from '../../graphql/account/queries/Notifications';
+import { useStoreActions, useStoreState } from "../../state";
+import { Notifications } from "graphql-src/users/queries";
+import { UpdateNotifications } from "graphql-src/users/mutations";
 
 const Page = styled.div`
   flex: 1;
@@ -46,13 +50,15 @@ const Loading = styled(CircularProgress)`
 `;
 
 const NotificationSettings = ({ history }) => {
-  const id = useStoreState(state => state.user.id);
-  const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
-  const setTitle = useStoreActions(actions => actions.theme.setTitle);
-  const setNavbarAction = useStoreActions(
-    actions => actions.theme.setNavbarAction
+  const id = useStoreState((state) => state.user.id);
+  const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
+  const setTitle = useStoreActions((actions) => actions.theme.setTitle);
+  // const setNavbarAction = useStoreActions(
+  //   (actions) => actions.theme.setNavbarAction
+  // );
+  const setBackLinkTo = useStoreActions(
+    (actions) => actions.theme.setBackLinkTo
   );
-  const setBackLinkTo = useStoreActions(actions => actions.theme.setBackLinkTo);
 
   // state
   const [notifications, setNotifications] = useState({
@@ -62,106 +68,109 @@ const NotificationSettings = ({ history }) => {
     offender: false,
     offenderEmail: false,
     offenderPush: false,
-    messagePush: false
+    messagePush: false,
   });
 
   // effects
   useEffect(() => {
     setBottomNav(false);
-    setTitle('Notification Settings');
-    setNavbarAction('backLink');
+    setTitle("Notification Settings");
+    // setNavbarAction("backLink");
     setBackLinkTo(`/account-settings`);
     return () => {
       setBottomNav(true);
-      setTitle('');
-      setNavbarAction('default');
-      setBackLinkTo('');
+      setTitle("");
+      // setNavbarAction("default");
+      setBackLinkTo("");
     };
   });
 
   // queries
-  const { loading } = useQuery(query, {
-    variables: { id },
-    fetchPolicy: 'cache-and-network',
-    onCompleted: data =>
+  const { loading } = useQuery(Notifications, {
+    onCompleted: ({ currentUser }) => {
       setNotifications({
         ...notifications,
         incident:
-          data.user.incidentEmail || data.user.incidentPush ? true : false,
-        incidentEmail: data.user.incidentEmail,
-        incidentPush: data.user.incidentPush,
+          currentUser.incidentEmail || currentUser.incidentPush ? true : false,
+        incidentEmail: currentUser.incidentEmail,
+        incidentPush: currentUser.incidentPush,
         offender:
-          !!data.user.offenderEmail || data.user.offenderPush ? true : false,
-        offenderEmail: data.user.offenderEmail,
-        offenderPush: data.user.offenderPush,
-        messagePush: data.user.messagePush
-      })
+          !!currentUser.offenderEmail || currentUser.offenderPush
+            ? true
+            : false,
+        offenderEmail: currentUser.offenderEmail,
+        offenderPush: currentUser.offenderPush,
+        messagePush: currentUser.messagePush,
+      });
+    },
   });
 
   // mutation
-  const [updateUser] = useMutation(mutation);
+  const [updateNotificationSettings] = useMutation(UpdateNotifications);
 
   // functions
-  const handleChange = name => event => {
-    if (event.target.checked && name === 'incident') {
+  const handleChange = (name) => (event) => {
+    if (event.target.checked && name === "incident") {
       setNotifications({
         ...notifications,
         incident: true,
         incidentEmail: true,
-        incidentPush: true
+        incidentPush: true,
       });
-    } else if (!event.target.checked && name === 'incident') {
+    } else if (!event.target.checked && name === "incident") {
       setNotifications({
         ...notifications,
         incident: false,
         incidentEmail: false,
-        incidentPush: false
+        incidentPush: false,
       });
-    } else if (event.target.checked && name === 'offender') {
+    } else if (event.target.checked && name === "offender") {
       setNotifications({
         ...notifications,
         offender: true,
         offenderEmail: true,
-        offenderPush: true
+        offenderPush: true,
       });
-    } else if (!event.target.checked && name === 'offender') {
+    } else if (!event.target.checked && name === "offender") {
       setNotifications({
         ...notifications,
         offender: false,
         offenderEmail: false,
-        offenderPush: false
+        offenderPush: false,
       });
     } else {
       setNotifications({
         ...notifications,
-        [name]: event.target.checked
+        [name]: event.target.checked,
       });
     }
   };
 
   const handleSave = () => {
-    updateUser({
+    updateNotificationSettings({
       variables: {
-        id,
-        incidentEmail: { set: notifications.incidentEmail },
-        incidentPush: { set: notifications.incidentPush },
-        offenderEmail: { set: notifications.offenderEmail },
-        offenderPush: { set: notifications.offenderPush },
-        messagePush: { set: notifications.messagePush }
-      }
+        where: { id },
+        data: {
+          incidentEmail: { set: notifications.incidentEmail },
+          incidentPush: { set: notifications.incidentPush },
+          offenderEmail: { set: notifications.offenderEmail },
+          offenderPush: { set: notifications.offenderPush },
+          messagePush: { set: notifications.messagePush },
+        },
+      },
     });
-    history.push('/');
+    history.push("/");
   };
 
   return (
     <MediaQuery minDeviceWidth={1024}>
-      {matches => (
+      {(matches) => (
         <Page>
           {matches ? (
             <Section width="100%" elevation={1}>
               <PageHeader>Notification Options</PageHeader>
               <HeaderSubText>
-                Choose what notifications you wish to receive and how you want
+                Choose which notifications you wish to receive and how you want
                 to receive them.
               </HeaderSubText>
             </Section>
@@ -169,7 +178,7 @@ const NotificationSettings = ({ history }) => {
             <Header>
               <HeaderText>Notification Options</HeaderText>
               <HeaderSubText>
-                Choose what notifications you wish to receive and how you want
+                Choose which notifications you wish to receive and how you want
                 to receive them.
               </HeaderSubText>
             </Header>
@@ -186,7 +195,7 @@ const NotificationSettings = ({ history }) => {
                       ) : (
                         <Switch
                           checked={notifications.incident}
-                          onChange={handleChange('incident')}
+                          onChange={handleChange("incident")}
                           value="incident"
                         />
                       )
@@ -199,7 +208,7 @@ const NotificationSettings = ({ history }) => {
                         control={
                           <Switch
                             checked={notifications.incidentEmail}
-                            onChange={handleChange('incidentEmail')}
+                            onChange={handleChange("incidentEmail")}
                             value="incidentEmail"
                           />
                         }
@@ -209,7 +218,7 @@ const NotificationSettings = ({ history }) => {
                         control={
                           <Switch
                             checked={notifications.incidentPush}
-                            onChange={handleChange('incidentPush')}
+                            onChange={handleChange("incidentPush")}
                             value="incidentPush"
                           />
                         }
@@ -229,7 +238,7 @@ const NotificationSettings = ({ history }) => {
                       ) : (
                         <Switch
                           checked={notifications.offender}
-                          onChange={handleChange('offender')}
+                          onChange={handleChange("offender")}
                           value="offender"
                         />
                       )
@@ -242,7 +251,7 @@ const NotificationSettings = ({ history }) => {
                         control={
                           <Switch
                             checked={notifications.offenderEmail}
-                            onChange={handleChange('offenderEmail')}
+                            onChange={handleChange("offenderEmail")}
                             value="offenderEmail"
                           />
                         }
@@ -252,7 +261,7 @@ const NotificationSettings = ({ history }) => {
                         control={
                           <Switch
                             checked={notifications.offenderPush}
-                            onChange={handleChange('offenderPush')}
+                            onChange={handleChange("offenderPush")}
                             value="offenderPush"
                           />
                         }
@@ -272,7 +281,7 @@ const NotificationSettings = ({ history }) => {
                       ) : (
                         <Switch
                           checked={notifications.messagePush}
-                          onChange={handleChange('messagePush')}
+                          onChange={handleChange("messagePush")}
                           value="messagePush"
                         />
                       )
@@ -288,7 +297,7 @@ const NotificationSettings = ({ history }) => {
               <Row row right>
                 <BackButton
                   component={Link}
-                  to={`/account-settings`}
+                  to={`${APP_PREFIX_PATH}/user-settings`}
                   disabled={loading}
                 >
                   Cancel
@@ -299,7 +308,7 @@ const NotificationSettings = ({ history }) => {
                   onClick={handleSave}
                   disabled={loading}
                 >
-                  Save Warning
+                  Save Settings
                 </Button>
               </Row>
             </Section>

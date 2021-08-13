@@ -120,35 +120,34 @@ const AddIncident = ({ history }) => {
           first: querySize,
         },
       });
-      if (createIncident?.offenders?.length > 0) {
-        let offenders = store.readQuery({
-          query: OffenderFeed,
-          variables: {
-            first: querySize,
-            order: { createdAt: "desc" },
-            role,
-            schemeId,
-            search: "",
-            userId: currentUser,
-          },
-        });
-        offenders.offenderFeed = [
-          ...createIncident.offenders,
-          ...offenders.offenderFeed,
-        ];
-        store.writeQuery({
-          query: OffenderFeed,
-          data: offenders,
-          variables: {
-            userId: currentUser,
-            schemeId,
-            role,
-            search: "",
-            order: { createdAt: "desc" },
-            first: querySize,
-          },
-        });
-      }
+      // if (createIncident?.offenders?.length > 0) {
+      //   let offenders = store.readQuery({
+      //     query: OffenderFeed,
+      //     variables: {
+      //       schemeId,
+      //       userId: currentUser,
+      //       order: { createdAt: "desc" },
+      //       search: "",
+      //       first: querySize,
+      //     },
+      //   });
+      //   offenders.offenderFeed = [
+      //     ...createIncident.offenders,
+      //     ...offenders.offenderFeed,
+      //   ];
+      //   store.writeQuery({
+      //     query: OffenderFeed,
+      //     data: offenders,
+      //     variables: {
+      //       userId: currentUser,
+      //       schemeId,
+      //       role,
+      //       search: "",
+      //       order: { createdAt: "desc" },
+      //       first: querySize,
+      //     },
+      //   });
+      // }
     },
   });
 
@@ -397,7 +396,7 @@ const AddIncident = ({ history }) => {
         date: description.date,
         time: description.time,
         description: description.description,
-        crimeTypes: crimeTypes.map((id) => ({ id })),
+        crimeTypes: crimeTypes.map(({ id }) => ({ id })),
         location: {
           create:
             location === "NEW"
@@ -449,7 +448,7 @@ const AddIncident = ({ history }) => {
       },
     });
 
-    history.push("/app/incidents/");
+    history.push("/");
   };
 
   return (

@@ -6,7 +6,7 @@ import CustomIcon from "components/util-components/CustomIcon";
 import { useHistory } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useStoreState, useStoreActions } from "state";
-import useAuth from 'hooks/useAuth'
+import { useAuth } from "hooks";
 
 export interface Props {
   otherSignIn?: boolean;
@@ -27,9 +27,7 @@ export const LoginForm = (props: Props) => {
     allowRedirect,
   } = props;
 
-  const {
-    login
-  } = useAuth()
+  const { login } = useAuth();
 
   const loading = useStoreState((state) => state.auth.loading);
   const message = useStoreState((state) => state.auth.message);
@@ -42,17 +40,17 @@ export const LoginForm = (props: Props) => {
     (actions) => actions.auth.hideAuthMessage
   );
 
-  interface onLoginArgs  {
+  interface onLoginArgs {
     email: string;
     password: string;
   }
 
-  const onLogin = ({ email, password }:onLoginArgs) => {
+  const onLogin = ({ email, password }: onLoginArgs) => {
     showLoading();
     login({
       email,
-      password
-    })
+      password,
+    });
   };
 
   const onGoogleLogin = () => {

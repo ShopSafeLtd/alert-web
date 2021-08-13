@@ -2,10 +2,10 @@ import React, { lazy, Suspense, useEffect } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Loading from "components/shared-components/Loading";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
-import useAuth from 'hooks/useAuth'
+import { useAuth } from "hooks";
 
 export const AppViews = () => {
-  const { getCurrentUser } = useAuth()
+  const { getCurrentUser } = useAuth();
 
   const adminRoutes = [
     <Route
@@ -25,15 +25,15 @@ export const AppViews = () => {
     />,
     <Route
       key="schemes"
-      path={`${APP_PREFIX_PATH}/user`}
-      component={lazy(() => import(`./user/router`))}
+      path={`${APP_PREFIX_PATH}/user-settings`}
+      component={lazy(() => import(`./user-settings/router`))}
     />,
   ];
 
   useEffect(() => {
-    getCurrentUser()
+    getCurrentUser();
     // eslint-disable-next-line
-  }, [])
+  }, []);
 
   return (
     <Suspense fallback={<Loading cover="content" />}>

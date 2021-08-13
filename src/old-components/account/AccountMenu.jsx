@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
-import styled from 'styled-components';
-import { useStoreActions } from '../../state';
+import React, { useEffect } from "react";
+import styled from "styled-components";
+import { useStoreActions } from "../../state";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
 
-import { MenuItem, Menu, MenuItemText } from '../global/layout';
+import { MenuItem, Menu, MenuItemText } from "../global/layout";
 
 const Svg = styled.svg`
   width: 28px;
@@ -11,29 +12,31 @@ const Svg = styled.svg`
 `;
 
 const AccountMenu = () => {
-  const setTitle = useStoreActions(actions => actions.theme.setTitle);
+  const setTitle = useStoreActions((actions) => actions.theme.setTitle);
   const setNavbarAction = useStoreActions(
-    actions => actions.theme.setNavbarAction
+    (actions) => actions.theme.setNavbarAction
   );
-  const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
-  const setBackLinkTo = useStoreActions(actions => actions.theme.setBackLinkTo);
+  const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
+  const setBackLinkTo = useStoreActions(
+    (actions) => actions.theme.setBackLinkTo
+  );
 
   useEffect(() => {
-    setTitle('Account Settings');
-    setNavbarAction('backLink');
+    setTitle("Account Settings");
+    // setNavbarAction('backLink');
     setBottomNav(false);
-    setBackLinkTo('/');
+    setBackLinkTo("/");
     return () => {
-      setNavbarAction('default');
+      // setNavbarAction("default");
       setBottomNav(true);
-      setBackLinkTo('');
+      setBackLinkTo("");
     };
     // eslint-disable-next-line
   }, []);
 
   return (
     <Menu>
-      <MenuItem to="/account-settings/edit-profile">
+      <MenuItem to={`${APP_PREFIX_PATH}/user-settings/edit-profile`}>
         <Svg viewBox="0 0 24 24">
           <path
             fill="#EF5350"
@@ -42,7 +45,7 @@ const AccountMenu = () => {
         </Svg>
         <MenuItemText>Edit Profile</MenuItemText>
       </MenuItem>
-      <MenuItem to="/account-settings/reset-password">
+      <MenuItem to={`${APP_PREFIX_PATH}/user-settings/reset-password`}>
         <Svg viewBox="0 0 24 24">
           <path
             fill="#EF5350"
@@ -51,7 +54,7 @@ const AccountMenu = () => {
         </Svg>
         <MenuItemText>Reset Password</MenuItemText>
       </MenuItem>
-      <MenuItem to="/account-settings/notifications">
+      <MenuItem to={`${APP_PREFIX_PATH}/user-settings/notifications`}>
         <Svg viewBox="0 0 24 24">
           <path
             fill="#EF5350"

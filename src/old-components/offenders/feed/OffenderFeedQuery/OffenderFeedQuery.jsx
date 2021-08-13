@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import React, { useState, useEffect } from "react";
+import { useQuery, useMutation } from "@apollo/client";
 
-import OffenderFeed from '../OffenderFeed/OffenderFeed';
-import {DeleteOffender} from 'graphql-src/offenders/mutations';
-import {ApproveOffender} from 'graphql-src/offenders/mutations';
-import {MarkOffenderActive} from 'graphql-src/offenders/mutations';
-import Offline from '../../../global/Offline/Offline';
-import { OffenderFeed as query } from 'graphql-src/offenders/queries';
-import { useStoreActions, useStoreState } from '../../../../state';
+import OffenderFeed from "../OffenderFeed/OffenderFeed";
+import { RecycleOffender } from "graphql-src/offenders/mutations";
+import { ApproveOffender } from "graphql-src/offenders/mutations";
+import { MarkOffenderActive } from "graphql-src/offenders/mutations";
+import Offline from "../../../global/Offline/Offline";
+import { OffenderFeed as query } from "graphql-src/offenders/queries";
+import { useStoreActions, useStoreState } from "../../../../state";
 
-const ALL = 'ALL';
-const BANNED = 'BANNED';
-const UNIDENTIFIED = 'UNIDENTIFIED';
-const ACTIVE = 'ACTIVE';
+const ALL = "ALL";
+const BANNED = "BANNED";
+const UNIDENTIFIED = "UNIDENTIFIED";
+const ACTIVE = "ACTIVE";
 
 let querySize = 10;
 if (window.innerWidth > 1239 && window.innerWidth < 1800) {
@@ -22,92 +22,94 @@ if (window.innerWidth > 1239 && window.innerWidth < 1800) {
 }
 
 const OffenderFeedQuery = ({ retryLoad, setActions }) => {
-  const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
-  const setTitle = useStoreActions(actions => actions.theme.setTitle);
-  const setAppBar = useStoreActions(actions => actions.theme.setAppBar);
-  const setSearch = useStoreActions(actions => actions.theme.setSearch);
-  const setSearchText = useStoreActions(actions => actions.theme.setSearchText);
-  const setStatusBar = useStoreActions(actions => actions.theme.setStatusBar);
-  const toggleFetchOffenders = useStoreActions(
-    actions => actions.theme.toggleFetchOffenders
+  const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
+  const setTitle = useStoreActions((actions) => actions.theme.setTitle);
+  const setAppBar = useStoreActions((actions) => actions.theme.setAppBar);
+  const setSearch = useStoreActions((actions) => actions.theme.setSearch);
+  const setSearchText = useStoreActions(
+    (actions) => actions.theme.setSearchText
   );
-  const userId = useStoreState(state => state.user.id);
-  const search = useStoreState(state => state.theme.search);
-  const fetchOffenders = useStoreState(state => state.theme.fetchOffenders);
-  const role = useStoreState(state => state.user.role);
-  const admin = role !== 'USER' ? true : false;
+  const setStatusBar = useStoreActions((actions) => actions.theme.setStatusBar);
+  const toggleFetchOffenders = useStoreActions(
+    (actions) => actions.theme.toggleFetchOffenders
+  );
+  const userId = useStoreState((state) => state.user.id);
+  const schemeId = useStoreState((state) => state.scheme.id);
+  const search = useStoreState((state) => state.theme.search);
+  const fetchOffenders = useStoreState((state) => state.theme.fetchOffenders);
+  const role = useStoreState((state) => state.user.role);
+  const admin = role !== "USER" ? true : false;
 
   // state
   const [fetching, setFetching] = useState(false);
   const [allLoaded, setAllLoaded] = useState(false);
   const [filter, setFilter] = useState(ALL);
   const [networkError, setNetworkError] = useState(false);
-  const [order, setOrder] = useState('desc');
+  const [order, setOrder] = useState("desc");
   const [filterPristine, setFilterPristine] = useState(true);
 
   const variables = {
-    schemeId: window.localStorage.getItem('currentScheme'),
-    search: filter === UNIDENTIFIED ? 'Unidentified Offender' : search,
-    first: querySize,
-    order: { createdAt: order },
-    active: filter === ACTIVE ? true : undefined,
+    schemeId: schemeId || window.localStorage.getItem("currentScheme"),
     userId,
+    search: filter === UNIDENTIFIED ? "Unidentified Offender" : "",
+    order: { createdAt: order },
+    first: querySize,
+    active: filter === ACTIVE ? true : undefined,
     role,
-    banned: filter === BANNED ? true : undefined
+    banned: filter === BANNED ? true : undefined,
   };
 
   // effects
   useEffect(() => {
     setBottomNav(true);
-    setTitle('Offenders');
+    setTitle("Offenders");
     setAppBar(true);
     setSearch(true);
-    setSearchText('Search for offenders...');
+    setSearchText("Search for offenders...");
     return () => {
       setSearch(false);
-      setSearchText('');
+      setSearchText("");
     };
     // eslint-disable-next-line
   }, []);
-  useEffect(
-    () => {
-      setAllLoaded(false);
-      !!search && setFilterPristine(false);
-    },
-    [filter, search]
-  );
+  useEffect(() => {
+    setAllLoaded(false);
+    !!search && setFilterPristine(false);
+  }, [filter, search]);
 
   // queries
   const { data, loading, fetchMore, refetch, error } = useQuery(query, {
     variables,
-    fetchPolicy: fetchOffenders ? 'cache-and-network' : 'cache-only'
+    fetchPolicy: "cache-and-network",
+    onError: (err) => console.log(err),
   });
 
   // mutations
-  const [deleteOffender] = useMutation(DeleteOffender, {
-    update: (store, { data: { deleteOffender } }) => {
+  const [deleteOffender] = useMutation(RecycleOffender, {
+    update: (store, { data: { recycleOffender } }) => {
       const data = store.readQuery({
         query,
-        variables
+        variables,
       });
-
-      data.offenderFeed = data.offenderFeed.filter(
-        offender => offender.id !== deleteOffender.id
-      );
 
       store.writeQuery({
         query,
-        data,
-        variables
+        data: {
+          ...data,
+          offenderFeed: data.offenderFeed.filter(
+            (offender) => offender.id !== recycleOffender.id
+          ),
+        },
+        variables,
       });
-    }
+    },
   });
   const [approveOffender] = useMutation(ApproveOffender);
   const [markOffenderActive] = useMutation(MarkOffenderActive, {
     update: (store, { data: { updateOffender } }) => {
       const data = store.readQuery({
         query,
-        variables
+        variables,
       });
 
       const index = data.offenderFeed
@@ -117,28 +119,28 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
         ({ id }) => id === updateOffender.id
       );
       data.offenderFeed = data.offenderFeed.filter(
-        offender => offender.id !== updateOffender.id
+        (offender) => offender.id !== updateOffender.id
       );
       offender.active = updateOffender.active;
       data.offenderFeed = [
         ...data.offenderFeed.slice(0, index),
         offender,
-        ...data.offenderFeed.slice(index)
+        ...data.offenderFeed.slice(index),
       ];
       store.writeQuery({
         query,
         data,
-        variables
+        variables,
       });
-    }
+    },
   });
 
   // functions
-  const changeFilter = filter => {
+  const changeFilter = (filter) => {
     setFilter(filter);
     setFilterPristine(false);
   };
-  const changeOrder = order => {
+  const changeOrder = (order) => {
     setOrder(order);
     setFilterPristine(false);
   };
@@ -159,7 +161,7 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
         query,
         variables: {
           ...variables,
-          cursor
+          cursor,
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
           fetchMoreResult.offenderFeed.length === 1 &&
@@ -172,15 +174,15 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
               ...fetchMoreResult.offenderFeed.filter(
                 ({ id }) =>
                   !previousResult.offenderFeed.map(({ id }) => id).includes(id)
-              )
-            ]
+              ),
+            ],
           };
-        }
+        },
       })
         .then(() => {
           setFetching(false);
         })
-        .catch(error => {
+        .catch((error) => {
           setFetching(false);
           error.networkError !== undefined && setNetworkError(true);
         });
@@ -190,15 +192,15 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
     await markOffenderActive({
       variables: {
         id: offender,
-        active: { set: active }
+        active: { set: active },
       },
       optimisticResponse: {
         updateOffender: {
           id: offender,
           active: active,
-          __typename: 'Offender'
-        }
-      }
+          __typename: "Offender",
+        },
+      },
     });
   };
 

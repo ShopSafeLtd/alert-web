@@ -1,24 +1,23 @@
-import React from 'react';
-import Button from '@material-ui/core/Button';
-import MediaQuery from 'react-responsive';
-import { Mutation } from 'react-apollo';
+import React from "react";
+import Button from "@material-ui/core/Button";
+import MediaQuery from "react-responsive";
 
-import { PopOver, PopOverContainer } from '../../../global/layout';
-import { FullWidthButton, BackButton } from '../../../global/actions';
-import { EditExclusionForm } from '../../../forms';
-import EditMutation from '../../../../graphql/exclusions/mutations/EditExclusion';
-import ExclusionQuery from '../../../../graphql/exclusions/queries/Exclusion';
-import CreateHistory from '../../../../graphql/history/mutations/CreateHistory';
-import { useStoreActions, useStoreState } from '../../../../state';
+import { PopOver, PopOverContainer } from "../../../global/layout";
+import { FullWidthButton, BackButton } from "../../../global/actions";
+import { EditExclusionForm } from "../../../forms";
+// import EditMutation from '../../../../graphql/exclusions/mutations/EditExclusion';
+// import ExclusionQuery from "../../../../graphql/exclusions/queries/Exclusion";
+// import CreateHistory from "../../../../graphql/history/mutations/CreateHistory";
+import { useStoreActions, useStoreState } from "../../../../state";
 
 class EditExclusionPopover extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      location: '',
-      locationError: '',
-      description: '',
-      submitting: false
+      location: "",
+      locationError: "",
+      description: "",
+      submitting: false,
     };
   }
 
@@ -26,7 +25,7 @@ class EditExclusionPopover extends React.Component {
     if (prevProps.visible === false && this.props.visible === true) {
       this.setState({
         location: this.props.exclusion.location,
-        description: this.props.exclusion.description
+        description: this.props.exclusion.description,
       });
     }
   }
@@ -37,8 +36,8 @@ class EditExclusionPopover extends React.Component {
 
   handleClose = () => {
     this.setState({
-      location: '',
-      description: ''
+      location: "",
+      description: "",
     });
     this.props.close();
   };
@@ -50,7 +49,7 @@ class EditExclusionPopover extends React.Component {
 
       if (!locationValid) {
         this.setState({
-          locationError: 'This is a required field.'
+          locationError: "This is a required field.",
         });
         reject();
       }
@@ -64,128 +63,163 @@ class EditExclusionPopover extends React.Component {
       setStatusBar,
       currentUserId,
       onSubmit,
-      exclusion: { startDate, endDate }
+      exclusion: { startDate, endDate },
     } = this.props;
     const { location, locationError, description, submitting } = this.state;
 
-    return (
-      <Mutation
-        mutation={CreateHistory}
-        refetchQueries={[
-          {
-            query: ExclusionQuery,
-            variables: {
-              id: exclusion.id
-            }
+    const handleSubmit = async () => {
+      this.validate()
+        .then(() => {
+          if (onSubmit !== undefined) {
+            onSubmit({
+              id: exclusion.id,
+              location,
+              description,
+              startDate,
+              endDate,
+            });
+          } else {
+            setStatusBar(true, "Saving Ban...");
+            this.setState({ submitting: true });
+            // editExclusion({
+            //   variables: {
+            //     id: exclusion.id,
+            //     location: location,
+            //     description: description,
+            //   },
+            // });
+            // createHistory({
+            //   variables: {
+            //     type: "EDITED",
+            //     model: "EXCLUSION",
+            //     byUserId: currentUserId,
+            //     schemeId: window.localStorage.getItem("currentScheme"),
+            //     exclusionId: exclusion.id,
+            //   },
+            // });
+            setStatusBar(false, "");
+            this.setState({ submitting: false });
           }
+          this.handleClose();
+        })
+        .catch(() => {});
+    };
+
+    return (
+      // <Mutation
+      //   mutation={CreateHistory}
+      //   refetchQueries={[
+      //     {
+      //       query: ExclusionQuery,
+      //       variables: {
+      //         id: exclusion.id,
+      //       },
+      //     },
+      //   ]}
+      // >
+      //   {(createHistory) => (
+      //     <Mutation mutation={EditMutation}>
+      //       {(editExclusion) => {
+      //         const handleSubmit = async () => {
+      //           this.validate()
+      //             .then(() => {
+      //               if (onSubmit !== undefined) {
+      //                 onSubmit({
+      //                   id: exclusion.id,
+      //                   location,
+      //                   description,
+      //                   startDate,
+      //                   endDate,
+      //                 });
+      //               } else {
+      //                 setStatusBar(true, "Saving Ban...");
+      //                 this.setState({ submitting: true });
+      //                 editExclusion({
+      //                   variables: {
+      //                     id: exclusion.id,
+      //                     location: location,
+      //                     description: description,
+      //                   },
+      //                 });
+      //                 createHistory({
+      //                   variables: {
+      //                     type: "EDITED",
+      //                     model: "EXCLUSION",
+      //                     byUserId: currentUserId,
+      //                     schemeId:
+      //                       window.localStorage.getItem("currentScheme"),
+      //                     exclusionId: exclusion.id,
+      //                   },
+      //                 });
+      //                 setStatusBar(false, "");
+      //                 this.setState({ submitting: false });
+      //               }
+      //               this.handleClose();
+      //             })
+      //             .catch(() => {});
+      //         };
+      //         return (
+
+      <PopOver
+        noPadding
+        open={visible}
+        width={500}
+        handleClose={(close) => this.handleClose()}
+        title={"Edit Ban"}
+        actions={[
+          <BackButton
+            key={Math.random()}
+            disabled={submitting}
+            onClick={this.handleClose}
+          >
+            Cancel
+          </BackButton>,
+          <Button
+            key={Math.random()}
+            disabled={submitting}
+            color="primary"
+            variant="contained"
+            onClick={() => handleSubmit()} //handleSubmit()}
+          >
+            Save Ban
+          </Button>,
+        ]}
+        mobileAction={[
+          <FullWidthButton
+            key={Math.random()}
+            text="Save"
+            onClick={() => null} //handleSubmit}
+            position="ABSOLUTE"
+            disabled={submitting}
+          />,
         ]}
       >
-        {createHistory => (
-          <Mutation mutation={EditMutation}>
-            {editExclusion => {
-              const handleSubmit = async () => {
-                this.validate()
-                  .then(() => {
-                    if (onSubmit !== undefined) {
-                      onSubmit({
-                        id: exclusion.id,
-                        location,
-                        description,
-                        startDate,
-                        endDate
-                      });
-                    } else {
-                      setStatusBar(true, 'Saving Ban...');
-                      this.setState({ submitting: true });
-                      editExclusion({
-                        variables: {
-                          id: exclusion.id,
-                          location: location,
-                          description: description
-                        }
-                      });
-                      createHistory({
-                        variables: {
-                          type: 'EDITED',
-                          model: 'EXCLUSION',
-                          byUserId: currentUserId,
-                          schemeId: window.localStorage.getItem(
-                            'currentScheme'
-                          ),
-                          exclusionId: exclusion.id
-                        }
-                      });
-                      setStatusBar(false, '');
-                      this.setState({ submitting: false });
-                    }
-                    this.handleClose();
-                  })
-                  .catch(() => {});
-              };
-              return (
-                <MediaQuery minDeviceWidth={1024}>
-                  {matches => (
-                    <PopOver
-                      noPadding
-                      open={visible}
-                      width={matches ? 500 : window.innerWidth - 15}
-                      handleClose={close => this.handleClose()}
-                      title={'Edit Ban'}
-                      actions={[
-                        <BackButton
-                          key={Math.random()}
-                          disabled={submitting}
-                          onClick={this.handleClose}
-                        >
-                          Cancel
-                        </BackButton>,
-                        <Button
-                          key={Math.random()}
-                          disabled={submitting}
-                          color="primary"
-                          variant="contained"
-                          onClick={() => handleSubmit()}
-                        >
-                          Save Ban
-                        </Button>
-                      ]}
-                      mobileAction={[
-                        <FullWidthButton
-                          key={Math.random()}
-                          text="Save"
-                          onClick={handleSubmit}
-                          position="ABSOLUTE"
-                          disabled={submitting}
-                        />
-                      ]}
-                    >
-                      <PopOverContainer>
-                        <EditExclusionForm
-                          data={{
-                            startDate,
-                            endDate,
-                            location,
-                            locationError,
-                            description
-                          }}
-                          handleChange={this.handleChange}
-                        />
-                      </PopOverContainer>
-                    </PopOver>
-                  )}
-                </MediaQuery>
-              );
+        <PopOverContainer>
+          <EditExclusionForm
+            data={{
+              startDate,
+              endDate,
+              location,
+              locationError,
+              description,
             }}
-          </Mutation>
-        )}
-      </Mutation>
+            handleChange={this.handleChange}
+          />
+        </PopOverContainer>
+      </PopOver>
     );
   }
+
+  // }}
+  //       </Mutation>
+  //     )}
+  //   </Mutation>
+  // );
 }
 
-const Wrapper = props => {
-  const currentUserId = useStoreState(state => state.user.id);
-  const setStatusBar = useStoreActions(actions => actions.theme.setStatusBar);
+const Wrapper = (props) => {
+  const currentUserId = useStoreState((state) => state.user.id);
+  const setStatusBar = useStoreActions((actions) => actions.theme.setStatusBar);
 
   return (
     <EditExclusionPopover

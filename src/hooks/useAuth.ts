@@ -1,5 +1,5 @@
 import { useMutation, useLazyQuery } from "@apollo/client";
-import { useStoreActions, SetUserPayload } from "state";
+import { useStoreActions, useStoreState, SetUserPayload } from "state";
 import jwtDecode from "jwt-decode";
 import LogRocket from "logrocket";
 
@@ -20,7 +20,7 @@ interface DecodedToken {
   updated_at: string;
 }
 
-const useAuth = () => {
+export const useAuth = () => {
   const authenticated = useStoreActions(
     (actions) => actions.auth.authenticated
   );
@@ -33,6 +33,7 @@ const useAuth = () => {
   const setAuthMessage = useStoreActions(
     (actions) => actions.auth.setAuthMessage
   );
+  const currentScheme = useStoreState((state) => state.scheme.id);
 
   interface HandleSuccessArgs extends SetUserPayload {
     accessToken: string;
@@ -50,20 +51,23 @@ const useAuth = () => {
     window.localStorage.setItem("accessToken", accessToken);
 
     const handleNoValidScheme = () => {
-      const schemeDetails = schemes[0].scheme;
-      window.localStorage.setItem("currentScheme", schemeDetails.id);
-      setRole({ role: schemes[0].role });
+      const schemeDetails = schemes[0]?.scheme;
+      window.localStorage.setItem("currentScheme", schemeDetails?.id);
+      setRole({ role: schemes[0]?.role });
       setScheme({
-        autoApproveIncidents: schemeDetails.autoApproveIncidents,
-        autoApproveOffenders: schemeDetails.autoApproveOffenders,
-        id: schemeDetails.id,
-        name: schemeDetails.name,
+        autoApproveIncidents: schemeDetails?.autoApproveIncidents,
+        autoApproveOffenders: schemeDetails?.autoApproveOffenders,
+        id: schemeDetails?.id,
+        name: schemeDetails?.name,
       });
     };
 
-    const scheme = window.localStorage.getItem("currentScheme");
+    const scheme =
+      currentScheme || window.localStorage.getItem("currentScheme");
     if (scheme) {
-      const schemeDetails = schemes.find(({ scheme: { id } }) => id === scheme);
+      const schemeDetails = schemes?.find(
+        ({ scheme: { id } }) => id === scheme
+      );
       if (schemeDetails) {
         setRole({ role: schemeDetails.role });
         setScheme({
@@ -131,15 +135,16 @@ const useAuth = () => {
       email: data.email,
     });
 
-    handleSuccess({
-      id: data.id,
-      accessToken: data.accessToken,
-      email: data.email,
-      fullName: data.fullName,
-      onboarded: data.onboarded,
-      organisation: data.organisation,
-      schemes: data.schemes,
-    });
+    getCurrentUser();
+    // handleSuccess({
+    //   id: data.id,
+    //   accessToken: data.accessToken,
+    //   email: data.email,
+    //   fullName: data.fullName,
+    //   onboarded: data.onboarded,
+    //   organisation: data.organisation,
+    //   schemes: data.schemes,
+    // });
   };
 
   const [handleLogin] = useMutation<SignInRes, SignInArgs>(SignIn, {
@@ -157,6 +162,7 @@ const useAuth = () => {
     onError: (error) => {
       console.log(error);
       setAuthMessage(error.message);
+      throw new Error(error.message);
     },
   });
 
@@ -180,8 +186,8 @@ const useAuth = () => {
     password: string;
   }
 
-  const login = ({ email, password }: LoginArgs) => {
-    handleLogin({
+  const login = async ({ email, password }: LoginArgs) => {
+    await handleLogin({
       variables: {
         email,
         password,
@@ -203,5 +209,3 @@ const useAuth = () => {
     getCurrentUser,
   };
 };
-
-export default useAuth;

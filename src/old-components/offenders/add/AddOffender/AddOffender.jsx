@@ -1,409 +1,477 @@
-import React, { PureComponent } from 'react';
-import MediaQuery from 'react-responsive';
-import { withRouter } from 'react-router-dom';
+import React, { useState } from "react";
+import { withRouter } from "react-router-dom";
+import { useMutation, useQuery } from "@apollo/client";
 
-import MobileForm from '../mobile/MobileForm/MobileForm';
-import OffenderWizard from '../desktop/OffenderWizard/OffenderWizard';
+import OffenderWizard from "../desktop/OffenderWizard/OffenderWizard";
+import { Tags } from "../../../../graphql-src/tags/queries";
+import { Groups } from "../../../../graphql-src/groups/queries";
+import { useStoreActions, useStoreState } from "../../../../state";
+import { CreateOffender } from "../../../../graphql-src/offenders/mutations/create-offender";
+import { OffenderFeed } from "../../../../graphql-src/offenders/queries/offender-feed";
 
-class AddOffender extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      pristine: true,
-      name: '',
-      gender: '',
-      race: '',
-      build: '',
-      age: '',
-      dateOfBirth: null,
-      dateSource: '',
-      hair: '',
-      peculiarities: '',
-      disabled: false,
-      images: [],
-      selectedLabels: [],
-      exclusions: [],
-      editingExclusion: {},
-      selectedGroups: []
-    };
-  }
+const AddOffender = ({ history }) => {
+  const [pristine, setPristine] = useState(true);
+  const [name, setName] = useState("");
+  const [gender, setGender] = useState("");
+  const [race, setRace] = useState("");
+  const [build, setBuild] = useState("");
+  const [age, setAge] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState(null);
+  const [dateSource, setDateSource] = useState("");
+  const [hair, setHair] = useState("");
+  const [peculiarities, setPeculiarities] = useState("");
+  const [disabled, setDisabled] = useState(false);
+  const [images, setImages] = useState([]);
+  const [selectedLabels, setSelectedLabels] = useState([]);
+  const [exclusions, setExclusions] = useState([]);
+  const [editingExclusion, setEditingExclusion] = useState({});
+  const [selectedGroups, setSelectedGroups] = useState([]);
 
-  handleChange = (value, field) => {
-    if (field === 'age') {
-      this.setState({
-        [field]: value,
-        dateOfBirth: '',
-        dateSource: '',
-        pristine: false
+  // user id and role from state
+  const schemeId = useStoreState((state) => state.scheme.id);
+  const currentUser = useStoreState((state) => state.user.id);
+  const role = useStoreState((state) => state.user.role);
+  const schemeAdmin = role === "SCHEME_ADMIN";
+  const admin = role === "USER" ? false : true;
+
+  // queries
+  const { data: labelsList, loading: labelsLoading } = useQuery(Tags, {
+    variables: {
+      where: {
+        scheme: { id: { equals: schemeId } },
+        dataType: { equals: "OFFENDER" },
+      },
+    },
+    fetchPolicy: "cache-and-network",
+  });
+
+  const { data: groups, loading: groupsLoading } = useQuery(Groups, {
+    variables: {
+      where: {
+        schemeId: { equals: schemeId },
+        users: schemeAdmin
+          ? undefined
+          : { some: { id: { equals: currentUser } } },
+      },
+    },
+    fetchPolicy: "cache-and-network",
+  });
+
+  // mutations
+  const [createOffender] = useMutation(CreateOffender, {
+    onError: (err) => {
+      console.log(err);
+    },
+
+    update: (store, { data: { createOffender } }) => {
+      let data = store.readQuery({
+        query: OffenderFeed,
+        variables: {
+          schemeId: schemeId || window.localStorage.getItem("currentScheme"),
+          userId: currentUser,
+          search: "",
+          order: { createdAt: "desc" },
+          first: 16,
+          active: undefined,
+          role,
+          banned: undefined,
+        },
       });
-    } else if (field === 'dateOfBirth') {
-      this.setState({
-        [field]: value,
-        age: '',
-        pristine: false
+      store.writeQuery({
+        query: OffenderFeed,
+        data: {
+          OffenderFeed: [createOffender, ...data?.offenderFeed],
+        },
+        variables: {
+          schemeId: schemeId || window.localStorage.getItem("currentScheme"),
+          userId: currentUser,
+          search: "",
+          order: { createdAt: "desc" },
+          first: 16,
+          active: undefined,
+          role,
+          banned: undefined,
+        },
       });
-    } else {
-      this.setState({
-        [field]: value,
-        pristine: false
-      });
+    },
+  });
+
+  const handleChange = (value, field) => {
+    if (field === "age") {
+      setAge(value);
+      setDateOfBirth("");
+      setDateSource("");
+      setPristine(false);
+    } else if (field === "dateOfBirth") {
+      setAge("");
+      setDateOfBirth(value);
+      setPristine(false);
+    } else if (field === "dateSource") {
+      setDateSource(value);
+      setPristine(false);
+    } else if (field === "name") {
+      setName(value);
+      setPristine(false);
+    } else if (field === "gender") {
+      setGender(value);
+      setPristine(false);
+    } else if (field === "race") {
+      setRace(value);
+      setPristine(false);
+    } else if (field === "build") {
+      setBuild(value);
+      setPristine(false);
+    } else if (field === "hair") {
+      setHair(value);
+      setPristine(false);
+    } else if (field === "peculiarities") {
+      setPeculiarities(value);
+      setPristine(false);
     }
   };
 
-  addImage = ({ target: { files } }) => {
+  const addImage = ({ target: { files } }) => {
     const filesArray = [...files];
-    this.setState({
-      images: [
-        ...this.state.images,
-        ...filesArray.map(file => ({
+    setImages((prev) => {
+      if (!Array.isArray(prev))
+        return [
+          ...filesArray.map((file) => ({
+            id: this.state.images.length,
+            url: URL.createObjectURL(file),
+            file: file,
+          })),
+        ];
+      return [
+        ...prev,
+        ...filesArray.map((file) => ({
           id: this.state.images.length,
           url: URL.createObjectURL(file),
-          file: file
-        }))
-      ]
+          file: file,
+        })),
+      ];
     });
   };
 
-  addImageMobile = data => {
-    window.resolveLocalFileSystemURL(data, fileEntry => {
-      const update = file => {
-        this.setState({
-          images: [
-            ...this.state.images,
-            {
-              id: this.state.images.length,
-              url: window.URL.createObjectURL(
-                new Blob([new Uint8Array(file)], {
-                  type: 'image/jpeg'
-                })
-              ),
-              file: new Blob([file], { type: 'image/jpeg' })
-            }
-          ]
-        });
-      };
-      fileEntry.file(function(file) {
-        const reader = new FileReader();
-        reader.onloadend = async function(e) {
-          update(this.result);
-        };
-        reader.readAsArrayBuffer(file);
-      });
+  const removeImage = (image) => {
+    setImages((prev) => {
+      return prev.filter(({ id }) => image !== id);
     });
+    setPristine(false);
   };
 
-  removeImage = image => {
-    this.setState({
-      images: this.state.images.filter(({ id }) => image !== id),
-      pristine: false
-    });
-  };
-
-  toggleSelectedLabels = label => {
-    const { selectedLabels } = this.state;
+  const toggleSelectedLabels = (label) => {
     const flatLabels = selectedLabels.map(({ id }) => id);
     if (flatLabels.indexOf(label.id) === -1) {
-      this.setState({
-        selectedLabels: [...selectedLabels, label]
+      setSelectedLabels((prev) => {
+        if (!Array.isArray(prev)) return [label];
+        return [...prev, label];
       });
     } else {
-      let newSelectedLabels = selectedLabels.filter(item => {
-        return item.id !== label.id;
-      });
-      this.setState({
-        selectedLabels: newSelectedLabels
+      setSelectedLabels((prev) => {
+        if (!Array.isArray(prev)) return [];
+        return prev.filter((el) => el.id !== label.id);
       });
     }
   };
 
-  addLabel = label => {
-    this.setState({
-      selectedLabels: [
-        ...this.state.selectedLabels,
+  const addLabel = (label) => {
+    setSelectedLabels((prev) => {
+      if (!Array.isArray(prev)) return [label];
+      return [
+        ...prev,
         {
           ...label,
-          id: this.state.selectedLabels.length,
+          id: prev.length,
           new: true,
-          __typename: 'OffenderLabel'
-        }
-      ]
+          __typename: "OffenderLabel",
+        },
+      ];
     });
   };
 
-  addExclusion = exclusion =>
-    this.setState({
-      exclusions: [
-        ...this.state.exclusions,
+  const addExclusion = (exclusion) =>
+    setExclusions((prev) => {
+      if (!Array.isArray(prev)) return [exclusion];
+      return [
+        ...prev,
         {
           ...exclusion,
-          id: this.state.exclusions.length
-        }
-      ]
-    });
-
-  removeExclusion = exclusion =>
-    this.setState({
-      exclusions: this.state.exclusions.filter(({ id }) => id !== exclusion)
-    });
-
-  setEditingExclusion = exclusion =>
-    this.setState({
-      editingExclusion: exclusion
-    });
-
-  editExclusion = exclusion => {
-    let index = this.state.exclusions.map(({ id }) => id).indexOf(exclusion.id);
-    let exclusions = this.state.exclusions.filter(({ id }) => {
-      return id !== exclusion.id;
-    });
-    this.setState({
-      exclusions: [
-        ...exclusions.slice(0, index),
-        exclusion,
-        ...exclusions.slice(index)
-      ]
-    });
-  };
-
-  toggleSelectedGroups = group => {
-    const { selectedGroups } = this.state;
-    if (selectedGroups.indexOf(group) === -1) {
-      this.setState({
-        selectedGroups: [...selectedGroups, group]
-      });
-    } else {
-      let newSelectedGroups = selectedGroups.filter(item => {
-        return item !== group;
-      });
-      this.setState({
-        selectedGroups: newSelectedGroups
-      });
-    }
-  };
-
-  handlePost = async () => {
-    this.props.setStatus({
-      status: 'info',
-      text: 'Uploading your new offender...'
-    });
-    this.setState({ disabled: true });
-    const {
-      name,
-      gender,
-      race,
-      build,
-      age,
-      dateOfBirth,
-      dateSource,
-      hair,
-      peculiarities,
-      images,
-      selectedLabels,
-      exclusions,
-      selectedGroups
-    } = this.state;
-    const { createdById, role } = this.props;
-
-    let newExclusions = [];
-    exclusions.forEach(({ description, endDate, location, startDate }) => {
-      newExclusions = [
-        ...newExclusions,
-        {
-          description,
-          endDate,
-          location,
-          startDate,
-          schemeId: window.localStorage.getItem('currentScheme'),
-          createdById
-        }
+          id: prev.length,
+        },
       ];
     });
 
-    let linkOffenderLabels = selectedLabels
-      .filter(({ new: newLabel }) => !newLabel)
-      .map(({ id }) => id);
+  const removeExclusion = (exclusion) =>
+    setExclusions((prev) => {
+      if (!Array.isArray(prev)) return [];
+      return prev.filter(({ id }) => id !== exclusion);
+    });
 
-    await this.props.createOffender({
+  const setEditingExclusionFunction = (exclusion) =>
+    setEditingExclusion(exclusion);
+
+  const editExclusion = (exclusion) => {
+    setExclusions((prev) => {
+      const index = prev.findIndex((el) => el.id === exclusion.id);
+      const output = prev;
+      output[index] = exclusion;
+      return output;
+    });
+  };
+
+  const toggleSelectedGroups = (group) => {
+    setSelectedGroups((prev) => {
+      const indexResult = prev.indexOf(group);
+      if (indexResult === -1) return [...prev, group];
+      return prev.filter((el) => el !== group);
+    });
+  };
+
+  const handlePost = async () => {
+    setDisabled(true);
+
+    await createOffender({
       variables: {
-        role,
-        age: age !== '' ? age : 'UNKNOWN',
+        age: age ? age : undefined,
         bans:
-          newExclusions.length > 0
-            ? newExclusions.map(
-                ({
-                  description,
+          exclusions.length > 0
+            ? exclusions.map(
+                ({ startDate, endDate, location, description }) => ({
+                  startDate,
                   endDate,
                   location,
-                  startDate,
-                  schemeId,
-                  createdById
-                }) => ({
                   description,
-                  endDate,
-                  location,
-                  startDate,
-                  scheme: {
-                    connect: { id: schemeId }
-                  },
-                  createdBy: {
-                    connect: { id: createdById }
-                  }
+                  scheme: { connect: { id: schemeId } },
+                  createdBy: { connect: { id: currentUser } },
                 })
               )
             : undefined,
-        build: build !== '' ? build : 'UNKNOWN',
-        dateOfBirth,
-        dateSource,
-        gender: gender !== '' ? gender : 'UNKNOWN',
-        groups: {
-          connect:
-            this.props.groups.length > 1
-              ? selectedGroups.map(id => ({ id }))
-              : this.props.groups.map(({ id }) => ({ id }))
+        build: build ? build : undefined,
+        dateOfBirth: dateOfBirth ? dateOfBirth : undefined,
+        dateSource: dateSource ? dateSource : undefined,
+        gender: gender ? gender : undefined,
+        groups:
+          selectedGroups.length > 0
+            ? {
+                connect: selectedGroups.map((id) => ({ id })),
+              }
+            : undefined,
+        hair: hair ? hair : undefined,
+        // image: {
+        //   connect: images?.map((el) => {
+        //     return {
+        //       id: el.id,
+        //     };
+        //   }),
+        // },
+        image: undefined,
+        name: name ? name : undefined,
+        tags:
+          selectedLabels.length > 0
+            ? {
+                connect: selectedLabels.map(({ id }) => ({ id })),
+              }
+            : undefined,
+        peculiarities: peculiarities ? peculiarities : undefined,
+        race: race ? race : undefined,
+        scheme: schemeId,
+      },
+      optimisticResponse: {
+        createOffender: {
+          id: `${Math.random()}`,
+          age: !!age ? age : null,
+          approved: true,
+          build: build,
+          gender: gender,
+          hair: hair,
+          name: name,
+          peculiarities: peculiarities,
+          race: race,
+          dateOfBirth: !!dateOfBirth ? dateOfBirth : null,
+          dateSource: !!dateSource ? dateSource : null,
+          active: true,
+          updatedAt: new Date(),
+          uploaded: false,
+          bans: exclusions.map(
+            ({ startDate, endDate, location, description }) => ({
+              id: `${Math.random()}`,
+              startDate,
+              endDate,
+              location,
+              description,
+              active: true,
+              current: true,
+              expired: false,
+              _typename: "Ban",
+            })
+          ),
+          groups: selectedGroups.map((id) => ({
+            id,
+            __typename: "Group",
+          })),
+          // images: images.map((image) => ({
+          //   optimised: image.uri,
+          //   url: image.uri,
+          //   id: `${Math.random()}`,
+          // })),
+          images: undefined,
+          tags: selectedLabels.map((el) => ({
+            id: `${Math.random()}`,
+            name: el.name,
+            description: el.description,
+            __typename: "Tag",
+          })),
+          __typename: "Offender",
         },
-        hair,
-        images: {
-          upload:
-            images.length > 0
-              ? images.map(({ file }) => ({
-                  file
-                }))
-              : undefined
-        },
-        name: name !== '' ? name : 'Unidentified Offender',
-        tags: {
-          connect:
-            linkOffenderLabels.length > 0
-              ? linkOffenderLabels.map(id => ({ id }))
-              : undefined
-        },
-        peculiarities,
-        race: race !== '' ? race : 'UNKNOWN',
-        scheme: window.localStorage.getItem('currentScheme'),
-        schemeId: window.localStorage.getItem('currentScheme'),
-        userId: createdById
-      }
+      },
     });
-    this.setState({ disabled: false });
-    this.props.setStatusBar(false, '');
-    this.props.toggleFetchOffenders(false);
   };
 
-  render() {
-    const {
-      setBottomNav,
-      setTitle,
-      setNavbarAction,
-      setBackLinkTo,
-      groups,
-      groupsLoading,
-      admin,
-      labelsLoading,
-      allOffenderLabels,
-      createdById
-    } = this.props;
-    const {
-      name,
-      gender,
-      race,
-      build,
-      age,
-      dateOfBirth,
-      dateSource,
-      hair,
-      peculiarities,
-      disabled,
-      images,
-      selectedLabels,
-      exclusions,
-      editingExclusion,
-      pristine,
-      selectedGroups
-    } = this.state;
+  // const handlePost = async () => {
+  //   console.log("fired post function");
+  //   return null;
+  // this.props.setStatus({
+  //   status: "info",
+  //   text: "Uploading your new offender...",
+  // });
+  // this.setState({ disabled: true });
+  // const {
+  //   name,
+  //   gender,
+  //   race,
+  //   build,
+  //   age,
+  //   dateOfBirth,
+  //   dateSource,
+  //   hair,
+  //   peculiarities,
+  //   images,
+  //   selectedLabels,
+  //   exclusions,
+  //   selectedGroups,
+  // } = this.state;
+  // const { createdById, role } = this.props;
 
-    return (
-      <MediaQuery minDeviceWidth={1024}>
-        {matches =>
-          matches ? (
-            <OffenderWizard
-              handleChange={this.handleChange}
-              name={name}
-              gender={gender}
-              race={race}
-              build={build}
-              age={age}
-              dateOfBirth={dateOfBirth}
-              dateSource={dateSource}
-              hair={hair}
-              peculiarities={peculiarities}
-              images={images}
-              disabled={disabled}
-              uploadImage={this.addImage}
-              removeImage={this.removeImage}
-              offenderLabels={allOffenderLabels}
-              selectedLabels={selectedLabels}
-              toggleSelectedLabels={this.toggleSelectedLabels}
-              addLabel={this.addLabel}
-              exclusions={exclusions}
-              addExclusion={this.addExclusion}
-              removeExclusion={this.removeExclusion}
-              editingExclusion={editingExclusion}
-              setEditingExclusion={this.setEditingExclusion}
-              editExclusion={this.editExclusion}
-              handlePost={this.handlePost}
-              groups={groups}
-              groupsLoading={groupsLoading}
-              toggleSelectedGroups={this.toggleSelectedGroups}
-              selectedGroups={selectedGroups}
-              admin={admin}
-              createdById={createdById}
-            />
-          ) : (
-            <MobileForm
-              createdById={createdById}
-              pristine={pristine}
-              setBottomNav={setBottomNav}
-              setNavbarAction={setNavbarAction}
-              setTitle={setTitle}
-              setBackLinkTo={setBackLinkTo}
-              handleChange={this.handleChange}
-              name={name}
-              gender={gender}
-              race={race}
-              build={build}
-              age={age}
-              dateOfBirth={dateOfBirth}
-              dateSource={dateSource}
-              hair={hair}
-              peculiarities={peculiarities}
-              uploadImage={this.addImage}
-              uploadMobileImage={this.addImageMobile}
-              disabled={disabled}
-              images={images}
-              removeImage={this.removeImage}
-              offenderLabels={allOffenderLabels}
-              selectedLabels={selectedLabels}
-              toggleSelectedLabels={this.toggleSelectedLabels}
-              addLabel={this.addLabel}
-              exclusions={exclusions}
-              addExclusion={this.addExclusion}
-              removeExclusion={this.removeExclusion}
-              editingExclusion={editingExclusion}
-              setEditingExclusion={this.setEditingExclusion}
-              editExclusion={this.editExclusion}
-              selectedGroups={selectedGroups}
-              toggleSelectedGroups={this.toggleSelectedGroups}
-              handlePost={this.handlePost}
-              groups={groups}
-              groupsLoading={groupsLoading}
-              admin={admin}
-              labelsLoading={labelsLoading}
-            />
-          )
-        }
-      </MediaQuery>
-    );
-  }
-}
+  // let newExclusions = [];
+  // exclusions.forEach(({ description, endDate, location, startDate }) => {
+  //   newExclusions = [
+  //     ...newExclusions,
+  //     {
+  //       description,
+  //       endDate,
+  //       location,
+  //       startDate,
+  //       schemeId: window.localStorage.getItem("currentScheme"),
+  //       createdById,
+  //     },
+  //   ];
+  // });
+
+  // let linkOffenderLabels = selectedLabels
+  //   .filter(({ new: newLabel }) => !newLabel)
+  //   .map(({ id }) => id);
+
+  // await this.props.createOffender({
+  //   variables: {
+  //     role,
+  //     age: age !== "" ? age : "UNKNOWN",
+  //     bans:
+  //       newExclusions.length > 0
+  //         ? newExclusions.map(
+  //             ({
+  //               description,
+  //               endDate,
+  //               location,
+  //               startDate,
+  //               schemeId,
+  //               createdById,
+  //             }) => ({
+  //               description,
+  //               endDate,
+  //               location,
+  //               startDate,
+  //               scheme: {
+  //                 connect: { id: schemeId },
+  //               },
+  //               createdBy: {
+  //                 connect: { id: createdById },
+  //               },
+  //             })
+  //           )
+  //         : undefined,
+  //     build: build !== "" ? build : "UNKNOWN",
+  //     dateOfBirth,
+  //     dateSource,
+  //     gender: gender !== "" ? gender : "UNKNOWN",
+  //     groups: {
+  //       connect:
+  //         this.props.groups.length > 1
+  //           ? selectedGroups.map((id) => ({ id }))
+  //           : this.props.groups.map(({ id }) => ({ id })),
+  //     },
+  //     hair,
+  //     images: {
+  //       upload:
+  //         images.length > 0
+  //           ? images.map(({ file }) => ({
+  //               file,
+  //             }))
+  //           : undefined,
+  //     },
+  //     name: name !== "" ? name : "Unidentified Offender",
+  //     tags: {
+  //       connect:
+  //         linkOffenderLabels.length > 0
+  //           ? linkOffenderLabels.map((id) => ({ id }))
+  //           : undefined,
+  //     },
+  //     peculiarities,
+  //     race: race !== "" ? race : "UNKNOWN",
+  //     scheme: window.localStorage.getItem("currentScheme"),
+  //     schemeId: window.localStorage.getItem("currentScheme"),
+  //     userId: createdById,
+  //   },
+  // });
+  // this.setState({ disabled: false });
+  // this.props.setStatusBar(false, "");
+  // this.props.toggleFetchOffenders(false);
+  // };
+
+  return (
+    <OffenderWizard
+      handleChange={handleChange}
+      name={name}
+      gender={gender}
+      race={race}
+      build={build}
+      age={age}
+      dateOfBirth={dateOfBirth}
+      dateSource={dateSource}
+      hair={hair}
+      peculiarities={peculiarities}
+      images={images}
+      disabled={disabled}
+      uploadImage={addImage}
+      removeImage={removeImage}
+      offenderLabels={labelsList ? labelsList.tags : []}
+      selectedLabels={selectedLabels}
+      toggleSelectedLabels={toggleSelectedLabels}
+      addLabel={addLabel}
+      exclusions={exclusions}
+      addExclusion={addExclusion}
+      removeExclusion={removeExclusion}
+      editingExclusion={editingExclusion}
+      setEditingExclusion={setEditingExclusionFunction}
+      editExclusion={editExclusion}
+      handlePost={handlePost}
+      groups={groups ? groups.groups : []}
+      groupsLoading={groupsLoading}
+      toggleSelectedGroups={toggleSelectedGroups}
+      selectedGroups={selectedGroups}
+      admin={admin}
+      createdById={currentUser}
+    />
+  );
+};
 
 export default withRouter(AddOffender);
