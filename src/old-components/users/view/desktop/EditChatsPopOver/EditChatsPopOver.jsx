@@ -1,16 +1,21 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import { useQuery, useMutation } from 'react-apollo';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+// import { useQuery, useMutation } from 'react-apollo';
+import { useQuery, useMutation } from "@apollo/client";
 
-import { PopOver, PopOverContainer } from '../../../../global/layout';
-import { BackButton } from '../../../../global/actions';
-import { EmptyText } from '../../../../global/typography';
-import GroupImage from '../../../../../images/AddGroup';
-import UserQuery from '../../../../../graphql/users/queries/User';
-import AllChats from '../../../../../graphql/chat/queries/AllChats';
-import UserMutation from '../../../../../graphql/users/mutations/UpdateUser';
+import { useStoreState } from "state";
+import { PopOver, PopOverContainer } from "../../../../global/layout";
+import { BackButton } from "../../../../global/actions";
+import { EmptyText } from "../../../../global/typography";
+import GroupImage from "../../../../../images/AddGroup";
+import { UserChats } from "graphql-src/users/queries";
+import { SchemeChats } from "graphql-src/chat/queries";
+import { UpdateUserChats } from "graphql-src/users/mutations";
+// import UserQuery from '../../../../../graphql/users/queries/User';
+// import AllChats from '../../../../../graphql/chat/queries/AllChats';
+// import UserMutation from '../../../../../graphql/users/mutations/UpdateUser';
 
 const Grow = styled.div`
   flex: 1;
@@ -51,89 +56,102 @@ const ItemText = styled(Typography)`
 
 const EditChatsPopOver = ({ open, user, close }) => {
   // state
+  const [userData, setUserData] = useState([]);
   const [chats, setChats] = useState([]);
   const [add, setAdd] = useState([]);
   const [remove, setRemove] = useState([]);
 
+  const schemeId = useStoreState((state) => state.scheme.id);
+
   // queries
-  const { data: userData, loading: userLoading } = useQuery(UserQuery, {
+  const {
+    data: userChatsData,
+    loading: userLoading,
+    refetch,
+  } = useQuery(UserChats, {
+    notifyOnNetworkStatusChange: true,
     variables: {
       id: user,
-      schemeId: window.localStorage.getItem('currentScheme')
+      scheme: schemeId,
     },
-    fetchPolicy: 'cache-and-network',
-    onCompleted: data => setChats(data.user.chats.map(({ chat: { id } }) => id))
+    onCompleted: (res) => {
+      setUserData(res.user.chats.map(({ chat: { id } }) => id));
+      setChats(res.user.chats.map(({ chat: { id } }) => id));
+    },
   });
 
-  const { data: chatsData, loading: chatsLoading } = useQuery(AllChats, {
+  const { data: chatsData, loading: chatsLoading } = useQuery(SchemeChats, {
     variables: {
-      schemeId: window.localStorage.getItem('currentScheme')
+      where: {
+        scheme: { id: { equals: schemeId } },
+      },
     },
-    fetchPolicy: 'cache-and-network'
   });
 
   // mutations
-  const [updateUser] = useMutation(UserMutation, {
-    update: (store, { data: { updateUser } }) => {
-      let data = store.readQuery({
-        query: UserQuery,
-        variables: {
-          id: user,
-          schemeId: window.localStorage.getItem('currentScheme')
-        }
-      });
-      data.user = {
-        ...data.user,
-        chats: updateUser.chats
-      };
-      store.writeQuery({
-        query: UserQuery,
-        data,
-        variables: {
-          id: user,
-          schemeId: window.localStorage.getItem('currentScheme')
-        }
-      });
+  const [updateUser, { loading: updateLoading }] = useMutation(
+    UpdateUserChats,
+    {
+      onCompleted: () => {
+        refetch();
+        setAdd([]);
+        setRemove([]);
+      },
     }
-  });
+  );
 
   // functions
-  const toggleSelectedChats = chat => {
-    if (chats.includes(chat)) {
-      setChats(chats.filter(id => id !== chat));
-      setAdd(add.filter(id => id !== chat));
-      userData.user.chats.map(({ chat: { id } }) => id).includes(chat) &&
-        setRemove([...remove, chat]);
-    } else {
-      setChats([...chats, chat]);
-      !userData.user.chats.map(({ chat: { id } }) => id).includes(chat) &&
-        setAdd([...add, chat]);
-      setRemove(remove.filter(id => id !== chat));
+  const toggleSelectedChats = (chat) => {
+    if (!add.includes(chat) && !chats.includes(chat)) {
+      setChats((prev) => [...prev, chat]);
+      setAdd((prev) => [...prev, chat]);
+      setRemove((prev) => prev.filter((el) => el !== chat));
+    } else if (!remove.includes(chat)) {
+      setChats((prev) => prev.filter((el) => el !== chat));
+      setRemove((prev) => [...prev, chat]);
+      setAdd((prev) => prev.filter((el) => el !== chat));
     }
   };
 
   const handleSave = () => {
+    const connect = add
+      .filter((el) => !userData.includes(el))
+      .map((id) => ({ id }));
+    const disconnect = remove
+      .filter((el) => userData.includes(el))
+      .map((id) => {
+        const userChatId = userChatsData.user.chats.find(
+          (e) => e.chat.id === id
+        )?.id;
+        return {
+          id: userChatId,
+        };
+      });
+
     updateUser({
       variables: {
-        id: user,
-        addChats: add.map(id => ({ chat: { connect: { id } } })),
-        removeChats: remove.map(id => ({
-          id: userData.user.chats.find(userChat => userChat.chat.id === id).id
-        }))
+        where: {
+          id: user,
+        },
+        data: {
+          chats: {
+            create:
+              connect.length > 0
+                ? connect.map((el) => ({
+                    chat: {
+                      connect: el,
+                    },
+                  }))
+                : undefined,
+            delete: disconnect.length > 0 ? disconnect : undefined,
+          },
+        },
       },
-      optimisticResponse: {
-        updateUser: {
-          ...userData.user,
-          chats: chats.map(chat =>
-            chatsData.chats.find(({ id }) => chat === id)
-          )
-        }
-      }
     });
     close();
   };
 
-  const loading = chatsLoading || userLoading;
+  const loading = chatsLoading || userLoading || updateLoading;
 
   return (
     <PopOver
@@ -154,18 +172,18 @@ const EditChatsPopOver = ({ open, user, close }) => {
           onClick={handleSave}
         >
           Save Chat Groups
-        </Button>
+        </Button>,
       ]}
     >
       <Grow>
         <PopOverContainer>
-          {!loading && chatsData.chats.length > 0 ? (
+          {!loading && chatsData?.chats?.length > 0 ? (
             <List>
-              {chatsData.chats.map(({ id, name }) => (
+              {chatsData?.chats?.map(({ id, name }) => (
                 <ListItem key={id} onClick={() => toggleSelectedChats(id)}>
                   <Svg viewBox="0 0 24 24">
                     <path
-                      fill={chats.includes(id) ? '#1E88E5' : '#E0E0E0'}
+                      fill={chats?.includes(id) ? "#1E88E5" : "#E0E0E0"}
                       d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M11,16.5L18,9.5L16.59,8.09L11,13.67L7.91,10.59L6.5,12L11,16.5Z"
                     />
                   </Svg>

@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import validate from 'validate.js';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+// import validate from "validate.js";
+// import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from "@apollo/client";
+import { useStoreState } from "state";
 
-import { PopOver, Row, PopOverContainer } from '../../../../global/layout';
-import { BackButton } from '../../../../global/actions';
-import { SubHeader } from '../../../../global/typography';
-import { Field, FieldHeader, Select } from '../../../../global/forms';
-import query from '../../../../../graphql/users/queries/User';
-import UserMutation from '../../../../../graphql/users/mutations/UpdateUser';
+import { PopOver, Row, PopOverContainer } from "../../../../global/layout";
+import { BackButton } from "../../../../global/actions";
+import { SubHeader } from "../../../../global/typography";
+import { Field, FieldHeader, Select } from "../../../../global/forms";
+import { ViewUser } from "graphql-src/users/queries/view-user";
+import { EditUser } from "graphql-src/users/mutations/edit-user";
+// import query from '../../../../../graphql/users/queries/User';
+// import UserMutation from '../../../../../graphql/users/mutations/UpdateUser';
 
 const Grow = styled.div`
   flex: 1;
@@ -18,96 +22,114 @@ const Grow = styled.div`
 `;
 
 const EditDetailsPopOver = ({ open, close, user }) => {
+  const schemeId = useStoreState((state) => state.scheme.id);
+
   // state
   const [details, setDetails] = useState({
-    id: '',
-    fullName: '',
-    fullNameError: '',
-    organisation: '',
-    organisationError: '',
-    email: '',
-    emailError: ''
+    id: "",
+    fullName: "",
+    fullNameError: "",
+    organisation: "",
+    organisationError: "",
+    email: "",
+    emailError: "",
   });
   const [scheme, setScheme] = useState({
-    id: '',
-    role: '',
-    roleErrror: ''
+    id: "",
+    role: "",
+    roleErrror: "",
   });
   const [address, setAddress] = useState({
     newAddress: false,
-    id: '',
-    premises: '',
-    building: '',
-    street: '',
-    streetError: '',
-    townCity: '',
-    townCityError: '',
-    county: '',
-    postcode: '',
-    postcodeError: ''
+    id: "",
+    premises: "",
+    building: "",
+    street: "",
+    streetError: "",
+    townCity: "",
+    townCityError: "",
+    county: "",
+    postcode: "",
+    postcodeError: "",
   });
 
   //queries
-  const { data, loading } = useQuery(query, {
+  const { loading } = useQuery(ViewUser, {
     variables: {
       id: user,
-      schemeId: window.localStorage.getItem('currentScheme')
     },
-    fetchPolicy: 'cache-and-network',
-    onCompleted: data => {
-      setDetails({
-        ...details,
-        id: data.user.id,
-        fullName: data.user.fullName,
-        organisation: data.user.organisation,
-        email: data.user.email
+    fetchPolicy: "cache-and-network",
+    onCompleted: (res) => {
+      const output = { ...res.user };
+      output.groups = output.groups.filter((el) => el.scheme.id === schemeId);
+      output.chats = output.chats.filter(
+        (el) => el.chat.scheme.id === schemeId
+      );
+      output.schemes = output.schemes.filter((el) => el.schemeId === schemeId);
+      setDetails((prev) => {
+        return {
+          ...prev,
+          id: output.id,
+          fullName: output.fullName,
+          organisation: output.organisation,
+          email: output.email,
+        };
       });
-      setScheme({
-        ...scheme,
-        id: data.user.schemes[0].id,
-        role: data.user.schemes[0].role
+      setScheme((prev) => {
+        return {
+          ...prev,
+          id: output.schemes[0].id,
+          role: output.schemes[0].role,
+        };
       });
-      if (data.user.addresses.length === 0) {
+      if (output.addresses.length === 0) {
         setAddress({
           ...address,
-          newAddress: true
+          newAddress: true,
         });
       } else {
         setAddress({
-          id: data.user.addresses[0].id,
-          premises: data.user.addresses[0].premises,
-          building: data.user.addresses[0].building,
-          street: data.user.addresses[0].street,
-          townCity: data.user.addresses[0].townCity,
-          county: data.user.addresses[0].county,
-          postcode: data.user.addresses[0].postcode
+          id: output.addresses[0].id,
+          premises: output.addresses[0].premises,
+          building: output.addresses[0].building,
+          street: output.addresses[0].street,
+          townCity: output.addresses[0].townCity,
+          county: output.addresses[0].county,
+          postcode: output.addresses[0].postcode,
         });
       }
-    }
+    },
   });
 
   // mutations
-  const [updateUser] = useMutation(UserMutation);
+  // const [updateUser] = useMutation(UserMutation);
+  const [updateUser] = useMutation(EditUser);
 
   // fucntions
-  const handleDetailsChange = name => event => {
-    setDetails({
-      ...details,
-      [name]: event.target.value
+  const handleDetailsChange = (name) => (event) => {
+    setDetails((prev) => {
+      return {
+        ...prev,
+        [name]: event.target.value,
+      };
     });
   };
 
-  const handleSchemeChange = name => event => {
-    setScheme({
-      ...scheme,
-      [name]: event.target.value
+  const handleSchemeChange = (name) => (event) => {
+    setScheme((prev) => {
+      return {
+        ...prev,
+        [name]: event.target.value,
+      };
     });
   };
 
-  const handleAddressChange = name => event => {
-    setAddress({
-      ...address,
-      [name]: event.target.value
+  const handleAddressChange = (name) => (event) => {
+    setAddress((prev) => {
+      return {
+        ...prev,
+        [name]: event.target.value,
+      };
     });
   };
 
@@ -115,14 +137,17 @@ const EditDetailsPopOver = ({ open, close, user }) => {
     new Promise((resolve, reject) => {
       const fullNameValid = !!details.fullName;
       const organisationValid = !!details.organisation;
-      const emailValid =
-        validate({ email: details.email }, { email: { email: true } }) ===
-        undefined;
+      // const emailValid =
+      // validate({ email: details.email }, { email: { email: true } }) ===
+      // undefined;
+
+      // make sure email matches anything@anything
+      const emailValid = /^[^\s@]+@[^\s@]+$/.test(details.email);
       setDetails({
         ...details,
-        fullNameError: fullNameValid ? '' : 'This is a required field.',
-        organisationError: organisationValid ? '' : 'This is a required field.',
-        emailError: emailValid ? '' : 'Please enter a valid email address.'
+        fullNameError: fullNameValid ? "" : "This is a required field.",
+        organisationError: organisationValid ? "" : "This is a required field.",
+        emailError: emailValid ? "" : "Please enter a valid email address.",
       });
       fullNameValid && organisationValid && emailValid ? resolve() : reject();
     });
@@ -132,7 +157,7 @@ const EditDetailsPopOver = ({ open, close, user }) => {
       const roleValid = !!scheme.role;
       setScheme({
         ...scheme,
-        roleError: roleValid ? '' : 'This is a required field.'
+        roleError: roleValid ? "" : "This is a required field.",
       });
       roleValid ? resolve() : reject();
     });
@@ -144,146 +169,73 @@ const EditDetailsPopOver = ({ open, close, user }) => {
       const postcodeValid = !!address.postcode;
       setAddress({
         ...address,
-        streetError: streetValid ? '' : 'This is a required field.',
-        townError: townValid ? '' : 'This is a required field.',
-        postcodeError: postcodeValid ? '' : 'This is a required field.'
+        streetError: streetValid ? "" : "This is a required field.",
+        townError: townValid ? "" : "This is a required field.",
+        postcodeError: postcodeValid ? "" : "This is a required field.",
       });
       streetValid && townValid && postcodeValid ? resolve() : reject();
     });
 
-  const handleSave = () => {
-    validateDetails()
-      .then(() => {
-        validateScheme()
-          .then(() => {
-            validateAddress()
-              .then(() => {
-                if (address.newAddress) {
-                  updateUser({
-                    variables: {
-                      id: user,
-                      fullName: { set: details.fullName },
-                      organisation: { set: details.organisation },
-                      email: { set: details.email },
-                      createAddress: [
-                        {
-                          primary: true,
-                          premises: { set: address.premises },
-                          building: { set: address.building },
-                          street: { set: address.street },
-                          townCity: { set: address.townCity },
-                          county: { set: address.county },
-                          postcode: { set: address.postcode }
-                        }
-                      ],
-                      updateScheme: [
-                        {
-                          where: { id: scheme.id },
-                          data: {
-                            role: scheme.role
-                          }
-                        }
-                      ],
-                      schemeId: window.localStorage.getItem('currentScheme')
-                    },
-                    optimisticResponse: {
-                      updateUser: {
-                        ...data.user,
-                        id: user,
-                        fullName: details.fullName,
-                        organisation: details.organisation,
-                        email: details.email,
-                        addresses: [
-                          {
-                            id: address.newAddress ? 0 : address.id,
-                            premises: address.premises,
-                            building: address.building,
-                            street: address.street,
-                            townCity: address.townCity,
-                            county: address.county,
-                            postcode: address.postcode,
-                            __typename: 'Address'
-                          }
-                        ],
-                        schemes: [
-                          {
-                            id: scheme.id,
-                            role: scheme.role,
-                            __typename: 'Scheme'
-                          }
-                        ],
-                        __typename: 'User'
-                      }
-                    }
-                  });
-                } else {
-                  updateUser({
-                    variables: {
-                      id: user,
-                      fullName: { set: details.fullName },
-                      organisation: { set: details.organisation },
-                      email: { set: details.email },
-                      updateAddress: [
-                        {
-                          where: { id: address.id },
-                          data: {
-                            premises: { set: address.premises },
-                            building: { set: address.building },
-                            street: { set: address.street },
-                            townCity: { set: address.townCity },
-                            county: { set: address.county },
-                            postcode: { set: address.postcode }
-                          }
-                        }
-                      ],
-                      updateScheme: [
-                        {
-                          where: { id: scheme.id },
-                          data: {
-                            role: scheme.role
-                          }
-                        }
-                      ],
-                      schemeId: window.localStorage.getItem('currentScheme')
-                    },
-                    optimisticResponse: {
-                      updateUser: {
-                        ...data.user,
-                        id: user,
-                        fullName: details.fullName,
-                        organisation: details.organisation,
-                        email: details.email,
-                        addresses: [
-                          {
-                            id: address.newAddress ? 0 : address.id,
-                            premises: address.premises,
-                            building: address.building,
-                            street: address.street,
-                            townCity: address.townCity,
-                            county: address.county,
-                            postcode: address.postcode,
-                            __typename: 'Address'
-                          }
-                        ],
-                        schemes: [
-                          {
-                            id: scheme.id,
-                            role: scheme.role,
-                            __typename: 'Scheme'
-                          }
-                        ],
-                        __typename: 'User'
-                      }
-                    }
-                  });
-                }
-                close();
-              })
-              .catch(() => {});
-          })
-          .catch(() => {});
-      })
-      .catch(() => {});
+  const handleSave = async () => {
+    try {
+      await validateDetails();
+      await validateAddress();
+      await validateScheme();
+
+      updateUser({
+        variables: {
+          id: user,
+          fullName: { set: details.fullName },
+          organisation: { set: details.organisation },
+          email: { set: details.email },
+          scheme: schemeId,
+          schemes: {
+            update: {
+              where: {
+                id: scheme.id,
+              },
+              data: {
+                role: { set: scheme.role },
+              },
+            },
+          },
+          addresses: {
+            update: address.newAddress
+              ? undefined
+              : {
+                  where: {
+                    id: address.id,
+                  },
+                  data: {
+                    premises: { set: address.premises },
+                    building: { set: address.building },
+                    street: { set: address.street },
+                    townCity: { set: address.townCity },
+                    county: { set: address.county },
+                    postcode: { set: address.postcode },
+                  },
+                },
+            create: address.newAddress
+              ? [
+                  {
+                    primary: true,
+                    premises: { set: address.premises },
+                    building: { set: address.building },
+                    street: { set: address.street },
+                    townCity: { set: address.townCity },
+                    county: { set: address.county },
+                    postcode: { set: address.postcode },
+                  },
+                ]
+              : undefined,
+          },
+        },
+      });
+      console.log("complete");
+      close();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -305,7 +257,7 @@ const EditDetailsPopOver = ({ open, close, user }) => {
           onClick={handleSave}
         >
           Save
-        </Button>
+        </Button>,
       ]}
     >
       <Grow>
@@ -315,7 +267,7 @@ const EditDetailsPopOver = ({ open, close, user }) => {
               <FieldHeader required>Full Name</FieldHeader>
               <TextField
                 value={details.fullName}
-                onChange={handleDetailsChange('fullName')}
+                onChange={handleDetailsChange("fullName")}
                 error={!!details.fullNameError}
                 helperText={details.fullNameError}
                 fullWidth
@@ -325,7 +277,7 @@ const EditDetailsPopOver = ({ open, close, user }) => {
               <FieldHeader required>Organisation</FieldHeader>
               <TextField
                 value={details.organisation}
-                onChange={handleDetailsChange('organisation')}
+                onChange={handleDetailsChange("organisation")}
                 error={!!details.organisationError}
                 helperText={details.organisationError}
                 fullWidth
@@ -337,7 +289,7 @@ const EditDetailsPopOver = ({ open, close, user }) => {
               <FieldHeader required>Email Address</FieldHeader>
               <TextField
                 value={details.email}
-                onChange={handleDetailsChange('email')}
+                onChange={handleDetailsChange("email")}
                 error={!!details.emailError}
                 helperText={details.emailError}
                 fullWidth
@@ -347,19 +299,19 @@ const EditDetailsPopOver = ({ open, close, user }) => {
               <FieldHeader required>User Role</FieldHeader>
               <Select
                 value={scheme.role}
-                onChange={handleSchemeChange('role')}
+                onChange={handleSchemeChange("role")}
                 error={!!scheme.roleError}
                 helperText={scheme.roleError}
                 menuItems={[
-                  { value: 'USER', label: 'User' },
+                  { value: "USER", label: "User" },
                   {
-                    value: 'CONTENT_ADMIN',
-                    label: 'Content Admin'
+                    value: "CONTENT_ADMIN",
+                    label: "Content Admin",
                   },
                   {
-                    value: 'SCHEME_ADMIN',
-                    label: 'Scheme Admin'
-                  }
+                    value: "SCHEME_ADMIN",
+                    label: "Scheme Admin",
+                  },
                 ]}
               />
             </Field>
@@ -370,7 +322,7 @@ const EditDetailsPopOver = ({ open, close, user }) => {
               <FieldHeader>Premise</FieldHeader>
               <TextField
                 value={address.premises}
-                onChange={handleAddressChange('premises')}
+                onChange={handleAddressChange("premises")}
                 fullWidth
               />
             </Field>
@@ -378,7 +330,7 @@ const EditDetailsPopOver = ({ open, close, user }) => {
               <FieldHeader>Building</FieldHeader>
               <TextField
                 value={address.building}
-                onChange={handleAddressChange('building')}
+                onChange={handleAddressChange("building")}
                 fullWidth
               />
             </Field>
@@ -390,7 +342,7 @@ const EditDetailsPopOver = ({ open, close, user }) => {
                 value={address.street}
                 error={!!address.streetError}
                 helperText={address.streetError}
-                onChange={handleAddressChange('street')}
+                onChange={handleAddressChange("street")}
                 fullWidth
               />
             </Field>
@@ -400,7 +352,7 @@ const EditDetailsPopOver = ({ open, close, user }) => {
                 value={address.townCity}
                 error={!!address.townError}
                 helperText={address.townError}
-                onChange={handleAddressChange('townCity')}
+                onChange={handleAddressChange("townCity")}
                 fullWidth
               />
             </Field>
@@ -410,7 +362,7 @@ const EditDetailsPopOver = ({ open, close, user }) => {
               <FieldHeader>County</FieldHeader>
               <TextField
                 value={address.county}
-                onChange={handleAddressChange('county')}
+                onChange={handleAddressChange("county")}
                 fullWidth
               />
             </Field>
@@ -420,7 +372,7 @@ const EditDetailsPopOver = ({ open, close, user }) => {
                 value={address.postcode}
                 error={!!address.postcodeError}
                 helperText={address.postcodeError}
-                onChange={handleAddressChange('postcode')}
+                onChange={handleAddressChange("postcode")}
                 fullWidth
               />
             </Field>

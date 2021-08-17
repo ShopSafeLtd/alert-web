@@ -1,30 +1,34 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import Paper from '@material-ui/core/Paper';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import { withStyles } from '@material-ui/styles';
-import Button from '@material-ui/core/Button';
-import MediaQuery from 'react-responsive';
-import validate from 'validate.js';
-import { withRouter, Route } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import Paper from "@material-ui/core/Paper";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import { withStyles } from "@material-ui/styles";
+import Button from "@material-ui/core/Button";
+import MediaQuery from "react-responsive";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
+// import validate from "validate.js";
+import { withRouter, Route } from "react-router-dom";
+// import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from "@apollo/client";
 
-import { BackButton, FullWidthButton } from '../../../global/actions';
-import CreateUser from '../../../../graphql/users/mutations/CreateUser';
-import AllChats from '../../../../graphql/chat/queries/AllChats';
-import AllGroups from '../../../../graphql/groups/AllGroupsQuery';
+import { BackButton, FullWidthButton } from "../../../global/actions";
+import { Groups as GroupsQuery } from "graphql-src/groups/queries";
+import { SchemeChats as ChatsQuery } from "graphql-src/chat/queries";
+// import CreateUser from '../../../../graphql/users/mutations/CreateUser';
+// import AllChats from '../../../../graphql/chat/queries/AllChats';
+// import AllGroups from '../../../../graphql/groups/AllGroupsQuery';
 
-import Details from '../Details/Details';
-import Groups from '../Groups/Groups';
-import ChatGroups from '../ChatGroups/ChatGroups';
-import { useStoreActions } from '../../../../state';
+import Details from "../Details/Details";
+import Groups from "../Groups/Groups";
+import ChatGroups from "../ChatGroups/ChatGroups";
+import { useStoreActions, useStoreState } from "../../../../state";
 
 const styles = {
   label: {
-    fontSize: '14px'
-  }
+    fontSize: "14px",
+  },
 };
 
 const Container = styled.div`
@@ -71,105 +75,122 @@ const Content = styled.div`
 `;
 
 const AddUser = ({ history, classes, location }) => {
-  const setTitle = useStoreActions(actions => actions.theme.setTitle);
-  const setBackLinkTo = useStoreActions(actions => actions.theme.setBackLinkTo);
-  const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
-  const setNavbarAction = useStoreActions(
-    actions => actions.theme.setNavbarAction
+  const setTitle = useStoreActions((actions) => actions.theme.setTitle);
+  const setBackLinkTo = useStoreActions(
+    (actions) => actions.theme.setBackLinkTo
   );
+  const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
+  // const setNavbarAction = useStoreActions(
+  //   (actions) => actions.theme.setNavbarAction
+  // );
+  const schemeId = useStoreState((state) => state.scheme.id);
 
   // state
   const [user, setUser] = useState({
-    fullName: '',
-    fullNameError: '',
-    email: '',
-    emailError: '',
-    organisation: '',
-    organisationError: '',
-    role: '',
-    roleError: '',
-    premises: '',
-    building: '',
-    street: '',
-    streetError: '',
-    townCity: '',
-    townCityError: '',
-    county: '',
-    postcode: '',
-    postcodeError: ''
+    fullName: "",
+    fullNameError: "",
+    email: "",
+    emailError: "",
+    organisation: "",
+    organisationError: "",
+    role: "",
+    roleError: "",
+    premises: "",
+    building: "",
+    street: "",
+    streetError: "",
+    townCity: "",
+    townCityError: "",
+    county: "",
+    postcode: "",
+    postcodeError: "",
   });
   const [groups, setGroups] = useState([]);
   const [chats, setChats] = useState([]);
   const [step, setStep] = useState(0);
   const steps = [
-    { step: 0, label: 'User Details', url: '/admin/users/add' },
-    { step: 1, label: 'Groups', url: '/admin/users/add/groups' },
-    { step: 2, label: 'Chat Groups', url: '/admin/users/add/chat-groups' }
+    {
+      step: 0,
+      label: "User Details",
+      url: `${APP_PREFIX_PATH}/scheme-settings/users/add`,
+    },
+    {
+      step: 1,
+      label: "Groups",
+      url: `${APP_PREFIX_PATH}/scheme-settings/users/add/groups`,
+    },
+    {
+      step: 2,
+      label: "Chat Groups",
+      url: `${APP_PREFIX_PATH}/scheme-settings/users/add/chat-groups`,
+    },
   ];
 
   // effects
   useEffect(() => {
     setBottomNav(false);
-    setTitle('Add User');
-    location.pathname !== '/admin/users/add' &&
-      history.push('/admin/users/add');
+    setTitle("Add User");
+    location.pathname !== `${APP_PREFIX_PATH}/scheme-settings/users/add` &&
+      history.push(`${APP_PREFIX_PATH}/scheme-settings/users/add`);
     return () => {
       setBottomNav(true);
-      setTitle('');
+      setTitle("");
     };
     // eslint-disable-next-line
   }, []);
 
   // queries
-  const { data: groupsData, loading: groupsLoading } = useQuery(AllGroups, {
+  const { data: groupsData, loading: groupsLoading } = useQuery(GroupsQuery, {
     variables: {
-      schemeId: window.localStorage.getItem('currentScheme')
+      where: { scheme: { id: { equals: schemeId } } },
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: "cache-and-network",
   });
 
-  const { data: chatsData, loading: chatsLoading } = useQuery(AllChats, {
+  const { data: chatsData, loading: chatsLoading } = useQuery(ChatsQuery, {
     variables: {
-      schemeId: window.localStorage.getItem('currentScheme')
+      where: {
+        scheme: { id: { equals: schemeId } },
+      },
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: "cache-and-network",
   });
 
   // mutations
-  const [addUser] = useMutation(CreateUser, {
-    onError: error => {
-      if (
-        error.message ===
-        'GraphQL error: A unique constraint would be violated on User. Details: Field name = email'
-      ) {
-        history.push(steps[0].url);
-        setStep(0);
-        setUser({
-          ...user,
-          emailError: 'A user already exists with this email address'
-        });
-      }
-    },
-    onCompleted: () => history.push('/admin/users/')
-  });
+  // const [addUser] = useMutation(CreateUser, {
+  //   onError: (error) => {
+  //     if (
+  //       error.message ===
+  //       "GraphQL error: A unique constraint would be violated on User. Details: Field name = email"
+  //     ) {
+  //       history.push(steps[0].url);
+  //       setStep(0);
+  //       setUser({
+  //         ...user,
+  //         emailError: "A user already exists with this email address",
+  //       });
+  //     }
+  //   },
+  //   onCompleted: () => history.push("/admin/users/"),
+  // });
 
   // functions
-  const handleChange = name => event => {
+  const handleChange = (name) => (event) => {
     setUser({
       ...user,
-      [name]: event.target.value
+      [name]: event.target.value,
     });
   };
 
-  const toggleGroups = group => {
+  const toggleGroups = (group) => {
     groups.includes(group)
-      ? setGroups(groups.filter(id => id !== group))
+      ? setGroups(groups.filter((id) => id !== group))
       : setGroups([...groups, group]);
   };
 
-  const toggleChats = chat => {
+  const toggleChats = (chat) => {
     chats.includes(chat)
-      ? setChats(chats.filter(id => id !== chat))
+      ? setChats(chats.filter((id) => id !== chat))
       : setChats([...chats, chat]);
   };
 
@@ -183,16 +204,17 @@ const AddUser = ({ history, classes, location }) => {
       const fullNameValid = !!user.fullName;
       const organisationValid = !!user.organisation;
       const roleValid = !!user.role;
-      const emailValid =
-        validate({ email: user.email }, { email: { email: true } }) ===
-        undefined;
+      // make sure email matches anything@anything
+      const emailValid = /^[^\s@]+@[^\s@]+$/.test(user.email);
+      // validate({ email: user.email }, { email: { email: true } }) ===
+      // undefined;
 
       setUser({
         ...user,
-        fullNameError: fullNameValid ? '' : 'This is a required field.',
-        organisationError: organisationValid ? '' : 'This is a required field.',
-        roleError: roleValid ? '' : 'This is a required field.',
-        emailError: emailValid ? '' : 'Please enter a valid email address.'
+        fullNameError: fullNameValid ? "" : "This is a required field.",
+        organisationError: organisationValid ? "" : "This is a required field.",
+        roleError: roleValid ? "" : "This is a required field.",
+        emailError: emailValid ? "" : "Please enter a valid email address.",
       });
 
       fullNameValid && organisationValid && roleValid && emailValid
@@ -210,50 +232,52 @@ const AddUser = ({ history, classes, location }) => {
       .then(() => {
         validateGroups()
           .then(() => {
-            addUser({
-              variables: {
-                email: user.email,
-                fullName: user.fullName,
-                organisation: user.organisation,
-                scheme: {
-                  create: {
-                    role: user.role,
-                    scheme: {
-                      connect: {
-                        id: window.localStorage.getItem('currentScheme')
-                      }
-                    }
-                  }
-                },
-                groups: {
-                  connect: groups.map(id => ({ id }))
-                },
-                chats: {
-                  create: chats.map(id => ({
-                    chat: { connect: { id } }
-                  }))
-                },
-                addresses: {
-                  create: {
-                    primary: true,
-                    premises: user.premises,
-                    building: user.building,
-                    street: user.street,
-                    townCity: user.townCity,
-                    county: user.county,
-                    postcode: user.postcode
-                  }
-                }
-              }
-            });
+            console.log("addUser:", user);
+            // addUser({
+            //   variables: {
+            //     email: user.email,
+            //     fullName: user.fullName,
+            //     organisation: user.organisation,
+            //     scheme: {
+            //       create: {
+            //         role: user.role,
+            //         scheme: {
+            //           connect: {
+            //             id: window.localStorage.getItem("currentScheme"),
+            //           },
+            //         },
+            //       },
+            //     },
+            //     groups: {
+            //       connect: groups.map((id) => ({ id })),
+            //     },
+            //     chats: {
+            //       create: chats.map((id) => ({
+            //         chat: { connect: { id } },
+            //       })),
+            //     },
+            //     addresses: {
+            //       create: {
+            //         primary: true,
+            //         premises: user.premises,
+            //         building: user.building,
+            //         street: user.street,
+            //         townCity: user.townCity,
+            //         county: user.county,
+            //         postcode: user.postcode,
+            //       },
+            //     },
+            //   },
+            // });
+            history.push(`${APP_PREFIX_PATH}/scheme-settings/users`);
           })
           .catch(() => {
-            history.push('/admin/users/add/groups');
+            history.push(`${APP_PREFIX_PATH}/scheme-settings/users/add/groups`);
             setStep(2);
           });
       })
       .catch(() => {
-        history.push('/admin/users/add');
+        history.push(`${APP_PREFIX_PATH}/scheme-settings/users/add`);
         setStep(1);
       });
   };
@@ -280,7 +304,7 @@ const AddUser = ({ history, classes, location }) => {
 
   return (
     <MediaQuery minDeviceWidth={1024}>
-      {matches => (
+      {(matches) => (
         <Container>
           <Page>
             <FormContainer elevation={1}>
@@ -298,19 +322,19 @@ const AddUser = ({ history, classes, location }) => {
               <Content>
                 <Route
                   exact
-                  path="/admin/users/add"
+                  path={`${APP_PREFIX_PATH}/scheme-settings/users/add`}
                   render={() => (
                     <Details
                       handleChange={handleChange}
                       user={user}
                       setBackLinkTo={setBackLinkTo}
-                      setNavbarAction={setNavbarAction}
+                      // setNavbarAction={setNavbarAction}
                       setActiveStep={setStep}
                     />
                   )}
                 />
                 <Route
-                  path="/admin/users/add/groups"
+                  path={`${APP_PREFIX_PATH}/scheme-settings/users/add/groups`}
                   render={() => (
                     <Groups
                       groups={groupsData.groups}
@@ -319,12 +343,12 @@ const AddUser = ({ history, classes, location }) => {
                       toggleSelectedGroups={toggleGroups}
                       setBackLinkTo={setBackLinkTo}
                       setActiveStep={setStep}
-                      setNavbarAction={setNavbarAction}
+                      // setNavbarAction={setNavbarAction}
                     />
                   )}
                 />
                 <Route
-                  path="/admin/users/add/chat-groups"
+                  path={`${APP_PREFIX_PATH}/scheme-settings/users/add/chat-groups`}
                   render={() => (
                     <ChatGroups
                       chatGroups={chatsData.chats}
@@ -333,7 +357,7 @@ const AddUser = ({ history, classes, location }) => {
                       toggleChatGroup={toggleChats}
                       setBackLinkTo={setBackLinkTo}
                       setActiveStep={setStep}
-                      setNavbarAction={setNavbarAction}
+                      // setNavbarAction={setNavbarAction}
                     />
                   )}
                 />
@@ -349,13 +373,13 @@ const AddUser = ({ history, classes, location }) => {
                     disabled={step === 1 && groups.length === 0}
                     onClick={handleNext}
                   >
-                    {step === 2 ? 'submit' : 'next'}
+                    {step === 2 ? "submit" : "next"}
                   </Button>
                 </Actions>
               )}
               {!matches && (
                 <FullWidthButton
-                  text={step === 2 ? 'submit' : 'next'}
+                  text={step === 2 ? "submit" : "next"}
                   onClick={handleNext}
                   disabled={step === 1 && groups.length === 0}
                 />

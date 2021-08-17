@@ -1,0 +1,82 @@
+import React from "react";
+import { Switch, Route } from "react-router";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
+import AdminMenu from "../../../old-components/admin/AdminMenu";
+
+import UserList from "../../../old-components/users/list/AllUsers/AllUsers";
+import ViewUser from "../../../old-components/users/view/ViewUser/ViewUser";
+import AddUser from "../../../old-components/users/add/AddUser/AddUser";
+
+import GroupsList from "../../../old-components/groups/list/AllGroups/AllGroups";
+import ViewGroup from "../../../old-components/groups/view/ViewGroup/ViewGroup";
+import AddGroup from "../../../old-components/groups/add/AddGroup/AddGroup";
+
+import ChatGroupsList from "../../../old-components/admin/chat-groups/list/ChatGroups";
+import ViewChatGroup from "../../../old-components/admin/chat-groups/view/ViewChatGroup";
+import AddChatGroup from "../../../old-components/admin/chat-groups/add/AddChatGroup";
+
+import SchemeDetails from "../../../old-components/admin/SchemeDetails";
+
+const SchemeSettings = () => {
+  return (
+    <Switch>
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings`}
+        exact
+        component={AdminMenu}
+      />
+      {/* users */}
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/users`}
+        exact
+        component={UserList}
+      />
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/users/view/:id`}
+        component={ViewUser}
+      />
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/users/add`}
+        component={AddUser}
+      />
+
+      {/* groups */}
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/groups`}
+        exact
+        component={GroupsList}
+      />
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/groups/view/:id`}
+        component={ViewGroup}
+      />
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/groups/add`}
+        component={AddGroup}
+      />
+
+      {/* chats */}
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/chat-groups`}
+        exact
+        component={ChatGroupsList}
+      />
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/chat-groups/view/:id`}
+        component={ViewChatGroup}
+      />
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/chat-groups/add`}
+        component={AddChatGroup}
+      />
+
+      {/* details */}
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/scheme-details`}
+        component={SchemeDetails}
+      />
+    </Switch>
+  );
+};
+
+export default SchemeSettings;

@@ -1,15 +1,15 @@
-import React from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import EditSvg from '@material-ui/icons/Edit';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import React from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import EditSvg from "@material-ui/icons/Edit";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import {
   ItemHeader,
   ItemText,
-  SectionTitle
-} from '../../../../global/typography';
-import { Section } from '../../../../global/layout';
+  SectionTitle,
+} from "../../../../global/typography";
+import { Section } from "../../../../global/layout";
 
 const Row = styled.div`
   display: flex;
@@ -48,11 +48,11 @@ const Details = ({ group, loading, openEdit }) => {
         <div>
           <Item>
             <ItemHeader>Group Name</ItemHeader>
-            <ItemText>{group.name}</ItemText>
+            <ItemText>{group?.name}</ItemText>
           </Item>
           <Item>
             <ItemHeader>Description</ItemHeader>
-            <ItemText>{group.description}</ItemText>
+            <ItemText>{group?.description}</ItemText>
           </Item>
         </div>
       )}

@@ -59,7 +59,7 @@ const adminOnlyItems: NavItem[] = [
   },
   {
     key: "scheme",
-    path: `${APP_PREFIX_PATH}/scheme`,
+    path: `${APP_PREFIX_PATH}/scheme-settings`,
     title: "sidenav.scheme",
     // icon: faCity,
     breadcrumb: true,

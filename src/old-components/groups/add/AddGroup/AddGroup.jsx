@@ -1,28 +1,29 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import Paper from '@material-ui/core/Paper';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import { withStyles } from '@material-ui/styles';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import Button from '@material-ui/core/Button';
-import MediaQuery from 'react-responsive';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import Paper from "@material-ui/core/Paper";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import { withStyles } from "@material-ui/styles";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
+import { useQuery, useMutation } from "@apollo/client";
+import Button from "@material-ui/core/Button";
+import MediaQuery from "react-responsive";
 
-import { BackButton, FullWidthButton } from '../../../global/actions';
-import { withRouter, Route } from 'react-router-dom';
-import UsersQuery from '../../../../graphql/users/queries/AllUsersQuery';
-import AddGroupMutation from '../../../../graphql/groups/mutations/AddGroup';
-import AllGroups from '../../../../graphql/groups/queries/GroupList';
+import { BackButton, FullWidthButton } from "../../../global/actions";
+import { withRouter, Route } from "react-router-dom";
+import { SchemeUsers } from "graphql-src/users/queries";
+import { CreateGroup } from "graphql-src/groups/mutations";
+import { Groups } from "graphql-src/groups/queries";
 
-import Details from '../Details/Details';
-import Users from '../Users/Users';
-import { useStoreActions } from '../../../../state';
+import Details from "../Details/Details";
+import Users from "../Users/Users";
+import { useStoreActions, useStoreState } from "../../../../state";
 
 const styles = {
   label: {
-    fontSize: '14px'
-  }
+    fontSize: "14px",
+  },
 };
 
 const Container = styled.div`
@@ -70,92 +71,109 @@ const Content = styled.div`
 `;
 
 const AddGroup = ({ history, classes }) => {
-  const setTitle = useStoreActions(actions => actions.theme.setTitle);
-  const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
-  const setBackLinkTo = useStoreActions(actions => actions.theme.setBackLinkTo);
-  const setNavbarAction = useStoreActions(
-    actions => actions.theme.setNavbarAction
+  const setTitle = useStoreActions((actions) => actions.theme.setTitle);
+  const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
+  const setBackLinkTo = useStoreActions(
+    (actions) => actions.theme.setBackLinkTo
   );
+  // const setNavbarAction = useStoreActions(
+  //   (actions) => actions.theme.setNavbarAction
+  // );
+  const schemeId = useStoreState((state) => state.scheme.id);
 
   // presets
   const steps = [
-    { step: 0, label: 'Group Details', url: '/admin/groups/add' },
-    { step: 1, label: 'Users', url: '/admin/groups/add/users' }
+    {
+      step: 0,
+      label: "Group Details",
+      url: `${APP_PREFIX_PATH}/scheme-settings/groups/add`,
+    },
+    {
+      step: 1,
+      label: "Users",
+      url: `${APP_PREFIX_PATH}/scheme-settings/groups/add/users`,
+    },
   ];
 
   // state
   const [step, setStep] = useState(0);
   const [group, setGroup] = useState({
-    name: '',
-    nameError: '',
-    description: ''
+    name: "",
+    nameError: "",
+    description: "",
   });
   const [users, setUsers] = useState([]);
-  const [userError, setUserError] = useState('');
+  const [userError, setUserError] = useState("");
 
   // effects
   useEffect(() => {
     setBottomNav(false);
-    setTitle('Add Group');
-    history.push('/admin/groups/add');
+    setTitle("Add Group");
+    history.push(`${APP_PREFIX_PATH}/scheme-settings/groups/add`);
     return () => {
       setBottomNav(true);
-      setTitle('');
+      setTitle("");
     };
     // eslint-disable-next-line
   }, []);
 
   // queries
-  const { data, loading } = useQuery(UsersQuery, {
+  const { data, loading } = useQuery(SchemeUsers, {
     variables: {
-      schemeId: window.localStorage.getItem('currentScheme')
+      scheme: schemeId,
+      search: "",
+      orderByName: "asc",
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: "cache-and-network",
   });
 
   // mutations
-  const [addGroup] = useMutation(AddGroupMutation, {
+  const [createGroup] = useMutation(CreateGroup, {
     update: (store, { data: { createGroup } }) => {
       let data = store.readQuery({
-        query: AllGroups,
+        query: Groups,
         variables: {
-          schemeId: window.localStorage.getItem('currentScheme'),
-          search: ''
-        }
+          where: {
+            scheme: { id: { equals: schemeId } },
+          },
+        },
       });
-      data.groups = [...data.groups, createGroup];
       store.writeQuery({
-        query: AllGroups,
-        data,
+        query: Groups,
+        data: {
+          ...data,
+          groups: [...data?.groups, createGroup],
+        },
         variables: {
-          schemeId: window.localStorage.getItem('currentScheme'),
-          search: ''
-        }
+          where: {
+            scheme: { id: { equals: schemeId } },
+          },
+        },
       });
-    }
+    },
   });
 
   // functions
-  const handleChange = name => event => {
+  const handleChange = (name) => (event) => {
     setGroup({
       ...group,
-      [name]: event.target.value
+      [name]: event.target.value,
     });
   };
 
-  const toggleSelectedUsers = user => {
+  const toggleSelectedUsers = (user) => {
     !users.includes(user)
       ? setUsers([...users, user])
-      : setUsers(users.filter(item => item !== user));
+      : setUsers(users.filter((item) => item !== user));
   };
 
   const validateDetails = () =>
     new Promise((resolve, reject) => {
-      const nameValid = group.name !== '';
+      const nameValid = group.name !== "";
 
       !nameValid
-        ? setGroup({ ...group, nameError: 'This is a required field.' })
-        : setGroup({ ...group, nameError: '' });
+        ? setGroup({ ...group, nameError: "This is a required field." })
+        : setGroup({ ...group, nameError: "" });
 
       nameValid ? resolve() : reject();
     });
@@ -164,8 +182,8 @@ const AddGroup = ({ history, classes }) => {
     new Promise((resolve, reject) => {
       const usersValid = users.length > 0;
       usersValid
-        ? setUserError('')
-        : setUserError('Please select at least one user.');
+        ? setUserError("")
+        : setUserError("Please select at least one user.");
       usersValid ? resolve() : reject();
     });
 
@@ -180,23 +198,30 @@ const AddGroup = ({ history, classes }) => {
     } else if (step === 1) {
       validateUsers()
         .then(() => {
-          addGroup({
+          createGroup({
             variables: {
-              name: group.name,
-              description: group.description,
-              usersIds: users.map(id => ({ id })),
-              schemeId: window.localStorage.getItem('currentScheme')
+              data: {
+                name: group.name,
+                description: group.description,
+                scheme: {
+                  connect: { id: schemeId },
+                },
+                users: {
+                  connect:
+                    users.length > 0 ? users.map((id) => ({ id })) : undefined,
+                },
+              },
             },
             optimisticResponse: {
               createGroup: {
                 id: 0,
                 name: group.name,
                 description: group.description,
-                __typename: 'Group'
-              }
-            }
+                __typename: "Group",
+              },
+            },
           });
-          history.push('/admin/groups');
+          history.push(`${APP_PREFIX_PATH}/scheme-settings/groups`);
         })
         .catch(() => {});
     }
@@ -209,7 +234,7 @@ const AddGroup = ({ history, classes }) => {
 
   return (
     <MediaQuery minDeviceWidth={1024}>
-      {matches => (
+      {(matches) => (
         <Container>
           <Page>
             <FormContainer elevation={1}>
@@ -227,7 +252,7 @@ const AddGroup = ({ history, classes }) => {
               <Content>
                 <Route
                   exact
-                  path="/admin/groups/add"
+                  path={`${APP_PREFIX_PATH}/scheme-settings/groups/add`}
                   render={() => (
                     <Details
                       handleChange={handleChange}
@@ -235,25 +260,25 @@ const AddGroup = ({ history, classes }) => {
                       nameError={group.nameError}
                       description={group.description}
                       setBackLinkTo={setBackLinkTo}
-                      setNavbarAction={setNavbarAction}
+                      // setNavbarAction={setNavbarAction}
                       setActiveStep={setStep}
-                      back="/admin/groups"
+                      back={`${APP_PREFIX_PATH}/scheme-settings/groups`}
                     />
                   )}
                 />
                 <Route
-                  path="/admin/groups/add/users"
+                  path={`${APP_PREFIX_PATH}/scheme-settings/groups/add/users`}
                   render={() => (
                     <Users
-                      users={data.users}
+                      users={data?.users}
                       error={userError}
                       selectedUsers={users}
                       loading={loading}
                       toggleSelectedUsers={toggleSelectedUsers}
                       setBackLinkTo={setBackLinkTo}
                       setActiveStep={step}
-                      setNavbarAction={setNavbarAction}
-                      back="/admin/groups/add"
+                      // setNavbarAction={setNavbarAction}
+                      back={`${APP_PREFIX_PATH}/scheme-settings/groups/add`}
                     />
                   )}
                 />
@@ -268,13 +293,13 @@ const AddGroup = ({ history, classes }) => {
                     color="primary"
                     onClick={handleNext}
                   >
-                    {step !== 0 ? 'submit' : 'next'}
+                    {step !== 0 ? "submit" : "next"}
                   </Button>
                 </Actions>
               )}
               {!matches && (
                 <FullWidthButton
-                  text={step !== 0 ? 'submit' : 'next'}
+                  text={step !== 0 ? "submit" : "next"}
                   onClick={handleNext}
                 />
               )}

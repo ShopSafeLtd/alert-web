@@ -28,7 +28,7 @@ const Header = styled.div`
 
 class Details extends PureComponent {
   componentDidMount() {
-    this.props.setNavbarAction("backLink");
+    // this.props.setNavbarAction("backLink");
     this.props.setBackLinkTo("/admin/users");
     this.props.setActiveStep(0);
   }
@@ -170,7 +170,7 @@ class Details extends PureComponent {
   }
 
   componentWillUnmount() {
-    this.props.setNavbarAction("default");
+    // this.props.setNavbarAction("default");
     this.props.setBackLinkTo("");
   }
 }

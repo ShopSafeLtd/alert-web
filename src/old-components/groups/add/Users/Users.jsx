@@ -1,10 +1,10 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
+import React, { PureComponent } from "react";
+import styled from "styled-components";
+import Typography from "@material-ui/core/Typography";
 
-import { HeaderText, HeaderSubText } from '../../../global/forms';
-import { ErrorText } from '../../../global/typography';
-import { ToggleSkeleton } from '../../../global/skeletons';
+import { HeaderText, HeaderSubText } from "../../../global/forms";
+import { ErrorText } from "../../../global/typography";
+import { ToggleSkeleton } from "../../../global/skeletons";
 
 const List = styled.div`
   flex: 1;
@@ -51,19 +51,14 @@ const Header = styled.div`
 
 class Users extends PureComponent {
   componentDidMount() {
-    this.props.setNavbarAction('backLink');
+    // this.props.setNavbarAction('backLink');
     this.props.setBackLinkTo(this.props.back);
     !!this.props.setActiveStep && this.props.setActiveStep(1);
   }
 
   render() {
-    const {
-      users,
-      error,
-      selectedUsers,
-      loading,
-      toggleSelectedUsers
-    } = this.props;
+    const { users, error, selectedUsers, loading, toggleSelectedUsers } =
+      this.props;
     return (
       <Page>
         <Header>
@@ -88,7 +83,7 @@ class Users extends PureComponent {
                 <ListItem key={id} onClick={() => toggleSelectedUsers(id)}>
                   <Svg viewBox="0 0 24 24">
                     <path
-                      fill={selectedUsers.includes(id) ? '#1E88E5' : '#E0E0E0'}
+                      fill={selectedUsers.includes(id) ? "#1E88E5" : "#E0E0E0"}
                       d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M11,16.5L18,9.5L16.59,8.09L11,13.67L7.91,10.59L6.5,12L11,16.5Z"
                     />
                   </Svg>
@@ -102,8 +97,8 @@ class Users extends PureComponent {
   }
 
   componentWillUnmount() {
-    this.props.setNavbarAction('');
-    this.props.setBackLinkTo('');
+    // this.props.setNavbarAction('');
+    this.props.setBackLinkTo("");
   }
 }
 

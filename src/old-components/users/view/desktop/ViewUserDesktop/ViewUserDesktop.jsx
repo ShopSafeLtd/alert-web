@@ -1,23 +1,25 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import { useMutation } from '@apollo/react-hooks';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+// import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from "@apollo/client";
 
-import EditDetailsPopOver from '../EditDetailsPopOver/EditDetailsPopOver';
-import EditGroupsPopOver from '../EditGroupsPopOver/EditGroupsPopOver';
-import EditChatsPopOver from '../EditChatsPopOver/EditChatsPopOver';
-import ConfirmDialog from '../../../../global/ConfirmDialog/ConfirmDialog';
-import ToggleUser from '../../../../../graphql/users/mutations/ToggleUser';
-import DeleteUser from '../../../../../graphql/users/mutations/DeleteUser';
-import SendInvite from '../../../../../graphql/users/mutations/SendInvite';
-import AllUsers from '../../../../../graphql/users/queries/AllUsersQuery';
+import EditDetailsPopOver from "../EditDetailsPopOver/EditDetailsPopOver";
+import EditGroupsPopOver from "../EditGroupsPopOver/EditGroupsPopOver";
+import EditChatsPopOver from "../EditChatsPopOver/EditChatsPopOver";
+import ConfirmDialog from "../../../../global/ConfirmDialog/ConfirmDialog";
+import { UpdateUserDisabled } from "graphql-src/users/mutations";
+// import ToggleUser from '../../../../../graphql/users/mutations/ToggleUser';
+// import DeleteUser from '../../../../../graphql/users/mutations/DeleteUser';
+// import SendInvite from '../../../../../graphql/users/mutations/SendInvite';
+// import AllUsers from '../../../../../graphql/users/queries/AllUsersQuery';
 
 // section imports
-import Details from '../Details/Details';
-import Groups from '../Groups/Groups';
-import ChatGroups from '../ChatsGroups/ChatGroups';
-import Header from '../Header/Header';
-import UserActions from '../UserActions/UserActions';
+import Details from "../Details/Details";
+import Groups from "../Groups/Groups";
+import ChatGroups from "../ChatsGroups/ChatGroups";
+import Header from "../Header/Header";
+import UserActions from "../UserActions/UserActions";
 
 const Page = styled.div`
   width: 100%;
@@ -35,7 +37,7 @@ const ViewUserDesktop = ({
   auth0User,
   userId,
   isCurrent,
-  history
+  history,
 }) => {
   // state
   const [enable, setEnable] = useState(false);
@@ -47,74 +49,79 @@ const ViewUserDesktop = ({
   const [invite, setInvite] = useState(false);
 
   // mutations
-  const [updateUser] = useMutation(ToggleUser);
-  const [sendInvite] = useMutation(SendInvite);
-  const [deleteUser] = useMutation(DeleteUser, {
-    update: (store, { data: { deleteUser } }) => {
-      let data = store.readQuery({
-        query: AllUsers,
-        variables: {
-          search: '',
-          schemeId: window.localStorage.getItem('currentScheme')
-        }
-      });
-      data.users = data.users.filter(({ id }) => deleteUser.id !== id);
-      store.writeQuery({
-        query: AllUsers,
-        data,
-        variables: {
-          search: '',
-          schemeId: window.localStorage.getItem('currentScheme')
-        }
-      });
-    }
-  });
+  const [updateUser] = useMutation(UpdateUserDisabled);
+  // const [sendInvite] = useMutation(SendInvite);
+  // const [deleteUser] = useMutation(DeleteUser, {
+  //   update: (store, { data: { deleteUser } }) => {
+  //     let data = store.readQuery({
+  //       query: AllUsers,
+  //       variables: {
+  //         search: "",
+  //         schemeId: window.localStorage.getItem("currentScheme"),
+  //       },
+  //     });
+  //     data.users = data.users.filter(({ id }) => deleteUser.id !== id);
+  //     store.writeQuery({
+  //       query: AllUsers,
+  //       data,
+  //       variables: {
+  //         search: "",
+  //         schemeId: window.localStorage.getItem("currentScheme"),
+  //       },
+  //     });
+  //   },
+  // });
 
   // functions
   const handleToggle = () => {
     updateUser({
       variables: {
-        id: user.id
+        where: {
+          id: user.id,
+        },
+        data: {
+          disabled: { set: disable ? true : false },
+        },
       },
       optimisticResponse: {
-        toggleUser: {
+        updateUser: {
           id: user.id,
           disabled: user.disabled,
-          __typename: 'User'
-        }
-      }
+          __typename: "User",
+        },
+      },
     });
     setEnable(false);
     setDisable(false);
   };
   const handleDelete = () => {
-    deleteUser({
-      variables: {
-        id: user.id,
-        scheme: window.localStorage.getItem('currentScheme')
-      },
-      optimisticResponse: {
-        deleteUser: {
-          id: user.id,
-          __typename: 'User'
-        }
-      }
-    });
+    // deleteUser({
+    //   variables: {
+    //     id: user.id,
+    //     scheme: window.localStorage.getItem("currentScheme"),
+    //   },
+    //   optimisticResponse: {
+    //     deleteUser: {
+    //       id: user.id,
+    //       __typename: "User",
+    //     },
+    //   },
+    // });
     setRemove(false);
-    history.push('/admin/users');
+    history.push("/admin/users");
   };
   const handleInvite = () => {
-    sendInvite({
-      variables: {
-        user: user.id
-      },
-      optimisticResponse: {
-        sendInvite: {
-          id: user.id,
-          __typename: 'User'
-        }
-      }
-    });
+    // sendInvite({
+    //   variables: {
+    //     user: user.id,
+    //   },
+    //   optimisticResponse: {
+    //     sendInvite: {
+    //       id: user.id,
+    //       __typename: "User",
+    //     },
+    //   },
+    // });
     setInvite(false);
   };
 
@@ -181,8 +188,8 @@ const ViewUserDesktop = ({
             Cancel
           </Button>,
           <Button key={Math.random()} onClick={handleToggle} color="primary">
-            {disable ? 'Disable' : 'Enable'}
-          </Button>
+            {disable ? "Disable" : "Enable"}
+          </Button>,
         ]}
       />
       <ConfirmDialog
@@ -196,7 +203,7 @@ const ViewUserDesktop = ({
           </Button>,
           <Button key={Math.random()} onClick={handleDelete} color="primary">
             Delete User
-          </Button>
+          </Button>,
         ]}
       />
       <ConfirmDialog
@@ -210,7 +217,7 @@ const ViewUserDesktop = ({
           </Button>,
           <Button key={Math.random()} onClick={handleInvite} color="primary">
             Invite User
-          </Button>
+          </Button>,
         ]}
       />
     </Page>

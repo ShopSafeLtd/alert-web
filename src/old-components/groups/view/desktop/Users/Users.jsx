@@ -1,13 +1,13 @@
-import React from 'react';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import React from "react";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import styled from "styled-components";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
 
-import { SectionTitle } from '../../../../global/typography';
-import GroupImage from '../../../../../images/AddGroup';
-import EditSvg from '@material-ui/icons/Edit';
-import { Section } from '../../../../global/layout';
+import { SectionTitle } from "../../../../global/typography";
+import GroupImage from "../../../../../images/AddGroup";
+import EditSvg from "@material-ui/icons/Edit";
+import { Section } from "../../../../global/layout";
 
 const Center = styled.div`
   display: flex;
@@ -47,11 +47,11 @@ const Users = ({ group, loading, openEdit }) => {
         <Center>
           <CircularProgress />
         </Center>
-      ) : group.users.length > 0 ? (
+      ) : group?.users?.length > 0 ? (
         <div>
-          {group.users.map(({ id, fullName, organisation }) => (
+          {group?.users?.map(({ id, fullName, organisation }) => (
             <User key={id}>
-              {fullName} -{' '}
+              {fullName} -{" "}
               <Org component="span" variant="caption">
                 {organisation}
               </Org>

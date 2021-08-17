@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
+import React, { PureComponent } from "react";
+import styled from "styled-components";
+import Typography from "@material-ui/core/Typography";
 
-import { HeaderText, HeaderSubText } from '../../../global/forms';
-import { ToggleSkeleton } from '../../../global/skeletons';
+import { HeaderText, HeaderSubText } from "../../../global/forms";
+import { ToggleSkeleton } from "../../../global/skeletons";
 
 const List = styled.div`
   flex: 1;
@@ -50,17 +50,13 @@ const Header = styled.div`
 
 class ChatGroups extends PureComponent {
   componentDidMount() {
-    this.props.setNavbarAction('backLink');
-    this.props.setBackLinkTo('/admin/users/add/groups');
+    // this.props.setNavbarAction('backLink');
+    this.props.setBackLinkTo("/admin/users/add/groups");
   }
 
   render() {
-    const {
-      chatGroups,
-      selectedChatGroups,
-      loading,
-      toggleChatGroup
-    } = this.props;
+    const { chatGroups, selectedChatGroups, loading, toggleChatGroup } =
+      this.props;
     return (
       <Page>
         <Header>
@@ -79,7 +75,7 @@ class ChatGroups extends PureComponent {
                   <Svg viewBox="0 0 24 24">
                     <path
                       fill={
-                        selectedChatGroups.includes(id) ? '#1E88E5' : '#E0E0E0'
+                        selectedChatGroups.includes(id) ? "#1E88E5" : "#E0E0E0"
                       }
                       d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M11,16.5L18,9.5L16.59,8.09L11,13.67L7.91,10.59L6.5,12L11,16.5Z"
                     />
@@ -101,8 +97,8 @@ class ChatGroups extends PureComponent {
   }
 
   componentWillUnmount() {
-    this.props.setNavbarAction('');
-    this.props.setBackLinkTo('');
+    // this.props.setNavbarAction("");
+    this.props.setBackLinkTo("");
   }
 }
 

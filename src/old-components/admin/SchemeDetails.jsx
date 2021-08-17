@@ -1,29 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import MediaQuery from 'react-responsive';
-import { Link } from 'react-router-dom';
-import Image from '@material-ui/icons/AddPhotoAlternate';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import MediaQuery from "react-responsive";
+import { Link } from "react-router-dom";
+import Image from "@material-ui/icons/AddPhotoAlternate";
 
 import {
   Field,
   FieldHeader,
   Header,
   HeaderText,
-  HeaderSubText
-} from '../global/forms';
-import { FullWidthButton, BackButton } from '../global/actions';
-import { EmptyText } from '../global/typography';
-import WebAddImages from '../global/images/WebAddImages/WebAddImages';
-import UpdateSchemeDetails from '../../graphql/admin/mutations/UpdateSchemeDetails';
-import UploadImage from '../../graphql/images/mutations/uploadImages';
-import { PageHeader } from '../global/typography';
-import { Row, Section } from '../global/layout';
-import query from '../../graphql/admin/queries/SchemeDetails';
-import { useStoreActions, useStoreState } from '../../state';
+  HeaderSubText,
+} from "../global/forms";
+import { FullWidthButton, BackButton } from "../global/actions";
+import { EmptyText } from "../global/typography";
+import WebAddImages from "../global/images/WebAddImages/WebAddImages";
+// import UpdateSchemeDetails from '../../graphql/admin/mutations/UpdateSchemeDetails';
+// import UploadImage from '../../graphql/images/mutations/uploadImages';
+import { PageHeader } from "../global/typography";
+import { Row, Section } from "../global/layout";
+// import query from "../../graphql/admin/queries/SchemeDetails";
+import { useStoreActions, useStoreState } from "../../state";
 
 const Page = styled.div`
   flex: 1;
@@ -73,127 +72,130 @@ const Clear = styled.div`
 `;
 
 const SchemeName = ({ history }) => {
-  const setTitle = useStoreActions(actions => actions.theme.setTitle);
-  const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
-  const setNavbarAction = useStoreActions(
-    actions => actions.theme.setNavbarAction
+  const setTitle = useStoreActions((actions) => actions.theme.setTitle);
+  const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
+  // const setNavbarAction = useStoreActions(
+  //   (actions) => actions.theme.setNavbarAction
+  // );
+  const setBackLinkTo = useStoreActions(
+    (actions) => actions.theme.setBackLinkTo
   );
-  const setBackLinkTo = useStoreActions(actions => actions.theme.setBackLinkTo);
-  const platform = useStoreState(state => state.theme.platform);
+  const platform = useStoreState((state) => state.theme.platform);
 
   // state
-  const [name, setName] = useState('');
-  const [nameError, setNameError] = useState('');
+  const [name, setName] = useState("");
+  const [nameError, setNameError] = useState("");
   const [image, setImage] = useState(null);
-  const [uploading, setUploading] = useState('');
+  const [uploading, setUploading] = useState("");
 
   // effects
   useEffect(() => {
     setBottomNav(false);
-    setTitle('Scheme Details');
-    setNavbarAction('backLink');
+    setTitle("Scheme Details");
+    // setNavbarAction("backLink");
     setBackLinkTo(`/admin`);
     return () => {
       setBottomNav(true);
-      setTitle('');
-      setNavbarAction('default');
-      setBackLinkTo('');
+      setTitle("");
+      // setNavbarAction("default");
+      setBackLinkTo("");
     };
     // eslint-disable-next-line
   }, []);
 
   // queries
-  const { data, loading } = useQuery(query, {
-    variables: {
-      id: window.localStorage.getItem('currentScheme')
-    },
-    fetchPolicy: 'cache-and-network',
-    onCompleted: ({ scheme: { name, logo } }) => {
-      setName(name);
-      !!logo && setImage({ id: logo.id, url: logo.url });
-    }
-  });
+  // const { data, loading } = useQuery(query, {
+  //   variables: {
+  //     id: window.localStorage.getItem("currentScheme"),
+  //   },
+  //   fetchPolicy: "cache-and-network",
+  //   onCompleted: ({ scheme: { name, logo } }) => {
+  //     setName(name);
+  //     !!logo && setImage({ id: logo.id, url: logo.url });
+  //   },
+  // });
+  const loading = false;
 
   // mutations
-  const [updateScheme] = useMutation(UpdateSchemeDetails);
-  const [uploadImage] = useMutation(UploadImage, {
-    onCompleted: ({ uploadImage: { id, url } }) => {
-      setImage({ id, url });
-      setUploading(false);
-    }
-  });
+  // const [updateScheme] = useMutation(UpdateSchemeDetails);
+  // const [uploadImage] = useMutation(UploadImage, {
+  //   onCompleted: ({ uploadImage: { id, url } }) => {
+  //     setImage({ id, url });
+  //     setUploading(false);
+  //   },
+  // });
 
   // functions
-  const handleChange = value => setName(value);
+  const handleChange = (value) => setName(value);
   const validate = () =>
     new Promise((resolve, reject) => {
-      setNameError(!!name ? '' : 'This field is required.');
+      setNameError(!!name ? "" : "This field is required.");
       !!name ? resolve() : reject();
     });
-  const handleSave = () => {
-    validate()
-      .then(() => {
-        updateScheme({
-          variables: {
-            id: window.localStorage.getItem('currentScheme'),
-            name: { set: name },
-            logo: {
-              connect: !!image
-                ? !!data.scheme.logo
-                  ? image.id !== data.scheme.logo.id
-                    ? { id: image.id }
-                    : undefined
-                  : { id: image.id }
-                : undefined,
-              delete: !!image
-                ? undefined
-                : !!data.scheme.logo
-                  ? true
-                  : undefined
-            }
-          }
-        });
-        history.push('/incidents');
-      })
-      .catch(() => {});
-  };
-  const mobileUpload = async data => {
-    setUploading(true);
-    window.resolveLocalFileSystemURL(data, fileEntry => {
-      fileEntry.file(function(file) {
-        const reader = new FileReader();
-        reader.onloadend = async function(e) {
-          await uploadImage({
-            variables: {
-              file: new Blob([this.result], { type: 'image/jpeg' }),
-              scheme: localStorage.getItem('currentScheme')
-            }
-          });
-          setUploading(false);
-        };
-        reader.readAsArrayBuffer(file);
-      });
-    });
-  };
-  const handleUpload = ({
-    target: {
-      validity,
-      files: [file]
-    }
-  }) => {
-    setUploading(true);
-    validity.valid &&
-      uploadImage({
-        variables: {
-          file,
-          scheme: window.localStorage.getItem('currentScheme')
-        }
-      });
-  };
+  // const handleSave = () => {
+  //   validate()
+  //     .then(() => {
+  //       updateScheme({
+  //         variables: {
+  //           id: window.localStorage.getItem("currentScheme"),
+  //           name: { set: name },
+  //           logo: {
+  //             connect: !!image
+  //               ? !!data.scheme.logo
+  //                 ? image.id !== data.scheme.logo.id
+  //                   ? { id: image.id }
+  //                   : undefined
+  //                 : { id: image.id }
+  //               : undefined,
+  //             delete: !!image
+  //               ? undefined
+  //               : !!data.scheme.logo
+  //               ? true
+  //               : undefined,
+  //           },
+  //         },
+  //       });
+  //       history.push("/incidents");
+  //     })
+  //     .catch(() => {});
+  // };
+  // const mobileUpload = async (data) => {
+  //   setUploading(true);
+  //   window.resolveLocalFileSystemURL(data, (fileEntry) => {
+  //     fileEntry.file(function (file) {
+  //       const reader = new FileReader();
+  //       reader.onloadend = async function (e) {
+  //         await uploadImage({
+  //           variables: {
+  //             file: new Blob([this.result], { type: "image/jpeg" }),
+  //             scheme: localStorage.getItem("currentScheme"),
+  //           },
+  //         });
+  //         setUploading(false);
+  //       };
+  //       reader.readAsArrayBuffer(file);
+  //     });
+  //   });
+  // };
+  // const handleUpload = ({
+  //   target: {
+  //     validity,
+  //     files: [file],
+  //   },
+  // }) => {
+  //   setUploading(true);
+  //   validity.valid &&
+  //     uploadImage({
+  //       variables: {
+  //         file,
+  //         scheme: window.localStorage.getItem("currentScheme"),
+  //       },
+  //     });
+  // };
 
   return (
     <MediaQuery minDeviceWidth={1024}>
-      {matches => (
+      {(matches) => (
         <Page>
           {matches ? (
             <Section width="100%" elevation={1}>
@@ -217,7 +219,7 @@ const SchemeName = ({ history }) => {
                 <TextField
                   id="name-input"
                   value={name}
-                  onChange={e => handleChange(e.target.value)}
+                  onChange={(e) => handleChange(e.target.value)}
                   fullWidth
                   disabled={loading}
                   error={!!nameError}
@@ -244,9 +246,9 @@ const SchemeName = ({ history }) => {
                   <EmptyLogo>
                     <ImageIcon />
                     <EmptyText>No logo added yet.</EmptyText>
-                    {platform === '' ? (
+                    {platform === "" ? (
                       <WebAddImages
-                        upload={handleUpload}
+                        upload={() => null} //handleUpload}
                         disabled={loading || uploading}
                       />
                     ) : (
@@ -255,8 +257,8 @@ const SchemeName = ({ history }) => {
                           !loading &&
                             !uploading &&
                             global.navigator.camera.getPicture(
-                              data => mobileUpload(data),
-                              data => console.log(data),
+                              (data) => null, // mobileUpload(data),
+                              (data) => console.log(data),
                               {
                                 quality: 50,
                                 destinationType:
@@ -266,7 +268,7 @@ const SchemeName = ({ history }) => {
                                 encodingType: global.Camera.EncodingType.JPEG,
                                 mediaType: global.Camera.MediaType.PICTURE,
                                 allowEdit: true,
-                                correctOrientation: true
+                                correctOrientation: true,
                               }
                             );
                         }}
@@ -295,7 +297,7 @@ const SchemeName = ({ history }) => {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={handleSave}
+                  onClick={() => null} // handleSave}
                   disabled={loading || uploading}
                 >
                   Save Scheme
@@ -305,7 +307,7 @@ const SchemeName = ({ history }) => {
           ) : (
             <FullWidthButton
               text="Save Scheme"
-              onClick={handleSave}
+              onClick={() => null} //handleSave}
               disabled={loading || uploading}
             />
           )}

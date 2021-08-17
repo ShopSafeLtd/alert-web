@@ -9,22 +9,22 @@ export const AppViews = () => {
 
   const adminRoutes = [
     <Route
-      key="settings"
+      key="incidents"
       path={`${APP_PREFIX_PATH}/incidents`}
       component={lazy(() => import(`./incidents/router`))}
     />,
     <Route
-      key="agreements"
+      key="offenders"
       path={`${APP_PREFIX_PATH}/offenders`}
       component={lazy(() => import(`./offenders/router`))}
     />,
     <Route
-      key="schemes"
-      path={`${APP_PREFIX_PATH}/scheme`}
-      component={lazy(() => import(`./scheme/router`))}
+      key="scheme"
+      path={`${APP_PREFIX_PATH}/scheme-settings`}
+      component={lazy(() => import(`./scheme-settings/router`))}
     />,
     <Route
-      key="schemes"
+      key="user"
       path={`${APP_PREFIX_PATH}/user-settings`}
       component={lazy(() => import(`./user-settings/router`))}
     />,

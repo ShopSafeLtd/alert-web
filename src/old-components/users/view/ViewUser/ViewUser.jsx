@@ -1,16 +1,20 @@
-import React from 'react';
-import MediaQuery from 'react-responsive';
-import { useQuery } from '@apollo/react-hooks';
+import React from "react";
+// import MediaQuery from "react-responsive";
+// import { useQuery } from "@apollo/react-hooks";
+import { useQuery } from "@apollo/client";
 
-import ViewUserDesktop from '../desktop/ViewUserDesktop/ViewUserDesktop';
-import ViewUserMobile from '../mobile/ViewUserMobile/ViewUserMobile';
+import { useStoreState } from "state";
+import ViewUserDesktop from "../desktop/ViewUserDesktop/ViewUserDesktop";
+// import ViewUserMobile from "../mobile/ViewUserMobile/ViewUserMobile";
 
-import UserQuery from '../../../../graphql/users/queries/User';
-import Auth0UserQuery from '../../../../graphql/users/queries/Auth0User';
+// import UserQuery from "../../../../graphql/users/queries/User";
+// import Auth0UserQuery from "../../../../graphql/users/queries/Auth0User";
+import { ViewUser as ViewUserQuery } from "graphql-src/users/queries/view-user";
+import { Auth0User } from "graphql-src/users/queries";
 
 const ViewUser = ({
   match: {
-    params: { id }
+    params: { id },
   },
   history,
   setStatusBar,
@@ -20,51 +24,57 @@ const ViewUser = ({
   setNavbarAction,
   setActions,
   toggleNotificationBar,
-  currentUser
+  currentUser,
 }) => {
-  // queries
-  const { data: user, loading: userLoading } = useQuery(UserQuery, {
+  const schemeId = useStoreState((state) => state.scheme.id);
+  const { data } = useQuery(ViewUserQuery, {
     variables: {
       id,
-      schemeId: window.localStorage.getItem('currentScheme')
     },
-    fetchPolicy: 'cache-and-network'
   });
-  const { data: auth0User } = useQuery(Auth0UserQuery, {
+  const output = data && { ...data.user };
+  if (output) {
+    output.groups = output.groups.filter((el) => el.scheme.id === schemeId);
+    output.chats = output.chats.filter((el) => el.chat.scheme.id === schemeId);
+    output.schemes = output.schemes.filter((el) => el.schemeId === schemeId);
+  }
+  const user = { user: output };
+
+  const { data: auth0User } = useQuery(Auth0User, {
     variables: {
-      id
+      id,
     },
-    fetchPolicy: 'cache-and-network'
   });
+
   return (
-    <MediaQuery minDeviceWidth={1024}>
-      {matches =>
-        matches ? (
-          <ViewUserDesktop
-            userId={id}
-            user={!!user ? user.user : {}}
-            auth0User={auth0User || {}}
-            setStatusBar={setStatusBar}
-            isCurrent={currentUser === id}
-            history={history}
-          />
-        ) : (
-          <ViewUserMobile
-            setTitle={setTitle}
-            setMultiAppBar={setMultiAppBar}
-            user={!!user ? user.user : {}}
-            userLoading={userLoading}
-            auth0User={auth0User || {}}
-            setBackLinkTo={setBackLinkTo}
-            setNavbarAction={setNavbarAction}
-            setActions={setActions}
-            toggleNotificationBar={toggleNotificationBar}
-            isCurrent={currentUser === id}
-            history={history}
-          />
-        )
-      }
-    </MediaQuery>
+    // <MediaQuery minDeviceWidth={1024}>
+    //   {matches =>
+    //     matches ? (
+    <ViewUserDesktop
+      userId={id}
+      user={!!data ? user.user : {}}
+      auth0User={auth0User || {}}
+      setStatusBar={setStatusBar}
+      isCurrent={currentUser === id}
+      history={history}
+    />
+    // ) : (
+    //   <ViewUserMobile
+    //     setTitle={setTitle}
+    //     setMultiAppBar={setMultiAppBar}
+    //     user={!!user ? user.user : {}}
+    //     userLoading={userLoading}
+    //     auth0User={auth0User || {}}
+    //     setBackLinkTo={setBackLinkTo}
+    //     setNavbarAction={setNavbarAction}
+    //     setActions={setActions}
+    //     toggleNotificationBar={toggleNotificationBar}
+    //     isCurrent={currentUser === id}
+    //     history={history}
+    //   />
+    // )
+    //   }
+    // </MediaQuery>
   );
 };
 

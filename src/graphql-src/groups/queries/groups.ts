@@ -6,6 +6,11 @@ export const Groups = gql`
       id
       name
       description
+      users {
+        id
+        fullName
+        organisation
+      }
     }
   }
 `;
