@@ -10,7 +10,7 @@ import { BackButton } from "../../../../global/actions";
 import { EmptyText, ErrorText } from "../../../../global/typography";
 import GroupImage from "../../../../../images/AddGroup";
 import Typography from "@material-ui/core/Typography";
-import { ViewUser } from "graphql-src/users/queries/view-user";
+import { User } from "graphql-src/users/queries";
 import { Groups } from "graphql-src/groups/queries";
 import { EditUserGroups } from "graphql-src/users/mutations";
 // import UserQuery from '../../../../../graphql/users/queries/User';
@@ -72,18 +72,16 @@ const EditGroupsPopOver = ({ user: userId, close, open }) => {
     },
   });
 
-  const { loading: userLoading } = useQuery(ViewUser, {
+  const { loading: userLoading } = useQuery(User, {
     variables: {
-      id: userId,
+      where: {
+        id: userId,
+      },
+      scheme: schemeId,
     },
     onCompleted: (res) => {
       if (!res) return;
       const output = { ...res.user };
-      output.groups = output.groups.filter((el) => el.scheme.id === schemeId);
-      output.chats = output.chats.filter(
-        (el) => el.chat.scheme.id === schemeId
-      );
-      output.schemes = output.schemes.filter((el) => el.schemeId === schemeId);
       setGroups(output.groups.map(({ id }) => id));
       setUserGroups(output.groups);
     },

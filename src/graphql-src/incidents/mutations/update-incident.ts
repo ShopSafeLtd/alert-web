@@ -57,9 +57,17 @@ export interface UpdateIncidentArgs {
       }[];
     };
     images?: {
-      create: any; // add create image type
       disconnect?: { id: string }[];
-      update: any; // add update image type
+      connect?: { id: string }[];
+      update?: {
+        where: { id: string };
+        data: {
+          offenders: {
+            connect?: { id: string }[];
+            disconnect?: { id: string }[];
+          };
+        };
+      };
     };
     groups?: {
       connect?: { id: string }[];

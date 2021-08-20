@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 import { FullIncident, FullIncidentType } from "../fragments";
 
 export const IncidentFeed = gql`
-  query IncidentFeed(
+  query incidentFeed(
     $schemeId: String!
     $search: String
     $order: IncidentOrderByInput

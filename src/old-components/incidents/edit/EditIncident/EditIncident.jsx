@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import update from "immutability-helper";
 import { isEqual } from "lodash-es";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
 
-import { EditIncident as Query } from "../../../../graphql-src/incidents/queries";
+import { Incident as Query } from "../../../../graphql-src/incidents/queries";
 import { UploadImage } from "../../../../graphql-src/images/mutations";
 import { UpdateIncident } from "../../../../graphql-src/incidents/mutations";
 import EditDesktop from "../desktop/EditDesktop/EditDesktop";
@@ -17,9 +18,9 @@ const EditIncident = ({
 }) => {
   const userId = useStoreState((state) => state.user.id);
   const schemeId = useStoreState((state) => state.scheme.id);
-  const setNavBarActionDisabled = useStoreActions(
-    (actions) => actions.theme.setNavBarActionDisabled
-  );
+  // const setNavBarActionDisabled = useStoreActions(
+  //   (actions) => actions.theme.setNavBarActionDisabled
+  // );
   // state
   const [description, setDescription] = useState({
     subject: "",
@@ -52,7 +53,7 @@ const EditIncident = ({
 
   // queries
   const { data, loading } = useQuery(Query, {
-    variables: { id },
+    variables: { where: { id } },
     fetchPolicy: "cache-and-network",
     onCompleted: ({ incident }) => {
       updateState(incident);
@@ -60,23 +61,12 @@ const EditIncident = ({
   });
 
   // mutations
-  const [updateIncident] = useMutation(UpdateIncident, {
+  const [updateIncident, { loading: updating }] = useMutation(UpdateIncident, {
     onCompleted: ({ updateIncident }) => {
       updateState(updateIncident);
-      history.push("/app/incidents");
     },
   });
-  const [createImage] = useMutation(UploadImage, {
-    onCompleted: (data) =>
-      updateIncident({
-        variables: {
-          id,
-          images: {
-            connect: [{ id: data.uploadImage.id }],
-          },
-        },
-      }),
-  });
+  const [createImage, { loading: uploading }] = useMutation(UploadImage, {});
 
   // functions
   const updateState = (incident) => {
@@ -126,25 +116,39 @@ const EditIncident = ({
   const removeImage = (image) =>
     setImages(images.filter(({ id }) => id !== image));
   const uploadImage = async ({ target: { files } }) => {
-    setUploadingImage(true);
-    setNavBarActionDisabled(true);
-    setImages([
-      ...images,
-      {
-        id: "UPLOADING",
-        offendersIds: [],
-      },
-    ]);
-    // create request for every files
     [...files].forEach(async (file) => {
-      await createImage({
+      setImages([
+        ...images,
+        {
+          id: "UPLOADING",
+        },
+      ]);
+      const {
+        data: { uploadImage },
+      } = await createImage({
         variables: {
           file,
           scheme: schemeId,
+          incident: { id: undefined },
         },
       });
-      setUploadingImage(false);
-      setNavBarActionDisabled(false);
+      setImages([...images, { ...uploadImage, offenders: [] }]);
+      const updatedImages = [...images, uploadImage];
+      const connectImages = updatedImages
+        .filter(
+          ({ id }) => !data.incident.images.map(({ id }) => id).includes(id)
+        )
+        .map(({ id }) => ({ id }));
+      updateIncident({
+        variables: {
+          where: { id },
+          data: {
+            images: {
+              connect: connectImages.length > 0 ? connectImages : undefined,
+            },
+          },
+        },
+      });
     });
   };
   const assignOffendersToImage = (image, assignOffenders, removeOffenders) => {
@@ -182,14 +186,20 @@ const EditIncident = ({
       });
     });
     setOffenders(newOffenders);
+    const existingTaggedOffenders = image.offenders
+      ? [
+          ...image?.offenders?.filter(
+            ({ id }) => !removeOffenders?.includes(id)
+          ),
+        ]
+      : [];
+
     setImages(
       update(images, {
         [images.map(({ id }) => id).indexOf(image.id)]: {
           offenders: {
             $set: [
-              ...image.offenders.filter(
-                ({ id }) => !removeOffenders.includes(id)
-              ),
+              ...existingTaggedOffenders,
               ...assignOffenders
                 .filter((id) => !images.includes(id))
                 .map((id) => ({ id, added: true })),
@@ -202,8 +212,8 @@ const EditIncident = ({
   const addGroups = (newGroups) => setGroups([...groups, ...newGroups]);
   const removeGroup = (remove) =>
     setGroups(groups.filter(({ id }) => id !== remove));
-  const validateDescription = () =>
-    new Promise((resolve, reject) => {
+  const validateDescription = () => {
+    return new Promise((resolve, reject) => {
       const subjectValid = !!description.subject;
       const descriptionValid = !!description.description;
       const dateValid = !!description.date;
@@ -216,17 +226,20 @@ const EditIncident = ({
         timeError: timeValid ? "" : "This is a required field.",
       });
       subjectValid && descriptionValid && dateValid && timeValid
-        ? resolve()
-        : reject();
+        ? resolve(true)
+        : resolve(false);
     });
-  const validateCrimeTypes = () =>
-    new Promise((resolve, reject) => {
+  };
+  const validateCrimeTypes = () => {
+    return new Promise((resolve, reject) => {
       const crimeTypesValid = crimeTypes.length !== 0;
       setCrimeTypeError(crimeTypesValid ? false : true);
-      crimeTypesValid ? resolve() : reject();
+      crimeTypesValid ? resolve(true) : resolve(false);
     });
-  const validateLocation = () =>
-    new Promise((resolve, reject) => {
+  };
+
+  const validateLocation = () => {
+    return new Promise((resolve, reject) => {
       const streetValid = !!location.street;
       const townValid = !!location.townCity;
       const postcodeValid = !!location.postcode;
@@ -236,14 +249,20 @@ const EditIncident = ({
         townError: townValid ? "" : "This is a required field",
         postcodeError: postcodeValid ? "" : "This is a required field",
       });
-      streetValid && townValid && postcodeValid ? resolve() : reject();
+      streetValid && townValid && postcodeValid
+        ? resolve(true)
+        : resolve(false);
     });
-  const validateGroups = () =>
-    new Promise((resolve, reject) => {
+  };
+
+  const validateGroups = () => {
+    return new Promise((resolve, reject) => {
       const groupsValid = groups.length > 0;
       groupsValid ? setGroupsError(false) : setGroupsError(true);
-      groupsValid ? resolve() : reject();
+      groupsValid ? resolve(true) : resolve(false);
     });
+  };
+
   const handleSave = () => {
     const connectCrimeTypes = crimeTypes.filter(
       ({ id }) => !data.incident.crimeTypes.map(({ id }) => id).includes(id)
@@ -298,20 +317,26 @@ const EditIncident = ({
     const disconnectOffenders = data.incident.offenders
       .filter(({ id }) => !offenders.map(({ id }) => id).includes(id))
       .map(({ id }) => ({ id }));
-    const createImages = images
-      .filter(({ create }) => create)
-      .map(({ url }) => ({
-        url,
-        scheme: {
-          connect: {
-            id: schemeId,
-          },
-        },
-      }));
+    // const createImages = images
+    //   .filter(({ create }) => create)
+    //   .map(({ url }) => ({
+    //     url,
+    //     scheme: {
+    //       connect: {
+    //         id: schemeId,
+    //       },
+    //     },
+    //   }));
+    const connectImages = images
+      .filter(
+        ({ id }) => !data.incident.images.map(({ id }) => id).includes(id)
+      )
+      .map(({ id }) => ({ id }));
     const disconnectImages = data.incident.images
       .filter(({ id }) => !images.map(({ id }) => id).includes(id))
       .map(({ id }) => ({ id }));
-    const updatedImages = images
+
+    const updateImages = images
       .filter(
         ({ id, offenders }) =>
           !isEqual(
@@ -320,13 +345,16 @@ const EditIncident = ({
           )
       )
       .map(({ id, offenders }) => {
-        const connect = offenders
-          .filter(({ added }) => added)
-          .map(({ id }) => ({ id }));
-        const disconnect = data.incident.images
-          .find((image) => id === image.id)
-          .offenders.filter(({ id }) => !offenders.includes(id))
-          .map(({ id }) => ({ id }));
+        const connect =
+          offenders?.filter(({ added }) => added)?.map(({ id }) => ({ id })) ||
+          [];
+        const disconnect =
+          data.incident.images
+            ?.find((image) => id === image.id)
+            ?.offenders.filter(
+              ({ id }) => !offenders.find((el) => el.id === id)
+            )
+            ?.map(({ id }) => ({ id })) || [];
         return {
           where: { id },
           data: {
@@ -337,6 +365,7 @@ const EditIncident = ({
           },
         };
       });
+
     const connectGroups = groups
       .filter(
         ({ id }) => !data.incident.groups.map(({ id }) => id).includes(id)
@@ -345,6 +374,7 @@ const EditIncident = ({
     const disconnectGroups = data.incident.groups
       .filter(({ id }) => !groups.map(({ id }) => id).includes(id))
       .map(({ id }) => ({ id }));
+
     updateIncident({
       variables: {
         where: { id },
@@ -379,12 +409,13 @@ const EditIncident = ({
             disconnect:
               disconnectOffenders.length > 0 ? disconnectOffenders : undefined,
           },
-          // images: {
-          //   create: createImages.length > 0 ? createImages : undefined,
-          //   disconnect:
-          //     disconnectImages.length > 0 ? disconnectImages : undefined,
-          //   update: updatedImages.length > 0 ? updatedImages : undefined,
-          // },
+          images: {
+            // create: createImages.length > 0 ? createImages : undefined,
+            connect: connectImages.length > 0 ? connectImages : undefined,
+            disconnect:
+              disconnectImages.length > 0 ? disconnectImages : undefined,
+            update: updateImages.length > 0 ? updateImages : undefined,
+          },
           groups: {
             connect: connectGroups.length > 0 ? connectGroups : undefined,
             disconnect:
@@ -393,6 +424,7 @@ const EditIncident = ({
         },
       },
     });
+    history.push(`${APP_PREFIX_PATH}/incidents`);
   };
 
   return (
@@ -405,7 +437,7 @@ const EditIncident = ({
       offenders={offenders}
       images={images}
       groups={groups}
-      uploadingImage={uploadingImage}
+      uploadingImage={uploading || updating}
       groupsError={groupsError}
       crimeTypeError={crimeTypeError}
       // functions

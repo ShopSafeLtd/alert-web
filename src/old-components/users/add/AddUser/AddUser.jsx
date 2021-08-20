@@ -13,9 +13,15 @@ import { withRouter, Route } from "react-router-dom";
 // import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useQuery, useMutation } from "@apollo/client";
 
+import ConfirmDialog from "../../../global/ConfirmDialog/ConfirmDialog";
 import { BackButton, FullWidthButton } from "../../../global/actions";
 import { Groups as GroupsQuery } from "graphql-src/groups/queries";
 import { SchemeChats as ChatsQuery } from "graphql-src/chat/queries";
+import { UserByEmail, SchemeUsers } from "graphql-src/users/queries";
+import {
+  InviteExistingUser,
+  CreateUserInDatabase,
+} from "graphql-src/users/mutations";
 // import CreateUser from '../../../../graphql/users/mutations/CreateUser';
 // import AllChats from '../../../../graphql/chat/queries/AllChats';
 // import AllGroups from '../../../../graphql/groups/AllGroupsQuery';
@@ -86,6 +92,7 @@ const AddUser = ({ history, classes, location }) => {
   const schemeId = useStoreState((state) => state.scheme.id);
 
   // state
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [user, setUser] = useState({
     fullName: "",
     fullNameError: "",
@@ -104,6 +111,8 @@ const AddUser = ({ history, classes, location }) => {
     county: "",
     postcode: "",
     postcodeError: "",
+    existing: false,
+    id: "",
   });
   const [groups, setGroups] = useState([]);
   const [chats, setChats] = useState([]);
@@ -140,6 +149,18 @@ const AddUser = ({ history, classes, location }) => {
   }, []);
 
   // queries
+  const { data: userData, loading: userLoading } = useQuery(UserByEmail, {
+    variables: {
+      email: user.email,
+    },
+    onCompleted: (res) => {
+      if (res.userByEmail) {
+        console.log(res);
+        setDialogOpen(true);
+      }
+    },
+  });
+
   const { data: groupsData, loading: groupsLoading } = useQuery(GroupsQuery, {
     variables: {
       where: { scheme: { id: { equals: schemeId } } },
@@ -157,22 +178,69 @@ const AddUser = ({ history, classes, location }) => {
   });
 
   // mutations
-  // const [addUser] = useMutation(CreateUser, {
-  //   onError: (error) => {
-  //     if (
-  //       error.message ===
-  //       "GraphQL error: A unique constraint would be violated on User. Details: Field name = email"
-  //     ) {
-  //       history.push(steps[0].url);
-  //       setStep(0);
-  //       setUser({
-  //         ...user,
-  //         emailError: "A user already exists with this email address",
-  //       });
-  //     }
-  //   },
-  //   onCompleted: () => history.push("/admin/users/"),
-  // });
+  const [inviteExistingUser, { loading: loadingExisting }] = useMutation(
+    InviteExistingUser,
+    {
+      update: (store, { data }) => {
+        const res = store.readQuery({
+          query: SchemeUsers,
+          variables: {
+            scheme: schemeId,
+            search: "",
+            orderByName: "asc",
+          },
+        });
+        if (!res || !data) return;
+        store.writeQuery({
+          query: SchemeUsers,
+          data: {
+            ...res,
+            users: [...res.users, data.inviteExistingUser],
+          },
+          variables: {
+            scheme: schemeId,
+            search: "",
+            orderByName: "asc",
+          },
+        });
+      },
+      onCompleted: () => {
+        history.push(`${APP_PREFIX_PATH}/scheme-settings/users`);
+      },
+    }
+  );
+
+  const [createUserInDatabase, { loading: loadingNew }] = useMutation(
+    CreateUserInDatabase,
+    {
+      update: (store, { data }) => {
+        const res = store.readQuery({
+          query: SchemeUsers,
+          variables: {
+            scheme: schemeId,
+            search: "",
+            orderByName: "asc",
+          },
+        });
+        if (!res || !data) return;
+        store.writeQuery({
+          query: SchemeUsers,
+          data: {
+            ...res,
+            users: [...res.users, data.createUserInDatabase],
+          },
+          variables: {
+            scheme: schemeId,
+            search: "",
+            orderByName: "asc",
+          },
+        });
+      },
+      onCompleted: () => {
+        history.push(`${APP_PREFIX_PATH}/scheme-settings/users`);
+      },
+    }
+  );
 
   // functions
   const handleChange = (name) => (event) => {
@@ -218,89 +286,135 @@ const AddUser = ({ history, classes, location }) => {
       });
 
       fullNameValid && organisationValid && roleValid && emailValid
-        ? resolve()
-        : reject();
+        ? resolve(true)
+        : resolve(false);
     });
 
   const validateGroups = () =>
     new Promise((resolve, reject) => {
-      groups.length > 0 ? resolve() : reject();
+      groups.length > 0 ? resolve(true) : resolve(false);
     });
 
-  const handleSave = () => {
-    validateUser()
-      .then(() => {
-        validateGroups()
-          .then(() => {
-            console.log("addUser:", user);
-            // addUser({
-            //   variables: {
-            //     email: user.email,
-            //     fullName: user.fullName,
-            //     organisation: user.organisation,
-            //     scheme: {
-            //       create: {
-            //         role: user.role,
-            //         scheme: {
-            //           connect: {
-            //             id: window.localStorage.getItem("currentScheme"),
-            //           },
-            //         },
-            //       },
-            //     },
-            //     groups: {
-            //       connect: groups.map((id) => ({ id })),
-            //     },
-            //     chats: {
-            //       create: chats.map((id) => ({
-            //         chat: { connect: { id } },
-            //       })),
-            //     },
-            //     addresses: {
-            //       create: {
-            //         primary: true,
-            //         premises: user.premises,
-            //         building: user.building,
-            //         street: user.street,
-            //         townCity: user.townCity,
-            //         county: user.county,
-            //         postcode: user.postcode,
-            //       },
-            //     },
-            //   },
-            // });
-            history.push(`${APP_PREFIX_PATH}/scheme-settings/users`);
-          })
-          .catch(() => {
-            history.push(`${APP_PREFIX_PATH}/scheme-settings/users/add/groups`);
-            setStep(2);
-          });
-      })
-      .catch(() => {
-        history.push(`${APP_PREFIX_PATH}/scheme-settings/users/add`);
-        setStep(1);
+  const handleSave = async () => {
+    if (!(await validateUser())) {
+      history.push(`${APP_PREFIX_PATH}/scheme-settings/users/add`);
+      setStep(1);
+      return;
+    }
+    if (!(await validateGroups())) {
+      history.push(`${APP_PREFIX_PATH}/scheme-settings/users/add/groups`);
+      setStep(2);
+      return;
+    }
+
+    if (user.existing) {
+      inviteExistingUser({
+        variables: {
+          where: {
+            id: user.id,
+          },
+          data: {
+            groups:
+              groups.length > 0
+                ? { connect: groups.map((id) => ({ id })) }
+                : undefined,
+            chats:
+              chats.length > 0
+                ? {
+                    create: chats.map((id) => {
+                      return {
+                        newMessages: true,
+                        chat: {
+                          connect: { id },
+                        },
+                      };
+                    }),
+                  }
+                : undefined,
+            schemes: {
+              create: [
+                {
+                  role: user.role,
+                  scheme: {
+                    connect: { id: schemeId },
+                  },
+                },
+              ],
+            },
+          },
+        },
       });
+    }
+
+    createUserInDatabase({
+      variables: {
+        address: {
+          building: user.building,
+          county: user.county,
+          postcode: user.postcode,
+          premises: user.premises,
+          primary: true,
+          street: user.street,
+          townCity: user.townCity,
+        },
+        chats: chats.length > 0 ? chats.map((id) => ({ id })) : undefined,
+        currentScheme: schemeId,
+        email: user.email,
+        fullName: user.fullName,
+        groups: groups.map((id) => ({ id })),
+        organisation: user.organisation,
+        role: user.role,
+        scheme: {
+          id: schemeId,
+        },
+      },
+    });
   };
 
   const handleNext = async () => {
     if (step === 0) {
-      validateUser()
-        .then(() => {
-          history.push(steps[step + 1].url);
-          setStep(1);
-        })
-        .catch(() => {});
+      if (await validateUser()) {
+        history.push(steps[step + 1].url);
+        setStep(1);
+      }
+      return;
     } else if (step === 1) {
-      validateGroups()
-        .then(() => {
-          history.push(steps[step + 1].url);
-          setStep(2);
-        })
-        .catch(() => {});
+      if (await validateGroups()) {
+        history.push(steps[step + 1].url);
+        setStep(2);
+      }
+      return;
     } else if (step === 2) {
       handleSave();
     }
   };
+
+  const handleAddExistingUser = () => {
+    const { id, fullName, organisation, email, addresses } =
+      userData.userByEmail;
+    const { building, county, postcode, premises, street, townCity } =
+      addresses[0];
+
+    setUser((prev) => {
+      return {
+        ...prev,
+        id,
+        fullName,
+        organisation,
+        email,
+        building,
+        county,
+        postcode,
+        premises,
+        street,
+        townCity,
+        existing: true,
+      };
+    });
+
+    setDialogOpen(false);
+  };
+  const handleCloseDialog = () => setDialogOpen(false);
 
   return (
     <MediaQuery minDeviceWidth={1024}>
@@ -370,7 +484,11 @@ const AddUser = ({ history, classes, location }) => {
                   <Button
                     variant="contained"
                     color="primary"
-                    disabled={step === 1 && groups.length === 0}
+                    disabled={
+                      (step === 1 && groups.length === 0) ||
+                      loadingExisting ||
+                      loadingNew
+                    }
                     onClick={handleNext}
                   >
                     {step === 2 ? "submit" : "next"}
@@ -385,6 +503,25 @@ const AddUser = ({ history, classes, location }) => {
                 />
               )}
             </FormContainer>
+
+            <ConfirmDialog
+              open={dialogOpen}
+              handleClose={handleCloseDialog}
+              title="A user with this email already exists"
+              description="Would you like to add this user to your scheme? This will automatically fill out their existing details for you, you will just need to choose a role, groups and chat groups for them."
+              actions={[
+                <Button key={Math.random()} onClick={handleCloseDialog}>
+                  Cancel
+                </Button>,
+                <Button
+                  key={Math.random()}
+                  onClick={handleAddExistingUser}
+                  color="primary"
+                >
+                  Add user
+                </Button>,
+              ]}
+            />
           </Page>
         </Container>
       )}

@@ -1,74 +1,80 @@
-import React, { useState } from 'react';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import React, { useState } from "react";
+import { useQuery, useMutation } from "@apollo/client";
 
-import MarkAsRead from '../../../graphql/chat/mutations/MarkAsRead';
-import ChatQuery from '../../../graphql/chat/queries/ChatQuery';
-import MessagesView from '../MessagesView/MessagesView';
-import query from '../../../graphql/chat/queries/MessagesQuery';
-import MoreQuery from '../../../graphql/chat/queries/MoreMessagesQuery';
-import MessageSubscription from '../../../graphql/chat/queries/MessageSubscription';
-import { useStoreActions, useStoreState } from '../../../state';
+import { Messages } from "graphql-src/chat/queries";
+// import MarkAsRead from '../../../graphql/chat/mutations/MarkAsRead';
+// import ChatQuery from '../../../graphql/chat/queries/ChatQuery';
+import MessagesView from "../MessagesView/MessagesView";
+// import query from '../../../graphql/chat/queries/MessagesQuery';
+// import MoreQuery from '../../../graphql/chat/queries/MoreMessagesQuery';
+// import MessageSubscription from '../../../graphql/chat/queries/MessageSubscription';
+import { MessagesSubscription } from "graphql-src/chat/subscriptions";
+import { useStoreActions, useStoreState } from "../../../state";
 
 const MessagesQuery = ({ id, match }) => {
-  const setTitle = useStoreActions(actions => actions.theme.setTitle);
-  const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
+  const setTitle = useStoreActions((actions) => actions.theme.setTitle);
+  const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
   const setNavbarAction = useStoreActions(
-    actions => actions.theme.setNavbarAction
+    (actions) => actions.theme.setNavbarAction
   );
-  const user = useStoreState(state => state.user);
-  const userId = useStoreState(state => state.user.id);
-  const bottomNav = useStoreState(state => state.theme.bottomNav);
+  const user = useStoreState((state) => state.user);
+  const userId = useStoreState((state) => state.user.id);
+  const bottomNav = useStoreState((state) => state.theme.bottomNav);
 
   // state
   const [loaded, setLoaded] = useState(false);
   const [fetching, setFetching] = useState(false);
   const [newReceived, setReceived] = useState(false);
   const [refetched, setRefetched] = useState(false);
+  const [after, setAfter] = useState("");
 
   // queries
-  const { data: chatData } = useQuery(ChatQuery, {
-    variables: {
-      id: id !== undefined ? id : match.params.id,
-      userId
-    },
-    fetchPolicy: 'cache-and-network'
-  });
+  // const { data: chatData } = useQuery(ChatQuery, {
+  //   variables: {
+  //     id: id !== undefined ? id : match.params.id,
+  //     userId,
+  //   },
+  //   fetchPolicy: "cache-and-network",
+  // });
+
   const {
     data: messagesData,
     loading: messagesLoading,
     subscribeToMore,
     refetch,
-    fetchMore
-  } = useQuery(query, {
+    fetchMore,
+  } = useQuery(Messages, {
     variables: {
-      chatId: id !== undefined ? id : match.params.id
+      chat: id !== undefined ? id : match.params.id,
     },
-    fetchPolicy: 'cache-and-network'
+    onCompleted: (res) => {
+      res.messages.length > 0 && setAfter(res.messages.slice(-1)[0].id);
+    },
+    fetchPolicy: "cache-and-network",
   });
 
   // mutations
-  const [markAsRead] = useMutation(MarkAsRead);
+  // const [markAsRead] = useMutation(MarkAsRead);
 
   // functions
-  let cursor;
-  if (!messagesLoading && messagesData.messages.length > 0)
-    cursor = messagesData.messages[0].id;
 
   const loadMore = async () => {
     if (!loaded && !fetching) {
       setFetching(true);
       await fetchMore({
-        query: MoreQuery,
+        query: Messages,
         variables: {
-          cursor,
-          chatId: !!id ? id : match.params.id
+          chat: id !== undefined ? id : match.params.id,
+          after: {
+            id: after,
+          },
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
           fetchMoreResult.messages.length === 0 && setLoaded(true);
           return {
-            messages: [...fetchMoreResult.messages, ...previousResult.messages]
+            messages: [...fetchMoreResult.messages, ...previousResult.messages],
           };
-        }
+        },
       });
       setFetching(false);
     }
@@ -79,8 +85,8 @@ const MessagesQuery = ({ id, match }) => {
       messages={
         !!messagesData && !!messagesData.messages ? messagesData.messages : []
       }
-      chatId={!!chatData && !!chatData.chat && chatData.chat.id}
-      chat={!!chatData && !!chatData.chat ? chatData.chat : {}}
+      // chatId={!!chatData && !!chatData.chat && chatData.chat.id}
+      // chat={!!chatData && !!chatData.chat ? chatData.chat : {}}
       refetch={() => {
         setFetching(true);
         refetch();
@@ -89,18 +95,19 @@ const MessagesQuery = ({ id, match }) => {
       setTitle={setTitle}
       loadMore={loadMore}
       allLoaded={loaded}
-      markAsRead={id =>
-        markAsRead({
-          variables: {
-            id
-          }
-        })
+      markAsRead={
+        (id) => {}
+        // markAsRead({
+        //   variables: {
+        //     id,
+        //   },
+        // })
       }
       subscribeToMore={() => {
         subscribeToMore({
-          document: MessageSubscription,
+          document: MessagesSubscription,
           variables: {
-            chatId: !!id ? id : match.params.id
+            chat: !!id ? id : match.params.id,
           },
           updateQuery: (prev, { subscriptionData }) => {
             setReceived(true);
@@ -110,10 +117,10 @@ const MessagesQuery = ({ id, match }) => {
             if (test === undefined) {
               return {
                 ...prev,
-                messages: [...prev.messages, subscriptionData.data.newMessage]
+                messages: [...prev.messages, subscriptionData.data.newMessage],
               };
             }
-          }
+          },
         });
       }}
       newRecived={newReceived}

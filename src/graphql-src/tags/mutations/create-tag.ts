@@ -3,22 +3,8 @@ import { gql } from "@apollo/client";
 import { DataType } from "../enums";
 
 export const CreateTag = gql`
-  mutation createTag(
-    $user: String
-    $description: String!
-    $name: String!
-    $scheme: String
-    $dataType: Model!
-  ) {
-    createTag(
-      data: {
-        description: $description
-        name: $name
-        scheme: { connect: { id: $scheme } }
-        dataType: $dataType
-        createdBy: { connect: { id: $user } }
-      }
-    ) {
+  mutation createTag($data: TagCreateInput!) {
+    createTag(data: $data) {
       id
       name
       description
@@ -27,11 +13,24 @@ export const CreateTag = gql`
 `;
 
 export interface CreateTagArgs {
-  name: string;
-  description: string;
-  scheme: string;
-  user: string;
-  dataType: DataType;
+  data: {
+    name: string;
+    description: string;
+    scheme: {
+      connect: { id: string };
+    };
+    users?: {
+      connect: {
+        id: string;
+      }[];
+    };
+    dataType: DataType;
+    createdBy: {
+      connect: {
+        id: string;
+      };
+    };
+  };
 }
 
 export interface CreateTagRes {

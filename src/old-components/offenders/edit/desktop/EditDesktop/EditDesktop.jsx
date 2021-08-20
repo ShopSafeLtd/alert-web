@@ -19,6 +19,7 @@ import EditGroups from "../../../../global/edit/EditGroups/EditGroups";
 import { EditOffender } from "../../../../../graphql-src/offenders/queries";
 import { UpdateOffender } from "../../../../../graphql-src/offenders/mutations";
 import { useStoreState } from "../../../../../state";
+import { UploadImage } from "graphql-src/images/mutations";
 // import { OffenderQuery } from "../../../../../graphql/offenders/queries";
 // import CreateImage from '../../../../../graphql/images/mutations/uploadImages';
 // import EditOffenderMutation from "../../../../../graphql/offenders/mutations/EditOffenderMutation";
@@ -93,8 +94,7 @@ const EditDesktop = ({ id, history }) => {
   );
 
   //mutations
-  // const [createImage, { loading: uploading }] = useMutation(CreateImage);
-  const uploading = false;
+  const [createImage, { loading: uploading }] = useMutation(UploadImage);
   const [updateOffender, { loading: saving }] = useMutation(UpdateOffender, {
     onCompleted: (res) => console.log(res),
   });
@@ -143,24 +143,26 @@ const EditDesktop = ({ id, history }) => {
     );
   const removeBan = (ban) => setBans(bans.filter(({ id }) => ban !== id));
   const removeTag = (tag) => setTags(tags.filter(({ id }) => tag !== id));
-  // const uploadImage = async ({ target: { files } }) =>
-  //   [...files].forEach(async (file) => {
-  //     setImages([
-  //       ...images,
-  //       {
-  //         id: "UPLOADING",
-  //       },
-  //     ]);
-  //     const {
-  //       data: { uploadImage },
-  //     } = await createImage({
-  //       variables: {
-  //         file,
-  //         scheme: localStorage.getItem("currentScheme"),
-  //       },
-  //     });
-  //     setImages([...images, uploadImage]);
-  //   });
+  const uploadImage = async ({ target: { files } }) => {
+    [...files].forEach(async (file) => {
+      setImages([
+        ...images,
+        {
+          id: "UPLOADING",
+        },
+      ]);
+      const {
+        data: { uploadImage },
+      } = await createImage({
+        variables: {
+          file,
+          scheme: schemeId,
+          incident: { id: undefined },
+        },
+      });
+      setImages([...images, uploadImage]);
+    });
+  };
   const removeImage = (image) =>
     setImages(images.filter(({ id }) => id !== image));
   const addGroupsToOffender = (newGroups) =>
@@ -208,12 +210,12 @@ const EditDesktop = ({ id, history }) => {
     const disconnectTags = flatOffender.tags
       .filter((id) => !flatState.tags.includes(id))
       .map((id) => ({ id }));
-    // const connectImages = flatState.images
-    //   .filter((id) => !flatOffender.images.includes(id))
-    //   .map((id) => ({ id }));
-    // const disconnectImages = flatOffender.images
-    //   .filter((id) => !flatState.images.includes(id))
-    //   .map((id) => ({ id }));
+    const connectImages = flatState.images
+      .filter((id) => !flatOffender.images.includes(id))
+      .map((id) => ({ id }));
+    const disconnectImages = flatOffender.images
+      .filter((id) => !flatState.images.includes(id))
+      .map((id) => ({ id }));
     const createBans = bans
       .filter(({ newBan }) => newBan)
       .map(({ description, startDate, endDate, location }) => ({
@@ -253,44 +255,48 @@ const EditDesktop = ({ id, history }) => {
       .filter((id) => !flatState.groups.includes(id))
       .map((id) => ({ id }));
 
+    console.log(connectImages, disconnectImages);
+
     await updateOffender({
       variables: {
-        id,
-        age: details.age ? { set: details.age } : undefined,
-        build: details.build ? { set: details.build } : undefined,
-        dateOfBirth:
-          details.dateOfBirth !== undefined
+        where: {
+          id,
+        },
+        data: {
+          age: details.age ? { set: details.age } : undefined,
+          build: details.build ? { set: details.build } : undefined,
+          dateOfBirth: details.dateOfBirth
             ? { set: details.dateOfBirth }
             : undefined,
-        dateSource:
-          details.dateSource !== undefined
+          dateSource: details.dateSource
             ? { set: details.dateSource }
             : undefined,
-        gender: details.gender ? { set: details.gender } : undefined,
-        hair: details.hair ? { set: details.hair } : undefined,
-        name: details.name ? { set: details.name } : undefined,
-        peculiarities: details.peculiarities
-          ? { set: details.peculiarities }
-          : undefined,
-        race: details.race ? { set: details.race } : undefined,
-        bans: {
-          create: createBans,
-          update: updateBans,
-          delete: deleteBans,
+          gender: details.gender ? { set: details.gender } : undefined,
+          hair: details.hair ? { set: details.hair } : undefined,
+          name: details.name ? { set: details.name } : undefined,
+          peculiarities: details.peculiarities
+            ? { set: details.peculiarities }
+            : undefined,
+          race: details.race ? { set: details.race } : undefined,
+          bans: {
+            create: createBans,
+            update: updateBans,
+            delete: deleteBans,
+          },
+          tags: {
+            connect: connectTags,
+            disconnect: disconnectTags,
+            create: createTags,
+          },
+          groups: {
+            connect: connectGroups,
+            disconnect: disconnectGroups,
+          },
+          images: {
+            connect: connectImages,
+            disconnect: disconnectImages,
+          },
         },
-        tags: {
-          connect: connectTags,
-          disconnect: disconnectTags,
-          create: createTags,
-        },
-        groups: {
-          connect: connectGroups,
-          disconnect: disconnectGroups,
-        },
-        // images: {
-        //   upload: any,
-        //   delete: [{ id: string }],
-        // },
       },
     });
     history.push("/app/offenders");
@@ -326,7 +332,7 @@ const EditDesktop = ({ id, history }) => {
         <EditImages
           images={images}
           removeImage={removeImage}
-          addImage={() => null} //uploadImage}
+          addImage={uploadImage}
           uploading={uploading}
           loading={offenderLoading}
         />

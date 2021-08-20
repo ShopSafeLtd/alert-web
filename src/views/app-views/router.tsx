@@ -19,14 +19,19 @@ export const AppViews = () => {
       component={lazy(() => import(`./offenders/router`))}
     />,
     <Route
-      key="scheme"
-      path={`${APP_PREFIX_PATH}/scheme-settings`}
-      component={lazy(() => import(`./scheme-settings/router`))}
+      key="chat"
+      path={`${APP_PREFIX_PATH}/chat`}
+      component={lazy(() => import(`./chat/router`))}
     />,
     <Route
       key="user"
       path={`${APP_PREFIX_PATH}/user-settings`}
       component={lazy(() => import(`./user-settings/router`))}
+    />,
+    <Route
+      key="scheme"
+      path={`${APP_PREFIX_PATH}/scheme-settings`}
+      component={lazy(() => import(`./scheme-settings/router`))}
     />,
   ];
 

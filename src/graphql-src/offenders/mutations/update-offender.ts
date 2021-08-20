@@ -3,40 +3,8 @@ import { Age, Build, Gender, Race } from "../enums";
 import { FullOffender, FullOffenderType } from "../fragments";
 
 export const UpdateOffender = gql`
-  mutation updateOffender(
-    $id: String!
-    $age: NullableEnumAgeFieldUpdateOperationsInput
-    $build: NullableEnumBuildFieldUpdateOperationsInput
-    $dateOfBirth: NullableDateTimeFieldUpdateOperationsInput
-    $dateSource: NullableStringFieldUpdateOperationsInput
-    $gender: NullableEnumGenderFieldUpdateOperationsInput
-    $hair: NullableStringFieldUpdateOperationsInput
-    $name: NullableStringFieldUpdateOperationsInput
-    $peculiarities: NullableStringFieldUpdateOperationsInput
-    $race: NullableEnumRaceFieldUpdateOperationsInput
-    $bans: BanUpdateManyWithoutOffenderInput
-    $tags: TagUpdateManyWithoutOffendersInput
-    $groups: GroupUpdateManyWithoutOffendersInput
-    $images: ImageUpdateManyWithoutOffendersInput
-  ) {
-    updateOffender(
-      where: { id: $id }
-      data: {
-        age: $age
-        build: $build
-        dateOfBirth: $dateOfBirth
-        dateSource: $dateSource
-        gender: $gender
-        hair: $hair
-        name: $name
-        peculiarities: $peculiarities
-        race: $race
-        bans: $bans
-        tags: $tags
-        groups: $groups
-        images: $images
-      }
-    ) {
+  mutation updateOffender($data: OffenderUpdateInput!, $where: UniqueId!) {
+    updateOffender(where: $where, data: $data) {
       ...FullOffender
     }
   }
@@ -102,8 +70,8 @@ export interface UpdateOffenderArgs {
     disconnect?: { id: string }[];
   };
   images?: {
-    upload?: any;
-    delete?: { id: string }[];
+    connect?: { id: string }[];
+    disconnect?: { id: string }[];
   };
 }
 

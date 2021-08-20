@@ -10,6 +10,7 @@ import { Tags } from "graphql-src/tags/queries";
 import { Groups } from "graphql-src/groups/queries";
 import { IncidentFeed } from "graphql-src/incidents/queries";
 import { OffenderFeed } from "graphql-src/offenders/queries";
+import { UploadImage } from "graphql-src/images/mutations";
 import { useStoreActions, useStoreState } from "../../../../state";
 
 let querySize = 10;
@@ -93,6 +94,7 @@ const AddIncident = ({ history }) => {
   });
 
   // mutations
+  const [createImage] = useMutation(UploadImage);
   const [createIncident] = useMutation(CreateIncident, {
     onError: (err) => {
       console.log(err);
@@ -221,18 +223,25 @@ const AddIncident = ({ history }) => {
   const removeOffender = (offender) =>
     setOffenders(offenders.filter(({ id }) => offender !== id));
 
-  const addImage = ({ target: { files } }) => {
-    const filesArray = [...files];
-
-    setImages([
-      ...images,
-      ...filesArray.map((file) => ({
-        id: images.length,
-        url: URL.createObjectURL(file),
-        offendersIds: [],
-        file: file,
-      })),
-    ]);
+  const addImage = async ({ target: { files } }) => {
+    [...files].forEach(async (file) => {
+      setImages([
+        ...images,
+        {
+          id: "UPLOADING",
+        },
+      ]);
+      const {
+        data: { uploadImage },
+      } = await createImage({
+        variables: {
+          file,
+          scheme: schemeId,
+          incident: { id: undefined },
+        },
+      });
+      setImages([...images, { ...uploadImage, offenders: [] }]);
+    });
   };
 
   const removeImage = (image, removeOffenders) => {
@@ -287,14 +296,15 @@ const AddIncident = ({ history }) => {
       });
     });
     setOffenders(newOffenders);
+    const existingOffenders = image?.offenderIds
+      ? [...image?.offendersIds?.filter((id) => !removeOffenders?.includes(id))]
+      : [];
     setImages(
       update(images, {
         [images.map(({ id }) => id).indexOf(image.id)]: {
           offendersIds: {
             $set: [
-              ...image.offendersIds.filter(
-                (id) => !removeOffenders.includes(id)
-              ),
+              ...existingOffenders,
               ...assignOffenders.filter((id) => !images.includes(id)),
             ],
           },
@@ -392,59 +402,60 @@ const AddIncident = ({ history }) => {
 
     createIncident({
       variables: {
-        subject: description.subject,
-        date: description.date,
-        time: description.time,
-        description: description.description,
-        crimeTypes: crimeTypes.map(({ id }) => ({ id })),
-        location: {
-          create:
-            location === "NEW"
-              ? {
-                  premises: newLocation.premises,
-                  building: newLocation.building,
-                  street: newLocation.street,
-                  townCity: newLocation.townCity,
-                  county: newLocation.county,
-                  postcode: newLocation.postcode,
-                }
-              : undefined,
+        data: {
+          subject: description.subject,
+          date: description.date,
+          time: description.time,
+          description: description.description,
+          crimeTypes: crimeTypes.map(({ id }) => ({ id })),
+          location: {
+            create:
+              location === "NEW"
+                ? {
+                    premises: newLocation.premises,
+                    building: newLocation.building,
+                    street: newLocation.street,
+                    townCity: newLocation.townCity,
+                    county: newLocation.county,
+                    postcode: newLocation.postcode,
+                  }
+                : undefined,
 
-          previous:
-            location === "PREVIOUS"
-              ? { id: previousLocation }
-              : location === "ACCOUNT"
-              ? { id: userData.addresses.find((el) => el.primary).id }
-              : undefined,
+            previous:
+              location === "PREVIOUS"
+                ? { id: previousLocation }
+                : location === "ACCOUNT"
+                ? { id: userData.addresses.find((el) => el.primary).id }
+                : undefined,
+          },
+          scheme: schemeId,
+          offenders: {
+            connect:
+              offenders.length > 0
+                ? offenders.filter((el) => !el.create).map(({ id }) => ({ id }))
+                : undefined,
+            create: undefined,
+          },
+          images: {
+            connect:
+              images.length > 0
+                ? images?.map((el) => {
+                    return {
+                      id: el?.id,
+                      offenders: el?.offendersIds
+                        ? el.offendersIds.map((e) => {
+                            return { id: e, localId: e.localId };
+                          })
+                        : undefined,
+                    };
+                  })
+                : undefined,
+          },
+          groups:
+            groups.length > 0
+              ? groups.map((id) => ({ id }))
+              : groupsData.groups.map(({ id }) => ({ id })),
         },
-        scheme: schemeId,
-        offenders: {
-          connect:
-            offenders.length > 0
-              ? offenders.filter((el) => !el.create).map(({ id }) => ({ id }))
-              : undefined,
-          create: undefined,
-        },
-        images: {
-          // connect:
-          //   images.length > 0
-          //     ? images?.map((el) => {
-          //         return {
-          //           id: el?.id,
-          //           offenders: el?.offendersIds
-          //             ? el.offendersIds.map((e) => {
-          //                 return { id: e, localId: e.localId };
-          //               })
-          //             : undefined,
-          //         };
-          //       })
-          //     : undefined,
-          connect: undefined,
-        },
-        groups:
-          groups.length > 0
-            ? groups.map((id) => ({ id }))
-            : groupsData.groups.map(({ id }) => ({ id })),
       },
     });
 

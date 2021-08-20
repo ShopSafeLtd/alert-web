@@ -1,11 +1,11 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import moment from 'moment';
-import { isEqual } from 'lodash-es';
+import React, { PureComponent } from "react";
+import styled from "styled-components";
+import moment from "moment";
+import { isEqual } from "lodash-es";
 
-import { MessageDate } from '../global';
-import Message from '../../../components/chat/global/Message/Message';
-import NewMessage from '../global/NewMessage/NewMessage';
+import { MessageDate } from "../global";
+import Message from "../global/Message/Message";
+import NewMessage from "../global/NewMessage/NewMessage";
 
 const Messages = styled.div`
   flex: 1;
@@ -15,7 +15,7 @@ const MessageContainer = styled.div`
   height: ${({ bottomNav, newMessageHeight }) =>
     bottomNav
       ? `calc(100vh - ${113 + newMessageHeight}px)`
-      : 'calc(100vh - 112px)'};
+      : "calc(100vh - 112px)"};
   width: 100%;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
@@ -36,30 +36,30 @@ class MessagesView extends PureComponent {
     this.state = {
       loadingMore: false,
       refetch: true,
-      lastMessage: '',
-      sentMessage: '',
+      lastMessage: "",
+      sentMessage: "",
       pristine: true,
-      recentMessage: '',
-      newMessageText: ''
+      recentMessage: "",
+      newMessageText: "",
     };
   }
 
   componentDidMount() {
     const { markAsRead, chat, messages, refetch } = this.props;
-    this.messages.addEventListener('scroll', this.onScroll, false);
+    this.messages.addEventListener("scroll", this.onScroll, false);
     this.messages.scrollTop = this.messages.scrollHeight;
-    this.props.setNavbarAction('back');
-    if (chat !== undefined) {
-      if (chat.members !== undefined) {
-        if (chat.members[0].newMessages) {
-          markAsRead(chat.members[0].id);
-        }
-      }
-    }
+    // this.props.setNavbarAction("back");
+    // if (chat !== undefined) {
+    //   if (chat.members !== undefined) {
+    //     if (chat.members[0].newMessages) {
+    //       markAsRead(chat.members[0].id);
+    //     }
+    //   }
+    // }
     if (messages.length > 0) {
       refetch();
       this.setState({
-        recentMessage: messages.pop().id
+        recentMessage: messages.pop().id,
       });
     }
   }
@@ -71,7 +71,7 @@ class MessagesView extends PureComponent {
       sentMessage,
       pristine,
       lastMessage,
-      recentMessage
+      recentMessage,
     } = this.state;
     const {
       messages,
@@ -82,29 +82,29 @@ class MessagesView extends PureComponent {
       newRecived,
       resetRecived,
       refetched,
-      resetRefetched
+      resetRefetched,
     } = this.props;
     if (refetch) {
       this.messages.scrollTop = this.messages.scrollHeight;
       this.setState({
-        refetch: false
+        refetch: false,
       });
     }
     if (loadingMore) {
       const topMessage = document.getElementById(lastMessage);
-      topMessage.scrollIntoView();
+      topMessage?.scrollIntoView();
       this.setState({
-        loadingMore: false
+        loadingMore: false,
       });
     } else if (sentMessage && !isEqual(messages, prevProps.messages)) {
       this.messages.scrollTop = this.messages.scrollHeight;
       this.setState({
-        sentMessage: false
+        sentMessage: false,
       });
     } else if (pristine && this.props.messages.length > 0) {
       this.messages.scrollTop = this.messages.scrollHeight;
       this.setState({
-        pristine: false
+        pristine: false,
       });
     } else if (newRecived && this.props.messages.length > 0) {
       this.messages.scrollTop = this.messages.scrollHeight;
@@ -118,19 +118,19 @@ class MessagesView extends PureComponent {
       resetRefetched();
     }
     messages.length > 0 && subscribeToMore();
-    setTitle(chat.name);
-    if (chat !== undefined) {
-      if (chat.members !== undefined) {
-        if (chat.members[0].newMessages) {
-          markAsRead(chat.members[0].id);
-        }
-      }
-    }
+    setTitle(this.props?.messages[0]?.chat?.name);
+    // if (chat !== undefined) {
+    //   if (chat.members !== undefined) {
+    //     if (chat.members[0].newMessages) {
+    //       markAsRead(chat.members[0].id);
+    //     }
+    //   }
+    // }
   }
 
-  handleChange = value =>
+  handleChange = (value) =>
     this.setState({
-      newMessageText: value
+      newMessageText: value,
     });
 
   onScroll = () => {
@@ -141,7 +141,7 @@ class MessagesView extends PureComponent {
     ) {
       this.setState({
         loadingMore: true,
-        lastMessage: this.props.messages[0].id
+        lastMessage: this.props?.messages[0]?.id,
       });
       this.props.loadMore();
     }
@@ -153,28 +153,28 @@ class MessagesView extends PureComponent {
 
     let currentDate, currentUser;
     messages.length > 0 &&
-      (currentDate = moment(messages[0].createdAt).format('DD/MM/YY'));
+      (currentDate = moment(messages[0].createdAt).format("DD/MM/YY"));
 
     let datedMessages = [];
     messages.length > 0 &&
       (datedMessages = [
         {
-          type: 'DATE',
-          date: moment(messages[0].createdAt).format('dddd, MMMM Do')
-        }
+          type: "DATE",
+          date: moment(messages[0].createdAt).format("dddd, MMMM Do"),
+        },
       ]);
-    messages.forEach(message => {
-      if (currentDate === moment(message.createdAt).format('DD/MM/YY')) {
-        datedMessages = [...datedMessages, { type: 'MESSAGE', ...message }];
+    messages.forEach((message) => {
+      if (currentDate === moment(message.createdAt).format("DD/MM/YY")) {
+        datedMessages = [...datedMessages, { type: "MESSAGE", ...message }];
       } else {
-        currentDate = moment(message.createdAt).format('DD/MM/YY');
+        currentDate = moment(message.createdAt).format("DD/MM/YY");
         datedMessages = [
           ...datedMessages,
           {
-            type: 'DATE',
-            date: moment(message.createdAt).format('dddd, MMMM Do')
+            type: "DATE",
+            date: moment(message.createdAt).format("dddd, MMMM Do"),
           },
-          { type: 'MESSAGE', ...message }
+          { type: "MESSAGE", ...message },
         ];
       }
     });
@@ -183,7 +183,7 @@ class MessagesView extends PureComponent {
       <Messages>
         <MessageContainer
           bottomNav={bottomNav}
-          ref={ref => (this.messages = ref)}
+          ref={(ref) => (this.messages = ref)}
           newMessageHeight={
             this.newMessage.current !== null &&
             this.newMessage.current.clientHeight
@@ -191,7 +191,7 @@ class MessagesView extends PureComponent {
         >
           {datedMessages.map(
             ({ type, date, id, content, createdAt, from, sent }) => {
-              if (type === 'MESSAGE') {
+              if (type === "MESSAGE") {
                 if (currentUser === from.id) {
                   return (
                     <Message
@@ -212,7 +212,7 @@ class MessagesView extends PureComponent {
                       content={content}
                       user={from.fullName}
                       fromId={from.id}
-                      initials={from.initials}
+                      initials={from.fullName[0]}
                       sent={sent}
                     />
                   );
@@ -231,11 +231,11 @@ class MessagesView extends PureComponent {
           ref={this.newMessage}
           message={newMessageText}
           handleChange={this.handleChange}
-          chatId={chatId}
+          chatId={this.props?.messages[0]?.chat?.id}
           refetch={refetch}
           onSend={() =>
             this.setState({
-              sentMessage: true
+              sentMessage: true,
             })
           }
           bottomNav={bottomNav}
@@ -250,8 +250,8 @@ class MessagesView extends PureComponent {
   }
 
   componentWillUnmount() {
-    this.messages.removeEventListener('scroll', this.onScroll, false);
-    this.props.setNavbarAction('default');
+    this.messages.removeEventListener("scroll", this.onScroll, false);
+    // this.props.setNavbarAction("default");
   }
 }
 

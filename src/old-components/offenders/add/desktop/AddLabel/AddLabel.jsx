@@ -92,11 +92,20 @@ const AddLabel = ({ open, close, createdById }) => {
       .then(() => {
         addWarning({
           variables: {
-            dataType: DataType.OFFENDER,
-            description: warning.description,
-            name: warning.name,
-            scheme: schemeId,
-            user: createdById,
+            data: {
+              name: warning.name,
+              description: warning.description,
+              scheme: {
+                connect: { id: schemeId },
+              },
+
+              dataType: DataType.OFFENDER,
+              createdBy: {
+                connect: {
+                  id: createdById,
+                },
+              },
+            },
           },
           optimisticResponse: {
             createTag: {

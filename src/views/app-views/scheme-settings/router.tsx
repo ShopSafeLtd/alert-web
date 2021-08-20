@@ -17,6 +17,14 @@ import AddChatGroup from "../../../old-components/admin/chat-groups/add/AddChatG
 
 import SchemeDetails from "../../../old-components/admin/SchemeDetails";
 
+import AutoApprove from "../../../old-components/admin/AutoApprove";
+
+import OffenderWarnings from "../../../old-components/admin/offender-warnings/OffenderWarningsList";
+import ViewOffenderWarnings from "../../../old-components/admin/offender-warnings/EditOffenderWarnings";
+import AddOffenderWarnings from "../../../old-components/admin/offender-warnings/AddOffenderWarning";
+
+import CrimeTypes from "../../../old-components/admin/crime-types/CrimeTypes";
+
 const SchemeSettings = () => {
   return (
     <Switch>
@@ -74,6 +82,33 @@ const SchemeSettings = () => {
       <Route
         path={`${APP_PREFIX_PATH}/scheme-settings/scheme-details`}
         component={SchemeDetails}
+      />
+
+      {/* auto approve */}
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/auto-approve`}
+        component={AutoApprove}
+      />
+
+      {/* offender tags */}
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/offender-warnings`}
+        exact
+        component={OffenderWarnings}
+      />
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/offender-warnings/view/:id`}
+        component={ViewOffenderWarnings}
+      />
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/offender-warnings/add`}
+        component={AddOffenderWarnings}
+      />
+
+      {/* crime types */}
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/crime-types`}
+        component={CrimeTypes}
       />
     </Switch>
   );

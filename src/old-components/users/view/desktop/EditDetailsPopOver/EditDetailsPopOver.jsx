@@ -11,7 +11,7 @@ import { PopOver, Row, PopOverContainer } from "../../../../global/layout";
 import { BackButton } from "../../../../global/actions";
 import { SubHeader } from "../../../../global/typography";
 import { Field, FieldHeader, Select } from "../../../../global/forms";
-import { ViewUser } from "graphql-src/users/queries/view-user";
+import { User } from "graphql-src/users/queries";
 import { EditUser } from "graphql-src/users/mutations/edit-user";
 // import query from '../../../../../graphql/users/queries/User';
 // import UserMutation from '../../../../../graphql/users/mutations/UpdateUser';
@@ -54,18 +54,16 @@ const EditDetailsPopOver = ({ open, close, user }) => {
   });
 
   //queries
-  const { loading } = useQuery(ViewUser, {
+  const { loading } = useQuery(User, {
     variables: {
-      id: user,
+      where: {
+        id: user,
+      },
+      scheme: schemeId,
     },
     fetchPolicy: "cache-and-network",
     onCompleted: (res) => {
       const output = { ...res.user };
-      output.groups = output.groups.filter((el) => el.scheme.id === schemeId);
-      output.chats = output.chats.filter(
-        (el) => el.chat.scheme.id === schemeId
-      );
-      output.schemes = output.schemes.filter((el) => el.schemeId === schemeId);
       setDetails((prev) => {
         return {
           ...prev,

@@ -9,7 +9,7 @@ import ViewUserDesktop from "../desktop/ViewUserDesktop/ViewUserDesktop";
 
 // import UserQuery from "../../../../graphql/users/queries/User";
 // import Auth0UserQuery from "../../../../graphql/users/queries/Auth0User";
-import { ViewUser as ViewUserQuery } from "graphql-src/users/queries/view-user";
+import { User } from "graphql-src/users/queries";
 import { Auth0User } from "graphql-src/users/queries";
 
 const ViewUser = ({
@@ -27,18 +27,15 @@ const ViewUser = ({
   currentUser,
 }) => {
   const schemeId = useStoreState((state) => state.scheme.id);
-  const { data } = useQuery(ViewUserQuery, {
+  const { data: user } = useQuery(User, {
     variables: {
-      id,
+      where: {
+        id,
+      },
+      scheme: schemeId,
     },
+    fetchPolicy: "cache-and-network",
   });
-  const output = data && { ...data.user };
-  if (output) {
-    output.groups = output.groups.filter((el) => el.scheme.id === schemeId);
-    output.chats = output.chats.filter((el) => el.chat.scheme.id === schemeId);
-    output.schemes = output.schemes.filter((el) => el.schemeId === schemeId);
-  }
-  const user = { user: output };
 
   const { data: auth0User } = useQuery(Auth0User, {
     variables: {
@@ -52,7 +49,7 @@ const ViewUser = ({
     //     matches ? (
     <ViewUserDesktop
       userId={id}
-      user={!!data ? user.user : {}}
+      user={!!user ? user.user : {}}
       auth0User={auth0User || {}}
       setStatusBar={setStatusBar}
       isCurrent={currentUser === id}

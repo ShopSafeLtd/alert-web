@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import AddSvg from '@material-ui/icons/Add';
-import MediaQuery from 'react-responsive';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import AddSvg from "@material-ui/icons/Add";
+import MediaQuery from "react-responsive";
 
-import { SubHeader, EmptyText } from '../../typography';
-import { EmptySection } from '../../emptyStates';
-import Images from '../../../../images/Images';
-import { Row, Section, Grow, SectionLoading } from '../../layout/';
-import { FileButton } from '../../../global/actions';
-import ConfirmDialog from '../../ConfirmDialog/ConfirmDialog';
-import { useStoreActions } from '../../../../state';
+import { SubHeader, EmptyText } from "../../typography";
+import { EmptySection } from "../../emptyStates";
+import Images from "../../../../images/Images";
+import { Row, Section, Grow, SectionLoading } from "../../layout/";
+import { FileButton } from "../../../global/actions";
+import ConfirmDialog from "../../ConfirmDialog/ConfirmDialog";
+import { useStoreActions } from "../../../../state";
 
 const AddIcon = styled(AddSvg)`
   margin-right: 5px;
@@ -88,17 +88,17 @@ const EditImages = ({
   uploading,
   openAssignOffenders,
   offenders,
-  loading
+  loading,
 }) => {
-  const toggleLightbox = useStoreActions(state => state.theme.toggleLightBox);
+  const toggleLightbox = useStoreActions((state) => state.theme.toggleLightBox);
 
-  const [removeId, setRemoveId] = useState('');
+  const [removeId, setRemoveId] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   return (
     <MediaQuery minDeviceWidth={1024}>
-      {matches => (
-        <Section width={matches ? '50%' : '100%'} elevation={1}>
+      {(matches) => (
+        <Section width={matches ? "50%" : "100%"} elevation={1}>
           {!!loading && <SectionLoading />}
           <Row right row>
             <SubHeader>Images</SubHeader>
@@ -109,7 +109,6 @@ const EditImages = ({
                   id="file"
                   type="file"
                   accept="image/*"
-                  multiple
                   disabled={uploading}
                 />
                 <Button
@@ -132,20 +131,19 @@ const EditImages = ({
                     <Image url={url}>
                       <ImageButton onClick={() => toggleLightbox([url])} />
                       <ImageMenu>
-                        {offenders !== undefined &&
-                          offenders.length > 0 && (
-                            <ImageMenuItem
-                              viewBox="0 0 24 24"
-                              onClick={() => {
-                                openAssignOffenders(id);
-                              }}
-                            >
-                              <path
-                                fill="#FFF"
-                                d="M13,13C11,13 7,14 7,16V18H19V16C19,14 15,13 13,13M19.62,13.16C20.45,13.88 21,14.82 21,16V18H24V16C24,14.46 21.63,13.5 19.62,13.16M13,11A3,3 0 0,0 16,8A3,3 0 0,0 13,5A3,3 0 0,0 10,8A3,3 0 0,0 13,11M18,11A3,3 0 0,0 21,8A3,3 0 0,0 18,5C17.68,5 17.37,5.05 17.08,5.14C17.65,5.95 18,6.94 18,8C18,9.06 17.65,10.04 17.08,10.85C17.37,10.95 17.68,11 18,11M8,10H5V7H3V10H0V12H3V15H5V12H8V10Z"
-                              />
-                            </ImageMenuItem>
-                          )}
+                        {offenders !== undefined && offenders.length > 0 && (
+                          <ImageMenuItem
+                            viewBox="0 0 24 24"
+                            onClick={() => {
+                              openAssignOffenders(id);
+                            }}
+                          >
+                            <path
+                              fill="#FFF"
+                              d="M13,13C11,13 7,14 7,16V18H19V16C19,14 15,13 13,13M19.62,13.16C20.45,13.88 21,14.82 21,16V18H24V16C24,14.46 21.63,13.5 19.62,13.16M13,11A3,3 0 0,0 16,8A3,3 0 0,0 13,5A3,3 0 0,0 10,8A3,3 0 0,0 13,11M18,11A3,3 0 0,0 21,8A3,3 0 0,0 18,5C17.68,5 17.37,5.05 17.08,5.14C17.65,5.95 18,6.94 18,8C18,9.06 17.65,10.04 17.08,10.85C17.37,10.95 17.68,11 18,11M8,10H5V7H3V10H0V12H3V15H5V12H8V10Z"
+                            />
+                          </ImageMenuItem>
+                        )}
                         <ImageMenuItem
                           viewBox="0 0 24 24"
                           onClick={() => {
@@ -181,7 +179,7 @@ const EditImages = ({
                     }}
                   >
                     Remove Image
-                  </Button>
+                  </Button>,
                 ]}
               />
             </ImageGrid>
@@ -194,7 +192,6 @@ const EditImages = ({
                   id="file"
                   type="file"
                   accept="image/*"
-                  multiple
                   disabled={uploading}
                 />
                 <Button

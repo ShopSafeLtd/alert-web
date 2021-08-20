@@ -3,16 +3,23 @@ import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 // import { useMutation } from '@apollo/react-hooks';
 import { useMutation } from "@apollo/client";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
 
 import EditDetailsPopOver from "../EditDetailsPopOver/EditDetailsPopOver";
 import EditGroupsPopOver from "../EditGroupsPopOver/EditGroupsPopOver";
 import EditChatsPopOver from "../EditChatsPopOver/EditChatsPopOver";
 import ConfirmDialog from "../../../../global/ConfirmDialog/ConfirmDialog";
-import { UpdateUserDisabled } from "graphql-src/users/mutations";
+import {
+  UpdateUserDisabled,
+  SendInvite,
+  DeleteUserFromScheme,
+} from "graphql-src/users/mutations";
+import { SchemeUsers } from "graphql-src/users/queries";
 // import ToggleUser from '../../../../../graphql/users/mutations/ToggleUser';
 // import DeleteUser from '../../../../../graphql/users/mutations/DeleteUser';
 // import SendInvite from '../../../../../graphql/users/mutations/SendInvite';
 // import AllUsers from '../../../../../graphql/users/queries/AllUsersQuery';
+import { useStoreState } from "state";
 
 // section imports
 import Details from "../Details/Details";
@@ -48,29 +55,38 @@ const ViewUserDesktop = ({
   const [remove, setRemove] = useState(false);
   const [invite, setInvite] = useState(false);
 
+  const schemeId = useStoreState((state) => state.scheme.id);
+
   // mutations
   const [updateUser] = useMutation(UpdateUserDisabled);
-  // const [sendInvite] = useMutation(SendInvite);
-  // const [deleteUser] = useMutation(DeleteUser, {
-  //   update: (store, { data: { deleteUser } }) => {
-  //     let data = store.readQuery({
-  //       query: AllUsers,
-  //       variables: {
-  //         search: "",
-  //         schemeId: window.localStorage.getItem("currentScheme"),
-  //       },
-  //     });
-  //     data.users = data.users.filter(({ id }) => deleteUser.id !== id);
-  //     store.writeQuery({
-  //       query: AllUsers,
-  //       data,
-  //       variables: {
-  //         search: "",
-  //         schemeId: window.localStorage.getItem("currentScheme"),
-  //       },
-  //     });
-  //   },
-  // });
+  const [sendInvite] = useMutation(SendInvite);
+  const [deleteUser] = useMutation(DeleteUserFromScheme, {
+    update: (store, { data }) => {
+      const res = store.readQuery({
+        query: SchemeUsers,
+        variables: {
+          scheme: schemeId,
+          search: "",
+          orderByName: "asc",
+        },
+      });
+      if (!res || !data) return;
+      store.writeQuery({
+        query: SchemeUsers,
+        data: {
+          ...data,
+          users: res.users.filter(
+            (el) => el.id !== data?.deleteUserFromScheme?.id
+          ),
+        },
+        variables: {
+          scheme: schemeId,
+          search: "",
+          orderByName: "asc",
+        },
+      });
+    },
+  });
 
   // functions
   const handleToggle = () => {
@@ -95,33 +111,34 @@ const ViewUserDesktop = ({
     setDisable(false);
   };
   const handleDelete = () => {
-    // deleteUser({
-    //   variables: {
-    //     id: user.id,
-    //     scheme: window.localStorage.getItem("currentScheme"),
-    //   },
-    //   optimisticResponse: {
-    //     deleteUser: {
-    //       id: user.id,
-    //       __typename: "User",
-    //     },
-    //   },
-    // });
+    deleteUser({
+      variables: {
+        id: user.id,
+        scheme: schemeId,
+      },
+      optimisticResponse: {
+        deleteUserFromScheme: {
+          id: user.id,
+          __typename: "User",
+        },
+      },
+    });
     setRemove(false);
-    history.push("/admin/users");
+    history.push(`${APP_PREFIX_PATH}/scheme-settings/users`);
   };
   const handleInvite = () => {
-    // sendInvite({
-    //   variables: {
-    //     user: user.id,
-    //   },
-    //   optimisticResponse: {
-    //     sendInvite: {
-    //       id: user.id,
-    //       __typename: "User",
-    //     },
-    //   },
-    // });
+    sendInvite({
+      variables: {
+        id: user.id,
+      },
+      optimisticResponse: {
+        sendInvite: {
+          id: user.id,
+          newUser: true,
+          __typename: "User",
+        },
+      },
+    });
     setInvite(false);
   };
 

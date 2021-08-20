@@ -8,6 +8,7 @@ import { Groups } from "../../../../graphql-src/groups/queries";
 import { useStoreActions, useStoreState } from "../../../../state";
 import { CreateOffender } from "../../../../graphql-src/offenders/mutations/create-offender";
 import { OffenderFeed } from "../../../../graphql-src/offenders/queries/offender-feed";
+import { UploadImage } from "graphql-src/images/mutations";
 
 const AddOffender = ({ history }) => {
   const [pristine, setPristine] = useState(true);
@@ -58,6 +59,8 @@ const AddOffender = ({ history }) => {
   });
 
   // mutations
+  const [createImage, { loading: uploading }] = useMutation(UploadImage);
+
   const [createOffender] = useMutation(CreateOffender, {
     onError: (err) => {
       console.log(err);
@@ -130,25 +133,46 @@ const AddOffender = ({ history }) => {
     }
   };
 
-  const addImage = ({ target: { files } }) => {
-    const filesArray = [...files];
-    setImages((prev) => {
-      if (!Array.isArray(prev))
-        return [
-          ...filesArray.map((file) => ({
-            id: this.state.images.length,
-            url: URL.createObjectURL(file),
-            file: file,
-          })),
-        ];
-      return [
-        ...prev,
-        ...filesArray.map((file) => ({
-          id: this.state.images.length,
-          url: URL.createObjectURL(file),
-          file: file,
-        })),
-      ];
+  // const addImage = ({ target: { files } }) => {
+  //   const filesArray = [...files];
+  //   setImages((prev) => {
+  //     if (!Array.isArray(prev))
+  //       return [
+  //         ...filesArray.map((file) => ({
+  //           id: this.state.images.length,
+  //           url: URL.createObjectURL(file),
+  //           file: file,
+  //         })),
+  //       ];
+  //     return [
+  //       ...prev,
+  //       ...filesArray.map((file) => ({
+  //         id: this.state.images.length,
+  //         url: URL.createObjectURL(file),
+  //         file: file,
+  //       })),
+  //     ];
+  //   });
+  // };
+
+  const addImage = async ({ target: { files } }) => {
+    [...files].forEach(async (file) => {
+      setImages([
+        ...images,
+        {
+          id: "UPLOADING",
+        },
+      ]);
+      const {
+        data: { uploadImage },
+      } = await createImage({
+        variables: {
+          file,
+          scheme: schemeId,
+          incident: { id: undefined },
+        },
+      });
+      setImages([...images, uploadImage]);
     });
   };
 
@@ -232,49 +256,51 @@ const AddOffender = ({ history }) => {
 
     await createOffender({
       variables: {
-        age: age ? age : undefined,
-        bans:
-          exclusions.length > 0
-            ? exclusions.map(
-                ({ startDate, endDate, location, description }) => ({
-                  startDate,
-                  endDate,
-                  location,
-                  description,
-                  scheme: { connect: { id: schemeId } },
-                  createdBy: { connect: { id: currentUser } },
-                })
-              )
-            : undefined,
-        build: build ? build : undefined,
-        dateOfBirth: dateOfBirth ? dateOfBirth : undefined,
-        dateSource: dateSource ? dateSource : undefined,
-        gender: gender ? gender : undefined,
-        groups:
-          selectedGroups.length > 0
-            ? {
-                connect: selectedGroups.map((id) => ({ id })),
-              }
-            : undefined,
-        hair: hair ? hair : undefined,
-        // image: {
-        //   connect: images?.map((el) => {
-        //     return {
-        //       id: el.id,
-        //     };
-        //   }),
-        // },
-        image: undefined,
-        name: name ? name : undefined,
-        tags:
-          selectedLabels.length > 0
-            ? {
-                connect: selectedLabels.map(({ id }) => ({ id })),
-              }
-            : undefined,
-        peculiarities: peculiarities ? peculiarities : undefined,
-        race: race ? race : undefined,
-        scheme: schemeId,
+        data: {
+          age: age ? age : undefined,
+          bans:
+            exclusions.length > 0
+              ? exclusions.map(
+                  ({ startDate, endDate, location, description }) => ({
+                    startDate,
+                    endDate,
+                    location,
+                    description,
+                    scheme: { connect: { id: schemeId } },
+                    createdBy: { connect: { id: currentUser } },
+                  })
+                )
+              : undefined,
+          build: build ? build : undefined,
+          dateOfBirth: dateOfBirth ? dateOfBirth : undefined,
+          dateSource: dateSource ? dateSource : undefined,
+          gender: gender ? gender : undefined,
+          groups:
+            selectedGroups.length > 0
+              ? {
+                  connect: selectedGroups.map((id) => ({ id })),
+                }
+              : undefined,
+          hair: hair ? hair : undefined,
+          image: {
+            connect: images?.map((el) => {
+              return {
+                id: el.id,
+              };
+            }),
+          },
+
+          name: name ? name : undefined,
+          tags:
+            selectedLabels.length > 0
+              ? {
+                  connect: selectedLabels.map(({ id }) => ({ id })),
+                }
+              : undefined,
+          peculiarities: peculiarities ? peculiarities : undefined,
+          race: race ? race : undefined,
+          scheme: schemeId,
+        },
       },
       optimisticResponse: {
         createOffender: {
@@ -309,12 +335,11 @@ const AddOffender = ({ history }) => {
             id,
             __typename: "Group",
           })),
-          // images: images.map((image) => ({
-          //   optimised: image.uri,
-          //   url: image.uri,
-          //   id: `${Math.random()}`,
-          // })),
-          images: undefined,
+          images: images.map((image) => ({
+            optimised: image.uri,
+            url: image.uri,
+            id: `${Math.random()}`,
+          })),
           tags: selectedLabels.map((el) => ({
             id: `${Math.random()}`,
             name: el.name,
@@ -450,7 +475,7 @@ const AddOffender = ({ history }) => {
       hair={hair}
       peculiarities={peculiarities}
       images={images}
-      disabled={disabled}
+      disabled={disabled || uploading}
       uploadImage={addImage}
       removeImage={removeImage}
       offenderLabels={labelsList ? labelsList.tags : []}

@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
-import MediaQuery from 'react-responsive';
-import Typography from '@material-ui/core/Typography';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { useStoreState } from '../../../../state';
+import React from "react";
+import styled from "styled-components";
+import MediaQuery from "react-responsive";
+import Typography from "@material-ui/core/Typography";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { useStoreState } from "../../../../state";
 
 const MessageContainer = styled.div`
   padding: 5px 0px 0;
@@ -12,7 +12,7 @@ const MessageContainer = styled.div`
   @media (min-width: 1024px) {
     flex: 1;
     padding: 5px 20px;
-    text-align: ${({ current }) => (current ? 'right' : 'left')};
+    text-align: ${({ current }) => (current ? "right" : "left")};
   }
 `;
 
@@ -23,7 +23,7 @@ const Row = styled.div`
   justify-content: flex-end;
   @media (min-width: 1024px) {
     padding: 5px 20px;
-    justify-content: ${({ current }) => (current ? 'flex-end' : 'flex-start')};
+    justify-content: ${({ current }) => (current ? "flex-end" : "flex-start")};
   }
 `;
 
@@ -93,10 +93,10 @@ const Container = styled.div`
 `;
 
 const Message = ({ content, sameUser, user, initials, fromId, sent, id }) => {
-  const currentUser = useStoreState(state => state.user.id);
+  const currentUser = useStoreState((state) => state.user.id);
   return (
     <MediaQuery minDeviceWidth={1024}>
-      {matches => (
+      {(matches) => (
         <Container>
           {!sent && <CircularProgress size={20} />}
           <MessageContainer current={currentUser === fromId} id={id}>
@@ -106,7 +106,7 @@ const Message = ({ content, sameUser, user, initials, fromId, sent, id }) => {
                   <Avatar component="div">{initials}</Avatar>
                 ) : null}
                 <User variant="caption">
-                  {currentUser === fromId && !matches ? 'You' : user}
+                  {currentUser === fromId && !matches ? "You" : user}
                 </User>
               </Row>
             )}

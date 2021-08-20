@@ -13,4 +13,5 @@ export interface BasicSchemeType {
   __typename: "scheme";
   id: string;
   role: Role;
+  schemeId: string;
 }

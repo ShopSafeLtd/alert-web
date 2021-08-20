@@ -4,32 +4,8 @@ import { FullIncident, FullIncidentType } from "../fragments";
 import { Age, Build, Gender, Race } from "../../offenders/enums";
 
 export const CreateIncident = gql`
-  mutation createIncident(
-    $subject: String!
-    $date: DateTime!
-    $time: DateTime!
-    $description: String!
-    $crimeTypes: [UniqueId]
-    $location: CreateIncidentLocation!
-    $offenders: CreateIncidentOffenders!
-    $images: CreatIncidentImages!
-    $groups: [UniqueId]!
-    $scheme: String!
-  ) {
-    createIncident(
-      data: {
-        subject: $subject
-        date: $date
-        time: $time
-        description: $description
-        crimeTypes: $crimeTypes
-        location: $location
-        images: $images
-        groups: $groups
-        scheme: $scheme
-        offenders: $offenders
-      }
-    ) {
+  mutation createIncident($data: CreatIncidentData!) {
+    createIncident(data: $data) {
       ...FullIncident
     }
   }

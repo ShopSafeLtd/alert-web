@@ -86,32 +86,24 @@ const EditDesktop = ({
   });
 
   // functions
-  const save = () => {
-    validateDescription()
-      .then(() =>
-        validateCrimeTypes()
-          .then(() =>
-            validateLocation()
-              .then(() =>
-                validateGroups()
-                  .then(() => {
-                    handleSave();
-                  })
-                  .catch(() =>
-                    setError(
-                      "Please select at least one group for the incident."
-                    )
-                  )
-              )
-              .catch(() =>
-                setError("There are some missing fields in the location.")
-              )
-          )
-          .catch(() => setError("Please select at least one crime type."))
-      )
-      .catch(() =>
-        setError("There are some missing fields in the description")
-      );
+  const save = async () => {
+    try {
+      if (!(await validateDescription())) {
+        return setError("There are some missing fields in the description");
+      }
+      if (!(await validateCrimeTypes())) {
+        return setError("Please select at least one crime type.");
+      }
+      if (!(await validateLocation())) {
+        return setError("There are some missing fields in the location.");
+      }
+      if (!(await validateGroups())) {
+        return setError("Please select at least one group for the incident.");
+      }
+      handleSave();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -129,7 +121,6 @@ const EditDesktop = ({
               crimeTypes={
                 crimeTypesList &&
                 crimeTypes.map((el) => {
-                  console.log(crimeTypesList.tags, crimeTypes);
                   return crimeTypesList.tags.find(
                     (e) => el.id === e.id || el === el.id
                   );
@@ -180,7 +171,12 @@ const EditDesktop = ({
                 </BackButton>
               </div>
               <div>
-                <Button variant="contained" color="primary" onClick={save}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={save}
+                  disabled={uploadingImage}
+                >
                   Save Incident
                 </Button>
               </div>

@@ -1,9 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Route } from 'react-router-dom';
+import React from "react";
+import styled from "styled-components";
+import { Route } from "react-router-dom";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
 
-import MessagesQuery from '../MessagesQuery/MessagesQuery';
-import ChatView from '../../../components/chat/ChatView/ChatView';
+import MessagesQuery from "../MessagesQuery/MessagesQuery";
+import ChatView from "../ChatView/ChatView";
 
 const Container = styled.div`
   flex: 1;
@@ -20,8 +21,8 @@ class Chat extends React.Component {
   render() {
     return (
       <Container>
-        <Route exact path="/chat" component={ChatView} />
-        <Route path="/chat/:id" component={MessagesQuery} />
+        <Route exact path={`${APP_PREFIX_PATH}/chat`} component={ChatView} />
+        <Route path={`${APP_PREFIX_PATH}/chat/:id`} component={MessagesQuery} />
       </Container>
     );
   }
