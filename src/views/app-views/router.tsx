@@ -4,8 +4,13 @@ import Loading from "components/shared-components/Loading";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
 import { useAuth } from "hooks";
 
+import { useStoreState } from "state";
+
 export const AppViews = () => {
   const { getCurrentUser } = useAuth();
+
+  const userRole = useStoreState((state) => state.user.role);
+  console.log(userRole);
 
   const adminRoutes = [
     <Route
@@ -28,12 +33,17 @@ export const AppViews = () => {
       path={`${APP_PREFIX_PATH}/user-settings`}
       component={lazy(() => import(`./user-settings/router`))}
     />,
-    <Route
-      key="scheme"
-      path={`${APP_PREFIX_PATH}/scheme-settings`}
-      component={lazy(() => import(`./scheme-settings/router`))}
-    />,
   ];
+
+  if (userRole === "SCHEME_ADMIN") {
+    adminRoutes.push(
+      <Route
+        key="scheme"
+        path={`${APP_PREFIX_PATH}/scheme-settings`}
+        component={lazy(() => import(`./scheme-settings/router`))}
+      />
+    );
+  }
 
   useEffect(() => {
     getCurrentUser();

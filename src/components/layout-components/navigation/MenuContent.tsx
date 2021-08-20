@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Menu, Grid } from "antd";
 //import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import IntlMessage from "../../util-components/IntlMessage";
-import navigationConfig, { NavItem } from "configs/NavigationConfig";
+import navConfig, { NavItem } from "configs/NavigationConfig";
 import utils from "utils";
 import { useStoreState, useStoreActions, NavType, SideNavTheme } from "state";
 
@@ -53,6 +53,12 @@ const SideNavContent = (props: SideNavContentProps) => {
       onMobileNavToggle(false);
     }
   };
+
+  const userRole = useStoreState((state) => state.user.role);
+  const navigationConfig =
+    userRole === "SCHEME_ADMIN"
+      ? navConfig
+      : navConfig.filter((el) => el.title !== "sidenav.scheme");
 
   return (
     <Menu
@@ -129,6 +135,12 @@ interface TopNavContentProps {
 
 const TopNavContent = (props: TopNavContentProps) => {
   const { topNavColor, localization } = props;
+
+  const userRole = useStoreState((state) => state.user.role);
+  const navigationConfig =
+    userRole === "SCHEME_ADMIN"
+      ? navConfig
+      : navConfig.filter((el) => el.title !== "sidenav.scheme");
   return (
     <Menu mode="horizontal" style={{ backgroundColor: topNavColor }}>
       {navigationConfig.map((menu) =>

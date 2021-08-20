@@ -36,9 +36,6 @@ const userOnlyItems: NavItem[] = [
     submenu: [],
     icon: undefined,
   },
-];
-
-const adminOnlyItems: NavItem[] = [
   {
     key: "offenders",
     path: `${APP_PREFIX_PATH}/offenders`,
@@ -57,6 +54,9 @@ const adminOnlyItems: NavItem[] = [
     submenu: [],
     icon: undefined,
   },
+];
+
+const adminOnlyItems: NavItem[] = [
   {
     key: "scheme",
     path: `${APP_PREFIX_PATH}/scheme-settings`,
