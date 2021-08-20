@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import ReactSwipe from 'react-swipe';
+import React from "react";
+import styled from "styled-components";
+import ReactSwipe from "react-swipe";
 
 const Carousel = styled.div`
   width: 100%;
@@ -37,7 +37,8 @@ class ImageCarousel extends React.Component {
     this.state = {
       rightControl: false,
       leftControl: false,
-      imageIndex: 0
+      imageIndex: 0,
+      startSlide: 0,
     };
     this.reactSwipe = React.createRef();
   }
@@ -51,6 +52,7 @@ class ImageCarousel extends React.Component {
   render() {
     const { images, height, toggleLightBox } = this.props;
     const { rightControl, leftControl, imageIndex } = this.state;
+
     return (
       <Carousel>
         {leftControl && (
@@ -64,26 +66,29 @@ class ImageCarousel extends React.Component {
           </LeftControl>
         )}
         <ReactSwipe
-          ref={el => (this.reactSwipe = el)}
+          ref={(el) => (this.reactSwipe = el)}
           swipeOptions={{
+            startSlide: this.state.startSlide,
             continuous: false,
-            callback: index => {
+            transitionEnd: (index) => {
+              this.setState({ startSlide: index, imageIndex: index });
               index > 0
-                ? this.setState({ leftControl: true, imageIndex: index })
-                : this.setState({ leftControl: false, imageIndex: index });
+                ? this.setState({ leftControl: true })
+                : this.setState({ leftControl: false });
               index < this.reactSwipe.getNumSlides() - 1
-                ? this.setState({ rightControl: true, imageIndex: index })
-                : this.setState({ rightControl: false, imageIndex: index });
-            }
+                ? this.setState({ rightControl: true })
+                : this.setState({ rightControl: false });
+              return;
+            },
           }}
         >
-          {images.map(image => (
+          {images.map((image) => (
             <div key={image.id}>
               <Image
                 alt=""
-                onClick={() =>
-                  toggleLightBox !== undefined && toggleLightBox(imageIndex)
-                }
+                onClick={() => {
+                  toggleLightBox !== undefined && toggleLightBox(imageIndex);
+                }}
                 style={{ backgroundImage: `url(${image.url})`, height: height }}
               />
             </div>

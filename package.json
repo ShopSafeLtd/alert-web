@@ -55,7 +55,7 @@
     "prismjs": "^1.24.0",
     "qr-code-styling": "^1.6.0-rc.0",
     "rc-tween-one": "^2.7.3",
-    "react": "^17.0.1",
+    "react": "^17.0.2",
     "react-apexcharts": "^1.3.7",
     "react-azure-mp": "^1.0.4",
     "react-beautiful-dnd": "^13.0.0",
@@ -98,6 +98,7 @@
     "save": "^2.4.0",
     "styled-components": "^5.2.1",
     "subscriptions-transport-ws": "^0.9.19",
+    "swipe-js-iso": "^2.1.5",
     "typescript": "^4.1.3",
     "web-vitals": "^0.2.4"
   },

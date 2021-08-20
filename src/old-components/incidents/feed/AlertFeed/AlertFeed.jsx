@@ -1,28 +1,29 @@
-import React, { Fragment } from 'react';
-import styled from 'styled-components';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
+import React, { Fragment } from "react";
+import styled from "styled-components";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Button from "@material-ui/core/Button";
+import { Link } from "react-router-dom";
 
 import {
   FeedContainer,
   FeedCardContainer,
-  SkeletonContainer
-} from '../../../global/feed';
-import { PullToRefresh } from '../../../global/pullToRefresh';
-import { Card } from '../../../global/cards';
-import { EmptyState } from '../../../global/emptyStates';
-import Incidents from 'images/Incidents';
-import AlertCard from '../AlertCard/AlertCard';
-import SkeletonAlertCard from '../SkeletonAlertCard/SkeletonAlertCard';
-import OffenderPopOver from '../OffenderPopOver/OffenderPopOver';
-import UnapprovedCardGroups from '../../../global/cards/UnapprovedCardGroups/UnapprovedCardGroups';
-import DeclineDialog from '../DeclineDialog/DeclineDialog';
-import AlertFilter from '../AlertFilter/AlertFilter';
+  SkeletonContainer,
+} from "../../../global/feed";
+import { PullToRefresh } from "../../../global/pullToRefresh";
+import { Card } from "../../../global/cards";
+import { EmptyState } from "../../../global/emptyStates";
+import Incidents from "images/Incidents";
+import AlertCard from "../AlertCard/AlertCard";
+import SkeletonAlertCard from "../SkeletonAlertCard/SkeletonAlertCard";
+import OffenderPopOver from "../OffenderPopOver/OffenderPopOver";
+import UnapprovedCardGroups from "../../../global/cards/UnapprovedCardGroups/UnapprovedCardGroups";
+import DeclineDialog from "../DeclineDialog/DeclineDialog";
+import AlertFilter from "../AlertFilter/AlertFilter";
+import LightBox from "old-components/global/LightBox/LightBox";
 
 const EmptyContainer = styled.div`
   height: calc(100vh - 112px);
@@ -36,17 +37,17 @@ class AlertFeed extends React.Component {
     this.state = {
       pristine: true,
       deleteModal: false,
-      deleteId: '',
+      deleteId: "",
       disable: false,
       offenderPopOver: false,
       currentOffender: {
-        images: []
+        images: [],
       },
       approve: false,
-      approveId: '',
+      approveId: "",
       approveOffenders: [],
       declineDialog: false,
-      filterOpen: false
+      filterOpen: false,
     };
   }
 
@@ -54,42 +55,42 @@ class AlertFeed extends React.Component {
     this.props.alerts.length > 0 &&
       this.state.pristine &&
       this.setState({
-        pristine: false
+        pristine: false,
       });
   }
 
-  toggleDeleteModal = id =>
+  toggleDeleteModal = (id) =>
     this.setState({
       deleteModal: !this.state.deleteModal,
-      deleteId: id || ''
+      deleteId: id || "",
     });
 
-  toggleDeclineDialog = id =>
+  toggleDeclineDialog = (id) =>
     this.setState({
       declineDialog: !this.state.declineDialog,
-      declineId: id || ''
+      declineId: id || "",
     });
 
-  toggleOffenderPopOver = offender =>
+  toggleOffenderPopOver = (offender) =>
     this.setState({
       offenderPopOver: !this.state.offenderPopOver,
-      currentOffender: offender || { images: [] }
+      currentOffender: offender || { images: [] },
     });
 
   toggleApprove = (id, offenders) =>
     this.setState({
       approve: !this.state.approve,
-      approveId: id || '',
+      approveId: id || "",
       approveGroups: [],
-      approveOffenders: offenders || []
+      approveOffenders: offenders || [],
     });
 
-  approveIncident = groups => {
+  approveIncident = (groups) => {
     const { approveId } = this.state;
     const incident = this.props.alerts.find(({ id }) => id === approveId);
     const connect = groups
-      .filter(group => !incident.groups.map(({ id }) => id).includes(group))
-      .map(id => ({ id }));
+      .filter((group) => !incident.groups.map(({ id }) => id).includes(group))
+      .map((id) => ({ id }));
     const disconnect = incident.groups
       .filter(({ id }) => !groups.includes(id))
       .map(({ id }) => ({ id }));
@@ -98,9 +99,9 @@ class AlertFeed extends React.Component {
         id: approveId,
         groups: {
           connect: connect.length > 0 ? connect : undefined,
-          disconnect: disconnect.length > 0 ? disconnect : undefined
-        }
-      }
+          disconnect: disconnect.length > 0 ? disconnect : undefined,
+        },
+      },
     });
     this.toggleApprove();
   };
@@ -108,28 +109,28 @@ class AlertFeed extends React.Component {
   handleDelete = () => {
     this.props.deleteIncident({
       variables: {
-        id: this.state.deleteId
+        id: this.state.deleteId,
       },
       optimisicResponse: {
         id: this.state.deleteId,
-        __typename: 'Alert'
-      }
+        __typename: "Alert",
+      },
     });
     this.toggleDeleteModal();
   };
 
   handleDecline = async () => {
     this.setState({
-      disable: true
+      disable: true,
     });
     await this.props.deleteIncident({
       variables: {
-        id: this.state.declineId
-      }
+        id: this.state.declineId,
+      },
     });
     this.toggleDeclineDialog();
     this.setState({
-      disable: false
+      disable: false,
     });
   };
 
@@ -149,7 +150,7 @@ class AlertFeed extends React.Component {
       loadingMore,
       networkError,
       retryLoad,
-      filterSet
+      filterSet,
     } = this.props;
     const {
       pristine,
@@ -160,7 +161,7 @@ class AlertFeed extends React.Component {
       disable,
       declineDialog,
       filterOpen,
-      approveId
+      approveId,
     } = this.state;
     return (
       <Fragment>
@@ -191,7 +192,7 @@ class AlertFeed extends React.Component {
           ) : alerts.length > 0 ? (
             <PullToRefresh onRefresh={refetch}>
               <FeedCardContainer>
-                {alerts.map(alert => {
+                {alerts.map((alert) => {
                   return (
                     <Card key={alert.id} height="500px">
                       <AlertCard
@@ -202,7 +203,7 @@ class AlertFeed extends React.Component {
                         toggleDeleteModal={this.toggleDeleteModal}
                         toggleOffenderPopOver={this.toggleOffenderPopOver}
                         toggleApprove={this.toggleApprove}
-                        toggleDecline={id => this.toggleDeclineDialog(id)}
+                        toggleDecline={(id) => this.toggleDeclineDialog(id)}
                         admin={admin}
                       />
                     </Card>
@@ -216,7 +217,7 @@ class AlertFeed extends React.Component {
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  {'Are you sure?'}
+                  {"Are you sure?"}
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
@@ -247,7 +248,7 @@ class AlertFeed extends React.Component {
                 handleDecline={this.handleDecline}
               />
             </PullToRefresh>
-          ) : filterSet > 0 || search !== '' ? (
+          ) : filterSet > 0 || search !== "" ? (
             <PullToRefresh onRefresh={refetch}>
               <EmptyContainer>
                 <EmptyState
@@ -272,7 +273,7 @@ class AlertFeed extends React.Component {
                       to="/app/incidents/add"
                     >
                       Add First Incident
-                    </Button>
+                    </Button>,
                   ]}
                 />
               </EmptyContainer>
@@ -292,6 +293,7 @@ class AlertFeed extends React.Component {
             incident={alerts.find(({ id }) => id === approveId)}
           />
         )}
+        <LightBox />
       </Fragment>
     );
   }

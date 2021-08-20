@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
-import { useStoreActions } from '../../../../state';
+import React from "react";
+import styled from "styled-components";
+import { useStoreActions } from "../../../../state";
 
-import { CardNoImage } from '../../../global/cards';
-import ImageCarousel from '../../../global/ImageCarousel/ImageCarousel';
+import { CardNoImage } from "../../../global/cards";
+import ImageCarousel from "../../../global/ImageCarousel/ImageCarousel";
 
 const MultiImagesContainer = styled.div`
   position: relative;
@@ -24,7 +24,7 @@ const Image = styled.div`
 
 const OffenderCardImage = ({ images }) => {
   const toggleLightbox = useStoreActions(
-    actions => actions.theme.toggleLightBox
+    (actions) => actions.theme.toggleLightBox
   );
 
   return images.length > 0 ? (
@@ -34,33 +34,37 @@ const OffenderCardImage = ({ images }) => {
           <ImageCarousel
             images={images}
             height="265px"
-            toggleLightBox={index =>
+            toggleLightBox={(index) => {
               toggleLightbox({
-                images: images.map(
-                  ({ url, optimised }) => (!!optimised ? optimised : url)
-                ),
-                index
-              })
-            }
+                images: [images[index].url],
+                index: 0,
+              });
+              // toggleLightbox({
+              //   images: images.map(({ url, optimised }) =>
+              //     !!optimised ? optimised : url
+              //   ),
+              //   index,
+              // });
+            }}
           />
         </MultiImagesContainer>
       ) : (
         <SingleImageContainer>
-          {images.map(image => (
-            <div key={image.id} style={{ height: '100%', width: '100%' }}>
+          {images.map((image) => (
+            <div key={image.id} style={{ height: "100%", width: "100%" }}>
               <Image
                 alt="Offender Image"
                 style={{
                   backgroundImage: `url(${
                     !!image.optimised ? image.optimised : image.url
-                  })`
+                  })`,
                 }}
                 onClick={() =>
                   toggleLightbox({
-                    images: images.map(
-                      ({ url, optimised }) => (!!optimised ? optimised : url)
+                    images: images.map(({ url, optimised }) =>
+                      !!optimised ? optimised : url
                     ),
-                    index: 0
+                    index: 0,
                   })
                 }
               />

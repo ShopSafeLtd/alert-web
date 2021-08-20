@@ -1,9 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import ImageCarousel from '../../../global/ImageCarousel/ImageCarousel';
-import { CardNoImage } from '../../../global/cards';
-import { useStoreActions } from '../../../../state';
+import ImageCarousel from "../../../global/ImageCarousel/ImageCarousel";
+import { CardNoImage } from "../../../global/cards";
+import { useStoreActions } from "../../../../state";
 
 const Image = styled.div`
   width: 100%;
@@ -18,7 +18,7 @@ const MultiImagesContainer = styled.div`
 
 const AlertCardImages = ({ images }) => {
   const toggleLightbox = useStoreActions(
-    actions => actions.theme.toggleLightBox
+    (actions) => actions.theme.toggleLightBox
   );
 
   return (
@@ -29,32 +29,38 @@ const AlertCardImages = ({ images }) => {
             <ImageCarousel
               images={images}
               height="220px"
-              toggleLightBox={index =>
-                toggleLightbox({
-                  images: images.map(
-                    ({ url, optimised }) => (!!optimised ? optimised : url)
-                  ),
-                  index
-                })
+              toggleLightBox={
+                (index) => {
+                  toggleLightbox({
+                    images: [images[index].url],
+                    index: 0,
+                  });
+                }
+                // toggleLightbox({
+                //   images: images.map(({ url, optimised }) =>
+                //     !!optimised ? optimised : url
+                //   ),
+                //   index,
+                // })
               }
             />
           </MultiImagesContainer>
         ) : (
-          images.map(image => (
+          images.map((image) => (
             <div key={image.id}>
               <Image
                 alt=""
                 style={{
                   backgroundImage: `url(${
                     !!image.optimised ? image.optimised : image.url
-                  })`
+                  })`,
                 }}
                 onClick={() =>
                   toggleLightbox({
-                    images: images.map(
-                      ({ url, optimised }) => (!!optimised ? optimised : url)
+                    images: images.map(({ url, optimised }) =>
+                      !!optimised ? optimised : url
                     ),
-                    index: 0
+                    index: 0,
                   })
                 }
               />

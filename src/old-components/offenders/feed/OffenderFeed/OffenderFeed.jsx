@@ -27,6 +27,7 @@ import InactiveOffenderModal from "../InactiveOffenderModal/InactiveOffenderModa
 import OffenderSkeletonCard from "../OffenderSkeletonCard/OffenderSkeletonCard";
 import DeclineDialog from "../DeclineDialog/DeclineDialog";
 import Offenders from "../../../../images/Offenders";
+import LightBox from "old-components/global/LightBox/LightBox";
 
 const EmptyContainer = styled.div`
   height: calc(100vh - 167px);
@@ -346,6 +347,7 @@ class OffenderFeed extends React.Component {
             setFilter={setFilter}
           />
         </PullToRefresh>
+        <LightBox />
       </FeedContainer>
     ) : !!offenders && offenders?.length > 0 ? (
       <Fragment>
@@ -457,6 +459,7 @@ class OffenderFeed extends React.Component {
           filter={filter}
           setFilter={setFilter}
         />
+        <LightBox />
       </Fragment>
     ) : filterPristine ? (
       <FeedContainer to="/app/offenders/add" text="Offender">
@@ -486,6 +489,7 @@ class OffenderFeed extends React.Component {
             setFilter={setFilter}
           />
         </PullToRefresh>
+        <LightBox />
       </FeedContainer>
     ) : (
       <FeedContainer to="/app/offenders/add" text="Offender">
@@ -514,6 +518,7 @@ class OffenderFeed extends React.Component {
             setFilter={setFilter}
           />
         </PullToRefresh>
+        <LightBox />
       </FeedContainer>
     );
   }
