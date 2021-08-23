@@ -125,11 +125,18 @@ const EditImages = ({
           </Row>
           {images.length > 0 ? (
             <ImageGrid>
-              {images.map(({ id, url }) => {
+              {images.map(({ id, url }, i) => {
                 return (
                   <GridItem key={id}>
                     <Image url={url}>
-                      <ImageButton onClick={() => toggleLightbox([url])} />
+                      <ImageButton
+                        onClick={() =>
+                          toggleLightbox({
+                            images: images.map(({ url }) => url),
+                            index: i,
+                          })
+                        }
+                      />
                       <ImageMenu>
                         {offenders !== undefined && offenders.length > 0 && (
                           <ImageMenuItem

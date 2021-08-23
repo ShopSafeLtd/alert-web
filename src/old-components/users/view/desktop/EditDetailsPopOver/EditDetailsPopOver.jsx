@@ -12,7 +12,7 @@ import { BackButton } from "../../../../global/actions";
 import { SubHeader } from "../../../../global/typography";
 import { Field, FieldHeader, Select } from "../../../../global/forms";
 import { User } from "graphql-src/users/queries";
-import { EditUser } from "graphql-src/users/mutations/edit-user";
+import { UpdateUser } from "graphql-src/users/mutations/update-user";
 // import query from '../../../../../graphql/users/queries/User';
 // import UserMutation from '../../../../../graphql/users/mutations/UpdateUser';
 
@@ -101,7 +101,7 @@ const EditDetailsPopOver = ({ open, close, user }) => {
 
   // mutations
   // const [updateUser] = useMutation(UserMutation);
-  const [updateUser] = useMutation(EditUser);
+  const [updateUser] = useMutation(UpdateUser);
 
   // fucntions
   const handleDetailsChange = (name) => (event) => {
@@ -182,54 +182,57 @@ const EditDetailsPopOver = ({ open, close, user }) => {
 
       updateUser({
         variables: {
-          id: user,
-          fullName: { set: details.fullName },
-          organisation: { set: details.organisation },
-          email: { set: details.email },
+          where: {
+            id: user,
+          },
           scheme: schemeId,
-          schemes: {
-            update: {
-              where: {
-                id: scheme.id,
-              },
-              data: {
-                role: { set: scheme.role },
+          data: {
+            fullName: { set: details.fullName },
+            organisation: { set: details.organisation },
+            email: { set: details.email },
+            schemes: {
+              update: {
+                where: {
+                  id: scheme.id,
+                },
+                data: {
+                  role: { set: scheme.role },
+                },
               },
             },
-          },
-          addresses: {
-            update: address.newAddress
-              ? undefined
-              : {
-                  where: {
-                    id: address.id,
+            addresses: {
+              update: address.newAddress
+                ? undefined
+                : {
+                    where: {
+                      id: address.id,
+                    },
+                    data: {
+                      premises: { set: address.premises },
+                      building: { set: address.building },
+                      street: { set: address.street },
+                      townCity: { set: address.townCity },
+                      county: { set: address.county },
+                      postcode: { set: address.postcode },
+                    },
                   },
-                  data: {
-                    premises: { set: address.premises },
-                    building: { set: address.building },
-                    street: { set: address.street },
-                    townCity: { set: address.townCity },
-                    county: { set: address.county },
-                    postcode: { set: address.postcode },
-                  },
-                },
-            create: address.newAddress
-              ? [
-                  {
-                    primary: true,
-                    premises: { set: address.premises },
-                    building: { set: address.building },
-                    street: { set: address.street },
-                    townCity: { set: address.townCity },
-                    county: { set: address.county },
-                    postcode: { set: address.postcode },
-                  },
-                ]
-              : undefined,
+              create: address.newAddress
+                ? [
+                    {
+                      primary: true,
+                      premises: { set: address.premises },
+                      building: { set: address.building },
+                      street: { set: address.street },
+                      townCity: { set: address.townCity },
+                      county: { set: address.county },
+                      postcode: { set: address.postcode },
+                    },
+                  ]
+                : undefined,
+            },
           },
         },
       });
-      console.log("complete");
       close();
     } catch (err) {
       console.log(err);

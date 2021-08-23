@@ -71,7 +71,9 @@ const EditChatsPopOver = ({ open, user, close }) => {
   } = useQuery(UserChats, {
     notifyOnNetworkStatusChange: true,
     variables: {
-      id: user,
+      where: {
+        id: user,
+      },
       scheme: schemeId,
     },
     onCompleted: (res) => {

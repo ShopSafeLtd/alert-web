@@ -16,10 +16,11 @@ import EditExclusionPopOver from "../../../global/EditExclusionPopOver/EditExclu
 import AddLabelPopOver from "../../../global/AddLabelPopOver/AddLablPopOver";
 import AddGroups from "../../../../global/edit/AddGroups/AddGroups";
 import EditGroups from "../../../../global/edit/EditGroups/EditGroups";
-import { EditOffender } from "../../../../../graphql-src/offenders/queries";
+import { Offender } from "../../../../../graphql-src/offenders/queries";
 import { UpdateOffender } from "../../../../../graphql-src/offenders/mutations";
 import { useStoreState } from "../../../../../state";
 import { UploadImage } from "graphql-src/images/mutations";
+import LightBox from "old-components/global/LightBox/LightBox";
 // import { OffenderQuery } from "../../../../../graphql/offenders/queries";
 // import CreateImage from '../../../../../graphql/images/mutations/uploadImages';
 // import EditOffenderMutation from "../../../../../graphql/offenders/mutations/EditOffenderMutation";
@@ -63,35 +64,34 @@ const EditDesktop = ({ id, history }) => {
   const userId = useStoreState((state) => state.user.id);
 
   // queries
-  const { data: offenderData, loading: offenderLoading } = useQuery(
-    EditOffender,
-    {
-      variables: {
+  const { data: offenderData, loading: offenderLoading } = useQuery(Offender, {
+    variables: {
+      where: {
         id,
       },
-      fetchPolicy: "cache-and-network",
-      onError: (err) => console.log(err),
-      onCompleted: ({ offender }) => {
-        setDetails({
-          ...details,
-          name: offender.name || "",
-          age: offender.age || "",
-          gender: offender.gender || "",
-          race: offender.race || "",
-          dateOfBirth: offender.dateOfBirth || "",
-          dateSource: offender.dateSource || "",
-          build: offender.build || "",
-          hair: offender.hair || "",
-          peculiarities: offender.peculiarities || "",
-          ageSection: !!offender.dateOfBirth ? 1 : !!offender.age ? 2 : 0,
-        });
-        setTags(offender.tags);
-        setImages(offender.images);
-        setBans(offender.bans);
-        setGroups(offender.groups);
-      },
-    }
-  );
+    },
+    fetchPolicy: "cache-and-network",
+    onError: (err) => console.log(err),
+    onCompleted: ({ offender }) => {
+      setDetails({
+        ...details,
+        name: offender.name || "",
+        age: offender.age || "",
+        gender: offender.gender || "",
+        race: offender.race || "",
+        dateOfBirth: offender.dateOfBirth || "",
+        dateSource: offender.dateSource || "",
+        build: offender.build || "",
+        hair: offender.hair || "",
+        peculiarities: offender.peculiarities || "",
+        ageSection: !!offender.dateOfBirth ? 1 : !!offender.age ? 2 : 0,
+      });
+      setTags(offender.tags);
+      setImages(offender.images);
+      setBans(offender.bans);
+      setGroups(offender.groups);
+    },
+  });
 
   //mutations
   const [createImage, { loading: uploading }] = useMutation(UploadImage);
@@ -303,99 +303,102 @@ const EditDesktop = ({ id, history }) => {
   };
 
   return (
-    <Page>
-      <Section width="100%" elevation={1}>
-        <PageHeader>Edit Offender</PageHeader>
-      </Section>
-      <Row>
-        <EditDescription
-          data={{
-            name: details.name,
-            age: details.age,
-            gender: details.gender,
-            race: details.race,
-            dateOfBirth: details.dateOfBirth,
-            dateSource: details.dateSource,
-            build: details.build,
-            hair: details.hair,
-            peculiarities: details.peculiarities,
-            labels: tags,
-          }}
-          ageSection={details.ageSection}
-          loading={offenderLoading}
-          handleChange={detailsChange}
-          openAddLabel={() => setEditTags(true)}
-          removeLabel={removeTag}
-        />
-      </Row>
-      <Row>
-        <EditImages
-          images={images}
-          removeImage={removeImage}
-          addImage={uploadImage}
-          uploading={uploading}
-          loading={offenderLoading}
-        />
-        <EditExclusions
-          exclusions={bans}
-          openAddExclusion={() => setAddBan(true)}
-          openEditExclusion={setEditBan}
-          removeExclusion={removeBan}
-          loading={offenderLoading}
-        />
-      </Row>
-      <Row>
-        <EditGroups
-          loading={offenderLoading}
-          groups={groups}
-          addGroups={() => setAddGroups(true)}
-          setGroups={setGroups}
-          removeGroup={removeGroup}
-        />
-      </Row>
-      <Section width="100%" elevation={1}>
-        <Row row right>
-          <BackButton
-            component={Link}
-            to="/app/offenders"
-            disabled={saving || uploading}
-          >
-            Cancel
-          </BackButton>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSave}
-            disabled={saving || uploading}
-          >
-            Save Offender
-          </Button>
+    <>
+      <Page>
+        <Section width="100%" elevation={1}>
+          <PageHeader>Edit Offender</PageHeader>
+        </Section>
+        <Row>
+          <EditDescription
+            data={{
+              name: details.name,
+              age: details.age,
+              gender: details.gender,
+              race: details.race,
+              dateOfBirth: details.dateOfBirth,
+              dateSource: details.dateSource,
+              build: details.build,
+              hair: details.hair,
+              peculiarities: details.peculiarities,
+              labels: tags,
+            }}
+            ageSection={details.ageSection}
+            loading={offenderLoading}
+            handleChange={detailsChange}
+            openAddLabel={() => setEditTags(true)}
+            removeLabel={removeTag}
+          />
         </Row>
-      </Section>
-      <AddExclusionPopOver
-        visible={addBan}
-        close={() => setAddBan(false)}
-        onSubmit={addBanToOffender}
-      />
-      <EditExclusionPopOver
-        visible={!!editBan}
-        close={() => setEditBan("")}
-        exclusion={!!editBan ? bans.find(({ id }) => id === editBan.id) : {}}
-        onSubmit={updateBan}
-      />
-      <AddLabelPopOver
-        visible={editTags}
-        close={() => setEditTags(false)}
-        submitLabels={setTags}
-        tags={tags}
-      />
-      <AddGroups
-        open={addGroups}
-        close={() => setAddGroups(false)}
-        groups={groups}
-        addGroups={addGroupsToOffender}
-      />
-    </Page>
+        <Row>
+          <EditImages
+            images={images}
+            removeImage={removeImage}
+            addImage={uploadImage}
+            uploading={uploading}
+            loading={offenderLoading}
+          />
+          <EditExclusions
+            exclusions={bans}
+            openAddExclusion={() => setAddBan(true)}
+            openEditExclusion={setEditBan}
+            removeExclusion={removeBan}
+            loading={offenderLoading}
+          />
+        </Row>
+        <Row>
+          <EditGroups
+            loading={offenderLoading}
+            groups={groups}
+            addGroups={() => setAddGroups(true)}
+            setGroups={setGroups}
+            removeGroup={removeGroup}
+          />
+        </Row>
+        <Section width="100%" elevation={1}>
+          <Row row right>
+            <BackButton
+              component={Link}
+              to="/app/offenders"
+              disabled={saving || uploading}
+            >
+              Cancel
+            </BackButton>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSave}
+              disabled={saving || uploading}
+            >
+              Save Offender
+            </Button>
+          </Row>
+        </Section>
+        <AddExclusionPopOver
+          visible={addBan}
+          close={() => setAddBan(false)}
+          onSubmit={addBanToOffender}
+        />
+        <EditExclusionPopOver
+          visible={!!editBan}
+          close={() => setEditBan("")}
+          exclusion={!!editBan ? bans.find(({ id }) => id === editBan.id) : {}}
+          onSubmit={updateBan}
+        />
+        <AddLabelPopOver
+          visible={editTags}
+          close={() => setEditTags(false)}
+          submitLabels={setTags}
+          tags={tags}
+        />
+        <AddGroups
+          open={addGroups}
+          close={() => setAddGroups(false)}
+          groups={groups}
+          addGroups={addGroupsToOffender}
+        />
+      </Page>
+      <LightBox />
+    </>
   );
 };
 

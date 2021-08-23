@@ -13,58 +13,60 @@ export const CreateIncident = gql`
 `;
 
 export interface CreateIncidentArgs {
-  subject: string;
-  date: Date;
-  time: Date;
-  description: string;
-  crimeTypes: {
-    id: string;
-  }[];
-  location: {
-    create?: {
-      building: string;
-      county: string;
-      postcode: string;
-      premises: string;
-      street: string;
-      townCity: string;
+  data: {
+    subject: string;
+    date: Date;
+    time: Date;
+    description: string;
+    crimeTypes: {
+      id: string;
+    }[];
+    location: {
+      create?: {
+        building: string;
+        county: string;
+        postcode: string;
+        premises: string;
+        street: string;
+        townCity: string;
+      };
+      previous?: {
+        id: string;
+      };
     };
-    previous?: {
-      id: string;
+    offenders: {
+      connect?: {
+        id: string;
+      }[];
+      create?: {
+        age?: Age;
+        build?: Build;
+        dateOfBirth?: Date;
+        dateSource?: string;
+        gender?: Gender;
+        hair?: string;
+        name?: string;
+        peculiarities?: string;
+        race: Race;
+      }[];
     };
-  };
-  offenders: {
-    connect?: {
+    images: {
+      connect: {
+        id: string;
+      }[];
+      // create?: {
+      //   file: any;
+      //   offenders?: {
+      //     id: string;
+      //     new: boolean;
+      //   }[];
+      // }[];
+    };
+    groups: {
       id: string;
     }[];
-    create?: {
-      age?: Age;
-      build?: Build;
-      dateOfBirth?: Date;
-      dateSource?: string;
-      gender?: Gender;
-      hair?: string;
-      name?: string;
-      peculiarities?: string;
-      race: Race;
-    }[];
+    scheme: string;
   };
-  images: {
-    connect: {
-      id: string;
-    }[];
-    // create?: {
-    //   file: any;
-    //   offenders?: {
-    //     id: string;
-    //     new: boolean;
-    //   }[];
-    // }[];
-  };
-  groups: {
-    id: string;
-  }[];
-  scheme: string;
 }
 
 export interface CreateIncidentRes {

@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const RecycleIncident = gql`
-  mutation recycleIncident($id: String!) {
-    recycleIncident(where: { id: $id }) {
+  mutation recycleIncident($where: UniqueId!) {
+    recycleIncident(where: $where) {
       id
       recycled
     }

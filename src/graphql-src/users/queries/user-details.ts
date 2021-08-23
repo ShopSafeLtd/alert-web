@@ -1,12 +1,17 @@
 import { gql } from "@apollo/client";
-import { Location, LocationType } from "../../address/fragments";
+
+import { Location, LocationType } from "graphql-src/address/fragments";
 
 export const UserDetails = gql`
-  {
-    currentUser {
+  query user($where: UserWhereUniqueInput!) {
+    user(where: $where) {
       id
       fullName
       organisation
+      email
+      newUser
+      disabled
+      status
       addresses(where: { primary: { equals: true } }) {
         ...Location
       }
@@ -15,11 +20,23 @@ export const UserDetails = gql`
   ${Location}
 `;
 
+export interface UserDetailsArgs {
+  where: {
+    id?: string;
+    email?: string;
+    auth0Id?: string;
+  };
+}
+
 export interface UserDetailsRes {
-  currentUser: {
+  user: {
     id: string;
     fullName: string;
     organisation: string;
+    email: string;
+    newUser: boolean;
+    disabled: boolean;
+    status: string;
     addresses: LocationType[];
   };
 }

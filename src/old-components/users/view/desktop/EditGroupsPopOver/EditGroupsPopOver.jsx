@@ -12,7 +12,7 @@ import GroupImage from "../../../../../images/AddGroup";
 import Typography from "@material-ui/core/Typography";
 import { User } from "graphql-src/users/queries";
 import { Groups } from "graphql-src/groups/queries";
-import { EditUserGroups } from "graphql-src/users/mutations";
+import { UpdateUserGroups } from "graphql-src/users/mutations";
 // import UserQuery from '../../../../../graphql/users/queries/User';
 // import AllGroups from '../../../../../graphql/groups/AllGroupsQuery';
 // import UserMutation from '../../../../../graphql/users/mutations/UpdateUser';
@@ -88,7 +88,7 @@ const EditGroupsPopOver = ({ user: userId, close, open }) => {
   });
 
   // mutations
-  const [updateUser] = useMutation(EditUserGroups, {});
+  const [updateUser] = useMutation(UpdateUserGroups, {});
 
   // functions
   const toggleSelectedGroups = (group) => {
@@ -114,10 +114,14 @@ const EditGroupsPopOver = ({ user: userId, close, open }) => {
 
       updateUser({
         variables: {
-          id: userId,
-          groups: {
-            connect: connect.length > 0 ? connect : undefined,
-            disconnect: disconnect.length > 0 ? disconnect : undefined,
+          where: {
+            id: userId,
+          },
+          data: {
+            groups: {
+              connect: connect.length > 0 ? connect : undefined,
+              disconnect: disconnect.length > 0 ? disconnect : undefined,
+            },
           },
         },
       });

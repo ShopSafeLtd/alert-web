@@ -24,7 +24,9 @@ const ChatView = () => {
   // queries
   const { data, loading, refetch } = useQuery(UserChats, {
     variables: {
-      id: userId,
+      where: {
+        id: userId,
+      },
       scheme: schemeId,
     },
     fetchPolicy: "cache-and-network",

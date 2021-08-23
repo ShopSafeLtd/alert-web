@@ -36,15 +36,11 @@ const OffenderCardImage = ({ images }) => {
             height="265px"
             toggleLightBox={(index) => {
               toggleLightbox({
-                images: [images[index].url],
-                index: 0,
+                images: images.map(({ url, optimised }) =>
+                  !!optimised ? optimised : url
+                ),
+                index,
               });
-              // toggleLightbox({
-              //   images: images.map(({ url, optimised }) =>
-              //     !!optimised ? optimised : url
-              //   ),
-              //   index,
-              // });
             }}
           />
         </MultiImagesContainer>

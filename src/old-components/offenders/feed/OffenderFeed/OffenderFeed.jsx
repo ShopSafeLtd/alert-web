@@ -262,7 +262,9 @@ class OffenderFeed extends React.Component {
       });
       await deleteOffender({
         variables: {
-          id: deleteOffenderId,
+          where: {
+            id: deleteOffenderId,
+          },
         },
         optimisticResponse: {
           recycleOffender: {

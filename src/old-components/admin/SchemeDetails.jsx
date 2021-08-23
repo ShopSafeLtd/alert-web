@@ -6,6 +6,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import MediaQuery from "react-responsive";
 import { Link } from "react-router-dom";
 import Image from "@material-ui/icons/AddPhotoAlternate";
+import { useQuery, useMutation } from "@apollo/client";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
 
 import {
   Field,
@@ -17,6 +19,9 @@ import {
 import { FullWidthButton, BackButton } from "../global/actions";
 import { EmptyText } from "../global/typography";
 import WebAddImages from "../global/images/WebAddImages/WebAddImages";
+import { Scheme } from "graphql-src/schemes/queries";
+import { UpdateScheme } from "graphql-src/schemes/mutations";
+import { UploadImage } from "graphql-src/images/mutations";
 // import UpdateSchemeDetails from '../../graphql/admin/mutations/UpdateSchemeDetails';
 // import UploadImage from '../../graphql/images/mutations/uploadImages';
 import { PageHeader } from "../global/typography";
@@ -81,19 +86,21 @@ const SchemeName = ({ history }) => {
     (actions) => actions.theme.setBackLinkTo
   );
   const platform = useStoreState((state) => state.theme.platform);
+  const schemeId = useStoreState((state) => state.scheme.id);
 
   // state
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState("");
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState("");
+  const [deleteLogo, setDeleteLogo] = useState(false);
 
   // effects
   useEffect(() => {
     setBottomNav(false);
     setTitle("Scheme Details");
     // setNavbarAction("backLink");
-    setBackLinkTo(`/admin`);
+    setBackLinkTo(`${APP_PREFIX_PATH}/scheme-settings`);
     return () => {
       setBottomNav(true);
       setTitle("");
@@ -104,20 +111,21 @@ const SchemeName = ({ history }) => {
   }, []);
 
   // queries
-  // const { data, loading } = useQuery(query, {
-  //   variables: {
-  //     id: window.localStorage.getItem("currentScheme"),
-  //   },
-  //   fetchPolicy: "cache-and-network",
-  //   onCompleted: ({ scheme: { name, logo } }) => {
-  //     setName(name);
-  //     !!logo && setImage({ id: logo.id, url: logo.url });
-  //   },
-  // });
-  const loading = false;
+  const { data, loading } = useQuery(Scheme, {
+    variables: {
+      where: {
+        id: schemeId,
+      },
+    },
+    fetchPolicy: "cache-and-network",
+    onCompleted: ({ scheme: { name, logo } }) => {
+      setName(name);
+      !!logo && setImage({ id: logo.id, url: logo.url });
+    },
+  });
 
   // mutations
-  // const [updateScheme] = useMutation(UpdateSchemeDetails);
+  const [updateScheme] = useMutation(UpdateScheme);
   // const [uploadImage] = useMutation(UploadImage, {
   //   onCompleted: ({ uploadImage: { id, url } }) => {
   //     setImage({ id, url });
@@ -127,38 +135,42 @@ const SchemeName = ({ history }) => {
 
   // functions
   const handleChange = (value) => setName(value);
+
   const validate = () =>
     new Promise((resolve, reject) => {
       setNameError(!!name ? "" : "This field is required.");
-      !!name ? resolve() : reject();
+      !!name ? resolve(true) : resolve(false);
     });
-  // const handleSave = () => {
-  //   validate()
-  //     .then(() => {
-  //       updateScheme({
-  //         variables: {
-  //           id: window.localStorage.getItem("currentScheme"),
-  //           name: { set: name },
-  //           logo: {
-  //             connect: !!image
-  //               ? !!data.scheme.logo
-  //                 ? image.id !== data.scheme.logo.id
-  //                   ? { id: image.id }
-  //                   : undefined
-  //                 : { id: image.id }
-  //               : undefined,
-  //             delete: !!image
-  //               ? undefined
-  //               : !!data.scheme.logo
-  //               ? true
-  //               : undefined,
-  //           },
-  //         },
-  //       });
-  //       history.push("/incidents");
-  //     })
-  //     .catch(() => {});
-  // };
+
+  const handleSave = async () => {
+    const valid = await validate();
+    if (!valid) return;
+    console.log({ image, ...(deleteLogo ? { delete: deleteLogo } : {}) });
+    updateScheme({
+      variables: {
+        where: {
+          id: window.localStorage.getItem("currentScheme"),
+        },
+        data: {
+          name: { set: name },
+          logo: {
+            // connect: !!image
+            //   ? !!data.scheme.logo
+            //     ? image.id !== data.scheme.logo.id
+            //       ? { id: image.id }
+            //       : undefined
+            //     : { id: image.id }
+            //   : undefined,
+            ...(image && !deleteLogo ? { upload: { file: image } } : {}),
+            ...(deleteLogo ? { delete: deleteLogo } : {}),
+          },
+        },
+      },
+    });
+
+    history.push("/");
+  };
+
   // const mobileUpload = async (data) => {
   //   setUploading(true);
   //   window.resolveLocalFileSystemURL(data, (fileEntry) => {
@@ -177,21 +189,28 @@ const SchemeName = ({ history }) => {
   //     });
   //   });
   // };
-  // const handleUpload = ({
-  //   target: {
-  //     validity,
-  //     files: [file],
-  //   },
-  // }) => {
-  //   setUploading(true);
-  //   validity.valid &&
-  //     uploadImage({
-  //       variables: {
-  //         file,
-  //         scheme: window.localStorage.getItem("currentScheme"),
-  //       },
-  //     });
-  // };
+
+  const handleUpload = ({
+    target: {
+      validity,
+      files: [file],
+    },
+  }) => {
+    // setUploading(true);
+    validity.valid && setImage(file);
+    // uploadImage({
+    //   variables: {
+    //     file,
+    //     scheme: window.localStorage.getItem("currentScheme"),
+    //     incident: { id: undefined },
+    //   },
+    // });
+  };
+
+  console.log(
+    image?.name,
+    image && !image.url ? URL.createObjectURL(image) : undefined
+  );
 
   return (
     <MediaQuery minDeviceWidth={1024}>
@@ -235,9 +254,22 @@ const SchemeName = ({ history }) => {
                   </EmptyLogo>
                 ) : !!image ? (
                   <LogoContainer>
-                    <LogoImage src={image.url} alt="scheme logo" />
+                    <LogoImage
+                      src={
+                        image.url ||
+                        (image && !image.url
+                          ? URL.createObjectURL(image)
+                          : undefined)
+                      }
+                      alt="scheme logo"
+                    />
                     <Clear>
-                      <Button onClick={() => setImage(null)}>
+                      <Button
+                        onClick={() => {
+                          setImage(null);
+                          setDeleteLogo(true);
+                        }}
+                      >
                         Clear Image
                       </Button>
                     </Clear>
@@ -248,7 +280,7 @@ const SchemeName = ({ history }) => {
                     <EmptyText>No logo added yet.</EmptyText>
                     {platform === "" ? (
                       <WebAddImages
-                        upload={() => null} //handleUpload}
+                        upload={handleUpload}
                         disabled={loading || uploading}
                       />
                     ) : (
@@ -289,7 +321,7 @@ const SchemeName = ({ history }) => {
               <Row row right>
                 <BackButton
                   component={Link}
-                  to={`/admin`}
+                  to={`${APP_PREFIX_PATH}/scheme-settings`}
                   disabled={loading || uploading}
                 >
                   Cancel
@@ -297,7 +329,7 @@ const SchemeName = ({ history }) => {
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => null} // handleSave}
+                  onClick={handleSave}
                   disabled={loading || uploading}
                 >
                   Save Scheme
@@ -307,7 +339,7 @@ const SchemeName = ({ history }) => {
           ) : (
             <FullWidthButton
               text="Save Scheme"
-              onClick={() => null} //handleSave}
+              onClick={handleSave}
               disabled={loading || uploading}
             />
           )}

@@ -128,21 +128,26 @@ const EditProfile = ({ history }) => {
 
   // queries
   const { loading } = useQuery(UserDetails, {
-    onCompleted: ({ currentUser }) => {
+    variables: {
+      where: {
+        id: id,
+      },
+    },
+    onCompleted: (res) => {
       setUser({
         ...user,
-        fullName: currentUser.fullName,
-        organisation: currentUser.organisation,
+        fullName: res.user.fullName,
+        organisation: res.user.organisation,
       });
       setAddress({
         ...address,
-        id: currentUser.addresses[0].id,
-        premises: currentUser.addresses[0].premises,
-        building: currentUser.addresses[0].building,
-        street: currentUser.addresses[0].street,
-        townCity: currentUser.addresses[0].townCity,
-        county: currentUser.addresses[0].county,
-        postcode: currentUser.addresses[0].postcode,
+        id: res.user.addresses[0].id,
+        premises: res.user.addresses[0].premises,
+        building: res.user.addresses[0].building,
+        street: res.user.addresses[0].street,
+        townCity: res.user.addresses[0].townCity,
+        county: res.user.addresses[0].county,
+        postcode: res.user.addresses[0].postcode,
       });
     },
   });

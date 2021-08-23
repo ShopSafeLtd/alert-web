@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-import { Role } from "graphql-src/users/enums";
 
 export const SignIn = gql`
   mutation signIn($email: String!, $password: String!) {
@@ -17,37 +16,7 @@ export interface SignInArgs {
 
 export interface SignInRes {
   signIn: {
-    id: string;
+    refreshToken: string;
     accessToken: string;
-    fullName: string;
-    email: string;
-    organisation: string;
-    newUser: boolean;
-    schemes: {
-      id: string;
-      role: Role;
-      scheme: {
-        id: string;
-        name: string;
-        autoApproveIncidents: boolean;
-        autoApproveOffenders: boolean;
-      };
-    }[];
   };
 }
-
-// id
-// fullName
-// email
-// organisation
-// newUser
-// schemes {
-//   id
-//   role
-//   scheme {
-//     id
-//     name
-//     autoApproveIncidents
-//     autoApproveOffenders
-//   }
-// }

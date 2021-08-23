@@ -115,14 +115,14 @@ const LightBox = () => {
       </Zoom>
       {images?.length > 0 && index !== images?.length - 1 && (
         <RightContainer>
-          <IconButton onClick={() => setLightboxIndex({ index: index + 1 })}>
+          <IconButton onClick={() => setLightboxIndex(index + 1)}>
             <RightButton />
           </IconButton>
         </RightContainer>
       )}
       {images.length > 0 && index !== 0 && (
         <LeftContainer>
-          <IconButton onClick={() => setLightboxIndex({ index: index - 1 })}>
+          <IconButton onClick={() => setLightboxIndex(index - 1)}>
             <LeftButton />
           </IconButton>
         </LeftContainer>

@@ -28,7 +28,7 @@ const Apollo = ({ children }: Props) => {
     {
       reconnect: true,
       connectionParams: {
-        Authorization: `Bearer ${accessToken}}` || null,
+        ...(accessToken ? { authorization: `Bearer ${accessToken}` } : {}),
       },
     }
   );
@@ -53,11 +53,16 @@ const Apollo = ({ children }: Props) => {
     uri: "http://192.168.0.24:4000/graphql",
   });
 
-  const middlewareLink = setContext(() => ({
-    headers: {
-      authorization: `Bearer ${accessToken}` || null,
-    },
-  }));
+  const middlewareLink = setContext((_, { headers, ...context }) => {
+    const accessToken = localStorage.getItem("accessToken");
+    return {
+      headers: {
+        ...headers,
+        ...(accessToken ? { authorization: `Bearer ${accessToken}` } : {}),
+      },
+      ...context,
+    };
+  });
 
   //@ts-expect-error apollo link not assignable to apollo link/handler
   const authHttp = middlewareLink.concat(httpLink);
@@ -202,12 +207,12 @@ const Apollo = ({ children }: Props) => {
     },
   });
 
-  // (async () => {
-  //   await persistCache({
-  //     cache,
-  //     storage: window.localStorage,
-  //   });
-  // })();
+  (async () => {
+    await persistCache({
+      cache,
+      storage: window.localStorage,
+    });
+  })();
 
   const client = new ApolloClient({
     link,

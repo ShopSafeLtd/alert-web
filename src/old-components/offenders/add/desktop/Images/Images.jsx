@@ -137,7 +137,7 @@ class Images extends PureComponent {
         </Header>
         {images.length > 0 ? (
           <ImageGrid>
-            {images.map(({ id, url, offendersIds }) => {
+            {images.map(({ id, url, offendersIds }, i) => {
               return id === "UPLOADING" ? (
                 <LoadingItem>
                   <CircularProgress />
@@ -149,7 +149,10 @@ class Images extends PureComponent {
                     <ImageMenu>
                       <ImageMenuItem
                         onClick={() => {
-                          toggleLightbox([url]);
+                          toggleLightbox({
+                            images: images.map(({ url }) => url),
+                            index: i,
+                          });
                         }}
                         tooltipLabel="Full Size"
                         tooltipPosition="bottom"

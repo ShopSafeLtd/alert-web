@@ -14,6 +14,7 @@ import Images from "../Images/Images";
 import Labels from "../Labels/Labels";
 import Exclusions from "../Exclusions/Exclusions";
 import Groups from "../Groups/Groups";
+import LightBox from "old-components/global/LightBox/LightBox";
 
 const styles = {
   label: {
@@ -231,6 +232,7 @@ const OffenderWizard = ({
           </Actions>
         </FormContainer>
       </Page>
+      <LightBox />
     </Container>
   );
 };

@@ -163,7 +163,7 @@ const AddImages = ({
         </Header>
         {images.length > 0 ? (
           <ImageGrid>
-            {images.map(({ id, url, offendersIds }) => {
+            {images.map(({ id, url, offendersIds }, index) => {
               return id === "UPLOADING" ? (
                 <LoadingItem>
                   <CircularProgress />
@@ -187,7 +187,10 @@ const AddImages = ({
                       <Grow />
                       <ImageMenuItem
                         onClick={() => {
-                          toggleLightBox({ images: [url], index: 0 });
+                          toggleLightBox({
+                            images: images.map(({ url }) => url),
+                            index,
+                          });
                         }}
                         tooltip="Full Size"
                       >

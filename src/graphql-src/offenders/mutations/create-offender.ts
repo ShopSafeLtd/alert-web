@@ -12,43 +12,45 @@ export const CreateOffender = gql`
 `;
 
 export interface CreateOffenderArgs {
-  age?: Age;
-  bans?: {
-    description?: string;
-    title?: string;
-    endDate: Date;
-    location: string;
-    startDate: Date;
-    scheme: {
+  data: {
+    age?: Age;
+    bans?: {
+      description?: string;
+      title?: string;
+      endDate: Date;
+      location: string;
+      startDate: Date;
+      scheme: {
+        connect: {
+          id: string;
+        }[];
+      };
+    }[];
+    build?: Build;
+    dateOfBirth?: Date;
+    dateSource?: string;
+    gender?: Gender;
+    groups?: {
       connect: {
         id: string;
       }[];
     };
-  }[];
-  build?: Build;
-  dateOfBirth?: Date;
-  dateSource?: string;
-  gender?: Gender;
-  groups?: {
-    connect: {
-      id: string;
-    }[];
-  };
-  hair?: string;
-  image?: {
-    connect: {
-      id: string;
+    hair?: string;
+    image?: {
+      connect: {
+        id: string;
+      };
     };
+    name?: string;
+    tags?: {
+      connect: {
+        id: string;
+      }[];
+    };
+    peculiarities?: string;
+    race?: Race;
+    scheme: string;
   };
-  name?: string;
-  tags?: {
-    connect: {
-      id: string;
-    }[];
-  };
-  peculiarities?: string;
-  race?: Race;
-  scheme: string;
 }
 
 export interface CreateOffenderRes {

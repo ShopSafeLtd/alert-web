@@ -109,7 +109,9 @@ class AlertFeed extends React.Component {
   handleDelete = () => {
     this.props.deleteIncident({
       variables: {
-        id: this.state.deleteId,
+        where: {
+          id: this.state.deleteId,
+        },
       },
       optimisicResponse: {
         id: this.state.deleteId,

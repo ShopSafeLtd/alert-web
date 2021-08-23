@@ -29,20 +29,14 @@ const AlertCardImages = ({ images }) => {
             <ImageCarousel
               images={images}
               height="220px"
-              toggleLightBox={
-                (index) => {
-                  toggleLightbox({
-                    images: [images[index].url],
-                    index: 0,
-                  });
-                }
-                // toggleLightbox({
-                //   images: images.map(({ url, optimised }) =>
-                //     !!optimised ? optimised : url
-                //   ),
-                //   index,
-                // })
-              }
+              toggleLightBox={(index) => {
+                toggleLightbox({
+                  images: images.map(({ url, optimised }) =>
+                    !!optimised ? optimised : url
+                  ),
+                  index,
+                });
+              }}
             />
           </MultiImagesContainer>
         ) : (

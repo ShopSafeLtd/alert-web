@@ -1,4 +1,4 @@
-import { useMutation, useLazyQuery } from "@apollo/client";
+import { useMutation, useLazyQuery, useApolloClient } from "@apollo/client";
 import { useStoreActions, useStoreState, SetUserPayload } from "state";
 import jwtDecode from "jwt-decode";
 import LogRocket from "logrocket";
@@ -21,6 +21,7 @@ interface DecodedToken {
 }
 
 export const useAuth = () => {
+  const client = useApolloClient();
   const authenticated = useStoreActions(
     (actions) => actions.auth.authenticated
   );
@@ -105,7 +106,13 @@ export const useAuth = () => {
       let token: DecodedToken = jwtDecode(accessToken);
       if (new Date().getTime() < token.exp * 1000) {
         if (token.iss === "https://alert.eu.auth0.com/") {
-          getCurrentUser();
+          getCurrentUser({
+            context: {
+              headers: {
+                authorization: `Bearer ${accessToken}`,
+              },
+            },
+          });
         } else {
           expired();
         }
@@ -135,29 +142,43 @@ export const useAuth = () => {
       email: data.email,
     });
 
-    getCurrentUser();
-    // handleSuccess({
-    //   id: data.id,
-    //   accessToken: data.accessToken,
-    //   email: data.email,
-    //   fullName: data.fullName,
-    //   onboarded: data.onboarded,
-    //   organisation: data.organisation,
-    //   schemes: data.schemes,
-    // });
+    handleSuccess({
+      id: data.id,
+      accessToken: data.accessToken,
+      email: data.email,
+      fullName: data.fullName,
+      onboarded: data.onboarded,
+      organisation: data.organisation,
+      schemes: data.schemes,
+    });
   };
 
   const [handleLogin] = useMutation<SignInRes, SignInArgs>(SignIn, {
-    onCompleted: ({ signIn }) => {
-      onLoginSuccess({
-        accessToken: signIn.accessToken,
-        email: signIn.email,
-        fullName: signIn.fullName,
-        id: signIn.id,
-        onboarded: !signIn.newUser,
-        organisation: signIn.organisation,
-        schemes: signIn.schemes,
-      });
+    fetchPolicy: "no-cache",
+    onCompleted: async ({ signIn }) => {
+      try {
+        const { data } = await client.query<CurrentUserRes>({
+          query: CurrentUser,
+          fetchPolicy: "network-only",
+          context: {
+            headers: {
+              authorization: `Bearer ${signIn.accessToken}`,
+            },
+          },
+        });
+        onLoginSuccess({
+          accessToken: signIn.accessToken,
+          email: data.currentUser.email,
+          fullName: data.currentUser.fullName,
+          id: data.currentUser.id,
+          onboarded: !data.currentUser.newUser,
+          organisation: data.currentUser.organisation,
+          schemes: data.currentUser.schemes,
+        });
+      } catch (err) {
+        setAuthMessage(err.message);
+        console.log(err);
+      }
     },
     onError: (error) => {
       console.log(error);
@@ -186,8 +207,8 @@ export const useAuth = () => {
     password: string;
   }
 
-  const login = async ({ email, password }: LoginArgs) => {
-    await handleLogin({
+  const login = ({ email, password }: LoginArgs) => {
+    handleLogin({
       variables: {
         email,
         password,
@@ -198,7 +219,8 @@ export const useAuth = () => {
   const signOut = () => {
     clearUser();
     handleSignOut();
-    window.localStorage.removeItem("accessToken");
+    window.localStorage.clear();
+    window.sessionStorage.clear();
   };
 
   return {

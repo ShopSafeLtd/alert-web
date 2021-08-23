@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const UserChats = gql`
-  query user($id: String!, $scheme: String!) {
-    user(where: { id: $id }) {
+  query user($where: UserWhereUniqueInput!, $scheme: String!) {
+    user(where: $where) {
       id
       chats(where: { chat: { scheme: { id: { equals: $scheme } } } }) {
         id
