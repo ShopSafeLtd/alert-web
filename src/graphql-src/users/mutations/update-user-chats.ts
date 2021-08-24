@@ -6,6 +6,7 @@ export const UpdateUserChats = gql`
       id
       chats {
         id
+        newMessages
         chat {
           id
           name
@@ -27,6 +28,14 @@ export interface UpdateUserChatsArgs {
         };
       }[];
       delete: { id: string }[];
+      update: {
+        where: {
+          id: string;
+        };
+        data: {
+          newMessages: { set: boolean };
+        };
+      };
     };
   };
 }
@@ -36,6 +45,7 @@ export interface UpdateUserChatsRes {
     id: string;
     chats: {
       id: string;
+      newMessages: boolean;
       chat: {
         id: string;
         name: string;

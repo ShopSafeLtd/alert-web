@@ -25,6 +25,8 @@ import AddOffenderWarnings from "../../../old-components/admin/offender-warnings
 
 import CrimeTypes from "../../../old-components/admin/crime-types/CrimeTypes";
 
+import { RecycleBin } from "old-components/admin/recycle-bin";
+
 const SchemeSettings = () => {
   return (
     <Switch>
@@ -109,6 +111,12 @@ const SchemeSettings = () => {
       <Route
         path={`${APP_PREFIX_PATH}/scheme-settings/crime-types`}
         component={CrimeTypes}
+      />
+
+      {/* recycle bin */}
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/recycle-bin`}
+        component={RecycleBin}
       />
     </Switch>
   );

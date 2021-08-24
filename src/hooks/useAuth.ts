@@ -154,7 +154,6 @@ export const useAuth = () => {
   };
 
   const [handleLogin] = useMutation<SignInRes, SignInArgs>(SignIn, {
-    fetchPolicy: "no-cache",
     onCompleted: async ({ signIn }) => {
       try {
         const { data } = await client.query<CurrentUserRes>({
@@ -166,6 +165,7 @@ export const useAuth = () => {
             },
           },
         });
+
         onLoginSuccess({
           accessToken: signIn.accessToken,
           email: data.currentUser.email,
@@ -208,6 +208,7 @@ export const useAuth = () => {
   }
 
   const login = ({ email, password }: LoginArgs) => {
+    window.localStorage.removeItem("accessToken");
     handleLogin({
       variables: {
         email,

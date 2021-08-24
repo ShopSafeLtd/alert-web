@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 import MediaQuery from "react-responsive";
@@ -26,7 +26,7 @@ const Container = styled.div`
   }
 `;
 
-class ChatList extends PureComponent {
+class ChatList extends Component {
   componentDidMount() {
     this.props.allChats !== undefined && this.props.refetchChats();
   }
@@ -44,8 +44,14 @@ class ChatList extends PureComponent {
   }
 
   render() {
-    const { allChats, activeChat, setActiveChat, history, loading } =
-      this.props;
+    const {
+      allChats,
+      activeChat,
+      setActiveChat,
+      history,
+      loading,
+      handleMarkAsRead,
+    } = this.props;
 
     return (
       <MediaQuery minDeviceWidth={1024}>
@@ -72,6 +78,7 @@ class ChatList extends PureComponent {
               ) : (
                 allChats?.map(
                   ({
+                    id: userChatId,
                     newMessages,
                     chat: { id, name, firstLetter, messages },
                   }) => {
@@ -81,7 +88,7 @@ class ChatList extends PureComponent {
                         active={activeChat === id}
                         onClick={() =>
                           matches
-                            ? setActiveChat(id)
+                            ? (setActiveChat(id), handleMarkAsRead(userChatId))
                             : history.push(`${APP_PREFIX_PATH}/chat/${id}`)
                         }
                       >

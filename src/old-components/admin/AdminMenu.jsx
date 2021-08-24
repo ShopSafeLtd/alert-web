@@ -99,6 +99,15 @@ const AdminMenu = () => {
         </Svg>
         <MenuItemText>Crime Types</MenuItemText>
       </MenuItem>
+      <MenuItem to={`${APP_PREFIX_PATH}/scheme-settings/recycle-bin`}>
+        <Svg viewBox="0 0 24 24">
+          <path
+            fill="#EF5350"
+            d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
+          />
+        </Svg>
+        <MenuItemText>Recycle Bin</MenuItemText>
+      </MenuItem>
     </Menu>
   );
 };

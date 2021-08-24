@@ -74,7 +74,7 @@ const AlertFeedQuery = () => {
   if (window.innerWidth > 1239 && window.innerWidth < 1800) {
     querySize = 12;
   } else if (window.innerWidth > 1799) {
-    querySize = 16;
+    querySize = 32;
   }
 
   const variables = {
@@ -95,22 +95,74 @@ const AlertFeedQuery = () => {
   const [addOffenderToGroup] = useMutation(AddOffenderToGroup);
   const [approveOffender] = useMutation(ApproveOffender);
   const [deleteIncident] = useMutation(RecycleIncident, {
-    update: async (store, { data: { recycleIncident } }) => {
-      const data = store.readQuery({
+    // update: async (store, { data: { recycleIncident } }) => {
+    //   const data = store.readQuery({
+    //     query: IncidentFeed,
+    //     variables,
+    //   });
+
+    //   store.writeQuery({
+    //     query: IncidentFeed,
+    //     data: {
+    //       ...data,
+    //       incidentFeed: data.incidentFeed.filter(
+    //         (alert) => alert.id !== recycleIncident.id
+    //       ),
+    //     },
+    //     variables,
+    //   });
+    // },
+    update: (cache, { data: { recycleIncident } }) => {
+      const prevData = cache.readQuery({
         query: IncidentFeed,
-        variables,
+        variables: {
+          userId: userId,
+          schemeId: scheme,
+          first: 30,
+          order: {
+            createdAt: "desc",
+            date: undefined,
+            subject: undefined,
+            updatedAt: undefined,
+          },
+          search: "",
+          crimeTypes: undefined,
+          groups: undefined,
+          approved: undefined,
+          recycled: false,
+        },
       });
 
-      store.writeQuery({
-        query: IncidentFeed,
-        data: {
-          ...data,
-          incidentFeed: data.incidentFeed.filter(
-            (alert) => alert.id !== recycleIncident.id
-          ),
-        },
-        variables,
-      });
+      const targetIncident = prevData?.incidentFeed.find(
+        (el) => el.id === recycleIncident.id
+      );
+      const newData =
+        prevData &&
+        prevData.incidentFeed.filter((el) => el.id !== targetIncident?.id);
+
+      newData &&
+        cache.writeQuery({
+          query: IncidentFeed,
+          data: {
+            incidentFeed: [{ ...targetIncident, recycled: true }, ...newData],
+          },
+          variables: {
+            userId: userId,
+            schemeId: scheme,
+            first: 30,
+            order: {
+              createdAt: "desc",
+              date: undefined,
+              subject: undefined,
+              updatedAt: undefined,
+            },
+            search: "",
+            crimeTypes: undefined,
+            groups: undefined,
+            approved: undefined,
+            recycled: false,
+          },
+        });
     },
   });
 
