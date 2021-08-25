@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Menu } from "antd";
-//import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 
 const { SubMenu } = Menu;
@@ -65,7 +65,7 @@ export const SideMenu: <T>(props: Props<T>) => JSX.Element = ({
                     marginRight: 10,
                   }}
                 >
-                  {/* <FontAwesomeIcon icon={icon} style={{ fontSize: 18 }} /> */}
+                  <FontAwesomeIcon icon={icon} style={{ fontSize: 18 }} />
                 </span>
               )
             }
@@ -84,7 +84,7 @@ export const SideMenu: <T>(props: Props<T>) => JSX.Element = ({
                       marginRight: 10,
                     }}
                   >
-                    {/* <FontAwesomeIcon icon={icon} style={{ fontSize: 18 }} /> */}
+                    <FontAwesomeIcon icon={icon} style={{ fontSize: 18 }} />
                   </span>
                 )}
                 <span>{name}</span>
@@ -108,7 +108,7 @@ export const SideMenu: <T>(props: Props<T>) => JSX.Element = ({
                   marginRight: 10,
                 }}
               >
-                {/* <FontAwesomeIcon icon={icon} style={{ fontSize: 18 }} /> */}
+                <FontAwesomeIcon icon={icon} style={{ fontSize: 18 }} />
               </span>
             )}
             <span>{name}</span>

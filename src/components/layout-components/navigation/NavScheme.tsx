@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Menu, Dropdown, Typography, List, Row, Col } from "antd";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import {
-//   faCity,
-//   faCaretDown,
-//   faArrowRight,
-// } from "@fortawesome/pro-light-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCity,
+  faCaretDown,
+  faArrowRight,
+} from "@fortawesome/pro-light-svg-icons";
 
 import { useStoreState, Scheme, useStoreActions } from "state";
 
@@ -66,10 +66,10 @@ export const NavNotification = () => {
                   </Col>
                 ) : (
                   <Col>
-                    {/* <FontAwesomeIcon
+                    <FontAwesomeIcon
                       icon={faArrowRight}
                       style={{ fontSize: 16, marginLeft: 10 }}
-                    /> */}
+                    />
                   </Col>
                 )}
               </Row>
@@ -90,12 +90,12 @@ export const NavNotification = () => {
     >
       <Menu mode="horizontal">
         <Menu.Item>
-          {/* <FontAwesomeIcon
+          <FontAwesomeIcon
             style={{ fontSize: 20, color: "#424242", marginRight: 10 }}
             icon={faCity}
-          /> */}
+          />
           <Text>{activeSchemeName}</Text>
-          {/* <FontAwesomeIcon
+          <FontAwesomeIcon
             style={{
               fontSize: 20,
               color: "#424242",
@@ -103,7 +103,7 @@ export const NavNotification = () => {
               marginBottom: -3,
             }}
             icon={faCaretDown}
-          /> */}
+          />
         </Menu.Item>
       </Menu>
     </Dropdown>
