@@ -13,6 +13,7 @@ const ViewChatGroup = ({
   match: {
     params: { id },
   },
+  history,
 }) => {
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
   // const setNavbarAction = useStoreActions(
@@ -49,7 +50,12 @@ const ViewChatGroup = ({
     // <MediaQuery minDeviceWidth={1024}>
     //   {(matches) =>
     //     matches ? (
-    <Desktop chat={!!data ? data?.chat : {}} loading={loading} chatId={id} />
+    <Desktop
+      chat={!!data ? data?.chat : {}}
+      loading={loading}
+      chatId={id}
+      history={history}
+    />
     //     ) : (
     //       <Mobile
     //         chat={!!data ? data.chat : {}}

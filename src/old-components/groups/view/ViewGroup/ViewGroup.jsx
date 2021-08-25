@@ -11,7 +11,7 @@ import { Groups } from "graphql-src/groups/queries";
 // import AllGroups from '../../../../graphql/groups/AllGroupsQuery';
 import { useStoreActions } from "../../../../state";
 
-const ViewGroup = ({ match }) => {
+const ViewGroup = ({ history, match }) => {
   const setTitle = useStoreActions((actions) => actions.setTitle);
   const setNavbarAction = useStoreActions((actions) => actions.setNavbarAction);
   const setMultiAppBar = useStoreActions((actions) => actions.setMultiAppBar);
@@ -69,6 +69,7 @@ const ViewGroup = ({ match }) => {
     //   {(matches) =>
     //     matches ? (
     <ViewGroupDesktop
+      history={history}
       group={!!data ? data.groups : {}}
       groupId={match.params.id}
       loading={loading}

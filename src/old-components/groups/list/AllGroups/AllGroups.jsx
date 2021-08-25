@@ -93,7 +93,7 @@ const AllGroups = ({ history }) => {
           </TableBody>
         ) : (
           <TableBody>
-            {data.groups.map(({ id, name, description }) => {
+            {data?.groups?.map(({ id, name, description }) => {
               return (
                 <Row key={id}>
                   <TableCell onClick={() => toViewGroup(id)}>{name}</TableCell>
