@@ -41,7 +41,6 @@ export const StandardForm = <T,>({
 
   useEffect(() => {
     if (data) {
-      // @ts-expect-error type does not like other type
       formRef.current?.setFieldsValue(data);
     }
   }, [data]);

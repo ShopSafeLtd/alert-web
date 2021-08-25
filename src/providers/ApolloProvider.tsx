@@ -64,7 +64,6 @@ const Apollo = ({ children }: Props) => {
     };
   });
 
-  //@ts-expect-error apollo link not assignable to apollo link/handler
   const authHttp = middlewareLink.concat(httpLink);
 
   const link = split(
