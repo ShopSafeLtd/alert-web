@@ -1,10 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
-import MediaQuery from 'react-responsive';
+import React from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import { Link } from "react-router-dom";
+import MediaQuery from "react-responsive";
 
-import logo from '../../../../images/icon-512.png';
+import logo from "../../../../images/icon-512.png";
 
 const Header = styled.div`
   flex: 1;
@@ -42,28 +42,24 @@ class OnboardWelcome extends React.Component {
     const { handleNext } = this.props;
     return (
       <MediaQuery minDeviceWidth={1024}>
-        {matches => (
+        {(matches) => (
           <Header>
             <Logo src={logo} alt="ShopSafe Icon" />
             <Welcome>
-              Welcome to{' '}
+              Welcome to{" "}
               <span>
                 alert
                 <HightLight>!</HightLight>
               </span>
             </Welcome>
-            <SubHeader>
-              Get connected
-              <HightLight>!</HightLight> Cut crime
-              <HightLight>!</HightLight>
-            </SubHeader>
+            <SubHeader></SubHeader>
             {matches && (
               <Button
                 variant="contained"
                 color="primary"
                 onClick={handleNext}
                 component={Link}
-                to="/onboard/password"
+                to="/onboarding/password"
               >
                 Get Started
               </Button>

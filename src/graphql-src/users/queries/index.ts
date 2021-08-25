@@ -4,4 +4,5 @@ export * from "./user-by-email";
 export * from "./scheme-users";
 export * from "./user-chats";
 export * from "./user-details";
+export * from "./user-new";
 export * from "./user";

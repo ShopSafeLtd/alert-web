@@ -1,3 +1,4 @@
+export * from "./create-user-in-auth0";
 export * from "./create-user-in-database";
 export * from "./delete-user-from-scheme";
 export * from "./invite-existing-user";

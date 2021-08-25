@@ -145,7 +145,7 @@ const SchemeName = ({ history }) => {
   const handleSave = async () => {
     const valid = await validate();
     if (!valid) return;
-    console.log({ image, ...(deleteLogo ? { delete: deleteLogo } : {}) });
+
     updateScheme({
       variables: {
         where: {
@@ -206,11 +206,6 @@ const SchemeName = ({ history }) => {
     //   },
     // });
   };
-
-  console.log(
-    image?.name,
-    image && !image.url ? URL.createObjectURL(image) : undefined
-  );
 
   return (
     <MediaQuery minDeviceWidth={1024}>
@@ -290,7 +285,6 @@ const SchemeName = ({ history }) => {
                             !uploading &&
                             global.navigator.camera.getPicture(
                               (data) => null, // mobileUpload(data),
-                              (data) => console.log(data),
                               {
                                 quality: 50,
                                 destinationType:

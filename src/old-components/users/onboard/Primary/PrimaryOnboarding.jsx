@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import MediaQuery from "react-responsive";
 import { Route } from "react-router-dom";
-import { useQuery, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import Paper from "@material-ui/core/Paper";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import { withStyles } from "@material-ui/styles";
 // import validate from "validate.js";
-import { APP_PREFIX_PATH } from "configs/AppConfig";
 
 import {
   BackButton,
@@ -18,12 +17,10 @@ import {
 } from "../../../global/actions";
 import Welcome from "../Welcome/Welcome";
 import Password from "../Password/Password";
-import Account from "../Account/Account";
-import Terms from "../Terms/Terms";
-// import query from '../../../../graphql/users/queries/UserOnboard';
-// import ResetPassword from '../../../../graphql/account/mutations/ResetPasswordMutation';
-// import EditUser from '../../../../graphql/account/mutations/EditProfileMutation';
-import { useStoreActions, useStoreState } from "../../../../state";
+
+import { CreateUserInAuth0 } from "graphql-src/users/mutations";
+
+import { useAuth } from "hooks";
 
 const styles = {
   label: {
@@ -74,22 +71,21 @@ const Content = styled.div`
   }
 `;
 
-const PrimaryOnboarding = ({ history, classes }) => {
-  const setUser = useStoreActions((actions) => actions.user.setUser);
-  const currentStep = useStoreState((state) => state.user.onboardSteps);
+const PrimaryOnboarding = ({ history, classes, user }) => {
+  const { login } = useAuth();
 
   // globals
   const steps = [
     {
       step: 0,
       label: "Welcome",
-      url: `${APP_PREFIX_PATH}/onboarding`,
+      url: `/onboarding/${user.id}`,
       next: "Get Started",
     },
     {
       step: 1,
       label: "Set Password",
-      url: `${APP_PREFIX_PATH}/onboarding/password`,
+      url: `/onboarding/password`,
       next: "Set Password",
     },
   ];
@@ -102,69 +98,55 @@ const PrimaryOnboarding = ({ history, classes }) => {
     confirm: "",
     confirmError: "",
   });
-  const [details, setDetails] = useState({
-    fullName: "",
-    fullNameError: "",
-    organisation: "",
-    organisationError: "",
-    premises: "",
-    building: "",
-    street: "",
-    streetError: "",
-    townCity: "",
-    townCityError: "",
-    county: "",
-    postcode: "",
-    postcodeError: "",
-  });
-  const [terms, setTerms] = useState({
-    termsSigned: false,
-    error: "",
-  });
+
+  const [locationKeys, setLocationKeys] = useState([]);
 
   // effects
   useEffect(() => {
-    if (currentStep === "WELCOME") {
-      history.push(`${APP_PREFIX_PATH}/onboarding`);
-      setStep(0);
-    }
-    if (currentStep === "PASSWORD") {
-      history.push(`${APP_PREFIX_PATH}/onboarding/password`);
+    if (history.location.pathname.includes("password") && step !== 1) {
       setStep(1);
     }
-    // eslint-disable-next-line
-  }, []);
+  }, [history, step]);
 
-  // queries
-  // const { data, loading } = useQuery(query, {
-  //   fetchPolicy: "cache-and-network",
-  //   onCompleted: ({ currentUser: { fullName, organisation, addresses } }) =>
-  //     setDetails({
-  //       ...details,
-  //       fullName,
-  //       organisation,
-  //       premises: addresses[0].premises,
-  //       building: addresses[0].building,
-  //       street: addresses[0].street,
-  //       townCity: addresses[0].townCity,
-  //       county: addresses[0].county,
-  //       postcode: addresses[0].postcode,
-  //     }),
-  // });
-  const loading = false;
+  useEffect(() => {
+    return history.listen((location) => {
+      if (history.action === "PUSH") {
+        setLocationKeys([location.key]);
+      }
+
+      if (history.action === "POP") {
+        if (locationKeys[1] === location.key) {
+          setLocationKeys(([_, ...keys]) => keys);
+          // Handle forward event
+          if (step < 1) {
+            setStep((prev) => prev + 1);
+          }
+        } else {
+          setLocationKeys((keys) => [location.key, ...keys]);
+          // Handle back event
+          if (step > 0) {
+            setStep((prev) => prev - 1);
+          }
+        }
+      }
+    });
+    // eslint-disable-next-line
+  }, [locationKeys, step]);
 
   // mutations
-  // const [updatePassword] = useMutation(ResetPassword);
-  // const [updateUser] = useMutation(EditUser);
+  const [createUserInAuth0] = useMutation(CreateUserInAuth0, {
+    variables: {
+      id: user.id || "",
+      password: password.password || "0000",
+    },
+  });
+
   // functions
   const validatePassword = () =>
     new Promise((resolve, reject) => {
       const regExp = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/;
-      const passwordLong = true;
-      // validate(
-      //   { password: password.password },
-      //   { password: { length: { minimum: 8 } } }
-      // ) === undefined;
+      const passwordLong = password.password.length >= 8;
+
       const passwordComplex = regExp.test(password.password);
       const passwordsMatch = password.password === password.confirm;
       setPassword({
@@ -174,45 +156,13 @@ const PrimaryOnboarding = ({ history, classes }) => {
             ? passwordsMatch
               ? ""
               : "Passwords do not match."
-            : "Password must contain at least one number and upper case letter."
+            : "Password must contain at least one number and an upper and lower case letter."
           : "Password must be at least 8 characters long.",
         confirmError: passwordsMatch ? "" : "Passwords do not match.",
       });
-      passwordLong && passwordComplex && passwordsMatch ? resolve() : reject();
-    });
-  const validateDetails = () =>
-    new Promise((resolve, reject) => {
-      const fullNameValid = !!details.fullName;
-      const organisationValid = !!details.organisation;
-      const streetValid = !!details.street;
-      const townValid = !!details.townCity;
-      const postcodeValid = !!details.postcode;
-
-      setDetails({
-        ...details,
-        fullNameError: fullNameValid ? "" : "This field is required",
-        organisationError: organisationValid ? "" : "This field is required",
-        streetError: streetValid ? "" : "This field is required",
-        townCityError: townValid ? "" : "This field is required",
-        postcodeError: postcodeValid ? "" : "This field is required",
-      });
-      fullNameValid &&
-      organisationValid &&
-      streetValid &&
-      townValid &&
-      postcodeValid
-        ? resolve()
-        : reject();
-    });
-  const validateSigned = () =>
-    new Promise((resolve, reject) => {
-      setTerms({
-        ...terms,
-        error: terms.termsSigned
-          ? ""
-          : "Please agree to the terms and conditions",
-      });
-      terms.termsSigned ? resolve() : reject();
+      passwordLong && passwordComplex && passwordsMatch
+        ? resolve(true)
+        : resolve(false);
     });
 
   const next = () => {
@@ -220,76 +170,20 @@ const PrimaryOnboarding = ({ history, classes }) => {
     setStep(step + 1);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step === 0) {
-      // updateUser({
-      //   variables: {
-      //     id: data.currentUser.id,
-      //     onboardStep: "PASSWORD",
-      //   },
-      // });
       next();
     }
-    step === 1 &&
-      validatePassword()
-        .then(() => {
-          // updateUser({
-          //   variables: {
-          //     id: data.currentUser.id,
-          //     onboardStep: "DETAILS",
-          //   },
-          // });
-          // updatePassword({
-          //   variables: {
-          //     password: password.password,
-          //   },
-          // });
-          next();
-        })
-        .catch(() => {});
-    step === 2 &&
-      validateDetails()
-        .then(() => {
-          // updateUser({
-          //   variables: {
-          //     id: data.currentUser.id,
-          //     onboardStep: "TERMS",
-          //     fullName: { set: details.fullName },
-          //     organisation: { set: details.organisation },
-          //     address: {
-          //       where: { id: data.currentUser.addresses[0].id },
-          //       data: {
-          //         premises: { set: details.premises },
-          //         building: { set: details.building },
-          //         street: { set: details.street },
-          //         townCity: { set: details.townCity },
-          //         county: { set: details.county },
-          //         postcode: { set: details.postcode },
-          //       },
-          //     },
-          //   },
-          // });
-          next();
-        })
-        .catch(() => {});
-    step === 3 &&
-      validateSigned()
-        .then(() => {
-          // updateUser({
-          //   variables: {
-          //     id: data.currentUser.id,
-          //     termsSigned: { set: true },
-          //     timeSigned: { set: new Date() },
-          //     newUser: { set: false },
-          //     platform: !!window.navigator.oscpu
-          //       ? { set: window.navigator.oscpu }
-          //       : undefined,
-          //   },
-          // });
-          setUser({ onboarded: true });
-          history.push("/");
-        })
-        .catch(() => {});
+    if (step === 1) {
+      if (!(await validatePassword())) return;
+
+      await createUserInAuth0();
+      login({
+        email: user.email,
+        password: password.password,
+      });
+      history.push("/");
+    }
   };
   const handleBack = () => {
     history.push(steps[step - 1].url);
@@ -322,45 +216,37 @@ const PrimaryOnboarding = ({ history, classes }) => {
               <Content>
                 <Route
                   exact
-                  path={`${APP_PREFIX_PATH}/onboarding`}
+                  path={`/onboarding/${user.id}`}
                   render={() => <Welcome handleNext={handleNext} />}
                   mobile={matches}
                 />
                 <Route
-                  path={`${APP_PREFIX_PATH}/onboarding/password`}
+                  path={`/onboarding/password`}
                   render={() => (
                     <Password
                       mobile={matches}
                       handleChange={handlePasswordChange}
                       values={password}
-                      loading={loading}
                     />
                   )}
                 />
               </Content>
               {matches && step > 0 && (
                 <Actions>
-                  {step > 1 && (
-                    <BackButton onClick={handleBack} disabled={loading}>
-                      Back
-                    </BackButton>
+                  {step >= 1 && (
+                    <BackButton onClick={handleBack}>Back</BackButton>
                   )}
                   <ProgressButton
                     variant="contained"
                     color="primary"
                     onClick={handleNext}
-                    disabled={loading}
                   >
                     {steps[step].next}
                   </ProgressButton>
                 </Actions>
               )}
               {!matches && (
-                <FullWidthButton
-                  text={steps[step].next}
-                  onClick={handleNext}
-                  disabled={loading}
-                />
+                <FullWidthButton text={steps[step].next} onClick={handleNext} />
               )}
             </FormContainer>
           </Page>

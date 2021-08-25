@@ -5,6 +5,7 @@ import { CardNoImage } from "../../../global/cards";
 import ImageCarousel from "../../../global/ImageCarousel/ImageCarousel";
 import { isEqual } from "lodash-es";
 import Typography from "@material-ui/core/Typography";
+import moment from "moment";
 
 import { PopOver, Item } from "../../../global/layout";
 import { BackButton } from "../../../global/actions";
@@ -53,18 +54,41 @@ class ViewOffenderPopOver extends Component {
     return false;
   }
 
+  calcAge(dateOfBirth) {
+    const now = moment();
+    const birth = moment(dateOfBirth);
+
+    const age = now.diff(birth, "years");
+    return age;
+  }
+
   render() {
     const {
       visible,
-      offender: { name, age, race, gender, build, hair, peculiarities, images },
+      offender: {
+        name,
+        age,
+        race,
+        gender,
+        build,
+        hair,
+        peculiarities,
+        images,
+        dateOfBirth,
+        dateSource,
+      },
       toggleLightbox,
       close,
     } = this.props;
 
+    let ageValue = ageValues.find((obj) => obj.value === age);
     const buildValue = buildValues.find((obj) => obj.value === build);
-    const ageValue = ageValues.find((obj) => obj.value === age);
     const raceValue = raceValues.find((obj) => obj.value === race);
     const genderValue = genderValues.find((obj) => obj.value === gender);
+
+    if (ageValue?.label === "Unknown" && dateOfBirth) {
+      ageValue.label = this.calcAge(dateOfBirth);
+    }
 
     return (
       <MediaQuery minDeviceWidth={1024}>
@@ -131,6 +155,7 @@ class ViewOffenderPopOver extends Component {
                     <ItemHeader>Age</ItemHeader>
                     <ItemText>{!!age && ageValue.label}</ItemText>
                   </Column>
+
                   <Column>
                     <ItemHeader>Build</ItemHeader>
                     <ItemText>{!!build && buildValue.label}</ItemText>
@@ -149,13 +174,25 @@ class ViewOffenderPopOver extends Component {
                     <ItemHeader>Hair</ItemHeader>
                     <ItemText>{!!hair ? hair : "Unknown"}</ItemText>
                   </Column>
+                  <Column>
+                    <ItemHeader>Peculiarities</ItemHeader>
+                    <ItemText>{peculiarities}</ItemText>
+                  </Column>
                 </Row>
                 <Row>
-                  {!!peculiarities && (
-                    <Column halfWidth>
-                      <ItemHeader>Peculiarities</ItemHeader>
-                      <ItemText>{peculiarities}</ItemText>
-                    </Column>
+                  {dateOfBirth && (
+                    <>
+                      <Column>
+                        <ItemHeader>Date of Birth</ItemHeader>
+                        <ItemText>
+                          {moment(dateOfBirth).format("DD/MM/YYYY")}
+                        </ItemText>
+                      </Column>
+                      <Column>
+                        <ItemHeader>Date Source</ItemHeader>
+                        <ItemText>{dateSource}</ItemText>
+                      </Column>
+                    </>
                   )}
                 </Row>
               </Container>

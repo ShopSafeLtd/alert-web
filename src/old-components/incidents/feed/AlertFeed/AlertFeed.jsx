@@ -223,8 +223,8 @@ class AlertFeed extends React.Component {
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    There is no going back this incident will be deleted
-                    permanently!
+                    Deleting this incident will add it to the recycle bin for 30
+                    days, after which, it will be permanently deleted.
                   </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -240,7 +240,7 @@ class AlertFeed extends React.Component {
                     color="primary"
                     autoFocus
                   >
-                    Delete Permanently
+                    Delete
                   </Button>
                 </DialogActions>
               </Dialog>
