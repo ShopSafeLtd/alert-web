@@ -13,9 +13,6 @@ const Svg = styled.svg`
 
 const AccountMenu = () => {
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
-  const setNavbarAction = useStoreActions(
-    (actions) => actions.theme.setNavbarAction
-  );
   const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
   const setBackLinkTo = useStoreActions(
     (actions) => actions.theme.setBackLinkTo

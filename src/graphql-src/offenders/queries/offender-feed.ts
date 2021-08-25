@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 import { CreatedBy, CreatedByType } from "../../users/fragments";
 import { BasicGroup, BasicGroupType } from "../../groups/fragments";
-import { BasicLocation, BasicLocationType } from "../../address/fragments";
+import { BasicLocationType } from "../../address/fragments";
 import { Tag, TagType } from "../../tags/fragments";
 import { Image, ImageType } from "../../images/fragments";
 import { Ban, BanType } from "../../bans/fragments";

@@ -7,7 +7,6 @@ import {
 } from "@apollo/client";
 import { persistCache } from "apollo3-cache-persist";
 
-import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "@apollo/client/utilities";
@@ -32,19 +31,6 @@ const Apollo = ({ children }: Props) => {
       },
     }
   );
-
-  const errorLink = onError(({ graphQLErrors, networkError }) => {
-    if (graphQLErrors)
-      graphQLErrors.map(({ message, locations, path }) => {
-        return console.log(
-          `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-        );
-      });
-
-    if (networkError) {
-      console.log(`[Network error]: ${networkError}`);
-    }
-  });
 
   const wsLink = new WebSocketLink(wsClient);
 

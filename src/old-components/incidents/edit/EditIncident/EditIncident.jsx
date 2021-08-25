@@ -8,7 +8,7 @@ import { Incident as Query } from "../../../../graphql-src/incidents/queries";
 import { UploadImage } from "../../../../graphql-src/images/mutations";
 import { UpdateIncident } from "../../../../graphql-src/incidents/mutations";
 import EditDesktop from "../desktop/EditDesktop/EditDesktop";
-import { useStoreActions, useStoreState } from "../../../../state";
+import { useStoreState } from "../../../../state";
 
 const EditIncident = ({
   match: {
@@ -47,7 +47,6 @@ const EditIncident = ({
   });
   const [offenders, setOffenders] = useState([]);
   const [images, setImages] = useState([]);
-  const [uploadingImage, setUploadingImage] = useState(false);
   const [groups, setGroups] = useState([]);
   const [groupsError, setGroupsError] = useState(false);
 

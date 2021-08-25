@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Paper from "@material-ui/core/Paper";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
-import MediaQuery from "react-responsive";
 import { Route } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
 
-import { BackButton, FullWidthButton } from "../../../global/actions";
+import { BackButton } from "../../../global/actions";
 import { SchemeUsers } from "graphql-src/users/queries";
 import { CreateChat } from "graphql-src/chat/mutations";
 // import AllChatGroups from '../../../../graphql/admin/queries/AllChatGroups';
@@ -65,11 +64,6 @@ const Content = styled.div`
 `;
 
 const AddChatGroup = ({ location, history }) => {
-  const setTitle = useStoreActions((actions) => actions.theme.setTitle);
-  const setBottomNav = useStoreActions((actions) => actions.theme.setTitle);
-  // const setNavbarAction = useStoreActions(
-  //   (actions) => actions.theme.setNavbarAction
-  // );
   const setBackLinkTo = useStoreActions(
     (actions) => actions.theme.setBackLinkTo
   );

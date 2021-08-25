@@ -1,22 +1,10 @@
 import React from "react";
-// import MediaQuery from "react-responsive";
-// import { useQuery, useMutation } from '@apollo/react-hooks';
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 import ViewGroupDesktop from "../desktop/ViewGroupDesktop/ViewGroupDesktop";
 import { Groups } from "graphql-src/groups/queries";
-// import ViewGroupMobile from "../mobile/ViewGroupMobile/ViewGroupMobile";
-// import GroupQuery from '../../../../graphql/groups/queries/Group';
-// import DeleteGroup from '../../../../graphql/groups/mutations/DeleteGroup';
-// import AllGroups from '../../../../graphql/groups/AllGroupsQuery';
-import { useStoreActions } from "../../../../state";
 
 const ViewGroup = ({ history, match }) => {
-  const setTitle = useStoreActions((actions) => actions.setTitle);
-  const setNavbarAction = useStoreActions((actions) => actions.setNavbarAction);
-  const setMultiAppBar = useStoreActions((actions) => actions.setMultiAppBar);
-  const setBackLinkTo = useStoreActions((actions) => actions.setBackLinkTo);
-
   // queries
   const { data, loading } = useQuery(Groups, {
     variables: {

@@ -23,7 +23,6 @@ export const LoginForm = (props: Props) => {
   const {
     otherSignIn,
     showForgetPassword,
-    onForgetPasswordClick,
     extra,
     allowRedirect,
   } = props;

@@ -27,7 +27,6 @@ const Row = styled(TableRow)`
 `;
 
 const AllUsers = ({ history }) => {
-  const search = useStoreState((state) => state.theme.search);
   const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
   const setBackLinkTo = useStoreActions(
     (actions) => actions.theme.setBackLinkTo

@@ -16,8 +16,6 @@ import {
   FullWidthButton,
   ProgressButton,
 } from "../../../global/actions";
-import Welcome from "../Welcome/Welcome";
-import Password from "../Password/Password";
 import Account from "../Account/Account";
 import Terms from "../Terms/Terms";
 import { UserDetails } from "graphql-src/users/queries";

@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Layout } from "antd";
 // eslint-disable-next-line
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
 import Logo from "./Logo";
 // eslint-disable-next-line
 import NavPanel from "./NavPanel";

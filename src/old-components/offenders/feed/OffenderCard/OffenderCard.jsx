@@ -14,7 +14,6 @@ import OffenderCardIncidents from "../OffenderCardIncidents/OffenderCardIncident
 import OffenderCardExclusions from "../OffenderCardExclusions/OffenderCardExclusions";
 import { isAuthorised } from "utils";
 import BannedBanner from "../BannedBanner/BannedBanner";
-import ActiveBanner from "../ActiveBanner/ActiveBanner";
 import { useStoreState } from "../../../../state";
 
 const Card = styled.div`

@@ -36,7 +36,6 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
   const userId = useStoreState((state) => state.user.id);
   const schemeId = useStoreState((state) => state.scheme.id);
   const search = useStoreState((state) => state.theme.search);
-  const fetchOffenders = useStoreState((state) => state.theme.fetchOffenders);
   const role = useStoreState((state) => state.user.role);
   const admin = role !== "USER" ? true : false;
 

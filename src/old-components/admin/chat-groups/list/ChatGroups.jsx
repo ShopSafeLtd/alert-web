@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useQuery } from "@apollo/client";
 import Table from "@material-ui/core/Table";
@@ -12,7 +12,7 @@ import { APP_PREFIX_PATH } from "configs/AppConfig";
 import { SchemeChats } from "graphql-src/chat/queries";
 import { ChatGroupRowSkeleton } from "../../../global/skeletons";
 import { FAB } from "../../../global/actions";
-import { useStoreActions, useStoreState } from "../../../../state";
+import { useStoreState } from "../../../../state";
 
 const Page = styled.div`
   background: #fff;
@@ -24,35 +24,7 @@ const Row = styled(TableRow)`
 `;
 
 const ChatGroups = ({ history }) => {
-  const search = useStoreState((state) => state.theme.search);
-  const setSearch = useStoreActions((actions) => actions.theme.setSearch);
-  const setSearchText = useStoreActions(
-    (actions) => actions.theme.setSearchText
-  );
-  const setTitle = useStoreActions((actions) => actions.theme.setTitle);
-  // const setNavbarAction = useStoreActions(
-  //   (actions) => actions.theme.setNavbarAction
-  // );
-  const setBackLinkTo = useStoreActions(
-    (actions) => actions.theme.setBackLinkTo
-  );
   const schemeId = useStoreState((state) => state.scheme.id);
-
-  // effects
-  // useEffect(() => {
-  //   setSearch(true);
-  //   setSearchText("Search for groups...");
-  //   setTitle("Chat Groups");
-  //   // setNavbarAction("backLink");
-  //   setBackLinkTo(`${APP_PREFIX_PATH}/scheme-settings`);
-  //   return () => {
-  //     setTitle("");
-  //     // setNavbarAction("default ");
-  //     setBackLinkTo(``);
-  //     setSearch(false);
-  //     setSearchText("");
-  //   };
-  // });
 
   // queries
   const { data, loading } = useQuery(SchemeChats, {

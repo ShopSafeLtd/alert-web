@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
-import MediaQuery from "react-responsive";
 import TextField from "@material-ui/core/TextField";
 import { Link } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
-import IconButton from "@material-ui/core/IconButton";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
 
 import {
   Field,
   FieldHeader,
-  Header,
-  HeaderText,
   HeaderSubText,
 } from "../../global/forms";
 import { PageHeader } from "../../global/typography";
-import { FullWidthButton, BackButton } from "../../global/actions";
+import { BackButton } from "../../global/actions";
 import { Tag, Tags } from "graphql-src/tags/queries";
 import { UpdateTag, DeleteTag } from "graphql-src/tags/mutations";
 // import Update from '../../../graphql/offenderLabels/mutations/UpdateOffenderLabel';
@@ -45,10 +41,6 @@ const Form = styled.div`
   @media (min-width: 1024px) {
     padding: 0px;
   }
-`;
-const Svg = styled.svg`
-  width: 24px;
-  height: 24px;
 `;
 
 const EditOffenderWarnings = ({ setActions, match, history }) => {
