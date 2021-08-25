@@ -1,16 +1,16 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import React, { PureComponent } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-import ImageMenuItem from '../../../../global/ImageMenuItem/ImageMenuItem';
-import { FileButton } from '../../../../global/actions';
-import AddOutline from '../../../../../images/AddOutline';
-import ImageGallery from '../../../../../images/ImageGallery';
-import { Header, HeaderText, HeaderSubText } from '../../../../global/forms';
-import { EmptyText } from '../../../../global/typography';
-import { useStoreActions } from '../../../../../state';
+import ImageMenuItem from "../../../../global/ImageMenuItem/ImageMenuItem";
+import { FileButton } from "../../../../global/actions";
+import AddOutline from "../../../../../images/AddOutline";
+import ImageGallery from "../../../../../images/ImageGallery";
+import { Header, HeaderText, HeaderSubText } from "../../../../global/forms";
+import { EmptyText } from "../../../../global/typography";
+import { useStoreActions } from "../../../../../state";
 
 const Page = styled.div`
   display: flex;
@@ -102,7 +102,7 @@ const AddItemButton = styled.label`
 `;
 const AddItemText = styled(Typography)`
   margin: 10px 0 0;
-  color: ${({ disabled }) => (disabled ? '#BDBDBD' : '#EF5350')};
+  color: ${({ disabled }) => (disabled ? "#BDBDBD" : "#EF5350")};
 `;
 const Empty = styled.div`
   height: 100%;
@@ -124,13 +124,8 @@ class Images extends PureComponent {
   }
 
   render() {
-    const {
-      images,
-      removeImages,
-      uploadImage,
-      uploading,
-      toggleLightbox
-    } = this.props;
+    const { images, removeImages, uploadImage, uploading, toggleLightbox } =
+      this.props;
     return (
       <Page>
         <Header>
@@ -142,8 +137,8 @@ class Images extends PureComponent {
         </Header>
         {images.length > 0 ? (
           <ImageGrid>
-            {images.map(({ id, url, offendersIds }) => {
-              return id === 'UPLOADING' ? (
+            {images.map(({ id, url, offendersIds }, i) => {
+              return id === "UPLOADING" ? (
                 <LoadingItem>
                   <CircularProgress />
                   <Typography>Uploading Image</Typography>
@@ -154,7 +149,10 @@ class Images extends PureComponent {
                     <ImageMenu>
                       <ImageMenuItem
                         onClick={() => {
-                          toggleLightbox([url]);
+                          toggleLightbox({
+                            images: images.map(({ url }) => url),
+                            index: i,
+                          });
                         }}
                         tooltipLabel="Full Size"
                         tooltipPosition="bottom"
@@ -182,14 +180,14 @@ class Images extends PureComponent {
               );
             })}
             <GridItem>
-              <AddItem onChange={value => uploadImage(value)}>
+              <AddItem onChange={(value) => uploadImage(value)}>
                 <FileButton
                   id="file-2"
                   type="file"
                   accept="image/*"
                   multiple
                   disabled={uploading}
-                  ref={ref => (this.addImageButton = ref)}
+                  ref={(ref) => (this.addImageButton = ref)}
                 />
                 <AddItemButton
                   component="label"
@@ -209,16 +207,16 @@ class Images extends PureComponent {
         ) : (
           <Empty>
             <ImageGallery width="100px" height="100px" />
-            <EmptyText>You have not added any offenders yet</EmptyText>
+            <EmptyText>You have not added any images yet</EmptyText>
             <EmptyActions>
-              <div onChange={value => uploadImage(value)}>
+              <div onChange={(value) => uploadImage(value)}>
                 <FileButton
                   id="file-2"
                   type="file"
                   accept="image/*"
                   multiple
                   disabled={uploading}
-                  ref={ref => (this.addImageButton = ref)}
+                  ref={(ref) => (this.addImageButton = ref)}
                 />
                 <Button
                   component="label"
@@ -238,9 +236,9 @@ class Images extends PureComponent {
   }
 }
 
-const Wrapper = props => {
+const Wrapper = (props) => {
   const toggleLightbox = useStoreActions(
-    actions => actions.theme.toggleLightBox
+    (actions) => actions.theme.toggleLightBox
   );
 
   return <Images toggleLightbox={toggleLightbox} {...props} />;

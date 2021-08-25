@@ -1,13 +1,13 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import TextField from '@material-ui/core/TextField';
+import React, { PureComponent } from "react";
+import styled from "styled-components";
+import TextField from "@material-ui/core/TextField";
 
 import {
   HeaderText,
   Field,
   FieldHeader,
-  HeaderSubText
-} from '../../../global/forms';
+  HeaderSubText,
+} from "../../../global/forms";
 
 const Page = styled.div`
   width: 100%;
@@ -33,7 +33,7 @@ class OnboardPassword extends PureComponent {
     const {
       mobile,
       values: { password, passwordError, confirm, confirmError },
-      handleChange
+      handleChange,
     } = this.props;
 
     return (
@@ -42,14 +42,15 @@ class OnboardPassword extends PureComponent {
           <HeaderText>Set Password</HeaderText>
           <HeaderSubText>
             Please set you new password, you will use this password when ever
-            you log into alert in the future.
+            you log into alert in the future. It must contain upper and lower
+            case letters, a number, and be longer than 8 characters.
           </HeaderSubText>
         </Header>
         <Field>
           <FieldHeader required>New Password</FieldHeader>
           <StyledTextField
             value={password}
-            onChange={handleChange('password')}
+            onChange={handleChange("password")}
             error={!!passwordError}
             helperText={passwordError}
             fullWidth={!mobile}
@@ -60,7 +61,7 @@ class OnboardPassword extends PureComponent {
           <FieldHeader required>Confirm New Password</FieldHeader>
           <StyledTextField
             value={confirm}
-            onChange={handleChange('confirm')}
+            onChange={handleChange("confirm")}
             error={!!confirmError}
             helperText={confirmError}
             fullWidth={!mobile}

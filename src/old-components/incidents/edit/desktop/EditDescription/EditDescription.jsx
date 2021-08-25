@@ -1,20 +1,20 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import AddSvg from '@material-ui/icons/Add';
-import { isEqual } from 'lodash-es';
+import React, { Component } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import AddSvg from "@material-ui/icons/Add";
+import { isEqual } from "lodash-es";
 
-import { SubHeader, ErrorText } from '../../../../global/typography';
+import { SubHeader, ErrorText } from "../../../../global/typography";
 import {
   Field,
   FieldHeader,
   DateField,
-  TimeField
-} from '../../../../global/forms';
-import { Row, Section } from '../../../../global/layout';
-import Grow from '../Grow/Grow';
+  TimeField,
+} from "../../../../global/forms";
+import { Row, Section } from "../../../../global/layout";
+import Grow from "../Grow/Grow";
 
 const AddIcon = styled(AddSvg)`
   margin-right: 5px;
@@ -74,13 +74,13 @@ class EditDescription extends Component {
         date,
         dateError,
         time,
-        timeError
+        timeError,
       },
       crimeTypes,
       handleChange,
       removeCrimeType,
       openCrimeTypes,
-      loading
+      loading,
     } = this.props;
 
     return (
@@ -92,7 +92,7 @@ class EditDescription extends Component {
             id="subject-input"
             value={subject}
             fullWidth
-            onChange={value => handleChange(value.target.value, 'subject')}
+            onChange={(value) => handleChange(value.target.value, "subject")}
             disabled={loading}
             error={!!subjectError}
             helperText={subjectError}
@@ -106,7 +106,9 @@ class EditDescription extends Component {
             fullWidth
             multiline
             value={description}
-            onChange={value => handleChange(value.target.value, 'description')}
+            onChange={(value) =>
+              handleChange(value.target.value, "description")
+            }
             disabled={loading}
             error={!!descriptionError}
             helperText={descriptionError}
@@ -118,7 +120,7 @@ class EditDescription extends Component {
             <DateField
               id="date-input"
               value={date}
-              onChange={value => handleChange(value, 'date')}
+              onChange={(value) => handleChange(value, "date")}
               disabled={loading}
               error={!!dateError}
               helperText={dateError}
@@ -129,7 +131,7 @@ class EditDescription extends Component {
             <TimeField
               id="time-input"
               value={time}
-              onChange={value => handleChange(value, 'time')}
+              onChange={(value) => handleChange(value, "time")}
               disabled={loading}
               error={!!timeError}
               helperText={timeError}
@@ -139,16 +141,16 @@ class EditDescription extends Component {
         <Field>
           <FieldHeader required>Crime Types</FieldHeader>
           <CrimeTypeRow>
-            {crimeTypes.length > 0 ? (
+            {crimeTypes?.length > 0 ? (
               <CrimeTypes>
                 <Grow>
-                  {crimeTypes.map(({ id, name }) => {
+                  {[...new Set(crimeTypes)].map((el) => {
                     return (
-                      <CrimeType component="div" key={id}>
-                        {name}
+                      <CrimeType component="div" key={el?.id}>
+                        {el?.name}
                         <Close
                           viewBox="0 0 24 24"
-                          onClick={() => removeCrimeType(id)}
+                          onClick={() => removeCrimeType(el?.id)}
                         >
                           <path
                             fill="#fff"

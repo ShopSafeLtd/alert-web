@@ -1,9 +1,8 @@
-import gql from 'graphql-tag';
-
-import { FullIncident, FullIncidentType } from '../fragments'
+import { gql } from "@apollo/client";
+import { FullIncident, FullIncidentType } from "../fragments";
 
 export const IncidentFeed = gql`
-  query IncidentFeed(
+  query incidentFeed(
     $schemeId: String!
     $search: String
     $order: IncidentOrderByInput
@@ -29,7 +28,7 @@ export interface IncidentFeedArgs {
   schemeId: string;
   search: string;
   order: {
-    createdAt: 'asc' | 'desc'
+    createdAt: "asc" | "desc";
   };
   first: number;
   cursor?: string;
@@ -37,5 +36,5 @@ export interface IncidentFeedArgs {
 }
 
 export interface IncidentFeedRes {
-  incidentFeed: FullIncidentType[]
+  incidentFeed: FullIncidentType[];
 }

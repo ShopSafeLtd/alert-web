@@ -1,16 +1,13 @@
-import { 
-  action,
-  Action,
-} from 'easy-peasy'
+import { action, Action } from "easy-peasy";
 
 export enum NavType {
-  SIDE = 'SIDE',
-  TOP = 'TOP'
+  SIDE = "SIDE",
+  TOP = "TOP",
 }
 
 export enum SideNavTheme {
-  LIGHT = 'LIGHT',
-  DARK = 'DARK'
+  LIGHT = "LIGHT",
+  DARK = "DARK",
 }
 
 export const ThemeConfig = {
@@ -19,33 +16,33 @@ export const ThemeConfig = {
   visibleAppDrawer: false,
   visibleStatusBar: false,
   multiAppBar: false,
-  title: '',
-  navbarAction: 'default',
-  statusBarText: '',
-  search: '',
+  title: "",
+  navbarAction: "default",
+  statusBarText: "",
+  search: "",
   searchActive: false,
-  searchText: '',
-  backLinkTo: '',
+  searchText: "",
+  backLinkTo: "",
   navbarActionDisabled: false,
   newMessages: false,
   newIncidents: false,
   lightbox: false,
   lightboxImages: [],
   lightboxIndex: 0,
-  platform: '',
+  platform: "",
   notification: false,
-  notificationText: '',
+  notificationText: "",
   notificationBottom: false,
 
   navCollapsed: false,
-	sideNavTheme: SideNavTheme.LIGHT,
-	locale: 'en',
-	navType: NavType.SIDE,
-	topNavColor: '#3e82f7',
-	headerNavColor: '',
-	mobileNav: false,
-	currentTheme: 'light',
-}
+  sideNavTheme: SideNavTheme.LIGHT,
+  locale: "en",
+  navType: NavType.SIDE,
+  topNavColor: "#3e82f7",
+  headerNavColor: "",
+  mobileNav: false,
+  currentTheme: "light",
+};
 
 export interface ThemeModel {
   visibleBottomNav: boolean;
@@ -86,27 +83,33 @@ export interface ThemeModel {
   setSearchText: Action<ThemeModel, string>;
   setBackLinkTo: Action<ThemeModel, string>;
   setNavBarActionDisabled: Action<ThemeModel, boolean>;
-  toggleLightBox: Action<ThemeModel, {
-    images: any[];
-    index: number;
-  }>;
+  toggleLightBox: Action<
+    ThemeModel,
+    {
+      images: any[];
+      index: number;
+    }
+  >;
   setPlatform: Action<ThemeModel, string>;
-  toggleNotificationBar: Action<ThemeModel, {
-    status: boolean;
-    text: string;
-    bottom: boolean;
-  }>;
+  toggleNotificationBar: Action<
+    ThemeModel,
+    {
+      status: boolean;
+      text: string;
+      bottom: boolean;
+    }
+  >;
   setNewIncidents: Action<ThemeModel>;
   setLightboxIndex: Action<ThemeModel, number>;
 
   navCollapsed: boolean;
-	sideNavTheme: SideNavTheme;
-	locale: string;
-	navType: NavType,
-	topNavColor: string;
-	headerNavColor: string;
-	mobileNav: boolean,
-	currentTheme: string;
+  sideNavTheme: SideNavTheme;
+  locale: string;
+  navType: NavType;
+  topNavColor: string;
+  headerNavColor: string;
+  mobileNav: boolean;
+  currentTheme: string;
 
   toggleCollapsedNav: Action<ThemeModel, boolean>;
   sideNavStyleChange: Action<ThemeModel, SideNavTheme>;
@@ -118,7 +121,7 @@ export interface ThemeModel {
   switchTheme: Action<ThemeModel, string>;
 }
 
-const themeModel:ThemeModel = {
+const themeModel: ThemeModel = {
   ...ThemeConfig,
 
   clearNav: action((state, payload) => {
@@ -153,92 +156,92 @@ const themeModel:ThemeModel = {
     state.visibleStatusBar = ThemeConfig.visibleStatusBar;
   }),
   clearSearch: action((state) => {
-    state.search = ''
+    state.search = "";
   }),
   handleSearch: action((state, payload) => {
-    state.search = payload
+    state.search = payload;
   }),
   setAppBar: action((state, payload) => {
-    state.visibleAppBar = payload
+    state.visibleAppBar = payload;
   }),
   setBackLinkTo: action((state, payload) => {
-    state.backLinkTo = payload
+    state.backLinkTo = payload;
   }),
   setBottomNav: action((state, payload) => {
-    state.visibleBottomNav = payload
+    state.visibleBottomNav = payload;
   }),
   setLightboxIndex: action((state, payload) => {
-    state.lightboxIndex = payload
+    state.lightboxIndex = payload;
   }),
   setMultiAppBar: action((state, payload) => {
-    state.visibleBottomNav = payload
+    state.visibleBottomNav = payload;
   }),
   setNavBarAction: action((state, payload) => {
-    state.navbarAction = payload
+    state.navbarAction = payload;
   }),
   setNavBarActionDisabled: action((state, payload) => {
-    state.navbarActionDisabled = payload
+    state.navbarActionDisabled = payload;
   }),
   setNewIncidents: action((state) => {
-    state.newIncidents = !state.newIncidents
+    state.newIncidents = !state.newIncidents;
   }),
   setNewMessages: action((state, payload) => {
-    state.newMessages = payload
+    state.newMessages = payload;
   }),
   setPlatform: action((state, payload) => {
-    state.platform = payload
+    state.platform = payload;
   }),
   setSearch: action((state, payload) => {
-    state.search = payload
+    state.search = payload;
   }),
   setSearchText: action((state, payload) => {
-    state.searchText = payload
+    state.searchText = payload;
   }),
   setStatusBar: action((state, payload) => {
-    state.statusBarText = payload.text
-    state.visibleStatusBar = payload.visible
+    state.statusBarText = payload.text;
+    state.visibleStatusBar = payload.visible;
   }),
   setTitle: action((state, payload) => {
-    state.title = payload
+    state.title = payload;
   }),
   toggleAppDrawer: action((state) => {
-    state.visibleAppDrawer = !state.visibleStatusBar
+    state.visibleAppDrawer = !state.visibleStatusBar;
   }),
   toggleLightBox: action((state, payload) => {
-    state.lightbox = !state.lightbox
-    state.lightboxImages = payload.images
-    state.lightboxIndex = payload.index
+    state.lightbox = !state.lightbox;
+    state.lightboxImages = payload.images;
+    state.lightboxIndex = payload.index;
   }),
   toggleNotificationBar: action((state, payload) => {
-    state.notification = payload.status
-    state.notificationBottom = payload.bottom
-    state.notificationText = payload.text
+    state.notification = payload.status;
+    state.notificationBottom = payload.bottom;
+    state.notificationText = payload.text;
   }),
 
   toggleCollapsedNav: action((state, payload) => {
-    state.navCollapsed = payload
+    state.navCollapsed = payload;
   }),
   sideNavStyleChange: action((state, payload) => {
-    state.sideNavTheme = payload
+    state.sideNavTheme = payload;
   }),
   changeLocale: action((state, payload) => {
-    state.locale = payload
+    state.locale = payload;
   }),
   navTypeChange: action((state, payload) => {
-    state.navType = payload
+    state.navType = payload;
   }),
   topNavColorChange: action((state, payload) => {
-    state.topNavColor = payload
+    state.topNavColor = payload;
   }),
   headerNavColorChange: action((state, payload) => {
-    state.headerNavColor = payload
+    state.headerNavColor = payload;
   }),
   toggleMobileNav: action((state, payload) => {
-    state.mobileNav = payload
+    state.mobileNav = payload;
   }),
   switchTheme: action((state, payload) => {
-    state.currentTheme = payload
-  })  
-}
+    state.currentTheme = payload;
+  }),
+};
 
-export default themeModel
+export default themeModel;

@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import SwipeableViews from 'react-swipeable-views';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import MenuItem from '@material-ui/core/MenuItem';
-import Divider from '@material-ui/core/Divider';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import styled from "styled-components";
+import SwipeableViews from "react-swipeable-views";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import MenuItem from "@material-ui/core/MenuItem";
+import Divider from "@material-ui/core/Divider";
+import { Link } from "react-router-dom";
 
-import { UnapprovedCard, CardMenu } from '../../../global/cards';
-import OffenderCardImage from '../OffenderCardImage/OffenderCardImage';
-import OffenderCardDescription from '../OffenderCardDescription/OffenderCardDescription';
-import OffenderCardIncidents from '../OffenderCardIncidents/OffenderCardIncidents';
-import OffenderCardExclusions from '../OffenderCardExclusions/OffenderCardExclusions';
-import { isAuthorised } from 'utils';
-import BannedBanner from '../BannedBanner/BannedBanner';
-import ActiveBanner from '../ActiveBanner/ActiveBanner';
-import { useStoreState } from '../../../../state';
+import { UnapprovedCard, CardMenu } from "../../../global/cards";
+import OffenderCardImage from "../OffenderCardImage/OffenderCardImage";
+import OffenderCardDescription from "../OffenderCardDescription/OffenderCardDescription";
+import OffenderCardIncidents from "../OffenderCardIncidents/OffenderCardIncidents";
+import OffenderCardExclusions from "../OffenderCardExclusions/OffenderCardExclusions";
+import { isAuthorised } from "utils";
+import BannedBanner from "../BannedBanner/BannedBanner";
+import ActiveBanner from "../ActiveBanner/ActiveBanner";
+import { useStoreState } from "../../../../state";
 
 const Card = styled.div`
   width: 100%;
@@ -45,14 +45,14 @@ const OffenderCard = ({
   toggleViewLabel,
   toggleActiveOffender,
   toggleInactiveOffender,
-  toggleDecline
+  toggleDecline,
 }) => {
-  const userRole = useStoreState(state => state.user.role);
-  const admin = userRole !== 'USER' ? true : false;
+  const userRole = useStoreState((state) => state.user.role);
+  const admin = userRole !== "USER" ? true : false;
   const [activeTab, setActiveTab] = useState(0);
 
   let actions = [];
-  if (isAuthorised(userRole, ['SCHEME_ADMIN', 'CONTENT_ADMIN'])) {
+  if (isAuthorised(userRole, ["SCHEME_ADMIN", "CONTENT_ADMIN"])) {
     actions.push(
       <MenuItem key={0} onClick={() => toggleAddExclusionPopOver(offender.id)}>
         <Svg viewBox="0 0 24 24">
@@ -66,7 +66,7 @@ const OffenderCard = ({
     );
   }
   if (
-    isAuthorised(userRole, ['SCHEME_ADMIN', 'CONTENT_ADMIN']) &&
+    isAuthorised(userRole, ["SCHEME_ADMIN", "CONTENT_ADMIN"]) &&
     !offender.active
   ) {
     actions.push(
@@ -81,26 +81,30 @@ const OffenderCard = ({
       </MenuItem>
     );
   }
-  if (
-    isAuthorised(userRole, ['SCHEME_ADMIN', 'CONTENT_ADMIN']) &&
-    offender.active
-  ) {
-    actions.push(
-      <MenuItem key={1} onClick={() => toggleInactiveOffender(offender.id)}>
-        <Svg viewBox="0 0 24 24">
-          <path
-            fill="#757575"
-            d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M7.07,18.28C7.5,17.38 10.12,16.5 12,16.5C13.88,16.5 16.5,17.38 16.93,18.28C15.57,19.36 13.86,20 12,20C10.14,20 8.43,19.36 7.07,18.28M18.36,16.83C16.93,15.09 13.46,14.5 12,14.5C10.54,14.5 7.07,15.09 5.64,16.83C4.62,15.5 4,13.82 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,13.82 19.38,15.5 18.36,16.83M12,6C10.06,6 8.5,7.56 8.5,9.5C8.5,11.44 10.06,13 12,13C13.94,13 15.5,11.44 15.5,9.5C15.5,7.56 13.94,6 12,6M12,11A1.5,1.5 0 0,1 10.5,9.5A1.5,1.5 0 0,1 12,8A1.5,1.5 0 0,1 13.5,9.5A1.5,1.5 0 0,1 12,11Z"
-          />
-        </Svg>
-        Remove from Active
-      </MenuItem>
-    );
-  }
-  if (isAuthorised(userRole, ['SCHEME_ADMIN', 'CONTENT_ADMIN'])) {
+  // if (
+  //   isAuthorised(userRole, ["SCHEME_ADMIN", "CONTENT_ADMIN"]) &&
+  //   offender.active
+  // ) {
+  //   actions.push(
+  //     <MenuItem key={1} onClick={() => toggleInactiveOffender(offender.id)}>
+  //       <Svg viewBox="0 0 24 24">
+  //         <path
+  //           fill="#757575"
+  //           d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M7.07,18.28C7.5,17.38 10.12,16.5 12,16.5C13.88,16.5 16.5,17.38 16.93,18.28C15.57,19.36 13.86,20 12,20C10.14,20 8.43,19.36 7.07,18.28M18.36,16.83C16.93,15.09 13.46,14.5 12,14.5C10.54,14.5 7.07,15.09 5.64,16.83C4.62,15.5 4,13.82 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,13.82 19.38,15.5 18.36,16.83M12,6C10.06,6 8.5,7.56 8.5,9.5C8.5,11.44 10.06,13 12,13C13.94,13 15.5,11.44 15.5,9.5C15.5,7.56 13.94,6 12,6M12,11A1.5,1.5 0 0,1 10.5,9.5A1.5,1.5 0 0,1 12,8A1.5,1.5 0 0,1 13.5,9.5A1.5,1.5 0 0,1 12,11Z"
+  //         />
+  //       </Svg>
+  //       Remove from Active
+  //     </MenuItem>
+  //   );
+  // }
+  if (isAuthorised(userRole, ["SCHEME_ADMIN", "CONTENT_ADMIN"])) {
     actions.push(
       <Divider key={2} />,
-      <MenuItem key={4} component={Link} to={`/offenders/edit/${offender.id}`}>
+      <MenuItem
+        key={4}
+        component={Link}
+        to={`/app/offenders/edit/${offender.id}`}
+      >
         <Svg viewBox="0 0 24 24">
           <path
             fill="#757575"
@@ -137,7 +141,7 @@ const OffenderCard = ({
         viewAll={() =>
           toggleViewOffenderPopOver({
             ...offender,
-            incidents: offender.incidents
+            incidents: offender.incidents,
           })
         }
         offenderWarnings={offender.offenderWarnings}
@@ -174,7 +178,7 @@ const OffenderCard = ({
         }
         large={offender.active}
       />
-      <ActiveBanner active={offender.active} />
+      {/* <ActiveBanner active={offender.active} /> */}
       {offender.approved ? null : (
         <UnapprovedCard
           decline={() => toggleDecline(offender.id)}
@@ -198,7 +202,7 @@ const OffenderCard = ({
         {admin && <StyledTab label="Bans" />}
         <StyledTab label="Incidents" />
       </Tabs>
-      <SwipeableViews index={activeTab} onChangeIndex={e => setActiveTab(e)}>
+      <SwipeableViews index={activeTab} onChangeIndex={(e) => setActiveTab(e)}>
         {tabViews}
       </SwipeableViews>
     </Card>

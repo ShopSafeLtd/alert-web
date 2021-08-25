@@ -1,11 +1,10 @@
 import React from "react";
 import { Menu, Dropdown, Avatar, Row } from "antd";
-import { 
-  LogoutOutlined 
-} from '@ant-design/icons';
-import Icon from 'components/util-components/Icon';
-import { useStoreState } from 'state'
-import useAuth from 'hooks/useAuth'
+import { LogoutOutlined } from "@ant-design/icons";
+import Icon from "components/util-components/Icon";
+import { useStoreState } from "state";
+import { useAuth } from "hooks";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
 
 interface MenuItem {
   title: string;
@@ -14,40 +13,45 @@ interface MenuItem {
 }
 
 const menuItem: MenuItem[] = [
+  {
+    title: "User Settings",
+    icon: "", //EditOutlined,
+    path: `${APP_PREFIX_PATH}/user-settings`,
+  },
+
   // {
-  //   title: "Edit Profile",
-  //   icon: EditOutlined ,
-  //   path: "/"
-  //   },
-    
-  //   {
   //   title: "Account Setting",
-  //   icon: SettingOutlined,
-  //   path: "/"
-  //   },
-  //   {
-  //   title: "Billing",
-  //   icon: ShopOutlined ,
-  //   path: "/"
+  //   icon: "", // SettingOutlined,
+  //   path: `${APP_PREFIX_PATH}/`,
   // },
-  //   {
+  // {
+  //   title: "Billing",
+  //   icon: "", // ShopOutlined,
+  //   path: `${APP_PREFIX_PATH}/`,
+  // },
+  // {
   //   title: "Help Center",
-  //   icon: QuestionCircleOutlined,
-  //   path: "/"
-  // }
-]
+  //   icon: "", // QuestionCircleOutlined,
+  //   path: `${APP_PREFIX_PATH}/`,
+  // },
+];
 
 export const NavProfile = () => {
-  const name = useStoreState(state => state.user.fullName)
-  const email = useStoreState(state => state.user.email)
-  const profileImg = useStoreState(state => state.user.picture)
-  const { signOut } = useAuth()
+  const name = useStoreState((state) => state.user.fullName);
+  const email = useStoreState((state) => state.user.email);
+  const profileImg = useStoreState((state) => state.user.picture);
+  const { signOut } = useAuth();
 
   const profileMenu = (
     <div className="nav-profile nav-dropdown">
       <div className="nav-profile-header">
-        <div className="d-flex" style={{ alignItems: 'center' }}>
-          <Avatar style={{ backgroundColor: 'rgb(222, 68, 54)', minWidth: 35 }} size={35}>{name.charAt(0)}</Avatar>
+        <div className="d-flex" style={{ alignItems: "center" }}>
+          <Avatar
+            style={{ backgroundColor: "rgb(222, 68, 54)", minWidth: 35 }}
+            size={35}
+          >
+            {name?.charAt(0)}
+          </Avatar>
           <div className="pl-2">
             <h4 className="mb-0">{name}</h4>
             <span className="text-muted">{email}</span>
@@ -61,16 +65,16 @@ export const NavProfile = () => {
               <Menu.Item key={i}>
                 <a href={el.path}>
                   <Row>
-                    <Icon className="mr-3" type={el.icon} />
+                    {/* <Icon className="mr-3" type={el.icon} /> */}
                     <span className="font-weight-normal">{el.title}</span>
                   </Row>
                 </a>
               </Menu.Item>
             );
           })}
-          <Menu.Item key={menuItem.length + 1} onClick={e => signOut()}>
+          <Menu.Item key={menuItem.length + 1} onClick={(e) => signOut()}>
             <Row>
-              <LogoutOutlined className="mr-3"/>
+              <LogoutOutlined className="mr-3" />
               <span className="font-weight-normal">Sign Out</span>
             </Row>
           </Menu.Item>
@@ -82,11 +86,13 @@ export const NavProfile = () => {
     <Dropdown placement="bottomRight" overlay={profileMenu} trigger={["click"]}>
       <Menu className="d-flex align-item-center" mode="horizontal">
         <Menu.Item>
-          <Avatar style={{ backgroundColor: 'rgb(222, 68, 54)' }}>{name.charAt(0)}</Avatar>
+          <Avatar style={{ backgroundColor: "rgb(222, 68, 54)" }}>
+            {name?.charAt(0)}
+          </Avatar>
         </Menu.Item>
       </Menu>
     </Dropdown>
   );
-}
+};
 
 export default NavProfile;

@@ -1,13 +1,13 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import { isEqual } from 'lodash-es';
-import MediaQuery from 'react-responsive';
+import React, { PureComponent } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import { isEqual } from "lodash-es";
+import MediaQuery from "react-responsive";
 
-import { PopOver, PopOverContainer } from '../../../../global/layout';
-import OffenderStacked from '../OffenderStacked/OffenderStacked';
-import { BackButton } from '../../../../global/actions';
-import OffenderStack from '../OffenderStack/OffenderStack';
+import { PopOver, PopOverContainer } from "../../../../global/layout";
+import OffenderStacked from "../OffenderStacked/OffenderStacked";
+import { BackButton } from "../../../../global/actions";
+import OffenderStack from "../OffenderStack/OffenderStack";
 
 const Grow = styled.div`
   flex: 1;
@@ -20,7 +20,7 @@ class AssignOffenderPopOver extends PureComponent {
     this.state = {
       selected: [],
       add: [],
-      remove: []
+      remove: [],
     };
   }
 
@@ -28,25 +28,25 @@ class AssignOffenderPopOver extends PureComponent {
     if (!isEqual(this.props.image, prevProps.image)) {
       if (!!this.props.image) {
         this.setState({
-          selected: this.props.image.offenders.map(({ id }) => id)
+          selected: this.props.image?.offenders?.map(({ id }) => id) || [],
         });
       }
     }
   }
 
-  toggleAssignOffenders = id => {
+  toggleAssignOffenders = (id) => {
     const { selected, add, remove } = this.state;
-    if (!selected.includes(id)) {
+    if (!selected?.includes(id)) {
       this.setState({
         selected: [...selected, id],
         add: [...add, id],
-        remove: remove.filter(offender => id !== offender)
+        remove: remove?.filter((offender) => id !== offender),
       });
     } else {
       this.setState({
-        selected: selected.filter(offender => offender !== id),
-        add: add.filter(offender => offender !== id),
-        remove: [...remove, id]
+        selected: selected?.filter((offender) => offender !== id),
+        add: add?.filter((offender) => offender !== id),
+        remove: [...remove, id],
       });
     }
   };
@@ -55,7 +55,7 @@ class AssignOffenderPopOver extends PureComponent {
     this.setState({
       selected: [],
       add: [],
-      remove: []
+      remove: [],
     });
     this.props.close();
   };
@@ -65,13 +65,13 @@ class AssignOffenderPopOver extends PureComponent {
     const { selected, add, remove } = this.state;
     return (
       <MediaQuery minDeviceWidth={1024}>
-        {matches => (
+        {(matches) => (
           <PopOver
             noPadding
             open={open}
             width={matches ? 500 : window.innerWidth - 15}
             handleClose={this.handleClose}
-            title={'Assign Offender To Images'}
+            title={"Assign Offender To Images"}
             actions={[
               <BackButton key={0} onClick={this.handleClose}>
                 Cancel
@@ -86,7 +86,7 @@ class AssignOffenderPopOver extends PureComponent {
                 }}
               >
                 Assign
-              </Button>
+              </Button>,
             ]}
           >
             <Grow>
@@ -99,7 +99,7 @@ class AssignOffenderPopOver extends PureComponent {
                         id={id}
                         name={name}
                         images={images}
-                        selected={selected.includes(id)}
+                        selected={selected?.includes(id)}
                         toggleSelected={() => this.toggleAssignOffenders(id)}
                       />
                     );

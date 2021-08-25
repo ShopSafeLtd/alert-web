@@ -1,26 +1,21 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import React, { Component } from "react";
+import styled from "styled-components";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 const StyledActions = styled(DialogActions)`
-  flex-direction: ${({ column }) => (column ? 'column' : 'row')};
-  align-items: ${({ column }) => (column ? 'flex-end' : 'center')};
+  flex-direction: ${({ column }) => (column ? "column" : "row")};
+  align-items: ${({ column }) => (column ? "flex-end" : "center")};
 `;
 
-class ConfirmDialog extends PureComponent {
+class ConfirmDialog extends Component {
   render() {
-    const {
-      open,
-      handleClose,
-      title,
-      description,
-      actions,
-      actionsColumn
-    } = this.props;
+    const { open, handleClose, title, description, actions, actionsColumn } =
+      this.props;
+
     return (
       open && (
         <Dialog

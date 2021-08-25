@@ -1,13 +1,13 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import MediaQuery from 'react-responsive';
-import Slide from '@material-ui/core/Slide';
-import Dialog from '@material-ui/core/Dialog';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import CloseIcon from '@material-ui/icons/Close';
+import React, { PureComponent } from "react";
+import styled from "styled-components";
+import MediaQuery from "react-responsive";
+import Slide from "@material-ui/core/Slide";
+import Dialog from "@material-ui/core/Dialog";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import Typography from "@material-ui/core/Typography";
+import CloseIcon from "@material-ui/icons/Close";
 
 const Popover = styled.div`
   position: fixed;
@@ -15,7 +15,7 @@ const Popover = styled.div`
   bottom: 0;
   background: #fff;
   box-shadow: rgba(0, 0, 0, 0.26) 0px 2px 5px;
-  padding: ${({ noPadding }) => !noPadding && '40px'};
+  padding: ${({ noPadding }) => !noPadding && "40px"};
   z-index: 1200;
   display: flex;
   flex-direction: column;
@@ -24,6 +24,8 @@ const Popover = styled.div`
     width: ${width}px;
     right: ${open ? 0 : `-${width + 5}px;`}
   `};
+  height: 100%;
+  overflow: auto;
 `;
 const Header = styled(AppBar)`
   color: rgba(0, 0, 0, 0.87);
@@ -31,7 +33,7 @@ const Header = styled(AppBar)`
 `;
 const DialogContainer = styled.div`
   margin-top: 56px;
-  margin-bottom: ${({ mobileAction }) => (mobileAction ? '60px' : '0px')};
+  margin-bottom: ${({ mobileAction }) => (mobileAction ? "60px" : "0px")};
 `;
 const Actions = styled.div`
   width: 100%;
@@ -63,7 +65,7 @@ class PopOver extends PureComponent {
     } = this.props;
     return (
       <MediaQuery minDeviceWidth={1024}>
-        {matches =>
+        {(matches) =>
           matches ? (
             <Popover open={open} {...rest}>
               <Toolbar>

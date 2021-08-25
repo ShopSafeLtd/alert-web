@@ -1,15 +1,15 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import moment from 'moment';
-import Typography from '@material-ui/core/Typography';
+import React, { PureComponent } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import moment from "moment";
+import Typography from "@material-ui/core/Typography";
 
-import { Header, HeaderText, HeaderSubText } from '../../../../global/forms';
-import { EmptyText } from '../../../../global/typography';
-import ExclusionsImage from '../../../../../images/Ban';
-import AddExclusions from '../AddExclusion/AddExclusion';
-import { ItemHeader } from '../../../../global/typography';
-import EditExclusion from '../EditExclusion/EditExclusion';
+import { Header, HeaderText, HeaderSubText } from "../../../../global/forms";
+import { EmptyText } from "../../../../global/typography";
+import ExclusionsImage from "../../../../../images/Ban";
+import AddExclusions from "../AddExclusion/AddExclusion";
+import { ItemHeader } from "../../../../global/typography";
+import EditExclusion from "../EditExclusion/EditExclusion";
 
 const Page = styled.div`
   display: flex;
@@ -48,7 +48,7 @@ const Icon = styled.svg`
 `;
 const FieldText = styled(Typography)`
   margin-top: 5px;
-  ${({ noWrap }) => noWrap && 'white-space: nowrap;'};
+  ${({ noWrap }) => noWrap && "white-space: nowrap;"};
 `;
 const List = styled.div`
   width: 100%;
@@ -60,8 +60,8 @@ const ListItem = styled.div`
 `;
 const Item = styled.div`
   margin-left: 30px;
-  ${({ marginTop }) => marginTop && 'margin-top: 28px;'} ${({ grow }) =>
-    grow && 'flex: 1;'};
+  ${({ marginTop }) => marginTop && "margin-top: 28px;"} ${({ grow }) =>
+    grow && "flex: 1;"};
 `;
 const Actions = styled.div`
   width: 100%;
@@ -75,11 +75,11 @@ class Exclusions extends PureComponent {
     super(props);
     this.state = {
       add: false,
-      edit: false
+      edit: false,
     };
   }
 
-  handleEdit = exclusion => {
+  handleEdit = (exclusion) => {
     this.props.setEditingExclusion(exclusion);
     this.setState({ edit: true });
   };
@@ -90,7 +90,7 @@ class Exclusions extends PureComponent {
       addExclusion,
       removeExclusion,
       editingExclusion,
-      editExclusion
+      editExclusion,
     } = this.props;
     const { add, edit } = this.state;
     return (
@@ -109,7 +109,7 @@ class Exclusions extends PureComponent {
                   <Item>
                     <ItemHeader>Duration</ItemHeader>
                     <ExclusionDate variant="body1">
-                      {moment(startDate).format('DD/MM/YYYY')}
+                      {moment(startDate).format("DD/MM/YYYY")}
                     </ExclusionDate>
                   </Item>
                   <Item marginTop>
@@ -122,18 +122,18 @@ class Exclusions extends PureComponent {
                   </Item>
                   <Item marginTop>
                     <ExclusionDate variant="body1">
-                      {moment(endDate).format('DD/MM/YYYY')}
+                      {moment(endDate).format("DD/MM/YYYY")}
                     </ExclusionDate>
                   </Item>
-                  {location !== '' && (
-                    <Item grow={description === ''}>
+                  {location !== "" && (
+                    <Item grow={description === ""}>
                       <ItemHeader>Location</ItemHeader>
                       <FieldText variant="body1" noWrap>
                         {location}
                       </FieldText>
                     </Item>
                   )}
-                  {description !== '' && (
+                  {description !== "" && (
                     <Item grow>
                       <ItemHeader>Description</ItemHeader>
                       <FieldText variant="body1">{description}</FieldText>
@@ -149,7 +149,7 @@ class Exclusions extends PureComponent {
                             startDate,
                             endDate,
                             location,
-                            description
+                            description,
                           })
                         }
                       >
@@ -193,7 +193,7 @@ class Exclusions extends PureComponent {
         ) : (
           <Empty>
             <ExclusionsImage width="100px" height="100px" />
-            <EmptyText>You have not added any offenders yet</EmptyText>
+            <EmptyText>You have not added any bans yet</EmptyText>
             <EmptyActions>
               <Button
                 variant="contained"

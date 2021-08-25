@@ -1,7 +1,7 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 
 export const PreviousAddresses = gql`
-  query allAddresses($where: AddressWhereInput) {
+  query addresses($where: AddressWhereInput) {
     addresses(where: $where) {
       id
       primary
@@ -17,12 +17,10 @@ export const PreviousAddresses = gql`
 
 export interface PreviousAddressesArgs {
   where: {
-    user: {
-      id: {
-        equals: string;
-      }
-    }
-  }
+    userId: {
+      equals: string;
+    };
+  };
 }
 
 export interface PreviousAddressesRes {

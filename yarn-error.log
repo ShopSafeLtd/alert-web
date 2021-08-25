@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/Cellar/node/15.14.0/bin/node /usr/local/bin/yarn add material-ui/icons/ArrowDownward
+  /usr/local/bin/node /usr/local/bin/yarn install
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin
@@ -8,23 +8,23 @@ Yarn version:
   1.22.10
 
 Node version: 
-  15.14.0
+  14.17.2
 
 Platform: 
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/material-ui%2ficons/ArrowDownward: Request "https://registry.yarnpkg.com/material-ui%2ficons/ArrowDownward" returned a 405
-      at Request.params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:66997:18)
-      at Request.self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:140662:22)
-      at Request.emit (node:events:369:20)
-      at Request.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141634:10)
-      at Request.emit (node:events:369:20)
-      at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141556:12)
-      at Object.onceWrapper (node:events:475:28)
-      at IncomingMessage.emit (node:events:381:22)
-      at endReadableNT (node:internal/streams/readable:1307:12)
-      at processTicksAndRejections (node:internal/process/task_queues:81:21)
+  Error: https://npm.fontawesome.com/@fortawesome/free-brands-svg-icons/-/5.15.3/free-brands-svg-icons-5.15.3.tgz: Request failed "401 Unauthorized"
+      at ResponseError.ExtendableBuiltin (/usr/local/lib/node_modules/yarn/lib/cli.js:696:66)
+      at new ResponseError (/usr/local/lib/node_modules/yarn/lib/cli.js:802:124)
+      at Request.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:67058:16)
+      at Request.emit (events.js:375:28)
+      at Request.module.exports.Request.onRequestResponse (/usr/local/lib/node_modules/yarn/lib/cli.js:141539:10)
+      at ClientRequest.emit (events.js:375:28)
+      at HTTPParser.parserOnIncomingClient (_http_client.js:647:27)
+      at HTTPParser.parserOnHeadersComplete (_http_common.js:126:17)
+      at TLSSocket.socketOnData (_http_client.js:515:22)
+      at TLSSocket.emit (events.js:375:28)
 
 npm manifest: 
   {
@@ -32,8 +32,8 @@ npm manifest:
     "version": "0.1.0",
     "dependencies": {
       "@apollo/client": "^3.3.7",
+      "@date-io/moment": "^2.11.0",
       "@fortawesome/fontawesome": "^1.2.0-6",
-      "@fortawesome/fontawesome-pro": "^5.15.3",
       "@fortawesome/fontawesome-svg-core": "^1.2.35",
       "@fortawesome/free-brands-svg-icons": "^5.15.3",
       "@fortawesome/free-solid-svg-icons": "^5.15.3",
@@ -41,6 +41,8 @@ npm manifest:
       "@fortawesome/pro-solid-svg-icons": "^5.15.3",
       "@fortawesome/react-fontawesome": "^0.1.14",
       "@material-ui/core": "^4.12.3",
+      "@material-ui/icons": "^4.11.2",
+      "@material-ui/pickers": "^3.3.10",
       "@stripe/react-stripe-js": "^1.4.1",
       "@stripe/stripe-js": "^1.15.1",
       "@testing-library/jest-dom": "^5.11.4",
@@ -100,17 +102,23 @@ npm manifest:
       "react-highlight-words": "^0.16.0",
       "react-infinite-scroller": "^1.2.4",
       "react-intl": "^5.10.6",
+      "react-js-pull-to-refresh": "^1.2.2",
       "react-markdown": "^6.0.2",
+      "react-moment": "^1.1.1",
       "react-number-format": "^4.4.1",
+      "react-onclickoutside": "^6.11.2",
       "react-quill": "^1.3.5",
       "react-resizable": "^1.11.0",
       "react-resize-detector": "^5.2.0",
+      "react-responsive": "^9.0.0-beta.3",
       "react-router-dom": "^5.2.0",
       "react-scripts": "4.0.1",
       "react-signature-canvas": "^1.0.3",
       "react-simple-code-editor": "^0.11.0",
       "react-simple-maps": "^2.3.0",
       "react-sticky": "^6.0.3",
+      "react-swipe": "^6.0.4",
+      "react-swipeable-views": "^0.14.0",
       "react-syntax-highlighter": "^15.4.3",
       "react-tooltip": "^4.2.11",
       "react-virtualized": "^9.22.2",
@@ -1342,6 +1350,13 @@ Lockfile:
       core-js-pure "^3.0.0"
       regenerator-runtime "^0.13.4"
   
+  "@babel/runtime@7.0.0":
+    version "7.0.0"
+    resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.0.0.tgz#adeb78fedfc855aa05bc041640f3f6f98e85424c"
+    integrity sha512-7hGhzlcmg01CvH1EHdSPVXYX1aJ8KCEyz6I9xYIi/asDtzBPMyMhVibhM/K6g/5qnKBwjZtp10bNZIEFTRW1MA==
+    dependencies:
+      regenerator-runtime "^0.12.0"
+  
   "@babel/runtime@7.12.1":
     version "7.12.1"
     resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.12.1.tgz#b4116a6b6711d010b2dad3b7b6e43bf1b9954740"
@@ -1356,7 +1371,7 @@ Lockfile:
     dependencies:
       regenerator-runtime "^0.13.4"
   
-  "@babel/runtime@^7.4.4", "@babel/runtime@^7.8.3":
+  "@babel/runtime@^7.2.0", "@babel/runtime@^7.4.4", "@babel/runtime@^7.6.0", "@babel/runtime@^7.8.3":
     version "7.14.8"
     resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.14.8.tgz#7119a56f421018852694290b9f9148097391b446"
     integrity sha512-twj3L8Og5SaCRCErB4x4ajbvBIVV77CGeFglHpeg5WC5FF8TZzBWXtTJ4MqaD9QszLYTtr+IsaAL2rEUevb+eg==
@@ -1456,6 +1471,23 @@ Lockfile:
     version "3.4.0"
     resolved "https://registry.yarnpkg.com/@ctrl/tinycolor/-/tinycolor-3.4.0.tgz#c3c5ae543c897caa9c2a68630bed355be5f9990f"
     integrity sha512-JZButFdZ1+/xAfpguQHoabIXkcqRRKpMrWKBkpEZZyxfY9C1DpADFB8PEqGSTeFr135SaTRfKqGKx5xSCLI7ZQ==
+  
+  "@date-io/core@1.x":
+    version "1.3.13"
+    resolved "https://registry.yarnpkg.com/@date-io/core/-/core-1.3.13.tgz#90c71da493f20204b7a972929cc5c482d078b3fa"
+    integrity sha512-AlEKV7TxjeK+jxWVKcCFrfYAk8spX9aCyiToFIiLPtfQbsjmRGLIhb5VZgptQcJdHtLXo7+m0DuurwFgUToQuA==
+  
+  "@date-io/core@^2.11.0":
+    version "2.11.0"
+    resolved "https://registry.yarnpkg.com/@date-io/core/-/core-2.11.0.tgz#28580cda1c8228ab2c7ed6aee673ef0495f913e6"
+    integrity sha512-DvPBnNoeuLaoSJZaxgpu54qzRhRKjSYVyQjhznTFrllKuDpm0sDFjHo6lvNLCM/cfMx2gb2PM2zY2kc9C8nmuw==
+  
+  "@date-io/moment@^2.11.0":
+    version "2.11.0"
+    resolved "https://registry.yarnpkg.com/@date-io/moment/-/moment-2.11.0.tgz#850f8dd090d401845b39276d034dbabe20224ef5"
+    integrity sha512-QSL+83qezQ9Ty0dtFgAkk6eC0GMl/lgYfDajeVUDB3zVA2A038hzczRLBg29ifnBGhQMPABxuOafgWwhDjlarg==
+    dependencies:
+      "@date-io/core" "^2.11.0"
   
   "@emotion/hash@^0.8.0":
     version "0.8.0"
@@ -1871,6 +1903,25 @@ Lockfile:
       prop-types "^15.7.2"
       react-is "^16.8.0 || ^17.0.0"
       react-transition-group "^4.4.0"
+  
+  "@material-ui/icons@^4.11.2":
+    version "4.11.2"
+    resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-4.11.2.tgz#b3a7353266519cd743b6461ae9fdfcb1b25eb4c5"
+    integrity sha512-fQNsKX2TxBmqIGJCSi3tGTO/gZ+eJgWmMJkgDiOfyNaunNaxcklJQFaFogYcFl0qFuaEz1qaXYXboa/bUXVSOQ==
+    dependencies:
+      "@babel/runtime" "^7.4.4"
+  
+  "@material-ui/pickers@^3.3.10":
+    version "3.3.10"
+    resolved "https://registry.yarnpkg.com/@material-ui/pickers/-/pickers-3.3.10.tgz#f1b0f963348cc191645ef0bdeff7a67c6aa25485"
+    integrity sha512-hS4pxwn1ZGXVkmgD4tpFpaumUaAg2ZzbTrxltfC5yPw4BJV+mGkfnQOB4VpWEYZw2jv65Z0wLwDE/piQiPPZ3w==
+    dependencies:
+      "@babel/runtime" "^7.6.0"
+      "@date-io/core" "1.x"
+      "@types/styled-jsx" "^2.2.8"
+      clsx "^1.0.2"
+      react-transition-group "^4.0.0"
+      rifm "^0.7.0"
   
   "@material-ui/styles@^4.11.4":
     version "4.11.4"
@@ -2562,6 +2613,13 @@ Lockfile:
       "@types/hoist-non-react-statics" "*"
       "@types/react" "*"
       csstype "^3.0.2"
+  
+  "@types/styled-jsx@^2.2.8":
+    version "2.2.9"
+    resolved "https://registry.yarnpkg.com/@types/styled-jsx/-/styled-jsx-2.2.9.tgz#e50b3f868c055bcbf9bc353eca6c10fdad32a53f"
+    integrity sha512-W/iTlIkGEyTBGTEvZCey8EgQlQ5l0DwMqi3iOXlLs2kyBwYTXHKEiU6IZ5EwoRwngL8/dGYuzezSup89ttVHLw==
+    dependencies:
+      "@types/react" "*"
   
   "@types/tapable@*", "@types/tapable@^1.0.5":
     version "1.0.6"
@@ -4540,7 +4598,7 @@ Lockfile:
       process-nextick-args "^2.0.0"
       readable-stream "^2.3.5"
   
-  clsx@^1.0.4:
+  clsx@^1.0.2, clsx@^1.0.4:
     version "1.1.1"
     resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.1.1.tgz#98b3134f9abbdf23b2663491ace13c5c03a73188"
     integrity sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==
@@ -5054,6 +5112,11 @@ Lockfile:
       postcss-value-parser "^4.1.0"
       schema-utils "^2.7.1"
       semver "^7.3.2"
+  
+  css-mediaquery@^0.1.2:
+    version "0.1.2"
+    resolved "https://registry.yarnpkg.com/css-mediaquery/-/css-mediaquery-0.1.2.tgz#6a2c37344928618631c54bd33cedd301da18bea0"
+    integrity sha1-aiw3NEkoYYYxxUvTPO3TAdoYvqA=
   
   css-prefers-color-scheme@^3.1.1:
     version "3.1.1"
@@ -7726,7 +7789,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-1.1.1.tgz#c5b1cd14f50aeae09ab6c59fe63ba3395fe4dfa3"
     integrity sha512-SEQu7vl8KjNL2eoGBLF3+wAjpsNfA9XMlXAYj/3EdaNfAlxKthD1xjEQfGOUhllCGGJVNY34bRr6lPINhNjyZw==
   
-  hyphenate-style-name@^1.0.3:
+  hyphenate-style-name@^1.0.0, hyphenate-style-name@^1.0.3:
     version "1.0.4"
     resolved "https://registry.yarnpkg.com/hyphenate-style-name/-/hyphenate-style-name-1.0.4.tgz#691879af8e220aea5750e8827db4ef62a54e361d"
     integrity sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ==
@@ -9169,6 +9232,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-3.1.2.tgz#3fb319f3675a2df0c2895c8f5e9fa4b67b04ed59"
     integrity sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==
   
+  keycode@^2.1.7:
+    version "2.2.0"
+    resolved "https://registry.yarnpkg.com/keycode/-/keycode-2.2.0.tgz#3d0af56dc7b8b8e5cba8d0a97f107204eec22b04"
+    integrity sha1-PQr1bce4uOXLqNCpfxByBO7CKwQ=
+  
   killable@^1.0.1:
     version "1.0.1"
     resolved "https://registry.yarnpkg.com/killable/-/killable-1.0.1.tgz#4c8ce441187a061c7474fb87ca08e2a638194892"
@@ -9432,6 +9500,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/lodash.flatten/-/lodash.flatten-4.4.0.tgz#f31c22225a9632d2bbf8e4addbef240aa765a61f"
     integrity sha1-8xwiIlqWMtK7+OSt2+8kCqdlph8=
   
+  lodash.isequal@^4.5.0:
+    version "4.5.0"
+    resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+    integrity sha1-QVxEePK8wwEgwizhDtMib30+GOA=
+  
   lodash.memoize@^4.1.2:
     version "4.1.2"
     resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
@@ -9631,6 +9704,13 @@ Lockfile:
       micromatch "^3.0.4"
       resolve "^1.4.0"
       stack-trace "0.0.10"
+  
+  matchmediaquery@^0.3.0:
+    version "0.3.1"
+    resolved "https://registry.yarnpkg.com/matchmediaquery/-/matchmediaquery-0.3.1.tgz#8247edc47e499ebb7c58f62a9ff9ccf5b815c6d7"
+    integrity sha512-Hlk20WQHRIm9EE9luN1kjRjYXAQToHOIAHPJn9buxBwuhfTHoKUcX+lXBbxc85DVQfXYbEQ4HcwQdd128E3qHQ==
+    dependencies:
+      css-mediaquery "^0.1.2"
   
   material-colors@^1.2.1:
     version "1.2.6"
@@ -11800,7 +11880,7 @@ Lockfile:
       kleur "^3.0.3"
       sisteransi "^1.0.5"
   
-  prop-types@15.x, prop-types@^15.5.10, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
+  prop-types@15.x, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
     version "15.7.2"
     resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
     integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -12550,6 +12630,15 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.8.tgz#474ed11d04fc6bda3af643447d85e9127ed6b5de"
     integrity sha512-HvPuUQnLp5H7TouGq3kzBeioJmXms1wHy9EGjz2OURWBp4qZO6AfGEcnxts1D/CbwPLRAgTMPCEgYhA3sEM4vw==
   
+  react-event-listener@^0.6.0:
+    version "0.6.6"
+    resolved "https://registry.yarnpkg.com/react-event-listener/-/react-event-listener-0.6.6.tgz#758f7b991cad9086dd39fd29fad72127e1d8962a"
+    integrity sha512-+hCNqfy7o9wvO6UgjqFmBzARJS7qrNoda0VqzvOuioEpoEXKutiKuv92dSz6kP7rYLmyHPyYNLesi5t/aH1gfw==
+    dependencies:
+      "@babel/runtime" "^7.2.0"
+      prop-types "^15.6.0"
+      warning "^4.0.1"
+  
   react-frame-component@^4.1.3:
     version "4.1.3"
     resolved "https://registry.yarnpkg.com/react-frame-component/-/react-frame-component-4.1.3.tgz#64c09dd29574720879c5f43ee36c17d8ae74d4ec"
@@ -12604,6 +12693,11 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
     integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
   
+  react-js-pull-to-refresh@^1.2.2:
+    version "1.2.2"
+    resolved "https://registry.yarnpkg.com/react-js-pull-to-refresh/-/react-js-pull-to-refresh-1.2.2.tgz#bd4288049cb564953ab1fa27187c1c37bc309a91"
+    integrity sha512-fb4gBIGIE7Mehj1ZzMegl3Ca8abSc2zT6s60n+iCALdUeI9H9XvD5T+v2M8N2MDyJcxvghKdzLHZlRbSVDwK7w==
+  
   react-lifecycles-compat@^3.0.4:
     version "3.0.4"
     resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
@@ -12628,12 +12722,22 @@ Lockfile:
       unist-util-visit "^2.0.0"
       vfile "^4.0.0"
   
+  react-moment@^1.1.1:
+    version "1.1.1"
+    resolved "https://registry.yarnpkg.com/react-moment/-/react-moment-1.1.1.tgz#5fe9fb257039590c804e2b3aedfc3ceb0a6ffb16"
+    integrity sha512-WjwvxBSnmLMRcU33do0KixDB+9vP3e84eCse+rd+HNklAMNWyRgZTDEQlay/qK6lcXFPRuEIASJTpEt6pyK7Ww==
+  
   react-number-format@^4.4.1:
     version "4.4.4"
     resolved "https://registry.yarnpkg.com/react-number-format/-/react-number-format-4.4.4.tgz#2a7f50be404f990ec15855cc6babfeae1be16351"
     integrity sha512-/MuF1GOs1Z0xBaQie8+TTqCxUTT8xxjc6RqIFVWcWB6FM8GNIenSh2ayzN6Y1J2WMcXUDVwMdDXjweHKVjXm/w==
     dependencies:
       prop-types "^15.7.2"
+  
+  react-onclickoutside@^6.11.2:
+    version "6.11.2"
+    resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.11.2.tgz#790e2100b9a3589eefca1404ecbf0476b81b7928"
+    integrity sha512-640486eSwU/t5iD6yeTlefma8dI3bxPXD93hM9JGKyYITAd0P1JFkkcDeyHZRqNpY/fv1YW0Fad9BXr44OY8wQ==
   
   react-quill@^1.3.5:
     version "1.3.5"
@@ -12680,6 +12784,16 @@ Lockfile:
       prop-types "^15.7.2"
       raf-schd "^4.0.2"
       resize-observer-polyfill "^1.5.1"
+  
+  react-responsive@^9.0.0-beta.3:
+    version "9.0.0-beta.3"
+    resolved "https://registry.yarnpkg.com/react-responsive/-/react-responsive-9.0.0-beta.3.tgz#934cd8e21d007335ef1456b66288ee197e69b78a"
+    integrity sha512-h194vQjUvxY4f9pMWDltSqllymir6Kdt5bqmTOdBeHsVnk/oe+lmD296hViKUDSYfjAHhdKVHMiexYY9dmvA+w==
+    dependencies:
+      hyphenate-style-name "^1.0.0"
+      matchmediaquery "^0.3.0"
+      prop-types "^15.6.1"
+      shallow-equal "^1.2.1"
   
   react-router-dom@^5.2.0:
     version "5.2.0"
@@ -12807,6 +12921,46 @@ Lockfile:
       prop-types "^15.5.8"
       raf "^3.3.0"
   
+  react-swipe@^6.0.4:
+    version "6.0.4"
+    resolved "https://registry.yarnpkg.com/react-swipe/-/react-swipe-6.0.4.tgz#76e53599b1a093d5a3a841c7f391ef0abcc1babb"
+    integrity sha512-NIF+gVOqPpE8GyCg0ssFC+fPgeqCwNnvqFU/A8nDAOvoncW3KjSVFwgkYNnErHvpFZGmsVw4SLWK96n7+mnChg==
+    dependencies:
+      lodash.isequal "^4.5.0"
+      prop-types "^15.6.0"
+      swipe-js-iso "^2.1.5"
+  
+  react-swipeable-views-core@^0.14.0:
+    version "0.14.0"
+    resolved "https://registry.yarnpkg.com/react-swipeable-views-core/-/react-swipeable-views-core-0.14.0.tgz#6ac443a7cc7bc5ea022fbd549292bb5fff361cce"
+    integrity sha512-0W/e9uPweNEOSPjmYtuKSC/SvKKg1sfo+WtPdnxeLF3t2L82h7jjszuOHz9C23fzkvLfdgkaOmcbAxE9w2GEjA==
+    dependencies:
+      "@babel/runtime" "7.0.0"
+      warning "^4.0.1"
+  
+  react-swipeable-views-utils@^0.14.0:
+    version "0.14.0"
+    resolved "https://registry.yarnpkg.com/react-swipeable-views-utils/-/react-swipeable-views-utils-0.14.0.tgz#6b76e251906747482730c22002fe47ab1014ba32"
+    integrity sha512-W+fXBOsDqgFK1/g7MzRMVcDurp3LqO3ksC8UgInh2P/tKgb5DusuuB1geKHFc6o1wKl+4oyER4Zh3Lxmr8xbXA==
+    dependencies:
+      "@babel/runtime" "7.0.0"
+      keycode "^2.1.7"
+      prop-types "^15.6.0"
+      react-event-listener "^0.6.0"
+      react-swipeable-views-core "^0.14.0"
+      shallow-equal "^1.2.1"
+  
+  react-swipeable-views@^0.14.0:
+    version "0.14.0"
+    resolved "https://registry.yarnpkg.com/react-swipeable-views/-/react-swipeable-views-0.14.0.tgz#149c0df3d92220cc89e3f6d5c04a78dfe46f9b54"
+    integrity sha512-wrTT6bi2nC3JbmyNAsPXffUXLn0DVT9SbbcFr36gKpbaCgEp7rX/OFxsu5hPc/NBsUhHyoSRGvwqJNNrWTwCww==
+    dependencies:
+      "@babel/runtime" "7.0.0"
+      prop-types "^15.5.4"
+      react-swipeable-views-core "^0.14.0"
+      react-swipeable-views-utils "^0.14.0"
+      warning "^4.0.1"
+  
   react-syntax-highlighter@^15.4.3:
     version "15.4.3"
     resolved "https://registry.yarnpkg.com/react-syntax-highlighter/-/react-syntax-highlighter-15.4.3.tgz#fffe3286677ac470b963b364916d16374996f3a6"
@@ -12826,7 +12980,7 @@ Lockfile:
       prop-types "^15.7.2"
       uuid "^7.0.3"
   
-  react-transition-group@^4.4.0:
+  react-transition-group@^4.0.0, react-transition-group@^4.4.0:
     version "4.4.2"
     resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-4.4.2.tgz#8b59a56f09ced7b55cbd53c36768b922890d5470"
     integrity sha512-/RNYfRAMlZwDSr6z4zNKV6xu53/e2BuaBbGhbyYIXTrmgu/bGHzmqOs7mJSJBHy9Ud+ApHx3QjrkKSp1pxvlFg==
@@ -13046,6 +13200,11 @@ Lockfile:
     version "0.11.1"
     resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz#be05ad7f9bf7d22e056f9726cee5017fbf19e2e9"
     integrity sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==
+  
+  regenerator-runtime@^0.12.0:
+    version "0.12.1"
+    resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.12.1.tgz#fa1a71544764c036f8c49b13a08b2594c9f8a0de"
+    integrity sha512-odxIc1/vDlo4iZcfXqRYFj0vpXFNoGdKMAUieAlFYO6m/nl5e9KR/beGf41z4a1FI+aQgtjhuaSlDxQ0hmkrHg==
   
   regenerator-runtime@^0.13.4, regenerator-runtime@^0.13.7:
     version "0.13.7"
@@ -13397,6 +13556,13 @@ Lockfile:
     version "1.0.0"
     resolved "https://registry.yarnpkg.com/rgba-regex/-/rgba-regex-1.0.0.tgz#43374e2e2ca0968b0ef1523460b7d730ff22eeb3"
     integrity sha1-QzdOLiyglosO8VI0YLfXMP8i7rM=
+  
+  rifm@^0.7.0:
+    version "0.7.0"
+    resolved "https://registry.yarnpkg.com/rifm/-/rifm-0.7.0.tgz#debe951a9c83549ca6b33e5919f716044c2230be"
+    integrity sha512-DSOJTWHD67860I5ojetXdEQRIBvF6YcpNe53j0vn1vp9EUb9N80EiZTxgP+FkDKorWC8PZw052kTF4C1GOivCQ==
+    dependencies:
+      "@babel/runtime" "^7.3.1"
   
   right-align@^0.1.1:
     version "0.1.3"
@@ -14580,6 +14746,11 @@ Lockfile:
       stable "^0.1.8"
       unquote "~1.1.1"
       util.promisify "~1.0.0"
+  
+  swipe-js-iso@^2.1.5:
+    version "2.1.5"
+    resolved "https://registry.yarnpkg.com/swipe-js-iso/-/swipe-js-iso-2.1.5.tgz#9b0eea8b9740487e6169d655184fc6440b6a2e34"
+    integrity sha512-yTTU5tDYEvtKfCD8PN+Rva25acJwogUCd6wPT1n1im/MOJlg6PtHiPKaaNK7HDBiIrWThA/WRbJZbox2letghg==
   
   symbol-observable@^1.2.0:
     version "1.2.0"

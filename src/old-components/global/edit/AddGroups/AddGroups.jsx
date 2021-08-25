@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import { useQuery } from '@apollo/client';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import { useQuery } from "@apollo/client";
 
-import { PopOver } from '../../layout';
-import { BackButton } from '../../actions';
-import { Groups } from 'graphql-src/groups/queries';
-import { EmptyText } from '../../typography';
-import { useStoreState } from 'state';
-import OffendersImage from 'images/Offender'
+import { PopOver } from "../../layout";
+import { BackButton } from "../../actions";
+import { Groups } from "graphql-src/groups/queries";
+import { EmptyText } from "../../typography";
+import { useStoreState } from "state";
+import OffendersImage from "images/Offender";
 
 const Grow = styled.div`
   flex: 1;
@@ -53,7 +53,7 @@ const PopOverContainer = styled.div`
 `;
 
 const AddGroups = ({ open, close, groups, addGroups }) => {
-  const scheme = useStoreState(state => state.scheme.id)
+  const scheme = useStoreState((state) => state.scheme.id);
 
   // state
   const [selected, setSelected] = useState([]);
@@ -62,17 +62,17 @@ const AddGroups = ({ open, close, groups, addGroups }) => {
   const { data, loading } = useQuery(Groups, {
     variables: {
       where: {
-        scheme: { id : { equals: scheme } },
-        id: { notIn: !!groups ? groups.map(({ id }) => id) : [] }
-      }
+        scheme: { id: { equals: scheme } },
+        id: { notIn: !!groups ? groups.map(({ id }) => id) : [] },
+      },
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: "cache-and-network",
   });
 
   // functions
-  const toggleSelected = id =>
+  const toggleSelected = (id) =>
     selected.includes(id)
-      ? setSelected(selected.filter(group => group !== id))
+      ? setSelected(selected.filter((group) => group !== id))
       : setSelected([...selected, id]);
   const handleClose = () => {
     close();
@@ -85,7 +85,7 @@ const AddGroups = ({ open, close, groups, addGroups }) => {
       open={open}
       width={600}
       handleClose={handleClose}
-      title={'Add Groups'}
+      title={"Add Groups"}
       actions={[
         <BackButton key={0} onClick={handleClose}>
           Cancel
@@ -97,12 +97,14 @@ const AddGroups = ({ open, close, groups, addGroups }) => {
           onClick={() => {
             handleClose();
             addGroups(
-              selected.map(group => data.groups.find(({ id }) => id === group))
+              selected.map((group) =>
+                data.groups.find(({ id }) => id === group)
+              )
             );
           }}
         >
           Add Groups
-        </Button>
+        </Button>,
       ]}
     >
       <Grow>
@@ -127,7 +129,7 @@ const AddGroups = ({ open, close, groups, addGroups }) => {
                         viewBox="0 0 24 24"
                       >
                         <path
-                          fill={selected.includes(id) ? '#1E88E5' : '#E0E0E0'}
+                          fill={selected.includes(id) ? "#1E88E5" : "#E0E0E0"}
                           d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M11,16.5L18,9.5L16.59,8.09L11,13.67L7.91,10.59L6.5,12L11,16.5Z"
                         />
                       </Svg>

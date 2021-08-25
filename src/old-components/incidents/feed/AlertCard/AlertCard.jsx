@@ -1,23 +1,23 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import isEqual from 'lodash/isEqual';
-import { Link } from 'react-router-dom';
-import MenuItem from '@material-ui/core/MenuItem';
-import SwipeableViews from 'react-swipeable-views';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import React, { Component } from "react";
+import styled from "styled-components";
+import isEqual from "lodash/isEqual";
+import { Link } from "react-router-dom";
+import MenuItem from "@material-ui/core/MenuItem";
+import SwipeableViews from "react-swipeable-views";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 
 import {
   UnapprovedCard,
   CardMenu,
-  UploadingOverlay
-} from '../../../global/cards';
-import AlertCardImages from '../AlertCardImages/AlertCardImages';
-import AlertCardDescription from '../AlertCardDescription/AlertCardDescription';
-import AlertCardLocation from '../AlertCardLocation/AlertCardLocation';
-import AlertCardOffenders from '../AlertCardOffenders/AlertCardOffenders';
-import { isAuthorised } from 'utils';
-import { useStoreState } from '../../../../state';
+  UploadingOverlay,
+} from "../../../global/cards";
+import AlertCardImages from "../AlertCardImages/AlertCardImages";
+import AlertCardDescription from "../AlertCardDescription/AlertCardDescription";
+import AlertCardLocation from "../AlertCardLocation/AlertCardLocation";
+import AlertCardOffenders from "../AlertCardOffenders/AlertCardOffenders";
+import { isAuthorised } from "utils";
+import { useStoreState } from "../../../../state";
 
 const StyledTab = styled(Tab)`
   min-width: 0px !important;
@@ -43,7 +43,7 @@ class AlertCard extends Component {
     this.state = {
       offenderView: false,
       currentOffender: { images: [] },
-      activeTab: 0
+      activeTab: 0,
     };
   }
 
@@ -70,20 +70,19 @@ class AlertCard extends Component {
         createdBy,
         location,
         offenders,
-        uploaded
+        uploaded,
       },
       userRole,
       toggleDeleteModal,
       toggleOffenderPopOver,
       toggleApprove,
       admin,
-      toggleDecline
+      toggleDecline,
     } = this.props;
     const { activeTab } = this.state;
     let menuActions = [];
-    console.log(userRole)
 
-    if (isAuthorised(userRole, ['SCHEME_ADMIN', 'CONTENT_ADMIN'])) {
+    if (isAuthorised(userRole, ["SCHEME_ADMIN", "CONTENT_ADMIN"])) {
       menuActions.push(
         <MenuItem key="0" component={Link} to={`/app/incidents/edit/${id}`}>
           <Svg viewBox="0 0 24 24">
@@ -135,7 +134,7 @@ class AlertCard extends Component {
         </Tabs>
         <SwipeableViews
           index={activeTab}
-          onChangeIndex={e => this.setState({ activeTab: e })}
+          onChangeIndex={(e) => this.setState({ activeTab: e })}
         >
           <div>
             <AlertCardDescription
@@ -162,8 +161,8 @@ class AlertCard extends Component {
   }
 }
 
-const Wrapper = props => {
-  const userRole = useStoreState(state => state.user.role);
+const Wrapper = (props) => {
+  const userRole = useStoreState((state) => state.user.role);
 
   return <AlertCard userRole={userRole} {...props} />;
 };

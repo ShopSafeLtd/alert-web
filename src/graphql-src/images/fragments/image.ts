@@ -6,6 +6,9 @@ export const Image = gql`
     url
     optimised
     card
+    offenders {
+      id
+    }
   }
 `;
 

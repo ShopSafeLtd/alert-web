@@ -1,5 +1,5 @@
-import { gql } from '@apollo/client';
-import { Image, ImageType } from '../fragments'
+import { gql } from "@apollo/client";
+import { Image, ImageType } from "../fragments";
 
 export const UploadImage = gql`
   mutation uploadImage(
@@ -23,10 +23,10 @@ export const UploadImage = gql`
 export interface UploadImageArgs {
   file: any;
   scheme: string;
-  incident?: { id: string; };
-  offenders?: { id: string; }[];
+  incident: { id: string };
+  offenders?: { id: string }[];
 }
 
 export interface UploadImageRes {
-  uploadImage: ImageType
+  uploadImage: ImageType;
 }

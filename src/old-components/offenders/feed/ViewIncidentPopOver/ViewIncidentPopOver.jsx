@@ -1,15 +1,15 @@
-import React from 'react';
-import styled from 'styled-components';
-import moment from 'moment';
-import MediaQuery from 'react-responsive';
-import Typography from '@material-ui/core/Typography';
-import { useQuery } from '@apollo/client';
+import React from "react";
+import styled from "styled-components";
+import moment from "moment";
+import MediaQuery from "react-responsive";
+import Typography from "@material-ui/core/Typography";
+import { useQuery } from "@apollo/client";
 
-import { PopOver, Item, Grow } from '../../../global/layout';
-import { ItemHeader, ItemText } from '../../../global/typography';
-import { Incident } from 'graphql-src/incidents/queries';
-import AlertCardImages from '../../../incidents/feed/AlertCardImages/AlertCardImages';
-import { BackButton } from '../../../global/actions';
+import { PopOver, Item, Grow } from "../../../global/layout";
+import { ItemHeader, ItemText } from "../../../global/typography";
+import { Incident } from "graphql-src/incidents/queries";
+import AlertCardImages from "../../../incidents/feed/AlertCardImages/AlertCardImages";
+import { BackButton } from "../../../global/actions";
 
 const Subject = styled(Typography)`
   margin: 10px 0 0;
@@ -58,21 +58,21 @@ const ViewIncidentPopOver = ({ visible, close, incidentId }) => {
   // queries
   const { data, loading: loadingQuery } = useQuery(Incident, {
     variables: { where: { id: incidentId } },
-    fetchPolicy: 'cache-and-network',
-    skip: !incidentId
+    fetchPolicy: "cache-and-network",
+    skip: !incidentId,
   });
 
   const loading = !!data && !!data.incident && !loadingQuery ? false : true;
 
   return (
     <MediaQuery minDeviceWidth={1024}>
-      {matches => (
+      {(matches) => (
         <PopOver
           noPadding
           open={visible}
           width={matches ? 500 : window.innerWidth - 15}
           handleClose={() => close()}
-          title={'View Incident'}
+          title={"View Incident"}
           actions={[
             <BackButton
               color="primary"
@@ -80,7 +80,7 @@ const ViewIncidentPopOver = ({ visible, close, incidentId }) => {
               onClick={() => close()}
             >
               Close
-            </BackButton>
+            </BackButton>,
           ]}
         >
           <AlertCardImages images={loading ? [] : data.incident.images} />
@@ -92,7 +92,7 @@ const ViewIncidentPopOver = ({ visible, close, incidentId }) => {
               {!loading &&
                 `${data.incident.createdBy.fullName} - ${
                   data.incident.createdBy.organisation
-                } - ${moment(data.incident.date).format('DD/MM/YY')}`}
+                } - ${moment(data.incident.date).format("DD/MM/YY")}`}
             </Date>
             <CrimeTypes>
               {!loading &&
@@ -106,7 +106,7 @@ const ViewIncidentPopOver = ({ visible, close, incidentId }) => {
                   <ItemHeader>Date</ItemHeader>
                   <ItemText loading={loading ? 1 : 0}>
                     {!loading &&
-                      moment(data.incident.date).format('DD/MM/YYYY')}
+                      moment(data.incident.date).format("DD/MM/YYYY")}
                   </ItemText>
                 </Item>
               </Grow>
@@ -114,7 +114,7 @@ const ViewIncidentPopOver = ({ visible, close, incidentId }) => {
                 <Item>
                   <ItemHeader>Time</ItemHeader>
                   <ItemText loading={loading ? 1 : 0}>
-                    {!loading && moment(data.incident.time).format('mm:hh')}
+                    {!loading && moment(data.incident.time).format("HH:mm")}
                   </ItemText>
                 </Item>
               </Grow>

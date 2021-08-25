@@ -1,17 +1,17 @@
-import React from 'react';
-import styled from 'styled-components';
-import EditSvg from '@material-ui/icons/Edit';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import React from "react";
+import styled from "styled-components";
+import EditSvg from "@material-ui/icons/Edit";
+import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import {
   ItemHeader,
   ItemText,
   SubHeader,
-  SectionTitle
-} from '../../../../global/typography';
-import { Section } from '../../../../global/layout';
-import { roles } from '../../../../../enums';
+  SectionTitle,
+} from "../../../../global/typography";
+import { Section } from "../../../../global/layout";
+import { RoleValues } from "types";
 
 const EditIcon = styled(EditSvg)`
   width: 18px;
@@ -66,9 +66,7 @@ const Details = ({ user, userLoading, openEdit }) => {
             <Item>
               <ItemHeader>Role</ItemHeader>
               <ItemText>
-                {!!user.schemes &&
-                  roles.find(({ value }) => user.schemes[0].role === value)
-                    .label}
+                {!!user.schemes && RoleValues[user.schemes[0].role]}
               </ItemText>
             </Item>
           </Row>

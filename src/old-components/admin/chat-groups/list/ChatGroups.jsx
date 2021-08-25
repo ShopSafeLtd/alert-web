@@ -1,16 +1,18 @@
-import React, { useEffect } from 'react';
-import styled from 'styled-components';
-import { useQuery } from '@apollo/react-hooks';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import React, { useEffect } from "react";
+import styled from "styled-components";
+import { useQuery } from "@apollo/client";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
 
-import AllChatGroups from '../../../../graphql/admin/queries/AllChatGroups';
-import { ChatGroupRowSkeleton } from '../../../global/skeletons';
-import { FAB } from '../../../global/actions';
-import { useStoreActions, useStoreState } from '../../../../state';
+// import AllChatGroups from '../../../../graphql/admin/queries/AllChatGroups';
+import { SchemeChats } from "graphql-src/chat/queries";
+import { ChatGroupRowSkeleton } from "../../../global/skeletons";
+import { FAB } from "../../../global/actions";
+import { useStoreActions, useStoreState } from "../../../../state";
 
 const Page = styled.div`
   background: #fff;
@@ -22,43 +24,49 @@ const Row = styled(TableRow)`
 `;
 
 const ChatGroups = ({ history }) => {
-  const search = useStoreState(state => state.theme.search);
-  const setSearch = useStoreActions(actions => actions.theme.setSearch);
-  const setSearchText = useStoreActions(actions => actions.theme.setSearchText);
-  const setTitle = useStoreActions(actions => actions.theme.setTitle);
-  const setNavbarAction = useStoreActions(
-    actions => actions.theme.setNavbarAction
+  const search = useStoreState((state) => state.theme.search);
+  const setSearch = useStoreActions((actions) => actions.theme.setSearch);
+  const setSearchText = useStoreActions(
+    (actions) => actions.theme.setSearchText
   );
-  const setBackLinkTo = useStoreActions(actions => actions.theme.setBackLinkTo);
+  const setTitle = useStoreActions((actions) => actions.theme.setTitle);
+  // const setNavbarAction = useStoreActions(
+  //   (actions) => actions.theme.setNavbarAction
+  // );
+  const setBackLinkTo = useStoreActions(
+    (actions) => actions.theme.setBackLinkTo
+  );
+  const schemeId = useStoreState((state) => state.scheme.id);
 
   // effects
-  useEffect(() => {
-    setSearch(true);
-    setSearchText('Search for groups...');
-    setTitle('Chat Groups');
-    setNavbarAction('backLink');
-    setBackLinkTo(`/admin`);
-    return () => {
-      setTitle('');
-      setNavbarAction('default ');
-      setBackLinkTo(``);
-      setSearch(false);
-      setSearchText('');
-    };
-  });
+  // useEffect(() => {
+  //   setSearch(true);
+  //   setSearchText("Search for groups...");
+  //   setTitle("Chat Groups");
+  //   // setNavbarAction("backLink");
+  //   setBackLinkTo(`${APP_PREFIX_PATH}/scheme-settings`);
+  //   return () => {
+  //     setTitle("");
+  //     // setNavbarAction("default ");
+  //     setBackLinkTo(``);
+  //     setSearch(false);
+  //     setSearchText("");
+  //   };
+  // });
 
   // queries
-  const { data, loading } = useQuery(AllChatGroups, {
+  const { data, loading } = useQuery(SchemeChats, {
     variables: {
-      schemeId: window.localStorage.getItem('currentScheme'),
-      search
+      where: {
+        scheme: { id: { equals: schemeId } },
+      },
     },
-    fetchPolicy: 'cache-and-network'
+    fetchPolicy: "cache-and-network",
   });
 
   // functions
-  const toViewGroup = id => {
-    history.push(`/admin/chat-groups/view/${id}`);
+  const toViewGroup = (id) => {
+    history.push(`${APP_PREFIX_PATH}/scheme-settings/chat-groups/view/${id}`);
   };
 
   return (
@@ -78,7 +86,7 @@ const ChatGroups = ({ history }) => {
         ) : (
           <TableBody>
             {!!data &&
-              data.chats.map(({ id, name }) => {
+              data?.chats.map(({ id, name }) => {
                 return (
                   <Row key={id}>
                     <TableCell onClick={() => toViewGroup(id)}>
@@ -90,7 +98,10 @@ const ChatGroups = ({ history }) => {
           </TableBody>
         )}
       </Table>
-      <FAB to="/admin/chat-groups/add" icon="add" />
+      <FAB
+        to={`${APP_PREFIX_PATH}/scheme-settings/chat-groups/add`}
+        icon="add"
+      />
     </Page>
   );
 };

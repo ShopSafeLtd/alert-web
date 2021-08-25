@@ -1,6 +1,6 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
+import React, { PureComponent } from "react";
+import styled from "styled-components";
+import Typography from "@material-ui/core/Typography";
 
 const Banner = styled.div`
   position: absolute;
@@ -11,9 +11,9 @@ const Banner = styled.div`
   ${({ large }) =>
     large
       ? `
-    top: 37px;
-    left: -51px;
-    padding: 5px 76px;
+      top: 25px;
+      left: -95px;
+      padding: 5px 110px;
   `
       : `
     top: 23px;
@@ -43,3 +43,7 @@ class BannedBanner extends PureComponent {
 }
 
 export default BannedBanner;
+
+// top: 37px;
+// left: -51px;
+// padding: 5px 76px;

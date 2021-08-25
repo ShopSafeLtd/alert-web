@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import { gql } from "@apollo/client";
 
 export const MarkOffenderActive = gql`
   mutation markOffenderActive(
@@ -13,8 +13,8 @@ export const MarkOffenderActive = gql`
 `;
 
 export interface MarkOffenderActiveArgs {
-  where: { id: string }
-  data: { active: { set: boolean } }
+  where: { id: string };
+  data: { active: { set: boolean } };
 }
 export interface MarkOffenderActiveRes {
   id: string;

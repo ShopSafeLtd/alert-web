@@ -1,9 +1,10 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import { withRouter } from 'react-router-dom';
-import MediaQuery from 'react-responsive';
+import React, { Component } from "react";
+import styled from "styled-components";
+import { withRouter } from "react-router-dom";
+import MediaQuery from "react-responsive";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
 
-import { EmptyState } from '../../../global/emptyStates';
+import { EmptyState } from "../../../global/emptyStates";
 import {
   List,
   ListHeader,
@@ -13,9 +14,9 @@ import {
   ChatText,
   ChatName,
   ChatMessage,
-  ChatSkeleton
-} from '../';
-import Messages from '../../../../images/Messages';
+  ChatSkeleton,
+} from "../";
+import Messages from "../../../../images/Messages";
 
 const Container = styled.div`
   background-color: #fff;
@@ -25,16 +26,18 @@ const Container = styled.div`
   }
 `;
 
-class ChatList extends PureComponent {
+class ChatList extends Component {
   componentDidMount() {
     this.props.allChats !== undefined && this.props.refetchChats();
   }
 
   componentDidUpdate() {
-    if (this.props.activeChat === '') {
+    if (this.props.activeChat === "") {
       if (this.props.allChats !== undefined) {
         if (this.props.allChats.length > 0) {
-          this.props.setActiveChat(this.props.allChats[0].chat.id);
+          if (this.props.activeChat === "") {
+            this.props.setActiveChat(this.props.allChats[0].chat.id);
+          }
         }
       }
     }
@@ -46,11 +49,13 @@ class ChatList extends PureComponent {
       activeChat,
       setActiveChat,
       history,
-      loading
+      loading,
+      handleMarkAsRead,
     } = this.props;
+
     return (
       <MediaQuery minDeviceWidth={1024}>
-        {matches => (
+        {(matches) => (
           <Container>
             <List>
               {matches && (
@@ -65,16 +70,17 @@ class ChatList extends PureComponent {
                   <ChatSkeleton />
                   <ChatSkeleton />
                 </div>
-              ) : allChats.length === 0 ? (
+              ) : allChats?.length === 0 ? (
                 <EmptyState
                   image={<Messages height="96px" width="96px" />}
                   text="You are not a member of any chat groups"
                 />
               ) : (
-                allChats.map(
+                allChats?.map(
                   ({
+                    id: userChatId,
                     newMessages,
-                    chat: { id, name, firstLetter, messages }
+                    chat: { id, name, firstLetter, messages },
                   }) => {
                     return (
                       <ListItem
@@ -82,19 +88,17 @@ class ChatList extends PureComponent {
                         active={activeChat === id}
                         onClick={() =>
                           matches
-                            ? setActiveChat(id)
-                            : history.push(`/chat/${id}`)
+                            ? (setActiveChat(id), handleMarkAsRead(userChatId))
+                            : history.push(`${APP_PREFIX_PATH}/chat/${id}`)
                         }
                       >
                         <Avatar newMessages={newMessages}>{firstLetter}</Avatar>
                         <ChatText newMessages={newMessages}>
                           <ChatName>{name}</ChatName>
                           <ChatMessage>
-                            {messages.length > 0
-                              ? `${messages[0].from.fullName} : ${
-                                  messages[0].content
-                                }`
-                              : 'No Messgaes'}
+                            {messages?.length > 0
+                              ? `${messages[0].from.fullName} : ${messages[0].content}`
+                              : "No Messages"}
                           </ChatMessage>
                         </ChatText>
                       </ListItem>

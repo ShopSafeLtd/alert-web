@@ -1,14 +1,8 @@
-import gql from 'graphql-tag';
+import { gql } from "@apollo/client";
 
 export const ApproveOffender = gql`
-  mutation updateOffender(
-    $where: UniqueId!
-    $data: GroupUpdateInput
-  ) {
-    updateOffender(
-      where: $where
-      data: $data
-    ) {
+  mutation updateOffender($where: UniqueId!, $data: GroupUpdateInput) {
+    updateOffender(where: $where, data: $data) {
       id
       approved
     }
@@ -16,11 +10,11 @@ export const ApproveOffender = gql`
 `;
 
 export interface ApproveOffenderArgs {
-  where: { id: string; };
+  where: { id: string };
   data: {
-    approved: { set: boolean; }
-    groups: { connect?: { id: string }[]; disconnect?: { id: string }[] }
-  }
+    approved: { set: boolean };
+    groups: { connect?: { id: string }[]; disconnect?: { id: string }[] };
+  };
 }
 
 export interface ApproveOffenderRes {

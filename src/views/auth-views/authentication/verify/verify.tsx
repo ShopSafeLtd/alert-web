@@ -10,7 +10,7 @@ import {
   VerifyUserRes,
 } from "graphql-src/auth/mutations";
 import styled from "styled-components";
-import useAuth from "hooks/useAuth";
+import { useAuth } from "hooks";
 
 const Verifying = styled.div`
   display: flex;
@@ -86,15 +86,16 @@ const LoginOne = (props: Props) => {
         id: data.verifyUser.id,
         onboarded: !data.verifyUser.newUser,
         organisation: data.verifyUser.organisation,
-        schemes: []
+        schemes: [],
       });
   };
 
   const backgroundStyle = {
-		background: theme === 'dark'
-			? 'linear-gradient(to right, #283c86, #45a247)'
-			: 'linear-gradient(to right, #11998e, #38ef7d)'
-	}
+    background:
+      theme === "dark"
+        ? "linear-gradient(to right, #283c86, #45a247)"
+        : "linear-gradient(to right, #11998e, #38ef7d)",
+  };
 
   return (
     <div className="h-100" style={backgroundStyle}>
@@ -116,7 +117,10 @@ const LoginOne = (props: Props) => {
                 <Row justify="center">
                   {expired ? (
                     <Verifying>
-                      <VerifyingText type="danger">This invite link has expired. If you need another please speak to you administrator.</VerifyingText>
+                      <VerifyingText type="danger">
+                        This invite link has expired. If you need another please
+                        speak to you administrator.
+                      </VerifyingText>
                     </Verifying>
                   ) : verifying ? (
                     <Verifying>

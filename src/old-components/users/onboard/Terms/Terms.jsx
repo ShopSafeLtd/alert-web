@@ -1,11 +1,11 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Typography from '@material-ui/core/Typography';
+import React, { PureComponent } from "react";
+import styled from "styled-components";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Typography from "@material-ui/core/Typography";
 
-import { HeaderText, HeaderSubText } from '../../../global/forms';
-import { ErrorText } from '../../../global/typography';
+import { HeaderText, HeaderSubText } from "../../../global/forms";
+import { ErrorText } from "../../../global/typography";
 
 const Page = styled.div`
   width: 100%;
@@ -48,7 +48,7 @@ class Terms extends PureComponent {
   render() {
     const {
       values: { termsSigned, error },
-      handleChange
+      handleChange,
     } = this.props;
     return (
       <Page>
@@ -59,7 +59,6 @@ class Terms extends PureComponent {
             continue.
           </HeaderSubText>
         </Header>
-        {!!error && <ErrorText>{error}</ErrorText>}
         <TermsContainer>
           <TermsText>
             By accessing Alert! you agree to these Terms of Use.
@@ -291,12 +290,14 @@ class Terms extends PureComponent {
             <br />
           </TermsText>
         </TermsContainer>
+        {!!error && <ErrorText>{error}</ErrorText>}
+
         <CheckboxRow>
           <FormControlLabel
             control={
               <Checkbox
                 checked={termsSigned}
-                onChange={() => handleChange('termsSigned', !termsSigned)}
+                onChange={() => handleChange("termsSigned", !termsSigned)}
                 value="accepted"
               />
             }

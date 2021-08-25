@@ -1,21 +1,19 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { useQuery } from '@apollo/client';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { useQuery } from "@apollo/client";
+import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-import OffendersImage from '../../../../../images/Offenders';
-import OffenderPreview from '../../../global/OffenderPreview/OffenderPreview';
-import SearchOffenders from '../../../global/SearchOffenders/SearchOffenders';
-import { EmptyText } from '../../../../global/typography';
-import OffenderItem from './OffenderItem';
-import {
-  Offenders
-} from 'graphql-src/offenders/queries';
-import OffendersList from './OffenderList';
-import { BackButton } from '../../../../global/actions';
-import { PopOver } from '../../../../global/layout';
-import { useStoreState } from 'state';
+import OffendersImage from "../../../../../images/Offenders";
+import OffenderPreview from "../../../global/OffenderPreview/OffenderPreview";
+import SearchOffenders from "../../../global/SearchOffenders/SearchOffenders";
+import { EmptyText } from "../../../../global/typography";
+import OffenderItem from "./OffenderItem";
+import { Offenders } from "graphql-src/offenders/queries";
+import OffendersList from "./OffenderList";
+import { BackButton } from "../../../../global/actions";
+import { PopOver } from "../../../../global/layout";
+import { useStoreState } from "state";
 
 const Page = styled.div`
   display: flex;
@@ -43,37 +41,44 @@ const ExistingOffender = ({
   open,
   close,
   addExistingOffenders,
-  addNew
+  addNew,
 }) => {
-  const scheme = useStoreState(state => state.scheme.id)
+  const scheme = useStoreState((state) => state.scheme.id);
 
   // state
-  const [current, setCurrent] = useState('');
+  const [current, setCurrent] = useState("");
   const [selected, setSelected] = useState([]);
-  const [search, setSearch] = useState('');
-  const [cursor, setCursor] = useState('');
+  const [search, setSearch] = useState("");
+  const [cursor, setCursor] = useState("");
   const [fetching, setFetching] = useState(false);
   const [allLoaded, setAllLoaded] = useState(false);
+  const [offenderListScrollPosition, setOffenderListScrollPosition] =
+    useState(0);
 
   // queries
   const { data, loading, fetchMore } = useQuery(Offenders, {
     variables: {
       where: {
-        scheme: { id: { equals: scheme.id } },
+        scheme: { id: { equals: scheme } },
         name: { contains: search },
         id: { notIn: existingOffenders },
-      }
+      },
+      orderBy: { createdAt: "desc" },
     },
-    fetchPolicy: 'cache-and-network',
-    onCompleted: data =>
-      data.offenders.length > 0 && setCurrent(data.offenders[0].id)
+    fetchPolicy: "cache-and-network",
+    onCompleted: (data) => {
+      data.offenders.length > 0 && setCurrent(data.offenders[0].id);
+
+      setCursor(data.offenders[data.offenders.length - 1].id);
+    },
   });
 
   // functions
-  const toggleOffenders = id =>
+  const toggleOffenders = (id) =>
     selected.includes(id)
-      ? setSelected(selected.filter(offender => offender !== id))
+      ? setSelected(selected.filter((offender) => offender !== id))
       : setSelected([...selected, id]);
+
   const loadMore = async () => {
     !!cursor && setCursor(data.offenders[0].id);
     if (!allLoaded && !fetching) {
@@ -82,21 +87,25 @@ const ExistingOffender = ({
         query: Offenders,
         variables: {
           after: { id: cursor },
+          orderBy: { createdAt: "desc" },
           where: {
-            scheme: { id: { equals: scheme.id } },
+            scheme: { id: { equals: scheme } },
             name: { contains: search },
             id: { notIn: existingOffenders },
-          }
+          },
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          fetchMoreResult.offenders.length === 0 && setAllLoaded(true);
+          if (fetchMoreResult.offenders.length === 0) return setAllLoaded(true);
+          setCursor(
+            fetchMoreResult.offenders[fetchMoreResult.offenders.length - 1].id
+          );
           return {
             offenders: [
               ...previousResult.offenders,
-              ...fetchMoreResult.offenders
-            ]
+              ...fetchMoreResult.offenders,
+            ],
           };
-        }
+        },
       });
       setFetching(false);
     }
@@ -107,37 +116,47 @@ const ExistingOffender = ({
       Cancel
     </BackButton>
   );
-  actions.push(
+
+  const addOne = (
     <BackButton
       key={1}
-      variant={selected.length === 0 ? 'contained' : 'text'}
+      variant="contained"
       color="primary"
       disabled={(!!data && data.offenders.length === 0) || loading}
       onClick={() => {
-        addExistingOffenders([data.offenders.find(({ id }) => current === id)]);
+        addExistingOffenders(
+          selected.map((offender) =>
+            data.offenders.find(({ id }) => {
+              return offender === id;
+            })
+          )
+        );
         close();
       }}
     >
       Add Offender
     </BackButton>
   );
-  selected.length > 0 &&
-    actions.push(
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => {
-          addExistingOffenders(
-            selected.map(offender =>
-              data.offenders.find(({ id }) => offender === id)
-            )
-          );
-          close();
-        }}
-      >
-        Add Selected Offenders
-      </Button>
-    );
+  const addMany = (
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={() => {
+        addExistingOffenders(
+          selected.map((offender) =>
+            data.offenders.find(({ id }) => {
+              return offender === id;
+            })
+          )
+        );
+        close();
+      }}
+    >
+      Add Selected Offenders
+    </Button>
+  );
+
+  actions.push(selected.length > 1 ? addMany : addOne);
 
   return (
     <PopOver
@@ -145,20 +164,25 @@ const ExistingOffender = ({
       open={open}
       width={1000}
       handleClose={close}
-      title={'Add Existing Offender'}
+      title={"Add Existing Offender"}
       actions={actions}
     >
       <Page>
         <ListContainer>
           <SearchOffenders
             search={search}
-            handleSearch={value => setSearch(value)}
+            handleSearch={(value) => setSearch(value)}
           />
-          <OffendersList loadMore={loadMore}>
+          <OffendersList
+            loadMore={loadMore}
+            scrollTop={offenderListScrollPosition}
+            setScrollTop={setOffenderListScrollPosition}
+            loading={fetching}
+          >
             {loading ? (
               <CircularProgress />
-            ) : data.offenders.length > 0 ? (
-              data.offenders.map(offender => {
+            ) : data?.offenders?.length > 0 ? (
+              data?.offenders?.map((offender) => {
                 return (
                   <OffenderItem
                     key={offender.id}

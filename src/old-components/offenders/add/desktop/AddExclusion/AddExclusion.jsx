@@ -1,155 +1,143 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 
 import {
   PopOver,
   PopOverHeader,
   PopOverActions,
   PopOverContainer,
-  Row
-} from '../../../../global/layout';
+  Row,
+} from "../../../../global/layout";
 import {
   FieldHeader,
   Field,
   DateField,
-  FieldHelp
-} from '../../../../global/forms';
-import { BackButton } from '../../../../global/actions';
+  FieldHelp,
+} from "../../../../global/forms";
+import { BackButton } from "../../../../global/actions";
 
 const Grow = styled.div`
   flex: 1;
   width: 100%;
 `;
 
-class AddExclusion extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      startDate: new Date(),
-      endDate: new Date(),
-      location: '',
-      locationError: '',
-      description: ''
-    };
-  }
+const AddExclusion = ({ open, addExclusion, close }) => {
+  const [details, setDetails] = useState({
+    startDate: new Date(),
+    endDate: new Date(),
+    location: "",
+    locationError: "",
+    description: "",
+  });
 
-  handleChange = (value, field) => {
-    this.setState({
-      [field]: value
+  const handleChange = (value, field) => {
+    setDetails((prev) => {
+      return { ...prev, [field]: value };
     });
   };
 
-  handleAdd = async () => {
-    if (this.state.location !== '') {
-      await this.props.addExclusion({
-        startDate: new Date(this.state.startDate),
-        endDate: new Date(this.state.endDate),
-        location: this.state.location,
-        description: this.state.description
+  const handleAdd = async () => {
+    if (details?.location !== "") {
+      await addExclusion({
+        startDate: new Date(details.startDate),
+        endDate: new Date(details.endDate),
+        location: details.location,
+        description: details.description,
       });
-      this.handleClose();
+      handleClose();
     } else {
-      this.setState({
-        locationError: 'This field is required.'
+      setDetails((prev) => {
+        return { ...prev, locationError: "This field is required." };
       });
     }
   };
 
-  handleClose = () => {
-    this.setState({
+  const handleClose = () => {
+    setDetails({
       startDate: new Date(),
       endDate: new Date(),
-      location: '',
-      locationError: '',
-      description: ''
+      location: "",
+      locationError: "",
+      description: "",
     });
-    this.props.close();
+    close();
   };
 
-  render() {
-    const { open } = this.props;
-    const {
-      startDate,
-      endDate,
-      location,
-      description,
-      locationError
-    } = this.state;
-    return (
-      <PopOver noPadding open={open} width={600}>
-        <PopOverHeader close={this.handleClose}>Add New Ban</PopOverHeader>
-        <Grow>
-          <PopOverContainer>
+  const { startDate, endDate, location, description, locationError } = details;
+  return (
+    <PopOver noPadding open={open} width={600}>
+      <PopOverHeader close={handleClose}>Add New Ban</PopOverHeader>
+      <Grow>
+        <PopOverContainer>
+          <Row row>
+            <Field row>
+              <Row row>
+                <FieldHeader>Start Date</FieldHeader>
+                <FieldHelp>The start date of the ban period.</FieldHelp>
+              </Row>
+              <DateField
+                id="Start Date"
+                value={startDate}
+                onChange={(value) => handleChange(value, "startDate")}
+              />
+            </Field>
+            <Field row left>
+              <Row row>
+                <FieldHeader>End Date</FieldHeader>
+                <FieldHelp>The end date of the ban period.</FieldHelp>
+              </Row>
+              <DateField
+                id="End Date"
+                value={endDate}
+                onChange={(value) => handleChange(value, "endDate")}
+              />
+            </Field>
+          </Row>
+          <Field>
             <Row row>
-              <Field row>
-                <Row row>
-                  <FieldHeader>Start Date</FieldHeader>
-                  <FieldHelp>The start date of the ban period.</FieldHelp>
-                </Row>
-                <DateField
-                  id="Start Date"
-                  value={startDate}
-                  onChange={value => this.handleChange(value, 'startDate')}
-                />
-              </Field>
-              <Field row left>
-                <Row row>
-                  <FieldHeader>End Date</FieldHeader>
-                  <FieldHelp>The end date of the ban period.</FieldHelp>
-                </Row>
-                <DateField
-                  id="End Date"
-                  value={endDate}
-                  onChange={value => this.handleChange(value, 'endDate')}
-                />
-              </Field>
+              <FieldHeader>Location</FieldHeader>
+              <FieldHelp>
+                The location that the offender the excluded from.
+              </FieldHelp>
             </Row>
-            <Field>
-              <Row row>
-                <FieldHeader>Location</FieldHeader>
-                <FieldHelp>
-                  The location that the offender the excluded from.
-                </FieldHelp>
-              </Row>
-              <TextField
-                id="name-input"
-                value={location}
-                onChange={e => this.handleChange(e.target.value, 'location')}
-                fullWidth
-                error={locationError !== ''}
-                helperText={locationError}
-              />
-            </Field>
-            <Field>
-              <Row row>
-                <FieldHeader>Description</FieldHeader>
-                <FieldHelp>
-                  Any addition information about the ban, like the reasoning for
-                  excluding.
-                </FieldHelp>
-              </Row>
-              <TextField
-                id="name-input"
-                value={description}
-                onChange={e => this.handleChange(e.target.value, 'description')}
-                fullWidth
-                multiline
-                rows="5"
-              />
-            </Field>
-          </PopOverContainer>
-        </Grow>
-        <PopOverActions>
-          <BackButton onClick={this.handleClose}>Cancel</BackButton>
-          <Button variant="contained" color="primary" onClick={this.handleAdd}>
-            Add Ban
-          </Button>
-        </PopOverActions>
-      </PopOver>
-    );
-  }
-}
+            <TextField
+              id="name-input"
+              value={location}
+              onChange={(e) => handleChange(e.target.value, "location")}
+              fullWidth
+              error={locationError !== ""}
+              helperText={locationError}
+            />
+          </Field>
+          <Field>
+            <Row row>
+              <FieldHeader>Description</FieldHeader>
+              <FieldHelp>
+                Any addition information about the ban, like the reasoning for
+                excluding.
+              </FieldHelp>
+            </Row>
+            <TextField
+              id="name-input"
+              value={description}
+              onChange={(e) => handleChange(e.target.value, "description")}
+              fullWidth
+              multiline
+              rows="5"
+            />
+          </Field>
+        </PopOverContainer>
+      </Grow>
+      <PopOverActions>
+        <BackButton onClick={handleClose}>Cancel</BackButton>
+        <Button variant="contained" color="primary" onClick={handleAdd}>
+          Add Ban
+        </Button>
+      </PopOverActions>
+    </PopOver>
+  );
+};
 
 export default AddExclusion;

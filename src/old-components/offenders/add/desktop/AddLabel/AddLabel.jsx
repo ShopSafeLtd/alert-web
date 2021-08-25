@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import { useMutation } from '@apollo/react-hooks';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import { useMutation } from "@apollo/client";
 
-import { PopOver, PopOverContainer } from '../../../../global/layout';
-import { FieldHeader, Field } from '../../../../global/forms';
-import { BackButton } from '../../../../global/actions';
-import mutation from '../../../../../graphql/admin/mutations/AddOffenderWarning';
-import AllOffenderLabels from '../../../../../graphql/offenderLabels/queries/AllOffenderLabels';
+import { PopOver, PopOverContainer } from "../../../../global/layout";
+import { FieldHeader, Field } from "../../../../global/forms";
+import { BackButton } from "../../../../global/actions";
+import { CreateTag } from "../../../../../graphql-src/tags/mutations";
+import { Tags } from "../../../../../graphql-src/tags/queries";
+import { DataType } from "../../../../../graphql-src/tags/enums";
+import { useStoreActions, useStoreState } from "../../../../../state";
 
 const Grow = styled.div`
   flex: 1;
@@ -18,46 +20,54 @@ const Grow = styled.div`
 const AddLabel = ({ open, close, createdById }) => {
   // state
   const [warning, setWarning] = useState({
-    name: '',
-    nameError: '',
-    description: '',
-    descriptionError: ''
+    name: "",
+    nameError: "",
+    description: "",
+    descriptionError: "",
   });
 
+  const schemeId = useStoreState((state) => state.scheme.id);
+
   // mutations
-  const [addWarning] = useMutation(mutation, {
-    update: (store, { data: { createTag } }) => {
-      let data = store.readQuery({
-        query: AllOffenderLabels,
-        variables: {
-          schemeId: window.localStorage.getItem('currentScheme')
-        }
-      });
-      data.tags = [...data.tags, createTag];
-      store.writeQuery({
-        query: AllOffenderLabels,
-        data,
-        variables: {
-          schemeId: window.localStorage.getItem('currentScheme')
-        }
-      });
-    }
+  const [addWarning] = useMutation(CreateTag, {
+    // update: (store, { data: { createTag } }) => {
+    //   let data = store.readQuery({
+    //     query: Tags,
+    //     variables: {
+    //       where: {
+    //         scheme: { id: { equals: schemeId } },
+    //         dataType: { equals: "OFFENDER" },
+    //       },
+    //     },
+    //   });
+    //   data.tags = [...data.tags, createTag];
+    //   store.writeQuery({
+    //     query: Tags,
+    //     data,
+    //     variables: {
+    //       where: {
+    //         scheme: { id: { equals: schemeId } },
+    //         dataType: { equals: "OFFENDER" },
+    //       },
+    //     },
+    //   });
+    // },
   });
 
   // functions
   const handleChange = (value, field) => {
     setWarning({
       ...warning,
-      [field]: value
+      [field]: value,
     });
   };
 
   const handleClose = () => {
     setWarning({
-      name: '',
-      nameError: '',
-      description: '',
-      descriptionError: ''
+      name: "",
+      nameError: "",
+      description: "",
+      descriptionError: "",
     });
     close();
   };
@@ -69,32 +79,42 @@ const AddLabel = ({ open, close, createdById }) => {
 
       setWarning({
         ...warning,
-        nameError: nameValid ? '' : 'This field is required',
-        descriptionError: descriptionValid ? '' : 'This field is required'
+        nameError: nameValid ? "" : "This field is required",
+        descriptionError: descriptionValid ? "" : "This field is required",
       });
 
       nameValid && descriptionValid ? resolve() : reject();
     });
 
   const submit = () => {
+    console.log("submit label:");
     validate()
       .then(() => {
         addWarning({
           variables: {
-            name: warning.name,
-            description: warning.description,
-            schemeId: window.localStorage.getItem('currentScheme'),
-            createdById: createdById
+            data: {
+              name: warning.name,
+              description: warning.description,
+              scheme: {
+                connect: { id: schemeId },
+              },
+
+              dataType: DataType.OFFENDER,
+              createdBy: {
+                connect: {
+                  id: createdById,
+                },
+              },
+            },
           },
           optimisticResponse: {
             createTag: {
-              id: 0,
+              id: "0",
               name: warning.name,
               description: warning.description,
-              uploaded: false,
-              __typename: 'Tag'
-            }
-          }
+              __typename: "Tag",
+            },
+          },
         });
         handleClose();
       })
@@ -112,7 +132,7 @@ const AddLabel = ({ open, close, createdById }) => {
         <BackButton onClick={handleClose}>Cancel</BackButton>,
         <Button variant="contained" color="primary" onClick={submit}>
           Add Label
-        </Button>
+        </Button>,
       ]}
     >
       <Grow>
@@ -125,7 +145,7 @@ const AddLabel = ({ open, close, createdById }) => {
               id="name"
               fullWidth
               value={warning.name}
-              onChange={e => handleChange(e.target.value, 'name')}
+              onChange={(e) => handleChange(e.target.value, "name")}
               error={!!warning.nameError}
               helperText={warning.nameError}
             />
@@ -141,7 +161,7 @@ const AddLabel = ({ open, close, createdById }) => {
                 multiline
                 rows="6"
                 value={warning.description}
-                onChange={e => handleChange(e.target.value, 'description')}
+                onChange={(e) => handleChange(e.target.value, "description")}
                 error={!!warning.descriptionError}
                 helperText={warning.descriptionError}
               />

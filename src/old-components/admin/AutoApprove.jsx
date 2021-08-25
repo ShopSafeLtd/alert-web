@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import MediaQuery from 'react-responsive';
-import { Link } from 'react-router-dom';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import MediaQuery from "react-responsive";
+import { Link } from "react-router-dom";
+import { useQuery, useMutation } from "@apollo/client";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
 
-import { Field, Header, HeaderText, HeaderSubText } from '../global/forms';
-import { PageHeader } from '../global/typography';
-import { FullWidthButton, BackButton } from '../global/actions';
-import UpdateAutoApprove from '../../graphql/admin/mutations/UpdateAutoApprove';
-import { Row, Section } from '../global/layout';
-import query from '../../graphql/admin/queries/AutoApprove';
-import { useStoreActions } from '../../state';
+import { Field, Header, HeaderText, HeaderSubText } from "../global/forms";
+import { PageHeader } from "../global/typography";
+import { FullWidthButton, BackButton } from "../global/actions";
+import { AutoApprove as AutoApproveQuery } from "graphql-src/schemes/queries";
+import { UpdateAutoApprove } from "graphql-src/schemes/mutations";
+// import UpdateAutoApprove from '../../graphql/admin/mutations/UpdateAutoApprove';
+import { Row, Section } from "../global/layout";
+// import query from '../../graphql/admin/queries/AutoApprove';
+import { useStoreActions, useStoreState } from "../../state";
 
 const Page = styled.div`
   flex: 1;
@@ -41,68 +44,74 @@ const Indent = styled.div`
 `;
 
 const AutoApprove = ({ history }) => {
-  const setTitle = useStoreActions(actions => actions.theme.setTitle);
-  const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
-  const setNavbarAction = useStoreActions(
-    actions => actions.theme.setNavbarAction
+  const setTitle = useStoreActions((actions) => actions.theme.setTitle);
+  const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
+  // const setNavbarAction = useStoreActions(
+  //   (actions) => actions.theme.setNavbarAction
+  // );
+  const setBackLinkTo = useStoreActions(
+    (actions) => actions.theme.setBackLinkTo
   );
-  const setBackLinkTo = useStoreActions(actions => actions.theme.setBackLinkTo);
+
+  const schemeId = useStoreState((state) => state.scheme.id);
 
   // state
   const [autoApprove, setAutoApprove] = useState({
     autoApprove: false,
     autoApproveIncidents: false,
-    autoApproveOffenders: false
+    autoApproveOffenders: false,
   });
 
   // effects
   useEffect(() => {
     setBottomNav(false);
-    setTitle('Auto Approve Options');
-    setNavbarAction('backLink');
-    setBackLinkTo(`/admin`);
+    setTitle("Auto Approve Options");
+    // setNavbarAction("backLink");
+    setBackLinkTo(`${APP_PREFIX_PATH}/scheme-settings`);
     return () => {
-      setTitle('');
-      setNavbarAction('default');
-      setBackLinkTo('');
+      setTitle("");
+      // setNavbarAction("default");
+      setBackLinkTo("");
       setBottomNav(true);
     };
     // eslint-disable-next-line
   }, []);
 
   // queries
-  const { loading } = useQuery(query, {
+  const { loading } = useQuery(AutoApproveQuery, {
     variables: {
-      id: window.localStorage.getItem('currentScheme')
+      where: {
+        id: schemeId,
+      },
     },
-    fetchPolicy: 'cache-and-network',
-    onCompleted: data =>
+    fetchPolicy: "cache-and-network",
+    onCompleted: (data) =>
       setAutoApprove({
         autoApprove:
           data.scheme.autoApproveIncidents || data.scheme.autoApproveOffenders
             ? true
             : false,
         autoApproveIncidents: data.scheme.autoApproveIncidents,
-        autoApproveOffenders: data.scheme.autoApproveOffenders
-      })
+        autoApproveOffenders: data.scheme.autoApproveOffenders,
+      }),
   });
 
   // mutations
   const [updateAutoApprove] = useMutation(UpdateAutoApprove);
 
   // functions
-  const handleChange = name => event => {
-    if (event.target.checked && name === 'autoApprove') {
+  const handleChange = (name) => (event) => {
+    if (event.target.checked && name === "autoApprove") {
       setAutoApprove({
         autoApprove: true,
         autoApproveOffenders: true,
-        autoApproveIncidents: true
+        autoApproveIncidents: true,
       });
-    } else if (!event.target.checked && name === 'autoApprove') {
+    } else if (!event.target.checked && name === "autoApprove") {
       setAutoApprove({
         autoApprove: false,
         autoApproveOffenders: false,
-        autoApproveIncidents: false
+        autoApproveIncidents: false,
       });
     } else {
       setAutoApprove({ ...autoApprove, [name]: event.target.checked });
@@ -110,28 +119,31 @@ const AutoApprove = ({ history }) => {
   };
 
   const handleSave = () => {
+    console.log(autoApprove);
     updateAutoApprove({
       variables: {
-        id: window.localStorage.getItem('currentScheme'),
-        autoApprove: { set: autoApprove.autoApprove },
-        autoApproveIncidents: { set: autoApprove.autoApproveIncidents },
-        autoApproveOffenders: { set: autoApprove.autoApproveOffenders }
+        where: {
+          id: schemeId,
+        },
+        data: {
+          autoApproveIncidents: { set: autoApprove.autoApproveIncidents },
+          autoApproveOffenders: { set: autoApprove.autoApproveOffenders },
+        },
       },
       optimisticResponse: {
         updateScheme: {
-          id: window.localStorage.getItem('currentScheme'),
-          autoApprove: autoApprove.autoApprove,
+          id: schemeId,
           autoApproveIncidents: autoApprove.autoApproveIncidents,
-          autoApproveOffenders: autoApprove.autoApproveOffenders
-        }
-      }
+          autoApproveOffenders: autoApprove.autoApproveOffenders,
+        },
+      },
     });
-    history.push('/incidents');
+    history.push("/");
   };
 
   return (
     <MediaQuery minDeviceWidth={1024}>
-      {matches => (
+      {(matches) => (
         <Page>
           {matches ? (
             <Section width="100%" elevation={1}>
@@ -158,7 +170,7 @@ const AutoApprove = ({ history }) => {
                     control={
                       <Switch
                         checked={autoApprove.autoApprove}
-                        onChange={handleChange('autoApprove')}
+                        onChange={handleChange("autoApprove")}
                         value="autoApprove"
                         disabled={loading}
                       />
@@ -171,7 +183,7 @@ const AutoApprove = ({ history }) => {
                         control={
                           <Switch
                             checked={autoApprove.autoApproveIncidents}
-                            onChange={handleChange('autoApproveIncidents')}
+                            onChange={handleChange("autoApproveIncidents")}
                             value="autoApproveIncidents"
                             disabled={loading}
                           />
@@ -182,7 +194,7 @@ const AutoApprove = ({ history }) => {
                         control={
                           <Switch
                             checked={autoApprove.autoApproveOffenders}
-                            onChange={handleChange('autoApproveOffenders')}
+                            onChange={handleChange("autoApproveOffenders")}
                             value="autoApproveOffenders"
                             disabled={loading}
                           />
@@ -198,7 +210,11 @@ const AutoApprove = ({ history }) => {
           {matches ? (
             <Section width="100%" elevation={1}>
               <Row row right>
-                <BackButton component={Link} to={`/admin`} disabled={loading}>
+                <BackButton
+                  component={Link}
+                  to={`${APP_PREFIX_PATH}/scheme-settings`}
+                  disabled={loading}
+                >
                   Cancel
                 </BackButton>
                 <Button

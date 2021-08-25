@@ -1,32 +1,33 @@
-import React, { Fragment } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom';
-import IconButton from '@material-ui/core/IconButton';
-import FilterIcon from '@material-ui/icons/FilterList';
+import React, { Fragment } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import { Link } from "react-router-dom";
+import IconButton from "@material-ui/core/IconButton";
+import FilterIcon from "@material-ui/icons/FilterList";
 
-import OffenderCard from '../OffenderCard/OffenderCard';
+import OffenderCard from "../OffenderCard/OffenderCard";
 import {
   FeedContainer,
   FeedCardContainer,
-  SkeletonContainer
-} from '../../../global/feed';
-import { PullToRefresh } from '../../../global/pullToRefresh';
-import { Card } from '../../../global/cards';
-import { EmptyState } from '../../../global/emptyStates';
-import DeleteOffenderModal from '../DeleteOffenderModal/DeleteOffenderModal';
-import AddExclusionPopOver from '../../global/AddExclusionPopOver/AddExclusionPopOver';
-import ViewExclusionPopOver from '../../global/ViewExclusionPopOver/ViewExclusionPopOver';
-import ViewIncidentPopOver from '../ViewIncidentPopOver/ViewIncidentPopOver';
-import UnapprovedCardGroups from '../../../global/cards/UnapprovedCardGroups/UnapprovedCardGroups';
-import OffenderFilter from '../OffenderFilter/OffenderFilter';
-import ViewOffenderPopOver from '../ViewOffenderPopOver/ViewOffenderPopOver';
-import LabelModal from '../LabelModal/LabelModal';
-import ActiveOffenderModal from '../ActiveOffenderModal/ActiveOffenderModal';
-import InactiveOffenderModal from '../InactiveOffenderModal/InactiveOffenderModal';
-import OffenderSkeletonCard from '../OffenderSkeletonCard/OffenderSkeletonCard';
-import DeclineDialog from '../DeclineDialog/DeclineDialog';
-import Offenders from '../../../../images/Offenders';
+  SkeletonContainer,
+} from "../../../global/feed";
+import { PullToRefresh } from "../../../global/pullToRefresh";
+import { Card } from "../../../global/cards";
+import { EmptyState } from "../../../global/emptyStates";
+import DeleteOffenderModal from "../DeleteOffenderModal/DeleteOffenderModal";
+import AddExclusionPopOver from "../../global/AddExclusionPopOver/AddExclusionPopOver";
+import ViewExclusionPopOver from "../../global/ViewExclusionPopOver/ViewExclusionPopOver";
+import ViewIncidentPopOver from "../ViewIncidentPopOver/ViewIncidentPopOver";
+import UnapprovedCardGroups from "../../../global/cards/UnapprovedCardGroups/UnapprovedCardGroups";
+import OffenderFilter from "../OffenderFilter/OffenderFilter";
+import ViewOffenderPopOver from "../ViewOffenderPopOver/ViewOffenderPopOver";
+import LabelModal from "../LabelModal/LabelModal";
+import ActiveOffenderModal from "../ActiveOffenderModal/ActiveOffenderModal";
+import InactiveOffenderModal from "../InactiveOffenderModal/InactiveOffenderModal";
+import OffenderSkeletonCard from "../OffenderSkeletonCard/OffenderSkeletonCard";
+import DeclineDialog from "../DeclineDialog/DeclineDialog";
+import Offenders from "../../../../images/Offenders";
+import LightBox from "old-components/global/LightBox/LightBox";
 
 const EmptyContainer = styled.div`
   height: calc(100vh - 167px);
@@ -39,41 +40,41 @@ class OffenderFeed extends React.Component {
     super(props);
     this.state = {
       deleteOffenderModal: false,
-      deleteOffenderId: '',
+      deleteOffenderId: "",
       declineOffenderDialog: false,
-      declineOffenderId: '',
+      declineOffenderId: "",
       disabled: false,
       addExclusionPopOver: false,
-      addExclusionId: '',
+      addExclusionId: "",
       viewExclusionPopOver: false,
-      viewExclusionId: '',
-      viewExclusionOffender: '',
+      viewExclusionId: "",
+      viewExclusionOffender: "",
       viewIncidentPopOver: false,
-      viewIncidentId: '',
+      viewIncidentId: "",
       approve: false,
-      approveId: '',
+      approveId: "",
       approveGroups: [],
       pristine: true,
       viewOffenderPopOver: false,
       viewOffender: {
         images: [],
-        age: 'UNKNOWN',
-        build: 'UNKNOWN',
-        race: 'UNKNOWN',
-        gender: 'UNKNOWN',
+        age: "UNKNOWN",
+        build: "UNKNOWN",
+        race: "UNKNOWN",
+        gender: "UNKNOWN",
         exclusions: [],
-        incidents: []
+        incidents: [],
       },
       viewLabel: false,
       label: {
-        name: '',
-        helpText: ''
+        name: "",
+        helpText: "",
       },
       activeOffenderModal: false,
-      activeOffenderId: '',
+      activeOffenderId: "",
       inactiveOffenderModal: false,
-      inactiveOffenderId: '',
-      filterOpen: false
+      inactiveOffenderId: "",
+      filterOpen: false,
     };
   }
 
@@ -82,51 +83,51 @@ class OffenderFeed extends React.Component {
       this.props.offenders.length > 0 &&
       this.state.pristine &&
       this.setState({
-        pristine: false
+        pristine: false,
       });
   }
 
-  setExcluded = value => {
+  setExcluded = (value) => {
     this.setState({
-      excluded: value
+      excluded: value,
     });
   };
 
-  toggleDeleteOffenderModal = id =>
+  toggleDeleteOffenderModal = (id) =>
     this.setState({
       deleteOffenderModal: !this.state.deleteOffenderModal,
-      deleteOffenderId: id || ''
+      deleteOffenderId: id || "",
     });
 
-  toggleDeclineOffender = id =>
+  toggleDeclineOffender = (id) =>
     this.setState({
       declineOffenderDialog: !this.state.declineOffenderDialog,
-      declineOffenderId: id || ''
+      declineOffenderId: id || "",
     });
 
-  toggleAddExclusionPopOver = id =>
+  toggleAddExclusionPopOver = (id) =>
     this.setState({
       addExclusionPopOver: !this.state.addExclusionPopOver,
-      addExclusionId: id || ''
+      addExclusionId: id || "",
     });
 
   toggleViewExclusionPopOver = (exclusion, offender) =>
     this.setState({
       viewExclusionPopOver: !this.state.viewExclusionPopOver,
-      viewExclusionId: exclusion || '',
-      viewExclusionOffender: offender || ''
+      viewExclusionId: exclusion || "",
+      viewExclusionOffender: offender || "",
     });
 
-  toggleIncidentPopOver = incident => {
+  toggleIncidentPopOver = (incident) => {
     if (incident !== undefined) {
       this.setState({
         viewIncidentPopOver: !this.state.viewIncidentPopOver,
-        viewIncidentId: incident
+        viewIncidentId: incident,
       });
     } else {
       this.setState({
         viewIncidentPopOver: !this.state.viewIncidentPopOver,
-        viewIncidentId: ''
+        viewIncidentId: "",
       });
     }
   };
@@ -134,28 +135,28 @@ class OffenderFeed extends React.Component {
   toggleApprove = (id, offenders) =>
     this.setState({
       approve: !this.state.approve,
-      approveId: id || '',
+      approveId: id || "",
       approveGroups: [],
-      approveOffenders: offenders
+      approveOffenders: offenders,
     });
 
-  toggleApproveGroups = id => {
+  toggleApproveGroups = (id) => {
     const { approveGroups } = this.state;
     if (approveGroups.indexOf(id) === -1) {
       this.setState({
-        approveGroups: [...approveGroups, id]
+        approveGroups: [...approveGroups, id],
       });
     } else {
-      let newSelected = approveGroups.filter(item => {
+      let newSelected = approveGroups.filter((item) => {
         return item !== id;
       });
       this.setState({
-        approveGroups: newSelected
+        approveGroups: newSelected,
       });
     }
   };
 
-  toggleViewOffenderPopOver = offender =>
+  toggleViewOffenderPopOver = (offender) =>
     this.setState({
       viewOffenderPopOver: !this.state.viewOffenderPopOver,
       viewOffender:
@@ -163,38 +164,38 @@ class OffenderFeed extends React.Component {
           ? offender
           : {
               images: [],
-              age: 'UNKNOWN',
-              build: 'UNKNOWN',
-              race: 'UNKNOWN',
-              gender: 'UNKNOWN',
+              age: "UNKNOWN",
+              build: "UNKNOWN",
+              race: "UNKNOWN",
+              gender: "UNKNOWN",
               exclusions: [],
-              incidents: []
-            }
+              incidents: [],
+            },
     });
 
-  toggleViewLabel = label =>
+  toggleViewLabel = (label) =>
     this.setState({
       viewLabel: !this.state.viewLabel,
       label:
         label !== undefined
           ? label
           : {
-              name: '',
-              helpText: ''
-            }
+              name: "",
+              helpText: "",
+            },
     });
 
-  toggleActiveOffender = offender => {
+  toggleActiveOffender = (offender) => {
     this.setState({
       activeOffenderModal: !this.state.activeOffenderModal,
-      activeOffenderId: offender !== undefined ? offender : ''
+      activeOffenderId: offender !== undefined ? offender : "",
     });
   };
 
-  toggleInactiveOffender = offender => {
+  toggleInactiveOffender = (offender) => {
     this.setState({
       inactiveOffenderModal: !this.state.inactiveOffenderModal,
-      inactiveOffenderId: offender !== undefined ? offender : ''
+      inactiveOffenderId: offender !== undefined ? offender : "",
     });
   };
 
@@ -219,7 +220,7 @@ class OffenderFeed extends React.Component {
       retryLoad,
       refetch,
       filterPristine,
-      role
+      role,
     } = this.props;
     const {
       deleteOffenderModal,
@@ -246,86 +247,93 @@ class OffenderFeed extends React.Component {
       inactiveOffenderModal,
       inactiveOffenderId,
       pristine,
-      filterOpen
+      filterOpen,
     } = this.state;
 
     const handleDelete = async () => {
-      setStatusBar(true, 'Deleting Offender...');
+      console.log({
+        variables: {
+          id: deleteOffenderId,
+        },
+      });
+      setStatusBar(true, "Deleting Offender...");
       this.setState({
-        disabled: true
+        disabled: true,
       });
       await deleteOffender({
         variables: {
-          id: deleteOffenderId
+          where: {
+            id: deleteOffenderId,
+          },
         },
         optimisticResponse: {
-          deleteOffender: {
+          recycleOffender: {
             id: deleteOffenderId,
             optimistic: true,
-            __typename: 'Offender'
-          }
-        }
+            __typename: "Offender",
+          },
+        },
       });
       this.setState({
-        disabled: false
+        disabled: false,
       });
-      setStatusBar(false, '');
+      setStatusBar(false, "");
     };
 
-    const handleApprove = async groups => {
-      setStatusBar(true, 'Approving Offender...');
+    const handleApprove = async (groups) => {
+      setStatusBar(true, "Approving Offender...");
       const add = groups
         .filter(
-          id =>
+          (id) =>
             !offenders
               .find(({ id }) => id === approveId)
               .groups.map(({ id }) => id)
               .includes(id)
         )
-        .map(id => ({ id }));
+        .map((id) => ({ id }));
       const remove = offenders
         .find(({ id }) => id === approveId)
         .groups.map(({ id }) => id)
-        .filter(id => !groups.includes(id))
-        .map(id => ({ id }));
+        .filter((id) => !groups.includes(id))
+        .map((id) => ({ id }));
 
       await approveOffender({
         variables: {
           id: approveId,
           groups: add.length > 0 ? add : undefined,
-          removeGroups: remove.length > 0 ? remove : undefined
-        }
+          removeGroups: remove.length > 0 ? remove : undefined,
+        },
       });
-      setStatusBar(false, '');
-      this.setState({ approve: false, approveId: '' });
+      setStatusBar(false, "");
+      this.setState({ approve: false, approveId: "" });
     };
 
     const handleDecline = async () => {
-      setStatusBar(true, 'Deleting Offender...');
+      setStatusBar(true, "Deleting Offender...");
       this.setState({
-        disabled: true
+        disabled: true,
       });
       await deleteOffender({
         variables: {
-          id: declineOffenderId
+          id: declineOffenderId,
         },
         optimisticResponse: {
           deleteOffender: {
             id: declineOffenderId,
             optimistic: true,
-            __typename: 'Offender'
-          }
-        }
+            __typename: "Offender",
+          },
+        },
       });
       this.toggleDeclineOffender();
       this.setState({
-        disabled: false
+        disabled: false,
       });
-      setStatusBar(false, '');
+      setStatusBar(false, "");
     };
 
     return loading && pristine ? (
-      <FeedContainer to="/offenders/add" text="Offender">
+      <FeedContainer to="/app/offenders/add" text="Offender">
         <PullToRefresh onRefresh={refetch}>
           <FeedCardContainer>
             <SkeletonContainer cardHeight="500px">
@@ -341,11 +349,12 @@ class OffenderFeed extends React.Component {
             setFilter={setFilter}
           />
         </PullToRefresh>
+        <LightBox />
       </FeedContainer>
-    ) : !!offenders && offenders.length > 0 ? (
+    ) : !!offenders && offenders?.length > 0 ? (
       <Fragment>
         <FeedContainer
-          to="/offenders/add"
+          to="/app/offenders/add"
           loadMore={loadMore}
           text="Offender"
           loading={loadingMore}
@@ -354,7 +363,7 @@ class OffenderFeed extends React.Component {
         >
           <PullToRefresh onRefresh={refetch}>
             <FeedCardContainer>
-              {offenders.map(offender => (
+              {offenders.map((offender) => (
                 <Card key={offender.id} height="500px">
                   <OffenderCard
                     key={offender.id}
@@ -419,7 +428,7 @@ class OffenderFeed extends React.Component {
           toggle={this.toggleApproveGroups}
           selected={approveGroups}
           approve={handleApprove}
-          offender={offenders.find(({ id }) => id === approveId)}
+          offender={offenders?.find(({ id }) => id === approveId)}
         />
         <ViewOffenderPopOver
           visible={viewOffenderPopOver}
@@ -452,9 +461,10 @@ class OffenderFeed extends React.Component {
           filter={filter}
           setFilter={setFilter}
         />
+        <LightBox />
       </Fragment>
     ) : filterPristine ? (
-      <FeedContainer to="/offenders/add" text="Offender">
+      <FeedContainer to="/app/offenders/add" text="Offender">
         <PullToRefresh onRefresh={refetch}>
           <EmptyContainer>
             <EmptyState
@@ -465,10 +475,10 @@ class OffenderFeed extends React.Component {
                   variant="contained"
                   color="primary"
                   component={Link}
-                  to="/offenders/add"
+                  to="/app/offenders/add"
                 >
                   Add First Offender
-                </Button>
+                </Button>,
               ]}
             />
           </EmptyContainer>
@@ -481,9 +491,10 @@ class OffenderFeed extends React.Component {
             setFilter={setFilter}
           />
         </PullToRefresh>
+        <LightBox />
       </FeedContainer>
     ) : (
-      <FeedContainer to="/offenders/add" text="Offender">
+      <FeedContainer to="/app/offenders/add" text="Offender">
         <PullToRefresh onRefresh={refetch}>
           <EmptyContainer>
             <EmptyState
@@ -496,7 +507,7 @@ class OffenderFeed extends React.Component {
                   onClick={() => this.setState({ filterOpen: true })}
                 >
                   Change Filter
-                </Button>
+                </Button>,
               ]}
             />
           </EmptyContainer>
@@ -509,12 +520,13 @@ class OffenderFeed extends React.Component {
             setFilter={setFilter}
           />
         </PullToRefresh>
+        <LightBox />
       </FeedContainer>
     );
   }
 
   componentWillUnmount() {
-    this.props.toggleFetchOffenders(true);
+    // this.props.toggleFetchOffenders(true);
     !!this.props.setActions && this.props.setActions([]);
   }
 }

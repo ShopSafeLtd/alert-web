@@ -1,13 +1,13 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import TextField from '@material-ui/core/TextField';
+import React, { PureComponent } from "react";
+import styled from "styled-components";
+import TextField from "@material-ui/core/TextField";
 
 import {
   HeaderText,
   HeaderSubText,
   Field,
-  FieldHeader
-} from '../../../../global/forms';
+  FieldHeader,
+} from "../../../../global/forms";
 
 const Page = styled.div`
   width: 100%;
@@ -25,8 +25,8 @@ const Header = styled.div`
 
 class Details extends PureComponent {
   componentDidMount() {
-    this.props.setNavbarAction('backLink');
-    this.props.setBackLinkTo('/admin/chat-groups');
+    // this.props.setNavbarAction('backLink');
+    this.props.setBackLinkTo("/admin/chat-groups");
     this.props.setActiveStep(0);
   }
 
@@ -42,8 +42,8 @@ class Details extends PureComponent {
           <FieldHeader required>Chat Name</FieldHeader>
           <TextField
             value={name}
-            onChange={handleChange('name')}
-            error={nameError !== ''}
+            onChange={handleChange("name")}
+            error={nameError !== ""}
             helperText={nameError}
             fullWidth
           />
@@ -52,7 +52,7 @@ class Details extends PureComponent {
           <FieldHeader>Description</FieldHeader>
           <TextField
             value={description}
-            onChange={handleChange('description')}
+            onChange={handleChange("description")}
             fullWidth
             multiline
             rows="6"
@@ -63,8 +63,8 @@ class Details extends PureComponent {
   }
 
   componentWillUnmount() {
-    this.props.setNavbarAction('');
-    this.props.setBackLinkTo('');
+    // this.props.setNavbarAction('');
+    this.props.setBackLinkTo("");
   }
 }
 

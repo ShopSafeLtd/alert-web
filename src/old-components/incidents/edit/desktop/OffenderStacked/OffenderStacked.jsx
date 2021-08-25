@@ -1,6 +1,6 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
+import React, { PureComponent } from "react";
+import styled from "styled-components";
+import Typography from "@material-ui/core/Typography";
 
 const Offender = styled.div`
   display: flex;
@@ -9,7 +9,7 @@ const Offender = styled.div`
   &:first-child {
     border-top: 1px solid #eeeeee;
   }
-  ${({ hover }) => hover && 'background: rgba(0,0,0,0.01)'};
+  ${({ hover }) => hover && "background: rgba(0,0,0,0.01)"};
 `;
 
 const OffenderName = styled(Typography)`
@@ -75,7 +75,7 @@ class OffenderStacked extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      hover: false
+      hover: false,
     };
   }
 
@@ -87,18 +87,18 @@ class OffenderStacked extends PureComponent {
       <Offender
         onMouseEnter={() =>
           this.setState({
-            hover: true
+            hover: true,
           })
         }
         onMouseLeave={() =>
           this.setState({
-            hover: false
+            hover: false,
           })
         }
         onClick={() => toggleSelected(id)}
         hover={hover}
       >
-        {images.length > 0 ? (
+        {images?.length > 0 ? (
           <OffenderImage url={images[0].url} />
         ) : (
           <BlankAvatar>
@@ -114,7 +114,7 @@ class OffenderStacked extends PureComponent {
         <Selected selected={selected}>
           <Check viewBox="0 0 24 24">
             <path
-              fill={selected ? '#FFF' : '#E0E0E0'}
+              fill={selected ? "#FFF" : "#E0E0E0"}
               d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
             />
           </Check>

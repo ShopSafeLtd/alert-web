@@ -1,10 +1,10 @@
-import React from 'react';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
+import React from "react";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Button from "@material-ui/core/Button";
 
 class DeleteOffenderModal extends React.Component {
   render() {
@@ -16,10 +16,11 @@ class DeleteOffenderModal extends React.Component {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{'Are you sure?'}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Are you sure?"}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            There is no going back this offender will be delete permanently!
+            Deleting this offender will add it to the recyle bin for 30 days,
+            after which, it will be permanently deleted.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -35,7 +36,7 @@ class DeleteOffenderModal extends React.Component {
             autoFocus
             disabled={disabled}
           >
-            Delete Permanently
+            Delete
           </Button>
         </DialogActions>
       </Dialog>

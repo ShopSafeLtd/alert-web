@@ -1,10 +1,11 @@
 import gql from "graphql-tag";
 
-import { ImageType, Image } from '../../images/fragments'
-import { Tag, TagType } from '../../tags/fragments'
-import { ListOffender, ListOffenderType } from '../../offenders/fragments'
-import { LocationType, Location } from '../../address/fragments'
-import { CreatedBy, CreatedByType } from '../../users/fragments/created-by'
+import { ImageType, Image } from "../../images/fragments";
+import { Tag, TagType } from "../../tags/fragments";
+import { FullOffender, FullOffenderType } from "../../offenders/fragments";
+import { LocationType, Location } from "../../address/fragments";
+import { CreatedBy, CreatedByType } from "../../users/fragments/created-by";
+import { BasicGroup, BasicGroupType } from "../../groups/fragments";
 
 export const FullIncident = gql`
   fragment FullIncident on Incident {
@@ -19,7 +20,7 @@ export const FullIncident = gql`
     approved
     uploaded
     offenders {
-      ...ListOffender
+      ...FullOffender
     }
     location {
       ...Location
@@ -30,12 +31,16 @@ export const FullIncident = gql`
     images {
       ...Image
     }
+    groups {
+      ...BasicGroup
+    }
   }
   ${Image}
   ${Tag}
-  ${ListOffender}
+  ${FullOffender}
   ${Location}
   ${CreatedBy}
+  ${BasicGroup}
 `;
 
 export interface FullIncidentType {
@@ -45,11 +50,12 @@ export interface FullIncidentType {
   description: string;
   date: Date;
   time: Date;
-  crimeTypes: TagType[]
+  crimeTypes: TagType[];
   approved: boolean;
   uploaded: boolean;
-  offenders: ListOffenderType[]
-  location: LocationType
-  createdBy: CreatedByType
-  images: ImageType[]
+  offenders: FullOffenderType[];
+  location: LocationType;
+  createdBy: CreatedByType;
+  images: ImageType[];
+  groups: BasicGroupType[];
 }

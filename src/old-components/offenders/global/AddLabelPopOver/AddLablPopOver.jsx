@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import { useQuery } from '@apollo/react-hooks';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
+import { useQuery } from "@apollo/client";
 
 import {
   PopOver,
   PopOverContainer,
   CheckList,
-  Row
-} from '../../../global/layout';
-import { BackButton } from '../../../global/actions';
-import { FieldHeader, FieldHelp } from '../../../global/forms';
-import AllOffenderLabels from '../../../../graphql/offenderLabels/queries/AllOffenderLabels';
+  Row,
+} from "../../../global/layout";
+import { BackButton } from "../../../global/actions";
+import { FieldHeader, FieldHelp } from "../../../global/forms";
+import { Tags } from "../../../../graphql-src/tags/queries";
+import { useStoreState } from "../../../../state";
+// import AllOffenderLabels from '../../../../graphql/offenderLabels/queries/AllOffenderLabels';
 
 const Container = styled.div`
   height: calc(100vh - 130px);
@@ -53,36 +55,41 @@ const AddLabelPopOver = ({
   visible,
   close,
   submitLabels,
-  tags: offenderTags
+  tags: offenderTags,
 }) => {
   // state
   const [add, setAdd] = useState(false);
   const [details, setDetails] = useState({
-    name: '',
-    nameError: '',
-    description: '',
-    descriptionError: ''
+    name: "",
+    nameError: "",
+    description: "",
+    descriptionError: "",
   });
   const [tags, setTags] = useState([]);
   const [selected, setSelected] = useState([]);
+
+  const schemeId = useStoreState((state) => state.scheme.id);
 
   // effects
   useEffect(() => setSelected(offenderTags), [offenderTags]);
 
   // queries
-  useQuery(AllOffenderLabels, {
+  useQuery(Tags, {
     variables: {
-      schemeId: window.localStorage.getItem('currentScheme')
+      where: {
+        scheme: { id: { equals: schemeId } },
+        dataType: { equals: "OFFENDER" },
+      },
     },
-    fetchPolicy: 'cache-and-network',
-    onCompleted: ({ tags }) => setTags(tags)
+    fetchPolicy: "cache-and-network",
+    onCompleted: ({ tags }) => setTags(tags),
   });
 
   // functions
   const handleChange = (value, field) => {
     setDetails({
       ...details,
-      [field]: value
+      [field]: value,
     });
   };
   const validate = () =>
@@ -91,12 +98,12 @@ const AddLabelPopOver = ({
       const descriptionValid = !!details.description;
       setDetails({
         ...details,
-        nameError: nameValid ? '' : 'This is a required field.',
-        descriptionError: descriptionValid ? '' : 'This is a required field.'
+        nameError: nameValid ? "" : "This is a required field.",
+        descriptionError: descriptionValid ? "" : "This is a required field.",
       });
       nameValid && descriptionValid ? resolve() : reject();
     });
-  const toggle = tag =>
+  const toggle = (tag) =>
     selected.map(({ id }) => id).includes(tag.id)
       ? setSelected(selected.filter(({ id }) => id !== tag.id))
       : setSelected([...selected, tag]);
@@ -107,16 +114,16 @@ const AddLabelPopOver = ({
           id: Math.random(),
           name: details.name,
           description: details.description,
-          newTag: true
+          newTag: true,
         };
         setTags([...tags, tag]);
         setSelected([...selected, tag]);
         setAdd(false);
         setDetails({
-          name: '',
-          nameError: '',
-          description: '',
-          descriptionError: ''
+          name: "",
+          nameError: "",
+          description: "",
+          descriptionError: "",
         });
       })
       .catch(() => {});
@@ -128,7 +135,7 @@ const AddLabelPopOver = ({
       open={visible}
       width={500}
       handleClose={close}
-      title={add ? 'Add Offender Warnings' : 'Edit Offender Warnings'}
+      title={add ? "Add Offender Warnings" : "Edit Offender Warnings"}
       actions={
         add
           ? [
@@ -137,10 +144,10 @@ const AddLabelPopOver = ({
                 onClick={() => {
                   setAdd(false);
                   setDetails({
-                    name: '',
-                    nameError: '',
-                    description: '',
-                    descriptionError: ''
+                    name: "",
+                    nameError: "",
+                    description: "",
+                    descriptionError: "",
                   });
                 }}
               >
@@ -153,7 +160,7 @@ const AddLabelPopOver = ({
                 onClick={addTag}
               >
                 Add Label
-              </Button>
+              </Button>,
             ]
           : [
               <BackButton key={0} onClick={close}>
@@ -169,7 +176,7 @@ const AddLabelPopOver = ({
                 }}
               >
                 Update Labels
-              </Button>
+              </Button>,
             ]
       }
     >
@@ -180,10 +187,10 @@ const AddLabelPopOver = ({
               menuItems={tags.map(({ id, name, helpText }) => ({
                 value: id,
                 label: name,
-                helpText
+                helpText,
               }))}
               selected={selected.map(({ id }) => id)}
-              onClick={id => toggle(tags.find(tag => id === tag.id))}
+              onClick={(id) => toggle(tags.find((tag) => id === tag.id))}
             />
             <ListItem onClick={() => setAdd(true)}>
               <Svg viewBox="0 0 24 24">
@@ -192,7 +199,7 @@ const AddLabelPopOver = ({
                   d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M13,7H11V11H7V13H11V17H13V13H17V11H13V7Z"
                 />
               </Svg>
-              <ItemText>{'Add New Label'}</ItemText>
+              <ItemText>{"Add New Label"}</ItemText>
             </ListItem>
           </PopOverContainer>
         ) : (
@@ -206,7 +213,7 @@ const AddLabelPopOver = ({
                 <TextField
                   id="name-input"
                   value={details.name}
-                  onChange={e => handleChange(e.target.value, 'name')}
+                  onChange={(e) => handleChange(e.target.value, "name")}
                   fullWidth
                   error={!!details.nameError}
                   helperText={details.nameError}
@@ -222,7 +229,7 @@ const AddLabelPopOver = ({
                 <TextField
                   id="description-input"
                   value={details.description}
-                  onChange={e => handleChange(e.target.value, 'description')}
+                  onChange={(e) => handleChange(e.target.value, "description")}
                   fullWidth
                   multiline
                   rows={2}

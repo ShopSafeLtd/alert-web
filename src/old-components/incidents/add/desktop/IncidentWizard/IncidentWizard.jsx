@@ -1,28 +1,28 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import { withStyles } from '@material-ui/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+import { withStyles } from "@material-ui/styles";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
-import { BackButton } from '../../../../global/actions';
-import AddDescription from '../AddDescription/AddDescription';
-import AddLocation from '../AddLocation/AddLocation';
-import AddOffenders from '../AddOffenders/AddOffenders';
-import AddImages from '../AddImages/AddImages';
-import Group from '../Groups/Groups';
-import ConfirmDialog from '../../../../global/ConfirmDialog/ConfirmDialog';
+import { BackButton } from "../../../../global/actions";
+import AddDescription from "../AddDescription/AddDescription";
+import AddLocation from "../AddLocation/AddLocation";
+import AddOffenders from "../AddOffenders/AddOffenders";
+import AddImages from "../AddImages/AddImages";
+import Group from "../Groups/Groups";
+import ConfirmDialog from "../../../../global/ConfirmDialog/ConfirmDialog";
 
 const styles = {
   label: {
-    fontSize: '14px'
-  }
+    fontSize: "14px",
+  },
 };
 
 const Container = styled.div`
@@ -109,7 +109,7 @@ const IncidentWizard = ({
   groupsList,
   groupsLoading,
   toggleGroups,
-  validateGroups
+  validateGroups,
 }) => {
   // state
   const [step, setStep] = useState(0);
@@ -126,8 +126,8 @@ const IncidentWizard = ({
     } else if (step === 1) {
       validateLocation()
         .then(() => setStep(2))
-        .catch(error => {
-          error === 'PREVIOUS' && setPrevious(true);
+        .catch((error) => {
+          error === "PREVIOUS" && setPrevious(true);
           setStep(1);
         });
     } else if (step === 2) {
@@ -151,6 +151,7 @@ const IncidentWizard = ({
         .catch(() => setStep(4));
     }
   };
+
   const decreaseStep = () => {
     step > 0 && setStep(step - 1);
   };
@@ -228,15 +229,14 @@ const IncidentWizard = ({
               step={step}
             />
           )}
-          {step === 4 &&
-            admin && (
-              <Group
-                groups={groupsList}
-                groupsLoading={groupsLoading}
-                selectedGroups={groups}
-                toggleSelectedGroups={toggleGroups}
-              />
-            )}
+          {step === 4 && admin && (
+            <Group
+              groups={groupsList}
+              groupsLoading={groupsLoading}
+              selectedGroups={groups}
+              toggleSelectedGroups={toggleGroups}
+            />
+          )}
         </Form>
         <Actions>
           {step > 0 && (
@@ -252,11 +252,11 @@ const IncidentWizard = ({
           >
             {admin
               ? step === 4
-                ? 'Submit'
-                : 'Next'
+                ? "Submit"
+                : "Next"
               : step === 3
-                ? 'Submit'
-                : 'Next'}
+              ? "Submit"
+              : "Next"}
           </Button>
         </Actions>
 
@@ -279,7 +279,7 @@ const IncidentWizard = ({
                   fill="#9E9E9E"
                   d="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15 17,16.5V19H23V16.5C23,14.17 18.33,13 16,13M8,13C5.67,13 1,14.17 1,16.5V19H15V16.5C15,14.17 10.33,13 8,13M8,11A3,3 0 0,0 11,8A3,3 0 0,0 8,5A3,3 0 0,0 5,8A3,3 0 0,0 8,11M16,11A3,3 0 0,0 19,8A3,3 0 0,0 16,5A3,3 0 0,0 13,8A3,3 0 0,0 16,11Z"
                 />
-              </Svg>{' '}
+              </Svg>{" "}
               icon on the images.
             </DialogContentText>
           </DialogContent>
@@ -316,7 +316,7 @@ const IncidentWizard = ({
               color="primary"
             >
               Go Back
-            </Button>
+            </Button>,
           ]}
         />
       </Page>

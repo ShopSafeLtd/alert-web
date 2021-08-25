@@ -1,16 +1,21 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+// import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from "@apollo/client";
 
-import { PopOver, PopOverContainer } from '../../../../global/layout';
-import { BackButton } from '../../../../global/actions';
-import { EmptyText, ErrorText } from '../../../../global/typography';
-import GroupImage from '../../../../../images/AddGroup';
-import Typography from '@material-ui/core/Typography';
-import UserQuery from '../../../../../graphql/users/queries/User';
-import AllGroups from '../../../../../graphql/groups/AllGroupsQuery';
-import UserMutation from '../../../../../graphql/users/mutations/UpdateUser';
+import { useStoreState } from "state";
+import { PopOver, PopOverContainer } from "../../../../global/layout";
+import { BackButton } from "../../../../global/actions";
+import { EmptyText, ErrorText } from "../../../../global/typography";
+import GroupImage from "../../../../../images/AddGroup";
+import Typography from "@material-ui/core/Typography";
+import { User } from "graphql-src/users/queries";
+import { Groups } from "graphql-src/groups/queries";
+import { UpdateUserGroups } from "graphql-src/users/mutations";
+// import UserQuery from '../../../../../graphql/users/queries/User';
+// import AllGroups from '../../../../../graphql/groups/AllGroupsQuery';
+// import UserMutation from '../../../../../graphql/users/mutations/UpdateUser';
 
 const Grow = styled.div`
   flex: 1;
@@ -49,88 +54,88 @@ const ItemText = styled(Typography)`
   align-items: center;
 `;
 
-const EditGroupsPopOver = ({ user, close, open }) => {
+const EditGroupsPopOver = ({ user: userId, close, open }) => {
   // state
+  const [userGroups, setUserGroups] = useState(undefined);
   const [groups, setGroups] = useState([]);
   const [add, setAdd] = useState([]);
   const [remove, setRemove] = useState([]);
   const [error, setError] = useState(false);
 
-  // queries
-  const { data: groupsData, loading: groupsLoading } = useQuery(AllGroups, {
+  const schemeId = useStoreState((state) => state.scheme.id);
+
+  const { data: groupsData, loading: groupsLoading } = useQuery(Groups, {
     variables: {
-      schemeId: window.localStorage.getItem('currentScheme'),
-      search: ''
+      where: {
+        scheme: { id: { equals: schemeId } },
+      },
     },
-    fetchPolicy: 'cache-and-network'
   });
-  const { data: userData, loading: userLoading } = useQuery(UserQuery, {
+
+  const { loading: userLoading } = useQuery(User, {
     variables: {
-      id: user,
-      schemeId: window.localStorage.getItem('currentScheme')
+      where: {
+        id: userId,
+      },
+      scheme: schemeId,
     },
-    fetchPolicy: 'cache-and-network',
-    onCompleted: data => setGroups(data.user.groups.map(({ id }) => id))
+    onCompleted: (res) => {
+      if (!res) return;
+      const output = { ...res.user };
+      setGroups(output.groups.map(({ id }) => id));
+      setUserGroups(output.groups);
+    },
   });
 
   // mutations
-  const [updateUser] = useMutation(UserMutation, {
-    update: (store, { data: { updateUser } }) => {
-      let data = store.readQuery({
-        query: UserQuery,
-        variables: {
-          id: user,
-          schemeId: window.localStorage.getItem('currentScheme')
-        }
-      });
-      data.user = {
-        ...data.user,
-        groups: updateUser.groups
-      };
-      store.writeQuery({
-        query: UserQuery,
-        data,
-        variables: {
-          id: user,
-          schemeId: window.localStorage.getItem('currentScheme')
-        }
-      });
-    }
-  });
+  const [updateUser] = useMutation(UpdateUserGroups, {});
 
   // functions
-  const toggleSelectedGroups = group => {
-    if (groups.includes(group)) {
-      setGroups(groups.filter(id => id !== group));
-      setAdd(add.filter(id => id !== group));
-      userData.user.groups.map(({ id }) => id).includes(group) &&
-        setRemove([...remove, group]);
-    } else {
-      setGroups([...groups, group]);
-      !userData.user.groups.map(({ id }) => id).includes(group) &&
-        setAdd([...add, group]);
-      setRemove(remove.filter(id => id !== group));
+  const toggleSelectedGroups = (group) => {
+    if (!add.includes(group) && !groups.includes(group)) {
+      setGroups((prev) => [...prev, group]);
+      setAdd((prev) => [...prev, group]);
+      setRemove((prev) => prev.filter((el) => el !== group));
+    } else if (!remove.includes(group)) {
+      setGroups((prev) => prev.filter((el) => el !== group));
+      setRemove((prev) => [...prev, group]);
+      setAdd((prev) => prev.filter((el) => el !== group));
     }
   };
 
   const handleSave = () => {
-    if (groups.length > 0) {
+    if (groups?.length > 0) {
+      const connect = add
+        .filter((el) => !userGroups.find((e) => e.id === el))
+        .map((id) => ({ id }));
+      const disconnect = remove
+        .filter((el) => userGroups.find((e) => e.id === el))
+        .map((id) => ({ id }));
+
       updateUser({
         variables: {
-          id: user,
-          addGroups: add.length > 0 ? add.map(id => ({ id })) : undefined,
-          removeGroups:
-            remove.length > 0 ? remove.map(id => ({ id })) : undefined,
-          schemeId: window.localStorage.getItem('currentScheme')
+          where: {
+            id: userId,
+          },
+          data: {
+            groups: {
+              connect: connect.length > 0 ? connect : undefined,
+              disconnect: disconnect.length > 0 ? disconnect : undefined,
+            },
+          },
         },
-        optimisticResponse: {
-          updateUser: {
-            ...userData.user,
-            groups: groups.map(group =>
-              groupsData.groups.find(({ id }) => id === group)
-            )
-          }
-        }
+      });
+
+      setUserGroups((prev) => {
+        return [
+          ...prev.filter((el) => !disconnect.find((e) => e.id === el.id)),
+          ...groupsData.groups.filter((el) => {
+            return (
+              connect.find((e) => e.id === el.id) &&
+              !disconnect.find((e) => e.id === el.id)
+            );
+          }),
+        ];
       });
       close();
     } else {
@@ -138,7 +143,7 @@ const EditGroupsPopOver = ({ user, close, open }) => {
     }
   };
 
-  const loading = groupsLoading || userLoading;
+  const loading = userLoading || groupsLoading;
 
   return (
     <PopOver
@@ -159,19 +164,19 @@ const EditGroupsPopOver = ({ user, close, open }) => {
           onClick={handleSave}
         >
           Save Groups
-        </Button>
+        </Button>,
       ]}
     >
       {error && <ErrorText>Please select at least one group.</ErrorText>}
       <Grow>
         <PopOverContainer>
-          {!loading && groupsData.groups.length > 0 ? (
+          {!loading && groupsData?.groups.length > 0 ? (
             <List>
-              {groupsData.groups.map(({ id, name }) => (
+              {groupsData?.groups.map(({ id, name }) => (
                 <ListItem key={id} onClick={() => toggleSelectedGroups(id)}>
                   <Svg viewBox="0 0 24 24">
                     <path
-                      fill={groups.includes(id) ? '#1E88E5' : '#E0E0E0'}
+                      fill={groups.includes(id) ? "#1E88E5" : "#E0E0E0"}
                       d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M11,16.5L18,9.5L16.59,8.09L11,13.67L7.91,10.59L6.5,12L11,16.5Z"
                     />
                   </Svg>

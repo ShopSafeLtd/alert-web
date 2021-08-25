@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import AddSvg from '@material-ui/icons/Add';
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
-import { isEqual } from 'lodash-es';
+import React, { Component } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import AddSvg from "@material-ui/icons/Add";
+import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from "@material-ui/icons/Delete";
+import { isEqual } from "lodash-es";
 
-import { SubHeader, ErrorText } from '../../typography';
-import { EmptySection } from '../../emptyStates';
-import { Row, Section, SectionLoading } from '../../layout';
-import ConfirmDialog from '../../ConfirmDialog/ConfirmDialog';
-import OffendersImage from '../../../../images/Offenders';
+import { SubHeader, ErrorText } from "../../typography";
+import { EmptySection } from "../../emptyStates";
+import { Row, Section, SectionLoading } from "../../layout";
+import ConfirmDialog from "../../ConfirmDialog/ConfirmDialog";
+import OffendersImage from "../../../../images/Offenders";
 
 const Grow = styled.div`
   flex: 1;
@@ -48,7 +48,7 @@ class EditDescription extends Component {
     super(props);
     this.state = {
       confirmDelete: false,
-      deleteId: ''
+      deleteId: "",
     };
   }
 
@@ -63,7 +63,6 @@ class EditDescription extends Component {
   render() {
     const { loading, groups, addGroups, removeGroup } = this.props;
     const { confirmDelete, deleteId } = this.state;
-    console.log(groups)
     return (
       <Section width="50%" elevation={1}>
         {loading && <SectionLoading />}
@@ -86,24 +85,25 @@ class EditDescription extends Component {
           </EmptySection>
         ) : (
           <List>
-            {!!groups && groups.map(({ id, name }) => {
-              return (
-                <ListItem key={id}>
-                  <ItemText>{name}</ItemText>
-                  <IconButton
-                    color="primary"
-                    onClick={() =>
-                      this.setState({
-                        confirmDelete: true,
-                        deleteId: id
-                      })
-                    }
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItem>
-              );
-            })}
+            {!!groups &&
+              groups.map(({ id, name }) => {
+                return (
+                  <ListItem key={id}>
+                    <ItemText>{name}</ItemText>
+                    <IconButton
+                      color="primary"
+                      onClick={() =>
+                        this.setState({
+                          confirmDelete: true,
+                          deleteId: id,
+                        })
+                      }
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItem>
+                );
+              })}
           </List>
         )}
         <ConfirmDialog
@@ -111,7 +111,7 @@ class EditDescription extends Component {
           handleClose={() =>
             this.setState({
               confirmDelete: true,
-              deleteId: ''
+              deleteId: "",
             })
           }
           title="Are you sure?"
@@ -120,7 +120,7 @@ class EditDescription extends Component {
             <Button
               key={0}
               onClick={() =>
-                this.setState({ confirmDelete: false, deleteId: '' })
+                this.setState({ confirmDelete: false, deleteId: "" })
               }
             >
               cancel
@@ -129,12 +129,12 @@ class EditDescription extends Component {
               key={1}
               color="primary"
               onClick={() => {
-                this.setState({ confirmDelete: false, deleteId: '' });
+                this.setState({ confirmDelete: false, deleteId: "" });
                 removeGroup(deleteId);
               }}
             >
               Remove Group
-            </Button>
+            </Button>,
           ]}
         />
       </Section>

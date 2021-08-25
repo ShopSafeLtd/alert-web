@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Menu, Grid } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+//import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import IntlMessage from "../../util-components/IntlMessage";
-import navigationConfig, { NavItem } from "configs/NavigationConfig";
+import navConfig, { NavItem } from "configs/NavigationConfig";
 import utils from "utils";
 import { useStoreState, useStoreActions, NavType, SideNavTheme } from "state";
 
@@ -27,7 +27,8 @@ const setDefaultOpen = (key: string) => {
   return keyList;
 };
 
-const Icon = ({ icon }: { icon: any }) => <FontAwesomeIcon icon={icon} style={{ fontSize: 22, marginRight: 10 }} />
+//const Icon = ({ icon }: { icon: any }) => <FontAwesomeIcon icon={icon} style={{ fontSize: 22, marginRight: 10 }} />
+const Icon = ({ icon }: any) => <></>;
 
 interface SideNavContentProps {
   sideNavTheme: SideNavTheme;
@@ -53,6 +54,12 @@ const SideNavContent = (props: SideNavContentProps) => {
     }
   };
 
+  const userRole = useStoreState((state) => state.user.role);
+  const navigationConfig =
+    userRole === "SCHEME_ADMIN"
+      ? navConfig
+      : navConfig.filter((el) => el.title !== "sidenav.scheme");
+
   return (
     <Menu
       theme={sideNavTheme === SideNavTheme.LIGHT ? "light" : "dark"}
@@ -62,70 +69,61 @@ const SideNavContent = (props: SideNavContentProps) => {
       defaultOpenKeys={setDefaultOpen(routeInfo?.key)}
       className={hideGroupTitle ? "hide-group-title" : ""}
     >
-      {navigationConfig
-        .map((menu) =>
-          menu.submenu.length > 0 ? (
-            <Menu.SubMenu
-              key={menu.key}
-              icon={<Icon icon={menu.icon} />}
-              title={setLocale(localization, menu.title)}
-            >
-              {menu.submenu.map((subMenuFirst) =>
-                subMenuFirst.submenu.length > 0 ? (
-                  <SubMenu
-                    icon={
-                      subMenuFirst.icon ? (
-                        <Icon icon={subMenuFirst?.icon} />
-                      ) : null
-                    }
-                    key={subMenuFirst.key}
-                    title={setLocale(localization, subMenuFirst.title)}
-                  >
-                    {subMenuFirst.submenu.map((subMenuSecond) => (
-                      <Menu.Item key={subMenuSecond.key}>
-                        {subMenuSecond.icon ? (
-                          <Icon icon={subMenuSecond?.icon} />
-                        ) : null}
-                        <span>
-                          {setLocale(localization, subMenuSecond.title)}
-                        </span>
-                        <Link
-                          onClick={() => closeMobileNav()}
-                          to={subMenuSecond.path}
-                        />
-                      </Menu.Item>
-                    ))}
-                  </SubMenu>
-                ) : (
-                  <Menu.Item key={subMenuFirst.key}>
-                    {subMenuFirst.icon ? (
-                      <Icon icon={subMenuFirst.icon} />
-                    ) : null}
-                    <span>{setLocale(localization, subMenuFirst.title)}</span>
-                    <Link
-                      onClick={() => closeMobileNav()}
-                      to={subMenuFirst.path}
-                    />
-                  </Menu.Item>
-                )
-              )}
-            </Menu.SubMenu>
-          ) : (
-            <Menu.Item
-              key={menu.key}
-            >
-              {menu.icon ? (
-                <Icon
-                icon={menu?.icon}
-                />
-              ) : null}
-              <span>{setLocale(localization, menu?.title)}</span>
-              {menu.path ? (
-                <Link onClick={() => closeMobileNav()} to={menu.path} />
-              ) : null}
-            </Menu.Item>
-          )
-        )}
+      {navigationConfig.map((menu) =>
+        menu.submenu.length > 0 ? (
+          <Menu.SubMenu
+            key={menu.key}
+            icon={<Icon icon={menu.icon} />}
+            title={setLocale(localization, menu.title)}
+          >
+            {menu.submenu.map((subMenuFirst) =>
+              subMenuFirst.submenu.length > 0 ? (
+                <SubMenu
+                  icon={
+                    subMenuFirst.icon ? (
+                      <Icon icon={subMenuFirst?.icon} />
+                    ) : null
+                  }
+                  key={subMenuFirst.key}
+                  title={setLocale(localization, subMenuFirst.title)}
+                >
+                  {subMenuFirst.submenu.map((subMenuSecond) => (
+                    <Menu.Item key={subMenuSecond.key}>
+                      {subMenuSecond.icon ? (
+                        <Icon icon={subMenuSecond?.icon} />
+                      ) : null}
+                      <span>
+                        {setLocale(localization, subMenuSecond.title)}
+                      </span>
+                      <Link
+                        onClick={() => closeMobileNav()}
+                        to={subMenuSecond.path}
+                      />
+                    </Menu.Item>
+                  ))}
+                </SubMenu>
+              ) : (
+                <Menu.Item key={subMenuFirst.key}>
+                  {subMenuFirst.icon ? <Icon icon={subMenuFirst.icon} /> : null}
+                  <span>{setLocale(localization, subMenuFirst.title)}</span>
+                  <Link
+                    onClick={() => closeMobileNav()}
+                    to={subMenuFirst.path}
+                  />
+                </Menu.Item>
+              )
+            )}
+          </Menu.SubMenu>
+        ) : (
+          <Menu.Item key={menu.key}>
+            {menu.icon ? <Icon icon={menu?.icon} /> : null}
+            <span>{setLocale(localization, menu?.title)}</span>
+            {menu.path ? (
+              <Link onClick={() => closeMobileNav()} to={menu.path} />
+            ) : null}
+          </Menu.Item>
+        )
+      )}
     </Menu>
   );
 };
@@ -137,6 +135,12 @@ interface TopNavContentProps {
 
 const TopNavContent = (props: TopNavContentProps) => {
   const { topNavColor, localization } = props;
+
+  const userRole = useStoreState((state) => state.user.role);
+  const navigationConfig =
+    userRole === "SCHEME_ADMIN"
+      ? navConfig
+      : navConfig.filter((el) => el.title !== "sidenav.scheme");
   return (
     <Menu mode="horizontal" style={{ backgroundColor: topNavColor }}>
       {navigationConfig.map((menu) =>

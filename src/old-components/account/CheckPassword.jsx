@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import Paper from '@material-ui/core/Paper';
-import MediaQuery from 'react-responsive';
-import TextField from '@material-ui/core/TextField';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import Paper from "@material-ui/core/Paper";
+import MediaQuery from "react-responsive";
+import TextField from "@material-ui/core/TextField";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
 
-import { FullWidthButton, ProgressButton } from '../global/actions';
-import { HeaderText, HeaderSubText, Field, FieldHeader } from '../global/forms';
-import Auth from '../../auth/Auth';
-import { useStoreActions, useStoreState } from '../../state';
+import { FullWidthButton, ProgressButton } from "../global/actions";
+import { HeaderText, HeaderSubText, Field, FieldHeader } from "../global/forms";
+// import Auth from '../../auth/Auth';
+import { useStoreActions, useStoreState } from "../../state";
+import { useAuth } from "../../hooks";
 
-const auth = new Auth();
+// const auth = new Auth();
 
 const Container = styled.div`
   min-height: calc(100vh - 56px);
@@ -73,63 +75,64 @@ const StyledTextField = styled(TextField)`
 `;
 
 const ResetPassword = ({ setAuth, history }) => {
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [passwordError, setPasswordError] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const user = useStoreState(state => state.user);
-  const setTitle = useStoreActions(actions => actions.theme.setTitle);
-  const setNavbarAction = useStoreActions(
-    actions => actions.theme.setNavbarAction
+  const { login } = useAuth();
+
+  const user = useStoreState((state) => state.user);
+  const setTitle = useStoreActions((actions) => actions.theme.setTitle);
+  // const setNavBarAction = useStoreActions(
+  //   (actions) => actions.theme.setNavbarAction
+  // );
+  const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
+  const setBackLinkTo = useStoreActions(
+    (actions) => actions.theme.setBackLinkTo
   );
-  const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
-  const setBackLinkTo = useStoreActions(actions => actions.theme.setBackLinkTo);
 
   useEffect(() => {
-    setTitle('Reset Password');
-    setNavbarAction('backLink');
-    setBackLinkTo('/account-settings');
+    setTitle("Reset Password");
+    // setNavBarAction("backLink");
+    setBackLinkTo("/account-settings");
     setBottomNav(false);
     return () => {
-      setNavbarAction('default');
+      // setNavBarAction("default");
       setBottomNav(true);
-      setBackLinkTo('');
+      setBackLinkTo("");
     };
     // eslint-disable-next-line
   }, []);
 
-  const handleChange = name => event => {
+  const handleChange = (name) => (event) => {
     setPassword(event.target.value);
+    setError("");
   };
 
-  const validate = () =>
-    new Promise((resolve, reject) => {
-      this.setState({
-        passwordError: !!password ? '' : 'Please enter your password.'
-      });
-      !!password ? resolve() : reject();
+  const validate = async () => {
+    const result = await new Promise((resolve, reject) => {
+      setPasswordError(!!password ? "" : "Please enter your password.");
+      !!password ? resolve(true) : resolve(false);
     });
+    return result;
+  };
 
-  const login = () => {
-    validate()
-      .then(() => {
-        auth.login({
-          emailAddress: user.emailAddress,
-          password,
-          success: () => {
-            setAuth(true);
-            history.push('/account-settings/reset-password/new');
-          },
-          errorCb: error => {
-            setError(error);
-          }
-        });
-      })
-      .catch(() => {});
+  const handleLogin = async () => {
+    try {
+      const valid = await validate();
+      if (!valid) throw new Error("Please enter your password");
+      await login({ email: user.email, password });
+      setAuth(password);
+      history.push(`${APP_PREFIX_PATH}/user-settings/reset-password/new`);
+    } catch (err) {
+      console.log("error", err.message);
+      setError(err.message);
+    }
   };
 
   return (
     <MediaQuery minDeviceWidth={1024}>
-      {matches => (
+      {(matches) => (
         <Container>
           <Page>
             <FormContainer elevation={1}>
@@ -146,8 +149,8 @@ const ResetPassword = ({ setAuth, history }) => {
                     <FieldHeader required>Password</FieldHeader>
                     <StyledTextField
                       value={password}
-                      onChange={handleChange('password')}
-                      error={error !== ''}
+                      onChange={handleChange("password")}
+                      error={error !== ""}
                       helperText={error}
                       fullWidth={!matches}
                       type="password"
@@ -160,7 +163,7 @@ const ResetPassword = ({ setAuth, history }) => {
                   <ProgressButton
                     variant="contained"
                     color="primary"
-                    onClick={login}
+                    onClick={handleLogin}
                   >
                     Enter New Password
                   </ProgressButton>

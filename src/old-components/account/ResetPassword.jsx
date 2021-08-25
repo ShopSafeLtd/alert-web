@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { Route } from 'react-router-dom';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import { Route } from "react-router-dom";
+import styled from "styled-components";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
 
-import CheckPassword from './CheckPassword';
-import ResetPasswordForm from './ResetPasswordForm';
+import CheckPassword from "./CheckPassword";
+import ResetPasswordForm from "./ResetPasswordForm";
 
 const Page = styled.div`
   display: 1;
@@ -13,18 +14,20 @@ const Page = styled.div`
 
 const ResetPassword = () => {
   // state
-  const [auth, setAuth] = useState(false);
+  const [auth, setAuth] = useState("");
 
   return (
     <Page>
       <Route
         exact
-        path="/account-settings/reset-password"
-        render={router => <CheckPassword setAuth={setAuth} {...router} />}
+        path={`${APP_PREFIX_PATH}/user-settings/reset-password`}
+        render={(router) => <CheckPassword setAuth={setAuth} {...router} />}
       />
       <Route
-        path="/account-settings/reset-password/new"
-        render={router => <ResetPasswordForm auth={auth} {...router} />}
+        path={`${APP_PREFIX_PATH}/user-settings/reset-password/new`}
+        render={(router) => (
+          <ResetPasswordForm auth={auth} setAuth={setAuth} {...router} />
+        )}
       />
     </Page>
   );

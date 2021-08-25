@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import { useQuery } from '@apollo/react-hooks';
-import Typography from '@material-ui/core/Typography';
-import MediaQuery from 'react-responsive';
-import { Link } from 'react-router-dom';
-import { PullToRefresh } from '../../global/pullToRefresh';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import { useQuery } from "@apollo/client";
+import Typography from "@material-ui/core/Typography";
+import MediaQuery from "react-responsive";
+import { Link } from "react-router-dom";
+import { PullToRefresh } from "../../global/pullToRefresh";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
 
-import { Section } from '../../global/layout';
-import { PageHeader, EmptyText } from '../../global/typography';
-import { AdminWarningSkeleton } from '../../global/skeletons';
-import { FAB } from '../../global/actions';
-import CrimeTypes from '../../../graphql/admin/queries/AllCrimeTypes';
-import Offline from '../../global/Offline/Offline';
-import { useStoreActions } from '../../../state';
+import { Section } from "../../global/layout";
+import { PageHeader, EmptyText } from "../../global/typography";
+import { AdminWarningSkeleton } from "../../global/skeletons";
+import { FAB } from "../../global/actions";
+import { Tags } from "graphql-src/tags/queries";
+// import CrimeTypes from '../../../graphql/admin/queries/AllCrimeTypes';
+import Offline from "../../global/Offline/Offline";
+import { useStoreActions, useStoreState } from "../../../state";
 
 const Page = styled.div`
   flex: 1;
@@ -53,12 +55,16 @@ const EmptyIcon = styled.svg`
 `;
 
 const CrimeTypeList = ({ history }) => {
-  const setTitle = useStoreActions(actions => actions.theme.setTitle);
-  const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
-  const setNavbarAction = useStoreActions(
-    actions => actions.theme.setNavbarAction
+  const setTitle = useStoreActions((actions) => actions.theme.setTitle);
+  const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
+  // const setNavbarAction = useStoreActions(
+  //   (actions) => actions.theme.setNavbarAction
+  // );
+  const setBackLinkTo = useStoreActions(
+    (actions) => actions.theme.setBackLinkTo
   );
-  const setBackLinkTo = useStoreActions(actions => actions.theme.setBackLinkTo);
+
+  const schemeId = useStoreState((state) => state.scheme.id);
 
   // state
   const [pristine, setPristine] = useState(true);
@@ -66,31 +72,38 @@ const CrimeTypeList = ({ history }) => {
   // effects
   useEffect(() => {
     setBottomNav(false);
-    setTitle('Crime Types');
-    setNavbarAction('backLink');
+    setTitle("Crime Types");
+    // setNavbarAction("backLink");
     setBackLinkTo(`/admin`);
     return () => {
       setBottomNav(true);
-      setTitle('');
-      setNavbarAction('default');
-      setBackLinkTo('');
+      setTitle("");
+      // setNavbarAction("default");
+      setBackLinkTo("");
     };
   });
 
   // queries
-  const { data, loading, refetch, error } = useQuery(CrimeTypes, {
+  const { data, loading, refetch, error } = useQuery(Tags, {
     variables: {
-      schemeId: window.localStorage.getItem('currentScheme')
+      where: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+        dataType: { equals: "INCIDENT" },
+      },
     },
-    fetchPolicy: 'cache-and-network',
-    onCompleted: () => pristine && setPristine(false)
+    fetchPolicy: "cache-and-network",
+    onCompleted: () => pristine && setPristine(false),
   });
 
   return !!data && !!error && !!error.networkError ? (
     <Offline type="Crime Types" />
   ) : (
     <MediaQuery minDeviceWidth={1024}>
-      {matches => (
+      {(matches) => (
         <Page>
           {matches && (
             <Section width="100%" elevation={1}>
@@ -105,7 +118,7 @@ const CrimeTypeList = ({ history }) => {
                 <AdminWarningSkeleton />
                 <AdminWarningSkeleton />
               </List>
-            ) : data.tags.length === 0 ? (
+            ) : data?.tags?.length === 0 ? (
               <Empty>
                 <EmptyIcon viewBox="0 0 24 24">
                   <path
@@ -126,11 +139,13 @@ const CrimeTypeList = ({ history }) => {
             ) : (
               <PullToRefresh onRefresh={refetch}>
                 <List>
-                  {data.tags.map(crimeType => (
+                  {data?.tags?.map((crimeType) => (
                     <ListItem
                       key={crimeType.id}
                       onClick={() =>
-                        history.push(`/admin/crime-types/edit/${crimeType.id}`)
+                        history.push(
+                          `${APP_PREFIX_PATH}/scheme-settings/crime-types/view/${crimeType.id}`
+                        )
                       }
                     >
                       <Typography>{crimeType.name}</Typography>
@@ -140,8 +155,12 @@ const CrimeTypeList = ({ history }) => {
               </PullToRefresh>
             )}
           </Section>
-          {!!data &&
-            data.tags.length > 0 && <FAB bottom to="/admin/crime-types/add" />}
+          {!!data && data.tags.length > 0 && (
+            <FAB
+              bottom
+              to={`${APP_PREFIX_PATH}/scheme-settings/crime-types/add`}
+            />
+          )}
         </Page>
       )}
     </MediaQuery>

@@ -1,1 +1,2 @@
-export * from './list-offender'
+export * from "./full-offender";
+export * from "./list-offender";

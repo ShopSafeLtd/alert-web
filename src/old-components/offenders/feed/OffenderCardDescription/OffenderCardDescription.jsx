@@ -1,10 +1,15 @@
-import React from 'react';
-import styled from 'styled-components';
-import Moment from 'react-moment';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import React from "react";
+import styled from "styled-components";
+import Moment from "react-moment";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 
-import { ageValues, buildValues, genderValues, raceValues } from 'graphql-src/offenders/enums';
+import {
+  ageValues,
+  buildValues,
+  genderValues,
+  raceValues,
+} from "graphql-src/offenders/enums";
 
 const Description = styled.div`
   height: 187px;
@@ -65,23 +70,23 @@ class OffenderCardDescription extends React.Component {
       race,
       viewAll,
       offenderWarnings,
-      toggleViewLabel
+      toggleViewLabel,
     } = this.props;
 
-    const buildValue = buildValues.find(obj => obj.value === build);
-    const ageValue = ageValues.find(obj => obj.value === age);
-    const raceValue = raceValues.find(obj => obj.value === race);
-    const genderValue = genderValues.find(obj => obj.value === gender);
+    const buildValue = buildValues.find((obj) => obj.value === build);
+    const ageValue = ageValues.find((obj) => obj.value === age);
+    const raceValue = raceValues.find((obj) => obj.value === race);
+    const genderValue = genderValues.find((obj) => obj.value === gender);
 
     return (
       <Description>
         <Title variant="h6">{name}</Title>
         <Grow>
-          {offenderWarnings.length > 0 ? (
+          {offenderWarnings?.length > 0 ? (
             <div>
               <Header variant="body2">Offender Warnings</Header>
               <Labels>
-                {offenderWarnings.map(label => (
+                {offenderWarnings.map((label) => (
                   <Label
                     key={label.name}
                     onClick={() => toggleViewLabel(label)}

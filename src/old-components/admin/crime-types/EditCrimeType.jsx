@@ -1,28 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import MediaQuery from 'react-responsive';
-import TextField from '@material-ui/core/TextField';
-import { Link } from 'react-router-dom';
-import { useQuery, useMutation } from '@apollo/react-hooks';
-import IconButton from '@material-ui/core/IconButton';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import MediaQuery from "react-responsive";
+import TextField from "@material-ui/core/TextField";
+import { Link } from "react-router-dom";
+import { useQuery, useMutation } from "@apollo/client";
+import IconButton from "@material-ui/core/IconButton";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
 
 import {
   Field,
   FieldHeader,
   Header,
   HeaderText,
-  HeaderSubText
-} from '../../global/forms';
-import { PageHeader } from '../../global/typography';
-import ConfirmDialog from '../../global/ConfirmDialog/ConfirmDialog';
-import { FullWidthButton, BackButton } from '../../global/actions';
-import { Row, Section } from '../../global/layout';
-import mutation from '../../../graphql/admin/mutations/EditCrimeType';
-import DeleteCrimeType from '../../../graphql/admin/mutations/DeleteCrimeType';
-import CrimeType from '../../../graphql/admin/queries/CrimeType';
-import AllCrimeTypes from '../../../graphql/admin/queries/AllCrimeTypes';
-import { useStoreActions } from '../../../state';
+  HeaderSubText,
+} from "../../global/forms";
+import { PageHeader } from "../../global/typography";
+import ConfirmDialog from "../../global/ConfirmDialog/ConfirmDialog";
+import { FullWidthButton, BackButton } from "../../global/actions";
+import { Row, Section } from "../../global/layout";
+import { Tag, Tags } from "graphql-src/tags/queries";
+import { UpdateTag, DeleteTag } from "graphql-src/tags/mutations";
+// import mutation from '../../../graphql/admin/mutations/EditCrimeType';
+// import DeleteCrimeType from '../../../graphql/admin/mutations/DeleteCrimeType';
+// import CrimeType from '../../../graphql/admin/queries/CrimeType';
+// import AllCrimeTypes from '../../../graphql/admin/queries/AllCrimeTypes';
+import { useStoreActions, useStoreState } from "../../../state";
 
 const Page = styled.div`
   flex: 1;
@@ -51,96 +54,121 @@ const Svg = styled.svg`
 const EditCrimeType = ({
   history,
   match: {
-    params: { id }
-  }
+    params: { id },
+  },
 }) => {
-  const setTitle = useStoreActions(actions => actions.theme.setTitle);
-  const setNavbarAction = useStoreActions(
-    actions => actions.theme.setNavbarAction
+  const setTitle = useStoreActions((actions) => actions.theme.setTitle);
+  // const setNavbarAction = useStoreActions(
+  //   (actions) => actions.theme.setNavbarAction
+  // );
+  const setBackLinkTo = useStoreActions(
+    (actions) => actions.theme.setBackLinkTo
   );
-  const setBackLinkTo = useStoreActions(actions => actions.theme.setBackLinkTo);
-  const setActions = useStoreActions(actions => actions.theme.setActions);
-  const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
+  const setActions = useStoreActions((actions) => actions.theme.setActions);
+  const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
+  const schemeId = useStoreState((state) => state.scheme.id);
 
   // state
   const [fields, setFields] = useState({
-    id: '',
-    name: '',
-    nameError: '',
-    description: '',
-    descriptionError: ''
+    id: "",
+    name: "",
+    nameError: "",
+    description: "",
+    descriptionError: "",
   });
   const [deleteDialog, setDeleteDialog] = useState(false);
 
   // effects
   useEffect(() => {
     setBottomNav(false);
-    setTitle('Add Crime Type');
-    setNavbarAction('backLink');
-    setBackLinkTo(`/admin/crime-types`);
-    setActions([
-      <IconButton onClick={() => setDeleteDialog(true)} key="0">
-        <Svg viewBox="0 0 24 24">
-          <path
-            fill="#EF5350"
-            d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
-          />
-        </Svg>
-      </IconButton>
-    ]);
+    setTitle("Add Crime Type");
+    // setNavbarAction("backLink");
+    setBackLinkTo(`${APP_PREFIX_PATH}/scheme-settings/crime-types`);
+    // setActions([
+    //   <IconButton onClick={() => setDeleteDialog(true)} key="0">
+    //     <Svg viewBox="0 0 24 24">
+    //       <path
+    //         fill="#EF5350"
+    //         d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
+    //       />
+    //     </Svg>
+    //   </IconButton>,
+    // ]);
     return () => {
       setBottomNav(true);
-      setTitle('');
-      setNavbarAction('default');
-      setBackLinkTo('');
-      setActions([]);
+      setTitle("");
+      // setNavbarAction("default");
+      setBackLinkTo("");
+      // setActions([]);
     };
   });
 
   // queries
-  const { loading } = useQuery(CrimeType, {
+  const { loading } = useQuery(Tag, {
     variables: {
-      id
+      where: {
+        id,
+      },
     },
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: "cache-and-network",
     onCompleted: ({ tag: { id, name, description } }) => {
-      if (fields.id === '') {
+      if (fields.id === "") {
         setFields({
           ...fields,
           id,
           name,
-          description
+          description,
         });
       }
-    }
+    },
   });
 
   // mutations
-  const [editCrimeType] = useMutation(mutation);
-  const [deleteCrimeType] = useMutation(DeleteCrimeType, {
+  const [editCrimeType] = useMutation(UpdateTag);
+  const [deleteCrimeType] = useMutation(DeleteTag, {
     update: (store, { data: { deleteTag } }) => {
       let data = store.readQuery({
-        query: AllCrimeTypes,
+        query: Tags,
         variables: {
-          schemeId: window.localStorage.getItem('currentScheme')
-        }
+          where: {
+            scheme: {
+              equals: {
+                id: schemeId,
+              },
+            },
+            dataType: {
+              equals: "INCIDENT",
+            },
+          },
+        },
       });
-      data.tags = data.tags.filter(type => type.id !== deleteTag.id);
       store.writeQuery({
-        query: AllCrimeTypes,
-        data,
+        query: Tags,
+        data: {
+          ...data,
+          tags: data.tags.filter((type) => type.id !== deleteTag.id),
+        },
         variables: {
-          schemeId: window.localStorage.getItem('currentScheme')
-        }
+          where: {
+            scheme: {
+              equals: {
+                id: schemeId,
+              },
+            },
+            dataType: {
+              equals: "INCIDENT",
+            },
+          },
+        },
       });
-    }
+    },
   });
 
   // functions
   const handleChange = (value, field) => {
     setFields({
       ...fields,
-      [field]: value
+      [field]: value,
     });
   };
 
@@ -149,8 +177,8 @@ const EditCrimeType = ({
       const nameValid = !!fields.name;
       const descriptionValid = !!fields.description;
       setFields({
-        nameError: nameValid ? '' : 'This field is required',
-        descriptionError: descriptionValid ? '' : 'This field is required'
+        nameError: nameValid ? "" : "This field is required",
+        descriptionError: descriptionValid ? "" : "This field is required",
       });
       nameValid && descriptionValid ? resolve() : reject();
     });
@@ -160,20 +188,24 @@ const EditCrimeType = ({
       .then(() => {
         editCrimeType({
           variables: {
-            id,
-            name: { set: fields.name },
-            description: { set: fields.description }
+            where: {
+              id,
+            },
+            data: {
+              name: { set: fields.name },
+              description: { set: fields.description },
+            },
           },
           optimisticResponse: {
             updateTag: {
               description: fields.description,
               id,
               name: fields.name,
-              __typename: 'CrimeType'
-            }
-          }
+              __typename: "CrimeType",
+            },
+          },
         });
-        history.push('/admin/crime-types');
+        history.push(`${APP_PREFIX_PATH}/scheme-settings/crime-types`);
       })
       .catch(() => {});
   };
@@ -181,31 +213,33 @@ const EditCrimeType = ({
   const handleDelete = async () => {
     await deleteCrimeType({
       variables: {
-        id
+        where: {
+          id,
+        },
       },
       optimisticResponse: {
         deleteTag: {
           id,
-          __typename: 'CrimeType'
-        }
-      }
+          __typename: "CrimeType",
+        },
+      },
     });
-    history.push('/admin/crime-types');
+    history.push(`${APP_PREFIX_PATH}/scheme-settings/crime-types`);
   };
 
   return (
-    <MediaQuery minDeviceWidth={1024}>
-      {matches => (
-        <Page>
-          {matches ? (
-            <Section width="100%" elevation={1}>
-              <PageHeader>Edit Crime Type</PageHeader>
-              <HeaderSubText>
-                Crime types are used to catagorise incidents that are submitted
-                by memebers.
-              </HeaderSubText>
-            </Section>
-          ) : (
+    // <MediaQuery minDeviceWidth={1024}>
+    //   {(matches) => (
+    <Page>
+      {/* {matches ? ( */}
+      <Section width="100%" elevation={1}>
+        <PageHeader>Edit Crime Type</PageHeader>
+        <HeaderSubText>
+          Crime types are used to catagorise incidents that are submitted by
+          memebers.
+        </HeaderSubText>
+      </Section>
+      {/* ) : (
             <Header>
               <HeaderText>Edit Crime Type</HeaderText>
               <HeaderSubText>
@@ -213,86 +247,79 @@ const EditCrimeType = ({
                 by memebers.
               </HeaderSubText>
             </Header>
-          )}
-          <Section noPadding width="100%" elevation={1} grow>
-            <Form>
-              <Field>
-                <FieldHeader required>Name</FieldHeader>
-                <TextField
-                  value={fields.name}
-                  onChange={e => handleChange(e.target.value, 'name')}
-                  fullWidth
-                  disabled={loading}
-                  error={!!fields.nameError}
-                  helperText={fields.nameError}
-                />
-              </Field>
-              <Field>
-                <FieldHeader required>Description</FieldHeader>
-                <TextField
-                  value={fields.description}
-                  onChange={e => handleChange(e.target.value, 'description')}
-                  fullWidth
-                  multiline
-                  rows="5"
-                  disabled={loading}
-                  error={!!fields.descriptionError}
-                  helperText={fields.descriptionError}
-                />
-              </Field>
-            </Form>
-          </Section>
-          {matches ? (
-            <Section width="100%" elevation={1}>
-              <Row row right>
-                <BackButton
-                  component={Link}
-                  to={`/admin/crime-types`}
-                  disabled={loading}
-                >
-                  Cancel
-                </BackButton>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={submit}
-                  disabled={loading}
-                >
-                  Submit
-                </Button>
-              </Row>
-            </Section>
-          ) : (
+          )} */}
+      <Section noPadding width="100%" elevation={1} grow>
+        <Form>
+          <Field>
+            <FieldHeader required>Name</FieldHeader>
+            <TextField
+              value={fields.name}
+              onChange={(e) => handleChange(e.target.value, "name")}
+              fullWidth
+              disabled={loading}
+              error={!!fields.nameError}
+              helperText={fields.nameError}
+            />
+          </Field>
+          <Field>
+            <FieldHeader required>Description</FieldHeader>
+            <TextField
+              value={fields.description}
+              onChange={(e) => handleChange(e.target.value, "description")}
+              fullWidth
+              multiline
+              rows="5"
+              disabled={loading}
+              error={!!fields.descriptionError}
+              helperText={fields.descriptionError}
+            />
+          </Field>
+        </Form>
+      </Section>
+      {/* {matches ? ( */}
+      <Section width="100%" elevation={1}>
+        <Row row right>
+          <BackButton
+            component={Link}
+            to={`${APP_PREFIX_PATH}/scheme-settings/crime-types`}
+            disabled={loading}
+          >
+            Cancel
+          </BackButton>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={submit}
+            disabled={loading}
+          >
+            Submit
+          </Button>
+        </Row>
+      </Section>
+      {/* ) : (
             <FullWidthButton
               text="Submit"
               onClick={submit}
               disabled={loading}
             />
-          )}
-          <ConfirmDialog
-            open={deleteDialog}
-            handleClose={() => setDeleteDialog(false)}
-            title="Are you sure?"
-            description="Deleting this crime type will remove it permanently and will also remove it from any incident it's assigned to."
-            actions={[
-              <Button
-                key={Math.random()}
-                onClick={() => setDeleteDialog(false)}
-              >
-                Cancel
-              </Button>,
-              <Button
-                key={Math.random()}
-                onClick={handleDelete}
-                color="primary"
-              >
-                Delete
-              </Button>
-            ]}
-          />
-        </Page>
-      )}
-    </MediaQuery>
+          )} */}
+      <ConfirmDialog
+        open={deleteDialog}
+        handleClose={() => setDeleteDialog(false)}
+        title="Are you sure?"
+        description="Deleting this crime type will remove it permanently and will also remove it from any incident it's assigned to."
+        actions={[
+          <Button key={Math.random()} onClick={() => setDeleteDialog(false)}>
+            Cancel
+          </Button>,
+          <Button key={Math.random()} onClick={handleDelete} color="primary">
+            Delete
+          </Button>,
+        ]}
+      />
+    </Page>
+    //   )}
+    // </MediaQuery>
   );
 };
 

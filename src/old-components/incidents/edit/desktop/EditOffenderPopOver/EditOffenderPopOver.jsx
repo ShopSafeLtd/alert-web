@@ -1,11 +1,11 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import Delete from '@material-ui/icons/Delete';
+import React, { PureComponent } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import Delete from "@material-ui/icons/Delete";
 
-import { PopOver, PopOverContainer } from '../../../../global/layout';
-import OffenderPreview from '../../../global/OffenderPreview/OffenderPreview';
-import ConfirmDialog from '../../../../global/ConfirmDialog/ConfirmDialog';
+import { PopOver, PopOverContainer } from "../../../../global/layout";
+import OffenderPreview from "../../../global/OffenderPreview/OffenderPreview";
+import ConfirmDialog from "../../../../global/ConfirmDialog/ConfirmDialog";
 
 const Grow = styled.div`
   flex: 1;
@@ -19,7 +19,7 @@ class AddOffenderPopOver extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      confrimDelete: false
+      confrimDelete: false,
     };
   }
 
@@ -33,11 +33,11 @@ class AddOffenderPopOver extends PureComponent {
         open={open}
         width={800}
         handleClose={close}
-        title={'View Offender'}
+        title={"View Offender"}
         actions={[
           <Button key={0} color="primary" variant="contained" onClick={close}>
             Close
-          </Button>
+          </Button>,
         ]}
         toolbarActions={[
           <Button
@@ -49,7 +49,7 @@ class AddOffenderPopOver extends PureComponent {
           >
             <DeleteIcon />
             Remove from Incident
-          </Button>
+          </Button>,
         ]}
       >
         <Grow>
@@ -77,7 +77,7 @@ class AddOffenderPopOver extends PureComponent {
                   }}
                 >
                   Remove
-                </Button>
+                </Button>,
               ]}
             />
           </PopOverContainer>

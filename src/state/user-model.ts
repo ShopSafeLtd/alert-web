@@ -22,7 +22,7 @@ export interface Scheme {
     name: string;
     autoApproveIncidents: boolean;
     autoApproveOffenders: boolean;
-  }
+  };
 }
 
 export interface UserModel {
@@ -40,32 +40,35 @@ export interface UserModel {
 }
 
 const userModel: UserModel = {
-  id: '',
-  email: '',
-  fullName: '',
-  picture: '',
-  organisation: '',
+  id: "",
+  email: "",
+  fullName: "",
+  picture: "",
+  organisation: "",
   onboarded: false,
   role: Role.USER,
   schemes: [],
 
   setUser: action((state, payload) => {
-      state.id = payload.id;
-      state.email = payload.email;
-      state.fullName = payload.fullName;
-      state.onboarded = payload.onboarded;
-      state.organisation = payload.organisation;
-      state.schemes = payload.schemes;
+    state.id = payload.id;
+    state.email = payload.email;
+    state.fullName = payload.fullName;
+    state.onboarded = payload.onboarded;
+    state.organisation = payload.organisation;
+    state.schemes = payload.schemes;
   }),
   setRole: action((state, payload) => {
     state.role = payload.role;
   }),
   clearUser: action((state) => {
-    state.id = '';
-    state.email = '';
-    state.fullName = ''
+    state.id = "";
+    state.email = "";
+    state.fullName = "";
+    state.picture = "";
+    state.organisation = "";
     state.onboarded = false;
-    state.organisation = '';
+    state.schemes = [];
+    state.role = Role.USER;
   }),
 };
 

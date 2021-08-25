@@ -1,7 +1,7 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import { DatePicker } from '@material-ui/pickers';
-import MediaQuery from 'react-responsive';
+import React, { PureComponent } from "react";
+import styled from "styled-components";
+import { DatePicker } from "@material-ui/pickers";
+import MediaQuery from "react-responsive";
 
 const Field = styled.div`
   margin-top: 10px;
@@ -12,7 +12,7 @@ class DateField extends PureComponent {
     const { value, onChange, modal, fullWidth, ...rest } = this.props;
     return (
       <MediaQuery minDeviceWidth={1024}>
-        {matches => (
+        {(matches) => (
           <Field>
             {matches && !modal ? (
               <DatePicker

@@ -6,7 +6,8 @@ import CustomIcon from "components/util-components/CustomIcon";
 import { useHistory } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useStoreState, useStoreActions } from "state";
-import useAuth from 'hooks/useAuth'
+import { useAuth } from "hooks";
+import { AUTH_PREFIX_PATH } from "configs/AppConfig";
 
 export interface Props {
   otherSignIn?: boolean;
@@ -27,9 +28,7 @@ export const LoginForm = (props: Props) => {
     allowRedirect,
   } = props;
 
-  const {
-    login
-  } = useAuth()
+  const { login } = useAuth();
 
   const loading = useStoreState((state) => state.auth.loading);
   const message = useStoreState((state) => state.auth.message);
@@ -42,17 +41,17 @@ export const LoginForm = (props: Props) => {
     (actions) => actions.auth.hideAuthMessage
   );
 
-  interface onLoginArgs  {
+  interface onLoginArgs {
     email: string;
     password: string;
   }
 
-  const onLogin = ({ email, password }:onLoginArgs) => {
+  const onLogin = ({ email, password }: onLoginArgs) => {
     showLoading();
     login({
       email,
-      password
-    })
+      password,
+    });
   };
 
   const onGoogleLogin = () => {
@@ -73,6 +72,10 @@ export const LoginForm = (props: Props) => {
       }, 3000);
     }
   });
+
+  const onForgotPassword = () => {
+    history.push(`${AUTH_PREFIX_PATH}/forgot-password`);
+  };
 
   const renderOtherSignIn = (
     <div>
@@ -140,14 +143,14 @@ export const LoginForm = (props: Props) => {
               }`}
             >
               <span>Password</span>
-              {showForgetPassword && (
+              {/* {showForgetPassword && (
                 <span
                   onClick={() => onForgetPasswordClick}
                   className="cursor-pointer font-size-sm font-weight-normal text-muted"
                 >
                   Forget Password?
                 </span>
-              )}
+              )} */}
             </div>
           }
           rules={[
@@ -164,6 +167,16 @@ export const LoginForm = (props: Props) => {
             Sign In
           </Button>
         </Form.Item>
+
+        <Divider>
+          <span
+            onClick={onForgotPassword}
+            className="text-muted font-size-base font-weight-normal cursor-pointer"
+          >
+            Forgotten password?
+          </span>
+        </Divider>
+
         {otherSignIn ? renderOtherSignIn : null}
         {extra}
       </Form>

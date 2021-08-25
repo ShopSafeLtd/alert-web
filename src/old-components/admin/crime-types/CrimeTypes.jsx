@@ -1,10 +1,11 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import { Route } from 'react-router-dom';
+import React, { Component } from "react";
+import styled from "styled-components";
+import { Route } from "react-router-dom";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
 
-import CrimeTypeList from './CrimeTypeList';
-import AddCrimeType from './AddCrimeType';
-import EditCrimeType from './EditCrimeType';
+import CrimeTypeList from "./CrimeTypeList";
+import AddCrimeType from "./AddCrimeType";
+import EditCrimeType from "./EditCrimeType";
 
 const Page = styled.div`
   flex: 1;
@@ -12,16 +13,23 @@ const Page = styled.div`
   display: flex;
 `;
 
-class CrimeTypes extends PureComponent {
+class CrimeTypes extends Component {
   render() {
     const { setActions } = this.props;
     return (
       <Page>
-        <Route exact path="/admin/crime-types" component={CrimeTypeList} />
-        <Route path="/admin/crime-types/add" component={AddCrimeType} />
         <Route
-          path="/admin/crime-types/edit/:id"
-          render={router => (
+          exact
+          path={`${APP_PREFIX_PATH}/scheme-settings/crime-types`}
+          component={CrimeTypeList}
+        />
+        <Route
+          path={`${APP_PREFIX_PATH}/scheme-settings/crime-types/add`}
+          component={AddCrimeType}
+        />
+        <Route
+          path={`${APP_PREFIX_PATH}/scheme-settings/crime-types/view/:id`}
+          render={(router) => (
             <EditCrimeType setActions={setActions} {...router} />
           )}
         />

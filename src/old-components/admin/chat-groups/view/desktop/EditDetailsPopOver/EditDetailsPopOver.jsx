@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import { useQuery, useMutation } from "@apollo/client";
 
-import { PopOver, PopOverContainer } from '../../../../../global/layout';
-import { BackButton } from '../../../../../global/actions';
-import { Field, FieldHeader } from '../../../../../global/forms';
-import ChatGroupMutation from '../../../../../../graphql/admin/mutations/UpdateChatGroup';
-import ChatQuery from '../../../../../../graphql/admin/queries/ChatGroup';
+import { PopOver, PopOverContainer } from "../../../../../global/layout";
+import { BackButton } from "../../../../../global/actions";
+import { Field, FieldHeader } from "../../../../../global/forms";
+import { ViewChat } from "graphql-src/chat/queries";
+import { UpdateChat } from "graphql-src/chat/mutations";
+// import ChatGroupMutation from '../../../../../../graphql/admin/mutations/UpdateChatGroup';
+// import ChatQuery from '../../../../../../graphql/admin/queries/ChatGroup';
 
 const Grow = styled.div`
   flex: 1;
@@ -18,32 +20,34 @@ const Grow = styled.div`
 const EditDetailsPopOver = ({ chat, open, close }) => {
   // state
   const [details, setDetails] = useState({
-    name: '',
-    nameError: '',
-    description: ''
+    name: "",
+    nameError: "",
+    description: "",
   });
 
   // queries
-  const { data, loading } = useQuery(ChatQuery, {
+  const { data, loading } = useQuery(ViewChat, {
     variables: {
-      id: chat
+      where: {
+        id: chat,
+      },
     },
-    fetchPolicy: 'cache-and-network',
-    onCompleted: data =>
+    fetchPolicy: "cache-and-network",
+    onCompleted: (data) =>
       setDetails({
         name: data.chat.name,
-        description: data.chat.description
-      })
+        description: data.chat.description,
+      }),
   });
 
   // mutations
-  const [updateChat] = useMutation(ChatGroupMutation);
+  const [updateChat] = useMutation(UpdateChat);
 
   // functions
-  const handleChange = name => event => {
+  const handleChange = (name) => (event) => {
     setDetails({
       ...details,
-      [name]: event.target.value
+      [name]: event.target.value,
     });
   };
 
@@ -51,8 +55,8 @@ const EditDetailsPopOver = ({ chat, open, close }) => {
     new Promise((resolve, reject) => {
       const nameValid = !!details.name;
       nameValid
-        ? setDetails({ ...details, nameError: '' })
-        : setDetails({ ...details, nameError: 'This is a required field' });
+        ? setDetails({ ...details, nameError: "" })
+        : setDetails({ ...details, nameError: "This is a required field" });
       nameValid ? resolve() : reject();
     });
 
@@ -61,17 +65,21 @@ const EditDetailsPopOver = ({ chat, open, close }) => {
       .then(() => {
         updateChat({
           variables: {
-            id: chat,
-            name: details.name,
-            description: details.description
+            where: {
+              id: chat,
+            },
+            data: {
+              name: { set: details.name },
+              description: { set: details.description },
+            },
           },
           optimisticResponse: {
             updateChat: {
               ...data.chat,
               name: details.name,
-              description: details.description
-            }
-          }
+              description: details.description,
+            },
+          },
         });
         close();
       })
@@ -84,7 +92,7 @@ const EditDetailsPopOver = ({ chat, open, close }) => {
       open={open}
       width={800}
       handleClose={close}
-      title={'Edit User Details'}
+      title={"Edit User Details"}
       actions={[
         <BackButton disabled={loading} color="primary" onClick={close}>
           Close
@@ -96,7 +104,7 @@ const EditDetailsPopOver = ({ chat, open, close }) => {
           onClick={handleSave}
         >
           Save
-        </Button>
+        </Button>,
       ]}
     >
       <Grow>
@@ -105,7 +113,7 @@ const EditDetailsPopOver = ({ chat, open, close }) => {
             <FieldHeader required>Chat Group Name</FieldHeader>
             <TextField
               value={details.name}
-              onChange={handleChange('name')}
+              onChange={handleChange("name")}
               error={!!details.nameError}
               helperText={details.nameError}
               fullWidth
@@ -115,7 +123,7 @@ const EditDetailsPopOver = ({ chat, open, close }) => {
             <FieldHeader required>Description</FieldHeader>
             <TextField
               value={details.description}
-              onChange={handleChange('description')}
+              onChange={handleChange("description")}
               fullWidth
               multiline
               rows="6"

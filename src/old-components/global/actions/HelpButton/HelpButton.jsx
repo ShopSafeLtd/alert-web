@@ -1,12 +1,12 @@
-import React from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import React from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 const Container = styled.div`
   position: relative;
@@ -23,13 +23,13 @@ class HelpButton extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      visible: false
+      visible: false,
     };
   }
 
   toggleVisible = () => {
     this.setState({
-      visible: !this.state.visible
+      visible: !this.state.visible,
     });
   };
 
@@ -46,7 +46,7 @@ class HelpButton extends React.Component {
             />
           </Svg>
         </StyledButton>
-        <Dialog open={visible} onClose={this.handleClose}>
+        <Dialog open={visible} onClose={this.toggleVisible}>
           <DialogContent>
             <DialogTitle>{title}</DialogTitle>
             <DialogContentText>{helpText}</DialogContentText>

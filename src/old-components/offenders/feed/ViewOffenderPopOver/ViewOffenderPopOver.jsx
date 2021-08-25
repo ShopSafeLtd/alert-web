@@ -1,16 +1,22 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import MediaQuery from 'react-responsive';
-import { CardNoImage } from '../../../global/cards';
-import ImageCarousel from '../../../global/ImageCarousel/ImageCarousel';
-import { isEqual } from 'lodash-es';
-import Typography from '@material-ui/core/Typography';
+import React, { Component } from "react";
+import styled from "styled-components";
+import MediaQuery from "react-responsive";
+import { CardNoImage } from "../../../global/cards";
+import ImageCarousel from "../../../global/ImageCarousel/ImageCarousel";
+import { isEqual } from "lodash-es";
+import Typography from "@material-ui/core/Typography";
+import moment from "moment";
 
-import { PopOver, Item } from '../../../global/layout';
-import { BackButton } from '../../../global/actions';
-import { ItemHeader, ItemText } from '../../../global/typography';
-import { ageValues, buildValues, genderValues, raceValues } from 'graphql-src/offenders/enums';
-import { useStoreActions } from '../../../../state';
+import { PopOver, Item } from "../../../global/layout";
+import { BackButton } from "../../../global/actions";
+import { ItemHeader, ItemText } from "../../../global/typography";
+import {
+  ageValues,
+  buildValues,
+  genderValues,
+  raceValues,
+} from "graphql-src/offenders/enums";
+import { useStoreActions } from "../../../../state";
 
 const MultiImagesContainer = styled.div`
   position: relative;
@@ -35,7 +41,7 @@ const Row = styled.div`
 `;
 const Column = styled(Item)`
   flex: 1;
-  ${({ halfWidth }) => halfWidth && 'min-width: 50%;'};
+  ${({ halfWidth }) => halfWidth && "min-width: 50%;"};
 `;
 const Container = styled.div`
   padding: 20px 30px;
@@ -44,26 +50,49 @@ const Container = styled.div`
 class ViewOffenderPopOver extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (this.props.visible !== nextProps.visible) return true;
-    if (!isEqual(this.state.offender, nextState.offender)) return true;
+    if (!isEqual(this.state?.offender, nextState?.offender)) return true;
     return false;
+  }
+
+  calcAge(dateOfBirth) {
+    const now = moment();
+    const birth = moment(dateOfBirth);
+
+    const age = now.diff(birth, "years");
+    return age;
   }
 
   render() {
     const {
       visible,
-      offender: { name, age, race, gender, build, hair, peculiarities, images },
+      offender: {
+        name,
+        age,
+        race,
+        gender,
+        build,
+        hair,
+        peculiarities,
+        images,
+        dateOfBirth,
+        dateSource,
+      },
       toggleLightbox,
-      close
+      close,
     } = this.props;
 
-    const buildValue = buildValues.find(obj => obj.value === build);
-    const ageValue = ageValues.find(obj => obj.value === age);
-    const raceValue = raceValues.find(obj => obj.value === race);
-    const genderValue = genderValues.find(obj => obj.value === gender);
+    let ageValue = ageValues.find((obj) => obj.value === age);
+    const buildValue = buildValues.find((obj) => obj.value === build);
+    const raceValue = raceValues.find((obj) => obj.value === race);
+    const genderValue = genderValues.find((obj) => obj.value === gender);
+
+    if (ageValue?.label === "Unknown" && dateOfBirth) {
+      ageValue.label = this.calcAge(dateOfBirth);
+    }
 
     return (
       <MediaQuery minDeviceWidth={1024}>
-        {matches => {
+        {(matches) => {
           let actions = [];
           matches &&
             actions.push(
@@ -87,20 +116,20 @@ class ViewOffenderPopOver extends Component {
                     <ImageCarousel
                       images={images}
                       height="280px"
-                      toggleLightBox={index =>
+                      toggleLightBox={(index) =>
                         toggleLightbox({
                           images: images.map(({ url }) => url),
-                          index
+                          index,
                         })
                       }
                     />
                   </MultiImagesContainer>
                 ) : (
                   <SingleImageContainer>
-                    {images.map(image => (
+                    {images.map((image) => (
                       <div
                         key={image.id}
-                        style={{ height: '100%', width: '100%' }}
+                        style={{ height: "100%", width: "100%" }}
                       >
                         <Image
                           alt="Offender Image"
@@ -108,7 +137,7 @@ class ViewOffenderPopOver extends Component {
                           onClick={() =>
                             toggleLightbox({
                               images: images.map(({ url }) => url),
-                              index: 0
+                              index: 0,
                             })
                           }
                         />
@@ -126,6 +155,7 @@ class ViewOffenderPopOver extends Component {
                     <ItemHeader>Age</ItemHeader>
                     <ItemText>{!!age && ageValue.label}</ItemText>
                   </Column>
+
                   <Column>
                     <ItemHeader>Build</ItemHeader>
                     <ItemText>{!!build && buildValue.label}</ItemText>
@@ -142,15 +172,27 @@ class ViewOffenderPopOver extends Component {
                   </Column>
                   <Column>
                     <ItemHeader>Hair</ItemHeader>
-                    <ItemText>{!!hair ? hair : 'Unknown'}</ItemText>
+                    <ItemText>{!!hair ? hair : "Unknown"}</ItemText>
+                  </Column>
+                  <Column>
+                    <ItemHeader>Peculiarities</ItemHeader>
+                    <ItemText>{peculiarities}</ItemText>
                   </Column>
                 </Row>
                 <Row>
-                  {!!peculiarities && (
-                    <Column halfWidth>
-                      <ItemHeader>Peculiarities</ItemHeader>
-                      <ItemText>{peculiarities}</ItemText>
-                    </Column>
+                  {dateOfBirth && (
+                    <>
+                      <Column>
+                        <ItemHeader>Date of Birth</ItemHeader>
+                        <ItemText>
+                          {moment(dateOfBirth).format("DD/MM/YYYY")}
+                        </ItemText>
+                      </Column>
+                      <Column>
+                        <ItemHeader>Date Source</ItemHeader>
+                        <ItemText>{dateSource}</ItemText>
+                      </Column>
+                    </>
                   )}
                 </Row>
               </Container>
@@ -162,9 +204,9 @@ class ViewOffenderPopOver extends Component {
   }
 }
 
-const Wrapper = props => {
+const Wrapper = (props) => {
   const toggleLightbox = useStoreActions(
-    actions => actions.theme.toggleLightBox
+    (actions) => actions.theme.toggleLightBox
   );
 
   return <ViewOffenderPopOver toggleLightbox={toggleLightbox} {...props} />;

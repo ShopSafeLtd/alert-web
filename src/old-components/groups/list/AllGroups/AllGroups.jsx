@@ -1,17 +1,20 @@
-import React, { useEffect } from 'react';
-import styled from 'styled-components';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import { withRouter } from 'react-router-dom';
-import { useQuery } from '@apollo/react-hooks';
+import React, { useEffect } from "react";
+import styled from "styled-components";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import { withRouter } from "react-router-dom";
+// import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from "@apollo/client";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
 
-import { FAB } from '../../../global/actions';
-import { GroupRowSkeleton } from '../../../global/skeletons';
-import query from '../../../../graphql/groups/queries/GroupList';
-import { useStoreActions, useStoreState } from '../../../../state';
+import { FAB } from "../../../global/actions";
+import { GroupRowSkeleton } from "../../../global/skeletons";
+import { Groups as GroupsQuery } from "graphql-src/groups/queries";
+// import query from '../../../../graphql/groups/queries/GroupList';
+import { useStoreActions, useStoreState } from "../../../../state";
 
 const Groups = styled.div`
   background: #fff;
@@ -28,43 +31,49 @@ const Row = styled(TableRow)`
 `;
 
 const AllGroups = ({ history }) => {
-  const setSearch = useStoreActions(actions => actions.theme.setSearch);
-  const setSearchText = useStoreActions(actions => actions.theme.setSearchText);
-  const setTitle = useStoreActions(actions => actions.theme.setTitle);
-  const setNavbarAction = useStoreActions(
-    actions => actions.theme.setNavbarAction
+  const setSearch = useStoreActions((actions) => actions.theme.setSearch);
+  const setSearchText = useStoreActions(
+    (actions) => actions.theme.setSearchText
   );
-  const setBackLinkTo = useStoreActions(actions => actions.theme.setBackLinkTo);
-  const search = useStoreState(state => state.theme.search);
+  const setTitle = useStoreActions((actions) => actions.theme.setTitle);
+  // const setNavbarAction = useStoreActions(
+  //   (actions) => actions.theme.setNavbarAction
+  // );
+  const setBackLinkTo = useStoreActions(
+    (actions) => actions.theme.setBackLinkTo
+  );
+  const search = useStoreState((state) => state.theme.search);
+
+  const schemeId = useStoreState((state) => state.scheme.id);
 
   // effects
-  useEffect(() => {
-    setBackLinkTo('/admin');
-    setNavbarAction('backLink');
-    setSearch(true);
-    setSearchText('Search for groups...');
-    setTitle('Group Management');
-    return () => {
-      setBackLinkTo('');
-      setNavbarAction('default');
-      setSearch(false);
-      setSearchText('');
-      setTitle('');
-    };
-  });
+  // useEffect(() => {
+  //   setBackLinkTo("/admin");
+  //   // setNavbarAction("backLink");
+  //   setSearch(true);
+  //   setSearchText("Search for groups...");
+  //   setTitle("Group Management");
+  //   return () => {
+  //     setBackLinkTo("");
+  //     // setNavbarAction("default");
+  //     setSearch(false);
+  //     setSearchText("");
+  //     setTitle("");
+  //   };
+  // });
 
   // queries
-  const { data, loading } = useQuery(query, {
+  const { data, loading } = useQuery(GroupsQuery, {
     variables: {
-      schemeId: window.localStorage.getItem('currentScheme'),
-      search
+      where: {
+        scheme: { id: { equals: schemeId } },
+      },
     },
-    fetchPolicy: 'cache-and-network'
   });
 
   // functions
-  const toViewGroup = id => {
-    history.push(`/admin/groups/view/${id}`);
+  const toViewGroup = (id) => {
+    history.push(`${APP_PREFIX_PATH}/scheme-settings/groups/view/${id}`);
   };
 
   return (
@@ -84,7 +93,7 @@ const AllGroups = ({ history }) => {
           </TableBody>
         ) : (
           <TableBody>
-            {data.groups.map(({ id, name, description }) => {
+            {data?.groups?.map(({ id, name, description }) => {
               return (
                 <Row key={id}>
                   <TableCell onClick={() => toViewGroup(id)}>{name}</TableCell>
@@ -97,7 +106,7 @@ const AllGroups = ({ history }) => {
           </TableBody>
         )}
       </Table>
-      <FAB to="/admin/groups/add" icon="add" />
+      <FAB to={`${APP_PREFIX_PATH}/scheme-settings/groups/add`} icon="add" />
     </Groups>
   );
 };

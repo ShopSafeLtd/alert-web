@@ -1,10 +1,10 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
+import React, { PureComponent } from "react";
+import styled from "styled-components";
+import Typography from "@material-ui/core/Typography";
 
-import { HelpButton } from '../../../../global/actions';
-import { Header, HeaderText, HeaderSubText } from '../../../../global/forms';
-import AddLabel from '../AddLabel/AddLabel';
+import { HelpButton } from "../../../../global/actions";
+import { Header, HeaderText, HeaderSubText } from "../../../../global/forms";
+import AddLabel from "../AddLabel/AddLabel";
 
 const Page = styled.div`
   display: flex;
@@ -45,7 +45,7 @@ class Labels extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      add: false
+      add: false,
     };
   }
 
@@ -55,7 +55,7 @@ class Labels extends PureComponent {
       toggleSelectedLabels,
       selectedLabels,
       addLabel,
-      createdById
+      createdById,
     } = this.props;
     const { add } = this.state;
     return (
@@ -68,31 +68,31 @@ class Labels extends PureComponent {
           </HeaderSubText>
         </Header>
         <List>
-          {offenderLabels.map(label => (
-            <ListItem key={label.id}>
+          {offenderLabels?.map((label) => (
+            <ListItem key={label?.id}>
               <Svg
                 onClick={() => toggleSelectedLabels(label)}
                 viewBox="0 0 24 24"
               >
                 <path
                   fill={
-                    selectedLabels.map(({ id }) => id).includes(label.id)
-                      ? '#1E88E5'
-                      : '#E0E0E0'
+                    selectedLabels.map(({ id }) => id).includes(label?.id)
+                      ? "#1E88E5"
+                      : "#E0E0E0"
                   }
                   d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M11,16.5L18,9.5L16.59,8.09L11,13.67L7.91,10.59L6.5,12L11,16.5Z"
                 />
               </Svg>
               <ItemText onClick={() => toggleSelectedLabels(label)}>
-                {label.name}
+                {label?.name}
               </ItemText>
-              <HelpButton title={label.name} helpText={label.description} />
+              <HelpButton title={label?.name} helpText={label?.description} />
             </ListItem>
           ))}
           <ListItem
             onClick={() =>
               this.setState({
-                add: true
+                add: true,
               })
             }
           >
@@ -111,7 +111,7 @@ class Labels extends PureComponent {
           createdById={createdById}
           close={() =>
             this.setState({
-              add: false
+              add: false,
             })
           }
         />

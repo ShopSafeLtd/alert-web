@@ -1,18 +1,21 @@
-import React, { useEffect } from 'react';
-import styled from 'styled-components';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import MediaQuery from 'react-responsive';
-import { withRouter } from 'react-router-dom';
-import { useQuery } from '@apollo/react-hooks';
+import React, { useEffect } from "react";
+import styled from "styled-components";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import MediaQuery from "react-responsive";
+import { withRouter } from "react-router-dom";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
+import { useQuery } from "@apollo/client";
+// import { useQuery } from '@apollo/react-hooks';
 
-import { FAB } from '../../../global/actions';
-import { UserRowSkeleton } from '../../../global/skeletons';
-import query from '../../../../graphql/users/queries/AllUsersQuery';
-import { useStoreActions, useStoreState } from '../../../../state';
+import { FAB } from "../../../global/actions";
+import { UserRowSkeleton } from "../../../global/skeletons";
+// import query from '../../../../graphql/users/queries/AllUsersQuery';
+import { SchemeUsers } from "graphql-src/users/queries";
+import { useStoreActions, useStoreState } from "../../../../state";
 
 const Users = styled.div`
   background: #fff;
@@ -24,51 +27,60 @@ const Row = styled(TableRow)`
 `;
 
 const AllUsers = ({ history }) => {
-  const search = useStoreState(state => state.theme.search);
-  const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
-  const setBackLinkTo = useStoreActions(actions => actions.theme.setBackLinkTo);
-  const setNavbarAction = useStoreActions(
-    actions => actions.theme.setNavbarAction
+  const search = useStoreState((state) => state.theme.search);
+  const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
+  const setBackLinkTo = useStoreActions(
+    (actions) => actions.theme.setBackLinkTo
   );
-  const setSearch = useStoreActions(actions => actions.theme.setSearch);
-  const setSearchText = useStoreActions(actions => actions.theme.setSearchText);
-  const setTitle = useStoreActions(actions => actions.theme.setSearchText);
+  const schemeId = useStoreState((state) => state.scheme.id);
+  // const setNavbarAction = useStoreActions(
+  //   actions => actions.theme.setNavbarAction
+  // );
+  const setSearch = useStoreActions((actions) => actions.theme.setSearch);
+  const setSearchText = useStoreActions(
+    (actions) => actions.theme.setSearchText
+  );
+  const setTitle = useStoreActions((actions) => actions.theme.setSearchText);
 
   // effects
   useEffect(() => {
     setSearch(true);
-    setSearchText('Search for users...');
-    setTitle('User Management');
+    setSearchText("Search for users...");
+    setTitle("User Management");
     setBottomNav(true);
-    setBackLinkTo('/admin');
-    setNavbarAction('backLink');
+    setBackLinkTo("/admin");
+    // setNavbarAction('backLink');
     return () => {
       setSearch(false);
-      setSearchText('');
-      setTitle('');
-      setBackLinkTo('');
-      setNavbarAction('default');
+      setSearchText("");
+      setTitle("");
+      setBackLinkTo("");
+      // setNavbarAction('default');
     };
     // eslint-disable-next-line
   }, []);
 
   // queries
-  const { data, loading } = useQuery(query, {
+  const { data, loading } = useQuery(SchemeUsers, {
     variables: {
-      schemeId: window.localStorage.getItem('currentScheme'),
-      search
+      scheme: schemeId,
+      search: "",
+      orderByName: "asc",
+      orderByOrganisation: undefined,
+      disabled: undefined,
+      newUser: undefined,
+      role: undefined,
     },
-    fetchPolicy: 'cache-and-network'
   });
 
   // functions
-  const toViewUser = id => {
-    history.push(`/admin/users/view/${id}`);
+  const toViewUser = (id) => {
+    history.push(`${APP_PREFIX_PATH}/scheme-settings/users/view/${id}`);
   };
 
   return (
     <MediaQuery minDeviceWidth={600}>
-      {matches => (
+      {(matches) => (
         <Users>
           <Table id="user-table">
             <TableHead>
@@ -107,7 +119,7 @@ const AllUsers = ({ history }) => {
                     organisation,
                     groups,
                     newUser,
-                    disabled
+                    disabled,
                   }) => {
                     return (
                       <Row key={id}>
@@ -124,18 +136,18 @@ const AllUsers = ({ history }) => {
                         </MediaQuery>
                         <MediaQuery minDeviceWidth={820}>
                           <TableCell>
-                            {groups.length > 1
-                              ? groups.map(({ id, name }) => {
+                            {groups?.length > 1
+                              ? groups?.map(({ id, name }) => {
                                   return <span key={id}>{name}, </span>;
                                 })
-                              : groups.map(({ id, name }) => {
+                              : groups?.map(({ id, name }) => {
                                   return <span key={id}>{name}</span>;
                                 })}
                           </TableCell>
                         </MediaQuery>
                         <MediaQuery minDeviceWidth={1225}>
                           <TableCell>
-                            {newUser ? 'Invited' : 'Active'}
+                            {newUser ? "Invited" : "Active"}
                           </TableCell>
                         </MediaQuery>
                       </Row>
@@ -145,7 +157,7 @@ const AllUsers = ({ history }) => {
               </TableBody>
             )}
           </Table>
-          <FAB to="/admin/users/add" icon="add" />
+          <FAB to={`${APP_PREFIX_PATH}/scheme-settings/users/add`} icon="add" />
         </Users>
       )}
     </MediaQuery>

@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
-import styled from 'styled-components';
-import { useStoreActions } from '../../state';
-import { Menu, MenuItem, MenuItemText } from '../global/layout';
+import React, { useEffect } from "react";
+import styled from "styled-components";
+import { APP_PREFIX_PATH } from "configs/AppConfig";
+import { useStoreActions } from "../../state";
+import { Menu, MenuItem, MenuItemText } from "../global/layout";
 
 const Svg = styled.svg`
   width: 28px;
@@ -10,21 +11,23 @@ const Svg = styled.svg`
 `;
 
 const AdminMenu = () => {
-  const setTitle = useStoreActions(actions => actions.theme.setTitle);
-  const setNavbarAction = useStoreActions(
-    actions => actions.theme.setNavbarAction
+  const setTitle = useStoreActions((actions) => actions.theme.setTitle);
+  // const setNavbarAction = useStoreActions(
+  //   actions => actions.theme.setNavbarAction
+  // );
+  const setBackLinkTo = useStoreActions(
+    (actions) => actions.theme.setBackLinkTo
   );
-  const setBackLinkTo = useStoreActions(actions => actions.theme.setBackLinkTo);
-  const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
+  const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
 
   useEffect(() => {
-    setTitle('Scheme Settings');
-    setNavbarAction('backLink');
-    setBackLinkTo(`/incidents`);
+    setTitle("Scheme Settings");
+    // setNavbarAction('backLink');
+    setBackLinkTo(`/`);
     setBottomNav(false);
     return () => {
-      setTitle('');
-      setNavbarAction('');
+      setTitle("");
+      // setNavbarAction('');
       setBackLinkTo(``);
       setBottomNav(true);
     };
@@ -33,7 +36,7 @@ const AdminMenu = () => {
 
   return (
     <Menu>
-      <MenuItem to={`/admin/users`}>
+      <MenuItem to={`${APP_PREFIX_PATH}/scheme-settings/users`}>
         <Svg viewBox="0 0 24 24">
           <path
             fill="#EF5350"
@@ -42,7 +45,7 @@ const AdminMenu = () => {
         </Svg>
         <MenuItemText>User Management</MenuItemText>
       </MenuItem>
-      <MenuItem to={`/admin/groups`}>
+      <MenuItem to={`${APP_PREFIX_PATH}/scheme-settings/groups`}>
         <Svg viewBox="0 0 24 24">
           <path
             fill="#EF5350"
@@ -51,7 +54,7 @@ const AdminMenu = () => {
         </Svg>
         <MenuItemText>Group Management</MenuItemText>
       </MenuItem>
-      <MenuItem to={`/admin/chat-groups`}>
+      <MenuItem to={`${APP_PREFIX_PATH}/scheme-settings/chat-groups`}>
         <Svg viewBox="0 0 24 24">
           <path
             fill="#EF5350"
@@ -60,7 +63,7 @@ const AdminMenu = () => {
         </Svg>
         <MenuItemText>Chat Groups</MenuItemText>
       </MenuItem>
-      <MenuItem to={`/admin/scheme-details`}>
+      <MenuItem to={`${APP_PREFIX_PATH}/scheme-settings/scheme-details`}>
         <Svg viewBox="0 0 24 24">
           <path
             fill="#EF5350"
@@ -69,7 +72,7 @@ const AdminMenu = () => {
         </Svg>
         <MenuItemText>Scheme Details</MenuItemText>
       </MenuItem>
-      <MenuItem to={`/admin/auto-approve`}>
+      <MenuItem to={`${APP_PREFIX_PATH}/scheme-settings/auto-approve`}>
         <Svg viewBox="0 0 24 24">
           <path
             fill="#EF5350"
@@ -78,7 +81,7 @@ const AdminMenu = () => {
         </Svg>
         <MenuItemText>Auto Approve Options</MenuItemText>
       </MenuItem>
-      <MenuItem to={`/admin/offender-warnings`}>
+      <MenuItem to={`${APP_PREFIX_PATH}/scheme-settings/offender-warnings`}>
         <Svg viewBox="0 0 24 24">
           <path
             fill="#EF5350"
@@ -87,7 +90,7 @@ const AdminMenu = () => {
         </Svg>
         <MenuItemText>Offender Warnings</MenuItemText>
       </MenuItem>
-      <MenuItem to={`/admin/crime-types`}>
+      <MenuItem to={`${APP_PREFIX_PATH}/scheme-settings/crime-types`}>
         <Svg viewBox="0 0 24 24">
           <path
             fill="#EF5350"
@@ -95,6 +98,15 @@ const AdminMenu = () => {
           />
         </Svg>
         <MenuItemText>Crime Types</MenuItemText>
+      </MenuItem>
+      <MenuItem to={`${APP_PREFIX_PATH}/scheme-settings/recycle-bin`}>
+        <Svg viewBox="0 0 24 24">
+          <path
+            fill="#EF5350"
+            d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"
+          />
+        </Svg>
+        <MenuItemText>Recycle Bin</MenuItemText>
       </MenuItem>
     </Menu>
   );
