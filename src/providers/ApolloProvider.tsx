@@ -35,8 +35,8 @@ const Apollo = ({ children }: Props) => {
   const wsLink = new WebSocketLink(wsClient);
 
   const httpLink = createUploadLink({
-    //uri: 'https://alert-api-dev.azurewebsites.net/graphql'
-    uri: "http://192.168.0.24:4000/graphql",
+    uri: 'https://alert-api-dev.azurewebsites.net/graphql'
+    //uri: "http://192.168.0.24:4000/graphql",
   });
 
   const middlewareLink = setContext((_, { headers, ...context }) => {
