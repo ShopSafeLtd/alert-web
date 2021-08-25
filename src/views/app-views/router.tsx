@@ -9,10 +9,9 @@ import { useStoreState } from "state";
 export const AppViews = () => {
   const { getCurrentUser } = useAuth();
 
-  const userRole = useStoreState((state) => state.user.role);
-  console.log(userRole);
+  const { role, onboarded } = useStoreState((state) => state.user);
 
-  const adminRoutes = [
+  const routes = [
     <Route
       key="incidents"
       path={`${APP_PREFIX_PATH}/incidents`}
@@ -35,8 +34,8 @@ export const AppViews = () => {
     />,
   ];
 
-  if (userRole === "SCHEME_ADMIN") {
-    adminRoutes.push(
+  if (role === "SCHEME_ADMIN") {
+    routes.push(
       <Route
         key="scheme"
         path={`${APP_PREFIX_PATH}/scheme-settings`}
@@ -57,13 +56,19 @@ export const AppViews = () => {
           path={`${APP_PREFIX_PATH}/home`}
           component={lazy(() => import(`./home`))}
         /> */}
-
-        {adminRoutes}
+        {!onboarded && (
+          <Route
+            key="onboarding"
+            path={`${APP_PREFIX_PATH}/onboarding`}
+            component={lazy(() => import(`./onboarding/router`))}
+          />
+        )}
+        {routes}
 
         <Redirect
           exact
           from={`${APP_PREFIX_PATH}`}
-          to={`${APP_PREFIX_PATH}/incidents`}
+          to={`${APP_PREFIX_PATH}/${onboarded ? "incidents" : "onboarding"}`}
         />
       </Switch>
     </Suspense>

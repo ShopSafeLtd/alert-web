@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Layout } from "antd";
 // eslint-disable-next-line
-import { MenuFoldOutlined, MenuUnfoldOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import Logo from "./Logo";
 // eslint-disable-next-line
 import NavPanel from "./NavPanel";
 // eslint-disable-next-line
 import NavSearch from "../NavSearch";
 // eslint-disable-next-line
-import SearchInput from '../NavSearch/SearchInput'
+import SearchInput from "../NavSearch/SearchInput";
 import NavProfile from "./NavProfile";
-import NavScheme from './NavScheme'
+import NavScheme from "./NavScheme";
 // eslint-disable-next-line
-import NavNotification from './NavNotification';
+import NavNotification from "./NavNotification";
 
 import {
   SIDE_NAV_COLLAPSED_WIDTH,
@@ -29,7 +33,7 @@ interface Props {
 
 export const HeaderNav = (props: Props) => {
   const { isMobile } = props;
-// eslint-disable-next-line
+  // eslint-disable-next-line
   const [searchActive, setSearchActive] = useState(false);
   const navCollapsed = useStoreState((state) => state.theme.navCollapsed);
   // const mobileNav = useStoreState((state) => state.theme.navCollapsed);
@@ -39,6 +43,7 @@ export const HeaderNav = (props: Props) => {
   // const { toggleCollapsedNav, toggleMobileNav  } = useStoreActions(
   //   (actions) => actions.theme
   // );
+  const { onboarded } = useStoreState((state) => state.user);
 
   const onSearchClose = () => {
     setSearchActive(false);
@@ -98,9 +103,9 @@ export const HeaderNav = (props: Props) => {
             </ul> */}
           </div>
           <div className="nav-right">
-            <NavScheme />
+            {onboarded && <NavScheme />}
             {/* <NavNotification /> */}
-            <NavProfile />
+            {onboarded && <NavProfile />}
             {/* <NavPanel /> */}
           </div>
           {/* <NavSearch active={searchActiv} close={onSearchClose} /> */}

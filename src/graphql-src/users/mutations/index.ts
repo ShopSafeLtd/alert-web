@@ -8,4 +8,5 @@ export * from "./update-user-chats";
 export * from "./update-user-details";
 export * from "./update-user-disabled";
 export * from "./update-user-groups";
+export * from "./update-user-terms";
 export * from "./update-user";

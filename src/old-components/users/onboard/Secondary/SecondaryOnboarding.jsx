@@ -20,6 +20,11 @@ import Welcome from "../Welcome/Welcome";
 import Password from "../Password/Password";
 import Account from "../Account/Account";
 import Terms from "../Terms/Terms";
+import { UserDetails } from "graphql-src/users/queries";
+import {
+  UpdateUserDetails,
+  UpdateUserTerms,
+} from "graphql-src/users/mutations";
 // import query from '../../../../graphql/users/queries/UserOnboard';
 // import ResetPassword from '../../../../graphql/account/mutations/ResetPasswordMutation';
 // import EditUser from '../../../../graphql/account/mutations/EditProfileMutation';
@@ -74,32 +79,21 @@ const Content = styled.div`
   }
 `;
 
-const UserOnboarding = ({ history, classes }) => {
+const SecondaryOnboarding = ({ history, classes }) => {
   const setUser = useStoreActions((actions) => actions.user.setUser);
-  const currentStep = useStoreState((state) => state.user.onboardSteps);
+  const userId = useStoreState((state) => state.user.id);
+  const user = useStoreState((state) => state.user);
 
   // globals
   const steps = [
     {
       step: 0,
-      label: "Welcome",
+      label: "Account Details",
       url: `${APP_PREFIX_PATH}/onboarding`,
-      next: "Get Started",
+      next: "Next",
     },
     {
       step: 1,
-      label: "Set Password",
-      url: `${APP_PREFIX_PATH}/onboarding/password`,
-      next: "Set Password",
-    },
-    {
-      step: 2,
-      label: "Account Details",
-      url: `${APP_PREFIX_PATH}/onboarding/account-details`,
-      next: "Save Details",
-    },
-    {
-      step: 3,
       label: "Terms & Conditions",
       url: `${APP_PREFIX_PATH}/onboarding/terms-conditions`,
       next: "Agree",
@@ -108,12 +102,7 @@ const UserOnboarding = ({ history, classes }) => {
 
   // state
   const [step, setStep] = useState(0);
-  const [password, setPassword] = useState({
-    password: "",
-    passwordError: "",
-    confirm: "",
-    confirmError: "",
-  });
+
   const [details, setDetails] = useState({
     fullName: "",
     fullNameError: "",
@@ -128,79 +117,75 @@ const UserOnboarding = ({ history, classes }) => {
     county: "",
     postcode: "",
     postcodeError: "",
+    addressId: "",
   });
   const [terms, setTerms] = useState({
     termsSigned: false,
     error: "",
   });
 
+  const [locationKeys, setLocationKeys] = useState([]);
+
   // effects
+
   useEffect(() => {
-    if (currentStep === "WELCOME") {
-      history.push(`${APP_PREFIX_PATH}/onboarding`);
-      setStep(0);
-    }
-    if (currentStep === "PASSWORD") {
-      history.push(`${APP_PREFIX_PATH}/onboarding/password`);
+    return history.listen((location) => {
+      if (history.action === "PUSH") {
+        setLocationKeys([location.key]);
+      }
+
+      if (history.action === "POP") {
+        if (locationKeys[1] === location.key) {
+          setLocationKeys(([_, ...keys]) => keys);
+          // Handle forward event
+          if (step < 1) {
+            setStep((prev) => prev + 1);
+          }
+        } else {
+          setLocationKeys((keys) => [location.key, ...keys]);
+          // Handle back event
+          if (step > 0) {
+            setStep((prev) => prev - 1);
+          }
+        }
+      }
+    });
+    // eslint-disable-next-line
+  }, [locationKeys, step]);
+
+  useEffect(() => {
+    if (history.location.pathname.includes("terms-conditions") && step !== 1) {
       setStep(1);
     }
-    if (currentStep === "DETAILS") {
-      history.push(`${APP_PREFIX_PATH}/onboarding/account-details`);
-      setStep(2);
-    }
-    if (currentStep === "TERMS") {
-      history.push(`${APP_PREFIX_PATH}/onboarding/terms-conditions`);
-      setStep(3);
-    }
-    // eslint-disable-next-line
-  }, []);
+  }, [history, step]);
 
   // queries
-  // const { data, loading } = useQuery(query, {
-  //   fetchPolicy: "cache-and-network",
-  //   onCompleted: ({ currentUser: { fullName, organisation, addresses } }) =>
-  //     setDetails({
-  //       ...details,
-  //       fullName,
-  //       organisation,
-  //       premises: addresses[0].premises,
-  //       building: addresses[0].building,
-  //       street: addresses[0].street,
-  //       townCity: addresses[0].townCity,
-  //       county: addresses[0].county,
-  //       postcode: addresses[0].postcode,
-  //     }),
-  // });
-  const data = {};
-  const loading = false;
+  const { loading } = useQuery(UserDetails, {
+    fetchPolicy: "cache-and-network",
+    variables: {
+      where: {
+        id: userId,
+      },
+    },
+    onCompleted: ({ user: { fullName, organisation, addresses } }) =>
+      setDetails({
+        ...details,
+        fullName,
+        organisation,
+        premises: addresses[0].premises,
+        building: addresses[0].building,
+        street: addresses[0].street,
+        townCity: addresses[0].townCity,
+        county: addresses[0].county,
+        postcode: addresses[0].postcode,
+        addressId: addresses[0].id,
+      }),
+  });
 
   // mutations
-  // const [updatePassword] = useMutation(ResetPassword);
-  // const [updateUser] = useMutation(EditUser);
+  const [updateUser] = useMutation(UpdateUserDetails);
+  const [updateUserTerms] = useMutation(UpdateUserTerms);
   // functions
-  const validatePassword = () =>
-    new Promise((resolve, reject) => {
-      const regExp = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/;
-      const passwordLong = true;
-      // validate(
-      //   { password: password.password },
-      //   { password: { length: { minimum: 8 } } }
-      // ) === undefined;
-      const passwordComplex = regExp.test(password.password);
-      const passwordsMatch = password.password === password.confirm;
-      setPassword({
-        ...password,
-        passwordError: passwordLong
-          ? passwordComplex
-            ? passwordsMatch
-              ? ""
-              : "Passwords do not match."
-            : "Password must contain at least one number and upper case letter."
-          : "Password must be at least 8 characters long.",
-        confirmError: passwordsMatch ? "" : "Passwords do not match.",
-      });
-      passwordLong && passwordComplex && passwordsMatch ? resolve() : reject();
-    });
   const validateDetails = () =>
     new Promise((resolve, reject) => {
       const fullNameValid = !!details.fullName;
@@ -222,8 +207,8 @@ const UserOnboarding = ({ history, classes }) => {
       streetValid &&
       townValid &&
       postcodeValid
-        ? resolve()
-        : reject();
+        ? resolve(true)
+        : resolve(false);
     });
   const validateSigned = () =>
     new Promise((resolve, reject) => {
@@ -233,7 +218,7 @@ const UserOnboarding = ({ history, classes }) => {
           ? ""
           : "Please agree to the terms and conditions",
       });
-      terms.termsSigned ? resolve() : reject();
+      terms.termsSigned ? resolve(true) : resolve(false);
     });
 
   const next = () => {
@@ -241,87 +226,59 @@ const UserOnboarding = ({ history, classes }) => {
     setStep(step + 1);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step === 0) {
-      // updateUser({
-      //   variables: {
-      //     id: data.currentUser.id,
-      //     onboardStep: "PASSWORD",
-      //   },
-      // });
+      if (!(await validateDetails())) return;
+      updateUser({
+        variables: {
+          data: {
+            fullName: { set: details.fullName },
+            organisation: { set: details.organisation },
+            addresses: {
+              update: {
+                where: {
+                  id: details.addressId,
+                },
+                data: {
+                  premises: { set: details.premises },
+                  building: { set: details.building },
+                  street: { set: details.street },
+                  townCity: { set: details.townCity },
+                  county: { set: details.county },
+                  postcode: { set: details.postcode },
+                },
+              },
+            },
+          },
+          where: {
+            id: userId,
+          },
+        },
+      });
       next();
     }
-    step === 1 &&
-      validatePassword()
-        .then(() => {
-          // updateUser({
-          //   variables: {
-          //     id: data.currentUser.id,
-          //     onboardStep: "DETAILS",
-          //   },
-          // });
-          // updatePassword({
-          //   variables: {
-          //     password: password.password,
-          //   },
-          // });
-          next();
-        })
-        .catch(() => {});
-    step === 2 &&
-      validateDetails()
-        .then(() => {
-          // updateUser({
-          //   variables: {
-          //     id: data.currentUser.id,
-          //     onboardStep: "TERMS",
-          //     fullName: { set: details.fullName },
-          //     organisation: { set: details.organisation },
-          //     address: {
-          //       where: { id: data.currentUser.addresses[0].id },
-          //       data: {
-          //         premises: { set: details.premises },
-          //         building: { set: details.building },
-          //         street: { set: details.street },
-          //         townCity: { set: details.townCity },
-          //         county: { set: details.county },
-          //         postcode: { set: details.postcode },
-          //       },
-          //     },
-          //   },
-          // });
-          next();
-        })
-        .catch(() => {});
-    step === 3 &&
-      validateSigned()
-        .then(() => {
-          // updateUser({
-          //   variables: {
-          //     id: data.currentUser.id,
-          //     termsSigned: { set: true },
-          //     timeSigned: { set: new Date() },
-          //     newUser: { set: false },
-          //     platform: !!window.navigator.oscpu
-          //       ? { set: window.navigator.oscpu }
-          //       : undefined,
-          //   },
-          // });
-          setUser({ onboarded: true });
-          history.push("/");
-        })
-        .catch(() => {});
+    if (step === 1) {
+      if (!(await validateSigned())) return;
+      updateUserTerms({
+        variables: {
+          where: {
+            id: userId,
+          },
+          data: {
+            termsSigned: { set: true },
+            newUser: { set: false },
+          },
+        },
+      });
+      setUser({ ...user, onboarded: true });
+      history.push("/");
+    }
   };
   const handleBack = () => {
     history.push(steps[step - 1].url);
-    setStep(step - 1);
+    setStep((prev) => prev - 1);
   };
-  const handlePasswordChange = (name) => (event) => {
-    setPassword({
-      ...password,
-      [name]: event.target.value,
-    });
-  };
+
   const handleDetailsChange = (name) => (event) => {
     setDetails({
       ...details,
@@ -341,7 +298,7 @@ const UserOnboarding = ({ history, classes }) => {
         <Container>
           <Page>
             <FormContainer elevation={1}>
-              {matches && step > 0 && (
+              {matches && step >= 0 && (
                 <Stepper activeStep={step} alternativeLabel>
                   {steps.map(({ label, step }) => (
                     <Step key={step}>
@@ -356,22 +313,6 @@ const UserOnboarding = ({ history, classes }) => {
                 <Route
                   exact
                   path={`${APP_PREFIX_PATH}/onboarding`}
-                  render={() => <Welcome handleNext={handleNext} />}
-                  mobile={matches}
-                />
-                <Route
-                  path={`${APP_PREFIX_PATH}/onboarding/password`}
-                  render={() => (
-                    <Password
-                      mobile={matches}
-                      handleChange={handlePasswordChange}
-                      values={password}
-                      loading={loading}
-                    />
-                  )}
-                />
-                <Route
-                  path={`${APP_PREFIX_PATH}/onboarding/account-details`}
                   render={() => (
                     <Account
                       handleChange={handleDetailsChange}
@@ -391,9 +332,9 @@ const UserOnboarding = ({ history, classes }) => {
                   )}
                 />
               </Content>
-              {matches && step > 0 && (
+              {matches && step >= 0 && (
                 <Actions>
-                  {step > 1 && (
+                  {step > 0 && (
                     <BackButton onClick={handleBack} disabled={loading}>
                       Back
                     </BackButton>
@@ -423,4 +364,4 @@ const UserOnboarding = ({ history, classes }) => {
   );
 };
 
-export default withStyles(styles)(UserOnboarding);
+export default withStyles(styles)(SecondaryOnboarding);

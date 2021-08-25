@@ -50,7 +50,7 @@ export const NavProfile = () => {
             style={{ backgroundColor: "rgb(222, 68, 54)", minWidth: 35 }}
             size={35}
           >
-            {name.charAt(0)}
+            {name?.charAt(0)}
           </Avatar>
           <div className="pl-2">
             <h4 className="mb-0">{name}</h4>
@@ -87,7 +87,7 @@ export const NavProfile = () => {
       <Menu className="d-flex align-item-center" mode="horizontal">
         <Menu.Item>
           <Avatar style={{ backgroundColor: "rgb(222, 68, 54)" }}>
-            {name.charAt(0)}
+            {name?.charAt(0)}
           </Avatar>
         </Menu.Item>
       </Menu>

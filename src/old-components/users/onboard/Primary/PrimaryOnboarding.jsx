@@ -74,7 +74,7 @@ const Content = styled.div`
   }
 `;
 
-const UserOnboarding = ({ history, classes }) => {
+const PrimaryOnboarding = ({ history, classes }) => {
   const setUser = useStoreActions((actions) => actions.user.setUser);
   const currentStep = useStoreState((state) => state.user.onboardSteps);
 
@@ -91,18 +91,6 @@ const UserOnboarding = ({ history, classes }) => {
       label: "Set Password",
       url: `${APP_PREFIX_PATH}/onboarding/password`,
       next: "Set Password",
-    },
-    {
-      step: 2,
-      label: "Account Details",
-      url: `${APP_PREFIX_PATH}/onboarding/account-details`,
-      next: "Save Details",
-    },
-    {
-      step: 3,
-      label: "Terms & Conditions",
-      url: `${APP_PREFIX_PATH}/onboarding/terms-conditions`,
-      next: "Agree",
     },
   ];
 
@@ -144,14 +132,6 @@ const UserOnboarding = ({ history, classes }) => {
       history.push(`${APP_PREFIX_PATH}/onboarding/password`);
       setStep(1);
     }
-    if (currentStep === "DETAILS") {
-      history.push(`${APP_PREFIX_PATH}/onboarding/account-details`);
-      setStep(2);
-    }
-    if (currentStep === "TERMS") {
-      history.push(`${APP_PREFIX_PATH}/onboarding/terms-conditions`);
-      setStep(3);
-    }
     // eslint-disable-next-line
   }, []);
 
@@ -171,7 +151,6 @@ const UserOnboarding = ({ history, classes }) => {
   //       postcode: addresses[0].postcode,
   //     }),
   // });
-  const data = {};
   const loading = false;
 
   // mutations
@@ -322,18 +301,6 @@ const UserOnboarding = ({ history, classes }) => {
       [name]: event.target.value,
     });
   };
-  const handleDetailsChange = (name) => (event) => {
-    setDetails({
-      ...details,
-      [name]: event.target.value,
-    });
-  };
-  const handleTermsChange = (name, value) => {
-    setTerms({
-      ...terms,
-      [name]: value,
-    });
-  };
 
   return (
     <MediaQuery minDeviceWidth={1024}>
@@ -366,26 +333,6 @@ const UserOnboarding = ({ history, classes }) => {
                       mobile={matches}
                       handleChange={handlePasswordChange}
                       values={password}
-                      loading={loading}
-                    />
-                  )}
-                />
-                <Route
-                  path={`${APP_PREFIX_PATH}/onboarding/account-details`}
-                  render={() => (
-                    <Account
-                      handleChange={handleDetailsChange}
-                      values={details}
-                      loading={loading}
-                    />
-                  )}
-                />
-                <Route
-                  path={`${APP_PREFIX_PATH}/onboarding/terms-conditions`}
-                  render={() => (
-                    <Terms
-                      handleChange={handleTermsChange}
-                      values={terms}
                       loading={loading}
                     />
                   )}
@@ -423,4 +370,4 @@ const UserOnboarding = ({ history, classes }) => {
   );
 };
 
-export default withStyles(styles)(UserOnboarding);
+export default withStyles(styles)(PrimaryOnboarding);
