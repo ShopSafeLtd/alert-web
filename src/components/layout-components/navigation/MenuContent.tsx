@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Menu, Grid } from "antd";
-//import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import IntlMessage from "../../util-components/IntlMessage";
 import navConfig, { NavItem } from "configs/NavigationConfig";
 import utils from "utils";
@@ -27,8 +27,10 @@ const setDefaultOpen = (key: string) => {
   return keyList;
 };
 
-//const Icon = ({ icon }: { icon: any }) => <FontAwesomeIcon icon={icon} style={{ fontSize: 22, marginRight: 10 }} />
-const Icon = ({ icon }: any) => <></>;
+const Icon = ({ icon }: { icon: any }) => (
+  <FontAwesomeIcon icon={icon} style={{ fontSize: 22, marginRight: 10 }} />
+);
+// const Icon = ({ icon }: any) => <></>;
 
 interface SideNavContentProps {
   sideNavTheme: SideNavTheme;
