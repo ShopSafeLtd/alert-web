@@ -19,6 +19,8 @@ import SchemeDetails from "../../../old-components/admin/SchemeDetails";
 
 import AutoApprove from "../../../old-components/admin/AutoApprove";
 
+import DataRetention from "old-components/admin/DataRetention";
+
 import OffenderWarnings from "../../../old-components/admin/offender-warnings/OffenderWarningsList";
 import ViewOffenderWarnings from "../../../old-components/admin/offender-warnings/EditOffenderWarnings";
 import AddOffenderWarnings from "../../../old-components/admin/offender-warnings/AddOffenderWarning";
@@ -90,6 +92,12 @@ const SchemeSettings = () => {
       <Route
         path={`${APP_PREFIX_PATH}/scheme-settings/auto-approve`}
         component={AutoApprove}
+      />
+
+      {/* data retention */}
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/data-retention`}
+        component={DataRetention}
       />
 
       {/* offender tags */}
