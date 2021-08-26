@@ -96,10 +96,14 @@ class AlertFeed extends React.Component {
       .map(({ id }) => ({ id }));
     this.props.approveIncident({
       variables: {
-        id: approveId,
-        groups: {
-          connect: connect.length > 0 ? connect : undefined,
-          disconnect: disconnect.length > 0 ? disconnect : undefined,
+        where: {
+          id: approveId,
+        },
+        data: {
+          groups: {
+            connect: connect.length > 0 ? connect : undefined,
+            disconnect: disconnect.length > 0 ? disconnect : undefined,
+          },
         },
       },
     });
@@ -127,7 +131,9 @@ class AlertFeed extends React.Component {
     });
     await this.props.deleteIncident({
       variables: {
-        id: this.state.declineId,
+        where: {
+          id: this.state.declineId,
+        },
       },
     });
     this.toggleDeclineDialog();
