@@ -3,8 +3,6 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Views from "./views/router";
 import { Route, Switch } from "react-router-dom";
 import { ThemeSwitcherProvider } from "react-css-theme-switcher";
-import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { createUploadLink } from "apollo-upload-client";
 import { ThemeProvider, StylesProvider } from "@material-ui/styles";
 import LogRocket from "logrocket";
 import { createMuiTheme } from "@material-ui/core/styles";
@@ -13,7 +11,6 @@ import MomentUtils from "@date-io/moment";
 import ApolloProvider from "./providers/ApolloProvider";
 
 import { ThemeConfig, Store } from "./state";
-import { setContext } from "@apollo/client/link/context";
 
 LogRocket.init("ub3rsv/gotalk-portal");
 

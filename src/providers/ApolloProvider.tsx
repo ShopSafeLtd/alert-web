@@ -7,7 +7,6 @@ import {
 } from "@apollo/client";
 import { persistCache } from "apollo3-cache-persist";
 
-import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "@apollo/client/utilities";
@@ -33,24 +32,11 @@ const Apollo = ({ children }: Props) => {
     }
   );
 
-  const errorLink = onError(({ graphQLErrors, networkError }) => {
-    if (graphQLErrors)
-      graphQLErrors.map(({ message, locations, path }) => {
-        return console.log(
-          `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-        );
-      });
-
-    if (networkError) {
-      console.log(`[Network error]: ${networkError}`);
-    }
-  });
-
   const wsLink = new WebSocketLink(wsClient);
 
   const httpLink = createUploadLink({
-    //uri: 'https://alert-api-dev.azurewebsites.net/graphql'
-    uri: "http://192.168.0.24:4000/graphql",
+    uri: 'https://alert-api-dev.azurewebsites.net/graphql'
+    //uri: "http://192.168.0.24:4000/graphql",
   });
 
   const middlewareLink = setContext((_, { headers, ...context }) => {
@@ -64,7 +50,6 @@ const Apollo = ({ children }: Props) => {
     };
   });
 
-  //@ts-expect-error apollo link not assignable to apollo link/handler
   const authHttp = middlewareLink.concat(httpLink);
 
   const link = split(

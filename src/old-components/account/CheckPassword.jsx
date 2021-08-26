@@ -75,7 +75,6 @@ const StyledTextField = styled(TextField)`
 `;
 
 const ResetPassword = ({ setAuth, history }) => {
-  const [passwordError, setPasswordError] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -111,7 +110,6 @@ const ResetPassword = ({ setAuth, history }) => {
 
   const validate = async () => {
     const result = await new Promise((resolve, reject) => {
-      setPasswordError(!!password ? "" : "Please enter your password.");
       !!password ? resolve(true) : resolve(false);
     });
     return result;

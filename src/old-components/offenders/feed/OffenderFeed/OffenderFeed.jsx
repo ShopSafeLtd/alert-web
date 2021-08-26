@@ -2,8 +2,6 @@ import React, { Fragment } from "react";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
-import IconButton from "@material-ui/core/IconButton";
-import FilterIcon from "@material-ui/icons/FilterList";
 
 import OffenderCard from "../OffenderCard/OffenderCard";
 import {

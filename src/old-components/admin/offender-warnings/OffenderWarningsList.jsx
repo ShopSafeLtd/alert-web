@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import MediaQuery from "react-responsive";
 import { useQuery } from "@apollo/client";
 import { Link } from "react-router-dom";
 import { FAB } from "../../global/actions";

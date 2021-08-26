@@ -76,7 +76,7 @@ const EditDesktop = ({
 
   const schemeId = useStoreState((state) => state.scheme.id);
 
-  const { data: crimeTypesList, loading: crimeTypesLoading } = useQuery(Tags, {
+  const { data: crimeTypesList } = useQuery(Tags, {
     variables: {
       where: {
         scheme: { id: { equals: schemeId } },

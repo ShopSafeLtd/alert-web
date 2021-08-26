@@ -1,7 +1,6 @@
 import React from "react";
 import { Menu, Dropdown, Avatar, Row } from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
-import Icon from "components/util-components/Icon";
 import { useStoreState } from "state";
 import { useAuth } from "hooks";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
@@ -39,7 +38,6 @@ const menuItem: MenuItem[] = [
 export const NavProfile = () => {
   const name = useStoreState((state) => state.user.fullName);
   const email = useStoreState((state) => state.user.email);
-  const profileImg = useStoreState((state) => state.user.picture);
   const { signOut } = useAuth();
 
   const profileMenu = (

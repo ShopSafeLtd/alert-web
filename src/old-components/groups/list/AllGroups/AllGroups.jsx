@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -14,7 +14,7 @@ import { FAB } from "../../../global/actions";
 import { GroupRowSkeleton } from "../../../global/skeletons";
 import { Groups as GroupsQuery } from "graphql-src/groups/queries";
 // import query from '../../../../graphql/groups/queries/GroupList';
-import { useStoreActions, useStoreState } from "../../../../state";
+import { useStoreState } from "../../../../state";
 
 const Groups = styled.div`
   background: #fff;
@@ -31,19 +31,6 @@ const Row = styled(TableRow)`
 `;
 
 const AllGroups = ({ history }) => {
-  const setSearch = useStoreActions((actions) => actions.theme.setSearch);
-  const setSearchText = useStoreActions(
-    (actions) => actions.theme.setSearchText
-  );
-  const setTitle = useStoreActions((actions) => actions.theme.setTitle);
-  // const setNavbarAction = useStoreActions(
-  //   (actions) => actions.theme.setNavbarAction
-  // );
-  const setBackLinkTo = useStoreActions(
-    (actions) => actions.theme.setBackLinkTo
-  );
-  const search = useStoreState((state) => state.theme.search);
-
   const schemeId = useStoreState((state) => state.scheme.id);
 
   // effects

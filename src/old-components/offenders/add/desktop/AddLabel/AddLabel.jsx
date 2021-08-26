@@ -8,9 +8,8 @@ import { PopOver, PopOverContainer } from "../../../../global/layout";
 import { FieldHeader, Field } from "../../../../global/forms";
 import { BackButton } from "../../../../global/actions";
 import { CreateTag } from "../../../../../graphql-src/tags/mutations";
-import { Tags } from "../../../../../graphql-src/tags/queries";
 import { DataType } from "../../../../../graphql-src/tags/enums";
-import { useStoreActions, useStoreState } from "../../../../../state";
+import { useStoreState } from "../../../../../state";
 
 const Grow = styled.div`
   flex: 1;

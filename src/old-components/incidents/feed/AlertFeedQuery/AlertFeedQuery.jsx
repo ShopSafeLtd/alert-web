@@ -52,10 +52,12 @@ const AlertFeedQuery = () => {
       setSearchText("");
       toggleFetchIncidents(true);
     };
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     if (allLoaded) setAllLoaded(false);
+    // eslint-disable-next-line
   }, [search]);
 
   const changeOrder = (order) => {

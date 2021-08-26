@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
-import MediaQuery from "react-responsive";
 import TextField from "@material-ui/core/TextField";
 import { useMutation } from "@apollo/client";
 import { Link } from "react-router-dom";
@@ -10,12 +9,10 @@ import { APP_PREFIX_PATH } from "configs/AppConfig";
 import {
   Field,
   FieldHeader,
-  Header,
-  HeaderText,
   HeaderSubText,
 } from "../../global/forms";
 import { PageHeader } from "../../global/typography";
-import { FullWidthButton, BackButton } from "../../global/actions";
+import { BackButton } from "../../global/actions";
 import { Row, Section } from "../../global/layout";
 import { CreateTag } from "graphql-src/tags/mutations";
 import { Tags } from "graphql-src/tags/queries";

@@ -45,7 +45,7 @@ class MessagesView extends PureComponent {
   }
 
   componentDidMount() {
-    const { markAsRead, chat, messages, refetch } = this.props;
+    const { messages, refetch } = this.props;
     this.messages.addEventListener("scroll", this.onScroll, false);
     this.messages.scrollTop = this.messages.scrollHeight;
     // this.props.setNavbarAction("back");
@@ -77,8 +77,6 @@ class MessagesView extends PureComponent {
       messages,
       setTitle,
       subscribeToMore,
-      chat,
-      markAsRead,
       newRecived,
       resetRecived,
       refetched,
@@ -148,7 +146,7 @@ class MessagesView extends PureComponent {
   };
 
   render() {
-    const { messages, chatId, refetch, bottomNav, user, fromId } = this.props;
+    const { messages, refetch, bottomNav, user, fromId } = this.props;
     const { newMessageText } = this.state;
 
     let currentDate, currentUser;

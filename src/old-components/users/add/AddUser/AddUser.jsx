@@ -149,7 +149,7 @@ const AddUser = ({ history, classes, location }) => {
   }, []);
 
   // queries
-  const { data: userData, loading: userLoading } = useQuery(UserByEmail, {
+  const { data: userData } = useQuery(UserByEmail, {
     variables: {
       email: user.email,
     },

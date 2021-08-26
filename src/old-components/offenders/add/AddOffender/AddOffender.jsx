@@ -5,13 +5,12 @@ import { useMutation, useQuery } from "@apollo/client";
 import OffenderWizard from "../desktop/OffenderWizard/OffenderWizard";
 import { Tags } from "../../../../graphql-src/tags/queries";
 import { Groups } from "../../../../graphql-src/groups/queries";
-import { useStoreActions, useStoreState } from "../../../../state";
+import { useStoreState } from "../../../../state";
 import { CreateOffender } from "../../../../graphql-src/offenders/mutations/create-offender";
 import { OffenderFeed } from "../../../../graphql-src/offenders/queries/offender-feed";
 import { UploadImage } from "graphql-src/images/mutations";
 
 const AddOffender = ({ history }) => {
-  const [pristine, setPristine] = useState(true);
   const [name, setName] = useState("");
   const [gender, setGender] = useState("");
   const [race, setRace] = useState("");
@@ -36,7 +35,7 @@ const AddOffender = ({ history }) => {
   const admin = role === "USER" ? false : true;
 
   // queries
-  const { data: labelsList, loading: labelsLoading } = useQuery(Tags, {
+  const { data: labelsList } = useQuery(Tags, {
     variables: {
       where: {
         scheme: { id: { equals: schemeId } },
@@ -104,32 +103,23 @@ const AddOffender = ({ history }) => {
       setAge(value);
       setDateOfBirth("");
       setDateSource("");
-      setPristine(false);
     } else if (field === "dateOfBirth") {
       setAge("");
       setDateOfBirth(value);
-      setPristine(false);
     } else if (field === "dateSource") {
       setDateSource(value);
-      setPristine(false);
     } else if (field === "name") {
       setName(value);
-      setPristine(false);
     } else if (field === "gender") {
       setGender(value);
-      setPristine(false);
     } else if (field === "race") {
       setRace(value);
-      setPristine(false);
     } else if (field === "build") {
       setBuild(value);
-      setPristine(false);
     } else if (field === "hair") {
       setHair(value);
-      setPristine(false);
     } else if (field === "peculiarities") {
       setPeculiarities(value);
-      setPristine(false);
     }
   };
 
@@ -180,7 +170,6 @@ const AddOffender = ({ history }) => {
     setImages((prev) => {
       return prev.filter(({ id }) => image !== id);
     });
-    setPristine(false);
   };
 
   const toggleSelectedLabels = (label) => {

@@ -23,7 +23,7 @@ const Container = styled.div`
   display: flex;
   @media (max-width: 1024px) {
     flex: 1;
-  }
+  };
 `;
 
 class ChatList extends Component {
@@ -86,11 +86,14 @@ class ChatList extends Component {
                       <ListItem
                         key={id}
                         active={activeChat === id}
-                        onClick={() =>
-                          matches
-                            ? (setActiveChat(id), handleMarkAsRead(userChatId))
-                            : history.push(`${APP_PREFIX_PATH}/chat/${id}`)
-                        }
+                        onClick={() => {
+                          if (matches) {
+                            setActiveChat(id)
+                            handleMarkAsRead(userChatId)
+                          } else {
+                            history.push(`${APP_PREFIX_PATH}/chat/${id}`)
+                          }
+                        }}
                       >
                         <Avatar newMessages={newMessages}>{firstLetter}</Avatar>
                         <ChatText newMessages={newMessages}>

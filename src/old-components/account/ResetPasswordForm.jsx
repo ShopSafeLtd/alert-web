@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 // import { Mutation } from 'react-apollo';
 import Paper from "@material-ui/core/Paper";
-import MediaQuery from "react-responsive";
 import TextField from "@material-ui/core/TextField";
 // import validate from "validate.js";
 import { useMutation } from "@apollo/client";
 
 // import ResetPasswordMutation from '../../graphql/account/mutations/ResetPasswordMutation';
 import { UpdatePassword } from "graphql-src/users/mutations";
-import { FullWidthButton, ProgressButton } from "../global/actions";
+import { ProgressButton } from "../global/actions";
 import { HeaderText, HeaderSubText, Field, FieldHeader } from "../global/forms";
 import { useStoreActions, useStoreState } from "../../state";
 
@@ -76,9 +75,6 @@ const StyledTextField = styled(TextField)`
 
 const ResetPassword = ({ auth, setAuth, history }) => {
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
-  const setNavbarAction = useStoreActions(
-    (actions) => actions.theme.setNavbarAction
-  );
   const setBackLinkTo = useStoreActions(
     (actions) => actions.theme.setBackLinkTo
   );

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import MediaQuery from "react-responsive";
 import { useQuery, useMutation } from "@apollo/client";
 
 import ChatList from "../global/ChatList/ChatList";

@@ -21,7 +21,6 @@ import { EmptyText } from "../global/typography";
 import WebAddImages from "../global/images/WebAddImages/WebAddImages";
 import { Scheme } from "graphql-src/schemes/queries";
 import { UpdateScheme } from "graphql-src/schemes/mutations";
-import { UploadImage } from "graphql-src/images/mutations";
 // import UpdateSchemeDetails from '../../graphql/admin/mutations/UpdateSchemeDetails';
 // import UploadImage from '../../graphql/images/mutations/uploadImages';
 import { PageHeader } from "../global/typography";
@@ -92,7 +91,7 @@ const SchemeName = ({ history }) => {
   const [name, setName] = useState("");
   const [nameError, setNameError] = useState("");
   const [image, setImage] = useState(null);
-  const [uploading, setUploading] = useState("");
+  const [uploading] = useState("");
   const [deleteLogo, setDeleteLogo] = useState(false);
 
   // effects
@@ -111,7 +110,7 @@ const SchemeName = ({ history }) => {
   }, []);
 
   // queries
-  const { data, loading } = useQuery(Scheme, {
+  const { loading } = useQuery(Scheme, {
     variables: {
       where: {
         id: schemeId,

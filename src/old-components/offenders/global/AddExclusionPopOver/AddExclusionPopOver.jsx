@@ -5,18 +5,10 @@ import { useMutation } from "@apollo/client";
 import moment from "moment";
 
 import { CreateBan } from "graphql-src/bans/mutations";
-import { OffenderFeed } from "graphql-src/offenders/queries";
 import { PopOver, PopOverContainer } from "../../../global/layout";
 import { FullWidthButton, BackButton } from "../../../global/actions";
 import { ExclusionForm } from "../../../forms";
 import { useStoreState } from "../../../../state";
-
-let querySize = 10;
-if (window.innerWidth > 1239 && window.innerWidth < 1800) {
-  querySize = 12;
-} else if (window.innerWidth > 1799) {
-  querySize = 16;
-}
 
 const AddExclusionPopover = ({
   userId,
@@ -40,15 +32,6 @@ const AddExclusionPopover = ({
     endDateError: null,
   });
   const [submitting, setSubmitting] = useState(false);
-
-  const variables = {
-    schemeId: schemeId,
-    search: "",
-    first: querySize,
-    order: { createdAt: "desc" },
-    userId,
-    role,
-  };
 
   // mutations
   const [addBan] = useMutation(CreateBan, {

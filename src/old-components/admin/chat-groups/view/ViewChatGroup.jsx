@@ -1,9 +1,7 @@
 import React, { useEffect } from "react";
-import MediaQuery from "react-responsive";
 import { useQuery } from "@apollo/client";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
 
-import Mobile from "./mobile/Mobile/Mobile";
 import Desktop from "./desktop/Desktop/Desktop";
 import { ViewChat } from "graphql-src/chat/queries";
 // import query from '../../../../graphql/admin/queries/ChatGroup';

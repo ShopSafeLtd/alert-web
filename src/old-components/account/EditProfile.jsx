@@ -4,11 +4,10 @@ import styled from "styled-components";
 import Paper from "@material-ui/core/Paper";
 // import MediaQuery from "react-responsive";
 import TextField from "@material-ui/core/TextField";
-import { useDispatch, useSelector } from "react-redux";
 import { useQuery, useMutation } from "@apollo/client";
 
 // import EditProfileMutation from '../../graphql/account/mutations/EditProfileMutation';
-import { FullWidthButton, ProgressButton } from "../global/actions";
+import { ProgressButton } from "../global/actions";
 import { HeaderText, HeaderSubText, Field, FieldHeader } from "../global/forms";
 import { Row } from "../global/layout";
 import { SubHeader } from "../global/typography";
@@ -79,9 +78,6 @@ const EditProfile = ({ history }) => {
   const userState = useStoreState((state) => state.user);
   const setUserState = useStoreActions((actions) => actions.user.setUser);
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
-  const setNavbarAction = useStoreActions(
-    (actions) => actions.theme.setNavbarAction
-  );
   const setBackLinkTo = useStoreActions(
     (actions) => actions.theme.setBackLinkTo
   );

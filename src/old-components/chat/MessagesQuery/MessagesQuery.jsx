@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 
 import { Messages } from "graphql-src/chat/queries";
 // import MarkAsRead from '../../../graphql/chat/mutations/MarkAsRead';
@@ -39,7 +39,6 @@ const MessagesQuery = ({ id, match }) => {
 
   const {
     data: messagesData,
-    loading: messagesLoading,
     subscribeToMore,
     refetch,
     fetchMore,

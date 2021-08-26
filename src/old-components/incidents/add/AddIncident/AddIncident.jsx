@@ -9,9 +9,8 @@ import { PreviousAddresses } from "graphql-src/address/queries";
 import { Tags } from "graphql-src/tags/queries";
 import { Groups } from "graphql-src/groups/queries";
 import { IncidentFeed } from "graphql-src/incidents/queries";
-import { OffenderFeed } from "graphql-src/offenders/queries";
 import { UploadImage } from "graphql-src/images/mutations";
-import { useStoreActions, useStoreState } from "../../../../state";
+import { useStoreState } from "../../../../state";
 
 let querySize = 10;
 if (window.innerWidth > 1239 && window.innerWidth < 1800) {
@@ -21,9 +20,6 @@ if (window.innerWidth > 1239 && window.innerWidth < 1800) {
 }
 
 const AddIncident = ({ history }) => {
-  const toggleFetchIncidents = useStoreActions(
-    (actions) => actions.toggleFetchIncidents
-  );
   const schemeId = useStoreState((state) => state.scheme.id);
   const currentUser = useStoreState((state) => state.user.id);
   const role = useStoreState((state) => state.user.role);
@@ -71,7 +67,7 @@ const AddIncident = ({ history }) => {
     },
     fetchPolicy: "cache-and-network",
   });
-  const { data: crimeTypesList, loading: crimeTypesLoading } = useQuery(Tags, {
+  const { data: crimeTypesList } = useQuery(Tags, {
     variables: {
       where: {
         scheme: { id: { equals: schemeId } },

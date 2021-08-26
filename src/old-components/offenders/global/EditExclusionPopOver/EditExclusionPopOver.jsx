@@ -1,6 +1,5 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
-import MediaQuery from "react-responsive";
 
 import { PopOver, PopOverContainer } from "../../../global/layout";
 import { FullWidthButton, BackButton } from "../../../global/actions";
@@ -61,7 +60,6 @@ class EditExclusionPopover extends React.Component {
       visible,
       exclusion,
       setStatusBar,
-      currentUserId,
       onSubmit,
       exclusion: { startDate, endDate },
     } = this.props;

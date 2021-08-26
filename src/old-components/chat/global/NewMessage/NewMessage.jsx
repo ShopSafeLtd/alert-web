@@ -2,8 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import SendIcon from "@material-ui/icons/Send";
-import { fromPromise, useMutation } from "@apollo/client";
-import MediaQuery from "react-responsive";
+import { useMutation } from "@apollo/client";
 // import TextareaAutosize from "react-autosize-textarea";
 
 import { CreateMessage } from "graphql-src/chat/mutations";
@@ -27,27 +26,6 @@ const Container = styled.form`
     height: auto;
   }
 `;
-const MobileContainer = styled.div`
-  position: absolute;
-  bottom: 0px;
-  left: 0;
-  width: 84%;
-`;
-//const TextField = styled(TextareaAutosize)`
-const TextField = styled.div`
-  height: auto;
-  min-height: 60px;
-  flex: 1;
-  outline: none;
-  resize: none;
-  font-size: 15px;
-  font-family: "Roboto", sans-serif;
-  padding: 10px 10px;
-  width: 100%;
-  -webkit-appearance: none;
-  border-radius: 0;
-  border: none;
-`;
 const DesktopTextField = styled.textarea`
   border: 1px solid #e0e0e0;
   height: auto;
@@ -67,30 +45,14 @@ const DesktopTextField = styled.textarea`
 const Send = styled(Button)`
   margin-left: 15px;
 `;
-const MobileSend = styled.div`
-  margin-left: 5px;
-  height: 45px;
-  width: 45px;
-  position: absolute;
-  bottom: 10px;
-  right: 3%;
-  color: #ef5350;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-`;
 
 const NewMessage = React.forwardRef((props, ref) => {
   const {
     refetch,
     chatId,
     onSend,
-    onFocus,
-    onBlur,
     message,
     handleChange,
-    onResize,
   } = props;
 
   const bottomNav = useStoreState((state) => state.theme.bottomNav);
