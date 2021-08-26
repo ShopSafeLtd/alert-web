@@ -297,9 +297,15 @@ class OffenderFeed extends React.Component {
 
       await approveOffender({
         variables: {
-          id: approveId,
-          groups: add.length > 0 ? add : undefined,
-          removeGroups: remove.length > 0 ? remove : undefined,
+          where: {
+            id: approveId,
+          },
+          data: {
+            groups: {
+              connect: add.length > 0 ? add : undefined,
+              disconnect: remove.length > 0 ? remove : undefined,
+            },
+          },
         },
       });
       setStatusBar(false, "");
@@ -313,10 +319,12 @@ class OffenderFeed extends React.Component {
       });
       await deleteOffender({
         variables: {
-          id: declineOffenderId,
+          where: {
+            id: declineOffenderId,
+          },
         },
         optimisticResponse: {
-          deleteOffender: {
+          recycleOffender: {
             id: declineOffenderId,
             optimistic: true,
             __typename: "Offender",

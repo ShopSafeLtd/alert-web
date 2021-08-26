@@ -1,23 +1,37 @@
 import { gql } from "@apollo/client";
 
 export const ApproveOffender = gql`
-  mutation updateOffender($where: UniqueId!, $data: GroupUpdateInput) {
-    updateOffender(where: $where, data: $data) {
+  mutation approveOffender($where: UniqueId!, $data: ApproveIncidentData!) {
+    approveOffender(where: $where, data: $data) {
       id
       approved
+      groups {
+        id
+        name
+      }
     }
   }
 `;
 
 export interface ApproveOffenderArgs {
-  where: { id: string };
+  wehre: {
+    id: string;
+  };
   data: {
-    approved: { set: boolean };
-    groups: { connect?: { id: string }[]; disconnect?: { id: string }[] };
+    groups: {
+      connect?: { id: string }[];
+      disconnect?: { id: string }[];
+    };
   };
 }
 
 export interface ApproveOffenderRes {
-  id: string;
-  approved: boolean;
+  offender: {
+    id: string;
+    approved: boolean;
+    groups: {
+      id: string;
+      name: string;
+    }[];
+  };
 }
