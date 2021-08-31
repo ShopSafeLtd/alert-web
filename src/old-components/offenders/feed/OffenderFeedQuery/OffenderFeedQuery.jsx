@@ -63,8 +63,6 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
     approved: undefined,
   });
 
-  console.log(filter, queryVariables);
-
   const [searchInput, setSearchInput] = useState("");
 
   const variables = {
