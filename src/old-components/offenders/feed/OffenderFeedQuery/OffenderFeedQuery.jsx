@@ -9,10 +9,8 @@ import Offline from "../../../global/Offline/Offline";
 import { OffenderFeed as query } from "graphql-src/offenders/queries";
 import { useStoreActions, useStoreState } from "../../../../state";
 
-const ALL = "ALL";
-const BANNED = "BANNED";
-const UNIDENTIFIED = "UNIDENTIFIED";
-const ACTIVE = "ACTIVE";
+import { Tags } from "graphql-src/tags/queries";
+import { Groups } from "graphql-src/groups/queries";
 
 let querySize = 10;
 if (window.innerWidth > 1239 && window.innerWidth < 1800) {
@@ -42,20 +40,39 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
   // state
   const [fetching, setFetching] = useState(false);
   const [allLoaded, setAllLoaded] = useState(false);
-  const [filter, setFilter] = useState(ALL);
   const [networkError, setNetworkError] = useState(false);
-  const [order, setOrder] = useState("desc");
   const [filterPristine, setFilterPristine] = useState(true);
+
+  const [order, setOrder] = useState();
+  const [filter, setFilter] = useState({
+    groups: [],
+    sex: [],
+    ethnicity: [],
+    tags: [],
+    approved: {
+      approved: undefined,
+      awaitingApproval: undefined,
+    },
+  });
+  const [queryVariables, setQueryVariables] = useState({
+    order: { createdAt: "desc" },
+    groups: undefined,
+    sex: undefined,
+    ethnicity: undefined,
+    tags: undefined,
+    approved: undefined,
+  });
+
+  console.log(filter, queryVariables);
+
+  const [searchInput, setSearchInput] = useState("");
 
   const variables = {
     schemeId: schemeId || window.localStorage.getItem("currentScheme"),
     userId,
-    search: filter === UNIDENTIFIED ? "Unidentified Offender" : "",
-    order: { createdAt: order },
+    search: searchInput,
     first: querySize,
-    active: filter === ACTIVE ? true : undefined,
-    role,
-    banned: filter === BANNED ? true : undefined,
+    ...queryVariables,
   };
 
   // effects
@@ -81,6 +98,41 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
     variables,
     fetchPolicy: "cache-and-network",
     onError: (err) => console.log(err),
+  });
+  const { data: tags } = useQuery(Tags, {
+    variables: {
+      where: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+        dataType: {
+          equals: "OFFENDER",
+        },
+      },
+      orderBy: [
+        {
+          name: "asc",
+        },
+      ],
+    },
+  });
+  const { data: groups } = useQuery(Groups, {
+    variables: {
+      where: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
+      orderBy: [
+        {
+          name: "asc",
+        },
+      ],
+    },
   });
 
   // mutations
@@ -134,15 +186,6 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
     },
   });
 
-  // functions
-  const changeFilter = (filter) => {
-    setFilter(filter);
-    setFilterPristine(false);
-  };
-  const changeOrder = (order) => {
-    setOrder(order);
-    setFilterPristine(false);
-  };
   // set the pagination cursor
   let cursor;
   if (
@@ -214,8 +257,6 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
       setStatusBar={setStatusBar}
       userId={userId}
       loadMore={loadMore}
-      setFilter={changeFilter}
-      filter={filter}
       search={search}
       markOffenderActive={markOffenderAsActive}
       admin={admin}
@@ -224,11 +265,19 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
       networkError={networkError}
       retryLoad={retryLoad}
       setActions={setActions}
-      order={order}
-      setOrder={changeOrder}
       filterPristine={filterPristine}
       toggleFetchOffenders={toggleFetchOffenders}
       role={role}
+      //
+      searchInput={searchInput}
+      setSearchInput={setSearchInput}
+      order={order}
+      setOrder={setOrder}
+      filter={filter}
+      setFilter={setFilter}
+      setQueryVariables={setQueryVariables}
+      tags={tags?.tags}
+      groups={groups?.groups}
     />
   );
 };

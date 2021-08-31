@@ -2,6 +2,13 @@ import React, { Fragment } from "react";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
+import { Input } from "antd";
+import {
+  SearchOutlined,
+  FilterOutlined,
+  ArrowUpOutlined,
+  ArrowDownOutlined,
+} from "@ant-design/icons";
 
 import OffenderCard from "../OffenderCard/OffenderCard";
 import {
@@ -206,10 +213,6 @@ class OffenderFeed extends React.Component {
       offenders,
       approveOffender,
       loadMore,
-      filter,
-      setFilter,
-      order,
-      setOrder,
       search,
       admin,
       markOffenderActive,
@@ -219,6 +222,17 @@ class OffenderFeed extends React.Component {
       refetch,
       filterPristine,
       role,
+
+      searchInput,
+      setSearchInput,
+      filter,
+      setFilter,
+      order,
+      setOrder,
+      setQueryVariables,
+
+      tags,
+      groups,
     } = this.props;
     const {
       deleteOffenderModal,
@@ -338,196 +352,286 @@ class OffenderFeed extends React.Component {
       setStatusBar(false, "");
     };
 
-    return loading && pristine ? (
-      <FeedContainer to="/app/offenders/add" text="Offender">
-        <PullToRefresh onRefresh={refetch}>
-          <FeedCardContainer>
-            <SkeletonContainer cardHeight="500px">
-              <OffenderSkeletonCard />
-            </SkeletonContainer>
-          </FeedCardContainer>
-          <OffenderFilter
-            open={filterOpen}
-            handleClose={() => this.setState({ filterOpen: false })}
-            order={order}
-            setOrder={setOrder}
-            filter={filter}
-            setFilter={setFilter}
-          />
-        </PullToRefresh>
-        <LightBox />
-      </FeedContainer>
-    ) : !!offenders && offenders?.length > 0 ? (
-      <Fragment>
-        <FeedContainer
-          to="/app/offenders/add"
-          loadMore={loadMore}
-          text="Offender"
-          loading={loadingMore}
-          networkError={networkError}
-          retryLoad={retryLoad}
+    return (
+      <>
+        {/* search and filter bar */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
         >
-          <PullToRefresh onRefresh={refetch}>
-            <FeedCardContainer>
-              {offenders.map((offender) => (
-                <Card key={offender.id} height="500px">
-                  <OffenderCard
-                    key={offender.id}
-                    offender={offender}
-                    toggleDeleteOffenderModal={this.toggleDeleteOffenderModal}
-                    toggleDecline={this.toggleDeclineOffender}
-                    toggleDeleteExclusionModal={this.toggleDeleteExclusionModal}
-                    toggleAddExclusionPopOver={this.toggleAddExclusionPopOver}
-                    toggleViewExclusionPopOver={this.toggleViewExclusionPopOver}
-                    toggleIncidentPopOver={this.toggleIncidentPopOver}
-                    toggleApprove={this.toggleApprove}
-                    toggleViewOffenderPopOver={this.toggleViewOffenderPopOver}
-                    toggleViewLabel={this.toggleViewLabel}
-                    toggleActiveOffender={this.toggleActiveOffender}
-                    toggleInactiveOffender={this.toggleInactiveOffender}
-                    admin={admin}
-                  />
-                </Card>
-              ))}
-            </FeedCardContainer>
-          </PullToRefresh>
-        </FeedContainer>
-        <DeleteOffenderModal
-          visible={deleteOffenderModal}
-          close={this.toggleDeleteOffenderModal}
-          handleDelete={handleDelete}
-          disabled={disabled}
-        />
-        <DeclineDialog
-          open={declineOffenderDialog}
-          close={this.toggleDeclineOffender}
-          handleDecline={handleDecline}
-        />
-        <AddExclusionPopOver
-          visible={addExclusionPopOver}
-          close={this.toggleAddExclusionPopOver}
-          offenderId={addExclusionId}
-          filter={filter}
-          admin={admin}
-          search={search}
-          userId={userId}
-          role={role}
-        />
-        <ViewExclusionPopOver
-          visible={viewExclusionPopOver}
-          close={this.toggleViewExclusionPopOver}
-          exclusionId={viewExclusionId}
-          offenderId={viewExclusionOffender}
-          filter={filter}
-          admin={admin}
-          search={search}
-          userId={userId}
-        />
-        <ViewIncidentPopOver
-          visible={viewIncidentPopOver}
-          close={this.toggleIncidentPopOver}
-          incidentId={viewIncidentId}
-        />
-        <UnapprovedCardGroups
-          visible={approve}
-          cancel={this.toggleApprove}
-          toggle={this.toggleApproveGroups}
-          selected={approveGroups}
-          approve={handleApprove}
-          offender={offenders?.find(({ id }) => id === approveId)}
-        />
-        <ViewOffenderPopOver
-          visible={viewOffenderPopOver}
-          close={this.toggleViewOffenderPopOver}
-          offender={viewOffender}
-          admin={admin}
-        />
-        <LabelModal
-          visible={viewLabel}
-          close={this.toggleViewLabel}
-          label={label}
-        />
-        <ActiveOffenderModal
-          open={activeOffenderModal}
-          close={this.toggleActiveOffender}
-          offenderId={activeOffenderId}
-          markOffenderActive={markOffenderActive}
-        />
-        <InactiveOffenderModal
-          open={inactiveOffenderModal}
-          close={this.toggleInactiveOffender}
-          offenderId={inactiveOffenderId}
-          markOffenderActive={markOffenderActive}
-        />
-        <OffenderFilter
-          open={filterOpen}
-          handleClose={() => this.setState({ filterOpen: false })}
-          order={order}
-          setOrder={setOrder}
-          filter={filter}
-          setFilter={setFilter}
-        />
-        <LightBox />
-      </Fragment>
-    ) : filterPristine ? (
-      <FeedContainer to="/app/offenders/add" text="Offender">
-        <PullToRefresh onRefresh={refetch}>
-          <EmptyContainer>
-            <EmptyState
-              image={<Offenders height="96px" width="96px" />}
-              text="There are currently no active offenders."
-              actions={[
-                <Button
-                  variant="contained"
-                  color="primary"
-                  component={Link}
-                  to="/app/offenders/add"
-                >
-                  Add First Offender
-                </Button>,
-              ]}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              width: "35%",
+            }}
+          >
+            <Input
+              placeholder="Search..."
+              size="large"
+              prefix={
+                <SearchOutlined
+                  style={{
+                    fontSize: "22px",
+                    color: "#EF5350",
+                    marginRight: 10,
+                  }}
+                />
+              }
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
             />
-          </EmptyContainer>
-          <OffenderFilter
-            open={filterOpen}
-            handleClose={() => this.setState({ filterOpen: false })}
-            order={order}
-            setOrder={setOrder}
-            filter={filter}
-            setFilter={setFilter}
-          />
-        </PullToRefresh>
-        <LightBox />
-      </FeedContainer>
-    ) : (
-      <FeedContainer to="/app/offenders/add" text="Offender">
-        <PullToRefresh onRefresh={refetch}>
-          <EmptyContainer>
-            <EmptyState
-              image={<Offenders height="96px" width="96px" />}
-              text="We could not find any offenders that match."
-              actions={[
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => this.setState({ filterOpen: true })}
-                >
-                  Change Filter
-                </Button>,
-              ]}
+          </div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginLeft: 16,
+            }}
+            onClick={() => this.setState({ filterOpen: true })}
+          >
+            <FilterOutlined
+              style={{
+                fontSize: "28px",
+                color: "#EF5350",
+                marginRight: 5,
+              }}
             />
-          </EmptyContainer>
-          <OffenderFilter
-            open={filterOpen}
-            handleClose={() => this.setState({ filterOpen: false })}
-            order={order}
-            setOrder={setOrder}
-            filter={filter}
-            setFilter={setFilter}
-          />
-        </PullToRefresh>
-        <LightBox />
-      </FeedContainer>
+            <ArrowUpOutlined
+              style={{
+                fontSize: "21px",
+                color: "#EF5350",
+                marginBottom: 8,
+              }}
+            />
+            <ArrowDownOutlined
+              style={{
+                fontSize: "21px",
+                color: "#EF5350",
+                marginTop: 8,
+                marginLeft: -8,
+              }}
+            />
+          </div>
+        </div>
+        {/* end search and filter bar */}
+        {loading ? (
+          <FeedContainer to="/app/offenders/add" text="Offender">
+            <PullToRefresh onRefresh={refetch}>
+              <FeedCardContainer>
+                <SkeletonContainer cardHeight="500px">
+                  <OffenderSkeletonCard />
+                </SkeletonContainer>
+              </FeedCardContainer>
+              <OffenderFilter
+                open={filterOpen}
+                handleClose={() => this.setState({ filterOpen: false })}
+                order={order}
+                setOrder={setOrder}
+                filter={filter}
+                setFilter={setFilter}
+                setQueryVariables={setQueryVariables}
+                tags={tags}
+                groups={groups}
+              />
+            </PullToRefresh>
+            <LightBox />
+          </FeedContainer>
+        ) : !!offenders && offenders?.length > 0 ? (
+          <Fragment>
+            <FeedContainer
+              to="/app/offenders/add"
+              loadMore={loadMore}
+              text="Offender"
+              loading={loadingMore}
+              networkError={networkError}
+              retryLoad={retryLoad}
+            >
+              <PullToRefresh onRefresh={refetch}>
+                <FeedCardContainer>
+                  {offenders.map((offender) => (
+                    <Card key={offender.id} height="500px">
+                      <OffenderCard
+                        key={offender.id}
+                        offender={offender}
+                        toggleDeleteOffenderModal={
+                          this.toggleDeleteOffenderModal
+                        }
+                        toggleDecline={this.toggleDeclineOffender}
+                        toggleDeleteExclusionModal={
+                          this.toggleDeleteExclusionModal
+                        }
+                        toggleAddExclusionPopOver={
+                          this.toggleAddExclusionPopOver
+                        }
+                        toggleViewExclusionPopOver={
+                          this.toggleViewExclusionPopOver
+                        }
+                        toggleIncidentPopOver={this.toggleIncidentPopOver}
+                        toggleApprove={this.toggleApprove}
+                        toggleViewOffenderPopOver={
+                          this.toggleViewOffenderPopOver
+                        }
+                        toggleViewLabel={this.toggleViewLabel}
+                        toggleActiveOffender={this.toggleActiveOffender}
+                        toggleInactiveOffender={this.toggleInactiveOffender}
+                        admin={admin}
+                      />
+                    </Card>
+                  ))}
+                </FeedCardContainer>
+              </PullToRefresh>
+            </FeedContainer>
+            <DeleteOffenderModal
+              visible={deleteOffenderModal}
+              close={this.toggleDeleteOffenderModal}
+              handleDelete={handleDelete}
+              disabled={disabled}
+            />
+            <DeclineDialog
+              open={declineOffenderDialog}
+              close={this.toggleDeclineOffender}
+              handleDecline={handleDecline}
+            />
+            <AddExclusionPopOver
+              visible={addExclusionPopOver}
+              close={this.toggleAddExclusionPopOver}
+              offenderId={addExclusionId}
+              filter={filter}
+              admin={admin}
+              search={search}
+              userId={userId}
+              role={role}
+            />
+            <ViewExclusionPopOver
+              visible={viewExclusionPopOver}
+              close={this.toggleViewExclusionPopOver}
+              exclusionId={viewExclusionId}
+              offenderId={viewExclusionOffender}
+              filter={filter}
+              admin={admin}
+              search={search}
+              userId={userId}
+            />
+            <ViewIncidentPopOver
+              visible={viewIncidentPopOver}
+              close={this.toggleIncidentPopOver}
+              incidentId={viewIncidentId}
+            />
+            <UnapprovedCardGroups
+              visible={approve}
+              cancel={this.toggleApprove}
+              toggle={this.toggleApproveGroups}
+              selected={approveGroups}
+              approve={handleApprove}
+              offender={offenders?.find(({ id }) => id === approveId)}
+            />
+            <ViewOffenderPopOver
+              visible={viewOffenderPopOver}
+              close={this.toggleViewOffenderPopOver}
+              offender={viewOffender}
+              admin={admin}
+            />
+            <LabelModal
+              visible={viewLabel}
+              close={this.toggleViewLabel}
+              label={label}
+            />
+            <ActiveOffenderModal
+              open={activeOffenderModal}
+              close={this.toggleActiveOffender}
+              offenderId={activeOffenderId}
+              markOffenderActive={markOffenderActive}
+            />
+            <InactiveOffenderModal
+              open={inactiveOffenderModal}
+              close={this.toggleInactiveOffender}
+              offenderId={inactiveOffenderId}
+              markOffenderActive={markOffenderActive}
+            />
+            <OffenderFilter
+              open={filterOpen}
+              handleClose={() => this.setState({ filterOpen: false })}
+              order={order}
+              setOrder={setOrder}
+              filter={filter}
+              setFilter={setFilter}
+              setQueryVariables={setQueryVariables}
+              tags={tags}
+              groups={groups}
+            />
+            <LightBox />
+          </Fragment>
+        ) : filterPristine ? (
+          <FeedContainer to="/app/offenders/add" text="Offender">
+            <PullToRefresh onRefresh={refetch}>
+              <EmptyContainer>
+                <EmptyState
+                  image={<Offenders height="96px" width="96px" />}
+                  text="There are currently no active offenders."
+                  actions={[
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      component={Link}
+                      to="/app/offenders/add"
+                    >
+                      Add First Offender
+                    </Button>,
+                  ]}
+                />
+              </EmptyContainer>
+              <OffenderFilter
+                open={filterOpen}
+                handleClose={() => this.setState({ filterOpen: false })}
+                order={order}
+                setOrder={setOrder}
+                filter={filter}
+                setFilter={setFilter}
+                setQueryVariables={setQueryVariables}
+                tags={tags}
+                groups={groups}
+              />
+            </PullToRefresh>
+            <LightBox />
+          </FeedContainer>
+        ) : (
+          <FeedContainer to="/app/offenders/add" text="Offender">
+            <PullToRefresh onRefresh={refetch}>
+              <EmptyContainer>
+                <EmptyState
+                  image={<Offenders height="96px" width="96px" />}
+                  text="We could not find any offenders that match."
+                  actions={[
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => this.setState({ filterOpen: true })}
+                    >
+                      Change Filter
+                    </Button>,
+                  ]}
+                />
+              </EmptyContainer>
+              <OffenderFilter
+                open={filterOpen}
+                handleClose={() => this.setState({ filterOpen: false })}
+                order={order}
+                setOrder={setOrder}
+                filter={filter}
+                setFilter={setFilter}
+                setQueryVariables={setQueryVariables}
+                tags={tags}
+                groups={groups}
+              />
+            </PullToRefresh>
+            <LightBox />
+          </FeedContainer>
+        )}
+      </>
     );
   }
 

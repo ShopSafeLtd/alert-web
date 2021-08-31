@@ -28,9 +28,11 @@ const setDefaultOpen = (key: string) => {
 };
 
 const Icon = ({ icon }: { icon: any }) => (
-  <FontAwesomeIcon icon={icon} style={{ fontSize: 22, marginRight: 10 }} />
+  <FontAwesomeIcon
+    icon={icon}
+    style={{ fontSize: 22, marginRight: 10, marginBottom: -3 }}
+  />
 );
-// const Icon = ({ icon }: any) => <></>;
 
 interface SideNavContentProps {
   sideNavTheme: SideNavTheme;

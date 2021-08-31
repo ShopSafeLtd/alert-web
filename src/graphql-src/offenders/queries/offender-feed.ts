@@ -17,6 +17,11 @@ export const OffenderFeed = gql`
     $cursor: String
     $active: Boolean
     $banned: Boolean
+    $groups: [String]
+    $tags: [String]
+    $ethnicity: [String]
+    $sex: [String]
+    $approved: Boolean
   ) {
     offenderFeed(
       schemeId: $schemeId
@@ -27,6 +32,11 @@ export const OffenderFeed = gql`
       after: $cursor
       active: $active
       banned: $banned
+      groups: $groups
+      tags: $tags
+      ethnicity: $ethnicity
+      sex: $sex
+      approved: $approved
     ) {
       id
       age
@@ -83,6 +93,11 @@ export interface OffenderFeedArgs {
   cursor: string;
   active: boolean;
   banned: boolean;
+  groups: string[];
+  tags: string[];
+  ethnicity: string[];
+  sex: string[];
+  approved: boolean;
 }
 
 export interface OffenderFeedRes {
