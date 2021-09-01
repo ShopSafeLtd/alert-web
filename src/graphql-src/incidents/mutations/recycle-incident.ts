@@ -10,7 +10,9 @@ export const RecycleIncident = gql`
 `;
 
 export interface RecycleIncidentArgs {
-  id: string;
+  where: {
+    id: string;
+  };
 }
 
 export interface RecycleIncidentRes {

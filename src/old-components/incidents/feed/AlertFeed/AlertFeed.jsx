@@ -7,6 +7,13 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
+import { Input } from "antd";
+import {
+  SearchOutlined,
+  FilterOutlined,
+  ArrowUpOutlined,
+  ArrowDownOutlined,
+} from "@ant-design/icons";
 
 import {
   FeedContainer,
@@ -96,10 +103,14 @@ class AlertFeed extends React.Component {
       .map(({ id }) => ({ id }));
     this.props.approveIncident({
       variables: {
-        id: approveId,
-        groups: {
-          connect: connect.length > 0 ? connect : undefined,
-          disconnect: disconnect.length > 0 ? disconnect : undefined,
+        where: {
+          id: approveId,
+        },
+        data: {
+          groups: {
+            connect: connect.length > 0 ? connect : undefined,
+            disconnect: disconnect.length > 0 ? disconnect : undefined,
+          },
         },
       },
     });
@@ -127,7 +138,9 @@ class AlertFeed extends React.Component {
     });
     await this.props.deleteIncident({
       variables: {
-        id: this.state.declineId,
+        where: {
+          id: this.state.declineId,
+        },
       },
     });
     this.toggleDeclineDialog();
@@ -136,23 +149,35 @@ class AlertFeed extends React.Component {
     });
   };
 
+  handleOpenFilter = () => {
+    this.setState({ filterOpen: true });
+  };
+
+  handleCloseFilter = () => {
+    this.setState({ filterOpen: false });
+  };
+
   render() {
     const {
       setStatusBar,
-      search,
       loading,
       alerts,
       refetch,
-      order,
-      crimeTypes,
-      setCrimeTypes,
-      setOrder,
       loadMore,
       admin,
       loadingMore,
       networkError,
       retryLoad,
       filterSet,
+      searchInput,
+      handleSearchChange,
+      order,
+      setOrder,
+      filter,
+      setFilter,
+      setQueryVariables,
+      crimeTypes,
+      groups,
     } = this.props;
     const {
       pristine,
@@ -176,14 +201,83 @@ class AlertFeed extends React.Component {
           retryLoad={retryLoad}
         >
           <AlertFilter
+            // state management
             open={filterOpen}
-            handleClose={() => this.setState({ filterOpen: false })}
+            handleClose={this.handleCloseFilter}
             order={order}
-            selectedCrimeTypes={crimeTypes}
-            setCrimeTypes={setCrimeTypes}
             setOrder={setOrder}
+            filter={filter}
+            setFilter={setFilter}
+            setQueryVariables={setQueryVariables}
+            // data
+            crimeTypes={crimeTypes}
+            groups={groups}
           />
-          {loading && pristine ? (
+          {/* search and filter bar */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                width: "35%",
+              }}
+            >
+              <Input
+                placeholder="Search..."
+                size="large"
+                prefix={
+                  <SearchOutlined
+                    style={{
+                      fontSize: "22px",
+                      color: "#EF5350",
+                      marginRight: 10,
+                    }}
+                  />
+                }
+                value={searchInput}
+                onChange={handleSearchChange}
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginLeft: 16,
+              }}
+              onClick={this.handleOpenFilter}
+            >
+              <FilterOutlined
+                style={{
+                  fontSize: "28px",
+                  color: "#EF5350",
+                  marginRight: 5,
+                }}
+              />
+              <ArrowUpOutlined
+                style={{
+                  fontSize: "21px",
+                  color: "#EF5350",
+                  marginBottom: 8,
+                }}
+              />
+              <ArrowDownOutlined
+                style={{
+                  fontSize: "21px",
+                  color: "#EF5350",
+                  marginTop: 8,
+                  marginLeft: -8,
+                }}
+              />
+            </div>
+          </div>
+          {/* end search and filter bar */}
+          {loading ? (
             <PullToRefresh onRefresh={refetch}>
               <FeedCardContainer>
                 <SkeletonContainer cardHeight="500px">
@@ -250,7 +344,7 @@ class AlertFeed extends React.Component {
                 handleDecline={this.handleDecline}
               />
             </PullToRefresh>
-          ) : filterSet > 0 || search !== "" ? (
+          ) : filterSet > 0 || searchInput !== "" ? (
             <PullToRefresh onRefresh={refetch}>
               <EmptyContainer>
                 <EmptyState

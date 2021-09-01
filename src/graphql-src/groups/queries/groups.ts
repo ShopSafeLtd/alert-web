@@ -1,8 +1,9 @@
 import gql from "graphql-tag";
+import { SortOrder } from "graphql-src/types";
 
 export const Groups = gql`
-  query GroupsQuery($where: GroupWhereInput) {
-    groups(where: $where) {
+  query GroupsQuery($where: GroupWhereInput, $orderBy: [GroupOrderByInput!]) {
+    groups(where: $where, orderBy: $orderBy) {
       id
       name
       description
@@ -25,6 +26,17 @@ export interface GroupsArgs {
       { users: { some: { fullName: { contains: string } } } }
     ];
   };
+  orderBy?: {
+    createdAt?: SortOrder;
+    createdById?: SortOrder;
+    description?: SortOrder;
+    id?: SortOrder;
+    name?: SortOrder;
+    schemeId?: SortOrder;
+    updatedAt?: SortOrder;
+    uploaded?: SortOrder;
+    dataType?: SortOrder;
+  }[];
 }
 
 export interface GroupsRes {

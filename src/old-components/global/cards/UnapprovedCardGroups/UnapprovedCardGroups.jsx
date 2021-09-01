@@ -38,8 +38,12 @@ const UnapprovedCardGroups = ({
   // queries
   const { data, loading } = useQuery(Groups, {
     variables: {
-      schemeId: window.localStorage.getItem("currentScheme"),
-      user: schemeAdmin ? undefined : { some: { id: { equals: userId } } },
+      where: {
+        scheme: {
+          id: { equals: window.localStorage.getItem("currentScheme") },
+        },
+        users: schemeAdmin ? undefined : { some: { id: { equals: userId } } },
+      },
     },
     fetchPolicy: "cache-and-network",
     onCompleted: (data) =>

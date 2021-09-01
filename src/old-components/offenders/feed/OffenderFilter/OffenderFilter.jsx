@@ -1,11 +1,11 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
-import isEqual from 'lodash/isEqual';
-import Button from '@material-ui/core/Button';
+import React, { PureComponent } from "react";
+import styled from "styled-components";
+import Typography from "@material-ui/core/Typography";
+import isEqual from "lodash/isEqual";
+import Button from "@material-ui/core/Button";
 
-import { FullWidthButton, BackButton } from '../../../global/actions';
-import { PopOver, PopOverContainer } from '../../../global/layout';
+import { FullWidthButton, BackButton } from "../../../global/actions";
+import { PopOver, PopOverContainer } from "../../../global/layout";
 
 const Options = styled.div`
   border-top: 1px solid #eeeeee;
@@ -29,12 +29,15 @@ const Row = styled.div`
   align-items: center;
   padding: 20px 20px 10px;
 `;
+const Grow = styled.div`
+  flex: 1;
+`;
 
 const OptionItem = ({ children, selected, onClick }) => (
   <Option onClick={onClick}>
     <Svg onClick={onClick} viewBox="0 0 24 24">
       <path
-        fill={selected ? '#1E88E5' : '#E0E0E0'}
+        fill={selected ? "#1E88E5" : "#E0E0E0"}
         d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M11,16.5L18,9.5L16.59,8.09L11,13.67L7.91,10.59L6.5,12L11,16.5Z"
       />
     </Svg>
@@ -45,22 +48,6 @@ const OptionItem = ({ children, selected, onClick }) => (
 );
 
 class AlertFilter extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      order: '',
-      type: ''
-    };
-  }
-
-  componentDidMount() {
-    const { order, filter } = this.props;
-    this.setState({
-      order,
-      filter
-    });
-  }
-
   componentDidUpdate(prevProps) {
     !isEqual(this.props.filter, prevProps.filter) &&
       this.setState({ filter: this.props.filter });
@@ -75,8 +62,17 @@ class AlertFilter extends PureComponent {
   };
 
   render() {
-    const { handleClose, open } = this.props;
-    const { order, filter } = this.state;
+    const {
+      handleClose,
+      open,
+      order,
+      setOrder,
+      filter,
+      setFilter,
+      setQueryVariables,
+      tags,
+      groups,
+    } = this.props;
 
     return (
       <PopOver
@@ -91,15 +87,30 @@ class AlertFilter extends PureComponent {
           </BackButton>,
           <Button
             key={1}
-            onClick={this.submit}
+            onClick={() => {
+              setQueryVariables({
+                order: order ? order : { createdAt: "desc" },
+                groups: filter.groups.length > 0 ? filter.groups : undefined,
+                sex: filter.sex.length > 0 ? filter.sex : undefined,
+                ethnicity:
+                  filter.ethnicity.length > 0 ? filter.ethnicity : undefined,
+                tags: filter.tags.length > 0 ? filter.tags : undefined,
+                approved: filter.approved.approved
+                  ? true
+                  : filter.approved.awaitingApproval
+                  ? false
+                  : undefined,
+              });
+              handleClose();
+            }}
             color="primary"
             variant="contained"
           >
             Apply Filter
-          </Button>
+          </Button>,
         ]}
         mobileAction={[
-          <FullWidthButton key={0} text="Apply Filter" onClick={this.submit} />
+          <FullWidthButton key={0} text="Apply Filter" onClick={this.submit} />,
         ]}
       >
         <PopOverContainer>
@@ -109,14 +120,14 @@ class AlertFilter extends PureComponent {
             </Row>
             <Options>
               <OptionItem
-                selected={order === 'desc'}
-                onClick={() => this.setState({ order: 'desc' })}
+                selected={order?.createdAt === "desc"}
+                onClick={() => setOrder({ createdAt: "desc" })}
               >
                 Latest First
               </OptionItem>
               <OptionItem
-                selected={order === 'asc'}
-                onClick={() => this.setState({ order: 'asc' })}
+                selected={order?.createdAt === "asc"}
+                onClick={() => setOrder({ createdAt: "asc" })}
               >
                 Oldest First
               </OptionItem>
@@ -124,32 +135,214 @@ class AlertFilter extends PureComponent {
           </div>
           <div>
             <Row>
-              <Typography variant="subtitle1">Offender Types</Typography>
+              <Typography variant="subtitle1">Groups</Typography>
+              <Grow />
+              <Button
+                color="primary"
+                size="small"
+                onClick={() =>
+                  setFilter({
+                    ...filter,
+                    groups: [],
+                  })
+                }
+              >
+                Clear All
+              </Button>
+            </Row>
+            <Options>
+              {groups?.map(({ id, name }) => (
+                <OptionItem
+                  key={id}
+                  selected={filter.groups.includes(id)}
+                  onClick={() => {
+                    const isSelected = filter.groups.find((el) => el === id);
+                    setFilter({
+                      ...filter,
+                      groups: isSelected
+                        ? filter.groups.filter((el) => el !== id)
+                        : [...filter.groups, id],
+                    });
+                  }}
+                >
+                  {name}
+                </OptionItem>
+              ))}
+            </Options>
+          </div>
+          <div>
+            <Row>
+              <Typography variant="subtitle1">Sex</Typography>
+              <Grow />
+              <Button
+                color="primary"
+                size="small"
+                onClick={() =>
+                  setFilter({
+                    ...filter,
+                    sex: [],
+                  })
+                }
+              >
+                Clear All
+              </Button>
+            </Row>
+            <Options>
+              {["Unknown", "Male", "Female"].map((el, i) => (
+                <OptionItem
+                  key={i}
+                  selected={filter.sex.includes(el.toUpperCase())}
+                  onClick={() => {
+                    const isSelected = filter.sex.find(
+                      (e) => el.toUpperCase() === e
+                    );
+                    setFilter({
+                      ...filter,
+                      sex: isSelected
+                        ? filter.sex.filter((e) => el.toUpperCase() !== e)
+                        : [...filter.sex, el.toUpperCase()],
+                    });
+                  }}
+                >
+                  {el}
+                </OptionItem>
+              ))}
+            </Options>
+          </div>
+          <div>
+            <Row>
+              <Typography variant="subtitle1">Ethnicity</Typography>
+              <Grow />
+              <Button
+                color="primary"
+                size="small"
+                onClick={() =>
+                  setFilter({
+                    ...filter,
+                    ethnicity: [],
+                  })
+                }
+              >
+                Clear All
+              </Button>
+            </Row>
+            <Options>
+              {[
+                { name: "Unknown", id: "UNKNOWN" },
+                { name: "IC1 - White - North European", id: "IC1" },
+                { name: "IC2 - White - South European", id: "IC2" },
+                { name: "IC3 - Black", id: "IC3" },
+                { name: "IC4 - South Asian", id: "IC4" },
+                { name: "IC5 - Southeast Asian", id: "IC5" },
+                { name: "IC6 - North African of Arab", id: "IC6" },
+              ].map((el, i) => (
+                <OptionItem
+                  key={i}
+                  selected={filter.ethnicity.includes(el.id)}
+                  onClick={() => {
+                    const isSelected = filter.ethnicity.find(
+                      (e) => el.id === e
+                    );
+                    setFilter({
+                      ...filter,
+                      ethnicity: isSelected
+                        ? filter.ethnicity.filter((e) => el.id !== e)
+                        : [...filter.ethnicity, el.id],
+                    });
+                  }}
+                >
+                  {el.name}
+                </OptionItem>
+              ))}
+            </Options>
+          </div>
+          <div>
+            <Row>
+              <Typography variant="subtitle1">Tags</Typography>
+              <Grow />
+              <Button
+                color="primary"
+                size="small"
+                onClick={() =>
+                  setFilter({
+                    ...filter,
+                    tags: [],
+                  })
+                }
+              >
+                Clear All
+              </Button>
+            </Row>
+            <Options>
+              {tags?.map(({ id, name }) => (
+                <OptionItem
+                  key={id}
+                  selected={filter.tags.includes(id)}
+                  onClick={() => {
+                    const isSelected = filter.tags.find((el) => el === id);
+                    setFilter({
+                      ...filter,
+                      tags: isSelected
+                        ? filter.tags.filter((el) => el !== id)
+                        : [...filter.tags, id],
+                    });
+                  }}
+                >
+                  {name}
+                </OptionItem>
+              ))}
+            </Options>
+          </div>
+          <div>
+            <Row>
+              <Typography variant="subtitle1">Approved</Typography>
+              <Grow />
+              <Button
+                color="primary"
+                size="small"
+                onClick={() =>
+                  setFilter({
+                    ...filter,
+                    approved: {
+                      approved: undefined,
+                      awaitingApproval: undefined,
+                    },
+                  })
+                }
+              >
+                Clear All
+              </Button>
             </Row>
             <Options>
               <OptionItem
-                selected={filter === 'ALL'}
-                onClick={() => this.setState({ filter: 'ALL' })}
+                selected={filter.approved.approved}
+                onClick={() =>
+                  setFilter({
+                    ...filter,
+                    approved: {
+                      ...filter.approved,
+                      approved: filter.approved.approved ? undefined : true,
+                    },
+                  })
+                }
               >
-                All Offenders
+                Approved
               </OptionItem>
               <OptionItem
-                selected={filter === 'ACTIVE'}
-                onClick={() => this.setState({ filter: 'ACTIVE' })}
+                selected={filter.approved.awaitingApproval}
+                onClick={() =>
+                  setFilter({
+                    ...filter,
+                    approved: {
+                      ...filter.approved,
+                      awaitingApproval: filter.approved.awaitingApproval
+                        ? undefined
+                        : true,
+                    },
+                  })
+                }
               >
-                Active Offenders
-              </OptionItem>
-              <OptionItem
-                selected={filter === 'BANNED'}
-                onClick={() => this.setState({ filter: 'BANNED' })}
-              >
-                Banned Offenders
-              </OptionItem>
-              <OptionItem
-                selected={filter === 'UNIDENTIFIED'}
-                onClick={() => this.setState({ filter: 'UNIDENTIFIED' })}
-              >
-                Unidentified Offenders
+                Awaiting Approval
               </OptionItem>
             </Options>
           </div>

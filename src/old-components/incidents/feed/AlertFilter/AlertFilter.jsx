@@ -1,11 +1,11 @@
-import React, { PureComponent } from 'react';
-import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
-import isEqual from 'lodash/isEqual';
-import Button from '@material-ui/core/Button';
+import React, { PureComponent } from "react";
+import styled from "styled-components";
+import Typography from "@material-ui/core/Typography";
+import isEqual from "lodash/isEqual";
+import Button from "@material-ui/core/Button";
 
-import { FullWidthButton, BackButton } from '../../../global/actions';
-import { PopOver, PopOverContainer } from '../../../global/layout';
+import { FullWidthButton, BackButton } from "../../../global/actions";
+import { PopOver, PopOverContainer } from "../../../global/layout";
 
 const Options = styled.div`
   border-top: 1px solid #eeeeee;
@@ -37,7 +37,7 @@ const OptionItem = ({ children, selected, onClick }) => (
   <Option onClick={onClick}>
     <Svg onClick={onClick} viewBox="0 0 24 24">
       <path
-        fill={selected ? '#1E88E5' : '#E0E0E0'}
+        fill={selected ? "#1E88E5" : "#E0E0E0"}
         d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M11,16.5L18,9.5L16.59,8.09L11,13.67L7.91,10.59L6.5,12L11,16.5Z"
       />
     </Svg>
@@ -48,46 +48,18 @@ const OptionItem = ({ children, selected, onClick }) => (
 );
 
 class AlertFilter extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      order: '',
-      selectedCrimeTypes: []
-    };
-  }
-
-  componentDidMount() {
-    this.setState({
-      order: this.props.order
-    });
-  }
-
-  componentDidUpdate(prevProps) {
-    !isEqual(this.props.order, prevProps.order) &&
-      this.setState({ order: this.props.order });
-  }
-
-  submit = () => {
-    this.props.setOrder(this.state.order);
-    this.props.setCrimeTypes(this.state.selectedCrimeTypes);
-    this.props.handleClose();
-  };
-
-  toggleCrimeTypes = crimeType => {
-    this.state.selectedCrimeTypes.includes(crimeType)
-      ? this.setState({
-          selectedCrimeTypes: this.state.selectedCrimeTypes.filter(
-            id => id !== crimeType
-          )
-        })
-      : this.setState({
-          selectedCrimeTypes: [...this.state.selectedCrimeTypes, crimeType]
-        });
-  };
-
   render() {
-    const { handleClose, open } = this.props;
-    const { selectedCrimeTypes, order } = this.state;
+    const {
+      handleClose,
+      open,
+      order,
+      setOrder,
+      filter,
+      setFilter,
+      setQueryVariables,
+      crimeTypes,
+      groups,
+    } = this.props;
 
     return (
       <PopOver
@@ -102,15 +74,28 @@ class AlertFilter extends PureComponent {
           </BackButton>,
           <Button
             key={1}
-            onClick={this.submit}
+            onClick={() => {
+              setQueryVariables({
+                order: order ? order : { createdAt: "desc" },
+                crimeTypes:
+                  filter.crimeTypes.length > 0 ? filter.crimeTypes : undefined,
+                groups: filter.groups.length > 0 ? filter.groups : undefined,
+                approved: filter.approved.approved
+                  ? true
+                  : filter.approved.awaitingApproval
+                  ? false
+                  : undefined,
+              });
+              handleClose();
+            }}
             color="primary"
             variant="contained"
           >
             Apply Filter
-          </Button>
+          </Button>,
         ]}
         mobileAction={[
-          <FullWidthButton key={0} text="Apply Filter" onClick={this.submit} />
+          <FullWidthButton key={0} text="Apply Filter" onClick={this.submit} />,
         ]}
       >
         <PopOverContainer>
@@ -120,17 +105,54 @@ class AlertFilter extends PureComponent {
             </Row>
             <Options>
               <OptionItem
-                selected={order === 'desc'}
-                onClick={() => this.setState({ order: 'desc' })}
+                selected={order?.createdAt === "desc"}
+                onClick={() => setOrder({ createdAt: "desc" })}
               >
                 Latest First
               </OptionItem>
               <OptionItem
-                selected={order === 'asc'}
-                onClick={() => this.setState({ order: 'asc' })}
+                selected={order?.createdAt === "asc"}
+                onClick={() => setOrder({ createdAt: "asc" })}
               >
                 Oldest First
               </OptionItem>
+            </Options>
+          </div>
+          <div>
+            <Row>
+              <Typography variant="subtitle1">Groups</Typography>
+              <Grow />
+              <Button
+                color="primary"
+                size="small"
+                onClick={() =>
+                  setFilter({
+                    ...filter,
+                    groups: [],
+                  })
+                }
+              >
+                Clear All
+              </Button>
+            </Row>
+            <Options>
+              {groups?.map(({ id, name }) => (
+                <OptionItem
+                  key={id}
+                  selected={filter.groups.includes(id)}
+                  onClick={() => {
+                    const isSelected = filter.groups.find((el) => el === id);
+                    setFilter({
+                      ...filter,
+                      groups: isSelected
+                        ? filter.groups.filter((el) => el !== id)
+                        : [...filter.groups, id],
+                    });
+                  }}
+                >
+                  {name}
+                </OptionItem>
+              ))}
             </Options>
           </div>
           <div>
@@ -140,21 +162,89 @@ class AlertFilter extends PureComponent {
               <Button
                 color="primary"
                 size="small"
-                onClick={() => this.setState({ selectedCrimeTypes: [] })}
+                onClick={() =>
+                  setFilter({
+                    ...filter,
+                    crimeTypes: [],
+                  })
+                }
               >
                 Clear All
               </Button>
             </Row>
             <Options>
-              {[].map(({ id, name }) => (
+              {crimeTypes?.map(({ id, name }) => (
                 <OptionItem
                   key={id}
-                  selected={selectedCrimeTypes.includes(id)}
-                  onClick={() => this.toggleCrimeTypes(id)}
+                  selected={filter.crimeTypes.includes(id)}
+                  onClick={() => {
+                    const isSelected = filter.crimeTypes.find(
+                      (el) => el === id
+                    );
+                    setFilter({
+                      ...filter,
+                      crimeTypes: isSelected
+                        ? filter.crimeTypes.filter((el) => el !== id)
+                        : [...filter.crimeTypes, id],
+                    });
+                  }}
                 >
                   {name}
                 </OptionItem>
               ))}
+            </Options>
+          </div>
+          <div>
+            <Row>
+              <Typography variant="subtitle1">Approved</Typography>
+              <Grow />
+              <Button
+                color="primary"
+                size="small"
+                onClick={() =>
+                  setFilter({
+                    ...filter,
+                    approved: {
+                      approved: undefined,
+                      awaitingApproval: undefined,
+                    },
+                  })
+                }
+              >
+                Clear All
+              </Button>
+            </Row>
+            <Options>
+              <OptionItem
+                selected={filter.approved.approved}
+                onClick={() =>
+                  setFilter({
+                    ...filter,
+                    approved: {
+                      ...filter.approved,
+                      approved: filter.approved.approved ? undefined : true,
+                    },
+                  })
+                }
+              >
+                Approved
+              </OptionItem>
+              <OptionItem
+                selected={filter.approved.awaitingApproval}
+                onClick={() =>
+                  setFilter({
+                    ...filter,
+                    approved: {
+                      ...filter.approved,
+                      awaitingApproval: filter.approved.awaitingApproval
+                        ? undefined
+                        : true,
+                    },
+                  })
+                }
+              >
+                Awaiting Approval
+              </OptionItem>
             </Options>
           </div>
         </PopOverContainer>

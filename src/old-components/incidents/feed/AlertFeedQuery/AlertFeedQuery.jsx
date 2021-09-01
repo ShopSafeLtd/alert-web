@@ -14,6 +14,8 @@ import {
 } from "graphql-src/offenders/mutations";
 import Offline from "../../../global/Offline/Offline";
 import { useStoreActions, useStoreState } from "../../../../state";
+import { Tags } from "graphql-src/tags/queries";
+import { Groups } from "graphql-src/groups/queries";
 
 const AlertFeedQuery = () => {
   const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
@@ -34,12 +36,26 @@ const AlertFeedQuery = () => {
   const fetchIncidents = useStoreState((state) => state.theme.fetchIncidents);
   const admin = role === "USER" ? true : false;
 
-  const [order, setOrder] = useState("desc");
   const [allLoaded, setAllLoaded] = useState(false);
   const [fetching, setFetching] = useState(false);
   const [networkError, setNetworkError] = useState("");
-  const [crimeTypes, setCrimeTypes] = useState([]);
-  const [filterSet, setFilterSet] = useState(false);
+
+  const [searchInput, setSearchInput] = useState("");
+  const [order, setOrder] = useState();
+  const [filter, setFilter] = useState({
+    groups: [],
+    crimeTypes: [],
+    approved: {
+      approved: undefined,
+      awaitingApproval: undefined,
+    },
+  });
+  const [queryVariables, setQueryVariables] = useState({
+    order: { createdAt: "desc" },
+    crimeTypes: undefined,
+    groups: undefined,
+    approved: undefined,
+  });
 
   useEffect(() => {
     setBottomNav(true);
@@ -60,17 +76,6 @@ const AlertFeedQuery = () => {
     // eslint-disable-next-line
   }, [search]);
 
-  const changeOrder = (order) => {
-    setOrder(order);
-    setAllLoaded(false);
-  };
-
-  const changeCrimeTypes = (crimeTypes) => {
-    setCrimeTypes(crimeTypes);
-    setFilterSet(true);
-    setAllLoaded(false);
-  };
-
   // Set queries based on users role
   let querySize = 10;
   if (window.innerWidth > 1239 && window.innerWidth < 1800) {
@@ -82,16 +87,51 @@ const AlertFeedQuery = () => {
   const variables = {
     userId,
     schemeId: scheme,
-    search: "",
-    order: { createdAt: order },
+    search: searchInput,
     first: querySize,
-    crimeTypes: crimeTypes.length > 0 ? crimeTypes : undefined,
+    ...queryVariables,
   };
 
   const { data, loading, fetchMore, refetch, error } = useQuery(IncidentFeed, {
     variables,
     fetchPolicy: "cache-and-network",
   });
+  const { data: crimeTypes } = useQuery(Tags, {
+    variables: {
+      where: {
+        scheme: {
+          id: {
+            equals: scheme,
+          },
+        },
+        dataType: {
+          equals: "INCIDENT",
+        },
+      },
+      orderBy: [
+        {
+          name: "asc",
+        },
+      ],
+    },
+  });
+  const { data: groups } = useQuery(Groups, {
+    variables: {
+      where: {
+        scheme: {
+          id: {
+            equals: scheme,
+          },
+        },
+      },
+      orderBy: [
+        {
+          name: "asc",
+        },
+      ],
+    },
+  });
+
   const [addIncidentToGroup] = useMutation(AddIncidentToGroup);
   const [approveIncident] = useMutation(ApproveIncident);
   const [addOffenderToGroup] = useMutation(AddOffenderToGroup);
@@ -223,14 +263,29 @@ const AlertFeedQuery = () => {
     loadMore();
   };
 
+  const handleSearchChange = (e) => {
+    setSearchInput(e.target.value);
+  };
+
   return error !== undefined && error.networkError !== undefined ? (
     <Offline type="incidents" />
   ) : (
     <AlertFeed
+      // search and filter
+      searchInput={searchInput}
+      handleSearchChange={handleSearchChange}
+      order={order}
+      setOrder={setOrder}
+      filter={filter}
+      setFilter={setFilter}
+      setQueryVariables={setQueryVariables}
+      // crime types and groups
+      crimeTypes={crimeTypes?.tags}
+      groups={groups?.groups}
+      //
       loading={loading}
       alerts={!!data ? data.incidentFeed : []}
       refetch={refetch}
-      setOrder={changeOrder}
       search={search}
       loadMore={loadMore}
       addIncidentToGroup={addIncidentToGroup}
@@ -246,10 +301,6 @@ const AlertFeedQuery = () => {
       retryLoad={retryLoad}
       fetchIncidents={fetchIncidents}
       toggleFetchIncidents={toggleFetchIncidents}
-      order={order}
-      crimeTypes={crimeTypes}
-      setCrimeTypes={changeCrimeTypes}
-      filterSet={filterSet}
     />
   );
 };
