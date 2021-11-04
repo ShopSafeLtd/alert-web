@@ -55,7 +55,9 @@ const Container = styled.div`
 
 class AlertCardDescription extends React.Component {
   render() {
-    const { subject, date, time, crimeTypes, description, user } = this.props;
+    const { subject, date, time, crimeTypes, description, user, groups } =
+      this.props;
+    console.log(groups);
     return (
       <AlertDescription>
         <Container>
@@ -68,6 +70,15 @@ class AlertCardDescription extends React.Component {
           <Date component="span" variant="body2">
             <Moment format="DD/MM/YYYY">{date}</Moment>
           </Date>
+          <div
+            style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}
+          >
+            {groups.map((el) => (
+              <>
+                <span style={{ marginRight: '9px' }}>{`${el.name}`}</span>
+              </>
+            ))}
+          </div>
           <CrimeTypes component="span" variant="body2">
             {crimeTypes.map(({ name, id }) => {
               return (

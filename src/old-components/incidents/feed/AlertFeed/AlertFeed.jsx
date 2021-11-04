@@ -1,36 +1,36 @@
-import React, { Fragment } from "react";
-import styled from "styled-components";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Button from "@material-ui/core/Button";
-import { Link } from "react-router-dom";
-import { Input } from "antd";
+import React, { Fragment } from 'react';
+import styled from 'styled-components';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
+import { Input } from 'antd';
 import {
   SearchOutlined,
   FilterOutlined,
   ArrowUpOutlined,
   ArrowDownOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 
 import {
   FeedContainer,
   FeedCardContainer,
   SkeletonContainer,
-} from "../../../global/feed";
-import { PullToRefresh } from "../../../global/pullToRefresh";
-import { Card } from "../../../global/cards";
-import { EmptyState } from "../../../global/emptyStates";
-import Incidents from "images/Incidents";
-import AlertCard from "../AlertCard/AlertCard";
-import SkeletonAlertCard from "../SkeletonAlertCard/SkeletonAlertCard";
-import OffenderPopOver from "../OffenderPopOver/OffenderPopOver";
-import UnapprovedCardGroups from "../../../global/cards/UnapprovedCardGroups/UnapprovedCardGroups";
-import DeclineDialog from "../DeclineDialog/DeclineDialog";
-import AlertFilter from "../AlertFilter/AlertFilter";
-import LightBox from "old-components/global/LightBox/LightBox";
+} from '../../../global/feed';
+import { PullToRefresh } from '../../../global/pullToRefresh';
+import { Card } from '../../../global/cards';
+import { EmptyState } from '../../../global/emptyStates';
+import Incidents from 'images/Incidents';
+import AlertCard from '../AlertCard/AlertCard';
+import SkeletonAlertCard from '../SkeletonAlertCard/SkeletonAlertCard';
+import OffenderPopOver from '../OffenderPopOver/OffenderPopOver';
+import UnapprovedCardGroups from '../../../global/cards/UnapprovedCardGroups/UnapprovedCardGroups';
+import DeclineDialog from '../DeclineDialog/DeclineDialog';
+import AlertFilter from '../AlertFilter/AlertFilter';
+import LightBox from 'old-components/global/LightBox/LightBox';
 
 const EmptyContainer = styled.div`
   height: calc(100vh - 112px);
@@ -44,14 +44,14 @@ class AlertFeed extends React.Component {
     this.state = {
       pristine: true,
       deleteModal: false,
-      deleteId: "",
+      deleteId: '',
       disable: false,
       offenderPopOver: false,
       currentOffender: {
         images: [],
       },
       approve: false,
-      approveId: "",
+      approveId: '',
       approveOffenders: [],
       declineDialog: false,
       filterOpen: false,
@@ -69,13 +69,13 @@ class AlertFeed extends React.Component {
   toggleDeleteModal = (id) =>
     this.setState({
       deleteModal: !this.state.deleteModal,
-      deleteId: id || "",
+      deleteId: id || '',
     });
 
   toggleDeclineDialog = (id) =>
     this.setState({
       declineDialog: !this.state.declineDialog,
-      declineId: id || "",
+      declineId: id || '',
     });
 
   toggleOffenderPopOver = (offender) =>
@@ -87,7 +87,7 @@ class AlertFeed extends React.Component {
   toggleApprove = (id, offenders) =>
     this.setState({
       approve: !this.state.approve,
-      approveId: id || "",
+      approveId: id || '',
       approveGroups: [],
       approveOffenders: offenders || [],
     });
@@ -126,7 +126,7 @@ class AlertFeed extends React.Component {
       },
       optimisicResponse: {
         id: this.state.deleteId,
-        __typename: "Alert",
+        __typename: 'Alert',
       },
     });
     this.toggleDeleteModal();
@@ -180,7 +180,6 @@ class AlertFeed extends React.Component {
       groups,
     } = this.props;
     const {
-      pristine,
       deleteModal,
       offenderPopOver,
       currentOffender,
@@ -216,16 +215,16 @@ class AlertFeed extends React.Component {
           {/* search and filter bar */}
           <div
             style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
             }}
           >
             <div
               style={{
-                display: "flex",
-                alignItems: "center",
-                width: "35%",
+                display: 'flex',
+                alignItems: 'center',
+                width: '35%',
               }}
             >
               <Input
@@ -234,8 +233,8 @@ class AlertFeed extends React.Component {
                 prefix={
                   <SearchOutlined
                     style={{
-                      fontSize: "22px",
-                      color: "#EF5350",
+                      fontSize: '22px',
+                      color: '#EF5350',
                       marginRight: 10,
                     }}
                   />
@@ -246,30 +245,30 @@ class AlertFeed extends React.Component {
             </div>
             <div
               style={{
-                display: "flex",
-                alignItems: "center",
+                display: 'flex',
+                alignItems: 'center',
                 marginLeft: 16,
               }}
               onClick={this.handleOpenFilter}
             >
               <FilterOutlined
                 style={{
-                  fontSize: "28px",
-                  color: "#EF5350",
+                  fontSize: '28px',
+                  color: '#EF5350',
                   marginRight: 5,
                 }}
               />
               <ArrowUpOutlined
                 style={{
-                  fontSize: "21px",
-                  color: "#EF5350",
+                  fontSize: '21px',
+                  color: '#EF5350',
                   marginBottom: 8,
                 }}
               />
               <ArrowDownOutlined
                 style={{
-                  fontSize: "21px",
-                  color: "#EF5350",
+                  fontSize: '21px',
+                  color: '#EF5350',
                   marginTop: 8,
                   marginLeft: -8,
                 }}
@@ -313,7 +312,7 @@ class AlertFeed extends React.Component {
                 aria-describedby="alert-dialog-description"
               >
                 <DialogTitle id="alert-dialog-title">
-                  {"Are you sure?"}
+                  {'Are you sure?'}
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
@@ -344,7 +343,7 @@ class AlertFeed extends React.Component {
                 handleDecline={this.handleDecline}
               />
             </PullToRefresh>
-          ) : filterSet > 0 || searchInput !== "" ? (
+          ) : filterSet > 0 || searchInput !== '' ? (
             <PullToRefresh onRefresh={refetch}>
               <EmptyContainer>
                 <EmptyState

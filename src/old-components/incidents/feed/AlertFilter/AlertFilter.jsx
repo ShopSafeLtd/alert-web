@@ -1,11 +1,10 @@
-import React, { PureComponent } from "react";
-import styled from "styled-components";
-import Typography from "@material-ui/core/Typography";
-import isEqual from "lodash/isEqual";
-import Button from "@material-ui/core/Button";
+import React, { PureComponent } from 'react';
+import styled from 'styled-components';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
-import { FullWidthButton, BackButton } from "../../../global/actions";
-import { PopOver, PopOverContainer } from "../../../global/layout";
+import { FullWidthButton, BackButton } from '../../../global/actions';
+import { PopOver, PopOverContainer } from '../../../global/layout';
 
 const Options = styled.div`
   border-top: 1px solid #eeeeee;
@@ -37,7 +36,7 @@ const OptionItem = ({ children, selected, onClick }) => (
   <Option onClick={onClick}>
     <Svg onClick={onClick} viewBox="0 0 24 24">
       <path
-        fill={selected ? "#1E88E5" : "#E0E0E0"}
+        fill={selected ? '#1E88E5' : '#E0E0E0'}
         d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M11,16.5L18,9.5L16.59,8.09L11,13.67L7.91,10.59L6.5,12L11,16.5Z"
       />
     </Svg>
@@ -76,7 +75,7 @@ class AlertFilter extends PureComponent {
             key={1}
             onClick={() => {
               setQueryVariables({
-                order: order ? order : { createdAt: "desc" },
+                order: order ? order : { createdAt: 'desc' },
                 crimeTypes:
                   filter.crimeTypes.length > 0 ? filter.crimeTypes : undefined,
                 groups: filter.groups.length > 0 ? filter.groups : undefined,
@@ -105,14 +104,14 @@ class AlertFilter extends PureComponent {
             </Row>
             <Options>
               <OptionItem
-                selected={order?.createdAt === "desc"}
-                onClick={() => setOrder({ createdAt: "desc" })}
+                selected={order?.createdAt === 'desc'}
+                onClick={() => setOrder({ createdAt: 'desc' })}
               >
                 Latest First
               </OptionItem>
               <OptionItem
-                selected={order?.createdAt === "asc"}
-                onClick={() => setOrder({ createdAt: "asc" })}
+                selected={order?.createdAt === 'asc'}
+                onClick={() => setOrder({ createdAt: 'asc' })}
               >
                 Oldest First
               </OptionItem>

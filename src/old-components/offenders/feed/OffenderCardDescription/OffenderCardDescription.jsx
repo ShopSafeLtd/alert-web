@@ -1,15 +1,15 @@
-import React from "react";
-import styled from "styled-components";
-import Moment from "react-moment";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
+import React from 'react';
+import styled from 'styled-components';
+import Moment from 'react-moment';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 import {
   ageValues,
   buildValues,
   genderValues,
   raceValues,
-} from "graphql-src/offenders/enums";
+} from 'graphql-src/offenders/enums';
 
 const Description = styled.div`
   height: 187px;
@@ -71,6 +71,7 @@ class OffenderCardDescription extends React.Component {
       viewAll,
       offenderWarnings,
       toggleViewLabel,
+      groups,
     } = this.props;
 
     const buildValue = buildValues.find((obj) => obj.value === build);
@@ -81,6 +82,20 @@ class OffenderCardDescription extends React.Component {
     return (
       <Description>
         <Title variant="h6">{name}</Title>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            marginBottom: '8px',
+          }}
+        >
+          {groups.map((el) => (
+            <>
+              <span style={{ marginRight: '9px' }}>{`${el.name}`}</span>
+            </>
+          ))}
+        </div>
         <Grow>
           {offenderWarnings?.length > 0 ? (
             <div>

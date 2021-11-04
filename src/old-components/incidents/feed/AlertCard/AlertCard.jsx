@@ -1,23 +1,23 @@
-import React, { Component } from "react";
-import styled from "styled-components";
-import isEqual from "lodash/isEqual";
-import { Link } from "react-router-dom";
-import MenuItem from "@material-ui/core/MenuItem";
-import SwipeableViews from "react-swipeable-views";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
+import React, { Component } from 'react';
+import styled from 'styled-components';
+import isEqual from 'lodash/isEqual';
+import { Link } from 'react-router-dom';
+import MenuItem from '@material-ui/core/MenuItem';
+import SwipeableViews from 'react-swipeable-views';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
 import {
   UnapprovedCard,
   CardMenu,
   UploadingOverlay,
-} from "../../../global/cards";
-import AlertCardImages from "../AlertCardImages/AlertCardImages";
-import AlertCardDescription from "../AlertCardDescription/AlertCardDescription";
-import AlertCardLocation from "../AlertCardLocation/AlertCardLocation";
-import AlertCardOffenders from "../AlertCardOffenders/AlertCardOffenders";
-import { isAuthorised } from "utils";
-import { useStoreState } from "../../../../state";
+} from '../../../global/cards';
+import AlertCardImages from '../AlertCardImages/AlertCardImages';
+import AlertCardDescription from '../AlertCardDescription/AlertCardDescription';
+import AlertCardLocation from '../AlertCardLocation/AlertCardLocation';
+import AlertCardOffenders from '../AlertCardOffenders/AlertCardOffenders';
+import { isAuthorised } from 'utils';
+import { useStoreState } from '../../../../state';
 
 const StyledTab = styled(Tab)`
   min-width: 0px !important;
@@ -71,6 +71,7 @@ class AlertCard extends Component {
         location,
         offenders,
         uploaded,
+        groups,
       },
       userRole,
       toggleDeleteModal,
@@ -81,8 +82,8 @@ class AlertCard extends Component {
     } = this.props;
     const { activeTab } = this.state;
     let menuActions = [];
-
-    if (isAuthorised(userRole, ["SCHEME_ADMIN", "CONTENT_ADMIN"])) {
+    console.log(groups);
+    if (isAuthorised(userRole, ['SCHEME_ADMIN', 'CONTENT_ADMIN'])) {
       menuActions.push(
         <MenuItem key="0" component={Link} to={`/app/incidents/edit/${id}`}>
           <Svg viewBox="0 0 24 24">
@@ -144,6 +145,7 @@ class AlertCard extends Component {
               crimeTypes={crimeTypes}
               description={description}
               user={createdBy}
+              groups={groups}
             />
           </div>
           <div>

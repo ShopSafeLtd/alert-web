@@ -1,38 +1,38 @@
-import React, { Fragment } from "react";
-import styled from "styled-components";
-import Button from "@material-ui/core/Button";
-import { Link } from "react-router-dom";
-import { Input } from "antd";
+import React, { Fragment } from 'react';
+import styled from 'styled-components';
+import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
+import { Input } from 'antd';
 import {
   SearchOutlined,
   FilterOutlined,
   ArrowUpOutlined,
   ArrowDownOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 
-import OffenderCard from "../OffenderCard/OffenderCard";
+import OffenderCard from '../OffenderCard/OffenderCard';
 import {
   FeedContainer,
   FeedCardContainer,
   SkeletonContainer,
-} from "../../../global/feed";
-import { PullToRefresh } from "../../../global/pullToRefresh";
-import { Card } from "../../../global/cards";
-import { EmptyState } from "../../../global/emptyStates";
-import DeleteOffenderModal from "../DeleteOffenderModal/DeleteOffenderModal";
-import AddExclusionPopOver from "../../global/AddExclusionPopOver/AddExclusionPopOver";
-import ViewExclusionPopOver from "../../global/ViewExclusionPopOver/ViewExclusionPopOver";
-import ViewIncidentPopOver from "../ViewIncidentPopOver/ViewIncidentPopOver";
-import UnapprovedCardGroups from "../../../global/cards/UnapprovedCardGroups/UnapprovedCardGroups";
-import OffenderFilter from "../OffenderFilter/OffenderFilter";
-import ViewOffenderPopOver from "../ViewOffenderPopOver/ViewOffenderPopOver";
-import LabelModal from "../LabelModal/LabelModal";
-import ActiveOffenderModal from "../ActiveOffenderModal/ActiveOffenderModal";
-import InactiveOffenderModal from "../InactiveOffenderModal/InactiveOffenderModal";
-import OffenderSkeletonCard from "../OffenderSkeletonCard/OffenderSkeletonCard";
-import DeclineDialog from "../DeclineDialog/DeclineDialog";
-import Offenders from "../../../../images/Offenders";
-import LightBox from "old-components/global/LightBox/LightBox";
+} from '../../../global/feed';
+import { PullToRefresh } from '../../../global/pullToRefresh';
+import { Card } from '../../../global/cards';
+import { EmptyState } from '../../../global/emptyStates';
+import DeleteOffenderModal from '../DeleteOffenderModal/DeleteOffenderModal';
+import AddExclusionPopOver from '../../global/AddExclusionPopOver/AddExclusionPopOver';
+import ViewExclusionPopOver from '../../global/ViewExclusionPopOver/ViewExclusionPopOver';
+import ViewIncidentPopOver from '../ViewIncidentPopOver/ViewIncidentPopOver';
+import UnapprovedCardGroups from '../../../global/cards/UnapprovedCardGroups/UnapprovedCardGroups';
+import OffenderFilter from '../OffenderFilter/OffenderFilter';
+import ViewOffenderPopOver from '../ViewOffenderPopOver/ViewOffenderPopOver';
+import LabelModal from '../LabelModal/LabelModal';
+import ActiveOffenderModal from '../ActiveOffenderModal/ActiveOffenderModal';
+import InactiveOffenderModal from '../InactiveOffenderModal/InactiveOffenderModal';
+import OffenderSkeletonCard from '../OffenderSkeletonCard/OffenderSkeletonCard';
+import DeclineDialog from '../DeclineDialog/DeclineDialog';
+import Offenders from '../../../../images/Offenders';
+import LightBox from 'old-components/global/LightBox/LightBox';
 
 const EmptyContainer = styled.div`
   height: calc(100vh - 167px);
@@ -45,40 +45,40 @@ class OffenderFeed extends React.Component {
     super(props);
     this.state = {
       deleteOffenderModal: false,
-      deleteOffenderId: "",
+      deleteOffenderId: '',
       declineOffenderDialog: false,
-      declineOffenderId: "",
+      declineOffenderId: '',
       disabled: false,
       addExclusionPopOver: false,
-      addExclusionId: "",
+      addExclusionId: '',
       viewExclusionPopOver: false,
-      viewExclusionId: "",
-      viewExclusionOffender: "",
+      viewExclusionId: '',
+      viewExclusionOffender: '',
       viewIncidentPopOver: false,
-      viewIncidentId: "",
+      viewIncidentId: '',
       approve: false,
-      approveId: "",
+      approveId: '',
       approveGroups: [],
       pristine: true,
       viewOffenderPopOver: false,
       viewOffender: {
         images: [],
-        age: "UNKNOWN",
-        build: "UNKNOWN",
-        race: "UNKNOWN",
-        gender: "UNKNOWN",
+        age: 'UNKNOWN',
+        build: 'UNKNOWN',
+        race: 'UNKNOWN',
+        gender: 'UNKNOWN',
         exclusions: [],
         incidents: [],
       },
       viewLabel: false,
       label: {
-        name: "",
-        helpText: "",
+        name: '',
+        helpText: '',
       },
       activeOffenderModal: false,
-      activeOffenderId: "",
+      activeOffenderId: '',
       inactiveOffenderModal: false,
-      inactiveOffenderId: "",
+      inactiveOffenderId: '',
       filterOpen: false,
     };
   }
@@ -101,26 +101,26 @@ class OffenderFeed extends React.Component {
   toggleDeleteOffenderModal = (id) =>
     this.setState({
       deleteOffenderModal: !this.state.deleteOffenderModal,
-      deleteOffenderId: id || "",
+      deleteOffenderId: id || '',
     });
 
   toggleDeclineOffender = (id) =>
     this.setState({
       declineOffenderDialog: !this.state.declineOffenderDialog,
-      declineOffenderId: id || "",
+      declineOffenderId: id || '',
     });
 
   toggleAddExclusionPopOver = (id) =>
     this.setState({
       addExclusionPopOver: !this.state.addExclusionPopOver,
-      addExclusionId: id || "",
+      addExclusionId: id || '',
     });
 
   toggleViewExclusionPopOver = (exclusion, offender) =>
     this.setState({
       viewExclusionPopOver: !this.state.viewExclusionPopOver,
-      viewExclusionId: exclusion || "",
-      viewExclusionOffender: offender || "",
+      viewExclusionId: exclusion || '',
+      viewExclusionOffender: offender || '',
     });
 
   toggleIncidentPopOver = (incident) => {
@@ -132,7 +132,7 @@ class OffenderFeed extends React.Component {
     } else {
       this.setState({
         viewIncidentPopOver: !this.state.viewIncidentPopOver,
-        viewIncidentId: "",
+        viewIncidentId: '',
       });
     }
   };
@@ -140,7 +140,7 @@ class OffenderFeed extends React.Component {
   toggleApprove = (id, offenders) =>
     this.setState({
       approve: !this.state.approve,
-      approveId: id || "",
+      approveId: id || '',
       approveGroups: [],
       approveOffenders: offenders,
     });
@@ -169,10 +169,10 @@ class OffenderFeed extends React.Component {
           ? offender
           : {
               images: [],
-              age: "UNKNOWN",
-              build: "UNKNOWN",
-              race: "UNKNOWN",
-              gender: "UNKNOWN",
+              age: 'UNKNOWN',
+              build: 'UNKNOWN',
+              race: 'UNKNOWN',
+              gender: 'UNKNOWN',
               exclusions: [],
               incidents: [],
             },
@@ -185,22 +185,22 @@ class OffenderFeed extends React.Component {
         label !== undefined
           ? label
           : {
-              name: "",
-              helpText: "",
+              name: '',
+              helpText: '',
             },
     });
 
   toggleActiveOffender = (offender) => {
     this.setState({
       activeOffenderModal: !this.state.activeOffenderModal,
-      activeOffenderId: offender !== undefined ? offender : "",
+      activeOffenderId: offender !== undefined ? offender : '',
     });
   };
 
   toggleInactiveOffender = (offender) => {
     this.setState({
       inactiveOffenderModal: !this.state.inactiveOffenderModal,
-      inactiveOffenderId: offender !== undefined ? offender : "",
+      inactiveOffenderId: offender !== undefined ? offender : '',
     });
   };
 
@@ -222,7 +222,6 @@ class OffenderFeed extends React.Component {
       refetch,
       filterPristine,
       role,
-
       searchInput,
       setSearchInput,
       filter,
@@ -258,7 +257,6 @@ class OffenderFeed extends React.Component {
       activeOffenderId,
       inactiveOffenderModal,
       inactiveOffenderId,
-      pristine,
       filterOpen,
     } = this.state;
 
@@ -268,7 +266,7 @@ class OffenderFeed extends React.Component {
           id: deleteOffenderId,
         },
       });
-      setStatusBar(true, "Deleting Offender...");
+      setStatusBar(true, 'Deleting Offender...');
       this.setState({
         disabled: true,
       });
@@ -282,18 +280,18 @@ class OffenderFeed extends React.Component {
           recycleOffender: {
             id: deleteOffenderId,
             optimistic: true,
-            __typename: "Offender",
+            __typename: 'Offender',
           },
         },
       });
       this.setState({
         disabled: false,
       });
-      setStatusBar(false, "");
+      setStatusBar(false, '');
     };
 
     const handleApprove = async (groups) => {
-      setStatusBar(true, "Approving Offender...");
+      setStatusBar(true, 'Approving Offender...');
       const add = groups
         .filter(
           (id) =>
@@ -322,12 +320,12 @@ class OffenderFeed extends React.Component {
           },
         },
       });
-      setStatusBar(false, "");
-      this.setState({ approve: false, approveId: "" });
+      setStatusBar(false, '');
+      this.setState({ approve: false, approveId: '' });
     };
 
     const handleDecline = async () => {
-      setStatusBar(true, "Deleting Offender...");
+      setStatusBar(true, 'Deleting Offender...');
       this.setState({
         disabled: true,
       });
@@ -341,7 +339,7 @@ class OffenderFeed extends React.Component {
           recycleOffender: {
             id: declineOffenderId,
             optimistic: true,
-            __typename: "Offender",
+            __typename: 'Offender',
           },
         },
       });
@@ -349,7 +347,7 @@ class OffenderFeed extends React.Component {
       this.setState({
         disabled: false,
       });
-      setStatusBar(false, "");
+      setStatusBar(false, '');
     };
 
     return (
@@ -357,16 +355,16 @@ class OffenderFeed extends React.Component {
         {/* search and filter bar */}
         <div
           style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
           }}
         >
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
-              width: "35%",
+              display: 'flex',
+              alignItems: 'center',
+              width: '35%',
             }}
           >
             <Input
@@ -375,8 +373,8 @@ class OffenderFeed extends React.Component {
               prefix={
                 <SearchOutlined
                   style={{
-                    fontSize: "22px",
-                    color: "#EF5350",
+                    fontSize: '22px',
+                    color: '#EF5350',
                     marginRight: 10,
                   }}
                 />
@@ -387,30 +385,30 @@ class OffenderFeed extends React.Component {
           </div>
           <div
             style={{
-              display: "flex",
-              alignItems: "center",
+              display: 'flex',
+              alignItems: 'center',
               marginLeft: 16,
             }}
             onClick={() => this.setState({ filterOpen: true })}
           >
             <FilterOutlined
               style={{
-                fontSize: "28px",
-                color: "#EF5350",
+                fontSize: '28px',
+                color: '#EF5350',
                 marginRight: 5,
               }}
             />
             <ArrowUpOutlined
               style={{
-                fontSize: "21px",
-                color: "#EF5350",
+                fontSize: '21px',
+                color: '#EF5350',
                 marginBottom: 8,
               }}
             />
             <ArrowDownOutlined
               style={{
-                fontSize: "21px",
-                color: "#EF5350",
+                fontSize: '21px',
+                color: '#EF5350',
                 marginTop: 8,
                 marginLeft: -8,
               }}
