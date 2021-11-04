@@ -350,6 +350,8 @@ class OffenderFeed extends React.Component {
       setStatusBar(false, '');
     };
 
+    console.log(!!offenders, offenders?.length === 0, loading )
+
     return (
       <>
         {/* search and filter bar */}
@@ -416,7 +418,7 @@ class OffenderFeed extends React.Component {
           </div>
         </div>
         {/* end search and filter bar */}
-        {loading ? (
+        {!!offenders && offenders?.length === 0 && loading ? (
           <FeedContainer to="/app/offenders/add" text="Offender">
             <PullToRefresh onRefresh={refetch}>
               <FeedCardContainer>

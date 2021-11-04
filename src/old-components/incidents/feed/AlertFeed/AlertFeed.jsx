@@ -189,6 +189,7 @@ class AlertFeed extends React.Component {
       filterOpen,
       approveId,
     } = this.state;
+
     return (
       <Fragment>
         <FeedContainer
@@ -276,7 +277,7 @@ class AlertFeed extends React.Component {
             </div>
           </div>
           {/* end search and filter bar */}
-          {loading ? (
+          {alerts && alerts.length === 0 && loading ? (
             <PullToRefresh onRefresh={refetch}>
               <FeedCardContainer>
                 <SkeletonContainer cardHeight="500px">
