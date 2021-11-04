@@ -45,7 +45,7 @@ class OffenderCardExclusions extends React.Component {
     ) : (
       <EmptyState>
         <TabEmptyState
-          text="There are no bans for this offender"
+          text="There are no exclusions for this offender"
           image={
             <Image viewBox="0 0 24 24">
               <path

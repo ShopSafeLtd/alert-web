@@ -98,9 +98,9 @@ class EditExclusion extends PureComponent {
     return (
       <Page>
         <Header>
-          <HeaderText>Edit Ban</HeaderText>
+          <HeaderText>Edit Exclusion</HeaderText>
           <HeaderSubText>
-            Create ban for this offender to ban them from areas or premises.
+            Create exclusion for this offender to exclusion them from areas or premises.
           </HeaderSubText>
         </Header>
         <Form>
@@ -108,7 +108,7 @@ class EditExclusion extends PureComponent {
             <Field row>
               <Row row>
                 <FieldHeader required>Start Date</FieldHeader>
-                <FieldHelp>The start date of the ban period.</FieldHelp>
+                <FieldHelp>The start date of the exclusion period.</FieldHelp>
               </Row>
               <DateField
                 id="Start Date"
@@ -121,7 +121,7 @@ class EditExclusion extends PureComponent {
             <Field row left>
               <Row row>
                 <FieldHeader required>End Date</FieldHeader>
-                <FieldHelp>The end date of the ban period.</FieldHelp>
+                <FieldHelp>The end date of the exclusion period.</FieldHelp>
               </Row>
               <DateField
                 id="End Date"
@@ -152,7 +152,7 @@ class EditExclusion extends PureComponent {
             <Row row>
               <FieldHeader>Description</FieldHeader>
               <FieldHelp>
-                Any addition information about the ban, like the reasoning for
+                Any addition information about the exclusion, like the reasoning for
                 excluding.
               </FieldHelp>
             </Row>

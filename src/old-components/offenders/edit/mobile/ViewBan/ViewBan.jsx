@@ -108,21 +108,21 @@ class ViewBan extends PureComponent {
                 component={Link}
                 to={`/offenders/edit/${id}/bans/edit/${banId}`}
               >
-                Edit Ban
+                Edit Exclusion
               </MenuItem>
               <MenuItem
                 onClick={() => this.handleClose()}
                 component={Link}
                 to={`/offenders/edit/${id}/bans/extend/${banId}`}
               >
-                Extend Ban
+                Extend Exclusion
               </MenuItem>
               <MenuItem
                 onClick={() => this.handleClose()}
                 component={Link}
                 to={`/offenders/edit/${id}/bans/reduce/${banId}`}
               >
-                Reduce Ban
+                Reduce Exclusion
               </MenuItem>
               {!loading && (
                 <MenuItem
@@ -131,7 +131,7 @@ class ViewBan extends PureComponent {
                     this.setState({ confirmActive: true });
                   }}
                 >
-                  {ban.active ? 'Deactivate Ban' : 'Activate Ban'}
+                  {ban.active ? 'Deactivate Exclusion' : 'Activate Exclusion'}
                 </MenuItem>
               )}
               <MenuItem
@@ -140,15 +140,15 @@ class ViewBan extends PureComponent {
                   this.setState({ confirmDelete: true });
                 }}
               >
-                Delete Ban
+                Delete Exclusion
               </MenuItem>
             </Menu>
             {!loading ? (
               <Form>
                 <Header>
-                  <HeaderText>Ban</HeaderText>
+                  <HeaderText>Exclusion</HeaderText>
                   <HeaderSubText>
-                    View the details and history of the ban.
+                    View the details and history of the exclusion.
                   </HeaderSubText>
                 </Header>
                 <ItemHeader>Duration</ItemHeader>
@@ -195,8 +195,8 @@ class ViewBan extends PureComponent {
                     title="Are You Sure?"
                     description={
                       Exclusion.active
-                        ? 'Deactivating this ban will hide it from all users. If this is th only ban for this offender it will no longer be shown as banned.'
-                        : 'Activate this ban will show it to all users and the offender will be shown as banned.'
+                        ? 'Deactivating this exclusion will hide it from all users. If this is th only exclusion for this offender it will no longer be shown as excluded.'
+                        : 'Activate this exclusion will show it to all users and the offender will be shown as excluded.'
                     }
                     actions={[
                       <Button
@@ -235,7 +235,7 @@ class ViewBan extends PureComponent {
               open={confirmDelete}
               handleClose={() => this.setState({ confirmDelete: false })}
               title="Are You Sure?"
-              description="Deleteing this ban will be permanent and cannot be undone."
+              description="Deleting this exclusion will be permanent and cannot be undone."
               actions={[
                 <Button
                   key={0}

@@ -143,7 +143,7 @@ const AddExclusionPopover = ({
           open={visible}
           width={matches ? 500 : window.innerWidth - 15}
           handleClose={handleClose}
-          title={"Add Ban"}
+          title={"Add Exclusion"}
           actions={[
             <BackButton
               key={Math.random()}
@@ -159,7 +159,7 @@ const AddExclusionPopover = ({
               variant="contained"
               onClick={() => handleSubmit()}
             >
-              Add Ban
+              Add Exclusion
             </Button>,
           ]}
           mobileAction={[

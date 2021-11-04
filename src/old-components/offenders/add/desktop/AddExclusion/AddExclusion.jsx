@@ -68,7 +68,7 @@ const AddExclusion = ({ open, addExclusion, close }) => {
   const { startDate, endDate, location, description, locationError } = details;
   return (
     <PopOver noPadding open={open} width={600}>
-      <PopOverHeader close={handleClose}>Add New Ban</PopOverHeader>
+      <PopOverHeader close={handleClose}>Add New Exclusion</PopOverHeader>
       <Grow>
         <PopOverContainer>
           <Row row>
@@ -133,7 +133,7 @@ const AddExclusion = ({ open, addExclusion, close }) => {
       <PopOverActions>
         <BackButton onClick={handleClose}>Cancel</BackButton>
         <Button variant="contained" color="primary" onClick={handleAdd}>
-          Add Ban
+          Add Exclusion
         </Button>
       </PopOverActions>
     </PopOver>

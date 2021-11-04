@@ -142,10 +142,10 @@ const EditBan = ({
   return (
     <Page>
       <Header>
-        <HeaderText>Edit Ban</HeaderText>
+        <HeaderText>Edit Exclusion</HeaderText>
         <HeaderSubText>
-          Update the details for of the ban, if you want to change the end date
-          you will need to extend or reduce the ban.
+          Update the details for of the exclusion, if you want to change the end date
+          you will need to extend or reduce the exclusion.
         </HeaderSubText>
       </Header>
       <Form>

@@ -58,7 +58,7 @@ const ViewExclusionPopover = ({ visible, close, exclusionId, offenderId }) => {
           open={visible}
           width={matches ? 500 : window.innerWidth - 15}
           handleClose={() => close()}
-          title={'View Ban'}
+          title={'Exclusion Ban'}
           actions={[
             <BackButton
               color="primary"

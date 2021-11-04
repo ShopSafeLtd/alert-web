@@ -94,7 +94,7 @@ class EditExclusion extends PureComponent {
     } = this.state;
     return (
       <PopOver noPadding open={open} width={600}>
-        <PopOverHeader close={this.handleClose}>Edit Ban</PopOverHeader>
+        <PopOverHeader close={this.handleClose}>Edit Exclusion</PopOverHeader>
         <Grow>
           <PopOverContainer>
             <Row row>
@@ -159,7 +159,7 @@ class EditExclusion extends PureComponent {
         <PopOverActions>
           <BackButton onClick={this.handleClose}>Cancel</BackButton>
           <Button variant="contained" color="primary" onClick={this.handleEdit}>
-            Edit Ban
+            Edit Exclusion
           </Button>
         </PopOverActions>
       </PopOver>

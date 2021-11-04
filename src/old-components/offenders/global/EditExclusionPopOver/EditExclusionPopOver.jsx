@@ -77,7 +77,7 @@ class EditExclusionPopover extends React.Component {
               endDate,
             });
           } else {
-            setStatusBar(true, "Saving Ban...");
+            setStatusBar(true, "Saving Exclusion...");
             this.setState({ submitting: true });
             // editExclusion({
             //   variables: {
@@ -130,7 +130,7 @@ class EditExclusionPopover extends React.Component {
       //                   endDate,
       //                 });
       //               } else {
-      //                 setStatusBar(true, "Saving Ban...");
+      //                 setStatusBar(true, "Saving Exclusion...");
       //                 this.setState({ submitting: true });
       //                 editExclusion({
       //                   variables: {
@@ -163,7 +163,7 @@ class EditExclusionPopover extends React.Component {
         open={visible}
         width={500}
         handleClose={(close) => this.handleClose()}
-        title={"Edit Ban"}
+        title={"Edit Exclusion"}
         actions={[
           <BackButton
             key={Math.random()}
@@ -179,7 +179,7 @@ class EditExclusionPopover extends React.Component {
             variant="contained"
             onClick={() => handleSubmit()} //handleSubmit()}
           >
-            Save Ban
+            Save Exclusion
           </Button>,
         ]}
         mobileAction={[

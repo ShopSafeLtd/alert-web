@@ -75,7 +75,7 @@ class AddExclusionPopover extends PureComponent {
             open={open}
             width={!matches ? window.innerWidth - 15 : 500}
             handleClose={close}
-            title={`${newExclusion ? 'Add' : 'Edit'} Ban`}
+            title={`${newExclusion ? 'Add' : 'Edit'} Exclusion`}
             actions={[
               <BackButton onClick={close}>cancel</BackButton>,
               <Button

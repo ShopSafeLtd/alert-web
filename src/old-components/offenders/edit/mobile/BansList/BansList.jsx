@@ -61,9 +61,9 @@ class BansList extends PureComponent {
     return (
       <Page>
         <Header>
-          <HeaderText>Bans</HeaderText>
+          <HeaderText>Exclusions</HeaderText>
           <HeaderSubText>
-            Add bans to this offender or click on a bad to view and edit its
+            Add exclusions to this offender or click on a exclusion to view and edit its
             details.
           </HeaderSubText>
         </Header>
@@ -126,7 +126,7 @@ class BansList extends PureComponent {
               component={Link}
               to={`${basePath}/bans/add`}
             >
-              Add Ban
+              Add Exclusion
             </Button>
           </Empty>
         )}

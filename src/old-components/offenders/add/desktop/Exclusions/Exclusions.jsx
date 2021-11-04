@@ -96,9 +96,9 @@ class Exclusions extends PureComponent {
     return (
       <Page>
         <Header>
-          <HeaderText>Bans</HeaderText>
+          <HeaderText>Exclusions</HeaderText>
           <HeaderSubText>
-            Create bans for this offender to ban them from areas or premises.
+            Create exclusions for this offender to exclusion them from areas or premises.
           </HeaderSubText>
         </Header>
         {exclusions.length > 0 ? (
@@ -186,21 +186,21 @@ class Exclusions extends PureComponent {
                 color="primary"
                 onClick={() => this.setState({ add: true })}
               >
-                Add New Ban
+                Add New Exclusion
               </Button>
             </Actions>
           </List>
         ) : (
           <Empty>
             <ExclusionsImage width="100px" height="100px" />
-            <EmptyText>You have not added any bans yet</EmptyText>
+            <EmptyText>You have not added any exclusions yet</EmptyText>
             <EmptyActions>
               <Button
                 variant="contained"
                 color="primary"
                 onClick={() => this.setState({ add: true })}
               >
-                Add Ban
+                Add Exclusion
               </Button>
             </EmptyActions>
           </Empty>

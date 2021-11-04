@@ -76,7 +76,7 @@ class EditExclusion extends PureComponent {
           <Section Section width={matches ? '50%' : '100%'} elevation={1}>
             {loading && <SectionLoading />}
             <Row row>
-              <SubHeader>Bans</SubHeader>
+              <SubHeader>Exclusions</SubHeader>
               <Grow />
               {exclusions.length > 0 && (
                 <Button color="primary" onClick={openAddExclusion}>
@@ -120,13 +120,13 @@ class EditExclusion extends PureComponent {
                         menuItems={[
                           {
                             key: 2,
-                            primaryText: 'Edit Ban',
+                            primaryText: 'Edit Exclusion',
                             onClick: () => openEditExclusion(exclusion),
                             leftIcon: <EditIcon />
                           },
                           {
                             key: 3,
-                            primaryText: 'Delete Ban',
+                            primaryText: 'Delete Exclusion',
                             onClick: () =>
                               this.setState({
                                 confirmDelete: true,
@@ -159,7 +159,7 @@ class EditExclusion extends PureComponent {
                         removeExclusion(deleteId);
                       }}
                     >
-                      Remove Ban
+                      Remove Exclusion
                     </Button>
                   ]}
                 />
@@ -170,7 +170,7 @@ class EditExclusion extends PureComponent {
                 <EmptyText>There are no bans for this offender</EmptyText>
                 <Button color="primary" onClick={openAddExclusion}>
                   <AddIcon />
-                  Add Ban
+                  Add Exclusion
                 </Button>
               </EmptySection>
             )}

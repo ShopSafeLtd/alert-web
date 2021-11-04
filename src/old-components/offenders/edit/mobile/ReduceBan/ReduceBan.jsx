@@ -94,9 +94,9 @@ class ReduceBan extends PureComponent {
               return (
                 <Page>
                   <Header>
-                    <HeaderText>Reduce Ban</HeaderText>
+                    <HeaderText>Reduce Exclusion</HeaderText>
                     <HeaderSubText>
-                      Enter the new start and end date for the ban and give a
+                      Enter the new start and end date for the exclusion and give a
                       reason for the change.
                     </HeaderSubText>
                   </Header>
@@ -112,7 +112,7 @@ class ReduceBan extends PureComponent {
                       handleChange={this.handleChange}
                     />
                   </Form>
-                  <FullWidthButton text="Submit Ban" onClick={handleSubmit} />
+                  <FullWidthButton text="Submit Exclusion" onClick={handleSubmit} />
                 </Page>
               );
             }}

@@ -66,7 +66,7 @@ class EditExclusionForm extends PureComponent {
           </Column>
         </Row>
         <Field>
-          <FieldHeader required>Ban Location</FieldHeader>
+          <FieldHeader required>Exclusion Location</FieldHeader>
           <TextField
             id="location-input"
             value={location}
@@ -79,7 +79,7 @@ class EditExclusionForm extends PureComponent {
           />
         </Field>
         <Field>
-          <FieldHeader>Ban Description</FieldHeader>
+          <FieldHeader>Exclusion Description</FieldHeader>
           <TextField
             id="location-input"
             value={description}

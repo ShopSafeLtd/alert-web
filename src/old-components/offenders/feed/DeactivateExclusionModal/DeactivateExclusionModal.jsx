@@ -69,9 +69,9 @@ class DeactivateExclusionModal extends PureComponent {
                   </DialogTitle>
                   <DialogContent>
                     <DialogContentText id="deactivate-dialog-description">
-                      Deactivating this ban will keep it listed on the offender
+                      Deactivating this exclusion will keep it listed on the offender
                       but will only show it to admin users, standard users will
-                      no longer be able to see this ban.
+                      no longer be able to see this exclusion.
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>

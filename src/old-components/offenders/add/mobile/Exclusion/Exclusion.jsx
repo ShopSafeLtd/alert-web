@@ -110,9 +110,9 @@ class Exclusion extends PureComponent {
     return (
       <Page>
         <Header>
-          <HeaderText>Ban</HeaderText>
+          <HeaderText>Exclusion</HeaderText>
           <HeaderSubText>
-            Create bans for this offender to ban them from areas or premises.
+            Create exclusions for this offender to exclusion them from areas or premises.
           </HeaderSubText>
         </Header>
         {exclusions.length > 0 ? (
@@ -206,7 +206,7 @@ class Exclusion extends PureComponent {
                 component={Link}
                 to="/offenders/add/ban/add-ban"
               >
-                Add Ban
+                Add Exclusion
               </Button>
             </EmptyActions>
           </Empty>
@@ -221,7 +221,7 @@ class Exclusion extends PureComponent {
             <Svg viewBox="0 0 24 24">
               <path fill="#FFF" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
             </Svg>
-            Add Ban
+            Add Exclusion
           </PositionedFab>
         )}
         <FullWidthButton
@@ -229,7 +229,7 @@ class Exclusion extends PureComponent {
             groups.length !== 1
               ? exclusions.length > 0
                 ? 'Next'
-                : 'Skip Bans'
+                : 'Skip Exclusions'
               : 'Submit Offender'
           }
           onClick={this.handleNext}

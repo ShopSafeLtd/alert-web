@@ -139,7 +139,7 @@ const OffenderWizard = ({
             </Step>
             {admin && (
               <Step>
-                <StepLabel classes={{ label: classes.label }}>Bans</StepLabel>
+                <StepLabel classes={{ label: classes.label }}>Exclusions</StepLabel>
               </Step>
             )}
             {admin && (

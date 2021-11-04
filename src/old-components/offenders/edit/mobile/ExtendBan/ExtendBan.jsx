@@ -96,7 +96,7 @@ class ExtendBan extends PureComponent {
                   <Header>
                     <HeaderText>Extend Ban</HeaderText>
                     <HeaderSubText>
-                      Enter the new start and end date for the ban and give a
+                      Enter the new start and end date for the exclusion and give a
                       reason for the change.
                     </HeaderSubText>
                   </Header>

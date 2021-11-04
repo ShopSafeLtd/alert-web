@@ -37,7 +37,7 @@ class ActivateExclusionModal extends PureComponent {
           <Mutation mutation={EditMutation}>
             {editExclusion => {
               const handleSubmit = async () => {
-                setStatusBar(true, 'Deactivating Ban...');
+                setStatusBar(true, 'Deactivating Exclusion...');
                 this.setState({ submitting: true });
                 editExclusion({
                   variables: {
@@ -70,7 +70,7 @@ class ActivateExclusionModal extends PureComponent {
                   </DialogTitle>
                   <DialogContent>
                     <DialogContentText id="deactivate-dialog-description">
-                      Activating this ban will make it available for all users
+                      Activating this exclusion will make it available for all users
                       to see.
                     </DialogContentText>
                   </DialogContent>

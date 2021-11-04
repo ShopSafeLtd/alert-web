@@ -75,7 +75,7 @@ class ExtendExclusionPopOver extends PureComponent {
             {editExclusion => {
               const handleSubmit = async () => {
                 if (this.state.reason !== '') {
-                  setStatusBar(true, 'Extending Ban...');
+                  setStatusBar(true, 'Extending Exclusion...');
                   this.setState({ submitting: true });
                   editExclusion({
                     variables: {
@@ -111,7 +111,7 @@ class ExtendExclusionPopOver extends PureComponent {
                       open={visible}
                       width={matches ? 500 : window.innerWidth - 15}
                       handleClose={() => close()}
-                      title={'Extend Ban'}
+                      title={'Extend Exclusion'}
                       actions={[
                         <BackButton
                           key={Math.random()}
@@ -127,7 +127,7 @@ class ExtendExclusionPopOver extends PureComponent {
                           variant="contained"
                           onClick={() => handleSubmit()}
                         >
-                          Extend Ban
+                          Extend Exclusion
                         </Button>
                       ]}
                       mobileAction={[

@@ -45,22 +45,22 @@ class History extends PureComponent {
         {history.map(({ id, type, notes, createdAt, byUser }) => {
           let title, icon;
           if (type === 'CREATED') {
-            title = 'Ban Created';
+            title = 'Exclusion Created';
             icon = <Created width="20px" height="20px" />;
           } else if (type === 'EDITED') {
-            title = 'Ban Edited';
+            title = 'Exclusion Edited';
             icon = <Edited width="20px" height="20px" />;
           } else if (type === 'EXTENDED') {
-            title = 'Ban Extended';
+            title = 'Exclusion Extended';
             icon = <Extended width="20px" height="20px" />;
           } else if (type === 'REDUCED') {
-            title = 'Ban Reduced';
+            title = 'Exclusion Reduced';
             icon = <Reduced width="20px" height="20px" />;
           } else if (type === 'DEACTIVATED') {
-            title = 'Ban Deactivated';
+            title = 'Exclusion Deactivated';
             icon = <Deactivated width="20px" height="20px" />;
           } else if (type === 'ACTIVATED') {
-            title = 'Ban Activated';
+            title = 'Exclusion Activated';
             icon = <Activate width="20px" height="20px" />;
           }
 
