@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import SwipeableViews from "react-swipeable-views";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import MenuItem from "@material-ui/core/MenuItem";
-import Divider from "@material-ui/core/Divider";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import SwipeableViews from 'react-swipeable-views';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import MenuItem from '@material-ui/core/MenuItem';
+import Divider from '@material-ui/core/Divider';
+import { Link } from 'react-router-dom';
 
-import { UnapprovedCard, CardMenu } from "../../../global/cards";
-import OffenderCardImage from "../OffenderCardImage/OffenderCardImage";
-import OffenderCardDescription from "../OffenderCardDescription/OffenderCardDescription";
-import OffenderCardIncidents from "../OffenderCardIncidents/OffenderCardIncidents";
-import OffenderCardExclusions from "../OffenderCardExclusions/OffenderCardExclusions";
-import { isAuthorised } from "utils";
-import BannedBanner from "../BannedBanner/BannedBanner";
-import { useStoreState } from "../../../../state";
+import { UnapprovedCard, CardMenu } from '../../../global/cards';
+import OffenderCardImage from '../OffenderCardImage/OffenderCardImage';
+import OffenderCardDescription from '../OffenderCardDescription/OffenderCardDescription';
+import OffenderCardIncidents from '../OffenderCardIncidents/OffenderCardIncidents';
+import OffenderCardExclusions from '../OffenderCardExclusions/OffenderCardExclusions';
+import { isAuthorised } from 'utils';
+import BannedBanner from '../BannedBanner/BannedBanner';
+import { useStoreState } from '../../../../state';
 
 const Card = styled.div`
   width: 100%;
@@ -47,11 +47,11 @@ const OffenderCard = ({
   toggleDecline,
 }) => {
   const userRole = useStoreState((state) => state.user.role);
-  const admin = userRole !== "USER" ? true : false;
+  const admin = userRole !== 'USER' ? true : false;
   const [activeTab, setActiveTab] = useState(0);
 
   let actions = [];
-  if (isAuthorised(userRole, ["SCHEME_ADMIN", "CONTENT_ADMIN"])) {
+  if (isAuthorised(userRole, ['SCHEME_ADMIN', 'CONTENT_ADMIN'])) {
     actions.push(
       <MenuItem key={0} onClick={() => toggleAddExclusionPopOver(offender.id)}>
         <Svg viewBox="0 0 24 24">
@@ -65,7 +65,7 @@ const OffenderCard = ({
     );
   }
   if (
-    isAuthorised(userRole, ["SCHEME_ADMIN", "CONTENT_ADMIN"]) &&
+    isAuthorised(userRole, ['SCHEME_ADMIN', 'CONTENT_ADMIN']) &&
     !offender.active
   ) {
     actions.push(
@@ -96,7 +96,7 @@ const OffenderCard = ({
   //     </MenuItem>
   //   );
   // }
-  if (isAuthorised(userRole, ["SCHEME_ADMIN", "CONTENT_ADMIN"])) {
+  if (isAuthorised(userRole, ['SCHEME_ADMIN', 'CONTENT_ADMIN'])) {
     actions.push(
       <Divider key={2} />,
       <MenuItem
@@ -145,6 +145,7 @@ const OffenderCard = ({
         }
         offenderWarnings={offender.offenderWarnings}
         toggleViewLabel={toggleViewLabel}
+        groups={offender.groups}
       />
     </div>
   );
