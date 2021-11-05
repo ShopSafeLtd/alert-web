@@ -82,7 +82,6 @@ class AlertCard extends Component {
     } = this.props;
     const { activeTab } = this.state;
     let menuActions = [];
-    console.log(groups);
     if (isAuthorised(userRole, ['SCHEME_ADMIN', 'CONTENT_ADMIN'])) {
       menuActions.push(
         <MenuItem key="0" component={Link} to={`/app/incidents/edit/${id}`}>

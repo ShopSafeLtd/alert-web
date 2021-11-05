@@ -57,7 +57,6 @@ class AlertCardDescription extends React.Component {
   render() {
     const { subject, date, time, crimeTypes, description, user, groups } =
       this.props;
-    console.log(groups);
     return (
       <AlertDescription>
         <Container>

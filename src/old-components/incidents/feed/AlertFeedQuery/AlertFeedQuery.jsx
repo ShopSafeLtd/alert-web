@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { useQuery, useMutation } from "@apollo/client";
+import React, { useState, useEffect } from 'react';
+import { useQuery, useMutation } from '@apollo/client';
 
-import { IncidentFeed } from "graphql-src/incidents/queries";
-import AlertFeed from "../AlertFeed/AlertFeed";
+import { IncidentFeed } from 'graphql-src/incidents/queries';
+import AlertFeed from '../AlertFeed/AlertFeed';
 import {
   AddIncidentToGroup,
   ApproveIncident,
   RecycleIncident,
-} from "graphql-src/incidents/mutations";
+} from 'graphql-src/incidents/mutations';
 import {
   AddOffenderToGroup,
   ApproveOffender,
-} from "graphql-src/offenders/mutations";
-import Offline from "../../../global/Offline/Offline";
-import { useStoreActions, useStoreState } from "../../../../state";
-import { Tags } from "graphql-src/tags/queries";
-import { Groups } from "graphql-src/groups/queries";
+} from 'graphql-src/offenders/mutations';
+import Offline from '../../../global/Offline/Offline';
+import { useStoreActions, useStoreState } from '../../../../state';
+import { Tags } from 'graphql-src/tags/queries';
+import { Groups } from 'graphql-src/groups/queries';
 
 const AlertFeedQuery = () => {
   const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
@@ -34,13 +34,13 @@ const AlertFeedQuery = () => {
   const userId = useStoreState((state) => state.user.id);
   const search = useStoreState((state) => state.theme.search);
   const fetchIncidents = useStoreState((state) => state.theme.fetchIncidents);
-  const admin = role === "USER" ? true : false;
+  const admin = role === 'USER' ? true : false;
 
   const [allLoaded, setAllLoaded] = useState(false);
   const [fetching, setFetching] = useState(false);
-  const [networkError, setNetworkError] = useState("");
+  const [networkError, setNetworkError] = useState('');
 
-  const [searchInput, setSearchInput] = useState("");
+  const [searchInput, setSearchInput] = useState('');
   const [order, setOrder] = useState();
   const [filter, setFilter] = useState({
     groups: [],
@@ -50,8 +50,9 @@ const AlertFeedQuery = () => {
       awaitingApproval: undefined,
     },
   });
+
   const [queryVariables, setQueryVariables] = useState({
-    order: { createdAt: "desc" },
+    order: { createdAt: 'desc' },
     crimeTypes: undefined,
     groups: undefined,
     approved: undefined,
@@ -59,13 +60,13 @@ const AlertFeedQuery = () => {
 
   useEffect(() => {
     setBottomNav(true);
-    setTitle("Incidents");
+    setTitle('Incidents');
     setAppBar(true);
     setSearch(true);
-    setSearchText("Search for incidents...");
+    setSearchText('Search for incidents...');
     return () => {
       setSearch(false);
-      setSearchText("");
+      setSearchText('');
       toggleFetchIncidents(true);
     };
     // eslint-disable-next-line
@@ -91,11 +92,12 @@ const AlertFeedQuery = () => {
     first: querySize,
     ...queryVariables,
   };
-
+  console.log(variables);
   const { data, loading, fetchMore, refetch, error } = useQuery(IncidentFeed, {
     variables,
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: 'cache-and-network',
   });
+
   const { data: crimeTypes } = useQuery(Tags, {
     variables: {
       where: {
@@ -105,12 +107,12 @@ const AlertFeedQuery = () => {
           },
         },
         dataType: {
-          equals: "INCIDENT",
+          equals: 'INCIDENT',
         },
       },
       orderBy: [
         {
-          name: "asc",
+          name: 'asc',
         },
       ],
     },
@@ -126,7 +128,7 @@ const AlertFeedQuery = () => {
       },
       orderBy: [
         {
-          name: "asc",
+          name: 'asc',
         },
       ],
     },
@@ -162,12 +164,12 @@ const AlertFeedQuery = () => {
           schemeId: scheme,
           first: 30,
           order: {
-            createdAt: "desc",
+            createdAt: 'desc',
             date: undefined,
             subject: undefined,
             updatedAt: undefined,
           },
-          search: "",
+          search: '',
           crimeTypes: undefined,
           groups: undefined,
           approved: undefined,
@@ -193,12 +195,12 @@ const AlertFeedQuery = () => {
             schemeId: scheme,
             first: 30,
             order: {
-              createdAt: "desc",
+              createdAt: 'desc',
               date: undefined,
               subject: undefined,
               updatedAt: undefined,
             },
-            search: "",
+            search: '',
             crimeTypes: undefined,
             groups: undefined,
             approved: undefined,
