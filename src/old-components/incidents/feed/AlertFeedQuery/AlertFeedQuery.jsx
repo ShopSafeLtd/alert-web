@@ -92,7 +92,7 @@ const AlertFeedQuery = () => {
     first: querySize,
     ...queryVariables,
   };
-  console.log(variables);
+
   const { data, loading, fetchMore, refetch, error } = useQuery(IncidentFeed, {
     variables,
     fetchPolicy: 'cache-and-network',

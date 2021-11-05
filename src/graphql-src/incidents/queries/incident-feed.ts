@@ -1,5 +1,5 @@
-import { gql } from "@apollo/client";
-import { FullIncident, FullIncidentType } from "../fragments";
+import { gql } from '@apollo/client';
+import { FullIncident, FullIncidentType } from '../fragments';
 
 export const IncidentFeed = gql`
   query incidentFeed(
@@ -8,7 +8,9 @@ export const IncidentFeed = gql`
     $order: IncidentOrderByInput
     $first: Int
     $cursor: String
+    $groups: [String]
     $crimeTypes: [String!]
+    $approved: Boolean
   ) {
     incidentFeed(
       schemeId: $schemeId
@@ -17,6 +19,8 @@ export const IncidentFeed = gql`
       after: $cursor
       crimeTypes: $crimeTypes
       search: $search
+      groups: $groups
+      approved: $approved
     ) {
       ...FullIncident
     }
@@ -28,7 +32,7 @@ export interface IncidentFeedArgs {
   schemeId: string;
   search: string;
   order: {
-    createdAt: "asc" | "desc";
+    createdAt: 'asc' | 'desc';
   };
   first: number;
   cursor?: string;
