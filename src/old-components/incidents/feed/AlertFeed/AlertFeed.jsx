@@ -219,6 +219,7 @@ class AlertFeed extends React.Component {
               display: 'flex',
               flexDirection: 'row',
               justifyContent: 'center',
+              marginBottom: 10
             }}
           >
             <div

@@ -1,0 +1,56 @@
+.feed-card {
+  max-width: 100%;
+  min-width: 100%;
+  position: relative;
+  margin: 5px 0;
+  overflow: hidden;
+  @media (min-width: 650px) {
+    width: calc(50% - 1rem);
+    max-width: calc(50% - 1rem);
+    min-width: calc(50% - 1rem);
+    margin: 0.5rem;
+  }
+  @media (min-width: 1240px) {
+    width: calc(33.33% - 10px);
+    max-width: calc(33.33% - 10px);
+    min-width: calc(33.33% - 10px);
+    margin: 5px;
+  }
+  @media (min-width: 1800px) {
+    width: calc(25% - 2rem);
+    max-width: calc(25% - 2rem);
+    min-width: calc(25% - 2rem);
+    margin: 1rem;
+  }
+
+  .ant-card-body {
+    padding: 0;
+  }
+  .ant-tabs-nav {
+    margin-bottom: 0;
+  }
+  .feed-card-title {
+    margin-bottom: 0;
+  }
+  .incident-card-date {
+    font-size: 12px;
+  }
+  .incident-card-user {
+    font-size: 12px;
+  }
+  .alert-crime-tags {
+    display: flex;
+    overflow-x: scroll;
+    scrollbar-width: 0;
+    &::-webkit-scrollbar {
+      display: none;
+    };
+    margin-bottom: 10px;
+  }
+  .ant-tabs-nav-list {
+    transform: translate(0px, 0px) !important;
+  }
+  .ant-tabs > .ant-tabs-nav .ant-tabs-nav-operations, .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-operations {
+    display: none;
+  }
+}

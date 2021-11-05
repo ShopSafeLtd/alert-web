@@ -1,41 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import Moment from 'react-moment';
-import Typography from '@material-ui/core/Typography';
+import { Typography, Row, Col, Tag } from 'antd'
 
 const AlertDescription = styled.div`
   height: 231px;
   padding: 0.5rem 1rem;
   position: relative;
-`;
-const Subject = styled(Typography)`
-  margin: 0;
-`;
-const Date = styled(Typography)`
-  color: rgba(0, 0, 0, 0.54);
-  display: inline;
-`;
-const Time = styled(Typography)`
-  padding-right: 0.5rem;
-  color: rgba(0, 0, 0, 0.54);
-  display: inline;
-`;
-const CrimeTypes = styled.div`
-  margin: 0.8rem 0 0.5rem;
-  display: flex;
-  flex-wrap: wrap;
-`;
-const CrimeType = styled(Typography)`
-  color: #fff;
-  background-color: #ef5350;
-  padding: 0.3rem 0.8rem;
-  border-radius: 25px;
-  font-weight: 300;
-  margin: 0 0.4rem 0.3rem 0;
-  display: inline;
-`;
-const Description = styled(Typography)`
-  margin: 0;
 `;
 const User = styled(Typography)`
   position: absolute;
@@ -44,14 +15,16 @@ const User = styled(Typography)`
   right: 0;
   width: 100%;
   background-color: #fff;
-  padding: 0.8rem 1rem;
+  padding: 0.5rem 1rem;
   color: rgba(0, 0, 0, 0.54);
 `;
 const Container = styled.div`
   height: 100%;
-  overflow: auto;
+  overflow-y: auto;
   padding-bottom: 38px;
 `;
+
+const { Title, Text, Paragraph } = Typography
 
 class AlertCardDescription extends React.Component {
   render() {
@@ -61,41 +34,45 @@ class AlertCardDescription extends React.Component {
     return (
       <AlertDescription>
         <Container>
-          <Subject component="h3" variant="h6">
+          <Title className="feed-card-title" level={4}>
             {subject}
-          </Subject>
-          <Time component="span" variant="body2">
-            <Moment format="HH:mm">{time}</Moment>
-          </Time>
-          <Date component="span" variant="body2">
-            <Moment format="DD/MM/YYYY">{date}</Moment>
-          </Date>
-          <div
-            style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}
-          >
+          </Title>
+          <Row gutter={8}>
+            <Col>
+              <Text className="incident-card-date" type="secondary">
+                <Moment format="HH:mm">{time}</Moment>
+              </Text>
+            </Col>
+            <Col>
+              <Text className="incident-card-date" type="secondary">
+                <Moment format="DD/MM/YYYY">{date}</Moment>
+              </Text>
+            </Col>
+          </Row>
+          <Row gutter={4}>
             {groups.map((el) => (
-              <>
-                <span style={{ marginRight: '9px' }}>{`${el.name}`}</span>
-              </>
+              <Col>
+                <Text style={{ marginRight: '9px' }}>{`${el.name}`}</Text>
+              </Col>
             ))}
-          </div>
-          <CrimeTypes component="span" variant="body2">
+          </Row>
+          <div gutter={16} className="alert-crime-tags">
             {crimeTypes.map(({ name, id }) => {
               return (
-                <CrimeType variant="caption" key={id}>
-                  {name}
-                </CrimeType>
+                <Tag color="volcano" key={id}>{name}</Tag>
               );
             })}
-          </CrimeTypes>
-          <Description component="span" variant="body2">
+          </div>
+          <Paragraph type="secondary">
             {description}
-          </Description>
+          </Paragraph>
         </Container>
-        <User component="p" variant="caption">
-          <span>{user === null ? 'Deleted User' : user.fullName}</span>{' '}
-          {user !== null && '-'}{' '}
-          <span>{user !== null && user.organisation}</span>
+        <User>
+          <Text className="incident-card-user" type="secondary">
+            {user === null ? 'Deleted User' : user.fullName}{' '}
+            {user !== null && '-'}{' '}
+            {user !== null && user.organisation}
+          </Text>
         </User>
       </AlertDescription>
     );
