@@ -41,15 +41,15 @@ const AlertFeedQuery = () => {
   const [networkError, setNetworkError] = useState('');
 
   const [searchInput, setSearchInput] = useState('');
-  const [order, setOrder] = useState();
-  const [filter, setFilter] = useState({
-    groups: [],
-    crimeTypes: [],
-    approved: {
-      approved: undefined,
-      awaitingApproval: undefined,
-    },
-  });
+  // const [order, setOrder] = useState({ createdAt: 'desc' });
+  // const [filter, setFilter] = useState({
+  //   groups: [],
+  //   crimeTypes: [],
+  //   approved: {
+  //     approved: undefined,
+  //     awaitingApproval: undefined,
+  //   },
+  // });
 
   const [queryVariables, setQueryVariables] = useState({
     order: { createdAt: 'desc' },
@@ -276,10 +276,11 @@ const AlertFeedQuery = () => {
       // search and filter
       searchInput={searchInput}
       handleSearchChange={handleSearchChange}
-      order={order}
-      setOrder={setOrder}
-      filter={filter}
-      setFilter={setFilter}
+      // order={order}
+      // setOrder={setOrder}
+      // filter={filter}
+      // setFilter={setFilter}
+      queryVariables={queryVariables}
       setQueryVariables={setQueryVariables}
       // crime types and groups
       crimeTypes={crimeTypes?.tags}

@@ -7,7 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
-import { Input } from 'antd';
+import { Input, Typography } from 'antd';
 import {
   SearchOutlined,
   FilterOutlined,
@@ -171,10 +171,7 @@ class AlertFeed extends React.Component {
       filterSet,
       searchInput,
       handleSearchChange,
-      order,
-      setOrder,
-      filter,
-      setFilter,
+      queryVariables,
       setQueryVariables,
       crimeTypes,
       groups,
@@ -190,6 +187,7 @@ class AlertFeed extends React.Component {
       approveId,
     } = this.state;
 
+    console.log(queryVariables);
     return (
       <Fragment>
         <FeedContainer
@@ -204,10 +202,6 @@ class AlertFeed extends React.Component {
             // state management
             open={filterOpen}
             handleClose={this.handleCloseFilter}
-            order={order}
-            setOrder={setOrder}
-            filter={filter}
-            setFilter={setFilter}
             setQueryVariables={setQueryVariables}
             // data
             crimeTypes={crimeTypes}
@@ -218,10 +212,11 @@ class AlertFeed extends React.Component {
             style={{
               display: 'flex',
               flexDirection: 'row',
-              justifyContent: 'center',
-              marginBottom: 10
+              justifyContent: 'space-between',
+              marginBottom: 10,
             }}
           >
+            <div style={{ width: '30%' }}></div>
             <div
               style={{
                 display: 'flex',
@@ -229,52 +224,117 @@ class AlertFeed extends React.Component {
                 width: '35%',
               }}
             >
-              <Input
-                placeholder="Search..."
-                size="large"
-                prefix={
-                  <SearchOutlined
-                    style={{
-                      fontSize: '22px',
-                      color: '#EF5350',
-                      marginRight: 10,
-                    }}
-                  />
-                }
-                value={searchInput}
-                onChange={handleSearchChange}
-              />
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  width: '100%',
+                }}
+              >
+                <Input
+                  placeholder="Search..."
+                  size="large"
+                  prefix={
+                    <SearchOutlined
+                      style={{
+                        fontSize: '22px',
+                        color: '#EF5350',
+                        marginRight: 10,
+                      }}
+                    />
+                  }
+                  value={searchInput}
+                  onChange={handleSearchChange}
+                />
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  marginLeft: 16,
+                  cursor: 'pointer',
+                }}
+                onClick={this.handleOpenFilter}
+              >
+                <FilterOutlined
+                  style={{
+                    fontSize: '28px',
+                    color: '#EF5350',
+                    marginRight: 5,
+                  }}
+                />
+                <ArrowUpOutlined
+                  style={{
+                    fontSize: '21px',
+                    color: '#EF5350',
+                    marginBottom: 8,
+                  }}
+                />
+                <ArrowDownOutlined
+                  style={{
+                    fontSize: '21px',
+                    color: '#EF5350',
+                    marginTop: 8,
+                    marginLeft: -8,
+                  }}
+                />
+              </div>
             </div>
             <div
               style={{
                 display: 'flex',
-                alignItems: 'center',
-                marginLeft: 16,
+                flexDirection: 'column',
+                alignItems: 'flex-end',
+                cursor: 'pointer',
+                userSelect: 'none',
+                width: '30%',
               }}
-              onClick={this.handleOpenFilter}
             >
-              <FilterOutlined
+              <div
+                onClick={this.handleOpenFilter}
                 style={{
-                  fontSize: '28px',
-                  color: '#EF5350',
-                  marginRight: 5,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  cursor: 'pointer',
+                  userSelect: 'none',
+                  marginRight: '36px',
                 }}
-              />
-              <ArrowUpOutlined
-                style={{
-                  fontSize: '21px',
-                  color: '#EF5350',
-                  marginBottom: 8,
-                }}
-              />
-              <ArrowDownOutlined
-                style={{
-                  fontSize: '21px',
-                  color: '#EF5350',
-                  marginTop: 8,
-                  marginLeft: -8,
-                }}
-              />
+              >
+                <Typography.Text>
+                  {`Order: ${
+                    queryVariables.order.createdAt === 'desc'
+                      ? 'Most recent first'
+                      : 'Oldest first'
+                  }`}
+                </Typography.Text>
+                {queryVariables.groups && (
+                  <div>
+                    {`Groups: `}
+                    {queryVariables.groups?.map((el) => (
+                      <Typography.Text>
+                        {`${groups.find((e) => e.id === el).name} `}
+                      </Typography.Text>
+                    ))}
+                  </div>
+                )}
+                {queryVariables.crimeTypes && (
+                  <div>
+                    {`Crime Types: `}
+                    {queryVariables.crimeTypes?.map((el) => (
+                      <Typography.Text>
+                        {`${crimeTypes.find((e) => e.id === el).name} `}
+                      </Typography.Text>
+                    ))}
+                  </div>
+                )}
+                {queryVariables.approved !== undefined && (
+                  <Typography.Text>
+                    {queryVariables.approved
+                      ? 'Approved only'
+                      : 'Awaiting approval only'}
+                  </Typography.Text>
+                )}
+              </div>
             </div>
           </div>
           {/* end search and filter bar */}

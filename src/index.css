@@ -3,7 +3,7 @@
   left: 50%;
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 .loading.cover-page {
   position: fixed;
@@ -70,7 +70,7 @@
 }
 .feed-card .ant-tabs-nav-list {
   -webkit-transform: translate(0px, 0px) !important;
-          transform: translate(0px, 0px) !important;
+  transform: translate(0px, 0px) !important;
 }
 .feed-card .ant-tabs > .ant-tabs-nav .ant-tabs-nav-operations,
 .feed-card .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-operations {
@@ -85,4 +85,15 @@
 .footer {
   font-size: 12px;
   height: 30px;
+}
+
+/* overrides for filter drawer */
+.ant-checkbox-wrapper {
+  align-items: center;
+}
+.ant-checkbox {
+  top: 0;
+}
+.ant-radio-wrapper {
+  align-items: center;
 }
