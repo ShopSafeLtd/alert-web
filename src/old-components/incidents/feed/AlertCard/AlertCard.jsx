@@ -3,9 +3,7 @@ import styled from 'styled-components';
 import isEqual from 'lodash/isEqual';
 import { Link } from 'react-router-dom';
 import MenuItem from '@material-ui/core/MenuItem';
-import SwipeableViews from 'react-swipeable-views';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import { Tabs } from 'antd';
 
 import {
   UnapprovedCard,
@@ -19,9 +17,8 @@ import AlertCardOffenders from '../AlertCardOffenders/AlertCardOffenders';
 import { isAuthorised } from 'utils';
 import { useStoreState } from '../../../../state';
 
-const StyledTab = styled(Tab)`
-  min-width: 0px !important;
-`;
+const { TabPane } = Tabs;
+
 const Card = styled.div`
   width: 100%;
   height: 100%;
@@ -43,7 +40,7 @@ class AlertCard extends Component {
     this.state = {
       offenderView: false,
       currentOffender: { images: [] },
-      activeTab: 0,
+      activeTab: '0',
     };
   }
 
@@ -104,6 +101,7 @@ class AlertCard extends Component {
         </DeleteItem>
       );
     }
+
     return (
       <Card>
         {approved ? null : (
@@ -121,22 +119,8 @@ class AlertCard extends Component {
         {!uploaded && <UploadingOverlay />}
         {menuActions.length > 0 ? <CardMenu actions={menuActions} /> : null}
         <AlertCardImages images={images} />
-        <Tabs
-          value={activeTab}
-          onChange={(e, value) => this.setState({ activeTab: value })}
-          indicatorColor="primary"
-          textColor="primary"
-          variant="fullWidth"
-        >
-          <StyledTab label="Description" />
-          <StyledTab label="Location" />
-          <StyledTab label="Offenders" />
-        </Tabs>
-        <SwipeableViews
-          index={activeTab}
-          onChangeIndex={(e) => this.setState({ activeTab: e })}
-        >
-          <div>
+        <Tabs activeKey={activeTab} onChange={(value) => this.setState({ activeTab: value })}>
+          <TabPane tab="Description" key="0">
             <AlertCardDescription
               subject={subject}
               date={date}
@@ -146,17 +130,17 @@ class AlertCard extends Component {
               user={createdBy}
               groups={groups}
             />
-          </div>
-          <div>
+          </TabPane>
+          <TabPane tab="Location" key="1">
             <AlertCardLocation location={location} />
-          </div>
-          <div>
+          </TabPane>
+          <TabPane tab="Offenders" key="2">
             <AlertCardOffenders
               offenders={offenders}
               toggleOffenderPopOver={toggleOffenderPopOver}
             />
-          </div>
-        </SwipeableViews>
+          </TabPane>
+        </Tabs>
       </Card>
     );
   }

@@ -13,7 +13,7 @@ const Container = styled.div`
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   @media (min-width: 1024px) {
-    height: calc(100vh - 56px);
+    height: calc(100vh - 150px);
   }
 `;
 const Wrapper = styled.div`
