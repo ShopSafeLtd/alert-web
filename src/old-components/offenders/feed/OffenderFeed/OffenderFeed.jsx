@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
-import { Input } from 'antd';
+import { Input, Typography } from 'antd';
 import {
   SearchOutlined,
   FilterOutlined,
@@ -357,6 +357,153 @@ class OffenderFeed extends React.Component {
           style={{
             display: 'flex',
             flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginBottom: 10,
+          }}
+        >
+          <div style={{ width: '30%' }}></div>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              width: '35%',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                width: '100%',
+              }}
+            >
+              <Input
+                placeholder="Search..."
+                size="large"
+                prefix={
+                  <SearchOutlined
+                    style={{
+                      fontSize: '22px',
+                      color: '#EF5350',
+                      marginRight: 10,
+                    }}
+                  />
+                }
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+              />
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginLeft: 16,
+                cursor: 'pointer',
+              }}
+              onClick={() => this.setState({ filterOpen: true })}
+            >
+              <FilterOutlined
+                style={{
+                  fontSize: '28px',
+                  color: '#EF5350',
+                  marginRight: 5,
+                }}
+              />
+              <ArrowUpOutlined
+                style={{
+                  fontSize: '21px',
+                  color: '#EF5350',
+                  marginBottom: 8,
+                }}
+              />
+              <ArrowDownOutlined
+                style={{
+                  fontSize: '21px',
+                  color: '#EF5350',
+                  marginTop: 8,
+                  marginLeft: -8,
+                }}
+              />
+            </div>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-end',
+              cursor: 'pointer',
+              userSelect: 'none',
+              width: '30%',
+            }}
+          >
+            <div
+              onClick={() => this.setState({ filterOpen: true })}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                cursor: 'pointer',
+                userSelect: 'none',
+                marginRight: '36px',
+              }}
+            >
+              <Typography.Text>
+                {`Order: ${
+                  queryVariables.order.createdAt === 'desc'
+                    ? 'Most recent first'
+                    : 'Oldest first'
+                }`}
+              </Typography.Text>
+              {queryVariables.groups && (
+                <div>
+                  {`Groups: `}
+                  {queryVariables.groups?.map((el) => (
+                    <Typography.Text>
+                      {`[ ${groups.find((e) => e.id === el).name} ] `}
+                    </Typography.Text>
+                  ))}
+                </div>
+              )}
+              {queryVariables.tags && (
+                <div>
+                  {`Tags: `}
+                  {queryVariables.tags?.map((el) => (
+                    <Typography.Text>
+                      {`[ ${tags.find((e) => e.id === el).name} ] `}
+                    </Typography.Text>
+                  ))}
+                </div>
+              )}
+              {queryVariables.ethnicity && (
+                <div>
+                  {`Ethnicity: `}
+                  {queryVariables.ethnicity?.map((el) => (
+                    <Typography.Text>{`[ ${el} ] `}</Typography.Text>
+                  ))}
+                </div>
+              )}
+              {queryVariables.sex && (
+                <div>
+                  {`Sex: `}
+                  {queryVariables.sex?.map((el) => (
+                    <Typography.Text>{`[ ${el[0]}${el
+                      .toLowerCase()
+                      .slice(1)} ] `}</Typography.Text>
+                  ))}
+                </div>
+              )}
+              {queryVariables.approved !== undefined && (
+                <Typography.Text>
+                  {queryVariables.approved
+                    ? 'Approved only'
+                    : 'Awaiting approval only'}
+                </Typography.Text>
+              )}
+            </div>
+          </div>
+        </div>
+        {/* <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
             justifyContent: 'center',
           }}
         >
@@ -414,7 +561,7 @@ class OffenderFeed extends React.Component {
               }}
             />
           </div>
-        </div>
+        </div> */}
         {/* end search and filter bar */}
         {!!offenders && offenders?.length === 0 && loading ? (
           <FeedContainer to="/app/offenders/add" text="Offender">

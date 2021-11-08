@@ -8,6 +8,7 @@ import { MarkOffenderActive } from 'graphql-src/offenders/mutations';
 import Offline from '../../../global/Offline/Offline';
 import { OffenderFeed as query } from 'graphql-src/offenders/queries';
 import { useStoreActions, useStoreState } from '../../../../state';
+import { LocalStorageKeys } from 'types';
 
 import { Tags } from 'graphql-src/tags/queries';
 import { Groups } from 'graphql-src/groups/queries';
@@ -62,9 +63,15 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
     tags: undefined,
     approved: undefined,
   });
-  console.log(queryVariables);
 
   const [searchInput, setSearchInput] = useState('');
+
+  useEffect(() => {
+    const json = window.localStorage.getItem(LocalStorageKeys.OFFENDER_FILTER);
+    const filters = json && JSON.parse(json);
+    if (!filters) return;
+    setQueryVariables(filters);
+  }, []);
 
   const variables = {
     schemeId: schemeId || window.localStorage.getItem('currentScheme'),

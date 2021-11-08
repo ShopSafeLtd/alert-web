@@ -1,4 +1,4 @@
-import React, { useState, SetStateAction } from 'react';
+import React, { useState, SetStateAction, useEffect } from 'react';
 
 import {
   Radio,
@@ -12,8 +12,8 @@ import {
   Space,
   Col,
 } from 'antd';
-
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
+import { LocalStorageKeys } from '../../../../types';
 
 const { Option } = Select;
 
@@ -28,8 +28,6 @@ const ethnicities = {
 };
 
 type OrderType = Record<string, 'asc' | 'desc' | undefined>;
-type SexType = string;
-type EthnicityType = Record<string, string>[];
 interface TagsType {
   id: string;
   name: string;
@@ -38,11 +36,11 @@ interface TagsType {
 
 interface QueryVariablesType {
   order: OrderType;
-  groups: string[] | undefined;
-  sex: CheckboxValueType[] | undefined;
-  ethnicity: string[] | undefined;
-  tags: string[] | undefined;
-  approved: boolean | undefined;
+  groups: string[] | undefined | null;
+  sex: CheckboxValueType[] | undefined | null;
+  ethnicity: string[] | undefined | null;
+  tags: string[] | undefined | null;
+  approved: boolean | undefined | null;
 }
 
 interface GroupType {
@@ -50,6 +48,23 @@ interface GroupType {
   name: string;
   description: string;
 }
+
+const convertApprovalToBooleanOrUndefined = (
+  value: CheckboxValueType[] | undefined
+) => {
+  let booleanOrUndefined;
+  if (value?.includes('Approved')) booleanOrUndefined = true;
+  if (value?.includes('Awaiting Approval')) booleanOrUndefined = false;
+  if (value?.length === 2) booleanOrUndefined = undefined;
+  return booleanOrUndefined;
+};
+
+const arrayOrNull = (
+  value: string[] | CheckboxValueType[] | undefined | null
+) => {
+  if (value && value.length > 0) return value as string[];
+  return null;
+};
 
 interface Props {
   handleClose: () => void;
@@ -81,16 +96,6 @@ const OffenderFilter: React.FC<Props> = ({
     CheckboxValueType[] | undefined
   >();
 
-  const convertApprovalToBooleanOrUndefined = (
-    value: CheckboxValueType[] | undefined
-  ) => {
-    let booleanOrUndefined;
-    if (value?.includes('Approved')) booleanOrUndefined = true;
-    if (value?.includes('Awaiting Approval')) booleanOrUndefined = false;
-    if (value?.length === 2) booleanOrUndefined = undefined;
-    return booleanOrUndefined;
-  };
-
   const actions = {
     onOrderChange: (event: RadioChangeEvent) =>
       setSelectedOrder({ createdAt: event.target.value }),
@@ -106,14 +111,20 @@ const OffenderFilter: React.FC<Props> = ({
       setSelectedApproval(value),
     clearApproval: () => setSelectedApproval(undefined),
     onSubmit: () => {
-      setQueryVariables({
+      const variables = {
         order: selectedOrder,
-        groups: selectedGroups,
-        sex: selectedSex,
-        tags: selectedTags,
-        ethnicity: selectedEthnicity,
+        groups: arrayOrNull(selectedGroups),
+        sex: arrayOrNull(selectedSex),
+        tags: arrayOrNull(selectedTags),
+        ethnicity: arrayOrNull(selectedEthnicity),
         approved: convertApprovalToBooleanOrUndefined(selectedApproval),
-      });
+      };
+
+      setQueryVariables(variables);
+      window.localStorage.setItem(
+        LocalStorageKeys.OFFENDER_FILTER,
+        JSON.stringify(variables)
+      );
       handleClose();
     },
     onClose: () => {
@@ -126,6 +137,24 @@ const OffenderFilter: React.FC<Props> = ({
       handleClose();
     },
   };
+
+  useEffect(() => {
+    const json = window.localStorage.getItem(LocalStorageKeys.OFFENDER_FILTER);
+    const filters = json && (JSON.parse(json) as QueryVariablesType | null);
+    if (!filters) return;
+
+    setSelectedOrder(filters.order);
+    setSelectedGroups(arrayOrNull(filters.groups) || undefined);
+    setSelectedSex(arrayOrNull(filters.sex) || undefined);
+    setSelectedTags(arrayOrNull(filters.tags) || undefined);
+    setSelectedEthnicity(arrayOrNull(filters.ethnicity) || undefined);
+
+    let approval: string[] | undefined;
+    approval = undefined;
+    if (filters.approved === true) approval = ['Approved'];
+    if (filters.approved === false) approval = ['Awaiting Approval'];
+    setSelectedApproval(approval);
+  }, []);
 
   return (
     <Drawer
@@ -200,7 +229,7 @@ const OffenderFilter: React.FC<Props> = ({
               <Typography.Title level={4}>Tags</Typography.Title>
             </Space>
             <div style={{ flex: 1 }} />
-            <Button type="text" onClick={actions.clearSex}>
+            <Button type="text" onClick={actions.clearTags}>
               Clear
             </Button>
           </Row>
@@ -263,7 +292,7 @@ const OffenderFilter: React.FC<Props> = ({
               <Typography.Title level={4}>Sex</Typography.Title>
             </Space>
             <div style={{ flex: 1 }} />
-            <Button type="text" onClick={actions.clearApproval}>
+            <Button type="text" onClick={actions.clearSex}>
               Clear
             </Button>
           </Row>
