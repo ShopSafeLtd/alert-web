@@ -187,7 +187,6 @@ class AlertFeed extends React.Component {
       approveId,
     } = this.state;
 
-    console.log(queryVariables);
     return (
       <Fragment>
         <FeedContainer

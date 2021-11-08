@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
-import { useQuery, useMutation } from "@apollo/client";
+import React, { useState, useEffect } from 'react';
+import { useQuery, useMutation } from '@apollo/client';
 
-import OffenderFeed from "../OffenderFeed/OffenderFeed";
-import { RecycleOffender } from "graphql-src/offenders/mutations";
-import { ApproveOffender } from "graphql-src/offenders/mutations";
-import { MarkOffenderActive } from "graphql-src/offenders/mutations";
-import Offline from "../../../global/Offline/Offline";
-import { OffenderFeed as query } from "graphql-src/offenders/queries";
-import { useStoreActions, useStoreState } from "../../../../state";
+import OffenderFeed from '../OffenderFeed/OffenderFeed';
+import { RecycleOffender } from 'graphql-src/offenders/mutations';
+import { ApproveOffender } from 'graphql-src/offenders/mutations';
+import { MarkOffenderActive } from 'graphql-src/offenders/mutations';
+import Offline from '../../../global/Offline/Offline';
+import { OffenderFeed as query } from 'graphql-src/offenders/queries';
+import { useStoreActions, useStoreState } from '../../../../state';
 
-import { Tags } from "graphql-src/tags/queries";
-import { Groups } from "graphql-src/groups/queries";
+import { Tags } from 'graphql-src/tags/queries';
+import { Groups } from 'graphql-src/groups/queries';
 
 let querySize = 10;
 if (window.innerWidth > 1239 && window.innerWidth < 1800) {
@@ -35,7 +35,7 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const search = useStoreState((state) => state.theme.search);
   const role = useStoreState((state) => state.user.role);
-  const admin = role !== "USER" ? true : false;
+  const admin = role !== 'USER' ? true : false;
 
   // state
   const [fetching, setFetching] = useState(false);
@@ -55,18 +55,19 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
     },
   });
   const [queryVariables, setQueryVariables] = useState({
-    order: { createdAt: "desc" },
+    order: { createdAt: 'desc' },
     groups: undefined,
     sex: undefined,
     ethnicity: undefined,
     tags: undefined,
     approved: undefined,
   });
+  console.log(queryVariables);
 
-  const [searchInput, setSearchInput] = useState("");
+  const [searchInput, setSearchInput] = useState('');
 
   const variables = {
-    schemeId: schemeId || window.localStorage.getItem("currentScheme"),
+    schemeId: schemeId || window.localStorage.getItem('currentScheme'),
     userId,
     search: searchInput,
     first: querySize,
@@ -76,13 +77,13 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
   // effects
   useEffect(() => {
     setBottomNav(true);
-    setTitle("Offenders");
+    setTitle('Offenders');
     setAppBar(true);
     setSearch(true);
-    setSearchText("Search for offenders...");
+    setSearchText('Search for offenders...');
     return () => {
       setSearch(false);
-      setSearchText("");
+      setSearchText('');
     };
     // eslint-disable-next-line
   }, []);
@@ -94,7 +95,7 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
   // queries
   const { data, loading, fetchMore, refetch, error } = useQuery(query, {
     variables,
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: 'cache-and-network',
     onError: (err) => console.log(err),
   });
   const { data: tags } = useQuery(Tags, {
@@ -106,12 +107,12 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
           },
         },
         dataType: {
-          equals: "OFFENDER",
+          equals: 'OFFENDER',
         },
       },
       orderBy: [
         {
-          name: "asc",
+          name: 'asc',
         },
       ],
     },
@@ -127,7 +128,7 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
       },
       orderBy: [
         {
-          name: "asc",
+          name: 'asc',
         },
       ],
     },
@@ -238,7 +239,7 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
         updateOffender: {
           id: offender,
           active: active,
-          __typename: "Offender",
+          __typename: 'Offender',
         },
       },
     });
@@ -273,6 +274,7 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
       setOrder={setOrder}
       filter={filter}
       setFilter={setFilter}
+      queryVariables={queryVariables}
       setQueryVariables={setQueryVariables}
       tags={tags?.tags}
       groups={groups?.groups}

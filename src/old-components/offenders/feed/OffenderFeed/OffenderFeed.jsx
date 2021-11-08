@@ -229,7 +229,7 @@ class OffenderFeed extends React.Component {
       order,
       setOrder,
       setQueryVariables,
-
+      queryVariables,
       tags,
       groups,
     } = this.props;
@@ -350,8 +350,6 @@ class OffenderFeed extends React.Component {
       setStatusBar(false, '');
     };
 
-    console.log(!!offenders, offenders?.length === 0, loading )
-
     return (
       <>
         {/* search and filter bar */}
@@ -433,6 +431,7 @@ class OffenderFeed extends React.Component {
                 setOrder={setOrder}
                 filter={filter}
                 setFilter={setFilter}
+                queryVariables={queryVariables}
                 setQueryVariables={setQueryVariables}
                 tags={tags}
                 groups={groups}
