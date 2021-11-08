@@ -55,15 +55,23 @@ class Terms extends PureComponent {
     const {
       values: { termsSigned, error },
       handleChange,
+      hideForm,
     } = this.props;
     return (
       <Page>
         <Header>
           <HeaderText>Terms of Use</HeaderText>
-          <HeaderSubText>
-            Please read through our terms and conditions and accept them to
-            continue.
-          </HeaderSubText>
+          {hideForm ? (
+            <HeaderSubText>
+              Below are the terms and conditions that you accepted during your
+              onboarding process as an Alert! user.
+            </HeaderSubText>
+          ) : (
+            <HeaderSubText>
+              Please read through our terms and conditions and accept them to
+              continue.
+            </HeaderSubText>
+          )}
         </Header>
         <TermsContainer>
           <TermsText>
@@ -455,18 +463,20 @@ class Terms extends PureComponent {
         </TermsContainer>
         {!!error && <ErrorText>{error}</ErrorText>}
 
-        <CheckboxRow>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={termsSigned}
-                onChange={() => handleChange('termsSigned', !termsSigned)}
-                value="accepted"
-              />
-            }
-            label="I confirm that I have read and agree to the above terms and conditions."
-          />
-        </CheckboxRow>
+        {!hideForm && (
+          <CheckboxRow>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={termsSigned}
+                  onChange={() => handleChange('termsSigned', !termsSigned)}
+                  value="accepted"
+                />
+              }
+              label="I confirm that I have read and agree to the above terms and conditions."
+            />
+          </CheckboxRow>
+        )}
       </Page>
     );
   }

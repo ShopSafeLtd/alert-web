@@ -1,9 +1,9 @@
-import React from "react";
-import { Menu, Dropdown, Avatar, Row } from "antd";
-import { LogoutOutlined } from "@ant-design/icons";
-import { useStoreState } from "state";
-import { useAuth } from "hooks";
-import { APP_PREFIX_PATH } from "configs/AppConfig";
+import React from 'react';
+import { Menu, Dropdown, Avatar, Row } from 'antd';
+import { LogoutOutlined } from '@ant-design/icons';
+import { useStoreState } from 'state';
+import { useAuth } from 'hooks';
+import { APP_PREFIX_PATH } from 'configs/AppConfig';
 
 interface MenuItem {
   title: string;
@@ -13,9 +13,14 @@ interface MenuItem {
 
 const menuItem: MenuItem[] = [
   {
-    title: "User Settings",
-    icon: "", //EditOutlined,
+    title: 'User Settings',
+    icon: '', //EditOutlined,
     path: `${APP_PREFIX_PATH}/user-settings`,
+  },
+  {
+    title: 'Terms & Conditions',
+    icon: '', //EditOutlined,
+    path: `${APP_PREFIX_PATH}/user-settings/terms`,
   },
 
   // {
@@ -43,9 +48,9 @@ export const NavProfile = () => {
   const profileMenu = (
     <div className="nav-profile nav-dropdown">
       <div className="nav-profile-header">
-        <div className="d-flex" style={{ alignItems: "center" }}>
+        <div className="d-flex" style={{ alignItems: 'center' }}>
           <Avatar
-            style={{ backgroundColor: "rgb(222, 68, 54)", minWidth: 35 }}
+            style={{ backgroundColor: 'rgb(222, 68, 54)', minWidth: 35 }}
             size={35}
           >
             {name?.charAt(0)}
@@ -81,10 +86,10 @@ export const NavProfile = () => {
     </div>
   );
   return (
-    <Dropdown placement="bottomRight" overlay={profileMenu} trigger={["click"]}>
+    <Dropdown placement="bottomRight" overlay={profileMenu} trigger={['click']}>
       <Menu className="d-flex align-item-center" mode="horizontal">
         <Menu.Item>
-          <Avatar style={{ backgroundColor: "rgb(222, 68, 54)" }}>
+          <Avatar style={{ backgroundColor: 'rgb(222, 68, 54)' }}>
             {name?.charAt(0)}
           </Avatar>
         </Menu.Item>
