@@ -1,4 +1,4 @@
-import React, { useState, SetStateAction } from 'react';
+import React, { useState, SetStateAction, useEffect } from 'react';
 
 import {
   Radio,
@@ -14,6 +14,7 @@ import {
 } from 'antd';
 
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
+import { LocalStorageKeys } from 'types';
 
 const { Option } = Select;
 
@@ -21,9 +22,9 @@ type OrderType = Record<string, 'asc' | 'desc' | undefined>;
 
 interface QueryVariablesType {
   order: OrderType;
-  crimeTypes: string[] | undefined;
-  groups: string[] | undefined;
-  approved: boolean | undefined;
+  crimeTypes: string[] | undefined | null;
+  groups: string[] | undefined | null;
+  approved: boolean | undefined | null;
 }
 interface CrimeTypeType {
   id: string;
@@ -72,6 +73,13 @@ const AlertFilter: React.FC<Props> = ({
     return booleanOrUndefined;
   };
 
+  const arrayOrNull = (
+    value: string[] | CheckboxValueType[] | undefined | null
+  ) => {
+    if (value && value.length > 0) return value as string[];
+    return null;
+  };
+
   const actions = {
     onOrderChange: (event: RadioChangeEvent) =>
       setSelectedOrder({ createdAt: event.target.value }),
@@ -83,12 +91,18 @@ const AlertFilter: React.FC<Props> = ({
       setSelectedApproval(value),
     clearApproval: () => setSelectedApproval(undefined),
     onSubmit: () => {
-      setQueryVariables({
+      const variables = {
         order: selectedOrder,
-        crimeTypes: selectedCrimeTypes,
-        groups: selectedGroups,
+        crimeTypes: arrayOrNull(selectedCrimeTypes),
+        groups: arrayOrNull(selectedGroups),
         approved: convertApprovalToBooleanOrUndefined(selectedApproval),
-      });
+      };
+
+      setQueryVariables(variables);
+      window.localStorage.setItem(
+        LocalStorageKeys.INCIDENT_FILTER,
+        JSON.stringify(variables)
+      );
       handleClose();
     },
     onClose: () => {
@@ -101,6 +115,22 @@ const AlertFilter: React.FC<Props> = ({
       handleClose();
     },
   };
+
+  useEffect(() => {
+    const json = window.localStorage.getItem(LocalStorageKeys.INCIDENT_FILTER);
+    const filters = json && (JSON.parse(json) as QueryVariablesType | null);
+    if (!filters) return;
+
+    setSelectedOrder(filters.order);
+    setSelectedGroups(arrayOrNull(filters.groups) || undefined);
+    setSelectedCrimeTypes(arrayOrNull(filters.crimeTypes) || undefined);
+
+    let approval: string[] | undefined;
+    approval = undefined;
+    if (filters.approved === true) approval = ['Approved'];
+    if (filters.approved === false) approval = ['Awaiting Approval'];
+    setSelectedApproval(approval);
+  }, []);
 
   return (
     <Drawer

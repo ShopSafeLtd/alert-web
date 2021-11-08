@@ -311,7 +311,7 @@ class AlertFeed extends React.Component {
                     {`Groups: `}
                     {queryVariables.groups?.map((el) => (
                       <Typography.Text>
-                        {`${groups.find((e) => e.id === el).name} `}
+                        {`[ ${groups.find((e) => e.id === el).name} ] `}
                       </Typography.Text>
                     ))}
                   </div>
@@ -321,7 +321,7 @@ class AlertFeed extends React.Component {
                     {`Crime Types: `}
                     {queryVariables.crimeTypes?.map((el) => (
                       <Typography.Text>
-                        {`${crimeTypes.find((e) => e.id === el).name} `}
+                        {`[ ${crimeTypes.find((e) => e.id === el).name} ] `}
                       </Typography.Text>
                     ))}
                   </div>

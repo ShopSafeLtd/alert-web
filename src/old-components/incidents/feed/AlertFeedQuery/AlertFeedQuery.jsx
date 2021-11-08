@@ -16,6 +16,7 @@ import Offline from '../../../global/Offline/Offline';
 import { useStoreActions, useStoreState } from '../../../../state';
 import { Tags } from 'graphql-src/tags/queries';
 import { Groups } from 'graphql-src/groups/queries';
+import { LocalStorageKeys } from 'types';
 
 const AlertFeedQuery = () => {
   const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
@@ -57,6 +58,13 @@ const AlertFeedQuery = () => {
     groups: undefined,
     approved: undefined,
   });
+
+  useEffect(() => {
+    const json = window.localStorage.getItem(LocalStorageKeys.INCIDENT_FILTER);
+    const filters = json && JSON.parse(json);
+    if (!filters) return;
+    setQueryVariables(filters);
+  }, []);
 
   useEffect(() => {
     setBottomNav(true);
