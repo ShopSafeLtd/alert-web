@@ -169,14 +169,16 @@ export const LoginForm = (props: Props) => {
           style={{
             display: 'flex',
             justifyContent: 'center',
-            paddingBottom: '24px',
+            paddingBottom: '12px',
           }}
         >
           <span
             onClick={onUserTerms}
             className="font-size-base font-weight-normal cursor-pointer"
           >
-            View Terms & Conditions
+            By accessing Alert! you have entered into an Agreement to accept our
+            Terms of Use and to specifically comply to the UK General Data
+            Protection Regulations.
           </span>
         </div>
         <Divider>
