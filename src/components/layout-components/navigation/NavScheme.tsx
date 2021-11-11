@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import { Menu, Dropdown, Typography, List, Row, Col } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState } from 'react';
+import { Menu, Dropdown, Typography, List, Row, Col } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCity,
   faCaretDown,
   faArrowRight,
-} from "@fortawesome/pro-light-svg-icons";
+} from '@fortawesome/pro-light-svg-icons';
+import { LocalStorageKeys } from 'types';
 
-import { useStoreState, Scheme, useStoreActions } from "state";
+import { useStoreState, Scheme, useStoreActions } from 'state';
 
 const { Text } = Typography;
 
@@ -24,7 +25,9 @@ export const NavNotification = () => {
   };
 
   const handleSchemeChange = (scheme: Scheme) => {
-    window.localStorage.setItem("currentScheme", scheme.scheme.id);
+    window.localStorage.removeItem(LocalStorageKeys.INCIDENT_FILTER);
+    window.localStorage.removeItem(LocalStorageKeys.OFFENDER_FILTER);
+    window.localStorage.setItem('currentScheme', scheme.scheme.id);
     setScheme({
       autoApproveIncidents: scheme.scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.scheme.autoApproveOffenders,
@@ -47,7 +50,7 @@ export const NavNotification = () => {
           renderItem={(item) => (
             <List.Item
               className={
-                activeScheme === item.scheme.id ? "" : "list-clickable"
+                activeScheme === item.scheme.id ? '' : 'list-clickable'
               }
               onClick={() =>
                 activeScheme !== item.scheme.id && handleSchemeChange(item)
@@ -55,7 +58,7 @@ export const NavNotification = () => {
             >
               <Row
                 align="middle"
-                style={{ width: "100%", paddingRight: 10, paddingLeft: 10 }}
+                style={{ width: '100%', paddingRight: 10, paddingLeft: 10 }}
               >
                 <Col flex={1}>
                   <span className="text-dark">{item.scheme.name} </span>
@@ -86,19 +89,19 @@ export const NavNotification = () => {
       overlay={schemeList}
       onVisibleChange={handleVisibleChange}
       visible={visible}
-      trigger={["click"]}
+      trigger={['click']}
     >
       <Menu mode="horizontal">
         <Menu.Item>
           <FontAwesomeIcon
-            style={{ fontSize: 20, color: "#424242", marginRight: 10 }}
+            style={{ fontSize: 20, color: '#424242', marginRight: 10 }}
             icon={faCity}
           />
           <Text>{activeSchemeName}</Text>
           <FontAwesomeIcon
             style={{
               fontSize: 20,
-              color: "#424242",
+              color: '#424242',
               marginLeft: 10,
               marginBottom: -3,
             }}
