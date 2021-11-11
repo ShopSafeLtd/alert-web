@@ -1,33 +1,37 @@
-import React from "react";
-import { Switch, Route } from "react-router";
-import { APP_PREFIX_PATH } from "configs/AppConfig";
-import AdminMenu from "../../../old-components/admin/AdminMenu";
+import React from 'react';
+import { Switch, Route } from 'react-router';
+import { APP_PREFIX_PATH } from 'configs/AppConfig';
+import AdminMenu from '../../../old-components/admin/AdminMenu';
 
-import UserList from "../../../old-components/users/list/AllUsers/AllUsers";
-import ViewUser from "../../../old-components/users/view/ViewUser/ViewUser";
-import AddUser from "../../../old-components/users/add/AddUser/AddUser";
+import UserList from '../../../old-components/users/list/AllUsers/AllUsers';
+import ViewUser from '../../../old-components/users/view/ViewUser/ViewUser';
+import AddUser from '../../../old-components/users/add/AddUser/AddUser';
 
-import GroupsList from "../../../old-components/groups/list/AllGroups/AllGroups";
-import ViewGroup from "../../../old-components/groups/view/ViewGroup/ViewGroup";
-import AddGroup from "../../../old-components/groups/add/AddGroup/AddGroup";
+import GroupsList from '../../../old-components/groups/list/AllGroups/AllGroups';
+import ViewGroup from '../../../old-components/groups/view/ViewGroup/ViewGroup';
+import AddGroup from '../../../old-components/groups/add/AddGroup/AddGroup';
 
-import ChatGroupsList from "../../../old-components/admin/chat-groups/list/ChatGroups";
-import ViewChatGroup from "../../../old-components/admin/chat-groups/view/ViewChatGroup";
-import AddChatGroup from "../../../old-components/admin/chat-groups/add/AddChatGroup";
+import ChatGroupsList from '../../../old-components/admin/chat-groups/list/ChatGroups';
+import ViewChatGroup from '../../../old-components/admin/chat-groups/view/ViewChatGroup';
+import AddChatGroup from '../../../old-components/admin/chat-groups/add/AddChatGroup';
 
-import SchemeDetails from "../../../old-components/admin/SchemeDetails";
+import SchemeDetails from '../../../old-components/admin/SchemeDetails';
 
-import AutoApprove from "../../../old-components/admin/AutoApprove";
+import Terms from '../../../old-components/admin/terms/Terms';
+import UserTerms from '../../../old-components/admin/terms/UserTerms';
+import SchemeTerms from '../../../old-components/admin/terms/SchemeTerms';
 
-import DataRetention from "old-components/admin/DataRetention";
+import AutoApprove from '../../../old-components/admin/AutoApprove';
 
-import OffenderWarnings from "../../../old-components/admin/offender-warnings/OffenderWarningsList";
-import ViewOffenderWarnings from "../../../old-components/admin/offender-warnings/EditOffenderWarnings";
-import AddOffenderWarnings from "../../../old-components/admin/offender-warnings/AddOffenderWarning";
+import DataRetention from 'old-components/admin/DataRetention';
 
-import CrimeTypes from "../../../old-components/admin/crime-types/CrimeTypes";
+import OffenderWarnings from '../../../old-components/admin/offender-warnings/OffenderWarningsList';
+import ViewOffenderWarnings from '../../../old-components/admin/offender-warnings/EditOffenderWarnings';
+import AddOffenderWarnings from '../../../old-components/admin/offender-warnings/AddOffenderWarning';
 
-import { RecycleBin } from "old-components/admin/recycle-bin";
+import CrimeTypes from '../../../old-components/admin/crime-types/CrimeTypes';
+
+import { RecycleBin } from 'old-components/admin/recycle-bin';
 
 const SchemeSettings = () => {
   return (
@@ -86,6 +90,31 @@ const SchemeSettings = () => {
       <Route
         path={`${APP_PREFIX_PATH}/scheme-settings/scheme-details`}
         component={SchemeDetails}
+      />
+
+      {/* terms */}
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/terms`}
+        component={Terms}
+      />
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/scheme-terms`}
+        component={() => (
+          <div style={{ padding: '24px', backgroundColor: 'white' }}>
+            <SchemeTerms
+              values={{ termsSigned: true, error: false }}
+              hideForm
+            />
+          </div>
+        )}
+      />
+      <Route
+        path={`${APP_PREFIX_PATH}/scheme-settings/user-terms`}
+        component={() => (
+          <div style={{ padding: '24px', backgroundColor: 'white' }}>
+            <UserTerms values={{ termsSigned: true, error: false }} hideForm />
+          </div>
+        )}
       />
 
       {/* auto approve */}

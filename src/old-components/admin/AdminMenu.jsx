@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import { APP_PREFIX_PATH } from "configs/AppConfig";
-import { useStoreActions } from "../../state";
-import { Menu, MenuItem, MenuItemText } from "../global/layout";
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
+import { APP_PREFIX_PATH } from 'configs/AppConfig';
+import { useStoreActions } from '../../state';
+import { Menu, MenuItem, MenuItemText } from '../global/layout';
 
 const Svg = styled.svg`
   width: 28px;
@@ -21,12 +21,12 @@ const AdminMenu = () => {
   const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
 
   useEffect(() => {
-    setTitle("Scheme Settings");
+    setTitle('Scheme Settings');
     // setNavbarAction('backLink');
     setBackLinkTo(`/`);
     setBottomNav(false);
     return () => {
-      setTitle("");
+      setTitle('');
       // setNavbarAction('');
       setBackLinkTo(``);
       setBottomNav(true);
@@ -71,6 +71,44 @@ const AdminMenu = () => {
           />
         </Svg>
         <MenuItemText>Scheme Details</MenuItemText>
+      </MenuItem>
+
+      <MenuItem to={`${APP_PREFIX_PATH}/scheme-settings/terms`}>
+        <Svg viewBox="0 0 503.6 503.6">
+          <path
+            fill="#EF5350"
+            d="M385.098,57.754h-41.967v-8.393c0-9.233-7.554-16.787-16.787-16.787h-25.18V24.18c0-14.269-10.911-25.18-25.18-25.18
+				h-50.361c-14.269,0-25.18,11.751-25.18,25.18v8.393h-25.18c-9.233,0-16.787,7.554-16.787,16.787v8.393h-41.967
+				c-23.502,0-41.967,18.466-41.967,41.967v360.918c0,23.502,18.466,41.967,41.967,41.967h268.59
+				c23.502,0,41.967-18.466,41.967-41.967V99.721C427.066,76.22,408.6,57.754,385.098,57.754z M175.262,49.361h33.574
+				c5.036,0,8.393-3.357,8.393-8.393V24.18c0-5.036,3.357-8.393,8.393-8.393h50.361c5.036,0,8.393,4.197,8.393,8.393v16.787
+				c0,5.036,3.357,8.393,8.393,8.393h33.574v16.787v41.967H175.262V66.148V49.361z M410.279,460.639
+				c0,14.269-10.911,25.18-25.18,25.18h-268.59c-14.269,0-25.18-10.911-25.18-25.18V99.721c0-14.269,10.911-25.18,25.18-25.18
+				h41.967v33.574c0,9.233,7.554,16.787,16.787,16.787h151.082c9.233,0,16.787-7.554,16.787-16.787V74.541h41.967
+				c14.269,0,25.18,10.911,25.18,25.18V460.639z"
+          />
+          <path
+            fill="#EF5350"
+            d="M343.131,183.656H158.475c-5.036,0-8.393,3.357-8.393,8.393s3.357,8.393,8.393,8.393h184.656
+				c5.036,0,8.393-3.357,8.393-8.393S348.167,183.656,343.131,183.656z"
+          />
+          <path
+            fill="#EF5350"
+            d="M343.131,259.197H158.475c-5.036,0-8.393,3.357-8.393,8.393s3.357,8.393,8.393,8.393h184.656
+				c5.036,0,8.393-3.357,8.393-8.393S348.167,259.197,343.131,259.197z"
+          />
+          <path
+            fill="#EF5350"
+            d="M343.131,334.738H158.475c-5.036,0-8.393,3.357-8.393,8.393c0,5.036,3.357,8.393,8.393,8.393h184.656
+				c5.036,0,8.393-3.357,8.393-8.393C351.525,338.095,348.167,334.738,343.131,334.738z"
+          />
+          <path
+            fill="#EF5350"
+            d="M343.131,410.279H158.475c-5.036,0-8.393,3.357-8.393,8.393s3.357,8.393,8.393,8.393h184.656
+				c5.036,0,8.393-3.357,8.393-8.393S348.167,410.279,343.131,410.279z"
+          />
+        </Svg>
+        <MenuItemText>Terms & Conditions</MenuItemText>
       </MenuItem>
       <MenuItem to={`${APP_PREFIX_PATH}/scheme-settings/auto-approve`}>
         <Svg viewBox="0 0 24 24">

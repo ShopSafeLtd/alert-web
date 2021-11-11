@@ -38,13 +38,13 @@ class SchemeSettings extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      label: {}
+      label: {},
     };
   }
 
-  setLabel = label => {
+  setLabel = (label) => {
     this.setState({
-      label
+      label,
     });
   };
 
@@ -57,6 +57,24 @@ class SchemeSettings extends PureComponent {
         <Route exact path="/admin" component={AdminMenu} />
         <Route
           path="/admin/scheme-details"
+          render={({ history }) => (
+            <SchemeDetails history={history} currentScheme={currentScheme} />
+          )}
+        />
+        <Route
+          path="/admin/terms"
+          render={({ history }) => (
+            <SchemeDetails history={history} currentScheme={currentScheme} />
+          )}
+        />
+        <Route
+          path="/admin/scheme-terms"
+          render={({ history }) => (
+            <SchemeDetails history={history} currentScheme={currentScheme} />
+          )}
+        />
+        <Route
+          path="/admin/user-terms"
           render={({ history }) => (
             <SchemeDetails history={history} currentScheme={currentScheme} />
           )}
@@ -101,7 +119,7 @@ class SchemeSettings extends PureComponent {
         <Route path="/admin/users/add" component={AddUser} />
         <Route
           path="/admin/users/view/:id"
-          render={router => <ViewUser setActions={setActions} {...router} />}
+          render={(router) => <ViewUser setActions={setActions} {...router} />}
         />
         <Route path="/admin/users/edit/:id" component={EditUser} />
         <Route path="/admin/users/groups/:id" component={EditUserGroups} />
@@ -118,7 +136,9 @@ class SchemeSettings extends PureComponent {
         <Route exact path="/admin/users" component={Users} />
         <Route
           path="/admin/crime-types"
-          render={router => <CrimeTypes setActions={setActions} {...router} />}
+          render={(router) => (
+            <CrimeTypes setActions={setActions} {...router} />
+          )}
         />
       </Page>
     );

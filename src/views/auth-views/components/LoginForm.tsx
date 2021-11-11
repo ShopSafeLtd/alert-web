@@ -1,13 +1,13 @@
-import React, { useEffect } from "react";
-import { Button, Form, Input, Divider, Alert } from "antd";
-import { MailOutlined, LockOutlined } from "@ant-design/icons";
-import { GoogleSVG, FacebookSVG } from "assets/svg/icon";
-import CustomIcon from "components/util-components/CustomIcon";
-import { useHistory } from "react-router-dom";
-import { motion } from "framer-motion";
-import { useStoreState, useStoreActions } from "state";
-import { useAuth } from "hooks";
-import { AUTH_PREFIX_PATH } from "configs/AppConfig";
+import React, { useEffect } from 'react';
+import { Button, Form, Input, Divider, Alert } from 'antd';
+import { MailOutlined, LockOutlined } from '@ant-design/icons';
+import { GoogleSVG, FacebookSVG } from 'assets/svg/icon';
+import CustomIcon from 'components/util-components/CustomIcon';
+import { useHistory } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { useStoreState, useStoreActions } from 'state';
+import { useAuth } from 'hooks';
+import { AUTH_PREFIX_PATH } from 'configs/AppConfig';
 
 export interface Props {
   otherSignIn?: boolean;
@@ -20,12 +20,7 @@ export interface Props {
 export const LoginForm = (props: Props) => {
   let history = useHistory();
 
-  const {
-    otherSignIn,
-    showForgetPassword,
-    extra,
-    allowRedirect,
-  } = props;
+  const { otherSignIn, showForgetPassword, extra, allowRedirect } = props;
 
   const { login } = useAuth();
 
@@ -76,6 +71,10 @@ export const LoginForm = (props: Props) => {
     history.push(`${AUTH_PREFIX_PATH}/forgot-password`);
   };
 
+  const onUserTerms = () => {
+    history.push(`${AUTH_PREFIX_PATH}/user-terms`);
+  };
+
   const renderOtherSignIn = (
     <div>
       <Divider>
@@ -121,11 +120,11 @@ export const LoginForm = (props: Props) => {
           rules={[
             {
               required: true,
-              message: "Please input your email",
+              message: 'Please input your email',
             },
             {
-              type: "email",
-              message: "Please enter a validate email!",
+              type: 'email',
+              message: 'Please enter a validate email!',
             },
           ]}
         >
@@ -137,8 +136,8 @@ export const LoginForm = (props: Props) => {
             <div
               className={`${
                 showForgetPassword
-                  ? "d-flex justify-content-between w-100 align-items-center"
-                  : ""
+                  ? 'd-flex justify-content-between w-100 align-items-center'
+                  : ''
               }`}
             >
               <span>Password</span>
@@ -155,7 +154,7 @@ export const LoginForm = (props: Props) => {
           rules={[
             {
               required: true,
-              message: "Please input your password",
+              message: 'Please input your password',
             },
           ]}
         >
@@ -166,7 +165,20 @@ export const LoginForm = (props: Props) => {
             Sign In
           </Button>
         </Form.Item>
-
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            paddingBottom: '24px',
+          }}
+        >
+          <span
+            onClick={onUserTerms}
+            className="font-size-base font-weight-normal cursor-pointer"
+          >
+            View Terms & Conditions
+          </span>
+        </div>
         <Divider>
           <span
             onClick={onForgotPassword}
@@ -175,7 +187,6 @@ export const LoginForm = (props: Props) => {
             Forgotten password?
           </span>
         </Divider>
-
         {otherSignIn ? renderOtherSignIn : null}
         {extra}
       </Form>
