@@ -174,7 +174,12 @@ export const LoginForm = (props: Props) => {
         >
           <span
             onClick={onUserTerms}
-            className="font-size-base font-weight-normal cursor-pointer"
+            className="font-weight-normal cursor-pointer"
+            style={{
+              fontSize: '12px',
+              textAlign: 'center',
+              marginBottom: '12px',
+            }}
           >
             By accessing Alert! you have entered into an Agreement to accept our
             Terms of Use and to specifically comply to the UK General Data
