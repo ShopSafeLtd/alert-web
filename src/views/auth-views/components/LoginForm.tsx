@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Button, Form, Input, Divider, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import { GoogleSVG, FacebookSVG } from 'assets/svg/icon';
-import CustomIcon from 'components/util-components/CustomIcon';
+import CustomIcon from 'components/util-components/AntD/CustomIcon';
 import { useHistory } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useStoreState, useStoreActions } from 'state';

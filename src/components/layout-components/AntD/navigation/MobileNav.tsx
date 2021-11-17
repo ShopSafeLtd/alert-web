@@ -1,12 +1,12 @@
-import React from "react";
-import { Drawer } from "antd";
-import { Scrollbars } from "react-custom-scrollbars";
-import MenuContent from "./MenuContent";
-import Logo from "./Logo";
-import Flex from "components/shared-components/Flex";
-import { ArrowLeftOutlined } from "@ant-design/icons";
-import { useStoreState, useStoreActions, NavType } from 'state'
-import { NavItem } from "configs/NavigationConfig";
+import React from 'react';
+import { Drawer } from 'antd';
+import { Scrollbars } from 'react-custom-scrollbars';
+import MenuContent from './MenuContent';
+import Logo from './Logo';
+import Flex from 'components/shared-components/AntD/Flex';
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import { useStoreState, useStoreActions, NavType } from 'state';
+import { NavItem } from 'configs/NavigationConfig';
 
 interface Props {
   routeInfo: NavItem;
@@ -21,8 +21,10 @@ export const MobileNav = ({
 }: Props) => {
   const props = { routeInfo, hideGroupTitle, localization };
 
-  const mobileNav = useStoreState(state => state.theme.mobileNav)
-  const onMobileNavToggle = useStoreActions(actions => actions.theme.toggleMobileNav)
+  const mobileNav = useStoreState((state) => state.theme.mobileNav);
+  const onMobileNavToggle = useStoreActions(
+    (actions) => actions.theme.toggleMobileNav
+  );
 
   const onClose = () => {
     onMobileNavToggle(false);

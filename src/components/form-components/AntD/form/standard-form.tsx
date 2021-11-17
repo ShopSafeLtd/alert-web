@@ -1,16 +1,9 @@
-import React, { useRef, useEffect } from "react";
-import {
-  Form,
-  Button,
-  FormInstance,
-  Row,
-  FormItemProps,
-  Checkbox
-} from "antd";
-import { Grow } from "components/layout-components";
+import React, { useRef, useEffect } from 'react';
+import { Form, Button, FormInstance, Row, FormItemProps, Checkbox } from 'antd';
+import { Grow } from 'components/layout-components/AntD';
 
 interface Field extends FormItemProps {
-  render(props: { disabled: boolean; }): JSX.Element;
+  render(props: { disabled: boolean }): JSX.Element;
   checkbox?: boolean;
 }
 
@@ -21,7 +14,7 @@ interface Props<T> {
   saving: boolean;
   data?: T;
   initialValues: T;
-  fields: Field[]
+  fields: Field[];
 }
 
 export const StandardForm = <T,>({
@@ -31,7 +24,7 @@ export const StandardForm = <T,>({
   saving,
   data,
   initialValues,
-  fields
+  fields,
 }: Props<T>) => {
   const formRef = useRef<FormInstance<T>>(null);
 
@@ -60,7 +53,7 @@ export const StandardForm = <T,>({
       onFinish={handleSubmit}
       onFinishFailed={() => {}}
       ref={formRef}
-      style={{ display: "flex", flexDirection: "column", flex: 1 }}
+      style={{ display: 'flex', flexDirection: 'column', flex: 1 }}
       initialValues={initialValues}
       layout="vertical"
     >

@@ -1,13 +1,13 @@
-import { action, Action } from "easy-peasy";
+import { action, Action } from 'easy-peasy';
 
 export enum NavType {
-  SIDE = "SIDE",
-  TOP = "TOP",
+  SIDE = 'SIDE',
+  TOP = 'TOP',
 }
 
 export enum SideNavTheme {
-  LIGHT = "LIGHT",
-  DARK = "DARK",
+  LIGHT = 'LIGHT',
+  DARK = 'DARK',
 }
 
 export const ThemeConfig = {
@@ -16,32 +16,32 @@ export const ThemeConfig = {
   visibleAppDrawer: false,
   visibleStatusBar: false,
   multiAppBar: false,
-  title: "",
-  navbarAction: "default",
-  statusBarText: "",
-  search: "",
+  title: '',
+  navbarAction: 'default',
+  statusBarText: '',
+  search: '',
   searchActive: false,
-  searchText: "",
-  backLinkTo: "",
+  searchText: '',
+  backLinkTo: '',
   navbarActionDisabled: false,
   newMessages: false,
   newIncidents: false,
   lightbox: false,
   lightboxImages: [],
   lightboxIndex: 0,
-  platform: "",
+  platform: '',
   notification: false,
-  notificationText: "",
+  notificationText: '',
   notificationBottom: false,
 
   navCollapsed: false,
   sideNavTheme: SideNavTheme.LIGHT,
-  locale: "en",
+  locale: 'en',
   navType: NavType.SIDE,
-  topNavColor: "#3e82f7",
-  headerNavColor: "",
+  topNavColor: '#3e82f7',
+  headerNavColor: '',
   mobileNav: false,
-  currentTheme: "light",
+  currentTheme: 'light',
 };
 
 export interface ThemeModel {
@@ -156,7 +156,7 @@ const themeModel: ThemeModel = {
     state.visibleStatusBar = ThemeConfig.visibleStatusBar;
   }),
   clearSearch: action((state) => {
-    state.search = "";
+    state.search = '';
   }),
   handleSearch: action((state, payload) => {
     state.search = payload;

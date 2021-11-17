@@ -1,16 +1,16 @@
-import React, { ReactNode } from "react";
-import { Radio, Switch, Button, message } from "antd";
-import { CopyOutlined } from "@ant-design/icons";
+import React, { ReactNode } from 'react';
+import { Radio, Switch, Button, message } from 'antd';
+import { CopyOutlined } from '@ant-design/icons';
 import ColorPicker, {
   ColorRes,
-} from "components/shared-components/ColorPicker";
-import CopyToClipboard from "react-copy-to-clipboard";
-import NavLanguage from "./navigation/NavLanguage";
-import { useThemeSwitcher } from "react-css-theme-switcher";
-import utils from "utils/index";
-import { useStoreActions, useStoreState, NavType, SideNavTheme } from "state";
+} from 'components/shared-components/AntD/ColorPicker';
+import CopyToClipboard from 'react-copy-to-clipboard';
+import NavLanguage from './navigation/NavLanguage';
+import { useThemeSwitcher } from 'react-css-theme-switcher';
+import utils from 'utils/index';
+import { useStoreActions, useStoreState, NavType, SideNavTheme } from 'state';
 
-const colorOptions = ["#3e82f7", "#24a772", "#de4436", "#924aca", "#193550"];
+const colorOptions = ['#3e82f7', '#24a772', '#de4436', '#924aca', '#193550'];
 
 interface ListItemProps {
   name: string;
@@ -22,11 +22,11 @@ interface ListItemProps {
 const ListOption = ({ name, selector, disabled, vertical }: ListItemProps) => (
   <div
     className={`my-4 ${
-      vertical ? "" : "d-flex align-items-center justify-content-between"
+      vertical ? '' : 'd-flex align-items-center justify-content-between'
     }`}
   >
     <div
-      className={`${disabled ? "opacity-0-3" : ""} ${vertical ? "mb-3" : ""}`}
+      className={`${disabled ? 'opacity-0-3' : ''} ${vertical ? 'mb-3' : ''}`}
     >
       {name}
     </div>
@@ -66,14 +66,14 @@ export const ThemeConfigurator = () => {
   const { switcher, themes } = useThemeSwitcher();
 
   const toggleTheme = (isChecked: boolean) => {
-    onHeaderNavColorChange("");
-    const changedTheme = isChecked ? "dark" : "light";
+    onHeaderNavColorChange('');
+    const changedTheme = isChecked ? 'dark' : 'light';
     onSwitchTheme(changedTheme);
     switcher({ theme: themes[changedTheme] });
   };
 
   const ontopNavColorClick = (value: ColorRes) => {
-    onHeaderNavColorChange("");
+    onHeaderNavColorChange('');
     const { rgb } = value;
     const rgba = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${rgb.a})`;
     const hex = utils.rgbaToHex(rgba);
@@ -87,7 +87,7 @@ export const ThemeConfigurator = () => {
   };
 
   const onNavTypeClick = (value: NavType) => {
-    onHeaderNavColorChange("");
+    onHeaderNavColorChange('');
     if (value === NavType.TOP) {
       onTopNavColorChange(colorOptions[0]);
       toggleCollapsedNav(false);
@@ -178,7 +178,7 @@ export const ThemeConfigurator = () => {
         <ListOption
           name="Dark Theme:"
           selector={
-            <Switch checked={currentTheme === "dark"} onChange={toggleTheme} />
+            <Switch checked={currentTheme === 'dark'} onChange={toggleTheme} />
           }
         />
       </div>
@@ -199,7 +199,7 @@ export const ThemeConfigurator = () => {
           })}
           onCopy={() =>
             message.success(
-              "Copy Success, please paste it to src/configs/AppConfig.js THEME_CONFIG variable."
+              'Copy Success, please paste it to src/configs/AppConfig.js THEME_CONFIG variable.'
             )
           }
         >

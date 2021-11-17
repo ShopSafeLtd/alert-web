@@ -1,11 +1,11 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Menu, Grid } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import IntlMessage from "../../util-components/IntlMessage";
-import navConfig, { NavItem } from "configs/NavigationConfig";
-import utils from "utils";
-import { useStoreState, useStoreActions, NavType, SideNavTheme } from "state";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Menu, Grid } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import IntlMessage from '../../../util-components/AntD/IntlMessage';
+import navConfig, { NavItem } from 'configs/NavigationConfig';
+import utils from 'utils';
+import { useStoreState, useStoreActions, NavType, SideNavTheme } from 'state';
 
 const { SubMenu } = Menu;
 const { useBreakpoint } = Grid;
@@ -15,9 +15,9 @@ const setLocale = (isLocaleOn: boolean, localeKey: string) =>
 
 const setDefaultOpen = (key: string) => {
   let keyList = [];
-  let keyString = "";
+  let keyString = '';
   if (key) {
-    const arr = key.split("-");
+    const arr = key.split('-');
     for (let index = 0; index < arr.length; index++) {
       const elm = arr[index];
       index === 0 ? (keyString = elm) : (keyString = `${keyString}-${elm}`);
@@ -51,7 +51,7 @@ const SideNavContent = (props: SideNavContentProps) => {
     onMobileNavToggle,
   } = props;
 
-  const isMobile = !utils.getBreakPoint(useBreakpoint()).includes("lg");
+  const isMobile = !utils.getBreakPoint(useBreakpoint()).includes('lg');
   const closeMobileNav = () => {
     if (isMobile) {
       onMobileNavToggle(false);
@@ -60,18 +60,18 @@ const SideNavContent = (props: SideNavContentProps) => {
 
   const userRole = useStoreState((state) => state.user.role);
   const navigationConfig =
-    userRole === "SCHEME_ADMIN"
+    userRole === 'SCHEME_ADMIN'
       ? navConfig
-      : navConfig.filter((el) => el.title !== "sidenav.scheme");
+      : navConfig.filter((el) => el.title !== 'sidenav.scheme');
 
   return (
     <Menu
-      theme={sideNavTheme === SideNavTheme.LIGHT ? "light" : "dark"}
+      theme={sideNavTheme === SideNavTheme.LIGHT ? 'light' : 'dark'}
       mode="inline"
-      style={{ height: "100%", borderRight: 0 }}
+      style={{ height: '100%', borderRight: 0 }}
       defaultSelectedKeys={[routeInfo?.key]}
       defaultOpenKeys={setDefaultOpen(routeInfo?.key)}
-      className={hideGroupTitle ? "hide-group-title" : ""}
+      className={hideGroupTitle ? 'hide-group-title' : ''}
     >
       {navigationConfig.map((menu) =>
         menu.submenu.length > 0 ? (
@@ -142,9 +142,9 @@ const TopNavContent = (props: TopNavContentProps) => {
 
   const userRole = useStoreState((state) => state.user.role);
   const navigationConfig =
-    userRole === "SCHEME_ADMIN"
+    userRole === 'SCHEME_ADMIN'
       ? navConfig
-      : navConfig.filter((el) => el.title !== "sidenav.scheme");
+      : navConfig.filter((el) => el.title !== 'sidenav.scheme');
   return (
     <Menu mode="horizontal" style={{ backgroundColor: topNavColor }}>
       {navigationConfig.map((menu) =>

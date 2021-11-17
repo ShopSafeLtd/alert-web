@@ -1,11 +1,11 @@
-import gql from "graphql-tag";
-import { CreatedBy, CreatedByType } from "../../users/fragments";
-import { BasicGroup, BasicGroupType } from "../../groups/fragments";
-import { BasicLocationType } from "../../address/fragments";
-import { Tag, TagType } from "../../tags/fragments";
-import { Image, ImageType } from "../../images/fragments";
-import { Ban, BanType } from "../../bans/fragments";
-import { Age, Build, Gender, Race } from "../enums";
+import gql from 'graphql-tag';
+import { CreatedBy, CreatedByType } from '../../users/fragments';
+import { BasicGroup, BasicGroupType } from '../../groups/fragments';
+import { BasicLocationType } from '../../address/fragments';
+import { Tag, TagType } from '../../tags/fragments';
+import { Image, ImageType } from '../../images/fragments';
+import { Ban, BanType } from '../../bans/fragments';
+import { Age, Build, Gender, Race } from '../enums';
 
 export const OffenderFeed = gql`
   query offenderFeed(
@@ -39,6 +39,7 @@ export const OffenderFeed = gql`
       approved: $approved
     ) {
       id
+      updatedAt
       age
       approved
       build

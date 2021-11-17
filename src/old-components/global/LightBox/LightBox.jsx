@@ -1,15 +1,16 @@
-import React from "react";
-import styled from "styled-components";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
-import RightIcon from "@material-ui/icons/ArrowForwardIos";
-import LeftIcon from "@material-ui/icons/ArrowBackIos";
+import React from 'react';
+import styled from 'styled-components';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import RightIcon from '@material-ui/icons/ArrowForwardIos';
+import LeftIcon from '@material-ui/icons/ArrowBackIos';
 // import PinchToZoom from "react-pinch-and-zoom";
-import { useStoreActions, useStoreState } from "../../../state";
+import { useStoreActions, useStoreState } from '../../../state';
 
 const Container = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   position: fixed;
   top: 0;
   right: 0;
@@ -40,22 +41,17 @@ const Actions = styled.div`
 const CloseButton = styled(CloseIcon)`
   color: #fff;
 `;
-const ImageWrapper = styled.div`
-  max-width: 90%;
-  max-height: 90vh;
-  flex: 1;
-  text-align: center;
-`;
+
 const Image = styled.img`
-  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  width: auto;
+  z-index: 1402;
+
   @media (min-width: 1024px) {
     max-width: 55%;
   }
-`;
-const ImageContainer = styled.div`
-  z-index: 1402;
-  display: flex;
-  justify-content: center;
 `;
 const RightContainer = styled.div`
   position: fixed;
@@ -75,15 +71,6 @@ const LeftContainer = styled.div`
 const LeftButton = styled(LeftIcon)`
   color: #fff;
 `;
-// const Zoom = styled(PinchToZoom)`
-//   flex: 1;
-//   z-index: 1402;
-// `;
-
-const Zoom = styled.div`
-  flex: 1;
-  z-index: 1402;
-`;
 
 const LightBox = () => {
   const open = useStoreState((state) => state.theme.lightbox);
@@ -97,7 +84,10 @@ const LightBox = () => {
   return open ? (
     <Container>
       <Background
-        onClick={() => close({ images: undefined, index: undefined })}
+        onClick={() => {
+          console.log('clicked');
+          close({ images: undefined, index: undefined });
+        }}
       />
       <Actions>
         <IconButton>
@@ -106,13 +96,9 @@ const LightBox = () => {
           />
         </IconButton>
       </Actions>
-      <Zoom>
-        <ImageContainer>
-          <ImageWrapper>
-            <Image src={images[index]} />
-          </ImageWrapper>
-        </ImageContainer>
-      </Zoom>
+
+      <Image src={images[index]} />
+
       {images?.length > 0 && index !== images?.length - 1 && (
         <RightContainer>
           <IconButton onClick={() => setLightboxIndex(index + 1)}>
