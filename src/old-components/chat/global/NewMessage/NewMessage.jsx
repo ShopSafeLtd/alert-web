@@ -1,59 +1,52 @@
-import React from "react";
-import styled from "styled-components";
-import Button from "@material-ui/core/Button";
-import SendIcon from "@material-ui/icons/Send";
-import { useMutation } from "@apollo/client";
+import React from 'react';
+import styled from 'styled-components';
+import Button from '@material-ui/core/Button';
+import SendIcon from '@material-ui/icons/Send';
+import { useMutation } from '@apollo/client';
 // import TextareaAutosize from "react-autosize-textarea";
 
-import { CreateMessage } from "graphql-src/chat/mutations";
-import { Messages } from "graphql-src/chat/queries";
+import { CreateMessage } from 'graphql-src/chat/mutations';
+import { Messages } from 'graphql-src/chat/queries';
 // import query from '../../../../graphql/chat/queries/MessagesQuery';
 // import SendMessageMutation from '../../../../graphql/chat/SendMessageMutation';
-import { useStoreState } from "../../../../state";
+import { useStoreState } from '../../../../state';
 
 const Container = styled.form`
-  position: absolute;
-  bottom: ${({ bottomNav }) => (bottomNav ? "57px" : "0px")};
-  ${({ height }) => `height: ${height + 2}px`};
   background: #fff;
-  width: 100%;
   display: flex;
   align-items: center;
+  height: auto;
+  display: flex;
+  flex: 1;
+  height: 63px;
+  margin: 0 24px 12px;
   @media (min-width: 1024px) {
-    position: static;
-    padding: 10px 20px 10px;
     background: #fff;
-    height: auto;
   }
 `;
+
 const DesktopTextField = styled.textarea`
   border: 1px solid #e0e0e0;
   height: auto;
-  min-height: 45px;
   flex: 1;
   border-radius: 5px;
-  padding: 15px 20px;
+  padding: 8px 12px;
   outline: none;
   resize: none;
   position: static;
-  bottom: 8px;
-  left: 1%;
   width: 84%;
   font-size: 15px;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
 `;
 const Send = styled(Button)`
   margin-left: 15px;
+  border-radius: 12px;
+  height: 63px;
+  font-size: 16px;
 `;
 
 const NewMessage = React.forwardRef((props, ref) => {
-  const {
-    refetch,
-    chatId,
-    onSend,
-    message,
-    handleChange,
-  } = props;
+  const { refetch, chatId, onSend, message, handleChange } = props;
 
   const bottomNav = useStoreState((state) => state.theme.bottomNav);
   const user = useStoreState((state) => state.user);
@@ -83,10 +76,10 @@ const NewMessage = React.forwardRef((props, ref) => {
 
   const onSubmit = async (e) => {
     e && e.preventDefault();
-    if (message !== "") {
+    if (message !== '') {
       onSend();
       const newMessage = message;
-      handleChange("");
+      handleChange('');
       await sendMessage({
         variables: {
           data: {
@@ -117,11 +110,11 @@ const NewMessage = React.forwardRef((props, ref) => {
               id: fromId,
               initials: user.initials,
               organisation: user.organisation,
-              __typename: "User",
+              __typename: 'User',
             },
             id: 0,
             createdAt: new Date(),
-            __typename: "Message",
+            __typename: 'Message',
           },
         },
       });
@@ -130,7 +123,7 @@ const NewMessage = React.forwardRef((props, ref) => {
   };
 
   const handleKeyPress = (e) => {
-    e.key === "Enter" && onSubmit(e);
+    e.key === 'Enter' && onSubmit(e);
   };
   return (
     // <MediaQuery minDeviceWidth={1024}>
@@ -198,7 +191,9 @@ const NewMessage = React.forwardRef((props, ref) => {
       height={!!ref.current && ref.current.clientHeight}
     >
       {/* {matches ? ( */}
+
       <DesktopTextField
+        // rows="1"
         onKeyPress={(e) => handleKeyPress(e)}
         value={message}
         onChange={(e) => handleChange(e.target.value)}
@@ -222,9 +217,11 @@ const NewMessage = React.forwardRef((props, ref) => {
       )}
       {matches ? ( */}
       <Send variant="contained" color="primary" onClick={() => onSubmit()}>
-        <SendIcon />
+        <SendIcon fontSize="small" />
+        <div style={{ marginLeft: '6px' }} />
         Send
       </Send>
+
       {/* ) : (
         <MobileSend size="small" aria-label="Send" onClick={onSubmit}>
           <SendIcon />

@@ -8,7 +8,8 @@ const List = styled.div`
   @media (min-width: 1024px) {
     max-width: 400px;
     min-width: 400px;
-    height: 100%;
+    height: calc(100vh - 70px);
+    overflow: scroll;
   }
 `;
 

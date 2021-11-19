@@ -386,10 +386,10 @@
 }
 @media (min-width: 1800px) {
   .feed-card {
-    width: calc(25% - 2rem);
-    max-width: calc(25% - 2rem);
-    min-width: calc(25% - 2rem);
-    margin: 1rem;
+    width: calc(25% - 1.6rem);
+    max-width: calc(25% - 1.6rem);
+    min-width: calc(25% - 1.6rem);
+    margin: 0.8rem;
   }
 }
 .feed-card .ant-card-body {
