@@ -34,6 +34,7 @@ interface Props {
   menu: DropDownProps['overlay'];
   approval: Approval;
   additionalItems?: JSX.Element[];
+  feedContainerRef: React.RefObject<any>;
 }
 
 /**
@@ -59,6 +60,7 @@ const Layout: React.FC<Props> = ({
   menu,
   approval,
   additionalItems,
+  feedContainerRef,
 }) => {
   const [imageIndex, setImageIndex] = useState<number>(0);
   const [overlay, setOverlay] = useState<boolean>(!approval.approved);
@@ -124,7 +126,7 @@ const Layout: React.FC<Props> = ({
       )}
 
       {additionalItems}
-      {admin && <CardMenu options={menu} />}
+      {admin && <CardMenu feedContainerRef={feedContainerRef} options={menu} />}
 
       {images.length ? (
         <div className="image-carousel">

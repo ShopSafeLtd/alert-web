@@ -4,6 +4,7 @@
  * @returns Object - { days, location } where days is the number of days since the incident, and location is the location.full of the incident
  */
 const getLastOffence = (incidentsArray: any[]) => {
+  if (!incidentsArray) return;
   const incidents = [...incidentsArray];
 
   if (incidents.length > 0) {

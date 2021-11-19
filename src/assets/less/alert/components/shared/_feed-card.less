@@ -26,7 +26,7 @@
     width: calc(25% - 2rem);
     max-width: calc(25% - 2rem);
     min-width: calc(25% - 2rem);
-    margin: 5rem;
+    margin: 1rem;
   }
 
   .ant-card-body {
@@ -107,6 +107,19 @@
       margin-bottom: 25px;
     }
   }
+  .no-image {
+    height: 265px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background-color: #d7d7d7;
+    .ant-typography {
+      color: #959595;
+      margin-top: 4px;
+    }
+  }
 
   .ant-tabs > .ant-tabs-nav .ant-tabs-nav-list,
   .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-list {
@@ -126,12 +139,12 @@
   }
   .ant-tabs-tab {
     margin: 0;
-    width: 130px;
+    width: 32%;
     display: flex;
     justify-content: center;
     & + .ant-tabs-tab {
       margin: 0;
-      width: 130px;
+      width: 32%;
       display: flex;
       justify-content: center;
     }
@@ -144,20 +157,6 @@
   .empty-content {
     span.ant-typography {
       text-align: center;
-    }
-  }
-
-  .no-image {
-    height: 265px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    background-color: #d7d7d7;
-    .ant-typography {
-      color: #959595;
-      margin-top: 4px;
     }
   }
 
@@ -218,6 +217,29 @@
     }
     .cancel {
       color: #bdbdbd;
+    }
+  }
+}
+
+.expanded-menu {
+  margin-right: 3px;
+  border-radius: 5px;
+  overflow: hidden;
+  background-color: #fff;
+  .menu-item {
+    display: flex;
+    align-items: center;
+    span {
+      font-size: 14px;
+      color: #757575;
+      margin-left: 8px;
+    }
+  }
+  .delete {
+    span {
+      font-size: 14px;
+      color: #ef5350;
+      margin-left: 8px;
     }
   }
 }

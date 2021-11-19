@@ -72,7 +72,7 @@ export const AppLayout = ({ location }: Props) => {
               <AppViews />
             </Content>
           </div>
-          <Footer />
+          {/* <Footer /> */}
         </Layout>
       </Layout>
       {isMobile && <MobileNav routeInfo={currentRouteInfo} />}

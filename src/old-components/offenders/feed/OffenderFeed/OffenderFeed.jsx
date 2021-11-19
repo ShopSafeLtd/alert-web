@@ -30,6 +30,7 @@ import LightBox from 'old-components/global/LightBox/LightBox';
 import {
   OffenderCard,
   OffenderSearchFilter,
+  ViewOffenderDrawer,
 } from '../../../../components/Offenders';
 
 const EmptyContainer = styled.div`
@@ -79,6 +80,7 @@ class OffenderFeed extends React.Component {
       inactiveOffenderId: '',
       filterOpen: false,
     };
+    this.feedRef = React.createRef();
   }
 
   componentDidUpdate() {
@@ -125,11 +127,13 @@ class OffenderFeed extends React.Component {
     if (incident !== undefined) {
       this.setState({
         viewIncidentPopOver: !this.state.viewIncidentPopOver,
+        viewOffenderPopOver: !this.state.viewOffenderPopOver,
         viewIncidentId: incident,
       });
     } else {
       this.setState({
         viewIncidentPopOver: !this.state.viewIncidentPopOver,
+        viewOffenderPopOver: !this.state.viewOffenderPopOver,
         viewIncidentId: '',
       });
     }
@@ -159,7 +163,7 @@ class OffenderFeed extends React.Component {
     }
   };
 
-  toggleViewOffenderPopOver = (offender) =>
+  toggleViewOffenderPopOver = (offender) => {
     this.setState({
       viewOffenderPopOver: !this.state.viewOffenderPopOver,
       viewOffender:
@@ -175,6 +179,7 @@ class OffenderFeed extends React.Component {
               incidents: [],
             },
     });
+  };
 
   toggleViewLabel = (label) =>
     this.setState({
@@ -344,7 +349,7 @@ class OffenderFeed extends React.Component {
     };
 
     return (
-      <>
+      <div style={{ paddingTop: '25px' }}>
         <OffenderSearchFilter
           queryVariables={queryVariables}
           tags={tags}
@@ -354,7 +359,11 @@ class OffenderFeed extends React.Component {
           openFilter={() => this.setState({ filterOpen: true })}
         />
         {!!offenders && offenders?.length === 0 && loading ? (
-          <FeedContainer to="/app/offenders/add" text="Offender">
+          <FeedContainer
+            ref={this.feedRef}
+            to="/app/offenders/add"
+            text="Offender"
+          >
             <PullToRefresh onRefresh={refetch}>
               <FeedCardContainer>
                 <SkeletonContainer cardHeight="500px">
@@ -379,6 +388,7 @@ class OffenderFeed extends React.Component {
         ) : !!offenders && offenders?.length > 0 ? (
           <Fragment>
             <FeedContainer
+              ref={this.feedRef}
               to="/app/offenders/add"
               loadMore={loadMore}
               text="Offender"
@@ -391,6 +401,7 @@ class OffenderFeed extends React.Component {
                   {offenders.map((offender) => (
                     <OffenderCard
                       key={offender.id}
+                      feedContainerRef={this.feedRef}
                       offender={offender}
                       actions={{
                         addExclusion: this.toggleAddExclusionPopOver.bind(this),
@@ -424,6 +435,14 @@ class OffenderFeed extends React.Component {
                 </FeedCardContainer>
               </PullToRefresh>
             </FeedContainer>
+
+            <ViewOffenderDrawer
+              visible={viewOffenderPopOver}
+              offender={viewOffender}
+              close={this.toggleViewOffenderPopOver}
+              viewIncident={this.toggleIncidentPopOver}
+            />
+
             <DeleteOffenderModal
               visible={deleteOffenderModal}
               close={this.toggleDeleteOffenderModal}
@@ -468,12 +487,12 @@ class OffenderFeed extends React.Component {
               approve={handleApprove}
               offender={offenders?.find(({ id }) => id === approveId)}
             />
-            <ViewOffenderPopOver
+            {/* <ViewOffenderPopOver
               visible={viewOffenderPopOver}
               close={this.toggleViewOffenderPopOver}
               offender={viewOffender}
               admin={admin}
-            />
+            /> */}
             <LabelModal
               visible={viewLabel}
               close={this.toggleViewLabel}
@@ -505,7 +524,11 @@ class OffenderFeed extends React.Component {
             <LightBox />
           </Fragment>
         ) : filterPristine ? (
-          <FeedContainer to="/app/offenders/add" text="Offender">
+          <FeedContainer
+            to="/app/offenders/add"
+            text="Offender"
+            ref={this.feedRef}
+          >
             <PullToRefresh onRefresh={refetch}>
               <EmptyContainer>
                 <EmptyState
@@ -538,7 +561,11 @@ class OffenderFeed extends React.Component {
             <LightBox />
           </FeedContainer>
         ) : (
-          <FeedContainer to="/app/offenders/add" text="Offender">
+          <FeedContainer
+            to="/app/offenders/add"
+            text="Offender"
+            ref={this.feedRef}
+          >
             <PullToRefresh onRefresh={refetch}>
               <EmptyContainer>
                 <EmptyState
@@ -570,7 +597,7 @@ class OffenderFeed extends React.Component {
             <LightBox />
           </FeedContainer>
         )}
-      </>
+      </div>
     );
   }
 

@@ -1,2 +1,2 @@
-export { default as OffenderCard } from './Card';
-export { default as OffenderSearchFilter } from './Feed';
+export { OffenderCard } from './Card';
+export { OffenderSearchFilter, ViewOffenderDrawer } from './Feed';

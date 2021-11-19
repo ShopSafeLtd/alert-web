@@ -19,7 +19,6 @@ interface Props {
   offender: any;
   onClick: () => void;
 }
-
 /**
  *
  * @param props - {@link Props}
@@ -29,63 +28,37 @@ interface Props {
  */
 const Details: React.FC<Props> = ({ offender, onClick }) => {
   return (
-    <div
-      onClick={onClick}
-      key="0"
-      style={{ padding: '12px 14px 14px 14px', cursor: 'pointer' }}
-    >
+    <div onClick={onClick} key="0" className="offender-tab-pane-content">
       <Row>
-        <Col span={20}>
-          <Typography.Title ellipsis level={3} style={{ marginBottom: '-4px' }}>
+        <Col span={20} className="title">
+          <Typography.Title ellipsis level={3}>
             {offender.name}
           </Typography.Title>
-          <Typography.Text
-            ellipsis
-            type="secondary"
-            style={{ fontSize: '12px' }}
-          >
+          <Typography.Text ellipsis type="secondary">
             Last updated:{' '}
             {moment
               .tz(offender.updatedAt, 'Europe/London')
               .format('ddd MMM DD YYYY - HH:mm')}
           </Typography.Text>
         </Col>
-        <Col span={4}>
+        <Col span={4} className="icon-container">
           <Row align="middle" justify="end">
-            <Typography.Text style={{ color: '#de4436' }}>
-              {offender.bans.length || 0}
-            </Typography.Text>
-            <div style={{ marginLeft: '8px' }} />
+            <Typography.Text>{offender.bans.length || 0}</Typography.Text>
             <IoBanOutline color="#de4436" size={24} />
           </Row>
           <Row align="middle" justify="end">
-            <Typography.Text style={{ color: '#de4436' }}>
-              {offender.incidents.length || 0}
-            </Typography.Text>
-            <div style={{ marginLeft: '8px' }} />
+            <Typography.Text>{offender.incidents.length || 0}</Typography.Text>
             <IoAlertCircleOutline color="#de4436" size={24} />
           </Row>
         </Col>
       </Row>
-      <Row>
+      <Row className="offender-groups">
         {offender.groups.map((el: any) => (
-          <div
-            key={el.id}
-            style={{
-              borderRadius: '3px',
-              paddingRight: '6px',
-              marginRight: '3px',
-            }}
-          >
-            <Typography.Text
-              style={{ color: '#de4436', fontWeight: 100, fontSize: '12px' }}
-            >
-              {el.name}
-            </Typography.Text>
+          <div key={el.id} className="group">
+            <Typography.Text>{el.name}</Typography.Text>
           </div>
         ))}
       </Row>
-      <div style={{ marginTop: '5px' }} />
       <Row>
         <Typography.Text ellipsis>
           Age:{' '}
@@ -104,15 +77,15 @@ const Details: React.FC<Props> = ({ offender, onClick }) => {
       </Row>
       <Row>
         <Typography.Text ellipsis>
-          Ethnicity: {getEthnicity(offender.ethnicity)}
+          Ethnicity: {getEthnicity(offender.race)}
         </Typography.Text>
       </Row>
-      <div style={{ marginTop: '10px' }} />
-      <Row align="middle" wrap={false}>
-        <IoLocationOutline color="#de4436" size={16} />
-        <div style={{ marginLeft: '6px' }} />
-        <Typography.Text ellipsis type="secondary" style={{ fontSize: '12px' }}>
-          Last offence: {getLastOffence(offender.incidents).location}
+      <Row align="middle" wrap={false} className="location margin-top">
+        <div className="icon-container">
+          <IoLocationOutline color="#de4436" size={16} />
+        </div>
+        <Typography.Text ellipsis type="secondary" className="margin">
+          Last offence: {getLastOffence(offender.incidents)?.location}
         </Typography.Text>
       </Row>
     </div>

@@ -13,7 +13,7 @@ const Container = styled.div`
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   @media (min-width: 1024px) {
-    height: calc(100vh - 150px);
+    height: calc(100vh - 155px);
   }
 `;
 const Wrapper = styled.div`
@@ -67,7 +67,7 @@ class FeedContainer extends React.PureComponent {
     const { children, to, text, loading, networkError, retryLoad } = this.props;
     return (
       <Wrapper>
-        <Container ref={ref => (this.feed = ref)}>
+        <Container ref={(ref) => (this.feed = ref)}>
           {children}
           {loading && (
             <FeedLoading>

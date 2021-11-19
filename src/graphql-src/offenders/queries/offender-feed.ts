@@ -63,6 +63,7 @@ export const OffenderFeed = gql`
       incidents {
         id
         subject
+        description
         date
         dayTime
         location {
@@ -71,6 +72,28 @@ export const OffenderFeed = gql`
         }
         createdBy {
           ...CreatedBy
+        }
+        crimeTypes {
+          id
+          name
+        }
+        images {
+          id
+          url
+          optimised
+        }
+        offenders {
+          id
+          name
+          age
+          dateOfBirth
+          dateSource
+          race
+          images(first: 1) {
+            id
+            url
+            optimised
+          }
         }
       }
       groups {
