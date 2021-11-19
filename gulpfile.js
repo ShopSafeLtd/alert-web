@@ -43,3 +43,8 @@ gulp.task('less', () => {
 gulp.task('watch', function () {
   return gulp.watch('src/assets/less/**/*.less', gulp.series('theme', 'less'));
 });
+
+gulp.task('build', async function (done) {
+  gulp.series('theme', 'less');
+  done();
+});

@@ -111,9 +111,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "buildOnly": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "build": "gulp build && npm run buildOnly",
     "dev": "concurrently \"npm run start\" \"gulp watch\""
   },
   "eslintConfig": {

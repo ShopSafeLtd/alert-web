@@ -350,7 +350,7 @@ class AlertFeed extends React.Component {
               <FeedCardContainer>
                 {alerts.map((alert) => {
                   return (
-                    <Card key={alert.id} height="500px">
+                    <div key={alert.id} className="feed-card">
                       <AlertCard
                         key={alert.id}
                         alert={alert}
@@ -362,7 +362,7 @@ class AlertFeed extends React.Component {
                         toggleDecline={(id) => this.toggleDeclineDialog(id)}
                         admin={admin}
                       />
-                    </Card>
+                    </div>
                   );
                 })}
               </FeedCardContainer>
