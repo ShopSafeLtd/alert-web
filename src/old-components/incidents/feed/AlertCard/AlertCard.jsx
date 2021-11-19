@@ -119,8 +119,11 @@ class AlertCard extends Component {
         {!uploaded && <UploadingOverlay />}
         {menuActions.length > 0 ? <CardMenu actions={menuActions} /> : null}
         <AlertCardImages images={images} />
-        <Tabs activeKey={activeTab} onChange={(value) => this.setState({ activeTab: value })}>
-          <TabPane tab="Description" key="0">
+        <Tabs
+          activeKey={activeTab}
+          onChange={(value) => this.setState({ activeTab: value })}
+        >
+          <TabPane tab="DETAILS" key="0">
             <AlertCardDescription
               subject={subject}
               date={date}
@@ -131,10 +134,10 @@ class AlertCard extends Component {
               groups={groups}
             />
           </TabPane>
-          <TabPane tab="Location" key="1">
+          <TabPane tab="LOCATION" key="1">
             <AlertCardLocation location={location} />
           </TabPane>
-          <TabPane tab="Offenders" key="2">
+          <TabPane tab="OFFENDERS" key="2">
             <AlertCardOffenders
               offenders={offenders}
               toggleOffenderPopOver={toggleOffenderPopOver}

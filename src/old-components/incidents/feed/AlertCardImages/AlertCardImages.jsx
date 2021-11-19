@@ -1,9 +1,11 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
+import { Typography } from 'antd';
+import { IoImagesOutline } from 'react-icons/io5';
 
-import ImageCarousel from "../../../global/ImageCarousel/ImageCarousel";
-import { CardNoImage } from "../../../global/cards";
-import { useStoreActions } from "../../../../state";
+import ImageCarousel from '../../../global/ImageCarousel/ImageCarousel';
+import { CardNoImage } from '../../../global/cards';
+import { useStoreActions } from '../../../../state';
 
 const Image = styled.div`
   width: 100%;
@@ -62,7 +64,10 @@ const AlertCardImages = ({ images }) => {
           ))
         )
       ) : (
-        <CardNoImage height="220px" />
+        <div className="no-image incident-card">
+          <IoImagesOutline color="#959595" size="36px" />
+          <Typography.Text>No Images</Typography.Text>
+        </div>
       )}
     </div>
   );

@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import Moment from 'react-moment';
-import { Typography, Row, Col, Tag } from 'antd'
+import { Typography, Row, Col } from 'antd';
+import moment from 'moment-timezone';
 
 const AlertDescription = styled.div`
   height: 231px;
@@ -24,7 +25,7 @@ const Container = styled.div`
   padding-bottom: 38px;
 `;
 
-const { Title, Text, Paragraph } = Typography
+const { Title, Text, Paragraph } = Typography;
 
 class AlertCardDescription extends React.Component {
   render() {
@@ -33,44 +34,45 @@ class AlertCardDescription extends React.Component {
     return (
       <AlertDescription>
         <Container>
-          <Title className="feed-card-title" level={4}>
-            {subject}
-          </Title>
-          <Row gutter={8}>
-            <Col>
-              <Text className="incident-card-date" type="secondary">
-                <Moment format="HH:mm">{time}</Moment>
-              </Text>
-            </Col>
-            <Col>
-              <Text className="incident-card-date" type="secondary">
-                <Moment format="DD/MM/YYYY">{date}</Moment>
-              </Text>
+          <Row>
+            <Col span={20} className="incident-title">
+              <Typography.Title ellipsis level={3}>
+                {subject}
+              </Typography.Title>
+              <Row className="incident-date-time">
+                <Text className="incident-card-date" type="secondary">
+                  {moment
+                    .tz(date, 'Europe/London')
+                    .format('ddd MMM DD YYYY - ')}
+                </Text>
+                <Text className="incident-card-date" type="secondary">
+                  {moment.tz(time, 'Europe/London').format('HH:mm')}
+                </Text>
+              </Row>
             </Col>
           </Row>
-          <Row gutter={4}>
+          <Row className="incident-groups">
             {groups.map((el) => (
-              <Col>
-                <Text style={{ marginRight: '9px' }}>{`${el.name}`}</Text>
-              </Col>
+              <div key={el.id} className="group">
+                <Typography.Text>{el.name}</Typography.Text>
+              </div>
             ))}
           </Row>
-          <div gutter={16} className="alert-crime-tags">
+          <div className="alert-crime-tags">
             {crimeTypes.map(({ name, id }) => {
               return (
-                <Tag color="volcano" key={id}>{name}</Tag>
+                <div key={id} className="main-tag">
+                  {name}
+                </div>
               );
             })}
           </div>
-          <Paragraph type="secondary">
-            {description}
-          </Paragraph>
+          <Paragraph type="secondary">{description}</Paragraph>
         </Container>
         <User>
           <Text className="incident-card-user" type="secondary">
             {user === null ? 'Deleted User' : user.fullName}{' '}
-            {user !== null && '-'}{' '}
-            {user !== null && user.organisation}
+            {user !== null && '-'} {user !== null && user.organisation}
           </Text>
         </User>
       </AlertDescription>

@@ -13,6 +13,29 @@
   align-items: center;
   justify-content: center;
 }
+.feed-card .no-image.incident-card {
+  height: 220px;
+}
+.feed-card .incident-title h3 {
+  margin-bottom: -3px;
+}
+.feed-card .incident-card-date {
+  font-size: 12px;
+  margin-right: 3px;
+}
+.feed-card .incident-groups .group {
+  margin-right: 4px;
+}
+.feed-card .alert-crime-tags {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 3px 0px 6px 0;
+}
+.feed-card .alert-crime-tags .main-tag {
+  width: auto;
+  margin-left: 0;
+  font-size: 12px;
+}
 .feed-card .banner-container {
   position: absolute;
   width: 75px;

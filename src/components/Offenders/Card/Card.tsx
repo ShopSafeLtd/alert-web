@@ -12,7 +12,6 @@ interface Props {
     approve: (id: string) => void;
     decline: (id: string) => void;
   };
-  feedContainerRef: React.RefObject<any>;
 }
 /**
  *
@@ -23,11 +22,7 @@ interface Props {
  *
  * @description A CardLayout component configured specifically for the OffenderFeed, with details, exclusion and incident tabs, an exclusion banner, and the offenders tags.
  */
-const OffenderCard: React.FC<Props> = ({
-  offender,
-  actions,
-  feedContainerRef,
-}) => {
+const OffenderCard: React.FC<Props> = ({ offender, actions }) => {
   // excluded banner
   const isExcluded =
     offender.bans &&
@@ -92,7 +87,6 @@ const OffenderCard: React.FC<Props> = ({
       ]}
       images={offender.images}
       menu={() => <Menu id={offender.id} actions={actions} />}
-      feedContainerRef={feedContainerRef}
       approval={{
         approved: offender.approved,
         approve: () => actions.approve(offender.id),
