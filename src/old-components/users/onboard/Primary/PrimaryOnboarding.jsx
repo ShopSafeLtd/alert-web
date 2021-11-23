@@ -1,30 +1,30 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import MediaQuery from "react-responsive";
-import { Route } from "react-router-dom";
-import { useMutation } from "@apollo/client";
-import Paper from "@material-ui/core/Paper";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
-import { withStyles } from "@material-ui/styles";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import MediaQuery from 'react-responsive';
+import { Route } from 'react-router-dom';
+import { useMutation } from '@apollo/client';
+import Paper from '@material-ui/core/Paper';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import { withStyles } from '@material-ui/styles';
 // import validate from "validate.js";
 
 import {
   BackButton,
   FullWidthButton,
   ProgressButton,
-} from "../../../global/actions";
-import Welcome from "../Welcome/Welcome";
-import Password from "../Password/Password";
+} from '../../../global/actions';
+import Welcome from '../Welcome/Welcome';
+import Password from '../Password/Password';
 
-import { CreateUserInAuth0 } from "graphql-src/users/mutations";
+import { CreateUserInAuth0 } from 'graphql-src/users/mutations';
 
-import { useAuth } from "hooks";
+import { useAuth } from 'hooks';
 
 const styles = {
   label: {
-    fontSize: "14px",
+    fontSize: '14px',
   },
 };
 
@@ -78,43 +78,43 @@ const PrimaryOnboarding = ({ history, classes, user }) => {
   const steps = [
     {
       step: 0,
-      label: "Welcome",
+      label: 'Welcome',
       url: `/onboarding/${user.id}`,
-      next: "Get Started",
+      next: 'Get Started',
     },
     {
       step: 1,
-      label: "Set Password",
+      label: 'Set Password',
       url: `/onboarding/password`,
-      next: "Set Password",
+      next: 'Set Password',
     },
   ];
 
   // state
   const [step, setStep] = useState(0);
   const [password, setPassword] = useState({
-    password: "",
-    passwordError: "",
-    confirm: "",
-    confirmError: "",
+    password: '',
+    passwordError: '',
+    confirm: '',
+    confirmError: '',
   });
 
   const [locationKeys, setLocationKeys] = useState([]);
 
   // effects
   useEffect(() => {
-    if (history.location.pathname.includes("password") && step !== 1) {
+    if (history.location.pathname.includes('password') && step !== 1) {
       setStep(1);
     }
   }, [history, step]);
 
   useEffect(() => {
     return history.listen((location) => {
-      if (history.action === "PUSH") {
+      if (history.action === 'PUSH') {
         setLocationKeys([location.key]);
       }
 
-      if (history.action === "POP") {
+      if (history.action === 'POP') {
         if (locationKeys[1] === location.key) {
           setLocationKeys(([_, ...keys]) => keys);
           // Handle forward event
@@ -136,8 +136,8 @@ const PrimaryOnboarding = ({ history, classes, user }) => {
   // mutations
   const [createUserInAuth0] = useMutation(CreateUserInAuth0, {
     variables: {
-      id: user.id || "",
-      password: password.password || "0000",
+      id: user.id || '',
+      password: password.password || '0000',
     },
   });
 
@@ -154,11 +154,11 @@ const PrimaryOnboarding = ({ history, classes, user }) => {
         passwordError: passwordLong
           ? passwordComplex
             ? passwordsMatch
-              ? ""
-              : "Passwords do not match."
-            : "Password must contain at least one number and an upper and lower case letter."
-          : "Password must be at least 8 characters long.",
-        confirmError: passwordsMatch ? "" : "Passwords do not match.",
+              ? ''
+              : 'Passwords do not match.'
+            : 'Password must contain at least one number and an upper and lower case letter.'
+          : 'Password must be at least 8 characters long.',
+        confirmError: passwordsMatch ? '' : 'Passwords do not match.',
       });
       passwordLong && passwordComplex && passwordsMatch
         ? resolve(true)
@@ -182,7 +182,7 @@ const PrimaryOnboarding = ({ history, classes, user }) => {
         email: user.email,
         password: password.password,
       });
-      history.push("/");
+      history.push('/');
     }
   };
   const handleBack = () => {
@@ -226,6 +226,7 @@ const PrimaryOnboarding = ({ history, classes, user }) => {
                     <Password
                       mobile={matches}
                       handleChange={handlePasswordChange}
+                      handleBack={handleBack}
                       values={password}
                     />
                   )}

@@ -1,10 +1,12 @@
-import React from "react";
-import styled from "styled-components";
-import Button from "@material-ui/core/Button";
-import { Link } from "react-router-dom";
-import MediaQuery from "react-responsive";
+import React from 'react';
+import styled from 'styled-components';
+import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
+import MediaQuery from 'react-responsive';
 
-import logo from "../../../../images/icon-512.png";
+import { Typography } from 'antd';
+
+import logo from '../../../../images/icon-512.png';
 
 const Header = styled.div`
   flex: 1;
@@ -20,17 +22,6 @@ const Header = styled.div`
 const Logo = styled.img`
   width: 120px;
 `;
-const HightLight = styled.span`
-  color: #f44336;
-`;
-const Welcome = styled.h1`
-  color: #9e9e9e;
-  font-size: 3rem;
-  font-weight: 400;
-  font-family: Chalet;
-  margin: 10px 0 0;
-  text-align: center;
-`;
 const SubHeader = styled.h2`
   font-family: Chalet;
   font-weight: 400;
@@ -45,13 +36,15 @@ class OnboardWelcome extends React.Component {
         {(matches) => (
           <Header>
             <Logo src={logo} alt="ShopSafe Icon" />
-            <Welcome>
-              Welcome to{" "}
-              <span>
-                alert
-                <HightLight>!</HightLight>
-              </span>
-            </Welcome>
+            <Typography.Title
+              style={{
+                margin: '20px 0px 0px 0px',
+                textAlign: 'center',
+                maxWidth: '220px',
+              }}
+            >
+              Welcome to Alert!
+            </Typography.Title>
             <SubHeader></SubHeader>
             {matches && (
               <Button

@@ -9,10 +9,10 @@ const ABSOLUTE = 'ABSOLUTE';
 const STATIC = 'STATIC';
 
 const Button = styled.button`
-  background-color: ${({ disabled }) => (disabled ? '#BDBDBD' : '#ef5350')};
+  background-color: ${({ disabled }) => (disabled ? '#BDBDBD' : '#f44b40')};
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   width: 100%;
   border-style: none;
   text-decoration: none;
@@ -53,7 +53,7 @@ const Button = styled.button`
 `;
 
 const LinkButton = styled(Link)`
-  background-color: ${({ disabled }) => (disabled ? '#BDBDBD' : '#ef5350')};
+  background-color: ${({ disabled }) => (disabled ? '#BDBDBD' : '#f44b40')};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -102,19 +102,15 @@ const LeftIcon = styled(LeftArrow)`
 const RightIcon = styled(RightArrow)`
   color: #fff !important;
 `;
+const Spacer = styled.div`
+  width: 24px;
+  height: 1px;
+`;
 
 class FullWidthButton extends React.Component {
   render() {
-    const {
-      text,
-      link,
-      to,
-      onClick,
-      small,
-      position,
-      disabled,
-      left
-    } = this.props;
+    const { text, link, to, onClick, small, position, disabled, left } =
+      this.props;
 
     const leftIcon = <LeftIcon />;
     const rightIcon = <RightIcon />;
@@ -154,6 +150,7 @@ class FullWidthButton extends React.Component {
         disabled={disabled}
       >
         {left && leftIcon}
+        {left === undefined && <Spacer />}
         <Text variant="button" component="span">
           {text}
         </Text>

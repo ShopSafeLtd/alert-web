@@ -1,13 +1,11 @@
-import React, { PureComponent } from "react";
-import styled from "styled-components";
-import TextField from "@material-ui/core/TextField";
+import React, { PureComponent } from 'react';
+import styled from 'styled-components';
+import TextField from '@material-ui/core/TextField';
 
-import {
-  HeaderText,
-  Field,
-  FieldHeader,
-  HeaderSubText,
-} from "../../../global/forms";
+import { IoArrowBackOutline } from 'react-icons/io5';
+import { Typography, Row } from 'antd';
+
+import { Field, FieldHeader } from '../../../global/forms';
 
 const Page = styled.div`
   width: 100%;
@@ -34,23 +32,36 @@ class OnboardPassword extends PureComponent {
       mobile,
       values: { password, passwordError, confirm, confirmError },
       handleChange,
+      handleBack,
     } = this.props;
 
     return (
       <Page>
         <Header>
-          <HeaderText>Set Password</HeaderText>
-          <HeaderSubText>
-            Please set you new password, you will use this password when ever
-            you log into alert in the future. It must contain upper and lower
-            case letters, a number, and be longer than 8 characters.
-          </HeaderSubText>
+          <Row align="middle">
+            <IoArrowBackOutline
+              onClick={handleBack}
+              role="button"
+              size="24px"
+              color="#1a3353"
+            />
+            <div style={{ width: '8px' }} />
+            <Typography.Title style={{ margin: 0 }} level={3}>
+              Set Password
+            </Typography.Title>
+          </Row>
+          <div style={{ height: '10px' }} />
+          <Typography.Text>
+            Please set your password, you will use this to log into Alert in the
+            future. It must contain upper and lower case letters, a number, and
+            be at least 8 characters long.
+          </Typography.Text>
         </Header>
         <Field>
           <FieldHeader required>New Password</FieldHeader>
           <StyledTextField
             value={password}
-            onChange={handleChange("password")}
+            onChange={handleChange('password')}
             error={!!passwordError}
             helperText={passwordError}
             fullWidth={!mobile}
@@ -61,7 +72,7 @@ class OnboardPassword extends PureComponent {
           <FieldHeader required>Confirm New Password</FieldHeader>
           <StyledTextField
             value={confirm}
-            onChange={handleChange("confirm")}
+            onChange={handleChange('confirm')}
             error={!!confirmError}
             helperText={confirmError}
             fullWidth={!mobile}

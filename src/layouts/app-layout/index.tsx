@@ -8,6 +8,8 @@ import HeaderNav from 'components/layout-components/AntD/navigation/HeaderNav';
 import AppViews from 'views/app-views/router';
 import { Layout, Grid } from 'antd';
 
+import { ScreenSizeUnsupported } from 'components/layout-components';
+
 import navigationConfig from 'configs/NavigationConfig';
 import {
   SIDE_NAV_WIDTH,
@@ -52,30 +54,32 @@ export const AppLayout = ({ location }: Props) => {
   }
 
   return (
-    <Layout>
-      <HeaderNav isMobile={isMobile} />
-      {isNavTop && !isMobile ? <TopNav routeInfo={currentRouteInfo} /> : null}
-      <Layout className="app-container">
-        {isNavSide && !isMobile && onboarded ? (
-          <SideNav routeInfo={currentRouteInfo} />
-        ) : null}
-        <Layout className="" style={{ paddingLeft: getLayoutGutter() }}>
-          <div
-            className={`app-content ${isNavTop ? 'layout-top-nav' : ''}`}
-            style={{
-              padding: location.pathname.includes('settings') ? 0 : undefined,
-            }}
-          >
-            {/* <PageHeader display={currentRouteInfo?.breadcrumb} title={currentRouteInfo?.title} /> */}
-            <Content>
-              <AppViews />
-            </Content>
-          </div>
-          {/* <Footer /> */}
+    <ScreenSizeUnsupported>
+      <Layout>
+        <HeaderNav isMobile={isMobile} />
+        {isNavTop && !isMobile ? <TopNav routeInfo={currentRouteInfo} /> : null}
+        <Layout className="app-container">
+          {isNavSide && !isMobile && onboarded ? (
+            <SideNav routeInfo={currentRouteInfo} />
+          ) : null}
+          <Layout className="" style={{ paddingLeft: getLayoutGutter() }}>
+            <div
+              className={`app-content ${isNavTop ? 'layout-top-nav' : ''}`}
+              style={{
+                padding: location.pathname.includes('settings') ? 0 : undefined,
+              }}
+            >
+              {/* <PageHeader display={currentRouteInfo?.breadcrumb} title={currentRouteInfo?.title} /> */}
+              <Content>
+                <AppViews />
+              </Content>
+            </div>
+            {/* <Footer /> */}
+          </Layout>
         </Layout>
+        {isMobile && <MobileNav routeInfo={currentRouteInfo} />}
       </Layout>
-      {isMobile && <MobileNav routeInfo={currentRouteInfo} />}
-    </Layout>
+    </ScreenSizeUnsupported>
   );
 };
 

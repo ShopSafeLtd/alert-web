@@ -1,21 +1,18 @@
-import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import Views from "./views/router";
-import { Route, Switch } from "react-router-dom";
-import { ThemeSwitcherProvider } from "react-css-theme-switcher";
-import { ThemeProvider, StylesProvider } from "@material-ui/styles";
-import LogRocket from "logrocket";
-import { createMuiTheme } from "@material-ui/core/styles";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import MomentUtils from "@date-io/moment";
-import ApolloProvider from "./providers/ApolloProvider";
-import logo from "./images/icon-192.png";
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Views from './views/router';
+import { Route, Switch } from 'react-router-dom';
+import { ThemeSwitcherProvider } from 'react-css-theme-switcher';
+import { ThemeProvider, StylesProvider } from '@material-ui/styles';
+import LogRocket from 'logrocket';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
+import ApolloProvider from './providers/ApolloProvider';
 
-import { useMediaQuery } from "react-responsive";
+import { ThemeConfig, Store } from './state';
 
-import { ThemeConfig, Store } from "./state";
-
-LogRocket.init("ub3rsv/gotalk-portal");
+LogRocket.init('ub3rsv/gotalk-portal');
 
 const themes = {
   dark: `${process.env.PUBLIC_URL}/css/dark-theme.css`,
@@ -47,88 +44,15 @@ const themes = {
 const theme = createMuiTheme({
   palette: {
     primary: {
-      light: "#E57373",
-      main: "#EF5350",
-      dark: "#E53935",
-      contrastText: "#FFFFFF",
+      light: '#E57373',
+      main: '#EF5350',
+      dark: '#E53935',
+      contrastText: '#FFFFFF',
     },
   },
 });
 
 function App() {
-  const SupportedScreenSizes = ({
-    children,
-  }: {
-    children: React.ReactElement;
-  }) => {
-    const isSupported = useMediaQuery({ minWidth: 1024 });
-    console.log(isSupported);
-
-    return isSupported ? (
-      children
-    ) : (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          height: window.screen.height,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <img
-          style={{ height: "150px", marginBottom: "48px" }}
-          alt="Alert logo"
-          src={logo}
-        />
-        <span
-          style={{
-            fontSize: 22,
-            marginBottom: "12px",
-            width: "70%",
-            minWidth: "280px",
-            textAlign: "center",
-          }}
-        >
-          We no longer support this screen size on the web version of Alert!
-        </span>
-        <span
-          style={{
-            fontSize: 16,
-            marginBottom: "56px",
-            width: "50%",
-            minWidth: "280px",
-            textAlign: "center",
-          }}
-        >
-          Please download our app to experience all the familiar features, with
-          better performance!
-        </span>
-        <a href="https://play.google.com/store/apps/details?id=co.uk.shopsafealert.app&gl=GB&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1">
-          <img
-            style={{ height: "80px" }}
-            alt="Get it on Google Play"
-            src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-          />
-        </a>
-        <a
-          href="https://apps.apple.com/gb/app/alert/id1497736226?itsct=apps_box_badge&amp;itscg=30200"
-          style={{
-            display: "inlineBlock",
-            overflow: "hidden",
-            borderRadius: "13px",
-            height: "60px",
-          }}
-        >
-          <img
-            src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1596585600&h=d061bb2467a3829491c56c906653e3f9"
-            alt="Download on the App Store"
-            style={{ borderRadius: "13px", height: "60px" }}
-          />
-        </a>
-      </div>
-    );
-  };
   return (
     <div className="App">
       <Store>
@@ -141,13 +65,11 @@ function App() {
             <MuiPickersUtilsProvider utils={MomentUtils}>
               <StylesProvider injectFirst>
                 <ThemeProvider theme={theme}>
-                  <SupportedScreenSizes>
-                    <Router>
-                      <Switch>
-                        <Route path="/" component={Views} />
-                      </Switch>
-                    </Router>
-                  </SupportedScreenSizes>
+                  <Router>
+                    <Switch>
+                      <Route path="/" component={Views} />
+                    </Switch>
+                  </Router>
                 </ThemeProvider>
               </StylesProvider>
             </MuiPickersUtilsProvider>
