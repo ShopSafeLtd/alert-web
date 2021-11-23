@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import ReactSwipe from "react-swipe";
+import React from 'react';
+import styled from 'styled-components';
+import ReactSwipe from 'react-swipe';
 
 const Carousel = styled.div`
   width: 100%;
@@ -46,6 +46,7 @@ class ImageCarousel extends React.Component {
   componentDidMount() {
     this.reactSwipe.getPos() > 0 && this.setState({ leftControl: true });
     this.reactSwipe.getPos() < this.reactSwipe.getNumSlides() &&
+      this.props.images.length > 1 &&
       this.setState({ rightControl: true });
   }
 

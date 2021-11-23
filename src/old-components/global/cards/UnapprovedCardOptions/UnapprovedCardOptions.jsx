@@ -6,7 +6,7 @@ const Container = styled.div`
   position: absolute;
   top: ${({ top }) => top};
   left: 0;
-  z-index: 1;
+  z-index: 6;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.6);
   display: flex;

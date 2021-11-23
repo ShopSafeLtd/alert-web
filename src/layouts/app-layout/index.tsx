@@ -1,22 +1,22 @@
-import React from "react";
-import SideNav from "components/layout-components/navigation/SideNav";
-import TopNav from "components/layout-components/navigation/TopNav";
-import Loading from "components/shared-components/Loading";
-import MobileNav from "components/layout-components/navigation/MobileNav";
-import HeaderNav from "components/layout-components/navigation/HeaderNav";
-// import PageHeader from 'components/layout-components/PageHeader';
-import Footer from "components/layout-components/Footer";
-import AppViews from "views/app-views/router";
-import { Layout, Grid } from "antd";
+import React from 'react';
+import SideNav from 'components/layout-components/AntD/navigation/SideNav';
+import TopNav from 'components/layout-components/AntD/navigation/TopNav';
+import Loading from 'components/shared-components/AntD/Loading';
+import MobileNav from 'components/layout-components/AntD/navigation/MobileNav';
+import HeaderNav from 'components/layout-components/AntD/navigation/HeaderNav';
+// import PageHeader from 'components/layout-components/AntD/PageHeader';
+import Footer from 'components/layout-components/AntD/Footer';
+import AppViews from 'views/app-views/router';
+import { Layout, Grid } from 'antd';
 
-import navigationConfig from "configs/NavigationConfig";
+import navigationConfig from 'configs/NavigationConfig';
 import {
   SIDE_NAV_WIDTH,
   SIDE_NAV_COLLAPSED_WIDTH,
-} from "constants/ThemeConstant";
-import utils from "utils";
-import { useThemeSwitcher } from "react-css-theme-switcher";
-import { useStoreState, NavType } from "state";
+} from 'constants/ThemeConstant';
+import utils from 'utils';
+import { useThemeSwitcher } from 'react-css-theme-switcher';
+import { useStoreState, NavType } from 'state';
 
 const { Content } = Layout;
 const { useBreakpoint } = Grid;
@@ -35,7 +35,7 @@ export const AppLayout = ({ location }: Props) => {
     location.pathname
   );
   const screens = utils.getBreakPoint(useBreakpoint());
-  const isMobile = !screens.includes("lg");
+  const isMobile = !screens.includes('lg');
   const isNavSide = navType === NavType.SIDE;
   const isNavTop = navType === NavType.TOP;
 
@@ -48,7 +48,7 @@ export const AppLayout = ({ location }: Props) => {
 
   const { status } = useThemeSwitcher();
 
-  if (status === "loading") {
+  if (status === 'loading') {
     return <Loading cover="page" />;
   }
 
@@ -62,9 +62,9 @@ export const AppLayout = ({ location }: Props) => {
         ) : null}
         <Layout className="" style={{ paddingLeft: getLayoutGutter() }}>
           <div
-            className={`app-content ${isNavTop ? "layout-top-nav" : ""}`}
+            className={`app-content ${isNavTop ? 'layout-top-nav' : ''}`}
             style={{
-              padding: location.pathname.includes("settings") ? 0 : undefined,
+              padding: location.pathname.includes('settings') ? 0 : undefined,
             }}
           >
             {/* <PageHeader display={currentRouteInfo?.breadcrumb} title={currentRouteInfo?.title} /> */}
@@ -72,7 +72,7 @@ export const AppLayout = ({ location }: Props) => {
               <AppViews />
             </Content>
           </div>
-          <Footer />
+          {/* <Footer /> */}
         </Layout>
       </Layout>
       {isMobile && <MobileNav routeInfo={currentRouteInfo} />}

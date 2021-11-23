@@ -1,13 +1,8 @@
-import { gql } from '@apollo/client'
+import { gql } from '@apollo/client';
 
 export const VerifyUser = gql`
-  mutation verifyUser(
-    $id: String!
-    $password: String!
-  ) {
-    verifyUser (
-      data: { id: $id, password: $password }
-    ) {
+  mutation verifyUser($id: String!, $password: String!) {
+    verifyUser(data: { id: $id, password: $password }) {
       id
       fullName
       email
@@ -17,7 +12,7 @@ export const VerifyUser = gql`
       newUser
     }
   }
-`
+`;
 
 export interface VerifyUserArgs {
   id: string;
@@ -26,12 +21,12 @@ export interface VerifyUserArgs {
 
 export interface VerifyUserRes {
   verifyUser: {
-    id: string
+    id: string;
     access_token: string;
     id_token: string;
     fullName: string;
     email: string;
     organisation: string;
     newUser: boolean;
-  }
+  };
 }

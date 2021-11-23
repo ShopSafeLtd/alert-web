@@ -188,7 +188,147 @@ class AlertFeed extends React.Component {
     } = this.state;
 
     return (
-      <Fragment>
+      <div style={{ paddingTop: '25px' }}>
+        <AlertFilter
+          // state management
+          open={filterOpen}
+          handleClose={this.handleCloseFilter}
+          setQueryVariables={setQueryVariables}
+          // data
+          crimeTypes={crimeTypes}
+          groups={groups}
+        />
+        {/* search and filter bar */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginBottom: 10,
+          }}
+        >
+          <div style={{ width: '30%' }}></div>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              width: '35%',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                width: '100%',
+              }}
+            >
+              <Input
+                placeholder="Search..."
+                size="large"
+                prefix={
+                  <SearchOutlined
+                    style={{
+                      fontSize: '22px',
+                      color: '#EF5350',
+                      marginRight: 10,
+                    }}
+                  />
+                }
+                value={searchInput}
+                onChange={handleSearchChange}
+              />
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginLeft: 16,
+                cursor: 'pointer',
+              }}
+              onClick={this.handleOpenFilter}
+            >
+              <FilterOutlined
+                style={{
+                  fontSize: '28px',
+                  color: '#EF5350',
+                  marginRight: 5,
+                }}
+              />
+              <ArrowUpOutlined
+                style={{
+                  fontSize: '21px',
+                  color: '#EF5350',
+                  marginBottom: 8,
+                }}
+              />
+              <ArrowDownOutlined
+                style={{
+                  fontSize: '21px',
+                  color: '#EF5350',
+                  marginTop: 8,
+                  marginLeft: -8,
+                }}
+              />
+            </div>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-end',
+              cursor: 'pointer',
+              userSelect: 'none',
+              width: '30%',
+            }}
+          >
+            <div
+              onClick={this.handleOpenFilter}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                cursor: 'pointer',
+                userSelect: 'none',
+                marginRight: '36px',
+              }}
+            >
+              <Typography.Text>
+                {`Order: ${
+                  queryVariables.order.createdAt === 'desc'
+                    ? 'Most recent first'
+                    : 'Oldest first'
+                }`}
+              </Typography.Text>
+              {queryVariables.groups && (
+                <div>
+                  {`Groups: `}
+                  {queryVariables.groups?.map((el) => (
+                    <Typography.Text>
+                      {`[ ${groups.find((e) => e.id === el).name} ] `}
+                    </Typography.Text>
+                  ))}
+                </div>
+              )}
+              {queryVariables.crimeTypes && (
+                <div>
+                  {`Crime Types: `}
+                  {queryVariables.crimeTypes?.map((el) => (
+                    <Typography.Text>
+                      {`[ ${crimeTypes.find((e) => e.id === el).name} ] `}
+                    </Typography.Text>
+                  ))}
+                </div>
+              )}
+              {queryVariables.approved !== undefined && (
+                <Typography.Text>
+                  {queryVariables.approved
+                    ? 'Approved only'
+                    : 'Awaiting approval only'}
+                </Typography.Text>
+              )}
+            </div>
+          </div>
+        </div>
+        {/* end search and filter bar */}
         <FeedContainer
           to="/app/incidents/add"
           loadMore={loadMore}
@@ -197,146 +337,6 @@ class AlertFeed extends React.Component {
           text="Incident"
           retryLoad={retryLoad}
         >
-          <AlertFilter
-            // state management
-            open={filterOpen}
-            handleClose={this.handleCloseFilter}
-            setQueryVariables={setQueryVariables}
-            // data
-            crimeTypes={crimeTypes}
-            groups={groups}
-          />
-          {/* search and filter bar */}
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: 10,
-            }}
-          >
-            <div style={{ width: '30%' }}></div>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                width: '35%',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  width: '100%',
-                }}
-              >
-                <Input
-                  placeholder="Search..."
-                  size="large"
-                  prefix={
-                    <SearchOutlined
-                      style={{
-                        fontSize: '22px',
-                        color: '#EF5350',
-                        marginRight: 10,
-                      }}
-                    />
-                  }
-                  value={searchInput}
-                  onChange={handleSearchChange}
-                />
-              </div>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  marginLeft: 16,
-                  cursor: 'pointer',
-                }}
-                onClick={this.handleOpenFilter}
-              >
-                <FilterOutlined
-                  style={{
-                    fontSize: '28px',
-                    color: '#EF5350',
-                    marginRight: 5,
-                  }}
-                />
-                <ArrowUpOutlined
-                  style={{
-                    fontSize: '21px',
-                    color: '#EF5350',
-                    marginBottom: 8,
-                  }}
-                />
-                <ArrowDownOutlined
-                  style={{
-                    fontSize: '21px',
-                    color: '#EF5350',
-                    marginTop: 8,
-                    marginLeft: -8,
-                  }}
-                />
-              </div>
-            </div>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-end',
-                cursor: 'pointer',
-                userSelect: 'none',
-                width: '30%',
-              }}
-            >
-              <div
-                onClick={this.handleOpenFilter}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  cursor: 'pointer',
-                  userSelect: 'none',
-                  marginRight: '36px',
-                }}
-              >
-                <Typography.Text>
-                  {`Order: ${
-                    queryVariables.order.createdAt === 'desc'
-                      ? 'Most recent first'
-                      : 'Oldest first'
-                  }`}
-                </Typography.Text>
-                {queryVariables.groups && (
-                  <div>
-                    {`Groups: `}
-                    {queryVariables.groups?.map((el) => (
-                      <Typography.Text>
-                        {`[ ${groups.find((e) => e.id === el).name} ] `}
-                      </Typography.Text>
-                    ))}
-                  </div>
-                )}
-                {queryVariables.crimeTypes && (
-                  <div>
-                    {`Crime Types: `}
-                    {queryVariables.crimeTypes?.map((el) => (
-                      <Typography.Text>
-                        {`[ ${crimeTypes.find((e) => e.id === el).name} ] `}
-                      </Typography.Text>
-                    ))}
-                  </div>
-                )}
-                {queryVariables.approved !== undefined && (
-                  <Typography.Text>
-                    {queryVariables.approved
-                      ? 'Approved only'
-                      : 'Awaiting approval only'}
-                  </Typography.Text>
-                )}
-              </div>
-            </div>
-          </div>
-          {/* end search and filter bar */}
           {alerts && alerts.length === 0 && loading ? (
             <PullToRefresh onRefresh={refetch}>
               <FeedCardContainer>
@@ -350,7 +350,7 @@ class AlertFeed extends React.Component {
               <FeedCardContainer>
                 {alerts.map((alert) => {
                   return (
-                    <Card key={alert.id} height="500px">
+                    <div key={alert.id} className="feed-card">
                       <AlertCard
                         key={alert.id}
                         alert={alert}
@@ -362,7 +362,7 @@ class AlertFeed extends React.Component {
                         toggleDecline={(id) => this.toggleDeclineDialog(id)}
                         admin={admin}
                       />
-                    </Card>
+                    </div>
                   );
                 })}
               </FeedCardContainer>
@@ -450,7 +450,7 @@ class AlertFeed extends React.Component {
           />
         )}
         <LightBox />
-      </Fragment>
+      </div>
     );
   }
 

@@ -1,0 +1,132 @@
+.feed-card {
+  .banner-container {
+    position: absolute;
+    width: 75px;
+    height: 75px;
+    z-index: 5;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .banner-rotation {
+    background-color: #ef5350;
+    transform: rotate(-45deg);
+    padding: 5px 50px;
+  }
+
+  .banner-text {
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .tags-container {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    height: 38px;
+    top: 227px;
+    left: 0;
+    z-index: 5;
+  }
+
+  .main-tag {
+    background-color: #df4032;
+    color: #fff;
+    border-radius: 5px;
+    padding: 2px 8px;
+    margin: 0 6px;
+  }
+
+  .more-tags {
+    color: #df4032;
+    background-color: #fff;
+    font-size: 12px;
+    border-radius: 4px;
+    opacity: 0.8;
+    padding: 1px 6px;
+  }
+
+  .offender-content-container {
+    padding: 12px 14px 14px 14px;
+    cursor: pointer;
+  }
+
+  .offender-tab-pane-content {
+    .offender-content-container();
+    .offender-groups {
+      margin-bottom: 5px;
+      .group {
+        border-radius: 3px;
+        padding-right: 6px;
+        margin-right: 3px;
+        span.ant-typography {
+          color: #de4436;
+          font-weight: 100;
+          font-size: 12px;
+        }
+      }
+    }
+    .title {
+      h3 {
+        margin-bottom: -4px;
+      }
+      span {
+        font-size: 12px;
+      }
+    }
+    .icon-container {
+      span {
+        color: #de4436;
+        margin-right: 8px;
+      }
+    }
+    .spacer {
+      height: 1px;
+      width: 100%;
+      background-color: rgb(229, 229, 229);
+      border-radius: 1px;
+      margin: 5px 0px;
+    }
+    h4 {
+      margin-bottom: 0px;
+      margin-top: 4px;
+    }
+    .expired {
+      margin-left: 4px;
+    }
+    .date-time {
+      font-size: 12px;
+      margin-top: -2px;
+      margin-bottom: 3px;
+    }
+    .margin-top {
+      margin-top: 10px;
+    }
+    .location {
+      height: 18px;
+      .icon-container {
+        display: flex;
+      }
+      .icon {
+        padding-top: 3px;
+        margin-right: 3px;
+      }
+      span {
+        font-size: 12px;
+      }
+      .margin {
+        margin-left: 6px;
+      }
+    }
+    button {
+      color: #de4436;
+      height: 28px;
+      padding: 3px 12px;
+      margin-top: 14px;
+    }
+  }
+}

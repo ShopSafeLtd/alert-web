@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
+import { Row, Col, Typography as AntTypography } from 'antd';
 
 import { TabEmptyState } from '../../../global/emptyStates';
 
@@ -61,7 +62,7 @@ class AlertCardOffenders extends React.PureComponent {
       <AlertOffenders>
         {!!offenders && offenders.length > 0 ? (
           <List>
-            {offenders.map(offender => (
+            {offenders.map((offender) => (
               <Offender
                 button
                 key={offender.id}
@@ -90,18 +91,25 @@ class AlertCardOffenders extends React.PureComponent {
             ))}
           </List>
         ) : (
-          <TabEmptyState
-            image={
-              <Image viewBox="0 0 24 24">
-                <path
-                  fill="#EF9A9A"
-                  d="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15 17,16.5V19H23V16.5C23,14.17 18.33,13 16,13M8,13C5.67,13 1,14.17 1,16.5V19H15V16.5C15,14.17 10.33,13 8,13M8,11A3,3 0 0,0 11,8A3,3 0 0,0 8,5A3,3 0 0,0 5,8A3,3 0 0,0 8,11M16,11A3,3 0 0,0 19,8A3,3 0 0,0 16,5A3,3 0 0,0 13,8A3,3 0 0,0 16,11Z"
-                />
-              </Image>
-            }
-            text="No offenders on this alert"
-            width={70}
-          />
+          <Row
+            className="empty-content"
+            align="middle"
+            justify="center"
+            gutter={[0, 65]}
+          >
+            <Col span={24} />
+            <Col span={14}>
+              <Row align="middle" justify="center">
+                <AntTypography.Title level={4}>
+                  There's nothing here!
+                </AntTypography.Title>
+                <AntTypography.Text type="secondary">
+                  There are no offenders associated with this incident
+                </AntTypography.Text>
+              </Row>
+            </Col>
+            <Col span={24} />
+          </Row>
         )}
       </AlertOffenders>
     );

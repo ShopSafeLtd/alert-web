@@ -1,10 +1,10 @@
-import React, { lazy, Suspense, useEffect } from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
-import Loading from "components/shared-components/Loading";
-import { APP_PREFIX_PATH } from "configs/AppConfig";
-import { useAuth } from "hooks";
+import React, { lazy, Suspense, useEffect } from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import Loading from 'components/shared-components/AntD/Loading';
+import { APP_PREFIX_PATH } from 'configs/AppConfig';
+import { useAuth } from 'hooks';
 
-import { useStoreState } from "state";
+import { useStoreState } from 'state';
 
 export const AppViews = () => {
   const { getCurrentUser } = useAuth();
@@ -34,7 +34,7 @@ export const AppViews = () => {
     />,
   ];
 
-  if (role === "SCHEME_ADMIN") {
+  if (role === 'SCHEME_ADMIN') {
     routes.push(
       <Route
         key="scheme"
@@ -68,7 +68,7 @@ export const AppViews = () => {
         <Redirect
           exact
           from={`${APP_PREFIX_PATH}`}
-          to={`${APP_PREFIX_PATH}/${onboarded ? "incidents" : "onboarding"}`}
+          to={`${APP_PREFIX_PATH}/${onboarded ? 'incidents' : 'onboarding'}`}
         />
       </Switch>
     </Suspense>

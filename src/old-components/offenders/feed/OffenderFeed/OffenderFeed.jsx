@@ -2,15 +2,8 @@ import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
-import { Input, Typography } from 'antd';
-import {
-  SearchOutlined,
-  FilterOutlined,
-  ArrowUpOutlined,
-  ArrowDownOutlined,
-} from '@ant-design/icons';
 
-import OffenderCard from '../OffenderCard/OffenderCard';
+// import OffenderCard from '../OffenderCard/OffenderCard';
 import {
   FeedContainer,
   FeedCardContainer,
@@ -33,6 +26,12 @@ import OffenderSkeletonCard from '../OffenderSkeletonCard/OffenderSkeletonCard';
 import DeclineDialog from '../DeclineDialog/DeclineDialog';
 import Offenders from '../../../../images/Offenders';
 import LightBox from 'old-components/global/LightBox/LightBox';
+
+import {
+  OffenderCard,
+  OffenderSearchFilter,
+  ViewOffenderDrawer,
+} from '../../../../components/Offenders';
 
 const EmptyContainer = styled.div`
   height: calc(100vh - 167px);
@@ -127,11 +126,13 @@ class OffenderFeed extends React.Component {
     if (incident !== undefined) {
       this.setState({
         viewIncidentPopOver: !this.state.viewIncidentPopOver,
+        viewOffenderPopOver: !this.state.viewOffenderPopOver,
         viewIncidentId: incident,
       });
     } else {
       this.setState({
         viewIncidentPopOver: !this.state.viewIncidentPopOver,
+        viewOffenderPopOver: !this.state.viewOffenderPopOver,
         viewIncidentId: '',
       });
     }
@@ -161,7 +162,7 @@ class OffenderFeed extends React.Component {
     }
   };
 
-  toggleViewOffenderPopOver = (offender) =>
+  toggleViewOffenderPopOver = (offender) => {
     this.setState({
       viewOffenderPopOver: !this.state.viewOffenderPopOver,
       viewOffender:
@@ -177,6 +178,7 @@ class OffenderFeed extends React.Component {
               incidents: [],
             },
     });
+  };
 
   toggleViewLabel = (label) =>
     this.setState({
@@ -261,11 +263,6 @@ class OffenderFeed extends React.Component {
     } = this.state;
 
     const handleDelete = async () => {
-      console.log({
-        variables: {
-          id: deleteOffenderId,
-        },
-      });
       setStatusBar(true, 'Deleting Offender...');
       this.setState({
         disabled: true,
@@ -351,218 +348,15 @@ class OffenderFeed extends React.Component {
     };
 
     return (
-      <>
-        {/* search and filter bar */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginBottom: 10,
-          }}
-        >
-          <div style={{ width: '30%' }}></div>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              width: '35%',
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                width: '100%',
-              }}
-            >
-              <Input
-                placeholder="Search..."
-                size="large"
-                prefix={
-                  <SearchOutlined
-                    style={{
-                      fontSize: '22px',
-                      color: '#EF5350',
-                      marginRight: 10,
-                    }}
-                  />
-                }
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-              />
-            </div>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                marginLeft: 16,
-                cursor: 'pointer',
-              }}
-              onClick={() => this.setState({ filterOpen: true })}
-            >
-              <FilterOutlined
-                style={{
-                  fontSize: '28px',
-                  color: '#EF5350',
-                  marginRight: 5,
-                }}
-              />
-              <ArrowUpOutlined
-                style={{
-                  fontSize: '21px',
-                  color: '#EF5350',
-                  marginBottom: 8,
-                }}
-              />
-              <ArrowDownOutlined
-                style={{
-                  fontSize: '21px',
-                  color: '#EF5350',
-                  marginTop: 8,
-                  marginLeft: -8,
-                }}
-              />
-            </div>
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-end',
-              cursor: 'pointer',
-              userSelect: 'none',
-              width: '30%',
-            }}
-          >
-            <div
-              onClick={() => this.setState({ filterOpen: true })}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                cursor: 'pointer',
-                userSelect: 'none',
-                marginRight: '36px',
-              }}
-            >
-              <Typography.Text>
-                {`Order: ${
-                  queryVariables.order.createdAt === 'desc'
-                    ? 'Most recent first'
-                    : 'Oldest first'
-                }`}
-              </Typography.Text>
-              {queryVariables.groups && (
-                <div>
-                  {`Groups: `}
-                  {queryVariables.groups?.map((el) => (
-                    <Typography.Text>
-                      {`[ ${groups.find((e) => e.id === el).name} ] `}
-                    </Typography.Text>
-                  ))}
-                </div>
-              )}
-              {queryVariables.tags && (
-                <div>
-                  {`Tags: `}
-                  {queryVariables.tags?.map((el) => (
-                    <Typography.Text>
-                      {`[ ${tags.find((e) => e.id === el).name} ] `}
-                    </Typography.Text>
-                  ))}
-                </div>
-              )}
-              {queryVariables.ethnicity && (
-                <div>
-                  {`Ethnicity: `}
-                  {queryVariables.ethnicity?.map((el) => (
-                    <Typography.Text>{`[ ${el} ] `}</Typography.Text>
-                  ))}
-                </div>
-              )}
-              {queryVariables.sex && (
-                <div>
-                  {`Sex: `}
-                  {queryVariables.sex?.map((el) => (
-                    <Typography.Text>{`[ ${el[0]}${el
-                      .toLowerCase()
-                      .slice(1)} ] `}</Typography.Text>
-                  ))}
-                </div>
-              )}
-              {queryVariables.approved !== undefined && (
-                <Typography.Text>
-                  {queryVariables.approved
-                    ? 'Approved only'
-                    : 'Awaiting approval only'}
-                </Typography.Text>
-              )}
-            </div>
-          </div>
-        </div>
-        {/* <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              width: '35%',
-            }}
-          >
-            <Input
-              placeholder="Search..."
-              size="large"
-              prefix={
-                <SearchOutlined
-                  style={{
-                    fontSize: '22px',
-                    color: '#EF5350',
-                    marginRight: 10,
-                  }}
-                />
-              }
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-            />
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              marginLeft: 16,
-            }}
-            onClick={() => this.setState({ filterOpen: true })}
-          >
-            <FilterOutlined
-              style={{
-                fontSize: '28px',
-                color: '#EF5350',
-                marginRight: 5,
-              }}
-            />
-            <ArrowUpOutlined
-              style={{
-                fontSize: '21px',
-                color: '#EF5350',
-                marginBottom: 8,
-              }}
-            />
-            <ArrowDownOutlined
-              style={{
-                fontSize: '21px',
-                color: '#EF5350',
-                marginTop: 8,
-                marginLeft: -8,
-              }}
-            />
-          </div>
-        </div> */}
-        {/* end search and filter bar */}
+      <div style={{ paddingTop: '25px' }}>
+        <OffenderSearchFilter
+          queryVariables={queryVariables}
+          tags={tags}
+          groups={groups}
+          searchInput={searchInput}
+          setSearchInput={setSearchInput}
+          openFilter={() => this.setState({ filterOpen: true })}
+        />
         {!!offenders && offenders?.length === 0 && loading ? (
           <FeedContainer to="/app/offenders/add" text="Offender">
             <PullToRefresh onRefresh={refetch}>
@@ -599,38 +393,50 @@ class OffenderFeed extends React.Component {
               <PullToRefresh onRefresh={refetch}>
                 <FeedCardContainer>
                   {offenders.map((offender) => (
-                    <Card key={offender.id} height="500px">
-                      <OffenderCard
-                        key={offender.id}
-                        offender={offender}
-                        toggleDeleteOffenderModal={
-                          this.toggleDeleteOffenderModal
-                        }
-                        toggleDecline={this.toggleDeclineOffender}
-                        toggleDeleteExclusionModal={
-                          this.toggleDeleteExclusionModal
-                        }
-                        toggleAddExclusionPopOver={
-                          this.toggleAddExclusionPopOver
-                        }
-                        toggleViewExclusionPopOver={
-                          this.toggleViewExclusionPopOver
-                        }
-                        toggleIncidentPopOver={this.toggleIncidentPopOver}
-                        toggleApprove={this.toggleApprove}
-                        toggleViewOffenderPopOver={
-                          this.toggleViewOffenderPopOver
-                        }
-                        toggleViewLabel={this.toggleViewLabel}
-                        toggleActiveOffender={this.toggleActiveOffender}
-                        toggleInactiveOffender={this.toggleInactiveOffender}
-                        admin={admin}
-                      />
-                    </Card>
+                    <OffenderCard
+                      key={offender.id}
+                      feedContainerRef={this.feedRef}
+                      offender={offender}
+                      actions={{
+                        addExclusion: this.toggleAddExclusionPopOver.bind(this),
+                        deleteOffender:
+                          this.toggleDeleteOffenderModal.bind(this),
+                        viewOffender: this.toggleViewOffenderPopOver.bind(this),
+                        approve: this.toggleApprove.bind(this),
+                        decline: this.toggleDeclineOffender.bind(this),
+                      }}
+                      // toggleDecline={this.toggleDeclineOffender}
+                      // toggleDeleteExclusionModal={
+                      //   this.toggleDeleteExclusionModal
+                      // }
+                      // toggleAddExclusionPopOver={
+                      //   this.toggleAddExclusionPopOver
+                      // }
+                      // toggleViewExclusionPopOver={
+                      //   this.toggleViewExclusionPopOver
+                      // }
+                      // toggleIncidentPopOver={this.toggleIncidentPopOver}
+                      // toggleApprove={this.toggleApprove}
+                      // toggleViewOffenderPopOver={
+                      //   this.toggleViewOffenderPopOver
+                      // }
+                      // toggleViewLabel={this.toggleViewLabel}
+                      // toggleActiveOffender={this.toggleActiveOffender}
+                      // toggleInactiveOffender={this.toggleInactiveOffender}
+                      // admin={admin}
+                    />
                   ))}
                 </FeedCardContainer>
               </PullToRefresh>
             </FeedContainer>
+
+            <ViewOffenderDrawer
+              visible={viewOffenderPopOver}
+              offender={viewOffender}
+              close={this.toggleViewOffenderPopOver}
+              viewIncident={this.toggleIncidentPopOver}
+            />
+
             <DeleteOffenderModal
               visible={deleteOffenderModal}
               close={this.toggleDeleteOffenderModal}
@@ -675,12 +481,12 @@ class OffenderFeed extends React.Component {
               approve={handleApprove}
               offender={offenders?.find(({ id }) => id === approveId)}
             />
-            <ViewOffenderPopOver
+            {/* <ViewOffenderPopOver
               visible={viewOffenderPopOver}
               close={this.toggleViewOffenderPopOver}
               offender={viewOffender}
               admin={admin}
-            />
+            /> */}
             <LabelModal
               visible={viewLabel}
               close={this.toggleViewLabel}
@@ -777,7 +583,7 @@ class OffenderFeed extends React.Component {
             <LightBox />
           </FeedContainer>
         )}
-      </>
+      </div>
     );
   }
 

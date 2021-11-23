@@ -1,13 +1,15 @@
-import React, { PureComponent } from "react";
-import styled from "styled-components";
-import moment from "moment";
-import { isEqual } from "lodash-es";
+import React, { PureComponent } from 'react';
+import styled from 'styled-components';
+import moment from 'moment';
+import { isEqual } from 'lodash-es';
 
-import { MessageDate } from "../global";
-import Message from "../global/Message/Message";
-import NewMessage from "../global/NewMessage/NewMessage";
+import { MessageDate } from '../global';
+import Message from '../global/Message/Message';
+import NewMessage from '../global/NewMessage/NewMessage';
 
 const Messages = styled.div`
+  display: flex;
+  flex-direction: column;
   flex: 1;
 `;
 
@@ -15,16 +17,17 @@ const MessageContainer = styled.div`
   height: ${({ bottomNav, newMessageHeight }) =>
     bottomNav
       ? `calc(100vh - ${113 + newMessageHeight}px)`
-      : "calc(100vh - 112px)"};
+      : 'calc(100vh - 112px)'};
   width: 100%;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   padding: 20px;
   @media (min-width: 1024px) {
     padding: 20px 0 0px;
-    height: calc(100vh - 145px);
+    height: calc(100vh - 157px);
     display: flex;
     flex-direction: column;
+    margin-bottom: 12px;
   }
 `;
 
@@ -36,17 +39,17 @@ class MessagesView extends PureComponent {
     this.state = {
       loadingMore: false,
       refetch: true,
-      lastMessage: "",
-      sentMessage: "",
+      lastMessage: '',
+      sentMessage: '',
       pristine: true,
-      recentMessage: "",
-      newMessageText: "",
+      recentMessage: '',
+      newMessageText: '',
     };
   }
 
   componentDidMount() {
     const { messages, refetch } = this.props;
-    this.messages.addEventListener("scroll", this.onScroll, false);
+    this.messages.addEventListener('scroll', this.onScroll, false);
     this.messages.scrollTop = this.messages.scrollHeight;
     // this.props.setNavbarAction("back");
     // if (chat !== undefined) {
@@ -151,28 +154,28 @@ class MessagesView extends PureComponent {
 
     let currentDate, currentUser;
     messages.length > 0 &&
-      (currentDate = moment(messages[0].createdAt).format("DD/MM/YY"));
+      (currentDate = moment(messages[0].createdAt).format('DD/MM/YY'));
 
     let datedMessages = [];
     messages.length > 0 &&
       (datedMessages = [
         {
-          type: "DATE",
-          date: moment(messages[0].createdAt).format("dddd, MMMM Do"),
+          type: 'DATE',
+          date: moment(messages[0].createdAt).format('dddd, MMMM Do'),
         },
       ]);
     messages.forEach((message) => {
-      if (currentDate === moment(message.createdAt).format("DD/MM/YY")) {
-        datedMessages = [...datedMessages, { type: "MESSAGE", ...message }];
+      if (currentDate === moment(message.createdAt).format('DD/MM/YY')) {
+        datedMessages = [...datedMessages, { type: 'MESSAGE', ...message }];
       } else {
-        currentDate = moment(message.createdAt).format("DD/MM/YY");
+        currentDate = moment(message.createdAt).format('DD/MM/YY');
         datedMessages = [
           ...datedMessages,
           {
-            type: "DATE",
-            date: moment(message.createdAt).format("dddd, MMMM Do"),
+            type: 'DATE',
+            date: moment(message.createdAt).format('dddd, MMMM Do'),
           },
-          { type: "MESSAGE", ...message },
+          { type: 'MESSAGE', ...message },
         ];
       }
     });
@@ -189,7 +192,7 @@ class MessagesView extends PureComponent {
         >
           {datedMessages.map(
             ({ type, date, id, content, createdAt, from, sent }) => {
-              if (type === "MESSAGE") {
+              if (type === 'MESSAGE') {
                 if (currentUser === from.id) {
                   return (
                     <Message
@@ -248,7 +251,7 @@ class MessagesView extends PureComponent {
   }
 
   componentWillUnmount() {
-    this.messages.removeEventListener("scroll", this.onScroll, false);
+    this.messages.removeEventListener('scroll', this.onScroll, false);
     // this.props.setNavbarAction("default");
   }
 }
