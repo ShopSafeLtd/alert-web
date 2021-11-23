@@ -5,7 +5,7 @@
       {
         "appID": "478AH7R57B.co.uk.shopsafealert.app",
         "paths": [
-          "onboarding/*"
+          "/onboarding/*"
         ]
       }
     ]
