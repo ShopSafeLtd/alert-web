@@ -10,7 +10,6 @@ import {
   SkeletonContainer,
 } from '../../../global/feed';
 import { PullToRefresh } from '../../../global/pullToRefresh';
-import { Card } from '../../../global/cards';
 import { EmptyState } from '../../../global/emptyStates';
 import DeleteOffenderModal from '../DeleteOffenderModal/DeleteOffenderModal';
 import AddExclusionPopOver from '../../global/AddExclusionPopOver/AddExclusionPopOver';
@@ -18,7 +17,6 @@ import ViewExclusionPopOver from '../../global/ViewExclusionPopOver/ViewExclusio
 import ViewIncidentPopOver from '../ViewIncidentPopOver/ViewIncidentPopOver';
 import UnapprovedCardGroups from '../../../global/cards/UnapprovedCardGroups/UnapprovedCardGroups';
 import OffenderFilter from '../OffenderFilter/OffenderFilter';
-import ViewOffenderPopOver from '../ViewOffenderPopOver/ViewOffenderPopOver';
 import LabelModal from '../LabelModal/LabelModal';
 import ActiveOffenderModal from '../ActiveOffenderModal/ActiveOffenderModal';
 import InactiveOffenderModal from '../InactiveOffenderModal/InactiveOffenderModal';

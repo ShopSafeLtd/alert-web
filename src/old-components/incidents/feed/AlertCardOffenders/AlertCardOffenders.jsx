@@ -3,8 +3,6 @@ import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
 import { Row, Col, Typography as AntTypography } from 'antd';
 
-import { TabEmptyState } from '../../../global/emptyStates';
-
 const OffenderImage = styled.div`
   width: 60px;
   height: 60px;
@@ -48,10 +46,6 @@ const List = styled.div`
   padding-top: 10px;
   height: 100%;
   overflow: auto;
-`;
-const Image = styled.svg`
-  width: 48px;
-  height: 48px;
 `;
 
 class AlertCardOffenders extends React.PureComponent {

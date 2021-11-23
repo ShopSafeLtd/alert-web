@@ -4,7 +4,6 @@ import { Typography } from 'antd';
 import { IoImagesOutline } from 'react-icons/io5';
 
 import ImageCarousel from '../../../global/ImageCarousel/ImageCarousel';
-import { CardNoImage } from '../../../global/cards';
 import { useStoreActions } from '../../../../state';
 
 const Image = styled.div`
