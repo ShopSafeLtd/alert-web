@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import Moment from 'react-moment';
 import { Typography, Row, Col } from 'antd';
 import moment from 'moment-timezone';
 
@@ -25,7 +24,7 @@ const Container = styled.div`
   padding-bottom: 38px;
 `;
 
-const { Title, Text, Paragraph } = Typography;
+const { Text, Paragraph } = Typography;
 
 class AlertCardDescription extends React.Component {
   render() {

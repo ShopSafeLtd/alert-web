@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -21,7 +21,6 @@ import {
   SkeletonContainer,
 } from '../../../global/feed';
 import { PullToRefresh } from '../../../global/pullToRefresh';
-import { Card } from '../../../global/cards';
 import { EmptyState } from '../../../global/emptyStates';
 import Incidents from 'images/Incidents';
 import AlertCard from '../AlertCard/AlertCard';

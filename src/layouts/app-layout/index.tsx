@@ -5,7 +5,6 @@ import Loading from 'components/shared-components/AntD/Loading';
 import MobileNav from 'components/layout-components/AntD/navigation/MobileNav';
 import HeaderNav from 'components/layout-components/AntD/navigation/HeaderNav';
 // import PageHeader from 'components/layout-components/AntD/PageHeader';
-import Footer from 'components/layout-components/AntD/Footer';
 import AppViews from 'views/app-views/router';
 import { Layout, Grid } from 'antd';
 
