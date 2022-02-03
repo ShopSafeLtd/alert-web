@@ -2,7 +2,7 @@ import gql from "graphql-tag";
 import { SortOrder } from "graphql-src/types";
 
 export const Groups = gql`
-  query GroupsQuery($where: GroupWhereInput, $orderBy: [GroupOrderByInput!]) {
+  query GroupsQuery($where: GroupWhereInput, $orderBy: [GroupOrderByWithRelationInput!]) {
     groups(where: $where, orderBy: $orderBy) {
       id
       name

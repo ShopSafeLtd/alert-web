@@ -11,7 +11,7 @@ export const OffenderFeed = gql`
   query offenderFeed(
     $schemeId: String!
     $userId: String!
-    $order: OffenderOrderByInput
+    $order: OffenderOrderByWithRelationInput
     $search: String
     $first: Int
     $cursor: String

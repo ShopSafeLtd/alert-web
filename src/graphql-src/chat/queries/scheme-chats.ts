@@ -4,7 +4,7 @@ import { SortOrder } from "graphql-src/types";
 export const SchemeChats = gql`
   query schemeChats(
     $where: ChatWhereInput
-    $orderBy: [ChatOrderByInput!]
+    $orderBy: [ChatOrderByWithRelationInput!]
     $after: ChatWhereUniqueInput
   ) {
     chats(where: $where, orderBy: $orderBy, after: $after) {

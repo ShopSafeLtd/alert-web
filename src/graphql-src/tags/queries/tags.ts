@@ -5,7 +5,7 @@ import { SortOrder } from "graphql-src/types";
 export const Tags = gql`
   query tags(
     $where: TagWhereInput
-    $orderBy: [TagOrderByInput!]
+    $orderBy: [TagOrderByWithRelationInput!]
     $first: Int
     $last: Int
     $before: TagWhereUniqueInput

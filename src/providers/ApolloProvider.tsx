@@ -23,7 +23,8 @@ const Apollo = ({ children }: Props) => {
   const accessToken = localStorage.getItem("accessToken");
 
   const wsClient = new SubscriptionClient(
-    "wss://alert-api-dev.azurewebsites.net/graphql",
+    // "wss://alert-api-dev.azurewebsites.net/graphql",
+    "wss://alert-api-dev-development.azurewebsites.net/graphql",
     {
       reconnect: true,
       connectionParams: {
@@ -35,7 +36,9 @@ const Apollo = ({ children }: Props) => {
   const wsLink = new WebSocketLink(wsClient);
 
   const httpLink = createUploadLink({
-    uri: "https://alert-api-dev.azurewebsites.net/graphql",
+    // uri: "https://alert-api-dev.azurewebsites.net/graphql",
+    uri: "https://alert-api-dev-development.azurewebsites.net/graphql",
+    // uri: "http://localhost:4000/graphql",
   });
 
   const middlewareLink = setContext((_, { headers, ...context }) => {

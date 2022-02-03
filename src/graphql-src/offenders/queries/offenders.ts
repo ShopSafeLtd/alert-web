@@ -6,7 +6,7 @@ export const Offenders = gql`
   query offenders(
     $where: OffenderWhereInput
     $after: OffenderWhereUniqueInput
-    $orderBy: [OffenderOrderByInput!]
+    $orderBy: [OffenderOrderByWithRelationInput!]
   ) {
     offenders(where: $where, first: 20, after: $after, orderBy: $orderBy) {
       id

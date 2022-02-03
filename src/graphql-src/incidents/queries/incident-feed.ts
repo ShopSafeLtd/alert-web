@@ -5,7 +5,7 @@ export const IncidentFeed = gql`
   query incidentFeed(
     $schemeId: String!
     $search: String
-    $order: IncidentOrderByInput
+    $order: IncidentOrderByWithRelationInput
     $first: Int
     $cursor: String
     $groups: [String]

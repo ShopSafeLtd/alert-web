@@ -5,7 +5,7 @@ export const RecycledItems = gql`
   query recycledItems(
     $schemeId: String!
     $search: String
-    $order: RecycledItemOrderByInput
+    $order: RecycledItemOrderByWithRelationInput
     $first: Int
     $after: String
     $dataType: [String!]
