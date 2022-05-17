@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import MediaQuery from "react-responsive";
-import { Route } from "react-router-dom";
-import { useQuery, useMutation } from "@apollo/client";
+import { Route, useNavigate } from "react-router-dom";
 import Paper from "@material-ui/core/Paper";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
@@ -74,7 +73,8 @@ const Content = styled.div`
   }
 `;
 
-const UserOnboarding = ({ history, classes }) => {
+const UserOnboarding = ({ classes }) => {
+  const navigate = useNavigate()
   const setUser = useStoreActions((actions) => actions.user.setUser);
   const currentStep = useStoreState((state) => state.user.onboardSteps);
 
@@ -137,19 +137,19 @@ const UserOnboarding = ({ history, classes }) => {
   // effects
   useEffect(() => {
     if (currentStep === "WELCOME") {
-      history.push(`${APP_PREFIX_PATH}/onboarding`);
+      navigate(`${APP_PREFIX_PATH}/onboarding`);
       setStep(0);
     }
     if (currentStep === "PASSWORD") {
-      history.push(`${APP_PREFIX_PATH}/onboarding/password`);
+      navigate(`${APP_PREFIX_PATH}/onboarding/password`);
       setStep(1);
     }
     if (currentStep === "DETAILS") {
-      history.push(`${APP_PREFIX_PATH}/onboarding/account-details`);
+      navigate(`${APP_PREFIX_PATH}/onboarding/account-details`);
       setStep(2);
     }
     if (currentStep === "TERMS") {
-      history.push(`${APP_PREFIX_PATH}/onboarding/terms-conditions`);
+      navigate(`${APP_PREFIX_PATH}/onboarding/terms-conditions`);
       setStep(3);
     }
     // eslint-disable-next-line
@@ -237,7 +237,7 @@ const UserOnboarding = ({ history, classes }) => {
     });
 
   const next = () => {
-    history.push(steps[step + 1].url);
+    navigate(steps[step + 1].url);
     setStep(step + 1);
   };
 
@@ -308,12 +308,12 @@ const UserOnboarding = ({ history, classes }) => {
           //   },
           // });
           setUser({ onboarded: true });
-          history.push("/");
+          navigate("/");
         })
         .catch(() => {});
   };
   const handleBack = () => {
-    history.push(steps[step - 1].url);
+    navigate(steps[step - 1].url);
     setStep(step - 1);
   };
   const handlePasswordChange = (name) => (event) => {

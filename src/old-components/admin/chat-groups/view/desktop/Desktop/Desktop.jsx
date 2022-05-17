@@ -15,6 +15,7 @@ import { useStoreState } from "state";
 import ConfirmDialog from "../../../../../global/ConfirmDialog/ConfirmDialog";
 import { SchemeChats } from "graphql-src/chat/queries";
 import { DeleteChat } from "graphql-src/chat/mutations";
+import { useNavigate } from "react-router-dom";
 
 const Page = styled.div`
   width: 100%;
@@ -39,7 +40,8 @@ const DeleteIcon = styled(Delete)`
   margin-right: 5px;
 `;
 
-const Desktop = ({ history, chat, chatId, loading }) => {
+const Desktop = ({ chat, chatId, loading }) => {
+  const navigate = useNavigate()
   // state
   const [editDetails, setEditDetails] = useState(false);
   const [editUsers, setEditUsers] = useState(false);
@@ -82,7 +84,7 @@ const Desktop = ({ history, chat, chatId, loading }) => {
       optimisticResponse: { deleteChat: { id: chatId } },
     });
     setConfirmDelete(false);
-    history.push(`${APP_PREFIX_PATH}/scheme-settings/chat-groups`);
+    navigate(`${APP_PREFIX_PATH}/scheme-settings/chat-groups`);
   };
 
   return (

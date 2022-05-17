@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 
@@ -19,6 +19,7 @@ const Page = styled.div`
 `;
 
 const AddGroup = ({ setNavbarAction, setBackLinkTo }) => {
+  const navigate = useNavigate()
   // state
   const [details, setDetails] = useState({
     name: '',
@@ -81,7 +82,7 @@ const AddGroup = ({ setNavbarAction, setBackLinkTo }) => {
       <Route
         exact
         path="/offenders/add/groups/add"
-        render={({ history }) => (
+        render={() => (
           <div>
             <Details
               setNavbarAction={setNavbarAction}
@@ -96,7 +97,7 @@ const AddGroup = ({ setNavbarAction, setBackLinkTo }) => {
               text="Next"
               onClick={() =>
                 validateDetails().then(() =>
-                  history.push('/offenders/add/groups/add/users')
+                  navigate('/offenders/add/groups/add/users')
                 )
               }
             />
@@ -105,7 +106,7 @@ const AddGroup = ({ setNavbarAction, setBackLinkTo }) => {
       />
       <Route
         path="/offenders/add/groups/add/users"
-        render={({ history }) => (
+        render={() => (
           <div>
             <Users
               setNavbarAction={setNavbarAction}
@@ -128,7 +129,7 @@ const AddGroup = ({ setNavbarAction, setBackLinkTo }) => {
                     schemeId: window.localStorage.getItem('currentScheme')
                   }
                 });
-                history.push('/offenders/add/groups');
+                navigate('/offenders/add/groups');
               }}
             />
           </div>

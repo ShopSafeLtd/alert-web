@@ -7,7 +7,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
 // import { useQuery, useMutation } from '@apollo/react-hooks';
 import MediaQuery from "react-responsive";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
 
@@ -49,7 +49,8 @@ const Loading = styled(CircularProgress)`
   margin: 14px 10px 14px 0;
 `;
 
-const NotificationSettings = ({ history }) => {
+const NotificationSettings = () => {
+  const navigate = useNavigate()
   const id = useStoreState((state) => state.user.id);
   const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
@@ -159,7 +160,7 @@ const NotificationSettings = ({ history }) => {
         },
       },
     });
-    history.push("/");
+    navigate("/");
   };
 
   return (

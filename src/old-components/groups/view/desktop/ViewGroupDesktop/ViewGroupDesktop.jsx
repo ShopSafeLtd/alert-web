@@ -15,6 +15,7 @@ import ConfirmDialog from "../../../../global/ConfirmDialog/ConfirmDialog";
 import { DeleteGroup } from "graphql-src/groups/mutations";
 import { Groups } from "graphql-src/groups/queries";
 import { useStoreState } from "state";
+import { useNavigate } from "react-router-dom";
 
 const Page = styled.div`
   width: 100%;
@@ -39,7 +40,8 @@ const DeleteIcon = styled(Delete)`
   margin-right: 5px;
 `;
 
-const ViewGroupDesktop = ({ history, group, groupId, loading }) => {
+const ViewGroupDesktop = ({ group, groupId, loading }) => {
+  const navigate = useNavigate()
   // state
   const [editDetails, setEditDetails] = useState(false);
   const [editUsers, setEditUsers] = useState(false);
@@ -87,7 +89,7 @@ const ViewGroupDesktop = ({ history, group, groupId, loading }) => {
       optimisticResponse: { deleteGroup: { id: groupId } },
     });
     setConfirmDelete(false);
-    history.push(`${APP_PREFIX_PATH}/scheme-settings/groups`);
+    navigate(`${APP_PREFIX_PATH}/scheme-settings/groups`);
   };
 
   return (

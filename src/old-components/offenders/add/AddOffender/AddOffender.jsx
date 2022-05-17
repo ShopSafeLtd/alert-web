@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
 
 import OffenderWizard from "../desktop/OffenderWizard/OffenderWizard";
@@ -10,7 +9,7 @@ import { CreateOffender } from "../../../../graphql-src/offenders/mutations/crea
 import { OffenderFeed } from "../../../../graphql-src/offenders/queries/offender-feed";
 import { UploadImage } from "graphql-src/images/mutations";
 
-const AddOffender = ({ history }) => {
+const AddOffender = () => {
   const [name, setName] = useState("");
   const [gender, setGender] = useState("");
   const [race, setRace] = useState("");
@@ -488,4 +487,4 @@ const AddOffender = ({ history }) => {
   );
 };
 
-export default withRouter(AddOffender);
+export default AddOffender;

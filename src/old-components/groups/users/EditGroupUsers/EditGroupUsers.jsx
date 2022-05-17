@@ -9,6 +9,7 @@ import GroupQuery from '../../../../graphql/groups/queries/Group';
 import AllUsers from '../../../../graphql/users/queries/AllUsersQuery';
 import UpdateGroup from '../../../../graphql/groups/mutations/UpdateGroup';
 import { useStoreActions } from '../../../../state';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Page = styled.div`
   width: 100%;
@@ -54,7 +55,9 @@ const Org = styled(Typography)`
   display: inline;
 `;
 
-const EditGroupUsers = ({ match, history }) => {
+const EditGroupUsers = () => {
+  const navigate = useNavigate()
+  const params = useParams()
   const setTitle = useStoreActions(actions => actions.theme.setTitle);
   const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
   const setBackLinkTo = useStoreActions(actions => actions.theme.setBackLinkTo);
@@ -71,7 +74,7 @@ const EditGroupUsers = ({ match, history }) => {
   useEffect(() => {
     setTitle(`Edit Group's Users`);
     setBottomNav(false);
-    setBackLinkTo(`/admin/groups/view/${match.params.id}`);
+    setBackLinkTo(`/admin/groups/view/${params.id}`);
     setNavbarAction('backLink');
     return () => {
       setTitle(``);
@@ -84,7 +87,7 @@ const EditGroupUsers = ({ match, history }) => {
   // queries
   const { data: groupData, loading: groupLoading } = useQuery(GroupQuery, {
     variables: {
-      id: match.params.id
+      id: params.id
     },
     fetchPolicy: 'cache-and-network',
     onCompleted: data => setUsers(data.group.users.map(({ id }) => id))
@@ -119,14 +122,14 @@ const EditGroupUsers = ({ match, history }) => {
   const handleSave = () => {
     updateGroup({
       variables: {
-        id: match.params.id,
+        id: params.id,
         addUsers:
           addUsers.length > 0 ? addUsers.map(id => ({ id })) : undefined,
         removeUsers:
           removeUsers.length > 0 ? removeUsers.map(id => ({ id })) : undefined
       }
     });
-    history.push(`/admin/groups/view/${match.params.id}`);
+    navigate(`/admin/groups/view/${params.id}`);
   };
 
   return (

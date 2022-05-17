@@ -13,6 +13,7 @@ import { SchemeChats } from "graphql-src/chat/queries";
 import { ChatGroupRowSkeleton } from "../../../global/skeletons";
 import { FAB } from "../../../global/actions";
 import { useStoreState } from "../../../../state";
+import { useNavigate } from "react-router-dom";
 
 const Page = styled.div`
   background: #fff;
@@ -23,7 +24,8 @@ const Row = styled(TableRow)`
   cursor: pointer;
 `;
 
-const ChatGroups = ({ history }) => {
+const ChatGroups = () => {
+  const navigate = useNavigate()
   const schemeId = useStoreState((state) => state.scheme.id);
 
   // queries
@@ -38,7 +40,7 @@ const ChatGroups = ({ history }) => {
 
   // functions
   const toViewGroup = (id) => {
-    history.push(`${APP_PREFIX_PATH}/scheme-settings/chat-groups/view/${id}`);
+    navigate(`${APP_PREFIX_PATH}/scheme-settings/chat-groups/view/${id}`);
   };
 
   return (

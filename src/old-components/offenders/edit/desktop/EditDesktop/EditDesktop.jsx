@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import update from "immutability-helper";
 import { useQuery, useMutation } from "@apollo/client";
 
@@ -37,7 +37,8 @@ const Page = styled.div`
   }
 `;
 
-const EditDesktop = ({ id, history }) => {
+const EditDesktop = ({ id }) => {
+  const navigate = useNavigate()
   // state
   const [details, setDetails] = useState({
     name: "",
@@ -299,7 +300,7 @@ const EditDesktop = ({ id, history }) => {
         },
       },
     });
-    history.push("/app/offenders");
+    navigate("/app/offenders");
   };
 
   return (

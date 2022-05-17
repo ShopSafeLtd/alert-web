@@ -8,6 +8,7 @@ import { FullWidthButton } from '../../../global/actions';
 import query from '../../../../graphql/admin/queries/EditChatGroup';
 import EditMutation from '../../../../graphql/admin/mutations/UpdateChatGroup';
 import { useStoreActions } from '../../../../state';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Page = styled.div`
   width: 100%;
@@ -17,7 +18,9 @@ const Page = styled.div`
   background-color: #fff;
 `;
 
-const EditChatGroup = ({ match, history }) => {
+const EditChatGroup = () => {
+  const navigate = useNavigate()
+  const params = useParams()
   const setTitle = useStoreActions(actions => actions.theme.setTitle);
   const setNavbarAction = useStoreActions(
     actions => actions.theme.setNavbarAction
@@ -36,7 +39,7 @@ const EditChatGroup = ({ match, history }) => {
   useEffect(() => {
     setTitle('Edit Chat Group');
     setNavbarAction('backLink');
-    setBackLinkTo(`/admin/chat-groups/view/${match.params.id}`);
+    setBackLinkTo(`/admin/chat-groups/view/${params.id}`);
     setBottomNav(false);
     return () => {
       setTitle('');
@@ -50,7 +53,7 @@ const EditChatGroup = ({ match, history }) => {
   // queries
   const { loading } = useQuery(query, {
     variables: {
-      id: match.params.id
+      id: params.id
     },
     onCompleted: data =>
       setChat({
@@ -84,20 +87,20 @@ const EditChatGroup = ({ match, history }) => {
       .then(() => {
         updateChat({
           variables: {
-            id: match.params.id,
+            id: params.id,
             name: { set: chat.name },
             description: { set: chat.description }
           },
           optimisticResponse: {
             updateChat: {
-              id: match.params.id,
+              id: params.id,
               name: chat.name,
               description: chat.description,
               __typename: 'Chat'
             }
           }
         });
-        history.push(`/admin/chat-groups/view/${match.params.id}`);
+        navigate(`/admin/chat-groups/view/${params.id}`);
       })
       .catch(() => {});
   };

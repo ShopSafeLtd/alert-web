@@ -11,6 +11,7 @@ import {
 } from "graphql-src/auth/mutations";
 import styled from "styled-components";
 import { useAuth } from "hooks";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Verifying = styled.div`
   display: flex;
@@ -32,12 +33,9 @@ const Header = styled(Typography.Title)`
   margin-top: 10px !important;
 `;
 
-interface Props {
-  match: any;
-  history: any;
-}
-
-const LoginOne = (props: Props) => {
+const LoginOne = () => {
+  const navigate = useNavigate()
+  const params = useParams<{ id: string }>()
   const theme = useStoreState((state) => state.theme.currentTheme);
   const token = useStoreState((state) => state.auth.token);
   const { onLoginSuccess } = useAuth();
@@ -47,7 +45,7 @@ const LoginOne = (props: Props) => {
   const [expired, setExpired] = useState(false);
 
   useEffect(() => {
-    token && props.history.push("/app");
+    token && navigate("/app");
     // eslint-disable-next-line
   }, []);
 
@@ -56,7 +54,7 @@ const LoginOne = (props: Props) => {
       setVerifying(false);
     },
     variables: {
-      id: props.match.params.id,
+      id: params.id || '',
     },
     onError: () => {
       setExpired(true);
@@ -73,7 +71,7 @@ const LoginOne = (props: Props) => {
     setLoading(true);
     const { data } = await verify({
       variables: {
-        id: props.match.params.id,
+        id: params.id || '',
         password,
       },
     });

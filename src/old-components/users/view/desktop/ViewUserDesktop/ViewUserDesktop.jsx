@@ -27,6 +27,7 @@ import Groups from "../Groups/Groups";
 import ChatGroups from "../ChatsGroups/ChatGroups";
 import Header from "../Header/Header";
 import UserActions from "../UserActions/UserActions";
+import { useNavigate } from "react-router-dom";
 
 const Page = styled.div`
   width: 100%;
@@ -44,8 +45,8 @@ const ViewUserDesktop = ({
   auth0User,
   userId,
   isCurrent,
-  history,
 }) => {
+  const navigate = useNavigate()
   // state
   const [enable, setEnable] = useState(false);
   const [disable, setDisable] = useState(false);
@@ -124,7 +125,7 @@ const ViewUserDesktop = ({
       },
     });
     setRemove(false);
-    history.push(`${APP_PREFIX_PATH}/scheme-settings/users`);
+    navigate(`${APP_PREFIX_PATH}/scheme-settings/users`);
   };
   const handleInvite = () => {
     sendInvite({

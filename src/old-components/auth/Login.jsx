@@ -15,6 +15,7 @@ import Auth from '../../auth/Auth';
 import Loading from '../global/Loading/Loading';
 import { CurrentUser } from '../../graphql/users/queries';
 import { useStoreActions } from '../../state';
+import { useNavigate } from 'react-router-dom';
 
 const auth = new Auth();
 
@@ -121,7 +122,8 @@ const LoginTitle = styled.h1`
 const LOGIN = 'LOGIN';
 const RESET = 'RESET';
 
-const Login = ({ history }) => {
+const Login = () => {
+  const navigate = useNavigate()
   const setCurrentUser = useStoreActions(actions => actions.user.setUser);
   const setCurrentScheme = useStoreActions(actions => actions.scheme.setScheme);
 
@@ -159,7 +161,7 @@ const Login = ({ history }) => {
             currentUser.schemes[0].scheme.id
           );
         }
-        history.push('/incidents');
+        navigate('/incidents');
       }
     },
     fetchPolicy: 'network-only'

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useNavigate, useParams } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 
@@ -48,7 +49,9 @@ const Org = styled(Typography)`
   display: inline;
 `;
 
-const EditChatUsers = ({ match, history }) => {
+const EditChatUsers = () => {
+  const navigate = useNavigate()
+  const params = useParams()
   const setTitle = useStoreActions(actions => actions.theme.setTitle);
   const setNavbarAction = useStoreActions(
     actions => actions.theme.setNavbarAction
@@ -65,7 +68,7 @@ const EditChatUsers = ({ match, history }) => {
   useEffect(() => {
     setTitle('Edit Chat Members');
     setNavbarAction('backLink');
-    setBackLinkTo(`/admin/chat-groups/view/${match.params.id}`);
+    setBackLinkTo(`/admin/chat-groups/view/${params.id}`);
     setBottomNav(false);
     return () => {
       setTitle('');
@@ -78,7 +81,7 @@ const EditChatUsers = ({ match, history }) => {
   // queries
   const { data: chatData, loading: chatLoading } = useQuery(ChatUsers, {
     variables: {
-      id: match.params.id
+      id: params.id
     },
     fetchPolicy: 'cache-and-network',
     onCompleted: data =>
@@ -114,14 +117,14 @@ const EditChatUsers = ({ match, history }) => {
   const handleSave = () => {
     updateChat({
       variables: {
-        id: match.params.id,
+        id: params.id,
         addMembers: addUsers.map(id => ({ user: { connect: { id } } })),
         removeMembers: removeUsers.map(id => ({
           id: chatData.chat.members.find(userChat => userChat.user.id === id).id
         }))
       }
     });
-    history.push(`/admin/chat-groups/view/${match.params.id}`);
+    navigate(`/admin/chat-groups/view/${params.id}`);
   };
 
   return (

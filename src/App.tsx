@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import Views from './views/router';
-import { Route, Switch } from 'react-router-dom';
+import Views from 'navigation/router';
 import { ThemeSwitcherProvider } from 'react-css-theme-switcher';
 import { ThemeProvider, StylesProvider } from '@material-ui/styles';
 import LogRocket from 'logrocket';
@@ -53,6 +52,7 @@ const theme = createMuiTheme({
 });
 
 function App() {
+  console.log('test')
   return (
     <div className="App">
       <Store>
@@ -66,9 +66,7 @@ function App() {
               <StylesProvider injectFirst>
                 <ThemeProvider theme={theme}>
                   <Router>
-                    <Switch>
-                      <Route path="/" component={Views} />
-                    </Switch>
+                    <Views />
                   </Router>
                 </ThemeProvider>
               </StylesProvider>

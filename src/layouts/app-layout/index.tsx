@@ -5,7 +5,7 @@ import Loading from 'components/shared-components/AntD/Loading';
 import MobileNav from 'components/layout-components/AntD/navigation/MobileNav';
 import HeaderNav from 'components/layout-components/AntD/navigation/HeaderNav';
 // import PageHeader from 'components/layout-components/AntD/PageHeader';
-import AppViews from 'views/app-views/router';
+import AppViews from 'navigation/app-views/router';
 import { Layout, Grid } from 'antd';
 
 import { ScreenSizeUnsupported } from 'components/layout-components';
@@ -18,6 +18,7 @@ import {
 import utils from 'utils';
 import { useThemeSwitcher } from 'react-css-theme-switcher';
 import { useStoreState, NavType } from 'state';
+import { Navigate } from 'react-router-dom';
 
 const { Content } = Layout;
 const { useBreakpoint } = Grid;
@@ -27,6 +28,7 @@ interface Props {
 }
 
 export const AppLayout = ({ location }: Props) => {
+  const loggedIn = useStoreState((state) => state.auth.loggedIn);
   const navCollapsed = useStoreState((state) => state.theme.navCollapsed);
   const navType = useStoreState((state) => state.theme.navType);
   const { onboarded } = useStoreState((state) => state.user);
@@ -53,7 +55,9 @@ export const AppLayout = ({ location }: Props) => {
     return <Loading cover="page" />;
   }
 
-  return (
+  return !loggedIn ? (
+    <Navigate to="/auth" />
+  ) : (
     <ScreenSizeUnsupported>
       <Layout>
         <HeaderNav isMobile={isMobile} />

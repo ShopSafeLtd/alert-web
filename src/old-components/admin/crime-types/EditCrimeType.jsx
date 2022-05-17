@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import { Link } from "react-router-dom";
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import { useQuery, useMutation } from "@apollo/client";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
-
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 import {
   Field,
   FieldHeader,
@@ -43,12 +42,9 @@ const Form = styled.div`
   }
 `;
 
-const EditCrimeType = ({
-  history,
-  match: {
-    params: { id },
-  },
-}) => {
+const EditCrimeType = () => {
+  const navigate = useNavigate()
+  const params = useParams()
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
   // const setNavbarAction = useStoreActions(
   //   (actions) => actions.theme.setNavbarAction
@@ -98,7 +94,7 @@ const EditCrimeType = ({
   const { loading } = useQuery(Tag, {
     variables: {
       where: {
-        id,
+        id: params.id,
       },
     },
     fetchPolicy: "cache-and-network",
@@ -180,7 +176,7 @@ const EditCrimeType = ({
         editCrimeType({
           variables: {
             where: {
-              id,
+              id: params.id,
             },
             data: {
               name: { set: fields.name },
@@ -190,13 +186,13 @@ const EditCrimeType = ({
           optimisticResponse: {
             updateTag: {
               description: fields.description,
-              id,
+              id: params.id,
               name: fields.name,
               __typename: "CrimeType",
             },
           },
         });
-        history.push(`${APP_PREFIX_PATH}/scheme-settings/crime-types`);
+        navigate(`${APP_PREFIX_PATH}/scheme-settings/crime-types`);
       })
       .catch(() => {});
   };
@@ -205,17 +201,17 @@ const EditCrimeType = ({
     await deleteCrimeType({
       variables: {
         where: {
-          id,
+          id: params.id,
         },
       },
       optimisticResponse: {
         deleteTag: {
-          id,
+          id: params.id,
           __typename: "CrimeType",
         },
       },
     });
-    history.push(`${APP_PREFIX_PATH}/scheme-settings/crime-types`);
+    navigate(`${APP_PREFIX_PATH}/scheme-settings/crime-types`);
   };
 
   return (

@@ -6,7 +6,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import MediaQuery from "react-responsive";
-import { withRouter } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 // import { useQuery } from '@apollo/react-hooks';
 import Typography from "@material-ui/core/Typography";
@@ -62,7 +61,7 @@ const Text = styled(Typography)`
   margin-bottom: 18px;
 `;
 
-const RecycleBin = ({ history }) => {
+const RecycleBin = () => {
   const [popover, setPopover] = useState(false);
   const [selectedItem, setSelectedItem] = useState({});
 
@@ -456,4 +455,4 @@ const RecycleBin = ({ history }) => {
   );
 };
 
-export default withRouter(RecycleBin);
+export default RecycleBin;

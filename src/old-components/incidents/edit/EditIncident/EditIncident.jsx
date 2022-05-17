@@ -9,13 +9,11 @@ import { UploadImage } from "../../../../graphql-src/images/mutations";
 import { UpdateIncident } from "../../../../graphql-src/incidents/mutations";
 import EditDesktop from "../desktop/EditDesktop/EditDesktop";
 import { useStoreState } from "../../../../state";
+import { useNavigate, useParams } from "react-router-dom";
 
-const EditIncident = ({
-  match: {
-    params: { id },
-  },
-  history,
-}) => {
+const EditIncident = () => {
+  const navigate = useNavigate()
+  const params = useParams()
   const userId = useStoreState((state) => state.user.id);
   const schemeId = useStoreState((state) => state.scheme.id);
   // const setNavBarActionDisabled = useStoreActions(
@@ -52,7 +50,7 @@ const EditIncident = ({
 
   // queries
   const { data, loading } = useQuery(Query, {
-    variables: { where: { id } },
+    variables: { where: { id: params.id } },
     fetchPolicy: "cache-and-network",
     onCompleted: ({ incident }) => {
       updateState(incident);
@@ -140,7 +138,7 @@ const EditIncident = ({
         .map(({ id }) => ({ id }));
       updateIncident({
         variables: {
-          where: { id },
+          where: { id: params.id },
           data: {
             images: {
               connect: connectImages.length > 0 ? connectImages : undefined,
@@ -376,7 +374,7 @@ const EditIncident = ({
 
     updateIncident({
       variables: {
-        where: { id },
+        where: { id: params.id },
         data: {
           subject: { set: description.subject },
           description: { set: description.description },
@@ -423,7 +421,7 @@ const EditIncident = ({
         },
       },
     });
-    history.push(`${APP_PREFIX_PATH}/incidents`);
+    navigate(`${APP_PREFIX_PATH}/incidents`);
   };
 
   return (

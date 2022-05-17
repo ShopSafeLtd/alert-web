@@ -7,7 +7,6 @@ import StepLabel from "@material-ui/core/StepLabel";
 import { withStyles } from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
 import { BackButton } from "../../../../global/actions";
-import { withRouter } from "react-router-dom";
 
 import Description from "../Description/Description";
 import Images from "../Images/Images";
@@ -15,6 +14,7 @@ import Labels from "../Labels/Labels";
 import Exclusions from "../Exclusions/Exclusions";
 import Groups from "../Groups/Groups";
 import LightBox from "old-components/global/LightBox/LightBox";
+import { useNavigate } from "react-router-dom";
 
 const styles = {
   label: {
@@ -86,9 +86,9 @@ const OffenderWizard = ({
   selectedGroups,
   admin,
   createdById,
-  history,
   handlePost,
 }) => {
+  const navigate = useNavigate()
   const [step, setStep] = useState({
     activeStep: 0,
   });
@@ -109,11 +109,11 @@ const OffenderWizard = ({
     if (admin) {
       if (selectedGroups.length > 0) {
         await handlePost();
-        history.push("/app/offenders");
+        navigate("/app/offenders");
       }
     } else {
       await handlePost();
-      history.push("/app/offenders");
+      navigate("/app/offenders");
     }
   };
 
@@ -237,4 +237,4 @@ const OffenderWizard = ({
   );
 };
 
-export default withRouter(withStyles(styles)(OffenderWizard));
+export default withStyles(styles)(OffenderWizard);

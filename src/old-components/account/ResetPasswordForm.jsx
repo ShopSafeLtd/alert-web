@@ -11,6 +11,7 @@ import { UpdatePassword } from "graphql-src/users/mutations";
 import { ProgressButton } from "../global/actions";
 import { HeaderText, HeaderSubText, Field, FieldHeader } from "../global/forms";
 import { useStoreActions, useStoreState } from "../../state";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   min-height: calc(100vh - 56px);
@@ -73,7 +74,8 @@ const StyledTextField = styled(TextField)`
   }
 `;
 
-const ResetPassword = ({ auth, setAuth, history }) => {
+const ResetPassword = ({ auth, setAuth }) => {
+  const navigate = useNavigate()
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
   const setBackLinkTo = useStoreActions(
     (actions) => actions.theme.setBackLinkTo
@@ -94,18 +96,15 @@ const ResetPassword = ({ auth, setAuth, history }) => {
     onCompleted: (res) => {
       setDisabled(false);
       setAuth("");
-      history.push(`/`);
+      navigate(`/`);
     },
   });
 
   useEffect(() => {
     setTitle("Reset Password");
-    // setNavbarAction("backLink");
     setBackLinkTo("/account-settings");
     setBottomNav(false);
-    // !auth && history.push("/account-settings/reset-password");
     return () => {
-      // setNavbarAction("default");
       setBottomNav(true);
       setBackLinkTo("");
     };
@@ -169,26 +168,6 @@ const ResetPassword = ({ auth, setAuth, history }) => {
   };
 
   return (
-    // <Mutation mutation={ResetPasswordMutation}>
-    //   {(resetPassword) => {
-    //     const handleSave = () => {
-    //       validatePassword()
-    //         .then(async () => {
-    //           setDisabled(true);
-    //           await resetPassword({
-    //             variables: {
-    //               password: passwords.password,
-    //             },
-    //           });
-    //           setDisabled(false);
-    //           history.push("/account-settings");
-    //         })
-    //         .catch(() => {});
-    //     };
-
-    //     return (
-    //       <MediaQuery minDeviceWidth={1024}>
-    //         {(matches) => (
     <Container>
       <Page>
         <FormContainer elevation={1}>

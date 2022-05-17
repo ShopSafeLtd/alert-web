@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
 
@@ -40,7 +40,8 @@ const Form = styled.div`
   }
 `;
 
-const AddOffenderWarning = ({ history }) => {
+const AddOffenderWarning = () => {
+  const navigate = useNavigate()
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
   const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
   // const setNavbarAction = useStoreActions(
@@ -144,7 +145,7 @@ const AddOffenderWarning = ({ history }) => {
             },
           },
         });
-        history.push(`${APP_PREFIX_PATH}/scheme-settings/offender-warnings`);
+        navigate(`${APP_PREFIX_PATH}/scheme-settings/offender-warnings`);
       })
       .catch(() => {});
   };

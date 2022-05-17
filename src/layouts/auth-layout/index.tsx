@@ -1,15 +1,17 @@
-import React from 'react';
-import { Switch, Route } from 'react-router-dom';
-import AuthViews from 'views/auth-views';
-import { ScreenSizeUnsupported } from 'components/layout-components';
+import React from "react";
+import AuthViews from "navigation/auth-views";
+import { useStoreState } from "state";
+import { ScreenSizeUnsupported } from "components/layout-components";
+import { Navigate } from "react-router-dom";
 
 export const AuthLayout = () => {
-  return (
+  const loggedIn = useStoreState((state) => state.auth.loggedIn);
+  return loggedIn ? (
+    <Navigate to="/app" />
+  ) : (
     <ScreenSizeUnsupported>
       <div className="auth-container">
-        <Switch>
-          <Route path="" component={AuthViews} />
-        </Switch>
+        <AuthViews />
       </div>
     </ScreenSizeUnsupported>
   );

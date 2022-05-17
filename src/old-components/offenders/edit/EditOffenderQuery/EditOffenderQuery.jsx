@@ -7,14 +7,10 @@ import CreateImage from '../../../../graphql/images/mutations/uploadImages';
 import EditOffenderMutation from '../../../../graphql/offenders/mutations/EditOffenderMutation';
 import AllOffenderLabels from '../../../../graphql/offenderLabels/queries/AllOffenderLabels';
 import { useStoreActions, useStoreState } from '../../../../state';
+import { useParams } from 'react-router-dom';
 
-const EditOffenderQuery = ({
-  match: {
-    params: { id }
-  },
-  history,
-  setActions
-}) => {
+const EditOffenderQuery = () => {
+  const params = useParams()
   const userId = useStoreState(state => state.user.id);
   const setStatusBar = useStoreActions(actions => actions.theme.setStatusBar);
   const setTitle = useStoreActions(actions => actions.theme.setTitle);
@@ -35,7 +31,7 @@ const EditOffenderQuery = ({
     OffenderQuery,
     {
       variables: {
-        id,
+        id: params.id,
         active: true
       },
       fetchPolicy: 'cache-and-network'
@@ -57,7 +53,7 @@ const EditOffenderQuery = ({
       let data = store.readQuery({
         query: OffenderQuery,
         variables: {
-          id,
+          id: params.id,
           active: true
         }
       });
@@ -66,7 +62,7 @@ const EditOffenderQuery = ({
         query: OffenderQuery,
         data,
         variables: {
-          id,
+          id: params.id,
           active: true
         }
       });
@@ -100,7 +96,7 @@ const EditOffenderQuery = ({
 
   return (
     <EditOffender
-      offenderId={id}
+      offenderId={params.id}
       offender={
         !!offenderData && !!offenderData.offender ? offenderData.offender : {}
       }
@@ -109,7 +105,6 @@ const EditOffenderQuery = ({
       createImage={createImage}
       returnData={data}
       editOffender={editOffender}
-      history={history}
       setTitle={setTitle}
       setBottomNav={setBottomNav}
       setNavbarAction={setNavbarAction}
@@ -121,7 +116,6 @@ const EditOffenderQuery = ({
       labelsLoading={warningsLoading}
       setNavbarActionDisabled={setNavbarActionDisabled}
       toggleNotificationBar={toggleNotificationBar}
-      setActions={setActions}
     />
   );
 };

@@ -3,7 +3,7 @@ import { Button, Form, Input, Divider, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import { GoogleSVG, FacebookSVG } from 'assets/svg/icon';
 import CustomIcon from 'components/util-components/AntD/CustomIcon';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useStoreState, useStoreActions } from 'state';
 import { useAuth } from 'hooks';
@@ -18,7 +18,7 @@ export interface Props {
 }
 
 export const LoginForm = (props: Props) => {
-  let history = useHistory();
+  let navigate = useNavigate();
 
   const { otherSignIn, showForgetPassword, extra, allowRedirect } = props;
 
@@ -58,7 +58,7 @@ export const LoginForm = (props: Props) => {
 
   useEffect(() => {
     if (token !== null && allowRedirect) {
-      history.push(redirect);
+      navigate(redirect);
     }
     if (showMessage) {
       setTimeout(() => {
@@ -68,11 +68,11 @@ export const LoginForm = (props: Props) => {
   });
 
   const onForgotPassword = () => {
-    history.push(`${AUTH_PREFIX_PATH}/forgot-password`);
+    navigate(`${AUTH_PREFIX_PATH}/forgot-password`);
   };
 
   const onUserTerms = () => {
-    history.push(`${AUTH_PREFIX_PATH}/user-terms`);
+    navigate(`${AUTH_PREFIX_PATH}/user-terms`);
   };
 
   const renderOtherSignIn = (

@@ -11,6 +11,7 @@ import AllChats from '../../../../graphql/chat/queries/AllChats';
 import UserMutation from '../../../../graphql/users/mutations/UpdateUser';
 import { EmptyText } from '../../../global/typography';
 import { useStoreActions } from '../../../../state';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Page = styled.div`
   width: 100%;
@@ -57,7 +58,9 @@ const ChatIcon = styled(Chat)`
   font-size: 50px;
 `;
 
-const EditUserChats = ({ match, history }) => {
+const EditUserChats = () => {
+  const navigate = useNavigate()
+  const params = useParams()
   const setTitle = useStoreActions(actions => actions.theme.setTitle);
   const setNavbarAction = useStoreActions(
     actions => actions.theme.setNavbarAction
@@ -74,7 +77,7 @@ const EditUserChats = ({ match, history }) => {
   useEffect(() => {
     setTitle('Edit Chats');
     setNavbarAction('backLink');
-    setBackLinkTo(`/admin/users/view/${match.params.id}`);
+    setBackLinkTo(`/admin/users/view/${params.id}`);
     setBottomNav(false);
     return () => {
       setTitle('');
@@ -87,7 +90,7 @@ const EditUserChats = ({ match, history }) => {
   // queries
   const { data: userData, loading: userLoading } = useQuery(UserQuery, {
     variables: {
-      id: match.params.id,
+      id: params.id,
       schemeId: window.localStorage.getItem('currentScheme')
     },
     fetchPolicy: 'cache-and-network',
@@ -122,14 +125,14 @@ const EditUserChats = ({ match, history }) => {
   const handleSave = () => {
     updateUser({
       variables: {
-        id: match.params.id,
+        id: params.id,
         addChats: add.map(id => ({ chat: { connect: { id } } })),
         removeChats: remove.map(id => ({
           id: userData.user.chats.find(userChat => userChat.chat.id === id).id
         }))
       }
     });
-    history.push(`/admin/users/view/${match.params.id}`);
+    navigate(`/admin/users/view/${params.id}`);
   };
 
   return (

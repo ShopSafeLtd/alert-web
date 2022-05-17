@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Alert } from "antd";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion"
 import { useStoreActions, useStoreState } from 'state'
 
@@ -57,7 +57,7 @@ export const RegisterForm = (props: Props) => {
   );
 
 	const [form] = Form.useForm();
-	let history = useHistory();
+	let navigate = useNavigate();
 
 	const onSignUp = () => {
     	form.validateFields().then(values => {
@@ -69,7 +69,7 @@ export const RegisterForm = (props: Props) => {
 
 	useEffect(() => {
     	if (token !== null && allowRedirect) {
-			history.push(redirect)
+				navigate(redirect)
 		}
 		if(showMessage) {
 				setTimeout(() => {

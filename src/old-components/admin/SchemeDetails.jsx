@@ -4,7 +4,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import MediaQuery from "react-responsive";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Image from "@material-ui/icons/AddPhotoAlternate";
 import { useQuery, useMutation } from "@apollo/client";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
@@ -75,7 +75,8 @@ const Clear = styled.div`
   margin: 10px 0;
 `;
 
-const SchemeName = ({ history }) => {
+const SchemeName = () => {
+  const navigate = useNavigate()
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
   const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
   // const setNavbarAction = useStoreActions(
@@ -167,7 +168,7 @@ const SchemeName = ({ history }) => {
       },
     });
 
-    history.push("/");
+    navigate("/");
   };
 
   // const mobileUpload = async (data) => {

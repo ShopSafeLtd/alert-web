@@ -3,13 +3,13 @@ import styled from "styled-components";
 import Paper from "@material-ui/core/Paper";
 import MediaQuery from "react-responsive";
 import TextField from "@material-ui/core/TextField";
-import { APP_PREFIX_PATH } from "configs/AppConfig";
 
 import { FullWidthButton, ProgressButton } from "../global/actions";
 import { HeaderText, HeaderSubText, Field, FieldHeader } from "../global/forms";
 // import Auth from '../../auth/Auth';
 import { useStoreActions, useStoreState } from "../../state";
 import { useAuth } from "../../hooks";
+import { useNavigate } from "react-router-dom";
 
 // const auth = new Auth();
 
@@ -74,7 +74,8 @@ const StyledTextField = styled(TextField)`
   }
 `;
 
-const ResetPassword = ({ setAuth, history }) => {
+const ResetPassword = ({ setAuth }) => {
+  const navigate = useNavigate()
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -121,7 +122,7 @@ const ResetPassword = ({ setAuth, history }) => {
       if (!valid) throw new Error("Please enter your password");
       await login({ email: user.email, password });
       setAuth(password);
-      history.push(`${APP_PREFIX_PATH}/user-settings/reset-password/new`);
+      navigate('new');
     } catch (err) {
       console.log("error", err.message);
       setError(err.message);

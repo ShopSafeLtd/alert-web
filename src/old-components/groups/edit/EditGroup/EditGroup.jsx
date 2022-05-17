@@ -9,6 +9,7 @@ import { FullWidthButton } from '../../../global/actions';
 import GroupQuery from '../../../../graphql/groups/queries/EditGroup';
 import UpdateGroup from '../../../../graphql/groups/mutations/UpdateGroup';
 import { useStoreActions } from '../../../../state';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Page = styled.div`
   width: 100%;
@@ -26,7 +27,9 @@ const Loading = styled.div`
   justify-content: center;
 `;
 
-const EditGroup = ({ match, history }) => {
+const EditGroup = () => {
+  const navigate = useNavigate()
+  const params = useParams()
   const setTitle = useStoreActions(actions => actions.theme.setTitle);
   const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
   const setNavbarAction = useStoreActions(
@@ -47,7 +50,7 @@ const EditGroup = ({ match, history }) => {
     setTitle('Edit Group Details');
     setBottomNav(false);
     setNavbarAction('backLink');
-    setBackLinkTo(`/admin/groups/view/${match.params.id}`);
+    setBackLinkTo(`/admin/groups/view/${params.id}`);
     return () => {
       setTitle('');
       setBottomNav(true);
@@ -60,7 +63,7 @@ const EditGroup = ({ match, history }) => {
   // queries
   const { loading } = useQuery(GroupQuery, {
     variables: {
-      id: match.params.id
+      id: params.id
     },
     fetchPolicy: 'cache-and-network',
     onCompleted: data => setGroup(data.group)
@@ -91,20 +94,20 @@ const EditGroup = ({ match, history }) => {
       .then(() => {
         updateGroup({
           variables: {
-            id: match.params.id,
+            id: params.id,
             name: { set: group.name },
             description: { set: group.description }
           },
           optimisticResponse: {
             updateGroup: {
-              id: match.params.id,
+              id: params.id,
               name: group.name,
               description: group.description,
               __typename: 'Group'
             }
           }
         });
-        history.push(`/admin/groups/view/${match.params.id}`);
+        navigate(`/admin/groups/view/${params.id}`);
       })
       .catch(() => {});
   };

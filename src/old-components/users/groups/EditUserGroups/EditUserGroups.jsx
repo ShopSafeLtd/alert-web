@@ -11,6 +11,7 @@ import UserQuery from '../../../../graphql/users/queries/User';
 import { ErrorText, EmptyText } from '../../../global/typography';
 import UserMutation from '../../../../graphql/users/mutations/UpdateUser';
 import { useStoreActions } from '../../../../state';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Page = styled.div`
   width: 100%;
@@ -63,7 +64,9 @@ const PeopleIcon = styled(People)`
   font-size: 50px;
 `;
 
-const EditUserGroups = ({ match, history }) => {
+const EditUserGroups = () => {
+  const navigate = useNavigate()
+  const params = useParams()
   const setTitle = useStoreActions(actions => actions.theme.setTitle);
   const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
   const setBackLinkTo = useStoreActions(actions => actions.theme.setBackLinkTo);
@@ -81,7 +84,7 @@ const EditUserGroups = ({ match, history }) => {
   useEffect(() => {
     setTitle(`Edit User's Groups`);
     setBottomNav(false);
-    setBackLinkTo(`/admin/users/view/${match.params.id}`);
+    setBackLinkTo(`/admin/users/view/${params.id}`);
     setNavbarAction('backLink');
     return () => {
       setTitle(``);
@@ -102,7 +105,7 @@ const EditUserGroups = ({ match, history }) => {
   });
   const { data: userData, loading: userLoading } = useQuery(UserQuery, {
     variables: {
-      id: match.params.id,
+      id: params.id,
       schemeId: window.localStorage.getItem('currentScheme')
     },
     fetchPolicy: 'cache-and-network',
@@ -131,13 +134,13 @@ const EditUserGroups = ({ match, history }) => {
     if (groups.length > 0) {
       updateUser({
         variables: {
-          id: match.params.id,
+          id: params.id,
           addGroups: add.length > 0 ? add.map(id => ({ id })) : undefined,
           removeGroups:
             remove.length > 0 ? remove.map(id => ({ id })) : undefined
         }
       });
-      history.push(`/admin/users/view/${match.params.id}`);
+      navigate(`/admin/users/view/${params.id}`);
     } else {
       setError(true);
     }

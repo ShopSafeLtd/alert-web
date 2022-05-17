@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { withRouter } from "react-router-dom";
 import MediaQuery from "react-responsive";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
 
@@ -117,4 +116,4 @@ class ChatList extends Component {
   }
 }
 
-export default withRouter(ChatList);
+export default ChatList;

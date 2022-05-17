@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 
 import MediaQuery from "react-responsive";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
 import { faExclamationCircle } from "@fortawesome/pro-light-svg-icons";
@@ -77,7 +77,8 @@ const Icon = ({ icon }) => (
   />
 );
 
-const DataRetention = ({ history }) => {
+const DataRetention = () => {
+  const navigate = useNavigate()
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
   const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
   const setBackLinkTo = useStoreActions(
@@ -140,7 +141,7 @@ const DataRetention = ({ history }) => {
         },
       },
     });
-    history.push(`${APP_PREFIX_PATH}/scheme-settings`);
+    navigate(`${APP_PREFIX_PATH}/scheme-settings`);
   };
 
   const handleIncidentChange = (event) => {

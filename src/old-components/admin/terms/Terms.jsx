@@ -6,6 +6,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
+import { useNavigate } from 'react-router-dom';
 
 const Page = styled.div`
   background: #fff;
@@ -16,12 +17,13 @@ const Row = styled(TableRow)`
   cursor: pointer;
 `;
 
-const Terms = ({ history }) => {
+const Terms = () => {
+  const navigate = useNavigate()
   const viewUserTerms = () => {
-    history.push(`${APP_PREFIX_PATH}/scheme-settings/user-terms`);
+    navigate(`${APP_PREFIX_PATH}/scheme-settings/user-terms`);
   };
   const viewSchemeTerms = () => {
-    history.push(`${APP_PREFIX_PATH}/scheme-settings/scheme-terms`);
+    navigate(`${APP_PREFIX_PATH}/scheme-settings/scheme-terms`);
   };
 
   return (

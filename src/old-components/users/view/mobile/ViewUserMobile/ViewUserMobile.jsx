@@ -7,7 +7,7 @@ import SwipeableViews from 'react-swipeable-views';
 import EditIcon from '@material-ui/icons/Edit';
 import Zoom from '@material-ui/core/Zoom';
 import Fab from '@material-ui/core/Fab';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -70,9 +70,9 @@ const ViewUserMobile = ({
   setBackLinkTo,
   setNavbarAction,
   setActions,
-  history,
   isCurrent
 }) => {
+  const navigate = useNavigate()
   // state
   const [tab, setTab] = useState(0);
   const [anchorEl, setAncorEl] = useState(null);
@@ -309,7 +309,7 @@ const ViewUserMobile = ({
                   }
                 }
               });
-              history.push('/admin/users');
+              navigate('/admin/users');
             }}
           >
             Delete User

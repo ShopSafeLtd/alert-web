@@ -4,7 +4,7 @@ import Button from "@material-ui/core/Button";
 import { useQuery } from "@apollo/client";
 import Typography from "@material-ui/core/Typography";
 import MediaQuery from "react-responsive";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PullToRefresh } from "../../global/pullToRefresh";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
 
@@ -54,7 +54,8 @@ const EmptyIcon = styled.svg`
   height: 64px;
 `;
 
-const CrimeTypeList = ({ history }) => {
+const CrimeTypeList = () => {
+  const navigate = useNavigate()
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
   const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
   // const setNavbarAction = useStoreActions(
@@ -143,7 +144,7 @@ const CrimeTypeList = ({ history }) => {
                     <ListItem
                       key={crimeType.id}
                       onClick={() =>
-                        history.push(
+                        navigate(
                           `${APP_PREFIX_PATH}/scheme-settings/crime-types/view/${crimeType.id}`
                         )
                       }

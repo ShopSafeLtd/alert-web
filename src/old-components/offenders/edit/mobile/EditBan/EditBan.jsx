@@ -13,6 +13,7 @@ import ExclusionQuery from '../../../../../graphql/exclusions/queries/Exclusion'
 import EditMutation from '../../../../../graphql/exclusions/mutations/EditExclusion';
 import ConfirmDialog from '../../../../global/ConfirmDialog/ConfirmDialog';
 import Edit from '../../../../../graphql/exclusions/mutations/EditExclusion';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Page = styled.div`
   width: 100%;
@@ -31,15 +32,13 @@ const DeleteIcon = styled(Delete)`
 `;
 
 const EditBan = ({
-  match: {
-    params: { banId, id }
-  },
-  history,
   basePath,
   setBackLinkTo,
   setActions,
   editOffender
 }) => {
+  const navigate = useNavigate()
+  const params = useParams()
   // state
   const [ban, setBan] = useState({
     startDate: new Date(),
@@ -81,7 +80,7 @@ const EditBan = ({
   // queries
   const { loading } = useQuery(ExclusionQuery, {
     variables: {
-      id: banId
+      id: params.banId
     },
     fetchPolicy: 'cache-and-network',
     onCompleted: ({ ban }) =>
@@ -127,14 +126,14 @@ const EditBan = ({
       .then(() => {
         updateBan({
           variables: {
-            id: banId,
+            id: params.banId,
             startDate: { set: ban.startDate },
             endDate: { set: ban.endDate },
             location: { set: ban.location },
             description: { set: ban.description }
           }
         });
-        history.push(`${basePath}/bans`);
+        navigate(`${basePath}/bans`);
       })
       .catch(() => {});
   };
@@ -183,7 +182,7 @@ const EditBan = ({
               setActive(false);
               markAsInactive({
                 variables: {
-                  id: banId,
+                  id: params.banId,
                   active: { set: !ban.active }
                 },
                 optimisticResponse: {
@@ -215,11 +214,11 @@ const EditBan = ({
               setActive(false);
               editOffender({
                 variables: {
-                  id,
-                  removeBans: [{ id: { equals: banId } }]
+                  id: params.id,
+                  removeBans: [{ id: { equals: params.banId } }]
                 }
               });
-              history.push(`/offenders/edit/${id}/bans`);
+              navigate(`/offenders/edit/${params.id}/bans`);
             }}
           >
             Confirm

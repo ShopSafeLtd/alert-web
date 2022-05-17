@@ -1,6 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router';
-import { APP_PREFIX_PATH } from 'configs/AppConfig';
+import { Routes, Route } from 'react-router';
 import AdminMenu from '../../../old-components/admin/AdminMenu';
 
 import UserList from '../../../old-components/users/list/AllUsers/AllUsers';
@@ -35,71 +34,67 @@ import { RecycleBin } from 'old-components/admin/recycle-bin';
 
 const SchemeSettings = () => {
   return (
-    <Switch>
+    <Routes>
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings`}
-        exact
-        component={AdminMenu}
+        path="*"
+        element={<AdminMenu />}
       />
       {/* users */}
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/users`}
-        exact
-        component={UserList}
+        path="users/*"
+        element={<UserList />}
       />
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/users/view/:id`}
-        component={ViewUser}
+        path="users/view/:id"
+        element={<ViewUser />}
       />
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/users/add`}
-        component={AddUser}
+        path="users/add/*"
+        element={<AddUser />}
       />
 
       {/* groups */}
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/groups`}
-        exact
-        component={GroupsList}
+        path="groups/*"
+        element={<GroupsList />}
       />
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/groups/view/:id`}
-        component={ViewGroup}
+        path="groups/view/:id"
+        element={<ViewGroup />}
       />
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/groups/add`}
-        component={AddGroup}
+        path="groups/add/*"
+        element={<AddGroup />}
       />
 
       {/* chats */}
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/chat-groups`}
-        exact
-        component={ChatGroupsList}
+        path="chat-groups/*"
+        element={<ChatGroupsList />}
       />
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/chat-groups/view/:id`}
-        component={ViewChatGroup}
+        path="chat-groups/view/:id"
+        element={<ViewChatGroup />}
       />
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/chat-groups/add`}
-        component={AddChatGroup}
+        path="chat-groups/add/*"
+        element={<AddChatGroup />}
       />
 
       {/* details */}
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/scheme-details`}
-        component={SchemeDetails}
+        path="scheme-details"
+        element={<SchemeDetails />}
       />
 
       {/* terms */}
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/terms`}
-        component={Terms}
+        path="terms"
+        element={<Terms />}
       />
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/scheme-terms`}
-        component={() => (
+        path="scheme-terms"
+        element={() => (
           <div style={{ padding: '24px', backgroundColor: 'white' }}>
             <SchemeTerms
               values={{ termsSigned: true, error: false }}
@@ -109,8 +104,8 @@ const SchemeSettings = () => {
         )}
       />
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/user-terms`}
-        component={() => (
+        path="user-terms"
+        element={() => (
           <div style={{ padding: '24px', backgroundColor: 'white' }}>
             <UserTerms values={{ termsSigned: true, error: false }} hideForm />
           </div>
@@ -119,43 +114,42 @@ const SchemeSettings = () => {
 
       {/* auto approve */}
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/auto-approve`}
-        component={AutoApprove}
+        path="auto-approve"
+        element={<AutoApprove />}
       />
 
       {/* data retention */}
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/data-retention`}
-        component={DataRetention}
+        path="data-retention"
+        element={<DataRetention />}
       />
 
       {/* offender tags */}
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/offender-warnings`}
-        exact
-        component={OffenderWarnings}
+        path="offender-warnings/*"
+        element={<OffenderWarnings />}
       />
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/offender-warnings/view/:id`}
-        component={ViewOffenderWarnings}
+        path="offender-warnings/view/:id"
+        element={<ViewOffenderWarnings />}
       />
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/offender-warnings/add`}
-        component={AddOffenderWarnings}
+        path="offender-warnings/add"
+        element={<AddOffenderWarnings />}
       />
 
       {/* crime types */}
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/crime-types`}
-        component={CrimeTypes}
+        path="crime-types"
+        element={<CrimeTypes />}
       />
 
       {/* recycle bin */}
       <Route
-        path={`${APP_PREFIX_PATH}/scheme-settings/recycle-bin`}
-        component={RecycleBin}
+        path="recycle-bin"
+        element={<RecycleBin />}
       />
-    </Switch>
+    </Routes>
   );
 };
 

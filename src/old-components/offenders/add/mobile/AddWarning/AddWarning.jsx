@@ -13,6 +13,7 @@ import {
 import { FullWidthButton } from '../../../../global/actions';
 import AllOffenderLabels from '../../../../../graphql/offenderLabels/queries/AllOffenderLabels';
 import mutation from '../../../../../graphql/admin/mutations/AddOffenderWarning';
+import { useNavigate } from 'react-router-dom';
 
 const Page = styled.div`
   width: 100%;
@@ -32,9 +33,9 @@ const Form = styled.div`
 const AddWarning = ({
   setNavbarAction,
   setBackLinkTo,
-  history,
   createdById
 }) => {
+  const navigate = useNavigate()
   // state
   const [warning, setWarning] = useState({
     name: '',
@@ -116,7 +117,7 @@ const AddWarning = ({
             }
           }
         });
-        history.push('/offenders/add/warning-labels');
+        navigate('/offenders/add/warning-labels');
       })
       .catch(() => {});
   };

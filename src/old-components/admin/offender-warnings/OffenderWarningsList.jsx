@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { useQuery } from "@apollo/client";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FAB } from "../../global/actions";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
 
@@ -48,7 +48,8 @@ const EmptyIcon = styled.svg`
   height: 64px;
 `;
 
-const OffenderWarnings = ({ history }) => {
+const OffenderWarnings = () => {
+  const navigate = useNavigate()
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
   const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
   // const setNavbarAction = useStoreActions(
@@ -133,7 +134,7 @@ const OffenderWarnings = ({ history }) => {
               <ListItem
                 key={id}
                 onClick={() =>
-                  history.push(
+                  navigate(
                     `${APP_PREFIX_PATH}/scheme-settings/offender-warnings/view/${id}`
                   )
                 }

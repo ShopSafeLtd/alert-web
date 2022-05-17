@@ -88,14 +88,14 @@ export const SideMenu: <T>(props: Props<T>) => JSX.Element = ({
                   </span>
                 )}
                 <span>{name}</span>
-                <Link to={to} />
+                <Link to={to!} />
               </Menu.Item>
             ))}
           </SubMenu>
         ) : layout ? (
           <Menu.Item key={key}>
             {layout}
-            <Link to={to} />
+            <Link to={to!} />
           </Menu.Item>
         ) : (
           <Menu.Item key={key}>
@@ -112,7 +112,7 @@ export const SideMenu: <T>(props: Props<T>) => JSX.Element = ({
               </span>
             )}
             <span>{name}</span>
-            <Link to={to} />
+            <Link to={to!} />
           </Menu.Item>
         );
       })}

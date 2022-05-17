@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import MediaQuery from "react-responsive";
-import { Route } from "react-router-dom";
+import { Route, useLocation, useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import Paper from "@material-ui/core/Paper";
 import Stepper from "@material-ui/core/Stepper";
@@ -77,7 +77,9 @@ const Content = styled.div`
   }
 `;
 
-const SecondaryOnboarding = ({ history, classes }) => {
+const SecondaryOnboarding = ({ classes }) => {
+  const navigate = useNavigate()
+  const location = useLocation()
   const setUser = useStoreActions((actions) => actions.user.setUser);
   const userId = useStoreState((state) => state.user.id);
   const user = useStoreState((state) => state.user);
@@ -127,12 +129,12 @@ const SecondaryOnboarding = ({ history, classes }) => {
   // effects
 
   useEffect(() => {
-    return history.listen((location) => {
-      if (history.action === "PUSH") {
+    return navigate.listen((location) => {
+      if (navigate.action === "PUSH") {
         setLocationKeys([location.key]);
       }
 
-      if (history.action === "POP") {
+      if (navigate.action === "POP") {
         if (locationKeys[1] === location.key) {
           setLocationKeys(([_, ...keys]) => keys);
           // Handle forward event
@@ -152,10 +154,10 @@ const SecondaryOnboarding = ({ history, classes }) => {
   }, [locationKeys, step]);
 
   useEffect(() => {
-    if (history.location.pathname.includes("terms-conditions") && step !== 1) {
+    if (location.pathname.includes("terms-conditions") && step !== 1) {
       setStep(1);
     }
-  }, [history, step]);
+  }, [location, step]);
 
   // queries
   const { loading } = useQuery(UserDetails, {
@@ -220,7 +222,7 @@ const SecondaryOnboarding = ({ history, classes }) => {
     });
 
   const next = () => {
-    history.push(steps[step + 1].url);
+    navigate(steps[step + 1].url);
     setStep(step + 1);
   };
 
@@ -269,11 +271,11 @@ const SecondaryOnboarding = ({ history, classes }) => {
         },
       });
       setUser({ ...user, onboarded: true });
-      history.push("/");
+      navigate("/");
     }
   };
   const handleBack = () => {
-    history.push(steps[step - 1].url);
+    navigate(steps[step - 1].url);
     setStep((prev) => prev - 1);
   };
 

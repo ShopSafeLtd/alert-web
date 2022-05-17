@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { useMutation } from "@apollo/client";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
 
 import {
@@ -40,7 +40,8 @@ const Form = styled.div`
   }
 `;
 
-const EditOffenderWarnings = ({ history }) => {
+const EditOffenderWarnings = () => {
+  const navigate = useNavigate()
   const userId = useStoreState((state) => state.user.id);
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
   const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
@@ -169,61 +170,13 @@ const EditOffenderWarnings = ({ history }) => {
             },
           },
         });
-        history.push(`${APP_PREFIX_PATH}/scheme-settings/crime-types`);
+        navigate(`${APP_PREFIX_PATH}/scheme-settings/crime-types`);
       })
       .catch(() => {});
   };
 
-  // return (
-  //   <Mutation
-  //     mutation={AddCrimeType}
-  //     update={(store, { data: { createTag } }) => {
-  //       let data = store.readQuery({
-  //         query: CrimeTypes,
-  //         variables: {
-  //           schemeId: window.localStorage.getItem('currentScheme')
-  //         }
-  //       });
-  //       data.tags = [...data.tags, createTag];
-  //       store.writeQuery({
-  //         query: CrimeTypes,
-  //         data,
-  //         variables: {
-  //           schemeId: window.localStorage.getItem('currentScheme')
-  //         }
-  //       });
-  //     }}
-  //   >
-  //     {addCrimeType => {
-  //       const submit = () => {
-  //         validate()
-  //           .then(async () => {
-  //             await addCrimeType({
-  //               variables: {
-  //                 name: details.name,
-  //                 description: details.description,
-  //                 schemeId: window.localStorage.getItem('currentScheme'),
-  //                 createdById: userId
-  //               },
-  //               optimisticResponse: {
-  //                 createTag: {
-  //                   description: details.description,
-  //                   id: Math.random(),
-  //                   name: details.name,
-  //                   __typename: 'Tag'
-  //                 }
-  //               }
-  //             });
-  //             history.push(`${APP_PREFIX_PATH}/scheme-settings/crime-types`);
-  //           })
-  //           .catch(() => {});
-  //       };
-
   return (
-    // <MediaQuery minDeviceWidth={1024}>
-    //   {(matches) => (
     <Page>
-      {/* {matches ? ( */}
       <Section width="100%" elevation={1}>
         <PageHeader>Add Crime Type</PageHeader>
         <HeaderSubText>
@@ -231,15 +184,6 @@ const EditOffenderWarnings = ({ history }) => {
           members.
         </HeaderSubText>
       </Section>
-      {/* ) : (
-            <Header>
-              <HeaderText>Add Crime Type</HeaderText>
-              <HeaderSubText>
-                Crime types are used to catagorise incidents that are submitted
-                by members.
-              </HeaderSubText>
-            </Header>
-          )} */}
       <Section noPadding width="100%" elevation={1} grow>
         <Form>
           <Field>
@@ -266,7 +210,6 @@ const EditOffenderWarnings = ({ history }) => {
           </Field>
         </Form>
       </Section>
-      {/* {matches ? ( */}
       <Section width="100%" elevation={1}>
         <Row row right>
           <BackButton
@@ -280,16 +223,8 @@ const EditOffenderWarnings = ({ history }) => {
           </Button>
         </Row>
       </Section>
-      {/* ) : (
-            <FullWidthButton text="Submit" onClick={submit} />
-          )} */}
     </Page>
-    //   )}
-    // </MediaQuery>
   );
-  //     }}
-  //   </Mutation>
-  // );
 };
 
 export default EditOffenderWarnings;

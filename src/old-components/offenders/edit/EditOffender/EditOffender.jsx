@@ -1,19 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
+import { useParams } from "react-router-dom";
 
 import EditDesktop from "../desktop/EditDesktop/EditDesktop";
 
-class EditOffender extends Component {
-  render() {
-    const {
-      userId,
-      history,
-      match: {
-        params: { id },
-      },
-    } = this.props;
-
-    return <EditDesktop id={id} userId={userId} history={history} />;
-  }
+const EditOffender = ({userId}) => {
+  const params = useParams()
+  return <EditDesktop id={params.id} userId={userId} />;
 }
 
 export default EditOffender;

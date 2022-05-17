@@ -20,7 +20,7 @@ if (window.innerWidth > 1239 && window.innerWidth < 1800) {
   querySize = 16;
 }
 
-const OffenderFeedQuery = ({ retryLoad, setActions }) => {
+const OffenderFeedQuery = () => {
   const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
   const setAppBar = useStoreActions((actions) => actions.theme.setAppBar);
@@ -269,8 +269,6 @@ const OffenderFeedQuery = ({ retryLoad, setActions }) => {
       refetch={refetch}
       loadingMore={fetching}
       networkError={networkError}
-      retryLoad={retryLoad}
-      setActions={setActions}
       filterPristine={filterPristine}
       toggleFetchOffenders={toggleFetchOffenders}
       role={role}

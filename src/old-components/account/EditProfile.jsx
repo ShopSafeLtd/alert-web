@@ -16,6 +16,7 @@ import { useStoreActions, useStoreState } from "../../state";
 
 import { UserDetails } from "graphql-src/users/queries";
 import { UpdateUserDetails } from "graphql-src/users/mutations";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   min-height: calc(100vh - 56px);
@@ -73,7 +74,8 @@ const Header = styled.div`
   }
 `;
 
-const EditProfile = ({ history }) => {
+const EditProfile = () => {
+  const navigate = useNavigate()
   const id = useStoreState((state) => state.user.id);
   const userState = useStoreState((state) => state.user);
   const setUserState = useStoreActions((actions) => actions.user.setUser);
@@ -224,7 +226,7 @@ const EditProfile = ({ history }) => {
           fullName: user.fullName,
           organisation: user.organisation,
         });
-        history.push("/");
+        navigate("/");
       })
       .catch(() => {});
   };

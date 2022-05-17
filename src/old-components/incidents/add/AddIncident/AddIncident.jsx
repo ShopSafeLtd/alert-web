@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
 import update from "immutability-helper";
 import { useMutation, useQuery } from "@apollo/client";
 
@@ -11,6 +10,7 @@ import { Groups } from "graphql-src/groups/queries";
 import { IncidentFeed } from "graphql-src/incidents/queries";
 import { UploadImage } from "graphql-src/images/mutations";
 import { useStoreState } from "../../../../state";
+import { useNavigate } from "react-router-dom";
 
 let querySize = 10;
 if (window.innerWidth > 1239 && window.innerWidth < 1800) {
@@ -19,7 +19,8 @@ if (window.innerWidth > 1239 && window.innerWidth < 1800) {
   querySize = 16;
 }
 
-const AddIncident = ({ history }) => {
+const AddIncident = () => {
+  const navigate = useNavigate()
   const schemeId = useStoreState((state) => state.scheme.id);
   const currentUser = useStoreState((state) => state.user.id);
   const role = useStoreState((state) => state.user.role);
@@ -455,7 +456,7 @@ const AddIncident = ({ history }) => {
       },
     });
 
-    history.push("/");
+    navigate("/");
   };
 
   return (
@@ -509,4 +510,4 @@ const AddIncident = ({ history }) => {
   );
 };
 
-export default withRouter(AddIncident);
+export default AddIncident;

@@ -6,13 +6,10 @@ import Desktop from "./desktop/Desktop/Desktop";
 import { ViewChat } from "graphql-src/chat/queries";
 // import query from '../../../../graphql/admin/queries/ChatGroup';
 import { useStoreActions } from "../../../../state";
+import { useParams } from "react-router-dom";
 
-const ViewChatGroup = ({
-  match: {
-    params: { id },
-  },
-  history,
-}) => {
+const ViewChatGroup = () => {
+  const params = useParams()
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
   // const setNavbarAction = useStoreActions(
   //   (actions) => actions.theme.setNavbarAction
@@ -38,31 +35,18 @@ const ViewChatGroup = ({
   const { data, loading } = useQuery(ViewChat, {
     variables: {
       where: {
-        id,
+        id: params.id,
       },
     },
     fetchPolicy: "cache-and-network",
   });
 
   return (
-    // <MediaQuery minDeviceWidth={1024}>
-    //   {(matches) =>
-    //     matches ? (
     <Desktop
       chat={!!data ? data?.chat : {}}
       loading={loading}
-      chatId={id}
-      history={history}
+      chatId={params.id}
     />
-    //     ) : (
-    //       <Mobile
-    //         chat={!!data ? data.chat : {}}
-    //         loading={loading}
-    //         chatId={id}
-    //       />
-    //     )
-    //   }
-    // </MediaQuery>
   );
 };
 

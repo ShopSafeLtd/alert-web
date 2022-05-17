@@ -4,12 +4,11 @@ import Paper from "@material-ui/core/Paper";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
-import { withStyles } from "@material-ui/styles";
 import Button from "@material-ui/core/Button";
 import MediaQuery from "react-responsive";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
 // import validate from "validate.js";
-import { withRouter, Route } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 // import { useMutation, useQuery } from '@apollo/react-hooks';
 import { useQuery, useMutation } from "@apollo/client";
 
@@ -30,12 +29,6 @@ import Details from "../Details/Details";
 import Groups from "../Groups/Groups";
 import ChatGroups from "../ChatGroups/ChatGroups";
 import { useStoreActions, useStoreState } from "../../../../state";
-
-const styles = {
-  label: {
-    fontSize: "14px",
-  },
-};
 
 const Container = styled.div`
   min-height: calc(100vh - 56px);
@@ -80,7 +73,9 @@ const Content = styled.div`
   }
 `;
 
-const AddUser = ({ history, classes, location }) => {
+const AddUser = () => {
+  const navigate = useNavigate()
+  const location = useLocation()
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
   const setBackLinkTo = useStoreActions(
     (actions) => actions.theme.setBackLinkTo
@@ -140,7 +135,7 @@ const AddUser = ({ history, classes, location }) => {
     setBottomNav(false);
     setTitle("Add User");
     location.pathname !== `${APP_PREFIX_PATH}/scheme-settings/users/add` &&
-      history.push(`${APP_PREFIX_PATH}/scheme-settings/users/add`);
+    navigate(`${APP_PREFIX_PATH}/scheme-settings/users/add`);
     return () => {
       setBottomNav(true);
       setTitle("");
@@ -205,7 +200,7 @@ const AddUser = ({ history, classes, location }) => {
         });
       },
       onCompleted: () => {
-        history.push(`${APP_PREFIX_PATH}/scheme-settings/users`);
+        navigate(`${APP_PREFIX_PATH}/scheme-settings/users`);
       },
     }
   );
@@ -237,7 +232,7 @@ const AddUser = ({ history, classes, location }) => {
         });
       },
       onCompleted: () => {
-        history.push(`${APP_PREFIX_PATH}/scheme-settings/users`);
+        navigate(`${APP_PREFIX_PATH}/scheme-settings/users`);
       },
     }
   );
@@ -263,7 +258,7 @@ const AddUser = ({ history, classes, location }) => {
   };
 
   const handleBack = () => {
-    history.push(steps[step - 1].url);
+    navigate(steps[step - 1].url);
     setStep(step - 1);
   };
 
@@ -297,12 +292,12 @@ const AddUser = ({ history, classes, location }) => {
 
   const handleSave = async () => {
     if (!(await validateUser())) {
-      history.push(`${APP_PREFIX_PATH}/scheme-settings/users/add`);
+      navigate(`${APP_PREFIX_PATH}/scheme-settings/users/add`);
       setStep(1);
       return;
     }
     if (!(await validateGroups())) {
-      history.push(`${APP_PREFIX_PATH}/scheme-settings/users/add/groups`);
+      navigate(`${APP_PREFIX_PATH}/scheme-settings/users/add/groups`);
       setStep(2);
       return;
     }
@@ -374,13 +369,13 @@ const AddUser = ({ history, classes, location }) => {
   const handleNext = async () => {
     if (step === 0) {
       if (await validateUser()) {
-        history.push(steps[step + 1].url);
+        navigate(steps[step + 1].url);
         setStep(1);
       }
       return;
     } else if (step === 1) {
       if (await validateGroups()) {
-        history.push(steps[step + 1].url);
+        navigate(steps[step + 1].url);
         setStep(2);
       }
       return;
@@ -426,7 +421,7 @@ const AddUser = ({ history, classes, location }) => {
                 <Stepper activeStep={step} alternativeLabel>
                   {steps.map(({ label, step }) => (
                     <Step key={step}>
-                      <StepLabel classes={{ label: classes.label }}>
+                      <StepLabel>
                         {label}
                       </StepLabel>
                     </Step>
@@ -434,47 +429,48 @@ const AddUser = ({ history, classes, location }) => {
                 </Stepper>
               )}
               <Content>
-                <Route
-                  exact
-                  path={`${APP_PREFIX_PATH}/scheme-settings/users/add`}
-                  render={() => (
-                    <Details
-                      handleChange={handleChange}
-                      user={user}
-                      setBackLinkTo={setBackLinkTo}
-                      // setNavbarAction={setNavbarAction}
-                      setActiveStep={setStep}
-                    />
-                  )}
-                />
-                <Route
-                  path={`${APP_PREFIX_PATH}/scheme-settings/users/add/groups`}
-                  render={() => (
-                    <Groups
-                      groups={groupsData.groups}
-                      selectedGroups={groups}
-                      loading={groupsLoading}
-                      toggleSelectedGroups={toggleGroups}
-                      setBackLinkTo={setBackLinkTo}
-                      setActiveStep={setStep}
-                      // setNavbarAction={setNavbarAction}
-                    />
-                  )}
-                />
-                <Route
-                  path={`${APP_PREFIX_PATH}/scheme-settings/users/add/chat-groups`}
-                  render={() => (
-                    <ChatGroups
-                      chatGroups={chatsData.chats}
-                      selectedChatGroups={chats}
-                      loading={chatsLoading}
-                      toggleChatGroup={toggleChats}
-                      setBackLinkTo={setBackLinkTo}
-                      setActiveStep={setStep}
-                      // setNavbarAction={setNavbarAction}
-                    />
-                  )}
-                />
+                <Routes>
+                  <Route
+                    index
+                    element={
+                      <Details
+                        handleChange={handleChange}
+                        user={user}
+                        setBackLinkTo={setBackLinkTo}
+                        // setNavbarAction={setNavbarAction}
+                        setActiveStep={setStep}
+                      />
+                    }
+                  />
+                  <Route
+                    path={`${APP_PREFIX_PATH}/scheme-settings/users/add/groups`}
+                    element={
+                      <Groups
+                        groups={groupsData.groups}
+                        selectedGroups={groups}
+                        loading={groupsLoading}
+                        toggleSelectedGroups={toggleGroups}
+                        setBackLinkTo={setBackLinkTo}
+                        setActiveStep={setStep}
+                        // setNavbarAction={setNavbarAction}
+                      />
+                    }
+                  />
+                  <Route
+                    path={`${APP_PREFIX_PATH}/scheme-settings/users/add/chat-groups`}
+                    element={
+                      <ChatGroups
+                        chatGroups={chatsData.chats}
+                        selectedChatGroups={chats}
+                        loading={chatsLoading}
+                        toggleChatGroup={toggleChats}
+                        setBackLinkTo={setBackLinkTo}
+                        setActiveStep={setStep}
+                        // setNavbarAction={setNavbarAction}
+                      />
+                    }
+                  />
+                </Routes>
               </Content>
               {matches && (
                 <Actions>
@@ -529,4 +525,4 @@ const AddUser = ({ history, classes, location }) => {
   );
 };
 
-export default withRouter(withStyles(styles)(AddUser));
+export default AddUser;

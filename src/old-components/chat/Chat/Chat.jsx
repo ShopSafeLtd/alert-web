@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Route } from "react-router-dom";
-import { APP_PREFIX_PATH } from "configs/AppConfig";
+import { Route, Routes } from "react-router-dom";
 
 import MessagesQuery from "../MessagesQuery/MessagesQuery";
 import ChatView from "../ChatView/ChatView";
@@ -21,8 +20,10 @@ class Chat extends React.Component {
   render() {
     return (
       <Container>
-        <Route exact path={`${APP_PREFIX_PATH}/chat`} component={ChatView} />
-        <Route path={`${APP_PREFIX_PATH}/chat/:id`} component={MessagesQuery} />
+        <Routes>
+          <Route index element={<ChatView />} />
+          <Route path=":id" element={<MessagesQuery />} />
+        </Routes>
       </Container>
     );
   }

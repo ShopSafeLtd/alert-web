@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Card, Row, Col, Form, Input, Button, message, Divider } from "antd";
 import { MailOutlined } from "@ant-design/icons";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AUTH_PREFIX_PATH } from "configs/AppConfig";
 import { useMutation } from "@apollo/client";
 import {
@@ -23,7 +23,7 @@ const ForgotPassword = () => {
     // backgroundSize: "cover",
   };
 
-  let history = useHistory();
+  let navigate = useNavigate();
 
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -46,7 +46,7 @@ const ForgotPassword = () => {
   };
 
   const onBack = () => {
-    history.push(`${AUTH_PREFIX_PATH}/login`);
+    navigate(`${AUTH_PREFIX_PATH}/login`);
   };
 
   return (

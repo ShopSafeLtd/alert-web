@@ -11,7 +11,7 @@ import Button from "@material-ui/core/Button";
 import MediaQuery from "react-responsive";
 
 import { BackButton, FullWidthButton } from "../../../global/actions";
-import { withRouter, Route } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { SchemeUsers } from "graphql-src/users/queries";
 import { CreateGroup } from "graphql-src/groups/mutations";
 import { Groups } from "graphql-src/groups/queries";
@@ -70,7 +70,8 @@ const Content = styled.div`
   }
 `;
 
-const AddGroup = ({ history, classes }) => {
+const AddGroup = ({ classes }) => {
+  const navigate = useNavigate()
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
   const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
   const setBackLinkTo = useStoreActions(
@@ -109,7 +110,7 @@ const AddGroup = ({ history, classes }) => {
   useEffect(() => {
     setBottomNav(false);
     setTitle("Add Group");
-    history.push(`${APP_PREFIX_PATH}/scheme-settings/groups/add`);
+    navigate(`${APP_PREFIX_PATH}/scheme-settings/groups/add`);
     return () => {
       setBottomNav(true);
       setTitle("");
@@ -191,7 +192,7 @@ const AddGroup = ({ history, classes }) => {
     if (step === 0) {
       validateDetails()
         .then(() => {
-          history.push(steps[step + 1].url);
+          navigate(steps[step + 1].url);
           setStep(1);
         })
         .catch(() => {});
@@ -221,14 +222,14 @@ const AddGroup = ({ history, classes }) => {
               },
             },
           });
-          history.push(`${APP_PREFIX_PATH}/scheme-settings/groups`);
+          navigate(`${APP_PREFIX_PATH}/scheme-settings/groups`);
         })
         .catch(() => {});
     }
   };
 
   const handleBack = () => {
-    history.push(steps[step - 1].url);
+    navigate(steps[step - 1].url);
     setStep(step - 1);
   };
 
@@ -250,38 +251,71 @@ const AddGroup = ({ history, classes }) => {
                 </Stepper>
               )}
               <Content>
-                <Route
-                  exact
-                  path={`${APP_PREFIX_PATH}/scheme-settings/groups/add`}
-                  render={() => (
-                    <Details
-                      handleChange={handleChange}
-                      name={group.name}
-                      nameError={group.nameError}
-                      description={group.description}
-                      setBackLinkTo={setBackLinkTo}
-                      // setNavbarAction={setNavbarAction}
-                      setActiveStep={setStep}
-                      back={`${APP_PREFIX_PATH}/scheme-settings/groups`}
-                    />
-                  )}
-                />
-                <Route
-                  path={`${APP_PREFIX_PATH}/scheme-settings/groups/add/users`}
-                  render={() => (
-                    <Users
-                      users={data?.users}
-                      error={userError}
-                      selectedUsers={users}
-                      loading={loading}
-                      toggleSelectedUsers={toggleSelectedUsers}
-                      setBackLinkTo={setBackLinkTo}
-                      setActiveStep={step}
-                      // setNavbarAction={setNavbarAction}
-                      back={`${APP_PREFIX_PATH}/scheme-settings/groups/add`}
-                    />
-                  )}
-                />
+                <Routes>
+
+                  <Route
+                    index
+                    element={
+                      <Details
+                        handleChange={handleChange}
+                        name={group.name}
+                        nameError={group.nameError}
+                        description={group.description}
+                        setBackLinkTo={setBackLinkTo}
+                        // setNavbarAction={setNavbarAction}
+                        setActiveStep={setStep}
+                        back={`${APP_PREFIX_PATH}/scheme-settings/groups`}
+                      />
+                    }
+                  />
+                  <Route
+                    path={`${APP_PREFIX_PATH}/scheme-settings/groups/add/users`}
+                    element={
+                      <Users
+                        users={data?.users}
+                        error={userError}
+                        selectedUsers={users}
+                        loading={loading}
+                        toggleSelectedUsers={toggleSelectedUsers}
+                        setBackLinkTo={setBackLinkTo}
+                        setActiveStep={step}
+                        // setNavbarAction={setNavbarAction}
+                        back={`${APP_PREFIX_PATH}/scheme-settings/groups/add`}
+                      />
+                    }
+                  />
+                  <Route
+                    index
+                    element={
+                      <Details
+                        handleChange={handleChange}
+                        name={group.name}
+                        nameError={group.nameError}
+                        description={group.description}
+                        setBackLinkTo={setBackLinkTo}
+                        // setNavbarAction={setNavbarAction}
+                        setActiveStep={setStep}
+                        back={`${APP_PREFIX_PATH}/scheme-settings/groups`}
+                      />
+                    }
+                  />
+                  <Route
+                    path={`${APP_PREFIX_PATH}/scheme-settings/groups/add/users`}
+                    element={
+                      <Users
+                        users={data?.users}
+                        error={userError}
+                        selectedUsers={users}
+                        loading={loading}
+                        toggleSelectedUsers={toggleSelectedUsers}
+                        setBackLinkTo={setBackLinkTo}
+                        setActiveStep={step}
+                        // setNavbarAction={setNavbarAction}
+                        back={`${APP_PREFIX_PATH}/scheme-settings/groups/add`}
+                      />
+                    }
+                  />
+                </Routes>
               </Content>
               {matches && (
                 <Actions>
@@ -311,4 +345,4 @@ const AddGroup = ({ history, classes }) => {
   );
 };
 
-export default withRouter(withStyles(styles)(AddGroup));
+export default withStyles(styles)(AddGroup);

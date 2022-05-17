@@ -5,7 +5,6 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import { withRouter } from "react-router-dom";
 // import { useQuery } from '@apollo/react-hooks';
 import { useQuery } from "@apollo/client";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
@@ -15,6 +14,7 @@ import { GroupRowSkeleton } from "../../../global/skeletons";
 import { Groups as GroupsQuery } from "graphql-src/groups/queries";
 // import query from '../../../../graphql/groups/queries/GroupList';
 import { useStoreState } from "../../../../state";
+import { useNavigate } from "react-router-dom";
 
 const Groups = styled.div`
   background: #fff;
@@ -30,24 +30,9 @@ const Row = styled(TableRow)`
   cursor: pointer;
 `;
 
-const AllGroups = ({ history }) => {
+const AllGroups = () => {
+  const navigate = useNavigate()
   const schemeId = useStoreState((state) => state.scheme.id);
-
-  // effects
-  // useEffect(() => {
-  //   setBackLinkTo("/admin");
-  //   // setNavbarAction("backLink");
-  //   setSearch(true);
-  //   setSearchText("Search for groups...");
-  //   setTitle("Group Management");
-  //   return () => {
-  //     setBackLinkTo("");
-  //     // setNavbarAction("default");
-  //     setSearch(false);
-  //     setSearchText("");
-  //     setTitle("");
-  //   };
-  // });
 
   // queries
   const { data, loading } = useQuery(GroupsQuery, {
@@ -60,7 +45,7 @@ const AllGroups = ({ history }) => {
 
   // functions
   const toViewGroup = (id) => {
-    history.push(`${APP_PREFIX_PATH}/scheme-settings/groups/view/${id}`);
+    navigate(`${APP_PREFIX_PATH}/scheme-settings/groups/view/${id}`);
   };
 
   return (
@@ -98,4 +83,4 @@ const AllGroups = ({ history }) => {
   );
 };
 
-export default withRouter(AllGroups);
+export default AllGroups;

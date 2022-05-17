@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
 
@@ -43,7 +43,9 @@ const Form = styled.div`
   }
 `;
 
-const EditOffenderWarnings = ({ setActions, match, history }) => {
+const EditOffenderWarnings = () => {
+  const navigate = useNavigate()
+  const params = useParams()
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
   const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
   // const setNavbarAction = useStoreActions(
@@ -93,7 +95,7 @@ const EditOffenderWarnings = ({ setActions, match, history }) => {
   const { loading } = useQuery(Tag, {
     variables: {
       where: {
-        id: match.params.id,
+        id: params.id,
       },
     },
     fetchPolicy: "cache-and-network",
@@ -164,7 +166,7 @@ const EditOffenderWarnings = ({ setActions, match, history }) => {
         await updateWarning({
           variables: {
             where: {
-              id: match.params.id,
+              id: params.id,
             },
             data: {
               name: { set: warning.name },
@@ -173,14 +175,14 @@ const EditOffenderWarnings = ({ setActions, match, history }) => {
           },
           optimisticResponse: {
             updateTag: {
-              id: match.params.id,
+              id: params.id,
               name: warning.name,
               description: warning.description,
               __typename: "OffenderWarning",
             },
           },
         });
-        history.push(`${APP_PREFIX_PATH}/scheme-settings/offender-warnings`);
+        navigate(`${APP_PREFIX_PATH}/scheme-settings/offender-warnings`);
       })
       .catch(() => {});
   };
@@ -189,17 +191,17 @@ const EditOffenderWarnings = ({ setActions, match, history }) => {
     await deleteOffenderWarning({
       variables: {
         where: {
-          id: match.params.id,
+          id: params.id,
         },
       },
       optimisticResponse: {
         deleteTag: {
-          id: match.params.id,
+          id: params.id,
           __typename: "OffenderWarning",
         },
       },
     });
-    history.push(`${APP_PREFIX_PATH}/scheme-settings/offender-warnings`);
+    navigate(`${APP_PREFIX_PATH}/scheme-settings/offender-warnings`);
   };
 
   return (

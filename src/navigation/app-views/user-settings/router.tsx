@@ -1,6 +1,5 @@
 import React from 'react';
-import { Switch, Route } from 'react-router';
-import { APP_PREFIX_PATH } from 'configs/AppConfig';
+import { Routes, Route } from 'react-router';
 import AccountMenu from '../../../old-components/account/AccountMenu';
 import EditProfile from '../../../old-components/account/EditProfile';
 import ResetPassword from '../../../old-components/account/ResetPassword';
@@ -9,33 +8,32 @@ import Terms from '../../../old-components/users/onboard/Terms/Terms';
 
 const UserSettings = () => {
   return (
-    <Switch>
+    <Routes>
       <Route
-        path={`${APP_PREFIX_PATH}/user-settings`}
-        exact
-        component={AccountMenu}
+        path="*"
+        element={AccountMenu}
       />
       <Route
-        path={`${APP_PREFIX_PATH}/user-settings/edit-profile`}
-        component={EditProfile}
+        path="edit-profile"
+        element={EditProfile}
       />
       <Route
-        path={`${APP_PREFIX_PATH}/user-settings/reset-password`}
-        component={ResetPassword}
+        path="reset-password"
+        element={ResetPassword}
       />
       <Route
-        path={`${APP_PREFIX_PATH}/user-settings/notifications`}
-        component={NotificationSettings}
+        path="notifications"
+        element={NotificationSettings}
       />
       <Route
-        path={`${APP_PREFIX_PATH}/user-settings/terms`}
-        component={() => (
+        path="terms"
+        element={() => (
           <div style={{ padding: '24px', backgroundColor: 'white' }}>
             <Terms values={{ termsSigned: true, error: false }} hideForm />
           </div>
         )}
       />
-    </Switch>
+    </Routes>
   );
 };
 

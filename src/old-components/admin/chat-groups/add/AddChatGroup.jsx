@@ -5,7 +5,7 @@ import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
-import { Route } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
 
@@ -63,7 +63,8 @@ const Content = styled.div`
   }
 `;
 
-const AddChatGroup = ({ location, history }) => {
+const AddChatGroup = () => {
+  const navigate = useNavigate()
   const setBackLinkTo = useStoreActions(
     (actions) => actions.theme.setBackLinkTo
   );
@@ -94,20 +95,6 @@ const AddChatGroup = ({ location, history }) => {
       url: `${APP_PREFIX_PATH}/scheme-settings/chat-groups/add/users`,
     },
   ];
-
-  // effects
-  // useEffect(() => {
-  //   setTitle("Add Chat Group");
-  //   setBottomNav(false);
-  //   location.pathname !==
-  //     `${APP_PREFIX_PATH}/scheme-settings/chat-groups/add` &&
-  //     history.push(`${APP_PREFIX_PATH}/scheme-settings/chat-groups/add`);
-  //   return () => {
-  //     setTitle("");
-  //     setBottomNav(true);
-  //   };
-  //   // eslint-disable-next-line
-  // }, []);
 
   // queries
   const { data, loading } = useQuery(SchemeUsers, {
@@ -156,7 +143,7 @@ const AddChatGroup = ({ location, history }) => {
   };
 
   const handleBack = () => {
-    history.push(steps[step - 1].url);
+    navigate(steps[step - 1].url);
     setStep(step - 1);
   };
 
@@ -173,7 +160,7 @@ const AddChatGroup = ({ location, history }) => {
     if (step === 0) {
       validateDetails()
         .then(() => {
-          history.push(steps[step + 1].url);
+          navigate(steps[step + 1].url);
         })
         .catch(() => {});
     } else if (step === 1) {
@@ -211,7 +198,7 @@ const AddChatGroup = ({ location, history }) => {
           },
         },
       });
-      history.push(`${APP_PREFIX_PATH}/scheme-settings/chat-groups`);
+      navigate(`${APP_PREFIX_PATH}/scheme-settings/chat-groups`);
     }
   };
 
@@ -231,37 +218,38 @@ const AddChatGroup = ({ location, history }) => {
           </Stepper>
           {/* )} */}
           <Content>
-            <Route
-              exact
-              path={`${APP_PREFIX_PATH}/scheme-settings/chat-groups/add`}
-              render={() => (
-                <Details
-                  handleChange={handleChange}
-                  name={details.name}
-                  nameError={details.nameError}
-                  description={details.description}
-                  setBackLinkTo={setBackLinkTo}
-                  // setNavbarAction={setNavbarAction}
-                  setActiveStep={setStep}
-                />
-              )}
-            />
-            <Route
-              path={`${APP_PREFIX_PATH}/scheme-settings/chat-groups/add/users`}
-              render={() => (
-                <Users
-                  users={data?.users}
-                  selectedUsers={members}
-                  loading={loading}
-                  toggleSelectedUsers={toggleSelectedMembers}
-                  setBackLinkTo={setBackLinkTo}
-                  setActiveStep={setStep}
-                  // setNavbarAction={setNavbarAction}
-                  setSearchText={setSearchText}
-                  setSearch={setSearch}
-                />
-              )}
-            />
+            <Routes>
+              <Route
+                index
+                element={
+                  <Details
+                    handleChange={handleChange}
+                    name={details.name}
+                    nameError={details.nameError}
+                    description={details.description}
+                    setBackLinkTo={setBackLinkTo}
+                    // setNavbarAction={setNavbarAction}
+                    setActiveStep={setStep}
+                  />
+                }
+              />
+              <Route
+                path={`${APP_PREFIX_PATH}/scheme-settings/chat-groups/add/users`}
+                element={
+                  <Users
+                    users={data?.users}
+                    selectedUsers={members}
+                    loading={loading}
+                    toggleSelectedUsers={toggleSelectedMembers}
+                    setBackLinkTo={setBackLinkTo}
+                    setActiveStep={setStep}
+                    // setNavbarAction={setNavbarAction}
+                    setSearchText={setSearchText}
+                    setSearch={setSearch}
+                  />
+                }
+              />
+            </Routes>
           </Content>
           {/* {matches && ( */}
           <Actions>

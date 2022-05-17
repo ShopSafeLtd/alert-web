@@ -4,7 +4,7 @@ import Button from "@material-ui/core/Button";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import MediaQuery from "react-responsive";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
 
@@ -43,7 +43,8 @@ const Indent = styled.div`
   flex-direction: column;
 `;
 
-const AutoApprove = ({ history }) => {
+const AutoApprove = () => {
+  const navigate = useNavigate()
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
   const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
   // const setNavbarAction = useStoreActions(
@@ -138,7 +139,7 @@ const AutoApprove = ({ history }) => {
         },
       },
     });
-    history.push("/");
+    navigate("/");
   };
 
   return (

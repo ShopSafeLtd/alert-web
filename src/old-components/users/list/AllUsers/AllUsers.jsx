@@ -6,7 +6,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import MediaQuery from "react-responsive";
-import { withRouter } from "react-router-dom";
 import { APP_PREFIX_PATH } from "configs/AppConfig";
 import { useQuery } from "@apollo/client";
 // import { useQuery } from '@apollo/react-hooks';
@@ -16,6 +15,7 @@ import { UserRowSkeleton } from "../../../global/skeletons";
 // import query from '../../../../graphql/users/queries/AllUsersQuery';
 import { SchemeUsers } from "graphql-src/users/queries";
 import { useStoreActions, useStoreState } from "../../../../state";
+import { useNavigate } from "react-router-dom";
 
 const Users = styled.div`
   background: #fff;
@@ -26,7 +26,8 @@ const Row = styled(TableRow)`
   cursor: pointer;
 `;
 
-const AllUsers = ({ history }) => {
+const AllUsers = () => {
+  const navigate = useNavigate()
   const setBottomNav = useStoreActions((actions) => actions.theme.setBottomNav);
   const setBackLinkTo = useStoreActions(
     (actions) => actions.theme.setBackLinkTo
@@ -74,7 +75,7 @@ const AllUsers = ({ history }) => {
 
   // functions
   const toViewUser = (id) => {
-    history.push(`${APP_PREFIX_PATH}/scheme-settings/users/view/${id}`);
+    navigate(`${APP_PREFIX_PATH}/scheme-settings/users/view/${id}`);
   };
 
   return (
@@ -163,4 +164,4 @@ const AllUsers = ({ history }) => {
   );
 };
 
-export default withRouter(AllUsers);
+export default AllUsers;

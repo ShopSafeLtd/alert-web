@@ -11,6 +11,7 @@ import { SubHeader } from '../../../global/typography';
 import query from '../../../../graphql/users/queries/User';
 import UserMutation from '../../../../graphql/users/mutations/UpdateUser';
 import { useStoreActions } from '../../../../state';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Page = styled.div`
   width: 100%;
@@ -28,7 +29,9 @@ const Loading = styled.div`
   justify-content: center;
 `;
 
-const EditUser = ({ match, history }) => {
+const EditUser = () => {
+  const navigate = useNavigate()
+  const params = useParams()
   const setTitle = useStoreActions(actions => actions.theme.setTitle);
   const setBottomNav = useStoreActions(actions => actions.theme.setBottomNav);
   const setNavbarAction = useStoreActions(
@@ -70,7 +73,7 @@ const EditUser = ({ match, history }) => {
     setTitle('Edit User Details');
     setBottomNav(false);
     setNavbarAction('backLink');
-    setBackLinkTo(`/admin/users/view/${match.params.id}`);
+    setBackLinkTo(`/admin/users/view/${params.id}`);
     return () => {
       setTitle('');
       setBottomNav(true);
@@ -83,7 +86,7 @@ const EditUser = ({ match, history }) => {
   //queries
   const { loading } = useQuery(query, {
     variables: {
-      id: match.params.id,
+      id: params.id,
       schemeId: window.localStorage.getItem('currentScheme')
     },
     fetchPolicy: 'cache-and-network',
@@ -194,7 +197,7 @@ const EditUser = ({ match, history }) => {
                 if (address.newAddress) {
                   updateUser({
                     variables: {
-                      id: match.params.id,
+                      id: params.id,
                       fullName: { set: user.fullName },
                       organisation: { set: user.organisation },
                       email: { set: user.email },
@@ -221,7 +224,7 @@ const EditUser = ({ match, history }) => {
                     },
                     optimisticResponse: {
                       updateUser: {
-                        id: match.params.id,
+                        id: params.id,
                         fullName: user.fullName,
                         organisation: user.organisation,
                         email: user.email,
@@ -248,11 +251,11 @@ const EditUser = ({ match, history }) => {
                       }
                     }
                   });
-                  history.push(`/admin/users/view/${match.params.id}`);
+                  navigate(`/admin/users/view/${params.id}`);
                 } else {
                   updateUser({
                     variables: {
-                      id: match.params.id,
+                      id: params.id,
                       fullName: { set: user.fullName },
                       organisation: { set: user.organisation },
                       email: { set: user.email },
@@ -281,7 +284,7 @@ const EditUser = ({ match, history }) => {
                     },
                     optimisticResponse: {
                       updateUser: {
-                        id: match.params.id,
+                        id: params.id,
                         fullName: user.fullName,
                         organisation: user.organisation,
                         email: user.email,
@@ -308,7 +311,7 @@ const EditUser = ({ match, history }) => {
                       }
                     }
                   });
-                  history.push(`/admin/users/view/${match.params.id}`);
+                  navigate(`/admin/users/view/${params.id}`);
                 }
               })
               .catch(() => {});

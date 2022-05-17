@@ -11,26 +11,15 @@ import ViewUserDesktop from "../desktop/ViewUserDesktop/ViewUserDesktop";
 // import Auth0UserQuery from "../../../../graphql/users/queries/Auth0User";
 import { User } from "graphql-src/users/queries";
 import { Auth0User } from "graphql-src/users/queries";
+import { useParams } from "react-router-dom";
 
-const ViewUser = ({
-  match: {
-    params: { id },
-  },
-  history,
-  setStatusBar,
-  setTitle,
-  setMultiAppBar,
-  setBackLinkTo,
-  setNavbarAction,
-  setActions,
-  toggleNotificationBar,
-  currentUser,
-}) => {
+const ViewUser = () => {
+  const params = useParams()
   const schemeId = useStoreState((state) => state.scheme.id);
   const { data: user } = useQuery(User, {
     variables: {
       where: {
-        id,
+        id: params.id,
       },
       scheme: schemeId,
     },
@@ -39,39 +28,16 @@ const ViewUser = ({
 
   const { data: auth0User } = useQuery(Auth0User, {
     variables: {
-      id,
+      id: params.id,
     },
   });
 
   return (
-    // <MediaQuery minDeviceWidth={1024}>
-    //   {matches =>
-    //     matches ? (
     <ViewUserDesktop
-      userId={id}
+      userId={params.id}
       user={!!user ? user.user : {}}
       auth0User={auth0User || {}}
-      setStatusBar={setStatusBar}
-      isCurrent={currentUser === id}
-      history={history}
     />
-    // ) : (
-    //   <ViewUserMobile
-    //     setTitle={setTitle}
-    //     setMultiAppBar={setMultiAppBar}
-    //     user={!!user ? user.user : {}}
-    //     userLoading={userLoading}
-    //     auth0User={auth0User || {}}
-    //     setBackLinkTo={setBackLinkTo}
-    //     setNavbarAction={setNavbarAction}
-    //     setActions={setActions}
-    //     toggleNotificationBar={toggleNotificationBar}
-    //     isCurrent={currentUser === id}
-    //     history={history}
-    //   />
-    // )
-    //   }
-    // </MediaQuery>
   );
 };
 

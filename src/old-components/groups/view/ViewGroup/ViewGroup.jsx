@@ -3,13 +3,15 @@ import { useQuery } from "@apollo/client";
 
 import ViewGroupDesktop from "../desktop/ViewGroupDesktop/ViewGroupDesktop";
 import { Groups } from "graphql-src/groups/queries";
+import { useParams } from "react-router-dom";
 
-const ViewGroup = ({ history, match }) => {
+const ViewGroup = () => {
+  const params = useParams()
   // queries
   const { data, loading } = useQuery(Groups, {
     variables: {
       where: {
-        id: { equals: match.params.id },
+        id: { equals: params.id },
       },
     },
     fetchPolicy: "cache-and-network",
@@ -57,9 +59,8 @@ const ViewGroup = ({ history, match }) => {
     //   {(matches) =>
     //     matches ? (
     <ViewGroupDesktop
-      history={history}
       group={!!data ? data.groups : {}}
-      groupId={match.params.id}
+      groupId={params.id}
       loading={loading}
       handleDelete={handleDelete}
     />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import MediaQuery from 'react-responsive';
-import { Route } from 'react-router-dom';
+import { Route, useNavigate, useLocation } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import Paper from '@material-ui/core/Paper';
 import Stepper from '@material-ui/core/Stepper';
@@ -71,7 +71,9 @@ const Content = styled.div`
   }
 `;
 
-const PrimaryOnboarding = ({ history, classes, user }) => {
+const PrimaryOnboarding = ({ classes, user }) => {
+  const navigate = useNavigate()
+  const location = useLocation()
   const { login } = useAuth();
 
   // globals
@@ -103,18 +105,18 @@ const PrimaryOnboarding = ({ history, classes, user }) => {
 
   // effects
   useEffect(() => {
-    if (history.location.pathname.includes('password') && step !== 1) {
+    if (location.pathname.includes('password') && step !== 1) {
       setStep(1);
     }
-  }, [history, step]);
+  }, [location, step]);
 
   useEffect(() => {
-    return history.listen((location) => {
-      if (history.action === 'PUSH') {
+    return navigate.listen((location) => {
+      if (navigate.action === 'PUSH') {
         setLocationKeys([location.key]);
       }
 
-      if (history.action === 'POP') {
+      if (navigate.action === 'POP') {
         if (locationKeys[1] === location.key) {
           setLocationKeys(([_, ...keys]) => keys);
           // Handle forward event
@@ -166,7 +168,7 @@ const PrimaryOnboarding = ({ history, classes, user }) => {
     });
 
   const next = () => {
-    history.push(steps[step + 1].url);
+    navigate(steps[step + 1].url);
     setStep(step + 1);
   };
 
@@ -182,11 +184,11 @@ const PrimaryOnboarding = ({ history, classes, user }) => {
         email: user.email,
         password: password.password,
       });
-      history.push('/');
+      navigate('/');
     }
   };
   const handleBack = () => {
-    history.push(steps[step - 1].url);
+    navigate(steps[step - 1].url);
     setStep(step - 1);
   };
   const handlePasswordChange = (name) => (event) => {
