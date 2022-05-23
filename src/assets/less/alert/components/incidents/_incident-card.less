@@ -27,3 +27,183 @@
     }
   }
 }
+
+.incident-card {
+  .ant-card-body {
+    position: relative;
+    padding: 0px;
+    overflow: hidden;
+  }
+
+  .incident-card-image {
+    width: 100%;
+    height: 300px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+
+  .incident-card-tags {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: calc(100% - 50px);
+    z-index: 1;
+  }
+
+  .incident-card-tag {
+    background: rgba(255, 255, 255, 1);
+    border-color: rgb(222, 68, 54);
+    font-weight: 500;
+    color: rgb(222, 68, 54);
+  }
+
+  .ant-tabs-nav {
+    margin: 0;
+  }
+  
+  .ant-tabs-nav-list {
+    width: 100%;
+  }
+
+  .ant-tabs-tab {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: 0px;
+    flex: 2;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+  }
+
+  .ant-tabs > .ant-tabs-nav .ant-tabs-nav-operations, .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-operations {
+    display: none;
+  }
+
+  .incident-card-content {
+    padding: 10px;
+    height: 225px;
+    overflow: auto;
+  }
+
+  .incident-card-desc {
+    height: 80px;
+    overflow: auto;
+    margin-bottom: 0;
+    margin-top: 10px;
+  }
+
+  .incident-card-location-row {
+    margin-top: 5px;
+  }
+
+  .incident-card-menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 45px;
+    z-index: 2;
+    border-bottom-right-radius: 0px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 8px;
+  }
+
+  .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu {
+    padding: 0px 15px;
+  }
+
+  .incident-card-overlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: 16;
+    background-color: rgba(0,0,0,.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 10px;
+  }
+
+  .incident-card-approval-title {
+    color: #fff;
+    margin-bottom: 15px;
+  }
+
+  .incident-card-controls {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 135px;
+    z-index: 2;
+  }
+  
+  .incident-card-control {
+    color: #FFF;
+    cursor: pointer;
+    padding: 15px;
+    transition: all 0.2s ease;
+    &:hover {
+      font-size: 1.8em;
+      margin-top: -4px;
+    }
+  }
+  
+  .incident-card-icon {
+    margin-right: 5px;
+    color: rgb(222, 68, 54);
+  }
+  
+  .incident-card-expand {
+    position: absolute;
+    right: 0;
+    top: 248px;
+    color: #FFF;
+    padding: 15px;
+    cursor: pointer;
+    font-size: 1.6em;
+    transition: all 0.2s ease;
+    &:hover {
+      font-size: 1.8em;
+      top: 246px;
+    }
+  }
+
+  .incident-card-offender-image {
+    height: 85px;
+    width: 85px;
+    border-radius: 5px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .incident-card-offender-content {
+    margin-left: 5px;
+  }
+
+  .incident-card-offender-placeholder {
+    height: 85px;
+    width: 85px;
+    border-radius: 5px;
+    background-color: #E0E0E0;
+  }
+
+  .incident-card-offender {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
+  .ant-skeleton-element {
+    width: 100%;
+  }
+
+  .ant-skeleton-image {
+    width: 100%;
+    height: 300px;
+  }
+}

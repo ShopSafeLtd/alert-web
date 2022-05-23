@@ -1,5 +1,5 @@
 import { action, Action } from "easy-peasy";
-import { Role } from "graphql-src/users/enums";
+import { Role } from "graphql/generated";
 
 export interface SetUserPayload {
   id: string;
@@ -8,6 +8,10 @@ export interface SetUserPayload {
   onboarded: boolean;
   organisation: string;
   schemes: Scheme[];
+  groups: {
+    id: string;
+    name: string;
+  }[];
 }
 
 export interface SetUserRole {
@@ -33,6 +37,10 @@ export interface UserModel {
   organisation: string;
   onboarded: boolean;
   schemes: Scheme[];
+  groups: {
+    id: string;
+    name: string;
+  }[];
   role: Role;
   setUser: Action<UserModel, SetUserPayload>;
   setRole: Action<UserModel, SetUserRole>;
@@ -46,8 +54,9 @@ const userModel: UserModel = {
   picture: "",
   organisation: "",
   onboarded: false,
-  role: Role.USER,
+  role: Role.User,
   schemes: [],
+  groups: [],
 
   setUser: action((state, payload) => {
     state.id = payload.id;
@@ -56,6 +65,7 @@ const userModel: UserModel = {
     state.onboarded = payload.onboarded;
     state.organisation = payload.organisation;
     state.schemes = payload.schemes;
+    state.groups = payload.groups;
   }),
   setRole: action((state, payload) => {
     state.role = payload.role;
@@ -68,7 +78,7 @@ const userModel: UserModel = {
     state.organisation = "";
     state.onboarded = false;
     state.schemes = [];
-    state.role = Role.USER;
+    state.role = Role.User;
   }),
 };
 

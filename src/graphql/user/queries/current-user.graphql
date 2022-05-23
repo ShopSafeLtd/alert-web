@@ -1,0 +1,23 @@
+query currentUser {
+  currentUser {
+    id
+    fullName
+    email
+    organisation
+    newUser
+    groups {
+      id
+      name
+    }
+    schemes {
+      id
+      role
+      scheme {
+        id
+        name
+        autoApproveIncidents
+        autoApproveOffenders
+      }
+    }
+  }
+}

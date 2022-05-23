@@ -1,0 +1,81 @@
+query incidentFeed(
+  $schemeId: String!
+  $search: String
+  $order: IncidentOrderByWithRelationInput
+  $first: Int
+  $cursor: String
+  $groups: [String]
+  $crimeTypes: [String!]
+  $approved: Boolean
+) {
+  incidentFeed(
+    schemeId: $schemeId
+    order: $order
+    first: $first
+    after: $cursor
+    crimeTypes: $crimeTypes
+    search: $search
+    groups: $groups
+    approved: $approved
+  ) {
+    id
+    subject
+    description
+    dayTime
+    crimeTypes {
+      id
+      name
+    }
+    approved
+    uploaded
+    offenders {
+      id
+      createdAt
+      updatedAt
+      age
+      build
+      dateOfBirth
+      dateSource
+      gender
+      hair
+      name
+      peculiarities
+      race
+      approved
+      uploaded
+      active
+      images {
+        id
+        url
+        optimised
+        card
+      }
+      tags {
+        id
+        name
+      }
+    }
+    location {
+      id
+      full
+    }
+    createdBy {
+      id
+      fullName
+      organisation
+    }
+    images {
+      id
+      url
+      optimised
+      card
+      offenders {
+        id
+      }
+    }
+    groups {
+      id
+      name
+    }
+  }
+}

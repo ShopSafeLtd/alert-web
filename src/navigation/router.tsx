@@ -36,7 +36,7 @@ export const Views = () => {
     if (newUserId !== "password") {
       setNewUserId(newUserId);
     }
-  }, [location]);
+  }, []);
 
   const { data } = useQuery<UserNewRes, UserNewArgs>(UserNew, {
     fetchPolicy: "network-only",
@@ -44,8 +44,6 @@ export const Views = () => {
       id: newUserId,
     },
   });
-
-  console.log("test 1");
 
   return (
     <IntlProvider

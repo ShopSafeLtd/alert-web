@@ -1,0 +1,78 @@
+query listIncidents(
+  $scheme: SchemeWhereUniqueInput!,
+  $where: IncidentWhereInput,
+  $order: IncidentOrderByWithRelationInput,
+  $take: Int,
+  $skip: Int
+) {
+  listIncidents(
+    scheme: $scheme,
+    where: $where,
+    order: $order,
+    take: $take,
+    skip: $skip
+  ) {
+    incidents {
+      id
+      subject
+      description
+      dayTime
+      crimeTypes {
+        id
+        name
+      }
+      approved
+      uploaded
+      offenders {
+        id
+        createdAt
+        updatedAt
+        age
+        build
+        dateOfBirth
+        dateSource
+        gender
+        hair
+        name
+        peculiarities
+        race
+        approved
+        uploaded
+        active
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        tags {
+          id
+          name
+        }
+      }
+      location {
+        id
+        full
+      }
+      createdBy {
+        id
+        fullName
+        organisation
+      }
+      images {
+        id
+        url
+        optimised
+        card
+        offenders {
+          id
+        }
+      }
+      groups {
+        id
+        name
+      }
+    }
+    total
+  }
+}

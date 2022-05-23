@@ -59,7 +59,7 @@ export const Logo = (props: Props) => {
       <img
         src={getLogo({ logoType: props.logoType, navCollapsed })}
         alt={`${APP_NAME} logo`}
-        style={{ width: 110 }}
+        style={{ width: 130 }}
       />
     </div>
   );

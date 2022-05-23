@@ -1,0 +1,6 @@
+query schemeGroups($where: GroupWhereInput) {
+  groups(where: $where){
+    id
+    name
+  }
+}

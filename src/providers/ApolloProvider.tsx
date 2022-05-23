@@ -37,8 +37,8 @@ const Apollo = ({ children }: Props) => {
 
   const httpLink = createUploadLink({
     // uri: "https://alert-api-dev.azurewebsites.net/graphql",
-    uri: "https://alert-api-dev-development.azurewebsites.net/graphql",
-    // uri: "http://localhost:4000/graphql",
+    // uri: "https://alert-api-dev-development.azurewebsites.net/graphql",
+    uri: "http://localhost:4000/graphql",
   });
 
   const middlewareLink = setContext((_, { headers, ...context }) => {

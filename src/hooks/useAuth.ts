@@ -1,10 +1,8 @@
-import { useMutation, useLazyQuery, useApolloClient } from "@apollo/client";
+import { useApolloClient } from "@apollo/client";
 import { useStoreActions, useStoreState, SetUserPayload } from "state";
 import jwtDecode from "jwt-decode";
 import LogRocket from "logrocket";
-
-import { CurrentUser, CurrentUserRes } from "graphql-src/auth/queries";
-import { SignIn, SignInArgs, SignInRes } from "graphql-src/auth/mutations";
+import { useCurrentUserLazyQuery, useSignInMutation, CurrentUserDocument, CurrentUserQuery } from 'graphql/generated'
 
 interface DecodedToken {
   aud: string;
@@ -48,6 +46,7 @@ export const useAuth = () => {
     organisation,
     onboarded,
     schemes,
+    groups
   }: HandleSuccessArgs) => {
     window.localStorage.setItem("accessToken", accessToken);
 
@@ -96,6 +95,7 @@ export const useAuth = () => {
       organisation,
       onboarded,
       schemes,
+      groups
     });
     authenticated(accessToken);
   };
@@ -150,30 +150,32 @@ export const useAuth = () => {
       onboarded: data.onboarded,
       organisation: data.organisation,
       schemes: data.schemes,
+      groups: data.groups
     });
   };
 
-  const [handleLogin] = useMutation<SignInRes, SignInArgs>(SignIn, {
+  const [handleLogin] = useSignInMutation({
     onCompleted: async ({ signIn }) => {
       try {
-        const { data } = await client.query<CurrentUserRes>({
-          query: CurrentUser,
+        const { data } = await client.query<CurrentUserQuery>({
+          query: CurrentUserDocument,
           fetchPolicy: "network-only",
           context: {
             headers: {
-              authorization: `Bearer ${signIn.accessToken}`,
+              authorization: `Bearer ${signIn?.accessToken}`,
             },
           },
         });
 
         onLoginSuccess({
-          accessToken: signIn.accessToken,
-          email: data.currentUser.email,
-          fullName: data.currentUser.fullName,
-          id: data.currentUser.id,
-          onboarded: !data.currentUser.newUser,
-          organisation: data.currentUser.organisation,
-          schemes: data.currentUser.schemes,
+          accessToken: signIn?.accessToken || '',
+          email: data.currentUser?.email || '',
+          fullName: data.currentUser?.fullName || '',
+          id: data.currentUser?.id || '',
+          onboarded: data.currentUser?.newUser || false,
+          organisation: data.currentUser?.organisation ||'',
+          schemes: data.currentUser?.schemes || [],
+          groups: data.currentUser?.groups || []
         });
       } catch (err) {
         setAuthMessage(err.message);
@@ -187,19 +189,21 @@ export const useAuth = () => {
     },
   });
 
-  const [getCurrentUser] = useLazyQuery<CurrentUserRes>(CurrentUser, {
+  const [getCurrentUser] = useCurrentUserLazyQuery({
     onCompleted: ({ currentUser }) => {
       handleSuccess({
-        id: currentUser?.id,
-        email: currentUser?.email,
-        fullName: currentUser?.fullName,
+        id: currentUser?.id || '',
+        email: currentUser?.email || '',
+        fullName: currentUser?.fullName || '',
         accessToken: window.localStorage.getItem("accessToken")!,
-        organisation: currentUser?.organisation,
-        onboarded: !currentUser.newUser,
-        schemes: currentUser.schemes,
+        organisation: currentUser?.organisation || '',
+        onboarded: currentUser?.newUser || true,
+        schemes: currentUser?.schemes || [],
+        groups: currentUser?.groups || []
       });
     },
     onError: (error) => expired(),
+    fetchPolicy: 'cache-and-network'
   });
 
   interface LoginArgs {

@@ -85,6 +85,7 @@ const LoginOne = () => {
         onboarded: !data.verifyUser.newUser,
         organisation: data.verifyUser.organisation,
         schemes: [],
+        groups: []
       });
   };
 
