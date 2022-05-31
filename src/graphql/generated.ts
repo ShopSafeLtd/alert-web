@@ -13947,7 +13947,14 @@ export type ListIncidentsQueryVariables = Exact<{
 }>;
 
 
-export type ListIncidentsQuery = { __typename?: 'Query', listIncidents?: { __typename?: 'ListIncidents', total: number, incidents: Array<{ __typename?: 'Incident', id: string, subject?: string | null, description: string, dayTime?: string | null, approved?: boolean | null, uploaded?: boolean | null, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, offenders: Array<{ __typename?: 'Offender', id: string, createdAt: any, updatedAt: any, age?: Age | null, build?: Build | null, dateOfBirth?: any | null, dateSource?: string | null, gender?: Gender | null, hair?: string | null, name?: string | null, peculiarities?: string | null, race?: Race | null, approved?: boolean | null, uploaded?: boolean | null, active?: boolean | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }>, location?: { __typename?: 'Address', id: string, full?: string | null } | null, createdBy: { __typename?: 'User', id: string, fullName: string, organisation: string }, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, offenders: Array<{ __typename?: 'Offender', id: string }> }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> } | null };
+export type ListIncidentsQuery = { __typename?: 'Query', listIncidents?: { __typename?: 'ListIncidents', total: number, incidents: Array<{ __typename?: 'Incident', id: string, subject?: string | null, description: string, dayTime?: string | null, approved?: boolean | null, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, offenders: Array<{ __typename?: 'Offender', id: string, age?: Age | null, build?: Build | null, dateOfBirth?: any | null, gender?: Gender | null, name?: string | null, race?: Race | null, approved?: boolean | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null }> }>, location?: { __typename?: 'Address', id: string, full?: string | null } | null, createdBy: { __typename?: 'User', id: string, fullName: string, organisation: string }, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> } | null };
+
+export type ViewIncidentQueryVariables = Exact<{
+  where: IncidentWhereUniqueInput;
+}>;
+
+
+export type ViewIncidentQuery = { __typename?: 'Query', incident?: { __typename?: 'Incident', id: string, subject?: string | null, description: string, dayTime?: string | null, approved?: boolean | null, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, offenders: Array<{ __typename?: 'Offender', id: string, age?: Age | null, build?: Build | null, dateOfBirth?: any | null, gender?: Gender | null, name?: string | null, race?: Race | null, approved?: boolean | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null }> }>, location?: { __typename?: 'Address', id: string, full?: string | null } | null, createdBy: { __typename?: 'User', id: string, fullName: string, organisation: string }, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> } | null };
 
 export type TagsQueryVariables = Exact<{
   where: TagWhereInput;
@@ -14194,32 +14201,18 @@ export const ListIncidentsDocument = gql`
         name
       }
       approved
-      uploaded
       offenders {
         id
-        createdAt
-        updatedAt
         age
         build
         dateOfBirth
-        dateSource
         gender
-        hair
         name
-        peculiarities
         race
         approved
-        uploaded
-        active
         images {
           id
-          url
           optimised
-          card
-        }
-        tags {
-          id
-          name
         }
       }
       location {
@@ -14233,12 +14226,7 @@ export const ListIncidentsDocument = gql`
       }
       images {
         id
-        url
         optimised
-        card
-        offenders {
-          id
-        }
       }
       groups {
         id
@@ -14281,6 +14269,80 @@ export function useListIncidentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type ListIncidentsQueryHookResult = ReturnType<typeof useListIncidentsQuery>;
 export type ListIncidentsLazyQueryHookResult = ReturnType<typeof useListIncidentsLazyQuery>;
 export type ListIncidentsQueryResult = Apollo.QueryResult<ListIncidentsQuery, ListIncidentsQueryVariables>;
+export const ViewIncidentDocument = gql`
+    query ViewIncident($where: IncidentWhereUniqueInput!) {
+  incident(where: $where) {
+    id
+    subject
+    description
+    dayTime
+    crimeTypes {
+      id
+      name
+    }
+    approved
+    offenders {
+      id
+      age
+      build
+      dateOfBirth
+      gender
+      name
+      race
+      approved
+      images {
+        id
+        optimised
+      }
+    }
+    location {
+      id
+      full
+    }
+    createdBy {
+      id
+      fullName
+      organisation
+    }
+    images {
+      id
+      optimised
+    }
+    groups {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useViewIncidentQuery__
+ *
+ * To run a query within a React component, call `useViewIncidentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useViewIncidentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useViewIncidentQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useViewIncidentQuery(baseOptions: Apollo.QueryHookOptions<ViewIncidentQuery, ViewIncidentQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ViewIncidentQuery, ViewIncidentQueryVariables>(ViewIncidentDocument, options);
+      }
+export function useViewIncidentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ViewIncidentQuery, ViewIncidentQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ViewIncidentQuery, ViewIncidentQueryVariables>(ViewIncidentDocument, options);
+        }
+export type ViewIncidentQueryHookResult = ReturnType<typeof useViewIncidentQuery>;
+export type ViewIncidentLazyQueryHookResult = ReturnType<typeof useViewIncidentLazyQuery>;
+export type ViewIncidentQueryResult = Apollo.QueryResult<ViewIncidentQuery, ViewIncidentQueryVariables>;
 export const TagsDocument = gql`
     query tags($where: TagWhereInput!) {
   tags(where: $where) {

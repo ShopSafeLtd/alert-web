@@ -22,32 +22,18 @@ query listIncidents(
         name
       }
       approved
-      uploaded
       offenders {
         id
-        createdAt
-        updatedAt
         age
         build
         dateOfBirth
-        dateSource
         gender
-        hair
         name
-        peculiarities
         race
         approved
-        uploaded
-        active
         images {
           id
-          url
           optimised
-          card
-        }
-        tags {
-          id
-          name
         }
       }
       location {
@@ -61,12 +47,7 @@ query listIncidents(
       }
       images {
         id
-        url
         optimised
-        card
-        offenders {
-          id
-        }
       }
       groups {
         id

@@ -9,19 +9,8 @@ import {
   Model
 } from "graphql/generated";
 import { useState, useEffect } from "react";
-import { useStoreState } from "state";
+import { useStoreActions, useStoreState, IncidentSort } from "state";
 import { useLightbox } from "simple-react-lightbox";
-
-export enum IncidentSort {
-  createdAtDesc = "CREATED_AT_DESC",
-  createdAtAsc = "CREATED_AT_ASC",
-}
-
-interface Variables {
-  crimeTypes: string[];
-  groups: string[];
-  approved: boolean | undefined;
-}
 
 interface Return {
   data: ListIncidentsQuery | undefined;
@@ -59,43 +48,43 @@ const getSizeOptions = () => {
 };
 
 const useIncidentFeed = (): Return => {
+  // Lightbox hook
   const { openLightbox } = useLightbox();
 
-  const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
-    []
-  );
-  const [pagination, setPagination] = useState({
-    page: 1,
-    pageSize: 12,
-    sizeOptions: ["24"],
-  });
-  const [search, setSearch] = useState("");
-  const [variables, setVariables] = useState<Variables>({
-    crimeTypes: [],
-    groups: [],
-    approved: undefined,
-  });
-  const [order, setOrder] = useState(IncidentSort.createdAtDesc);
-
+  // Global State
   const scheme = useStoreState((state) => state.scheme.id);
   const groups = useStoreState((state) => state.user.groups);
   const role = useStoreState((state) => state.user.role);
+  const pagination = useStoreState(state => state.data.incidents.pagination)
+  const variables = useStoreState(state => state.data.incidents.variables)
+  const order = useStoreState(state => state.data.incidents.order)
+  const setIncidentsState = useStoreActions(actions => actions.data.setIncidents)
 
+  // local State
+  const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
+    []
+  );
+
+  // On mount
   useEffect(() => {
     const sizeOptions = getSizeOptions()
-    setPagination({
-      ...pagination,
-      sizeOptions,
-      pageSize: Number(sizeOptions[0])
-    });
-
-    setVariables({
-      ...variables,
-      groups: role === Role.SchemeAdmin ? groupData?.groups.map(group => group.id) || [] : groups.map(group => group.id)
+    setIncidentsState({
+      pagination: {
+        ...pagination,
+        sizeOptions,
+        pageSize: Number(sizeOptions[0])
+      },
+      variables: {
+        ...variables,
+        groups: role === Role.SchemeAdmin ? groupData?.groups.map(group => group.id) || [] : groups.map(group => group.id)
+      },
+      order
     })
     // eslint-disable-next-line
   }, []);
 
+  // Queries
+  // Fetch scheme groups if scheme admin
   const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
       where: {
@@ -109,13 +98,18 @@ const useIncidentFeed = (): Return => {
     fetchPolicy: "cache-and-network",
     skip: role !== Role.SchemeAdmin,
     onCompleted: (result) => {
-      setVariables({
-        ...variables,
-        groups: result.groups.map(group => group.id)
+      setIncidentsState({
+        pagination,
+        variables: {
+          ...variables,
+          groups: result.groups.map(group => group.id)
+        },
+        order
       })
     }
   });
 
+  // Fetch scheme tags
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     variables: {
       where: {
@@ -131,6 +125,7 @@ const useIncidentFeed = (): Return => {
     }
   })
 
+  // Fetch incidents
   const { data, loading } = useListIncidentsQuery({
     variables: {
       scheme: {
@@ -162,7 +157,7 @@ const useIncidentFeed = (): Return => {
         OR: [
           {
             subject: {
-              contains: search,
+              contains: variables.search,
               mode: QueryMode.Insensitive,
             },
           },
@@ -171,13 +166,13 @@ const useIncidentFeed = (): Return => {
               OR: [
                 {
                   fullName: {
-                    contains: search,
+                    contains: variables.search,
                     mode: QueryMode.Insensitive,
                   },
                 },
                 {
                   organisation: {
-                    contains: search,
+                    contains: variables.search,
                     mode: QueryMode.Insensitive,
                   },
                 },
@@ -192,30 +187,62 @@ const useIncidentFeed = (): Return => {
     fetchPolicy: "cache-and-network",
   });
 
+  // Functions
   const triggerLightbox = (elements: { src: string }[], index: number) => {
     setLightboxElements(elements);
     setTimeout(() => openLightbox(index), 0.3);
   };
 
   const onPaginationChange = (page: number, pageSize: number) => {
-    setPagination({
-      ...pagination,
-      page,
-      pageSize,
-    });
+    setIncidentsState({
+      pagination: {
+        ...pagination,
+        page,
+        pageSize
+      },
+      variables,
+      order
+    })
   };
 
   const onGroupsChange = (values: string[]) => {
-    setVariables({
-      ...variables,
-      groups: values
+    setIncidentsState({
+      pagination,
+      variables: {
+        ...variables,
+        groups: values
+      },
+      order
     })
   }
 
   const onCrimeTypesChange = (values: string[]) => {
-    setVariables({
-      ...variables,
-      crimeTypes: values
+    setIncidentsState({
+      pagination,
+      variables: {
+        ...variables,
+        crimeTypes: values
+      },
+      order
+    })
+  }
+
+  const setOrder = (value: IncidentSort) => {
+    setIncidentsState({
+      pagination,
+      variables,
+      order: value
+    })
+  }
+
+  const setSearch = (value: string) => {
+    setIncidentsState({
+      pagination,
+      variables: {
+        ...variables,
+        search: value
+      },
+      order
     })
   }
 
@@ -228,7 +255,7 @@ const useIncidentFeed = (): Return => {
     pagination,
     order,
     setOrder,
-    search,
+    search: variables.search,
     setSearch,
     groups:
       role === Role.SchemeAdmin

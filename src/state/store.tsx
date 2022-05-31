@@ -9,12 +9,14 @@ import authModel, { AuthModel } from './auth-model'
 import themeModel, { ThemeModel } from './theme-model'
 import userModel, { UserModel } from './user-model'
 import schemeModel, { SchemeModel } from './scheme-model'
+import dataModel, { DataModel } from './data-model'
 
 interface StoreModel {
   auth: AuthModel;
   theme: ThemeModel;
   user: UserModel;
-  scheme: SchemeModel
+  scheme: SchemeModel;
+  data: DataModel;
 }
 
 const typedHooks = createTypedHooks<StoreModel>();
@@ -32,7 +34,8 @@ export const Store = ({ children }:GlobalStoreProps) => {
     auth: authModel,
     theme: themeModel,
     user: userModel,
-    scheme: schemeModel
+    scheme: schemeModel,
+    data: dataModel
   }
   
   const store = createStore(storeModel);

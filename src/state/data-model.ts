@@ -1,59 +1,48 @@
-import { 
-  action,
-  Action,
-} from 'easy-peasy'
+import { action, Action } from "easy-peasy";
+
+export enum IncidentSort {
+  createdAtDesc = "CREATED_AT_DESC",
+  createdAtAsc = "CREATED_AT_ASC",
+}
+
+interface Incidents {
+  pagination: {
+    page: number;
+    pageSize: number;
+    sizeOptions: string[];
+  };
+  variables: {
+    search: string;
+    crimeTypes: string[];
+    groups: string[];
+  };
+  order: IncidentSort;
+}
 
 export interface DataModel {
-  users: {
-    name: {name: string; id: string};
-    status: string;
-    services: string[]
-  }[]
+  incidents: Incidents;
 
-  addUser: Action<DataModel, {
-    name: {name: string; id: string};
-    status: string;
-    services: string[]
-  }>;
+  setIncidents: Action<DataModel, Incidents>;
 }
 
-const dataModel:DataModel = {
-  users: [{
-    name: { name: 'Warden 1', id: '0' },
-    services: ['HYTALK', 'DEM'],
-    status: 'Active'
-  }, {
-    name: { name: 'Warden 2', id: '1' },
-    services: ['HYTALK', 'DEM'],
-    status: 'Active'
-  }, {
-    name: { name: 'Warden 3', id: '2' },
-    services: ['HYTALK', 'DEM'],
-    status: 'Active'
-  }, {
-    name: { name: 'Warden 4', id: '3' },
-    services: ['HYTALK', 'DEM'],
-    status: 'Active'
-  }, {
-    name: { name: 'Warden 5', id: '4' },
-    services: ['HYTALK'],
-    status: 'Active'
-  }, {
-    name: { name: 'Warden 6', id: '5' },
-    services: ['HYTALK', 'DEM'],
-    status: 'Active'
-  }, {
-    name: { name: 'Warden 7', id: '6' },
-    services: ['HYTALK', 'DEM'],
-    status: 'Active'
-  }],
+const dataModel: DataModel = {
+  incidents: {
+    pagination: {
+      page: 1,
+      pageSize: 24,
+      sizeOptions: ["24"],
+    },
+    variables: {
+      search: '',
+      crimeTypes: [],
+      groups: [],
+    },
+    order: IncidentSort.createdAtDesc
+  },
 
-  addUser: action((state, payload) => {
-    state.users = [
-      ...state.users,
-      payload
-    ]
-  }) 
-}
+  setIncidents: action((state, payload) => {
+    state.incidents = payload;
+  }),
+};
 
-export default dataModel
+export default dataModel;

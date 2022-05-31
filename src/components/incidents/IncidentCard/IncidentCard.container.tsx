@@ -1,10 +1,10 @@
 import React from "react";
-import { IncidentFeedQuery } from "graphql/generated";
+import { ListIncidentsQuery } from "graphql/generated";
 import View from "./IncidentCard.view";
 import useIncidentCard from "./useIncidentCard";
 
 interface Props {
-  incident: Exclude<IncidentFeedQuery["incidentFeed"], undefined | null>[0];
+  incident: Exclude<ListIncidentsQuery["listIncidents"], undefined | null>['incidents'][0];
   openLightbox: (elements: { src: string }[], index: number) => void;
 }
 

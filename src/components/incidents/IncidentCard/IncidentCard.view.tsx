@@ -15,7 +15,7 @@ import {
   Modal,
   Skeleton
 } from "antd";
-import { IncidentFeedQuery } from "graphql/generated";
+import { ListIncidentsQuery } from "graphql/generated";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faLocationDot,
@@ -37,12 +37,13 @@ import {
   getOffenderGender,
   getOffenderRace,
 } from "utils/get-offender-desc";
+import { Link } from "react-router-dom";
 
 const { Title, Text, Paragraph } = Typography;
 const { confirm } = Modal;
 
 interface Props {
-  incident: Exclude<IncidentFeedQuery["incidentFeed"], undefined | null>[0];
+  incident: Exclude<ListIncidentsQuery["listIncidents"], undefined | null>['incidents'][0];
   approvalRights: boolean;
   deleteRights: boolean;
   menuRights: boolean;
@@ -117,7 +118,7 @@ const IncidentCard = ({
       </div>
       {incident && incident.images.length > 0 ? <Carousel ref={imagesRef}>
         {incident?.images.map((image) => (
-          <div>
+          <div key={image.id}>
             <div
               className="incident-card-image"
               style={{
@@ -165,6 +166,9 @@ const IncidentCard = ({
             <Title level={4} ellipsis>
               {incident?.subject}
             </Title>
+            <Paragraph className="incident-card-desc" type="secondary">
+              {incident?.description}
+            </Paragraph>
             <Row>
               <Col flex={1}>
                 <FontAwesomeIcon
@@ -200,14 +204,13 @@ const IncidentCard = ({
                 </Text>
               </Col>
             </Row>
-            <Paragraph className="incident-card-desc" type="secondary">
-              {incident?.description}
-            </Paragraph>
             <Row justify="center">
               <Col>
-                <Button size="small" type="text">
-                  View Full Incident
-                </Button>
+                <Link to={`view/${incident?.id}`}>
+                  <Button size="small" type="text">
+                    View Full Incident
+                  </Button>
+                </Link>
               </Col>
             </Row>
           </div>
@@ -226,7 +229,7 @@ const IncidentCard = ({
         >
           <div className="incident-card-content">
             {incident?.offenders.map((offender) => (
-              <Row className="incident-card-offender">
+              <Row key={offender.id} className="incident-card-offender">
                 <Col span={6}>
                   {offender.images.length > 0 ? (
                     <div

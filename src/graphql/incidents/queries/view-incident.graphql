@@ -1,0 +1,48 @@
+query ViewIncident(
+  $where: IncidentWhereUniqueInput!,
+) {
+  incident(
+    where: $where,
+  ) {
+    id
+    subject
+    description
+    dayTime
+    crimeTypes {
+      id
+      name
+    }
+    approved
+    offenders {
+      id
+      age
+      build
+      dateOfBirth
+      gender
+      name
+      race
+      approved
+      images {
+        id
+        optimised
+      }
+    }
+    location {
+      id
+      full
+    }
+    createdBy {
+      id
+      fullName
+      organisation
+    }
+    images {
+      id
+      optimised
+    }
+    groups {
+      id
+      name
+    }
+  }
+}

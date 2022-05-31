@@ -1,10 +1,14 @@
 import React from "react";
 import { ListIncidentsQuery } from "graphql/generated";
-import { Col, Input, Row, Select, Pagination } from "antd";
+import { Col, Input, Row, Select, Pagination, Button } from "antd";
 import IncidentCard from "components/incidents/IncidentCard";
 import IncidentSkeletonCard from "components/incidents/IncidentSkeletonCard";
 import { SRLWrapper } from "simple-react-lightbox";
-import { IncidentSort } from "./useIncidentFeed";
+import { IncidentSort } from "state";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPlus,
+} from "@fortawesome/pro-light-svg-icons";
 
 interface Props {
   data: ListIncidentsQuery | undefined;
@@ -144,7 +148,7 @@ const IncidentFeed = ({
             ))}
       </Row>
 
-      <Row justify="end">
+      <Row justify="center">
         <Col>
           <Pagination
             total={data?.listIncidents?.total}
@@ -156,7 +160,9 @@ const IncidentFeed = ({
           />
         </Col>
       </Row>
-
+      <Button className="add-button" size="large" type="primary" shape="round" icon={<FontAwesomeIcon icon={faPlus} size="lg" style={{ marginRight: 10 }} />}>
+        Add Incident
+      </Button>
       <SRLWrapper
         elements={lightboxElements}
         options={{ buttons: { showDownloadButton: false } }}
