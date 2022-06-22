@@ -13968,6 +13968,15 @@ export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, email: string, organisation: string, newUser: boolean, groups: Array<{ __typename?: 'Group', id: string, name: string }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role, scheme: { __typename?: 'Scheme', id: string, name: string, autoApproveIncidents: boolean, autoApproveOffenders: boolean } }> } | null };
 
+export type ListSchemeUsersQueryVariables = Exact<{
+  where?: InputMaybe<UserWhereInput>;
+  orderBy?: InputMaybe<Array<UserOrderByWithRelationInput> | UserOrderByWithRelationInput>;
+  after?: InputMaybe<UserWhereUniqueInput>;
+}>;
+
+
+export type ListSchemeUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, createdAt: any, email: string, fullName: string }> };
+
 
 export const SignInDocument = gql`
     mutation signIn($email: String!, $password: String!) {
@@ -14432,3 +14441,43 @@ export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
 export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
 export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
+export const ListSchemeUsersDocument = gql`
+    query ListSchemeUsers($where: UserWhereInput, $orderBy: [UserOrderByWithRelationInput!], $after: UserWhereUniqueInput) {
+  users(where: $where, orderBy: $orderBy, after: $after) {
+    id
+    createdAt
+    email
+    fullName
+  }
+}
+    `;
+
+/**
+ * __useListSchemeUsersQuery__
+ *
+ * To run a query within a React component, call `useListSchemeUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListSchemeUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListSchemeUsersQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useListSchemeUsersQuery(baseOptions?: Apollo.QueryHookOptions<ListSchemeUsersQuery, ListSchemeUsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ListSchemeUsersQuery, ListSchemeUsersQueryVariables>(ListSchemeUsersDocument, options);
+      }
+export function useListSchemeUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListSchemeUsersQuery, ListSchemeUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ListSchemeUsersQuery, ListSchemeUsersQueryVariables>(ListSchemeUsersDocument, options);
+        }
+export type ListSchemeUsersQueryHookResult = ReturnType<typeof useListSchemeUsersQuery>;
+export type ListSchemeUsersLazyQueryHookResult = ReturnType<typeof useListSchemeUsersLazyQuery>;
+export type ListSchemeUsersQueryResult = Apollo.QueryResult<ListSchemeUsersQuery, ListSchemeUsersQueryVariables>;

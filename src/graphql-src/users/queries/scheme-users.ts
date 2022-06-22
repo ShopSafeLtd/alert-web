@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 import { SortOrder, BoolFilter } from "../../types";
 import { Role } from "../enums";
-import { BasicGroup, BasicGroupType } from "graphql-src/groups/fragments";
+import { BasicGroupType } from "graphql-src/groups/fragments";
 
 export const SchemeUsers = gql`
   query schemeUsers(
@@ -47,7 +47,8 @@ export const SchemeUsers = gql`
       newUser
       disabled
       groups(where: { scheme: { id: { equals: $scheme } } }) {
-        ...BasicGroup
+        id
+        name
       }
       schemes(where: { scheme: { id: { equals: $scheme } } }) {
         id
@@ -55,7 +56,6 @@ export const SchemeUsers = gql`
       }
     }
   }
-  ${BasicGroup}
 `;
 
 export interface SchemeUsersArgs {

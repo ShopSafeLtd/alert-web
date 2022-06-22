@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router';
 import AdminMenu from '../../../old-components/admin/AdminMenu';
 
-import UserList from '../../../old-components/users/list/AllUsers/AllUsers';
+import UserList from 'views/settings/users/UserList'
 import ViewUser from '../../../old-components/users/view/ViewUser/ViewUser';
 import AddUser from '../../../old-components/users/add/AddUser/AddUser';
 

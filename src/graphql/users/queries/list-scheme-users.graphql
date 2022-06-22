@@ -1,0 +1,8 @@
+query ListSchemeUsers($where: UserWhereInput, $orderBy: [UserOrderByWithRelationInput!], $after: UserWhereUniqueInput) {
+  users(where: $where, orderBy: $orderBy, after: $after) {
+    id
+    createdAt
+    email
+    fullName
+  }
+}

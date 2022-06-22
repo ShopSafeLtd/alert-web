@@ -403,6 +403,9 @@
 .page-container {
   height: calc(100vh - 70px);
 }
+.list-view {
+  padding: 15px;
+}
 .feed-card .banner-container {
   position: absolute;
   width: 75px;
