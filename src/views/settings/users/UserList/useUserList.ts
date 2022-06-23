@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useListSchemeUsersQuery, ListSchemeUsersQuery, QueryMode } from 'graphql/generated'
+import { useListSchemeUsersQuery, ListSchemeUsersQuery, QueryMode, useSchemeGroupsQuery, SchemeGroupsQuery } from 'graphql/generated'
 import { useStoreState } from 'state'
 
 interface Return {
@@ -7,12 +7,17 @@ interface Return {
   loading: boolean,
   search: string;
   setSearch: (value: string) => void
+  groupsData: SchemeGroupsQuery | undefined,
+  groupsLoading: boolean;
+  selectedGroups: string[];
+  setSelectedGroups: (value: string[]) => void
 }
 
 const useUserList = (): Return => {
   const schemeId = useStoreState(state => state.scheme.id)
 
   const [search, setSearch] = useState('')
+  const [selectedGroups, setSelectedGroups] = useState<string[]>([])
 
   const {
     data,
@@ -36,6 +41,13 @@ const useUserList = (): Return => {
         recycled: {
           equals: false
         },
+        groups: selectedGroups.length > 0 ? {
+          some: {
+            id: {
+              in: selectedGroups
+            }
+          }
+        } : undefined,
         OR: [{
           fullName: {
             contains: search,
@@ -46,7 +58,32 @@ const useUserList = (): Return => {
             contains: search,
             mode: QueryMode.Insensitive
           }
+        }, {
+          organisation: {
+            contains: search,
+            mode: QueryMode.Insensitive
+          }
         }]
+      },
+      groupWhere: {
+        scheme: {
+          id: {
+            equals: schemeId
+          }
+        }
+      }
+    }
+  })
+
+  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      where: {
+        scheme: {
+          id: {
+            equals: schemeId
+          }
+        }
       }
     }
   })
@@ -55,7 +92,11 @@ const useUserList = (): Return => {
     data,
     loading,
     search,
-    setSearch
+    setSearch,
+    groupsData,
+    groupsLoading,
+    selectedGroups,
+    setSelectedGroups
   }
 }
 

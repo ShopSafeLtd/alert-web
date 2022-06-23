@@ -1,10 +1,18 @@
-import React from 'react'
-import View from './UserList.view'
-import useUserList from './useUserList'
-
+import React from "react";
+import View from "./UserList.view";
+import useUserList from "./useUserList";
 
 const UserList = () => {
-  const { data, loading, search, setSearch } = useUserList()
+  const {
+    data,
+    loading,
+    search,
+    setSearch,
+    groupsData,
+    groupsLoading,
+    selectedGroups,
+    setSelectedGroups,
+  } = useUserList();
 
   return (
     <View
@@ -12,8 +20,12 @@ const UserList = () => {
       loading={loading}
       search={search}
       setSearch={setSearch}
+      groupsData={groupsData}
+      groupsLoading={groupsLoading}
+      selectedGroups={selectedGroups}
+      setSelectedGroups={setSelectedGroups}
     />
-  )
-}
+  );
+};
 
-export default UserList
+export default UserList;

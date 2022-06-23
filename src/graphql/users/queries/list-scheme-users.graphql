@@ -1,8 +1,18 @@
-query ListSchemeUsers($where: UserWhereInput, $orderBy: [UserOrderByWithRelationInput!], $after: UserWhereUniqueInput) {
+query ListSchemeUsers(
+  $where: UserWhereInput,
+  $orderBy: [UserOrderByWithRelationInput!],
+  $after: UserWhereUniqueInput,
+  $groupWhere: GroupWhereInput
+) {
   users(where: $where, orderBy: $orderBy, after: $after) {
     id
-    createdAt
-    email
     fullName
+    email
+    organisation
+    status
+    groups(where: $groupWhere) {
+      id
+      name
+    }
   }
 }

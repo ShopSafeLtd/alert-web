@@ -1,23 +1,54 @@
 import React from "react";
-import { Table, Row, Col, Input } from "antd";
-import { ListSchemeUsersQuery } from "graphql/generated";
+import { Table, Row, Col, Input, Typography, Select } from "antd";
+import { ListSchemeUsersQuery, SchemeGroupsQuery } from "graphql/generated";
+import { Link } from "react-router-dom";
 
 interface Props {
   data: ListSchemeUsersQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
+  groupsData: SchemeGroupsQuery | undefined;
+  groupsLoading: boolean;
+  selectedGroups: string[];
+  setSelectedGroups: (value: string[]) => void;
 }
 
-const UserList = ({ data, loading, search, setSearch }: Props) => (
+const UserList = ({
+  data,
+  loading,
+  search,
+  setSearch,
+  groupsData,
+  groupsLoading,
+  selectedGroups,
+  setSelectedGroups,
+}: Props) => (
   <div className="list-view">
-    <Row style={{ marginBottom: 10 }}>
+    <Row gutter={8} style={{ marginBottom: 10 }}>
       <Col span={8}>
         <Input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           placeholder="Search for a user..."
+          allowClear
         />
+      </Col>
+      <Col>
+        <Select
+          loading={groupsLoading}
+          style={{ minWidth: 250 }}
+          allowClear
+          mode="multiple"
+          value={selectedGroups}
+          onChange={setSelectedGroups}
+        >
+          {groupsData?.groups.map((group) => (
+            <Select.Option key={group.name} value={group.id}>
+              {group.name}
+            </Select.Option>
+          ))}
+        </Select>
       </Col>
     </Row>
     <Table
@@ -32,16 +63,47 @@ const UserList = ({ data, loading, search, setSearch }: Props) => (
           key: "name",
           title: "Name",
           dataIndex: "name",
+          render: (value, record) => (
+            <Link to={`/app/scheme-settings/users/view/${record.key}`}>
+              {value}
+            </Link>
+          ),
+        },
+        {
+          key: "status",
+          title: "Status",
+          dataIndex: "status",
+          render: (value) => (
+            <Typography.Text type={value === "Enabled" ? "success" : "warning"}>
+              {value}
+            </Typography.Text>
+          ),
         },
         {
           key: "emailAddress",
           title: "Email Address",
           dataIndex: "emailAddress",
         },
+        {
+          key: "organisation",
+          title: "Organisation",
+          dataIndex: "organisation",
+        },
+        {
+          key: "groups",
+          title: "Groups",
+          dataIndex: "groups",
+        },
       ]}
       dataSource={data?.users.map((user) => ({
+        key: user.id,
         name: user.fullName,
         emailAddress: user.email,
+        organisation: user.organisation,
+        groups: user.groups
+          .map((group, index) => (index === 0 ? group.name : ` ${group.name}`))
+          .toString(),
+        status: user.status,
       }))}
     />
   </div>

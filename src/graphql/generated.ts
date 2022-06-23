@@ -13972,10 +13972,11 @@ export type ListSchemeUsersQueryVariables = Exact<{
   where?: InputMaybe<UserWhereInput>;
   orderBy?: InputMaybe<Array<UserOrderByWithRelationInput> | UserOrderByWithRelationInput>;
   after?: InputMaybe<UserWhereUniqueInput>;
+  groupWhere?: InputMaybe<GroupWhereInput>;
 }>;
 
 
-export type ListSchemeUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, createdAt: any, email: string, fullName: string }> };
+export type ListSchemeUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, fullName: string, email: string, organisation: string, status?: string | null, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> };
 
 
 export const SignInDocument = gql`
@@ -14442,12 +14443,17 @@ export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
 export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
 export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
 export const ListSchemeUsersDocument = gql`
-    query ListSchemeUsers($where: UserWhereInput, $orderBy: [UserOrderByWithRelationInput!], $after: UserWhereUniqueInput) {
+    query ListSchemeUsers($where: UserWhereInput, $orderBy: [UserOrderByWithRelationInput!], $after: UserWhereUniqueInput, $groupWhere: GroupWhereInput) {
   users(where: $where, orderBy: $orderBy, after: $after) {
     id
-    createdAt
-    email
     fullName
+    email
+    organisation
+    status
+    groups(where: $groupWhere) {
+      id
+      name
+    }
   }
 }
     `;
@@ -14467,6 +14473,7 @@ export const ListSchemeUsersDocument = gql`
  *      where: // value for 'where'
  *      orderBy: // value for 'orderBy'
  *      after: // value for 'after'
+ *      groupWhere: // value for 'groupWhere'
  *   },
  * });
  */
