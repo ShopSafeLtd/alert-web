@@ -17,11 +17,14 @@ interface Return {
   groupsLoading: boolean;
   selectedGroups: string[];
   setSelectedGroups: (value: string[]) => void;
+  addUser: boolean;
+  toggleAddUser: () => void;
 }
 
 const useUserList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
 
+  const [addUser, setAddUser] = useState(false);
   const [search, setSearch] = useState("");
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
 
@@ -98,6 +101,10 @@ const useUserList = (): Return => {
     },
   });
 
+  const toggleAddUser = () => {
+    setAddUser(!addUser)
+  }
+
   return {
     data,
     loading,
@@ -107,6 +114,8 @@ const useUserList = (): Return => {
     groupsLoading,
     selectedGroups,
     setSelectedGroups,
+    addUser,
+    toggleAddUser
   };
 };
 

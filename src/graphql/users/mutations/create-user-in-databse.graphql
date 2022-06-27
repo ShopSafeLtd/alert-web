@@ -1,0 +1,11 @@
+mutation createUserInDatabase($data: CreateUserData!) {
+  createUserInDatabase(
+    data: $data
+  ) {
+    id
+    fullName
+    organisation
+    newUser
+    disabled
+  }
+}

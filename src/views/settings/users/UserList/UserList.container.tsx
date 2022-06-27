@@ -12,6 +12,8 @@ const UserList = () => {
     groupsLoading,
     selectedGroups,
     setSelectedGroups,
+    addUser,
+    toggleAddUser
   } = useUserList();
 
   return (
@@ -24,6 +26,8 @@ const UserList = () => {
       groupsLoading={groupsLoading}
       selectedGroups={selectedGroups}
       setSelectedGroups={setSelectedGroups}
+      addUser={addUser}
+      toggleAddUser={toggleAddUser}
     />
   );
 };

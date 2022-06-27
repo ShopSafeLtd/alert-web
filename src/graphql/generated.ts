@@ -3739,7 +3739,7 @@ export type ImageCreateInput = {
 export type ImageCreateManyIncidentInput = {
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  fileNames?: InputMaybe<ImageCreateManyfileNamesInput>;
+  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
   optimised?: InputMaybe<Scalars['String']>;
@@ -3758,7 +3758,7 @@ export type ImageCreateManyIncidentInputEnvelope = {
 export type ImageCreateManySchemeInput = {
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  fileNames?: InputMaybe<ImageCreateManyfileNamesInput>;
+  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
@@ -3777,7 +3777,7 @@ export type ImageCreateManySchemeInputEnvelope = {
 export type ImageCreateManyUploadedByInput = {
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  fileNames?: InputMaybe<ImageCreateManyfileNamesInput>;
+  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
@@ -3791,10 +3791,6 @@ export type ImageCreateManyUploadedByInput = {
 export type ImageCreateManyUploadedByInputEnvelope = {
   data?: InputMaybe<Array<ImageCreateManyUploadedByInput>>;
   skipDuplicates?: InputMaybe<Scalars['Boolean']>;
-};
-
-export type ImageCreateManyfileNamesInput = {
-  set?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type ImageCreateNestedManyWithoutIncidentInput = {
@@ -13930,6 +13926,7 @@ export type GroupQuery = { __typename?: 'Query', group?: { __typename?: 'Group',
 
 export type SchemeGroupsQueryVariables = Exact<{
   where?: InputMaybe<GroupWhereInput>;
+  orderBy?: InputMaybe<Array<GroupOrderByWithRelationInput> | GroupOrderByWithRelationInput>;
 }>;
 
 
@@ -13994,6 +13991,21 @@ export type UserQueryVariables = Exact<{
 
 
 export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, fullName: string, email: string, organisation: string, disabled: boolean, newUser: boolean, addresses: Array<{ __typename?: 'Address', premises?: string | null, building?: string | null, street: string, townCity: string, county?: string | null, postcode: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, chats: Array<{ __typename?: 'UserChat', id: string, chat: { __typename?: 'Chat', name: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role }> } | null };
+
+export type CreateUserInDatabaseMutationVariables = Exact<{
+  data: CreateUserData;
+}>;
+
+
+export type CreateUserInDatabaseMutation = { __typename?: 'Mutation', createUserInDatabase?: { __typename?: 'User', id: string, fullName: string, organisation: string, newUser: boolean, disabled: boolean } | null };
+
+export type InviteExistingUserMutationVariables = Exact<{
+  data: UserUpdateInput;
+  where: UniqueId;
+}>;
+
+
+export type InviteExistingUserMutation = { __typename?: 'Mutation', inviteExistingUser?: { __typename?: 'User', id: string } | null };
 
 export type ListSchemeUsersQueryVariables = Exact<{
   where?: InputMaybe<UserWhereInput>;
@@ -14120,8 +14132,8 @@ export type GroupQueryHookResult = ReturnType<typeof useGroupQuery>;
 export type GroupLazyQueryHookResult = ReturnType<typeof useGroupLazyQuery>;
 export type GroupQueryResult = Apollo.QueryResult<GroupQuery, GroupQueryVariables>;
 export const SchemeGroupsDocument = gql`
-    query schemeGroups($where: GroupWhereInput) {
-  groups(where: $where) {
+    query schemeGroups($where: GroupWhereInput, $orderBy: [GroupOrderByWithRelationInput!]) {
+  groups(where: $where, orderBy: $orderBy) {
     id
     name
     description
@@ -14142,6 +14154,7 @@ export const SchemeGroupsDocument = gql`
  * const { data, loading, error } = useSchemeGroupsQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
  *   },
  * });
  */
@@ -14612,6 +14625,77 @@ export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQ
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
+export const CreateUserInDatabaseDocument = gql`
+    mutation createUserInDatabase($data: CreateUserData!) {
+  createUserInDatabase(data: $data) {
+    id
+    fullName
+    organisation
+    newUser
+    disabled
+  }
+}
+    `;
+export type CreateUserInDatabaseMutationFn = Apollo.MutationFunction<CreateUserInDatabaseMutation, CreateUserInDatabaseMutationVariables>;
+
+/**
+ * __useCreateUserInDatabaseMutation__
+ *
+ * To run a mutation, you first call `useCreateUserInDatabaseMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUserInDatabaseMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUserInDatabaseMutation, { data, loading, error }] = useCreateUserInDatabaseMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateUserInDatabaseMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserInDatabaseMutation, CreateUserInDatabaseMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateUserInDatabaseMutation, CreateUserInDatabaseMutationVariables>(CreateUserInDatabaseDocument, options);
+      }
+export type CreateUserInDatabaseMutationHookResult = ReturnType<typeof useCreateUserInDatabaseMutation>;
+export type CreateUserInDatabaseMutationResult = Apollo.MutationResult<CreateUserInDatabaseMutation>;
+export type CreateUserInDatabaseMutationOptions = Apollo.BaseMutationOptions<CreateUserInDatabaseMutation, CreateUserInDatabaseMutationVariables>;
+export const InviteExistingUserDocument = gql`
+    mutation inviteExistingUser($data: UserUpdateInput!, $where: UniqueId!) {
+  inviteExistingUser(data: $data, where: $where) {
+    id
+  }
+}
+    `;
+export type InviteExistingUserMutationFn = Apollo.MutationFunction<InviteExistingUserMutation, InviteExistingUserMutationVariables>;
+
+/**
+ * __useInviteExistingUserMutation__
+ *
+ * To run a mutation, you first call `useInviteExistingUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInviteExistingUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [inviteExistingUserMutation, { data, loading, error }] = useInviteExistingUserMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useInviteExistingUserMutation(baseOptions?: Apollo.MutationHookOptions<InviteExistingUserMutation, InviteExistingUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<InviteExistingUserMutation, InviteExistingUserMutationVariables>(InviteExistingUserDocument, options);
+      }
+export type InviteExistingUserMutationHookResult = ReturnType<typeof useInviteExistingUserMutation>;
+export type InviteExistingUserMutationResult = Apollo.MutationResult<InviteExistingUserMutation>;
+export type InviteExistingUserMutationOptions = Apollo.BaseMutationOptions<InviteExistingUserMutation, InviteExistingUserMutationVariables>;
 export const ListSchemeUsersDocument = gql`
     query ListSchemeUsers($where: UserWhereInput, $orderBy: [UserOrderByWithRelationInput!], $after: UserWhereUniqueInput, $groupWhere: GroupWhereInput) {
   users(where: $where, orderBy: $orderBy, after: $after) {

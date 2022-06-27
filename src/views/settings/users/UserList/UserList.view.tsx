@@ -1,7 +1,8 @@
 import React from "react";
-import { Table, Row, Col, Input, Typography, Select } from "antd";
+import { Table, Row, Col, Input, Typography, Select, Drawer, Button } from "antd";
 import { ListSchemeUsersQuery, SchemeGroupsQuery } from "graphql/generated";
 import { Link } from "react-router-dom";
+import AddUser from 'components/form-components/user/AddUser'
 
 interface Props {
   data: ListSchemeUsersQuery | undefined;
@@ -12,6 +13,8 @@ interface Props {
   groupsLoading: boolean;
   selectedGroups: string[];
   setSelectedGroups: (value: string[]) => void;
+  addUser: boolean;
+  toggleAddUser: () => void;
 }
 
 const UserList = ({
@@ -23,6 +26,8 @@ const UserList = ({
   groupsLoading,
   selectedGroups,
   setSelectedGroups,
+  addUser,
+  toggleAddUser
 }: Props) => (
   <div className="list-view">
     <Row gutter={8} style={{ marginBottom: 10 }}>
@@ -42,6 +47,7 @@ const UserList = ({
           mode="multiple"
           value={selectedGroups}
           onChange={setSelectedGroups}
+          placeholder="Filter Groups"
         >
           {groupsData?.groups.map((group) => (
             <Select.Option key={group.name} value={group.id}>
@@ -49,6 +55,10 @@ const UserList = ({
             </Select.Option>
           ))}
         </Select>
+      </Col>
+      <Col flex={1} />
+      <Col>
+        <Button type="primary" onClick={toggleAddUser}>Invite New User</Button>
       </Col>
     </Row>
     <Table
@@ -106,6 +116,12 @@ const UserList = ({
         status: user.status,
       }))}
     />
+
+    <Drawer title="Invite New User" visible={addUser} width="800" onClose={toggleAddUser}>
+      {addUser ? <AddUser
+        onClose={toggleAddUser}
+      /> : <div />}
+    </Drawer>
   </div>
 );
 

@@ -1,0 +1,5 @@
+mutation inviteExistingUser($data: UserUpdateInput!, $where: UniqueId!) {
+  inviteExistingUser(data: $data, where: $where) {
+    id
+  }
+}

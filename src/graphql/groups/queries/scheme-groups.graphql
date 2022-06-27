@@ -1,5 +1,5 @@
-query schemeGroups($where: GroupWhereInput) {
-  groups(where: $where) {
+query schemeGroups($where: GroupWhereInput, $orderBy: [GroupOrderByWithRelationInput!]) {
+  groups(where: $where, orderBy: $orderBy) {
     id
     name
     description
