@@ -1,0 +1,7 @@
+query schemeChats($where: ChatWhereInput) {
+  chats(where: $where) {
+    id
+    name
+    description
+  }
+}

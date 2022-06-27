@@ -1,13 +1,13 @@
-import React from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
+import React from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
 
-import { Section } from '../../../../global/layout';
-import LockSvg from '@material-ui/icons/Lock';
-import LockOpenSvg from '@material-ui/icons/LockOpen';
-import Delete from '@material-ui/icons/Delete';
-import Typography from '@material-ui/core/Typography';
-import Send from '@material-ui/icons/Send';
+import { Section } from "../../../../global/layout";
+import LockSvg from "@material-ui/icons/Lock";
+import LockOpenSvg from "@material-ui/icons/LockOpen";
+import Delete from "@material-ui/icons/Delete";
+import Typography from "@material-ui/core/Typography";
+import Send from "@material-ui/icons/Send";
 
 const LockButtonIcon = styled(LockSvg)`
   width: 18px;
@@ -54,14 +54,14 @@ const Header = ({
   enableUser,
   remove,
   isCurrent,
-  sendInvite
+  sendInvite,
 }) => {
   return (
     <Section width="100%" elevation={1}>
       <Row>
         <div>
           <UserName variant="h5">
-            {user.fullName}{' '}
+            {user.fullName}{" "}
             {user.disabled && <Blocked>(User Disabled)</Blocked>}
           </UserName>
           <Org variant="subtitle1">{user.organisation}</Org>
@@ -73,18 +73,18 @@ const Header = ({
             <SendIcon />
             Send Invite
           </Button>
-          {!user.disabled && (
+          {user.disabled ? (
+            <Button disabled={isCurrent} color="primary" onClick={enableUser}>
+              <LockOpenButtonIcon />
+              Enable User
+            </Button>
+          ) : (
             <Button disabled={isCurrent} color="primary" onClick={disableUser}>
               <LockButtonIcon />
               Disable User
             </Button>
           )}
-          {user.disabled && (
-            <Button disabled={isCurrent} color="primary" onClick={enableUser}>
-              <LockOpenButtonIcon />
-              Enable User
-            </Button>
-          )}
+
           <Button disabled={isCurrent} color="primary" onClick={remove}>
             <DeleteIcon />
             Delete User

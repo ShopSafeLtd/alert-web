@@ -1,0 +1,36 @@
+query User(
+  $where: UserWhereUniqueInput!
+  $groupWhere: GroupWhereInput
+  $chatWhere: UserChatWhereInput
+) {
+  user(where: $where) {
+    id
+    fullName
+    email
+    organisation
+    addresses {
+      premises
+      building
+      street
+      townCity
+      county
+      postcode
+    }
+    disabled
+    newUser
+    groups(where: $groupWhere) {
+      id
+      name
+    }
+    chats(where: $chatWhere) {
+      id
+      chat {
+        name
+      }
+    }
+    schemes {
+      id
+      role
+    }
+  }
+}

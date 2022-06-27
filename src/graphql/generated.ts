@@ -3739,7 +3739,7 @@ export type ImageCreateInput = {
 export type ImageCreateManyIncidentInput = {
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
+  fileNames?: InputMaybe<ImageCreateManyfileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
   optimised?: InputMaybe<Scalars['String']>;
@@ -3758,7 +3758,7 @@ export type ImageCreateManyIncidentInputEnvelope = {
 export type ImageCreateManySchemeInput = {
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
+  fileNames?: InputMaybe<ImageCreateManyfileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
@@ -3777,7 +3777,7 @@ export type ImageCreateManySchemeInputEnvelope = {
 export type ImageCreateManyUploadedByInput = {
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
+  fileNames?: InputMaybe<ImageCreateManyfileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
@@ -3791,6 +3791,10 @@ export type ImageCreateManyUploadedByInput = {
 export type ImageCreateManyUploadedByInputEnvelope = {
   data?: InputMaybe<Array<ImageCreateManyUploadedByInput>>;
   skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type ImageCreateManyfileNamesInput = {
+  set?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type ImageCreateNestedManyWithoutIncidentInput = {
@@ -13910,12 +13914,26 @@ export type SignInMutationVariables = Exact<{
 
 export type SignInMutation = { __typename?: 'Mutation', signIn?: { __typename?: 'SignIn', accessToken: string, refreshToken: string } | null };
 
+export type SchemeChatsQueryVariables = Exact<{
+  where?: InputMaybe<ChatWhereInput>;
+}>;
+
+
+export type SchemeChatsQuery = { __typename?: 'Query', chats: Array<{ __typename?: 'Chat', id: string, name: string, description?: string | null }> };
+
+export type GroupQueryVariables = Exact<{
+  where: GroupWhereUniqueInput;
+}>;
+
+
+export type GroupQuery = { __typename?: 'Query', group?: { __typename?: 'Group', name: string, description?: string | null, users: Array<{ __typename?: 'User', id: string, fullName: string, organisation: string }> } | null };
+
 export type SchemeGroupsQueryVariables = Exact<{
   where?: InputMaybe<GroupWhereInput>;
 }>;
 
 
-export type SchemeGroupsQuery = { __typename?: 'Query', groups: Array<{ __typename?: 'Group', id: string, name: string }> };
+export type SchemeGroupsQuery = { __typename?: 'Query', groups: Array<{ __typename?: 'Group', id: string, name: string, description?: string | null }> };
 
 export type DeleteIncidentMutationVariables = Exact<{
   where: UniqueId;
@@ -13968,6 +13986,15 @@ export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, email: string, organisation: string, newUser: boolean, groups: Array<{ __typename?: 'Group', id: string, name: string }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role, scheme: { __typename?: 'Scheme', id: string, name: string, autoApproveIncidents: boolean, autoApproveOffenders: boolean } }> } | null };
 
+export type UserQueryVariables = Exact<{
+  where: UserWhereUniqueInput;
+  groupWhere?: InputMaybe<GroupWhereInput>;
+  chatWhere?: InputMaybe<UserChatWhereInput>;
+}>;
+
+
+export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, fullName: string, email: string, organisation: string, disabled: boolean, newUser: boolean, addresses: Array<{ __typename?: 'Address', premises?: string | null, building?: string | null, street: string, townCity: string, county?: string | null, postcode: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, chats: Array<{ __typename?: 'UserChat', id: string, chat: { __typename?: 'Chat', name: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role }> } | null };
+
 export type ListSchemeUsersQueryVariables = Exact<{
   where?: InputMaybe<UserWhereInput>;
   orderBy?: InputMaybe<Array<UserOrderByWithRelationInput> | UserOrderByWithRelationInput>;
@@ -14014,11 +14041,90 @@ export function useSignInMutation(baseOptions?: Apollo.MutationHookOptions<SignI
 export type SignInMutationHookResult = ReturnType<typeof useSignInMutation>;
 export type SignInMutationResult = Apollo.MutationResult<SignInMutation>;
 export type SignInMutationOptions = Apollo.BaseMutationOptions<SignInMutation, SignInMutationVariables>;
+export const SchemeChatsDocument = gql`
+    query schemeChats($where: ChatWhereInput) {
+  chats(where: $where) {
+    id
+    name
+    description
+  }
+}
+    `;
+
+/**
+ * __useSchemeChatsQuery__
+ *
+ * To run a query within a React component, call `useSchemeChatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSchemeChatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSchemeChatsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useSchemeChatsQuery(baseOptions?: Apollo.QueryHookOptions<SchemeChatsQuery, SchemeChatsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SchemeChatsQuery, SchemeChatsQueryVariables>(SchemeChatsDocument, options);
+      }
+export function useSchemeChatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SchemeChatsQuery, SchemeChatsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SchemeChatsQuery, SchemeChatsQueryVariables>(SchemeChatsDocument, options);
+        }
+export type SchemeChatsQueryHookResult = ReturnType<typeof useSchemeChatsQuery>;
+export type SchemeChatsLazyQueryHookResult = ReturnType<typeof useSchemeChatsLazyQuery>;
+export type SchemeChatsQueryResult = Apollo.QueryResult<SchemeChatsQuery, SchemeChatsQueryVariables>;
+export const GroupDocument = gql`
+    query Group($where: GroupWhereUniqueInput!) {
+  group(where: $where) {
+    name
+    description
+    users {
+      id
+      fullName
+      organisation
+    }
+  }
+}
+    `;
+
+/**
+ * __useGroupQuery__
+ *
+ * To run a query within a React component, call `useGroupQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGroupQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useGroupQuery(baseOptions: Apollo.QueryHookOptions<GroupQuery, GroupQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GroupQuery, GroupQueryVariables>(GroupDocument, options);
+      }
+export function useGroupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GroupQuery, GroupQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GroupQuery, GroupQueryVariables>(GroupDocument, options);
+        }
+export type GroupQueryHookResult = ReturnType<typeof useGroupQuery>;
+export type GroupLazyQueryHookResult = ReturnType<typeof useGroupLazyQuery>;
+export type GroupQueryResult = Apollo.QueryResult<GroupQuery, GroupQueryVariables>;
 export const SchemeGroupsDocument = gql`
     query schemeGroups($where: GroupWhereInput) {
   groups(where: $where) {
     id
     name
+    description
   }
 }
     `;
@@ -14442,6 +14548,70 @@ export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
 export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
 export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
+export const UserDocument = gql`
+    query User($where: UserWhereUniqueInput!, $groupWhere: GroupWhereInput, $chatWhere: UserChatWhereInput) {
+  user(where: $where) {
+    id
+    fullName
+    email
+    organisation
+    addresses {
+      premises
+      building
+      street
+      townCity
+      county
+      postcode
+    }
+    disabled
+    newUser
+    groups(where: $groupWhere) {
+      id
+      name
+    }
+    chats(where: $chatWhere) {
+      id
+      chat {
+        name
+      }
+    }
+    schemes {
+      id
+      role
+    }
+  }
+}
+    `;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      groupWhere: // value for 'groupWhere'
+ *      chatWhere: // value for 'chatWhere'
+ *   },
+ * });
+ */
+export function useUserQuery(baseOptions: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+      }
+export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+        }
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export const ListSchemeUsersDocument = gql`
     query ListSchemeUsers($where: UserWhereInput, $orderBy: [UserOrderByWithRelationInput!], $after: UserWhereUniqueInput, $groupWhere: GroupWhereInput) {
   users(where: $where, orderBy: $orderBy, after: $after) {

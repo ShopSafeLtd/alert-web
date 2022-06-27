@@ -1,13 +1,13 @@
-import React from 'react';
-import styled from 'styled-components';
-import Button from '@material-ui/core/Button';
-import EditSvg from '@material-ui/icons/Edit';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Typography from '@material-ui/core/Typography';
+import React from "react";
+import styled from "styled-components";
+import Button from "@material-ui/core/Button";
+import EditSvg from "@material-ui/icons/Edit";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Typography from "@material-ui/core/Typography";
 
-import { Section } from '../../../../global/layout';
-import { SectionTitle } from '../../../../global/typography';
-import GroupImage from '../../../../../images/AddGroup';
+import { Section } from "../../../../global/layout";
+import { SectionTitle } from "../../../../global/typography";
+import GroupImage from "../../../../../images/AddGroup";
 
 const Row = styled.div`
   display: flex;

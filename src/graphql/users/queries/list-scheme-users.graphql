@@ -1,7 +1,7 @@
 query ListSchemeUsers(
-  $where: UserWhereInput,
-  $orderBy: [UserOrderByWithRelationInput!],
-  $after: UserWhereUniqueInput,
+  $where: UserWhereInput
+  $orderBy: [UserOrderByWithRelationInput!]
+  $after: UserWhereUniqueInput
   $groupWhere: GroupWhereInput
 ) {
   users(where: $where, orderBy: $orderBy, after: $after) {

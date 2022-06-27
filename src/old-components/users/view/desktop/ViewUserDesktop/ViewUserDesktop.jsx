@@ -46,7 +46,7 @@ const ViewUserDesktop = ({
   userId,
   isCurrent,
 }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   // state
   const [enable, setEnable] = useState(false);
   const [disable, setDisable] = useState(false);
