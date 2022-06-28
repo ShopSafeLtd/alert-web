@@ -11,7 +11,7 @@ import ApolloProvider from "./providers/ApolloProvider";
 
 import { ThemeConfig, Store } from "./state";
 
-LogRocket.init("ub3rsv/gotalk-portal");
+LogRocket.init("ub3rsv/gotalk-portal"); 
 
 const themes = {
   dark: `${process.env.PUBLIC_URL}/css/dark-theme.css`,

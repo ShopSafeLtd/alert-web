@@ -148,5 +148,11 @@
     "gulp-less": "^4.0.1",
     "gulp-postcss": "^8.0.0",
     "less-plugin-npm-import": "^2.1.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,css,md}": [
+      "eslint",
+      "prettier --write"
+    ]
   }
 }
