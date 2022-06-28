@@ -13,14 +13,16 @@ interface Props {
   usersData: ListSchemeUsersQuery | undefined;
   usersLoading: boolean;
   saving: boolean;
+  setSaving: (value: boolean) => void;
 }
 
-const AddGroup = ({
+const AddChat = ({
   onSubmit,
   onClose,
   usersData,
   usersLoading,
   saving,
+  setSaving,
 }: Props) => (
   <Form layout="vertical" onFinish={onSubmit}>
     <Row gutter={16}>
@@ -31,7 +33,7 @@ const AddGroup = ({
           rules={[
             {
               required: true,
-              message: "Please enter a name for the new group.",
+              message: "Please enter a name for the new chat group.",
             },
           ]}
         >
@@ -46,7 +48,7 @@ const AddGroup = ({
           rules={[
             {
               required: true,
-              message: "Please enter a description for the new group.",
+              message: "Please enter a description for the new chat group.",
             },
           ]}
         >
@@ -63,7 +65,7 @@ const AddGroup = ({
           rules={[
             {
               required: true,
-              message: "Please selected at least one user for a group.",
+              message: "Please selected at least one user for a chat group.",
             },
           ]}
         >
@@ -97,7 +99,7 @@ const AddGroup = ({
             disabled={saving}
             loading={saving}
           >
-            Create A New Group
+            Create A New Chat Group
           </Button>
         </Col>
       </Row>
@@ -105,4 +107,4 @@ const AddGroup = ({
   </Form>
 );
 
-export default AddGroup;
+export default AddChat;

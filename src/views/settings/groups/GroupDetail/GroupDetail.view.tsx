@@ -48,7 +48,7 @@ const groupDetail = ({ data, loading }: Props) => {
         ) : (
           <Descriptions
             title="Users"
-            bordered={true}
+            // bordered={true}
             extra={
               <Button icon={<EditOutlined />} onClick={openEdit}>
                 Edit Users

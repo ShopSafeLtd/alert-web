@@ -1,15 +1,17 @@
 import { Table, Row, Col, Input, Drawer, Button } from "antd";
-import { SchemeChatsQuery } from "graphql/generated";
+import { CreateChatMutation, SchemeChatsQuery } from "graphql/generated";
 import { Link } from "react-router-dom";
-import AddChatGroup from "components/form-components/chatGroup/AddChatGroup";
+import AddChat from "components/form-components/chat/AddChat";
+import { MutationUpdaterFn } from "@apollo/client";
 
 interface Props {
   data: SchemeChatsQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
-  addChatGroup: boolean;
-  toggleAddChatGroup: () => void;
+  addChat: boolean;
+  toggleAddChat: () => void;
+  updateChatList: MutationUpdaterFn<CreateChatMutation>;
 }
 
 const ChatList = ({
@@ -17,8 +19,9 @@ const ChatList = ({
   loading,
   search,
   setSearch,
-  addChatGroup,
-  toggleAddChatGroup,
+  addChat,
+  toggleAddChat,
+  updateChatList,
 }: Props) => (
   <div className="list-view">
     <Row gutter={8} style={{ marginBottom: 10 }}>
@@ -32,7 +35,7 @@ const ChatList = ({
       </Col>
       <Col flex={1} />
       <Col>
-        <Button type="primary" onClick={toggleAddChatGroup}>
+        <Button type="primary" onClick={toggleAddChat}>
           Create New Chat Groups
         </Button>
       </Col>
@@ -70,11 +73,15 @@ const ChatList = ({
 
     <Drawer
       title="Invite A New Chat Group"
-      visible={addChatGroup}
-      width="800"
-      onClose={toggleAddChatGroup}
+      visible={addChat}
+      width="400"
+      onClose={toggleAddChat}
     >
-      {addChatGroup ? <AddChatGroup onClose={toggleAddChatGroup} /> : <div />}
+      {addChat ? (
+        <AddChat update={updateChatList} onClose={toggleAddChat} />
+      ) : (
+        <div />
+      )}
     </Drawer>
   </div>
 );

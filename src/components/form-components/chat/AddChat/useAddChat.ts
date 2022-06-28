@@ -1,11 +1,12 @@
 import { useState } from "react";
 import {
-  useCreateGroupMutation,
-  CreateGroupMutation,
+  useCreateChatMutation,
+  CreateChatMutation,
   ListSchemeUsersQuery,
   useListSchemeUsersQuery,
   SortOrder,
 } from "graphql/generated";
+
 import { useStoreState } from "state";
 import { MutationUpdaterFn } from "@apollo/client";
 
@@ -13,12 +14,10 @@ interface FormData {
   name: string;
   description: string;
 }
-
 interface Props {
   onClose: () => void;
-  update: MutationUpdaterFn<CreateGroupMutation>;
+  update: MutationUpdaterFn<CreateChatMutation>;
 }
-
 interface Return {
   onSubmit: (value: FormData) => void;
   usersData: ListSchemeUsersQuery | undefined;
@@ -27,7 +26,7 @@ interface Return {
   setSaving: (value: boolean) => void;
 }
 
-const useAddGroup = ({ onClose, update }: Props): Return => {
+const useAddChat = ({ onClose, update }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
 
@@ -57,8 +56,7 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
       },
     },
   });
-
-  const [createGroup] = useCreateGroupMutation({
+  const [CreateChat] = useCreateChatMutation({
     onCompleted: () => {
       setSaving(false);
       onClose();
@@ -69,7 +67,7 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    createGroup({
+    CreateChat({
       variables: {
         data: {
           name: data.name,
@@ -92,4 +90,4 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
     setSaving,
   };
 };
-export default useAddGroup;
+export default useAddChat;

@@ -10,8 +10,10 @@ interface Props {
 }
 
 const AddGroup = ({ onClose, update }: Props) => {
-  const { onSubmit, usersData, usersLoading, saving, setSaving } =
-    useAddGroup({ onClose, update });
+  const { onSubmit, usersData, usersLoading, saving } = useAddGroup({
+    onClose,
+    update,
+  });
 
   return (
     <View
@@ -20,7 +22,6 @@ const AddGroup = ({ onClose, update }: Props) => {
       usersData={usersData}
       usersLoading={usersLoading}
       saving={saving}
-      setSaving={setSaving}
     />
   );
 };
