@@ -27,6 +27,7 @@ src/components/shared-components/*
 src/components/util-components/*
 src/components/layout-components/*
 src/components/form-components/*
+src/images/*
 
 *.css
 
