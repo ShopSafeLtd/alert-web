@@ -1,15 +1,25 @@
-import { Table, Row, Col, Input } from "antd";
+import { Table, Row, Col, Input, Drawer, Button } from "antd";
 import { SchemeGroupsQuery } from "graphql/generated";
 import { Link } from "react-router-dom";
+import AddGroup from "components/form-components/group/AddGroup";
 
 interface Props {
   data: SchemeGroupsQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
+  addGroup: boolean;
+  toggleAddGroup: () => void;
 }
 
-const GroupList = ({ data, loading, search, setSearch }: Props) => (
+const GroupList = ({
+  data,
+  loading,
+  search,
+  setSearch,
+  addGroup,
+  toggleAddGroup,
+}: Props) => (
   <div className="list-view">
     <Row gutter={8} style={{ marginBottom: 10 }}>
       <Col span={8}>
@@ -19,6 +29,12 @@ const GroupList = ({ data, loading, search, setSearch }: Props) => (
           placeholder="Search for a group..."
           allowClear
         />
+      </Col>
+      <Col flex={1} />
+      <Col>
+        <Button type="primary" onClick={toggleAddGroup}>
+          Create New Groups
+        </Button>
       </Col>
     </Row>
     <Table
@@ -51,6 +67,15 @@ const GroupList = ({ data, loading, search, setSearch }: Props) => (
         description: group.description,
       }))}
     />
+
+    <Drawer
+      title="Invite New Group"
+      visible={addGroup}
+      width="400"
+      onClose={toggleAddGroup}
+    >
+      {addGroup ? <AddGroup onClose={toggleAddGroup} /> : <div />}
+    </Drawer>
   </div>
 );
 

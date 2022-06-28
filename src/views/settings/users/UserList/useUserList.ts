@@ -102,8 +102,8 @@ const useUserList = (): Return => {
   });
 
   const toggleAddUser = () => {
-    setAddUser(!addUser)
-  }
+    setAddUser(!addUser);
+  };
 
   return {
     data,
@@ -115,7 +115,7 @@ const useUserList = (): Return => {
     selectedGroups,
     setSelectedGroups,
     addUser,
-    toggleAddUser
+    toggleAddUser,
   };
 };
 

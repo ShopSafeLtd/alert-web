@@ -1,15 +1,25 @@
-import { Table, Row, Col, Input } from "antd";
+import { Table, Row, Col, Input, Drawer, Button } from "antd";
 import { SchemeChatsQuery } from "graphql/generated";
 import { Link } from "react-router-dom";
+import AddChatGroup from "components/form-components/chatGroup/AddChatGroup";
 
 interface Props {
   data: SchemeChatsQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
+  addChatGroup: boolean;
+  toggleAddChatGroup: () => void;
 }
 
-const ChatList = ({ data, loading, search, setSearch }: Props) => (
+const ChatList = ({
+  data,
+  loading,
+  search,
+  setSearch,
+  addChatGroup,
+  toggleAddChatGroup,
+}: Props) => (
   <div className="list-view">
     <Row gutter={8} style={{ marginBottom: 10 }}>
       <Col span={8}>
@@ -19,6 +29,12 @@ const ChatList = ({ data, loading, search, setSearch }: Props) => (
           placeholder="Search for a chat group..."
           allowClear
         />
+      </Col>
+      <Col flex={1} />
+      <Col>
+        <Button type="primary" onClick={toggleAddChatGroup}>
+          Create New Chat Groups
+        </Button>
       </Col>
     </Row>
     <Table
@@ -51,6 +67,15 @@ const ChatList = ({ data, loading, search, setSearch }: Props) => (
         description: chat.description,
       }))}
     />
+
+    <Drawer
+      title="Invite A New Chat Group"
+      visible={addChatGroup}
+      width="800"
+      onClose={toggleAddChatGroup}
+    >
+      {addChatGroup ? <AddChatGroup onClose={toggleAddChatGroup} /> : <div />}
+    </Drawer>
   </div>
 );
 

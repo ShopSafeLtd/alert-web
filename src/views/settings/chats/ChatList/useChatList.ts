@@ -11,11 +11,13 @@ interface Return {
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
+  addChatGroup: boolean;
+  toggleAddChatGroup: () => void;
 }
 
 const useChatList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
-
+  const [addChatGroup, setAddChatGroup] = useState(false);
   const [search, setSearch] = useState("");
 
   const { data, loading } = useSchemeChatsQuery({
@@ -23,21 +25,6 @@ const useChatList = (): Return => {
     variables: {
       where: {
         scheme: { id: { equals: schemeId } },
-        // schemes: {
-        //   some: {
-        //     scheme: {
-        //       id: {
-        //         equals: schemeId,
-        //       },
-        //     },
-        //     recycled: {
-        //       equals: false,
-        //     },
-        //   },
-        // },
-        // recycled: {
-        //   equals: false,
-        // },
         OR: [
           {
             name: {
@@ -55,12 +42,16 @@ const useChatList = (): Return => {
       },
     },
   });
-
+  const toggleAddChatGroup = () => {
+    setAddChatGroup(!addChatGroup);
+  };
   return {
     data,
     loading,
     search,
     setSearch,
+    addChatGroup,
+    toggleAddChatGroup,
   };
 };
 

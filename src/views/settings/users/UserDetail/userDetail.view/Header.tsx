@@ -14,9 +14,8 @@ interface Props {
   loading: boolean;
 }
 
-const userDetail = ({ data, loading }: Props) => {
+const Header = ({ data, loading }: Props) => {
   const openEdit = () => {};
-
   return (
     <div className="list-view">
       <PageHeader
@@ -71,4 +70,4 @@ const userDetail = ({ data, loading }: Props) => {
   );
 };
 
-export default userDetail;
+export default Header;
