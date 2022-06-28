@@ -1,7 +1,8 @@
 import { Table, Row, Col, Input, Drawer, Button } from "antd";
-import { SchemeGroupsQuery } from "graphql/generated";
+import { CreateGroupMutation, SchemeGroupsQuery } from "graphql/generated";
 import { Link } from "react-router-dom";
 import AddGroup from "components/form-components/group/AddGroup";
+import { MutationUpdaterFn } from "@apollo/client";
 
 interface Props {
   data: SchemeGroupsQuery | undefined;
@@ -10,6 +11,7 @@ interface Props {
   setSearch: (value: string) => void;
   addGroup: boolean;
   toggleAddGroup: () => void;
+  updateGroupList: MutationUpdaterFn<CreateGroupMutation>;
 }
 
 const GroupList = ({
@@ -19,6 +21,7 @@ const GroupList = ({
   setSearch,
   addGroup,
   toggleAddGroup,
+  updateGroupList
 }: Props) => (
   <div className="list-view">
     <Row gutter={8} style={{ marginBottom: 10 }}>
@@ -74,7 +77,14 @@ const GroupList = ({
       width="400"
       onClose={toggleAddGroup}
     >
-      {addGroup ? <AddGroup onClose={toggleAddGroup} /> : <div />}
+      {addGroup ? (
+        <AddGroup
+          update={updateGroupList}
+          onClose={toggleAddGroup}
+        />
+      ) : (
+        <div />
+      )}
     </Drawer>
   </div>
 );

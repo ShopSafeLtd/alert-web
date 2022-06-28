@@ -3,8 +3,15 @@ import View from "./GroupList.view";
 import useGroupList from "./useGroupList";
 
 const GroupList = () => {
-  const { data, loading, search, setSearch, addGroup, toggleAddGroup } =
-    useGroupList();
+  const {
+    data,
+    loading,
+    search,
+    setSearch,
+    addGroup,
+    toggleAddGroup,
+    updateGroupList,
+  } = useGroupList();
   return (
     <View
       data={data}
@@ -13,6 +20,7 @@ const GroupList = () => {
       setSearch={setSearch}
       addGroup={addGroup}
       toggleAddGroup={toggleAddGroup}
+      updateGroupList={updateGroupList}
     />
   );
 };
