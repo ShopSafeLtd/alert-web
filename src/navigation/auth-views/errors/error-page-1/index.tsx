@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import Flex from 'components/shared-components/AntD/Flex';
 import { useStoreState } from 'state';
 
-const ErrorOne = () => {
+const ErrorOne = (): JSX.Element => {
   const theme = useStoreState((state) => state.theme.currentTheme);
   return (
     <div className={`h-100 ${theme === 'light' ? 'bg-white' : ''}`}>
@@ -25,7 +25,7 @@ const ErrorOne = () => {
                 Page not found
               </h1>
               <p className="font-size-md mb-4">
-                We've noticed you lost your way, no worries, we will help you to
+                We&apos;ve noticed you lost your way, no worries, we will help you to
                 found the correct path.
               </p>
               <Link to="/app">

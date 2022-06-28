@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { Card, Row, Col, Spin, Typography, Form, Input, Button } from "antd";
-import { LockOutlined } from "@ant-design/icons";
-import { useStoreState } from "state";
-import { useMutation, useQuery } from "@apollo/client";
-import { Verify, VerifyArgs, VerifyRes } from "graphql-src/auth/queries";
+import React, { useState, useEffect } from 'react';
+import { Card, Row, Col, Spin, Typography, Form, Input, Button } from 'antd';
+import { LockOutlined } from '@ant-design/icons';
+import { useStoreState } from 'state';
+import { useMutation, useQuery } from '@apollo/client';
+import { Verify, VerifyArgs, VerifyRes } from 'graphql-src/auth/queries';
 import {
   VerifyUser,
   VerifyUserArgs,
   VerifyUserRes,
-} from "graphql-src/auth/mutations";
-import styled from "styled-components";
-import { useAuth } from "hooks";
-import { useNavigate, useParams } from "react-router-dom";
+} from 'graphql-src/auth/mutations';
+import styled from 'styled-components';
+import { useAuth } from 'hooks';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Verifying = styled.div`
   display: flex;
@@ -33,9 +33,9 @@ const Header = styled(Typography.Title)`
   margin-top: 10px !important;
 `;
 
-const LoginOne = () => {
-  const navigate = useNavigate()
-  const params = useParams<{ id: string }>()
+const LoginOne = (): JSX.Element => {
+  const navigate = useNavigate();
+  const params = useParams<{ id: string }>();
   const theme = useStoreState((state) => state.theme.currentTheme);
   const token = useStoreState((state) => state.auth.token);
   const { onLoginSuccess } = useAuth();
@@ -45,7 +45,7 @@ const LoginOne = () => {
   const [expired, setExpired] = useState(false);
 
   useEffect(() => {
-    token && navigate("/app");
+    if (token) navigate('/app');
     // eslint-disable-next-line
   }, []);
 
@@ -69,31 +69,31 @@ const LoginOne = () => {
 
   const onSubmitPassword = async ({ password }: OnSubmitPasswordArgs) => {
     setLoading(true);
-    const { data } = await verify({
+    const { data: verifiedData } = await verify({
       variables: {
         id: params.id || '',
         password,
       },
     });
     setLoading(false);
-    if (data?.verifyUser)
+    if (verifiedData?.verifyUser)
       onLoginSuccess({
-        accessToken: data.verifyUser.access_token,
-        email: data.verifyUser.email,
-        fullName: data.verifyUser.fullName,
-        id: data.verifyUser.id,
-        onboarded: !data.verifyUser.newUser,
-        organisation: data.verifyUser.organisation,
+        accessToken: verifiedData.verifyUser.access_token,
+        email: verifiedData.verifyUser.email,
+        fullName: verifiedData.verifyUser.fullName,
+        id: verifiedData.verifyUser.id,
+        onboarded: !verifiedData.verifyUser.newUser,
+        organisation: verifiedData.verifyUser.organisation,
         schemes: [],
-        groups: []
+        groups: [],
       });
   };
 
   const backgroundStyle = {
     background:
-      theme === "dark"
-        ? "linear-gradient(to right, #283c86, #45a247)"
-        : "linear-gradient(to right, #11998e, #38ef7d)",
+      theme === 'dark'
+        ? 'linear-gradient(to right, #283c86, #45a247)'
+        : 'linear-gradient(to right, #11998e, #38ef7d)',
   };
 
   return (
@@ -107,13 +107,14 @@ const LoginOne = () => {
                   <img
                     className="img-fluid"
                     src={`/img/${
-                      theme === "light" ? "logo.svg" : "logo-white.svg"
+                      theme === 'light' ? 'logo.svg' : 'logo-white.svg'
                     }`}
                     alt=""
                     style={{ marginBottom: 20 }}
                   />
                 </div>
                 <Row justify="center">
+                  {/* eslint-disable-next-line no-nested-ternary */}
                   {expired ? (
                     <Verifying>
                       <VerifyingText type="danger">
@@ -135,7 +136,7 @@ const LoginOne = () => {
                           onFinish={onSubmitPassword}
                         >
                           <Welcome level={3}>
-                            Welcome {!!data ? data.verify.name : ""}!
+                            Welcome {data ? data.verify.name : ''}!
                           </Welcome>
                           <Header level={4}>Set New Password</Header>
                           <Description>
@@ -149,21 +150,21 @@ const LoginOne = () => {
                             rules={[
                               {
                                 required: true,
-                                message: "Please input your password",
+                                message: 'Please input your password',
                               },
                               {
                                 min: 8,
                                 message:
-                                  "Needs to be at least 8 characters long",
+                                  'Needs to be at least 8 characters long',
                               },
                               {
                                 pattern: RegExp(/\d/),
-                                message: "Requires at least one number",
+                                message: 'Requires at least one number',
                               },
                               {
                                 pattern: RegExp(/[a-zA-Z]/),
                                 message:
-                                  "Requires at least one uppercase and lowercase letter",
+                                  'Requires at least one uppercase and lowercase letter',
                               },
                             ]}
                           >
@@ -177,18 +178,19 @@ const LoginOne = () => {
                             rules={[
                               {
                                 required: true,
-                                message: "Please input your password",
+                                message: 'Please input your password',
                               },
                               ({ getFieldValue }) => ({
                                 validator(_, value) {
                                   if (
                                     !value ||
-                                    getFieldValue("password") === value
+                                    getFieldValue('password') === value
                                   ) {
                                     return Promise.resolve();
                                   }
+                                  // eslint-disable-next-line prefer-promise-reject-errors
                                   return Promise.reject(
-                                    "The two passwords that you entered do not match!"
+                                    'The two passwords that you entered do not match!'
                                   );
                                 },
                               }),

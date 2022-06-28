@@ -15,16 +15,18 @@ node_modules
 build
 coverage
 
-src/components/Form/Dealers
-src/components/Form/Distributors
-src/components/Form/Licences
-src/components/Form/PortalUser
-src/components/Form/PriceLists
-src/components/Form/Services
-src/components/Form/Terms
-
 src/serviceWorker.js
 src/setupTests.js
+src/old-components/*
+src/views/settings/*
+src/graphql/*
+src/graphql-src/*
+src/configs/*
+src/constants/*
+src/components/shared-components/*
+src/components/util-components/*
+src/components/layout-components/*
+src/components/form-components/*
 
 *.css
 

@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import React from 'react';
 import { Col, Row, Typography } from 'antd';
 import { IoLocationOutline } from 'react-icons/io5';
@@ -32,7 +33,7 @@ const Exclusion: React.FC<Props> = ({
   exclusion,
   activeExclusion,
   exclusionKey,
-}) => {
+}: Props) => {
   const { title, startDate, endDate, location } = exclusion;
   const expired = calcExpired(new Date(endDate));
   const active = activeExclusion?.includes(exclusionKey || ' ');
@@ -48,17 +49,16 @@ const Exclusion: React.FC<Props> = ({
             endDate
           ).toDateString()}`}</Typography.Text>
           {expired && (
-            <Typography.Text
-              type="secondary"
-              className="expired"
-            >{`- [ EXPIRED ]`}</Typography.Text>
+            <Typography.Text type="secondary" className="expired">
+              - [ EXPIRED ]
+            </Typography.Text>
           )}
         </Row>
         <Row align="top" wrap={false} className="location">
           <div className="icon-container">
             <IoLocationOutline color="#de4436" size={13} />
           </div>
-          <Typography.Text ellipsis={active ? false : true} type="secondary">
+          <Typography.Text ellipsis={!active} type="secondary">
             {location}
           </Typography.Text>
         </Row>

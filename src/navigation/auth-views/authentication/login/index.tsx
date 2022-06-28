@@ -1,10 +1,6 @@
-import React from 'react'
-import LoginOne from '../login-1'
+import React from 'react';
+import LoginOne from '../login-1';
 
-const Login = () => {
-	return (
-		<LoginOne allowRedirect={true} />
-	)
-}
+const Login = (): JSX.Element => <LoginOne allowRedirect />;
 
-export default Login
+export default Login;

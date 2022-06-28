@@ -1,29 +1,31 @@
-import React, { useState } from "react";
-import { Card, Row, Col, Form, Input, Button, message, Divider } from "antd";
-import { MailOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
-import { AUTH_PREFIX_PATH } from "configs/AppConfig";
-import { useMutation } from "@apollo/client";
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import React, { useState } from 'react';
+import { Card, Row, Col, Form, Input, Button, message, Divider } from 'antd';
+import { MailOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import { AUTH_PREFIX_PATH } from 'configs/AppConfig';
+import { useMutation } from '@apollo/client';
 import {
   ResetPassword,
   ResetPasswordArgs,
   ResetPasswordRes,
-} from "graphql-src/users/mutations";
-import { useStoreState } from "state";
+} from 'graphql-src/users/mutations';
+import { useStoreState } from 'state';
 
-const ForgotPassword = () => {
+const ForgotPassword = (): JSX.Element => {
   const theme = useStoreState((state) => state.theme.currentTheme);
   const backgroundStyle = {
     background:
-      theme === "dark"
-        ? "linear-gradient(to right, #cb2d3e, #ef473a)"
-        : "linear-gradient(to right, #cb2d3e, #ef473a)",
+      theme === 'dark'
+        ? 'linear-gradient(to right, #cb2d3e, #ef473a)'
+        : 'linear-gradient(to right, #cb2d3e, #ef473a)',
     // backgroundImage: "url(/img/others/img-17.jpg)",
     // backgroundRepeat: "no-repeat",
     // backgroundSize: "cover",
   };
 
-  let navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
@@ -41,7 +43,7 @@ const ForgotPassword = () => {
     });
     setTimeout(() => {
       setLoading(false);
-      message.success("New password has been sent to your email!");
+      message.success('New password has been sent to your email!');
     }, 1500);
   };
 
@@ -74,11 +76,11 @@ const ForgotPassword = () => {
                         rules={[
                           {
                             required: true,
-                            message: "Please input your email address",
+                            message: 'Please input your email address',
                           },
                           {
-                            type: "email",
-                            message: "Please enter a validate email!",
+                            type: 'email',
+                            message: 'Please enter a validate email!',
                           },
                         ]}
                       >
@@ -94,7 +96,7 @@ const ForgotPassword = () => {
                           htmlType="submit"
                           block
                         >
-                          {loading ? "Sending" : "Send"}
+                          {loading ? 'Sending' : 'Send'}
                         </Button>
                       </Form.Item>
                     </Form>

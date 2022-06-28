@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Button,
@@ -48,7 +51,7 @@ const ViewOffender: React.FC<Props> = ({
   close,
   offender,
   viewIncident,
-}) => {
+}: Props) => {
   const { images } = offender;
 
   const [imageIndex, setImageIndex] = useState<number>(0);
@@ -230,67 +233,65 @@ const ViewOffender: React.FC<Props> = ({
               onChange={(key) => setActiveIncident(key)}
               accordion
             >
-              {offender?.incidents?.map((el: any) => {
-                return (
-                  <Panel
-                    header={
-                      <IncidentListItem
-                        incident={el}
-                        incidentKey={el.id}
-                        activeIncident={activeIncident}
-                      />
-                    }
-                    key={el.id}
-                  >
-                    <Row>
-                      <Col flex="100px">
-                        {incidentLightBoxImages?.length ? (
-                          <img
-                            className="incident-image"
-                            alt=""
-                            onClick={() =>
-                              toggleLightBox({
-                                images: incidentLightBoxImages,
-                                index: 0,
-                              })
-                            }
-                            style={{
-                              backgroundImage: `url(${incidentLightBoxImages[0]})`,
-                            }}
-                          />
-                        ) : (
-                          <div className="no-image">
-                            <IoImagesOutline color="#959595" size="18px" />
-                            <Typography.Text>No Images</Typography.Text>
-                          </div>
-                        )}
-                      </Col>
-                      <Col flex="12px" />
-                      <Col flex="1">
-                        <Row>
-                          <Typography.Text className="description">
-                            {el.description || '[ No description available ]'}
-                          </Typography.Text>
-                        </Row>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Typography.Text type="secondary" className="description">
-                        Reported by: {el.createdBy.fullName} -{' '}
-                        {el.createdBy.organisation}
-                      </Typography.Text>
-                    </Row>
-                    <Row>
-                      <Button
-                        onClick={() => handleViewIncident(el.id)}
-                        type="text"
-                      >
-                        View Incident
-                      </Button>
-                    </Row>
-                  </Panel>
-                );
-              })}
+              {offender?.incidents?.map((el: any) => (
+                <Panel
+                  header={
+                    <IncidentListItem
+                      incident={el}
+                      incidentKey={el.id}
+                      activeIncident={activeIncident}
+                    />
+                  }
+                  key={el.id}
+                >
+                  <Row>
+                    <Col flex="100px">
+                      {incidentLightBoxImages?.length ? (
+                        <img
+                          className="incident-image"
+                          alt=""
+                          onClick={() =>
+                            toggleLightBox({
+                              images: incidentLightBoxImages,
+                              index: 0,
+                            })
+                          }
+                          style={{
+                            backgroundImage: `url(${incidentLightBoxImages[0]})`,
+                          }}
+                        />
+                      ) : (
+                        <div className="no-image">
+                          <IoImagesOutline color="#959595" size="18px" />
+                          <Typography.Text>No Images</Typography.Text>
+                        </div>
+                      )}
+                    </Col>
+                    <Col flex="12px" />
+                    <Col flex="1">
+                      <Row>
+                        <Typography.Text className="description">
+                          {el.description || '[ No description available ]'}
+                        </Typography.Text>
+                      </Row>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Typography.Text type="secondary" className="description">
+                      Reported by: {el.createdBy.fullName} -{' '}
+                      {el.createdBy.organisation}
+                    </Typography.Text>
+                  </Row>
+                  <Row>
+                    <Button
+                      onClick={() => handleViewIncident(el.id)}
+                      type="text"
+                    >
+                      View Incident
+                    </Button>
+                  </Row>
+                </Panel>
+              ))}
             </Collapse>
           ) : (
             <Row>
@@ -305,36 +306,34 @@ const ViewOffender: React.FC<Props> = ({
           <Typography.Title level={3}>Exclusions</Typography.Title>
           {offender.bans?.length ? (
             <Collapse ghost onChange={(key) => setActiveExclusion(key)}>
-              {offender?.bans?.map((el: any, i: string | number) => {
-                return (
-                  <Panel
-                    header={
-                      <ExclusionListItem
-                        exclusion={el}
-                        exclusionKey={el.id}
-                        activeExclusion={activeExclusion}
-                      />
-                    }
-                    key={i}
-                  >
-                    <Row>
-                      <Typography.Text>{el.description}</Typography.Text>
-                    </Row>
-                    <Row>
-                      <Typography.Text>{`Start: ${new Date(
-                        el.startDate
-                      ).toDateString()}`}</Typography.Text>
-                    </Row>
-                    <Row>
-                      <Typography.Text type="secondary">{`Duration: ${calcDuration(
-                        new Date(el.startDate),
-                        new Date(el.endDate)
-                      )}`}</Typography.Text>
-                    </Row>
-                    <Divider />
-                  </Panel>
-                );
-              })}
+              {offender?.bans?.map((el: any) => (
+                <Panel
+                  header={
+                    <ExclusionListItem
+                      exclusion={el}
+                      exclusionKey={el.id}
+                      activeExclusion={activeExclusion}
+                    />
+                  }
+                  key={el.id}
+                >
+                  <Row>
+                    <Typography.Text>{el.description}</Typography.Text>
+                  </Row>
+                  <Row>
+                    <Typography.Text>{`Start: ${new Date(
+                      el.startDate
+                    ).toDateString()}`}</Typography.Text>
+                  </Row>
+                  <Row>
+                    <Typography.Text type="secondary">{`Duration: ${calcDuration(
+                      new Date(el.startDate),
+                      new Date(el.endDate)
+                    )}`}</Typography.Text>
+                  </Row>
+                  <Divider />
+                </Panel>
+              ))}
             </Collapse>
           ) : (
             <Row>

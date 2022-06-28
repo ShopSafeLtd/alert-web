@@ -1,25 +1,31 @@
-import React from "react";
-import { ListIncidentsQuery } from "graphql/generated";
-import { Row, Col, Skeleton, Typography, Divider, Pagination } from "antd";
-import { Link } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClock, faUser } from "@fortawesome/pro-light-svg-icons";
+import React from 'react';
+import { ListIncidentsQuery } from 'graphql/generated';
+import { Row, Col, Skeleton, Typography, Divider, Pagination } from 'antd';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClock, faUser } from '@fortawesome/pro-light-svg-icons';
 
 interface Props {
   data: ListIncidentsQuery | undefined;
-  loading: boolean;
+  // loading: boolean;
+  // eslint-disable-next-line react/require-default-props
   current?: string;
   onPaginationChange: (page: number, pageSize: number) => void;
 }
 
-const IncidentSideList = ({ data, loading, current, onPaginationChange }: Props) => (
+const IncidentSideList = ({
+  data,
+  // loading,
+  current,
+  onPaginationChange,
+}: Props): JSX.Element => (
   <div className="incidents-side-list">
     {data?.listIncidents?.incidents.map((incident) => (
       <Link to={`/app/incidents/view/${incident.id}`}>
         <div
           key={incident.id}
           className={
-            current === incident.id ? "incident-item current" : "incident-item"
+            current === incident.id ? 'incident-item current' : 'incident-item'
           }
         >
           <Row wrap={false}>
@@ -36,10 +42,7 @@ const IncidentSideList = ({ data, loading, current, onPaginationChange }: Props)
               )}
             </Col>
             <Col className="incident-item-content" flex={1}>
-              <Typography.Text
-                strong={current === incident.id}
-                ellipsis
-              >
+              <Typography.Text strong={current === incident.id} ellipsis>
                 {incident.subject}
               </Typography.Text>
               <Typography.Paragraph
@@ -66,7 +69,7 @@ const IncidentSideList = ({ data, loading, current, onPaginationChange }: Props)
                 ellipsis
               >
                 <FontAwesomeIcon className="incident-item-icon" icon={faUser} />
-                {incident.createdBy.fullName} -{" "}
+                {incident.createdBy.fullName} -{' '}
                 {incident.createdBy.organisation}
               </Typography.Paragraph>
             </Col>

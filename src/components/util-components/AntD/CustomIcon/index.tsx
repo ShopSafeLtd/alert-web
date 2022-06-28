@@ -1,4 +1,5 @@
-import React from 'react'
+/* eslint-disable react/require-default-props */
+import React from 'react';
 import Icon from '@ant-design/icons';
 
 interface Props {
@@ -6,6 +7,8 @@ interface Props {
   className?: string;
 }
 
-const CustomIcon = React.forwardRef((props: Props, _) => <Icon component={props.svg} className={props.className}/>)
+const CustomIcon = React.forwardRef((props: Props) => (
+  <Icon component={props.svg} className={props.className} />
+));
 
-export default CustomIcon
+export default CustomIcon;

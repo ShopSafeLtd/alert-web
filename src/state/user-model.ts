@@ -1,5 +1,6 @@
-import { action, Action } from "easy-peasy";
-import { Role } from "graphql/generated";
+/* eslint-disable no-param-reassign */
+import { action, Action } from 'easy-peasy';
+import { Role } from 'graphql/generated';
 
 export interface SetUserPayload {
   id: string;
@@ -48,11 +49,11 @@ export interface UserModel {
 }
 
 const userModel: UserModel = {
-  id: "",
-  email: "",
-  fullName: "",
-  picture: "",
-  organisation: "",
+  id: '',
+  email: '',
+  fullName: '',
+  picture: '',
+  organisation: '',
   onboarded: false,
   role: Role.User,
   schemes: [],
@@ -71,11 +72,11 @@ const userModel: UserModel = {
     state.role = payload.role;
   }),
   clearUser: action((state) => {
-    state.id = "";
-    state.email = "";
-    state.fullName = "";
-    state.picture = "";
-    state.organisation = "";
+    state.id = '';
+    state.email = '';
+    state.fullName = '';
+    state.picture = '';
+    state.organisation = '';
     state.onboarded = false;
     state.schemes = [];
     state.role = Role.User;

@@ -17,7 +17,7 @@ interface Props {
  *@param actions - handler functions for the menu items.
  * @returns JSX.Element containing menu component to pass to CardLayout as the menu prop.
  */
-const Menu: React.FC<Props> = ({ id, actions }) => {
+const Menu: React.FC<Props> = ({ id, actions }: Props) => {
   const addExclusion = () => actions.addExclusion(id);
   const deleteOffender = () => actions.deleteOffender(id);
   return (

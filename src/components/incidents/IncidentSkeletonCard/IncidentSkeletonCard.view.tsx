@@ -1,8 +1,7 @@
 import React from 'react'
 import { Card, Skeleton, Tabs } from 'antd'
 
-const IncidentSkeletonCard = () => {
- return (
+const IncidentSkeletonCard = ():JSX.Element => (
     <Card className="incident-card">
       <Skeleton.Image />
       <Tabs size="middle" defaultActiveKey="DETAILS">
@@ -21,6 +20,5 @@ const IncidentSkeletonCard = () => {
       </Tabs>
     </Card>
  )
-}
 
 export default IncidentSkeletonCard

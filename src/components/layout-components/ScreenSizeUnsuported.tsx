@@ -7,7 +7,7 @@ interface Props {
   children: JSX.Element;
 }
 
-const ScreenSizeUnsuported: React.FC<Props> = ({ children }) => {
+const ScreenSizeUnsuported: React.FC<Props> = ({ children }: Props) => {
   const isSupported = useMediaQuery({ minWidth: 1024 });
 
   return isSupported ? (

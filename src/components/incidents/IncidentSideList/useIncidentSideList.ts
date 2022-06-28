@@ -8,7 +8,7 @@ import { useStoreState, IncidentSort, useStoreActions } from "state";
 
 interface Return {
   data: ListIncidentsQuery | undefined;
-  loading: boolean;
+  // loading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
 }
 
@@ -19,7 +19,9 @@ const useIncidentSideList = (): Return => {
   const variables = useStoreState((state) => state.data.incidents.variables);
   const setIncidentsState = useStoreActions(actions => actions.data.setIncidents)
 
-  const { data, loading } = useListIncidentsQuery({
+  const { data, 
+    // loading 
+  } = useListIncidentsQuery({
     variables: {
       scheme: {
         id: schemeId,
@@ -94,7 +96,7 @@ const useIncidentSideList = (): Return => {
 
   return {
     data,
-    loading,
+    // loading,
     onPaginationChange
   };
 };

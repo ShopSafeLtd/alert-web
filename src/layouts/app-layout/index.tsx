@@ -24,10 +24,11 @@ const { Content } = Layout;
 const { useBreakpoint } = Grid;
 
 interface Props {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   location: any;
 }
 
-export const AppLayout = ({ location }: Props) => {
+export const AppLayout = ({ location }: Props): JSX.Element => {
   const loggedIn = useStoreState((state) => state.auth.loggedIn);
   const navCollapsed = useStoreState((state) => state.theme.navCollapsed);
   const navType = useStoreState((state) => state.theme.navType);

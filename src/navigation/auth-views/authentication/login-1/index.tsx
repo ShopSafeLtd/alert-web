@@ -1,9 +1,9 @@
 import React from 'react';
-import LoginForm, { Props } from '../../components/LoginForm';
 import { Card, Row, Col } from 'antd';
 import { useStoreState } from 'state';
+import { LoginForm, Props } from '../../components/LoginForm';
 
-const LoginOne = (props: Props) => {
+const LoginOne = (props: Props): JSX.Element => {
   const theme = useStoreState((state) => state.theme.currentTheme);
 
   const backgroundStyle = {
@@ -23,6 +23,7 @@ const LoginOne = (props: Props) => {
                 <div className="text-center">
                   <img
                     className="img-fluid"
+                    // eslint-disable-next-line no-constant-condition
                     src={`/img/${'dark' ? 'logo.png' : 'logo-white.png'}`}
                     alt=""
                   />
@@ -30,6 +31,7 @@ const LoginOne = (props: Props) => {
                 </div>
                 <Row justify="center">
                   <Col xs={24} sm={24} md={20} lg={20}>
+                    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
                     <LoginForm {...props} />
                   </Col>
                 </Row>

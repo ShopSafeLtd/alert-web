@@ -1,8 +1,19 @@
-import { useApolloClient } from "@apollo/client";
-import { useStoreActions, useStoreState, SetUserPayload } from "state";
-import jwtDecode from "jwt-decode";
-import LogRocket from "logrocket";
-import { useCurrentUserLazyQuery, useSignInMutation, CurrentUserDocument, CurrentUserQuery } from 'graphql/generated'
+/* eslint-disable no-console */
+import { useApolloClient } from '@apollo/client';
+import { useStoreActions, useStoreState, SetUserPayload } from 'state';
+import jwtDecode from 'jwt-decode';
+import LogRocket from 'logrocket';
+import {
+  useCurrentUserLazyQuery,
+  useSignInMutation,
+  CurrentUserDocument,
+  CurrentUserQuery,
+} from 'graphql/generated';
+
+interface LoginArgs {
+  email: string;
+  password: string;
+}
 
 interface DecodedToken {
   aud: string;
@@ -17,8 +28,17 @@ interface DecodedToken {
   sub: string;
   updated_at: string;
 }
-
-export const useAuth = () => {
+interface Return {
+  login: ({ email, password }: LoginArgs) => void;
+  rehydrateAuth: () => void;
+  signOut: () => void;
+  onLoginSuccess: (data: OnLoginSuccessArgs) => void;
+  getCurrentUser: () => void;
+}
+interface OnLoginSuccessArgs extends SetUserPayload {
+  accessToken: string;
+}
+const useAuth = ():Return => {
   const client = useApolloClient();
   const authenticated = useStoreActions(
     (actions) => actions.auth.authenticated
@@ -46,13 +66,13 @@ export const useAuth = () => {
     organisation,
     onboarded,
     schemes,
-    groups
+    groups,
   }: HandleSuccessArgs) => {
-    window.localStorage.setItem("accessToken", accessToken);
+    window.localStorage.setItem('accessToken', accessToken);
 
     const handleNoValidScheme = () => {
       const schemeDetails = schemes[0]?.scheme;
-      window.localStorage.setItem("currentScheme", schemeDetails?.id);
+      window.localStorage.setItem('currentScheme', schemeDetails?.id);
       setRole({ role: schemes[0]?.role });
       setScheme({
         autoApproveIncidents: schemeDetails?.autoApproveIncidents,
@@ -63,9 +83,10 @@ export const useAuth = () => {
     };
 
     const scheme =
-      currentScheme || window.localStorage.getItem("currentScheme");
+      currentScheme || window.localStorage.getItem('currentScheme');
     if (scheme) {
       const schemeDetails = schemes?.find(
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         ({ scheme: { id } }) => id === scheme
       );
       if (schemeDetails) {
@@ -83,7 +104,7 @@ export const useAuth = () => {
       handleNoValidScheme();
     }
 
-    LogRocket.identify(id!, {
+    LogRocket.identify(id, {
       fullName,
       email,
     });
@@ -95,17 +116,32 @@ export const useAuth = () => {
       organisation,
       onboarded,
       schemes,
-      groups
+      groups,
     });
     authenticated(accessToken);
   };
-
+  const [getCurrentUser] = useCurrentUserLazyQuery({
+    onCompleted: ({ currentUser }) => {
+      handleSuccess({
+        id: currentUser?.id || '',
+        email: currentUser?.email || '',
+        fullName: currentUser?.fullName || '',
+        accessToken: window.localStorage.getItem('accessToken') || '',
+        organisation: currentUser?.organisation || '',
+        onboarded: currentUser?.newUser || true,
+        schemes: currentUser?.schemes || [],
+        groups: currentUser?.groups || [],
+      });
+    },
+    onError: () => expired(),
+    fetchPolicy: 'cache-and-network',
+  });
   const rehydrateAuth = () => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (!!accessToken) {
-      let token: DecodedToken = jwtDecode(accessToken);
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      const token: DecodedToken = jwtDecode(accessToken);
       if (new Date().getTime() < token.exp * 1000) {
-        if (token.iss === "https://alert.eu.auth0.com/") {
+        if (token.iss === 'https://alert.eu.auth0.com/') {
           getCurrentUser({
             context: {
               headers: {
@@ -124,17 +160,14 @@ export const useAuth = () => {
     }
   };
 
-  interface OnLoginSuccessArgs extends SetUserPayload {
-    accessToken: string;
-  }
+
 
   const onLoginSuccess = (data: OnLoginSuccessArgs) => {
-    window.localStorage.setItem("accessToken", data.accessToken);
+    window.localStorage.setItem('accessToken', data.accessToken);
 
-    const scheme = window.localStorage.getItem("currentScheme");
-    if (scheme) {
-    } else {
-      window.localStorage.setItem("currentScheme", data.schemes[0].scheme.id);
+    const scheme = window.localStorage.getItem('currentScheme');
+    if (!scheme) {
+      window.localStorage.setItem('currentScheme', data.schemes[0].scheme.id);
     }
 
     LogRocket.identify(data.id, {
@@ -150,7 +183,7 @@ export const useAuth = () => {
       onboarded: data.onboarded,
       organisation: data.organisation,
       schemes: data.schemes,
-      groups: data.groups
+      groups: data.groups,
     });
   };
 
@@ -159,7 +192,7 @@ export const useAuth = () => {
       try {
         const { data } = await client.query<CurrentUserQuery>({
           query: CurrentUserDocument,
-          fetchPolicy: "network-only",
+          fetchPolicy: 'network-only',
           context: {
             headers: {
               authorization: `Bearer ${signIn?.accessToken}`,
@@ -173,11 +206,12 @@ export const useAuth = () => {
           fullName: data.currentUser?.fullName || '',
           id: data.currentUser?.id || '',
           onboarded: data.currentUser?.newUser || false,
-          organisation: data.currentUser?.organisation ||'',
+          organisation: data.currentUser?.organisation || '',
           schemes: data.currentUser?.schemes || [],
-          groups: data.currentUser?.groups || []
+          groups: data.currentUser?.groups || [],
         });
-      } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (err: any) {
         setAuthMessage(err.message);
         console.log(err);
       }
@@ -189,30 +223,9 @@ export const useAuth = () => {
     },
   });
 
-  const [getCurrentUser] = useCurrentUserLazyQuery({
-    onCompleted: ({ currentUser }) => {
-      handleSuccess({
-        id: currentUser?.id || '',
-        email: currentUser?.email || '',
-        fullName: currentUser?.fullName || '',
-        accessToken: window.localStorage.getItem("accessToken")!,
-        organisation: currentUser?.organisation || '',
-        onboarded: currentUser?.newUser || true,
-        schemes: currentUser?.schemes || [],
-        groups: currentUser?.groups || []
-      });
-    },
-    onError: (error) => expired(),
-    fetchPolicy: 'cache-and-network'
-  });
-
-  interface LoginArgs {
-    email: string;
-    password: string;
-  }
 
   const login = ({ email, password }: LoginArgs) => {
-    window.localStorage.removeItem("accessToken");
+    window.localStorage.removeItem('accessToken');
     handleLogin({
       variables: {
         email,
@@ -236,3 +249,5 @@ export const useAuth = () => {
     getCurrentUser,
   };
 };
+
+export default useAuth;

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react/require-default-props */
 import React from 'react';
 import { Col, Row, Typography } from 'antd';
 import moment from 'moment-timezone';
@@ -18,7 +20,7 @@ const Incident: React.FC<Props> = ({
   incident,
   incidentKey,
   activeIncident,
-}) => {
+}: Props) => {
   const { subject, date, location } = incident;
   // const active = activeIncident?.includes(incidentKey || ' ');
   // const active = activeIncident === incidentKey;
@@ -39,7 +41,7 @@ const Incident: React.FC<Props> = ({
           <div className="icon-container">
             <IoLocationOutline color="#de4436" size={13} />
           </div>
-          <Typography.Text ellipsis={active ? false : true} type="secondary">
+          <Typography.Text ellipsis={!active} type="secondary">
             {location.full}
           </Typography.Text>
         </Row>

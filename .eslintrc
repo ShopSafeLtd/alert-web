@@ -10,12 +10,8 @@
   "parserOptions": {
     "project": "./tsconfig.json"
   },
-  "plugins": ["@typescript-eslint", "formatjs"],
+  "plugins": ["@typescript-eslint"],
   "rules": {
-     "formatjs/enforce-id": [
-      "error"
-    ],
-    "formatjs/no-offset": "error",
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-explicit-any": "error"
   }

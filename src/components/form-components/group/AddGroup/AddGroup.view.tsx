@@ -1,6 +1,6 @@
-import React from "react";
-import { Button, Col, Form, Input, Row, Select } from "antd";
-import { ListSchemeUsersQuery } from "graphql/generated";
+import React from 'react';
+import { Button, Col, Form, Input, Row, Select } from 'antd';
+import { ListSchemeUsersQuery } from 'graphql/generated';
 
 interface FormData {
   name: string;
@@ -23,7 +23,7 @@ const AddGroup = ({
   usersLoading,
   saving,
   setSaving,
-}: Props) => (
+}: Props): JSX.Element => (
   <Form layout="vertical" onFinish={onSubmit}>
     <Row gutter={16}>
       <Col span={18}>
@@ -33,7 +33,7 @@ const AddGroup = ({
           rules={[
             {
               required: true,
-              message: "Please enter a name for the new group.",
+              message: 'Please enter a name for the new group.',
             },
           ]}
         >
@@ -48,7 +48,7 @@ const AddGroup = ({
           rules={[
             {
               required: true,
-              message: "Please enter a description for the new group.",
+              message: 'Please enter a description for the new group.',
             },
           ]}
         >
@@ -65,7 +65,7 @@ const AddGroup = ({
           rules={[
             {
               required: true,
-              message: "Please selected at least one group for a user.",
+              message: 'Please selected at least one group for a user.',
             },
           ]}
         >
