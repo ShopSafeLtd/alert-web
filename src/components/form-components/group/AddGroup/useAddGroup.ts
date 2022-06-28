@@ -4,12 +4,21 @@ import {
   ListSchemeUsersQuery,
   useListSchemeUsersQuery,
   SortOrder,
+  SchemeGroupsQuery,
+  SchemeGroupsDocument,
+  CreateGroupMutation
 } from "graphql/generated";
 import { useStoreState } from "state";
+import { MutationUpdaterFn } from "@apollo/client";
 
 interface FormData {
   name: string;
   description: string;
+}
+
+interface Props {
+  onClose: () => void;
+  update: MutationUpdaterFn<CreateGroupMutation>;
 }
 
 interface Return {
@@ -20,7 +29,7 @@ interface Return {
   setSaving: (value: boolean) => void;
 }
 
-const useAddGroup = (onClose: () => void): Return => {
+const useAddGroup = ({ onClose, update }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
 
@@ -57,6 +66,7 @@ const useAddGroup = (onClose: () => void): Return => {
       setSaving(false);
       onClose();
     },
+    update
   });
   // const [inviteExistingUser] = useInviteExistingUserMutation()
 
