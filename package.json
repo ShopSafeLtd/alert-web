@@ -7,7 +7,6 @@
     "@date-io/core": "^1.3.6",
     "@date-io/moment": "1.3.13",
     "@auth0/auth0-react": "^1.9.0",
-
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/pro-light-svg-icons": "^6.1.1",
     "@fortawesome/pro-solid-svg-icons": "^6.1.1",
@@ -117,6 +116,7 @@
     "buildOnly": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "prepare": "husky install",
     "build": "gulp build && npm run buildOnly",
     "dev": "concurrently \"npm run start\" \"gulp watch\"",
     "generate": "graphql-codegen --config codegen.yml"
@@ -158,6 +158,7 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^1.7.0",
+    "husky": ">=6",
     "gulp": "^4.0.2",
     "gulp-csso": "^4.0.1",
     "gulp-debug": "^4.0.0",
