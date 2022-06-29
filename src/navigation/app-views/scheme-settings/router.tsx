@@ -1,18 +1,20 @@
 import React from "react";
 import { Routes, Route } from "react-router";
-import AdminMenu from "../../../old-components/admin/AdminMenu";
-
 import UserList from "views/settings/users/UserList";
 import ViewUser from "views/settings/users/UserDetail";
+import GroupList from "views/settings/groups/GroupList";
+import ViewGroup from "views/settings/groups/GroupDetail";
+import ChatGroupsList from "views/settings/chats/ChatList";
+import DataRetention from "old-components/admin/DataRetention";
+import { RecycleBin } from "old-components/admin/recycle-bin";
+import AdminMenu from "../../../old-components/admin/AdminMenu";
+
 
 // import ViewUser from "../../../old-components/users/view/ViewUser/ViewUser";
 import AddUser from "../../../old-components/users/add/AddUser/AddUser";
 
-import GroupList from "views/settings/groups/GroupList";
-import ViewGroup from "views/settings/groups/GroupDetail";
 import AddGroup from "../../../old-components/groups/add/AddGroup/AddGroup";
 
-import ChatGroupsList from "views/settings/chats/ChatList";
 
 import ViewChatGroup from "../../../old-components/admin/chat-groups/view/ViewChatGroup";
 import AddChatGroup from "../../../old-components/admin/chat-groups/add/AddChatGroup";
@@ -25,7 +27,6 @@ import SchemeTerms from "../../../old-components/admin/terms/SchemeTerms";
 
 import AutoApprove from "../../../old-components/admin/AutoApprove";
 
-import DataRetention from "old-components/admin/DataRetention";
 
 import OffenderWarnings from "../../../old-components/admin/offender-warnings/OffenderWarningsList";
 import ViewOffenderWarnings from "../../../old-components/admin/offender-warnings/EditOffenderWarnings";
@@ -33,10 +34,8 @@ import AddOffenderWarnings from "../../../old-components/admin/offender-warnings
 
 import CrimeTypes from "../../../old-components/admin/crime-types/CrimeTypes";
 
-import { RecycleBin } from "old-components/admin/recycle-bin";
 
-const SchemeSettings = () => {
-  return (
+const SchemeSettings = () => (
     <Routes>
       <Route path="*" element={<AdminMenu />} />
       {/* users */}
@@ -100,6 +99,5 @@ const SchemeSettings = () => {
       <Route path="recycle-bin" element={<RecycleBin />} />
     </Routes>
   );
-};
 
 export default SchemeSettings;

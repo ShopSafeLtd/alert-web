@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import { Input } from 'antd';
 import {
@@ -26,25 +28,23 @@ const SearchFilterBar: React.FC<Props> = ({
   searchInput,
   setSearchInput,
   openFilter,
-}) => {
-  return (
-    <div className="search-filter-bar">
-      <div className="input-container">
-        <Input
-          placeholder="Search..."
-          size="large"
-          prefix={<SearchOutlined className="search-icon" />}
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-        />
-      </div>
-      <div className="icons-container" onClick={openFilter}>
-        <FilterOutlined className="icon filter" />
-        <ArrowUpOutlined className="icon arrow up" />
-        <ArrowDownOutlined className="icon arrow down" />
-      </div>
+}: Props) => (
+  <div className="search-filter-bar">
+    <div className="input-container">
+      <Input
+        placeholder="Search..."
+        size="large"
+        prefix={<SearchOutlined className="search-icon" />}
+        value={searchInput}
+        onChange={(e) => setSearchInput(e.target.value)}
+      />
     </div>
-  );
-};
+    <div className="icons-container" onClick={openFilter}>
+      <FilterOutlined className="icon filter" />
+      <ArrowUpOutlined className="icon arrow up" />
+      <ArrowDownOutlined className="icon arrow down" />
+    </div>
+  </div>
+);
 
 export default SearchFilterBar;

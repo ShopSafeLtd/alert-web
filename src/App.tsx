@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import Views from "navigation/router";
 import { ThemeSwitcherProvider } from "react-css-theme-switcher";
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { ThemeProvider, StylesProvider } from "@material-ui/styles";
 import LogRocket from "logrocket";
 import { createMuiTheme } from "@material-ui/core/styles";
@@ -11,7 +12,7 @@ import ApolloProvider from "./providers/ApolloProvider";
 
 import { ThemeConfig, Store } from "./state";
 
-LogRocket.init("ub3rsv/gotalk-portal");
+LogRocket.init("ub3rsv/gotalk-portal"); 
 
 const themes = {
   dark: `${process.env.PUBLIC_URL}/css/dark-theme.css`,

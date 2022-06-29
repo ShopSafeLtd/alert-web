@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { action, Action } from "easy-peasy";
 
 export enum IncidentSort {

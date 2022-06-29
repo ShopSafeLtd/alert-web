@@ -1,7 +1,10 @@
-import React, { useState } from "react";
-import { Grid, Drawer } from "antd";
-import utils from "utils";
-import { MenuOutlined } from "@ant-design/icons";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/require-default-props */
+import React, { useState } from 'react';
+import { Grid, Drawer } from 'antd';
+import utils from 'utils';
+import { MenuOutlined } from '@ant-design/icons';
 import CSS from 'csstype';
 
 const { useBreakpoint } = Grid;
@@ -12,11 +15,11 @@ interface SideContentProps {
   border?: boolean;
 }
 
-export const SideContent = (props: SideContentProps) => {
+export const SideContent = (props: SideContentProps): JSX.Element => {
   const { sideContent, sideContentWidth = 150, border } = props;
   return (
     <div
-      className={`side-content ${border ? "with-border" : ""}`}
+      className={`side-content ${border ? 'with-border' : ''}`}
       style={{ width: `${sideContentWidth}px` }}
     >
       {sideContent}
@@ -56,11 +59,11 @@ interface InnerAppLayoutProps {
   contentStyle?: CSS.Properties;
 }
 
-export const InnerAppLayout = (props: InnerAppLayoutProps) => {
+export const InnerAppLayout = (props: InnerAppLayoutProps): JSX.Element => {
   const { mainContent, pageHeader, sideContentGutter = true } = props;
-  const isMobile = !utils.getBreakPoint(useBreakpoint()).includes("lg");
+  const isMobile = !utils.getBreakPoint(useBreakpoint()).includes('lg');
   const [visible, setVisible] = useState(false);
-
+  const { style, contentStyle } = props;
   const close = () => {
     setVisible(false);
   };
@@ -70,7 +73,8 @@ export const InnerAppLayout = (props: InnerAppLayoutProps) => {
   };
 
   return (
-    <div className="inner-app-layout" style={props.style}>
+    // @ts-ignore
+    <div className="inner-app-layout" style={style}>
       {isMobile ? (
         <SideContentMobile
           visible={visible}
@@ -81,15 +85,16 @@ export const InnerAppLayout = (props: InnerAppLayoutProps) => {
         <SideContent {...props} />
       )}
       <div
-        className={`main-content ${pageHeader ? "has-page-header" : ""} ${
-          sideContentGutter ? "gutter" : "no-gutter"
+        className={`main-content ${pageHeader ? 'has-page-header' : ''} ${
+          sideContentGutter ? 'gutter' : 'no-gutter'
         }`}
-        style={{ display: "flex", ...props.contentStyle }}
+        // @ts-ignore
+        style={{ display: 'flex', ...contentStyle }}
       >
         {isMobile ? (
           <div
             className={`font-size-lg mb-3 ${
-              !sideContentGutter ? "pt-3 px-3" : ""
+              !sideContentGutter ? 'pt-3 px-3' : ''
             }`}
           >
             <MenuOutlined onClick={() => openSideContentMobile()} />

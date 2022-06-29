@@ -11,8 +11,7 @@ interface Props {
  *
  * @description Renders a kebab menu, which, when clicked, will display the content provided in the options prop.
  */
-const Menu: React.FC<Props> = ({ options }) => {
-  return (
+const Menu: React.FC<Props> = ({ options }: Props) => (
     <div className="dropdown-menu">
       <Dropdown overlay={options} trigger={['hover']} placement="bottomRight">
         <div className="kebab">
@@ -23,6 +22,5 @@ const Menu: React.FC<Props> = ({ options }) => {
       </Dropdown>
     </div>
   );
-};
 
 export default Menu;

@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-param-reassign */
+
 import { action, Action } from 'easy-peasy';
 
 export enum NavType {
@@ -124,7 +127,8 @@ export interface ThemeModel {
 const themeModel: ThemeModel = {
   ...ThemeConfig,
 
-  clearNav: action((state, payload) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  clearNav: action((state, _payload) => {
     state.backLinkTo = ThemeConfig.backLinkTo;
     state.currentTheme = ThemeConfig.currentTheme;
     state.headerNavColor = ThemeConfig.headerNavColor;

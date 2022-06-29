@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import AppLayout from "layouts/app-layout";
-import AuthLayout from "layouts/auth-layout";
-import AppLocale from "lang";
-import { IntlProvider } from "react-intl";
-import { ConfigProvider } from "antd";
-import { useStoreState } from "state";
-import Loading from "./auth-views/authentication/loading";
-import { useAuth } from "hooks";
-import { useQuery } from "@apollo/client";
-import { UserNew, UserNewArgs, UserNewRes } from "graphql-src/users/queries";
+import React, { useEffect, useState } from 'react';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import AppLayout from 'layouts/app-layout';
+import AuthLayout from 'layouts/auth-layout';
+import AppLocale from 'lang';
+import { IntlProvider } from 'react-intl';
+import { ConfigProvider } from 'antd';
+import { useStoreState } from 'state';
+import { useAuth } from 'hooks';
+import { useQuery } from '@apollo/client';
+import { UserNew, UserNewArgs, UserNewRes } from 'graphql-src/users/queries';
+import Loading from './auth-views/authentication/loading';
 
-import PrimaryOnboarding from "../old-components/users/onboard/Primary/PrimaryOnboarding";
+import PrimaryOnboarding from '../old-components/users/onboard/Primary/PrimaryOnboarding';
 
 export const Views = () => {
-  const [newUserId, setNewUserId] = useState<string>("");
+  const [newUserId, setNewUserId] = useState<string>('');
 
   const locale = useStoreState((state) => state.theme.locale);
   const isSet = useStoreState((state) => state.auth.isSet);
 
   const location = useLocation();
 
-  // @ts-expect-error
+  // @ts-expect-error ???
   const currentAppLocale = AppLocale[locale];
 
   const { rehydrateAuth } = useAuth();
@@ -32,14 +32,14 @@ export const Views = () => {
   }, []);
 
   useEffect(() => {
-    let newUserId = location?.pathname?.split("/onboarding/")[1] || "";
-    if (newUserId !== "password") {
-      setNewUserId(newUserId);
+    const newUserIdCheck = location?.pathname?.split('/onboarding/')[1] || '';
+    if (newUserIdCheck !== 'password') {
+      setNewUserId(newUserIdCheck);
     }
   }, []);
 
   const { data } = useQuery<UserNewRes, UserNewArgs>(UserNew, {
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
     variables: {
       id: newUserId,
     },

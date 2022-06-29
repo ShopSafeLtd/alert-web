@@ -1,3 +1,7 @@
+/* eslint-disable react/default-props-match-prop-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/require-default-props */
+/* eslint-disable react/jsx-props-no-spreading */
 import React from "react";
 import { Card } from "antd";
 import ApexChart, { Props as DefaultChatProps } from "react-apexcharts";
@@ -11,9 +15,7 @@ interface ChatProps extends DefaultChatProps {
   height: number | string;
 }
 
-const Chart = (props: ChatProps) => {
-  return <ApexChart {...props} />;
-};
+const Chart = (props: ChatProps) => <ApexChart {...props} />;
 
 interface Props {
   series: string[];
@@ -38,7 +40,7 @@ const DonutChartWidget = (props: Props) => {
 	
 	let options = defaultOption;
 	
-	// @ts-expect-error
+	// @ts-expect-error array type wrong
   options.labels = labels;
   options.plotOptions.pie.donut.labels.total.label = title;
   if (!title) {

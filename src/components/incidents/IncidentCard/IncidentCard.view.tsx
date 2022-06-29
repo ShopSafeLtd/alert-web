@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef } from 'react';
 import {
   Card,
   Carousel,
@@ -13,10 +13,10 @@ import {
   Dropdown,
   Descriptions,
   Modal,
-  Skeleton
-} from "antd";
-import { ListIncidentsQuery } from "graphql/generated";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+  Skeleton,
+} from 'antd';
+import { ListIncidentsQuery } from 'graphql/generated';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faLocationDot,
   faClock,
@@ -24,30 +24,33 @@ import {
   faEllipsisV,
   faTrash,
   faEdit,
-} from "@fortawesome/pro-light-svg-icons";
+} from '@fortawesome/pro-light-svg-icons';
 import {
   faAngleLeft,
   faAngleRight,
   faArrowsMaximize,
-} from "@fortawesome/pro-solid-svg-icons";
-import { CarouselRef } from "antd/lib/carousel";
+} from '@fortawesome/pro-solid-svg-icons';
+import { CarouselRef } from 'antd/lib/carousel';
 import {
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
   getOffenderRace,
-} from "utils/get-offender-desc";
-import { Link } from "react-router-dom";
+} from 'utils/get-offender-desc';
+import { Link } from 'react-router-dom';
 
 const { Title, Text, Paragraph } = Typography;
 const { confirm } = Modal;
 
 interface Props {
-  incident: Exclude<ListIncidentsQuery["listIncidents"], undefined | null>['incidents'][0];
+  incident: Exclude<
+    ListIncidentsQuery['listIncidents'],
+    undefined | null
+  >['incidents'][0];
   approvalRights: boolean;
   deleteRights: boolean;
   menuRights: boolean;
-  openLightbox: (elements: { src: string; }[], index: number) => void;
+  openLightbox: (elements: { src: string }[], index: number) => void;
   onDelete: (id: string) => void;
 }
 
@@ -57,8 +60,8 @@ const IncidentCard = ({
   deleteRights,
   menuRights,
   openLightbox,
-  onDelete
-}: Props) => {
+  onDelete,
+}: Props): JSX.Element => {
   const imagesRef = useRef<CarouselRef>(null);
 
   return (
@@ -73,28 +76,30 @@ const IncidentCard = ({
       )}
       {menuRights && (
         <Dropdown
-          trigger={["click"]}
+          trigger={['click']}
           overlay={
             <Menu
               items={[
                 {
                   key: 0,
-                  label: "Edit Incident",
+                  label: 'Edit Incident',
                   onClick: () => {},
                   icon: <FontAwesomeIcon size="lg" icon={faEdit} />,
                 },
                 {
                   key: 1,
-                  label: "Delete Incident",
-                  onClick: () => confirm({
-                    title: 'Are you sure?',
-                    content: 'Click delete incident if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-                    okText: 'Delete Incident',
-                    onOk: () => onDelete(incident?.id || '')
-                  }),
+                  label: 'Delete Incident',
+                  onClick: () =>
+                    confirm({
+                      title: 'Are you sure?',
+                      content:
+                        'Click delete incident if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+                      okText: 'Delete Incident',
+                      onOk: () => onDelete(incident?.id || ''),
+                    }),
                   icon: <FontAwesomeIcon size="lg" icon={faTrash} />,
                 },
-              ].filter(item => item.key !== 1 || deleteRights)}
+              ].filter((item) => item.key !== 1 || deleteRights)}
             />
           }
           placement="bottomRight"
@@ -108,6 +113,7 @@ const IncidentCard = ({
       <div className="incident-card-tags">
         <Row gutter={8}>
           {incident?.crimeTypes.map((crimeType, i) => (
+            // eslint-disable-next-line react/no-array-index-key
             <Col key={i}>
               <Tag className="incident-card-tag" color="red">
                 {crimeType.name}
@@ -116,18 +122,22 @@ const IncidentCard = ({
           ))}
         </Row>
       </div>
-      {incident && incident.images.length > 0 ? <Carousel ref={imagesRef}>
-        {incident?.images.map((image) => (
-          <div key={image.id}>
-            <div
-              className="incident-card-image"
-              style={{
-                backgroundImage: `url(${image.optimised})`,
-              }}
-            />
-          </div>
-        ))}
-      </Carousel> : <Skeleton.Image />}
+      {incident && incident.images.length > 0 ? (
+        <Carousel ref={imagesRef}>
+          {incident?.images.map((image) => (
+            <div key={image.id}>
+              <div
+                className="incident-card-image"
+                style={{
+                  backgroundImage: `url(${image.optimised})`,
+                }}
+              />
+            </div>
+          ))}
+        </Carousel>
+      ) : (
+        <Skeleton.Image />
+      )}
       {incident && incident.images.length > 1 && (
         <Row className="incident-card-controls">
           <Col>
@@ -149,17 +159,21 @@ const IncidentCard = ({
           </Col>
         </Row>
       )}
-     {incident && incident.images.length > 0 && <FontAwesomeIcon
-        size="lg"
-        className="incident-card-expand"
-        icon={faArrowsMaximize}
-        onClick={() =>
-          openLightbox(
-            incident?.images.map((image) => ({ src: image.optimised || '' })) || [],
-            0
-          )
-        }
-      />}
+      {incident && incident.images.length > 0 && (
+        <FontAwesomeIcon
+          size="lg"
+          className="incident-card-expand"
+          icon={faArrowsMaximize}
+          onClick={() =>
+            openLightbox(
+              incident?.images.map((image) => ({
+                src: image.optimised || '',
+              })) || [],
+              0
+            )
+          }
+        />
+      )}
       <Tabs size="middle" defaultActiveKey="DETAILS">
         <Tabs.TabPane key="DETAILS" tab={<Badge>DETAILS</Badge>}>
           <div className="incident-card-content">
@@ -185,7 +199,7 @@ const IncidentCard = ({
                   icon={faUser}
                 />
                 <Text type="secondary">
-                  {incident?.createdBy.fullName} -{" "}
+                  {incident?.createdBy.fullName} -{' '}
                   {incident?.createdBy.organisation}
                 </Text>
               </Col>
@@ -199,7 +213,7 @@ const IncidentCard = ({
                 />
               </Col>
               <Col span={23}>
-                <Text style={{ width: "100%" }} ellipsis type="secondary">
+                <Text style={{ width: '100%' }} ellipsis type="secondary">
                   {incident?.location?.full}
                 </Text>
               </Col>

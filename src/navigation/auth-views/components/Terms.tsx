@@ -1,3 +1,4 @@
+/* eslint-disable no-irregular-whitespace */
 import React from 'react';
 import styled from 'styled-components';
 import Typography from '@material-ui/core/Typography';
@@ -46,13 +47,14 @@ const TermSubHeader = styled.div`
   font-weight: 600;
 `;
 
+// eslint-disable-next-line react/prop-types
 const BoldItalic: React.FC = ({ children }) => (
   <strong>
     <em>{children}</em>
   </strong>
 );
 
-const Terms = () => {
+const Terms = (): JSX.Element => {
   const theme = useStoreState((state) => state.theme.currentTheme);
   const backgroundStyle = {
     background:
@@ -402,13 +404,13 @@ const Terms = () => {
                 between ShopSafe, the Organisation and their Members who are
                 Users of the Services
                 <br />
-                11.2 <BoldItalic>"Data Protection Laws"</BoldItalic> and{' '}
+                11.2 <BoldItalic>&quot;Data Protection Laws&quot;</BoldItalic> and{' '}
                 <BoldItalic>“UK GDPR”</BoldItalic> and{' '}
                 <BoldItalic>“Applicable Law”</BoldItalic> means the UK General
                 Data Protection Regulation (UK GDPR), tailored by the Data
                 Protection Act 2018.
                 <br />
-                11.3 <BoldItalic>"Personal Data"</BoldItalic> includes “any
+                11.3 <BoldItalic>&quot;Personal Data&quot;</BoldItalic> includes “any
                 information relating to an identified or identifiable natural
                 person” as defined in GDPR, article 4 (1) (1) (the ”Personal
                 Data”);

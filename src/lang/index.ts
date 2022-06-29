@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import enLang from './entries/en_US';
 import frLang from './entries/fr_FR';
 

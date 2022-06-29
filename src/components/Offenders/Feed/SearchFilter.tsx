@@ -52,65 +52,63 @@ const SearchFilter: React.FC<Props> = ({
   openFilter,
   tags,
   groups,
-}) => {
-  return (
-    <FeedSearchFilter
-      searchInput={searchInput}
-      setSearchInput={setSearchInput}
-      openFilter={openFilter}
-    >
+}: Props) => (
+  <FeedSearchFilter
+    searchInput={searchInput}
+    setSearchInput={setSearchInput}
+    openFilter={openFilter}
+  >
+    <Typography.Text>
+      {`Order: ${
+        queryVariables.order.createdAt === 'desc'
+          ? 'Most recent first'
+          : 'Oldest first'
+      }`}
+    </Typography.Text>
+    {queryVariables.groups && (
+      <div>
+        {`Groups: `}
+        {queryVariables.groups?.map((el) => (
+          <Typography.Text>
+            {`[ ${groups.find((e) => e.id === el)?.name} ] `}
+          </Typography.Text>
+        ))}
+      </div>
+    )}
+    {queryVariables.tags && (
+      <div>
+        {`Tags: `}
+        {queryVariables.tags?.map((el) => (
+          <Typography.Text>
+            {`[ ${tags.find((e) => e.id === el)?.name} ] `}
+          </Typography.Text>
+        ))}
+      </div>
+    )}
+    {queryVariables.ethnicity && (
+      <div>
+        {`Ethnicity: `}
+        {queryVariables.ethnicity?.map((el) => (
+          <Typography.Text>{`[ ${el} ] `}</Typography.Text>
+        ))}
+      </div>
+    )}
+    {queryVariables.sex && (
+      <div>
+        {`Sex: `}
+        {queryVariables.sex?.map((el) => (
+          <Typography.Text>{`[ ${el[0]}${el
+            .toLowerCase()
+            .slice(1)} ] `}</Typography.Text>
+        ))}
+      </div>
+    )}
+    {queryVariables.approved !== undefined && (
       <Typography.Text>
-        {`Order: ${
-          queryVariables.order.createdAt === 'desc'
-            ? 'Most recent first'
-            : 'Oldest first'
-        }`}
+        {queryVariables.approved ? 'Approved only' : 'Awaiting approval only'}
       </Typography.Text>
-      {queryVariables.groups && (
-        <div>
-          {`Groups: `}
-          {queryVariables.groups?.map((el) => (
-            <Typography.Text>
-              {`[ ${groups.find((e) => e.id === el)?.name} ] `}
-            </Typography.Text>
-          ))}
-        </div>
-      )}
-      {queryVariables.tags && (
-        <div>
-          {`Tags: `}
-          {queryVariables.tags?.map((el) => (
-            <Typography.Text>
-              {`[ ${tags.find((e) => e.id === el)?.name} ] `}
-            </Typography.Text>
-          ))}
-        </div>
-      )}
-      {queryVariables.ethnicity && (
-        <div>
-          {`Ethnicity: `}
-          {queryVariables.ethnicity?.map((el) => (
-            <Typography.Text>{`[ ${el} ] `}</Typography.Text>
-          ))}
-        </div>
-      )}
-      {queryVariables.sex && (
-        <div>
-          {`Sex: `}
-          {queryVariables.sex?.map((el) => (
-            <Typography.Text>{`[ ${el[0]}${el
-              .toLowerCase()
-              .slice(1)} ] `}</Typography.Text>
-          ))}
-        </div>
-      )}
-      {queryVariables.approved !== undefined && (
-        <Typography.Text>
-          {queryVariables.approved ? 'Approved only' : 'Awaiting approval only'}
-        </Typography.Text>
-      )}
-    </FeedSearchFilter>
-  );
-};
+    )}
+  </FeedSearchFilter>
+);
 
 export default SearchFilter;

@@ -1,3 +1,7 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/prop-types */
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import { Input, InputNumber, Form, InputNumberProps } from 'antd'
 

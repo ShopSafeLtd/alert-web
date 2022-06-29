@@ -6,11 +6,11 @@ import {
   useListIncidentsQuery,
   useSchemeGroupsQuery,
   useTagsQuery,
-  Model
-} from "graphql/generated";
-import { useState, useEffect } from "react";
-import { useStoreActions, useStoreState, IncidentSort } from "state";
-import { useLightbox } from "simple-react-lightbox";
+  Model,
+} from 'graphql/generated';
+import { useState, useEffect } from 'react';
+import { useStoreActions, useStoreState, IncidentSort } from 'state';
+import { useLightbox } from 'simple-react-lightbox';
 
 interface Return {
   data: ListIncidentsQuery | undefined;
@@ -31,20 +31,20 @@ interface Return {
   variables: {
     groups: string[];
     crimeTypes: string[];
-  }
-  crimeTypes: { value: string; label: string; }[];
+  };
+  crimeTypes: { value: string; label: string }[];
   onCrimeTypesChange: (crimeTypes: string[]) => void;
   tagsLoading: boolean;
 }
 
 const getSizeOptions = () => {
   if (window.innerWidth > 1239 && window.innerWidth < 1800) {
-    return ["24", "48", "96"];
-  } else if (window.innerWidth > 1799) {
-    return ["24", "48", "96"];
-  } else {
-    return ["24"];
+    return ['24', '48', '96'];
   }
+  if (window.innerWidth > 1799) {
+    return ['24', '48', '96'];
+  }
+  return ['24'];
 };
 
 const useIncidentFeed = (): Return => {
@@ -55,34 +55,17 @@ const useIncidentFeed = (): Return => {
   const scheme = useStoreState((state) => state.scheme.id);
   const groups = useStoreState((state) => state.user.groups);
   const role = useStoreState((state) => state.user.role);
-  const pagination = useStoreState(state => state.data.incidents.pagination)
-  const variables = useStoreState(state => state.data.incidents.variables)
-  const order = useStoreState(state => state.data.incidents.order)
-  const setIncidentsState = useStoreActions(actions => actions.data.setIncidents)
+  const pagination = useStoreState((state) => state.data.incidents.pagination);
+  const variables = useStoreState((state) => state.data.incidents.variables);
+  const order = useStoreState((state) => state.data.incidents.order);
+  const setIncidentsState = useStoreActions(
+    (actions) => actions.data.setIncidents
+  );
 
   // local State
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
   );
-
-  // On mount
-  useEffect(() => {
-    const sizeOptions = getSizeOptions()
-    setIncidentsState({
-      pagination: {
-        ...pagination,
-        sizeOptions,
-        pageSize: Number(sizeOptions[0])
-      },
-      variables: {
-        ...variables,
-        groups: role === Role.SchemeAdmin ? groupData?.groups.map(group => group.id) || [] : groups.map(group => group.id)
-      },
-      order
-    })
-    // eslint-disable-next-line
-  }, []);
-
   // Queries
   // Fetch scheme groups if scheme admin
   const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
@@ -95,19 +78,39 @@ const useIncidentFeed = (): Return => {
         },
       },
     },
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: 'cache-and-network',
     skip: role !== Role.SchemeAdmin,
     onCompleted: (result) => {
       setIncidentsState({
         pagination,
         variables: {
           ...variables,
-          groups: result.groups.map(group => group.id)
+          groups: result.groups.map((group) => group.id),
         },
-        order
-      })
-    }
+        order,
+      });
+    },
   });
+  // On mount
+  useEffect(() => {
+    const sizeOptions = getSizeOptions();
+    setIncidentsState({
+      pagination: {
+        ...pagination,
+        sizeOptions,
+        pageSize: Number(sizeOptions[0]),
+      },
+      variables: {
+        ...variables,
+        groups:
+          role === Role.SchemeAdmin
+            ? groupData?.groups.map((group) => group.id) || []
+            : groups.map((group) => group.id),
+      },
+      order,
+    });
+    // eslint-disable-next-line
+  }, []);
 
   // Fetch scheme tags
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
@@ -115,15 +118,15 @@ const useIncidentFeed = (): Return => {
       where: {
         scheme: {
           id: {
-            equals: scheme
-          }
+            equals: scheme,
+          },
         },
         dataType: {
-          equals: Model.Incident
-        }
-      }
-    }
-  })
+          equals: Model.Incident,
+        },
+      },
+    },
+  });
 
   // Fetch incidents
   const { data, loading } = useListIncidentsQuery({
@@ -184,7 +187,7 @@ const useIncidentFeed = (): Return => {
       take: pagination.pageSize,
       skip: pagination.pageSize * (pagination.page - 1),
     },
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: 'cache-and-network',
   });
 
   // Functions
@@ -198,11 +201,11 @@ const useIncidentFeed = (): Return => {
       pagination: {
         ...pagination,
         page,
-        pageSize
+        pageSize,
       },
       variables,
-      order
-    })
+      order,
+    });
   };
 
   const onGroupsChange = (values: string[]) => {
@@ -210,41 +213,41 @@ const useIncidentFeed = (): Return => {
       pagination,
       variables: {
         ...variables,
-        groups: values
+        groups: values,
       },
-      order
-    })
-  }
+      order,
+    });
+  };
 
   const onCrimeTypesChange = (values: string[]) => {
     setIncidentsState({
       pagination,
       variables: {
         ...variables,
-        crimeTypes: values
+        crimeTypes: values,
       },
-      order
-    })
-  }
+      order,
+    });
+  };
 
   const setOrder = (value: IncidentSort) => {
     setIncidentsState({
       pagination,
       variables,
-      order: value
-    })
-  }
+      order: value,
+    });
+  };
 
   const setSearch = (value: string) => {
     setIncidentsState({
       pagination,
       variables: {
         ...variables,
-        search: value
+        search: value,
       },
-      order
-    })
-  }
+      order,
+    });
+  };
 
   return {
     data,
@@ -270,8 +273,9 @@ const useIncidentFeed = (): Return => {
     onGroupsChange,
     variables,
     onCrimeTypesChange,
-    crimeTypes: tagsData?.tags.map(tag => ({ value: tag.id, label: tag.name })) || [],
-    tagsLoading
+    crimeTypes:
+      tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
+    tagsLoading,
   };
 };
 

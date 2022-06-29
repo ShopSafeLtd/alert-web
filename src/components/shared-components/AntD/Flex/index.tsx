@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import React, { ReactNode } from "react";
 
 interface Props {
@@ -22,9 +23,9 @@ const Flex = (props: Props) => {
   return (
     <div
       className={`${getFlexResponsive()} ${className} ${
-        flexDirection ? "flex-" + flexDirection : ""
-      } ${alignItems ? "align-items-" + alignItems : ""} ${
-        justifyContent ? "justify-content-" + justifyContent : ""
+        flexDirection ? `flex-${  flexDirection}` : ""
+      } ${alignItems ? `align-items-${  alignItems}` : ""} ${
+        justifyContent ? `justify-content-${  justifyContent}` : ""
       }`}
     >
       {children}

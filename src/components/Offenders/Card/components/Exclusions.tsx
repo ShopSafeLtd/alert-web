@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { Col, Button, Row, Typography } from 'antd';
 import { IoLocationOutline } from 'react-icons/io5';
@@ -24,7 +27,7 @@ interface Props {
  *
  * @description Displays the last two items in the exclusions array, with an indication of how many additonal exclusions the offender has. Will display an empty content message if the exclusions array is empty.
  */
-const Exclusions: React.FC<Props> = ({ exclusions, onClick }) => {
+const Exclusions: React.FC<Props> = ({ exclusions, onClick }: Props) => {
   const itemsToRender = new Array(2);
   exclusions.forEach((el, i) => {
     const expired = calcExpired(new Date(el.endDate));
@@ -47,7 +50,7 @@ const Exclusions: React.FC<Props> = ({ exclusions, onClick }) => {
               <Typography.Text
                 type="secondary"
                 className="expired"
-              >{`- [ EXPIRED ]`}</Typography.Text>
+              >- [ EXPIRED ]</Typography.Text>
             )}
           </Row>
           <Row align="middle" wrap={false} className="location">

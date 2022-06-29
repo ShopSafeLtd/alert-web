@@ -1,22 +1,20 @@
-import React from 'react'
+import React from 'react';
 import { Dropdown, Menu, DropDownProps } from 'antd';
 import { EllipsisOutlined } from '@ant-design/icons';
 
 interface Props extends DropDownProps {
-	menu: JSX.Element
+  menu: JSX.Element;
 }
 
 const EllipsisDropdown = ({
-	placement,
-	menu = <Menu />
-}: Props) => {
-	return (
-		<Dropdown overlay={menu} placement={placement} trigger={['click']}>
-			<div className="ellipsis-dropdown">
-				<EllipsisOutlined />
-			</div>
-		</Dropdown>
-	)
-}
+  placement,
+  menu = <Menu />,
+}: Props): JSX.Element => (
+  <Dropdown overlay={menu} placement={placement} trigger={['click']}>
+    <div className="ellipsis-dropdown">
+      <EllipsisOutlined />
+    </div>
+  </Dropdown>
+);
 
-export default EllipsisDropdown
+export default EllipsisDropdown;

@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 
-import { Details, Exclusions, Incidents, Menu } from './components';
 import { CardLayout } from 'components/shared-components';
+import { Details, Exclusions, Incidents, Menu } from './components';
 
 interface Props {
   offender: any;
@@ -22,7 +23,7 @@ interface Props {
  *
  * @description A CardLayout component configured specifically for the OffenderFeed, with details, exclusion and incident tabs, an exclusion banner, and the offenders tags.
  */
-const OffenderCard: React.FC<Props> = ({ offender, actions }) => {
+const OffenderCard: React.FC<Props> = ({ offender, actions }: Props) => {
   // excluded banner
   const isExcluded =
     offender.bans &&

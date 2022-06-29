@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect } from 'react';
 import { Button, Form, Input, Divider, Alert } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
@@ -17,8 +20,8 @@ export interface Props {
   allowRedirect: boolean;
 }
 
-export const LoginForm = (props: Props) => {
-  let navigate = useNavigate();
+export const LoginForm = (props: Props): JSX.Element => {
+  const navigate = useNavigate();
 
   const { otherSignIn, showForgetPassword, extra, allowRedirect } = props;
 
@@ -35,12 +38,12 @@ export const LoginForm = (props: Props) => {
     (actions) => actions.auth.hideAuthMessage
   );
 
-  interface onLoginArgs {
+  interface OnLoginArgs {
     email: string;
     password: string;
   }
 
-  const onLogin = ({ email, password }: onLoginArgs) => {
+  const onLogin = ({ email, password }: OnLoginArgs) => {
     showLoading();
     login({
       email,
@@ -111,7 +114,7 @@ export const LoginForm = (props: Props) => {
           marginBottom: showMessage ? 20 : 0,
         }}
       >
-        <Alert type="error" showIcon message={message}></Alert>
+        <Alert type="error" showIcon message={message} />
       </motion.div>
       <Form layout="vertical" name="login-form" onFinish={onLogin}>
         <Form.Item

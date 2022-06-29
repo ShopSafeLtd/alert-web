@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { Col, Button, Row, Typography } from 'antd';
 import { IoLocationOutline } from 'react-icons/io5';
@@ -19,7 +22,7 @@ interface Props {
  *
  * @description Displays the last two items in the incidents array, with an indication of how many additonal incidents the offender has. Will display an empty content message if the incidents array is empty.
  */
-const Incidents: React.FC<Props> = ({ incidents, onClick }) => {
+const Incidents: React.FC<Props> = ({ incidents, onClick }: Props) => {
   const itemsToRender = new Array(2);
   incidents.forEach((el, i) => {
     itemsToRender.unshift(

@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 import React, { useState } from "react";
 import { Card, Row, Col, Badge, Grid } from "antd";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
@@ -61,8 +62,7 @@ const MapChart = ({
   data,
   mapSource,
   mapType,
-}: MapChartProps) => {
-  return (
+}: MapChartProps) => (
     <ComposableMap
       style={{
         transform: `${mapType === "world" ? "translateY(20px)" : "none"}`,
@@ -101,7 +101,6 @@ const MapChart = ({
       </Geographies>
     </ComposableMap>
   );
-};
 
 interface Props {
 	data: ListData[];
@@ -149,6 +148,7 @@ interface ListData {
 
 interface RegionDataWidgetProps {
   data: ListData[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   mapSource: any;
   mapType: string;
   title: string;
@@ -166,7 +166,7 @@ export const RegionDataWidget = (props: RegionDataWidgetProps) => {
           <div className="d-flex flex-column p-3 justify-content-between h-100">
             <div>{title && <h4 className="font-weight-bold">{title}</h4>}</div>
             <div>{content}</div>
-            <div>{list ? list : renderDataList(data)}</div>
+            <div>{list || renderDataList(data)}</div>
           </div>
         </Col>
         <Col xs={24} sm={24} md={24} lg={17}>

@@ -1,14 +1,12 @@
-import React from "react";
-import { ListIncidentsQuery } from "graphql/generated";
-import { Col, Input, Row, Select, Pagination, Button } from "antd";
-import IncidentCard from "components/incidents/IncidentCard";
-import IncidentSkeletonCard from "components/incidents/IncidentSkeletonCard";
-import { SRLWrapper } from "simple-react-lightbox";
-import { IncidentSort } from "state";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPlus,
-} from "@fortawesome/pro-light-svg-icons";
+import React from 'react';
+import { ListIncidentsQuery } from 'graphql/generated';
+import { Col, Input, Row, Select, Pagination, Button } from 'antd';
+import IncidentCard from 'components/incidents/IncidentCard';
+import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
+import { SRLWrapper } from 'simple-react-lightbox';
+import { IncidentSort } from 'state';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/pro-light-svg-icons';
 
 interface Props {
   data: ListIncidentsQuery | undefined;
@@ -53,122 +51,128 @@ const IncidentFeed = ({
   crimeTypes,
   onCrimeTypesChange,
   tagsLoading,
-}: Props) => {
-  return (
-    <div className="feed-container">
-      <Row gutter={8} style={{ marginBottom: 10 }}>
-        <Col>
-          <Select
-            placeholder="Groups"
-            mode="multiple"
-            size="small"
-            maxTagCount={2}
-            style={{ minWidth: 150 }}
-            loading={groupsLoading}
-            onChange={onGroupsChange}
-            value={variables.groups}
-          >
-            {groups.map((group) => (
-              <Select.Option value={group.value}>{group.label}</Select.Option>
-            ))}
-          </Select>
-        </Col>
-        <Col>
-          <Select
-            placeholder="Crime Types"
-            mode="multiple"
-            size="small"
-            maxTagCount={2}
-            style={{ minWidth: 200 }}
-            onChange={onCrimeTypesChange}
-            value={variables.crimeTypes}
-            loading={tagsLoading}
-          >
-            {crimeTypes.map((crimeType) => (
-              <Select.Option value={crimeType.value}>
-                {crimeType.label}
-              </Select.Option>
-            ))}
-          </Select>
-        </Col>
-        <Col flex={1}>
-          <Input
-            size="small"
-            style={{ width: "80%" }}
-            placeholder="Search incidents..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </Col>
-        <Col>
-          <Select
-            value={order}
-            onChange={setOrder}
-            size="small"
-            style={{ minWidth: 150 }}
-          >
-            <Select.Option value={IncidentSort.createdAtDesc}>
-              Newest First
+}: Props): JSX.Element => (
+  <div className="feed-container">
+    <Row gutter={8} style={{ marginBottom: 10 }}>
+      <Col>
+        <Select
+          placeholder="Groups"
+          mode="multiple"
+          size="small"
+          maxTagCount={2}
+          style={{ minWidth: 150 }}
+          loading={groupsLoading}
+          onChange={onGroupsChange}
+          value={variables.groups}
+        >
+          {groups.map((group) => (
+            <Select.Option value={group.value}>{group.label}</Select.Option>
+          ))}
+        </Select>
+      </Col>
+      <Col>
+        <Select
+          placeholder="Crime Types"
+          mode="multiple"
+          size="small"
+          maxTagCount={2}
+          style={{ minWidth: 200 }}
+          onChange={onCrimeTypesChange}
+          value={variables.crimeTypes}
+          loading={tagsLoading}
+        >
+          {crimeTypes.map((crimeType) => (
+            <Select.Option value={crimeType.value}>
+              {crimeType.label}
             </Select.Option>
-            <Select.Option value={IncidentSort.createdAtAsc}>
-              Oldest First
-            </Select.Option>
-          </Select>
-        </Col>
-        {/* <Col>
+          ))}
+        </Select>
+      </Col>
+      <Col flex={1}>
+        <Input
+          size="small"
+          style={{ width: '80%' }}
+          placeholder="Search incidents..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </Col>
+      <Col>
+        <Select
+          value={order}
+          onChange={setOrder}
+          size="small"
+          style={{ minWidth: 150 }}
+        >
+          <Select.Option value={IncidentSort.createdAtDesc}>
+            Newest First
+          </Select.Option>
+          <Select.Option value={IncidentSort.createdAtAsc}>
+            Oldest First
+          </Select.Option>
+        </Select>
+      </Col>
+      {/* <Col>
           <Button size="small">All Options</Button>
         </Col> */}
-      </Row>
-      <Row gutter={8}>
-        {loading && !data?.listIncidents?.incidents
-          ? [
-              <Col key="0" sm={24} md={12} lg={12} xl={8} xxl={6}>
-                <IncidentSkeletonCard />
-              </Col>,
-              <Col key="1" sm={24} md={12} lg={12} xl={8} xxl={6}>
-                <IncidentSkeletonCard />
-              </Col>,
-              <Col key="2" sm={24} md={12} lg={12} xl={8} xxl={6}>
-                <IncidentSkeletonCard />
-              </Col>,
-              <Col key="3" sm={24} md={12} lg={12} xl={8} xxl={6}>
-                <IncidentSkeletonCard />
-              </Col>,
-              <Col key="4" sm={24} md={12} lg={12} xl={8} xxl={6}>
-                <IncidentSkeletonCard />
-              </Col>,
-              <Col key="5" sm={24} md={12} lg={12} xl={8} xxl={6}>
-                <IncidentSkeletonCard />
-              </Col>,
-            ]
-          : data?.listIncidents?.incidents?.map((item) => (
-              <Col sm={24} md={12} lg={12} xl={8} xxl={6} key={item?.id}>
-                <IncidentCard incident={item} openLightbox={openLightbox} />
-              </Col>
-            ))}
-      </Row>
+    </Row>
+    <Row gutter={8}>
+      {loading && !data?.listIncidents?.incidents
+        ? [
+            <Col key="0" sm={24} md={12} lg={12} xl={8} xxl={6}>
+              <IncidentSkeletonCard />
+            </Col>,
+            <Col key="1" sm={24} md={12} lg={12} xl={8} xxl={6}>
+              <IncidentSkeletonCard />
+            </Col>,
+            <Col key="2" sm={24} md={12} lg={12} xl={8} xxl={6}>
+              <IncidentSkeletonCard />
+            </Col>,
+            <Col key="3" sm={24} md={12} lg={12} xl={8} xxl={6}>
+              <IncidentSkeletonCard />
+            </Col>,
+            <Col key="4" sm={24} md={12} lg={12} xl={8} xxl={6}>
+              <IncidentSkeletonCard />
+            </Col>,
+            <Col key="5" sm={24} md={12} lg={12} xl={8} xxl={6}>
+              <IncidentSkeletonCard />
+            </Col>,
+          ]
+        : data?.listIncidents?.incidents?.map((item) => (
+            <Col sm={24} md={12} lg={12} xl={8} xxl={6} key={item?.id}>
+              <IncidentCard incident={item} openLightbox={openLightbox} />
+            </Col>
+          ))}
+    </Row>
 
-      <Row justify="center">
-        <Col>
-          <Pagination
-            total={data?.listIncidents?.total}
-            pageSizeOptions={pagination.sizeOptions}
-            pageSize={pagination.pageSize}
-            current={pagination.page}
-            onChange={onPaginationChange}
-            showTotal={(total) => `Total Incidents: ${total}`}
-          />
-        </Col>
-      </Row>
-      <Button className="add-button" size="large" type="primary" shape="round" icon={<FontAwesomeIcon icon={faPlus} size="lg" style={{ marginRight: 10 }} />}>
-        Add Incident
-      </Button>
-      <SRLWrapper
-        elements={lightboxElements}
-        options={{ buttons: { showDownloadButton: false } }}
-      />
-    </div>
-  );
-};
+    <Row justify="center">
+      <Col>
+        <Pagination
+          total={data?.listIncidents?.total}
+          pageSizeOptions={pagination.sizeOptions}
+          pageSize={pagination.pageSize}
+          current={pagination.page}
+          onChange={onPaginationChange}
+          showTotal={(total) => `Total Incidents: ${total}`}
+        />
+      </Col>
+    </Row>
+    <Button
+      className="add-button"
+      size="large"
+      type="primary"
+      shape="round"
+      icon={
+        <FontAwesomeIcon icon={faPlus} size="lg" style={{ marginRight: 10 }} />
+      }
+    >
+      Add Incident
+    </Button>
+    <SRLWrapper
+      elements={lightboxElements}
+      options={{ buttons: { showDownloadButton: false } }}
+    />
+  </div>
+);
 
 export default IncidentFeed;
