@@ -39,26 +39,30 @@ interface Return {
   chatsData: SchemeChatsQuery | undefined;
   chatsLoading: boolean;
   saving: boolean;
-  setSaving: (value: boolean) => void;
+  // setSaving: (value: boolean) => void;
 }
-// type NotificationType = "success" | "info" | "warning" | "error";
+type NotificationType = "success" | "info" | "warning" | "error";
 
 const useAddUser = ({ onClose, update }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
 
-  const openSuccessNotification = () => {
-    notification["success"]({
-      message: "Success!",
-      description: "Your invitation is successful! ",
-    });
-  };
-
-  const openErrorNotification = () => {
-    notification["error"]({
-      message: "error!",
-      description: "Whoops, there are some errors. Please try again. ",
-    });
+  const openNotification = (type: NotificationType) => {
+    switch (type) {
+      case "success":
+        notification["success"]({
+          message: "Success!",
+          description: "Your invitation is successful! ",
+        });
+        break
+      
+      case "error":
+        notification["error"]({
+          message: "error!",
+          description: "Whoops, there are some errors. Please try again. ",
+        });
+        break
+    }
   };
 
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
@@ -97,16 +101,17 @@ const useAddUser = ({ onClose, update }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       onClose();
-      openSuccessNotification();
+      openNotification("success")
     },
     onError: () => {
-      openErrorNotification();
+      openNotification("error")
     },
     update,
   });
   const [inviteExistingUser] = useInviteExistingUserMutation();
 
   const onSubmit = (data: FormData) => {
+    setSaving(true);
     createUserInDatabase({
       variables: {
         data: {
@@ -147,7 +152,7 @@ const useAddUser = ({ onClose, update }: Props): Return => {
     chatsData,
     chatsLoading,
     saving,
-    setSaving,
+    // setSaving,
   };
 };
 
