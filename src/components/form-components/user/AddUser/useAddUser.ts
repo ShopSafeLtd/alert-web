@@ -1,28 +1,65 @@
+import { useState } from "react";
 import {
   Role,
   SchemeGroupsQuery,
+  SchemeChatsQuery,
   SortOrder,
   useCreateUserInDatabaseMutation,
   useInviteExistingUserMutation,
   useSchemeGroupsQuery,
+  useSchemeChatsQuery,
+  CreateUserInDatabaseMutation,
 } from "graphql/generated";
 import { useStoreState } from "state";
+import { MutationUpdaterFn } from "@apollo/client";
+import { notification } from "antd";
 
 interface FormData {
   fullName: string;
   email: string;
   organisation: string;
   role: Role;
+  address: {
+    postcode: string;
+    street: string;
+    townCity: string;
+    building: string;
+    county: string;
+    primary: boolean;
+  };
 }
-
+interface Props {
+  onClose: () => void;
+  update: MutationUpdaterFn<CreateUserInDatabaseMutation>;
+}
 interface Return {
   onSubmit: (value: FormData) => void;
   groupsData: SchemeGroupsQuery | undefined;
   groupsLoading: boolean;
+  chatsData: SchemeChatsQuery | undefined;
+  chatsLoading: boolean;
+  saving: boolean;
+  setSaving: (value: boolean) => void;
 }
+// type NotificationType = "success" | "info" | "warning" | "error";
 
-const useAddUser = (onClose: () => void): Return => {
+const useAddUser = ({ onClose, update }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
+  const [saving, setSaving] = useState(false);
+
+  const openSuccessNotification = () => {
+    notification["success"]({
+      message: "Success!",
+      description: "Your invitation is successful! ",
+    });
+  };
+
+  const openErrorNotification = () => {
+    notification["error"]({
+      message: "error!",
+      description: "Whoops, there are some errors. Please try again. ",
+    });
+  };
 
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
     fetchPolicy: "cache-and-network",
@@ -40,22 +77,45 @@ const useAddUser = (onClose: () => void): Return => {
     },
   });
 
-  const [createUserInDatabase] = useCreateUserInDatabaseMutation();
+  const { data: chatsData, loading: chatsLoading } = useSchemeChatsQuery({
+    fetchPolicy: "cache-and-network",
+    variables: {
+      where: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
+      orderBy: {
+        name: SortOrder.Desc,
+      },
+    },
+  });
+
+  const [createUserInDatabase] = useCreateUserInDatabaseMutation({
+    onCompleted: () => {
+      setSaving(false);
+      onClose();
+      openSuccessNotification();
+    },
+    onError: () => {
+      openErrorNotification();
+    },
+    update,
+  });
   const [inviteExistingUser] = useInviteExistingUserMutation();
 
   const onSubmit = (data: FormData) => {
     createUserInDatabase({
-      onCompleted: () => {
-        onClose();
-      },
       variables: {
         data: {
           address: {
-            postcode: "",
-            street: "",
-            townCity: "",
-            building: "",
-            county: "",
+            postcode: data.address?.postcode || "",
+            street: data.address?.street || "",
+            townCity: data.address?.townCity || "",
+            building: data.address?.building || "",
+            county: data.address?.county || "",
             primary: true,
           },
           email: data.email,
@@ -84,6 +144,10 @@ const useAddUser = (onClose: () => void): Return => {
     onSubmit,
     groupsData,
     groupsLoading,
+    chatsData,
+    chatsLoading,
+    saving,
+    setSaving,
   };
 };
 
