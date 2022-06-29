@@ -1,14 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import SimpleReactLightbox from 'simple-react-lightbox';
+import { Auth0Provider } from '@auth0/auth0-react';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
 
 ReactDOM.render(
-  <SimpleReactLightbox>
-    <App />
-  </SimpleReactLightbox>,
+  <Auth0Provider
+    domain="alert.eu.auth0.com"
+    clientId="c2MqDavoao6lbVplyQTN8jq90m4PL6Io" // client id for portal in auth0
+    redirectUri={window.location.origin}
+    audience="https://app.shopsafealert.co.uk"
+    scope="read:current_user update:current_user_metadata"
+  >
+    <SimpleReactLightbox>
+      <App />
+    </SimpleReactLightbox>
+  </Auth0Provider>,
   document.getElementById('root')
 );
 
