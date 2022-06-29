@@ -1,5 +1,5 @@
-query schemeChats($where: ChatWhereInput) {
-  chats(where: $where) {
+query schemeChats($where: ChatWhereInput, $orderBy: [ChatOrderByWithRelationInput!]) {
+  chats(where: $where, orderBy: $orderBy) {
     id
     name
     description

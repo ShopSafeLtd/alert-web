@@ -1,8 +1,9 @@
 import React from "react";
 import { Table, Row, Col, Input, Typography, Select, Drawer, Button } from "antd";
-import { ListSchemeUsersQuery, SchemeGroupsQuery } from "graphql/generated";
+import { ListSchemeUsersQuery, SchemeGroupsQuery,CreateUserInDatabaseMutation } from "graphql/generated";
 import { Link } from "react-router-dom";
 import AddUser from 'components/form-components/user/AddUser'
+import { MutationUpdaterFn } from "@apollo/client";
 
 interface Props {
   data: ListSchemeUsersQuery | undefined;
@@ -15,6 +16,7 @@ interface Props {
   setSelectedGroups: (value: string[]) => void;
   addUser: boolean;
   toggleAddUser: () => void;
+  updateUserList: MutationUpdaterFn<CreateUserInDatabaseMutation>;
 }
 
 const UserList = ({
@@ -27,7 +29,9 @@ const UserList = ({
   selectedGroups,
   setSelectedGroups,
   addUser,
-  toggleAddUser
+  toggleAddUser,
+  updateUserList
+
 }: Props) => (
   <div className="list-view">
     <Row gutter={8} style={{ marginBottom: 10 }}>
@@ -119,6 +123,8 @@ const UserList = ({
 
     <Drawer title="Invite New User" visible={addUser} width="800" onClose={toggleAddUser}>
       {addUser ? <AddUser
+          update={updateUserList}
+        
         onClose={toggleAddUser}
       /> : <div />}
     </Drawer>

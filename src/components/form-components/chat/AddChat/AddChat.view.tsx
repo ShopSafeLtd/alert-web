@@ -13,7 +13,6 @@ interface Props {
   usersData: ListSchemeUsersQuery | undefined;
   usersLoading: boolean;
   saving: boolean;
-  setSaving: (value: boolean) => void;
 }
 
 const AddChat = ({
@@ -22,8 +21,7 @@ const AddChat = ({
   usersData,
   usersLoading,
   saving,
-  setSaving,
-}: Props) => (
+}: Props): JSX.Element => (
   <Form layout="vertical" onFinish={onSubmit}>
     <Row gutter={16}>
       <Col span={18}>

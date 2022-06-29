@@ -24,7 +24,6 @@ interface Return {
   usersData: ListSchemeUsersQuery | undefined;
   usersLoading: boolean;
   saving: boolean;
-  setSaving: (value: boolean) => void;
 }
 
 const useAddGroup = ({ onClose, update }: Props): Return => {
@@ -89,7 +88,6 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
     usersData,
     usersLoading,
     saving,
-    setSaving,
   };
 };
 export default useAddGroup;

@@ -5,8 +5,12 @@ import {
   QueryMode,
   useSchemeGroupsQuery,
   SchemeGroupsQuery,
+  CreateUserInDatabaseMutation,
+  ListSchemeUsersDocument
 } from "graphql/generated";
 import { useStoreState } from "state";
+import { MutationUpdaterFn } from "@apollo/client";
+
 
 interface Return {
   data: ListSchemeUsersQuery | undefined;
@@ -19,6 +23,8 @@ interface Return {
   setSelectedGroups: (value: string[]) => void;
   addUser: boolean;
   toggleAddUser: () => void;
+  updateUserList: MutationUpdaterFn<CreateUserInDatabaseMutation>;
+
 }
 
 const useUserList = (): Return => {
@@ -105,6 +111,141 @@ const useUserList = (): Return => {
     setAddUser(!addUser);
   };
 
+const updateUserList: MutationUpdaterFn<CreateUserInDatabaseMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res?.createUserInDatabase === null || res?.createUserInDatabase === undefined) return;
+
+    // get existing group list data from Apollo store
+    const existingData = store.readQuery<ListSchemeUsersQuery>({
+      query: ListSchemeUsersDocument,
+      variables: {
+      where: {
+        schemes: {
+          some: {
+            scheme: {
+              id: {
+                equals: schemeId,
+              },
+            },
+            recycled: {
+              equals: false,
+            },
+          },
+        },
+        recycled: {
+          equals: false,
+        },
+        groups:
+          selectedGroups.length > 0
+            ? {
+                some: {
+                  id: {
+                    in: selectedGroups,
+                  },
+                },
+              }
+            : undefined,
+        OR: [
+          {
+            fullName: {
+              contains: search,
+              mode: QueryMode.Insensitive,
+            },
+          },
+          {
+            email: {
+              contains: search,
+              mode: QueryMode.Insensitive,
+            },
+          },
+          {
+            organisation: {
+              contains: search,
+              mode: QueryMode.Insensitive,
+            },
+          },
+        ],
+      },
+      groupWhere: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
+    },
+    });
+
+    if (existingData === null) return;
+
+    // write the new data to the Apollo store
+    store.writeQuery<ListSchemeUsersQuery>({
+      query: ListSchemeUsersDocument,
+      data: {
+        users: [...existingData.users, res.createUserInDatabase],
+        __typename: "Query",
+      },
+      variables: {
+      where: {
+        schemes: {
+          some: {
+            scheme: {
+              id: {
+                equals: schemeId,
+              },
+            },
+            recycled: {
+              equals: false,
+            },
+          },
+        },
+        recycled: {
+          equals: false,
+        },
+        groups:
+          selectedGroups.length > 0
+            ? {
+                some: {
+                  id: {
+                    in: selectedGroups,
+                  },
+                },
+              }
+            : undefined,
+        OR: [
+          {
+            fullName: {
+              contains: search,
+              mode: QueryMode.Insensitive,
+            },
+          },
+          {
+            email: {
+              contains: search,
+              mode: QueryMode.Insensitive,
+            },
+          },
+          {
+            organisation: {
+              contains: search,
+              mode: QueryMode.Insensitive,
+            },
+          },
+        ],
+      },
+      groupWhere: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
+    },
+    });
+  };
+
   return {
     data,
     loading,
@@ -116,6 +257,8 @@ const useUserList = (): Return => {
     setSelectedGroups,
     addUser,
     toggleAddUser,
+    updateUserList
+
   };
 };
 

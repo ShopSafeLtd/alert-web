@@ -10,7 +10,7 @@ interface Props {
 }
 
 const AddChat = ({ onClose, update }: Props) => {
-  const { onSubmit, usersData, usersLoading, saving, setSaving } = useAddChat({
+  const { onSubmit, usersData, usersLoading, saving } = useAddChat({
     onClose,
     update,
   });
@@ -22,7 +22,6 @@ const AddChat = ({ onClose, update }: Props) => {
       usersData={usersData}
       usersLoading={usersLoading}
       saving={saving}
-      setSaving={setSaving}
     />
   );
 };

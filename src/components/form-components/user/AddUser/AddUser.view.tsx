@@ -1,12 +1,21 @@
 import React from "react";
-import { Button, Col, Form, Input, Row, Select } from "antd";
-import { Role, SchemeGroupsQuery } from "graphql/generated";
+import { Role, SchemeGroupsQuery,SchemeChatsQuery } from "graphql/generated";
+import { Button, Col, Form, Input, Row, Select,Typography } from "antd";
+const { Title } = Typography;
 
 interface FormData {
   fullName: string;
   email: string;
   organisation: string;
   role: Role;
+  address: {
+    postcode: string;
+    street: string;
+    townCity: string;
+    building: string;
+    county: string;
+    primary: boolean;
+  };
 }
 
 interface Props {
@@ -14,10 +23,14 @@ interface Props {
   onClose: () => void;
   groupsData: SchemeGroupsQuery | undefined;
   groupsLoading: boolean;
+  chatsData: SchemeChatsQuery | undefined;
+  chatsLoading: boolean;
+  saving: boolean;
 }
 
-const AddUser = ({ onSubmit, onClose, groupsData, groupsLoading }: Props) => (
+const AddUser = ({ onSubmit, onClose, groupsData, groupsLoading,chatsData,chatsLoading, saving }: Props): JSX.Element => (
   <Form layout="vertical" onFinish={onSubmit}>
+     <Title level={4} style={{ marginBottom: 15 }}>User Detail:</Title>
     <Row gutter={16}>
       <Col span={12}>
         <Form.Item
@@ -30,7 +43,7 @@ const AddUser = ({ onSubmit, onClose, groupsData, groupsLoading }: Props) => (
             },
           ]}
         >
-          <Input />
+          <Input disabled={saving} />
         </Form.Item>
       </Col>
       <Col span={12}>
@@ -44,7 +57,7 @@ const AddUser = ({ onSubmit, onClose, groupsData, groupsLoading }: Props) => (
             },
           ]}
         >
-          <Input type="email" />
+          <Input disabled={saving} type="email" />
         </Form.Item>
       </Col>
     </Row>
@@ -60,7 +73,7 @@ const AddUser = ({ onSubmit, onClose, groupsData, groupsLoading }: Props) => (
             },
           ]}
         >
-          <Input />
+          <Input disabled={saving} />
         </Form.Item>
       </Col>
       <Col span={12}>
@@ -85,6 +98,57 @@ const AddUser = ({ onSubmit, onClose, groupsData, groupsLoading }: Props) => (
         </Form.Item>
       </Col>
     </Row>
+
+
+     <Title level={4} style={{ marginBottom: 15 }}>User Address:</Title>
+<Row gutter={16}>
+      <Col span={12}>
+        <Form.Item
+          name="postcode"
+          label="Postcode"
+        >
+          <Input disabled={saving} />
+        </Form.Item>
+      </Col>
+      <Col span={12}>
+        <Form.Item
+          name="street"
+          label="Street"
+        >
+           <Input disabled={saving} />
+        </Form.Item>
+      </Col>
+    </Row>
+    <Row gutter={16}>
+      <Col span={12}>
+        <Form.Item
+          name="townCity"
+          label="TownCity"
+        >
+          <Input disabled={saving} />
+        </Form.Item>
+      </Col>
+      <Col span={12}>
+        <Form.Item
+          name="building"
+          label="Building"
+        >
+           <Input disabled={saving} />
+        </Form.Item>
+      </Col>
+    </Row>
+    <Row gutter={16}>
+      <Col span={12}>
+        <Form.Item
+          name="county"
+          label="County"
+        >
+          <Input disabled={saving} />
+        </Form.Item>
+      </Col>
+    </Row>
+
+     <Title level={4} style={{ marginBottom: 15 }}>User Groups:</Title>
     <Row gutter={16}>
       <Col span={12}>
         <Form.Item
@@ -97,10 +161,24 @@ const AddUser = ({ onSubmit, onClose, groupsData, groupsLoading }: Props) => (
             },
           ]}
         >
-          <Select loading={groupsLoading} mode="multiple" maxTagCount={2}>
+          <Select loading={groupsLoading} disabled={saving} mode="multiple" maxTagCount={2} >
             {groupsData?.groups.map((group) => (
               <Select.Option key={group.id} value={group.id}>
                 {group.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+      </Col>
+      <Col span={12}>
+        <Form.Item
+          name="chats"
+          label="chats"
+        >
+          <Select loading={chatsLoading} disabled={saving} mode="multiple" maxTagCount={2} >
+            {chatsData?.chats.map((chat) => (
+              <Select.Option key={chat.id} value={chat.id}>
+                {chat.name}
               </Select.Option>
             ))}
           </Select>
@@ -111,10 +189,11 @@ const AddUser = ({ onSubmit, onClose, groupsData, groupsLoading }: Props) => (
     <Form.Item>
       <Row style={{ marginTop: 30 }} gutter={16} justify="end">
         <Col>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button disabled={saving} onClick={onClose}>Cancel</Button>
         </Col>
         <Col>
-          <Button type="primary" htmlType="submit">
+            
+          <Button disabled={saving} loading={saving} type="primary" htmlType="submit">
             Invite User
           </Button>
         </Col>

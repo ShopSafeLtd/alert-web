@@ -13,7 +13,8 @@ const UserList = () => {
     selectedGroups,
     setSelectedGroups,
     addUser,
-    toggleAddUser
+    toggleAddUser,
+    updateUserList,
   } = useUserList();
 
   return (
@@ -28,6 +29,7 @@ const UserList = () => {
       setSelectedGroups={setSelectedGroups}
       addUser={addUser}
       toggleAddUser={toggleAddUser}
+      updateUserList={updateUserList}
     />
   );
 };

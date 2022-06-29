@@ -1,6 +1,5 @@
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
-
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -3740,7 +3739,7 @@ export type ImageCreateInput = {
 export type ImageCreateManyIncidentInput = {
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
+  fileNames?: InputMaybe<ImageCreateManyfileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
   optimised?: InputMaybe<Scalars['String']>;
@@ -3759,7 +3758,7 @@ export type ImageCreateManyIncidentInputEnvelope = {
 export type ImageCreateManySchemeInput = {
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
+  fileNames?: InputMaybe<ImageCreateManyfileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
@@ -3778,7 +3777,7 @@ export type ImageCreateManySchemeInputEnvelope = {
 export type ImageCreateManyUploadedByInput = {
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
+  fileNames?: InputMaybe<ImageCreateManyfileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
@@ -3792,6 +3791,10 @@ export type ImageCreateManyUploadedByInput = {
 export type ImageCreateManyUploadedByInputEnvelope = {
   data?: InputMaybe<Array<ImageCreateManyUploadedByInput>>;
   skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type ImageCreateManyfileNamesInput = {
+  set?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type ImageCreateNestedManyWithoutIncidentInput = {
@@ -13920,6 +13923,7 @@ export type CreateChatMutation = { __typename?: 'Mutation', createChat: { __type
 
 export type SchemeChatsQueryVariables = Exact<{
   where?: InputMaybe<ChatWhereInput>;
+  orderBy?: InputMaybe<Array<ChatOrderByWithRelationInput> | ChatOrderByWithRelationInput>;
 }>;
 
 
@@ -14009,10 +14013,11 @@ export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id
 
 export type CreateUserInDatabaseMutationVariables = Exact<{
   data: CreateUserData;
+  groupWhere?: InputMaybe<GroupWhereInput>;
 }>;
 
 
-export type CreateUserInDatabaseMutation = { __typename?: 'Mutation', createUserInDatabase?: { __typename?: 'User', id: string, fullName: string, organisation: string, newUser: boolean, disabled: boolean } | null };
+export type CreateUserInDatabaseMutation = { __typename?: 'Mutation', createUserInDatabase?: { __typename?: 'User', id: string, fullName: string, email: string, organisation: string, status?: string | null, groups: Array<{ __typename?: 'Group', id: string, name: string }> } | null };
 
 export type InviteExistingUserMutationVariables = Exact<{
   data: UserUpdateInput;
@@ -14104,8 +14109,8 @@ export type CreateChatMutationHookResult = ReturnType<typeof useCreateChatMutati
 export type CreateChatMutationResult = Apollo.MutationResult<CreateChatMutation>;
 export type CreateChatMutationOptions = Apollo.BaseMutationOptions<CreateChatMutation, CreateChatMutationVariables>;
 export const SchemeChatsDocument = gql`
-    query schemeChats($where: ChatWhereInput) {
-  chats(where: $where) {
+    query schemeChats($where: ChatWhereInput, $orderBy: [ChatOrderByWithRelationInput!]) {
+  chats(where: $where, orderBy: $orderBy) {
     id
     name
     description
@@ -14126,6 +14131,7 @@ export const SchemeChatsDocument = gql`
  * const { data, loading, error } = useSchemeChatsQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
  *   },
  * });
  */
@@ -14711,13 +14717,17 @@ export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export const CreateUserInDatabaseDocument = gql`
-    mutation createUserInDatabase($data: CreateUserData!) {
+    mutation createUserInDatabase($data: CreateUserData!, $groupWhere: GroupWhereInput) {
   createUserInDatabase(data: $data) {
     id
     fullName
+    email
     organisation
-    newUser
-    disabled
+    status
+    groups(where: $groupWhere) {
+      id
+      name
+    }
   }
 }
     `;
@@ -14737,6 +14747,7 @@ export type CreateUserInDatabaseMutationFn = Apollo.MutationFunction<CreateUserI
  * const [createUserInDatabaseMutation, { data, loading, error }] = useCreateUserInDatabaseMutation({
  *   variables: {
  *      data: // value for 'data'
+ *      groupWhere: // value for 'groupWhere'
  *   },
  * });
  */

@@ -1,4 +1,4 @@
-import { Table, Row, Col, Input, Drawer, Button } from "antd";
+ import { Table, Row, Col, Input, Drawer, Button } from "antd";
 import { CreateChatMutation, SchemeChatsQuery } from "graphql/generated";
 import { Link } from "react-router-dom";
 import AddChat from "components/form-components/chat/AddChat";
