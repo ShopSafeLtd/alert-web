@@ -8,7 +8,7 @@ import './index.css';
 
 ReactDOM.render(
   <Auth0Provider
-    domain="alert.eu.auth0.com"
+    domain="auth.shopsafealert.co.uk"
     clientId="c2MqDavoao6lbVplyQTN8jq90m4PL6Io" // client id for portal in auth0
     redirectUri={window.location.origin}
     audience="https://app.shopsafealert.co.uk"
