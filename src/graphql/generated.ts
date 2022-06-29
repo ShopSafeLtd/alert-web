@@ -2,9 +2,15 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -430,14 +436,18 @@ export type ActionCreateNestedManyWithoutImagesInput = {
 
 export type ActionCreateNestedManyWithoutInSchemeInput = {
   connect?: InputMaybe<Array<ActionWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<ActionCreateOrConnectWithoutInSchemeInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<ActionCreateOrConnectWithoutInSchemeInput>
+  >;
   create?: InputMaybe<Array<ActionCreateWithoutInSchemeInput>>;
   createMany?: InputMaybe<ActionCreateManyInSchemeInputEnvelope>;
 };
 
 export type ActionCreateNestedManyWithoutIncidentInput = {
   connect?: InputMaybe<Array<ActionWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<ActionCreateOrConnectWithoutIncidentInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<ActionCreateOrConnectWithoutIncidentInput>
+  >;
   create?: InputMaybe<Array<ActionCreateWithoutIncidentInput>>;
   createMany?: InputMaybe<ActionCreateManyIncidentInputEnvelope>;
 };
@@ -451,7 +461,9 @@ export type ActionCreateNestedManyWithoutMessageInput = {
 
 export type ActionCreateNestedManyWithoutOffenderInput = {
   connect?: InputMaybe<Array<ActionWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<ActionCreateOrConnectWithoutOffenderInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<ActionCreateOrConnectWithoutOffenderInput>
+  >;
   create?: InputMaybe<Array<ActionCreateWithoutOffenderInput>>;
   createMany?: InputMaybe<ActionCreateManyOffenderInputEnvelope>;
 };
@@ -896,7 +908,7 @@ export enum ActionType {
   Reduce = 'REDUCE',
   Remove = 'REMOVE',
   ResetPassword = 'RESET_PASSWORD',
-  Update = 'UPDATE'
+  Update = 'UPDATE',
 }
 
 export type ActionUpdateInput = {
@@ -1081,7 +1093,9 @@ export type ActionUpdateManyWithoutImagesInput = {
 
 export type ActionUpdateManyWithoutInSchemeInput = {
   connect?: InputMaybe<Array<ActionWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<ActionCreateOrConnectWithoutInSchemeInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<ActionCreateOrConnectWithoutInSchemeInput>
+  >;
   create?: InputMaybe<Array<ActionCreateWithoutInSchemeInput>>;
   createMany?: InputMaybe<ActionCreateManyInSchemeInputEnvelope>;
   delete?: InputMaybe<Array<ActionWhereUniqueInput>>;
@@ -1095,7 +1109,9 @@ export type ActionUpdateManyWithoutInSchemeInput = {
 
 export type ActionUpdateManyWithoutIncidentInput = {
   connect?: InputMaybe<Array<ActionWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<ActionCreateOrConnectWithoutIncidentInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<ActionCreateOrConnectWithoutIncidentInput>
+  >;
   create?: InputMaybe<Array<ActionCreateWithoutIncidentInput>>;
   createMany?: InputMaybe<ActionCreateManyIncidentInputEnvelope>;
   delete?: InputMaybe<Array<ActionWhereUniqueInput>>;
@@ -1123,7 +1139,9 @@ export type ActionUpdateManyWithoutMessageInput = {
 
 export type ActionUpdateManyWithoutOffenderInput = {
   connect?: InputMaybe<Array<ActionWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<ActionCreateOrConnectWithoutOffenderInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<ActionCreateOrConnectWithoutOffenderInput>
+  >;
   create?: InputMaybe<Array<ActionCreateWithoutOffenderInput>>;
   createMany?: InputMaybe<ActionCreateManyOffenderInputEnvelope>;
   delete?: InputMaybe<Array<ActionWhereUniqueInput>>;
@@ -1659,7 +1677,6 @@ export type Address = {
   user?: Maybe<User>;
 };
 
-
 export type AddressActionsArgs = {
   after?: InputMaybe<ActionWhereUniqueInput>;
   before?: InputMaybe<ActionWhereUniqueInput>;
@@ -1998,7 +2015,7 @@ export enum Age {
   SixtySeventy = 'SIXTY_SEVENTY',
   ThirtyForty = 'THIRTY_FORTY',
   UnderEighteen = 'UNDER_EIGHTEEN',
-  Unknown = 'UNKNOWN'
+  Unknown = 'UNKNOWN',
 }
 
 export type ApproveGroupsData = {
@@ -2036,7 +2053,6 @@ export type Ban = {
   title?: Maybe<Scalars['String']>;
   updatedAt: Scalars['DateTime'];
 };
-
 
 export type BanActionsArgs = {
   after?: InputMaybe<ActionWhereUniqueInput>;
@@ -2511,7 +2527,7 @@ export enum Build {
   Large = 'LARGE',
   Medium = 'MEDIUM',
   Small = 'SMALL',
-  Unknown = 'UNKNOWN'
+  Unknown = 'UNKNOWN',
 }
 
 export type Chat = {
@@ -2528,7 +2544,6 @@ export type Chat = {
   updatedAt: Scalars['DateTime'];
 };
 
-
 export type ChatActionsArgs = {
   after?: InputMaybe<ActionWhereUniqueInput>;
   before?: InputMaybe<ActionWhereUniqueInput>;
@@ -2538,7 +2553,6 @@ export type ChatActionsArgs = {
   where?: InputMaybe<ActionWhereInput>;
 };
 
-
 export type ChatMembersArgs = {
   after?: InputMaybe<UserChatWhereUniqueInput>;
   before?: InputMaybe<UserChatWhereUniqueInput>;
@@ -2547,7 +2561,6 @@ export type ChatMembersArgs = {
   orderBy?: InputMaybe<Array<UserChatOrderByWithRelationInput>>;
   where?: InputMaybe<UserChatWhereInput>;
 };
-
 
 export type ChatMessagesArgs = {
   after?: InputMaybe<MessageWhereUniqueInput>;
@@ -3086,7 +3099,9 @@ export type ExpoPushTokenCreateManyUserInputEnvelope = {
 
 export type ExpoPushTokenCreateNestedManyWithoutUserInput = {
   connect?: InputMaybe<Array<ExpoPushTokenWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<ExpoPushTokenCreateOrConnectWithoutUserInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<ExpoPushTokenCreateOrConnectWithoutUserInput>
+  >;
   create?: InputMaybe<Array<ExpoPushTokenCreateWithoutUserInput>>;
   createMany?: InputMaybe<ExpoPushTokenCreateManyUserInputEnvelope>;
 };
@@ -3138,16 +3153,24 @@ export type ExpoPushTokenUpdateManyWithWhereWithoutUserInput = {
 
 export type ExpoPushTokenUpdateManyWithoutUserInput = {
   connect?: InputMaybe<Array<ExpoPushTokenWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<ExpoPushTokenCreateOrConnectWithoutUserInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<ExpoPushTokenCreateOrConnectWithoutUserInput>
+  >;
   create?: InputMaybe<Array<ExpoPushTokenCreateWithoutUserInput>>;
   createMany?: InputMaybe<ExpoPushTokenCreateManyUserInputEnvelope>;
   delete?: InputMaybe<Array<ExpoPushTokenWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<ExpoPushTokenScalarWhereInput>>;
   disconnect?: InputMaybe<Array<ExpoPushTokenWhereUniqueInput>>;
   set?: InputMaybe<Array<ExpoPushTokenWhereUniqueInput>>;
-  update?: InputMaybe<Array<ExpoPushTokenUpdateWithWhereUniqueWithoutUserInput>>;
-  updateMany?: InputMaybe<Array<ExpoPushTokenUpdateManyWithWhereWithoutUserInput>>;
-  upsert?: InputMaybe<Array<ExpoPushTokenUpsertWithWhereUniqueWithoutUserInput>>;
+  update?: InputMaybe<
+    Array<ExpoPushTokenUpdateWithWhereUniqueWithoutUserInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<ExpoPushTokenUpdateManyWithWhereWithoutUserInput>
+  >;
+  upsert?: InputMaybe<
+    Array<ExpoPushTokenUpsertWithWhereUniqueWithoutUserInput>
+  >;
 };
 
 export type ExpoPushTokenUpdateWithWhereUniqueWithoutUserInput = {
@@ -3197,7 +3220,7 @@ export type File = {
 export enum Gender {
   Female = 'FEMALE',
   Male = 'MALE',
-  Unknown = 'UNKNOWN'
+  Unknown = 'UNKNOWN',
 }
 
 export type Group = {
@@ -3215,7 +3238,6 @@ export type Group = {
   users: Array<User>;
 };
 
-
 export type GroupActionsArgs = {
   after?: InputMaybe<ActionWhereUniqueInput>;
   before?: InputMaybe<ActionWhereUniqueInput>;
@@ -3225,7 +3247,6 @@ export type GroupActionsArgs = {
   where?: InputMaybe<ActionWhereInput>;
 };
 
-
 export type GroupIncidentsArgs = {
   after?: InputMaybe<IncidentWhereUniqueInput>;
   before?: InputMaybe<IncidentWhereUniqueInput>;
@@ -3233,14 +3254,12 @@ export type GroupIncidentsArgs = {
   last?: InputMaybe<Scalars['Int']>;
 };
 
-
 export type GroupOffendersArgs = {
   after?: InputMaybe<OffenderWhereUniqueInput>;
   before?: InputMaybe<OffenderWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
 };
-
 
 export type GroupUsersArgs = {
   after?: InputMaybe<UserWhereUniqueInput>;
@@ -3281,13 +3300,17 @@ export type GroupCreateManySchemeInputEnvelope = {
 
 export type GroupCreateNestedManyWithoutIncidentsInput = {
   connect?: InputMaybe<Array<GroupWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<GroupCreateOrConnectWithoutIncidentsInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<GroupCreateOrConnectWithoutIncidentsInput>
+  >;
   create?: InputMaybe<Array<GroupCreateWithoutIncidentsInput>>;
 };
 
 export type GroupCreateNestedManyWithoutOffendersInput = {
   connect?: InputMaybe<Array<GroupWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<GroupCreateOrConnectWithoutOffendersInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<GroupCreateOrConnectWithoutOffendersInput>
+  >;
   create?: InputMaybe<Array<GroupCreateWithoutOffendersInput>>;
 };
 
@@ -3483,7 +3506,9 @@ export type GroupUpdateManyWithWhereWithoutUsersInput = {
 
 export type GroupUpdateManyWithoutIncidentsInput = {
   connect?: InputMaybe<Array<GroupWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<GroupCreateOrConnectWithoutIncidentsInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<GroupCreateOrConnectWithoutIncidentsInput>
+  >;
   create?: InputMaybe<Array<GroupCreateWithoutIncidentsInput>>;
   delete?: InputMaybe<Array<GroupWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<GroupScalarWhereInput>>;
@@ -3496,7 +3521,9 @@ export type GroupUpdateManyWithoutIncidentsInput = {
 
 export type GroupUpdateManyWithoutOffendersInput = {
   connect?: InputMaybe<Array<GroupWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<GroupCreateOrConnectWithoutOffendersInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<GroupCreateOrConnectWithoutOffendersInput>
+  >;
   create?: InputMaybe<Array<GroupCreateWithoutOffendersInput>>;
   delete?: InputMaybe<Array<GroupWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<GroupScalarWhereInput>>;
@@ -3697,7 +3724,6 @@ export type Image = {
   url?: Maybe<Scalars['String']>;
 };
 
-
 export type ImageActionsArgs = {
   after?: InputMaybe<ActionWhereUniqueInput>;
   before?: InputMaybe<ActionWhereUniqueInput>;
@@ -3706,7 +3732,6 @@ export type ImageActionsArgs = {
   orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
   where?: InputMaybe<ActionWhereInput>;
 };
-
 
 export type ImageOffendersArgs = {
   after?: InputMaybe<OffenderWhereUniqueInput>;
@@ -3739,7 +3764,7 @@ export type ImageCreateInput = {
 export type ImageCreateManyIncidentInput = {
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  fileNames?: InputMaybe<ImageCreateManyfileNamesInput>;
+  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
   optimised?: InputMaybe<Scalars['String']>;
@@ -3758,7 +3783,7 @@ export type ImageCreateManyIncidentInputEnvelope = {
 export type ImageCreateManySchemeInput = {
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  fileNames?: InputMaybe<ImageCreateManyfileNamesInput>;
+  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
@@ -3777,7 +3802,7 @@ export type ImageCreateManySchemeInputEnvelope = {
 export type ImageCreateManyUploadedByInput = {
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  fileNames?: InputMaybe<ImageCreateManyfileNamesInput>;
+  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
@@ -3793,10 +3818,6 @@ export type ImageCreateManyUploadedByInputEnvelope = {
   skipDuplicates?: InputMaybe<Scalars['Boolean']>;
 };
 
-export type ImageCreateManyfileNamesInput = {
-  set?: InputMaybe<Array<Scalars['String']>>;
-};
-
 export type ImageCreateNestedManyWithoutIncidentInput = {
   connect?: InputMaybe<Array<ImageWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<Array<ImageCreateOrConnectWithoutIncidentInput>>;
@@ -3806,7 +3827,9 @@ export type ImageCreateNestedManyWithoutIncidentInput = {
 
 export type ImageCreateNestedManyWithoutOffendersInput = {
   connect?: InputMaybe<Array<ImageWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<ImageCreateOrConnectWithoutOffendersInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<ImageCreateOrConnectWithoutOffendersInput>
+  >;
   create?: InputMaybe<Array<ImageCreateWithoutOffendersInput>>;
   upload?: InputMaybe<Array<InputMaybe<UploadOffenderImage>>>;
 };
@@ -3820,7 +3843,9 @@ export type ImageCreateNestedManyWithoutSchemeInput = {
 
 export type ImageCreateNestedManyWithoutUploadedByInput = {
   connect?: InputMaybe<Array<ImageWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<ImageCreateOrConnectWithoutUploadedByInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<ImageCreateOrConnectWithoutUploadedByInput>
+  >;
   create?: InputMaybe<Array<ImageCreateWithoutUploadedByInput>>;
   createMany?: InputMaybe<ImageCreateManyUploadedByInputEnvelope>;
 };
@@ -4109,7 +4134,9 @@ export type ImageUpdateManyWithoutIncidentInput = {
 
 export type ImageUpdateManyWithoutOffendersInput = {
   connect?: InputMaybe<Array<ImageWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<ImageCreateOrConnectWithoutOffendersInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<ImageCreateOrConnectWithoutOffendersInput>
+  >;
   create?: InputMaybe<Array<ImageCreateWithoutOffendersInput>>;
   delete?: InputMaybe<Array<ImageWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<ImageScalarWhereInput>>;
@@ -4137,7 +4164,9 @@ export type ImageUpdateManyWithoutSchemeInput = {
 
 export type ImageUpdateManyWithoutUploadedByInput = {
   connect?: InputMaybe<Array<ImageWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<ImageCreateOrConnectWithoutUploadedByInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<ImageCreateOrConnectWithoutUploadedByInput>
+  >;
   create?: InputMaybe<Array<ImageCreateWithoutUploadedByInput>>;
   createMany?: InputMaybe<ImageCreateManyUploadedByInputEnvelope>;
   delete?: InputMaybe<Array<ImageWhereUniqueInput>>;
@@ -4145,7 +4174,9 @@ export type ImageUpdateManyWithoutUploadedByInput = {
   disconnect?: InputMaybe<Array<ImageWhereUniqueInput>>;
   set?: InputMaybe<Array<ImageWhereUniqueInput>>;
   update?: InputMaybe<Array<ImageUpdateWithWhereUniqueWithoutUploadedByInput>>;
-  updateMany?: InputMaybe<Array<ImageUpdateManyWithWhereWithoutUploadedByInput>>;
+  updateMany?: InputMaybe<
+    Array<ImageUpdateManyWithWhereWithoutUploadedByInput>
+  >;
   upsert?: InputMaybe<Array<ImageUpsertWithWhereUniqueWithoutUploadedByInput>>;
 };
 
@@ -4406,7 +4437,6 @@ export type Incident = {
   uploaded?: Maybe<Scalars['Boolean']>;
 };
 
-
 export type IncidentActionsArgs = {
   after?: InputMaybe<ActionWhereUniqueInput>;
   before?: InputMaybe<ActionWhereUniqueInput>;
@@ -4415,7 +4445,6 @@ export type IncidentActionsArgs = {
   orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
   where?: InputMaybe<ActionWhereInput>;
 };
-
 
 export type IncidentCrimeTypesArgs = {
   after?: InputMaybe<TagWhereUniqueInput>;
@@ -4426,7 +4455,6 @@ export type IncidentCrimeTypesArgs = {
   where?: InputMaybe<TagWhereInput>;
 };
 
-
 export type IncidentGroupsArgs = {
   after?: InputMaybe<GroupWhereUniqueInput>;
   before?: InputMaybe<GroupWhereUniqueInput>;
@@ -4435,7 +4463,6 @@ export type IncidentGroupsArgs = {
   orderBy?: InputMaybe<Array<GroupOrderByWithRelationInput>>;
   where?: InputMaybe<GroupWhereInput>;
 };
-
 
 export type IncidentImagesArgs = {
   after?: InputMaybe<ImageWhereUniqueInput>;
@@ -4446,7 +4473,6 @@ export type IncidentImagesArgs = {
   where?: InputMaybe<ImageWhereInput>;
 };
 
-
 export type IncidentIntelArgs = {
   after?: InputMaybe<IntelWhereUniqueInput>;
   before?: InputMaybe<IntelWhereUniqueInput>;
@@ -4455,7 +4481,6 @@ export type IncidentIntelArgs = {
   orderBy?: InputMaybe<Array<IntelOrderByWithRelationInput>>;
   where?: InputMaybe<IntelWhereInput>;
 };
-
 
 export type IncidentOffendersArgs = {
   after?: InputMaybe<OffenderWhereUniqueInput>;
@@ -4533,32 +4558,42 @@ export type IncidentCreateManySchemeInputEnvelope = {
 
 export type IncidentCreateNestedManyWithoutCreatedByInput = {
   connect?: InputMaybe<Array<IncidentWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<IncidentCreateOrConnectWithoutCreatedByInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<IncidentCreateOrConnectWithoutCreatedByInput>
+  >;
   create?: InputMaybe<Array<IncidentCreateWithoutCreatedByInput>>;
   createMany?: InputMaybe<IncidentCreateManyCreatedByInputEnvelope>;
 };
 
 export type IncidentCreateNestedManyWithoutCrimeTypesInput = {
   connect?: InputMaybe<Array<IncidentWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<IncidentCreateOrConnectWithoutCrimeTypesInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<IncidentCreateOrConnectWithoutCrimeTypesInput>
+  >;
   create?: InputMaybe<Array<IncidentCreateWithoutCrimeTypesInput>>;
 };
 
 export type IncidentCreateNestedManyWithoutGroupsInput = {
   connect?: InputMaybe<Array<IncidentWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<IncidentCreateOrConnectWithoutGroupsInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<IncidentCreateOrConnectWithoutGroupsInput>
+  >;
   create?: InputMaybe<Array<IncidentCreateWithoutGroupsInput>>;
 };
 
 export type IncidentCreateNestedManyWithoutOffendersInput = {
   connect?: InputMaybe<Array<IncidentWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<IncidentCreateOrConnectWithoutOffendersInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<IncidentCreateOrConnectWithoutOffendersInput>
+  >;
   create?: InputMaybe<Array<IncidentCreateWithoutOffendersInput>>;
 };
 
 export type IncidentCreateNestedManyWithoutSchemeInput = {
   connect?: InputMaybe<Array<IncidentWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<IncidentCreateOrConnectWithoutSchemeInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<IncidentCreateOrConnectWithoutSchemeInput>
+  >;
   create?: InputMaybe<Array<IncidentCreateWithoutSchemeInput>>;
   createMany?: InputMaybe<IncidentCreateManySchemeInputEnvelope>;
 };
@@ -4984,34 +5019,52 @@ export type IncidentUpdateManyWithWhereWithoutSchemeInput = {
 
 export type IncidentUpdateManyWithoutCreatedByInput = {
   connect?: InputMaybe<Array<IncidentWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<IncidentCreateOrConnectWithoutCreatedByInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<IncidentCreateOrConnectWithoutCreatedByInput>
+  >;
   create?: InputMaybe<Array<IncidentCreateWithoutCreatedByInput>>;
   createMany?: InputMaybe<IncidentCreateManyCreatedByInputEnvelope>;
   delete?: InputMaybe<Array<IncidentWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<IncidentScalarWhereInput>>;
   disconnect?: InputMaybe<Array<IncidentWhereUniqueInput>>;
   set?: InputMaybe<Array<IncidentWhereUniqueInput>>;
-  update?: InputMaybe<Array<IncidentUpdateWithWhereUniqueWithoutCreatedByInput>>;
-  updateMany?: InputMaybe<Array<IncidentUpdateManyWithWhereWithoutCreatedByInput>>;
-  upsert?: InputMaybe<Array<IncidentUpsertWithWhereUniqueWithoutCreatedByInput>>;
+  update?: InputMaybe<
+    Array<IncidentUpdateWithWhereUniqueWithoutCreatedByInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<IncidentUpdateManyWithWhereWithoutCreatedByInput>
+  >;
+  upsert?: InputMaybe<
+    Array<IncidentUpsertWithWhereUniqueWithoutCreatedByInput>
+  >;
 };
 
 export type IncidentUpdateManyWithoutCrimeTypesInput = {
   connect?: InputMaybe<Array<IncidentWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<IncidentCreateOrConnectWithoutCrimeTypesInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<IncidentCreateOrConnectWithoutCrimeTypesInput>
+  >;
   create?: InputMaybe<Array<IncidentCreateWithoutCrimeTypesInput>>;
   delete?: InputMaybe<Array<IncidentWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<IncidentScalarWhereInput>>;
   disconnect?: InputMaybe<Array<IncidentWhereUniqueInput>>;
   set?: InputMaybe<Array<IncidentWhereUniqueInput>>;
-  update?: InputMaybe<Array<IncidentUpdateWithWhereUniqueWithoutCrimeTypesInput>>;
-  updateMany?: InputMaybe<Array<IncidentUpdateManyWithWhereWithoutCrimeTypesInput>>;
-  upsert?: InputMaybe<Array<IncidentUpsertWithWhereUniqueWithoutCrimeTypesInput>>;
+  update?: InputMaybe<
+    Array<IncidentUpdateWithWhereUniqueWithoutCrimeTypesInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<IncidentUpdateManyWithWhereWithoutCrimeTypesInput>
+  >;
+  upsert?: InputMaybe<
+    Array<IncidentUpsertWithWhereUniqueWithoutCrimeTypesInput>
+  >;
 };
 
 export type IncidentUpdateManyWithoutGroupsInput = {
   connect?: InputMaybe<Array<IncidentWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<IncidentCreateOrConnectWithoutGroupsInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<IncidentCreateOrConnectWithoutGroupsInput>
+  >;
   create?: InputMaybe<Array<IncidentCreateWithoutGroupsInput>>;
   delete?: InputMaybe<Array<IncidentWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<IncidentScalarWhereInput>>;
@@ -5024,20 +5077,30 @@ export type IncidentUpdateManyWithoutGroupsInput = {
 
 export type IncidentUpdateManyWithoutOffendersInput = {
   connect?: InputMaybe<Array<IncidentWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<IncidentCreateOrConnectWithoutOffendersInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<IncidentCreateOrConnectWithoutOffendersInput>
+  >;
   create?: InputMaybe<Array<IncidentCreateWithoutOffendersInput>>;
   delete?: InputMaybe<Array<IncidentWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<IncidentScalarWhereInput>>;
   disconnect?: InputMaybe<Array<IncidentWhereUniqueInput>>;
   set?: InputMaybe<Array<IncidentWhereUniqueInput>>;
-  update?: InputMaybe<Array<IncidentUpdateWithWhereUniqueWithoutOffendersInput>>;
-  updateMany?: InputMaybe<Array<IncidentUpdateManyWithWhereWithoutOffendersInput>>;
-  upsert?: InputMaybe<Array<IncidentUpsertWithWhereUniqueWithoutOffendersInput>>;
+  update?: InputMaybe<
+    Array<IncidentUpdateWithWhereUniqueWithoutOffendersInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<IncidentUpdateManyWithWhereWithoutOffendersInput>
+  >;
+  upsert?: InputMaybe<
+    Array<IncidentUpsertWithWhereUniqueWithoutOffendersInput>
+  >;
 };
 
 export type IncidentUpdateManyWithoutSchemeInput = {
   connect?: InputMaybe<Array<IncidentWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<IncidentCreateOrConnectWithoutSchemeInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<IncidentCreateOrConnectWithoutSchemeInput>
+  >;
   create?: InputMaybe<Array<IncidentCreateWithoutSchemeInput>>;
   createMany?: InputMaybe<IncidentCreateManySchemeInputEnvelope>;
   delete?: InputMaybe<Array<IncidentWhereUniqueInput>>;
@@ -5548,7 +5611,9 @@ export type IntelCreateManySuggestedOffenderInputEnvelope = {
 
 export type IntelCreateNestedManyWithoutCreatedByInput = {
   connect?: InputMaybe<Array<IntelWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<IntelCreateOrConnectWithoutCreatedByInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<IntelCreateOrConnectWithoutCreatedByInput>
+  >;
   create?: InputMaybe<Array<IntelCreateWithoutCreatedByInput>>;
   createMany?: InputMaybe<IntelCreateManyCreatedByInputEnvelope>;
 };
@@ -5576,7 +5641,9 @@ export type IntelCreateNestedManyWithoutSchemeInput = {
 
 export type IntelCreateNestedManyWithoutSuggestedOffenderInput = {
   connect?: InputMaybe<Array<IntelWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<IntelCreateOrConnectWithoutSuggestedOffenderInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<IntelCreateOrConnectWithoutSuggestedOffenderInput>
+  >;
   create?: InputMaybe<Array<IntelCreateWithoutSuggestedOffenderInput>>;
   createMany?: InputMaybe<IntelCreateManySuggestedOffenderInputEnvelope>;
 };
@@ -5746,7 +5813,7 @@ export enum IntelType {
   AddImage = 'ADD_IMAGE',
   AddOffender = 'ADD_OFFENDER',
   Comment = 'COMMENT',
-  SuggestOffender = 'SUGGEST_OFFENDER'
+  SuggestOffender = 'SUGGEST_OFFENDER',
 }
 
 export type IntelUpdateManyMutationInput = {
@@ -5784,7 +5851,9 @@ export type IntelUpdateManyWithWhereWithoutSuggestedOffenderInput = {
 
 export type IntelUpdateManyWithoutCreatedByInput = {
   connect?: InputMaybe<Array<IntelWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<IntelCreateOrConnectWithoutCreatedByInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<IntelCreateOrConnectWithoutCreatedByInput>
+  >;
   create?: InputMaybe<Array<IntelCreateWithoutCreatedByInput>>;
   createMany?: InputMaybe<IntelCreateManyCreatedByInputEnvelope>;
   delete?: InputMaybe<Array<IntelWhereUniqueInput>>;
@@ -5840,16 +5909,24 @@ export type IntelUpdateManyWithoutSchemeInput = {
 
 export type IntelUpdateManyWithoutSuggestedOffenderInput = {
   connect?: InputMaybe<Array<IntelWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<IntelCreateOrConnectWithoutSuggestedOffenderInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<IntelCreateOrConnectWithoutSuggestedOffenderInput>
+  >;
   create?: InputMaybe<Array<IntelCreateWithoutSuggestedOffenderInput>>;
   createMany?: InputMaybe<IntelCreateManySuggestedOffenderInputEnvelope>;
   delete?: InputMaybe<Array<IntelWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<IntelScalarWhereInput>>;
   disconnect?: InputMaybe<Array<IntelWhereUniqueInput>>;
   set?: InputMaybe<Array<IntelWhereUniqueInput>>;
-  update?: InputMaybe<Array<IntelUpdateWithWhereUniqueWithoutSuggestedOffenderInput>>;
-  updateMany?: InputMaybe<Array<IntelUpdateManyWithWhereWithoutSuggestedOffenderInput>>;
-  upsert?: InputMaybe<Array<IntelUpsertWithWhereUniqueWithoutSuggestedOffenderInput>>;
+  update?: InputMaybe<
+    Array<IntelUpdateWithWhereUniqueWithoutSuggestedOffenderInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<IntelUpdateManyWithWhereWithoutSuggestedOffenderInput>
+  >;
+  upsert?: InputMaybe<
+    Array<IntelUpsertWithWhereUniqueWithoutSuggestedOffenderInput>
+  >;
 };
 
 export type IntelUpdateOneWithoutImageInput = {
@@ -6047,7 +6124,6 @@ export type Message = {
   sent?: Maybe<Scalars['Boolean']>;
   updatedAt: Scalars['DateTime'];
 };
-
 
 export type MessageActionsArgs = {
   after?: InputMaybe<ActionWhereUniqueInput>;
@@ -6450,7 +6526,7 @@ export enum Model {
   Scheme = 'SCHEME',
   Send = 'SEND',
   Tag = 'TAG',
-  User = 'USER'
+  User = 'USER',
 }
 
 export type Mutation = {
@@ -6548,38 +6624,31 @@ export type Mutation = {
   uploadToImage?: Maybe<Image>;
 };
 
-
 export type MutationAddImageIntelArgs = {
   data: AddImageIntelData;
 };
-
 
 export type MutationApproveIncidentArgs = {
   data: ApproveIncidentData;
   where: UniqueId;
 };
 
-
 export type MutationApproveOffenderArgs = {
   data: ApproveIncidentData;
   where: UniqueId;
 };
 
-
 export type MutationCreateActionArgs = {
   data: ActionCreateInput;
 };
-
 
 export type MutationCreateAddressArgs = {
   data: AddressCreateInput;
 };
 
-
 export type MutationCreateBanArgs = {
   data: BanCreateInput;
 };
-
 
 export type MutationCreateBlankImageArgs = {
   incident?: InputMaybe<IncidentWhereUniqueInput>;
@@ -6587,61 +6656,49 @@ export type MutationCreateBlankImageArgs = {
   scheme: Scalars['String'];
 };
 
-
 export type MutationCreateChatArgs = {
   data: ChatCreateInput;
 };
-
 
 export type MutationCreateCommentArgs = {
   data: CreateCommentData;
 };
 
-
 export type MutationCreateGroupArgs = {
   data: GroupCreateInput;
 };
-
 
 export type MutationCreateImageArgs = {
   data: ImageCreateInput;
 };
 
-
 export type MutationCreateIncidentArgs = {
   data: CreatIncidentData;
 };
-
 
 export type MutationCreateMessageArgs = {
   data: MessageCreateWithoutActionsInput;
 };
 
-
 export type MutationCreateMessageDefaultArgs = {
   data: MessageCreateInput;
 };
-
 
 export type MutationCreateOffenderArgs = {
   data: CreateOffenderData;
 };
 
-
 export type MutationCreateOffenderDefaultArgs = {
   data: OffenderCreateInput;
 };
-
 
 export type MutationCreateSchemeArgs = {
   data: SchemeCreateInput;
 };
 
-
 export type MutationCreateTagArgs = {
   data: TagCreateInput;
 };
-
 
 export type MutationCreateUnlinkedImageArgs = {
   file: Scalars['Upload'];
@@ -6649,369 +6706,301 @@ export type MutationCreateUnlinkedImageArgs = {
   scheme: Scalars['String'];
 };
 
-
 export type MutationCreateUserArgs = {
   data: CreateUserData;
 };
-
 
 export type MutationCreateUserChatArgs = {
   data: UserChatCreateInput;
 };
 
-
 export type MutationCreateUserDefaultArgs = {
   data: UserCreateInput;
 };
-
 
 export type MutationCreateUserInAuth0Args = {
   id: Scalars['String'];
   password: Scalars['String'];
 };
 
-
 export type MutationCreateUserInDatabaseArgs = {
   data: CreateUserData;
 };
-
 
 export type MutationCreateUserSchemeArgs = {
   data: UserSchemeCreateInput;
 };
 
-
 export type MutationDeleteActionArgs = {
   where: ActionWhereUniqueInput;
 };
-
 
 export type MutationDeleteAddressArgs = {
   where: AddressWhereUniqueInput;
 };
 
-
 export type MutationDeleteBanArgs = {
   where: UniqueId;
 };
-
 
 export type MutationDeleteChatArgs = {
   where: UniqueId;
 };
 
-
 export type MutationDeleteChatDefaultArgs = {
   where: ChatWhereUniqueInput;
 };
-
 
 export type MutationDeleteGroupArgs = {
   where: UniqueId;
 };
 
-
 export type MutationDeleteGroupDefaultArgs = {
   where: GroupWhereUniqueInput;
 };
-
 
 export type MutationDeleteImageArgs = {
   where: ImageWhereUniqueInput;
 };
 
-
 export type MutationDeleteIncidentArgs = {
   where: UniqueId;
 };
-
 
 export type MutationDeleteIncidentDefaultArgs = {
   where: IncidentWhereUniqueInput;
 };
 
-
 export type MutationDeleteIntelArgs = {
   where: IntelWhereUniqueInput;
 };
-
 
 export type MutationDeleteMessageArgs = {
   where: MessageWhereUniqueInput;
 };
 
-
 export type MutationDeleteOffenderArgs = {
   where: UniqueId;
 };
-
 
 export type MutationDeleteOffenderDefaultArgs = {
   where: OffenderWhereUniqueInput;
 };
 
-
 export type MutationDeleteSchemeArgs = {
   where: SchemeWhereUniqueInput;
 };
-
 
 export type MutationDeleteTagArgs = {
   where: UniqueId;
 };
 
-
 export type MutationDeleteTagDefaultArgs = {
   where: TagWhereUniqueInput;
 };
-
 
 export type MutationDeleteUserArgs = {
   id: Scalars['String'];
   scheme: Scalars['String'];
 };
 
-
 export type MutationDeleteUserChatArgs = {
   where: UserChatWhereUniqueInput;
 };
 
-
 export type MutationDeleteUserDefaultArgs = {
   where: UserWhereUniqueInput;
 };
-
 
 export type MutationDeleteUserFromSchemeArgs = {
   id: Scalars['String'];
   scheme: Scalars['String'];
 };
 
-
 export type MutationDeleteUserSchemeArgs = {
   where: UserSchemeWhereUniqueInput;
 };
-
 
 export type MutationInviteExistingUserArgs = {
   data: UserUpdateInput;
   where: UniqueId;
 };
 
-
 export type MutationNewIncidentArgs = {
   data: IncidentCreateInput;
 };
-
 
 export type MutationRecycleIncidentArgs = {
   where: UniqueId;
 };
 
-
 export type MutationRecycleOffenderArgs = {
   where: UniqueId;
 };
-
 
 export type MutationRefreshAuthArgs = {
   data: RefreshAuthData;
 };
 
-
 export type MutationRegisterPushTokenArgs = {
   data: RegisterPushTokenData;
 };
-
 
 export type MutationResetPasswordArgs = {
   data: ResetPasswordData;
 };
 
-
 export type MutationRestoreAllRecycledItemsArgs = {
   schemeId: UniqueId;
 };
-
 
 export type MutationRestoreIncidentArgs = {
   data: RecycledItemWhereUniqueInput;
   where: UniqueId;
 };
 
-
 export type MutationRestoreItemArgs = {
   where: RecycledItemWhereUniqueInput;
 };
-
 
 export type MutationRestoreOffenderArgs = {
   data: RecycledItemWhereUniqueInput;
   where: UniqueId;
 };
 
-
 export type MutationSendInviteArgs = {
   user: Scalars['String'];
 };
-
 
 export type MutationSetPasswordArgs = {
   data: SetPasswordData;
 };
 
-
 export type MutationSignInArgs = {
   data: SignInData;
 };
-
 
 export type MutationSuggestOffenderArgs = {
   data: SuggestOffenderData;
 };
 
-
 export type MutationToggleUserArgs = {
   id: Scalars['ID'];
 };
-
 
 export type MutationUpdateActionArgs = {
   data: ActionUpdateInput;
   where: ActionWhereUniqueInput;
 };
 
-
 export type MutationUpdateAddressArgs = {
   data: AddressUpdateInput;
   where: AddressWhereUniqueInput;
 };
-
 
 export type MutationUpdateBanArgs = {
   data: BanUpdateInput;
   where: UniqueId;
 };
 
-
 export type MutationUpdateBanDefaultArgs = {
   data: BanUpdateInput;
   where: BanWhereUniqueInput;
 };
-
 
 export type MutationUpdateChatArgs = {
   data: ChatUpdateInput;
   where: UniqueId;
 };
 
-
 export type MutationUpdateChatDefaultArgs = {
   data: ChatUpdateInput;
   where: ChatWhereUniqueInput;
 };
-
 
 export type MutationUpdateGroupArgs = {
   data: GroupUpdateInput;
   where: UniqueId;
 };
 
-
 export type MutationUpdateGroupDefaultArgs = {
   data: GroupUpdateInput;
   where: GroupWhereUniqueInput;
 };
-
 
 export type MutationUpdateImageArgs = {
   data: ImageUpdateInput;
   where: ImageWhereUniqueInput;
 };
 
-
 export type MutationUpdateIncidentArgs = {
   data: IncidentUpdateInput;
   where: UniqueId;
 };
-
 
 export type MutationUpdateMessageArgs = {
   data: MessageUpdateInput;
   where: MessageWhereUniqueInput;
 };
 
-
 export type MutationUpdateOffenderArgs = {
   data: OffenderUpdateInput;
   where: UniqueId;
 };
-
 
 export type MutationUpdateOffenderDefaultArgs = {
   data: OffenderUpdateInput;
   where: OffenderWhereUniqueInput;
 };
 
-
 export type MutationUpdateOneIncidentArgs = {
   data: IncidentUpdateInput;
   where: IncidentWhereUniqueInput;
 };
 
-
 export type MutationUpdatePasswordArgs = {
   data: UpdatePasswordData;
 };
-
 
 export type MutationUpdateSchemeArgs = {
   data: SchemeUpdateInput;
   where: UniqueId;
 };
 
-
 export type MutationUpdateSchemeDefaultArgs = {
   data: SchemeUpdateInput;
   where: SchemeWhereUniqueInput;
 };
-
 
 export type MutationUpdateTagArgs = {
   data: TagUpdateInput;
   where: UniqueId;
 };
 
-
 export type MutationUpdateTagDefaultArgs = {
   data: TagUpdateInput;
   where: TagWhereUniqueInput;
 };
-
 
 export type MutationUpdateUserArgs = {
   data: UserUpdateInput;
   where: UniqueId;
 };
 
-
 export type MutationUpdateUserChatArgs = {
   data: UserChatUpdateInput;
   where: UserChatWhereUniqueInput;
 };
-
 
 export type MutationUpdateUserDefaultArgs = {
   data: UserUpdateInput;
   where: UserWhereUniqueInput;
 };
 
-
 export type MutationUpdateUserSchemeArgs = {
   data: UserSchemeUpdateInput;
   where: UserSchemeWhereUniqueInput;
 };
-
 
 export type MutationUploadImageArgs = {
   file: Scalars['Upload'];
@@ -7019,7 +7008,6 @@ export type MutationUploadImageArgs = {
   offenders?: InputMaybe<Array<UniqueId>>;
   scheme: Scalars['String'];
 };
-
 
 export type MutationUploadToImageArgs = {
   file: Scalars['Upload'];
@@ -7226,7 +7214,6 @@ export type Offender = {
   uploaded?: Maybe<Scalars['Boolean']>;
 };
 
-
 export type OffenderActionsArgs = {
   after?: InputMaybe<ActionWhereUniqueInput>;
   before?: InputMaybe<ActionWhereUniqueInput>;
@@ -7235,7 +7222,6 @@ export type OffenderActionsArgs = {
   orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
   where?: InputMaybe<ActionWhereInput>;
 };
-
 
 export type OffenderBansArgs = {
   after?: InputMaybe<BanWhereUniqueInput>;
@@ -7246,7 +7232,6 @@ export type OffenderBansArgs = {
   where?: InputMaybe<BanWhereInput>;
 };
 
-
 export type OffenderGroupsArgs = {
   after?: InputMaybe<GroupWhereUniqueInput>;
   before?: InputMaybe<GroupWhereUniqueInput>;
@@ -7255,7 +7240,6 @@ export type OffenderGroupsArgs = {
   orderBy?: InputMaybe<Array<GroupOrderByWithRelationInput>>;
   where?: InputMaybe<GroupWhereInput>;
 };
-
 
 export type OffenderImagesArgs = {
   after?: InputMaybe<ImageWhereUniqueInput>;
@@ -7266,7 +7250,6 @@ export type OffenderImagesArgs = {
   where?: InputMaybe<ImageWhereInput>;
 };
 
-
 export type OffenderIncidentsArgs = {
   after?: InputMaybe<IncidentWhereUniqueInput>;
   before?: InputMaybe<IncidentWhereUniqueInput>;
@@ -7276,7 +7259,6 @@ export type OffenderIncidentsArgs = {
   where?: InputMaybe<IncidentWhereInput>;
 };
 
-
 export type OffenderIntelArgs = {
   after?: InputMaybe<IntelWhereUniqueInput>;
   before?: InputMaybe<IntelWhereUniqueInput>;
@@ -7285,7 +7267,6 @@ export type OffenderIntelArgs = {
   orderBy?: InputMaybe<Array<IntelOrderByWithRelationInput>>;
   where?: InputMaybe<IntelWhereInput>;
 };
-
 
 export type OffenderTagsArgs = {
   after?: InputMaybe<TagWhereUniqueInput>;
@@ -7382,32 +7363,42 @@ export type OffenderCreateManySchemeInputEnvelope = {
 
 export type OffenderCreateNestedManyWithoutCreatedByInput = {
   connect?: InputMaybe<Array<OffenderWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<OffenderCreateOrConnectWithoutCreatedByInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<OffenderCreateOrConnectWithoutCreatedByInput>
+  >;
   create?: InputMaybe<Array<OffenderCreateWithoutCreatedByInput>>;
   createMany?: InputMaybe<OffenderCreateManyCreatedByInputEnvelope>;
 };
 
 export type OffenderCreateNestedManyWithoutGroupsInput = {
   connect?: InputMaybe<Array<OffenderWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<OffenderCreateOrConnectWithoutGroupsInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<OffenderCreateOrConnectWithoutGroupsInput>
+  >;
   create?: InputMaybe<Array<OffenderCreateWithoutGroupsInput>>;
 };
 
 export type OffenderCreateNestedManyWithoutImagesInput = {
   connect?: InputMaybe<Array<OffenderWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<OffenderCreateOrConnectWithoutImagesInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<OffenderCreateOrConnectWithoutImagesInput>
+  >;
   create?: InputMaybe<Array<OffenderCreateWithoutImagesInput>>;
 };
 
 export type OffenderCreateNestedManyWithoutIncidentsInput = {
   connect?: InputMaybe<Array<OffenderWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<OffenderCreateOrConnectWithoutIncidentsInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<OffenderCreateOrConnectWithoutIncidentsInput>
+  >;
   create?: InputMaybe<Array<OffenderCreateWithoutIncidentsInput>>;
 };
 
 export type OffenderCreateNestedManyWithoutSchemeInput = {
   connect?: InputMaybe<Array<OffenderWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<OffenderCreateOrConnectWithoutSchemeInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<OffenderCreateOrConnectWithoutSchemeInput>
+  >;
   create?: InputMaybe<Array<OffenderCreateWithoutSchemeInput>>;
   createMany?: InputMaybe<OffenderCreateManySchemeInputEnvelope>;
 };
@@ -7970,21 +7961,31 @@ export type OffenderUpdateManyWithWhereWithoutTagsInput = {
 
 export type OffenderUpdateManyWithoutCreatedByInput = {
   connect?: InputMaybe<Array<OffenderWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<OffenderCreateOrConnectWithoutCreatedByInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<OffenderCreateOrConnectWithoutCreatedByInput>
+  >;
   create?: InputMaybe<Array<OffenderCreateWithoutCreatedByInput>>;
   createMany?: InputMaybe<OffenderCreateManyCreatedByInputEnvelope>;
   delete?: InputMaybe<Array<OffenderWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<OffenderScalarWhereInput>>;
   disconnect?: InputMaybe<Array<OffenderWhereUniqueInput>>;
   set?: InputMaybe<Array<OffenderWhereUniqueInput>>;
-  update?: InputMaybe<Array<OffenderUpdateWithWhereUniqueWithoutCreatedByInput>>;
-  updateMany?: InputMaybe<Array<OffenderUpdateManyWithWhereWithoutCreatedByInput>>;
-  upsert?: InputMaybe<Array<OffenderUpsertWithWhereUniqueWithoutCreatedByInput>>;
+  update?: InputMaybe<
+    Array<OffenderUpdateWithWhereUniqueWithoutCreatedByInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<OffenderUpdateManyWithWhereWithoutCreatedByInput>
+  >;
+  upsert?: InputMaybe<
+    Array<OffenderUpsertWithWhereUniqueWithoutCreatedByInput>
+  >;
 };
 
 export type OffenderUpdateManyWithoutGroupsInput = {
   connect?: InputMaybe<Array<OffenderWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<OffenderCreateOrConnectWithoutGroupsInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<OffenderCreateOrConnectWithoutGroupsInput>
+  >;
   create?: InputMaybe<Array<OffenderCreateWithoutGroupsInput>>;
   delete?: InputMaybe<Array<OffenderWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<OffenderScalarWhereInput>>;
@@ -7997,7 +7998,9 @@ export type OffenderUpdateManyWithoutGroupsInput = {
 
 export type OffenderUpdateManyWithoutImagesInput = {
   connect?: InputMaybe<Array<OffenderWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<OffenderCreateOrConnectWithoutImagesInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<OffenderCreateOrConnectWithoutImagesInput>
+  >;
   create?: InputMaybe<Array<OffenderCreateWithoutImagesInput>>;
   delete?: InputMaybe<Array<OffenderWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<OffenderScalarWhereInput>>;
@@ -8010,20 +8013,30 @@ export type OffenderUpdateManyWithoutImagesInput = {
 
 export type OffenderUpdateManyWithoutIncidentsInput = {
   connect?: InputMaybe<Array<OffenderWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<OffenderCreateOrConnectWithoutIncidentsInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<OffenderCreateOrConnectWithoutIncidentsInput>
+  >;
   create?: InputMaybe<Array<OffenderCreateWithoutIncidentsInput>>;
   delete?: InputMaybe<Array<OffenderWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<OffenderScalarWhereInput>>;
   disconnect?: InputMaybe<Array<OffenderWhereUniqueInput>>;
   set?: InputMaybe<Array<OffenderWhereUniqueInput>>;
-  update?: InputMaybe<Array<OffenderUpdateWithWhereUniqueWithoutIncidentsInput>>;
-  updateMany?: InputMaybe<Array<OffenderUpdateManyWithWhereWithoutIncidentsInput>>;
-  upsert?: InputMaybe<Array<OffenderUpsertWithWhereUniqueWithoutIncidentsInput>>;
+  update?: InputMaybe<
+    Array<OffenderUpdateWithWhereUniqueWithoutIncidentsInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<OffenderUpdateManyWithWhereWithoutIncidentsInput>
+  >;
+  upsert?: InputMaybe<
+    Array<OffenderUpsertWithWhereUniqueWithoutIncidentsInput>
+  >;
 };
 
 export type OffenderUpdateManyWithoutSchemeInput = {
   connect?: InputMaybe<Array<OffenderWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<OffenderCreateOrConnectWithoutSchemeInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<OffenderCreateOrConnectWithoutSchemeInput>
+  >;
   create?: InputMaybe<Array<OffenderCreateWithoutSchemeInput>>;
   createMany?: InputMaybe<OffenderCreateManySchemeInputEnvelope>;
   delete?: InputMaybe<Array<OffenderWhereUniqueInput>>;
@@ -8549,7 +8562,7 @@ export enum OnboardSteps {
   Details = 'DETAILS',
   Password = 'PASSWORD',
   Terms = 'TERMS',
-  Welcome = 'WELCOME'
+  Welcome = 'WELCOME',
 }
 
 export type OneSignalIdCreateManyUserInput = {
@@ -8566,7 +8579,9 @@ export type OneSignalIdCreateManyUserInputEnvelope = {
 
 export type OneSignalIdCreateNestedManyWithoutUserInput = {
   connect?: InputMaybe<Array<OneSignalIdWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<OneSignalIdCreateOrConnectWithoutUserInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<OneSignalIdCreateOrConnectWithoutUserInput>
+  >;
   create?: InputMaybe<Array<OneSignalIdCreateWithoutUserInput>>;
   createMany?: InputMaybe<OneSignalIdCreateManyUserInputEnvelope>;
 };
@@ -8618,7 +8633,9 @@ export type OneSignalIdUpdateManyWithWhereWithoutUserInput = {
 
 export type OneSignalIdUpdateManyWithoutUserInput = {
   connect?: InputMaybe<Array<OneSignalIdWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<OneSignalIdCreateOrConnectWithoutUserInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<OneSignalIdCreateOrConnectWithoutUserInput>
+  >;
   create?: InputMaybe<Array<OneSignalIdCreateWithoutUserInput>>;
   createMany?: InputMaybe<OneSignalIdCreateManyUserInputEnvelope>;
   delete?: InputMaybe<Array<OneSignalIdWhereUniqueInput>>;
@@ -8626,7 +8643,9 @@ export type OneSignalIdUpdateManyWithoutUserInput = {
   disconnect?: InputMaybe<Array<OneSignalIdWhereUniqueInput>>;
   set?: InputMaybe<Array<OneSignalIdWhereUniqueInput>>;
   update?: InputMaybe<Array<OneSignalIdUpdateWithWhereUniqueWithoutUserInput>>;
-  updateMany?: InputMaybe<Array<OneSignalIdUpdateManyWithWhereWithoutUserInput>>;
+  updateMany?: InputMaybe<
+    Array<OneSignalIdUpdateManyWithWhereWithoutUserInput>
+  >;
   upsert?: InputMaybe<Array<OneSignalIdUpsertWithWhereUniqueWithoutUserInput>>;
 };
 
@@ -8706,11 +8725,9 @@ export type Query = {
   users: Array<User>;
 };
 
-
 export type QueryActionArgs = {
   where: ActionWhereUniqueInput;
 };
-
 
 export type QueryActionsArgs = {
   after?: InputMaybe<ActionWhereUniqueInput>;
@@ -8721,11 +8738,9 @@ export type QueryActionsArgs = {
   where?: InputMaybe<ActionWhereInput>;
 };
 
-
 export type QueryAddressArgs = {
   where: AddressWhereUniqueInput;
 };
-
 
 export type QueryAddressesArgs = {
   after?: InputMaybe<AddressWhereUniqueInput>;
@@ -8736,16 +8751,13 @@ export type QueryAddressesArgs = {
   where?: InputMaybe<AddressWhereInput>;
 };
 
-
 export type QueryAuth0UserArgs = {
   id: Scalars['String'];
 };
 
-
 export type QueryBanArgs = {
   where: BanWhereUniqueInput;
 };
-
 
 export type QueryBansArgs = {
   after?: InputMaybe<BanWhereUniqueInput>;
@@ -8756,11 +8768,9 @@ export type QueryBansArgs = {
   where?: InputMaybe<BanWhereInput>;
 };
 
-
 export type QueryChatArgs = {
   where: ChatWhereUniqueInput;
 };
-
 
 export type QueryChatsArgs = {
   after?: InputMaybe<ChatWhereUniqueInput>;
@@ -8771,11 +8781,9 @@ export type QueryChatsArgs = {
   where?: InputMaybe<ChatWhereInput>;
 };
 
-
 export type QueryGroupArgs = {
   where: GroupWhereUniqueInput;
 };
-
 
 export type QueryGroupsArgs = {
   after?: InputMaybe<GroupWhereUniqueInput>;
@@ -8786,11 +8794,9 @@ export type QueryGroupsArgs = {
   where?: InputMaybe<GroupWhereInput>;
 };
 
-
 export type QueryImageArgs = {
   where: ImageWhereUniqueInput;
 };
-
 
 export type QueryImagesArgs = {
   after?: InputMaybe<ImageWhereUniqueInput>;
@@ -8801,11 +8807,9 @@ export type QueryImagesArgs = {
   where?: InputMaybe<ImageWhereInput>;
 };
 
-
 export type QueryIncidentArgs = {
   where: IncidentWhereUniqueInput;
 };
-
 
 export type QueryIncidentFeedArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -8818,7 +8822,6 @@ export type QueryIncidentFeedArgs = {
   search?: InputMaybe<Scalars['String']>;
 };
 
-
 export type QueryIncidentsArgs = {
   after?: InputMaybe<IncidentWhereUniqueInput>;
   before?: InputMaybe<IncidentWhereUniqueInput>;
@@ -8827,7 +8830,6 @@ export type QueryIncidentsArgs = {
   orderBy?: InputMaybe<Array<IncidentOrderByWithRelationInput>>;
   where?: InputMaybe<IncidentWhereInput>;
 };
-
 
 export type QueryListIncidentsArgs = {
   after?: InputMaybe<IncidentWhereUniqueInput>;
@@ -8838,11 +8840,9 @@ export type QueryListIncidentsArgs = {
   where?: InputMaybe<IncidentWhereInput>;
 };
 
-
 export type QueryMessageArgs = {
   where: MessageWhereUniqueInput;
 };
-
 
 export type QueryMessagesArgs = {
   after?: InputMaybe<MessageWhereUniqueInput>;
@@ -8853,11 +8853,9 @@ export type QueryMessagesArgs = {
   where?: InputMaybe<MessageWhereInput>;
 };
 
-
 export type QueryOffenderArgs = {
   where: OffenderWhereUniqueInput;
 };
-
 
 export type QueryOffenderFeedArgs = {
   active?: InputMaybe<Scalars['Boolean']>;
@@ -8875,7 +8873,6 @@ export type QueryOffenderFeedArgs = {
   userId: Scalars['String'];
 };
 
-
 export type QueryOffendersArgs = {
   after?: InputMaybe<OffenderWhereUniqueInput>;
   before?: InputMaybe<OffenderWhereUniqueInput>;
@@ -8885,11 +8882,9 @@ export type QueryOffendersArgs = {
   where?: InputMaybe<OffenderWhereInput>;
 };
 
-
 export type QueryRecycledItemArgs = {
   where: RecycledItemWhereUniqueInput;
 };
-
 
 export type QueryRecycledItemsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -8900,17 +8895,14 @@ export type QueryRecycledItemsArgs = {
   search?: InputMaybe<Scalars['String']>;
 };
 
-
 export type QueryReportUserLoginArgs = {
   device: DeviceInfo;
   platform: Scalars['String'];
 };
 
-
 export type QuerySchemeArgs = {
   where: SchemeWhereUniqueInput;
 };
-
 
 export type QuerySchemesArgs = {
   after?: InputMaybe<SchemeWhereUniqueInput>;
@@ -8921,11 +8913,9 @@ export type QuerySchemesArgs = {
   where?: InputMaybe<SchemeWhereInput>;
 };
 
-
 export type QueryTagArgs = {
   where: TagWhereUniqueInput;
 };
-
 
 export type QueryTagsArgs = {
   after?: InputMaybe<TagWhereUniqueInput>;
@@ -8936,21 +8926,17 @@ export type QueryTagsArgs = {
   where?: InputMaybe<TagWhereInput>;
 };
 
-
 export type QueryUserArgs = {
   where: UserWhereUniqueInput;
 };
-
 
 export type QueryUserByEmailArgs = {
   email: Scalars['String'];
 };
 
-
 export type QueryUserChatArgs = {
   where: UserChatWhereUniqueInput;
 };
-
 
 export type QueryUserChatsArgs = {
   after?: InputMaybe<UserChatWhereUniqueInput>;
@@ -8961,16 +8947,13 @@ export type QueryUserChatsArgs = {
   where?: InputMaybe<UserChatWhereInput>;
 };
 
-
 export type QueryUserNewArgs = {
   id: Scalars['String'];
 };
 
-
 export type QueryUserSchemeArgs = {
   where: UserSchemeWhereUniqueInput;
 };
-
 
 export type QueryUserSchemesArgs = {
   after?: InputMaybe<UserSchemeWhereUniqueInput>;
@@ -8980,7 +8963,6 @@ export type QueryUserSchemesArgs = {
   orderBy?: InputMaybe<Array<UserSchemeOrderByWithRelationInput>>;
   where?: InputMaybe<UserSchemeWhereInput>;
 };
-
 
 export type QueryUsersArgs = {
   after?: InputMaybe<UserWhereUniqueInput>;
@@ -8993,7 +8975,7 @@ export type QueryUsersArgs = {
 
 export enum QueryMode {
   Default = 'default',
-  Insensitive = 'insensitive'
+  Insensitive = 'insensitive',
 }
 
 export enum Race {
@@ -9003,7 +8985,7 @@ export enum Race {
   Ic4 = 'IC4',
   Ic5 = 'IC5',
   Ic6 = 'IC6',
-  Unknown = 'UNKNOWN'
+  Unknown = 'UNKNOWN',
 }
 
 export type RecycledItem = {
@@ -9050,14 +9032,18 @@ export type RecycledItemCreateManySchemeInputEnvelope = {
 
 export type RecycledItemCreateNestedManyWithoutDeletedByInput = {
   connect?: InputMaybe<Array<RecycledItemWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<RecycledItemCreateOrConnectWithoutDeletedByInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<RecycledItemCreateOrConnectWithoutDeletedByInput>
+  >;
   create?: InputMaybe<Array<RecycledItemCreateWithoutDeletedByInput>>;
   createMany?: InputMaybe<RecycledItemCreateManyDeletedByInputEnvelope>;
 };
 
 export type RecycledItemCreateNestedManyWithoutSchemeInput = {
   connect?: InputMaybe<Array<RecycledItemWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<RecycledItemCreateOrConnectWithoutSchemeInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<RecycledItemCreateOrConnectWithoutSchemeInput>
+  >;
   create?: InputMaybe<Array<RecycledItemCreateWithoutSchemeInput>>;
   createMany?: InputMaybe<RecycledItemCreateManySchemeInputEnvelope>;
 };
@@ -9192,30 +9178,46 @@ export type RecycledItemUpdateManyWithWhereWithoutSchemeInput = {
 
 export type RecycledItemUpdateManyWithoutDeletedByInput = {
   connect?: InputMaybe<Array<RecycledItemWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<RecycledItemCreateOrConnectWithoutDeletedByInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<RecycledItemCreateOrConnectWithoutDeletedByInput>
+  >;
   create?: InputMaybe<Array<RecycledItemCreateWithoutDeletedByInput>>;
   createMany?: InputMaybe<RecycledItemCreateManyDeletedByInputEnvelope>;
   delete?: InputMaybe<Array<RecycledItemWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<RecycledItemScalarWhereInput>>;
   disconnect?: InputMaybe<Array<RecycledItemWhereUniqueInput>>;
   set?: InputMaybe<Array<RecycledItemWhereUniqueInput>>;
-  update?: InputMaybe<Array<RecycledItemUpdateWithWhereUniqueWithoutDeletedByInput>>;
-  updateMany?: InputMaybe<Array<RecycledItemUpdateManyWithWhereWithoutDeletedByInput>>;
-  upsert?: InputMaybe<Array<RecycledItemUpsertWithWhereUniqueWithoutDeletedByInput>>;
+  update?: InputMaybe<
+    Array<RecycledItemUpdateWithWhereUniqueWithoutDeletedByInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<RecycledItemUpdateManyWithWhereWithoutDeletedByInput>
+  >;
+  upsert?: InputMaybe<
+    Array<RecycledItemUpsertWithWhereUniqueWithoutDeletedByInput>
+  >;
 };
 
 export type RecycledItemUpdateManyWithoutSchemeInput = {
   connect?: InputMaybe<Array<RecycledItemWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<RecycledItemCreateOrConnectWithoutSchemeInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<RecycledItemCreateOrConnectWithoutSchemeInput>
+  >;
   create?: InputMaybe<Array<RecycledItemCreateWithoutSchemeInput>>;
   createMany?: InputMaybe<RecycledItemCreateManySchemeInputEnvelope>;
   delete?: InputMaybe<Array<RecycledItemWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<RecycledItemScalarWhereInput>>;
   disconnect?: InputMaybe<Array<RecycledItemWhereUniqueInput>>;
   set?: InputMaybe<Array<RecycledItemWhereUniqueInput>>;
-  update?: InputMaybe<Array<RecycledItemUpdateWithWhereUniqueWithoutSchemeInput>>;
-  updateMany?: InputMaybe<Array<RecycledItemUpdateManyWithWhereWithoutSchemeInput>>;
-  upsert?: InputMaybe<Array<RecycledItemUpsertWithWhereUniqueWithoutSchemeInput>>;
+  update?: InputMaybe<
+    Array<RecycledItemUpdateWithWhereUniqueWithoutSchemeInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<RecycledItemUpdateManyWithWhereWithoutSchemeInput>
+  >;
+  upsert?: InputMaybe<
+    Array<RecycledItemUpsertWithWhereUniqueWithoutSchemeInput>
+  >;
 };
 
 export type RecycledItemUpdateOneWithoutIncidentInput = {
@@ -9361,7 +9363,7 @@ export enum Role {
   ContentAdmin = 'CONTENT_ADMIN',
   SchemeAdmin = 'SCHEME_ADMIN',
   ShopsafeAdmin = 'SHOPSAFE_ADMIN',
-  User = 'USER'
+  User = 'USER',
 }
 
 export type Scheme = {
@@ -9389,7 +9391,6 @@ export type Scheme = {
   updatedAt: Scalars['DateTime'];
 };
 
-
 export type SchemeActionsArgs = {
   after?: InputMaybe<ActionWhereUniqueInput>;
   before?: InputMaybe<ActionWhereUniqueInput>;
@@ -9398,7 +9399,6 @@ export type SchemeActionsArgs = {
   orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
   where?: InputMaybe<ActionWhereInput>;
 };
-
 
 export type SchemeActionsInSchemeArgs = {
   after?: InputMaybe<ActionWhereUniqueInput>;
@@ -9409,7 +9409,6 @@ export type SchemeActionsInSchemeArgs = {
   where?: InputMaybe<ActionWhereInput>;
 };
 
-
 export type SchemeBansArgs = {
   after?: InputMaybe<BanWhereUniqueInput>;
   before?: InputMaybe<BanWhereUniqueInput>;
@@ -9418,7 +9417,6 @@ export type SchemeBansArgs = {
   orderBy?: InputMaybe<Array<BanOrderByWithRelationInput>>;
   where?: InputMaybe<BanWhereInput>;
 };
-
 
 export type SchemeChatsArgs = {
   after?: InputMaybe<ChatWhereUniqueInput>;
@@ -9429,7 +9427,6 @@ export type SchemeChatsArgs = {
   where?: InputMaybe<ChatWhereInput>;
 };
 
-
 export type SchemeGroupsArgs = {
   after?: InputMaybe<GroupWhereUniqueInput>;
   before?: InputMaybe<GroupWhereUniqueInput>;
@@ -9438,7 +9435,6 @@ export type SchemeGroupsArgs = {
   orderBy?: InputMaybe<Array<GroupOrderByWithRelationInput>>;
   where?: InputMaybe<GroupWhereInput>;
 };
-
 
 export type SchemeImagesArgs = {
   after?: InputMaybe<ImageWhereUniqueInput>;
@@ -9449,7 +9445,6 @@ export type SchemeImagesArgs = {
   where?: InputMaybe<ImageWhereInput>;
 };
 
-
 export type SchemeIncidentsArgs = {
   after?: InputMaybe<IncidentWhereUniqueInput>;
   before?: InputMaybe<IncidentWhereUniqueInput>;
@@ -9458,7 +9453,6 @@ export type SchemeIncidentsArgs = {
   orderBy?: InputMaybe<Array<IncidentOrderByWithRelationInput>>;
   where?: InputMaybe<IncidentWhereInput>;
 };
-
 
 export type SchemeMembersArgs = {
   after?: InputMaybe<UserSchemeWhereUniqueInput>;
@@ -9469,7 +9463,6 @@ export type SchemeMembersArgs = {
   where?: InputMaybe<UserSchemeWhereInput>;
 };
 
-
 export type SchemeMessagesArgs = {
   after?: InputMaybe<MessageWhereUniqueInput>;
   before?: InputMaybe<MessageWhereUniqueInput>;
@@ -9479,7 +9472,6 @@ export type SchemeMessagesArgs = {
   where?: InputMaybe<MessageWhereInput>;
 };
 
-
 export type SchemeOffendersArgs = {
   after?: InputMaybe<OffenderWhereUniqueInput>;
   before?: InputMaybe<OffenderWhereUniqueInput>;
@@ -9487,14 +9479,12 @@ export type SchemeOffendersArgs = {
   last?: InputMaybe<Scalars['Int']>;
 };
 
-
 export type SchemeRecycledItemsArgs = {
   after?: InputMaybe<RecycledItemWhereUniqueInput>;
   before?: InputMaybe<RecycledItemWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
 };
-
 
 export type SchemeTagsArgs = {
   after?: InputMaybe<TagWhereUniqueInput>;
@@ -10714,7 +10704,7 @@ export type SignInData = {
 
 export enum SortOrder {
   Asc = 'asc',
-  Desc = 'desc'
+  Desc = 'desc',
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -10764,7 +10754,6 @@ export type Subscription = {
   newMessage?: Maybe<Message>;
 };
 
-
 export type SubscriptionNewMessageArgs = {
   chatId: Scalars['ID'];
 };
@@ -10797,7 +10786,6 @@ export type Tag = {
   users: Array<User>;
 };
 
-
 export type TagActionsArgs = {
   after?: InputMaybe<ActionWhereUniqueInput>;
   before?: InputMaybe<ActionWhereUniqueInput>;
@@ -10806,7 +10794,6 @@ export type TagActionsArgs = {
   orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
   where?: InputMaybe<ActionWhereInput>;
 };
-
 
 export type TagIncidentsArgs = {
   after?: InputMaybe<IncidentWhereUniqueInput>;
@@ -10817,7 +10804,6 @@ export type TagIncidentsArgs = {
   where?: InputMaybe<IncidentWhereInput>;
 };
 
-
 export type TagOffendersArgs = {
   after?: InputMaybe<OffenderWhereUniqueInput>;
   before?: InputMaybe<OffenderWhereUniqueInput>;
@@ -10826,7 +10812,6 @@ export type TagOffendersArgs = {
   orderBy?: InputMaybe<Array<OffenderOrderByWithRelationInput>>;
   where?: InputMaybe<OffenderWhereInput>;
 };
-
 
 export type TagUsersArgs = {
   after?: InputMaybe<UserWhereUniqueInput>;
@@ -11463,7 +11448,6 @@ export type User = {
   uploaded: Scalars['Boolean'];
 };
 
-
 export type UserActionsArgs = {
   after?: InputMaybe<ActionWhereUniqueInput>;
   before?: InputMaybe<ActionWhereUniqueInput>;
@@ -11472,7 +11456,6 @@ export type UserActionsArgs = {
   orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
   where?: InputMaybe<ActionWhereInput>;
 };
-
 
 export type UserActionsByUserArgs = {
   after?: InputMaybe<ActionWhereUniqueInput>;
@@ -11483,7 +11466,6 @@ export type UserActionsByUserArgs = {
   where?: InputMaybe<ActionWhereInput>;
 };
 
-
 export type UserAddressesArgs = {
   after?: InputMaybe<AddressWhereUniqueInput>;
   before?: InputMaybe<AddressWhereUniqueInput>;
@@ -11492,7 +11474,6 @@ export type UserAddressesArgs = {
   orderBy?: InputMaybe<Array<AddressOrderByWithRelationInput>>;
   where?: InputMaybe<AddressWhereInput>;
 };
-
 
 export type UserBansArgs = {
   after?: InputMaybe<BanWhereUniqueInput>;
@@ -11503,7 +11484,6 @@ export type UserBansArgs = {
   where?: InputMaybe<BanWhereInput>;
 };
 
-
 export type UserChatsArgs = {
   after?: InputMaybe<UserChatWhereUniqueInput>;
   before?: InputMaybe<UserChatWhereUniqueInput>;
@@ -11512,7 +11492,6 @@ export type UserChatsArgs = {
   orderBy?: InputMaybe<Array<UserChatOrderByWithRelationInput>>;
   where?: InputMaybe<UserChatWhereInput>;
 };
-
 
 export type UserCreatedTagsArgs = {
   after?: InputMaybe<TagWhereUniqueInput>;
@@ -11523,14 +11502,12 @@ export type UserCreatedTagsArgs = {
   where?: InputMaybe<TagWhereInput>;
 };
 
-
 export type UserExpoPushTokensArgs = {
   after?: InputMaybe<ExpoPushTokenWhereUniqueInput>;
   before?: InputMaybe<ExpoPushTokenWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
 };
-
 
 export type UserGroupsArgs = {
   after?: InputMaybe<GroupWhereUniqueInput>;
@@ -11541,7 +11518,6 @@ export type UserGroupsArgs = {
   where?: InputMaybe<GroupWhereInput>;
 };
 
-
 export type UserIncidentsArgs = {
   after?: InputMaybe<IncidentWhereUniqueInput>;
   before?: InputMaybe<IncidentWhereUniqueInput>;
@@ -11550,7 +11526,6 @@ export type UserIncidentsArgs = {
   orderBy?: InputMaybe<Array<IncidentOrderByWithRelationInput>>;
   where?: InputMaybe<IncidentWhereInput>;
 };
-
 
 export type UserMessagesArgs = {
   after?: InputMaybe<MessageWhereUniqueInput>;
@@ -11561,7 +11536,6 @@ export type UserMessagesArgs = {
   where?: InputMaybe<MessageWhereInput>;
 };
 
-
 export type UserOffendersArgs = {
   after?: InputMaybe<OffenderWhereUniqueInput>;
   before?: InputMaybe<OffenderWhereUniqueInput>;
@@ -11571,7 +11545,6 @@ export type UserOffendersArgs = {
   where?: InputMaybe<OffenderWhereInput>;
 };
 
-
 export type UserSchemesArgs = {
   after?: InputMaybe<UserSchemeWhereUniqueInput>;
   before?: InputMaybe<UserSchemeWhereUniqueInput>;
@@ -11580,7 +11553,6 @@ export type UserSchemesArgs = {
   orderBy?: InputMaybe<Array<UserSchemeOrderByWithRelationInput>>;
   where?: InputMaybe<UserSchemeWhereInput>;
 };
-
 
 export type UserTagsArgs = {
   after?: InputMaybe<TagWhereUniqueInput>;
@@ -12768,14 +12740,18 @@ export type UserSchemeCreateManyUserInputEnvelope = {
 
 export type UserSchemeCreateNestedManyWithoutSchemeInput = {
   connect?: InputMaybe<Array<UserSchemeWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<UserSchemeCreateOrConnectWithoutSchemeInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<UserSchemeCreateOrConnectWithoutSchemeInput>
+  >;
   create?: InputMaybe<Array<UserSchemeCreateWithoutSchemeInput>>;
   createMany?: InputMaybe<UserSchemeCreateManySchemeInputEnvelope>;
 };
 
 export type UserSchemeCreateNestedManyWithoutUserInput = {
   connect?: InputMaybe<Array<UserSchemeWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<UserSchemeCreateOrConnectWithoutUserInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<UserSchemeCreateOrConnectWithoutUserInput>
+  >;
   create?: InputMaybe<Array<UserSchemeCreateWithoutUserInput>>;
   createMany?: InputMaybe<UserSchemeCreateManyUserInputEnvelope>;
 };
@@ -12873,7 +12849,9 @@ export type UserSchemeUpdateManyWithWhereWithoutUserInput = {
 
 export type UserSchemeUpdateManyWithoutSchemeInput = {
   connect?: InputMaybe<Array<UserSchemeWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<UserSchemeCreateOrConnectWithoutSchemeInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<UserSchemeCreateOrConnectWithoutSchemeInput>
+  >;
   create?: InputMaybe<Array<UserSchemeCreateWithoutSchemeInput>>;
   createMany?: InputMaybe<UserSchemeCreateManySchemeInputEnvelope>;
   delete?: InputMaybe<Array<UserSchemeWhereUniqueInput>>;
@@ -12881,13 +12859,17 @@ export type UserSchemeUpdateManyWithoutSchemeInput = {
   disconnect?: InputMaybe<Array<UserSchemeWhereUniqueInput>>;
   set?: InputMaybe<Array<UserSchemeWhereUniqueInput>>;
   update?: InputMaybe<Array<UserSchemeUpdateWithWhereUniqueWithoutSchemeInput>>;
-  updateMany?: InputMaybe<Array<UserSchemeUpdateManyWithWhereWithoutSchemeInput>>;
+  updateMany?: InputMaybe<
+    Array<UserSchemeUpdateManyWithWhereWithoutSchemeInput>
+  >;
   upsert?: InputMaybe<Array<UserSchemeUpsertWithWhereUniqueWithoutSchemeInput>>;
 };
 
 export type UserSchemeUpdateManyWithoutUserInput = {
   connect?: InputMaybe<Array<UserSchemeWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<UserSchemeCreateOrConnectWithoutUserInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<UserSchemeCreateOrConnectWithoutUserInput>
+  >;
   create?: InputMaybe<Array<UserSchemeCreateWithoutUserInput>>;
   createMany?: InputMaybe<UserSchemeCreateManyUserInputEnvelope>;
   delete?: InputMaybe<Array<UserSchemeWhereUniqueInput>>;
@@ -13911,52 +13893,104 @@ export type SignInMutationVariables = Exact<{
   password: Scalars['String'];
 }>;
 
-
-export type SignInMutation = { __typename?: 'Mutation', signIn?: { __typename?: 'SignIn', accessToken: string, refreshToken: string } | null };
+export type SignInMutation = {
+  __typename?: 'Mutation';
+  signIn?: {
+    __typename?: 'SignIn';
+    accessToken: string;
+    refreshToken: string;
+  } | null;
+};
 
 export type CreateChatMutationVariables = Exact<{
   data: ChatCreateInput;
 }>;
 
-
-export type CreateChatMutation = { __typename?: 'Mutation', createChat: { __typename?: 'Chat', id: string, name: string, description?: string | null } };
+export type CreateChatMutation = {
+  __typename?: 'Mutation';
+  createChat: {
+    __typename?: 'Chat';
+    id: string;
+    name: string;
+    description?: string | null;
+  };
+};
 
 export type SchemeChatsQueryVariables = Exact<{
   where?: InputMaybe<ChatWhereInput>;
-  orderBy?: InputMaybe<Array<ChatOrderByWithRelationInput> | ChatOrderByWithRelationInput>;
+  orderBy?: InputMaybe<
+    Array<ChatOrderByWithRelationInput> | ChatOrderByWithRelationInput
+  >;
 }>;
 
-
-export type SchemeChatsQuery = { __typename?: 'Query', chats: Array<{ __typename?: 'Chat', id: string, name: string, description?: string | null }> };
+export type SchemeChatsQuery = {
+  __typename?: 'Query';
+  chats: Array<{
+    __typename?: 'Chat';
+    id: string;
+    name: string;
+    description?: string | null;
+  }>;
+};
 
 export type GroupQueryVariables = Exact<{
   where: GroupWhereUniqueInput;
 }>;
 
-
-export type GroupQuery = { __typename?: 'Query', group?: { __typename?: 'Group', name: string, description?: string | null, users: Array<{ __typename?: 'User', id: string, fullName: string, organisation: string }> } | null };
+export type GroupQuery = {
+  __typename?: 'Query';
+  group?: {
+    __typename?: 'Group';
+    name: string;
+    description?: string | null;
+    users: Array<{
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      organisation: string;
+    }>;
+  } | null;
+};
 
 export type CreateGroupMutationVariables = Exact<{
   data: GroupCreateInput;
 }>;
 
-
-export type CreateGroupMutation = { __typename?: 'Mutation', createGroup: { __typename?: 'Group', id: string, name: string, description?: string | null } };
+export type CreateGroupMutation = {
+  __typename?: 'Mutation';
+  createGroup: {
+    __typename?: 'Group';
+    id: string;
+    name: string;
+    description?: string | null;
+  };
+};
 
 export type SchemeGroupsQueryVariables = Exact<{
   where?: InputMaybe<GroupWhereInput>;
-  orderBy?: InputMaybe<Array<GroupOrderByWithRelationInput> | GroupOrderByWithRelationInput>;
+  orderBy?: InputMaybe<
+    Array<GroupOrderByWithRelationInput> | GroupOrderByWithRelationInput
+  >;
 }>;
 
-
-export type SchemeGroupsQuery = { __typename?: 'Query', groups: Array<{ __typename?: 'Group', id: string, name: string, description?: string | null }> };
+export type SchemeGroupsQuery = {
+  __typename?: 'Query';
+  groups: Array<{
+    __typename?: 'Group';
+    id: string;
+    name: string;
+    description?: string | null;
+  }>;
+};
 
 export type DeleteIncidentMutationVariables = Exact<{
   where: UniqueId;
 }>;
 
-
-export type DeleteIncidentMutation = { __typename?: 'Mutation', deleteIncident?: { __typename?: 'Incident', id: string } | null };
+export type DeleteIncidentMutation = {
+  __typename?: 'Mutation';
+  deleteIncident?: { __typename?: 'Incident'; id: string } | null;
+};
 
 export type IncidentFeedQueryVariables = Exact<{
   schemeId: Scalars['String'];
@@ -13964,13 +13998,72 @@ export type IncidentFeedQueryVariables = Exact<{
   order?: InputMaybe<IncidentOrderByWithRelationInput>;
   first?: InputMaybe<Scalars['Int']>;
   cursor?: InputMaybe<Scalars['String']>;
-  groups?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
+  groups?: InputMaybe<
+    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
+  >;
   crimeTypes?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
   approved?: InputMaybe<Scalars['Boolean']>;
 }>;
 
-
-export type IncidentFeedQuery = { __typename?: 'Query', incidentFeed?: Array<{ __typename?: 'Incident', id: string, subject?: string | null, description: string, dayTime?: string | null, approved?: boolean | null, uploaded?: boolean | null, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, offenders: Array<{ __typename?: 'Offender', id: string, createdAt: any, updatedAt: any, age?: Age | null, build?: Build | null, dateOfBirth?: any | null, dateSource?: string | null, gender?: Gender | null, hair?: string | null, name?: string | null, peculiarities?: string | null, race?: Race | null, approved?: boolean | null, uploaded?: boolean | null, active?: boolean | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }> }>, location?: { __typename?: 'Address', id: string, full?: string | null } | null, createdBy: { __typename?: 'User', id: string, fullName: string, organisation: string }, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null, offenders: Array<{ __typename?: 'Offender', id: string }> }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> } | null> | null };
+export type IncidentFeedQuery = {
+  __typename?: 'Query';
+  incidentFeed?: Array<{
+    __typename?: 'Incident';
+    id: string;
+    subject?: string | null;
+    description: string;
+    dayTime?: string | null;
+    approved?: boolean | null;
+    uploaded?: boolean | null;
+    crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      createdAt: any;
+      updatedAt: any;
+      age?: Age | null;
+      build?: Build | null;
+      dateOfBirth?: any | null;
+      dateSource?: string | null;
+      gender?: Gender | null;
+      hair?: string | null;
+      name?: string | null;
+      peculiarities?: string | null;
+      race?: Race | null;
+      approved?: boolean | null;
+      uploaded?: boolean | null;
+      active?: boolean | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+      }>;
+      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    }>;
+    location?: {
+      __typename?: 'Address';
+      id: string;
+      full?: string | null;
+    } | null;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      organisation: string;
+    };
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      card?: string | null;
+      offenders: Array<{ __typename?: 'Offender'; id: string }>;
+    }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+  } | null> | null;
+};
 
 export type ListIncidentsQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
@@ -13980,27 +14073,146 @@ export type ListIncidentsQueryVariables = Exact<{
   skip?: InputMaybe<Scalars['Int']>;
 }>;
 
-
-export type ListIncidentsQuery = { __typename?: 'Query', listIncidents?: { __typename?: 'ListIncidents', total: number, incidents: Array<{ __typename?: 'Incident', id: string, subject?: string | null, description: string, dayTime?: string | null, approved?: boolean | null, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, offenders: Array<{ __typename?: 'Offender', id: string, age?: Age | null, build?: Build | null, dateOfBirth?: any | null, gender?: Gender | null, name?: string | null, race?: Race | null, approved?: boolean | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null }> }>, location?: { __typename?: 'Address', id: string, full?: string | null } | null, createdBy: { __typename?: 'User', id: string, fullName: string, organisation: string }, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> } | null };
+export type ListIncidentsQuery = {
+  __typename?: 'Query';
+  listIncidents?: {
+    __typename?: 'ListIncidents';
+    total: number;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+      description: string;
+      dayTime?: string | null;
+      approved?: boolean | null;
+      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      offenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        age?: Age | null;
+        build?: Build | null;
+        dateOfBirth?: any | null;
+        gender?: Gender | null;
+        name?: string | null;
+        race?: Race | null;
+        approved?: boolean | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          optimised?: string | null;
+        }>;
+      }>;
+      location?: {
+        __typename?: 'Address';
+        id: string;
+        full?: string | null;
+      } | null;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        organisation: string;
+      };
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+      }>;
+      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    }>;
+  } | null;
+};
 
 export type ViewIncidentQueryVariables = Exact<{
   where: IncidentWhereUniqueInput;
 }>;
 
-
-export type ViewIncidentQuery = { __typename?: 'Query', incident?: { __typename?: 'Incident', id: string, subject?: string | null, description: string, dayTime?: string | null, approved?: boolean | null, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, offenders: Array<{ __typename?: 'Offender', id: string, age?: Age | null, build?: Build | null, dateOfBirth?: any | null, gender?: Gender | null, name?: string | null, race?: Race | null, approved?: boolean | null, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null }> }>, location?: { __typename?: 'Address', id: string, full?: string | null } | null, createdBy: { __typename?: 'User', id: string, fullName: string, organisation: string }, images: Array<{ __typename?: 'Image', id: string, optimised?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }> } | null };
+export type ViewIncidentQuery = {
+  __typename?: 'Query';
+  incident?: {
+    __typename?: 'Incident';
+    id: string;
+    subject?: string | null;
+    description: string;
+    dayTime?: string | null;
+    approved?: boolean | null;
+    crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      age?: Age | null;
+      build?: Build | null;
+      dateOfBirth?: any | null;
+      gender?: Gender | null;
+      name?: string | null;
+      race?: Race | null;
+      approved?: boolean | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+      }>;
+    }>;
+    location?: {
+      __typename?: 'Address';
+      id: string;
+      full?: string | null;
+    } | null;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      organisation: string;
+    };
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      optimised?: string | null;
+    }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+  } | null;
+};
 
 export type TagsQueryVariables = Exact<{
   where: TagWhereInput;
 }>;
 
+export type TagsQuery = {
+  __typename?: 'Query';
+  tags: Array<{
+    __typename?: 'Tag';
+    id: string;
+    name: string;
+    description: string;
+  }>;
+};
 
-export type TagsQuery = { __typename?: 'Query', tags: Array<{ __typename?: 'Tag', id: string, name: string, description: string }> };
+export type CurrentUserQueryVariables = Exact<{ [key: string]: never }>;
 
-export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, fullName: string, email: string, organisation: string, newUser: boolean, groups: Array<{ __typename?: 'Group', id: string, name: string }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role, scheme: { __typename?: 'Scheme', id: string, name: string, autoApproveIncidents: boolean, autoApproveOffenders: boolean } }> } | null };
+export type CurrentUserQuery = {
+  __typename?: 'Query';
+  currentUser?: {
+    __typename?: 'User';
+    id: string;
+    fullName: string;
+    email: string;
+    organisation: string;
+    newUser: boolean;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    schemes: Array<{
+      __typename?: 'UserScheme';
+      id: string;
+      role: Role;
+      scheme: {
+        __typename?: 'Scheme';
+        id: string;
+        name: string;
+        autoApproveIncidents: boolean;
+        autoApproveOffenders: boolean;
+      };
+    }>;
+  } | null;
+};
 
 export type UserQueryVariables = Exact<{
   where: UserWhereUniqueInput;
@@ -14008,45 +14220,130 @@ export type UserQueryVariables = Exact<{
   chatWhere?: InputMaybe<UserChatWhereInput>;
 }>;
 
-
-export type UserQuery = { __typename?: 'Query', user?: { __typename?: 'User', id: string, fullName: string, email: string, organisation: string, disabled: boolean, newUser: boolean, addresses: Array<{ __typename?: 'Address', premises?: string | null, building?: string | null, street: string, townCity: string, county?: string | null, postcode: string }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, chats: Array<{ __typename?: 'UserChat', id: string, chat: { __typename?: 'Chat', name: string } }>, schemes: Array<{ __typename?: 'UserScheme', id: string, role: Role }> } | null };
+export type UserQuery = {
+  __typename?: 'Query';
+  user?: {
+    __typename?: 'User';
+    id: string;
+    fullName: string;
+    email: string;
+    organisation: string;
+    disabled: boolean;
+    newUser: boolean;
+    addresses: Array<{
+      __typename?: 'Address';
+      premises?: string | null;
+      building?: string | null;
+      street: string;
+      townCity: string;
+      county?: string | null;
+      postcode: string;
+    }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    chats: Array<{
+      __typename?: 'UserChat';
+      id: string;
+      chat: { __typename?: 'Chat'; name: string };
+    }>;
+    schemes: Array<{ __typename?: 'UserScheme'; id: string; role: Role }>;
+  } | null;
+};
 
 export type CreateUserInDatabaseMutationVariables = Exact<{
   data: CreateUserData;
   groupWhere?: InputMaybe<GroupWhereInput>;
 }>;
 
-
-export type CreateUserInDatabaseMutation = { __typename?: 'Mutation', createUserInDatabase?: { __typename?: 'User', id: string, fullName: string, email: string, organisation: string, status?: string | null, groups: Array<{ __typename?: 'Group', id: string, name: string }> } | null };
+export type CreateUserInDatabaseMutation = {
+  __typename?: 'Mutation';
+  createUserInDatabase?: {
+    __typename?: 'User';
+    id: string;
+    fullName: string;
+    email: string;
+    organisation: string;
+    status?: string | null;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+  } | null;
+};
 
 export type InviteExistingUserMutationVariables = Exact<{
   data: UserUpdateInput;
   where: UniqueId;
+  groupWhere?: InputMaybe<GroupWhereInput>;
 }>;
 
-
-export type InviteExistingUserMutation = { __typename?: 'Mutation', inviteExistingUser?: { __typename?: 'User', id: string } | null };
+export type InviteExistingUserMutation = {
+  __typename?: 'Mutation';
+  inviteExistingUser?: {
+    __typename?: 'User';
+    id: string;
+    fullName: string;
+    email: string;
+    organisation: string;
+    status?: string | null;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+  } | null;
+};
 
 export type ListSchemeUsersQueryVariables = Exact<{
   where?: InputMaybe<UserWhereInput>;
-  orderBy?: InputMaybe<Array<UserOrderByWithRelationInput> | UserOrderByWithRelationInput>;
+  orderBy?: InputMaybe<
+    Array<UserOrderByWithRelationInput> | UserOrderByWithRelationInput
+  >;
   after?: InputMaybe<UserWhereUniqueInput>;
   groupWhere?: InputMaybe<GroupWhereInput>;
 }>;
 
+export type ListSchemeUsersQuery = {
+  __typename?: 'Query';
+  users: Array<{
+    __typename?: 'User';
+    id: string;
+    fullName: string;
+    email: string;
+    organisation: string;
+    status?: string | null;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+  }>;
+};
 
-export type ListSchemeUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, fullName: string, email: string, organisation: string, status?: string | null, groups: Array<{ __typename?: 'Group', id: string, name: string }> }> };
+export type SearchUserQueryVariables = Exact<{
+  where: UserWhereUniqueInput;
+}>;
 
+export type SearchUserQuery = {
+  __typename?: 'Query';
+  user?: {
+    __typename?: 'User';
+    id: string;
+    fullName: string;
+    organisation: string;
+    email: string;
+    addresses: Array<{
+      __typename?: 'Address';
+      id: string;
+      postcode: string;
+      street: string;
+      townCity: string;
+      building?: string | null;
+      county?: string | null;
+    }>;
+  } | null;
+};
 
 export const SignInDocument = gql`
-    mutation signIn($email: String!, $password: String!) {
-  signIn(data: {email: $email, password: $password}) {
-    accessToken
-    refreshToken
+  mutation signIn($email: String!, $password: String!) {
+    signIn(data: { email: $email, password: $password }) {
+      accessToken
+      refreshToken
+    }
   }
-}
-    `;
-export type SignInMutationFn = Apollo.MutationFunction<SignInMutation, SignInMutationVariables>;
+`;
+export type SignInMutationFn = Apollo.MutationFunction<
+  SignInMutation,
+  SignInMutationVariables
+>;
 
 /**
  * __useSignInMutation__
@@ -14066,23 +14363,37 @@ export type SignInMutationFn = Apollo.MutationFunction<SignInMutation, SignInMut
  *   },
  * });
  */
-export function useSignInMutation(baseOptions?: Apollo.MutationHookOptions<SignInMutation, SignInMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SignInMutation, SignInMutationVariables>(SignInDocument, options);
-      }
+export function useSignInMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SignInMutation,
+    SignInMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<SignInMutation, SignInMutationVariables>(
+    SignInDocument,
+    options
+  );
+}
 export type SignInMutationHookResult = ReturnType<typeof useSignInMutation>;
 export type SignInMutationResult = Apollo.MutationResult<SignInMutation>;
-export type SignInMutationOptions = Apollo.BaseMutationOptions<SignInMutation, SignInMutationVariables>;
+export type SignInMutationOptions = Apollo.BaseMutationOptions<
+  SignInMutation,
+  SignInMutationVariables
+>;
 export const CreateChatDocument = gql`
-    mutation createChat($data: ChatCreateInput!) {
-  createChat(data: $data) {
-    id
-    name
-    description
+  mutation createChat($data: ChatCreateInput!) {
+    createChat(data: $data) {
+      id
+      name
+      description
+    }
   }
-}
-    `;
-export type CreateChatMutationFn = Apollo.MutationFunction<CreateChatMutation, CreateChatMutationVariables>;
+`;
+export type CreateChatMutationFn = Apollo.MutationFunction<
+  CreateChatMutation,
+  CreateChatMutationVariables
+>;
 
 /**
  * __useCreateChatMutation__
@@ -14101,22 +14412,39 @@ export type CreateChatMutationFn = Apollo.MutationFunction<CreateChatMutation, C
  *   },
  * });
  */
-export function useCreateChatMutation(baseOptions?: Apollo.MutationHookOptions<CreateChatMutation, CreateChatMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateChatMutation, CreateChatMutationVariables>(CreateChatDocument, options);
-      }
-export type CreateChatMutationHookResult = ReturnType<typeof useCreateChatMutation>;
-export type CreateChatMutationResult = Apollo.MutationResult<CreateChatMutation>;
-export type CreateChatMutationOptions = Apollo.BaseMutationOptions<CreateChatMutation, CreateChatMutationVariables>;
-export const SchemeChatsDocument = gql`
-    query schemeChats($where: ChatWhereInput, $orderBy: [ChatOrderByWithRelationInput!]) {
-  chats(where: $where, orderBy: $orderBy) {
-    id
-    name
-    description
-  }
+export function useCreateChatMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateChatMutation,
+    CreateChatMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateChatMutation, CreateChatMutationVariables>(
+    CreateChatDocument,
+    options
+  );
 }
-    `;
+export type CreateChatMutationHookResult = ReturnType<
+  typeof useCreateChatMutation
+>;
+export type CreateChatMutationResult =
+  Apollo.MutationResult<CreateChatMutation>;
+export type CreateChatMutationOptions = Apollo.BaseMutationOptions<
+  CreateChatMutation,
+  CreateChatMutationVariables
+>;
+export const SchemeChatsDocument = gql`
+  query schemeChats(
+    $where: ChatWhereInput
+    $orderBy: [ChatOrderByWithRelationInput!]
+  ) {
+    chats(where: $where, orderBy: $orderBy) {
+      id
+      name
+      description
+    }
+  }
+`;
 
 /**
  * __useSchemeChatsQuery__
@@ -14135,30 +14463,51 @@ export const SchemeChatsDocument = gql`
  *   },
  * });
  */
-export function useSchemeChatsQuery(baseOptions?: Apollo.QueryHookOptions<SchemeChatsQuery, SchemeChatsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SchemeChatsQuery, SchemeChatsQueryVariables>(SchemeChatsDocument, options);
-      }
-export function useSchemeChatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SchemeChatsQuery, SchemeChatsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SchemeChatsQuery, SchemeChatsQueryVariables>(SchemeChatsDocument, options);
-        }
+export function useSchemeChatsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    SchemeChatsQuery,
+    SchemeChatsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SchemeChatsQuery, SchemeChatsQueryVariables>(
+    SchemeChatsDocument,
+    options
+  );
+}
+export function useSchemeChatsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SchemeChatsQuery,
+    SchemeChatsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<SchemeChatsQuery, SchemeChatsQueryVariables>(
+    SchemeChatsDocument,
+    options
+  );
+}
 export type SchemeChatsQueryHookResult = ReturnType<typeof useSchemeChatsQuery>;
-export type SchemeChatsLazyQueryHookResult = ReturnType<typeof useSchemeChatsLazyQuery>;
-export type SchemeChatsQueryResult = Apollo.QueryResult<SchemeChatsQuery, SchemeChatsQueryVariables>;
+export type SchemeChatsLazyQueryHookResult = ReturnType<
+  typeof useSchemeChatsLazyQuery
+>;
+export type SchemeChatsQueryResult = Apollo.QueryResult<
+  SchemeChatsQuery,
+  SchemeChatsQueryVariables
+>;
 export const GroupDocument = gql`
-    query Group($where: GroupWhereUniqueInput!) {
-  group(where: $where) {
-    name
-    description
-    users {
-      id
-      fullName
-      organisation
+  query Group($where: GroupWhereUniqueInput!) {
+    group(where: $where) {
+      name
+      description
+      users {
+        id
+        fullName
+        organisation
+      }
     }
   }
-}
-    `;
+`;
 
 /**
  * __useGroupQuery__
@@ -14176,27 +14525,43 @@ export const GroupDocument = gql`
  *   },
  * });
  */
-export function useGroupQuery(baseOptions: Apollo.QueryHookOptions<GroupQuery, GroupQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GroupQuery, GroupQueryVariables>(GroupDocument, options);
-      }
-export function useGroupLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GroupQuery, GroupQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GroupQuery, GroupQueryVariables>(GroupDocument, options);
-        }
+export function useGroupQuery(
+  baseOptions: Apollo.QueryHookOptions<GroupQuery, GroupQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GroupQuery, GroupQueryVariables>(
+    GroupDocument,
+    options
+  );
+}
+export function useGroupLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GroupQuery, GroupQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GroupQuery, GroupQueryVariables>(
+    GroupDocument,
+    options
+  );
+}
 export type GroupQueryHookResult = ReturnType<typeof useGroupQuery>;
 export type GroupLazyQueryHookResult = ReturnType<typeof useGroupLazyQuery>;
-export type GroupQueryResult = Apollo.QueryResult<GroupQuery, GroupQueryVariables>;
+export type GroupQueryResult = Apollo.QueryResult<
+  GroupQuery,
+  GroupQueryVariables
+>;
 export const CreateGroupDocument = gql`
-    mutation createGroup($data: GroupCreateInput!) {
-  createGroup(data: $data) {
-    id
-    name
-    description
+  mutation createGroup($data: GroupCreateInput!) {
+    createGroup(data: $data) {
+      id
+      name
+      description
+    }
   }
-}
-    `;
-export type CreateGroupMutationFn = Apollo.MutationFunction<CreateGroupMutation, CreateGroupMutationVariables>;
+`;
+export type CreateGroupMutationFn = Apollo.MutationFunction<
+  CreateGroupMutation,
+  CreateGroupMutationVariables
+>;
 
 /**
  * __useCreateGroupMutation__
@@ -14215,22 +14580,39 @@ export type CreateGroupMutationFn = Apollo.MutationFunction<CreateGroupMutation,
  *   },
  * });
  */
-export function useCreateGroupMutation(baseOptions?: Apollo.MutationHookOptions<CreateGroupMutation, CreateGroupMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateGroupMutation, CreateGroupMutationVariables>(CreateGroupDocument, options);
-      }
-export type CreateGroupMutationHookResult = ReturnType<typeof useCreateGroupMutation>;
-export type CreateGroupMutationResult = Apollo.MutationResult<CreateGroupMutation>;
-export type CreateGroupMutationOptions = Apollo.BaseMutationOptions<CreateGroupMutation, CreateGroupMutationVariables>;
-export const SchemeGroupsDocument = gql`
-    query schemeGroups($where: GroupWhereInput, $orderBy: [GroupOrderByWithRelationInput!]) {
-  groups(where: $where, orderBy: $orderBy) {
-    id
-    name
-    description
-  }
+export function useCreateGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateGroupMutation,
+    CreateGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateGroupMutation, CreateGroupMutationVariables>(
+    CreateGroupDocument,
+    options
+  );
 }
-    `;
+export type CreateGroupMutationHookResult = ReturnType<
+  typeof useCreateGroupMutation
+>;
+export type CreateGroupMutationResult =
+  Apollo.MutationResult<CreateGroupMutation>;
+export type CreateGroupMutationOptions = Apollo.BaseMutationOptions<
+  CreateGroupMutation,
+  CreateGroupMutationVariables
+>;
+export const SchemeGroupsDocument = gql`
+  query schemeGroups(
+    $where: GroupWhereInput
+    $orderBy: [GroupOrderByWithRelationInput!]
+  ) {
+    groups(where: $where, orderBy: $orderBy) {
+      id
+      name
+      description
+    }
+  }
+`;
 
 /**
  * __useSchemeGroupsQuery__
@@ -14249,25 +14631,51 @@ export const SchemeGroupsDocument = gql`
  *   },
  * });
  */
-export function useSchemeGroupsQuery(baseOptions?: Apollo.QueryHookOptions<SchemeGroupsQuery, SchemeGroupsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<SchemeGroupsQuery, SchemeGroupsQueryVariables>(SchemeGroupsDocument, options);
-      }
-export function useSchemeGroupsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SchemeGroupsQuery, SchemeGroupsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<SchemeGroupsQuery, SchemeGroupsQueryVariables>(SchemeGroupsDocument, options);
-        }
-export type SchemeGroupsQueryHookResult = ReturnType<typeof useSchemeGroupsQuery>;
-export type SchemeGroupsLazyQueryHookResult = ReturnType<typeof useSchemeGroupsLazyQuery>;
-export type SchemeGroupsQueryResult = Apollo.QueryResult<SchemeGroupsQuery, SchemeGroupsQueryVariables>;
-export const DeleteIncidentDocument = gql`
-    mutation deleteIncident($where: UniqueId!) {
-  deleteIncident(where: $where) {
-    id
-  }
+export function useSchemeGroupsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    SchemeGroupsQuery,
+    SchemeGroupsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SchemeGroupsQuery, SchemeGroupsQueryVariables>(
+    SchemeGroupsDocument,
+    options
+  );
 }
-    `;
-export type DeleteIncidentMutationFn = Apollo.MutationFunction<DeleteIncidentMutation, DeleteIncidentMutationVariables>;
+export function useSchemeGroupsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SchemeGroupsQuery,
+    SchemeGroupsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<SchemeGroupsQuery, SchemeGroupsQueryVariables>(
+    SchemeGroupsDocument,
+    options
+  );
+}
+export type SchemeGroupsQueryHookResult = ReturnType<
+  typeof useSchemeGroupsQuery
+>;
+export type SchemeGroupsLazyQueryHookResult = ReturnType<
+  typeof useSchemeGroupsLazyQuery
+>;
+export type SchemeGroupsQueryResult = Apollo.QueryResult<
+  SchemeGroupsQuery,
+  SchemeGroupsQueryVariables
+>;
+export const DeleteIncidentDocument = gql`
+  mutation deleteIncident($where: UniqueId!) {
+    deleteIncident(where: $where) {
+      id
+    }
+  }
+`;
+export type DeleteIncidentMutationFn = Apollo.MutationFunction<
+  DeleteIncidentMutation,
+  DeleteIncidentMutationVariables
+>;
 
 /**
  * __useDeleteIncidentMutation__
@@ -14286,87 +14694,110 @@ export type DeleteIncidentMutationFn = Apollo.MutationFunction<DeleteIncidentMut
  *   },
  * });
  */
-export function useDeleteIncidentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteIncidentMutation, DeleteIncidentMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteIncidentMutation, DeleteIncidentMutationVariables>(DeleteIncidentDocument, options);
-      }
-export type DeleteIncidentMutationHookResult = ReturnType<typeof useDeleteIncidentMutation>;
-export type DeleteIncidentMutationResult = Apollo.MutationResult<DeleteIncidentMutation>;
-export type DeleteIncidentMutationOptions = Apollo.BaseMutationOptions<DeleteIncidentMutation, DeleteIncidentMutationVariables>;
+export function useDeleteIncidentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteIncidentMutation,
+    DeleteIncidentMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteIncidentMutation,
+    DeleteIncidentMutationVariables
+  >(DeleteIncidentDocument, options);
+}
+export type DeleteIncidentMutationHookResult = ReturnType<
+  typeof useDeleteIncidentMutation
+>;
+export type DeleteIncidentMutationResult =
+  Apollo.MutationResult<DeleteIncidentMutation>;
+export type DeleteIncidentMutationOptions = Apollo.BaseMutationOptions<
+  DeleteIncidentMutation,
+  DeleteIncidentMutationVariables
+>;
 export const IncidentFeedDocument = gql`
-    query incidentFeed($schemeId: String!, $search: String, $order: IncidentOrderByWithRelationInput, $first: Int, $cursor: String, $groups: [String], $crimeTypes: [String!], $approved: Boolean) {
-  incidentFeed(
-    schemeId: $schemeId
-    order: $order
-    first: $first
-    after: $cursor
-    crimeTypes: $crimeTypes
-    search: $search
-    groups: $groups
-    approved: $approved
+  query incidentFeed(
+    $schemeId: String!
+    $search: String
+    $order: IncidentOrderByWithRelationInput
+    $first: Int
+    $cursor: String
+    $groups: [String]
+    $crimeTypes: [String!]
+    $approved: Boolean
   ) {
-    id
-    subject
-    description
-    dayTime
-    crimeTypes {
+    incidentFeed(
+      schemeId: $schemeId
+      order: $order
+      first: $first
+      after: $cursor
+      crimeTypes: $crimeTypes
+      search: $search
+      groups: $groups
+      approved: $approved
+    ) {
       id
-      name
-    }
-    approved
-    uploaded
-    offenders {
-      id
-      createdAt
-      updatedAt
-      age
-      build
-      dateOfBirth
-      dateSource
-      gender
-      hair
-      name
-      peculiarities
-      race
+      subject
+      description
+      dayTime
+      crimeTypes {
+        id
+        name
+      }
       approved
       uploaded
-      active
+      offenders {
+        id
+        createdAt
+        updatedAt
+        age
+        build
+        dateOfBirth
+        dateSource
+        gender
+        hair
+        name
+        peculiarities
+        race
+        approved
+        uploaded
+        active
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        tags {
+          id
+          name
+        }
+      }
+      location {
+        id
+        full
+      }
+      createdBy {
+        id
+        fullName
+        organisation
+      }
       images {
         id
         url
         optimised
         card
+        offenders {
+          id
+        }
       }
-      tags {
+      groups {
         id
         name
       }
     }
-    location {
-      id
-      full
-    }
-    createdBy {
-      id
-      fullName
-      organisation
-    }
-    images {
-      id
-      url
-      optimised
-      card
-      offenders {
-        id
-      }
-    }
-    groups {
-      id
-      name
-    }
   }
-}
-    `;
+`;
 
 /**
  * __useIncidentFeedQuery__
@@ -14391,27 +14822,159 @@ export const IncidentFeedDocument = gql`
  *   },
  * });
  */
-export function useIncidentFeedQuery(baseOptions: Apollo.QueryHookOptions<IncidentFeedQuery, IncidentFeedQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<IncidentFeedQuery, IncidentFeedQueryVariables>(IncidentFeedDocument, options);
-      }
-export function useIncidentFeedLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IncidentFeedQuery, IncidentFeedQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<IncidentFeedQuery, IncidentFeedQueryVariables>(IncidentFeedDocument, options);
-        }
-export type IncidentFeedQueryHookResult = ReturnType<typeof useIncidentFeedQuery>;
-export type IncidentFeedLazyQueryHookResult = ReturnType<typeof useIncidentFeedLazyQuery>;
-export type IncidentFeedQueryResult = Apollo.QueryResult<IncidentFeedQuery, IncidentFeedQueryVariables>;
+export function useIncidentFeedQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    IncidentFeedQuery,
+    IncidentFeedQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<IncidentFeedQuery, IncidentFeedQueryVariables>(
+    IncidentFeedDocument,
+    options
+  );
+}
+export function useIncidentFeedLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    IncidentFeedQuery,
+    IncidentFeedQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<IncidentFeedQuery, IncidentFeedQueryVariables>(
+    IncidentFeedDocument,
+    options
+  );
+}
+export type IncidentFeedQueryHookResult = ReturnType<
+  typeof useIncidentFeedQuery
+>;
+export type IncidentFeedLazyQueryHookResult = ReturnType<
+  typeof useIncidentFeedLazyQuery
+>;
+export type IncidentFeedQueryResult = Apollo.QueryResult<
+  IncidentFeedQuery,
+  IncidentFeedQueryVariables
+>;
 export const ListIncidentsDocument = gql`
-    query listIncidents($scheme: SchemeWhereUniqueInput!, $where: IncidentWhereInput, $order: IncidentOrderByWithRelationInput, $take: Int, $skip: Int) {
-  listIncidents(
-    scheme: $scheme
-    where: $where
-    order: $order
-    take: $take
-    skip: $skip
+  query listIncidents(
+    $scheme: SchemeWhereUniqueInput!
+    $where: IncidentWhereInput
+    $order: IncidentOrderByWithRelationInput
+    $take: Int
+    $skip: Int
   ) {
-    incidents {
+    listIncidents(
+      scheme: $scheme
+      where: $where
+      order: $order
+      take: $take
+      skip: $skip
+    ) {
+      incidents {
+        id
+        subject
+        description
+        dayTime
+        crimeTypes {
+          id
+          name
+        }
+        approved
+        offenders {
+          id
+          age
+          build
+          dateOfBirth
+          gender
+          name
+          race
+          approved
+          images {
+            id
+            optimised
+          }
+        }
+        location {
+          id
+          full
+        }
+        createdBy {
+          id
+          fullName
+          organisation
+        }
+        images {
+          id
+          optimised
+        }
+        groups {
+          id
+          name
+        }
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useListIncidentsQuery__
+ *
+ * To run a query within a React component, call `useListIncidentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListIncidentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListIncidentsQuery({
+ *   variables: {
+ *      scheme: // value for 'scheme'
+ *      where: // value for 'where'
+ *      order: // value for 'order'
+ *      take: // value for 'take'
+ *      skip: // value for 'skip'
+ *   },
+ * });
+ */
+export function useListIncidentsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListIncidentsQuery,
+    ListIncidentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ListIncidentsQuery, ListIncidentsQueryVariables>(
+    ListIncidentsDocument,
+    options
+  );
+}
+export function useListIncidentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListIncidentsQuery,
+    ListIncidentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ListIncidentsQuery, ListIncidentsQueryVariables>(
+    ListIncidentsDocument,
+    options
+  );
+}
+export type ListIncidentsQueryHookResult = ReturnType<
+  typeof useListIncidentsQuery
+>;
+export type ListIncidentsLazyQueryHookResult = ReturnType<
+  typeof useListIncidentsLazyQuery
+>;
+export type ListIncidentsQueryResult = Apollo.QueryResult<
+  ListIncidentsQuery,
+  ListIncidentsQueryVariables
+>;
+export const ViewIncidentDocument = gql`
+  query ViewIncident($where: IncidentWhereUniqueInput!) {
+    incident(where: $where) {
       id
       subject
       description
@@ -14453,88 +15016,8 @@ export const ListIncidentsDocument = gql`
         name
       }
     }
-    total
   }
-}
-    `;
-
-/**
- * __useListIncidentsQuery__
- *
- * To run a query within a React component, call `useListIncidentsQuery` and pass it any options that fit your needs.
- * When your component renders, `useListIncidentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListIncidentsQuery({
- *   variables: {
- *      scheme: // value for 'scheme'
- *      where: // value for 'where'
- *      order: // value for 'order'
- *      take: // value for 'take'
- *      skip: // value for 'skip'
- *   },
- * });
- */
-export function useListIncidentsQuery(baseOptions: Apollo.QueryHookOptions<ListIncidentsQuery, ListIncidentsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ListIncidentsQuery, ListIncidentsQueryVariables>(ListIncidentsDocument, options);
-      }
-export function useListIncidentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListIncidentsQuery, ListIncidentsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ListIncidentsQuery, ListIncidentsQueryVariables>(ListIncidentsDocument, options);
-        }
-export type ListIncidentsQueryHookResult = ReturnType<typeof useListIncidentsQuery>;
-export type ListIncidentsLazyQueryHookResult = ReturnType<typeof useListIncidentsLazyQuery>;
-export type ListIncidentsQueryResult = Apollo.QueryResult<ListIncidentsQuery, ListIncidentsQueryVariables>;
-export const ViewIncidentDocument = gql`
-    query ViewIncident($where: IncidentWhereUniqueInput!) {
-  incident(where: $where) {
-    id
-    subject
-    description
-    dayTime
-    crimeTypes {
-      id
-      name
-    }
-    approved
-    offenders {
-      id
-      age
-      build
-      dateOfBirth
-      gender
-      name
-      race
-      approved
-      images {
-        id
-        optimised
-      }
-    }
-    location {
-      id
-      full
-    }
-    createdBy {
-      id
-      fullName
-      organisation
-    }
-    images {
-      id
-      optimised
-    }
-    groups {
-      id
-      name
-    }
-  }
-}
-    `;
+`;
 
 /**
  * __useViewIncidentQuery__
@@ -14552,26 +15035,49 @@ export const ViewIncidentDocument = gql`
  *   },
  * });
  */
-export function useViewIncidentQuery(baseOptions: Apollo.QueryHookOptions<ViewIncidentQuery, ViewIncidentQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ViewIncidentQuery, ViewIncidentQueryVariables>(ViewIncidentDocument, options);
-      }
-export function useViewIncidentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ViewIncidentQuery, ViewIncidentQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ViewIncidentQuery, ViewIncidentQueryVariables>(ViewIncidentDocument, options);
-        }
-export type ViewIncidentQueryHookResult = ReturnType<typeof useViewIncidentQuery>;
-export type ViewIncidentLazyQueryHookResult = ReturnType<typeof useViewIncidentLazyQuery>;
-export type ViewIncidentQueryResult = Apollo.QueryResult<ViewIncidentQuery, ViewIncidentQueryVariables>;
-export const TagsDocument = gql`
-    query tags($where: TagWhereInput!) {
-  tags(where: $where) {
-    id
-    name
-    description
-  }
+export function useViewIncidentQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ViewIncidentQuery,
+    ViewIncidentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ViewIncidentQuery, ViewIncidentQueryVariables>(
+    ViewIncidentDocument,
+    options
+  );
 }
-    `;
+export function useViewIncidentLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ViewIncidentQuery,
+    ViewIncidentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ViewIncidentQuery, ViewIncidentQueryVariables>(
+    ViewIncidentDocument,
+    options
+  );
+}
+export type ViewIncidentQueryHookResult = ReturnType<
+  typeof useViewIncidentQuery
+>;
+export type ViewIncidentLazyQueryHookResult = ReturnType<
+  typeof useViewIncidentLazyQuery
+>;
+export type ViewIncidentQueryResult = Apollo.QueryResult<
+  ViewIncidentQuery,
+  ViewIncidentQueryVariables
+>;
+export const TagsDocument = gql`
+  query tags($where: TagWhereInput!) {
+    tags(where: $where) {
+      id
+      name
+      description
+    }
+  }
+`;
 
 /**
  * __useTagsQuery__
@@ -14589,42 +15095,49 @@ export const TagsDocument = gql`
  *   },
  * });
  */
-export function useTagsQuery(baseOptions: Apollo.QueryHookOptions<TagsQuery, TagsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<TagsQuery, TagsQueryVariables>(TagsDocument, options);
-      }
-export function useTagsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TagsQuery, TagsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<TagsQuery, TagsQueryVariables>(TagsDocument, options);
-        }
+export function useTagsQuery(
+  baseOptions: Apollo.QueryHookOptions<TagsQuery, TagsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<TagsQuery, TagsQueryVariables>(TagsDocument, options);
+}
+export function useTagsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<TagsQuery, TagsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<TagsQuery, TagsQueryVariables>(
+    TagsDocument,
+    options
+  );
+}
 export type TagsQueryHookResult = ReturnType<typeof useTagsQuery>;
 export type TagsLazyQueryHookResult = ReturnType<typeof useTagsLazyQuery>;
 export type TagsQueryResult = Apollo.QueryResult<TagsQuery, TagsQueryVariables>;
 export const CurrentUserDocument = gql`
-    query currentUser {
-  currentUser {
-    id
-    fullName
-    email
-    organisation
-    newUser
-    groups {
+  query currentUser {
+    currentUser {
       id
-      name
-    }
-    schemes {
-      id
-      role
-      scheme {
+      fullName
+      email
+      organisation
+      newUser
+      groups {
         id
         name
-        autoApproveIncidents
-        autoApproveOffenders
+      }
+      schemes {
+        id
+        role
+        scheme {
+          id
+          name
+          autoApproveIncidents
+          autoApproveOffenders
+        }
       }
     }
   }
-}
-    `;
+`;
 
 /**
  * __useCurrentUserQuery__
@@ -14641,51 +15154,76 @@ export const CurrentUserDocument = gql`
  *   },
  * });
  */
-export function useCurrentUserQuery(baseOptions?: Apollo.QueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
-      }
-export function useCurrentUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CurrentUserQuery, CurrentUserQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(CurrentUserDocument, options);
-        }
+export function useCurrentUserQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    CurrentUserQuery,
+    CurrentUserQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<CurrentUserQuery, CurrentUserQueryVariables>(
+    CurrentUserDocument,
+    options
+  );
+}
+export function useCurrentUserLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    CurrentUserQuery,
+    CurrentUserQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<CurrentUserQuery, CurrentUserQueryVariables>(
+    CurrentUserDocument,
+    options
+  );
+}
 export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
-export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
-export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
+export type CurrentUserLazyQueryHookResult = ReturnType<
+  typeof useCurrentUserLazyQuery
+>;
+export type CurrentUserQueryResult = Apollo.QueryResult<
+  CurrentUserQuery,
+  CurrentUserQueryVariables
+>;
 export const UserDocument = gql`
-    query User($where: UserWhereUniqueInput!, $groupWhere: GroupWhereInput, $chatWhere: UserChatWhereInput) {
-  user(where: $where) {
-    id
-    fullName
-    email
-    organisation
-    addresses {
-      premises
-      building
-      street
-      townCity
-      county
-      postcode
-    }
-    disabled
-    newUser
-    groups(where: $groupWhere) {
+  query User(
+    $where: UserWhereUniqueInput!
+    $groupWhere: GroupWhereInput
+    $chatWhere: UserChatWhereInput
+  ) {
+    user(where: $where) {
       id
-      name
-    }
-    chats(where: $chatWhere) {
-      id
-      chat {
+      fullName
+      email
+      organisation
+      addresses {
+        premises
+        building
+        street
+        townCity
+        county
+        postcode
+      }
+      disabled
+      newUser
+      groups(where: $groupWhere) {
+        id
         name
       }
-    }
-    schemes {
-      id
-      role
+      chats(where: $chatWhere) {
+        id
+        chat {
+          name
+        }
+      }
+      schemes {
+        id
+        role
+      }
     }
   }
-}
-    `;
+`;
 
 /**
  * __useUserQuery__
@@ -14705,33 +15243,46 @@ export const UserDocument = gql`
  *   },
  * });
  */
-export function useUserQuery(baseOptions: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
-      }
-export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
-        }
+export function useUserQuery(
+  baseOptions: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+}
+export function useUserLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(
+    UserDocument,
+    options
+  );
+}
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export const CreateUserInDatabaseDocument = gql`
-    mutation createUserInDatabase($data: CreateUserData!, $groupWhere: GroupWhereInput) {
-  createUserInDatabase(data: $data) {
-    id
-    fullName
-    email
-    organisation
-    status
-    groups(where: $groupWhere) {
+  mutation createUserInDatabase(
+    $data: CreateUserData!
+    $groupWhere: GroupWhereInput
+  ) {
+    createUserInDatabase(data: $data) {
       id
-      name
+      fullName
+      email
+      organisation
+      status
+      groups(where: $groupWhere) {
+        id
+        name
+      }
     }
   }
-}
-    `;
-export type CreateUserInDatabaseMutationFn = Apollo.MutationFunction<CreateUserInDatabaseMutation, CreateUserInDatabaseMutationVariables>;
+`;
+export type CreateUserInDatabaseMutationFn = Apollo.MutationFunction<
+  CreateUserInDatabaseMutation,
+  CreateUserInDatabaseMutationVariables
+>;
 
 /**
  * __useCreateUserInDatabaseMutation__
@@ -14751,21 +15302,50 @@ export type CreateUserInDatabaseMutationFn = Apollo.MutationFunction<CreateUserI
  *   },
  * });
  */
-export function useCreateUserInDatabaseMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserInDatabaseMutation, CreateUserInDatabaseMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateUserInDatabaseMutation, CreateUserInDatabaseMutationVariables>(CreateUserInDatabaseDocument, options);
-      }
-export type CreateUserInDatabaseMutationHookResult = ReturnType<typeof useCreateUserInDatabaseMutation>;
-export type CreateUserInDatabaseMutationResult = Apollo.MutationResult<CreateUserInDatabaseMutation>;
-export type CreateUserInDatabaseMutationOptions = Apollo.BaseMutationOptions<CreateUserInDatabaseMutation, CreateUserInDatabaseMutationVariables>;
-export const InviteExistingUserDocument = gql`
-    mutation inviteExistingUser($data: UserUpdateInput!, $where: UniqueId!) {
-  inviteExistingUser(data: $data, where: $where) {
-    id
-  }
+export function useCreateUserInDatabaseMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateUserInDatabaseMutation,
+    CreateUserInDatabaseMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateUserInDatabaseMutation,
+    CreateUserInDatabaseMutationVariables
+  >(CreateUserInDatabaseDocument, options);
 }
-    `;
-export type InviteExistingUserMutationFn = Apollo.MutationFunction<InviteExistingUserMutation, InviteExistingUserMutationVariables>;
+export type CreateUserInDatabaseMutationHookResult = ReturnType<
+  typeof useCreateUserInDatabaseMutation
+>;
+export type CreateUserInDatabaseMutationResult =
+  Apollo.MutationResult<CreateUserInDatabaseMutation>;
+export type CreateUserInDatabaseMutationOptions = Apollo.BaseMutationOptions<
+  CreateUserInDatabaseMutation,
+  CreateUserInDatabaseMutationVariables
+>;
+export const InviteExistingUserDocument = gql`
+  mutation inviteExistingUser(
+    $data: UserUpdateInput!
+    $where: UniqueId!
+    $groupWhere: GroupWhereInput
+  ) {
+    inviteExistingUser(data: $data, where: $where) {
+      id
+      fullName
+      email
+      organisation
+      status
+      groups(where: $groupWhere) {
+        id
+        name
+      }
+    }
+  }
+`;
+export type InviteExistingUserMutationFn = Apollo.MutationFunction<
+  InviteExistingUserMutation,
+  InviteExistingUserMutationVariables
+>;
 
 /**
  * __useInviteExistingUserMutation__
@@ -14782,31 +15362,51 @@ export type InviteExistingUserMutationFn = Apollo.MutationFunction<InviteExistin
  *   variables: {
  *      data: // value for 'data'
  *      where: // value for 'where'
+ *      groupWhere: // value for 'groupWhere'
  *   },
  * });
  */
-export function useInviteExistingUserMutation(baseOptions?: Apollo.MutationHookOptions<InviteExistingUserMutation, InviteExistingUserMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<InviteExistingUserMutation, InviteExistingUserMutationVariables>(InviteExistingUserDocument, options);
-      }
-export type InviteExistingUserMutationHookResult = ReturnType<typeof useInviteExistingUserMutation>;
-export type InviteExistingUserMutationResult = Apollo.MutationResult<InviteExistingUserMutation>;
-export type InviteExistingUserMutationOptions = Apollo.BaseMutationOptions<InviteExistingUserMutation, InviteExistingUserMutationVariables>;
+export function useInviteExistingUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    InviteExistingUserMutation,
+    InviteExistingUserMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    InviteExistingUserMutation,
+    InviteExistingUserMutationVariables
+  >(InviteExistingUserDocument, options);
+}
+export type InviteExistingUserMutationHookResult = ReturnType<
+  typeof useInviteExistingUserMutation
+>;
+export type InviteExistingUserMutationResult =
+  Apollo.MutationResult<InviteExistingUserMutation>;
+export type InviteExistingUserMutationOptions = Apollo.BaseMutationOptions<
+  InviteExistingUserMutation,
+  InviteExistingUserMutationVariables
+>;
 export const ListSchemeUsersDocument = gql`
-    query ListSchemeUsers($where: UserWhereInput, $orderBy: [UserOrderByWithRelationInput!], $after: UserWhereUniqueInput, $groupWhere: GroupWhereInput) {
-  users(where: $where, orderBy: $orderBy, after: $after) {
-    id
-    fullName
-    email
-    organisation
-    status
-    groups(where: $groupWhere) {
+  query ListSchemeUsers(
+    $where: UserWhereInput
+    $orderBy: [UserOrderByWithRelationInput!]
+    $after: UserWhereUniqueInput
+    $groupWhere: GroupWhereInput
+  ) {
+    users(where: $where, orderBy: $orderBy, after: $after) {
       id
-      name
+      fullName
+      email
+      organisation
+      status
+      groups(where: $groupWhere) {
+        id
+        name
+      }
     }
   }
-}
-    `;
+`;
 
 /**
  * __useListSchemeUsersQuery__
@@ -14827,14 +15427,104 @@ export const ListSchemeUsersDocument = gql`
  *   },
  * });
  */
-export function useListSchemeUsersQuery(baseOptions?: Apollo.QueryHookOptions<ListSchemeUsersQuery, ListSchemeUsersQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ListSchemeUsersQuery, ListSchemeUsersQueryVariables>(ListSchemeUsersDocument, options);
+export function useListSchemeUsersQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ListSchemeUsersQuery,
+    ListSchemeUsersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ListSchemeUsersQuery, ListSchemeUsersQueryVariables>(
+    ListSchemeUsersDocument,
+    options
+  );
+}
+export function useListSchemeUsersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListSchemeUsersQuery,
+    ListSchemeUsersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListSchemeUsersQuery,
+    ListSchemeUsersQueryVariables
+  >(ListSchemeUsersDocument, options);
+}
+export type ListSchemeUsersQueryHookResult = ReturnType<
+  typeof useListSchemeUsersQuery
+>;
+export type ListSchemeUsersLazyQueryHookResult = ReturnType<
+  typeof useListSchemeUsersLazyQuery
+>;
+export type ListSchemeUsersQueryResult = Apollo.QueryResult<
+  ListSchemeUsersQuery,
+  ListSchemeUsersQueryVariables
+>;
+export const SearchUserDocument = gql`
+  query SearchUser($where: UserWhereUniqueInput!) {
+    user(where: $where) {
+      id
+      fullName
+      organisation
+      email
+      addresses(where: { primary: { equals: true } }) {
+        id
+        postcode
+        street
+        townCity
+        building
+        county
       }
-export function useListSchemeUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListSchemeUsersQuery, ListSchemeUsersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ListSchemeUsersQuery, ListSchemeUsersQueryVariables>(ListSchemeUsersDocument, options);
-        }
-export type ListSchemeUsersQueryHookResult = ReturnType<typeof useListSchemeUsersQuery>;
-export type ListSchemeUsersLazyQueryHookResult = ReturnType<typeof useListSchemeUsersLazyQuery>;
-export type ListSchemeUsersQueryResult = Apollo.QueryResult<ListSchemeUsersQuery, ListSchemeUsersQueryVariables>;
+    }
+  }
+`;
+
+/**
+ * __useSearchUserQuery__
+ *
+ * To run a query within a React component, call `useSearchUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchUserQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useSearchUserQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SearchUserQuery,
+    SearchUserQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SearchUserQuery, SearchUserQueryVariables>(
+    SearchUserDocument,
+    options
+  );
+}
+export function useSearchUserLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SearchUserQuery,
+    SearchUserQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<SearchUserQuery, SearchUserQueryVariables>(
+    SearchUserDocument,
+    options
+  );
+}
+export type SearchUserQueryHookResult = ReturnType<typeof useSearchUserQuery>;
+export type SearchUserLazyQueryHookResult = ReturnType<
+  typeof useSearchUserLazyQuery
+>;
+export type SearchUserQueryResult = Apollo.QueryResult<
+  SearchUserQuery,
+  SearchUserQueryVariables
+>;

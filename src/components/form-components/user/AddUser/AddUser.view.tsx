@@ -1,6 +1,15 @@
-import React from "react";
-import { Role, SchemeGroupsQuery,SchemeChatsQuery } from "graphql/generated";
-import { Button, Col, Form, Input, Row, Select,Typography } from "antd";
+import React from 'react';
+import { Role, SchemeGroupsQuery, SchemeChatsQuery } from 'graphql/generated';
+import {
+  Button,
+  Col,
+  Form,
+  FormInstance,
+  Input,
+  Row,
+  Select,
+  Typography,
+} from 'antd';
 const { Title } = Typography;
 
 interface FormData {
@@ -8,14 +17,13 @@ interface FormData {
   email: string;
   organisation: string;
   role: Role;
-  address: {
-    postcode: string;
-    street: string;
-    townCity: string;
-    building: string;
-    county: string;
-    primary: boolean;
-  };
+  postcode: string;
+  street: string;
+  townCity: string;
+  building: string;
+  county: string;
+  groups: string[];
+  chats: string[];
 }
 
 interface Props {
@@ -26,11 +34,45 @@ interface Props {
   chatsData: SchemeChatsQuery | undefined;
   chatsLoading: boolean;
   saving: boolean;
+  onValuesChange: (changedValues: any, values: FormData) => void;
+  form: FormInstance<FormData>;
+  existingUser: boolean;
 }
 
-const AddUser = ({ onSubmit, onClose, groupsData, groupsLoading,chatsData,chatsLoading, saving }: Props): JSX.Element => (
-  <Form layout="vertical" onFinish={onSubmit}>
-     <Title level={4} style={{ marginBottom: 15 }}>User Detail:</Title>
+const AddUser = ({
+  onSubmit,
+  onClose,
+  groupsData,
+  groupsLoading,
+  chatsData,
+  chatsLoading,
+  saving,
+  onValuesChange,
+  form,
+  existingUser,
+}: Props): JSX.Element => (
+  <Form<FormData>
+    form={form}
+    initialValues={{
+      fullName: '',
+      email: '',
+      organisation: '',
+      role: Role.User,
+      postcode: '',
+      street: '',
+      townCity: '',
+      building: '',
+      county: '',
+      groups: [],
+      chats: [],
+    }}
+    layout="vertical"
+    onFinish={onSubmit}
+    onValuesChange={onValuesChange}
+  >
+    <Title level={4} style={{ marginBottom: 15 }}>
+      User Detail:
+    </Title>
     <Row gutter={16}>
       <Col span={12}>
         <Form.Item
@@ -39,11 +81,11 @@ const AddUser = ({ onSubmit, onClose, groupsData, groupsLoading,chatsData,chatsL
           rules={[
             {
               required: true,
-              message: "Please enter a name for the new user.",
+              message: 'Please enter a name for the new user.',
             },
           ]}
         >
-          <Input disabled={saving} />
+          <Input readOnly={existingUser} disabled={saving} />
         </Form.Item>
       </Col>
       <Col span={12}>
@@ -53,11 +95,11 @@ const AddUser = ({ onSubmit, onClose, groupsData, groupsLoading,chatsData,chatsL
           rules={[
             {
               required: true,
-              message: "Please enter a email address for the new user.",
+              message: 'Please enter a email address for the new user.',
             },
           ]}
         >
-          <Input disabled={saving} type="email" />
+          <Input readOnly={existingUser} disabled={saving} type="email" />
         </Form.Item>
       </Col>
     </Row>
@@ -69,11 +111,11 @@ const AddUser = ({ onSubmit, onClose, groupsData, groupsLoading,chatsData,chatsL
           rules={[
             {
               required: true,
-              message: "Please enter a organisation for the new user.",
+              message: 'Please enter a organisation for the new user.',
             },
           ]}
         >
-          <Input disabled={saving} />
+          <Input readOnly={existingUser} disabled={saving} />
         </Form.Item>
       </Col>
       <Col span={12}>
@@ -81,10 +123,10 @@ const AddUser = ({ onSubmit, onClose, groupsData, groupsLoading,chatsData,chatsL
           name="role"
           label="Role"
           rules={[
-            { required: true, message: "Please select a role for the user." },
+            { required: true, message: 'Please select a role for the user.' },
           ]}
         >
-          <Select defaultValue={Role.User}>
+          <Select>
             <Select.Option key={Role.User} value={Role.User}>
               User
             </Select.Option>
@@ -99,56 +141,44 @@ const AddUser = ({ onSubmit, onClose, groupsData, groupsLoading,chatsData,chatsL
       </Col>
     </Row>
 
-
-     <Title level={4} style={{ marginBottom: 15 }}>User Address:</Title>
-<Row gutter={16}>
+    <Title level={4} style={{ marginBottom: 15 }}>
+      User Address:
+    </Title>
+    <Row gutter={16}>
       <Col span={12}>
-        <Form.Item
-          name="postcode"
-          label="Postcode"
-        >
-          <Input disabled={saving} />
+        <Form.Item name="postcode" label="Postcode">
+          <Input readOnly={existingUser} disabled={saving} />
         </Form.Item>
       </Col>
       <Col span={12}>
-        <Form.Item
-          name="street"
-          label="Street"
-        >
-           <Input disabled={saving} />
+        <Form.Item name="street" label="Street">
+          <Input readOnly={existingUser} disabled={saving} />
         </Form.Item>
       </Col>
     </Row>
     <Row gutter={16}>
       <Col span={12}>
-        <Form.Item
-          name="townCity"
-          label="TownCity"
-        >
-          <Input disabled={saving} />
+        <Form.Item name="townCity" label="Town City">
+          <Input readOnly={existingUser} disabled={saving} />
         </Form.Item>
       </Col>
       <Col span={12}>
-        <Form.Item
-          name="building"
-          label="Building"
-        >
-           <Input disabled={saving} />
+        <Form.Item name="building" label="Building">
+          <Input readOnly={existingUser} disabled={saving} />
         </Form.Item>
       </Col>
     </Row>
     <Row gutter={16}>
       <Col span={12}>
-        <Form.Item
-          name="county"
-          label="County"
-        >
-          <Input disabled={saving} />
+        <Form.Item name="county" label="County">
+          <Input readOnly={existingUser} disabled={saving} />
         </Form.Item>
       </Col>
     </Row>
 
-     <Title level={4} style={{ marginBottom: 15 }}>User Groups:</Title>
+    <Title level={4} style={{ marginBottom: 15 }}>
+      User Groups:
+    </Title>
     <Row gutter={16}>
       <Col span={12}>
         <Form.Item
@@ -157,11 +187,16 @@ const AddUser = ({ onSubmit, onClose, groupsData, groupsLoading,chatsData,chatsL
           rules={[
             {
               required: true,
-              message: "Please selected at least one group for a user.",
+              message: 'Please selected at least one group for a user.',
             },
           ]}
         >
-          <Select loading={groupsLoading} disabled={saving} mode="multiple" maxTagCount={2} >
+          <Select
+            loading={groupsLoading}
+            disabled={saving}
+            mode="multiple"
+            maxTagCount={2}
+          >
             {groupsData?.groups.map((group) => (
               <Select.Option key={group.id} value={group.id}>
                 {group.name}
@@ -171,11 +206,13 @@ const AddUser = ({ onSubmit, onClose, groupsData, groupsLoading,chatsData,chatsL
         </Form.Item>
       </Col>
       <Col span={12}>
-        <Form.Item
-          name="chats"
-          label="chats"
-        >
-          <Select loading={chatsLoading} disabled={saving} mode="multiple" maxTagCount={2} >
+        <Form.Item name="chats" label="Chats">
+          <Select
+            loading={chatsLoading}
+            disabled={saving}
+            mode="multiple"
+            maxTagCount={2}
+          >
             {chatsData?.chats.map((chat) => (
               <Select.Option key={chat.id} value={chat.id}>
                 {chat.name}
@@ -189,11 +226,17 @@ const AddUser = ({ onSubmit, onClose, groupsData, groupsLoading,chatsData,chatsL
     <Form.Item>
       <Row style={{ marginTop: 30 }} gutter={16} justify="end">
         <Col>
-          <Button disabled={saving} onClick={onClose}>Cancel</Button>
+          <Button disabled={saving} onClick={onClose}>
+            Cancel
+          </Button>
         </Col>
         <Col>
-            
-          <Button disabled={saving} loading={saving} type="primary" htmlType="submit">
+          <Button
+            disabled={saving}
+            loading={saving}
+            type="primary"
+            htmlType="submit"
+          >
             Invite User
           </Button>
         </Col>

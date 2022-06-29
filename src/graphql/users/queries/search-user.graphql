@@ -1,0 +1,16 @@
+query SearchUser($where: UserWhereUniqueInput!) {
+    user(where: $where) {
+      id
+      fullName
+      organisation
+      email
+      addresses(where: { primary: { equals: true } }) {
+        id
+        postcode
+        street
+        townCity
+        building
+        county
+      }
+    }
+  }

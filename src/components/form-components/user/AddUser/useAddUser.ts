@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   Role,
   SchemeGroupsQuery,
@@ -9,24 +9,27 @@ import {
   useSchemeGroupsQuery,
   useSchemeChatsQuery,
   CreateUserInDatabaseMutation,
-} from "graphql/generated";
-import { useStoreState } from "state";
-import { MutationUpdaterFn } from "@apollo/client";
-import { notification } from "antd";
+  useSearchUserQuery,
+} from 'graphql/generated';
+import { useStoreState } from 'state';
+import { MutationUpdaterFn } from '@apollo/client';
+import { Modal, notification, Form, FormInstance } from 'antd';
+
+const { confirm } = Modal;
+const { useForm } = Form;
 
 interface FormData {
   fullName: string;
   email: string;
   organisation: string;
   role: Role;
-  address: {
-    postcode: string;
-    street: string;
-    townCity: string;
-    building: string;
-    county: string;
-    primary: boolean;
-  };
+  postcode: string;
+  street: string;
+  townCity: string;
+  building: string;
+  county: string;
+  groups: string[];
+  chats: string[];
 }
 interface Props {
   onClose: () => void;
@@ -39,34 +42,76 @@ interface Return {
   chatsData: SchemeChatsQuery | undefined;
   chatsLoading: boolean;
   saving: boolean;
+  onValuesChange: (changedValues: any, values: FormData) => void;
+  form: FormInstance<FormData>;
+  existingUser: boolean;
   // setSaving: (value: boolean) => void;
 }
-type NotificationType = "success" | "info" | "warning" | "error";
+type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const useAddUser = ({ onClose, update }: Props): Return => {
+  const [form] = useForm<FormData>();
+
   const schemeId = useStoreState((state) => state.scheme.id);
+  const [existingUser, setExistingUser] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [search, setSearch] = useState<string | null>(null);
 
   const openNotification = (type: NotificationType) => {
     switch (type) {
-      case "success":
-        notification["success"]({
-          message: "Success!",
-          description: "Your invitation is successful! ",
+      case 'success':
+        notification['success']({
+          message: 'Success!',
+          description: 'Your invitation is successful! ',
         });
-        break
-      
-      case "error":
-        notification["error"]({
-          message: "error!",
-          description: "Whoops, there are some errors. Please try again. ",
+        break;
+
+      case 'error':
+        notification['error']({
+          message: 'error!',
+          description: 'Whoops, there are some errors. Please try again. ',
         });
-        break
+        break;
     }
   };
 
+  const { data: userData } = useSearchUserQuery({
+    variables: {
+      where: {
+        email: search,
+      },
+    },
+    skip: search === null,
+    onCompleted: ({ user }) => {
+      if (user) {
+        confirm({
+          title: 'This user already exists',
+          content: `A user with the email address ${user.email} already exists, do you want to invite ${user.fullName} to the scheme?`,
+          onOk() {
+            setExistingUser(true);
+            form.setFieldsValue({
+              fullName: user.fullName,
+              building: user.addresses[0].building || '',
+              county: user.addresses[0].county || '',
+              postcode: user.addresses[0].postcode || '',
+              street: user.addresses[0].street || '',
+              townCity: user.addresses[0].townCity || '',
+              email: user.email,
+              organisation: user.organisation,
+            });
+          },
+          onCancel() {
+            form.setFieldsValue({
+              email: '',
+            });
+          },
+        });
+      }
+    },
+  });
+
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: 'cache-and-network',
     variables: {
       where: {
         scheme: {
@@ -82,7 +127,7 @@ const useAddUser = ({ onClose, update }: Props): Return => {
   });
 
   const { data: chatsData, loading: chatsLoading } = useSchemeChatsQuery({
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: 'cache-and-network',
     variables: {
       where: {
         scheme: {
@@ -101,48 +146,108 @@ const useAddUser = ({ onClose, update }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       onClose();
-      openNotification("success")
+      openNotification('success');
     },
     onError: () => {
-      openNotification("error")
+      openNotification('error');
     },
     update,
   });
-  const [inviteExistingUser] = useInviteExistingUserMutation();
+
+  const [inviteExistingUser] = useInviteExistingUserMutation({
+    onCompleted: () => {
+      setSaving(false);
+      onClose();
+      openNotification('success');
+    },
+    onError: () => {
+      openNotification('error');
+    },
+    update,
+  });
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    createUserInDatabase({
-      variables: {
-        data: {
-          address: {
-            postcode: data.address?.postcode || "",
-            street: data.address?.street || "",
-            townCity: data.address?.townCity || "",
-            building: data.address?.building || "",
-            county: data.address?.county || "",
-            primary: true,
+    if (existingUser && userData?.user) {
+      inviteExistingUser({
+        variables: {
+          where: {
+            id: userData.user.id,
           },
-          email: data.email,
-          fullName: data.fullName,
-          groups: [
-            {
-              id: "",
+          data: {
+            groups:
+              data.groups.length > 0
+                ? { connect: data.groups.map((id) => ({ id })) }
+                : undefined,
+            chats:
+              data.chats.length > 0
+                ? {
+                    create: data.chats.map((id) => {
+                      return {
+                        newMessages: true,
+                        chat: {
+                          connect: { id },
+                        },
+                      };
+                    }),
+                  }
+                : undefined,
+            schemes: {
+              create: [
+                {
+                  role: data.role,
+                  scheme: {
+                    connect: { id: schemeId },
+                  },
+                },
+              ],
             },
-          ],
-          organisation: data.organisation,
-          role: data.role,
-          scheme: {
-            id: "",
           },
-          chats: [
-            {
-              id: "",
+          groupWhere: {
+            scheme: {
+              id: {
+                equals: schemeId,
+              },
             },
-          ],
+          },
         },
-      },
-    });
+      });
+    } else {
+      createUserInDatabase({
+        variables: {
+          data: {
+            address: {
+              postcode: data.postcode || '',
+              street: data.street || '',
+              townCity: data.townCity || '',
+              building: data.building || '',
+              county: data.county || '',
+              primary: true,
+            },
+            email: data.email,
+            fullName: data.fullName,
+            groups: data.groups.map((id) => ({ id })),
+            organisation: data.organisation,
+            role: data.role,
+            scheme: {
+              id: schemeId,
+            },
+            chats: data.chats.map((id) => ({ id })),
+          },
+          groupWhere: {
+            scheme: {
+              id: {
+                equals: schemeId,
+              },
+            },
+          },
+        },
+      });
+    }
+  };
+
+  const onValuesChange = (changedValues: any) => {
+    if (changedValues.email) setSearch(changedValues.email);
   };
 
   return {
@@ -153,6 +258,9 @@ const useAddUser = ({ onClose, update }: Props): Return => {
     chatsLoading,
     saving,
     // setSaving,
+    onValuesChange,
+    form,
+    existingUser,
   };
 };
 
