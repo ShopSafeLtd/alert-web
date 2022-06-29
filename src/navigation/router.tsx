@@ -9,19 +9,21 @@ import { useStoreState } from 'state';
 import { useAuth } from 'hooks';
 import { useQuery } from '@apollo/client';
 import { UserNew, UserNewArgs, UserNewRes } from 'graphql-src/users/queries';
+import { useAuth0 } from '@auth0/auth0-react';
 import Loading from './auth-views/authentication/loading';
 
 import PrimaryOnboarding from '../old-components/users/onboard/Primary/PrimaryOnboarding';
 
 export const Views = () => {
   const [newUserId, setNewUserId] = useState<string>('');
+  const { isLoading } = useAuth0();
 
-  const locale = useStoreState((state) => state.theme.locale);
+  const locale = useStoreState((state) => state.theme.locale) as 'en' | 'fr';
+
   const isSet = useStoreState((state) => state.auth.isSet);
 
   const location = useLocation();
 
-  // @ts-expect-error ???
   const currentAppLocale = AppLocale[locale];
 
   const { rehydrateAuth } = useAuth();
@@ -44,6 +46,7 @@ export const Views = () => {
       id: newUserId,
     },
   });
+  if (isLoading) return <Loading />;
 
   return (
     <IntlProvider

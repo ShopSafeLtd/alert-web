@@ -4,6 +4,7 @@ import { LogoutOutlined } from '@ant-design/icons';
 import { useStoreState } from 'state';
 import { useAuth } from 'hooks';
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
+import { useAuth0 } from '@auth0/auth0-react';
 
 interface MenuItem {
   title: string;
@@ -44,6 +45,7 @@ export const NavProfile = () => {
   const name = useStoreState((state) => state.user.fullName);
   const email = useStoreState((state) => state.user.email);
   const { signOut } = useAuth();
+  const { logout } = useAuth0();
 
   const profileMenu = (
     <div className="nav-profile nav-dropdown">
@@ -75,7 +77,13 @@ export const NavProfile = () => {
               </Menu.Item>
             );
           })}
-          <Menu.Item key={menuItem.length + 1} onClick={(e) => signOut()}>
+          <Menu.Item
+            key={menuItem.length + 1}
+            onClick={() => {
+              signOut();
+              logout({ returnTo: window.location.origin });
+            }}
+          >
             <Row>
               <LogoutOutlined className="mr-3" />
               <span className="font-weight-normal">Sign Out</span>

@@ -5,15 +5,17 @@ import jwtDecode from 'jwt-decode';
 import LogRocket from 'logrocket';
 import {
   useCurrentUserLazyQuery,
-  useSignInMutation,
+  // useSignInMutation,
   CurrentUserDocument,
   CurrentUserQuery,
 } from 'graphql/generated';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useEffect } from 'react';
 
-interface LoginArgs {
-  email: string;
-  password: string;
-}
+// interface LoginArgs {
+//   email: string;
+//   password: string;
+// }
 
 interface DecodedToken {
   aud: string;
@@ -29,7 +31,7 @@ interface DecodedToken {
   updated_at: string;
 }
 interface Return {
-  login: ({ email, password }: LoginArgs) => void;
+  // login: ({ email, password }: LoginArgs) => void;
   rehydrateAuth: () => void;
   signOut: () => void;
   onLoginSuccess: (data: OnLoginSuccessArgs) => void;
@@ -38,7 +40,9 @@ interface Return {
 interface OnLoginSuccessArgs extends SetUserPayload {
   accessToken: string;
 }
-const useAuth = ():Return => {
+const useAuth = (): Return => {
+  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+
   const client = useApolloClient();
   const authenticated = useStoreActions(
     (actions) => actions.auth.authenticated
@@ -136,6 +140,7 @@ const useAuth = ():Return => {
     onError: () => expired(),
     fetchPolicy: 'cache-and-network',
   });
+
   const rehydrateAuth = () => {
     const accessToken = localStorage.getItem('accessToken');
     if (accessToken) {
@@ -159,8 +164,6 @@ const useAuth = ():Return => {
       expired();
     }
   };
-
-
 
   const onLoginSuccess = (data: OnLoginSuccessArgs) => {
     window.localStorage.setItem('accessToken', data.accessToken);
@@ -187,52 +190,102 @@ const useAuth = ():Return => {
     });
   };
 
-  const [handleLogin] = useSignInMutation({
-    onCompleted: async ({ signIn }) => {
-      try {
-        const { data } = await client.query<CurrentUserQuery>({
-          query: CurrentUserDocument,
-          fetchPolicy: 'network-only',
-          context: {
-            headers: {
-              authorization: `Bearer ${signIn?.accessToken}`,
-            },
-          },
-        });
+  // const [handleLogin] = useSignInMutation({
+  //   onCompleted: async ({ signIn }) => {
+  //     try {
+  //       const { data } = await client.query<CurrentUserQuery>({
+  //         query: CurrentUserDocument,
+  //         fetchPolicy: 'network-only',
+  //         context: {
+  //           headers: {
+  //             authorization: `Bearer ${signIn?.accessToken}`,
+  //           },
+  //         },
+  //       });
 
-        onLoginSuccess({
-          accessToken: signIn?.accessToken || '',
-          email: data.currentUser?.email || '',
-          fullName: data.currentUser?.fullName || '',
-          id: data.currentUser?.id || '',
-          onboarded: data.currentUser?.newUser || false,
-          organisation: data.currentUser?.organisation || '',
-          schemes: data.currentUser?.schemes || [],
-          groups: data.currentUser?.groups || [],
-        });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (err: any) {
-        setAuthMessage(err.message);
-        console.log(err);
-      }
-    },
-    onError: (error) => {
-      console.log(error);
-      setAuthMessage(error.message);
-      throw new Error(error.message);
-    },
-  });
+  //       onLoginSuccess({
+  //         accessToken: signIn?.accessToken || '',
+  //         email: data.currentUser?.email || '',
+  //         fullName: data.currentUser?.fullName || '',
+  //         id: data.currentUser?.id || '',
+  //         onboarded: data.currentUser?.newUser || false,
+  //         organisation: data.currentUser?.organisation || '',
+  //         schemes: data.currentUser?.schemes || [],
+  //         groups: data.currentUser?.groups || [],
+  //       });
+  //       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //     } catch (err: any) {
+  //       setAuthMessage(err.message);
+  //       console.log(err);
+  //     }
+  //   },
+  //   onError: (error) => {
+  //     console.log(error);
+  //     setAuthMessage(error.message);
+  //     throw new Error(error.message);
+  //   },
+  // });
 
+  useEffect(() => {
+    // authenticated from auth0
+    if (isAuthenticated) {
+      (async () => {
+        try {
+          console.log('i ran', isAuthenticated);
+          const token = await getAccessTokenSilently();
+          authenticated(token);
+          window.localStorage.setItem('accessToken', token);
+          try {
+            const { data } = await client.query<CurrentUserQuery>({
+              query: CurrentUserDocument,
+              fetchPolicy: 'network-only',
+              context: {
+                headers: {
+                  authorization: `Bearer ${token}`,
+                },
+              },
+            });
+            console.log(data);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          } catch (err: any) {
+            setAuthMessage(err.message);
+            console.log(err);
+          }
+        } catch (e) {
+          // eslint-disable-next-line no-console
+          console.error(e);
+        }
 
-  const login = ({ email, password }: LoginArgs) => {
-    window.localStorage.removeItem('accessToken');
-    handleLogin({
-      variables: {
-        email,
-        password,
-      },
-    });
-  };
+        // try {
+
+        //   onLoginSuccess({
+        //     accessToken: token || '',
+        //     email: data.currentUser?.email || '',
+        //     fullName: data.currentUser?.fullName || '',
+        //     id: data.currentUser?.id || '',
+        //     onboarded: data.currentUser?.newUser || false,
+        //     organisation: data.currentUser?.organisation || '',
+        //     schemes: data.currentUser?.schemes || [],
+        //     groups: data.currentUser?.groups || [],
+        //   });
+        //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // } catch (err: any) {
+        //   setAuthMessage(err.message);
+        //   console.log(err);
+        // }
+      })();
+    }
+  }, [isAuthenticated]);
+
+  // const login = ({ email, password }: LoginArgs) => {
+  //   window.localStorage.removeItem('accessToken');
+  //   handleLogin({
+  //     variables: {
+  //       email,
+  //       password,
+  //     },
+  //   });
+  // };
 
   const signOut = () => {
     clearUser();
@@ -242,7 +295,7 @@ const useAuth = ():Return => {
   };
 
   return {
-    login,
+    // login,
     rehydrateAuth,
     signOut,
     onLoginSuccess,

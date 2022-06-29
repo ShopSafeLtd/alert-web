@@ -16,6 +16,7 @@ import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { createUploadLink } from 'apollo-upload-client';
 
 import { ReadFieldFunction } from '@apollo/client/cache/core/types/common';
+import { useAuth0 } from '@auth0/auth0-react';
 
 interface Props {
   children: React.ReactNode;
@@ -23,6 +24,7 @@ interface Props {
 
 const Apollo = ({ children }: Props) => {
   const accessToken = localStorage.getItem('accessToken');
+  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 
   const wsClient = new SubscriptionClient(
     // "wss://alert-api-dev.azurewebsites.net/graphql",
@@ -43,13 +45,36 @@ const Apollo = ({ children }: Props) => {
     uri: 'http://localhost:4000/graphql',
   });
 
-  const middlewareLink = setContext((_, { headers, ...context }) => ({
-    headers: {
-      ...headers,
-      ...(accessToken ? { authorization: `Bearer ${accessToken}` } : {}),
-    },
-    ...context,
-  }));
+  const middlewareLink = setContext(async (_, { headers, ...context }) => {
+    if (isAuthenticated) {
+      const authToken = await getAccessTokenSilently({
+        audience: `https://app.shopsafealert.co.uk`,
+        scope: 'openid read:current_user',
+      });
+      return {
+        headers: {
+          ...headers,
+          Authorization: authToken ? `Bearer ${authToken}` : '',
+        },
+        ...context,
+      };
+    }
+    return {
+      headers: {
+        ...headers,
+        Authorization: `Bearer ''`,
+      },
+      ...context,
+    };
+  });
+
+  // const middlewareLink = setContext((_, { headers, ...context }) => ({
+  //   headers: {
+  //     ...headers,
+  //     ...(accessToken ? { authorization: `Bearer ${accessToken}` } : {}),
+  //   },
+  //   ...context,
+  // }));
 
   const authHttp = middlewareLink.concat(httpLink);
 
@@ -70,7 +95,8 @@ const Apollo = ({ children }: Props) => {
     readField: ReadFieldFunction,
     args: Record<string, any> | null
   ) => {
-    const removeRecycledItems = (data = []) => data.filter((el: any) => !readField('recycled', el));
+    const removeRecycledItems = (data = []) =>
+      data.filter((el: any) => !readField('recycled', el));
     const existingData = removeRecycledItems(existing) || [];
     const incomingData = removeRecycledItems(incoming) || [];
 

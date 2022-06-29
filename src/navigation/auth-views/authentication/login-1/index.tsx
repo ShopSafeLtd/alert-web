@@ -1,18 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, Row, Col } from 'antd';
 import { useStoreState } from 'state';
+import { useAuth0 } from '@auth0/auth0-react';
 import { LoginForm, Props } from '../../components/LoginForm';
+import Loading from '../loading';
 
 const LoginOne = (props: Props): JSX.Element => {
   const theme = useStoreState((state) => state.theme.currentTheme);
-
+  const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
   const backgroundStyle = {
     background:
       theme === 'dark'
         ? 'linear-gradient(to right, #cb2d3e, #ef473a)'
         : 'linear-gradient(to right, #cb2d3e, #ef473a)',
   };
-
+  useEffect(() => {
+    if (!isAuthenticated) {
+      if (!isLoading) loginWithRedirect();
+    }
+  }, []);
+  if (isLoading) return <Loading />;
+  if (!isAuthenticated) return <Loading />;
   return (
     <div className="h-100" style={backgroundStyle}>
       <div className="container d-flex flex-column justify-content-center h-100">

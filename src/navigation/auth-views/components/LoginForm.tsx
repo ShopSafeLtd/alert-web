@@ -9,7 +9,6 @@ import CustomIcon from 'components/util-components/AntD/CustomIcon';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useStoreState, useStoreActions } from 'state';
-import { useAuth } from 'hooks';
 import { AUTH_PREFIX_PATH } from 'configs/AppConfig';
 
 export interface Props {
@@ -25,7 +24,7 @@ export const LoginForm = (props: Props): JSX.Element => {
 
   const { otherSignIn, showForgetPassword, extra, allowRedirect } = props;
 
-  const { login } = useAuth();
+  // const { login } = useAuth();
 
   const loading = useStoreState((state) => state.auth.loading);
   const message = useStoreState((state) => state.auth.message);
@@ -38,17 +37,12 @@ export const LoginForm = (props: Props): JSX.Element => {
     (actions) => actions.auth.hideAuthMessage
   );
 
-  interface OnLoginArgs {
-    email: string;
-    password: string;
-  }
-
-  const onLogin = ({ email, password }: OnLoginArgs) => {
+  const onLogin = () => {
     showLoading();
-    login({
-      email,
-      password,
-    });
+    // login({
+    //   email,
+    //   password,
+    // });
   };
 
   const onGoogleLogin = () => {
