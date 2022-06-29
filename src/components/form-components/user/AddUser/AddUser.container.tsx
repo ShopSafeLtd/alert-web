@@ -2,14 +2,18 @@ import React from 'react';
 import View from './AddUser.view';
 import useAddUser from './useAddUser';
 import { MutationUpdaterFn } from '@apollo/client';
-import { CreateUserInDatabaseMutation } from 'graphql/generated';
+import {
+  CreateUserInDatabaseMutation,
+  InviteExistingUserMutation,
+} from 'graphql/generated';
 
 interface Props {
   onClose: () => void;
   update: MutationUpdaterFn<CreateUserInDatabaseMutation>;
+  updateSearch: MutationUpdaterFn<InviteExistingUserMutation>;
 }
 
-const AddUser = ({ onClose, update }: Props) => {
+const AddUser = ({ onClose, update, updateSearch }: Props) => {
   const {
     onSubmit,
     groupsData,
@@ -20,7 +24,7 @@ const AddUser = ({ onClose, update }: Props) => {
     onValuesChange,
     form,
     existingUser,
-  } = useAddUser({ onClose, update });
+  } = useAddUser({ onClose, update, updateSearch });
 
   return (
     <View

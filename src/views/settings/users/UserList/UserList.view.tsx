@@ -1,9 +1,23 @@
-import React from "react";
-import { Table, Row, Col, Input, Typography, Select, Drawer, Button } from "antd";
-import { ListSchemeUsersQuery, SchemeGroupsQuery,CreateUserInDatabaseMutation } from "graphql/generated";
-import { Link } from "react-router-dom";
-import AddUser from 'components/form-components/user/AddUser'
-import { MutationUpdaterFn } from "@apollo/client";
+import React from 'react';
+import {
+  Table,
+  Row,
+  Col,
+  Input,
+  Typography,
+  Select,
+  Drawer,
+  Button,
+} from 'antd';
+import {
+  ListSchemeUsersQuery,
+  SchemeGroupsQuery,
+  CreateUserInDatabaseMutation,
+  InviteExistingUserMutation,
+} from 'graphql/generated';
+import { Link } from 'react-router-dom';
+import AddUser from 'components/form-components/user/AddUser';
+import { MutationUpdaterFn } from '@apollo/client';
 
 interface Props {
   data: ListSchemeUsersQuery | undefined;
@@ -17,6 +31,7 @@ interface Props {
   addUser: boolean;
   toggleAddUser: () => void;
   updateUserList: MutationUpdaterFn<CreateUserInDatabaseMutation>;
+  updateExitingUserList: MutationUpdaterFn<InviteExistingUserMutation>;
 }
 
 const UserList = ({
@@ -30,8 +45,8 @@ const UserList = ({
   setSelectedGroups,
   addUser,
   toggleAddUser,
-  updateUserList
-
+  updateUserList,
+  updateExitingUserList,
 }: Props) => (
   <div className="list-view">
     <Row gutter={8} style={{ marginBottom: 10 }}>
@@ -62,7 +77,9 @@ const UserList = ({
       </Col>
       <Col flex={1} />
       <Col>
-        <Button type="primary" onClick={toggleAddUser}>Invite New User</Button>
+        <Button type="primary" onClick={toggleAddUser}>
+          Invite New User
+        </Button>
       </Col>
     </Row>
     <Table
@@ -74,9 +91,9 @@ const UserList = ({
       }}
       columns={[
         {
-          key: "name",
-          title: "Name",
-          dataIndex: "name",
+          key: 'name',
+          title: 'Name',
+          dataIndex: 'name',
           render: (value, record) => (
             <Link to={`/app/scheme-settings/users/view/${record.key}`}>
               {value}
@@ -84,29 +101,29 @@ const UserList = ({
           ),
         },
         {
-          key: "status",
-          title: "Status",
-          dataIndex: "status",
+          key: 'status',
+          title: 'Status',
+          dataIndex: 'status',
           render: (value) => (
-            <Typography.Text type={value === "Enabled" ? "success" : "warning"}>
+            <Typography.Text type={value === 'Enabled' ? 'success' : 'warning'}>
               {value}
             </Typography.Text>
           ),
         },
         {
-          key: "emailAddress",
-          title: "Email Address",
-          dataIndex: "emailAddress",
+          key: 'emailAddress',
+          title: 'Email Address',
+          dataIndex: 'emailAddress',
         },
         {
-          key: "organisation",
-          title: "Organisation",
-          dataIndex: "organisation",
+          key: 'organisation',
+          title: 'Organisation',
+          dataIndex: 'organisation',
         },
         {
-          key: "groups",
-          title: "Groups",
-          dataIndex: "groups",
+          key: 'groups',
+          title: 'Groups',
+          dataIndex: 'groups',
         },
       ]}
       dataSource={data?.users.map((user) => ({
@@ -121,12 +138,21 @@ const UserList = ({
       }))}
     />
 
-    <Drawer title="Invite New User" visible={addUser} width="800" onClose={toggleAddUser}>
-      {addUser ? <AddUser
+    <Drawer
+      title="Invite New User"
+      visible={addUser}
+      width="800"
+      onClose={toggleAddUser}
+    >
+      {addUser ? (
+        <AddUser
           update={updateUserList}
-        
-        onClose={toggleAddUser}
-      /> : <div />}
+          updateSearch={updateExitingUserList}
+          onClose={toggleAddUser}
+        />
+      ) : (
+        <div />
+      )}
     </Drawer>
   </div>
 );

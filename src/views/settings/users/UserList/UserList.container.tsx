@@ -1,6 +1,6 @@
-import React from "react";
-import View from "./UserList.view";
-import useUserList from "./useUserList";
+import React from 'react';
+import View from './UserList.view';
+import useUserList from './useUserList';
 
 const UserList = () => {
   const {
@@ -15,6 +15,7 @@ const UserList = () => {
     addUser,
     toggleAddUser,
     updateUserList,
+    updateExitingUserList,
   } = useUserList();
 
   return (
@@ -30,6 +31,7 @@ const UserList = () => {
       addUser={addUser}
       toggleAddUser={toggleAddUser}
       updateUserList={updateUserList}
+      updateExitingUserList={updateExitingUserList}
     />
   );
 };

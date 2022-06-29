@@ -10,6 +10,7 @@ import {
   useSchemeChatsQuery,
   CreateUserInDatabaseMutation,
   useSearchUserQuery,
+  InviteExistingUserMutation,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import { MutationUpdaterFn } from '@apollo/client';
@@ -34,6 +35,7 @@ interface FormData {
 interface Props {
   onClose: () => void;
   update: MutationUpdaterFn<CreateUserInDatabaseMutation>;
+  updateSearch: MutationUpdaterFn<InviteExistingUserMutation>;
 }
 interface Return {
   onSubmit: (value: FormData) => void;
@@ -45,11 +47,10 @@ interface Return {
   onValuesChange: (changedValues: any, values: FormData) => void;
   form: FormInstance<FormData>;
   existingUser: boolean;
-  // setSaving: (value: boolean) => void;
 }
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
-const useAddUser = ({ onClose, update }: Props): Return => {
+const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
   const [form] = useForm<FormData>();
 
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -152,6 +153,7 @@ const useAddUser = ({ onClose, update }: Props): Return => {
       openNotification('error');
     },
     update,
+    // updateSearch,
   });
 
   const [inviteExistingUser] = useInviteExistingUserMutation({
@@ -163,7 +165,8 @@ const useAddUser = ({ onClose, update }: Props): Return => {
     onError: () => {
       openNotification('error');
     },
-    update,
+    // update,
+    update: updateSearch,
   });
 
   const onSubmit = (data: FormData) => {
@@ -257,7 +260,6 @@ const useAddUser = ({ onClose, update }: Props): Return => {
     chatsData,
     chatsLoading,
     saving,
-    // setSaving,
     onValuesChange,
     form,
     existingUser,
