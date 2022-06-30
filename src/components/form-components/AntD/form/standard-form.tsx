@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { Form, Button, FormInstance, Row, FormItemProps, Checkbox } from 'antd';
+import { Form, Button, FormInstance, Row, FormItemProps } from 'antd';
 import { Grow } from 'components/layout-components/AntD';
 
 interface Field extends FormItemProps {
@@ -34,6 +34,7 @@ export const StandardForm = <T,>({
 
   useEffect(() => {
     if (data) {
+      // @ts-expect-error types wrong?
       formRef.current?.setFieldsValue(data);
     }
   }, [data]);
@@ -43,8 +44,8 @@ export const StandardForm = <T,>({
     onClose();
   };
 
-  const handleSubmit = async (data: T) => {
-    onSubmit(data);
+  const handleSubmit = async (inputData: T) => {
+    onSubmit(inputData);
   };
 
   return (
@@ -70,6 +71,7 @@ export const StandardForm = <T,>({
 
       <Grow />
 
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <Form.Item {...tailLayout}>
         <Row justify="end">
           <Button
@@ -92,4 +94,9 @@ export const StandardForm = <T,>({
       </Form.Item>
     </Form>
   );
+};
+export default StandardForm;
+StandardForm.defaultProps = {
+  data: undefined,
+  loading: false,
 };

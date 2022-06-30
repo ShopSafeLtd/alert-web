@@ -1,2 +1,2 @@
 export * from './form';
-export * from './form-drawer';
+export { default as FormDrawer } from './form-drawer';
