@@ -36,6 +36,7 @@ interface Return {
   signOut: () => void;
   onLoginSuccess: (data: OnLoginSuccessArgs) => void;
   getCurrentUser: () => void;
+  loading: boolean;
 }
 interface OnLoginSuccessArgs extends SetUserPayload {
   accessToken: string;
@@ -124,7 +125,8 @@ const useAuth = (): Return => {
     });
     authenticated(accessToken);
   };
-  const [getCurrentUser] = useCurrentUserLazyQuery({
+
+  const [getCurrentUser, { loading }] = useCurrentUserLazyQuery({
     onCompleted: ({ currentUser }) => {
       handleSuccess({
         id: currentUser?.id || '',
@@ -190,48 +192,11 @@ const useAuth = (): Return => {
     });
   };
 
-  // const [handleLogin] = useSignInMutation({
-  //   onCompleted: async ({ signIn }) => {
-  //     try {
-  //       const { data } = await client.query<CurrentUserQuery>({
-  //         query: CurrentUserDocument,
-  //         fetchPolicy: 'network-only',
-  //         context: {
-  //           headers: {
-  //             authorization: `Bearer ${signIn?.accessToken}`,
-  //           },
-  //         },
-  //       });
-
-  //       onLoginSuccess({
-  //         accessToken: signIn?.accessToken || '',
-  //         email: data.currentUser?.email || '',
-  //         fullName: data.currentUser?.fullName || '',
-  //         id: data.currentUser?.id || '',
-  //         onboarded: data.currentUser?.newUser || false,
-  //         organisation: data.currentUser?.organisation || '',
-  //         schemes: data.currentUser?.schemes || [],
-  //         groups: data.currentUser?.groups || [],
-  //       });
-  //       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  //     } catch (err: any) {
-  //       setAuthMessage(err.message);
-  //       console.log(err);
-  //     }
-  //   },
-  //   onError: (error) => {
-  //     console.log(error);
-  //     setAuthMessage(error.message);
-  //     throw new Error(error.message);
-  //   },
-  // });
-
   useEffect(() => {
     // authenticated from auth0
     if (isAuthenticated) {
       (async () => {
         try {
-          console.log('i ran', isAuthenticated);
           const token = await getAccessTokenSilently();
           authenticated(token);
           window.localStorage.setItem('accessToken', token);
@@ -246,6 +211,17 @@ const useAuth = (): Return => {
               },
             });
             console.log(data);
+            // Adding this in breaks the side and top navs. Not sure why atm
+            // onLoginSuccess({
+            //   accessToken: token || '',
+            //   email: data.currentUser?.email || '',
+            //   fullName: data.currentUser?.fullName || '',
+            //   id: data.currentUser?.id || '',
+            //   onboarded: data.currentUser?.newUser || false,
+            //   organisation: data.currentUser?.organisation || '',
+            //   schemes: data.currentUser?.schemes || [],
+            //   groups: data.currentUser?.groups || [],
+            // });
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
           } catch (err: any) {
             setAuthMessage(err.message);
@@ -296,6 +272,7 @@ const useAuth = (): Return => {
 
   return {
     // login,
+    loading,
     rehydrateAuth,
     signOut,
     onLoginSuccess,
