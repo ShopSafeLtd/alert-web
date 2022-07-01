@@ -9,14 +9,12 @@ import {
   Button,
   Col,
   Form,
-  FormInstance,
   Input,
   Row,
   Select,
   Typography,
   Skeleton,
 } from 'antd';
-import { RoleValues } from 'types';
 
 const { Title } = Typography;
 
@@ -56,8 +54,8 @@ const EditUser = ({
   chatsData,
   chatsLoading,
   saving,
-}: Props): JSX.Element => {
-  return loading ? (
+}: Props): JSX.Element =>
+  loading ? (
     <Skeleton />
   ) : (
     <Form
@@ -159,7 +157,7 @@ const EditUser = ({
       </Title>
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item name="postcode" label="Postcode">
+          <Form.Item name="building" label="Building">
             <Input disabled={saving} />
           </Form.Item>
         </Col>
@@ -176,14 +174,14 @@ const EditUser = ({
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item name="building" label="Building">
+          <Form.Item name="county" label="County">
             <Input disabled={saving} />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item name="county" label="County">
+          <Form.Item name="postcode" label="Postcode">
             <Input disabled={saving} />
           </Form.Item>
         </Col>
@@ -257,6 +255,5 @@ const EditUser = ({
       </Form.Item>
     </Form>
   );
-};
 
 export default EditUser;

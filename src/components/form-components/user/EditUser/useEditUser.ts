@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
-import { MutationUpdaterFn } from '@apollo/client';
 import {
   Role,
   UserQuery,
@@ -11,13 +10,9 @@ import {
   useSchemeChatsQuery,
   useUserQuery,
   useUpdateUserMutation,
-  UpdateUserMutation,
 } from 'graphql/generated';
-import { Modal, notification, Form, FormInstance } from 'antd';
+import { notification } from 'antd';
 import { useParams } from 'react-router-dom';
-
-const { confirm } = Modal;
-const { useForm } = Form;
 
 interface FormData {
   // id: string;
@@ -50,22 +45,22 @@ interface Return {
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const useEditUser = ({ onClose }: Props): Return => {
-  const [form] = useForm<FormData>();
-
   const userId = useParams().id;
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
 
   const openNotification = (type: NotificationType) => {
     if (type === 'success') {
-      notification['success']({
+      notification.success({
         message: 'Success!',
-        description: 'Your invitation is successful! ',
+        description: 'The user has been updated! ',
+        placement: 'bottomRight',
       });
     } else if (type === 'error') {
-      notification['error']({
+      notification.error({
         message: 'error!',
         description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
       });
     }
   };
@@ -190,11 +185,26 @@ const useEditUser = ({ onClose }: Props): Return => {
               set: data.groups.map((id) => ({ id })),
             },
             chats: {
-              set: data.chats.map((id) => ({
-                id:
-                  userData?.user?.chats.find((chat) => chat.id === id)?.id ||
-                  '',
-              })),
+              create: data.chats
+                .filter(
+                  (chatId) =>
+                    !userData?.user?.chats
+                      .map((userChat) => userChat.chat.id)
+                      .includes(chatId)
+                )
+                .map((chatId) => ({
+                  chat: {
+                    connect: {
+                      id: chatId,
+                    },
+                  },
+                  newMessages: true,
+                })),
+              delete: userData?.user?.chats
+                .filter((chat) => !data.chats.includes(chat.chat.id))
+                .map((chat) => ({
+                  id: chat.id,
+                })),
             },
           },
           groupWhere: {

@@ -1,11 +1,9 @@
+import React from 'react';
 import View from './EditUser.view';
 import useEditUser from './useEditUser';
-import { UpdateUserMutation } from 'graphql/generated';
-import { MutationUpdaterFn } from '@apollo/client';
 
 interface Props {
   onClose: () => void;
-  // update: MutationUpdaterFn<UpdateUserMutation>;
 }
 
 const EditUser = ({ onClose }: Props) => {
@@ -33,8 +31,6 @@ const EditUser = ({ onClose }: Props) => {
       chatsData={chatsData}
       chatsLoading={chatsLoading}
       saving={saving}
-      //   onValuesChange={onValuesChange}
-      //   form={form}
     />
   );
 };

@@ -148,7 +148,7 @@ const AddUser = ({
     </Title>
     <Row gutter={16}>
       <Col span={12}>
-        <Form.Item name="postcode" label="Postcode">
+        <Form.Item name="building" label="Building">
           <Input readOnly={existingUser} disabled={saving} />
         </Form.Item>
       </Col>
@@ -165,14 +165,14 @@ const AddUser = ({
         </Form.Item>
       </Col>
       <Col span={12}>
-        <Form.Item name="building" label="Building">
+        <Form.Item name="county" label="County">
           <Input readOnly={existingUser} disabled={saving} />
         </Form.Item>
       </Col>
     </Row>
     <Row gutter={16}>
       <Col span={12}>
-        <Form.Item name="county" label="County">
+        <Form.Item name="postcode" label="Postcode">
           <Input readOnly={existingUser} disabled={saving} />
         </Form.Item>
       </Col>

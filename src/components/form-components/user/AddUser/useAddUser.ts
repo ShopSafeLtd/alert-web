@@ -65,7 +65,8 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
       case 'success':
         notification.success({
           message: 'Success!',
-          description: 'Your invitation is successful! ',
+          description: 'The invite has been sent to the user! ',
+          placement: 'bottomRight',
         });
         break;
 
@@ -73,6 +74,7 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
         notification.error({
           message: 'error!',
           description: 'Whoops, there are some errors. Please try again. ',
+          placement: 'bottomRight',
         });
         break;
     }
