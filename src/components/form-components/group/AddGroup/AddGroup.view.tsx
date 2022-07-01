@@ -24,7 +24,7 @@ const AddGroup = ({
 }: Props): JSX.Element => (
   <Form layout="vertical" onFinish={onSubmit}>
     <Row gutter={16}>
-      <Col span={18}>
+      <Col span={21}>
         <Form.Item
           name="name"
           label="name"
@@ -39,7 +39,7 @@ const AddGroup = ({
         </Form.Item>
       </Col>
 
-      <Col span={18}>
+      <Col span={21}>
         <Form.Item
           name="description"
           label="Description"
@@ -56,14 +56,14 @@ const AddGroup = ({
     </Row>
 
     <Row gutter={16}>
-      <Col span={18}>
+      <Col span={21}>
         <Form.Item
           name="users"
           label="users"
           rules={[
             {
               required: true,
-              message: "Please selected at least one group for a user.",
+              message: 'Please selected at least one group for a user.',
             },
           ]}
         >

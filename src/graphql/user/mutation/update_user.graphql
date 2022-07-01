@@ -1,10 +1,11 @@
-query User(
-  $where: UserWhereUniqueInput!
+mutation updateUser(
+  $where: UniqueId!
+  $data: UserUpdateInput!
   $groupWhere: GroupWhereInput
   $chatWhere: UserChatWhereInput
   $schemeWhere: UserSchemeWhereInput
 ) {
-  user(where: $where) {
+  updateUser(where: $where, data: $data) {
     id
     fullName
     email
@@ -26,7 +27,6 @@ query User(
     chats(where: $chatWhere) {
       id
       chat {
-        id
         name
       }
     }

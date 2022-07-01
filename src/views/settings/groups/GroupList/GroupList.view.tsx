@@ -1,8 +1,8 @@
-import { Table, Row, Col, Input, Drawer, Button } from "antd";
-import { CreateGroupMutation, SchemeGroupsQuery } from "graphql/generated";
-import { Link } from "react-router-dom";
-import AddGroup from "components/form-components/group/AddGroup";
-import { MutationUpdaterFn } from "@apollo/client";
+import { Table, Row, Col, Input, Drawer, Button } from 'antd';
+import { CreateGroupMutation, SchemeGroupsQuery } from 'graphql/generated';
+import { Link } from 'react-router-dom';
+import AddGroup from 'components/form-components/group/AddGroup';
+import { MutationUpdaterFn } from '@apollo/client';
 
 interface Props {
   data: SchemeGroupsQuery | undefined;
@@ -21,7 +21,7 @@ const GroupList = ({
   setSearch,
   addGroup,
   toggleAddGroup,
-  updateGroupList
+  updateGroupList,
 }: Props) => (
   <div className="list-view">
     <Row gutter={8} style={{ marginBottom: 10 }}>
@@ -49,9 +49,9 @@ const GroupList = ({
       }}
       columns={[
         {
-          key: "name",
-          title: "Name",
-          dataIndex: "name",
+          key: 'name',
+          title: 'Name',
+          dataIndex: 'name',
           render: (value, record) => (
             <Link to={`/app/scheme-settings/groups/view/${record.key}`}>
               {value}
@@ -59,9 +59,9 @@ const GroupList = ({
           ),
         },
         {
-          key: "description",
-          title: "description",
-          dataIndex: "description",
+          key: 'description',
+          title: 'description',
+          dataIndex: 'description',
         },
       ]}
       dataSource={data?.groups.map((group) => ({
@@ -78,10 +78,7 @@ const GroupList = ({
       onClose={toggleAddGroup}
     >
       {addGroup ? (
-        <AddGroup
-          update={updateGroupList}
-          onClose={toggleAddGroup}
-        />
+        <AddGroup update={updateGroupList} onClose={toggleAddGroup} />
       ) : (
         <div />
       )}

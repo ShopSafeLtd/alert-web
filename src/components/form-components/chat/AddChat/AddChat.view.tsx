@@ -1,6 +1,6 @@
-import React from "react";
-import { Button, Col, Form, Input, Row, Select } from "antd";
-import { ListSchemeUsersQuery } from "graphql/generated";
+import React from 'react';
+import { Button, Col, Form, Input, Row, Select } from 'antd';
+import { ListSchemeUsersQuery } from 'graphql/generated';
 
 interface FormData {
   name: string;
@@ -24,14 +24,14 @@ const AddChat = ({
 }: Props): JSX.Element => (
   <Form layout="vertical" onFinish={onSubmit}>
     <Row gutter={16}>
-      <Col span={18}>
+      <Col span={21}>
         <Form.Item
           name="name"
           label="name"
           rules={[
             {
               required: true,
-              message: "Please enter a name for the new chat group.",
+              message: 'Please enter a name for the new chat group.',
             },
           ]}
         >
@@ -39,14 +39,14 @@ const AddChat = ({
         </Form.Item>
       </Col>
 
-      <Col span={18}>
+      <Col span={21}>
         <Form.Item
           name="description"
           label="Description"
           rules={[
             {
               required: true,
-              message: "Please enter a description for the new chat group.",
+              message: 'Please enter a description for the new chat group.',
             },
           ]}
         >
@@ -56,14 +56,14 @@ const AddChat = ({
     </Row>
 
     <Row gutter={16}>
-      <Col span={18}>
+      <Col span={21}>
         <Form.Item
           name="users"
           label="users"
           rules={[
             {
               required: true,
-              message: "Please selected at least one user for a chat group.",
+              message: 'Please selected at least one user for a chat group.',
             },
           ]}
         >

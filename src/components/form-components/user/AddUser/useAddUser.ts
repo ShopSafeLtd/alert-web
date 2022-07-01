@@ -153,7 +153,6 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
       openNotification('error');
     },
     update,
-    // updateSearch,
   });
 
   const [inviteExistingUser] = useInviteExistingUserMutation({
@@ -165,7 +164,6 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
     onError: () => {
       openNotification('error');
     },
-    // update,
     update: updateSearch,
   });
 

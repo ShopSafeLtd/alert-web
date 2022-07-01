@@ -3764,7 +3764,7 @@ export type ImageCreateInput = {
 export type ImageCreateManyIncidentInput = {
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
+  fileNames?: InputMaybe<ImageCreateManyfileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
   optimised?: InputMaybe<Scalars['String']>;
@@ -3783,7 +3783,7 @@ export type ImageCreateManyIncidentInputEnvelope = {
 export type ImageCreateManySchemeInput = {
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
+  fileNames?: InputMaybe<ImageCreateManyfileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
@@ -3802,7 +3802,7 @@ export type ImageCreateManySchemeInputEnvelope = {
 export type ImageCreateManyUploadedByInput = {
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
+  fileNames?: InputMaybe<ImageCreateManyfileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
@@ -3816,6 +3816,10 @@ export type ImageCreateManyUploadedByInput = {
 export type ImageCreateManyUploadedByInputEnvelope = {
   data?: InputMaybe<Array<ImageCreateManyUploadedByInput>>;
   skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type ImageCreateManyfileNamesInput = {
+  set?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type ImageCreateNestedManyWithoutIncidentInput = {
@@ -14187,6 +14191,43 @@ export type TagsQuery = {
   }>;
 };
 
+export type UpdateUserMutationVariables = Exact<{
+  where: UniqueId;
+  data: UserUpdateInput;
+  groupWhere?: InputMaybe<GroupWhereInput>;
+  chatWhere?: InputMaybe<UserChatWhereInput>;
+  schemeWhere?: InputMaybe<UserSchemeWhereInput>;
+}>;
+
+export type UpdateUserMutation = {
+  __typename?: 'Mutation';
+  updateUser?: {
+    __typename?: 'User';
+    id: string;
+    fullName: string;
+    email: string;
+    organisation: string;
+    disabled: boolean;
+    newUser: boolean;
+    addresses: Array<{
+      __typename?: 'Address';
+      id: string;
+      building?: string | null;
+      street: string;
+      townCity: string;
+      county?: string | null;
+      postcode: string;
+    }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    chats: Array<{
+      __typename?: 'UserChat';
+      id: string;
+      chat: { __typename?: 'Chat'; name: string };
+    }>;
+    schemes: Array<{ __typename?: 'UserScheme'; id: string; role: Role }>;
+  } | null;
+};
+
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never }>;
 
 export type CurrentUserQuery = {
@@ -14218,6 +14259,7 @@ export type UserQueryVariables = Exact<{
   where: UserWhereUniqueInput;
   groupWhere?: InputMaybe<GroupWhereInput>;
   chatWhere?: InputMaybe<UserChatWhereInput>;
+  schemeWhere?: InputMaybe<UserSchemeWhereInput>;
 }>;
 
 export type UserQuery = {
@@ -14232,7 +14274,7 @@ export type UserQuery = {
     newUser: boolean;
     addresses: Array<{
       __typename?: 'Address';
-      premises?: string | null;
+      id: string;
       building?: string | null;
       street: string;
       townCity: string;
@@ -14243,7 +14285,7 @@ export type UserQuery = {
     chats: Array<{
       __typename?: 'UserChat';
       id: string;
-      chat: { __typename?: 'Chat'; name: string };
+      chat: { __typename?: 'Chat'; id: string; name: string };
     }>;
     schemes: Array<{ __typename?: 'UserScheme'; id: string; role: Role }>;
   } | null;
@@ -15113,6 +15155,93 @@ export function useTagsLazyQuery(
 export type TagsQueryHookResult = ReturnType<typeof useTagsQuery>;
 export type TagsLazyQueryHookResult = ReturnType<typeof useTagsLazyQuery>;
 export type TagsQueryResult = Apollo.QueryResult<TagsQuery, TagsQueryVariables>;
+export const UpdateUserDocument = gql`
+  mutation updateUser(
+    $where: UniqueId!
+    $data: UserUpdateInput!
+    $groupWhere: GroupWhereInput
+    $chatWhere: UserChatWhereInput
+    $schemeWhere: UserSchemeWhereInput
+  ) {
+    updateUser(where: $where, data: $data) {
+      id
+      fullName
+      email
+      organisation
+      addresses(where: { primary: { equals: true } }) {
+        id
+        building
+        street
+        townCity
+        county
+        postcode
+      }
+      disabled
+      newUser
+      groups(where: $groupWhere) {
+        id
+        name
+      }
+      chats(where: $chatWhere) {
+        id
+        chat {
+          name
+        }
+      }
+      schemes(where: $schemeWhere) {
+        id
+        role
+      }
+    }
+  }
+`;
+export type UpdateUserMutationFn = Apollo.MutationFunction<
+  UpdateUserMutation,
+  UpdateUserMutationVariables
+>;
+
+/**
+ * __useUpdateUserMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      data: // value for 'data'
+ *      groupWhere: // value for 'groupWhere'
+ *      chatWhere: // value for 'chatWhere'
+ *      schemeWhere: // value for 'schemeWhere'
+ *   },
+ * });
+ */
+export function useUpdateUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateUserMutation,
+    UpdateUserMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(
+    UpdateUserDocument,
+    options
+  );
+}
+export type UpdateUserMutationHookResult = ReturnType<
+  typeof useUpdateUserMutation
+>;
+export type UpdateUserMutationResult =
+  Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<
+  UpdateUserMutation,
+  UpdateUserMutationVariables
+>;
 export const CurrentUserDocument = gql`
   query currentUser {
     currentUser {
@@ -15191,14 +15320,15 @@ export const UserDocument = gql`
     $where: UserWhereUniqueInput!
     $groupWhere: GroupWhereInput
     $chatWhere: UserChatWhereInput
+    $schemeWhere: UserSchemeWhereInput
   ) {
     user(where: $where) {
       id
       fullName
       email
       organisation
-      addresses {
-        premises
+      addresses(where: { primary: { equals: true } }) {
+        id
         building
         street
         townCity
@@ -15214,10 +15344,11 @@ export const UserDocument = gql`
       chats(where: $chatWhere) {
         id
         chat {
+          id
           name
         }
       }
-      schemes {
+      schemes(where: $schemeWhere) {
         id
         role
       }
@@ -15240,6 +15371,7 @@ export const UserDocument = gql`
  *      where: // value for 'where'
  *      groupWhere: // value for 'groupWhere'
  *      chatWhere: // value for 'chatWhere'
+ *      schemeWhere: // value for 'schemeWhere'
  *   },
  * });
  */
