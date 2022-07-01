@@ -44,6 +44,7 @@ interface Return {
   chatsData: SchemeChatsQuery | undefined;
   chatsLoading: boolean;
   saving: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onValuesChange: (changedValues: any, values: FormData) => void;
   form: FormInstance<FormData>;
   existingUser: boolean;
@@ -59,16 +60,17 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
   const [search, setSearch] = useState<string | null>(null);
 
   const openNotification = (type: NotificationType) => {
+    // eslint-disable-next-line default-case
     switch (type) {
       case 'success':
-        notification['success']({
+        notification.success({
           message: 'Success!',
           description: 'Your invitation is successful! ',
         });
         break;
 
       case 'error':
-        notification['error']({
+        notification.error({
           message: 'error!',
           description: 'Whoops, there are some errors. Please try again. ',
         });
@@ -183,14 +185,12 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
             chats:
               data.chats.length > 0
                 ? {
-                    create: data.chats.map((id) => {
-                      return {
-                        newMessages: true,
-                        chat: {
-                          connect: { id },
-                        },
-                      };
-                    }),
+                    create: data.chats.map((id) => ({
+                      newMessages: true,
+                      chat: {
+                        connect: { id },
+                      },
+                    })),
                   }
                 : undefined,
             schemes: {
@@ -247,6 +247,7 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onValuesChange = (changedValues: any) => {
     if (changedValues.email) setSearch(changedValues.email);
   };

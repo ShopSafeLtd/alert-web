@@ -10,6 +10,7 @@ import {
   Select,
   Typography,
 } from 'antd';
+
 const { Title } = Typography;
 
 interface FormData {
@@ -34,6 +35,7 @@ interface Props {
   chatsData: SchemeChatsQuery | undefined;
   chatsLoading: boolean;
   saving: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onValuesChange: (changedValues: any, values: FormData) => void;
   form: FormInstance<FormData>;
   existingUser: boolean;

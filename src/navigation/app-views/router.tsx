@@ -1,8 +1,13 @@
 import React, { lazy, Suspense, useEffect } from 'react';
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import Loading from 'components/shared-components/AntD/Loading';
 import { useAuth } from 'hooks';
-
 import { useStoreState } from 'state';
 
 const Onboarding = lazy(() => import(`./onboarding/router`));
@@ -14,18 +19,17 @@ const Scheme = lazy(() => import(`./scheme-settings/router`));
 
 export const AppViews = () => {
   const { getCurrentUser } = useAuth();
-  const navigate = useNavigate();
-
   const { role, onboarded } = useStoreState((state) => state.user);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     getCurrentUser();
-    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    if (onboarded) {
-      navigate(onboarded ? 'incidents' : 'onboarded');
+    if (onboarded && location.pathname === '/app/onboarded') {
+      navigate('incidents');
     }
   }, [onboarded]);
 
