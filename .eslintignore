@@ -18,7 +18,6 @@ coverage
 src/serviceWorker.js
 src/setupTests.js
 src/old-components/*
-src/views/settings/*
 src/graphql/*
 src/graphql-src/*
 src/configs/*
