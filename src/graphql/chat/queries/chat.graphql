@@ -1,0 +1,15 @@
+query Chat($where: ChatWhereUniqueInput!) {
+  chat(where: $where) {
+    id
+    name
+    description
+    members {
+      id
+      user {
+        id
+        fullName
+        organisation
+      }
+    }
+  }
+}

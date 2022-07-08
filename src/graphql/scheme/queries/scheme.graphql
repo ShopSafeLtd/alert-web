@@ -1,0 +1,15 @@
+query scheme($where: SchemeWhereUniqueInput!) {
+  scheme(where: $where) {
+    id
+    name
+    autoApproveIncidents
+    autoApproveOffenders
+    incidentRetention
+    offenderRetention
+    logo {
+      id
+      url
+      optimised
+    }
+  }
+}

@@ -1,0 +1,14 @@
+mutation updateChat($where: UniqueId!, $data: ChatUpdateInput!) {
+  updateChat(where: $where, data: $data) {
+    id
+    name
+    description
+    members {
+      user {
+        id
+        fullName
+        organisation
+      }
+    }
+  }
+}

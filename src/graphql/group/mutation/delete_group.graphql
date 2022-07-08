@@ -1,0 +1,5 @@
+mutation deleteGroup($id: String!) {
+  deleteGroup(where: { id: $id }) {
+    id
+  }
+}

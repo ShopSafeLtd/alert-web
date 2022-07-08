@@ -1,0 +1,12 @@
+mutation updateGroup($where: UniqueId!, $data: GroupUpdateInput!) {
+  updateGroup(where: $where, data: $data) {
+    id
+    name
+    description
+    users {
+      id
+      fullName
+      organisation
+    }
+  }
+}
