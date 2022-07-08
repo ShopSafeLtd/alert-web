@@ -1,15 +1,15 @@
-import { MutationUpdaterFn } from "@apollo/client";
-import { CreateGroupMutation } from "graphql/generated";
-import React from "react";
-import View from "./AddGroup.view";
-import useAddGroup from "./useAddGroup";
+import { MutationUpdaterFn } from '@apollo/client';
+import { CreateGroupMutation } from 'graphql/generated';
+import React from 'react';
+import View from './AddGroup.view';
+import useAddGroup from './useAddGroup';
 
 interface Props {
   onClose: () => void;
   update: MutationUpdaterFn<CreateGroupMutation>;
 }
 
-const AddGroup = ({ onClose, update }: Props) => {
+const AddGroup = ({ onClose, update }: Props): JSX.Element => {
   const { onSubmit, usersData, usersLoading, saving } = useAddGroup({
     onClose,
     update,

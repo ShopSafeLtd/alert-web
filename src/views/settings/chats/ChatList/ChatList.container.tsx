@@ -1,8 +1,8 @@
-import React from "react";
-import View from "./ChatList.view";
-import useChatList from "./useChatList";
+import React from 'react';
+import View from './ChatList.view';
+import useChatList from './useChatList';
 
-const ChatList = () => {
+const ChatList = (): JSX.Element => {
   const {
     data,
     loading,

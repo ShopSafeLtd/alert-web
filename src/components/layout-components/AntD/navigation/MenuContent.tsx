@@ -34,6 +34,9 @@ const Icon = ({ icon }: { icon: any }) => (
     style={{ fontSize: 22, marginRight: 10, marginBottom: -3 }}
   />
 );
+const SubIcon = ({ icon }: { icon: any }) => (
+  <FontAwesomeIcon icon={icon} style={{ fontSize: 14, marginRight: 5 }} />
+);
 
 interface SideNavContentProps {
   sideNavTheme: SideNavTheme;
@@ -119,7 +122,7 @@ const SideNavContent = (props: SideNavContentProps) => {
                 ) : (
                   <Menu.Item key={subMenuFirst.key}>
                     {subMenuFirst.icon ? (
-                      <Icon icon={subMenuFirst.icon} />
+                      <SubIcon icon={subMenuFirst.icon} />
                     ) : null}
                     <span>{setLocale(localization, subMenuFirst.title)}</span>
                     <Link

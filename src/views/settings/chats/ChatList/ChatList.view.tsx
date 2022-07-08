@@ -1,8 +1,9 @@
- import { Table, Row, Col, Input, Drawer, Button } from "antd";
-import { CreateChatMutation, SchemeChatsQuery } from "graphql/generated";
-import { Link } from "react-router-dom";
-import AddChat from "components/form-components/chat/AddChat";
-import { MutationUpdaterFn } from "@apollo/client";
+import React from 'react';
+import { Table, Row, Col, Input, Drawer, Button } from 'antd';
+import { CreateChatMutation, SchemeChatsQuery } from 'graphql/generated';
+import { Link } from 'react-router-dom';
+import AddChat from 'components/form-components/chat/AddChat';
+import { MutationUpdaterFn } from '@apollo/client';
 
 interface Props {
   data: SchemeChatsQuery | undefined;
@@ -22,7 +23,7 @@ const ChatList = ({
   addChat,
   toggleAddChat,
   updateChatList,
-}: Props) => (
+}: Props): JSX.Element => (
   <div className="list-view">
     <Row gutter={8} style={{ marginBottom: 10 }}>
       <Col span={8}>
@@ -49,19 +50,21 @@ const ChatList = ({
       }}
       columns={[
         {
-          key: "name",
-          title: "Name",
-          dataIndex: "name",
+          key: 'name',
+          title: 'Name',
+          dataIndex: 'name',
+          width: 300,
           render: (value, record) => (
-            <Link to={`/app/scheme-settings/Chats/view/${record.key}`}>
+            <Link to={`/app/scheme-settings/chat-groups/view/${record.key}`}>
               {value}
             </Link>
           ),
         },
         {
-          key: "description",
-          title: "description",
-          dataIndex: "description",
+          key: 'description',
+          title: 'description',
+          dataIndex: 'description',
+          ellipsis: true,
         },
       ]}
       dataSource={data?.chats.map((chat) => ({

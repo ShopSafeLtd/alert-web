@@ -1,3 +1,4 @@
+import React from 'react';
 import { Table, Row, Col, Input, Drawer, Button } from 'antd';
 import { CreateGroupMutation, SchemeGroupsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
@@ -22,7 +23,7 @@ const GroupList = ({
   addGroup,
   toggleAddGroup,
   updateGroupList,
-}: Props) => (
+}: Props): JSX.Element => (
   <div className="list-view">
     <Row gutter={8} style={{ marginBottom: 10 }}>
       <Col span={8}>
@@ -52,6 +53,7 @@ const GroupList = ({
           key: 'name',
           title: 'Name',
           dataIndex: 'name',
+          width: 300,
           render: (value, record) => (
             <Link to={`/app/scheme-settings/groups/view/${record.key}`}>
               {value}
@@ -62,6 +64,7 @@ const GroupList = ({
           key: 'description',
           title: 'description',
           dataIndex: 'description',
+          ellipsis: true,
         },
       ]}
       dataSource={data?.groups.map((group) => ({

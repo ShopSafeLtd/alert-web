@@ -1,17 +1,18 @@
 import React from 'react';
 import { Routes, Route } from 'react-router';
-import AccountMenu from '../../../old-components/account/AccountMenu';
-import EditProfile from '../../../old-components/account/EditProfile';
+import EditProfile from 'views/user-settings/editProfile';
+// import AccountMenu from '../../../old-components/account/AccountMenu';
 import ResetPassword from '../../../old-components/account/ResetPassword';
 import NotificationSettings from '../../../old-components/account/NotificationSettings';
 import Terms from '../../../old-components/users/onboard/Terms/Terms';
 
 const UserSettings = (): JSX.Element => (
   <Routes>
-    <Route path="*" element={AccountMenu} />
-    <Route path="edit-profile" element={EditProfile} />
-    <Route path="reset-password" element={ResetPassword} />
-    <Route path="notifications" element={NotificationSettings} />
+    {/* <Route path="*" element={AccountMenu} /> */}
+    <Route path="*" element={<EditProfile />} />
+    {/* <Route path="edit-profile" element={EditProfile} /> */}
+    <Route path="reset-password" element={<ResetPassword />} />
+    <Route path="notifications" element={<NotificationSettings />} />
     <Route
       path="terms"
       element={() => (

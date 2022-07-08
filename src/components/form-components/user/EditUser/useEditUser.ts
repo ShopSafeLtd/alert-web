@@ -15,7 +15,6 @@ import { notification } from 'antd';
 import { useParams } from 'react-router-dom';
 
 interface FormData {
-  // id: string;
   fullName: string;
   email: string;
   organisation: string;
@@ -30,7 +29,6 @@ interface FormData {
 }
 interface Props {
   onClose: () => void;
-  // update: MutationUpdaterFn<UpdateUserMutation>;
 }
 interface Return {
   onSubmit: (value: FormData) => void;
@@ -137,8 +135,8 @@ const useEditUser = ({ onClose }: Props): Return => {
     },
     onError: () => {
       openNotification('error');
+      setSaving(false);
     },
-    // update,
   });
 
   const onSubmit = (data: FormData) => {
@@ -201,9 +199,9 @@ const useEditUser = ({ onClose }: Props): Return => {
                   newMessages: true,
                 })),
               delete: userData?.user?.chats
-                .filter((chat) => !data.chats.includes(chat.chat.id))
-                .map((chat) => ({
-                  id: chat.id,
+                .filter((userChat) => !data.chats.includes(userChat.chat.id))
+                .map((userChat) => ({
+                  id: userChat.id,
                 })),
             },
           },
@@ -236,8 +234,6 @@ const useEditUser = ({ onClose }: Props): Return => {
     chatsData,
     chatsLoading,
     saving,
-    // onValuesChange,
-    // form,
   };
 };
 

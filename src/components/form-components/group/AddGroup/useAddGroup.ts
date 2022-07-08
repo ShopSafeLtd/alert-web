@@ -1,13 +1,14 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   useCreateGroupMutation,
   CreateGroupMutation,
   ListSchemeUsersQuery,
   useListSchemeUsersQuery,
   SortOrder,
-} from "graphql/generated";
-import { useStoreState } from "state";
-import { MutationUpdaterFn } from "@apollo/client";
+} from 'graphql/generated';
+import { notification } from 'antd';
+import { useStoreState } from 'state';
+import { MutationUpdaterFn } from '@apollo/client';
 
 interface FormData {
   name: string;
@@ -25,13 +26,29 @@ interface Return {
   usersLoading: boolean;
   saving: boolean;
 }
+type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const useAddGroup = ({ onClose, update }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
 
+  const openNotification = (type: NotificationType) => {
+    if (type === 'success') {
+      notification.success({
+        message: 'Success!',
+        description: 'The Group has been added! ',
+        placement: 'bottomRight',
+      });
+    } else if (type === 'error') {
+      notification.error({
+        message: 'error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
+    }
+  };
   const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: 'cache-and-network',
     variables: {
       where: {
         schemes: {
@@ -61,10 +78,14 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       onClose();
+      openNotification('success');
+    },
+    onError: () => {
+      setSaving(false);
+      openNotification('error');
     },
     update,
   });
-  // const [inviteExistingUser] = useInviteExistingUserMutation()
 
   const onSubmit = (data: FormData) => {
     setSaving(true);

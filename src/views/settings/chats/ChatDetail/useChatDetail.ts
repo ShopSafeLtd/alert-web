@@ -5,15 +5,16 @@ import {
   useDeleteChatMutation,
 } from 'graphql/generated';
 import { useParams } from 'react-router-dom';
-import { notification } from 'antd';
+import { notification, Modal } from 'antd';
 
+const { confirm } = Modal;
 interface Return {
   data: ChatQuery | undefined;
   loading: boolean;
   editChat: boolean;
   toggleEditChat: () => void;
   saving: boolean;
-  openDelete: () => void;
+  deleteConfirm: () => void;
 }
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
@@ -45,10 +46,13 @@ const useChatDetail = (): Return => {
       },
     },
   });
-
+  const toggleEditChat = () => {
+    setEditChat(!editChat);
+  };
   const [deleteChat] = useDeleteChatMutation({
     onCompleted: () => {
       setSaving(false);
+      window.history.back();
       openNotification('success');
     },
     onError: () => {
@@ -65,17 +69,23 @@ const useChatDetail = (): Return => {
         },
       });
   };
-
-  const toggleEditChat = () => {
-    setEditChat(!editChat);
+  const deleteConfirm = () => {
+    confirm({
+      title: 'Do you want to delete the chat group?',
+      content: 'This action cannot be undone.',
+      onOk() {
+        openDelete();
+      },
+    });
   };
+
   return {
     data,
     loading,
     editChat,
     toggleEditChat,
     saving,
-    openDelete,
+    deleteConfirm,
   };
 };
 

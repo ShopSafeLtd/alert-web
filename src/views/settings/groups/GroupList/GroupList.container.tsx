@@ -1,8 +1,8 @@
-import React from "react";
-import View from "./GroupList.view";
-import useGroupList from "./useGroupList";
+import React from 'react';
+import View from './GroupList.view';
+import useGroupList from './useGroupList';
 
-const GroupList = () => {
+const GroupList = (): JSX.Element => {
   const {
     data,
     loading,

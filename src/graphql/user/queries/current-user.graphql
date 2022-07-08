@@ -19,5 +19,18 @@ query currentUser {
         autoApproveOffenders
       }
     }
+    addresses(where: { primary: { equals: true } }) {
+      id
+      building
+      street
+      townCity
+      county
+      postcode
+    }
+    incidentEmail
+    incidentPush
+    offenderEmail
+    offenderPush
+    messagePush
   }
 }

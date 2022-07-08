@@ -13,7 +13,7 @@ interface Props {
   updateSearch: MutationUpdaterFn<InviteExistingUserMutation>;
 }
 
-const AddUser = ({ onClose, update, updateSearch }: Props) => {
+const AddUser = ({ onClose, update, updateSearch }: Props): JSX.Element => {
   const {
     onSubmit,
     groupsData,

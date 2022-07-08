@@ -2,7 +2,7 @@ import React from 'react';
 import View from './UserList.view';
 import useUserList from './useUserList';
 
-const UserList = () => {
+const UserList = (): JSX.Element => {
   const {
     data,
     loading,

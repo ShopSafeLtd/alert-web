@@ -1,0 +1,5 @@
+mutation deleteTag($id: String!) {
+  deleteTag(where: { id: $id }) {
+    id
+  }
+}

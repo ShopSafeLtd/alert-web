@@ -60,23 +60,18 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
   const [search, setSearch] = useState<string | null>(null);
 
   const openNotification = (type: NotificationType) => {
-    // eslint-disable-next-line default-case
-    switch (type) {
-      case 'success':
-        notification.success({
-          message: 'Success!',
-          description: 'The invite has been sent to the user! ',
-          placement: 'bottomRight',
-        });
-        break;
-
-      case 'error':
-        notification.error({
-          message: 'error!',
-          description: 'Whoops, there are some errors. Please try again. ',
-          placement: 'bottomRight',
-        });
-        break;
+    if (type === 'success') {
+      notification.success({
+        message: 'Success!',
+        description: 'The invite has been sent to the user! ',
+        placement: 'bottomRight',
+      });
+    } else if (type === 'error') {
+      notification.error({
+        message: 'error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
     }
   };
 

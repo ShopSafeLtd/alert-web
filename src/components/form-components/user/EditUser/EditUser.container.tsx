@@ -6,7 +6,7 @@ interface Props {
   onClose: () => void;
 }
 
-const EditUser = ({ onClose }: Props) => {
+const EditUser = ({ onClose }: Props): JSX.Element => {
   const {
     onSubmit,
     data,
@@ -18,7 +18,6 @@ const EditUser = ({ onClose }: Props) => {
     saving,
   } = useEditUser({
     onClose,
-    // update,
   });
   return (
     <View

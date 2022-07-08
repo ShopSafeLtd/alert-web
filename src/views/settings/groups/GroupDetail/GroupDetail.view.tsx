@@ -1,86 +1,97 @@
-import React from "react";
-import { GroupQuery } from "graphql/generated";
-import {
-  DeleteOutlined,
-  EditOutlined,
-  UserAddOutlined,
-} from "@ant-design/icons";
-
-import { Button, PageHeader, Card, Descriptions, Empty, Skeleton } from "antd";
+import React from 'react';
+import { GroupQuery } from 'graphql/generated';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, PageHeader, Card, Table, Drawer, Skeleton } from 'antd';
+import EditGroup from 'components/form-components/group/EditGroup';
+import { Link } from 'react-router-dom';
 
 interface Props {
   data: GroupQuery | undefined;
   loading: boolean;
+  editGroup: boolean;
+  toggleEditGroup: () => void;
+  saving: boolean;
+  deleteConfirm: () => void;
 }
 
-const groupDetail = ({ data, loading }: Props) => {
-  const openEdit = () => {};
-  return (
-    <div className="list-view">
-      <PageHeader
-        onBack={() => window.history.back()}
-        title={data?.group?.name}
-        subTitle={data?.group?.description}
-        extra={[
-          <Button
-            key="2"
-            type="primary"
-            // disabled={isCurrent}
-            // onClick={sendInvite}
-            icon={<EditOutlined />}
-          >
-            Edit Group
-          </Button>,
-          <Button
-            key="1"
-            // disabled={isCurrent}
-            // onClick={remove}
-            type="primary"
-            icon={<DeleteOutlined />}
-          >
-            Delete Group
-          </Button>,
-        ]}
-      />
-      <Card>
-        {loading ? (
-          <Skeleton />
-        ) : (
-          <Descriptions
-            title="Users"
-            // bordered={true}
-            extra={
-              <Button icon={<EditOutlined />} onClick={openEdit}>
-                Edit Users
-              </Button>
-            }
-          >
-            {data?.group?.users && data.group.users.length > 0 ? (
-              data.group.users.map(({ id, fullName, organisation }) => (
-                <Descriptions.Item label={fullName} key={id}>
-                  {organisation}
-                </Descriptions.Item>
-              ))
-            ) : (
-              <Descriptions.Item>
-                <Empty
-                  image={Empty.PRESENTED_IMAGE_SIMPLE}
-                  imageStyle={{
-                    height: 20,
-                  }}
-                  description="Create Now"
-                >
-                  <Button icon={<UserAddOutlined />} onClick={openEdit}>
-                    Create
-                  </Button>
-                </Empty>
-              </Descriptions.Item>
-            )}
-          </Descriptions>
-        )}
-      </Card>
-    </div>
-  );
-};
-
-export default groupDetail;
+const GroupDetail = ({
+  data,
+  loading,
+  editGroup,
+  toggleEditGroup,
+  saving,
+  deleteConfirm,
+}: Props): JSX.Element => (
+  <div className="list-view">
+    <PageHeader
+      onBack={() => window.history.back()}
+      title={data?.group?.name}
+      subTitle={data?.group?.description}
+      extra={[
+        <Button
+          key="2"
+          type="primary"
+          disabled={saving}
+          onClick={toggleEditGroup}
+          icon={<EditOutlined />}
+        >
+          Edit Group
+        </Button>,
+        <Button
+          key="1"
+          disabled={saving}
+          onClick={deleteConfirm}
+          type="primary"
+          icon={<DeleteOutlined />}
+        >
+          Delete Group
+        </Button>,
+      ]}
+    />
+    <Card>
+      {loading ? (
+        <Skeleton />
+      ) : (
+        <Table
+          size="small"
+          loading={loading}
+          pagination={{
+            defaultPageSize: 20,
+            pageSize: 20,
+          }}
+          columns={[
+            {
+              key: 'name',
+              title: 'Name',
+              dataIndex: 'name',
+              render: (value, record) => (
+                <Link to={`/app/scheme-settings/users/view/${record.key}`}>
+                  {value}
+                </Link>
+              ),
+            },
+            {
+              key: 'organisation',
+              title: 'organisation',
+              dataIndex: 'organisation',
+            },
+          ]}
+          dataSource={data?.group?.users.map((user) => ({
+            key: user.id,
+            name: user.fullName,
+            organisation: user.organisation,
+          }))}
+        />
+      )}
+      <Drawer
+        title="Edit Group Details"
+        visible={editGroup}
+        width="400"
+        onClose={toggleEditGroup}
+      >
+        {editGroup ? <EditGroup onClose={toggleEditGroup} /> : <div />}
+      </Drawer>
+    </Card>
+  </div>
+);
+export default GroupDetail;

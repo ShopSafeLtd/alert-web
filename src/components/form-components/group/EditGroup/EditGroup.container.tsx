@@ -6,7 +6,7 @@ interface Props {
   onClose: () => void;
 }
 
-const EditGroup = ({ onClose }: Props) => {
+const EditGroup = ({ onClose }: Props): JSX.Element => {
   const { onSubmit, data, loading, usersData, usersLoading, saving } =
     useEditGroup({
       onClose,

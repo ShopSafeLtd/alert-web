@@ -49,6 +49,7 @@ const useEditGroup = ({ onClose }: Props): Return => {
       });
     }
   };
+
   const { data: groupData, loading } = useGroupQuery({
     variables: {
       where: {

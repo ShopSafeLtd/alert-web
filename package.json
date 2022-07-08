@@ -35,6 +35,7 @@
     "@types/styled-components": "^5.1.7",
     "@vx/pattern": "0.0.199",
     "antd": "^4.20.5",
+    "antd-img-crop": "^4.2.3",
     "apexcharts": "^3.23.0",
     "apollo-upload-client": "^16.0.0",
     "apollo3-cache-persist": "^0.12.1",

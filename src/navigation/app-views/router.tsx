@@ -17,7 +17,7 @@ const Chat = lazy(() => import(`./chat/router`));
 const User = lazy(() => import(`./user-settings/router`));
 const Scheme = lazy(() => import(`./scheme-settings/router`));
 
-export const AppViews = () => {
+export const AppViews = (): JSX.Element => {
   const { getCurrentUser } = useAuth();
   const { role, onboarded } = useStoreState((state) => state.user);
   const navigate = useNavigate();

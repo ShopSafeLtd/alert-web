@@ -34,5 +34,10 @@ mutation updateUser(
       id
       role
     }
+    incidentEmail
+    incidentPush
+    offenderEmail
+    offenderPush
+    messagePush
   }
 }

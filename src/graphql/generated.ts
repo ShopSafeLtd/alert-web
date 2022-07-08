@@ -13906,6 +13906,63 @@ export type SignInMutation = {
   } | null;
 };
 
+export type DeleteChatMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type DeleteChatMutation = {
+  __typename?: 'Mutation';
+  deleteChat?: { __typename?: 'Chat'; id: string } | null;
+};
+
+export type UpdateChatMutationVariables = Exact<{
+  where: UniqueId;
+  data: ChatUpdateInput;
+}>;
+
+export type UpdateChatMutation = {
+  __typename?: 'Mutation';
+  updateChat?: {
+    __typename?: 'Chat';
+    id: string;
+    name: string;
+    description?: string | null;
+    members: Array<{
+      __typename?: 'UserChat';
+      user: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        organisation: string;
+      };
+    }>;
+  } | null;
+};
+
+export type ChatQueryVariables = Exact<{
+  where: ChatWhereUniqueInput;
+}>;
+
+export type ChatQuery = {
+  __typename?: 'Query';
+  chat?: {
+    __typename?: 'Chat';
+    id: string;
+    name: string;
+    description?: string | null;
+    members: Array<{
+      __typename?: 'UserChat';
+      id: string;
+      user: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        organisation: string;
+      };
+    }>;
+  } | null;
+};
+
 export type CreateChatMutationVariables = Exact<{
   data: ChatCreateInput;
 }>;
@@ -13937,6 +13994,36 @@ export type SchemeChatsQuery = {
   }>;
 };
 
+export type DeleteGroupMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type DeleteGroupMutation = {
+  __typename?: 'Mutation';
+  deleteGroup?: { __typename?: 'Group'; id: string } | null;
+};
+
+export type UpdateGroupMutationVariables = Exact<{
+  where: UniqueId;
+  data: GroupUpdateInput;
+}>;
+
+export type UpdateGroupMutation = {
+  __typename?: 'Mutation';
+  updateGroup?: {
+    __typename?: 'Group';
+    id: string;
+    name: string;
+    description?: string | null;
+    users: Array<{
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      organisation: string;
+    }>;
+  } | null;
+};
+
 export type GroupQueryVariables = Exact<{
   where: GroupWhereUniqueInput;
 }>;
@@ -13945,6 +14032,7 @@ export type GroupQuery = {
   __typename?: 'Query';
   group?: {
     __typename?: 'Group';
+    id: string;
     name: string;
     description?: string | null;
     users: Array<{
@@ -14177,6 +14265,105 @@ export type ViewIncidentQuery = {
   } | null;
 };
 
+export type UpdateSchemeMutationVariables = Exact<{
+  where: UniqueId;
+  data: SchemeUpdateInput;
+}>;
+
+export type UpdateSchemeMutation = {
+  __typename?: 'Mutation';
+  updateScheme?: {
+    __typename?: 'Scheme';
+    id: string;
+    name: string;
+    autoApproveIncidents: boolean;
+    autoApproveOffenders: boolean;
+    incidentRetention?: number | null;
+    offenderRetention?: number | null;
+    logo?: {
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+    } | null;
+  } | null;
+};
+
+export type SchemeQueryVariables = Exact<{
+  where: SchemeWhereUniqueInput;
+}>;
+
+export type SchemeQuery = {
+  __typename?: 'Query';
+  scheme?: {
+    __typename?: 'Scheme';
+    id: string;
+    name: string;
+    autoApproveIncidents: boolean;
+    autoApproveOffenders: boolean;
+    incidentRetention?: number | null;
+    offenderRetention?: number | null;
+    logo?: {
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+    } | null;
+  } | null;
+};
+
+export type DeleteTagMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type DeleteTagMutation = {
+  __typename?: 'Mutation';
+  deleteTag?: { __typename?: 'Tag'; id: string } | null;
+};
+
+export type UpdateTagMutationVariables = Exact<{
+  where: UniqueId;
+  data: TagUpdateInput;
+}>;
+
+export type UpdateTagMutation = {
+  __typename?: 'Mutation';
+  updateTag?: {
+    __typename?: 'Tag';
+    id: string;
+    name: string;
+    description: string;
+  } | null;
+};
+
+export type TagQueryVariables = Exact<{
+  where: TagWhereUniqueInput;
+}>;
+
+export type TagQuery = {
+  __typename?: 'Query';
+  tag?: {
+    __typename?: 'Tag';
+    id: string;
+    name: string;
+    description: string;
+  } | null;
+};
+
+export type CreateTagMutationVariables = Exact<{
+  data: TagCreateInput;
+}>;
+
+export type CreateTagMutation = {
+  __typename?: 'Mutation';
+  createTag: {
+    __typename?: 'Tag';
+    id: string;
+    name: string;
+    description: string;
+  };
+};
+
 export type TagsQueryVariables = Exact<{
   where: TagWhereInput;
 }>;
@@ -14189,6 +14376,25 @@ export type TagsQuery = {
     name: string;
     description: string;
   }>;
+};
+
+export type DeleteUserFromSchemeMutationVariables = Exact<{
+  id: Scalars['String'];
+  scheme: Scalars['String'];
+}>;
+
+export type DeleteUserFromSchemeMutation = {
+  __typename?: 'Mutation';
+  deleteUserFromScheme?: { __typename?: 'User'; id: string } | null;
+};
+
+export type SendInviteMutationVariables = Exact<{
+  user: Scalars['String'];
+}>;
+
+export type SendInviteMutation = {
+  __typename?: 'Mutation';
+  sendInvite?: { __typename?: 'User'; id: string; newUser: boolean } | null;
 };
 
 export type UpdateUserMutationVariables = Exact<{
@@ -14209,6 +14415,11 @@ export type UpdateUserMutation = {
     organisation: string;
     disabled: boolean;
     newUser: boolean;
+    incidentEmail: boolean;
+    incidentPush: boolean;
+    offenderEmail: boolean;
+    offenderPush: boolean;
+    messagePush: boolean;
     addresses: Array<{
       __typename?: 'Address';
       id: string;
@@ -14228,6 +14439,16 @@ export type UpdateUserMutation = {
   } | null;
 };
 
+export type UpdateUserDisableMutationVariables = Exact<{
+  where: UniqueId;
+  data: UserUpdateInput;
+}>;
+
+export type UpdateUserDisableMutation = {
+  __typename?: 'Mutation';
+  updateUser?: { __typename?: 'User'; id: string; disabled: boolean } | null;
+};
+
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never }>;
 
 export type CurrentUserQuery = {
@@ -14239,6 +14460,11 @@ export type CurrentUserQuery = {
     email: string;
     organisation: string;
     newUser: boolean;
+    incidentEmail: boolean;
+    incidentPush: boolean;
+    offenderEmail: boolean;
+    offenderPush: boolean;
+    messagePush: boolean;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     schemes: Array<{
       __typename?: 'UserScheme';
@@ -14251,6 +14477,15 @@ export type CurrentUserQuery = {
         autoApproveIncidents: boolean;
         autoApproveOffenders: boolean;
       };
+    }>;
+    addresses: Array<{
+      __typename?: 'Address';
+      id: string;
+      building?: string | null;
+      street: string;
+      townCity: string;
+      county?: string | null;
+      postcode: string;
     }>;
   } | null;
 };
@@ -14423,6 +14658,168 @@ export type SignInMutationOptions = Apollo.BaseMutationOptions<
   SignInMutation,
   SignInMutationVariables
 >;
+export const DeleteChatDocument = gql`
+  mutation deleteChat($id: String!) {
+    deleteChat(where: { id: $id }) {
+      id
+    }
+  }
+`;
+export type DeleteChatMutationFn = Apollo.MutationFunction<
+  DeleteChatMutation,
+  DeleteChatMutationVariables
+>;
+
+/**
+ * __useDeleteChatMutation__
+ *
+ * To run a mutation, you first call `useDeleteChatMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteChatMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteChatMutation, { data, loading, error }] = useDeleteChatMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteChatMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteChatMutation,
+    DeleteChatMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<DeleteChatMutation, DeleteChatMutationVariables>(
+    DeleteChatDocument,
+    options
+  );
+}
+export type DeleteChatMutationHookResult = ReturnType<
+  typeof useDeleteChatMutation
+>;
+export type DeleteChatMutationResult =
+  Apollo.MutationResult<DeleteChatMutation>;
+export type DeleteChatMutationOptions = Apollo.BaseMutationOptions<
+  DeleteChatMutation,
+  DeleteChatMutationVariables
+>;
+export const UpdateChatDocument = gql`
+  mutation updateChat($where: UniqueId!, $data: ChatUpdateInput!) {
+    updateChat(where: $where, data: $data) {
+      id
+      name
+      description
+      members {
+        user {
+          id
+          fullName
+          organisation
+        }
+      }
+    }
+  }
+`;
+export type UpdateChatMutationFn = Apollo.MutationFunction<
+  UpdateChatMutation,
+  UpdateChatMutationVariables
+>;
+
+/**
+ * __useUpdateChatMutation__
+ *
+ * To run a mutation, you first call `useUpdateChatMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateChatMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateChatMutation, { data, loading, error }] = useUpdateChatMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateChatMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateChatMutation,
+    UpdateChatMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateChatMutation, UpdateChatMutationVariables>(
+    UpdateChatDocument,
+    options
+  );
+}
+export type UpdateChatMutationHookResult = ReturnType<
+  typeof useUpdateChatMutation
+>;
+export type UpdateChatMutationResult =
+  Apollo.MutationResult<UpdateChatMutation>;
+export type UpdateChatMutationOptions = Apollo.BaseMutationOptions<
+  UpdateChatMutation,
+  UpdateChatMutationVariables
+>;
+export const ChatDocument = gql`
+  query Chat($where: ChatWhereUniqueInput!) {
+    chat(where: $where) {
+      id
+      name
+      description
+      members {
+        id
+        user {
+          id
+          fullName
+          organisation
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useChatQuery__
+ *
+ * To run a query within a React component, call `useChatQuery` and pass it any options that fit your needs.
+ * When your component renders, `useChatQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useChatQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useChatQuery(
+  baseOptions: Apollo.QueryHookOptions<ChatQuery, ChatQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ChatQuery, ChatQueryVariables>(ChatDocument, options);
+}
+export function useChatLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ChatQuery, ChatQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ChatQuery, ChatQueryVariables>(
+    ChatDocument,
+    options
+  );
+}
+export type ChatQueryHookResult = ReturnType<typeof useChatQuery>;
+export type ChatLazyQueryHookResult = ReturnType<typeof useChatLazyQuery>;
+export type ChatQueryResult = Apollo.QueryResult<ChatQuery, ChatQueryVariables>;
 export const CreateChatDocument = gql`
   mutation createChat($data: ChatCreateInput!) {
     createChat(data: $data) {
@@ -14537,9 +14934,118 @@ export type SchemeChatsQueryResult = Apollo.QueryResult<
   SchemeChatsQuery,
   SchemeChatsQueryVariables
 >;
+export const DeleteGroupDocument = gql`
+  mutation deleteGroup($id: String!) {
+    deleteGroup(where: { id: $id }) {
+      id
+    }
+  }
+`;
+export type DeleteGroupMutationFn = Apollo.MutationFunction<
+  DeleteGroupMutation,
+  DeleteGroupMutationVariables
+>;
+
+/**
+ * __useDeleteGroupMutation__
+ *
+ * To run a mutation, you first call `useDeleteGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteGroupMutation, { data, loading, error }] = useDeleteGroupMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteGroupMutation,
+    DeleteGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<DeleteGroupMutation, DeleteGroupMutationVariables>(
+    DeleteGroupDocument,
+    options
+  );
+}
+export type DeleteGroupMutationHookResult = ReturnType<
+  typeof useDeleteGroupMutation
+>;
+export type DeleteGroupMutationResult =
+  Apollo.MutationResult<DeleteGroupMutation>;
+export type DeleteGroupMutationOptions = Apollo.BaseMutationOptions<
+  DeleteGroupMutation,
+  DeleteGroupMutationVariables
+>;
+export const UpdateGroupDocument = gql`
+  mutation updateGroup($where: UniqueId!, $data: GroupUpdateInput!) {
+    updateGroup(where: $where, data: $data) {
+      id
+      name
+      description
+      users {
+        id
+        fullName
+        organisation
+      }
+    }
+  }
+`;
+export type UpdateGroupMutationFn = Apollo.MutationFunction<
+  UpdateGroupMutation,
+  UpdateGroupMutationVariables
+>;
+
+/**
+ * __useUpdateGroupMutation__
+ *
+ * To run a mutation, you first call `useUpdateGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateGroupMutation, { data, loading, error }] = useUpdateGroupMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateGroupMutation,
+    UpdateGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateGroupMutation, UpdateGroupMutationVariables>(
+    UpdateGroupDocument,
+    options
+  );
+}
+export type UpdateGroupMutationHookResult = ReturnType<
+  typeof useUpdateGroupMutation
+>;
+export type UpdateGroupMutationResult =
+  Apollo.MutationResult<UpdateGroupMutation>;
+export type UpdateGroupMutationOptions = Apollo.BaseMutationOptions<
+  UpdateGroupMutation,
+  UpdateGroupMutationVariables
+>;
 export const GroupDocument = gql`
   query Group($where: GroupWhereUniqueInput!) {
     group(where: $where) {
+      id
       name
       description
       users {
@@ -15111,6 +15617,318 @@ export type ViewIncidentQueryResult = Apollo.QueryResult<
   ViewIncidentQuery,
   ViewIncidentQueryVariables
 >;
+export const UpdateSchemeDocument = gql`
+  mutation updateScheme($where: UniqueId!, $data: SchemeUpdateInput!) {
+    updateScheme(where: $where, data: $data) {
+      id
+      name
+      autoApproveIncidents
+      autoApproveOffenders
+      incidentRetention
+      offenderRetention
+      logo {
+        id
+        url
+        optimised
+      }
+    }
+  }
+`;
+export type UpdateSchemeMutationFn = Apollo.MutationFunction<
+  UpdateSchemeMutation,
+  UpdateSchemeMutationVariables
+>;
+
+/**
+ * __useUpdateSchemeMutation__
+ *
+ * To run a mutation, you first call `useUpdateSchemeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateSchemeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateSchemeMutation, { data, loading, error }] = useUpdateSchemeMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateSchemeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateSchemeMutation,
+    UpdateSchemeMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateSchemeMutation,
+    UpdateSchemeMutationVariables
+  >(UpdateSchemeDocument, options);
+}
+export type UpdateSchemeMutationHookResult = ReturnType<
+  typeof useUpdateSchemeMutation
+>;
+export type UpdateSchemeMutationResult =
+  Apollo.MutationResult<UpdateSchemeMutation>;
+export type UpdateSchemeMutationOptions = Apollo.BaseMutationOptions<
+  UpdateSchemeMutation,
+  UpdateSchemeMutationVariables
+>;
+export const SchemeDocument = gql`
+  query scheme($where: SchemeWhereUniqueInput!) {
+    scheme(where: $where) {
+      id
+      name
+      autoApproveIncidents
+      autoApproveOffenders
+      incidentRetention
+      offenderRetention
+      logo {
+        id
+        url
+        optimised
+      }
+    }
+  }
+`;
+
+/**
+ * __useSchemeQuery__
+ *
+ * To run a query within a React component, call `useSchemeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSchemeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSchemeQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useSchemeQuery(
+  baseOptions: Apollo.QueryHookOptions<SchemeQuery, SchemeQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SchemeQuery, SchemeQueryVariables>(
+    SchemeDocument,
+    options
+  );
+}
+export function useSchemeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<SchemeQuery, SchemeQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<SchemeQuery, SchemeQueryVariables>(
+    SchemeDocument,
+    options
+  );
+}
+export type SchemeQueryHookResult = ReturnType<typeof useSchemeQuery>;
+export type SchemeLazyQueryHookResult = ReturnType<typeof useSchemeLazyQuery>;
+export type SchemeQueryResult = Apollo.QueryResult<
+  SchemeQuery,
+  SchemeQueryVariables
+>;
+export const DeleteTagDocument = gql`
+  mutation deleteTag($id: String!) {
+    deleteTag(where: { id: $id }) {
+      id
+    }
+  }
+`;
+export type DeleteTagMutationFn = Apollo.MutationFunction<
+  DeleteTagMutation,
+  DeleteTagMutationVariables
+>;
+
+/**
+ * __useDeleteTagMutation__
+ *
+ * To run a mutation, you first call `useDeleteTagMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteTagMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteTagMutation, { data, loading, error }] = useDeleteTagMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteTagMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteTagMutation,
+    DeleteTagMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<DeleteTagMutation, DeleteTagMutationVariables>(
+    DeleteTagDocument,
+    options
+  );
+}
+export type DeleteTagMutationHookResult = ReturnType<
+  typeof useDeleteTagMutation
+>;
+export type DeleteTagMutationResult = Apollo.MutationResult<DeleteTagMutation>;
+export type DeleteTagMutationOptions = Apollo.BaseMutationOptions<
+  DeleteTagMutation,
+  DeleteTagMutationVariables
+>;
+export const UpdateTagDocument = gql`
+  mutation updateTag($where: UniqueId!, $data: TagUpdateInput!) {
+    updateTag(where: $where, data: $data) {
+      id
+      name
+      description
+    }
+  }
+`;
+export type UpdateTagMutationFn = Apollo.MutationFunction<
+  UpdateTagMutation,
+  UpdateTagMutationVariables
+>;
+
+/**
+ * __useUpdateTagMutation__
+ *
+ * To run a mutation, you first call `useUpdateTagMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTagMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTagMutation, { data, loading, error }] = useUpdateTagMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateTagMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateTagMutation,
+    UpdateTagMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateTagMutation, UpdateTagMutationVariables>(
+    UpdateTagDocument,
+    options
+  );
+}
+export type UpdateTagMutationHookResult = ReturnType<
+  typeof useUpdateTagMutation
+>;
+export type UpdateTagMutationResult = Apollo.MutationResult<UpdateTagMutation>;
+export type UpdateTagMutationOptions = Apollo.BaseMutationOptions<
+  UpdateTagMutation,
+  UpdateTagMutationVariables
+>;
+export const TagDocument = gql`
+  query tag($where: TagWhereUniqueInput!) {
+    tag(where: $where) {
+      id
+      name
+      description
+    }
+  }
+`;
+
+/**
+ * __useTagQuery__
+ *
+ * To run a query within a React component, call `useTagQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTagQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTagQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useTagQuery(
+  baseOptions: Apollo.QueryHookOptions<TagQuery, TagQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<TagQuery, TagQueryVariables>(TagDocument, options);
+}
+export function useTagLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<TagQuery, TagQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<TagQuery, TagQueryVariables>(TagDocument, options);
+}
+export type TagQueryHookResult = ReturnType<typeof useTagQuery>;
+export type TagLazyQueryHookResult = ReturnType<typeof useTagLazyQuery>;
+export type TagQueryResult = Apollo.QueryResult<TagQuery, TagQueryVariables>;
+export const CreateTagDocument = gql`
+  mutation createTag($data: TagCreateInput!) {
+    createTag(data: $data) {
+      id
+      name
+      description
+    }
+  }
+`;
+export type CreateTagMutationFn = Apollo.MutationFunction<
+  CreateTagMutation,
+  CreateTagMutationVariables
+>;
+
+/**
+ * __useCreateTagMutation__
+ *
+ * To run a mutation, you first call `useCreateTagMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTagMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTagMutation, { data, loading, error }] = useCreateTagMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateTagMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateTagMutation,
+    CreateTagMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateTagMutation, CreateTagMutationVariables>(
+    CreateTagDocument,
+    options
+  );
+}
+export type CreateTagMutationHookResult = ReturnType<
+  typeof useCreateTagMutation
+>;
+export type CreateTagMutationResult = Apollo.MutationResult<CreateTagMutation>;
+export type CreateTagMutationOptions = Apollo.BaseMutationOptions<
+  CreateTagMutation,
+  CreateTagMutationVariables
+>;
 export const TagsDocument = gql`
   query tags($where: TagWhereInput!) {
     tags(where: $where) {
@@ -15155,6 +15973,108 @@ export function useTagsLazyQuery(
 export type TagsQueryHookResult = ReturnType<typeof useTagsQuery>;
 export type TagsLazyQueryHookResult = ReturnType<typeof useTagsLazyQuery>;
 export type TagsQueryResult = Apollo.QueryResult<TagsQuery, TagsQueryVariables>;
+export const DeleteUserFromSchemeDocument = gql`
+  mutation deleteUserFromScheme($id: String!, $scheme: String!) {
+    deleteUserFromScheme(id: $id, scheme: $scheme) {
+      id
+    }
+  }
+`;
+export type DeleteUserFromSchemeMutationFn = Apollo.MutationFunction<
+  DeleteUserFromSchemeMutation,
+  DeleteUserFromSchemeMutationVariables
+>;
+
+/**
+ * __useDeleteUserFromSchemeMutation__
+ *
+ * To run a mutation, you first call `useDeleteUserFromSchemeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteUserFromSchemeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteUserFromSchemeMutation, { data, loading, error }] = useDeleteUserFromSchemeMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      scheme: // value for 'scheme'
+ *   },
+ * });
+ */
+export function useDeleteUserFromSchemeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteUserFromSchemeMutation,
+    DeleteUserFromSchemeMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteUserFromSchemeMutation,
+    DeleteUserFromSchemeMutationVariables
+  >(DeleteUserFromSchemeDocument, options);
+}
+export type DeleteUserFromSchemeMutationHookResult = ReturnType<
+  typeof useDeleteUserFromSchemeMutation
+>;
+export type DeleteUserFromSchemeMutationResult =
+  Apollo.MutationResult<DeleteUserFromSchemeMutation>;
+export type DeleteUserFromSchemeMutationOptions = Apollo.BaseMutationOptions<
+  DeleteUserFromSchemeMutation,
+  DeleteUserFromSchemeMutationVariables
+>;
+export const SendInviteDocument = gql`
+  mutation sendInvite($user: String!) {
+    sendInvite(user: $user) {
+      id
+      newUser
+    }
+  }
+`;
+export type SendInviteMutationFn = Apollo.MutationFunction<
+  SendInviteMutation,
+  SendInviteMutationVariables
+>;
+
+/**
+ * __useSendInviteMutation__
+ *
+ * To run a mutation, you first call `useSendInviteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendInviteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendInviteMutation, { data, loading, error }] = useSendInviteMutation({
+ *   variables: {
+ *      user: // value for 'user'
+ *   },
+ * });
+ */
+export function useSendInviteMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SendInviteMutation,
+    SendInviteMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<SendInviteMutation, SendInviteMutationVariables>(
+    SendInviteDocument,
+    options
+  );
+}
+export type SendInviteMutationHookResult = ReturnType<
+  typeof useSendInviteMutation
+>;
+export type SendInviteMutationResult =
+  Apollo.MutationResult<SendInviteMutation>;
+export type SendInviteMutationOptions = Apollo.BaseMutationOptions<
+  SendInviteMutation,
+  SendInviteMutationVariables
+>;
 export const UpdateUserDocument = gql`
   mutation updateUser(
     $where: UniqueId!
@@ -15192,6 +16112,11 @@ export const UpdateUserDocument = gql`
         id
         role
       }
+      incidentEmail
+      incidentPush
+      offenderEmail
+      offenderPush
+      messagePush
     }
   }
 `;
@@ -15242,6 +16167,58 @@ export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<
   UpdateUserMutation,
   UpdateUserMutationVariables
 >;
+export const UpdateUserDisableDocument = gql`
+  mutation updateUserDisable($where: UniqueId!, $data: UserUpdateInput!) {
+    updateUser(where: $where, data: $data) {
+      id
+      disabled
+    }
+  }
+`;
+export type UpdateUserDisableMutationFn = Apollo.MutationFunction<
+  UpdateUserDisableMutation,
+  UpdateUserDisableMutationVariables
+>;
+
+/**
+ * __useUpdateUserDisableMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserDisableMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserDisableMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserDisableMutation, { data, loading, error }] = useUpdateUserDisableMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateUserDisableMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateUserDisableMutation,
+    UpdateUserDisableMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateUserDisableMutation,
+    UpdateUserDisableMutationVariables
+  >(UpdateUserDisableDocument, options);
+}
+export type UpdateUserDisableMutationHookResult = ReturnType<
+  typeof useUpdateUserDisableMutation
+>;
+export type UpdateUserDisableMutationResult =
+  Apollo.MutationResult<UpdateUserDisableMutation>;
+export type UpdateUserDisableMutationOptions = Apollo.BaseMutationOptions<
+  UpdateUserDisableMutation,
+  UpdateUserDisableMutationVariables
+>;
 export const CurrentUserDocument = gql`
   query currentUser {
     currentUser {
@@ -15264,6 +16241,19 @@ export const CurrentUserDocument = gql`
           autoApproveOffenders
         }
       }
+      addresses(where: { primary: { equals: true } }) {
+        id
+        building
+        street
+        townCity
+        county
+        postcode
+      }
+      incidentEmail
+      incidentPush
+      offenderEmail
+      offenderPush
+      messagePush
     }
   }
 `;

@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   useCreateChatMutation,
   CreateChatMutation,
   ListSchemeUsersQuery,
   useListSchemeUsersQuery,
   SortOrder,
-} from "graphql/generated";
+} from 'graphql/generated';
 
-import { useStoreState } from "state";
-import { MutationUpdaterFn } from "@apollo/client";
+import { useStoreState } from 'state';
+import { MutationUpdaterFn } from '@apollo/client';
 
 interface FormData {
   name: string;
@@ -31,7 +31,7 @@ const useAddChat = ({ onClose, update }: Props): Return => {
   const [saving, setSaving] = useState(false);
 
   const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: 'cache-and-network',
     variables: {
       where: {
         schemes: {
@@ -63,7 +63,6 @@ const useAddChat = ({ onClose, update }: Props): Return => {
     },
     update,
   });
-  // const [inviteExistingUser] = useInviteExistingUserMutation()
 
   const onSubmit = (data: FormData) => {
     setSaving(true);

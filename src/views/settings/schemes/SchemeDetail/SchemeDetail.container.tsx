@@ -1,19 +1,29 @@
 import React from 'react';
 import View from './SchemeDetail.view';
-
 import useSchemeDetail from './useSchemeDetail';
 
-function SchemeDetail() {
-  const { data, loading, saving, schemeSubmit } = useSchemeDetail();
+function SchemeDetail(): JSX.Element {
+  const {
+    data,
+    loading,
+    saving,
+    onSubmit,
+    beforeUpload,
+    handlePreview,
+    imgChange,
+    fileList,
+  } = useSchemeDetail();
   return (
-    <div>
-      <View
-        data={data}
-        loading={loading}
-        saving={saving}
-        schemeSubmit={schemeSubmit}
-      />
-    </div>
+    <View
+      data={data}
+      loading={loading}
+      saving={saving}
+      onSubmit={onSubmit}
+      fileList={fileList}
+      beforeUpload={beforeUpload}
+      imgChange={imgChange}
+      handlePreview={handlePreview}
+    />
   );
 }
 

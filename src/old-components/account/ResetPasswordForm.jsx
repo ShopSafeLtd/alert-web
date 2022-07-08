@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 // import { Mutation } from 'react-apollo';
-import Paper from "@material-ui/core/Paper";
-import TextField from "@material-ui/core/TextField";
+import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
 // import validate from "validate.js";
-import { useMutation } from "@apollo/client";
+import { useMutation } from '@apollo/client';
 
 // import ResetPasswordMutation from '../../graphql/account/mutations/ResetPasswordMutation';
-import { UpdatePassword } from "graphql-src/users/mutations";
-import { ProgressButton } from "../global/actions";
-import { HeaderText, HeaderSubText, Field, FieldHeader } from "../global/forms";
-import { useStoreActions, useStoreState } from "../../state";
-import { useNavigate } from "react-router-dom";
+import { UpdatePassword } from 'graphql-src/users/mutations';
+import { ProgressButton } from '../global/actions';
+import { HeaderText, HeaderSubText, Field, FieldHeader } from '../global/forms';
+import { useStoreActions, useStoreState } from '../../state';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   min-height: calc(100vh - 56px);
@@ -75,7 +75,7 @@ const StyledTextField = styled(TextField)`
 `;
 
 const ResetPassword = ({ auth, setAuth }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
   const setBackLinkTo = useStoreActions(
     (actions) => actions.theme.setBackLinkTo
@@ -84,10 +84,10 @@ const ResetPassword = ({ auth, setAuth }) => {
   const userId = useStoreState((state) => state.user.id);
 
   const [passwords, setPassword] = useState({
-    password: "",
-    passwordError: "",
-    passwordConfirmation: "",
-    passwordConfirmationError: "",
+    password: '',
+    passwordError: '',
+    passwordConfirmation: '',
+    passwordConfirmationError: '',
   });
   const [disabled, setDisabled] = useState(false);
 
@@ -95,18 +95,18 @@ const ResetPassword = ({ auth, setAuth }) => {
   const [updatePassword] = useMutation(UpdatePassword, {
     onCompleted: (res) => {
       setDisabled(false);
-      setAuth("");
+      setAuth('');
       navigate(`/`);
     },
   });
 
   useEffect(() => {
-    setTitle("Reset Password");
-    setBackLinkTo("/account-settings");
+    setTitle('Reset Password');
+    setBackLinkTo('/account-settings');
     setBottomNav(false);
     return () => {
       setBottomNav(true);
-      setBackLinkTo("");
+      setBackLinkTo('');
     };
     // eslint-disable-next-line
   }, []);
@@ -123,33 +123,33 @@ const ResetPassword = ({ auth, setAuth }) => {
     const confirmation = passwords.passwordConfirmation;
     const regExp = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/;
 
-    if (password === "" || confirmation === "") {
+    if (password === '' || confirmation === '') {
       handleChange({
-        passwordConfirmationError: "Please enter a new password",
+        passwordConfirmationError: 'Please enter a new password',
       });
       return false;
     }
     if (password !== confirmation) {
-      handleChange({ passwordConfirmationError: "Passwords do not match" });
+      handleChange({ passwordConfirmationError: 'Passwords do not match' });
       return false;
     }
     if (!regExp.test(password)) {
       handleChange({
         passwordConfirmationError:
-          "Password must contain at least one number and upper case letter",
+          'Password must contain at least one number and upper case letter',
       });
       return false;
     }
     if (password.length < 8) {
       handleChange({
         passwordConfirmationError:
-          "Password must be at least 8 characters long",
+          'Password must be at least 8 characters long',
       });
       return false;
     }
 
     handleChange({
-      passwordConfirmationError: "",
+      passwordConfirmationError: '',
     });
     return true;
   };
@@ -187,7 +187,7 @@ const ResetPassword = ({ auth, setAuth }) => {
                 <StyledTextField
                   value={passwords.password}
                   onChange={(e) => handleChange({ password: e.target.value })}
-                  error={passwords.passwordError !== ""}
+                  error={passwords.passwordError !== ''}
                   helperText={passwords.passwordError}
                   fullWidth={false} //!matches}
                   type="password"
@@ -202,7 +202,7 @@ const ResetPassword = ({ auth, setAuth }) => {
                       passwordConfirmation: e.target.value,
                     })
                   }
-                  error={passwords.passwordConfirmationError !== ""}
+                  error={passwords.passwordConfirmationError !== ''}
                   helperText={passwords.passwordConfirmationError}
                   fullWidth={false} //!matches}
                   type="password"

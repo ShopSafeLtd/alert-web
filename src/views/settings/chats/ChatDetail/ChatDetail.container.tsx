@@ -2,8 +2,8 @@ import React from 'react';
 import View from './ChatDetail.view';
 import useChatDetail from './useChatDetail';
 
-function ChatDetail() {
-  const { data, loading, editChat, toggleEditChat, saving, openDelete } =
+function ChatDetail(): JSX.Element {
+  const { data, loading, editChat, toggleEditChat, saving, deleteConfirm } =
     useChatDetail();
   return (
     <div>
@@ -13,7 +13,7 @@ function ChatDetail() {
         editChat={editChat}
         toggleEditChat={toggleEditChat}
         saving={saving}
-        openDelete={openDelete}
+        deleteConfirm={deleteConfirm}
       />
     </div>
   );

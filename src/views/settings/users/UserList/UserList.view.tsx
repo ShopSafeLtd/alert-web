@@ -47,7 +47,7 @@ const UserList = ({
   toggleAddUser,
   updateUserList,
   updateExitingUserList,
-}: Props) => (
+}: Props): JSX.Element => (
   <div className="list-view">
     <Row gutter={8} style={{ marginBottom: 10 }}>
       <Col span={8}>

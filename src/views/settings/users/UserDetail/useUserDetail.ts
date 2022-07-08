@@ -2,26 +2,52 @@ import { useState } from 'react';
 import {
   useUserQuery,
   UserQuery,
-  UpdateUserMutation,
-  UserDocument,
+  useSendInviteMutation,
+  useUpdateUserDisableMutation,
+  useDeleteUserFromSchemeMutation,
 } from 'graphql/generated';
-import { MutationUpdaterFn } from '@apollo/client';
 import { useStoreState } from 'state';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { notification, Modal } from 'antd';
+
+const { confirm } = Modal;
 
 interface Return {
   data: UserQuery | undefined;
   loading: boolean;
+  saving: boolean;
   editUser: boolean;
   toggleEditUser: () => void;
-  // updateUserDetails: MutationUpdaterFn<UpdateUserMutation>;
+  inviteConfirm: () => void;
+  enableConfirm: () => void;
+  disableConfirm: () => void;
+  deleteConfirm: () => void;
 }
+
+type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const useUserDetail = (): Return => {
   const userId = useParams().id;
+  const navigate = useNavigate();
+  const schemeId = useStoreState((state) => state.scheme.id);
+  const [saving, setSaving] = useState(false);
   const [editUser, setEditUser] = useState(false);
 
-  const schemeId = useStoreState((state) => state.scheme.id);
+  const openNotification = (type: NotificationType) => {
+    if (type === 'success') {
+      notification.success({
+        message: 'Success!',
+        description: 'Your action has succeeded!',
+        placement: 'bottomRight',
+      });
+    } else if (type === 'error') {
+      notification.error({
+        message: 'error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
+    }
+  };
 
   const { data, loading } = useUserQuery({
     fetchPolicy: 'cache-and-network',
@@ -29,7 +55,6 @@ const useUserDetail = (): Return => {
       where: {
         id: userId,
       },
-
       groupWhere: {
         scheme: {
           id: {
@@ -48,84 +73,133 @@ const useUserDetail = (): Return => {
       },
     },
   });
+  // send invite
+  const [sendInvite] = useSendInviteMutation({
+    onCompleted: () => {
+      setSaving(false);
+      openNotification('success');
+      navigate('users');
+    },
+    onError: () => {
+      openNotification('error');
+      setSaving(false);
+    },
+  });
 
+  const openInvite = () => {
+    setSaving(true);
+    if (userId)
+      sendInvite({
+        variables: {
+          user: userId,
+        },
+      });
+  };
+  const inviteConfirm = () => {
+    confirm({
+      title: 'Do you Want to send the invite?',
+      content:
+        'Resending the invite will reset the users password and send them an new invite containing the new password.',
+      onOk() {
+        openInvite();
+      },
+    });
+  };
+
+  // disable
+  const [updateUser] = useUpdateUserDisableMutation({
+    onCompleted: () => {
+      setSaving(false);
+      openNotification('success');
+    },
+    onError: () => {
+      openNotification('error');
+      setSaving(false);
+    },
+  });
+
+  const openDisableUser = (disabled: boolean) => {
+    setSaving(true);
+    if (userId)
+      updateUser({
+        variables: {
+          where: {
+            id: userId,
+          },
+          data: {
+            disabled: { set: disabled },
+          },
+        },
+      });
+  };
+  const enableConfirm = () => {
+    confirm({
+      title: 'Do you want to enable the user?',
+      content:
+        'Enabling this user will allow them to log back into the system.',
+      onOk() {
+        openDisableUser(false);
+      },
+    });
+  };
+
+  const disableConfirm = () => {
+    confirm({
+      title: 'Do you want to disable the user?',
+      content:
+        'Disabling this user will prevent them from logging into alert but will not delete them or any content they have added.',
+      onOk() {
+        openDisableUser(true);
+      },
+    });
+  };
   const toggleEditUser = () => {
     setEditUser(!editUser);
   };
+  // delete data
+  const [deleteUserFromScheme] = useDeleteUserFromSchemeMutation({
+    onCompleted: () => {
+      setSaving(false);
+      window.history.back();
+      openNotification('success');
+    },
+    onError: () => {
+      openNotification('error');
+      setSaving(false);
+    },
+  });
 
-  // const updateUserDetails: MutationUpdaterFn<UpdateUserMutation> = (
-  //   store,
-  //   { data: res }
-  // ) => {
-  //   if (res?.updateUser === null || res?.updateUser === undefined) return;
+  const openDelete = () => {
+    setSaving(true);
+    if (userId)
+      deleteUserFromScheme({
+        variables: {
+          id: userId,
+          scheme: schemeId,
+        },
+      });
+  };
 
-  //   // get existing group list data from Apollo store
-  //   const existingData = store.readQuery<UserQuery>({
-  //     query: UserDocument,
-  //     variables: {
-  //       where: {
-  //         id: userId,
-  //       },
-
-  //       groupWhere: {
-  //         scheme: {
-  //           id: {
-  //             equals: schemeId,
-  //           },
-  //         },
-  //       },
-  //       chatWhere: {
-  //         chat: {
-  //           scheme: {
-  //             id: {
-  //               equals: schemeId,
-  //             },
-  //           },
-  //         },
-  //       },
-  //     },
-  //   });
-
-  //   if (existingData === null) return;
-
-  //   // write the new data to the Apollo store
-  //   store.writeQuery<UserQuery>({
-  //     query: UserDocument,
-  //     data: {
-  //       user: [...existingData.user, res.updateUser],
-  //       __typename: 'Query',
-  //     },
-  //     variables: {
-  //       where: {
-  //         id: userId,
-  //       },
-
-  //       groupWhere: {
-  //         scheme: {
-  //           id: {
-  //             equals: schemeId,
-  //           },
-  //         },
-  //       },
-  //       chatWhere: {
-  //         chat: {
-  //           scheme: {
-  //             id: {
-  //               equals: schemeId,
-  //             },
-  //           },
-  //         },
-  //       },
-  //     },
-  //   });
-  // };
-
+  const deleteConfirm = () => {
+    confirm({
+      title: 'Do you want to delete the user from the scheme?',
+      content:
+        'Deleting this user will remove them from the scheme and any groups, it will not remove any content that they have submitted. This action can not be undone.',
+      onOk() {
+        openDelete();
+      },
+    });
+  };
   return {
     data,
     loading,
     editUser,
+    saving,
     toggleEditUser,
-    // updateUserDetails,
+    inviteConfirm,
+    enableConfirm,
+    disableConfirm,
+    deleteConfirm,
   };
 };
 

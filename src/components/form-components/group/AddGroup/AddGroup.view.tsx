@@ -27,7 +27,7 @@ const AddGroup = ({
       <Col span={21}>
         <Form.Item
           name="name"
-          label="name"
+          label="Name"
           rules={[
             {
               required: true,
