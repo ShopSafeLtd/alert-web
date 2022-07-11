@@ -87,7 +87,7 @@ const EditProfile = ({
             User Details:
           </Title>
           <Row gutter={60}>
-            <Col span={5}>
+            <Col span={8}>
               <Form.Item
                 name="fullName"
                 label="Full Name"
@@ -101,7 +101,7 @@ const EditProfile = ({
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
-            <Col span={5}>
+            <Col span={8}>
               <Form.Item
                 name="email"
                 label="Email Address"
@@ -117,7 +117,7 @@ const EditProfile = ({
             </Col>
           </Row>
           <Row gutter={60}>
-            <Col span={5}>
+            <Col span={8}>
               <Form.Item
                 name="organisation"
                 label="Organisation"
@@ -137,31 +137,31 @@ const EditProfile = ({
             User Address:
           </Title>
           <Row gutter={60}>
-            <Col span={5}>
+            <Col span={8}>
               <Form.Item name="building" label="Building">
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
-            <Col span={5}>
+            <Col span={8}>
               <Form.Item name="street" label="Street">
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={60}>
-            <Col span={5}>
+            <Col span={8}>
               <Form.Item name="townCity" label="Town City">
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
-            <Col span={5}>
+            <Col span={8}>
               <Form.Item name="county" label="County">
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={60}>
-            <Col span={5}>
+            <Col span={8}>
               <Form.Item name="postcode" label="Postcode">
                 <Input disabled={saving} />
               </Form.Item>
