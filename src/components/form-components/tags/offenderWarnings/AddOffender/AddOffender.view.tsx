@@ -14,7 +14,7 @@ interface Props {
   saving: boolean;
 }
 
-const AddGroup = ({ onSubmit, onClose, saving }: Props): JSX.Element => (
+const AddOffender = ({ onSubmit, onClose, saving }: Props): JSX.Element => (
   <Form layout="vertical" onFinish={onSubmit}>
     <Row style={{ marginBottom: 30 }}>
       <Col>
@@ -70,4 +70,4 @@ const AddGroup = ({ onSubmit, onClose, saving }: Props): JSX.Element => (
   </Form>
 );
 
-export default AddGroup;
+export default AddOffender;

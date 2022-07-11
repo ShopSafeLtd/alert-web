@@ -150,6 +150,7 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
     },
     onError: () => {
       openNotification('error');
+      setSaving(false);
     },
     update,
   });
@@ -162,6 +163,7 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
     },
     onError: () => {
       openNotification('error');
+      setSaving(false);
     },
     update: updateSearch,
   });

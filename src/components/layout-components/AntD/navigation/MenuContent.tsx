@@ -120,7 +120,7 @@ const SideNavContent = (props: SideNavContentProps) => {
                     ))}
                   </SubMenu>
                 ) : (
-                  <Menu.Item key={subMenuFirst.key}>
+                  <Menu.Item key={subMenuFirst.key} style={{ paddingLeft: 15 }}>
                     {subMenuFirst.icon ? (
                       <SubIcon icon={subMenuFirst.icon} />
                     ) : null}

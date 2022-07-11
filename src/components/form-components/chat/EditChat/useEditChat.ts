@@ -38,7 +38,7 @@ const useEditChat = ({ onClose }: Props): Return => {
     if (type === 'success') {
       notification.success({
         message: 'Success!',
-        description: 'The user has been updated! ',
+        description: 'The chat group has been updated! ',
         placement: 'bottomRight',
       });
     } else if (type === 'error') {
@@ -92,6 +92,7 @@ const useEditChat = ({ onClose }: Props): Return => {
     },
     onError: () => {
       openNotification('error');
+      setSaving(false);
     },
   });
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Table } from 'antd';
 import { Link } from 'react-router-dom';
 
-const GroupList = (): JSX.Element => (
+const Terms = (): JSX.Element => (
   <div className="list-view">
     <Card>
       <Table
@@ -17,7 +17,9 @@ const GroupList = (): JSX.Element => (
             title: 'Terms',
             dataIndex: 'term',
             render: (value, record) => (
-              <Link to={`/app/scheme-settings/${record.key}`}>{value}</Link>
+              <Link to={`/app/scheme-settings/terms/${record.key}`}>
+                {value}
+              </Link>
             ),
           },
         ]}
@@ -36,4 +38,4 @@ const GroupList = (): JSX.Element => (
   </div>
 );
 
-export default GroupList;
+export default Terms;

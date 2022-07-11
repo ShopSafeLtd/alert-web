@@ -17,7 +17,7 @@ interface Props {
   saving: boolean;
 }
 
-const EditUser = ({
+const EditOffender = ({
   onSubmit,
   onClose,
   data,
@@ -50,7 +50,7 @@ const EditUser = ({
             rules={[
               {
                 required: true,
-                message: 'Please enter a name for the Tag.',
+                message: 'Please enter a name for the offender warning.',
               },
             ]}
           >
@@ -88,4 +88,4 @@ const EditUser = ({
     </Form>
   );
 
-export default EditUser;
+export default EditOffender;

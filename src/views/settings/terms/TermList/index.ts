@@ -1,1 +1,1 @@
-export { default } from './TermList.container';
+export { default } from './TermList.view';

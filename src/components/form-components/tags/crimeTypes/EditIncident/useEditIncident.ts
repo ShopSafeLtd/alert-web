@@ -1,5 +1,4 @@
 import { useState } from 'react';
-// import { useStoreState } from 'state';
 import { TagQuery, useUpdateTagMutation, useTagQuery } from 'graphql/generated';
 import { notification } from 'antd';
 
@@ -9,7 +8,7 @@ interface FormData {
 }
 interface Props {
   onClose: () => void;
-  incidentId: string;
+  incidentId: string | undefined;
 }
 interface Return {
   onSubmit: (value: FormData) => void;
@@ -20,14 +19,13 @@ interface Return {
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const useEditIncident = ({ onClose, incidentId }: Props): Return => {
-  // const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
 
   const openNotification = (type: NotificationType) => {
     if (type === 'success') {
       notification.success({
         message: 'Success!',
-        description: 'The user has been updated! ',
+        description: 'The crime type has been updated! ',
         placement: 'bottomRight',
       });
     } else if (type === 'error') {
@@ -55,6 +53,7 @@ const useEditIncident = ({ onClose, incidentId }: Props): Return => {
     },
     onError: () => {
       openNotification('error');
+      setSaving(false);
     },
   });
 

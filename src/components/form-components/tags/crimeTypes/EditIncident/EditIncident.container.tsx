@@ -4,7 +4,7 @@ import useEditIncident from './useEditIncident';
 
 interface Props {
   onClose: () => void;
-  incidentId: string;
+  incidentId: string | undefined;
 }
 
 const EditIncident = ({ onClose, incidentId }: Props): JSX.Element => {

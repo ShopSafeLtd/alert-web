@@ -14265,6 +14265,156 @@ export type ViewIncidentQuery = {
   } | null;
 };
 
+export type DeleteOffenderMutationVariables = Exact<{
+  where: UniqueId;
+}>;
+
+export type DeleteOffenderMutation = {
+  __typename?: 'Mutation';
+  deleteOffender?: { __typename?: 'Offender'; id: string } | null;
+};
+
+export type RestoreIncidentMutationVariables = Exact<{
+  id: Scalars['String'];
+  recycledId: Scalars['String'];
+}>;
+
+export type RestoreIncidentMutation = {
+  __typename?: 'Mutation';
+  restoreIncident?: {
+    __typename?: 'Incident';
+    id: string;
+    recycled: boolean;
+  } | null;
+};
+
+export type RestoreOffenderMutationVariables = Exact<{
+  id: Scalars['String'];
+  recycledId: Scalars['String'];
+}>;
+
+export type RestoreOffenderMutation = {
+  __typename?: 'Mutation';
+  restoreOffender?: {
+    __typename?: 'Offender';
+    id: string;
+    recycled: boolean;
+  } | null;
+};
+
+export type RecycledItemQueryVariables = Exact<{
+  where: RecycledItemWhereUniqueInput;
+}>;
+
+export type RecycledItemQuery = {
+  __typename?: 'Query';
+  recycledItem?: {
+    __typename?: 'RecycledItem';
+    id: string;
+    systemTask: boolean;
+    incident?: {
+      __typename?: 'Incident';
+      id: string;
+      date: any;
+      recycled: boolean;
+      subject?: string | null;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        organisation: string;
+      };
+      location?: {
+        __typename?: 'Address';
+        id: string;
+        full?: string | null;
+      } | null;
+    } | null;
+    offender?: {
+      __typename?: 'Offender';
+      id: string;
+      gender?: Gender | null;
+      name?: string | null;
+      race?: Race | null;
+      recycled: boolean;
+      incidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        date: any;
+        location?: {
+          __typename?: 'Address';
+          id: string;
+          full?: string | null;
+        } | null;
+      }>;
+    } | null;
+    scheme: { __typename?: 'Scheme'; id: string };
+  } | null;
+};
+
+export type RecycledItemsQueryVariables = Exact<{
+  schemeId: Scalars['String'];
+  search?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<RecycledItemOrderByWithRelationInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  dataType?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+}>;
+
+export type RecycledItemsQuery = {
+  __typename?: 'Query';
+  recycledItems?: Array<{
+    __typename?: 'RecycledItem';
+    id: string;
+    deletedAt: any;
+    expiresAt: any;
+    systemTask: boolean;
+    deletedBy?: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      organisation: string;
+    } | null;
+    incident?: {
+      __typename?: 'Incident';
+      id: string;
+      date: any;
+      recycled: boolean;
+      subject?: string | null;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        organisation: string;
+      };
+      location?: {
+        __typename?: 'Address';
+        id: string;
+        full?: string | null;
+      } | null;
+    } | null;
+    offender?: {
+      __typename?: 'Offender';
+      id: string;
+      gender?: Gender | null;
+      name?: string | null;
+      race?: Race | null;
+      recycled: boolean;
+      incidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        date: any;
+        location?: {
+          __typename?: 'Address';
+          id: string;
+          full?: string | null;
+        } | null;
+      }>;
+    } | null;
+    scheme: { __typename?: 'Scheme'; id: string };
+  } | null> | null;
+};
+
 export type UpdateSchemeMutationVariables = Exact<{
   where: UniqueId;
   data: SchemeUpdateInput;
@@ -15616,6 +15766,370 @@ export type ViewIncidentLazyQueryHookResult = ReturnType<
 export type ViewIncidentQueryResult = Apollo.QueryResult<
   ViewIncidentQuery,
   ViewIncidentQueryVariables
+>;
+export const DeleteOffenderDocument = gql`
+  mutation deleteOffender($where: UniqueId!) {
+    deleteOffender(where: $where) {
+      id
+    }
+  }
+`;
+export type DeleteOffenderMutationFn = Apollo.MutationFunction<
+  DeleteOffenderMutation,
+  DeleteOffenderMutationVariables
+>;
+
+/**
+ * __useDeleteOffenderMutation__
+ *
+ * To run a mutation, you first call `useDeleteOffenderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteOffenderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteOffenderMutation, { data, loading, error }] = useDeleteOffenderMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useDeleteOffenderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteOffenderMutation,
+    DeleteOffenderMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteOffenderMutation,
+    DeleteOffenderMutationVariables
+  >(DeleteOffenderDocument, options);
+}
+export type DeleteOffenderMutationHookResult = ReturnType<
+  typeof useDeleteOffenderMutation
+>;
+export type DeleteOffenderMutationResult =
+  Apollo.MutationResult<DeleteOffenderMutation>;
+export type DeleteOffenderMutationOptions = Apollo.BaseMutationOptions<
+  DeleteOffenderMutation,
+  DeleteOffenderMutationVariables
+>;
+export const RestoreIncidentDocument = gql`
+  mutation restoreIncident($id: String!, $recycledId: String!) {
+    restoreIncident(where: { id: $id }, data: { id: $recycledId }) {
+      id
+      recycled
+    }
+  }
+`;
+export type RestoreIncidentMutationFn = Apollo.MutationFunction<
+  RestoreIncidentMutation,
+  RestoreIncidentMutationVariables
+>;
+
+/**
+ * __useRestoreIncidentMutation__
+ *
+ * To run a mutation, you first call `useRestoreIncidentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRestoreIncidentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [restoreIncidentMutation, { data, loading, error }] = useRestoreIncidentMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      recycledId: // value for 'recycledId'
+ *   },
+ * });
+ */
+export function useRestoreIncidentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RestoreIncidentMutation,
+    RestoreIncidentMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    RestoreIncidentMutation,
+    RestoreIncidentMutationVariables
+  >(RestoreIncidentDocument, options);
+}
+export type RestoreIncidentMutationHookResult = ReturnType<
+  typeof useRestoreIncidentMutation
+>;
+export type RestoreIncidentMutationResult =
+  Apollo.MutationResult<RestoreIncidentMutation>;
+export type RestoreIncidentMutationOptions = Apollo.BaseMutationOptions<
+  RestoreIncidentMutation,
+  RestoreIncidentMutationVariables
+>;
+export const RestoreOffenderDocument = gql`
+  mutation restoreOffender($id: String!, $recycledId: String!) {
+    restoreOffender(where: { id: $id }, data: { id: $recycledId }) {
+      id
+      recycled
+    }
+  }
+`;
+export type RestoreOffenderMutationFn = Apollo.MutationFunction<
+  RestoreOffenderMutation,
+  RestoreOffenderMutationVariables
+>;
+
+/**
+ * __useRestoreOffenderMutation__
+ *
+ * To run a mutation, you first call `useRestoreOffenderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRestoreOffenderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [restoreOffenderMutation, { data, loading, error }] = useRestoreOffenderMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      recycledId: // value for 'recycledId'
+ *   },
+ * });
+ */
+export function useRestoreOffenderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RestoreOffenderMutation,
+    RestoreOffenderMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    RestoreOffenderMutation,
+    RestoreOffenderMutationVariables
+  >(RestoreOffenderDocument, options);
+}
+export type RestoreOffenderMutationHookResult = ReturnType<
+  typeof useRestoreOffenderMutation
+>;
+export type RestoreOffenderMutationResult =
+  Apollo.MutationResult<RestoreOffenderMutation>;
+export type RestoreOffenderMutationOptions = Apollo.BaseMutationOptions<
+  RestoreOffenderMutation,
+  RestoreOffenderMutationVariables
+>;
+export const RecycledItemDocument = gql`
+  query recycledItem($where: RecycledItemWhereUniqueInput!) {
+    recycledItem(where: $where) {
+      id
+      incident {
+        id
+        createdBy {
+          id
+          fullName
+          organisation
+        }
+        date
+        location {
+          id
+          full
+        }
+        recycled
+        subject
+      }
+      offender {
+        id
+        gender
+        incidents {
+          id
+          date
+          location {
+            id
+            full
+          }
+        }
+        name
+        race
+        recycled
+      }
+      scheme {
+        id
+      }
+      systemTask
+    }
+  }
+`;
+
+/**
+ * __useRecycledItemQuery__
+ *
+ * To run a query within a React component, call `useRecycledItemQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRecycledItemQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRecycledItemQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useRecycledItemQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    RecycledItemQuery,
+    RecycledItemQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<RecycledItemQuery, RecycledItemQueryVariables>(
+    RecycledItemDocument,
+    options
+  );
+}
+export function useRecycledItemLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    RecycledItemQuery,
+    RecycledItemQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<RecycledItemQuery, RecycledItemQueryVariables>(
+    RecycledItemDocument,
+    options
+  );
+}
+export type RecycledItemQueryHookResult = ReturnType<
+  typeof useRecycledItemQuery
+>;
+export type RecycledItemLazyQueryHookResult = ReturnType<
+  typeof useRecycledItemLazyQuery
+>;
+export type RecycledItemQueryResult = Apollo.QueryResult<
+  RecycledItemQuery,
+  RecycledItemQueryVariables
+>;
+export const RecycledItemsDocument = gql`
+  query recycledItems(
+    $schemeId: String!
+    $search: String
+    $order: RecycledItemOrderByWithRelationInput
+    $first: Int
+    $after: String
+    $dataType: [String!]
+  ) {
+    recycledItems(
+      schemeId: $schemeId
+      search: $search
+      order: $order
+      first: $first
+      after: $after
+      dataType: $dataType
+    ) {
+      id
+      deletedAt
+      deletedBy {
+        id
+        fullName
+        organisation
+      }
+      expiresAt
+      incident {
+        id
+        createdBy {
+          id
+          fullName
+          organisation
+        }
+        date
+        location {
+          id
+          full
+        }
+        recycled
+        subject
+      }
+      offender {
+        id
+        gender
+        incidents {
+          id
+          date
+          location {
+            id
+            full
+          }
+        }
+        name
+        race
+        recycled
+      }
+      scheme {
+        id
+      }
+      systemTask
+    }
+  }
+`;
+
+/**
+ * __useRecycledItemsQuery__
+ *
+ * To run a query within a React component, call `useRecycledItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRecycledItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRecycledItemsQuery({
+ *   variables: {
+ *      schemeId: // value for 'schemeId'
+ *      search: // value for 'search'
+ *      order: // value for 'order'
+ *      first: // value for 'first'
+ *      after: // value for 'after'
+ *      dataType: // value for 'dataType'
+ *   },
+ * });
+ */
+export function useRecycledItemsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    RecycledItemsQuery,
+    RecycledItemsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<RecycledItemsQuery, RecycledItemsQueryVariables>(
+    RecycledItemsDocument,
+    options
+  );
+}
+export function useRecycledItemsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    RecycledItemsQuery,
+    RecycledItemsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<RecycledItemsQuery, RecycledItemsQueryVariables>(
+    RecycledItemsDocument,
+    options
+  );
+}
+export type RecycledItemsQueryHookResult = ReturnType<
+  typeof useRecycledItemsQuery
+>;
+export type RecycledItemsLazyQueryHookResult = ReturnType<
+  typeof useRecycledItemsLazyQuery
+>;
+export type RecycledItemsQueryResult = Apollo.QueryResult<
+  RecycledItemsQuery,
+  RecycledItemsQueryVariables
 >;
 export const UpdateSchemeDocument = gql`
   mutation updateScheme($where: UniqueId!, $data: SchemeUpdateInput!) {

@@ -124,7 +124,7 @@ const EditProfile = ({
                 rules={[
                   {
                     required: true,
-                    message: 'Please enter a organisation for the user.',
+                    message: 'Please enter an organisation for the user.',
                   },
                 ]}
               >
@@ -232,7 +232,7 @@ const EditProfile = ({
           <Row gutter={20} style={{ margin: 20 }}>
             <Col span={15}>
               <Form.Item
-                label="Receive notifications for new messagess"
+                label="Receive notifications for new messages"
                 name="messagePush"
                 valuePropName="checked"
               >

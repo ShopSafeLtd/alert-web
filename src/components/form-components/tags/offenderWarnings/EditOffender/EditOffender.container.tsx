@@ -1,14 +1,14 @@
 import React from 'react';
 import View from './EditOffender.view';
-import useEditGroup from './useEditOffender';
+import useEditOffender from './useEditOffender';
 
 interface Props {
   onClose: () => void;
   offenderId: string;
 }
 
-const EditGroup = ({ onClose, offenderId }: Props): JSX.Element => {
-  const { onSubmit, data, loading, saving } = useEditGroup({
+const EditOffender = ({ onClose, offenderId }: Props): JSX.Element => {
+  const { onSubmit, data, loading, saving } = useEditOffender({
     onClose,
     offenderId,
   });
@@ -23,4 +23,4 @@ const EditGroup = ({ onClose, offenderId }: Props): JSX.Element => {
   );
 };
 
-export default EditGroup;
+export default EditOffender;

@@ -18,7 +18,7 @@ interface Props {
   saving: boolean;
 }
 
-const EditUser = ({
+const EditChat = ({
   onSubmit,
   onClose,
   data,
@@ -50,7 +50,7 @@ const EditUser = ({
             rules={[
               {
                 required: true,
-                message: 'Please enter a name for the Chat Group.',
+                message: 'Please enter a name for the chat group.',
               },
             ]}
           >
@@ -68,17 +68,7 @@ const EditUser = ({
 
       <Row gutter={16}>
         <Col span={23}>
-          <Form.Item
-            name="user"
-            label="users"
-            rules={[
-              {
-                required: true,
-                message:
-                  'Please selected at least one user for the chat group.',
-              },
-            ]}
-          >
+          <Form.Item name="user" label="users">
             <Select
               loading={usersLoading}
               disabled={saving}
@@ -117,4 +107,4 @@ const EditUser = ({
     </Form>
   );
 
-export default EditUser;
+export default EditChat;

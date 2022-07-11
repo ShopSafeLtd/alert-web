@@ -44,7 +44,7 @@ const useIncidentList = (): Return => {
     if (type === 'success') {
       notification.success({
         message: 'Success!',
-        description: 'The Incident warning has been deleted!',
+        description: 'The crime type has been deleted!',
         placement: 'bottomRight',
       });
     } else if (type === 'error') {
@@ -247,7 +247,7 @@ const useIncidentList = (): Return => {
 
   const deleteConfirm = (currentId: string) => {
     confirm({
-      title: 'Do you want to delete the Crime Types?',
+      title: 'Do you want to delete the crime type?',
       content: 'This action cannot be undone.',
       onOk() {
         openDelete(currentId);

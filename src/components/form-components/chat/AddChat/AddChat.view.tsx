@@ -40,16 +40,7 @@ const AddChat = ({
       </Col>
 
       <Col span={21}>
-        <Form.Item
-          name="description"
-          label="Description"
-          rules={[
-            {
-              required: true,
-              message: 'Please enter a description for the new chat group.',
-            },
-          ]}
-        >
+        <Form.Item name="description" label="Description">
           <Input disabled={saving} />
         </Form.Item>
       </Col>
@@ -57,16 +48,7 @@ const AddChat = ({
 
     <Row gutter={16}>
       <Col span={21}>
-        <Form.Item
-          name="users"
-          label="users"
-          rules={[
-            {
-              required: true,
-              message: 'Please selected at least one user for a chat group.',
-            },
-          ]}
-        >
+        <Form.Item name="users" label="users">
           <Select
             loading={usersLoading}
             mode="multiple"

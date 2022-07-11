@@ -57,6 +57,7 @@ const useGroupDetail = (): Return => {
     },
     onError: () => {
       openNotification('error');
+      setSaving(false);
     },
   });
 

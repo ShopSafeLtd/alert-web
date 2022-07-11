@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Row, Col, Input, Drawer, Button } from 'antd';
+import { Table, Row, Col, Input, Drawer, Button, Typography } from 'antd';
 import {
   DeleteOutlined,
   EditOutlined,
@@ -74,6 +74,17 @@ const OffenderList = ({
           title: 'Name',
           dataIndex: 'name',
           width: 300,
+          render: (value, record) => (
+            <Typography.Link
+              disabled={saving}
+              onClick={() => {
+                setOffenderId(record.key);
+                toggleEditOffender();
+              }}
+            >
+              {value}
+            </Typography.Link>
+          ),
         },
         {
           key: 'description',

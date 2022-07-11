@@ -2,7 +2,7 @@ import React from 'react';
 import { ChatQuery } from 'graphql/generated';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
-import { Button, PageHeader, Card, Table, Drawer, Skeleton } from 'antd';
+import { Button, PageHeader, Card, Table, Drawer } from 'antd';
 import EditChat from 'components/form-components/chat/EditChat';
 import { Link } from 'react-router-dom';
 
@@ -50,42 +50,40 @@ const ChatDetail = ({
       ]}
     />
     <Card>
-      {loading ? (
-        <Skeleton />
-      ) : (
-        <Table
-          size="small"
-          loading={loading}
-          pagination={{
-            defaultPageSize: 20,
-            pageSize: 20,
-          }}
-          columns={[
-            {
-              key: 'name',
-              title: 'Name',
-              dataIndex: 'name',
-              render: (value, record) => (
-                <Link to={`/app/scheme-settings/users/view/${record.key}`}>
-                  {value}
-                </Link>
-              ),
-            },
-            {
-              key: 'organisation',
-              title: 'organisation',
-              dataIndex: 'organisation',
-            },
-          ]}
-          dataSource={data?.chat?.members
-            .map(({ user }) => user)
-            .map(({ id, fullName, organisation }) => ({
-              key: id,
-              name: fullName,
-              organisation,
-            }))}
-        />
-      )}
+      <Table
+        size="small"
+        loading={loading}
+        pagination={{
+          defaultPageSize: 20,
+          pageSize: 20,
+        }}
+        columns={[
+          {
+            key: 'name',
+            title: 'Name',
+            dataIndex: 'name',
+            width: 300,
+            render: (value, record) => (
+              <Link to={`/app/scheme-settings/users/view/${record.key}`}>
+                {value}
+              </Link>
+            ),
+          },
+          {
+            key: 'organisation',
+            title: 'organisation',
+            dataIndex: 'organisation',
+          },
+        ]}
+        dataSource={data?.chat?.members
+          .map(({ user }) => user)
+          .map(({ id, fullName, organisation }) => ({
+            key: id,
+            name: fullName,
+            organisation,
+          }))}
+      />
+
       <Drawer
         title="Edit Chat Group Details"
         visible={editChat}

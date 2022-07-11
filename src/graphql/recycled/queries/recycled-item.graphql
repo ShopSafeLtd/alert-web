@@ -1,0 +1,39 @@
+query recycledItem($where: RecycledItemWhereUniqueInput!) {
+  recycledItem(where: $where) {
+    id
+    incident {
+      id
+      createdBy {
+        id
+        fullName
+        organisation
+      }
+      date
+      location {
+        id
+        full
+      }
+      recycled
+      subject
+    }
+    offender {
+      id
+      gender
+      incidents {
+        id
+        date
+        location {
+          id
+          full
+        }
+      }
+      name
+      race
+      recycled
+    }
+    scheme {
+      id
+    }
+    systemTask
+  }
+}

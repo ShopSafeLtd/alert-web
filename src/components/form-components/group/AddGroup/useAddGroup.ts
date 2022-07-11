@@ -36,7 +36,7 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
     if (type === 'success') {
       notification.success({
         message: 'Success!',
-        description: 'The Group has been added! ',
+        description: 'The group has been added! ',
         placement: 'bottomRight',
       });
     } else if (type === 'error') {

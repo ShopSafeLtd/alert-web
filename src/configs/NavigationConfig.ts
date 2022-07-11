@@ -87,7 +87,7 @@ const adminOnlyItems: NavItem[] = [
       {
         key: 'chat-groups',
         path: `${APP_PREFIX_PATH}/scheme-settings/chat-groups`,
-        title: 'User Management',
+        title: 'Chat Groups',
         icon: faCommentLines,
         breadcrumb: true,
         submenu: [],

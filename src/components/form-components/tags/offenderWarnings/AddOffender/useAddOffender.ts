@@ -33,7 +33,7 @@ const useAddOffender = ({ onClose, update }: Props): Return => {
     if (type === 'success') {
       notification.success({
         message: 'Success!',
-        description: 'The Offender Warning has been added! ',
+        description: 'The offender warning has been added! ',
         placement: 'bottomRight',
       });
     } else if (type === 'error') {
@@ -63,7 +63,7 @@ const useAddOffender = ({ onClose, update }: Props): Return => {
       variables: {
         data: {
           name: data.name,
-          description: data.description,
+          description: data.description || '',
           scheme: {
             connect: {
               id: schemeId,

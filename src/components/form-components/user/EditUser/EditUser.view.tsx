@@ -92,7 +92,7 @@ const EditUser = ({
             rules={[
               {
                 required: true,
-                message: 'Please enter a name for the  user.',
+                message: 'Please enter a name for the user.',
               },
             ]}
           >
@@ -122,7 +122,7 @@ const EditUser = ({
             rules={[
               {
                 required: true,
-                message: 'Please enter a organisation for the user.',
+                message: 'Please enter an organisation for the user.',
               },
             ]}
           >

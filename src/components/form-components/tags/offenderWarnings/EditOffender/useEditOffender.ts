@@ -1,5 +1,4 @@
 import { useState } from 'react';
-// import { useStoreState } from 'state';
 import { TagQuery, useUpdateTagMutation, useTagQuery } from 'graphql/generated';
 import { notification } from 'antd';
 
@@ -19,15 +18,14 @@ interface Return {
 }
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
-const useEditTag = ({ onClose, offenderId }: Props): Return => {
-  // const schemeId = useStoreState((state) => state.scheme.id);
+const useEditOffender = ({ onClose, offenderId }: Props): Return => {
   const [saving, setSaving] = useState(false);
 
   const openNotification = (type: NotificationType) => {
     if (type === 'success') {
       notification.success({
         message: 'Success!',
-        description: 'The user has been updated! ',
+        description: 'The offender warning has been updated! ',
         placement: 'bottomRight',
       });
     } else if (type === 'error') {
@@ -55,6 +53,7 @@ const useEditTag = ({ onClose, offenderId }: Props): Return => {
     },
     onError: () => {
       openNotification('error');
+      setSaving(false);
     },
   });
 
@@ -82,4 +81,4 @@ const useEditTag = ({ onClose, offenderId }: Props): Return => {
   };
 };
 
-export default useEditTag;
+export default useEditOffender;

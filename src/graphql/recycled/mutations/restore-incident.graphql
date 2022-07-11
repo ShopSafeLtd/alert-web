@@ -1,0 +1,6 @@
+mutation restoreIncident($id: String!, $recycledId: String!) {
+  restoreIncident(where: { id: $id }, data: { id: $recycledId }) {
+    id
+    recycled
+  }
+}

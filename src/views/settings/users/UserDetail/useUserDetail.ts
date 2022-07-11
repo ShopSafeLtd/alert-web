@@ -78,7 +78,6 @@ const useUserDetail = (): Return => {
     onCompleted: () => {
       setSaving(false);
       openNotification('success');
-      navigate('users');
     },
     onError: () => {
       openNotification('error');
@@ -97,7 +96,7 @@ const useUserDetail = (): Return => {
   };
   const inviteConfirm = () => {
     confirm({
-      title: 'Do you Want to send the invite?',
+      title: 'Do you want to send the invite?',
       content:
         'Resending the invite will reset the users password and send them an new invite containing the new password.',
       onOk() {
@@ -160,7 +159,7 @@ const useUserDetail = (): Return => {
   const [deleteUserFromScheme] = useDeleteUserFromSchemeMutation({
     onCompleted: () => {
       setSaving(false);
-      window.history.back();
+      navigate('users');
       openNotification('success');
     },
     onError: () => {

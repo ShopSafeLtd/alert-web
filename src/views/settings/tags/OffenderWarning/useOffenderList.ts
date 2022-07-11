@@ -247,7 +247,7 @@ const useOffenderList = (): Return => {
 
   const deleteConfirm = (currentId: string) => {
     confirm({
-      title: 'Do you want to delete the Offender Warning?',
+      title: 'Do you want to delete the offender warning?',
       content: 'This action cannot be undone.',
       onOk() {
         openDelete(currentId);

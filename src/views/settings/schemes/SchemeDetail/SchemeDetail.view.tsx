@@ -2,7 +2,6 @@ import React from 'react';
 import { SchemeQuery } from 'graphql/generated';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import {
-  PageHeader,
   Card,
   Skeleton,
   Switch,
@@ -61,7 +60,12 @@ const GroupDetail = ({
   fileList,
 }: Props): JSX.Element => (
   <div className="list-view">
-    <PageHeader onBack={() => window.history.back()} title="Scheme Settings" />
+    <Row style={{ margin: 15 }}>
+      <Col>
+        <Title level={3}>Scheme Settings</Title>
+      </Col>
+    </Row>
+
     {loading ? (
       <Skeleton />
     ) : (

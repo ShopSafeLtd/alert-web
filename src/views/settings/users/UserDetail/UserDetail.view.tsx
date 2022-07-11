@@ -16,7 +16,6 @@ import {
   Card,
   Descriptions,
   Empty,
-  Skeleton,
   Drawer,
 } from 'antd';
 import EditUser from 'components/form-components/user/EditUser';
@@ -91,84 +90,81 @@ const userDetail = ({
       ]}
     />
 
-    <Card>
-      {loading ? (
-        <Skeleton />
-      ) : (
-        <div>
-          <Descriptions
-            title="Details"
-            extra={
-              <Button icon={<EditOutlined />} onClick={toggleEditUser}>
-                Edit Details
-              </Button>
-            }
-          >
-            <Descriptions.Item label="Full Name">
-              {data?.user?.fullName}
-            </Descriptions.Item>
-            <Descriptions.Item label="Organisation">
-              {data?.user?.organisation}
-            </Descriptions.Item>
-            <Descriptions.Item label="Email Address">
-              {data?.user?.email}
-            </Descriptions.Item>
+    <Card loading={loading}>
+      <div>
+        <Descriptions
+          title="Details"
+          extra={
+            <Button icon={<EditOutlined />} onClick={toggleEditUser}>
+              Edit Details
+            </Button>
+          }
+        >
+          <Descriptions.Item label="Full Name">
+            {data?.user?.fullName}
+          </Descriptions.Item>
+          <Descriptions.Item label="Organisation">
+            {data?.user?.organisation}
+          </Descriptions.Item>
+          <Descriptions.Item label="Email Address">
+            {data?.user?.email}
+          </Descriptions.Item>
 
-            <Descriptions.Item label="Role">
-              {data?.user?.schemes && RoleValues[data?.user?.schemes[0].role]}
+          <Descriptions.Item label="Role">
+            {data?.user?.schemes && RoleValues[data?.user?.schemes[0].role]}
+          </Descriptions.Item>
+          {data?.user?.addresses && data.user.addresses.length > 0 && (
+            <Descriptions.Item label="Address">
+              {data?.user?.addresses[0].building &&
+                `${data?.user?.addresses[0].building}, `}
+              {data?.user?.addresses[0].street &&
+                `${data?.user?.addresses[0].street}, `}
+              {data?.user?.addresses[0].townCity &&
+                `${data?.user?.addresses[0].townCity}, `}
+              {data?.user?.addresses[0].county &&
+                `${data?.user?.addresses[0].county}, `}
+              {data?.user?.addresses[0].postcode &&
+                `${data?.user?.addresses[0].postcode}`}
             </Descriptions.Item>
-            {data?.user?.addresses && data.user.addresses.length > 0 && (
-              <Descriptions.Item label="Address">
-                {data?.user?.addresses[0].building &&
-                  `${data?.user?.addresses[0].building}, `}
-                {data?.user?.addresses[0].street &&
-                  `${data?.user?.addresses[0].street}, `}
-                {data?.user?.addresses[0].townCity &&
-                  `${data?.user?.addresses[0].townCity}, `}
-                {data?.user?.addresses[0].county &&
-                  `${data?.user?.addresses[0].county}, `}
-                {data?.user?.addresses[0].postcode &&
-                  `${data?.user?.addresses[0].postcode}`}
-              </Descriptions.Item>
-            )}
-          </Descriptions>
-          <Descriptions title="Groups">
-            {data?.user?.groups && data?.user?.groups.length > 0 ? (
-              <Descriptions.Item>
-                {data?.user?.groups
-                  .map(({ name }, index) => (index === 0 ? name : ` ${name}`))
-                  .toString()}
-              </Descriptions.Item>
-            ) : (
-              <Descriptions.Item>
-                <Empty
-                  image={Empty.PRESENTED_IMAGE_SIMPLE}
-                  style={{ marginTop: -2, marginLeft: 5 }}
-                  description="No Data"
-                />
-              </Descriptions.Item>
-            )}
-          </Descriptions>
-          <Descriptions title="Chat Groups">
-            {data?.user?.chats && data?.user?.chats.length > 0 ? (
-              <Descriptions.Item>
-                {data?.user?.chats
-                  .map(({ chat }) => chat)
-                  .map(({ name }, index) => (index === 0 ? name : ` ${name}`))
-                  .toString()}
-              </Descriptions.Item>
-            ) : (
-              <Descriptions.Item>
-                <Empty
-                  image={Empty.PRESENTED_IMAGE_SIMPLE}
-                  style={{ marginTop: -5, marginLeft: 10 }}
-                  description="No Data"
-                />
-              </Descriptions.Item>
-            )}
-          </Descriptions>
-        </div>
-      )}
+          )}
+        </Descriptions>
+        <Descriptions title="Groups">
+          {data?.user?.groups && data?.user?.groups.length > 0 ? (
+            <Descriptions.Item>
+              {data?.user?.groups
+                .map(({ name }, index) => (index === 0 ? name : ` ${name}`))
+                .toString()}
+            </Descriptions.Item>
+          ) : (
+            <Descriptions.Item>
+              <Empty
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                style={{ marginTop: -2, marginLeft: 5 }}
+                description="No Data"
+              />
+            </Descriptions.Item>
+          )}
+        </Descriptions>
+        <Descriptions title="Chat Groups">
+          {data?.user?.chats && data?.user?.chats.length > 0 ? (
+            <Descriptions.Item>
+              {data?.user?.chats
+                .map(({ chat }) => chat)
+                .map(({ name }, index) => (index === 0 ? name : ` ${name}`))
+                .toString()}
+            </Descriptions.Item>
+          ) : (
+            <Descriptions.Item>
+              <Empty
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                style={{ marginTop: -5, marginLeft: 10 }}
+                description="No Data"
+              />
+            </Descriptions.Item>
+          )}
+        </Descriptions>
+      </div>
+
       <Drawer
         title="Edit User Details"
         visible={editUser}

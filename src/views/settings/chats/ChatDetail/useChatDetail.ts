@@ -57,6 +57,7 @@ const useChatDetail = (): Return => {
     },
     onError: () => {
       openNotification('error');
+      setSaving(false);
     },
   });
 

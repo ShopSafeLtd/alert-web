@@ -9,6 +9,7 @@ import {
 
 import { useStoreState } from 'state';
 import { MutationUpdaterFn } from '@apollo/client';
+import { notification } from 'antd';
 
 interface FormData {
   name: string;
@@ -23,13 +24,28 @@ interface Return {
   usersData: ListSchemeUsersQuery | undefined;
   usersLoading: boolean;
   saving: boolean;
-  setSaving: (value: boolean) => void;
 }
+type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const useAddChat = ({ onClose, update }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
 
+  const openNotification = (type: NotificationType) => {
+    if (type === 'success') {
+      notification.success({
+        message: 'Success!',
+        description: 'The Chat Group has been added! ',
+        placement: 'bottomRight',
+      });
+    } else if (type === 'error') {
+      notification.error({
+        message: 'error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
+    }
+  };
   const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -60,6 +76,11 @@ const useAddChat = ({ onClose, update }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       onClose();
+      openNotification('success');
+    },
+    onError: () => {
+      setSaving(false);
+      openNotification('error');
     },
     update,
   });
@@ -70,7 +91,7 @@ const useAddChat = ({ onClose, update }: Props): Return => {
       variables: {
         data: {
           name: data.name,
-          description: data.description,
+          description: data.description || '',
           scheme: {
             connect: {
               id: schemeId,
@@ -86,7 +107,6 @@ const useAddChat = ({ onClose, update }: Props): Return => {
     usersData,
     usersLoading,
     saving,
-    setSaving,
   };
 };
 export default useAddChat;

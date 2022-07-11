@@ -18,7 +18,7 @@ interface Props {
   saving: boolean;
 }
 
-const EditUser = ({
+const EditGroup = ({
   onSubmit,
   onClose,
   data,
@@ -50,7 +50,7 @@ const EditUser = ({
             rules={[
               {
                 required: true,
-                message: 'Please enter a name for the Group.',
+                message: 'Please enter a name for the group.',
               },
             ]}
           >
@@ -73,7 +73,7 @@ const EditUser = ({
             rules={[
               {
                 required: true,
-                message: 'Please selected at least one group for the user.',
+                message: 'Please selected at least one user for the group.',
               },
             ]}
           >
@@ -115,4 +115,4 @@ const EditUser = ({
     </Form>
   );
 
-export default EditUser;
+export default EditGroup;

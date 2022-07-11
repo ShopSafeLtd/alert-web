@@ -1,7 +1,7 @@
 import React from 'react';
 import { GroupQuery } from 'graphql/generated';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, PageHeader, Card, Table, Drawer, Skeleton } from 'antd';
+import { Button, PageHeader, Card, Table, Drawer } from 'antd';
 import EditGroup from 'components/form-components/group/EditGroup';
 import { Link } from 'react-router-dom';
 
@@ -49,40 +49,38 @@ const GroupDetail = ({
       ]}
     />
     <Card>
-      {loading ? (
-        <Skeleton />
-      ) : (
-        <Table
-          size="small"
-          loading={loading}
-          pagination={{
-            defaultPageSize: 20,
-            pageSize: 20,
-          }}
-          columns={[
-            {
-              key: 'name',
-              title: 'Name',
-              dataIndex: 'name',
-              render: (value, record) => (
-                <Link to={`/app/scheme-settings/users/view/${record.key}`}>
-                  {value}
-                </Link>
-              ),
-            },
-            {
-              key: 'organisation',
-              title: 'organisation',
-              dataIndex: 'organisation',
-            },
-          ]}
-          dataSource={data?.group?.users.map((user) => ({
-            key: user.id,
-            name: user.fullName,
-            organisation: user.organisation,
-          }))}
-        />
-      )}
+      <Table
+        size="small"
+        loading={loading}
+        pagination={{
+          defaultPageSize: 20,
+          pageSize: 20,
+        }}
+        columns={[
+          {
+            key: 'name',
+            title: 'Name',
+            dataIndex: 'name',
+            width: 300,
+            render: (value, record) => (
+              <Link to={`/app/scheme-settings/users/view/${record.key}`}>
+                {value}
+              </Link>
+            ),
+          },
+          {
+            key: 'organisation',
+            title: 'organisation',
+            dataIndex: 'organisation',
+          },
+        ]}
+        dataSource={data?.group?.users.map((user) => ({
+          key: user.id,
+          name: user.fullName,
+          organisation: user.organisation,
+        }))}
+      />
+
       <Drawer
         title="Edit Group Details"
         visible={editGroup}
