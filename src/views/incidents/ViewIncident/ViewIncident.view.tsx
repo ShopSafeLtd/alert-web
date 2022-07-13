@@ -12,6 +12,7 @@ import {
   Divider,
   Skeleton,
   Button,
+  // Drawer,
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -29,6 +30,8 @@ import {
 import { SRLWrapper } from 'simple-react-lightbox';
 import IncidentSideList from 'components/incidents/IncidentSideList';
 import { Link } from 'react-router-dom';
+
+const { Title, Text, Paragraph } = Typography;
 
 interface Props {
   data: ViewIncidentQuery | undefined;
@@ -104,12 +107,8 @@ const ViewIncident = ({
                           <Skeleton />
                         ) : (
                           <>
-                            <Typography.Title level={4}>
-                              {data?.incident?.subject}
-                            </Typography.Title>
-                            <Typography.Text>
-                              {data?.incident?.description}
-                            </Typography.Text>
+                            <Title level={4}>{data?.incident?.subject}</Title>
+                            <Text>{data?.incident?.description}</Text>
                             <Row className="incident-tags">
                               {data?.incident?.crimeTypes.map((crimeType) => (
                                 <Col key={crimeType.id}>
@@ -211,12 +210,12 @@ const ViewIncident = ({
                                     flex={1}
                                     className="incident-offender-content"
                                   >
-                                    <Typography.Text
+                                    <Text
                                       className="incident-offender-name"
                                       strong
                                     >
                                       {offender.name}
-                                    </Typography.Text>
+                                    </Text>
                                     <Descriptions size="small" column={1}>
                                       <Descriptions.Item label="Gender">
                                         {getOffenderGender(offender.gender)}
@@ -240,9 +239,9 @@ const ViewIncident = ({
                         </div>
                       ) : (
                         <div className="incident-offenders-empty">
-                          <Typography.Paragraph>
+                          <Paragraph>
                             There are no offenders on this incident.
-                          </Typography.Paragraph>
+                          </Paragraph>
                           {addOffenderRights && (
                             <div>
                               <Button
@@ -259,6 +258,25 @@ const ViewIncident = ({
                           )}
                         </div>
                       )}
+                      <div className="incident-offenders-empty">
+                        <Paragraph>
+                          There are no offenders on this incident.
+                        </Paragraph>
+                        {addOffenderRights && (
+                          <div>
+                            <Button
+                              icon={
+                                <FontAwesomeIcon
+                                  className="button-icon"
+                                  icon={faPlus}
+                                />
+                              }
+                            >
+                              Link Offender
+                            </Button>
+                          </div>
+                        )}
+                      </div>
                     </Col>
                   </Row>
                 </div>
@@ -277,6 +295,14 @@ const ViewIncident = ({
       }
       options={{ buttons: { showDownloadButton: false } }}
     />
+    {/* <Drawer
+      title="Edit Crime Types"
+      visible={editIncident}
+      width="400"
+      onClose={toggleEditIncident}
+    >
+      <EditIncident incidentId={incidentId} onClose={toggleEditIncident} />
+    </Drawer> */}
   </div>
 );
 
