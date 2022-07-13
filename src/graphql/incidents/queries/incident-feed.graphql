@@ -28,6 +28,28 @@ query incidentFeed(
     }
     approved
     uploaded
+    location {
+      id
+      full
+    }
+    createdBy {
+      id
+      fullName
+      organisation
+    }
+    images {
+      id
+      url
+      optimised
+      card
+      offenders {
+        id
+      }
+    }
+    groups {
+      id
+      name
+    }
     offenders {
       id
       createdAt
@@ -54,28 +76,6 @@ query incidentFeed(
         id
         name
       }
-    }
-    location {
-      id
-      full
-    }
-    createdBy {
-      id
-      fullName
-      organisation
-    }
-    images {
-      id
-      url
-      optimised
-      card
-      offenders {
-        id
-      }
-    }
-    groups {
-      id
-      name
     }
   }
 }

@@ -1,0 +1,125 @@
+.view-offender {
+  height: calc(100vh - 70px);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .offender-images {
+    width: 100%;
+    height: 180px;
+    padding: 0px 10px;
+    @media only screen and (min-height: 800px) {
+      height: 250px;
+    }
+  }
+
+  .offender-image {
+    height: 160px;
+    width: 160px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+      height: 180px;
+      width: 180px;
+      @media only screen and (min-height: 800px) {
+        height: 250px;
+        width: 250px;
+      }
+    }
+    @media only screen and (min-height: 800px) {
+      height: 230px;
+      width: 230px;
+    }
+  }
+
+  .offender-content {
+    flex: 1;
+    background-color: #fff;
+  }
+
+  .ant-tabs-bottom > .ant-tabs-nav,
+  .ant-tabs-bottom > div > .ant-tabs-nav,
+  .ant-tabs-top > .ant-tabs-nav,
+  .ant-tabs-top > div > .ant-tabs-nav {
+    margin: 0px;
+  }
+
+  .offender-details-main {
+    border-right: 1px solid rgb(237, 242, 249);
+    padding: 15px;
+  }
+
+  .offender-descriptions {
+    margin-top: 10px;
+    .ant-skeleton-title {
+      margin: 0px;
+    }
+
+    .ant-descriptions-item {
+      padding-bottom: 10px;
+    }
+  }
+
+  .offender-description-icon {
+    margin-right: 5px;
+    color: rgb(222, 68, 54);
+  }
+
+  .offender-tags {
+    margin-top: 10px;
+    margin-bottom: 5px;
+  }
+
+  .offender-incidents-title {
+    margin-top: 10px;
+    margin-left: 10px;
+  }
+
+  .offender-incidents {
+    margin-top: 0px;
+  }
+
+  .offender-incident {
+    background-color: #fff;
+
+    &:hover {
+      background-color: #fafafa;
+    }
+  }
+
+  .offender-incident-content {
+    padding: 10px 20px;
+  }
+
+  .incident-image-skeleton {
+    height: 100px;
+    width: 100px;
+  }
+
+  .incident-image {
+    height: 160px;
+    width: 140px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .ant-divider-horizontal {
+    margin: 0px;
+  }
+
+  .offender-incident-name {
+    font-size: 14px;
+  }
+
+  .offender-incidents-empty {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+}

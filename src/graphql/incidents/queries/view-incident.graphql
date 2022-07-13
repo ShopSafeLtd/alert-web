@@ -1,9 +1,5 @@
-query ViewIncident(
-  $where: IncidentWhereUniqueInput!,
-) {
-  incident(
-    where: $where,
-  ) {
+query ViewIncident($where: IncidentWhereUniqueInput!) {
+  incident(where: $where) {
     id
     subject
     description

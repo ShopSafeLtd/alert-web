@@ -6115,6 +6115,12 @@ export type ListIncidents = {
   total: Scalars['Int'];
 };
 
+export type ListOffenders = {
+  __typename?: 'ListOffenders';
+  offenders: Array<Offender>;
+  total: Scalars['Int'];
+};
+
 export type Message = {
   __typename?: 'Message';
   actions: Array<Action>;
@@ -6591,6 +6597,7 @@ export type Mutation = {
   recycleOffender?: Maybe<Offender>;
   refreshAuth?: Maybe<RefreshAuth>;
   registerPushToken?: Maybe<ExpoPushToken>;
+  /** Uses the auth0Id or userId to generate a reset password token and sends it to the user */
   resetPassword?: Maybe<ResetPassword>;
   restoreAllRecycledItems?: Maybe<SystemTask>;
   restoreIncident?: Maybe<Incident>;
@@ -8707,6 +8714,7 @@ export type Query = {
   incidentFeed?: Maybe<Array<Maybe<Incident>>>;
   incidents: Array<Incident>;
   listIncidents?: Maybe<ListIncidents>;
+  listOffenders?: Maybe<ListOffenders>;
   message?: Maybe<Message>;
   messages: Array<Message>;
   offender?: Maybe<Offender>;
@@ -8842,6 +8850,15 @@ export type QueryListIncidentsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<IncidentWhereInput>;
+};
+
+export type QueryListOffendersArgs = {
+  after?: InputMaybe<OffenderWhereUniqueInput>;
+  order?: InputMaybe<OffenderOrderByWithRelationInput>;
+  scheme: SchemeWhereUniqueInput;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<OffenderWhereInput>;
 };
 
 export type QueryMessageArgs = {
@@ -9360,7 +9377,8 @@ export type ResetPassword = {
 };
 
 export type ResetPasswordData = {
-  email: Scalars['String'];
+  auth0Id?: InputMaybe<Scalars['String']>;
+  userId?: InputMaybe<Scalars['String']>;
 };
 
 export enum Role {
@@ -14108,6 +14126,26 @@ export type IncidentFeedQuery = {
     approved?: boolean | null;
     uploaded?: boolean | null;
     crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    location?: {
+      __typename?: 'Address';
+      id: string;
+      full?: string | null;
+    } | null;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      organisation: string;
+    };
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      card?: string | null;
+      offenders: Array<{ __typename?: 'Offender'; id: string }>;
+    }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
@@ -14134,26 +14172,6 @@ export type IncidentFeedQuery = {
       }>;
       tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
     }>;
-    location?: {
-      __typename?: 'Address';
-      id: string;
-      full?: string | null;
-    } | null;
-    createdBy: {
-      __typename?: 'User';
-      id: string;
-      fullName: string;
-      organisation: string;
-    };
-    images: Array<{
-      __typename?: 'Image';
-      id: string;
-      url?: string | null;
-      optimised?: string | null;
-      card?: string | null;
-      offenders: Array<{ __typename?: 'Offender'; id: string }>;
-    }>;
-    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
   } | null> | null;
 };
 
@@ -14272,6 +14290,228 @@ export type DeleteOffenderMutationVariables = Exact<{
 export type DeleteOffenderMutation = {
   __typename?: 'Mutation';
   deleteOffender?: { __typename?: 'Offender'; id: string } | null;
+};
+
+export type ListOffendersQueryVariables = Exact<{
+  scheme: SchemeWhereUniqueInput;
+  where?: InputMaybe<OffenderWhereInput>;
+  order?: InputMaybe<OffenderOrderByWithRelationInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type ListOffendersQuery = {
+  __typename?: 'Query';
+  listOffenders?: {
+    __typename?: 'ListOffenders';
+    total: number;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      createdAt: any;
+      updatedAt: any;
+      age?: Age | null;
+      build?: Build | null;
+      dateOfBirth?: any | null;
+      dateSource?: string | null;
+      hair?: string | null;
+      gender?: Gender | null;
+      name?: string | null;
+      race?: Race | null;
+      peculiarities?: string | null;
+      approved?: boolean | null;
+      active?: boolean | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+      }>;
+      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        organisation: string;
+      };
+      incidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+        location?: {
+          __typename?: 'Address';
+          id: string;
+          full?: string | null;
+        } | null;
+        createdBy: {
+          __typename?: 'User';
+          id: string;
+          fullName: string;
+          organisation: string;
+        };
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          optimised?: string | null;
+        }>;
+      }>;
+    }>;
+  } | null;
+};
+
+export type OffenderFeedQueryVariables = Exact<{
+  userId: Scalars['String'];
+  schemeId: Scalars['String'];
+  search?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<OffenderOrderByWithRelationInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  cursor?: InputMaybe<Scalars['String']>;
+  active?: InputMaybe<Scalars['Boolean']>;
+  banned?: InputMaybe<Scalars['Boolean']>;
+  groups?: InputMaybe<
+    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
+  >;
+  tags?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+  ethnicity?: InputMaybe<
+    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
+  >;
+  sex?: InputMaybe<
+    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
+  >;
+  approved?: InputMaybe<Scalars['Boolean']>;
+}>;
+
+export type OffenderFeedQuery = {
+  __typename?: 'Query';
+  offenderFeed?: Array<{
+    __typename?: 'Offender';
+    id: string;
+    createdAt: any;
+    updatedAt: any;
+    age?: Age | null;
+    build?: Build | null;
+    dateOfBirth?: any | null;
+    dateSource?: string | null;
+    gender?: Gender | null;
+    hair?: string | null;
+    name?: string | null;
+    peculiarities?: string | null;
+    race?: Race | null;
+    approved?: boolean | null;
+    uploaded?: boolean | null;
+    active?: boolean | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      card?: string | null;
+    }>;
+    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      organisation: string;
+    };
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      createdAt: any;
+      updatedAt: any;
+      subject?: string | null;
+      description: string;
+      dayTime?: string | null;
+      approved?: boolean | null;
+      uploaded?: boolean | null;
+      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      location?: {
+        __typename?: 'Address';
+        id: string;
+        full?: string | null;
+      } | null;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        organisation: string;
+      };
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+        offenders: Array<{ __typename?: 'Offender'; id: string }>;
+      }>;
+    }>;
+  } | null> | null;
+};
+
+export type ViewOffenderQueryVariables = Exact<{
+  where: OffenderWhereUniqueInput;
+}>;
+
+export type ViewOffenderQuery = {
+  __typename?: 'Query';
+  offender?: {
+    __typename?: 'Offender';
+    id: string;
+    createdAt: any;
+    updatedAt: any;
+    age?: Age | null;
+    build?: Build | null;
+    dateOfBirth?: any | null;
+    dateSource?: string | null;
+    hair?: string | null;
+    gender?: Gender | null;
+    name?: string | null;
+    race?: Race | null;
+    peculiarities?: string | null;
+    approved?: boolean | null;
+    active?: boolean | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      optimised?: string | null;
+    }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      organisation: string;
+    };
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+      description: string;
+      dayTime?: string | null;
+      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      location?: {
+        __typename?: 'Address';
+        id: string;
+        full?: string | null;
+      } | null;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        organisation: string;
+      };
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+      }>;
+    }>;
+  } | null;
 };
 
 export type RestoreIncidentMutationVariables = Exact<{
@@ -15444,6 +15684,28 @@ export const IncidentFeedDocument = gql`
       }
       approved
       uploaded
+      location {
+        id
+        full
+      }
+      createdBy {
+        id
+        fullName
+        organisation
+      }
+      images {
+        id
+        url
+        optimised
+        card
+        offenders {
+          id
+        }
+      }
+      groups {
+        id
+        name
+      }
       offenders {
         id
         createdAt
@@ -15470,28 +15732,6 @@ export const IncidentFeedDocument = gql`
           id
           name
         }
-      }
-      location {
-        id
-        full
-      }
-      createdBy {
-        id
-        fullName
-        organisation
-      }
-      images {
-        id
-        url
-        optimised
-        card
-        offenders {
-          id
-        }
-      }
-      groups {
-        id
-        name
       }
     }
   }
@@ -15816,6 +16056,414 @@ export type DeleteOffenderMutationResult =
 export type DeleteOffenderMutationOptions = Apollo.BaseMutationOptions<
   DeleteOffenderMutation,
   DeleteOffenderMutationVariables
+>;
+export const ListOffendersDocument = gql`
+  query listOffenders(
+    $scheme: SchemeWhereUniqueInput!
+    $where: OffenderWhereInput
+    $order: OffenderOrderByWithRelationInput
+    $take: Int
+    $skip: Int
+  ) {
+    listOffenders(
+      scheme: $scheme
+      where: $where
+      order: $order
+      take: $take
+      skip: $skip
+    ) {
+      offenders {
+        id
+        createdAt
+        updatedAt
+        age
+        build
+        dateOfBirth
+        dateSource
+        hair
+        gender
+        name
+        race
+        peculiarities
+        approved
+        active
+        images {
+          id
+          optimised
+        }
+        groups {
+          id
+          name
+        }
+        tags {
+          id
+          name
+        }
+        createdBy {
+          id
+          fullName
+          organisation
+        }
+        incidents {
+          id
+          subject
+          description
+          dayTime
+          crimeTypes {
+            id
+            name
+          }
+          location {
+            id
+            full
+          }
+          createdBy {
+            id
+            fullName
+            organisation
+          }
+          images {
+            id
+            optimised
+          }
+        }
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useListOffendersQuery__
+ *
+ * To run a query within a React component, call `useListOffendersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListOffendersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListOffendersQuery({
+ *   variables: {
+ *      scheme: // value for 'scheme'
+ *      where: // value for 'where'
+ *      order: // value for 'order'
+ *      take: // value for 'take'
+ *      skip: // value for 'skip'
+ *   },
+ * });
+ */
+export function useListOffendersQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListOffendersQuery,
+    ListOffendersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ListOffendersQuery, ListOffendersQueryVariables>(
+    ListOffendersDocument,
+    options
+  );
+}
+export function useListOffendersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListOffendersQuery,
+    ListOffendersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ListOffendersQuery, ListOffendersQueryVariables>(
+    ListOffendersDocument,
+    options
+  );
+}
+export type ListOffendersQueryHookResult = ReturnType<
+  typeof useListOffendersQuery
+>;
+export type ListOffendersLazyQueryHookResult = ReturnType<
+  typeof useListOffendersLazyQuery
+>;
+export type ListOffendersQueryResult = Apollo.QueryResult<
+  ListOffendersQuery,
+  ListOffendersQueryVariables
+>;
+export const OffenderFeedDocument = gql`
+  query offenderFeed(
+    $userId: String!
+    $schemeId: String!
+    $search: String
+    $order: OffenderOrderByWithRelationInput
+    $first: Int
+    $cursor: String
+    $active: Boolean
+    $banned: Boolean
+    $groups: [String]
+    $tags: [String!]
+    $ethnicity: [String]
+    $sex: [String]
+    $approved: Boolean
+  ) {
+    offenderFeed(
+      userId: $userId
+      schemeId: $schemeId
+      search: $search
+      order: $order
+      first: $first
+      after: $cursor
+      active: $active
+      banned: $banned
+      groups: $groups
+      tags: $tags
+      ethnicity: $ethnicity
+      sex: $sex
+      approved: $approved
+    ) {
+      id
+      createdAt
+      updatedAt
+      age
+      build
+      dateOfBirth
+      dateSource
+      gender
+      hair
+      name
+      peculiarities
+      race
+      approved
+      uploaded
+      active
+      images {
+        id
+        url
+        optimised
+        card
+      }
+      tags {
+        id
+        name
+      }
+      groups {
+        id
+        name
+      }
+      tags {
+        id
+        name
+      }
+      createdBy {
+        id
+        fullName
+        organisation
+      }
+      incidents {
+        id
+        createdAt
+        updatedAt
+        subject
+        description
+        dayTime
+        crimeTypes {
+          id
+          name
+        }
+        location {
+          id
+          full
+        }
+        createdBy {
+          id
+          fullName
+          organisation
+        }
+        images {
+          id
+          url
+          optimised
+          card
+          offenders {
+            id
+          }
+        }
+        approved
+        uploaded
+      }
+    }
+  }
+`;
+
+/**
+ * __useOffenderFeedQuery__
+ *
+ * To run a query within a React component, call `useOffenderFeedQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOffenderFeedQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOffenderFeedQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      schemeId: // value for 'schemeId'
+ *      search: // value for 'search'
+ *      order: // value for 'order'
+ *      first: // value for 'first'
+ *      cursor: // value for 'cursor'
+ *      active: // value for 'active'
+ *      banned: // value for 'banned'
+ *      groups: // value for 'groups'
+ *      tags: // value for 'tags'
+ *      ethnicity: // value for 'ethnicity'
+ *      sex: // value for 'sex'
+ *      approved: // value for 'approved'
+ *   },
+ * });
+ */
+export function useOffenderFeedQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    OffenderFeedQuery,
+    OffenderFeedQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OffenderFeedQuery, OffenderFeedQueryVariables>(
+    OffenderFeedDocument,
+    options
+  );
+}
+export function useOffenderFeedLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    OffenderFeedQuery,
+    OffenderFeedQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<OffenderFeedQuery, OffenderFeedQueryVariables>(
+    OffenderFeedDocument,
+    options
+  );
+}
+export type OffenderFeedQueryHookResult = ReturnType<
+  typeof useOffenderFeedQuery
+>;
+export type OffenderFeedLazyQueryHookResult = ReturnType<
+  typeof useOffenderFeedLazyQuery
+>;
+export type OffenderFeedQueryResult = Apollo.QueryResult<
+  OffenderFeedQuery,
+  OffenderFeedQueryVariables
+>;
+export const ViewOffenderDocument = gql`
+  query ViewOffender($where: OffenderWhereUniqueInput!) {
+    offender(where: $where) {
+      id
+      createdAt
+      updatedAt
+      age
+      build
+      dateOfBirth
+      dateSource
+      hair
+      gender
+      name
+      race
+      peculiarities
+      approved
+      active
+      images {
+        id
+        optimised
+      }
+      groups {
+        id
+        name
+      }
+      tags {
+        id
+        name
+      }
+      createdBy {
+        id
+        fullName
+        organisation
+      }
+      incidents {
+        id
+        subject
+        description
+        dayTime
+        crimeTypes {
+          id
+          name
+        }
+        location {
+          id
+          full
+        }
+        createdBy {
+          id
+          fullName
+          organisation
+        }
+        images {
+          id
+          optimised
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useViewOffenderQuery__
+ *
+ * To run a query within a React component, call `useViewOffenderQuery` and pass it any options that fit your needs.
+ * When your component renders, `useViewOffenderQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useViewOffenderQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useViewOffenderQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ViewOffenderQuery,
+    ViewOffenderQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ViewOffenderQuery, ViewOffenderQueryVariables>(
+    ViewOffenderDocument,
+    options
+  );
+}
+export function useViewOffenderLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ViewOffenderQuery,
+    ViewOffenderQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ViewOffenderQuery, ViewOffenderQueryVariables>(
+    ViewOffenderDocument,
+    options
+  );
+}
+export type ViewOffenderQueryHookResult = ReturnType<
+  typeof useViewOffenderQuery
+>;
+export type ViewOffenderLazyQueryHookResult = ReturnType<
+  typeof useViewOffenderLazyQuery
+>;
+export type ViewOffenderQueryResult = Apollo.QueryResult<
+  ViewOffenderQuery,
+  ViewOffenderQueryVariables
 >;
 export const RestoreIncidentDocument = gql`
   mutation restoreIncident($id: String!, $recycledId: String!) {

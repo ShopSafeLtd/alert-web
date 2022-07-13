@@ -1,0 +1,58 @@
+query ViewOffender($where: OffenderWhereUniqueInput!) {
+  offender(where: $where) {
+    id
+    createdAt
+    updatedAt
+    age
+    build
+    dateOfBirth
+    dateSource
+    hair
+    gender
+    name
+    race
+    peculiarities
+    approved
+    active
+    images {
+      id
+      optimised
+    }
+    groups {
+      id
+      name
+    }
+    tags {
+      id
+      name
+    }
+    createdBy {
+      id
+      fullName
+      organisation
+    }
+    incidents {
+      id
+      subject
+      description
+      dayTime
+      crimeTypes {
+        id
+        name
+      }
+      location {
+        id
+        full
+      }
+      createdBy {
+        id
+        fullName
+        organisation
+      }
+      images {
+        id
+        optimised
+      }
+    }
+  }
+}

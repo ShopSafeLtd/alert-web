@@ -262,7 +262,7 @@ const IncidentCard = ({
                     <Row>
                       <Col span={12}>
                         <Descriptions column={1} size="small">
-                          <Descriptions.Item label="Gender">
+                          <Descriptions.Item label="Sex">
                             {getOffenderGender(offender.gender)}
                           </Descriptions.Item>
                           <Descriptions.Item label="Ethnicity">

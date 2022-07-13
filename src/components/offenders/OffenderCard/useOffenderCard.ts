@@ -1,12 +1,12 @@
 import { useStoreState } from 'state';
-import { Role, useDeleteIncidentMutation } from 'graphql/generated';
+import { Role, useDeleteOffenderMutation } from 'graphql/generated';
 import { notification } from 'antd';
 
 interface Props {
   createdById: string | undefined;
 }
 
-const useIncidentCard = ({ createdById }: Props) => {
+const useOffenderCard = ({ createdById }: Props) => {
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
 
@@ -14,11 +14,11 @@ const useIncidentCard = ({ createdById }: Props) => {
   const menuRights = role !== Role.User || userId === createdById;
   const deleteRights = role !== Role.User;
 
-  const [deleteIncident] = useDeleteIncidentMutation();
+  const [deleteOffender] = useDeleteOffenderMutation();
 
   const onDelete = (id: string) => {
     if (deleteRights)
-      deleteIncident({
+      deleteOffender({
         variables: {
           where: {
             id,
@@ -26,16 +26,16 @@ const useIncidentCard = ({ createdById }: Props) => {
         },
         optimisticResponse: {
           __typename: 'Mutation',
-          deleteIncident: {
+          deleteOffender: {
             id,
-            __typename: 'Incident',
+            __typename: 'Offender',
           },
         },
         onCompleted: () => {
           notification.success({
             message: 'Successfully Deleted',
             description:
-              'The incident has been deleted from the feed and moved to the recycle bin.',
+              'The offender has been deleted from the feed and moved to the recycle bin.',
           });
         },
       });
@@ -49,4 +49,4 @@ const useIncidentCard = ({ createdById }: Props) => {
   };
 };
 
-export default useIncidentCard;
+export default useOffenderCard;

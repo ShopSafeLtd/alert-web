@@ -1,15 +1,15 @@
 query listIncidents(
-  $scheme: SchemeWhereUniqueInput!,
-  $where: IncidentWhereInput,
-  $order: IncidentOrderByWithRelationInput,
-  $take: Int,
+  $scheme: SchemeWhereUniqueInput!
+  $where: IncidentWhereInput
+  $order: IncidentOrderByWithRelationInput
+  $take: Int
   $skip: Int
 ) {
   listIncidents(
-    scheme: $scheme,
-    where: $where,
-    order: $order,
-    take: $take,
+    scheme: $scheme
+    where: $where
+    order: $order
+    take: $take
     skip: $skip
   ) {
     incidents {

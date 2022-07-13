@@ -1,10 +1,6 @@
 import React from 'react';
 import { Table, Row, Col, Input, Drawer, Button, Typography } from 'antd';
-import {
-  DeleteOutlined,
-  EditOutlined,
-  FileAddOutlined,
-} from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { CreateTagMutation, TagsQuery } from 'graphql/generated';
 import AddIncident from 'components/form-components/tags/crimeTypes/AddIncident';
 import EditIncident from 'components/form-components/tags/crimeTypes/EditIncident';
@@ -55,14 +51,12 @@ const IncidentList = ({
       <Col flex={1} />
       <Col>
         <Button type="primary" onClick={toggleAddIncident}>
-          <FileAddOutlined />
           Add
         </Button>
       </Col>
     </Row>
     <Table
       size="small"
-      style={{ marginRight: 10 }}
       loading={loading}
       pagination={{
         defaultPageSize: 20,
