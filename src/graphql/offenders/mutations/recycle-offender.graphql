@@ -1,0 +1,5 @@
+mutation recycleOffender($where: UniqueId!) {
+  recycleOffender(where: $where) {
+    id
+  }
+}

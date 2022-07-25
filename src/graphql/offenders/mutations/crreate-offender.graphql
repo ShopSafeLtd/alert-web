@@ -1,0 +1,69 @@
+mutation createOffender($data: CreateOffenderData!) {
+  createOffender(data: $data) {
+    id
+    createdAt
+    updatedAt
+    age
+    build
+    dateOfBirth
+    dateSource
+    hair
+    gender
+    name
+    race
+    peculiarities
+    approved
+    active
+    images {
+      id
+      url
+      optimised
+    }
+    groups {
+      id
+      name
+    }
+    tags {
+      id
+      name
+    }
+    bans {
+      id
+      title
+      location
+      description
+      startDate
+      endDate
+    }
+    createdBy {
+      id
+      fullName
+      organisation
+    }
+    incidents {
+      id
+      subject
+      description
+      date
+      dayTime
+      crimeTypes {
+        id
+        name
+      }
+      location {
+        id
+        full
+      }
+      createdBy {
+        id
+        fullName
+        organisation
+      }
+      images {
+        id
+        url
+        optimised
+      }
+    }
+  }
+}

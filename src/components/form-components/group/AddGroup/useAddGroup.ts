@@ -26,27 +26,11 @@ interface Return {
   usersLoading: boolean;
   saving: boolean;
 }
-type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const useAddGroup = ({ onClose, update }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
 
-  const openNotification = (type: NotificationType) => {
-    if (type === 'success') {
-      notification.success({
-        message: 'Success!',
-        description: 'The group has been added! ',
-        placement: 'bottomRight',
-      });
-    } else if (type === 'error') {
-      notification.error({
-        message: 'error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
-    }
-  };
   const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -78,11 +62,19 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       onClose();
-      openNotification('success');
+      notification.success({
+        message: 'Successfully Added!',
+        description: 'The group has been added! ',
+        placement: 'bottomRight',
+      });
     },
     onError: () => {
       setSaving(false);
-      openNotification('error');
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
     },
     update,
   });

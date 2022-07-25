@@ -1,0 +1,15 @@
+mutation updateBan($where: UniqueId!, $data: BanUpdateInput!) {
+  updateBan(where: $where, data: $data) {
+    id
+    active
+    location
+    startDate
+    endDate
+    description
+    createdBy {
+      id
+      fullName
+    }
+    createdAt
+  }
+}

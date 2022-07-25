@@ -1,0 +1,9 @@
+query Bans($where: BanWhereInput!) {
+  bans(where: $where) {
+    id
+    location
+    startDate
+    endDate
+    description
+  }
+}

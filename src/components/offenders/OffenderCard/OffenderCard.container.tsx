@@ -1,5 +1,6 @@
 import React from 'react';
-import { ListOffendersQuery } from 'graphql/generated';
+import { ListOffendersQuery, RecycleOffenderMutation } from 'graphql/generated';
+import { MutationUpdaterFn } from '@apollo/client';
 import View from './OffenderCard.view';
 import useOffenderCard from './useOffenderCard';
 
@@ -9,12 +10,14 @@ interface Props {
     undefined | null
   >['offenders'][0];
   openLightbox: (elements: { src: string }[], index: number) => void;
+  update: MutationUpdaterFn<RecycleOffenderMutation>;
 }
 
-const OffenderCard = ({ offender, openLightbox }: Props) => {
-  const { approvalRights, deleteRights, menuRights, onDelete } =
+const OffenderCard = ({ offender, openLightbox, update }: Props) => {
+  const { approvalRights, deleteRights, menuRights, onNavigate, onDelete } =
     useOffenderCard({
       createdById: offender.createdBy.id,
+      update,
     });
 
   return (
@@ -24,6 +27,7 @@ const OffenderCard = ({ offender, openLightbox }: Props) => {
       menuRights={menuRights}
       offender={offender}
       openLightbox={openLightbox}
+      onNavigate={onNavigate}
       onDelete={onDelete}
     />
   );

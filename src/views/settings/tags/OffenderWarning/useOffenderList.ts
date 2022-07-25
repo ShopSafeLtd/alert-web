@@ -30,7 +30,6 @@ interface Return {
   saving: boolean;
   deleteConfirm: (value: string) => void;
 }
-type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const useOffenderList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -40,21 +39,6 @@ const useOffenderList = (): Return => {
   const [addOffender, setAddOffender] = useState(false);
   const [editOffender, setEditOffender] = useState(false);
 
-  const openNotification = (type: NotificationType) => {
-    if (type === 'success') {
-      notification.success({
-        message: 'Success!',
-        description: 'The offender warning has been deleted!',
-        placement: 'bottomRight',
-      });
-    } else if (type === 'error') {
-      notification.error({
-        message: 'error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
-    }
-  };
   const toggleAddOffender = () => {
     setAddOffender(!addOffender);
   };
@@ -88,14 +72,13 @@ const useOffenderList = (): Return => {
     },
   });
 
-  // update list after adding a new item
+  // update tag list after adding a new item
   const updateOffenderList: MutationUpdaterFn<CreateTagMutation> = (
     store,
     { data: res }
   ) => {
     if (res === null || res === undefined) return;
 
-    // get existing Offender list data from Apollo store
     const existingData = store.readQuery<TagsQuery>({
       query: TagsDocument,
       variables: {
@@ -124,7 +107,6 @@ const useOffenderList = (): Return => {
 
     if (existingData === null) return;
 
-    // write the new data to the Apollo store
     store.writeQuery<TagsQuery>({
       query: TagsDocument,
       data: {
@@ -227,11 +209,19 @@ const useOffenderList = (): Return => {
   const [deleteTag] = useDeleteTagMutation({
     onCompleted: () => {
       setSaving(false);
-      openNotification('success');
+      notification.success({
+        message: 'Successfully Deleted',
+        description: 'The offender warning has been deleted!',
+        placement: 'bottomRight',
+      });
     },
     onError: () => {
-      openNotification('error');
       setSaving(false);
+      notification.error({
+        message: 'error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
     },
     update,
   });

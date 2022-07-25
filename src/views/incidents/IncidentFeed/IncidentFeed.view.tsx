@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListIncidentsQuery } from 'graphql/generated';
+import { ListIncidentsQuery, RecycleIncidentMutation } from 'graphql/generated';
 import { Col, Input, Row, Select, Pagination, Button } from 'antd';
 import IncidentCard from 'components/incidents/IncidentCard';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
@@ -7,6 +7,7 @@ import { SRLWrapper } from 'simple-react-lightbox';
 import { IncidentSort } from 'state';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { MutationUpdaterFn } from '@apollo/client';
 
 interface Props {
   data: ListIncidentsQuery | undefined;
@@ -31,6 +32,8 @@ interface Props {
   crimeTypes: { value: string; label: string }[];
   onCrimeTypesChange: (crimeTypes: string[]) => void;
   tagsLoading: boolean;
+  updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
+  onNavigate: () => void;
 }
 
 const IncidentFeed = ({
@@ -51,6 +54,8 @@ const IncidentFeed = ({
   crimeTypes,
   onCrimeTypesChange,
   tagsLoading,
+  updateIncidentList,
+  onNavigate,
 }: Props): JSX.Element => (
   <div className="feed-container">
     <Row gutter={8} style={{ marginBottom: 10 }}>
@@ -140,7 +145,11 @@ const IncidentFeed = ({
           ]
         : data?.listIncidents?.incidents?.map((item) => (
             <Col sm={24} md={12} lg={12} xl={8} xxl={6} key={item?.id}>
-              <IncidentCard incident={item} openLightbox={openLightbox} />
+              <IncidentCard
+                incident={item}
+                openLightbox={openLightbox}
+                update={updateIncidentList}
+              />
             </Col>
           ))}
     </Row>
@@ -162,6 +171,7 @@ const IncidentFeed = ({
       size="large"
       type="primary"
       shape="round"
+      onClick={onNavigate}
       icon={
         <FontAwesomeIcon icon={faPlus} size="lg" style={{ marginRight: 10 }} />
       }

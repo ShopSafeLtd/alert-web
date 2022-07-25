@@ -16,6 +16,7 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
     active
     images {
       id
+      url
       optimised
     }
     groups {
@@ -26,6 +27,14 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
       id
       name
     }
+    bans {
+      id
+      title
+      location
+      description
+      startDate
+      endDate
+    }
     createdBy {
       id
       fullName
@@ -35,6 +44,7 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
       id
       subject
       description
+      date
       dayTime
       crimeTypes {
         id
@@ -51,6 +61,7 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
       }
       images {
         id
+        url
         optimised
       }
     }

@@ -1,12 +1,20 @@
 import { useStoreState } from 'state';
-import { Role, useDeleteOffenderMutation } from 'graphql/generated';
+import {
+  RecycleOffenderMutation,
+  Role,
+  useRecycleOffenderMutation,
+} from 'graphql/generated';
 import { notification } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { MutationUpdaterFn } from '@apollo/client';
 
 interface Props {
   createdById: string | undefined;
+  update: MutationUpdaterFn<RecycleOffenderMutation>;
 }
 
-const useOffenderCard = ({ createdById }: Props) => {
+const useOffenderCard = ({ createdById, update }: Props) => {
+  const navigate = useNavigate();
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
 
@@ -14,29 +22,31 @@ const useOffenderCard = ({ createdById }: Props) => {
   const menuRights = role !== Role.User || userId === createdById;
   const deleteRights = role !== Role.User;
 
-  const [deleteOffender] = useDeleteOffenderMutation();
+  const onNavigate = (id: string) => navigate(`/app/offenders/edit/${id}`);
+  const [recycleOffender] = useRecycleOffenderMutation({
+    onCompleted: () => {
+      notification.success({
+        message: 'Successfully Deleted',
+        description:
+          'The offender has been deleted from the feed and moved to the recycle bin.',
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
+    },
+    update,
+  });
 
   const onDelete = (id: string) => {
     if (deleteRights)
-      deleteOffender({
+      recycleOffender({
         variables: {
-          where: {
-            id,
-          },
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          deleteOffender: {
-            id,
-            __typename: 'Offender',
-          },
-        },
-        onCompleted: () => {
-          notification.success({
-            message: 'Successfully Deleted',
-            description:
-              'The offender has been deleted from the feed and moved to the recycle bin.',
-          });
+          where: { id },
         },
       });
   };
@@ -45,6 +55,7 @@ const useOffenderCard = ({ createdById }: Props) => {
     approvalRights,
     menuRights,
     deleteRights,
+    onNavigate,
     onDelete,
   };
 };

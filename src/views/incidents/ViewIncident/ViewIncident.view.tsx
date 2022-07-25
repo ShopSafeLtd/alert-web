@@ -26,7 +26,7 @@ import {
   getOffenderBuild,
   getOffenderGender,
   getOffenderRace,
-} from 'utils/get-offender-desc';
+} from 'utils/offender/get-offender-desc';
 import { SRLWrapper } from 'simple-react-lightbox';
 import IncidentSideList from 'components/incidents/IncidentSideList';
 import { Link } from 'react-router-dom';
@@ -258,25 +258,6 @@ const ViewIncident = ({
                           )}
                         </div>
                       )}
-                      <div className="incident-offenders-empty">
-                        <Paragraph>
-                          There are no offenders on this incident.
-                        </Paragraph>
-                        {addOffenderRights && (
-                          <div>
-                            <Button
-                              icon={
-                                <FontAwesomeIcon
-                                  className="button-icon"
-                                  icon={faPlus}
-                                />
-                              }
-                            >
-                              Link Offender
-                            </Button>
-                          </div>
-                        )}
-                      </div>
                     </Col>
                   </Row>
                 </div>

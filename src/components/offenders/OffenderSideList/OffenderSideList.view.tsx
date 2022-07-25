@@ -3,13 +3,19 @@ import { ListOffendersQuery } from 'graphql/generated';
 import { Row, Col, Skeleton, Typography, Divider, Pagination } from 'antd';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faUser } from '@fortawesome/pro-light-svg-icons';
+import {
+  faEarth,
+  faMarsAndVenus,
+  faUserClock,
+  faUserTag,
+} from '@fortawesome/pro-light-svg-icons';
 import {
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
   getOffenderRace,
-} from 'utils/get-offender-desc';
+  calcAge,
+} from 'utils/offender/get-offender-desc';
 
 const { Text, Paragraph } = Typography;
 interface Props {
@@ -32,7 +38,7 @@ const OffenderSideList = ({
         <div
           key={offender.id}
           className={
-            current === offender.id ? 'incident-item current' : 'incident-item'
+            current === offender.id ? 'offender-item current' : 'offender-item'
           }
         >
           <Row wrap={false}>
@@ -52,16 +58,7 @@ const OffenderSideList = ({
               <Text strong={current === offender.id} ellipsis>
                 {offender.name}
               </Text>
-              {/* <Paragraph
-                className="offender-item-desc"
-                type="secondary"
-                ellipsis
-              >
-                Last updated:{' '}
-                {moment(offender?.updatedAt || moment()).format(
-                  `ddd MMM DD YYYY - HH:mm`
-                )}
-              </Paragraph> */}
+
               <Paragraph
                 className="offender-item-detail"
                 type="secondary"
@@ -69,16 +66,22 @@ const OffenderSideList = ({
               >
                 <FontAwesomeIcon
                   className="offender-item-icon"
-                  icon={faClock}
+                  icon={faUserClock}
                 />
-                Age: {getOffenderAge(offender.age)}
+                Age:{' '}
+                {offender.dateOfBirth
+                  ? calcAge(offender.dateOfBirth)
+                  : getOffenderAge(offender.age)}
               </Paragraph>
               <Paragraph
                 className="offender-item-detail"
                 type="secondary"
                 ellipsis
               >
-                <FontAwesomeIcon className="offender-item-icon" icon={faUser} />
+                <FontAwesomeIcon
+                  className="offender-item-icon"
+                  icon={faUserTag}
+                />
                 Build:{getOffenderBuild(offender.build)}
               </Paragraph>
               <Paragraph
@@ -86,7 +89,10 @@ const OffenderSideList = ({
                 type="secondary"
                 ellipsis
               >
-                <FontAwesomeIcon className="offender-item-icon" icon={faUser} />
+                <FontAwesomeIcon
+                  className="offender-item-icon"
+                  icon={faMarsAndVenus}
+                />
                 Sex: {getOffenderGender(offender.gender)}
               </Paragraph>
               <Paragraph
@@ -94,7 +100,10 @@ const OffenderSideList = ({
                 type="secondary"
                 ellipsis
               >
-                <FontAwesomeIcon className="offender-item-icon" icon={faUser} />
+                <FontAwesomeIcon
+                  className="offender-item-icon"
+                  icon={faEarth}
+                />
                 Ethnicity: {getOffenderRace(offender.race, true)}
               </Paragraph>
             </Col>

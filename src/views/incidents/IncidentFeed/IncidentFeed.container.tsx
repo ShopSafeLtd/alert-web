@@ -1,6 +1,6 @@
-import React from "react";
-import View from "./IncidentFeed.view";
-import useIncidentFeed from "./useIncidentFeed";
+import React from 'react';
+import View from './IncidentFeed.view';
+import useIncidentFeed from './useIncidentFeed';
 
 const IncidentFeed = () => {
   const {
@@ -20,7 +20,9 @@ const IncidentFeed = () => {
     variables,
     crimeTypes,
     onCrimeTypesChange,
-    tagsLoading
+    tagsLoading,
+    updateIncidentList,
+    onNavigate,
   } = useIncidentFeed();
   return (
     <View
@@ -41,6 +43,8 @@ const IncidentFeed = () => {
       crimeTypes={crimeTypes}
       onCrimeTypesChange={onCrimeTypesChange}
       tagsLoading={tagsLoading}
+      updateIncidentList={updateIncidentList}
+      onNavigate={onNavigate}
     />
   );
 };

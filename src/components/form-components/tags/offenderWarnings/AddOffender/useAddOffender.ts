@@ -22,37 +22,29 @@ interface Return {
   onSubmit: (value: FormData) => void;
   saving: boolean;
 }
-type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const useAddOffender = ({ onClose, update }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
   const [saving, setSaving] = useState(false);
 
-  const openNotification = (type: NotificationType) => {
-    if (type === 'success') {
-      notification.success({
-        message: 'Success!',
-        description: 'The offender warning has been added! ',
-        placement: 'bottomRight',
-      });
-    } else if (type === 'error') {
-      notification.error({
-        message: 'error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
-    }
-  };
   const [createTag] = useCreateTagMutation({
     onCompleted: () => {
       setSaving(false);
       onClose();
-      openNotification('success');
+      notification.success({
+        message: 'Successfully Added!',
+        description: 'The offender warning has been added! ',
+        placement: 'bottomRight',
+      });
     },
     onError: () => {
       setSaving(false);
-      openNotification('error');
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
     },
     update,
   });

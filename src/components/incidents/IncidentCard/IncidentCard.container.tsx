@@ -1,17 +1,23 @@
-import React from "react";
-import { ListIncidentsQuery } from "graphql/generated";
-import View from "./IncidentCard.view";
-import useIncidentCard from "./useIncidentCard";
+import React from 'react';
+import { ListIncidentsQuery, RecycleIncidentMutation } from 'graphql/generated';
+import { MutationUpdaterFn } from '@apollo/client';
+import View from './IncidentCard.view';
+import useIncidentCard from './useIncidentCard';
 
 interface Props {
-  incident: Exclude<ListIncidentsQuery["listIncidents"], undefined | null>['incidents'][0];
+  incident: Exclude<
+    ListIncidentsQuery['listIncidents'],
+    undefined | null
+  >['incidents'][0];
   openLightbox: (elements: { src: string }[], index: number) => void;
+  update: MutationUpdaterFn<RecycleIncidentMutation>;
 }
 
-const IncidentCard = ({ incident, openLightbox }: Props) => {
-  const { approvalRights, deleteRights, menuRights, onDelete } =
+const IncidentCard = ({ incident, openLightbox, update }: Props) => {
+  const { approvalRights, deleteRights, menuRights, onNavigate, onDelete } =
     useIncidentCard({
       createdById: incident?.createdBy.id,
+      update,
     });
 
   return (
@@ -21,6 +27,7 @@ const IncidentCard = ({ incident, openLightbox }: Props) => {
       menuRights={menuRights}
       incident={incident}
       openLightbox={openLightbox}
+      onNavigate={onNavigate}
       onDelete={onDelete}
     />
   );

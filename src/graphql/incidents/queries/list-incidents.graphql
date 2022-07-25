@@ -48,6 +48,7 @@ query listIncidents(
       images {
         id
         optimised
+        url
       }
       groups {
         id

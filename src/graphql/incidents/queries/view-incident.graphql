@@ -4,6 +4,8 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     subject
     description
     dayTime
+    date
+    time
     crimeTypes {
       id
       name
@@ -25,6 +27,11 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     }
     location {
       id
+      building
+      street
+      townCity
+      county
+      postcode
       full
     }
     createdBy {
@@ -35,6 +42,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     images {
       id
       optimised
+      url
     }
     groups {
       id

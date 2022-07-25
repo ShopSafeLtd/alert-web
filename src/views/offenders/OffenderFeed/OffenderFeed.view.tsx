@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListOffendersQuery } from 'graphql/generated';
+import { ListOffendersQuery, RecycleOffenderMutation } from 'graphql/generated';
 import { Col, Input, Row, Select, Pagination, Button } from 'antd';
 import OffenderCard from 'components/offenders/OffenderCard';
 import OffenderSkeletonCard from 'components/offenders/OffenderSkeletonCard/OffenderSkeletonCard.view';
@@ -7,6 +7,7 @@ import { SRLWrapper } from 'simple-react-lightbox';
 import { OffenderSort } from 'state';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { MutationUpdaterFn } from '@apollo/client';
 
 interface Props {
   data: ListOffendersQuery | undefined;
@@ -31,6 +32,8 @@ interface Props {
   tags: { value: string; label: string }[];
   onTagsChange: (tags: string[]) => void;
   tagsLoading: boolean;
+  updateOffenderList: MutationUpdaterFn<RecycleOffenderMutation>;
+  onNavigate: () => void;
 }
 
 const OffenderFeed = ({
@@ -50,7 +53,9 @@ const OffenderFeed = ({
   variables,
   tags,
   onTagsChange,
+  updateOffenderList,
   tagsLoading,
+  onNavigate,
 }: Props): JSX.Element => (
   <div className="feed-container">
     <Row gutter={8} style={{ marginBottom: 10 }}>
@@ -138,7 +143,11 @@ const OffenderFeed = ({
           ]
         : data?.listOffenders?.offenders?.map((item) => (
             <Col sm={24} md={12} lg={12} xl={8} xxl={6} key={item?.id}>
-              <OffenderCard offender={item} openLightbox={openLightbox} />
+              <OffenderCard
+                offender={item}
+                openLightbox={openLightbox}
+                update={updateOffenderList}
+              />
             </Col>
           ))}
     </Row>
@@ -160,6 +169,7 @@ const OffenderFeed = ({
       size="large"
       type="primary"
       shape="round"
+      onClick={onNavigate}
       icon={
         <FontAwesomeIcon icon={faPlus} size="lg" style={{ marginRight: 10 }} />
       }

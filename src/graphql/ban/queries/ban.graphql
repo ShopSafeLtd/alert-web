@@ -1,0 +1,15 @@
+query Ban($where: BanWhereUniqueInput!) {
+  ban(where: $where) {
+    id
+    active
+    location
+    startDate
+    endDate
+    description
+    createdBy {
+      id
+      fullName
+    }
+    createdAt
+  }
+}

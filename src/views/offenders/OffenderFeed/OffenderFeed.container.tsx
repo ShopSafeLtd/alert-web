@@ -21,6 +21,8 @@ const IncidentFeed = () => {
     tags,
     onTagsChange,
     tagsLoading,
+    updateOffenderList,
+    onNavigate,
   } = useIncidentFeed();
   return (
     <View
@@ -41,6 +43,8 @@ const IncidentFeed = () => {
       tags={tags}
       onTagsChange={onTagsChange}
       tagsLoading={tagsLoading}
+      updateOffenderList={updateOffenderList}
+      onNavigate={onNavigate}
     />
   );
 };

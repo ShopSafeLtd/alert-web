@@ -36,7 +36,7 @@ import {
   getOffenderBuild,
   getOffenderGender,
   getOffenderRace,
-} from 'utils/get-offender-desc';
+} from 'utils/offender/get-offender-desc';
 import { Link } from 'react-router-dom';
 
 const { Title, Text, Paragraph } = Typography;
@@ -51,6 +51,7 @@ interface Props {
   deleteRights: boolean;
   menuRights: boolean;
   openLightbox: (elements: { src: string }[], index: number) => void;
+  onNavigate: (id: string) => void;
   onDelete: (id: string) => void;
 }
 
@@ -60,6 +61,7 @@ const IncidentCard = ({
   deleteRights,
   menuRights,
   openLightbox,
+  onNavigate,
   onDelete,
 }: Props): JSX.Element => {
   const imagesRef = useRef<CarouselRef>(null);
@@ -83,7 +85,7 @@ const IncidentCard = ({
                 {
                   key: 0,
                   label: 'Edit Incident',
-                  onClick: () => {},
+                  onClick: () => onNavigate(incident?.id || ''),
                   icon: <FontAwesomeIcon size="lg" icon={faEdit} />,
                 },
                 {

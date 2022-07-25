@@ -7,10 +7,14 @@ import {
   useSchemeGroupsQuery,
   useTagsQuery,
   Model,
+  ListOffendersDocument,
+  RecycleOffenderMutation,
 } from 'graphql/generated';
 import { useState, useEffect } from 'react';
 import { useStoreActions, useStoreState, OffenderSort } from 'state';
 import { useLightbox } from 'simple-react-lightbox';
+import { MutationUpdaterFn } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
 
 interface Return {
   data: ListOffendersQuery | undefined;
@@ -35,6 +39,8 @@ interface Return {
   tags: { value: string; label: string }[];
   onTagsChange: (tags: string[]) => void;
   tagsLoading: boolean;
+  updateOffenderList: MutationUpdaterFn<RecycleOffenderMutation>;
+  onNavigate: () => void;
 }
 
 const getSizeOptions = () => {
@@ -50,6 +56,8 @@ const getSizeOptions = () => {
 const useOffenderFeed = (): Return => {
   // Lightbox hook
   const { openLightbox } = useLightbox();
+  const navigate = useNavigate();
+  const onNavigate = () => navigate(`/app/offenders/add`);
 
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -189,7 +197,151 @@ const useOffenderFeed = (): Return => {
     },
     fetchPolicy: 'cache-and-network',
   });
+  // update Offender list after deleting an item
+  const updateOffenderList: MutationUpdaterFn<RecycleOffenderMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res === null || res === undefined) return;
 
+    const existingData = store.readQuery<ListOffendersQuery>({
+      query: ListOffendersDocument,
+      variables: {
+        scheme: {
+          id: schemeId,
+        },
+        order: {
+          createdAt:
+            order === OffenderSort.createdAtDesc
+              ? SortOrder.Desc
+              : SortOrder.Asc,
+        },
+        where: {
+          tags: variables.tags.length
+            ? {
+                some: {
+                  id: {
+                    in: variables.tags,
+                  },
+                },
+              }
+            : undefined,
+          groups: variables.groups.length
+            ? {
+                some: {
+                  id: {
+                    in: variables.groups,
+                  },
+                },
+              }
+            : undefined,
+          OR: [
+            {
+              name: {
+                contains: variables.search,
+                mode: QueryMode.Insensitive,
+              },
+            },
+            {
+              createdBy: {
+                OR: [
+                  {
+                    fullName: {
+                      contains: variables.search,
+                      mode: QueryMode.Insensitive,
+                    },
+                  },
+                  {
+                    organisation: {
+                      contains: variables.search,
+                      mode: QueryMode.Insensitive,
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        take: pagination.pageSize,
+        skip: pagination.pageSize * (pagination.page - 1),
+      },
+    });
+
+    if (existingData === null) return;
+    if (existingData?.listOffenders?.offenders === undefined) return;
+
+    store.writeQuery<ListOffendersQuery>({
+      query: ListOffendersDocument,
+      data: {
+        listOffenders: {
+          ...existingData.listOffenders,
+          offenders: existingData.listOffenders?.offenders.filter(
+            (offender) => offender.id !== res?.recycleOffender?.id
+          ),
+        },
+        __typename: 'Query',
+      },
+      variables: {
+        scheme: {
+          id: schemeId,
+        },
+        order: {
+          createdAt:
+            order === OffenderSort.createdAtDesc
+              ? SortOrder.Desc
+              : SortOrder.Asc,
+        },
+        where: {
+          tags: variables.tags.length
+            ? {
+                some: {
+                  id: {
+                    in: variables.tags,
+                  },
+                },
+              }
+            : undefined,
+          groups: variables.groups.length
+            ? {
+                some: {
+                  id: {
+                    in: variables.groups,
+                  },
+                },
+              }
+            : undefined,
+          OR: [
+            {
+              name: {
+                contains: variables.search,
+                mode: QueryMode.Insensitive,
+              },
+            },
+            {
+              createdBy: {
+                OR: [
+                  {
+                    fullName: {
+                      contains: variables.search,
+                      mode: QueryMode.Insensitive,
+                    },
+                  },
+                  {
+                    organisation: {
+                      contains: variables.search,
+                      mode: QueryMode.Insensitive,
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        take: pagination.pageSize,
+        skip: pagination.pageSize * (pagination.page - 1),
+      },
+    });
+  };
   // Functions
   const triggerLightbox = (elements: { src: string }[], index: number) => {
     setLightboxElements(elements);
@@ -276,6 +428,8 @@ const useOffenderFeed = (): Return => {
     tags:
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
     tagsLoading,
+    updateOffenderList,
+    onNavigate,
   };
 };
 

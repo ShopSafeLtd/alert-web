@@ -13924,6 +13924,86 @@ export type SignInMutation = {
   } | null;
 };
 
+export type DeleteBanMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type DeleteBanMutation = {
+  __typename?: 'Mutation';
+  deleteBan?: { __typename?: 'Ban'; id: string } | null;
+};
+
+export type UpdateBanMutationVariables = Exact<{
+  where: UniqueId;
+  data: BanUpdateInput;
+}>;
+
+export type UpdateBanMutation = {
+  __typename?: 'Mutation';
+  updateBan?: {
+    __typename?: 'Ban';
+    id: string;
+    active: boolean;
+    location: string;
+    startDate: any;
+    endDate: any;
+    description?: string | null;
+    createdAt: any;
+    createdBy: { __typename?: 'User'; id: string; fullName: string };
+  } | null;
+};
+
+export type BanQueryVariables = Exact<{
+  where: BanWhereUniqueInput;
+}>;
+
+export type BanQuery = {
+  __typename?: 'Query';
+  ban?: {
+    __typename?: 'Ban';
+    id: string;
+    active: boolean;
+    location: string;
+    startDate: any;
+    endDate: any;
+    description?: string | null;
+    createdAt: any;
+    createdBy: { __typename?: 'User'; id: string; fullName: string };
+  } | null;
+};
+
+export type CreateBanMutationVariables = Exact<{
+  data: BanCreateInput;
+}>;
+
+export type CreateBanMutation = {
+  __typename?: 'Mutation';
+  createBan: {
+    __typename?: 'Ban';
+    id: string;
+    location: string;
+    description?: string | null;
+    startDate: any;
+    endDate: any;
+  };
+};
+
+export type BansQueryVariables = Exact<{
+  where: BanWhereInput;
+}>;
+
+export type BansQuery = {
+  __typename?: 'Query';
+  bans: Array<{
+    __typename?: 'Ban';
+    id: string;
+    location: string;
+    startDate: any;
+    endDate: any;
+    description?: string | null;
+  }>;
+};
+
 export type DeleteChatMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -14102,6 +14182,25 @@ export type DeleteIncidentMutation = {
   deleteIncident?: { __typename?: 'Incident'; id: string } | null;
 };
 
+export type RecycleIncidentMutationVariables = Exact<{
+  where: UniqueId;
+}>;
+
+export type RecycleIncidentMutation = {
+  __typename?: 'Mutation';
+  recycleIncident?: { __typename?: 'Incident'; id: string } | null;
+};
+
+export type UpdateIncidentMutationVariables = Exact<{
+  where: UniqueId;
+  data: IncidentUpdateInput;
+}>;
+
+export type UpdateIncidentMutation = {
+  __typename?: 'Mutation';
+  updateIncident?: { __typename?: 'Incident'; id: string } | null;
+};
+
 export type IncidentFeedQueryVariables = Exact<{
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
@@ -14227,6 +14326,7 @@ export type ListIncidentsQuery = {
         __typename?: 'Image';
         id: string;
         optimised?: string | null;
+        url?: string | null;
       }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     }>;
@@ -14245,6 +14345,8 @@ export type ViewIncidentQuery = {
     subject?: string | null;
     description: string;
     dayTime?: string | null;
+    date: any;
+    time: any;
     approved?: boolean | null;
     crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
     offenders: Array<{
@@ -14266,6 +14368,11 @@ export type ViewIncidentQuery = {
     location?: {
       __typename?: 'Address';
       id: string;
+      building?: string | null;
+      street: string;
+      townCity: string;
+      county?: string | null;
+      postcode: string;
       full?: string | null;
     } | null;
     createdBy: {
@@ -14278,18 +14385,141 @@ export type ViewIncidentQuery = {
       __typename?: 'Image';
       id: string;
       optimised?: string | null;
+      url?: string | null;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
   } | null;
 };
 
-export type DeleteOffenderMutationVariables = Exact<{
+export type CreateOffenderMutationVariables = Exact<{
+  data: CreateOffenderData;
+}>;
+
+export type CreateOffenderMutation = {
+  __typename?: 'Mutation';
+  createOffender?: {
+    __typename?: 'Offender';
+    id: string;
+    createdAt: any;
+    updatedAt: any;
+    age?: Age | null;
+    build?: Build | null;
+    dateOfBirth?: any | null;
+    dateSource?: string | null;
+    hair?: string | null;
+    gender?: Gender | null;
+    name?: string | null;
+    race?: Race | null;
+    peculiarities?: string | null;
+    approved?: boolean | null;
+    active?: boolean | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+    }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    bans: Array<{
+      __typename?: 'Ban';
+      id: string;
+      title?: string | null;
+      location: string;
+      description?: string | null;
+      startDate: any;
+      endDate: any;
+    }>;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      organisation: string;
+    };
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+      description: string;
+      date: any;
+      dayTime?: string | null;
+      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      location?: {
+        __typename?: 'Address';
+        id: string;
+        full?: string | null;
+      } | null;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        organisation: string;
+      };
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
+  } | null;
+};
+
+export type RecycleOffenderMutationVariables = Exact<{
   where: UniqueId;
 }>;
 
-export type DeleteOffenderMutation = {
+export type RecycleOffenderMutation = {
   __typename?: 'Mutation';
-  deleteOffender?: { __typename?: 'Offender'; id: string } | null;
+  recycleOffender?: { __typename?: 'Offender'; id: string } | null;
+};
+
+export type UpdateOffenderMutationVariables = Exact<{
+  where: UniqueId;
+  data: OffenderUpdateInput;
+}>;
+
+export type UpdateOffenderMutation = {
+  __typename?: 'Mutation';
+  updateOffender?: {
+    __typename?: 'Offender';
+    id: string;
+    createdAt: any;
+    updatedAt: any;
+    age?: Age | null;
+    build?: Build | null;
+    dateOfBirth?: any | null;
+    dateSource?: string | null;
+    hair?: string | null;
+    gender?: Gender | null;
+    name?: string | null;
+    race?: Race | null;
+    peculiarities?: string | null;
+    approved?: boolean | null;
+    active?: boolean | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+    }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    bans: Array<{
+      __typename?: 'Ban';
+      id: string;
+      location: string;
+      description?: string | null;
+      startDate: any;
+      endDate: any;
+    }>;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      organisation: string;
+    };
+  } | null;
 };
 
 export type ListOffendersQueryVariables = Exact<{
@@ -14324,10 +14554,20 @@ export type ListOffendersQuery = {
       images: Array<{
         __typename?: 'Image';
         id: string;
+        url?: string | null;
         optimised?: string | null;
       }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
       tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      bans: Array<{
+        __typename?: 'Ban';
+        id: string;
+        title?: string | null;
+        location: string;
+        description?: string | null;
+        startDate: any;
+        endDate: any;
+      }>;
       createdBy: {
         __typename?: 'User';
         id: string;
@@ -14339,6 +14579,7 @@ export type ListOffendersQuery = {
         id: string;
         subject?: string | null;
         description: string;
+        date: any;
         dayTime?: string | null;
         crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
         location?: {
@@ -14355,6 +14596,7 @@ export type ListOffendersQuery = {
         images: Array<{
           __typename?: 'Image';
           id: string;
+          url?: string | null;
           optimised?: string | null;
         }>;
       }>;
@@ -14477,10 +14719,20 @@ export type ViewOffenderQuery = {
     images: Array<{
       __typename?: 'Image';
       id: string;
+      url?: string | null;
       optimised?: string | null;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    bans: Array<{
+      __typename?: 'Ban';
+      id: string;
+      title?: string | null;
+      location: string;
+      description?: string | null;
+      startDate: any;
+      endDate: any;
+    }>;
     createdBy: {
       __typename?: 'User';
       id: string;
@@ -14492,6 +14744,7 @@ export type ViewOffenderQuery = {
       id: string;
       subject?: string | null;
       description: string;
+      date: any;
       dayTime?: string | null;
       crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
       location?: {
@@ -14508,10 +14761,20 @@ export type ViewOffenderQuery = {
       images: Array<{
         __typename?: 'Image';
         id: string;
+        url?: string | null;
         optimised?: string | null;
       }>;
     }>;
   } | null;
+};
+
+export type DeleteOffenderMutationVariables = Exact<{
+  where: UniqueId;
+}>;
+
+export type DeleteOffenderMutation = {
+  __typename?: 'Mutation';
+  deleteOffender?: { __typename?: 'Offender'; id: string } | null;
 };
 
 export type RestoreIncidentMutationVariables = Exact<{
@@ -15048,6 +15311,263 @@ export type SignInMutationOptions = Apollo.BaseMutationOptions<
   SignInMutation,
   SignInMutationVariables
 >;
+export const DeleteBanDocument = gql`
+  mutation deleteBan($id: String!) {
+    deleteBan(where: { id: $id }) {
+      id
+    }
+  }
+`;
+export type DeleteBanMutationFn = Apollo.MutationFunction<
+  DeleteBanMutation,
+  DeleteBanMutationVariables
+>;
+
+/**
+ * __useDeleteBanMutation__
+ *
+ * To run a mutation, you first call `useDeleteBanMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteBanMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteBanMutation, { data, loading, error }] = useDeleteBanMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteBanMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteBanMutation,
+    DeleteBanMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<DeleteBanMutation, DeleteBanMutationVariables>(
+    DeleteBanDocument,
+    options
+  );
+}
+export type DeleteBanMutationHookResult = ReturnType<
+  typeof useDeleteBanMutation
+>;
+export type DeleteBanMutationResult = Apollo.MutationResult<DeleteBanMutation>;
+export type DeleteBanMutationOptions = Apollo.BaseMutationOptions<
+  DeleteBanMutation,
+  DeleteBanMutationVariables
+>;
+export const UpdateBanDocument = gql`
+  mutation updateBan($where: UniqueId!, $data: BanUpdateInput!) {
+    updateBan(where: $where, data: $data) {
+      id
+      active
+      location
+      startDate
+      endDate
+      description
+      createdBy {
+        id
+        fullName
+      }
+      createdAt
+    }
+  }
+`;
+export type UpdateBanMutationFn = Apollo.MutationFunction<
+  UpdateBanMutation,
+  UpdateBanMutationVariables
+>;
+
+/**
+ * __useUpdateBanMutation__
+ *
+ * To run a mutation, you first call `useUpdateBanMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBanMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBanMutation, { data, loading, error }] = useUpdateBanMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateBanMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateBanMutation,
+    UpdateBanMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateBanMutation, UpdateBanMutationVariables>(
+    UpdateBanDocument,
+    options
+  );
+}
+export type UpdateBanMutationHookResult = ReturnType<
+  typeof useUpdateBanMutation
+>;
+export type UpdateBanMutationResult = Apollo.MutationResult<UpdateBanMutation>;
+export type UpdateBanMutationOptions = Apollo.BaseMutationOptions<
+  UpdateBanMutation,
+  UpdateBanMutationVariables
+>;
+export const BanDocument = gql`
+  query Ban($where: BanWhereUniqueInput!) {
+    ban(where: $where) {
+      id
+      active
+      location
+      startDate
+      endDate
+      description
+      createdBy {
+        id
+        fullName
+      }
+      createdAt
+    }
+  }
+`;
+
+/**
+ * __useBanQuery__
+ *
+ * To run a query within a React component, call `useBanQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBanQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBanQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useBanQuery(
+  baseOptions: Apollo.QueryHookOptions<BanQuery, BanQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<BanQuery, BanQueryVariables>(BanDocument, options);
+}
+export function useBanLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<BanQuery, BanQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<BanQuery, BanQueryVariables>(BanDocument, options);
+}
+export type BanQueryHookResult = ReturnType<typeof useBanQuery>;
+export type BanLazyQueryHookResult = ReturnType<typeof useBanLazyQuery>;
+export type BanQueryResult = Apollo.QueryResult<BanQuery, BanQueryVariables>;
+export const CreateBanDocument = gql`
+  mutation createBan($data: BanCreateInput!) {
+    createBan(data: $data) {
+      id
+      location
+      description
+      startDate
+      endDate
+    }
+  }
+`;
+export type CreateBanMutationFn = Apollo.MutationFunction<
+  CreateBanMutation,
+  CreateBanMutationVariables
+>;
+
+/**
+ * __useCreateBanMutation__
+ *
+ * To run a mutation, you first call `useCreateBanMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateBanMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createBanMutation, { data, loading, error }] = useCreateBanMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateBanMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateBanMutation,
+    CreateBanMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateBanMutation, CreateBanMutationVariables>(
+    CreateBanDocument,
+    options
+  );
+}
+export type CreateBanMutationHookResult = ReturnType<
+  typeof useCreateBanMutation
+>;
+export type CreateBanMutationResult = Apollo.MutationResult<CreateBanMutation>;
+export type CreateBanMutationOptions = Apollo.BaseMutationOptions<
+  CreateBanMutation,
+  CreateBanMutationVariables
+>;
+export const BansDocument = gql`
+  query Bans($where: BanWhereInput!) {
+    bans(where: $where) {
+      id
+      location
+      startDate
+      endDate
+      description
+    }
+  }
+`;
+
+/**
+ * __useBansQuery__
+ *
+ * To run a query within a React component, call `useBansQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBansQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBansQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useBansQuery(
+  baseOptions: Apollo.QueryHookOptions<BansQuery, BansQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<BansQuery, BansQueryVariables>(BansDocument, options);
+}
+export function useBansLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<BansQuery, BansQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<BansQuery, BansQueryVariables>(
+    BansDocument,
+    options
+  );
+}
+export type BansQueryHookResult = ReturnType<typeof useBansQuery>;
+export type BansLazyQueryHookResult = ReturnType<typeof useBansLazyQuery>;
+export type BansQueryResult = Apollo.QueryResult<BansQuery, BansQueryVariables>;
 export const DeleteChatDocument = gql`
   mutation deleteChat($id: String!) {
     deleteChat(where: { id: $id }) {
@@ -15653,6 +16173,107 @@ export type DeleteIncidentMutationOptions = Apollo.BaseMutationOptions<
   DeleteIncidentMutation,
   DeleteIncidentMutationVariables
 >;
+export const RecycleIncidentDocument = gql`
+  mutation recycleIncident($where: UniqueId!) {
+    recycleIncident(where: $where) {
+      id
+    }
+  }
+`;
+export type RecycleIncidentMutationFn = Apollo.MutationFunction<
+  RecycleIncidentMutation,
+  RecycleIncidentMutationVariables
+>;
+
+/**
+ * __useRecycleIncidentMutation__
+ *
+ * To run a mutation, you first call `useRecycleIncidentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRecycleIncidentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [recycleIncidentMutation, { data, loading, error }] = useRecycleIncidentMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useRecycleIncidentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RecycleIncidentMutation,
+    RecycleIncidentMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    RecycleIncidentMutation,
+    RecycleIncidentMutationVariables
+  >(RecycleIncidentDocument, options);
+}
+export type RecycleIncidentMutationHookResult = ReturnType<
+  typeof useRecycleIncidentMutation
+>;
+export type RecycleIncidentMutationResult =
+  Apollo.MutationResult<RecycleIncidentMutation>;
+export type RecycleIncidentMutationOptions = Apollo.BaseMutationOptions<
+  RecycleIncidentMutation,
+  RecycleIncidentMutationVariables
+>;
+export const UpdateIncidentDocument = gql`
+  mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
+    updateIncident(where: $where, data: $data) {
+      id
+    }
+  }
+`;
+export type UpdateIncidentMutationFn = Apollo.MutationFunction<
+  UpdateIncidentMutation,
+  UpdateIncidentMutationVariables
+>;
+
+/**
+ * __useUpdateIncidentMutation__
+ *
+ * To run a mutation, you first call `useUpdateIncidentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateIncidentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateIncidentMutation, { data, loading, error }] = useUpdateIncidentMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateIncidentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateIncidentMutation,
+    UpdateIncidentMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateIncidentMutation,
+    UpdateIncidentMutationVariables
+  >(UpdateIncidentDocument, options);
+}
+export type UpdateIncidentMutationHookResult = ReturnType<
+  typeof useUpdateIncidentMutation
+>;
+export type UpdateIncidentMutationResult =
+  Apollo.MutationResult<UpdateIncidentMutation>;
+export type UpdateIncidentMutationOptions = Apollo.BaseMutationOptions<
+  UpdateIncidentMutation,
+  UpdateIncidentMutationVariables
+>;
 export const IncidentFeedDocument = gql`
   query incidentFeed(
     $schemeId: String!
@@ -15845,6 +16466,7 @@ export const ListIncidentsDocument = gql`
         images {
           id
           optimised
+          url
         }
         groups {
           id
@@ -15917,6 +16539,8 @@ export const ViewIncidentDocument = gql`
       subject
       description
       dayTime
+      date
+      time
       crimeTypes {
         id
         name
@@ -15938,6 +16562,11 @@ export const ViewIncidentDocument = gql`
       }
       location {
         id
+        building
+        street
+        townCity
+        county
+        postcode
         full
       }
       createdBy {
@@ -15948,6 +16577,7 @@ export const ViewIncidentDocument = gql`
       images {
         id
         optimised
+        url
       }
       groups {
         id
@@ -16007,55 +16637,258 @@ export type ViewIncidentQueryResult = Apollo.QueryResult<
   ViewIncidentQuery,
   ViewIncidentQueryVariables
 >;
-export const DeleteOffenderDocument = gql`
-  mutation deleteOffender($where: UniqueId!) {
-    deleteOffender(where: $where) {
+export const CreateOffenderDocument = gql`
+  mutation createOffender($data: CreateOffenderData!) {
+    createOffender(data: $data) {
       id
+      createdAt
+      updatedAt
+      age
+      build
+      dateOfBirth
+      dateSource
+      hair
+      gender
+      name
+      race
+      peculiarities
+      approved
+      active
+      images {
+        id
+        url
+        optimised
+      }
+      groups {
+        id
+        name
+      }
+      tags {
+        id
+        name
+      }
+      bans {
+        id
+        title
+        location
+        description
+        startDate
+        endDate
+      }
+      createdBy {
+        id
+        fullName
+        organisation
+      }
+      incidents {
+        id
+        subject
+        description
+        date
+        dayTime
+        crimeTypes {
+          id
+          name
+        }
+        location {
+          id
+          full
+        }
+        createdBy {
+          id
+          fullName
+          organisation
+        }
+        images {
+          id
+          url
+          optimised
+        }
+      }
     }
   }
 `;
-export type DeleteOffenderMutationFn = Apollo.MutationFunction<
-  DeleteOffenderMutation,
-  DeleteOffenderMutationVariables
+export type CreateOffenderMutationFn = Apollo.MutationFunction<
+  CreateOffenderMutation,
+  CreateOffenderMutationVariables
 >;
 
 /**
- * __useDeleteOffenderMutation__
+ * __useCreateOffenderMutation__
  *
- * To run a mutation, you first call `useDeleteOffenderMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteOffenderMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateOffenderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOffenderMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [deleteOffenderMutation, { data, loading, error }] = useDeleteOffenderMutation({
+ * const [createOffenderMutation, { data, loading, error }] = useCreateOffenderMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateOffenderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateOffenderMutation,
+    CreateOffenderMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateOffenderMutation,
+    CreateOffenderMutationVariables
+  >(CreateOffenderDocument, options);
+}
+export type CreateOffenderMutationHookResult = ReturnType<
+  typeof useCreateOffenderMutation
+>;
+export type CreateOffenderMutationResult =
+  Apollo.MutationResult<CreateOffenderMutation>;
+export type CreateOffenderMutationOptions = Apollo.BaseMutationOptions<
+  CreateOffenderMutation,
+  CreateOffenderMutationVariables
+>;
+export const RecycleOffenderDocument = gql`
+  mutation recycleOffender($where: UniqueId!) {
+    recycleOffender(where: $where) {
+      id
+    }
+  }
+`;
+export type RecycleOffenderMutationFn = Apollo.MutationFunction<
+  RecycleOffenderMutation,
+  RecycleOffenderMutationVariables
+>;
+
+/**
+ * __useRecycleOffenderMutation__
+ *
+ * To run a mutation, you first call `useRecycleOffenderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRecycleOffenderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [recycleOffenderMutation, { data, loading, error }] = useRecycleOffenderMutation({
  *   variables: {
  *      where: // value for 'where'
  *   },
  * });
  */
-export function useDeleteOffenderMutation(
+export function useRecycleOffenderMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    DeleteOffenderMutation,
-    DeleteOffenderMutationVariables
+    RecycleOffenderMutation,
+    RecycleOffenderMutationVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<
-    DeleteOffenderMutation,
-    DeleteOffenderMutationVariables
-  >(DeleteOffenderDocument, options);
+    RecycleOffenderMutation,
+    RecycleOffenderMutationVariables
+  >(RecycleOffenderDocument, options);
 }
-export type DeleteOffenderMutationHookResult = ReturnType<
-  typeof useDeleteOffenderMutation
+export type RecycleOffenderMutationHookResult = ReturnType<
+  typeof useRecycleOffenderMutation
 >;
-export type DeleteOffenderMutationResult =
-  Apollo.MutationResult<DeleteOffenderMutation>;
-export type DeleteOffenderMutationOptions = Apollo.BaseMutationOptions<
-  DeleteOffenderMutation,
-  DeleteOffenderMutationVariables
+export type RecycleOffenderMutationResult =
+  Apollo.MutationResult<RecycleOffenderMutation>;
+export type RecycleOffenderMutationOptions = Apollo.BaseMutationOptions<
+  RecycleOffenderMutation,
+  RecycleOffenderMutationVariables
+>;
+export const UpdateOffenderDocument = gql`
+  mutation updateOffender($where: UniqueId!, $data: OffenderUpdateInput!) {
+    updateOffender(where: $where, data: $data) {
+      id
+      createdAt
+      updatedAt
+      age
+      build
+      dateOfBirth
+      dateSource
+      hair
+      gender
+      name
+      race
+      peculiarities
+      approved
+      active
+      images {
+        id
+        url
+        optimised
+      }
+      groups {
+        id
+        name
+      }
+      tags {
+        id
+        name
+      }
+      bans {
+        id
+        location
+        description
+        startDate
+        endDate
+      }
+      createdBy {
+        id
+        fullName
+        organisation
+      }
+    }
+  }
+`;
+export type UpdateOffenderMutationFn = Apollo.MutationFunction<
+  UpdateOffenderMutation,
+  UpdateOffenderMutationVariables
+>;
+
+/**
+ * __useUpdateOffenderMutation__
+ *
+ * To run a mutation, you first call `useUpdateOffenderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateOffenderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateOffenderMutation, { data, loading, error }] = useUpdateOffenderMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateOffenderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateOffenderMutation,
+    UpdateOffenderMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateOffenderMutation,
+    UpdateOffenderMutationVariables
+  >(UpdateOffenderDocument, options);
+}
+export type UpdateOffenderMutationHookResult = ReturnType<
+  typeof useUpdateOffenderMutation
+>;
+export type UpdateOffenderMutationResult =
+  Apollo.MutationResult<UpdateOffenderMutation>;
+export type UpdateOffenderMutationOptions = Apollo.BaseMutationOptions<
+  UpdateOffenderMutation,
+  UpdateOffenderMutationVariables
 >;
 export const ListOffendersDocument = gql`
   query listOffenders(
@@ -16089,6 +16922,7 @@ export const ListOffendersDocument = gql`
         active
         images {
           id
+          url
           optimised
         }
         groups {
@@ -16099,6 +16933,14 @@ export const ListOffendersDocument = gql`
           id
           name
         }
+        bans {
+          id
+          title
+          location
+          description
+          startDate
+          endDate
+        }
         createdBy {
           id
           fullName
@@ -16108,6 +16950,7 @@ export const ListOffendersDocument = gql`
           id
           subject
           description
+          date
           dayTime
           crimeTypes {
             id
@@ -16124,6 +16967,7 @@ export const ListOffendersDocument = gql`
           }
           images {
             id
+            url
             optimised
           }
         }
@@ -16373,6 +17217,7 @@ export const ViewOffenderDocument = gql`
       active
       images {
         id
+        url
         optimised
       }
       groups {
@@ -16383,6 +17228,14 @@ export const ViewOffenderDocument = gql`
         id
         name
       }
+      bans {
+        id
+        title
+        location
+        description
+        startDate
+        endDate
+      }
       createdBy {
         id
         fullName
@@ -16392,6 +17245,7 @@ export const ViewOffenderDocument = gql`
         id
         subject
         description
+        date
         dayTime
         crimeTypes {
           id
@@ -16408,6 +17262,7 @@ export const ViewOffenderDocument = gql`
         }
         images {
           id
+          url
           optimised
         }
       }
@@ -16464,6 +17319,56 @@ export type ViewOffenderLazyQueryHookResult = ReturnType<
 export type ViewOffenderQueryResult = Apollo.QueryResult<
   ViewOffenderQuery,
   ViewOffenderQueryVariables
+>;
+export const DeleteOffenderDocument = gql`
+  mutation deleteOffender($where: UniqueId!) {
+    deleteOffender(where: $where) {
+      id
+    }
+  }
+`;
+export type DeleteOffenderMutationFn = Apollo.MutationFunction<
+  DeleteOffenderMutation,
+  DeleteOffenderMutationVariables
+>;
+
+/**
+ * __useDeleteOffenderMutation__
+ *
+ * To run a mutation, you first call `useDeleteOffenderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteOffenderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteOffenderMutation, { data, loading, error }] = useDeleteOffenderMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useDeleteOffenderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteOffenderMutation,
+    DeleteOffenderMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteOffenderMutation,
+    DeleteOffenderMutationVariables
+  >(DeleteOffenderDocument, options);
+}
+export type DeleteOffenderMutationHookResult = ReturnType<
+  typeof useDeleteOffenderMutation
+>;
+export type DeleteOffenderMutationResult =
+  Apollo.MutationResult<DeleteOffenderMutation>;
+export type DeleteOffenderMutationOptions = Apollo.BaseMutationOptions<
+  DeleteOffenderMutation,
+  DeleteOffenderMutationVariables
 >;
 export const RestoreIncidentDocument = gql`
   mutation restoreIncident($id: String!, $recycledId: String!) {

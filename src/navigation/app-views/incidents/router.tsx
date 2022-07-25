@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router';
 import IncidentFeed from 'views/incidents/IncidentFeed';
 import ViewIncident from 'views/incidents/ViewIncident';
 import Add from 'old-components/incidents/add/AddIncident/AddIncident';
-import Edit from 'old-components/incidents/edit/EditIncident/EditIncident';
+import Edit from 'views/incidents/EditIncident';
 
 const Incidents = (): JSX.Element => (
   <Routes>

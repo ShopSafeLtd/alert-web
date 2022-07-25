@@ -12,29 +12,39 @@ import {
   Divider,
   Skeleton,
   Button,
+  List,
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faLocationDot,
   faClock,
-  faUser,
   faPlus,
-  faImagePortrait,
-  faImageUser,
   faUserTag,
+  faUserClock,
+  faEarth,
+  faMarsAndVenus,
+  faUserHair,
+  faCircleInfo,
 } from '@fortawesome/pro-light-svg-icons';
 import {
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
   getOffenderRace,
-} from 'utils/get-offender-desc';
+  getLastOffence,
+  calcAge,
+} from 'utils/offender/get-offender-desc';
+
+import {
+  calcDuration,
+  calcExpired,
+} from 'utils/offender/get-offender-exclusion';
 import { SRLWrapper } from 'simple-react-lightbox';
 import OffenderSideList from 'components/offenders/OffenderSideList';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 interface Props {
   data: ViewOffenderQuery | undefined;
@@ -44,7 +54,7 @@ interface Props {
   offenderId: string;
   editRights: boolean;
   deleteRights: boolean;
-  onDelete: () => void;
+  onDelete: (id: string) => void;
 }
 
 const ViewOffender = ({
@@ -93,7 +103,13 @@ const ViewOffender = ({
                   )}
                   {deleteRights && (
                     <Col>
-                      <Button onClick={onDelete} danger type="text">
+                      <Button
+                        onClick={() => {
+                          onDelete(offenderId);
+                        }}
+                        danger
+                        type="text"
+                      >
                         Delete Offender
                       </Button>
                     </Col>
@@ -111,7 +127,11 @@ const ViewOffender = ({
                         ) : (
                           <>
                             <Title level={4}>{data?.offender?.name}</Title>
-                            <Text>{data?.offender?.groups[0].name}</Text>
+                            {data?.offender?.groups?.map((group) => (
+                              <Text key={group.id} type="danger" ellipsis>
+                                {group.name}
+                              </Text>
+                            ))}
                             <Row className="offender-tags">
                               {data?.offender?.tags.map((tag) => (
                                 <Col key={tag.id}>
@@ -122,10 +142,11 @@ const ViewOffender = ({
                           </>
                         )}
                         <Descriptions
-                          column={1}
+                          column={2}
                           className="offender-descriptions"
                         >
                           <Descriptions.Item
+                            span={2}
                             label={
                               <span>
                                 <FontAwesomeIcon
@@ -152,20 +173,15 @@ const ViewOffender = ({
                               <span>
                                 <FontAwesomeIcon
                                   className="offender-description-icon"
-                                  icon={faImagePortrait}
+                                  icon={faUserClock}
                                 />
                                 Age
                               </span>
                             }
                           >
-                            {loading ? (
-                              <Skeleton
-                                title={{ width: 100 }}
-                                paragraph={false}
-                              />
-                            ) : (
-                              getOffenderAge(data?.offender?.age)
-                            )}
+                            {data?.offender?.dateOfBirth
+                              ? calcAge(data?.offender?.dateOfBirth)
+                              : getOffenderAge(data?.offender?.age)}
                           </Descriptions.Item>
                           <Descriptions.Item
                             label={
@@ -187,12 +203,34 @@ const ViewOffender = ({
                               getOffenderBuild(data?.offender?.build)
                             )}
                           </Descriptions.Item>
+                          {data?.offender?.hair && (
+                            <Descriptions.Item
+                              label={
+                                <span>
+                                  <FontAwesomeIcon
+                                    className="offender-description-icon"
+                                    icon={faUserHair}
+                                  />
+                                  Hair
+                                </span>
+                              }
+                            >
+                              {loading ? (
+                                <Skeleton
+                                  title={{ width: 100 }}
+                                  paragraph={false}
+                                />
+                              ) : (
+                                data?.offender?.hair
+                              )}
+                            </Descriptions.Item>
+                          )}
                           <Descriptions.Item
                             label={
                               <span>
                                 <FontAwesomeIcon
                                   className="offender-description-icon"
-                                  icon={faImageUser}
+                                  icon={faMarsAndVenus}
                                 />
                                 Sex
                               </span>
@@ -212,7 +250,7 @@ const ViewOffender = ({
                               <span>
                                 <FontAwesomeIcon
                                   className="offender-description-icon"
-                                  icon={faUser}
+                                  icon={faEarth}
                                 />
                                 Ethnicity
                               </span>
@@ -227,15 +265,17 @@ const ViewOffender = ({
                               getOffenderRace(data?.offender?.race, false)
                             )}
                           </Descriptions.Item>
-                          {data?.offender?.incidents[0]?.location && (
+
+                          {data?.offender?.peculiarities && (
                             <Descriptions.Item
+                              span={2}
                               label={
                                 <span>
                                   <FontAwesomeIcon
                                     className="offender-description-icon"
-                                    icon={faLocationDot}
+                                    icon={faCircleInfo}
                                   />
-                                  Location:
+                                  Additional Info
                                 </span>
                               }
                             >
@@ -245,11 +285,74 @@ const ViewOffender = ({
                                   paragraph={false}
                                 />
                               ) : (
-                                data?.offender?.incidents[0]?.location?.full
+                                data?.offender?.peculiarities
+                              )}
+                            </Descriptions.Item>
+                          )}
+
+                          {data?.offender?.incidents[0]?.location && (
+                            <Descriptions.Item
+                              span={2}
+                              label={
+                                <span>
+                                  <FontAwesomeIcon
+                                    className="offender-description-icon"
+                                    icon={faLocationDot}
+                                  />
+                                  Last offence
+                                </span>
+                              }
+                            >
+                              {loading ? (
+                                <Skeleton
+                                  title={{ width: 100 }}
+                                  paragraph={false}
+                                />
+                              ) : (
+                                getLastOffence(data?.offender?.incidents)
+                                  ?.location
                               )}
                             </Descriptions.Item>
                           )}
                         </Descriptions>
+                        <Title level={4}>Exclusions</Title>
+                        {data?.offender?.bans &&
+                        data.offender.bans.length > 0 ? (
+                          <List
+                            itemLayout="horizontal"
+                            size="small"
+                            dataSource={data?.offender?.bans}
+                            renderItem={(ban) => (
+                              <List.Item key={ban.id}>
+                                <Row gutter={16}>
+                                  <Col>
+                                    End: {new Date(ban?.endDate).toDateString()}
+                                    {calcExpired(new Date(ban.endDate)) && (
+                                      <Tag
+                                        color="red"
+                                        style={{ marginLeft: 5, padding: 1 }}
+                                      >
+                                        EXPIRED
+                                      </Tag>
+                                    )}
+                                  </Col>
+                                  <Col>
+                                    Duration:
+                                    {calcDuration(
+                                      new Date(ban?.startDate),
+                                      new Date(ban?.endDate)
+                                    )}
+                                  </Col>
+                                  <Col>Location: {ban.location}</Col>
+                                </Row>
+                              </List.Item>
+                            )}
+                          />
+                        ) : (
+                          <Paragraph>
+                            No one has added an exclusion to this offender yet.
+                          </Paragraph>
+                        )}
                       </div>
                     </Col>
                     <Col span={11}>
@@ -276,37 +379,17 @@ const ViewOffender = ({
                                     flex={1}
                                     className="offender-incident-content"
                                   >
-                                    <Text
+                                    <Title
+                                      level={4}
                                       className="offender-incident-name"
-                                      strong
                                     >
                                       {incident.subject}
-                                    </Text>
+                                    </Title>
                                     <Descriptions size="small" column={1}>
-                                      <Descriptions.Item
-                                        label={
-                                          <span>
-                                            <FontAwesomeIcon
-                                              className="incident-description-icon"
-                                              icon={faClock}
-                                            />
-                                            Created At
-                                          </span>
-                                        }
-                                      >
+                                      <Descriptions.Item label="Created At">
                                         {incident.dayTime}
                                       </Descriptions.Item>
-                                      <Descriptions.Item
-                                        label={
-                                          <span>
-                                            <FontAwesomeIcon
-                                              className="incident-description-icon"
-                                              icon={faUser}
-                                            />
-                                            Created By
-                                          </span>
-                                        }
-                                      >
+                                      <Descriptions.Item label="Created By">
                                         {loading ? (
                                           <Skeleton
                                             title={{ width: 100 }}
@@ -317,17 +400,7 @@ const ViewOffender = ({
                               ${incident?.createdBy.organisation}`
                                         )}
                                       </Descriptions.Item>
-                                      <Descriptions.Item
-                                        label={
-                                          <span>
-                                            <FontAwesomeIcon
-                                              className="incident-description-icon"
-                                              icon={faLocationDot}
-                                            />
-                                            Location
-                                          </span>
-                                        }
-                                      >
+                                      <Descriptions.Item label="Location">
                                         {incident?.location?.full}
                                       </Descriptions.Item>
                                     </Descriptions>
@@ -340,9 +413,9 @@ const ViewOffender = ({
                         </div>
                       ) : (
                         <div className="offender-incidents-empty">
-                          <Typography.Paragraph>
-                            There are no offenders on this Offender.
-                          </Typography.Paragraph>
+                          <Paragraph>
+                            This offender does not appear in any incidents.
+                          </Paragraph>
                           {addOffenderRights && (
                             <div>
                               <Button
@@ -353,7 +426,7 @@ const ViewOffender = ({
                                   />
                                 }
                               >
-                                Link Offender
+                                Link Incident
                               </Button>
                             </div>
                           )}

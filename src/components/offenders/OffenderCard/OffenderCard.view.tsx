@@ -20,14 +20,14 @@ import { ListOffendersQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faLocationDot,
-  faUser,
   faEllipsisV,
   faTrash,
   faEdit,
   faUserTag,
-  faImagePortrait,
   faClock,
-  faImageUser,
+  faUserClock,
+  faMarsAndVenus,
+  faEarth,
 } from '@fortawesome/pro-light-svg-icons';
 import {
   faAngleLeft,
@@ -39,7 +39,10 @@ import {
   getOffenderBuild,
   getOffenderGender,
   getOffenderRace,
-} from 'utils/get-offender-desc';
+  getLastOffence,
+  calcAge,
+} from 'utils/offender/get-offender-desc';
+
 import { CarouselRef } from 'antd/lib/carousel';
 
 import { Link } from 'react-router-dom';
@@ -57,6 +60,7 @@ interface Props {
   deleteRights: boolean;
   menuRights: boolean;
   openLightbox: (elements: { src: string }[], index: number) => void;
+  onNavigate: (id: string) => void;
   onDelete: (id: string) => void;
 }
 
@@ -66,6 +70,7 @@ const OffenderCard = ({
   deleteRights,
   menuRights,
   openLightbox,
+  onNavigate,
   onDelete,
 }: Props): JSX.Element => {
   const imagesRef = useRef<CarouselRef>(null);
@@ -89,7 +94,7 @@ const OffenderCard = ({
                 {
                   key: 0,
                   label: 'Edit Offender',
-                  onClick: () => {},
+                  onClick: () => onNavigate(offender?.id || ''),
                   icon: <FontAwesomeIcon size="lg" icon={faEdit} />,
                 },
                 {
@@ -189,6 +194,11 @@ const OffenderCard = ({
               </Title>
               <Row style={{ marginTop: -5, marginBottom: 10 }}>
                 <Col>
+                  <FontAwesomeIcon
+                    size="sm"
+                    className="offender-card-icon"
+                    icon={faClock}
+                  />
                   <Text type="secondary">
                     Last updated:{' '}
                     {moment(offender?.updatedAt || moment()).format(
@@ -197,12 +207,14 @@ const OffenderCard = ({
                   </Text>
                 </Col>
               </Row>
-              <Row>
-                <Col>
-                  <Text type="danger" ellipsis>
-                    {offender?.groups[0]?.name}
-                  </Text>
-                </Col>
+              <Row gutter={8}>
+                {offender?.groups?.map((group) => (
+                  <Col key={group.id}>
+                    <Text type="danger" ellipsis>
+                      {group.name}
+                    </Text>
+                  </Col>
+                ))}
               </Row>
             </div>
 
@@ -211,10 +223,13 @@ const OffenderCard = ({
                 <FontAwesomeIcon
                   size="sm"
                   className="offender-card-icon"
-                  icon={faImagePortrait}
+                  icon={faUserClock}
                 />
                 <Text type="secondary">
-                  Age: {getOffenderAge(offender.age)}
+                  Age:{' '}
+                  {offender.dateOfBirth
+                    ? calcAge(offender.dateOfBirth)
+                    : getOffenderAge(offender.age)}
                 </Text>
               </Col>
               <Col>
@@ -233,7 +248,7 @@ const OffenderCard = ({
                 <FontAwesomeIcon
                   size="sm"
                   className="offender-card-icon"
-                  icon={faImageUser}
+                  icon={faMarsAndVenus}
                 />
                 <Text type="secondary">
                   Sex: {getOffenderGender(offender.gender)}
@@ -243,7 +258,7 @@ const OffenderCard = ({
                 <FontAwesomeIcon
                   size="sm"
                   className="offender-card-icon"
-                  icon={faUser}
+                  icon={faEarth}
                 />
                 <Text type="secondary">
                   Ethnicity: {getOffenderRace(offender.race, false)}
@@ -251,25 +266,22 @@ const OffenderCard = ({
               </Col>
             </Row>
 
-            {offender?.incidents[0]?.location ? (
-              <Row gutter={8} className="offender-card-location-row">
-                <Col span={1}>
-                  <FontAwesomeIcon
-                    size="sm"
-                    className="offender-card-icon"
-                    icon={faLocationDot}
-                  />
-                </Col>
+            <Row gutter={8} className="offender-card-location-row">
+              <Col span={1}>
+                <FontAwesomeIcon
+                  size="sm"
+                  className="offender-card-icon"
+                  icon={faLocationDot}
+                />
+              </Col>
 
-                <Col span={23}>
-                  <Text style={{ width: '100%' }} ellipsis type="secondary">
-                    {offender?.incidents[0]?.location?.full}
-                  </Text>
-                </Col>
-              </Row>
-            ) : (
-              <div style={{ marginTop: 30 }} />
-            )}
+              <Col span={23}>
+                <Text style={{ width: '100%' }} ellipsis type="secondary">
+                  Last offence: {getLastOffence(offender.incidents)?.location}
+                </Text>
+              </Col>
+            </Row>
+
             <Row justify="center">
               <Col>
                 <Link to={`view/${offender?.id}`}>
@@ -355,25 +367,19 @@ const OffenderCard = ({
                           </Descriptions>
                         </Col>
                       </Row>
-                      <Row justify="center">
-                        <Col>
-                          <Link to={`/app/incidents/view/${incident?.id}`}>
-                            <Button size="small" type="text">
-                              View more details
-                            </Button>
-                          </Link>
-                        </Col>
-                      </Row>
                     </div>
                   </Col>
                 </Row>
               ))}
             </div>
           ) : (
-            <Empty
-              image={Empty.PRESENTED_IMAGE_SIMPLE}
-              description="No Incident"
-            />
+            <div className="offender-card-content">
+              <Empty
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                description="There are no incidents on this offender."
+                style={{ marginTop: 60 }}
+              />
+            </div>
           )}
         </Tabs.TabPane>
       </Tabs>

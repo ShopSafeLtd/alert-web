@@ -7,10 +7,14 @@ import {
   useSchemeGroupsQuery,
   useTagsQuery,
   Model,
+  RecycleIncidentMutation,
+  ListIncidentsDocument,
 } from 'graphql/generated';
 import { useState, useEffect } from 'react';
 import { useStoreActions, useStoreState, IncidentSort } from 'state';
 import { useLightbox } from 'simple-react-lightbox';
+import { MutationUpdaterFn } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
 
 interface Return {
   data: ListIncidentsQuery | undefined;
@@ -35,6 +39,8 @@ interface Return {
   crimeTypes: { value: string; label: string }[];
   onCrimeTypesChange: (crimeTypes: string[]) => void;
   tagsLoading: boolean;
+  updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
+  onNavigate: () => void;
 }
 
 const getSizeOptions = () => {
@@ -50,6 +56,8 @@ const getSizeOptions = () => {
 const useIncidentFeed = (): Return => {
   // Lightbox hook
   const { openLightbox } = useLightbox();
+  const navigate = useNavigate();
+  const onNavigate = () => navigate(`/app/incidents/add`);
 
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -189,7 +197,151 @@ const useIncidentFeed = (): Return => {
     },
     fetchPolicy: 'cache-and-network',
   });
+  // update Incident list after deleting an item
+  const updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res === null || res === undefined) return;
 
+    const existingData = store.readQuery<ListIncidentsQuery>({
+      query: ListIncidentsDocument,
+      variables: {
+        scheme: {
+          id: schemeId,
+        },
+        order: {
+          createdAt:
+            order === IncidentSort.createdAtDesc
+              ? SortOrder.Desc
+              : SortOrder.Asc,
+        },
+        where: {
+          crimeTypes: variables.crimeTypes.length
+            ? {
+                some: {
+                  id: {
+                    in: variables.crimeTypes,
+                  },
+                },
+              }
+            : undefined,
+          groups: variables.groups.length
+            ? {
+                some: {
+                  id: {
+                    in: variables.groups,
+                  },
+                },
+              }
+            : undefined,
+          OR: [
+            {
+              subject: {
+                contains: variables.search,
+                mode: QueryMode.Insensitive,
+              },
+            },
+            {
+              createdBy: {
+                OR: [
+                  {
+                    fullName: {
+                      contains: variables.search,
+                      mode: QueryMode.Insensitive,
+                    },
+                  },
+                  {
+                    organisation: {
+                      contains: variables.search,
+                      mode: QueryMode.Insensitive,
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        take: pagination.pageSize,
+        skip: pagination.pageSize * (pagination.page - 1),
+      },
+    });
+
+    if (existingData === null) return;
+    if (existingData?.listIncidents?.incidents === undefined) return;
+
+    store.writeQuery<ListIncidentsQuery>({
+      query: ListIncidentsDocument,
+      data: {
+        listIncidents: {
+          ...existingData.listIncidents,
+          incidents: existingData.listIncidents?.incidents.filter(
+            (incident) => incident.id !== res?.recycleIncident?.id
+          ),
+        },
+        __typename: 'Query',
+      },
+      variables: {
+        scheme: {
+          id: schemeId,
+        },
+        order: {
+          createdAt:
+            order === IncidentSort.createdAtDesc
+              ? SortOrder.Desc
+              : SortOrder.Asc,
+        },
+        where: {
+          crimeTypes: variables.crimeTypes.length
+            ? {
+                some: {
+                  id: {
+                    in: variables.crimeTypes,
+                  },
+                },
+              }
+            : undefined,
+          groups: variables.groups.length
+            ? {
+                some: {
+                  id: {
+                    in: variables.groups,
+                  },
+                },
+              }
+            : undefined,
+          OR: [
+            {
+              subject: {
+                contains: variables.search,
+                mode: QueryMode.Insensitive,
+              },
+            },
+            {
+              createdBy: {
+                OR: [
+                  {
+                    fullName: {
+                      contains: variables.search,
+                      mode: QueryMode.Insensitive,
+                    },
+                  },
+                  {
+                    organisation: {
+                      contains: variables.search,
+                      mode: QueryMode.Insensitive,
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        take: pagination.pageSize,
+        skip: pagination.pageSize * (pagination.page - 1),
+      },
+    });
+  };
   // Functions
   const triggerLightbox = (elements: { src: string }[], index: number) => {
     setLightboxElements(elements);
@@ -276,6 +428,8 @@ const useIncidentFeed = (): Return => {
     crimeTypes:
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
     tagsLoading,
+    updateIncidentList,
+    onNavigate,
   };
 };
 

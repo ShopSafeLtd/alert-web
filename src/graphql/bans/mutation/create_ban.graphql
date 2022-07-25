@@ -1,0 +1,9 @@
+mutation createBan($data: BanCreateInput!) {
+  createBan(data: $data) {
+    id
+    location
+    description
+    startDate
+    endDate
+  }
+}

@@ -17,28 +17,11 @@ interface Return {
   saving: boolean;
   deleteConfirm: () => void;
 }
-type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const useGroupDetail = (): Return => {
   const groupId = useParams().id;
   const [saving, setSaving] = useState(false);
   const [editGroup, setEditGroup] = useState(false);
-
-  const openNotification = (type: NotificationType) => {
-    if (type === 'success') {
-      notification.success({
-        message: 'Success!',
-        description: 'The group has been deleted!',
-        placement: 'bottomRight',
-      });
-    } else if (type === 'error') {
-      notification.error({
-        message: 'error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
-    }
-  };
 
   const { data, loading } = useGroupQuery({
     fetchPolicy: 'cache-and-network',
@@ -53,11 +36,19 @@ const useGroupDetail = (): Return => {
     onCompleted: () => {
       setSaving(false);
       window.history.back();
-      openNotification('success');
+      notification.success({
+        message: 'Successfully Deleted',
+        description: 'The group has been deleted!',
+        placement: 'bottomRight',
+      });
     },
     onError: () => {
-      openNotification('error');
       setSaving(false);
+      notification.error({
+        message: 'error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
     },
   });
 
