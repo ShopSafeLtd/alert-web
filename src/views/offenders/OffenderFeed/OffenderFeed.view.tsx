@@ -107,10 +107,10 @@ const OffenderFeed = ({
           size="small"
           style={{ minWidth: 150 }}
         >
-          <Select.Option value={OffenderSort.createdAtDesc}>
+          <Select.Option value={OffenderSort.updatedAtDesc}>
             Newest First
           </Select.Option>
-          <Select.Option value={OffenderSort.createdAtAsc}>
+          <Select.Option value={OffenderSort.updatedAtAsc}>
             Oldest First
           </Select.Option>
         </Select>

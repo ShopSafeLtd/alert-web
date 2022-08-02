@@ -58,23 +58,38 @@ query incidentFeed(
       build
       dateOfBirth
       dateSource
-      gender
       hair
+      gender
       name
-      peculiarities
       race
+      peculiarities
       approved
-      uploaded
       active
       images {
         id
         url
         optimised
-        card
+      }
+      groups {
+        id
+        name
       }
       tags {
         id
         name
+      }
+      bans {
+        id
+        title
+        location
+        description
+        startDate
+        endDate
+      }
+      createdBy {
+        id
+        fullName
+        organisation
       }
     }
   }

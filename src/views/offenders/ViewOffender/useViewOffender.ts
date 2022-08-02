@@ -41,7 +41,7 @@ const useViewOffender = (): Return => {
     onCompleted: () => {
       window.history.back();
       notification.success({
-        message: 'Successfully Deleted',
+        message: 'Successfully Deleted!',
         description:
           'The offender has been deleted from the feed and moved to the recycle bin.',
         placement: 'bottomRight',
@@ -49,7 +49,7 @@ const useViewOffender = (): Return => {
     },
     onError: () => {
       notification.error({
-        message: 'error!',
+        message: 'Error!',
         description: 'Whoops, there are some errors. Please try again. ',
         placement: 'bottomRight',
       });

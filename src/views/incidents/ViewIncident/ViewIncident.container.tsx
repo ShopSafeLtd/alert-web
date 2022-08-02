@@ -1,8 +1,8 @@
-import React from "react";
-import View from "./ViewIncident.view";
-import useViewIncident from "./useViewIncident";
+import React from 'react';
+import View from './ViewIncident.view';
+import useViewIncident from './useViewIncident';
 
-const ViewIncident = () => {
+const ViewIncident = (): JSX.Element => {
   const {
     data,
     loading,
@@ -12,6 +12,9 @@ const ViewIncident = () => {
     onDelete,
     deleteRights,
     editRights,
+    addExistingOffender,
+    toggleAddExistingOffender,
+    updateOffenderList,
   } = useViewIncident();
 
   return (
@@ -24,6 +27,9 @@ const ViewIncident = () => {
       onDelete={onDelete}
       deleteRights={deleteRights}
       editRights={editRights}
+      addExistingOffender={addExistingOffender}
+      toggleAddExistingOffender={toggleAddExistingOffender}
+      updateOffenderList={updateOffenderList}
     />
   );
 };

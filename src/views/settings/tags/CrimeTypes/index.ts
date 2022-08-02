@@ -1,1 +1,1 @@
-export { default } from './IncidentList.container';
+export { default } from './CrimeTypeList.container';

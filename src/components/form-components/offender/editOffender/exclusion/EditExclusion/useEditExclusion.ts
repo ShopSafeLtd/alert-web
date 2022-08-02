@@ -47,7 +47,7 @@ const useEditBan = ({ onClose, banId }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: 'Success!',
+        message: 'Successfully Updated!',
         description: 'The exclusion has been updated! ',
         placement: 'bottomRight',
       });
@@ -55,7 +55,7 @@ const useEditBan = ({ onClose, banId }: Props): Return => {
     onError: () => {
       setSaving(false);
       notification.error({
-        message: 'error!',
+        message: 'Error!',
         description: 'Whoops, there are some errors. Please try again. ',
         placement: 'bottomRight',
       });

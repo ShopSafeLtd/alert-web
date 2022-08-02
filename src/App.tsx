@@ -1,18 +1,18 @@
-import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import Views from "navigation/router";
-import { ThemeSwitcherProvider } from "react-css-theme-switcher";
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Views from 'navigation/router';
+import { ThemeSwitcherProvider } from 'react-css-theme-switcher';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { ThemeProvider, StylesProvider } from "@material-ui/styles";
-import LogRocket from "logrocket";
-import { createMuiTheme } from "@material-ui/core/styles";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import MomentUtils from "@date-io/moment";
-import ApolloProvider from "./providers/ApolloProvider";
+import { ThemeProvider, StylesProvider } from '@material-ui/styles';
+import LogRocket from 'logrocket';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
+import ApolloProvider from './providers/ApolloProvider';
 
-import { ThemeConfig, Store } from "./state";
+import { ThemeConfig, Store } from './state';
 
-LogRocket.init("ub3rsv/gotalk-portal"); 
+LogRocket.init('ub3rsv/gotalk-portal');
 
 const themes = {
   dark: `${process.env.PUBLIC_URL}/css/dark-theme.css`,
@@ -44,15 +44,15 @@ const themes = {
 const theme = createMuiTheme({
   palette: {
     primary: {
-      light: "#E57373",
-      main: "#EF5350",
-      dark: "#E53935",
-      contrastText: "#FFFFFF",
+      light: '#E57373',
+      main: '#EF5350',
+      dark: '#E53935',
+      contrastText: '#FFFFFF',
     },
   },
 });
 
-function App() {
+function App(): JSX.Element {
   return (
     <div className="App">
       <Store>

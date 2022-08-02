@@ -6,7 +6,7 @@ import { Navigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import Loading from 'navigation/auth-views/authentication/loading';
 
-export const AuthLayout = () => {
+export const AuthLayout = (): JSX.Element => {
   const { isAuthenticated, isLoading } = useAuth0();
 
   const loggedIn = useStoreState((state) => state.auth.loggedIn);

@@ -12,7 +12,7 @@ import {
   Divider,
   Skeleton,
   Button,
-  List,
+  Table,
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -25,6 +25,7 @@ import {
   faMarsAndVenus,
   faUserHair,
   faCircleInfo,
+  faUser,
 } from '@fortawesome/pro-light-svg-icons';
 import {
   getOffenderAge,
@@ -35,10 +36,7 @@ import {
   calcAge,
 } from 'utils/offender/get-offender-desc';
 
-import {
-  calcDuration,
-  calcExpired,
-} from 'utils/offender/get-offender-exclusion';
+import { calcExpired } from 'utils/offender/get-offender-exclusion';
 import { SRLWrapper } from 'simple-react-lightbox';
 import OffenderSideList from 'components/offenders/OffenderSideList';
 import { Link } from 'react-router-dom';
@@ -318,35 +316,62 @@ const ViewOffender = ({
                         <Title level={4}>Exclusions</Title>
                         {data?.offender?.bans &&
                         data.offender.bans.length > 0 ? (
-                          <List
-                            itemLayout="horizontal"
+                          <Table
                             size="small"
-                            dataSource={data?.offender?.bans}
-                            renderItem={(ban) => (
-                              <List.Item key={ban.id}>
-                                <Row gutter={16}>
-                                  <Col>
-                                    End: {new Date(ban?.endDate).toDateString()}
-                                    {calcExpired(new Date(ban.endDate)) && (
+                            loading={loading}
+                            pagination={{
+                              defaultPageSize: 20,
+                              pageSize: 20,
+                            }}
+                            columns={[
+                              {
+                                key: 'duration',
+                                title: 'Duration',
+                                dataIndex: 'duration',
+                                render: (value, record) => (
+                                  <>
+                                    <Text>{value}</Text>
+                                    {calcExpired(new Date(record.endDate)) && (
                                       <Tag
                                         color="red"
-                                        style={{ marginLeft: 5, padding: 1 }}
+                                        style={{
+                                          marginLeft: 10,
+                                        }}
                                       >
                                         EXPIRED
                                       </Tag>
                                     )}
-                                  </Col>
-                                  <Col>
-                                    Duration:
-                                    {calcDuration(
-                                      new Date(ban?.startDate),
-                                      new Date(ban?.endDate)
+                                  </>
+                                ),
+                              },
+
+                              {
+                                key: 'location',
+                                title: 'Location',
+                                dataIndex: 'location',
+                                ellipsis: true,
+                                render: (value) => (
+                                  <span>
+                                    {value && (
+                                      <FontAwesomeIcon
+                                        className="offender-description-icon"
+                                        icon={faLocationDot}
+                                      />
                                     )}
-                                  </Col>
-                                  <Col>Location: {ban.location}</Col>
-                                </Row>
-                              </List.Item>
-                            )}
+                                    {value}
+                                  </span>
+                                ),
+                              },
+                            ]}
+                            dataSource={data?.offender?.bans.map((ban) => ({
+                              endDate: ban.endDate,
+                              duration: `${new Date(
+                                ban?.startDate
+                              ).toDateString()}  >  ${new Date(
+                                ban?.endDate
+                              ).toDateString()}`,
+                              location: ban.description,
+                            }))}
                           />
                         ) : (
                           <Paragraph>
@@ -386,10 +411,30 @@ const ViewOffender = ({
                                       {incident.subject}
                                     </Title>
                                     <Descriptions size="small" column={1}>
-                                      <Descriptions.Item label="Created At">
+                                      <Descriptions.Item
+                                        label={
+                                          <span>
+                                            <FontAwesomeIcon
+                                              className="offender-description-icon"
+                                              icon={faClock}
+                                            />
+                                            Created At
+                                          </span>
+                                        }
+                                      >
                                         {incident.dayTime}
                                       </Descriptions.Item>
-                                      <Descriptions.Item label="Created By">
+                                      <Descriptions.Item
+                                        label={
+                                          <span>
+                                            <FontAwesomeIcon
+                                              className="offender-description-icon"
+                                              icon={faUser}
+                                            />
+                                            Created By
+                                          </span>
+                                        }
+                                      >
                                         {loading ? (
                                           <Skeleton
                                             title={{ width: 100 }}
@@ -400,7 +445,17 @@ const ViewOffender = ({
                               ${incident?.createdBy.organisation}`
                                         )}
                                       </Descriptions.Item>
-                                      <Descriptions.Item label="Location">
+                                      <Descriptions.Item
+                                        label={
+                                          <span>
+                                            <FontAwesomeIcon
+                                              className="offender-description-icon"
+                                              icon={faLocationDot}
+                                            />
+                                            Location
+                                          </span>
+                                        }
+                                      >
                                         {incident?.location?.full}
                                       </Descriptions.Item>
                                     </Descriptions>

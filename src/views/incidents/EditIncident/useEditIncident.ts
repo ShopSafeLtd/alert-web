@@ -10,18 +10,20 @@ import {
   CreateTagMutation,
   TagsQuery,
   TagsDocument,
+  Age,
+  Gender,
+  Race,
+  Build,
+  useListOffendersQuery,
 } from 'graphql/generated';
 import { useParams } from 'react-router-dom';
-import {
-  notification,
-  // Modal
-} from 'antd';
+import { notification, Modal } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { MutationUpdaterFn } from '@apollo/client';
 import { Moment } from 'moment';
 
-// const { confirm } = Modal;
+const { confirm } = Modal;
 
 interface FormData {
   subject: string;
@@ -35,9 +37,31 @@ interface FormData {
   postcode: string;
   groups: string[];
   tags: string[];
-  images: [{ id: string; url: string; optimised: string }];
+  images: { id: string; url: string; optimised: string }[];
 }
-
+interface OffenderData {
+  id: string;
+  name?: string | null;
+  age?: Age | null;
+  gender?: Gender | null;
+  race?: Race | null;
+  build?: Build | null;
+  dateOfBirth?: Date | null;
+  hair?: string | null;
+  dateSource?: string | null;
+  peculiarities?: string | null;
+  approved?: boolean | null;
+  groups?:
+    | {
+        id: string;
+        name: string;
+      }[]
+    | undefined;
+  // images?: {
+  //   id: string;
+  //   optimised?: string | null;
+  // }[];
+}
 interface Return {
   onSubmit: (value: FormData) => void;
   data: ViewIncidentQuery | undefined;
@@ -47,22 +71,24 @@ interface Return {
   groupsLoading: boolean;
   tags: { value: string; label: string }[];
   tagsLoading: boolean;
-
   imgChange: UploadProps['onChange'];
   fileList: UploadFile[];
-
   addIncidentTag: boolean;
   toggleAddIncidentTag: () => void;
   updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
-  // banId: string;
-  // setBanId: (value: string) => void;
-  // deleteConfirm: (value: string) => void;
+  addOffender: boolean;
+  toggleAddOffender: () => void;
+  addExistingOffender: boolean;
+  toggleAddExistingOffender: () => void;
+  updateOffenderList: (value: OffenderData[] | undefined) => void;
+  offendersData: OffenderData[] | undefined;
+  deleteConfirm: (value: string | undefined) => void;
 }
 
 const useEditIncident = (): Return => {
-  console.log('a');
   const incidentId = useParams().id;
   const schemeId = useStoreState((state) => state.scheme.id);
+  const userId = useStoreState((state) => state.user.id);
 
   const groups = useStoreState((state) => state.user.groups);
   const role = useStoreState((state) => state.user.role);
@@ -75,25 +101,15 @@ const useEditIncident = (): Return => {
   const [saving, setSaving] = useState(false);
 
   const [addIncidentTag, setAddIncidentTag] = useState(false);
-
+  const [addOffender, setAddOffender] = useState(false);
+  const [addExistingOffender, setAddExistingOffender] = useState(false);
+  const [offendersData, setOffendersData] = useState<
+    OffenderData[] | undefined
+  >([]);
   const [imageChange, setImageChange] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
-    setImageChange(true);
-  };
-  const toggleAddIncidentTag = () => {
-    setAddIncidentTag(!addIncidentTag);
-  };
-  const errorNotification = () => {
-    notification.error({
-      message: 'error!',
-      description: 'Whoops, there are some errors. Please try again. ',
-      placement: 'bottomRight',
-    });
-  };
-
+  // Query
   const { data: IncidentData, loading } = useViewIncidentQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -103,39 +119,19 @@ const useEditIncident = (): Return => {
     },
 
     onCompleted: ({ incident }) => {
-      console.log(incident);
-      console.log('aa');
+      if (incident?.offenders && incident.offenders.length > 0) {
+        setOffendersData(incident.offenders);
+      }
 
-      // setAgeCheck(incident?.dateOfBirth);
       if (incident?.images && incident.images.length > 0) {
-        if (incident.images.length === 1) {
-          setFileList([
-            {
-              uid: `${incident?.images[0].id}`,
-              name: `${incident?.images[0].id}.png`,
-              status: 'done',
-              url: `${incident?.images[0].url}`,
-            },
-          ]);
-        } else {
-          setFileList(
-            incident?.images.map((image) => ({
-              uid: `${image.id}`,
-              name: `${image.id}.png`,
-              status: 'done',
-              url: `${image.url}`,
-            }))
-          );
-
-          // incident?.images.map((image) =>
-          //   fileList.push({
-          //     uid: `${image.id}`,
-          //     name: `${image.id}.png`,
-          //     status: 'done',
-          //     url: `${image.url}`,
-          //   })
-          // );
-        }
+        setFileList(
+          incident?.images.map((image) => ({
+            uid: `${image.id}`,
+            name: `${image.id}.png`,
+            status: 'done',
+            url: `${image.url}`,
+          }))
+        );
       }
     },
   });
@@ -165,6 +161,7 @@ const useEditIncident = (): Return => {
   });
 
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       where: {
         scheme: {
@@ -179,75 +176,15 @@ const useEditIncident = (): Return => {
     },
   });
 
-  const [updateIncident] = useUpdateIncidentMutation({
-    onCompleted: () => {
-      setSaving(false);
-      notification.success({
-        message: 'Successfully Updated!',
-        description: 'The Incident has been updated!',
-        placement: 'bottomRight',
-      });
-    },
-    onError: () => {
-      setSaving(false);
-      errorNotification();
+  const { data: ListOffendersData } = useListOffendersQuery({
+    variables: {
+      scheme: {
+        id: schemeId,
+      },
     },
   });
 
-  const onSubmit = (data: FormData) => {
-    setSaving(true);
-
-    if (incidentId) {
-      updateIncident({
-        variables: {
-          where: {
-            id: incidentId,
-          },
-          data: {
-            subject: { set: data.subject },
-            description: { set: data.description },
-            date: { set: data.date },
-            time: { set: data.time },
-            location: {
-              update: {
-                building: { set: data.building },
-                street: { set: data.street },
-                townCity: { set: data.townCity },
-                county: { set: data.county },
-                postcode: { set: data.postcode },
-              },
-            },
-            groups: {
-              set: data.groups.map((id) => ({ id })),
-            },
-            crimeTypes: {
-              set: data.tags.map((id) => ({ id })),
-            },
-            images: {
-              upload:
-                imageChange && fileList.length > 0
-                  ? fileList
-                      .map((item) => ({
-                        file: item.originFileObj,
-                      }))
-                      .filter((obj) => obj.file !== undefined)
-                  : [],
-              delete: imageChange
-                ? IncidentData?.incident?.images
-                    .filter(
-                      (image) =>
-                        !fileList.map((item) => item.uid).includes(image.id)
-                    )
-                    .map((image) => ({
-                      id: image.id,
-                    }))
-                : [],
-            },
-          },
-        },
-      });
-    }
-  };
+  // update mutation
   // update tag list after adding a new item
   const updateIncidentTag: MutationUpdaterFn<CreateTagMutation> = (
     store,
@@ -286,42 +223,169 @@ const useEditIncident = (): Return => {
     });
   };
 
-  // // delete
-  // const [deleteBan] = useDeleteBanMutation({
-  //   onCompleted: () => {
-  //     setSaving(false);
-  //     notification.success({
-  //       message: 'Successfully Deleted',
-  //       description:
-  //         'The Incident has been deleted from the feed and moved to the recycle bin.',
-  //       placement: 'bottomRight',
-  //     });
-  //   },
-  //   onError: () => {
-  //     setSaving(false);
-  //     errorNotification();
-  //   },
-  //   update,
-  // });
-  // const openDelete = (currentId: string) => {
-  //   setSaving(true);
-  //   if (currentId)
-  //     deleteBan({
-  //       variables: {
-  //         id: currentId,
-  //       },
-  //     });
-  // };
+  const [updateIncident] = useUpdateIncidentMutation({
+    onCompleted: () => {
+      setSaving(false);
+      notification.success({
+        message: 'Successfully Updated!',
+        description: 'The Incident has been updated!',
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      setSaving(false);
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
+    },
+  });
 
-  // const deleteConfirm = (currentId: string) => {
-  //   confirm({
-  //     title: 'Do you want to delete the exclusion?',
-  //     content: 'This action cannot be undone.',
-  //     onOk() {
-  //       openDelete(currentId);
-  //     },
-  //   });
-  // };
+  const onSubmit = (data: FormData) => {
+    setSaving(true);
+    if (incidentId) {
+      updateIncident({
+        variables: {
+          where: {
+            id: incidentId,
+          },
+          data: {
+            subject: { set: data.subject },
+            description: { set: data.description },
+            date: { set: data.date },
+            time: { set: data.time },
+            location: {
+              update: {
+                building: { set: data.building },
+                street: { set: data.street },
+                townCity: { set: data.townCity },
+                county: { set: data.county },
+                postcode: { set: data.postcode },
+              },
+            },
+            groups: {
+              set: data.groups.map((id) => ({ id })),
+            },
+            crimeTypes: {
+              set: data.tags.map((id) => ({ id })),
+            },
+            offenders: {
+              connect:
+                offendersData && offendersData.length > 0
+                  ? offendersData.map((offender) => ({ id: offender.id }))
+                  : undefined,
+              create:
+                offendersData && offendersData.length > 0
+                  ? offendersData
+                      .filter(
+                        (item) =>
+                          !ListOffendersData?.listOffenders?.offenders
+                            ?.map((offender) => offender.id)
+                            .includes(item.id)
+                      )
+                      .map((offender) => ({
+                        name: offender.name || 'Unidentified Offender' || null,
+                        gender: offender.gender || null,
+                        race: offender.race || null,
+                        build: offender.build || null,
+                        hair: offender.hair || null,
+                        peculiarities: offender.peculiarities || null,
+                        age: offender.age || null,
+                        dateSource: offender.dateSource || null,
+                        dateOfBirth: offender.dateOfBirth || null,
+                        groups:
+                          offender.groups && offender.groups.length > 0
+                            ? {
+                                connect: offender.groups.map(({ id }) => ({
+                                  id,
+                                })),
+                              }
+                            : undefined,
+                        scheme: { connect: { id: schemeId } },
+                        createdBy: { connect: { id: userId } },
+                        localId: offender.id,
+                      }))
+                  : undefined,
+
+              delete:
+                IncidentData?.incident?.offenders &&
+                IncidentData.incident.offenders.length > 0
+                  ? IncidentData.incident.offenders
+                      .filter(
+                        (offender) =>
+                          !offendersData
+                            ?.map((item) => item.id)
+                            .includes(offender.id)
+                      )
+                      .map((offender) => ({ id: offender.id }))
+                  : undefined,
+            },
+
+            images: {
+              upload:
+                imageChange && fileList.length > 0
+                  ? fileList
+                      .map((item) => ({
+                        file: item.originFileObj,
+                      }))
+                      .filter((obj) => obj.file !== undefined)
+                  : [],
+              delete: imageChange
+                ? IncidentData?.incident?.images
+                    .filter(
+                      (image) =>
+                        !fileList.map((item) => item.uid).includes(image.id)
+                    )
+                    .map((image) => ({
+                      id: image.id,
+                    }))
+                : [],
+            },
+          },
+        },
+      });
+    }
+  };
+  // functions
+  const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+    setImageChange(true);
+  };
+  const toggleAddIncidentTag = () => {
+    setAddIncidentTag(!addIncidentTag);
+  };
+  const toggleAddOffender = () => {
+    setAddOffender(!addOffender);
+  };
+  const toggleAddExistingOffender = () => {
+    setAddExistingOffender(!addExistingOffender);
+  };
+  const updateOffenderList = (filterOffenders: OffenderData[] | undefined) => {
+    if (filterOffenders) {
+      if (offendersData && offendersData.length > 0) {
+        setOffendersData(
+          offendersData.concat(
+            filterOffenders.filter(
+              (item) =>
+                !offendersData?.map((offender) => offender.id).includes(item.id)
+            )
+          )
+        );
+      } else setOffendersData(filterOffenders);
+    }
+  };
+  const deleteConfirm = (offenderId: string | undefined) => {
+    confirm({
+      title: 'Do you want to delete the exclusion?',
+      content: 'This action cannot be undone.',
+      onOk() {
+        setOffendersData(
+          offendersData?.filter((offender) => offender.id !== offenderId)
+        );
+      },
+    });
+  };
 
   return {
     onSubmit,
@@ -346,10 +410,13 @@ const useEditIncident = (): Return => {
     addIncidentTag,
     toggleAddIncidentTag,
     updateIncidentTag,
-
-    // banId,
-    // setBanId,
-    // deleteConfirm,
+    addOffender,
+    toggleAddOffender,
+    addExistingOffender,
+    toggleAddExistingOffender,
+    updateOffenderList,
+    offendersData,
+    deleteConfirm,
   };
 };
 

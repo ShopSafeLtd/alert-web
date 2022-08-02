@@ -24,8 +24,6 @@ interface Return {
   deleteConfirm: () => void;
 }
 
-type NotificationType = 'success' | 'info' | 'warning' | 'error';
-
 const useUserDetail = (): Return => {
   const userId = useParams().id;
   const navigate = useNavigate();
@@ -33,20 +31,12 @@ const useUserDetail = (): Return => {
   const [saving, setSaving] = useState(false);
   const [editUser, setEditUser] = useState(false);
 
-  const openNotification = (type: NotificationType) => {
-    if (type === 'success') {
-      notification.success({
-        message: 'Success!',
-        description: 'Your action has succeeded!',
-        placement: 'bottomRight',
-      });
-    } else if (type === 'error') {
-      notification.error({
-        message: 'error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
-    }
+  const errorNotification = () => {
+    notification.error({
+      message: 'Error!',
+      description: 'Whoops, there are some errors. Please try again. ',
+      placement: 'bottomRight',
+    });
   };
 
   const { data, loading } = useUserQuery({
@@ -77,10 +67,14 @@ const useUserDetail = (): Return => {
   const [sendInvite] = useSendInviteMutation({
     onCompleted: () => {
       setSaving(false);
-      openNotification('success');
+      notification.success({
+        message: 'Successfully invited!',
+        description: 'The invitation has been sent!',
+        placement: 'bottomRight',
+      });
     },
     onError: () => {
-      openNotification('error');
+      errorNotification();
       setSaving(false);
     },
   });
@@ -109,10 +103,14 @@ const useUserDetail = (): Return => {
   const [updateUser] = useUpdateUserDisableMutation({
     onCompleted: () => {
       setSaving(false);
-      openNotification('success');
+      notification.success({
+        message: 'Successfully updated!',
+        description: 'The status of user has been updated!',
+        placement: 'bottomRight',
+      });
     },
     onError: () => {
-      openNotification('error');
+      errorNotification();
       setSaving(false);
     },
   });
@@ -160,10 +158,14 @@ const useUserDetail = (): Return => {
     onCompleted: () => {
       setSaving(false);
       navigate('users');
-      openNotification('success');
+      notification.success({
+        message: 'Successfully Deleted!',
+        description: 'The user has been deleted!',
+        placement: 'bottomRight',
+      });
     },
     onError: () => {
-      openNotification('error');
+      errorNotification();
       setSaving(false);
     },
   });

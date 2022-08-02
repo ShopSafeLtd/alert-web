@@ -44,12 +44,12 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
       id
       subject
       description
-      date
       dayTime
       crimeTypes {
         id
         name
       }
+      approved
       location {
         id
         full
@@ -61,7 +61,6 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
       }
       images {
         id
-        url
         optimised
       }
     }

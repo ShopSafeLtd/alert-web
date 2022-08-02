@@ -1,5 +1,0 @@
-mutation deleteIncident($where: UniqueId!) {
-  deleteIncident(where: $where) {
-    id
-  }
-}

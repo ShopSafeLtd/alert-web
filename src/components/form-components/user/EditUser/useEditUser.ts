@@ -40,28 +40,11 @@ interface Return {
   chatsLoading: boolean;
   saving: boolean;
 }
-type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const useEditUser = ({ onClose }: Props): Return => {
   const userId = useParams().id;
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
-
-  const openNotification = (type: NotificationType) => {
-    if (type === 'success') {
-      notification.success({
-        message: 'Success!',
-        description: 'The user has been updated! ',
-        placement: 'bottomRight',
-      });
-    } else if (type === 'error') {
-      notification.error({
-        message: 'error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
-    }
-  };
 
   const { data: userData, loading } = useUserQuery({
     variables: {
@@ -131,11 +114,19 @@ const useEditUser = ({ onClose }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       onClose();
-      openNotification('success');
+      notification.success({
+        message: 'Successfully Updated!',
+        description: 'The user has been Updated! ',
+        placement: 'bottomRight',
+      });
     },
     onError: () => {
-      openNotification('error');
       setSaving(false);
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
     },
   });
 

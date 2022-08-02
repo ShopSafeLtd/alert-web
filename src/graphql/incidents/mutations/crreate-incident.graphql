@@ -1,0 +1,65 @@
+mutation createIncident($data: CreatIncidentData!) {
+  createIncident(data: $data) {
+    id
+    subject
+    description
+    dayTime
+    date
+    time
+    crimeTypes {
+      id
+      name
+    }
+    approved
+    location {
+      id
+      building
+      street
+      townCity
+      county
+      postcode
+      full
+    }
+    createdBy {
+      id
+      fullName
+      organisation
+    }
+    images {
+      id
+      optimised
+      url
+    }
+    groups {
+      id
+      name
+    }
+    offenders {
+      id
+      createdAt
+      updatedAt
+      age
+      build
+      dateOfBirth
+      dateSource
+      gender
+      hair
+      name
+      peculiarities
+      race
+      approved
+      uploaded
+      active
+      images {
+        id
+        url
+        optimised
+        card
+      }
+      tags {
+        id
+        name
+      }
+    }
+  }
+}

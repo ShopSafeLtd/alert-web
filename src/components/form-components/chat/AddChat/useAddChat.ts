@@ -25,27 +25,11 @@ interface Return {
   usersLoading: boolean;
   saving: boolean;
 }
-type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const useAddChat = ({ onClose, update }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
 
-  const openNotification = (type: NotificationType) => {
-    if (type === 'success') {
-      notification.success({
-        message: 'Success!',
-        description: 'The Chat Group has been added! ',
-        placement: 'bottomRight',
-      });
-    } else if (type === 'error') {
-      notification.error({
-        message: 'error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
-    }
-  };
   const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -76,11 +60,19 @@ const useAddChat = ({ onClose, update }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       onClose();
-      openNotification('success');
+      notification.success({
+        message: 'Successfully Added!',
+        description: 'The Chat Group has been added! ',
+        placement: 'bottomRight',
+      });
     },
     onError: () => {
       setSaving(false);
-      openNotification('error');
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
     },
     update,
   });

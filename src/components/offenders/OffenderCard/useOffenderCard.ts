@@ -12,8 +12,14 @@ interface Props {
   createdById: string | undefined;
   update: MutationUpdaterFn<RecycleOffenderMutation>;
 }
-
-const useOffenderCard = ({ createdById, update }: Props) => {
+interface Return {
+  approvalRights: boolean;
+  deleteRights: boolean;
+  menuRights: boolean;
+  onNavigate: (id: string) => void;
+  onDelete: (id: string) => void;
+}
+const useOffenderCard = ({ createdById, update }: Props): Return => {
   const navigate = useNavigate();
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);

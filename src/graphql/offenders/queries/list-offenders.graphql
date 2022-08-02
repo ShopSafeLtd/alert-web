@@ -29,7 +29,6 @@ query listOffenders(
       active
       images {
         id
-        url
         optimised
       }
       groups {
@@ -40,14 +39,6 @@ query listOffenders(
         id
         name
       }
-      bans {
-        id
-        title
-        location
-        description
-        startDate
-        endDate
-      }
       createdBy {
         id
         fullName
@@ -57,12 +48,12 @@ query listOffenders(
         id
         subject
         description
-        date
         dayTime
         crimeTypes {
           id
           name
         }
+        approved
         location {
           id
           full
@@ -74,7 +65,6 @@ query listOffenders(
         }
         images {
           id
-          url
           optimised
         }
       }

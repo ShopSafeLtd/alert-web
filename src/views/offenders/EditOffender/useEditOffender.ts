@@ -36,7 +36,7 @@ interface FormData {
   hair: string;
   peculiarities: string;
   dateSource: string;
-  dateOfBirth: string;
+  dateOfBirth: Date;
   groups: string[];
   tags: string[];
   images: [{ id: string; url: string; optimised: string }];
@@ -117,41 +117,21 @@ const useEditOffender = (): Return => {
         id: offenderId,
       },
     },
-    onCompleted: ({ offender }) => {
-      // setAgeCheck(offender?.dateOfBirth);
-      if (offender?.images && offender.images.length > 0) {
-        if (offender.images.length === 1) {
-          setFileList([
-            {
-              uid: `${offender?.images[0].id}`,
-              name: `${offender?.images[0].id}.png`,
-              status: 'done',
-              url: `${offender?.images[0].url}`,
-            },
-          ]);
-        } else {
-          setFileList(
-            offender?.images.map((image) => ({
-              uid: `${image.id}`,
-              name: `${image.id}.png`,
-              status: 'done',
-              url: `${image.url}`,
-            }))
-          );
 
-          // offender?.images.map((image) =>
-          //   fileList.push({
-          //     uid: `${image.id}`,
-          //     name: `${image.id}.png`,
-          //     status: 'done',
-          //     url: `${image.url}`,
-          //   })
-          // );
-        }
+    onCompleted: ({ offender }) => {
+      setAgeCheck(!!offender?.dateOfBirth);
+      if (offender?.images && offender.images.length > 0) {
+        setFileList(
+          offender?.images.map((image) => ({
+            uid: `${image.id}`,
+            name: `${image.id}.png`,
+            status: 'done',
+            url: `${image.url}`,
+          }))
+        );
       }
     },
   });
-
   const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
       where: {
@@ -381,7 +361,7 @@ const useEditOffender = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Deleted',
+        message: 'Successfully Deleted!',
         description:
           'The offender has been deleted from the feed and moved to the recycle bin.',
         placement: 'bottomRight',

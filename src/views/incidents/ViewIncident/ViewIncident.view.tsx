@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import { ViewIncidentQuery } from 'graphql/generated';
+import { ViewIncidentQuery, Age, Gender, Race, Build } from 'graphql/generated';
 import {
   Typography,
   Row,
@@ -12,6 +12,7 @@ import {
   Divider,
   Skeleton,
   Button,
+  Drawer,
   // Drawer,
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -30,9 +31,28 @@ import {
 import { SRLWrapper } from 'simple-react-lightbox';
 import IncidentSideList from 'components/incidents/IncidentSideList';
 import { Link } from 'react-router-dom';
+import AddExistingOffender from 'components/form-components/incident/offender/AddExisitingOffender';
 
 const { Title, Text, Paragraph } = Typography;
-
+interface OffenderData {
+  id: string;
+  name?: string | null;
+  age?: Age | null;
+  gender?: Gender | null;
+  race?: Race | null;
+  build?: Build | null;
+  dateOfBirth?: Date | null;
+  hair?: string | null;
+  dateSource?: string | null;
+  peculiarities?: string | null;
+  approved?: boolean | null;
+  groups?:
+    | {
+        id: string;
+        name: string;
+      }[]
+    | undefined;
+}
 interface Props {
   data: ViewIncidentQuery | undefined;
   loading: boolean;
@@ -42,6 +62,9 @@ interface Props {
   editRights: boolean;
   deleteRights: boolean;
   onDelete: () => void;
+  addExistingOffender: boolean;
+  toggleAddExistingOffender: () => void;
+  updateOffenderList: (value: OffenderData[] | undefined) => void;
 }
 
 const ViewIncident = ({
@@ -53,6 +76,9 @@ const ViewIncident = ({
   deleteRights,
   editRights,
   onDelete,
+  addExistingOffender,
+  toggleAddExistingOffender,
+  updateOffenderList,
 }: Props): JSX.Element => (
   <div className="page-container">
     <Row>
@@ -245,6 +271,8 @@ const ViewIncident = ({
                           {addOffenderRights && (
                             <div>
                               <Button
+                                onClick={toggleAddExistingOffender}
+                                style={{ color: 'red' }}
                                 icon={
                                   <FontAwesomeIcon
                                     className="button-icon"
@@ -276,14 +304,21 @@ const ViewIncident = ({
       }
       options={{ buttons: { showDownloadButton: false } }}
     />
-    {/* <Drawer
-      title="Edit Crime Types"
-      visible={editIncident}
-      width="400"
-      onClose={toggleEditIncident}
+    <Drawer
+      title="Link Offenders"
+      visible={addExistingOffender}
+      width="600"
+      onClose={toggleAddExistingOffender}
     >
-      <EditIncident incidentId={incidentId} onClose={toggleEditIncident} />
-    </Drawer> */}
+      {addExistingOffender ? (
+        <AddExistingOffender
+          update={updateOffenderList}
+          onClose={toggleAddExistingOffender}
+        />
+      ) : (
+        <div />
+      )}
+    </Drawer>
   </div>
 );
 

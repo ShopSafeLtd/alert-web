@@ -1,6 +1,5 @@
 import React from 'react';
 import View from './EditIncident.view';
-
 import useEditIncident from './useEditIncident';
 
 function EditIncident(): JSX.Element {
@@ -18,10 +17,13 @@ function EditIncident(): JSX.Element {
     addIncidentTag,
     toggleAddIncidentTag,
     updateIncidentTag,
-
-    // banId,
-    // setBanId,
-    // deleteConfirm,
+    addOffender,
+    toggleAddOffender,
+    addExistingOffender,
+    toggleAddExistingOffender,
+    updateOffenderList,
+    offendersData,
+    deleteConfirm,
   } = useEditIncident();
   return (
     <div>
@@ -39,10 +41,13 @@ function EditIncident(): JSX.Element {
         addIncidentTag={addIncidentTag}
         toggleAddIncidentTag={toggleAddIncidentTag}
         updateIncidentTag={updateIncidentTag}
-
-        // banId={banId}
-        // setBanId={setBanId}
-        // deleteConfirm={deleteConfirm}
+        addOffender={addOffender}
+        toggleAddOffender={toggleAddOffender}
+        addExistingOffender={addExistingOffender}
+        toggleAddExistingOffender={toggleAddExistingOffender}
+        updateOffenderList={updateOffenderList}
+        offendersData={offendersData}
+        deleteConfirm={deleteConfirm}
       />
     </div>
   );

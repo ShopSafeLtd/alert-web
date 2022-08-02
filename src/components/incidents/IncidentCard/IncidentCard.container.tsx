@@ -13,7 +13,11 @@ interface Props {
   update: MutationUpdaterFn<RecycleIncidentMutation>;
 }
 
-const IncidentCard = ({ incident, openLightbox, update }: Props) => {
+const IncidentCard = ({
+  incident,
+  openLightbox,
+  update,
+}: Props): JSX.Element => {
   const { approvalRights, deleteRights, menuRights, onNavigate, onDelete } =
     useIncidentCard({
       createdById: incident?.createdBy.id,

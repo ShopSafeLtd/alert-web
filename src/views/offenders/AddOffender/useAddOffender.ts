@@ -32,7 +32,7 @@ interface FormData {
   hair: string;
   peculiarities: string;
   dateSource: string;
-  dateOfBirth: string;
+  dateOfBirth: Date;
   groups: string[];
   tags: string[];
   images: [{ id: string; url: string; optimised: string }];
@@ -274,7 +274,6 @@ const useAddOffender = (): Return => {
       variables: {
         data: {
           name: data.name || null,
-
           gender: data.gender || null,
           race: data.race || null,
           build: data.build || null,

@@ -3,7 +3,7 @@
  * @param date string representation of a date, or Date object.
  * @returns number
  */
-const calcAge = (date: string | Date) => {
+const calcAge = (date: string | Date): number => {
   if (!date) return -1;
   const birthDate = new Date(date);
   const now = new Date(Date.now());

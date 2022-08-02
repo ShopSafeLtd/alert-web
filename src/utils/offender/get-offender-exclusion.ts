@@ -1,5 +1,5 @@
 // calculate the difference in days between start and end date
-export const calcDuration = (startDate: Date, endDate: Date) => {
+export const calcDuration = (startDate: Date, endDate: Date): string => {
   const start = new Date(startDate).valueOf();
   const end = new Date(endDate).valueOf();
 
@@ -15,7 +15,7 @@ export const calcDuration = (startDate: Date, endDate: Date) => {
 };
 
 // calculate if the end date is expired
-export const calcExpired = (endDate: Date) => {
+export const calcExpired = (endDate: Date): boolean => {
   const end = new Date(endDate).valueOf();
   const now = Date.now();
 

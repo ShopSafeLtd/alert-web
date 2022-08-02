@@ -22,7 +22,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const Apollo = ({ children }: Props) => {
+const Apollo = ({ children }: Props): JSX.Element => {
   const accessToken = localStorage.getItem('accessToken');
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 

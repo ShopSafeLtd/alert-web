@@ -3,7 +3,7 @@ import { Card, Row, Col } from 'antd';
 import { useStoreState } from 'state';
 import Loading from 'components/shared-components/AntD/Loading';
 
-const LoginOne = () => {
+const LoginOne = (): JSX.Element => {
   const theme = useStoreState((state) => state.theme.currentTheme);
 
   const backgroundStyle = {

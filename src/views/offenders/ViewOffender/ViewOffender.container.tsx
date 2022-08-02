@@ -2,7 +2,7 @@ import React from 'react';
 import View from './ViewOffender.view';
 import useViewOffender from './useViewOffender';
 
-const ViewOffender = () => {
+const ViewOffender = (): JSX.Element => {
   const {
     data,
     loading,

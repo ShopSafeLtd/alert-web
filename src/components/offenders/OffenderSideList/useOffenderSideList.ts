@@ -30,8 +30,8 @@ const useOffenderSideList = (): Return => {
         id: schemeId,
       },
       order: {
-        createdAt:
-          order === OffenderSort.createdAtDesc ? SortOrder.Desc : SortOrder.Asc,
+        updatedAt:
+          order === OffenderSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
       },
       take: pagination.pageSize,
       skip: (pagination.page - 1) * pagination.pageSize,
@@ -59,24 +59,6 @@ const useOffenderSideList = (): Return => {
             name: {
               contains: variables.search,
               mode: QueryMode.Insensitive,
-            },
-          },
-          {
-            createdBy: {
-              OR: [
-                {
-                  fullName: {
-                    contains: variables.search,
-                    mode: QueryMode.Insensitive,
-                  },
-                },
-                {
-                  organisation: {
-                    contains: variables.search,
-                    mode: QueryMode.Insensitive,
-                  },
-                },
-              ],
             },
           },
         ],

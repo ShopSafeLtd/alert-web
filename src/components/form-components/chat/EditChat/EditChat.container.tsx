@@ -6,7 +6,7 @@ interface Props {
   onClose: () => void;
 }
 
-const EditChat = ({ onClose }: Props) => {
+const EditChat = ({ onClose }: Props): JSX.Element => {
   const { onSubmit, data, loading, usersData, usersLoading, saving } =
     useEditChat({
       onClose,

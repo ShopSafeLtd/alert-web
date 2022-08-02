@@ -27,28 +27,12 @@ interface Return {
   usersLoading: boolean;
   saving: boolean;
 }
-type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const useEditChat = ({ onClose }: Props): Return => {
   const chatId = useParams().id;
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
 
-  const openNotification = (type: NotificationType) => {
-    if (type === 'success') {
-      notification.success({
-        message: 'Success!',
-        description: 'The chat group has been updated! ',
-        placement: 'bottomRight',
-      });
-    } else if (type === 'error') {
-      notification.error({
-        message: 'error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
-    }
-  };
   const { data: chatData, loading } = useChatQuery({
     variables: {
       where: {
@@ -88,11 +72,19 @@ const useEditChat = ({ onClose }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       onClose();
-      openNotification('success');
+      notification.success({
+        message: 'Successfully Updated!',
+        description: 'The chat group has been updated! ',
+        placement: 'bottomRight',
+      });
     },
     onError: () => {
-      openNotification('error');
       setSaving(false);
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
     },
   });
 

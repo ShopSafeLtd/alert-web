@@ -68,8 +68,6 @@ query offenderFeed(
     }
     incidents {
       id
-      createdAt
-      updatedAt
       subject
       description
       dayTime
@@ -77,6 +75,7 @@ query offenderFeed(
         id
         name
       }
+      approved
       location {
         id
         full
@@ -88,15 +87,8 @@ query offenderFeed(
       }
       images {
         id
-        url
         optimised
-        card
-        offenders {
-          id
-        }
       }
-      approved
-      uploaded
     }
   }
 }

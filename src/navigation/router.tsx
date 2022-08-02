@@ -14,7 +14,7 @@ import Loading from './auth-views/authentication/loading';
 
 import PrimaryOnboarding from '../old-components/users/onboard/Primary/PrimaryOnboarding';
 
-export const Views = () => {
+export const Views = (): JSX.Element => {
   const [newUserId, setNewUserId] = useState<string>('');
   const { isLoading } = useAuth0();
 

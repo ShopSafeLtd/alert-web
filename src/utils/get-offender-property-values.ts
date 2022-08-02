@@ -37,13 +37,13 @@ const roles = [
   { value: 'SHOPSAFE_ADMIN', text: 'Scheme Admin' },
 ];
 
-export const getSex = (gender: string) =>
+export const getSex = (gender: string): string =>
   genders.find(({ value }) => value === gender)?.text || 'Unknown';
-export const getEthnicity = (ethnicity: string) =>
+export const getEthnicity = (ethnicity: string): string =>
   ethnicities.find(({ value }) => value === ethnicity)?.text || 'Unknown';
-export const getAge = (age: string | number) =>
+export const getAge = (age: string | number): string =>
   ages.find(({ value }) => value === age)?.text || 'Unknown';
-export const getBuild = (build: string) =>
+export const getBuild = (build: string): string =>
   builds.find(({ value }) => value === build)?.text || 'Unknown';
-export const getRole = (role: string) =>
+export const getRole = (role: string): string =>
   roles.find(({ value }) => value === role)?.text || 'Unknown';

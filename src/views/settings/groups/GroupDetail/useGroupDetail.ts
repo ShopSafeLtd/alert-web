@@ -37,7 +37,7 @@ const useGroupDetail = (): Return => {
       setSaving(false);
       window.history.back();
       notification.success({
-        message: 'Successfully Deleted',
+        message: 'Successfully Deleted!',
         description: 'The group has been deleted!',
         placement: 'bottomRight',
       });
@@ -45,7 +45,7 @@ const useGroupDetail = (): Return => {
     onError: () => {
       setSaving(false);
       notification.error({
-        message: 'error!',
+        message: 'Error!',
         description: 'Whoops, there are some errors. Please try again. ',
         placement: 'bottomRight',
       });

@@ -13,7 +13,11 @@ interface Props {
   update: MutationUpdaterFn<RecycleOffenderMutation>;
 }
 
-const OffenderCard = ({ offender, openLightbox, update }: Props) => {
+const OffenderCard = ({
+  offender,
+  openLightbox,
+  update,
+}: Props): JSX.Element => {
   const { approvalRights, deleteRights, menuRights, onNavigate, onDelete } =
     useOffenderCard({
       createdById: offender.createdBy.id,

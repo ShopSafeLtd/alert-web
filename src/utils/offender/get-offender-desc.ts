@@ -1,6 +1,8 @@
 import { Age, Build, Gender, Race } from 'graphql/generated';
 
-export const getOffenderGender = (gender: Gender | undefined | null) => {
+export const getOffenderGender = (
+  gender: Gender | undefined | null
+): string => {
   if (gender === Gender.Female) return 'Female';
   if (gender === Gender.Male) return 'Male';
   return 'Unknown';
@@ -9,7 +11,7 @@ export const getOffenderGender = (gender: Gender | undefined | null) => {
 export const getOffenderRace = (
   race: Race | undefined | null,
   short?: boolean
-) => {
+): string => {
   if (race === Race.Ic1) return short ? 'IC1' : 'IC1 - White - North European';
   if (race === Race.Ic2) return short ? 'IC2' : 'IC2 - White - South European';
   if (race === Race.Ic3) return short ? 'IC3' : 'IC3 - Black';
@@ -19,14 +21,14 @@ export const getOffenderRace = (
   return 'Unknown';
 };
 
-export const getOffenderBuild = (build: Build | undefined | null) => {
+export const getOffenderBuild = (build: Build | undefined | null): string => {
   if (build === Build.Large) return 'Large';
   if (build === Build.Medium) return 'Medium';
   if (build === Build.Small) return 'Small';
   return 'Unknown';
 };
 
-export const getOffenderAge = (age: Age | undefined | null) => {
+export const getOffenderAge = (age: Age | undefined | null): string => {
   if (age === Age.EighteenThirty) return '18 - 30';
   if (age === Age.FiftySixty) return '50 - 60';
   if (age === Age.FortyFifty) return '40 - 50';
@@ -43,7 +45,7 @@ export const getOffenderAge = (age: Age | undefined | null) => {
  * @param date string representation of a date, or Date object.
  * @returns number
  */
-export const calcAge = (date: string | Date) => {
+export const calcAge = (date: string | Date): number => {
   if (!date) return -1;
   const birthDate = new Date(date);
   const now = new Date(Date.now());
@@ -59,7 +61,9 @@ export const calcAge = (date: string | Date) => {
  * @returns Object - { days, location } where days is the number of days since the incident, and location is the location.full of the incident
  */
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const getLastOffence = (incidentsArray: any[]) => {
+export const getLastOffence = (
+  incidentsArray: any[]
+): { days: number; location: string } | undefined => {
   if (!incidentsArray) return;
   const incidents = [...incidentsArray];
 

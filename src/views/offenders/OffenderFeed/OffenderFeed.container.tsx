@@ -2,7 +2,7 @@ import React from 'react';
 import View from './OffenderFeed.view';
 import useIncidentFeed from './useOffenderFeed';
 
-const IncidentFeed = () => {
+const IncidentFeed = (): JSX.Element => {
   const {
     data,
     loading,

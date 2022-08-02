@@ -1,1 +1,1 @@
-export { default } from './OffenderList.container';
+export { default } from './OffenderWarningList.container';

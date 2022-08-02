@@ -24,7 +24,6 @@ interface Return {
   loading: boolean;
   saving: boolean;
 }
-type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const useRestoreOffender = ({
   onClose,
@@ -35,36 +34,6 @@ const useRestoreOffender = ({
 }: Props): Return => {
   const [saving, setSaving] = useState(false);
 
-  const openNotification = (type: NotificationType) => {
-    if (type === 'success') {
-      notification.success({
-        message: 'Success!',
-        description: 'The offender has been restored! ',
-        placement: 'bottomRight',
-      });
-    } else if (type === 'error') {
-      notification.error({
-        message: 'error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
-    }
-  };
-  const deleteNotification = (type: NotificationType) => {
-    if (type === 'success') {
-      notification.success({
-        message: 'Success!',
-        description: 'The offender has been Deleted! ',
-        placement: 'bottomRight',
-      });
-    } else if (type === 'error') {
-      notification.error({
-        message: 'error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
-    }
-  };
   const { data, loading } = useRecycledItemQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -78,11 +47,19 @@ const useRestoreOffender = ({
     onCompleted: () => {
       setSaving(false);
       onClose();
-      openNotification('success');
+      notification.success({
+        message: 'Successfully Restored!',
+        description: 'The offender has been restored! ',
+        placement: 'bottomRight',
+      });
     },
     onError: () => {
-      openNotification('error');
       setSaving(false);
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
     },
     update: updateRestore,
   });
@@ -101,11 +78,19 @@ const useRestoreOffender = ({
     onCompleted: () => {
       setSaving(false);
       onClose();
-      deleteNotification('success');
+      notification.success({
+        message: 'Successfully Deleted!',
+        description: 'The offender has been Deleted! ',
+        placement: 'bottomRight',
+      });
     },
     onError: () => {
-      deleteNotification('error');
       setSaving(false);
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
     },
     update: updateDelete,
   });

@@ -49,7 +49,6 @@ interface Return {
   form: FormInstance<FormData>;
   existingUser: boolean;
 }
-type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
   const [form] = useForm<FormData>();
@@ -58,22 +57,6 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
   const [existingUser, setExistingUser] = useState(false);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState<string | null>(null);
-
-  const openNotification = (type: NotificationType) => {
-    if (type === 'success') {
-      notification.success({
-        message: 'Success!',
-        description: 'The invite has been sent to the user! ',
-        placement: 'bottomRight',
-      });
-    } else if (type === 'error') {
-      notification.error({
-        message: 'error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
-    }
-  };
 
   const { data: userData } = useSearchUserQuery({
     variables: {
@@ -146,11 +129,19 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       onClose();
-      openNotification('success');
+      notification.success({
+        message: 'Successfully Created!',
+        description: 'The user has been created! ',
+        placement: 'bottomRight',
+      });
     },
     onError: () => {
-      openNotification('error');
       setSaving(false);
+      notification.error({
+        message: 'error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
     },
     update,
   });
@@ -159,11 +150,19 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
     onCompleted: () => {
       setSaving(false);
       onClose();
-      openNotification('success');
+      notification.success({
+        message: 'Successfully Invited!',
+        description: 'The invitation has been sent! ',
+        placement: 'bottomRight',
+      });
     },
     onError: () => {
-      openNotification('error');
       setSaving(false);
+      notification.error({
+        message: 'error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
     },
     update: updateSearch,
   });

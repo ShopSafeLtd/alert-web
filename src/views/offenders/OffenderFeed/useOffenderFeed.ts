@@ -143,8 +143,8 @@ const useOffenderFeed = (): Return => {
         id: schemeId,
       },
       order: {
-        createdAt:
-          order === OffenderSort.createdAtDesc ? SortOrder.Desc : SortOrder.Asc,
+        updatedAt:
+          order === OffenderSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
       },
       where: {
         tags: variables.tags.length
@@ -172,24 +172,6 @@ const useOffenderFeed = (): Return => {
               mode: QueryMode.Insensitive,
             },
           },
-          {
-            createdBy: {
-              OR: [
-                {
-                  fullName: {
-                    contains: variables.search,
-                    mode: QueryMode.Insensitive,
-                  },
-                },
-                {
-                  organisation: {
-                    contains: variables.search,
-                    mode: QueryMode.Insensitive,
-                  },
-                },
-              ],
-            },
-          },
         ],
       },
       take: pagination.pageSize,
@@ -211,8 +193,8 @@ const useOffenderFeed = (): Return => {
           id: schemeId,
         },
         order: {
-          createdAt:
-            order === OffenderSort.createdAtDesc
+          updatedAt:
+            order === OffenderSort.updatedAtDesc
               ? SortOrder.Desc
               : SortOrder.Asc,
         },
@@ -240,24 +222,6 @@ const useOffenderFeed = (): Return => {
               name: {
                 contains: variables.search,
                 mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              createdBy: {
-                OR: [
-                  {
-                    fullName: {
-                      contains: variables.search,
-                      mode: QueryMode.Insensitive,
-                    },
-                  },
-                  {
-                    organisation: {
-                      contains: variables.search,
-                      mode: QueryMode.Insensitive,
-                    },
-                  },
-                ],
               },
             },
           ],
@@ -286,8 +250,8 @@ const useOffenderFeed = (): Return => {
           id: schemeId,
         },
         order: {
-          createdAt:
-            order === OffenderSort.createdAtDesc
+          updatedAt:
+            order === OffenderSort.updatedAtDesc
               ? SortOrder.Desc
               : SortOrder.Asc,
         },
@@ -315,24 +279,6 @@ const useOffenderFeed = (): Return => {
               name: {
                 contains: variables.search,
                 mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              createdBy: {
-                OR: [
-                  {
-                    fullName: {
-                      contains: variables.search,
-                      mode: QueryMode.Insensitive,
-                    },
-                  },
-                  {
-                    organisation: {
-                      contains: variables.search,
-                      mode: QueryMode.Insensitive,
-                    },
-                  },
-                ],
               },
             },
           ],

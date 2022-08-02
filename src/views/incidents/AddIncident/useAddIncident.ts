@@ -1,0 +1,489 @@
+import { useState } from 'react';
+import {
+  useSchemeGroupsQuery,
+  Role,
+  useTagsQuery,
+  Model,
+  CreateTagMutation,
+  TagsQuery,
+  TagsDocument,
+  Age,
+  Gender,
+  Race,
+  Build,
+  useCreateIncidentMutation,
+  CreateIncidentMutation,
+  ListIncidentsDocument,
+  ListIncidentsQuery,
+  useListOffendersQuery,
+  useAddressesQuery,
+  AddressesQuery,
+} from 'graphql/generated';
+import { notification, Modal } from 'antd';
+import { useStoreActions, useStoreState } from 'state';
+import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
+import { MutationUpdaterFn } from '@apollo/client';
+import { Moment } from 'moment';
+
+const { confirm } = Modal;
+
+interface FormData {
+  subject: string;
+  description: string;
+  date: Date;
+  time: Moment;
+  building: string;
+  street: string;
+  townCity: string;
+  county: string;
+  postcode: string;
+  groups: string[];
+  tags: string[];
+  images: { id: string; url: string; optimised: string }[];
+}
+interface OffenderData {
+  id: string;
+  name?: string | null;
+  age?: Age | null;
+  gender?: Gender | null;
+  race?: Race | null;
+  build?: Build | null;
+  dateOfBirth?: Date | null;
+  hair?: string | null;
+  dateSource?: string | null;
+  peculiarities?: string | null;
+  approved?: boolean | null;
+  groups?:
+    | {
+        id: string;
+        name: string;
+      }[]
+    | undefined;
+}
+
+enum Options {
+  'ACCOUNT' = 'ACCOUNT',
+  'PREVIOUS' = 'PREVIOUS',
+  'NEW' = 'NEW',
+}
+
+interface LocationData {
+  building?: string | null;
+  street: string;
+  townCity: string;
+  county?: string | null;
+  postcode: string;
+}
+
+interface Return {
+  onSubmit: (value: FormData) => void;
+  saving: boolean;
+  groups: { value: string; label: string }[];
+  groupsLoading: boolean;
+  tags: { value: string; label: string }[];
+  tagsLoading: boolean;
+  primaryAddress:
+    | Exclude<AddressesQuery['addresses'], undefined | null>[0]
+    | undefined;
+  addressLoading: boolean;
+  imgChange: UploadProps['onChange'];
+  fileList: UploadFile[];
+  addIncidentTag: boolean;
+  toggleAddIncidentTag: () => void;
+  updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
+  addOffender: boolean;
+  toggleAddOffender: () => void;
+  addExistingOffender: boolean;
+  toggleAddExistingOffender: () => void;
+  updateOffenderList: (value: OffenderData[] | undefined) => void;
+  offendersData: OffenderData[] | undefined;
+  deleteConfirm: (value: string | undefined) => void;
+  addPreviousLocation: boolean;
+  toggleAddPreviousLocation: () => void;
+  updatePreviousLocation: (value: string | undefined) => void;
+  addNewLocation: boolean;
+  toggleAddNewLocation: () => void;
+  updateNewLocation: (value: LocationData | undefined) => void;
+}
+
+const useEditIncident = (): Return => {
+  const schemeId = useStoreState((state) => state.scheme.id);
+  const userId = useStoreState((state) => state.user.id);
+
+  const groups = useStoreState((state) => state.user.groups);
+  const role = useStoreState((state) => state.user.role);
+  const pagination = useStoreState((state) => state.data.incidents.pagination);
+  const variables = useStoreState((state) => state.data.incidents.variables);
+  const order = useStoreState((state) => state.data.incidents.order);
+  const setIncidentsState = useStoreActions(
+    (actions) => actions.data.setIncidents
+  );
+  const [saving, setSaving] = useState(false);
+
+  const [addIncidentTag, setAddIncidentTag] = useState(false);
+  const [addOffender, setAddOffender] = useState(false);
+  const [addExistingOffender, setAddExistingOffender] = useState(false);
+  const [offendersData, setOffendersData] = useState<
+    OffenderData[] | undefined
+  >([]);
+  const [imageChange, setImageChange] = useState(false);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+  const [option, setOption] = useState<Options>(Options.ACCOUNT);
+  const [newLocation, setNewLocation] = useState<LocationData | undefined>();
+  const [previousId, setPreviousId] = useState<string>('');
+  const [addNewLocation, setAddNewLocation] = useState(false);
+  const [addPreviousLocation, setAddPreviousLocation] = useState(false);
+
+  // Query
+  const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
+    variables: {
+      where: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
+    },
+    fetchPolicy: 'cache-and-network',
+    skip: role !== Role.SchemeAdmin,
+    onCompleted: (result) => {
+      setIncidentsState({
+        pagination,
+        variables: {
+          ...variables,
+          groups: result.groups.map((group) => group.id),
+        },
+        order,
+      });
+    },
+  });
+  const { data: addressData, loading: addressLoading } = useAddressesQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      where: {
+        user: {
+          id: {
+            equals: userId,
+          },
+        },
+      },
+    },
+    // onCompleted: () => {
+    //   const primarAddress= addressData?.addresses.find((address) => address.primary)
+
+    // }
+  });
+
+  const { data: tagsData, loading: tagsLoading } = useTagsQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      where: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+        dataType: {
+          equals: Model.Incident,
+        },
+      },
+    },
+  });
+  const { data: ListOffendersData } = useListOffendersQuery({
+    variables: {
+      scheme: {
+        id: schemeId,
+      },
+    },
+  });
+
+  // update mutation
+  // update tag list after adding a new item
+  const updateIncidentTag: MutationUpdaterFn<CreateTagMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res === null || res === undefined) return;
+
+    const existingData = store.readQuery<TagsQuery>({
+      query: TagsDocument,
+      variables: {
+        where: {
+          scheme: { id: { equals: schemeId } },
+          dataType: {
+            equals: Model.Incident,
+          },
+        },
+      },
+    });
+
+    if (existingData === null) return;
+
+    store.writeQuery<TagsQuery>({
+      query: TagsDocument,
+      data: {
+        tags: [...existingData.tags, res.createTag],
+        __typename: 'Query',
+      },
+      variables: {
+        where: {
+          scheme: { id: { equals: schemeId } },
+          dataType: {
+            equals: Model.Incident,
+          },
+        },
+      },
+    });
+  };
+  // update incident list after adding a new item
+  const updateIncident: MutationUpdaterFn<CreateIncidentMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res === null || res === undefined) return;
+    if (res.createIncident === null || res.createIncident === undefined) return;
+    // get existing group list data from Apollo store
+    const existingData = store.readQuery<ListIncidentsQuery>({
+      query: ListIncidentsDocument,
+      variables: {
+        scheme: {
+          id: schemeId,
+        },
+      },
+    });
+
+    if (existingData === null) return;
+    if (existingData?.listIncidents?.incidents === undefined) return;
+
+    // write the new data to the Apollo store
+    store.writeQuery<ListIncidentsQuery>({
+      query: ListIncidentsDocument,
+      data: {
+        listIncidents: {
+          ...existingData.listIncidents,
+          incidents:
+            existingData?.listIncidents?.incidents &&
+            existingData.listIncidents.incidents.length > 0
+              ? existingData?.listIncidents?.incidents.concat(
+                  res.createIncident
+                )
+              : [res.createIncident],
+        },
+        __typename: 'Query',
+      },
+      variables: {
+        scheme: {
+          id: schemeId,
+        },
+      },
+    });
+  };
+
+  const [createIncident] = useCreateIncidentMutation({
+    onCompleted: () => {
+      setSaving(false);
+      notification.success({
+        message: 'Successfully Added!',
+        description: 'The Incident has been added!',
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      // errorNotification();
+      setSaving(false);
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
+    },
+    update: updateIncident,
+  });
+
+  const onSubmit = (data: FormData) => {
+    setSaving(true);
+    createIncident({
+      variables: {
+        data: {
+          subject: data.subject,
+          description: data.description,
+          date: data.date,
+          time: data.time,
+          location: {
+            account: option === Options.ACCOUNT,
+            create:
+              newLocation && option === Options.NEW
+                ? {
+                    building: newLocation.building || null,
+                    street: newLocation.street,
+                    townCity: newLocation.townCity,
+                    county: newLocation.county || null,
+                    postcode: newLocation.postcode,
+                  }
+                : undefined,
+            previous:
+              previousId && option === Options.PREVIOUS
+                ? { id: previousId }
+                : undefined,
+            // : location === 'ACCOUNT'
+            // ? { id: userData.addresses.find((el) => el.primary).id }
+          },
+          groups: data.groups.map((id) => ({ id })),
+          scheme: schemeId,
+          crimeTypes:
+            data.tags.length > 0 ? data.tags.map((id) => ({ id })) : undefined,
+          offenders: {
+            connect:
+              offendersData && offendersData.length > 0
+                ? offendersData.map((offender) => ({ id: offender.id }))
+                : undefined,
+            create:
+              offendersData && offendersData.length > 0
+                ? offendersData
+                    .filter(
+                      (item) =>
+                        !ListOffendersData?.listOffenders?.offenders
+                          ?.map((offender) => offender.id)
+                          .includes(item.id)
+                    )
+                    .map((offender) => ({
+                      name: offender.name || 'Unidentified Offender' || null,
+                      gender: offender.gender || null,
+                      race: offender.race || null,
+                      build: offender.build || null,
+                      hair: offender.hair || null,
+                      peculiarities: offender.peculiarities || null,
+                      age: offender.age || null,
+                      dateSource: offender.dateSource || null,
+                      dateOfBirth: offender.dateOfBirth || null,
+                      groups:
+                        offender.groups && offender.groups.length > 0
+                          ? {
+                              connect: offender.groups.map(({ id }) => ({
+                                id,
+                              })),
+                            }
+                          : undefined,
+                      scheme: { connect: { id: schemeId } },
+                      createdBy: { connect: { id: userId } },
+                      localId: offender.id,
+                    }))
+                : undefined,
+          },
+          images: {
+            create:
+              imageChange && fileList.length > 0
+                ? fileList
+                    .map((item) => ({
+                      file: item.originFileObj,
+                    }))
+                    .filter((obj) => obj.file !== undefined)
+                : undefined,
+          },
+        },
+      },
+    });
+  };
+
+  // functions
+  const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+    setImageChange(true);
+  };
+  const toggleAddIncidentTag = () => {
+    setAddIncidentTag(!addIncidentTag);
+  };
+  const toggleAddOffender = () => {
+    setAddOffender(!addOffender);
+  };
+  const toggleAddExistingOffender = () => {
+    setAddExistingOffender(!addExistingOffender);
+  };
+  const toggleAddPreviousLocation = () => {
+    setAddPreviousLocation(!addPreviousLocation);
+  };
+  const toggleAddNewLocation = () => {
+    setAddNewLocation(!addNewLocation);
+  };
+  const updatePreviousLocation = (value: string | undefined) => {
+    if (value) {
+      setOption(Options.PREVIOUS);
+      setPreviousId(value);
+    }
+  };
+
+  const updateNewLocation = (value: LocationData | undefined) => {
+    if (value) {
+      setOption(Options.NEW);
+      setNewLocation(value);
+    }
+  };
+  const updateOffenderList = (filterOffenders: OffenderData[] | undefined) => {
+    if (filterOffenders) {
+      if (offendersData && offendersData.length > 0) {
+        setOffendersData(
+          offendersData.concat(
+            filterOffenders.filter(
+              (item) =>
+                !offendersData?.map((offender) => offender.id).includes(item.id)
+            )
+          )
+        );
+      } else setOffendersData(filterOffenders);
+    }
+  };
+
+  const deleteConfirm = (offenderId: string | undefined) => {
+    confirm({
+      title: 'Do you want to delete the exclusion?',
+      content: 'This action cannot be undone.',
+      onOk() {
+        setOffendersData(
+          offendersData?.filter((offender) => offender.id !== offenderId)
+        );
+      },
+    });
+  };
+
+  return {
+    onSubmit,
+    saving,
+    groups:
+      role === Role.SchemeAdmin
+        ? groupData?.groups.map((group) => ({
+            value: group.id,
+            label: group.name,
+          })) || []
+        : groups
+            .filter((group) => group.id === schemeId)
+            .map((group) => ({ value: group.id, label: group.name })),
+    groupsLoading,
+    tags:
+      tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
+    tagsLoading,
+    primaryAddress: addressData?.addresses.find((address) => address.primary),
+    addressLoading,
+    imgChange,
+    fileList,
+    addIncidentTag,
+    toggleAddIncidentTag,
+    updateIncidentTag,
+    addOffender,
+    toggleAddOffender,
+    addExistingOffender,
+    toggleAddExistingOffender,
+    updateOffenderList,
+    offendersData,
+    deleteConfirm,
+    addPreviousLocation,
+    toggleAddPreviousLocation,
+    updatePreviousLocation,
+    addNewLocation,
+    toggleAddNewLocation,
+    updateNewLocation,
+  };
+};
+
+export default useEditIncident;

@@ -6,8 +6,8 @@ export enum IncidentSort {
   createdAtAsc = 'CREATED_AT_ASC',
 }
 export enum OffenderSort {
-  createdAtDesc = 'CREATED_AT_DESC',
-  createdAtAsc = 'CREATED_AT_ASC',
+  updatedAtDesc = 'UPDATED_AT_DESC',
+  updatedAtAsc = 'UPDATED_AT_ASC',
 }
 interface Incidents {
   pagination: {
@@ -73,7 +73,7 @@ const dataModel: DataModel = {
       tags: [],
       groups: [],
     },
-    order: OffenderSort.createdAtDesc,
+    order: OffenderSort.updatedAtDesc,
   },
 
   setOffenders: action((state, payload) => {

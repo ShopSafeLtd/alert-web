@@ -27,7 +27,6 @@ interface Return {
   fileList: UploadFile[];
   imgChange: UploadProps['onChange'];
 }
-type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 const useSchemeDetail = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -35,6 +34,7 @@ const useSchemeDetail = (): Return => {
   const [imageChange, setImageChange] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
+  // check the size/type if image before uploading
   const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
     setImageChange(true);
@@ -67,21 +67,6 @@ const useSchemeDetail = (): Return => {
     imgWindow?.document.write(image.outerHTML);
   };
 
-  const openNotification = (type: NotificationType) => {
-    if (type === 'success') {
-      notification.success({
-        message: 'Success!',
-        description: 'The Scheme has been updated!',
-        placement: 'bottomRight',
-      });
-    } else if (type === 'error') {
-      notification.error({
-        message: 'error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
-    }
-  };
   const { data: schemeData, loading } = useSchemeQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -105,11 +90,19 @@ const useSchemeDetail = (): Return => {
   const [updateScheme] = useUpdateSchemeMutation({
     onCompleted: () => {
       setSaving(false);
-      openNotification('success');
+      notification.success({
+        message: 'Success Updated!',
+        description: 'The Scheme has been updated!',
+        placement: 'bottomRight',
+      });
     },
     onError: () => {
-      openNotification('error');
       setSaving(false);
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
     },
   });
 
