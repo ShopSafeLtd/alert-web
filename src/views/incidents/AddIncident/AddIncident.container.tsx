@@ -5,6 +5,7 @@ import useEditIncident from './useAddIncident';
 function EditIncident(): JSX.Element {
   const {
     onSubmit,
+    form,
     saving,
     groups,
     groupsLoading,
@@ -35,6 +36,7 @@ function EditIncident(): JSX.Element {
     <div>
       <View
         onSubmit={onSubmit}
+        form={form}
         saving={saving}
         groups={groups}
         groupsLoading={groupsLoading}

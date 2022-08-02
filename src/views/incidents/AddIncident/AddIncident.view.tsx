@@ -13,6 +13,7 @@ import {
   Typography,
   Button,
   Form,
+  FormInstance,
   Input,
   Select,
   Row,
@@ -54,11 +55,11 @@ interface FormData {
   description: string;
   date: Date;
   time: Moment;
-  building: string;
-  street: string;
-  townCity: string;
-  county: string;
-  postcode: string;
+  // building: string;
+  // street: string;
+  // townCity: string;
+  // county: string;
+  // postcode: string;
   groups: string[];
   tags: string[];
   images: [{ id: string; url: string; optimised: string }];
@@ -119,6 +120,7 @@ interface Props {
   addNewLocation: boolean;
   toggleAddNewLocation: () => void;
   updateNewLocation: (value: LocationData | undefined) => void;
+  form: FormInstance<LocationData>;
 }
 
 const EditIncident = ({
@@ -148,20 +150,12 @@ const EditIncident = ({
   addNewLocation,
   toggleAddNewLocation,
   updateNewLocation,
+  form,
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader onBack={() => window.history.back()} title="Add Incident" />
     <Card>
-      <Form
-        onFinish={onSubmit}
-        initialValues={{
-          building: primaryAddress?.building || '',
-          street: primaryAddress?.street || '',
-          townCity: primaryAddress?.townCity || '',
-          county: primaryAddress?.county || '',
-          postcode: primaryAddress?.postcode || '',
-        }}
-      >
+      <Form onFinish={onSubmit}>
         <Row gutter={20} style={{ marginBottom: 30 }}>
           <Col>
             <Title level={4}>Incident Details</Title>
@@ -310,10 +304,20 @@ const EditIncident = ({
             <Title level={4}>Location</Title>
           </Col>
         </Row>
+
         {addressLoading ? (
           <Skeleton />
         ) : (
-          <>
+          <Form<LocationData>
+            form={form}
+            initialValues={{
+              building: primaryAddress?.building || '',
+              street: primaryAddress?.street || '',
+              townCity: primaryAddress?.townCity || '',
+              county: primaryAddress?.county || '',
+              postcode: primaryAddress?.postcode || '',
+            }}
+          >
             <Row gutter={50}>
               <Col span={11}>
                 <Form.Item name="building" label="Building">
@@ -401,7 +405,7 @@ const EditIncident = ({
                 </Button>
               </Col>
             </Row>
-          </>
+          </Form>
         )}
 
         <Row gutter={20}>

@@ -19,24 +19,20 @@ import {
   useAddressesQuery,
   AddressesQuery,
 } from 'graphql/generated';
-import { notification, Modal } from 'antd';
+import { notification, Modal, Form, FormInstance } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { MutationUpdaterFn } from '@apollo/client';
 import { Moment } from 'moment';
 
 const { confirm } = Modal;
+const { useForm } = Form;
 
 interface FormData {
   subject: string;
   description: string;
   date: Date;
   time: Moment;
-  building: string;
-  street: string;
-  townCity: string;
-  county: string;
-  postcode: string;
   groups: string[];
   tags: string[];
   images: { id: string; url: string; optimised: string }[];
@@ -77,6 +73,7 @@ interface LocationData {
 
 interface Return {
   onSubmit: (value: FormData) => void;
+  form: FormInstance<LocationData>;
   saving: boolean;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
@@ -107,6 +104,7 @@ interface Return {
 }
 
 const useEditIncident = (): Return => {
+  const [form] = useForm<LocationData>();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
 
@@ -291,7 +289,6 @@ const useEditIncident = (): Return => {
       });
     },
     onError: () => {
-      // errorNotification();
       setSaving(false);
       notification.error({
         message: 'Error!',
@@ -311,6 +308,10 @@ const useEditIncident = (): Return => {
           description: data.description,
           date: data.date,
           time: data.time,
+          groups: data.groups.map((id) => ({ id })),
+          scheme: schemeId,
+          crimeTypes:
+            data.tags.length > 0 ? data.tags.map((id) => ({ id })) : undefined,
           location: {
             account: option === Options.ACCOUNT,
             create:
@@ -327,13 +328,7 @@ const useEditIncident = (): Return => {
               previousId && option === Options.PREVIOUS
                 ? { id: previousId }
                 : undefined,
-            // : location === 'ACCOUNT'
-            // ? { id: userData.addresses.find((el) => el.primary).id }
           },
-          groups: data.groups.map((id) => ({ id })),
-          scheme: schemeId,
-          crimeTypes:
-            data.tags.length > 0 ? data.tags.map((id) => ({ id })) : undefined,
           offenders: {
             connect:
               offendersData && offendersData.length > 0
@@ -411,6 +406,16 @@ const useEditIncident = (): Return => {
     if (value) {
       setOption(Options.PREVIOUS);
       setPreviousId(value);
+      const previousLocation = addressData?.addresses.find(
+        (location) => location.id === value
+      );
+      form.setFieldsValue({
+        building: previousLocation?.building || '',
+        street: previousLocation?.street || '',
+        townCity: previousLocation?.townCity || '',
+        county: previousLocation?.county || '',
+        postcode: previousLocation?.postcode || '',
+      });
     }
   };
 
@@ -418,6 +423,13 @@ const useEditIncident = (): Return => {
     if (value) {
       setOption(Options.NEW);
       setNewLocation(value);
+      form.setFieldsValue({
+        building: value?.building || '',
+        street: value?.street || '',
+        townCity: value?.townCity || '',
+        county: value?.county || '',
+        postcode: value?.postcode || '',
+      });
     }
   };
   const updateOffenderList = (filterOffenders: OffenderData[] | undefined) => {
@@ -483,6 +495,7 @@ const useEditIncident = (): Return => {
     addNewLocation,
     toggleAddNewLocation,
     updateNewLocation,
+    form,
   };
 };
 

@@ -16,7 +16,7 @@ interface Props {
 interface Return {
   onSubmit: (value: FormData) => void;
   saving: boolean;
-  data: AddressesQuery | undefined;
+  data: Exclude<AddressesQuery['addresses'], undefined | null> | undefined;
   loading: boolean;
 }
 
@@ -45,7 +45,7 @@ const useViewOffender = ({ onClose, update }: Props): Return => {
   return {
     onSubmit,
     saving,
-    data: addressData,
+    data: addressData?.addresses.filter(({ primary }) => !primary),
     loading,
   };
 };

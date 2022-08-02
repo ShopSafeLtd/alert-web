@@ -15,7 +15,7 @@ interface Props {
   onClose: () => void;
   onSubmit: (value: FormData) => void;
   saving: boolean;
-  data: AddressesQuery | undefined;
+  data: Exclude<AddressesQuery['addresses'], undefined | null> | undefined;
   loading: boolean;
 }
 
@@ -43,7 +43,7 @@ const ViewOffender = ({
         ]}
       >
         <Radio.Group>
-          {data?.addresses.map((location) => (
+          {data?.map((location) => (
             // <Row wrap={false} key={location.id}>
             <Radio
               value={location.id}

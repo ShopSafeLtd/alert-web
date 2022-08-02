@@ -43,6 +43,7 @@ interface Props {
 
 const AddUser = ({
   onSubmit,
+  form,
   onClose,
   groupsData,
   groupsLoading,
@@ -50,7 +51,7 @@ const AddUser = ({
   chatsLoading,
   saving,
   onValuesChange,
-  form,
+
   existingUser,
 }: Props): JSX.Element => (
   <Form<FormData>
