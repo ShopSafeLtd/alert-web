@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import update from "immutability-helper";
-import { useMutation, useQuery } from "@apollo/client";
+import React, { useState } from 'react';
+import update from 'immutability-helper';
+import { useMutation, useQuery } from '@apollo/client';
 
-import IncidentWizard from "../desktop/IncidentWizard/IncidentWizard";
-import { CreateIncident } from "graphql-src/incidents/mutations";
-import { PreviousAddresses } from "graphql-src/address/queries";
-import { Tags } from "graphql-src/tags/queries";
-import { Groups } from "graphql-src/groups/queries";
-import { IncidentFeed } from "graphql-src/incidents/queries";
-import { UploadImage } from "graphql-src/images/mutations";
-import { useStoreState } from "../../../../state";
-import { useNavigate } from "react-router-dom";
+import IncidentWizard from '../desktop/IncidentWizard/IncidentWizard';
+import { CreateIncident } from 'graphql-src/incidents/mutations';
+import { PreviousAddresses } from 'graphql-src/address/queries';
+import { Tags } from 'graphql-src/tags/queries';
+import { Groups } from 'graphql-src/groups/queries';
+import { IncidentFeed } from 'graphql-src/incidents/queries';
+import { UploadImage } from 'graphql-src/images/mutations';
+import { useStoreState } from '../../../../state';
+import { useNavigate } from 'react-router-dom';
 
 let querySize = 10;
 if (window.innerWidth > 1239 && window.innerWidth < 1800) {
@@ -20,18 +20,18 @@ if (window.innerWidth > 1239 && window.innerWidth < 1800) {
 }
 
 const AddIncident = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const schemeId = useStoreState((state) => state.scheme.id);
   const currentUser = useStoreState((state) => state.user.id);
   const role = useStoreState((state) => state.user.role);
-  const schemeAdmin = role === "SCHEME_ADMIN";
-  const admin = role === "USER" ? false : true;
+  const schemeAdmin = role === 'SCHEME_ADMIN';
+  const admin = role === 'USER' ? false : true;
 
   // state
   const [description, setDescription] = useState({
-    subject: "",
+    subject: '',
     subjectError: null,
-    description: "",
+    description: '',
     descriptionError: null,
     date: new Date(),
     dateError: null,
@@ -39,19 +39,19 @@ const AddIncident = () => {
     timeError: null,
   });
   const [crimeTypes, setCrimeTypes] = useState([]);
-  const [location, setLocation] = useState("ACCOUNT");
+  const [location, setLocation] = useState('ACCOUNT');
   const [newLocation, setNewLocation] = useState({
-    premises: "",
-    building: "",
-    street: "",
+    premises: '',
+    building: '',
+    street: '',
     streetError: null,
-    townCity: "",
+    townCity: '',
     townCityError: null,
-    county: "",
-    postcode: "",
+    county: '',
+    postcode: '',
     postcodeError: null,
   });
-  const [previousLocation, setPreviousLocation] = useState("");
+  const [previousLocation, setPreviousLocation] = useState('');
   const [offenders, setOffenders] = useState([]);
   const [images, setImages] = useState([]);
   const [imagesAssigned, setImagesAssigned] = useState(false);
@@ -66,16 +66,16 @@ const AddIncident = () => {
         },
       },
     },
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: 'cache-and-network',
   });
   const { data: crimeTypesList } = useQuery(Tags, {
     variables: {
       where: {
         scheme: { id: { equals: schemeId } },
-        dataType: { equals: "INCIDENT" },
+        dataType: { equals: 'INCIDENT' },
       },
     },
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: 'cache-and-network',
   });
 
   const { data: groupsData, loading: groupsLoading } = useQuery(Groups, {
@@ -87,7 +87,7 @@ const AddIncident = () => {
           : { some: { id: { equals: currentUser } } },
       },
     },
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: 'cache-and-network',
   });
 
   // mutations
@@ -102,8 +102,8 @@ const AddIncident = () => {
         query: IncidentFeed,
         variables: {
           schemeId,
-          search: "",
-          order: { createdAt: "desc" },
+          search: '',
+          order: { createdAt: 'desc' },
           first: querySize,
         },
       });
@@ -114,8 +114,8 @@ const AddIncident = () => {
         },
         variables: {
           schemeId,
-          search: "",
-          order: { createdAt: "desc" },
+          search: '',
+          order: { createdAt: 'desc' },
           first: querySize,
         },
       });
@@ -185,13 +185,13 @@ const AddIncident = () => {
         ...offender,
         id: offenders.length,
         create: true,
-        name: offender.name === "" ? "Unidentified Offender" : offender.name,
-        gender: offender.gender === "" ? "UNKNOWN" : offender.gender,
-        race: offender.race === "" ? "UNKNOWN" : offender.race,
-        build: offender.build === "" ? "UNKNOWN" : offender.build,
+        name: offender.name === '' ? 'Unidentified Offender' : offender.name,
+        gender: offender.gender === '' ? 'UNKNOWN' : offender.gender,
+        race: offender.race === '' ? 'UNKNOWN' : offender.race,
+        build: offender.build === '' ? 'UNKNOWN' : offender.build,
         age:
-          offender.age === "" && offender.dateOfBirth === ""
-            ? "UNKNOWN"
+          offender.age === '' && offender.dateOfBirth === ''
+            ? 'UNKNOWN'
             : offender.age,
         dateOfBirth: !!offender.dateOfBirth ? offender.dateOfBirth : undefined,
         imagesIds: [],
@@ -205,13 +205,13 @@ const AddIncident = () => {
           $set: {
             ...offender,
             name:
-              offender.name === "" ? "Unidentified Offender" : offender.name,
-            gender: offender.gender === "" ? "UNKNOWN" : offender.gender,
-            race: offender.race === "" ? "UNKNOWN" : offender.race,
-            build: offender.build === "" ? "UNKNOWN" : offender.build,
+              offender.name === '' ? 'Unidentified Offender' : offender.name,
+            gender: offender.gender === '' ? 'UNKNOWN' : offender.gender,
+            race: offender.race === '' ? 'UNKNOWN' : offender.race,
+            build: offender.build === '' ? 'UNKNOWN' : offender.build,
             age:
-              offender.age === "" && offender.dateOfBirth === ""
-                ? "UNKNOWN"
+              offender.age === '' && offender.dateOfBirth === ''
+                ? 'UNKNOWN'
                 : offender.age,
           },
         },
@@ -225,7 +225,7 @@ const AddIncident = () => {
       setImages([
         ...images,
         {
-          id: "UPLOADING",
+          id: 'UPLOADING',
         },
       ]);
       const {
@@ -348,10 +348,10 @@ const AddIncident = () => {
       const timeValid = !!description.time;
       setDescription({
         ...description,
-        subjectError: subjectValid ? "" : "This is a required Field.",
-        descriptionError: descriptionValid ? "" : "This is a required Field.",
-        dateError: dateValid ? "" : "This is a required Field.",
-        timeError: timeValid ? "" : "This is a required Field.",
+        subjectError: subjectValid ? '' : 'This is a required Field.',
+        descriptionError: descriptionValid ? '' : 'This is a required Field.',
+        dateError: dateValid ? '' : 'This is a required Field.',
+        timeError: timeValid ? '' : 'This is a required Field.',
       });
       subjectValid && descriptionValid && dateValid && timeValid
         ? resolve()
@@ -359,14 +359,14 @@ const AddIncident = () => {
     });
   const validateNewLocation = () =>
     new Promise((resolve, reject) => {
-      const streetValid = location === "NEW" && !!newLocation.street;
-      const townCityValid = location === "NEW" && !!newLocation.townCity;
-      const postcodeValid = location === "NEW" && !!newLocation.postcode;
+      const streetValid = location === 'NEW' && !!newLocation.street;
+      const townCityValid = location === 'NEW' && !!newLocation.townCity;
+      const postcodeValid = location === 'NEW' && !!newLocation.postcode;
       setNewLocation({
         ...newLocation,
-        streetError: streetValid ? "" : "This is a required Field.",
-        townCityError: townCityValid ? "" : "This is a required Field.",
-        postcodeError: postcodeValid ? "" : "This is a required Field.",
+        streetError: streetValid ? '' : 'This is a required Field.',
+        townCityError: townCityValid ? '' : 'This is a required Field.',
+        postcodeError: postcodeValid ? '' : 'This is a required Field.',
       });
       streetValid && townCityValid && postcodeValid ? resolve() : reject();
     });
@@ -380,14 +380,14 @@ const AddIncident = () => {
     });
   const validateLocation = () =>
     new Promise((resolve, reject) => {
-      location === "NEW"
+      location === 'NEW'
         ? validateNewLocation()
             .then(() => resolve())
-            .catch(() => reject("NEW"))
-        : location === "PREVIOUS"
+            .catch(() => reject('NEW'))
+        : location === 'PREVIOUS'
         ? !!previousLocation
           ? resolve()
-          : reject("PREVIOUS")
+          : reject('PREVIOUS')
         : resolve();
     });
   const validateGroups = () =>
@@ -407,7 +407,7 @@ const AddIncident = () => {
           crimeTypes: crimeTypes.map(({ id }) => ({ id })),
           location: {
             create:
-              location === "NEW"
+              location === 'NEW'
                 ? {
                     premises: newLocation.premises,
                     building: newLocation.building,
@@ -419,9 +419,9 @@ const AddIncident = () => {
                 : undefined,
 
             previous:
-              location === "PREVIOUS"
+              location === 'PREVIOUS'
                 ? { id: previousLocation }
-                : location === "ACCOUNT"
+                : location === 'ACCOUNT'
                 ? { id: userData.addresses.find((el) => el.primary).id }
                 : undefined,
           },
@@ -456,7 +456,7 @@ const AddIncident = () => {
       },
     });
 
-    navigate("/");
+    navigate('/');
   };
 
   return (
