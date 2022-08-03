@@ -21,10 +21,11 @@ interface OffenderData {
         name: string;
       }[]
     | undefined;
-  // images?: {
-  //   id: string;
-  //   optimised?: string | null;
-  // }[];
+  images?: {
+    id: string;
+    optimised?: string | null;
+    url?: string | null;
+  }[];
 }
 
 interface Props {

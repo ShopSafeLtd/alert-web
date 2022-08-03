@@ -166,18 +166,13 @@ const ViewOffender = ({
             <Tabs.TabPane key={0} tab="Details">
               <Row>
                 <Col span={24} style={{ margin: 10 }}>
-                  {loading ? (
-                    <Skeleton />
-                  ) : (
-                    <>
-                      <Title level={4}>{offenderData?.name}</Title>
-                      {offenderData?.groups?.map((group) => (
-                        <Text key={group.id} type="danger" ellipsis>
-                          {group.name}
-                        </Text>
-                      ))}
-                    </>
-                  )}
+                  <Title level={4}>{offenderData?.name}</Title>
+                  {offenderData?.groups?.map((group) => (
+                    <Text key={group.id} type="danger" ellipsis>
+                      {group.name}
+                    </Text>
+                  ))}
+
                   <Descriptions column={1} className="offender-descriptions">
                     <Descriptions.Item
                       span={2}
@@ -210,6 +205,14 @@ const ViewOffender = ({
                         </span>
                       }
                     >
+                      {/* {loading ? (
+                        <Skeleton title={{ width: 100 }} paragraph={false} />
+                      ) : offenderData?.dateOfBirth ? (
+                        calcAge(offenderData?.dateOfBirth)
+                      ) : (
+                        getOffenderAge(offenderData?.age)
+                      )} */}
+
                       {offenderData?.dateOfBirth
                         ? calcAge(offenderData?.dateOfBirth)
                         : getOffenderAge(offenderData?.age)}

@@ -10,9 +10,8 @@ import {
   Build,
   ListOffendersQuery,
 } from 'graphql/generated';
-// import { useParams } from 'react-router-dom';
+
 import { useLightbox } from 'simple-react-lightbox';
-// import { Modal, notification } from 'antd';
 
 import { useStoreState, OffenderSort, useStoreActions } from 'state';
 
@@ -37,10 +36,11 @@ interface OffenderData {
         name: string;
       }[]
     | undefined;
-  // images?: {
-  //   id: string;
-  //   optimised?: string | null;
-  // }[];
+  images?: {
+    id: string;
+    optimised?: string | null;
+    url?: string | null;
+  }[];
 }
 interface Props {
   onClose: () => void;
@@ -144,6 +144,11 @@ const useViewOffender = ({ onClose, update }: Props): Return => {
           race: offender.race || null,
           build: offender.build || null,
           dateOfBirth: offender.dateOfBirth || null,
+          images:
+            offender.images.map(({ id, optimised }) => ({
+              id,
+              optimised,
+            })) || null,
         }));
 
       update(filterOffenders);

@@ -47,6 +47,7 @@ import AddOffender from 'components/form-components/incident/offender/AddOffende
 import AddExistingOffender from 'components/form-components/incident/offender/AddExisitingOffender';
 import AddNewLocation from 'components/form-components/incident/location/AddLocation';
 import AddPreviousLocation from 'components/form-components/incident/location/AddPreviousOffender';
+import AssignImageToOffender from 'components/form-components/incident/offender/AssignImageToOffender';
 
 const { Title, Paragraph } = Typography;
 
@@ -55,11 +56,6 @@ interface FormData {
   description: string;
   date: Date;
   time: Moment;
-  // building: string;
-  // street: string;
-  // townCity: string;
-  // county: string;
-  // postcode: string;
   groups: string[];
   tags: string[];
   images: [{ id: string; url: string; optimised: string }];
@@ -82,6 +78,11 @@ interface OffenderData {
         name: string;
       }[]
     | undefined;
+  images?: {
+    id: string;
+    optimised?: string | null;
+    url?: string | null;
+  }[];
 }
 
 interface LocationData {
@@ -121,6 +122,9 @@ interface Props {
   toggleAddNewLocation: () => void;
   updateNewLocation: (value: LocationData | undefined) => void;
   form: FormInstance<LocationData>;
+  assignImage: boolean;
+  toggleAssignImage: () => void;
+  updateAssignImage: (value: string[] | undefined) => void;
 }
 
 const EditIncident = ({
@@ -151,6 +155,9 @@ const EditIncident = ({
   toggleAddNewLocation,
   updateNewLocation,
   form,
+  assignImage,
+  toggleAssignImage,
+  updateAssignImage,
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader onBack={() => window.history.back()} title="Add Incident" />
@@ -321,7 +328,7 @@ const EditIncident = ({
             <Row gutter={50}>
               <Col span={11}>
                 <Form.Item name="building" label="Building">
-                  <Input disabled={saving} />
+                  <Input disabled={saving} readOnly />
                 </Form.Item>
               </Col>
               <Col span={11}>
@@ -335,7 +342,7 @@ const EditIncident = ({
                     },
                   ]}
                 >
-                  <Input disabled={saving} />
+                  <Input disabled={saving} readOnly />
                 </Form.Item>
               </Col>
             </Row>
@@ -351,12 +358,12 @@ const EditIncident = ({
                     },
                   ]}
                 >
-                  <Input disabled={saving} />
+                  <Input disabled={saving} readOnly />
                 </Form.Item>
               </Col>
               <Col span={11}>
                 <Form.Item name="county" label="County">
-                  <Input disabled={saving} />
+                  <Input disabled={saving} readOnly />
                 </Form.Item>
               </Col>
             </Row>
@@ -372,7 +379,7 @@ const EditIncident = ({
                     },
                   ]}
                 >
-                  <Input disabled={saving} />
+                  <Input disabled={saving} readOnly />
                 </Form.Item>
               </Col>
               <Col>
@@ -408,22 +415,7 @@ const EditIncident = ({
           </Form>
         )}
 
-        <Row gutter={20}>
-          <Col>
-            <Title level={4}>Images</Title>
-            <Form.Item name="images">
-              <Upload
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                listType="picture-card"
-                fileList={fileList}
-                onChange={imgChange}
-              >
-                {fileList.length < 10 && '+ Upload'}
-              </Upload>
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={5}>
+        <Row gutter={5} style={{ marginTop: 20 }}>
           <Col flex={1}>
             <Title level={4}>Offenders</Title>
           </Col>
@@ -523,13 +515,27 @@ const EditIncident = ({
                 }))}
               />
             ) : (
-              <Paragraph type="secondary">
+              <Paragraph type="secondary" style={{ marginBottom: 50 }}>
                 You have not add any offenders on this incident.
               </Paragraph>
             )}
           </Col>
         </Row>
-
+        <Row gutter={20}>
+          <Col>
+            <Title level={4}>Images</Title>
+            <Form.Item name="images">
+              <Upload
+                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                listType="picture-card"
+                fileList={fileList}
+                onChange={imgChange}
+              >
+                {fileList.length < 10 && '+ Upload'}
+              </Upload>
+            </Form.Item>
+          </Col>
+        </Row>
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={10} justify="end">
             <Col>
@@ -621,6 +627,22 @@ const EditIncident = ({
         <AddExistingOffender
           update={updateOffenderList}
           onClose={toggleAddExistingOffender}
+        />
+      ) : (
+        <div />
+      )}
+    </Drawer>
+    <Drawer
+      title="Assigned offenders"
+      visible={assignImage}
+      width="600"
+      onClose={toggleAssignImage}
+    >
+      {assignImage ? (
+        <AssignImageToOffender
+          update={updateAssignImage}
+          onClose={toggleAssignImage}
+          data={offendersData}
         />
       ) : (
         <div />

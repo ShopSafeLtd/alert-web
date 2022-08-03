@@ -31,6 +31,9 @@ function EditIncident(): JSX.Element {
     addNewLocation,
     toggleAddNewLocation,
     updateNewLocation,
+    assignImage,
+    toggleAssignImage,
+    updateAssignImage,
   } = useEditIncident();
   return (
     <div>
@@ -62,6 +65,9 @@ function EditIncident(): JSX.Element {
         toggleAddNewLocation={toggleAddNewLocation}
         updateNewLocation={updateNewLocation}
         updatePreviousLocation={updatePreviousLocation}
+        assignImage={assignImage}
+        toggleAssignImage={toggleAssignImage}
+        updateAssignImage={updateAssignImage}
       />
     </div>
   );

@@ -57,10 +57,6 @@ interface OffenderData {
         name: string;
       }[]
     | undefined;
-  // images?: {
-  //   id: string;
-  //   optimised?: string | null;
-  // }[];
 }
 interface Return {
   onSubmit: (value: FormData) => void;
@@ -119,10 +115,11 @@ const useEditIncident = (): Return => {
     },
 
     onCompleted: ({ incident }) => {
+      // offendersData
       if (incident?.offenders && incident.offenders.length > 0) {
         setOffendersData(incident.offenders);
       }
-
+      // imageList
       if (incident?.images && incident.images.length > 0) {
         setFileList(
           incident?.images.map((image) => ({
@@ -132,7 +129,9 @@ const useEditIncident = (): Return => {
             url: `${image.url}`,
           }))
         );
+        console.log('images', incident.images);
       }
+      console.log('fileList', fileList);
     },
   });
 
@@ -349,7 +348,14 @@ const useEditIncident = (): Return => {
   };
   // functions
   const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
+    console.log('newFileList', newFileList);
+
+    setFileList(
+      newFileList
+      // newFileList.filter(
+      //   (newItem) => !fileList?.map((item) => item.).includes(newItem.uid)
+      // )
+    );
     setImageChange(true);
   };
   const toggleAddIncidentTag = () => {
