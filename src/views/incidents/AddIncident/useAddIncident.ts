@@ -55,6 +55,11 @@ interface OffenderData {
         name: string;
       }[]
     | undefined;
+  images?: {
+    id: string;
+    optimised?: string | null;
+    url?: string | null;
+  }[];
 }
 
 enum Options {
@@ -101,6 +106,9 @@ interface Return {
   addNewLocation: boolean;
   toggleAddNewLocation: () => void;
   updateNewLocation: (value: LocationData | undefined) => void;
+  assignImage: boolean;
+  toggleAssignImage: () => void;
+  updateAssignImage: (value: string[] | undefined) => void;
 }
 
 const useEditIncident = (): Return => {
@@ -132,6 +140,7 @@ const useEditIncident = (): Return => {
   const [previousId, setPreviousId] = useState<string>('');
   const [addNewLocation, setAddNewLocation] = useState(false);
   const [addPreviousLocation, setAddPreviousLocation] = useState(false);
+  const [assignImage, setAssignImage] = useState(false);
 
   // Query
   const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
@@ -168,10 +177,6 @@ const useEditIncident = (): Return => {
         },
       },
     },
-    // onCompleted: () => {
-    //   const primarAddress= addressData?.addresses.find((address) => address.primary)
-
-    // }
   });
 
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
@@ -332,7 +337,13 @@ const useEditIncident = (): Return => {
           offenders: {
             connect:
               offendersData && offendersData.length > 0
-                ? offendersData.map((offender) => ({ id: offender.id }))
+                ? offendersData
+                    .filter((item) =>
+                      ListOffendersData?.listOffenders?.offenders
+                        ?.map((offender) => offender.id)
+                        .includes(item.id)
+                    )
+                    .map((offender) => ({ id: offender.id }))
                 : undefined,
             create:
               offendersData && offendersData.length > 0
@@ -364,6 +375,7 @@ const useEditIncident = (): Return => {
                       scheme: { connect: { id: schemeId } },
                       createdBy: { connect: { id: userId } },
                       localId: offender.id,
+                      // images:{create:}
                     }))
                 : undefined,
           },
@@ -383,10 +395,7 @@ const useEditIncident = (): Return => {
   };
 
   // functions
-  const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
-    setImageChange(true);
-  };
+
   const toggleAddIncidentTag = () => {
     setAddIncidentTag(!addIncidentTag);
   };
@@ -401,6 +410,24 @@ const useEditIncident = (): Return => {
   };
   const toggleAddNewLocation = () => {
     setAddNewLocation(!addNewLocation);
+  };
+  const toggleAssignImage = () => {
+    setAssignImage(!assignImage);
+  };
+  const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+    setImageChange(true);
+    if (fileList) {
+      confirm({
+        title:
+          'Do you Want to assign this image to any offenders shown in them?',
+        // content: 'Some descriptions',
+        okText: 'Yes',
+        onOk() {
+          toggleAssignImage();
+        },
+      });
+    }
   };
   const updatePreviousLocation = (value: string | undefined) => {
     if (value) {
@@ -445,6 +472,17 @@ const useEditIncident = (): Return => {
         );
       } else setOffendersData(filterOffenders);
     }
+  };
+  const updateAssignImage = (value: string[] | undefined) => {
+    // if (value && value.length > 0) {
+    //                 value.filter(
+    //                   (item) =>
+    //                     ListOffendersData?.listOffenders?.offenders
+    //                       ?.map((offender) => offender.id)
+    //                       .includes(item)
+    //             ).map((offender) => ({id:offender.id}))
+    // }
+    console.log(value);
   };
 
   const deleteConfirm = (offenderId: string | undefined) => {
@@ -496,6 +534,9 @@ const useEditIncident = (): Return => {
     toggleAddNewLocation,
     updateNewLocation,
     form,
+    assignImage,
+    toggleAssignImage,
+    updateAssignImage,
   };
 };
 
