@@ -2,87 +2,83 @@ import { useState } from 'react';
 
 import {
   Role,
+  useUpdateIncidentMutation,
   useViewIncidentQuery,
   ViewIncidentQuery,
-  Age,
-  Gender,
-  Race,
-  Build,
 } from 'graphql/generated';
 import { useParams } from 'react-router-dom';
 import { useLightbox } from 'simple-react-lightbox';
 import { useStoreState } from 'state';
-import { Modal } from 'antd';
+import { notification, Modal } from 'antd';
 
 const { confirm } = Modal;
-interface OffenderData {
-  id: string;
-  name?: string | null;
-  age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
-  build?: Build | null;
-  dateOfBirth?: Date | null;
-  hair?: string | null;
-  dateSource?: string | null;
-  peculiarities?: string | null;
-  approved?: boolean | null;
-  groups?:
-    | {
-        id: string;
-        name: string;
-      }[]
-    | undefined;
-  // images?: {
-  //   id: string;
-  //   optimised?: string | null;
-  // }[];
-}
+
 interface Return {
   data: ViewIncidentQuery | undefined;
   loading: boolean;
   openLightbox: (index: number) => void;
   addOffenderRights: boolean;
-  incidentId: string;
+  incidentId: string | undefined;
   editRights: boolean;
   deleteRights: boolean;
   onDelete: () => void;
   addExistingOffender: boolean;
   toggleAddExistingOffender: () => void;
-  updateOffenderList: (value: OffenderData[] | undefined) => void;
+  updateOffenderList: (value: string[] | undefined) => void;
 }
 
 const useViewIncident = (): Return => {
   const { openLightbox } = useLightbox();
-  const params = useParams();
+  const incidentId = useParams().id;
 
   const role = useStoreState((state) => state.user.role);
   const [addExistingOffender, setAddExistingOffender] = useState(false);
-  const [offendersData, setOffendersData] = useState<
-    OffenderData[] | undefined
-  >([]);
   const { data, loading } = useViewIncidentQuery({
     variables: {
       where: {
-        id: params.id,
+        id: incidentId,
       },
     },
   });
+  const [updateIncident] = useUpdateIncidentMutation({
+    onCompleted: () => {
+      // setSaving(false);
+      notification.success({
+        message: 'Successfully Linked!',
+        description: 'The offenders have been Linked to this incidents!',
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      // setSaving(false);
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
+    },
+  });
+
   const toggleAddExistingOffender = () => {
     setAddExistingOffender(!addExistingOffender);
   };
-  const updateOffenderList = (filterOffenders: OffenderData[] | undefined) => {
-    if (filterOffenders) {
-      if (offendersData && offendersData.length > 0) {
-        setOffendersData(
-          offendersData.concat(
-            filterOffenders.filter(
-              (item) =>
-                !offendersData?.map((offender) => offender.id).includes(item.id)
-            )
-          )
-        );
-      } else setOffendersData(filterOffenders);
+  const updateOffenderList = (selectOffenders: string[] | undefined) => {
+    if (incidentId) {
+      updateIncident({
+        variables: {
+          where: {
+            id: incidentId,
+          },
+          data: {
+            offenders: {
+              connect:
+                selectOffenders && selectOffenders.length > 0
+                  ? selectOffenders.map((offenderId) => ({ id: offenderId }))
+                  : undefined,
+            },
+          },
+        },
+      });
     }
   };
   const onDelete = () => {
@@ -102,7 +98,7 @@ const useViewIncident = (): Return => {
     addOffenderRights: role !== Role.User,
     editRights: role !== Role.User,
     deleteRights: role !== Role.User,
-    incidentId: params.id || '',
+    incidentId,
     onDelete,
     addExistingOffender,
     toggleAddExistingOffender,

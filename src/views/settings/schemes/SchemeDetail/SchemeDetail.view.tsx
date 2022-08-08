@@ -27,7 +27,7 @@ interface Props {
   saving: boolean;
   onSubmit: (value: FormData) => void;
   beforeUpload: (value: RcFile) => void;
-  handlePreview: (value: UploadFile) => void;
+  onPreview: (value: UploadFile) => void;
   fileList: UploadFile[];
   imgChange: UploadProps['onChange'];
 }
@@ -56,7 +56,7 @@ const GroupDetail = ({
   onSubmit,
   beforeUpload,
   imgChange,
-  handlePreview,
+  onPreview,
   fileList,
 }: Props): JSX.Element => (
   <div className="list-view">
@@ -114,9 +114,11 @@ const GroupDetail = ({
                     fileList={fileList}
                     beforeUpload={beforeUpload}
                     onChange={imgChange}
-                    onPreview={handlePreview}
+                    onPreview={onPreview}
+                    maxCount={1}
+                    accept=".png,.jpeg,"
                   >
-                    {fileList.length < 1 && '+ Upload'}
+                    {fileList.length < 2 && '+ Upload'}
                   </Upload>
                 </ImgCrop>
               </Form.Item>

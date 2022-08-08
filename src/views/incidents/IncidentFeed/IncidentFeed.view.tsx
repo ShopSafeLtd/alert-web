@@ -102,12 +102,13 @@ const IncidentFeed = ({
           onChange={(e) => setSearch(e.target.value)}
         />
       </Col>
+
       <Col>
         <Select
           value={order}
           onChange={setOrder}
           size="small"
-          style={{ minWidth: 150 }}
+          style={{ minWidth: 150, marginRight: 5 }}
         >
           <Select.Option value={IncidentSort.createdAtDesc}>
             Newest First
@@ -117,10 +118,23 @@ const IncidentFeed = ({
           </Select.Option>
         </Select>
       </Col>
-      {/* <Col>
-          <Button size="small">All Options</Button>
-        </Col> */}
+      <Col>
+        <Button
+          type="primary"
+          onClick={onNavigate}
+          icon={
+            <FontAwesomeIcon
+              icon={faPlus}
+              size="lg"
+              style={{ marginRight: 10 }}
+            />
+          }
+        >
+          Add Incident
+        </Button>
+      </Col>
     </Row>
+
     <Row gutter={8}>
       {loading && !data?.listIncidents?.incidents
         ? [
@@ -166,18 +180,7 @@ const IncidentFeed = ({
         />
       </Col>
     </Row>
-    <Button
-      className="add-button"
-      size="large"
-      type="primary"
-      shape="round"
-      onClick={onNavigate}
-      icon={
-        <FontAwesomeIcon icon={faPlus} size="lg" style={{ marginRight: 10 }} />
-      }
-    >
-      Add Incident
-    </Button>
+
     <SRLWrapper
       elements={lightboxElements}
       options={{ buttons: { showDownloadButton: false } }}

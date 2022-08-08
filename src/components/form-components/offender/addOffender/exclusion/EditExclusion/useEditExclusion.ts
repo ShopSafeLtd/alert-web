@@ -23,20 +23,32 @@ interface Return {
   onSubmit: (value: FormData) => void;
   saving: boolean;
   setStartDate: (value: Moment | Date | null) => void;
-  disabledDate: RangePickerProps['disabledDate'];
+  // disabledStartDate: (value: Moment | Date | null) => boolean | undefined;
+  disabledStartDate: RangePickerProps['disabledDate'];
+  setEndDate: (value: Moment | Date | null) => void;
+  disabledEndDate: RangePickerProps['disabledDate'];
 }
 
 const useEditBan = ({ onClose, update }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [startDate, setStartDate] = useState<Moment | Date | null>(null);
+  const [endDate, setEndDate] = useState<Moment | Date | null>(null);
+
   // eslint-disable-next-line arrow-body-style
-  const disabledDate: RangePickerProps['disabledDate'] = (current) => {
+
+  const disabledStartDate: RangePickerProps['disabledDate'] = (current) => {
+    if (endDate && endDate?.valueOf() > Date.now()) {
+      return current && current.valueOf() > endDate.valueOf();
+    }
+    // return undefined
+    return current && current.valueOf() < Date.now() - 3600 * 1000 * 24;
+  };
+  const disabledEndDate: RangePickerProps['disabledDate'] = (current) => {
     if (startDate && startDate?.valueOf() > Date.now()) {
       return current && current.valueOf() < startDate.valueOf();
     }
     return current && current.valueOf() < Date.now() - 3600 * 1000 * 24;
   };
-
   const onSubmit = (data: FormData) => {
     setSaving(true);
     update({
@@ -53,7 +65,9 @@ const useEditBan = ({ onClose, update }: Props): Return => {
     onSubmit,
     saving,
     setStartDate,
-    disabledDate,
+    disabledStartDate,
+    setEndDate,
+    disabledEndDate,
   };
 };
 

@@ -39,10 +39,6 @@ interface OffenderData {
         name: string;
       }[]
     | undefined;
-  // images?: {
-  //   id: string;
-  //   optimised?: string | null;
-  // }[];
 }
 interface Props {
   onClose: () => void;
@@ -117,26 +113,6 @@ const useAddOffender = ({ onClose, update }: Props): Return => {
       },
     ]);
 
-    // createOffender({
-    //   variables: {
-    //     data: {
-    //       name: data.name || null,
-    //       gender: data.gender || null,
-    //       race: data.race || null,
-    //       build: data.build || null,
-    //       hair: data.hair || null,
-    //       peculiarities: data.peculiarities || null,
-    //       age: ageCheck ? null : data.age || null,
-    //       dateSource: ageCheck ? data.dateSource || null : null,
-    //       dateOfBirth: ageCheck ? data.dateOfBirth || null : null,
-    //       groups:
-    //         data.groups.length > 0
-    //           ? { connect: data.groups.map((id) => ({ id })) }
-    //           : undefined,
-    //       scheme: schemeId,
-    //     },
-    //   },
-    // });
     onClose();
     setSaving(false);
   };

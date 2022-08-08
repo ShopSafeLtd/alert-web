@@ -130,8 +130,8 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
       setSaving(false);
       onClose();
       notification.success({
-        message: 'Successfully Created!',
-        description: 'The user has been created! ',
+        message: 'Successfully Invited!',
+        description: 'The invitation has been sent! ',
         placement: 'bottomRight',
       });
     },

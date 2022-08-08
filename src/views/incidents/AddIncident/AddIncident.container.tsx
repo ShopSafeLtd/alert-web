@@ -15,6 +15,7 @@ function EditIncident(): JSX.Element {
     addressLoading,
     imgChange,
     fileList,
+    beforeUpload,
     addIncidentTag,
     toggleAddIncidentTag,
     updateIncidentTag,
@@ -49,6 +50,7 @@ function EditIncident(): JSX.Element {
         addressLoading={addressLoading}
         imgChange={imgChange}
         fileList={fileList}
+        beforeUpload={beforeUpload}
         addIncidentTag={addIncidentTag}
         toggleAddIncidentTag={toggleAddIncidentTag}
         updateIncidentTag={updateIncidentTag}

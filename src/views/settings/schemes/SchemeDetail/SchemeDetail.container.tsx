@@ -9,7 +9,7 @@ function SchemeDetail(): JSX.Element {
     saving,
     onSubmit,
     beforeUpload,
-    handlePreview,
+    onPreview,
     imgChange,
     fileList,
   } = useSchemeDetail();
@@ -22,7 +22,7 @@ function SchemeDetail(): JSX.Element {
       fileList={fileList}
       beforeUpload={beforeUpload}
       imgChange={imgChange}
-      handlePreview={handlePreview}
+      onPreview={onPreview}
     />
   );
 }

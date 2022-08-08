@@ -23,7 +23,7 @@ interface Return {
   onSubmit: (value: FormData) => void;
 
   beforeUpload: (value: RcFile) => void;
-  handlePreview: (value: UploadFile) => void;
+  onPreview: (value: UploadFile) => void;
   fileList: UploadFile[];
   imgChange: UploadProps['onChange'];
 }
@@ -41,18 +41,14 @@ const useSchemeDetail = (): Return => {
   };
 
   const beforeUpload = (file: RcFile) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-    if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
-    }
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
       message.error('Image must smaller than 2MB!');
     }
-    return isJpgOrPng && isLt2M;
+    return isLt2M;
   };
 
-  const handlePreview = async (file: UploadFile) => {
+  const onPreview = async (file: UploadFile) => {
     let src = file.url as string;
     if (!src) {
       src = await new Promise((resolve) => {
@@ -139,7 +135,7 @@ const useSchemeDetail = (): Return => {
     onSubmit,
 
     beforeUpload,
-    handlePreview,
+    onPreview,
     imgChange,
     fileList,
   };

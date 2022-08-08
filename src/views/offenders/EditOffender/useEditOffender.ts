@@ -91,13 +91,6 @@ const useEditOffender = (): Return => {
   const [addExclusion, setAddExclusion] = useState(false);
   const [editExclusion, setEditExclusion] = useState(false);
 
-  const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
-    setImageChange(true);
-  };
-  const toggleAddOffenderTag = () => {
-    setAddOffenderTag(!addOffenderTag);
-  };
   const errorNotification = () => {
     notification.error({
       message: 'error!',
@@ -105,12 +98,7 @@ const useEditOffender = (): Return => {
       placement: 'bottomRight',
     });
   };
-  const toggleAddExclusion = () => {
-    setAddExclusion(!addExclusion);
-  };
-  const toggleEditExclusion = () => {
-    setEditExclusion(!editExclusion);
-  };
+
   const { data: offenderData, loading } = useViewOffenderQuery({
     variables: {
       where: {
@@ -382,7 +370,20 @@ const useEditOffender = (): Return => {
         },
       });
   };
-
+  // function
+  const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+    setImageChange(true);
+  };
+  const toggleAddOffenderTag = () => {
+    setAddOffenderTag(!addOffenderTag);
+  };
+  const toggleAddExclusion = () => {
+    setAddExclusion(!addExclusion);
+  };
+  const toggleEditExclusion = () => {
+    setEditExclusion(!editExclusion);
+  };
   const deleteConfirm = (currentId: string) => {
     confirm({
       title: 'Do you want to delete the exclusion?',
@@ -418,7 +419,6 @@ const useEditOffender = (): Return => {
     updateOffenderTag,
     addExclusion,
     toggleAddExclusion,
-
     editExclusion,
     toggleEditExclusion,
     updateExclusion,

@@ -14,6 +14,7 @@ function EditIncident(): JSX.Element {
     tagsLoading,
     imgChange,
     fileList,
+    beforeUpload,
     addIncidentTag,
     toggleAddIncidentTag,
     updateIncidentTag,
@@ -38,6 +39,7 @@ function EditIncident(): JSX.Element {
         tagsLoading={tagsLoading}
         imgChange={imgChange}
         fileList={fileList}
+        beforeUpload={beforeUpload}
         addIncidentTag={addIncidentTag}
         toggleAddIncidentTag={toggleAddIncidentTag}
         updateIncidentTag={updateIncidentTag}

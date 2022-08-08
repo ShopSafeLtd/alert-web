@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import { ViewIncidentQuery, Age, Gender, Race, Build } from 'graphql/generated';
+import { ViewIncidentQuery } from 'graphql/generated';
 import {
   Typography,
   Row,
@@ -13,7 +13,6 @@ import {
   Skeleton,
   Button,
   Drawer,
-  // Drawer,
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -27,44 +26,27 @@ import {
   getOffenderBuild,
   getOffenderGender,
   getOffenderRace,
+  calcAge,
 } from 'utils/offender/get-offender-desc';
 import { SRLWrapper } from 'simple-react-lightbox';
 import IncidentSideList from 'components/incidents/IncidentSideList';
 import { Link } from 'react-router-dom';
-import AddExistingOffender from 'components/form-components/incident/offender/AddExisitingOffender';
+import LinkOffender from 'components/form-components/incident/offender/LinkOffender';
 
 const { Title, Text, Paragraph } = Typography;
-interface OffenderData {
-  id: string;
-  name?: string | null;
-  age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
-  build?: Build | null;
-  dateOfBirth?: Date | null;
-  hair?: string | null;
-  dateSource?: string | null;
-  peculiarities?: string | null;
-  approved?: boolean | null;
-  groups?:
-    | {
-        id: string;
-        name: string;
-      }[]
-    | undefined;
-}
+
 interface Props {
   data: ViewIncidentQuery | undefined;
   loading: boolean;
   openLightbox: (index: number) => void;
   addOffenderRights: boolean;
-  incidentId: string;
+  incidentId: string | undefined;
   editRights: boolean;
   deleteRights: boolean;
   onDelete: () => void;
   addExistingOffender: boolean;
   toggleAddExistingOffender: () => void;
-  updateOffenderList: (value: OffenderData[] | undefined) => void;
+  updateOffenderList: (value: string[] | undefined) => void;
 }
 
 const ViewIncident = ({
@@ -250,7 +232,9 @@ const ViewIncident = ({
                                         {getOffenderRace(offender.race)}
                                       </Descriptions.Item>
                                       <Descriptions.Item label="Age">
-                                        {getOffenderAge(offender.age)}
+                                        {offender.dateOfBirth
+                                          ? calcAge(offender.dateOfBirth)
+                                          : getOffenderAge(offender.age)}
                                       </Descriptions.Item>
                                       <Descriptions.Item label="Build">
                                         {getOffenderBuild(offender.build)}
@@ -311,7 +295,7 @@ const ViewIncident = ({
       onClose={toggleAddExistingOffender}
     >
       {addExistingOffender ? (
-        <AddExistingOffender
+        <LinkOffender
           update={updateOffenderList}
           onClose={toggleAddExistingOffender}
         />

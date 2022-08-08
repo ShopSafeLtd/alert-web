@@ -74,7 +74,7 @@ const useEditBan = ({ onClose, banId }: Props): Return => {
             startDate: { set: data.startDate },
             endDate: { set: data.endDate },
             location: { set: data.location },
-            description: { set: data.description || '' },
+            description: { set: data.description || null },
           },
         },
       });

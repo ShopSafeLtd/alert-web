@@ -17,9 +17,9 @@ import {
   useListOffendersQuery,
 } from 'graphql/generated';
 import { useParams } from 'react-router-dom';
-import { notification, Modal } from 'antd';
+import { notification, Modal, message, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
-import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { MutationUpdaterFn } from '@apollo/client';
 import { Moment } from 'moment';
 
@@ -69,6 +69,7 @@ interface Return {
   tagsLoading: boolean;
   imgChange: UploadProps['onChange'];
   fileList: UploadFile[];
+  beforeUpload: (value: RcFile) => void;
   addIncidentTag: boolean;
   toggleAddIncidentTag: () => void;
   updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
@@ -123,15 +124,13 @@ const useEditIncident = (): Return => {
       if (incident?.images && incident.images.length > 0) {
         setFileList(
           incident?.images.map((image) => ({
-            uid: `${image.id}`,
+            uid: `-${image.id}`,
             name: `${image.id}.png`,
             status: 'done',
             url: `${image.url}`,
           }))
         );
-        console.log('images', incident.images);
       }
-      console.log('fileList', fileList);
     },
   });
 
@@ -272,7 +271,13 @@ const useEditIncident = (): Return => {
             offenders: {
               connect:
                 offendersData && offendersData.length > 0
-                  ? offendersData.map((offender) => ({ id: offender.id }))
+                  ? offendersData
+                      .filter((item) =>
+                        ListOffendersData?.listOffenders?.offenders
+                          ?.map((offender) => offender.id)
+                          .includes(item.id)
+                      )
+                      .map((offender) => ({ id: offender.id }))
                   : undefined,
               create:
                 offendersData && offendersData.length > 0
@@ -347,15 +352,18 @@ const useEditIncident = (): Return => {
     }
   };
   // functions
-  const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    console.log('newFileList', newFileList);
+  const beforeUpload = (file: RcFile) => {
+    const isFileDuplicate = fileList.find((item) => item.name === file.name);
+    if (isFileDuplicate) {
+      message.error(
+        'This image has already existed, please choose another one.'
+      );
+    }
 
-    setFileList(
-      newFileList
-      // newFileList.filter(
-      //   (newItem) => !fileList?.map((item) => item.).includes(newItem.uid)
-      // )
-    );
+    return !isFileDuplicate || Upload.LIST_IGNORE;
+  };
+  const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
     setImageChange(true);
   };
   const toggleAddIncidentTag = () => {
@@ -413,6 +421,7 @@ const useEditIncident = (): Return => {
     tagsLoading,
     imgChange,
     fileList,
+    beforeUpload,
     addIncidentTag,
     toggleAddIncidentTag,
     updateIncidentTag,

@@ -24,7 +24,9 @@ interface Props {
   banData: BanData | null;
   saving: boolean;
   setStartDate: (value: Moment | Date | null) => void;
-  disabledDate: RangePickerProps['disabledDate'];
+  disabledStartDate: RangePickerProps['disabledDate'];
+  setEndDate: (value: Moment | Date | null) => void;
+  disabledEndDate: RangePickerProps['disabledDate'];
 }
 
 const EditExclusion = ({
@@ -33,7 +35,9 @@ const EditExclusion = ({
   onClose,
   saving,
   setStartDate,
-  disabledDate,
+  disabledStartDate,
+  setEndDate,
+  disabledEndDate,
 }: Props): JSX.Element => (
   <Form
     initialValues={{
@@ -59,6 +63,7 @@ const EditExclusion = ({
         >
           <DatePicker
             disabled={saving}
+            disabledDate={disabledStartDate}
             onChange={(value) =>
               setStartDate(value ? new Date(value.valueOf()) : null)
             }
@@ -77,7 +82,13 @@ const EditExclusion = ({
             },
           ]}
         >
-          <DatePicker disabled={saving} disabledDate={disabledDate} />
+          <DatePicker
+            disabled={saving}
+            disabledDate={disabledEndDate}
+            onChange={(value) =>
+              setEndDate(value ? new Date(value.valueOf()) : null)
+            }
+          />
         </Form.Item>
       </Col>
     </Row>
