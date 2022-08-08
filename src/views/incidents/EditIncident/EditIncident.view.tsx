@@ -32,7 +32,7 @@ import {
   getOffenderRace,
   calcAge,
 } from 'utils/offender/get-offender-desc';
-import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import { MutationUpdaterFn } from '@apollo/client';
 
@@ -95,6 +95,7 @@ interface Props {
   tagsLoading: boolean;
   imgChange: UploadProps['onChange'];
   fileList: UploadFile[];
+  beforeUpload: (value: RcFile) => void;
   addIncidentTag: boolean;
   toggleAddIncidentTag: () => void;
   updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
@@ -118,6 +119,7 @@ const EditIncident = ({
   tagsLoading,
   imgChange,
   fileList,
+  beforeUpload,
   addIncidentTag,
   toggleAddIncidentTag,
   updateIncidentTag,
@@ -364,6 +366,10 @@ const EditIncident = ({
                   listType="picture-card"
                   fileList={fileList}
                   onChange={imgChange}
+                  beforeUpload={beforeUpload}
+                  openFileDialogOnClick
+                  accept=".png,.jpeg"
+                  multiple
                 >
                   {fileList.length < 10 && '+ Upload'}
                 </Upload>

@@ -19,9 +19,9 @@ import {
   useAddressesQuery,
   AddressesQuery,
 } from 'graphql/generated';
-import { notification, Modal, Form, FormInstance } from 'antd';
+import { notification, Modal, Form, FormInstance, Upload, message } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
-import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { MutationUpdaterFn } from '@apollo/client';
 import { Moment } from 'moment';
 
@@ -76,9 +76,12 @@ interface LocationData {
   postcode: string;
 }
 
+interface LocationFormData {
+  fullLocation: string;
+}
 interface Return {
   onSubmit: (value: FormData) => void;
-  form: FormInstance<LocationData>;
+  form: FormInstance<LocationFormData>;
   saving: boolean;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
@@ -90,6 +93,7 @@ interface Return {
   addressLoading: boolean;
   imgChange: UploadProps['onChange'];
   fileList: UploadFile[];
+  beforeUpload: (value: RcFile) => void;
   addIncidentTag: boolean;
   toggleAddIncidentTag: () => void;
   updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
@@ -112,7 +116,7 @@ interface Return {
 }
 
 const useEditIncident = (): Return => {
-  const [form] = useForm<LocationData>();
+  const [form] = useForm<LocationFormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
 
@@ -284,116 +288,6 @@ const useEditIncident = (): Return => {
     });
   };
 
-  const [createIncident] = useCreateIncidentMutation({
-    onCompleted: () => {
-      setSaving(false);
-      notification.success({
-        message: 'Successfully Added!',
-        description: 'The Incident has been added!',
-        placement: 'bottomRight',
-      });
-    },
-    onError: () => {
-      setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
-    },
-    update: updateIncident,
-  });
-
-  const onSubmit = (data: FormData) => {
-    setSaving(true);
-    createIncident({
-      variables: {
-        data: {
-          subject: data.subject,
-          description: data.description,
-          date: data.date,
-          time: data.time,
-          groups: data.groups.map((id) => ({ id })),
-          scheme: schemeId,
-          crimeTypes:
-            data.tags.length > 0 ? data.tags.map((id) => ({ id })) : undefined,
-          location: {
-            account: option === Options.ACCOUNT,
-            create:
-              newLocation && option === Options.NEW
-                ? {
-                    building: newLocation.building || null,
-                    street: newLocation.street,
-                    townCity: newLocation.townCity,
-                    county: newLocation.county || null,
-                    postcode: newLocation.postcode,
-                  }
-                : undefined,
-            previous:
-              previousId && option === Options.PREVIOUS
-                ? { id: previousId }
-                : undefined,
-          },
-          offenders: {
-            connect:
-              offendersData && offendersData.length > 0
-                ? offendersData
-                    .filter((item) =>
-                      ListOffendersData?.listOffenders?.offenders
-                        ?.map((offender) => offender.id)
-                        .includes(item.id)
-                    )
-                    .map((offender) => ({ id: offender.id }))
-                : undefined,
-            create:
-              offendersData && offendersData.length > 0
-                ? offendersData
-                    .filter(
-                      (item) =>
-                        !ListOffendersData?.listOffenders?.offenders
-                          ?.map((offender) => offender.id)
-                          .includes(item.id)
-                    )
-                    .map((offender) => ({
-                      name: offender.name || 'Unidentified Offender' || null,
-                      gender: offender.gender || null,
-                      race: offender.race || null,
-                      build: offender.build || null,
-                      hair: offender.hair || null,
-                      peculiarities: offender.peculiarities || null,
-                      age: offender.age || null,
-                      dateSource: offender.dateSource || null,
-                      dateOfBirth: offender.dateOfBirth || null,
-                      groups:
-                        offender.groups && offender.groups.length > 0
-                          ? {
-                              connect: offender.groups.map(({ id }) => ({
-                                id,
-                              })),
-                            }
-                          : undefined,
-                      scheme: { connect: { id: schemeId } },
-                      createdBy: { connect: { id: userId } },
-                      localId: offender.id,
-                      // images:{create:}
-                    }))
-                : undefined,
-          },
-          images: {
-            create:
-              imageChange && fileList.length > 0
-                ? fileList
-                    .map((item) => ({
-                      file: item.originFileObj,
-                    }))
-                    .filter((obj) => obj.file !== undefined)
-                : undefined,
-          },
-        },
-      },
-    });
-  };
-
   // functions
 
   const toggleAddIncidentTag = () => {
@@ -414,14 +308,31 @@ const useEditIncident = (): Return => {
   const toggleAssignImage = () => {
     setAssignImage(!assignImage);
   };
-  const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
+  const beforeUpload = (file: RcFile) => {
+    const isFileDuplicate = fileList.find((item) => item.name === file.name);
+    if (isFileDuplicate) {
+      message.error(
+        'This image has already existed, please choose another one.'
+      );
+    }
+    return !isFileDuplicate || Upload.LIST_IGNORE;
+  };
+  // {
+  //   fileList: newFileList;
+  // }
+
+  const imgChange: UploadProps['onChange'] = (info) => {
+    setFileList([...info.fileList]);
     setImageChange(true);
-    if (fileList) {
+    // info.file.status === 'done' || 'error'||"success"
+    if (info.file.status === 'error') {
+      console.log('file', info.file.response);
+      console.log('obj', info.file.originFileObj);
       confirm({
-        title:
+        title: 'Assign Offenders',
+
+        content:
           'Do you Want to assign this image to any offenders shown in them?',
-        // content: 'Some descriptions',
         okText: 'Yes',
         onOk() {
           toggleAssignImage();
@@ -437,11 +348,7 @@ const useEditIncident = (): Return => {
         (location) => location.id === value
       );
       form.setFieldsValue({
-        building: previousLocation?.building || '',
-        street: previousLocation?.street || '',
-        townCity: previousLocation?.townCity || '',
-        county: previousLocation?.county || '',
-        postcode: previousLocation?.postcode || '',
+        fullLocation: previousLocation?.full || undefined,
       });
     }
   };
@@ -451,11 +358,9 @@ const useEditIncident = (): Return => {
       setOption(Options.NEW);
       setNewLocation(value);
       form.setFieldsValue({
-        building: value?.building || '',
-        street: value?.street || '',
-        townCity: value?.townCity || '',
-        county: value?.county || '',
-        postcode: value?.postcode || '',
+        fullLocation: `${value.building && value.building}, ${value?.street},${
+          value?.townCity
+        },${value?.county && value?.county},${value?.postcode}`,
       });
     }
   };
@@ -497,6 +402,133 @@ const useEditIncident = (): Return => {
     });
   };
 
+  const [createIncident] = useCreateIncidentMutation({
+    onCompleted: () => {
+      setSaving(false);
+      notification.success({
+        message: 'Successfully Added!',
+        description: 'The Incident has been added!',
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      setSaving(false);
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
+    },
+    update: updateIncident,
+  });
+  const onSubmit = (data: FormData) => {
+    setSaving(true);
+    if (offendersData === undefined || offendersData.length === 0) {
+      confirm({
+        title: 'No Offenders',
+        content: 'Please select or add at least one offender for the incident.',
+        cancelText: 'Find Offenders',
+        onCancel() {
+          toggleAddExistingOffender();
+        },
+        okText: 'Add New Offender',
+        onOk() {
+          toggleAddOffender();
+        },
+      });
+      setSaving(false);
+    } else {
+      createIncident({
+        variables: {
+          data: {
+            subject: data.subject,
+            description: data.description,
+            date: data.date,
+            time: data.time,
+            groups: data.groups.map((id) => ({ id })),
+            scheme: schemeId,
+            crimeTypes:
+              data.tags.length > 0
+                ? data.tags.map((id) => ({ id }))
+                : undefined,
+            location: {
+              account: option === Options.ACCOUNT,
+              create:
+                newLocation && option === Options.NEW
+                  ? {
+                      building: newLocation.building || null,
+                      street: newLocation.street,
+                      townCity: newLocation.townCity,
+                      county: newLocation.county || null,
+                      postcode: newLocation.postcode,
+                    }
+                  : undefined,
+              previous:
+                previousId && option === Options.PREVIOUS
+                  ? { id: previousId }
+                  : undefined,
+            },
+            offenders: {
+              connect:
+                offendersData && offendersData.length > 0
+                  ? offendersData
+                      .filter((item) =>
+                        ListOffendersData?.listOffenders?.offenders
+                          ?.map((offender) => offender.id)
+                          .includes(item.id)
+                      )
+                      .map((offender) => ({ id: offender.id }))
+                  : undefined,
+              create:
+                offendersData && offendersData.length > 0
+                  ? offendersData
+                      .filter(
+                        (item) =>
+                          !ListOffendersData?.listOffenders?.offenders
+                            ?.map((offender) => offender.id)
+                            .includes(item.id)
+                      )
+                      .map((offender) => ({
+                        name: offender.name || 'Unidentified Offender' || null,
+                        gender: offender.gender || null,
+                        race: offender.race || null,
+                        build: offender.build || null,
+                        hair: offender.hair || null,
+                        peculiarities: offender.peculiarities || null,
+                        age: offender.age || null,
+                        dateSource: offender.dateSource || null,
+                        dateOfBirth: offender.dateOfBirth || null,
+                        groups:
+                          offender.groups && offender.groups.length > 0
+                            ? {
+                                connect: offender.groups.map(({ id }) => ({
+                                  id,
+                                })),
+                              }
+                            : undefined,
+                        scheme: { connect: { id: schemeId } },
+                        createdBy: { connect: { id: userId } },
+                        localId: offender.id,
+                        // images:{create:}
+                      }))
+                  : undefined,
+            },
+            images: {
+              create:
+                imageChange && fileList.length > 0
+                  ? fileList
+                      .map((item) => ({
+                        file: item.originFileObj,
+                      }))
+                      .filter((obj) => obj.file !== undefined)
+                  : undefined,
+            },
+          },
+        },
+      });
+    }
+  };
+
   return {
     onSubmit,
     saving,
@@ -513,10 +545,11 @@ const useEditIncident = (): Return => {
     tags:
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
     tagsLoading,
-    primaryAddress: addressData?.addresses.find((address) => address.primary),
+    primaryAddress: addressData?.addresses.find(({ primary }) => primary),
     addressLoading,
     imgChange,
     fileList,
+    beforeUpload,
     addIncidentTag,
     toggleAddIncidentTag,
     updateIncidentTag,
