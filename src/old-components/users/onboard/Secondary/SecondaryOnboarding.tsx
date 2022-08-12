@@ -1,36 +1,36 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import MediaQuery from "react-responsive";
-import { Route, useLocation, useNavigate } from "react-router-dom";
-import { useQuery, useMutation } from "@apollo/client";
-import Paper from "@material-ui/core/Paper";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
-import { withStyles } from "@material-ui/styles";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import MediaQuery from 'react-responsive';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { useQuery, useMutation } from '@apollo/client';
+import Paper from '@material-ui/core/Paper';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import { withStyles } from '@material-ui/styles';
 // import validate from "validate.js";
-import { APP_PREFIX_PATH } from "configs/AppConfig";
+import { APP_PREFIX_PATH } from 'configs/AppConfig';
 
 import {
   BackButton,
   FullWidthButton,
   ProgressButton,
-} from "../../../global/actions";
-import Account from "../Account/Account";
-import Terms from "../Terms/Terms";
-import { UserDetails } from "graphql-src/users/queries";
+} from '../../../global/actions';
+import Account from '../Account/Account';
+import Terms from '../Terms/Terms';
+import { UserDetails } from 'graphql-src/users/queries';
 import {
   UpdateUserDetails,
   UpdateUserTerms,
-} from "graphql-src/users/mutations";
+} from 'graphql-src/users/mutations';
 // import query from '../../../../graphql/users/queries/UserOnboard';
 // import ResetPassword from '../../../../graphql/account/mutations/ResetPasswordMutation';
 // import EditUser from '../../../../graphql/account/mutations/EditProfileMutation';
-import { useStoreActions, useStoreState } from "../../../../state";
+import { useStoreActions, useStoreState } from '../../../../state';
 
 const styles = {
   label: {
-    fontSize: "14px",
+    fontSize: '14px',
   },
 };
 
@@ -76,10 +76,10 @@ const Content = styled.div`
     padding: 0px 90px;
   }
 `;
-
+// @ts-ignore ????
 const SecondaryOnboarding = ({ classes }) => {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useNavigate();
+  const location = useLocation();
   const setUser = useStoreActions((actions) => actions.user.setUser);
   const userId = useStoreState((state) => state.user.id);
   const user = useStoreState((state) => state.user);
@@ -88,15 +88,15 @@ const SecondaryOnboarding = ({ classes }) => {
   const steps = [
     {
       step: 0,
-      label: "Account Details",
+      label: 'Account Details',
       url: `${APP_PREFIX_PATH}/onboarding`,
-      next: "Next",
+      next: 'Next',
     },
     {
       step: 1,
-      label: "Terms & Conditions",
+      label: 'Terms & Conditions',
       url: `${APP_PREFIX_PATH}/onboarding/terms-conditions`,
-      next: "Agree",
+      next: 'Agree',
     },
   ];
 
@@ -104,64 +104,64 @@ const SecondaryOnboarding = ({ classes }) => {
   const [step, setStep] = useState(0);
 
   const [details, setDetails] = useState({
-    fullName: "",
-    fullNameError: "",
-    organisation: "",
-    organisationError: "",
-    premises: "",
-    building: "",
-    street: "",
-    streetError: "",
-    townCity: "",
-    townCityError: "",
-    county: "",
-    postcode: "",
-    postcodeError: "",
-    addressId: "",
+    fullName: '',
+    fullNameError: '',
+    organisation: '',
+    organisationError: '',
+    premises: '',
+    building: '',
+    street: '',
+    streetError: '',
+    townCity: '',
+    townCityError: '',
+    county: '',
+    postcode: '',
+    postcodeError: '',
+    addressId: '',
   });
   const [terms, setTerms] = useState({
     termsSigned: false,
-    error: "",
+    error: '',
   });
 
   const [locationKeys, setLocationKeys] = useState([]);
 
   // effects
 
-  useEffect(() => {
-    return navigate.listen((location) => {
-      if (navigate.action === "PUSH") {
-        setLocationKeys([location.key]);
-      }
+  // useEffect(() => {
+  //   return navigate.listen((location) => {
+  //     if (navigate.action === 'PUSH') {
+  //       setLocationKeys([location.key]);
+  //     }
 
-      if (navigate.action === "POP") {
-        if (locationKeys[1] === location.key) {
-          setLocationKeys(([_, ...keys]) => keys);
-          // Handle forward event
-          if (step < 1) {
-            setStep((prev) => prev + 1);
-          }
-        } else {
-          setLocationKeys((keys) => [location.key, ...keys]);
-          // Handle back event
-          if (step > 0) {
-            setStep((prev) => prev - 1);
-          }
-        }
-      }
-    });
-    // eslint-disable-next-line
-  }, [locationKeys, step]);
+  //     if (navigate.action === 'POP') {
+  //       if (locationKeys[1] === location.key) {
+  //         setLocationKeys(([_, ...keys]) => keys);
+  //         // Handle forward event
+  //         if (step < 1) {
+  //           setStep((prev) => prev + 1);
+  //         }
+  //       } else {
+  //         setLocationKeys((keys) => [location.key, ...keys]);
+  //         // Handle back event
+  //         if (step > 0) {
+  //           setStep((prev) => prev - 1);
+  //         }
+  //       }
+  //     }
+  //   });
+  //   // eslint-disable-next-line
+  // }, [locationKeys, step]);
 
   useEffect(() => {
-    if (location.pathname.includes("terms-conditions") && step !== 1) {
+    if (location.pathname.includes('terms-conditions') && step !== 1) {
       setStep(1);
     }
   }, [location, step]);
 
   // queries
   const { loading } = useQuery(UserDetails, {
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: 'cache-and-network',
     variables: {
       where: {
         id: userId,
@@ -196,11 +196,11 @@ const SecondaryOnboarding = ({ classes }) => {
 
       setDetails({
         ...details,
-        fullNameError: fullNameValid ? "" : "This field is required",
-        organisationError: organisationValid ? "" : "This field is required",
-        streetError: streetValid ? "" : "This field is required",
-        townCityError: townValid ? "" : "This field is required",
-        postcodeError: postcodeValid ? "" : "This field is required",
+        fullNameError: fullNameValid ? '' : 'This field is required',
+        organisationError: organisationValid ? '' : 'This field is required',
+        streetError: streetValid ? '' : 'This field is required',
+        townCityError: townValid ? '' : 'This field is required',
+        postcodeError: postcodeValid ? '' : 'This field is required',
       });
       fullNameValid &&
       organisationValid &&
@@ -215,8 +215,8 @@ const SecondaryOnboarding = ({ classes }) => {
       setTerms({
         ...terms,
         error: terms.termsSigned
-          ? ""
-          : "Please agree to the terms and conditions",
+          ? ''
+          : 'Please agree to the terms and conditions',
       });
       terms.termsSigned ? resolve(true) : resolve(false);
     });
@@ -271,20 +271,21 @@ const SecondaryOnboarding = ({ classes }) => {
         },
       });
       setUser({ ...user, onboarded: true });
-      navigate("/");
+      navigate('/');
     }
   };
   const handleBack = () => {
     navigate(steps[step - 1].url);
     setStep((prev) => prev - 1);
   };
-
+  // @ts-ignore ????
   const handleDetailsChange = (name) => (event) => {
     setDetails({
       ...details,
       [name]: event.target.value,
     });
   };
+  // @ts-ignore ????
   const handleTermsChange = (name, value) => {
     setTerms({
       ...terms,
@@ -294,6 +295,7 @@ const SecondaryOnboarding = ({ classes }) => {
 
   return (
     <MediaQuery minDeviceWidth={1024}>
+      {/*  @ts-ignore ???? */}
       {(matches) => (
         <Container>
           <Page>
@@ -310,27 +312,56 @@ const SecondaryOnboarding = ({ classes }) => {
                 </Stepper>
               )}
               <Content>
-                <Route
-                  exact
-                  path={`${APP_PREFIX_PATH}/onboarding`}
-                  render={() => (
-                    <Account
-                      handleChange={handleDetailsChange}
-                      values={details}
-                      loading={loading}
-                    />
-                  )}
-                />
-                <Route
-                  path={`${APP_PREFIX_PATH}/onboarding/terms-conditions`}
-                  render={() => (
-                    <Terms
-                      handleChange={handleTermsChange}
-                      values={terms}
-                      loading={loading}
-                    />
-                  )}
-                />
+                {/* <Routes>
+                  <Route
+                    index
+                    element={
+                      <Account
+                        handleChange={handleDetailsChange}
+                        values={details}
+                        loading={loading}
+                      />
+                    }
+                  />
+                  <Route
+                    path={`${APP_PREFIX_PATH}/onboarding/terms-conditions`}
+                    element={
+                      <Terms
+                        handleChange={handleTermsChange}
+                        values={terms}
+                        loading={loading}
+                      />
+                    }
+                  />
+                </Routes> */}
+                <Routes>
+                  <Route
+                    index
+                    element={
+                      <Account
+                        handleChange={handleDetailsChange}
+                        values={details}
+                        loading={loading}
+                      />
+                      // <Terms
+                      //   handleChange={handleTermsChange}
+                      //   values={terms}
+                      //   loading={loading}
+                      // />
+                    }
+                  />
+
+                  <Route
+                    path={`terms-conditions`}
+                    element={
+                      <Terms
+                        handleChange={handleTermsChange}
+                        values={terms}
+                        loading={false}
+                      />
+                    }
+                  />
+                </Routes>
               </Content>
               {matches && step >= 0 && (
                 <Actions>

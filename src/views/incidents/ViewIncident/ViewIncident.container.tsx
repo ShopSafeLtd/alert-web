@@ -6,6 +6,7 @@ const ViewIncident = (): JSX.Element => {
   const {
     data,
     loading,
+    saving,
     openLightbox,
     addOffenderRights,
     incidentId,
@@ -21,6 +22,7 @@ const ViewIncident = (): JSX.Element => {
     <View
       data={data}
       loading={loading}
+      saving={saving}
       openLightbox={openLightbox}
       addOffenderRights={addOffenderRights}
       incidentId={incidentId}

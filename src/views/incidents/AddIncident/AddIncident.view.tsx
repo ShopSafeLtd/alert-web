@@ -25,6 +25,7 @@ import {
   TimePicker,
   Table,
   Skeleton,
+  Modal,
 } from 'antd';
 import {
   getOffenderAge,
@@ -42,7 +43,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faPlus } from '@fortawesome/pro-light-svg-icons';
 
 import { Moment } from 'moment';
-import { DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, UserAddOutlined } from '@ant-design/icons';
 import AddOffender from 'components/form-components/incident/offender/AddOffender';
 import AddExistingOffender from 'components/form-components/incident/offender/AddExisitingOffender';
 import AddNewLocation from 'components/form-components/incident/location/AddLocation';
@@ -50,7 +51,7 @@ import AddPreviousLocation from 'components/form-components/incident/location/Ad
 import AssignImageToOffender from 'components/form-components/incident/offender/AssignImageToOffender';
 
 const { Title, Paragraph } = Typography;
-
+const { confirm } = Modal;
 interface FormData {
   subject: string;
   description: string;
@@ -60,6 +61,7 @@ interface FormData {
   tags: string[];
   images: [{ id: string; url: string; optimised: string }];
 }
+
 interface OffenderData {
   id: string;
   name?: string | null;
@@ -83,8 +85,8 @@ interface OffenderData {
     optimised?: string | null;
     url?: string | null;
   }[];
+  imageUid?: string[] | undefined;
 }
-
 interface LocationData {
   building?: string | null;
   street: string;
@@ -97,6 +99,7 @@ interface LocationFormData {
 }
 interface Props {
   onSubmit: (value: FormData) => void;
+  form: FormInstance<LocationFormData>;
   saving: boolean;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
@@ -125,7 +128,6 @@ interface Props {
   addNewLocation: boolean;
   toggleAddNewLocation: () => void;
   updateNewLocation: (value: LocationData | undefined) => void;
-  form: FormInstance<LocationFormData>;
   assignImage: boolean;
   toggleAssignImage: () => void;
   updateAssignImage: (value: string[] | undefined) => void;
@@ -163,472 +165,472 @@ const EditIncident = ({
   assignImage,
   toggleAssignImage,
   updateAssignImage,
-}: Props): JSX.Element => {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore ....
-  const dummyRequest = ({ file, onSuccess }) => {
-    console.log(file);
-
-    setTimeout(() => {
-      onSuccess('ok');
-    }, 0);
-  };
-  return (
-    <div className="list-view">
-      <PageHeader onBack={() => window.history.back()} title="Add Incident" />
-      <Card>
-        <Form onFinish={onSubmit}>
-          <Row gutter={20} style={{ marginBottom: 30 }}>
-            <Col>
-              <Title level={4}>Incident Details</Title>
-            </Col>
-          </Row>
-          <Row gutter={50}>
-            <Col span={11}>
-              <Form.Item
-                name="subject"
-                label="Subject"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please enter a subject for the incident.',
-                  },
-                ]}
-              >
-                <Input disabled={saving} />
-              </Form.Item>
-            </Col>
-            <Col span={11}>
-              <Form.Item
-                name="description"
-                label="Description"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please enter a description for the incident.',
-                  },
-                ]}
-              >
-                <Input disabled={saving} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={50}>
-            <Col span={11}>
-              <Row>
-                <Col span={12}>
-                  <Form.Item
-                    name="date"
-                    label="Date"
-                    rules={[
-                      {
-                        required: true,
-                        message: 'Please select a date for the incident.',
-                      },
-                    ]}
-                  >
-                    <DatePicker
-                      disabled={saving}
-                      disabledDate={(current) =>
-                        current &&
-                        current.valueOf() > Date.now() - 3600 * 1000 * 24
-                      }
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    name="time"
-                    label="Time"
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          'Please select a start date for the new exclusion.',
-                      },
-                    ]}
-                  >
-                    <TimePicker />
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Col>
-
-            <Col span={11}>
-              <Form.Item
-                name="groups"
-                label="Groups"
-                rules={[
-                  {
-                    required: true,
-                    message:
-                      'Please add at least one group that you would like this incident to be visible to.',
-                  },
-                ]}
-              >
-                <Select
-                  loading={groupsLoading}
-                  disabled={saving}
-                  mode="multiple"
-                  maxTagCount={3}
-                  placeholder="Select the groups that you would like this incident to be visible to."
-                >
-                  {groups.map((group) => (
-                    <Select.Option key={group.value} value={group.value}>
-                      {group.label}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Row gutter={5}>
-            <Col span={11}>
-              <Form.Item
-                name="tags"
-                label="Crime Types"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please add at least one crime type.',
-                  },
-                ]}
-              >
-                <Select
-                  loading={tagsLoading}
-                  disabled={saving}
-                  mode="multiple"
-                  maxTagCount={3}
-                >
-                  {tags.map((tag) => (
-                    <Select.Option value={tag.value}>{tag.label}</Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={11}>
-              <Button
-                disabled={saving}
-                loading={saving}
-                style={{ color: 'red', padding: 8 }}
-                onClick={toggleAddIncidentTag}
-                icon={
-                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
-                }
-              >
-                Add Crime Type
-              </Button>
-            </Col>
-          </Row>
-
-          {addressLoading ? (
-            <Skeleton />
-          ) : (
-            <Form<LocationFormData>
-              form={form}
-              initialValues={{
-                fullLocation: primaryAddress?.full || '',
-              }}
+}: Props): JSX.Element => (
+  <div className="list-view">
+    <PageHeader onBack={() => window.history.back()} title="Add Incident" />
+    <Card>
+      <Form onFinish={onSubmit}>
+        <Row gutter={20} style={{ marginBottom: 30 }}>
+          <Col>
+            <Title level={4}>Incident Details</Title>
+          </Col>
+        </Row>
+        <Row gutter={50}>
+          <Col span={11}>
+            <Form.Item
+              name="subject"
+              label="Subject"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter a subject for the incident.',
+                },
+              ]}
             >
-              <Row gutter={10}>
-                <Col
-                  // flex={1}
-                  span={11}
-                >
-                  <Form.Item
-                    name="fullLocation"
-                    label="Location"
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          'Please select or add a new location for the incident.',
-                      },
-                    ]}
-                  >
-                    <Input disabled={saving} readOnly bordered={false} />
-                  </Form.Item>
-                </Col>
-                <Col>
-                  <Button
-                    disabled={saving}
-                    loading={saving}
-                    onClick={toggleAddPreviousLocation}
-                    style={{ color: 'red' }}
-                    icon={
-                      <FontAwesomeIcon
-                        icon={faMagnifyingGlass}
-                        style={{ marginRight: 5 }}
-                      />
-                    }
-                  >
-                    Use Previous Locations
-                  </Button>
-                </Col>
-                <Col>
-                  <Button
-                    disabled={saving}
-                    loading={saving}
-                    onClick={toggleAddNewLocation}
-                    style={{ color: 'red' }}
-                    icon={
-                      <FontAwesomeIcon
-                        icon={faPlus}
-                        style={{ marginRight: 5 }}
-                      />
-                    }
-                  >
-                    Add New Location
-                  </Button>
-                </Col>
-              </Row>
-            </Form>
-          )}
-
-          <Row gutter={5} style={{ marginTop: 20 }}>
-            <Col flex={1}>
-              <Title level={4}>Offenders</Title>
-            </Col>
-            <Col>
-              <Button
-                disabled={saving}
-                loading={saving}
-                onClick={toggleAddExistingOffender}
-                style={{ color: 'red' }}
-                icon={
-                  <FontAwesomeIcon
-                    icon={faMagnifyingGlass}
-                    style={{ marginRight: 5 }}
-                  />
-                }
-              >
-                Find Offenders
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                disabled={saving}
-                loading={saving}
-                onClick={toggleAddOffender}
-                style={{ color: 'red' }}
-                icon={
-                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
-                }
-              >
-                Add New Offender
-              </Button>
-            </Col>
-          </Row>
-
-          <Row gutter={20} style={{ marginTop: 10 }}>
-            <Col flex={1}>
-              {offendersData && offendersData.length > 0 ? (
-                <Table
-                  size="small"
-                  pagination={{
-                    defaultPageSize: 20,
-                    pageSize: 20,
-                  }}
-                  columns={[
+              <Input disabled={saving} />
+            </Form.Item>
+          </Col>
+          <Col span={11}>
+            <Form.Item
+              name="description"
+              label="Description"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter a description for the incident.',
+                },
+              ]}
+            >
+              <Input disabled={saving} />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={50}>
+          <Col span={11}>
+            <Row>
+              <Col span={12}>
+                <Form.Item
+                  name="date"
+                  label="Date"
+                  rules={[
                     {
-                      key: 'name',
-                      title: 'Name',
-                      dataIndex: 'name',
-                      // width: 350,
-                    },
-                    {
-                      key: 'age',
-                      title: 'Age',
-                      dataIndex: 'age',
-                    },
-                    {
-                      key: 'build',
-                      title: 'Build',
-                      dataIndex: 'build',
-                    },
-                    {
-                      key: 'gender',
-                      title: 'Sex',
-                      dataIndex: 'gender',
-                    },
-                    {
-                      key: 'race',
-                      title: 'Ethnicity',
-                      dataIndex: 'race',
-                    },
-
-                    {
-                      key: 'delete',
-                      title: 'Delete',
-                      dataIndex: 'delete',
-                      width: 100,
-                      render: (value, record) => (
-                        <Button
-                          disabled={saving}
-                          onClick={() => {
-                            deleteConfirm(record.key || undefined);
-                          }}
-                          icon={<DeleteOutlined />}
-                        />
-                      ),
+                      required: true,
+                      message: 'Please select a date for the incident.',
                     },
                   ]}
-                  dataSource={offendersData.map((offender) => ({
-                    key: offender.id,
-                    name: offender.name,
-                    age: offender?.dateOfBirth
-                      ? calcAge(offender?.dateOfBirth)
-                      : getOffenderAge(offender?.age),
-                    gender: getOffenderGender(offender.gender),
-                    build: getOffenderBuild(offender.build),
-                    race: getOffenderRace(offender.race),
-                  }))}
-                />
-              ) : (
-                <Paragraph type="secondary" style={{ marginBottom: 50 }}>
-                  You have not add any offenders on this incident.
-                </Paragraph>
-              )}
-            </Col>
-          </Row>
-          <Row gutter={20}>
-            <Col>
-              <Title level={4}>Images</Title>
-              <Form.Item name="images">
-                <Upload
-                  // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                  listType="picture-card"
-                  fileList={fileList}
-                  onChange={imgChange}
-                  beforeUpload={beforeUpload}
-                  accept=".png,.jpeg"
-                  customRequest={dummyRequest}
-                  // itemRender={(file) => <Button>{file.key}</Button>}
                 >
-                  {fileList.length < 10 && '+ Upload'}
-                  {/* <Button>a</Button> */}
-                </Upload>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Form.Item>
-            <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+                  <DatePicker
+                    disabled={saving}
+                    disabledDate={(current) =>
+                      current &&
+                      current.valueOf() > Date.now() - 3600 * 1000 * 24
+                    }
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name="time"
+                  label="Time"
+                  rules={[
+                    {
+                      required: true,
+                      message:
+                        'Please select a start date for the new exclusion.',
+                    },
+                  ]}
+                >
+                  <TimePicker />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Col>
+
+          <Col span={11}>
+            <Form.Item
+              name="groups"
+              label="Groups"
+              rules={[
+                {
+                  required: true,
+                  message:
+                    'Please add at least one group that you would like this incident to be visible to.',
+                },
+              ]}
+            >
+              <Select
+                loading={groupsLoading}
+                disabled={saving}
+                mode="multiple"
+                maxTagCount={3}
+                placeholder="Select the groups that you would like this incident to be visible to."
+              >
+                {groups.map((group) => (
+                  <Select.Option key={group.value} value={group.value}>
+                    {group.label}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Row gutter={5}>
+          <Col span={11}>
+            <Form.Item
+              name="tags"
+              label="Crime Types"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please add at least one crime type.',
+                },
+              ]}
+            >
+              <Select
+                loading={tagsLoading}
+                disabled={saving}
+                mode="multiple"
+                maxTagCount={3}
+              >
+                {tags.map((tag) => (
+                  <Select.Option value={tag.value}>{tag.label}</Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={11}>
+            <Button
+              disabled={saving}
+              loading={saving}
+              style={{ color: 'red', padding: 8 }}
+              onClick={toggleAddIncidentTag}
+              icon={
+                <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
+              }
+            >
+              Add Crime Type
+            </Button>
+          </Col>
+        </Row>
+
+        {addressLoading ? (
+          <Skeleton />
+        ) : (
+          <Form<LocationFormData>
+            form={form}
+            initialValues={{
+              fullLocation: primaryAddress?.full || '',
+            }}
+          >
+            <Row gutter={10}>
+              <Col
+                // flex={1}
+                span={11}
+              >
+                <Form.Item
+                  name="fullLocation"
+                  label="Location"
+                  rules={[
+                    {
+                      required: true,
+                      message:
+                        'Please select or add a new location for the incident.',
+                    },
+                  ]}
+                >
+                  <Input disabled={saving} readOnly bordered={false} />
+                </Form.Item>
+              </Col>
               <Col>
-                <Button disabled={saving} onClick={() => window.history.back()}>
-                  Cancel
+                <Button
+                  disabled={saving}
+                  loading={saving}
+                  onClick={toggleAddPreviousLocation}
+                  style={{ color: 'red' }}
+                  icon={
+                    <FontAwesomeIcon
+                      icon={faMagnifyingGlass}
+                      style={{ marginRight: 5 }}
+                    />
+                  }
+                >
+                  Use Previous Locations
                 </Button>
               </Col>
               <Col>
                 <Button
                   disabled={saving}
                   loading={saving}
-                  type="primary"
-                  htmlType="submit"
+                  onClick={toggleAddNewLocation}
+                  style={{ color: 'red' }}
+                  icon={
+                    <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
+                  }
                 >
-                  Create Incident
+                  Add New Location
                 </Button>
               </Col>
             </Row>
-          </Form.Item>
-        </Form>
-      </Card>
+          </Form>
+        )}
 
-      <Drawer
-        title="Add Crime Type"
-        visible={addIncidentTag}
-        width="400"
-        onClose={toggleAddIncidentTag}
-      >
-        {addIncidentTag ? (
-          <AddIncidentTag
-            update={updateIncidentTag}
-            onClose={toggleAddIncidentTag}
-          />
-        ) : (
-          <div />
-        )}
-      </Drawer>
-      <Drawer
-        title="Add New Location"
-        visible={addNewLocation}
-        width="600"
-        onClose={toggleAddNewLocation}
-      >
-        {addNewLocation ? (
-          <AddNewLocation
-            update={updateNewLocation}
-            onClose={toggleAddNewLocation}
-          />
-        ) : (
-          <div />
-        )}
-      </Drawer>
+        <Row gutter={5} style={{ marginTop: 20 }}>
+          <Col flex={1}>
+            <Title level={4}>Offenders</Title>
+          </Col>
+          <Col>
+            <Button
+              disabled={saving}
+              loading={saving}
+              onClick={toggleAddExistingOffender}
+              style={{ color: 'red' }}
+              icon={
+                <FontAwesomeIcon
+                  icon={faMagnifyingGlass}
+                  style={{ marginRight: 5 }}
+                />
+              }
+            >
+              Find Offenders
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              disabled={saving}
+              loading={saving}
+              onClick={toggleAddOffender}
+              style={{ color: 'red' }}
+              icon={
+                <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
+              }
+            >
+              Add New Offender
+            </Button>
+          </Col>
+        </Row>
 
-      <Drawer
-        title="Select Previous Locations"
-        visible={addPreviousLocation}
-        width="600"
-        onClose={toggleAddPreviousLocation}
-      >
-        {addPreviousLocation ? (
-          <AddPreviousLocation
-            update={updatePreviousLocation}
-            onClose={toggleAddPreviousLocation}
-          />
-        ) : (
-          <div />
-        )}
-      </Drawer>
-      <Drawer
-        title="Add New Offender"
-        visible={addOffender}
-        width="600"
-        onClose={toggleAddOffender}
-      >
-        {addOffender ? (
-          <AddOffender
-            update={updateOffenderList}
-            onClose={toggleAddOffender}
-          />
-        ) : (
-          <div />
-        )}
-      </Drawer>
+        <Row gutter={20} style={{ marginTop: 10 }}>
+          <Col flex={1}>
+            {offendersData && offendersData.length > 0 ? (
+              <Table
+                size="small"
+                pagination={{
+                  defaultPageSize: 20,
+                  pageSize: 20,
+                }}
+                columns={[
+                  {
+                    key: 'name',
+                    title: 'Name',
+                    dataIndex: 'name',
+                    // width: 350,
+                  },
+                  {
+                    key: 'age',
+                    title: 'Age',
+                    dataIndex: 'age',
+                  },
+                  {
+                    key: 'build',
+                    title: 'Build',
+                    dataIndex: 'build',
+                  },
+                  {
+                    key: 'gender',
+                    title: 'Sex',
+                    dataIndex: 'gender',
+                  },
+                  {
+                    key: 'race',
+                    title: 'Ethnicity',
+                    dataIndex: 'race',
+                  },
 
-      <Drawer
-        title="Add Existing Offenders"
-        visible={addExistingOffender}
-        width="600"
-        onClose={toggleAddExistingOffender}
-      >
-        {addExistingOffender ? (
-          <AddExistingOffender
-            update={updateOffenderList}
-            onClose={toggleAddExistingOffender}
-          />
-        ) : (
-          <div />
-        )}
-      </Drawer>
-      <Drawer
-        title="Assigned offenders"
-        visible={assignImage}
-        width="600"
-        onClose={toggleAssignImage}
-      >
-        {assignImage ? (
-          <AssignImageToOffender
-            update={updateAssignImage}
-            onClose={toggleAssignImage}
-            data={offendersData}
-          />
-        ) : (
-          <div />
-        )}
-      </Drawer>
-    </div>
-  );
-};
+                  {
+                    key: 'delete',
+                    title: 'Delete',
+                    dataIndex: 'delete',
+                    width: 100,
+                    render: (value, record) => (
+                      <Button
+                        disabled={saving}
+                        onClick={() => {
+                          deleteConfirm(record.key || undefined);
+                        }}
+                        icon={<DeleteOutlined />}
+                      />
+                    ),
+                  },
+                ]}
+                dataSource={offendersData.map((offender) => ({
+                  key: offender.id,
+                  name: offender.name,
+                  age: offender?.dateOfBirth
+                    ? calcAge(offender?.dateOfBirth)
+                    : getOffenderAge(offender?.age),
+                  gender: getOffenderGender(offender.gender),
+                  build: getOffenderBuild(offender.build),
+                  race: getOffenderRace(offender.race),
+                }))}
+              />
+            ) : (
+              <Paragraph type="secondary" style={{ marginBottom: 50 }}>
+                You have not add any offenders on this incident.
+              </Paragraph>
+            )}
+          </Col>
+        </Row>
+        <Row gutter={20}>
+          <Col>
+            <Title level={4}>Images</Title>
+            <Form.Item name="images">
+              <Upload
+                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                listType="picture-card"
+                fileList={fileList}
+                onChange={imgChange}
+                beforeUpload={beforeUpload}
+                accept=".png,.jpeg,.webp"
+                // showUploadList={previewIcon}
+                // previewIcon={<Button>a</Button>}
+                showUploadList={{
+                  // showPreviewIcon: true,
+                  showDownloadIcon: true,
+                  // previewIcon: <Button>a</Button>,
+                  downloadIcon: <UserAddOutlined />,
+                }}
+                onDownload={() =>
+                  confirm({
+                    title: 'Assign Offenders',
+                    content:
+                      'Do you Want to assign this image to any offenders shown in them?',
+                    okText: 'Yes',
+                    onOk() {
+                      toggleAssignImage();
+                    },
+                  })
+                }
+                // itemRender={(file) => <Button>{file.key}</Button>}
+              >
+                {fileList.length < 10 && '+ Upload'}
+                {/* <Button>a</Button> */}
+              </Upload>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Form.Item>
+          <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+            <Col>
+              <Button disabled={saving} onClick={() => window.history.back()}>
+                Cancel
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                disabled={saving}
+                loading={saving}
+                type="primary"
+                htmlType="submit"
+              >
+                Create Incident
+              </Button>
+            </Col>
+          </Row>
+        </Form.Item>
+      </Form>
+    </Card>
 
+    <Drawer
+      title="Add Crime Type"
+      visible={addIncidentTag}
+      width="400"
+      onClose={toggleAddIncidentTag}
+    >
+      {addIncidentTag ? (
+        <AddIncidentTag
+          update={updateIncidentTag}
+          onClose={toggleAddIncidentTag}
+        />
+      ) : (
+        <div />
+      )}
+    </Drawer>
+    <Drawer
+      title="Add New Location"
+      visible={addNewLocation}
+      width="600"
+      onClose={toggleAddNewLocation}
+    >
+      {addNewLocation ? (
+        <AddNewLocation
+          update={updateNewLocation}
+          onClose={toggleAddNewLocation}
+        />
+      ) : (
+        <div />
+      )}
+    </Drawer>
+
+    <Drawer
+      title="Select Previous Locations"
+      visible={addPreviousLocation}
+      width="600"
+      onClose={toggleAddPreviousLocation}
+    >
+      {addPreviousLocation ? (
+        <AddPreviousLocation
+          update={updatePreviousLocation}
+          onClose={toggleAddPreviousLocation}
+        />
+      ) : (
+        <div />
+      )}
+    </Drawer>
+    <Drawer
+      title="Add New Offender"
+      visible={addOffender}
+      width="600"
+      onClose={toggleAddOffender}
+    >
+      {addOffender ? (
+        <AddOffender update={updateOffenderList} onClose={toggleAddOffender} />
+      ) : (
+        <div />
+      )}
+    </Drawer>
+
+    <Drawer
+      title="Add Existing Offenders"
+      visible={addExistingOffender}
+      width="600"
+      onClose={toggleAddExistingOffender}
+    >
+      {addExistingOffender ? (
+        <AddExistingOffender
+          update={updateOffenderList}
+          onClose={toggleAddExistingOffender}
+        />
+      ) : (
+        <div />
+      )}
+    </Drawer>
+    <Drawer
+      title="Assigned offenders"
+      visible={assignImage}
+      width="600"
+      onClose={toggleAssignImage}
+    >
+      {assignImage ? (
+        <AssignImageToOffender
+          update={updateAssignImage}
+          onClose={toggleAssignImage}
+          data={offendersData}
+        />
+      ) : (
+        <div />
+      )}
+    </Drawer>
+  </div>
+);
 export default EditIncident;

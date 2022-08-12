@@ -32,7 +32,7 @@ import {
   getOffenderRace,
   calcAge,
 } from 'utils/offender/get-offender-desc';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { RcFile, UploadProps, UploadFile } from 'antd/es/upload/interface';
 
 import { MutationUpdaterFn } from '@apollo/client';
 
@@ -61,6 +61,7 @@ interface FormData {
   tags: string[];
   images: [{ id: string; url: string; optimised: string }];
 }
+
 interface OffenderData {
   id: string;
   name?: string | null;
@@ -79,10 +80,6 @@ interface OffenderData {
         name: string;
       }[]
     | undefined;
-  // images?: {
-  //   id: string;
-  //   optimised?: string | null;
-  // }[];
 }
 interface Props {
   onSubmit: (value: FormData) => void;
@@ -146,7 +143,7 @@ const EditIncident = ({
             time: moment(data?.incident?.time, 'HH:mm:ss'),
             building: data?.incident?.location?.building || '',
             street: data?.incident?.location?.street || '',
-            townCity: data?.incident?.location?.townCity || '',
+            townCity: data?.incident?.location?.townCity,
             county: data?.incident?.location?.county || '',
             postcode: data?.incident?.location?.postcode || '',
             groups:
@@ -237,7 +234,17 @@ const EditIncident = ({
             </Col>
 
             <Col span={11}>
-              <Form.Item name="groups" label="Groups">
+              <Form.Item
+                name="groups"
+                label="Groups"
+                rules={[
+                  {
+                    required: true,
+                    message:
+                      'Please select at least one group that you would like this incident to be visible to.',
+                  },
+                ]}
+              >
                 <Select
                   loading={groupsLoading}
                   disabled={saving}
@@ -263,7 +270,8 @@ const EditIncident = ({
                 rules={[
                   {
                     required: true,
-                    message: 'Please add at least one crime type.',
+                    message:
+                      'Please add at least one crime type for the incident.',
                   },
                 ]}
               >
@@ -323,11 +331,11 @@ const EditIncident = ({
             <Col span={11}>
               <Form.Item
                 name="townCity"
-                label="Town City"
+                label="Town/City"
                 rules={[
                   {
                     required: true,
-                    message: `Please enter a town city for the incident's location.`,
+                    message: `Please enter a town/city for the incident's location.`,
                   },
                 ]}
               >
@@ -367,7 +375,6 @@ const EditIncident = ({
                   fileList={fileList}
                   onChange={imgChange}
                   beforeUpload={beforeUpload}
-                  openFileDialogOnClick
                   accept=".png,.jpeg"
                   multiple
                 >

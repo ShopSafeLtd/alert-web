@@ -116,7 +116,7 @@ const GroupDetail = ({
                     onChange={imgChange}
                     onPreview={onPreview}
                     maxCount={1}
-                    accept=".png,.jpeg,"
+                    accept=".png,.jpeg,.webp"
                   >
                     {fileList.length < 2 && '+ Upload'}
                   </Upload>

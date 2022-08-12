@@ -147,34 +147,61 @@ const AddUser = ({
     <Title level={4} style={{ marginBottom: 15 }}>
       User Address:
     </Title>
-    <Row gutter={16}>
-      <Col span={12}>
+    <Row gutter={60}>
+      <Col span={8}>
         <Form.Item name="building" label="Building">
-          <Input readOnly={existingUser} disabled={saving} />
+          <Input disabled={saving} />
         </Form.Item>
       </Col>
-      <Col span={12}>
-        <Form.Item name="street" label="Street">
-          <Input readOnly={existingUser} disabled={saving} />
+      <Col span={8}>
+        <Form.Item
+          name="street"
+          label="Street"
+          rules={[
+            {
+              required: true,
+              message: 'Please enter a town/city for the address.',
+            },
+          ]}
+        >
+          <Input disabled={saving} />
         </Form.Item>
       </Col>
     </Row>
-    <Row gutter={16}>
-      <Col span={12}>
-        <Form.Item name="townCity" label="Town City">
-          <Input readOnly={existingUser} disabled={saving} />
+    <Row gutter={60}>
+      <Col span={8}>
+        <Form.Item
+          name="townCity"
+          label="Town/City"
+          rules={[
+            {
+              required: true,
+              message: 'Please enter a town/city for the address.',
+            },
+          ]}
+        >
+          <Input disabled={saving} />
         </Form.Item>
       </Col>
-      <Col span={12}>
+      <Col span={8}>
         <Form.Item name="county" label="County">
-          <Input readOnly={existingUser} disabled={saving} />
+          <Input disabled={saving} />
         </Form.Item>
       </Col>
     </Row>
-    <Row gutter={16}>
-      <Col span={12}>
-        <Form.Item name="postcode" label="Postcode">
-          <Input readOnly={existingUser} disabled={saving} />
+    <Row gutter={60}>
+      <Col span={8}>
+        <Form.Item
+          name="postcode"
+          label="Postcode"
+          rules={[
+            {
+              required: true,
+              message: 'Please enter postcode for the address.',
+            },
+          ]}
+        >
+          <Input disabled={saving} />
         </Form.Item>
       </Col>
     </Row>

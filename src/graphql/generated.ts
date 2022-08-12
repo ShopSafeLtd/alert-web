@@ -3764,7 +3764,7 @@ export type ImageCreateInput = {
 export type ImageCreateManyIncidentInput = {
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  fileNames?: InputMaybe<ImageCreateManyfileNamesInput>;
+  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
   optimised?: InputMaybe<Scalars['String']>;
@@ -3783,7 +3783,7 @@ export type ImageCreateManyIncidentInputEnvelope = {
 export type ImageCreateManySchemeInput = {
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  fileNames?: InputMaybe<ImageCreateManyfileNamesInput>;
+  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
@@ -3802,7 +3802,7 @@ export type ImageCreateManySchemeInputEnvelope = {
 export type ImageCreateManyUploadedByInput = {
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  fileNames?: InputMaybe<ImageCreateManyfileNamesInput>;
+  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
@@ -3816,10 +3816,6 @@ export type ImageCreateManyUploadedByInput = {
 export type ImageCreateManyUploadedByInputEnvelope = {
   data?: InputMaybe<Array<ImageCreateManyUploadedByInput>>;
   skipDuplicates?: InputMaybe<Scalars['Boolean']>;
-};
-
-export type ImageCreateManyfileNamesInput = {
-  set?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type ImageCreateNestedManyWithoutIncidentInput = {
@@ -13910,6 +13906,15 @@ export type UserWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
 };
 
+export type ResetPasswordMutationVariables = Exact<{
+  data: ResetPasswordData;
+}>;
+
+export type ResetPasswordMutation = {
+  __typename?: 'Mutation';
+  resetPassword?: { __typename?: 'ResetPassword'; message: string } | null;
+};
+
 export type SignInMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
@@ -14257,7 +14262,36 @@ export type UpdateIncidentMutationVariables = Exact<{
 
 export type UpdateIncidentMutation = {
   __typename?: 'Mutation';
-  updateIncident?: { __typename?: 'Incident'; id: string } | null;
+  updateIncident?: {
+    __typename?: 'Incident';
+    id: string;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      createdAt: any;
+      updatedAt: any;
+      age?: Age | null;
+      build?: Build | null;
+      dateOfBirth?: any | null;
+      dateSource?: string | null;
+      gender?: Gender | null;
+      hair?: string | null;
+      name?: string | null;
+      peculiarities?: string | null;
+      race?: Race | null;
+      approved?: boolean | null;
+      uploaded?: boolean | null;
+      active?: boolean | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+      }>;
+      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    }>;
+  } | null;
 };
 
 export type AddressesQueryVariables = Exact<{
@@ -15365,6 +15399,56 @@ export type SearchUserQuery = {
   } | null;
 };
 
+export const ResetPasswordDocument = gql`
+  mutation ResetPassword($data: ResetPasswordData!) {
+    resetPassword(data: $data) {
+      message
+    }
+  }
+`;
+export type ResetPasswordMutationFn = Apollo.MutationFunction<
+  ResetPasswordMutation,
+  ResetPasswordMutationVariables
+>;
+
+/**
+ * __useResetPasswordMutation__
+ *
+ * To run a mutation, you first call `useResetPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResetPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resetPasswordMutation, { data, loading, error }] = useResetPasswordMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useResetPasswordMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ResetPasswordMutation,
+    ResetPasswordMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    ResetPasswordMutation,
+    ResetPasswordMutationVariables
+  >(ResetPasswordDocument, options);
+}
+export type ResetPasswordMutationHookResult = ReturnType<
+  typeof useResetPasswordMutation
+>;
+export type ResetPasswordMutationResult =
+  Apollo.MutationResult<ResetPasswordMutation>;
+export type ResetPasswordMutationOptions = Apollo.BaseMutationOptions<
+  ResetPasswordMutation,
+  ResetPasswordMutationVariables
+>;
 export const SignInDocument = gql`
   mutation signIn($email: String!, $password: String!) {
     signIn(data: { email: $email, password: $password }) {
@@ -16390,6 +16474,33 @@ export const UpdateIncidentDocument = gql`
   mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
     updateIncident(where: $where, data: $data) {
       id
+      offenders {
+        id
+        createdAt
+        updatedAt
+        age
+        build
+        dateOfBirth
+        dateSource
+        gender
+        hair
+        name
+        peculiarities
+        race
+        approved
+        uploaded
+        active
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        tags {
+          id
+          name
+        }
+      }
     }
   }
 `;

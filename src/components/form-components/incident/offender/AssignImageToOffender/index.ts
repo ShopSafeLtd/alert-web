@@ -1,1 +1,1 @@
-export { default } from './AddPreviousOffender.container';
+export { default } from './AssignImageToOffender.container';

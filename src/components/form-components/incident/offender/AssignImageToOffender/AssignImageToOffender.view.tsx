@@ -10,6 +10,7 @@ const { Text } = Typography;
 interface FormData {
   selectedOffenderIds: string[];
 }
+
 interface OffenderData {
   id: string;
   name?: string | null;
@@ -33,6 +34,7 @@ interface OffenderData {
     optimised?: string | null;
     url?: string | null;
   }[];
+  imageUid?: string[] | undefined;
 }
 interface Props {
   onClose: () => void;

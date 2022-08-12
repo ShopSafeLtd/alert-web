@@ -13,6 +13,7 @@ import {
   Skeleton,
   Button,
   Table,
+  Drawer,
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -37,33 +38,41 @@ import {
 } from 'utils/offender/get-offender-desc';
 
 import { calcExpired } from 'utils/offender/get-offender-exclusion';
-import { SRLWrapper } from 'simple-react-lightbox';
 import OffenderSideList from 'components/offenders/OffenderSideList';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import LinkIncident from 'components/form-components/offender/LinkIncident';
 
 const { Title, Text, Paragraph } = Typography;
 
 interface Props {
   data: ViewOffenderQuery | undefined;
   loading: boolean;
+  saving: boolean;
   openLightbox: (index: number) => void;
   addOffenderRights: boolean;
   offenderId: string;
   editRights: boolean;
   deleteRights: boolean;
   onDelete: (id: string) => void;
+  addExistingIncident: boolean;
+  toggleAddExistingIncident: () => void;
+  updateIncidentList: (value: string[] | undefined) => void;
 }
 
 const ViewOffender = ({
   data,
   loading,
+  saving,
   openLightbox,
   addOffenderRights,
   offenderId,
   deleteRights,
   editRights,
   onDelete,
+  addExistingIncident,
+  toggleAddExistingIncident,
+  updateIncidentList,
 }: Props): JSX.Element => (
   <div className="page-container">
     <Row>
@@ -76,6 +85,7 @@ const ViewOffender = ({
             gutter={8}
             justify="start"
             align="middle"
+            wrap={false}
             className="offender-images"
           >
             {data?.offender?.images.map((image, i) => (
@@ -95,7 +105,9 @@ const ViewOffender = ({
                   {editRights && (
                     <Col>
                       <Link to={`/app/offenders/edit/${offenderId}`}>
-                        <Button type="text">Edit Offender</Button>
+                        <Button disabled={saving} loading={saving} type="text">
+                          Edit Offender
+                        </Button>
                       </Link>
                     </Col>
                   )}
@@ -105,6 +117,8 @@ const ViewOffender = ({
                         onClick={() => {
                           onDelete(offenderId);
                         }}
+                        disabled={saving}
+                        loading={saving}
                         danger
                         type="text"
                       >
@@ -381,8 +395,8 @@ const ViewOffender = ({
                       </div>
                     </Col>
                     <Col span={11}>
-                      {data?.offender &&
-                      data?.offender?.incidents.length > 0 ? (
+                      {data?.offender?.incidents &&
+                      data.offender.incidents.length > 0 ? (
                         <div className="offender-incidents">
                           {data?.offender?.incidents.map((incident) => (
                             <Link to={`/app/incidents/view/${incident.id}`}>
@@ -474,6 +488,10 @@ const ViewOffender = ({
                           {addOffenderRights && (
                             <div>
                               <Button
+                                onClick={toggleAddExistingIncident}
+                                disabled={saving}
+                                loading={saving}
+                                style={{ color: 'red' }}
                                 icon={
                                   <FontAwesomeIcon
                                     className="button-icon"
@@ -486,6 +504,24 @@ const ViewOffender = ({
                             </div>
                           )}
                         </div>
+                      )}{' '}
+                      {addOffenderRights && (
+                        <div>
+                          <Button
+                            onClick={toggleAddExistingIncident}
+                            disabled={saving}
+                            loading={saving}
+                            style={{ color: 'red' }}
+                            icon={
+                              <FontAwesomeIcon
+                                className="button-icon"
+                                icon={faPlus}
+                              />
+                            }
+                          >
+                            Link Incident
+                          </Button>
+                        </div>
                       )}
                     </Col>
                   </Row>
@@ -497,14 +533,21 @@ const ViewOffender = ({
       </Col>
     </Row>
 
-    <SRLWrapper
-      elements={
-        data?.offender?.images.map((image) => ({
-          src: image.optimised || '',
-        })) || []
-      }
-      options={{ buttons: { showDownloadButton: false } }}
-    />
+    <Drawer
+      title="Link Incidents"
+      visible={addExistingIncident}
+      width="600"
+      onClose={toggleAddExistingIncident}
+    >
+      {addExistingIncident ? (
+        <LinkIncident
+          update={updateIncidentList}
+          onClose={toggleAddExistingIncident}
+        />
+      ) : (
+        <div />
+      )}
+    </Drawer>
   </div>
 );
 

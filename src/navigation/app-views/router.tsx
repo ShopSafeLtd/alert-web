@@ -28,7 +28,7 @@ export const AppViews = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    if (false && location.pathname === '/app/onboarded') {
+    if (onboarded && location.pathname === '/app/onboarded') {
       navigate('incidents');
     }
   }, [onboarded]);
@@ -38,11 +38,11 @@ export const AppViews = (): JSX.Element => {
       <Routes>
         <Route
           index
-          element={<Navigate to={false ? 'incidents' : 'onboarded'} />}
+          element={<Navigate to={onboarded ? 'incidents' : 'onboarded'} />}
         />
-        {!false && (
-          <Route key="onboarding" path="onboarding" element={<Onboarding />} />
-        )}
+        {/* {!onboarded && ( */}
+        <Route key="onboarding" path="onboarding/*" element={<Onboarding />} />
+        {/* )} */}
         <Route key="incidents" path="incidents/*" element={<Incidents />} />,
         <Route key="offenders" path="offenders/*" element={<Offenders />} />,
         <Route key="chat" path="chat/*" element={<Chat />} />,

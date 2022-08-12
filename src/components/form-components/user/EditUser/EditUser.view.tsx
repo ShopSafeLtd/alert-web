@@ -162,14 +162,32 @@ const EditUser = ({
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item name="street" label="Street">
+          <Form.Item
+            name="street"
+            label="Street"
+            rules={[
+              {
+                required: true,
+                message: 'Please enter a street for the address.',
+              },
+            ]}
+          >
             <Input disabled={saving} />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item name="townCity" label="Town City">
+          <Form.Item
+            name="townCity"
+            label="Town/City"
+            rules={[
+              {
+                required: true,
+                message: 'Please enter a town/city for the address.',
+              },
+            ]}
+          >
             <Input disabled={saving} />
           </Form.Item>
         </Col>
@@ -181,7 +199,16 @@ const EditUser = ({
       </Row>
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item name="postcode" label="Postcode">
+          <Form.Item
+            name="postcode"
+            label="Postcode"
+            rules={[
+              {
+                required: true,
+                message: 'Please enter postcode for the address.',
+              },
+            ]}
+          >
             <Input disabled={saving} />
           </Form.Item>
         </Col>

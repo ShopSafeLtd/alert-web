@@ -12,7 +12,6 @@ import {
   Input,
   Switch,
 } from 'antd';
-// import { Link } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 
@@ -83,11 +82,11 @@ const EditProfile = ({
           }}
           onFinish={onSubmit}
         >
-          <Title level={4} style={{ marginBottom: 15 }}>
+          <Title level={3} style={{ marginBottom: 15 }}>
             User Details:
           </Title>
-          <Row gutter={60}>
-            <Col span={8}>
+          <Row gutter={50}>
+            <Col span={11}>
               <Form.Item
                 name="fullName"
                 label="Full Name"
@@ -101,7 +100,7 @@ const EditProfile = ({
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={11}>
               <Form.Item
                 name="email"
                 label="Email Address"
@@ -116,8 +115,8 @@ const EditProfile = ({
               </Form.Item>
             </Col>
           </Row>
-          <Row gutter={60}>
-            <Col span={8}>
+          <Row gutter={50}>
+            <Col span={11}>
               <Form.Item
                 name="organisation"
                 label="Organisation"
@@ -133,41 +132,68 @@ const EditProfile = ({
             </Col>
           </Row>
 
-          <Title level={4} style={{ marginBottom: 15 }}>
+          <Title level={3} style={{ marginTop: 15, marginBottom: 20 }}>
             User Address:
           </Title>
-          <Row gutter={60}>
-            <Col span={8}>
+          <Row gutter={50}>
+            <Col span={11}>
               <Form.Item name="building" label="Building">
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
-            <Col span={8}>
-              <Form.Item name="street" label="Street">
+            <Col span={11}>
+              <Form.Item
+                name="street"
+                label="Street"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please enter a town/city for the address.',
+                  },
+                ]}
+              >
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
           </Row>
-          <Row gutter={60}>
-            <Col span={8}>
-              <Form.Item name="townCity" label="Town City">
+          <Row gutter={50}>
+            <Col span={11}>
+              <Form.Item
+                name="townCity"
+                label="Town/City"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please enter a town/city for the address.',
+                  },
+                ]}
+              >
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={11}>
               <Form.Item name="county" label="County">
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
           </Row>
-          <Row gutter={60}>
-            <Col span={8}>
-              <Form.Item name="postcode" label="Postcode">
+          <Row gutter={50}>
+            <Col span={11}>
+              <Form.Item
+                name="postcode"
+                label="Postcode"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please enter postcode for the address.',
+                  },
+                ]}
+              >
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
           </Row>
-          <Row gutter={20} style={{ marginTop: 40, marginBottom: 20 }}>
+          <Row gutter={20} style={{ marginTop: 20, marginBottom: 20 }}>
             <Col>
               <Title level={3}>Notification Options</Title>
               <Text type="secondary">

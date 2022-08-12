@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import type { Moment } from 'moment';
+import { Modal } from 'antd';
 
 interface FormData {
   endDate: Date;
@@ -23,27 +24,14 @@ interface Return {
   onSubmit: (value: FormData) => void;
   saving: boolean;
   setStartDate: (value: Moment | Date | null) => void;
-  // disabledStartDate: (value: Moment | Date | null) => boolean | undefined;
-  disabledStartDate: RangePickerProps['disabledDate'];
-  setEndDate: (value: Moment | Date | null) => void;
-  disabledEndDate: RangePickerProps['disabledDate'];
+  disabledDate: RangePickerProps['disabledDate'];
 }
 
 const useEditBan = ({ onClose, update }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [startDate, setStartDate] = useState<Moment | Date | null>(null);
-  const [endDate, setEndDate] = useState<Moment | Date | null>(null);
 
-  // eslint-disable-next-line arrow-body-style
-
-  const disabledStartDate: RangePickerProps['disabledDate'] = (current) => {
-    if (endDate && endDate?.valueOf() > Date.now()) {
-      return current && current.valueOf() > endDate.valueOf();
-    }
-    // return undefined
-    return current && current.valueOf() < Date.now() - 3600 * 1000 * 24;
-  };
-  const disabledEndDate: RangePickerProps['disabledDate'] = (current) => {
+  const disabledDate: RangePickerProps['disabledDate'] = (current) => {
     if (startDate && startDate?.valueOf() > Date.now()) {
       return current && current.valueOf() < startDate.valueOf();
     }
@@ -51,23 +39,29 @@ const useEditBan = ({ onClose, update }: Props): Return => {
   };
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    update({
-      startDate: data.startDate || null,
-      endDate: data.endDate || null,
-      location: data.location || '',
-      description: data.description || '',
-    });
-    onClose();
-    setSaving(false);
+    if (data.startDate.valueOf() > data.endDate.valueOf()) {
+      Modal.warning({
+        title: 'The end date cannot be earlier than start date.',
+        content: 'Please select an another date.',
+      });
+      setSaving(false);
+    } else {
+      update({
+        startDate: data.startDate || null,
+        endDate: data.endDate || null,
+        location: data.location || '',
+        description: data.description || '',
+      });
+      onClose();
+      setSaving(false);
+    }
   };
 
   return {
     onSubmit,
     saving,
     setStartDate,
-    disabledStartDate,
-    setEndDate,
-    disabledEndDate,
+    disabledDate,
   };
 };
 

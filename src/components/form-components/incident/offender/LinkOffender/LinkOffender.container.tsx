@@ -1,12 +1,12 @@
 import React from 'react';
 import View from './LinkOffender.view';
-import useViewOffender from './useLinkOffender';
+import useLinkOffender from './useLinkOffender';
 
 interface Props {
   onClose: () => void;
   update: (value: string[] | undefined) => void;
 }
-const ViewOffender = ({ onClose, update }: Props): JSX.Element => {
+const LinkOffender = ({ onClose, update }: Props): JSX.Element => {
   const {
     onSubmit,
     saving,
@@ -18,7 +18,7 @@ const ViewOffender = ({ onClose, update }: Props): JSX.Element => {
     onPaginationChange,
     setCurrentId,
     offenderData,
-  } = useViewOffender({ onClose, update });
+  } = useLinkOffender({ onClose, update });
 
   return (
     <View
@@ -37,4 +37,4 @@ const ViewOffender = ({ onClose, update }: Props): JSX.Element => {
   );
 };
 
-export default ViewOffender;
+export default LinkOffender;

@@ -33,12 +33,21 @@ export const Views = (): JSX.Element => {
     // eslint-disable-next-line
   }, []);
 
+  // useEffect(() => {
+  //   const newUserIdCheck = location?.pathname?.split('/onboarding/')[1] || '';
+  //   if (newUserIdCheck !== 'password') {
+  //     setNewUserId(newUserIdCheck);
+  //   }
+  // }, []);
   useEffect(() => {
-    const newUserIdCheck = location?.pathname?.split('/onboarding/')[1] || '';
-    if (newUserIdCheck !== 'password') {
-      setNewUserId(newUserIdCheck);
+    if (!isLoading) {
+      const newUserIdCheck = location?.pathname?.split('/onboarding/')[1] || '';
+
+      if (newUserIdCheck !== 'password') {
+        setNewUserId(newUserIdCheck);
+      }
     }
-  }, []);
+  }, [isLoading]);
 
   const { data } = useQuery<UserNewRes, UserNewArgs>(UserNew, {
     fetchPolicy: 'network-only',

@@ -6,7 +6,6 @@ import useAddOffender from './useAddOffender';
 function AddOffender(): JSX.Element {
   const {
     onSubmit,
-
     saving,
     groups,
     groupsLoading,

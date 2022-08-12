@@ -10,7 +10,6 @@ import {
   Build,
   ListOffendersQuery,
 } from 'graphql/generated';
-
 import { useLightbox } from 'simple-react-lightbox';
 
 import { useStoreState, OffenderSort, useStoreActions } from 'state';
@@ -36,11 +35,6 @@ interface OffenderData {
         name: string;
       }[]
     | undefined;
-  images?: {
-    id: string;
-    optimised?: string | null;
-    url?: string | null;
-  }[];
 }
 interface Props {
   onClose: () => void;

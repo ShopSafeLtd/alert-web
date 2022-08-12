@@ -149,6 +149,7 @@ const ViewOffender = ({
             gutter={8}
             justify="start"
             align="middle"
+            wrap={false}
             className="offender-images"
           >
             {offenderData?.images.map((image, i) => (
@@ -205,17 +206,13 @@ const ViewOffender = ({
                         </span>
                       }
                     >
-                      {/* {loading ? (
+                      {loading ? (
                         <Skeleton title={{ width: 100 }} paragraph={false} />
-                      ) : offenderData?.dateOfBirth ? (
-                        calcAge(offenderData?.dateOfBirth)
                       ) : (
+                        (offenderData?.dateOfBirth &&
+                          calcAge(offenderData?.dateOfBirth)) ||
                         getOffenderAge(offenderData?.age)
-                      )} */}
-
-                      {offenderData?.dateOfBirth
-                        ? calcAge(offenderData?.dateOfBirth)
-                        : getOffenderAge(offenderData?.age)}
+                      )}
                     </Descriptions.Item>
                     <Descriptions.Item
                       label={

@@ -13,12 +13,7 @@ import {
   Typography,
 } from 'antd';
 
-import {
-  ageValues,
-  buildValues,
-  genderValues,
-  raceValues,
-} from 'utils/select-offenders-desc/enums';
+import { ageValues, buildValues, genderValues, raceValues } from 'utils/enums';
 
 interface FormData {
   name: string;

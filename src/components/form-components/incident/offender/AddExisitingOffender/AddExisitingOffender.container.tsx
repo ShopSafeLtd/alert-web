@@ -1,5 +1,6 @@
 import React from 'react';
 import { Age, Gender, Race, Build } from 'graphql/generated';
+
 import View from './AddExisitingOffender.view';
 import useViewOffender from './useAddExisitingOffender';
 
@@ -21,11 +22,6 @@ interface OffenderData {
         name: string;
       }[]
     | undefined;
-  images?: {
-    id: string;
-    optimised?: string | null;
-    url?: string | null;
-  }[];
 }
 
 interface Props {

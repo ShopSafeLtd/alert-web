@@ -38,7 +38,7 @@ interface Return {
     | undefined;
 }
 
-const useViewOffender = ({ onClose, update }: Props): Return => {
+const useLinkOffender = ({ onClose, update }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [currentId, setCurrentId] = useState<string | undefined>(undefined);
   const { openLightbox } = useLightbox();
@@ -120,4 +120,4 @@ const useViewOffender = ({ onClose, update }: Props): Return => {
   };
 };
 
-export default useViewOffender;
+export default useLinkOffender;

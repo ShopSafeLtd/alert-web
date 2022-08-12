@@ -4,6 +4,7 @@ import {
   CurrentUserQuery,
   useCurrentUserQuery,
   useUpdateUserMutation,
+  useResetPasswordMutation,
 } from 'graphql/generated';
 import { notification, Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
@@ -119,13 +120,19 @@ const useEditUser = (): Return => {
         },
       });
   };
-
+  const [resetPassword] = useResetPasswordMutation();
   const resetConfirm = () => {
     confirm({
       title: 'Do you Want to reset your password?',
       content: 'You will receive a reset email.',
       onOk() {
-        // openInvite();
+        resetPassword({
+          variables: {
+            data: {
+              userId,
+            },
+          },
+        });
       },
     });
   };

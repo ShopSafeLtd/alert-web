@@ -21,10 +21,6 @@ interface OffenderData {
         name: string;
       }[]
     | undefined;
-  // images?: {
-  //   id: string;
-  //   optimised?: string | null;
-  // }[];
 }
 interface Props {
   onClose: () => void;

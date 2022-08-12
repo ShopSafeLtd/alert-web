@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import type { RangePickerProps } from 'antd/es/date-picker';
 import type { Moment } from 'moment';
+import { Modal } from 'antd';
 
 interface FormData {
   endDate: Date;
@@ -41,13 +42,21 @@ const useAddExclusion = ({ update, onClose }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    update({
-      id: Math.floor(Math.random() * 1000).toString(),
-      startDate: data.startDate || null,
-      endDate: data.endDate || null,
-      location: data.location || '',
-      description: data.description || '',
-    });
+    if (data.startDate.valueOf() > data.endDate.valueOf()) {
+      Modal.warning({
+        title: 'The end date cannot be earlier than start date.',
+        content: 'Please select an another date.',
+      });
+      setSaving(false);
+    } else {
+      update({
+        id: Math.floor(Math.random() * 1000).toString(),
+        startDate: data.startDate || null,
+        endDate: data.endDate || null,
+        location: data.location || '',
+        description: data.description || '',
+      });
+    }
 
     onClose();
     setSaving(false);

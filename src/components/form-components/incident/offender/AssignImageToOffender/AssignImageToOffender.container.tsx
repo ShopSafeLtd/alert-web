@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Age, Gender, Race, Build } from 'graphql/generated';
+
 import View from './AssignImageToOffender.view';
 import useViewOffender from './useAssignImageToOffender';
 
@@ -27,6 +28,7 @@ interface OffenderData {
     optimised?: string | null;
     url?: string | null;
   }[];
+  imageUid?: string[] | undefined;
 }
 interface Props {
   onClose: () => void;

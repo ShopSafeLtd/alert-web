@@ -45,11 +45,11 @@ const AddOffender = ({ onClose, onSubmit, saving }: Props): JSX.Element => (
       <Col span={12}>
         <Form.Item
           name="townCity"
-          label="Town City"
+          label="Town/City"
           rules={[
             {
               required: true,
-              message: 'Please enter a town city for the new location.',
+              message: 'Please enter a town/city for the new location.',
             },
           ]}
         >

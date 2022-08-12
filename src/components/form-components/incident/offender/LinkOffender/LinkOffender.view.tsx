@@ -63,7 +63,7 @@ interface Props {
     | undefined;
 }
 
-const ViewOffender = ({
+const LinkOffender = ({
   onClose,
   onSubmit,
   saving,
@@ -147,6 +147,7 @@ const ViewOffender = ({
         <div className="view-offender">
           <Row
             gutter={8}
+            wrap={false}
             justify="start"
             align="middle"
             className="offender-images"
@@ -210,9 +211,13 @@ const ViewOffender = ({
                         </span>
                       }
                     >
-                      {offenderData?.dateOfBirth
-                        ? calcAge(offenderData?.dateOfBirth)
-                        : getOffenderAge(offenderData?.age)}
+                      {loading ? (
+                        <Skeleton title={{ width: 100 }} paragraph={false} />
+                      ) : (
+                        (offenderData?.dateOfBirth &&
+                          calcAge(offenderData?.dateOfBirth)) ||
+                        getOffenderAge(offenderData?.age)
+                      )}
                     </Descriptions.Item>
                     <Descriptions.Item
                       label={
@@ -365,4 +370,4 @@ const ViewOffender = ({
   </Form>
 );
 
-export default ViewOffender;
+export default LinkOffender;

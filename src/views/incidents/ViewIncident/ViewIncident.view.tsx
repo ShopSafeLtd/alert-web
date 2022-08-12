@@ -28,7 +28,6 @@ import {
   getOffenderRace,
   calcAge,
 } from 'utils/offender/get-offender-desc';
-import { SRLWrapper } from 'simple-react-lightbox';
 import IncidentSideList from 'components/incidents/IncidentSideList';
 import { Link } from 'react-router-dom';
 import LinkOffender from 'components/form-components/incident/offender/LinkOffender';
@@ -38,12 +37,13 @@ const { Title, Text, Paragraph } = Typography;
 interface Props {
   data: ViewIncidentQuery | undefined;
   loading: boolean;
+  saving: boolean;
   openLightbox: (index: number) => void;
   addOffenderRights: boolean;
-  incidentId: string | undefined;
+  incidentId: string;
   editRights: boolean;
   deleteRights: boolean;
-  onDelete: () => void;
+  onDelete: (id: string) => void;
   addExistingOffender: boolean;
   toggleAddExistingOffender: () => void;
   updateOffenderList: (value: string[] | undefined) => void;
@@ -52,6 +52,7 @@ interface Props {
 const ViewIncident = ({
   data,
   loading,
+  saving,
   openLightbox,
   addOffenderRights,
   incidentId,
@@ -73,6 +74,7 @@ const ViewIncident = ({
             gutter={8}
             justify="start"
             align="middle"
+            wrap={false}
             className="incident-images"
           >
             {data?.incident?.images.map((image, i) => (
@@ -92,13 +94,23 @@ const ViewIncident = ({
                   {editRights && (
                     <Col>
                       <Link to={`/app/incidents/edit/${incidentId}`}>
-                        <Button type="text">Edit Incident</Button>
+                        <Button disabled={saving} loading={saving} type="text">
+                          Edit Incident
+                        </Button>
                       </Link>
                     </Col>
                   )}
                   {deleteRights && (
                     <Col>
-                      <Button onClick={onDelete} danger type="text">
+                      <Button
+                        onClick={() => {
+                          onDelete(incidentId);
+                        }}
+                        danger
+                        disabled={saving}
+                        loading={saving}
+                        type="text"
+                      >
                         Delete Incident
                       </Button>
                     </Col>
@@ -256,6 +268,8 @@ const ViewIncident = ({
                             <div>
                               <Button
                                 onClick={toggleAddExistingOffender}
+                                disabled={saving}
+                                loading={saving}
                                 style={{ color: 'red' }}
                                 icon={
                                   <FontAwesomeIcon
@@ -280,14 +294,6 @@ const ViewIncident = ({
       </Col>
     </Row>
 
-    <SRLWrapper
-      elements={
-        data?.incident?.images.map((image) => ({
-          src: image.optimised || '',
-        })) || []
-      }
-      options={{ buttons: { showDownloadButton: false } }}
-    />
     <Drawer
       title="Link Offenders"
       visible={addExistingOffender}

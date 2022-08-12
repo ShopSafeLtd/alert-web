@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import {
   Role,
+  useRecycleIncidentMutation,
   useUpdateIncidentMutation,
   useViewIncidentQuery,
   ViewIncidentQuery,
@@ -16,12 +17,13 @@ const { confirm } = Modal;
 interface Return {
   data: ViewIncidentQuery | undefined;
   loading: boolean;
+  saving: boolean;
   openLightbox: (index: number) => void;
   addOffenderRights: boolean;
-  incidentId: string | undefined;
+  incidentId: string;
   editRights: boolean;
   deleteRights: boolean;
-  onDelete: () => void;
+  onDelete: (id: string) => void;
   addExistingOffender: boolean;
   toggleAddExistingOffender: () => void;
   updateOffenderList: (value: string[] | undefined) => void;
@@ -32,7 +34,9 @@ const useViewIncident = (): Return => {
   const incidentId = useParams().id;
 
   const role = useStoreState((state) => state.user.role);
+  const [saving, setSaving] = useState(false);
   const [addExistingOffender, setAddExistingOffender] = useState(false);
+
   const { data, loading } = useViewIncidentQuery({
     variables: {
       where: {
@@ -42,7 +46,7 @@ const useViewIncident = (): Return => {
   });
   const [updateIncident] = useUpdateIncidentMutation({
     onCompleted: () => {
-      // setSaving(false);
+      setSaving(false);
       notification.success({
         message: 'Successfully Linked!',
         description: 'The offenders have been Linked to this incidents!',
@@ -50,7 +54,7 @@ const useViewIncident = (): Return => {
       });
     },
     onError: () => {
-      // setSaving(false);
+      setSaving(false);
       notification.error({
         message: 'Error!',
         description: 'Whoops, there are some errors. Please try again. ',
@@ -59,10 +63,8 @@ const useViewIncident = (): Return => {
     },
   });
 
-  const toggleAddExistingOffender = () => {
-    setAddExistingOffender(!addExistingOffender);
-  };
   const updateOffenderList = (selectOffenders: string[] | undefined) => {
+    setSaving(true);
     if (incidentId) {
       updateIncident({
         variables: {
@@ -73,7 +75,7 @@ const useViewIncident = (): Return => {
             offenders: {
               connect:
                 selectOffenders && selectOffenders.length > 0
-                  ? selectOffenders.map((offenderId) => ({ id: offenderId }))
+                  ? selectOffenders.map((id) => ({ id }))
                   : undefined,
             },
           },
@@ -81,24 +83,53 @@ const useViewIncident = (): Return => {
       });
     }
   };
-  const onDelete = () => {
+
+  const [recycleIncident] = useRecycleIncidentMutation({
+    onCompleted: () => {
+      window.history.back();
+      notification.success({
+        message: 'Successfully Deleted!',
+        description:
+          'The incident has been deleted from the feed and moved to the recycle bin.',
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
+    },
+  });
+  const onDelete = (id: string) => {
     confirm({
       title: 'Are you sure?',
       content:
         'Deleting this incident will remove it from the feed and move it to the recycle bin for 30 days before being deleted.',
       okType: 'danger',
       okText: 'Delete',
+      onOk() {
+        recycleIncident({
+          variables: {
+            where: { id },
+          },
+        });
+      },
     });
   };
-
+  const toggleAddExistingOffender = () => {
+    setAddExistingOffender(!addExistingOffender);
+  };
   return {
     data,
     loading,
+    saving,
     openLightbox,
     addOffenderRights: role !== Role.User,
     editRights: role !== Role.User,
     deleteRights: role !== Role.User,
-    incidentId,
+    incidentId: incidentId || '',
     onDelete,
     addExistingOffender,
     toggleAddExistingOffender,

@@ -16,14 +16,7 @@ interface Props {
 }
 
 const EditExclusion = ({ onClose, banData, update }: Props): JSX.Element => {
-  const {
-    onSubmit,
-    saving,
-    setStartDate,
-    disabledStartDate,
-    setEndDate,
-    disabledEndDate,
-  } = useEditExclusion({
+  const { onSubmit, saving, setStartDate, disabledDate } = useEditExclusion({
     onClose,
     update,
   });
@@ -34,9 +27,7 @@ const EditExclusion = ({ onClose, banData, update }: Props): JSX.Element => {
       banData={banData}
       saving={saving}
       setStartDate={setStartDate}
-      setEndDate={setEndDate}
-      disabledStartDate={disabledStartDate}
-      disabledEndDate={disabledEndDate}
+      disabledDate={disabledDate}
     />
   );
 };

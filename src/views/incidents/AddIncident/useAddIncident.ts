@@ -18,7 +18,9 @@ import {
   useListOffendersQuery,
   useAddressesQuery,
   AddressesQuery,
+  useUpdateOffenderMutation,
 } from 'graphql/generated';
+import { LocationOptions } from 'utils/enums/LocationOptions';
 import { notification, Modal, Form, FormInstance, Upload, message } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
@@ -37,6 +39,7 @@ interface FormData {
   tags: string[];
   images: { id: string; url: string; optimised: string }[];
 }
+
 interface OffenderData {
   id: string;
   name?: string | null;
@@ -60,12 +63,7 @@ interface OffenderData {
     optimised?: string | null;
     url?: string | null;
   }[];
-}
-
-enum Options {
-  'ACCOUNT' = 'ACCOUNT',
-  'PREVIOUS' = 'PREVIOUS',
-  'NEW' = 'NEW',
+  imageUid?: string[] | undefined;
 }
 
 interface LocationData {
@@ -133,13 +131,18 @@ const useEditIncident = (): Return => {
   const [addIncidentTag, setAddIncidentTag] = useState(false);
   const [addOffender, setAddOffender] = useState(false);
   const [addExistingOffender, setAddExistingOffender] = useState(false);
+
   const [offendersData, setOffendersData] = useState<
     OffenderData[] | undefined
   >([]);
+
   const [imageChange, setImageChange] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [fileUid, setFileUid] = useState<string | undefined>();
 
-  const [option, setOption] = useState<Options>(Options.ACCOUNT);
+  const [option, setOption] = useState<LocationOptions>(
+    LocationOptions.ACCOUNT
+  );
   const [newLocation, setNewLocation] = useState<LocationData | undefined>();
   const [previousId, setPreviousId] = useState<string>('');
   const [addNewLocation, setAddNewLocation] = useState(false);
@@ -315,34 +318,30 @@ const useEditIncident = (): Return => {
         'This image has already existed, please choose another one.'
       );
     }
-    return !isFileDuplicate || Upload.LIST_IGNORE;
-  };
-  // {
-  //   fileList: newFileList;
-  // }
-
-  const imgChange: UploadProps['onChange'] = (info) => {
-    setFileList([...info.fileList]);
-    setImageChange(true);
-    // info.file.status === 'done' || 'error'||"success"
-    if (info.file.status === 'error') {
-      console.log('file', info.file.response);
-      console.log('obj', info.file.originFileObj);
+    if (offendersData && offendersData.length > 0) {
       confirm({
         title: 'Assign Offenders',
-
         content:
           'Do you Want to assign this image to any offenders shown in them?',
         okText: 'Yes',
         onOk() {
+          setFileUid(file.uid);
           toggleAssignImage();
         },
       });
     }
+    return !isFileDuplicate || Upload.LIST_IGNORE;
   };
+
+  const imgChange: UploadProps['onChange'] = (info) => {
+    setFileList([...info.fileList]);
+    setImageChange(true);
+  };
+
+  // const onPreview = ()
   const updatePreviousLocation = (value: string | undefined) => {
     if (value) {
-      setOption(Options.PREVIOUS);
+      setOption(LocationOptions.PREVIOUS);
       setPreviousId(value);
       const previousLocation = addressData?.addresses.find(
         (location) => location.id === value
@@ -355,7 +354,7 @@ const useEditIncident = (): Return => {
 
   const updateNewLocation = (value: LocationData | undefined) => {
     if (value) {
-      setOption(Options.NEW);
+      setOption(LocationOptions.NEW);
       setNewLocation(value);
       form.setFieldsValue({
         fullLocation: `${value.building && value.building}, ${value?.street},${
@@ -378,16 +377,75 @@ const useEditIncident = (): Return => {
       } else setOffendersData(filterOffenders);
     }
   };
+  const [updateOffender] = useUpdateOffenderMutation({
+    onCompleted: () => {
+      setSaving(false);
+      notification.success({
+        message: 'Successfully Assigned!',
+        description: 'The image has been assigned to the offenders !',
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      setSaving(false);
+      notification.error({
+        message: 'error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
+    },
+  });
   const updateAssignImage = (value: string[] | undefined) => {
-    // if (value && value.length > 0) {
-    //                 value.filter(
-    //                   (item) =>
-    //                     ListOffendersData?.listOffenders?.offenders
-    //                       ?.map((offender) => offender.id)
-    //                       .includes(item)
-    //             ).map((offender) => ({id:offender.id}))
-    // }
-    console.log(value);
+    if (value && value.length > 0 && fileUid && fileList) {
+      value
+        .filter((item) =>
+          ListOffendersData?.listOffenders?.offenders
+            ?.map((offender) => offender.id)
+            .includes(item)
+        )
+        .map((id) =>
+          updateOffender({
+            variables: {
+              where: {
+                id,
+              },
+              data: {
+                images: {
+                  upload: [
+                    {
+                      file: fileList.find((file) => file.uid === fileUid)
+                        ?.originFileObj,
+                    },
+                  ],
+                },
+              },
+            },
+          })
+        );
+      value
+        .filter(
+          (item) =>
+            !ListOffendersData?.listOffenders?.offenders
+              ?.map((offender) => offender.id)
+              .includes(item)
+        )
+        .map((newOffenderId) =>
+          setOffendersData(
+            offendersData?.map((offender) => {
+              if (offender.id === newOffenderId) {
+                return {
+                  ...offender,
+                  imageUid:
+                    offender.imageUid && offender.imageUid.length > 0
+                      ? offender.imageUid.concat(fileUid)
+                      : [fileUid],
+                };
+              }
+              return offender;
+            })
+          )
+        );
+    }
   };
 
   const deleteConfirm = (offenderId: string | undefined) => {
@@ -423,7 +481,8 @@ const useEditIncident = (): Return => {
   });
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    if (offendersData === undefined || offendersData.length === 0) {
+    // if (offendersData === undefined || offendersData.length === 0) {
+    if (!offendersData || !offendersData.length) {
       confirm({
         title: 'No Offenders',
         content: 'Please select or add at least one offender for the incident.',
@@ -452,9 +511,9 @@ const useEditIncident = (): Return => {
                 ? data.tags.map((id) => ({ id }))
                 : undefined,
             location: {
-              account: option === Options.ACCOUNT,
+              account: option === LocationOptions.ACCOUNT,
               create:
-                newLocation && option === Options.NEW
+                newLocation && option === LocationOptions.NEW
                   ? {
                       building: newLocation.building || null,
                       street: newLocation.street,
@@ -464,7 +523,7 @@ const useEditIncident = (): Return => {
                     }
                   : undefined,
               previous:
-                previousId && option === Options.PREVIOUS
+                previousId && option === LocationOptions.PREVIOUS
                   ? { id: previousId }
                   : undefined,
             },
@@ -509,7 +568,13 @@ const useEditIncident = (): Return => {
                         scheme: { connect: { id: schemeId } },
                         createdBy: { connect: { id: userId } },
                         localId: offender.id,
-                        // images:{create:}
+                        images: {
+                          // create:
+                          upload: offender.imageUid?.map((uid) => ({
+                            file: fileList.find((file) => file.uid === uid)
+                              ?.originFileObj,
+                          })),
+                        },
                       }))
                   : undefined,
             },
