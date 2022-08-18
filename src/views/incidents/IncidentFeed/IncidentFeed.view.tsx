@@ -157,10 +157,10 @@ const IncidentFeed = ({
               <IncidentSkeletonCard />
             </Col>,
           ]
-        : data?.listIncidents?.incidents?.map((item) => (
-            <Col sm={24} md={12} lg={12} xl={8} xxl={6} key={item?.id}>
+        : data?.listIncidents?.incidents?.map((el) => (
+            <Col sm={24} md={12} lg={12} xl={8} xxl={6} key={el?.id}>
               <IncidentCard
-                incident={item}
+                incident={el}
                 openLightbox={openLightbox}
                 update={updateIncidentList}
               />
