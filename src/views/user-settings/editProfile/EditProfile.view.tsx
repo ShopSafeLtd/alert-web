@@ -53,11 +53,9 @@ const EditProfile = ({
       title="Edit Account"
       subTitle="Amend your account details and then press the save button to update them."
       extra={[
-        // <Link to="reset-password">
         <Button type="primary" onClick={resetConfirm} disabled={saving}>
           Reset Password
         </Button>,
-        // </Link>,
       ]}
     />
     <Card>

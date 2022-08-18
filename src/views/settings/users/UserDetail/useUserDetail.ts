@@ -7,7 +7,7 @@ import {
   useDeleteUserFromSchemeMutation,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { notification, Modal } from 'antd';
 
 const { confirm } = Modal;
@@ -24,8 +24,7 @@ interface Return {
   deleteConfirm: () => void;
 }
 
-const useUserDetail = (): Return => {
-  const userId = useParams().id;
+const useUserDetail = (userId: string): Return => {
   const navigate = useNavigate();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
@@ -63,6 +62,7 @@ const useUserDetail = (): Return => {
       },
     },
   });
+
   // send invite
   const [sendInvite] = useSendInviteMutation({
     onCompleted: () => {

@@ -1,9 +1,12 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import View from './UserDetail.view';
 
 import useUserDetail from './useUserDetail';
 
 const UserDetail = (): JSX.Element => {
+  const userId = useParams().id || '';
+
   const {
     data,
     loading,
@@ -14,7 +17,7 @@ const UserDetail = (): JSX.Element => {
     deleteConfirm,
     enableConfirm,
     disableConfirm,
-  } = useUserDetail();
+  } = useUserDetail(userId);
   return (
     <View
       data={data}

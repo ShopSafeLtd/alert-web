@@ -1,11 +1,13 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import View from './GroupDetail.view';
-
 import useGroupDetail from './useGroupDetail';
 
 function GroupDetail(): JSX.Element {
+  const groupId = useParams().id;
+
   const { data, loading, saving, editGroup, toggleEditGroup, deleteConfirm } =
-    useGroupDetail();
+    useGroupDetail(groupId || '');
   return (
     <div>
       <View

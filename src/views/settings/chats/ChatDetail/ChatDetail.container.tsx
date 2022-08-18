@@ -1,10 +1,13 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import View from './ChatDetail.view';
 import useChatDetail from './useChatDetail';
 
 function ChatDetail(): JSX.Element {
+  const chatId = useParams().id || '';
+
   const { data, loading, editChat, toggleEditChat, saving, deleteConfirm } =
-    useChatDetail();
+    useChatDetail(chatId);
   return (
     <div>
       <View

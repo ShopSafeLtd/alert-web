@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import View from './EditGroup.view';
 import useEditGroup from './useEditGroup';
 
@@ -7,9 +8,12 @@ interface Props {
 }
 
 const EditGroup = ({ onClose }: Props): JSX.Element => {
+  const groupId = useParams().id || '';
+
   const { onSubmit, data, loading, usersData, usersLoading, saving } =
     useEditGroup({
       onClose,
+      groupId,
     });
   return (
     <View

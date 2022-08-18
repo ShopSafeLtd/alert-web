@@ -4,7 +4,7 @@ import {
   ChatQuery,
   useDeleteChatMutation,
 } from 'graphql/generated';
-import { useParams } from 'react-router-dom';
+
 import { notification, Modal } from 'antd';
 
 const { confirm } = Modal;
@@ -17,8 +17,7 @@ interface Return {
   deleteConfirm: () => void;
 }
 
-const useChatDetail = (): Return => {
-  const chatId = useParams().id;
+const useChatDetail = (chatId: string): Return => {
   const [editChat, setEditChat] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -30,6 +29,7 @@ const useChatDetail = (): Return => {
       },
     },
   });
+
   const toggleEditChat = () => {
     setEditChat(!editChat);
   };

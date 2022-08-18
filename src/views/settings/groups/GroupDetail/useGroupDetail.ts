@@ -4,9 +4,9 @@ import {
   GroupQuery,
   useDeleteGroupMutation,
 } from 'graphql/generated';
-import { useParams } from 'react-router-dom';
+
 import { notification, Modal } from 'antd';
-// import { ExclamationCircleOutlined } from '@ant-design/icons';
+
 const { confirm } = Modal;
 
 interface Return {
@@ -18,8 +18,7 @@ interface Return {
   deleteConfirm: () => void;
 }
 
-const useGroupDetail = (): Return => {
-  const groupId = useParams().id;
+const useGroupDetail = (groupId: string): Return => {
   const [saving, setSaving] = useState(false);
   const [editGroup, setEditGroup] = useState(false);
 

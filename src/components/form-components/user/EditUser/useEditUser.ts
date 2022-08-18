@@ -12,7 +12,6 @@ import {
   useUpdateUserMutation,
 } from 'graphql/generated';
 import { notification } from 'antd';
-import { useParams } from 'react-router-dom';
 
 interface FormData {
   fullName: string;
@@ -29,6 +28,7 @@ interface FormData {
 }
 interface Props {
   onClose: () => void;
+  userId: string;
 }
 interface Return {
   onSubmit: (value: FormData) => void;
@@ -41,8 +41,7 @@ interface Return {
   saving: boolean;
 }
 
-const useEditUser = ({ onClose }: Props): Return => {
-  const userId = useParams().id;
+const useEditUser = ({ onClose, userId }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
 

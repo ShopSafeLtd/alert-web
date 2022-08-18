@@ -49,7 +49,7 @@ const options = [
   { value: 1096, label: '3 years' },
   { value: 1826, label: '5 years' },
 ];
-const GroupDetail = ({
+const SchemeDetail = ({
   data,
   loading,
   saving,
@@ -265,4 +265,4 @@ const GroupDetail = ({
     )}
   </div>
 );
-export default GroupDetail;
+export default SchemeDetail;

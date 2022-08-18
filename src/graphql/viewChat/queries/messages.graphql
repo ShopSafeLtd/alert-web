@@ -1,0 +1,22 @@
+query messages($chat: String, $after: MessageWhereUniqueInput) {
+  messages(
+    where: { chat: { id: { equals: $chat } } }
+    first: 30
+    orderBy: { createdAt: asc }
+    after: $after
+  ) {
+    id
+    sent
+    from {
+      id
+      fullName
+      organisation
+    }
+    chat {
+      id
+      name
+    }
+    content
+    createdAt
+  }
+}

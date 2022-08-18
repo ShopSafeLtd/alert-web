@@ -1,9 +1,11 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import View from './EditOffender.view';
 
 import useEditOffender from './useEditOffender';
 
 function EditOffender(): JSX.Element {
+  const offenderId = useParams().id || '';
   const {
     onSubmit,
     data,
@@ -28,7 +30,7 @@ function EditOffender(): JSX.Element {
     deleteConfirm,
     ageCheck,
     setAgeCheck,
-  } = useEditOffender();
+  } = useEditOffender(offenderId);
   return (
     <div>
       <View

@@ -6,7 +6,7 @@ import {
   useViewOffenderQuery,
   ViewOffenderQuery,
 } from 'graphql/generated';
-import { useParams } from 'react-router-dom';
+
 import { useLightbox } from 'simple-react-lightbox';
 import { Modal, notification } from 'antd';
 
@@ -29,9 +29,8 @@ interface Return {
   updateIncidentList: (value: string[] | undefined) => void;
 }
 
-const useViewOffender = (): Return => {
+const useViewOffender = (offenderId: string): Return => {
   const { openLightbox } = useLightbox();
-  const offenderId = useParams().id;
   const role = useStoreState((state) => state.user.role);
   const [saving, setSaving] = useState(false);
   const [addExistingIncident, setAddExistingIncident] = useState(false);

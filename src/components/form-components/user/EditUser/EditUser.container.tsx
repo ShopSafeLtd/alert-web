@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import View from './EditUser.view';
 import useEditUser from './useEditUser';
 
@@ -7,6 +8,7 @@ interface Props {
 }
 
 const EditUser = ({ onClose }: Props): JSX.Element => {
+  const userId = useParams().id || '';
   const {
     onSubmit,
     data,
@@ -18,6 +20,7 @@ const EditUser = ({ onClose }: Props): JSX.Element => {
     saving,
   } = useEditUser({
     onClose,
+    userId,
   });
   return (
     <View

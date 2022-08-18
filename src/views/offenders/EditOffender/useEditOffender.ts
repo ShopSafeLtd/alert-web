@@ -19,7 +19,6 @@ import {
   TagsQuery,
   TagsDocument,
 } from 'graphql/generated';
-import { useParams } from 'react-router-dom';
 import { notification, Modal } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
@@ -70,8 +69,7 @@ interface Return {
   setAgeCheck: (value: boolean) => void;
 }
 
-const useEditOffender = (): Return => {
-  const offenderId = useParams().id;
+const useEditOffender = (offenderId: string): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
 
   const groups = useStoreState((state) => state.user.groups);

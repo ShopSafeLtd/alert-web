@@ -640,15 +640,15 @@ const SchemeTerms = ({
             Data Controller at the time of entering into this Agreement:
           </Text>
           <Text style={{ marginLeft: '12px' }}>
-            i. Authentification Provider & Secure Hosting: Auth0 Inc., 10900 NE
-            8th Street, Suite 700, Bellevue, WA 98004
+            i. Authentification Provider &amp; Secure Hosting: Auth0 Inc., 10900
+            NE 8th Street, Suite 700, Bellevue, WA 98004
           </Text>
           <Text style={{ marginLeft: '12px' }}>
-            ii. Image Manipulation Services & Secure Hosting: Cloudinary Inc.,
-            111 W Evelyn Avenue, Suite 206, Sunnyvayle, CA 94086
+            ii. Image Manipulation Services &amp; Secure Hosting: Cloudinary
+            Inc., 111 W Evelyn Avenue, Suite 206, Sunnyvayle, CA 94086
           </Text>
           <Text style={{ marginLeft: '12px' }}>
-            iii. Software Provider & Secure Hosting: Graphcool Inc.
+            iii. Software Provider &amp; Secure Hosting: Graphcool Inc.
           </Text>
 
           <Text>2. New Sub-Processors</Text>

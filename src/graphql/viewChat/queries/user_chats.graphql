@@ -1,0 +1,22 @@
+query userChats($where: UserWhereUniqueInput!, $scheme: String!) {
+  user(where: $where) {
+    id
+    chats(where: { chat: { scheme: { id: { equals: $scheme } } } }) {
+      id
+      newMessages
+      chat {
+        id
+        name
+        firstLetter
+        messages {
+          id
+          content
+          from {
+            id
+            fullName
+          }
+        }
+      }
+    }
+  }
+}

@@ -46,7 +46,7 @@ const Onboarding = ({
         className="site-navigation-steps"
       >
         <Step title="Account Details" />
-        <Step title="Terms & Conditions" />
+        <Step title="Terms &amp; Conditions" />
       </Steps>
       <Routes>
         <Route

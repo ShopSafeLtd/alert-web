@@ -83,6 +83,7 @@ const useSchemeDetail = (): Return => {
       }
     },
   });
+
   const [updateScheme] = useUpdateSchemeMutation({
     onCompleted: () => {
       setSaving(false);

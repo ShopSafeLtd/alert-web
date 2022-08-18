@@ -1,8 +1,11 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import View from './EditIncident.view';
 import useEditIncident from './useEditIncident';
 
 function EditIncident(): JSX.Element {
+  const incidentId = useParams().id || '';
+
   const {
     onSubmit,
     data,
@@ -25,7 +28,7 @@ function EditIncident(): JSX.Element {
     updateOffenderList,
     offendersData,
     deleteConfirm,
-  } = useEditIncident();
+  } = useEditIncident(incidentId);
   return (
     <div>
       <View

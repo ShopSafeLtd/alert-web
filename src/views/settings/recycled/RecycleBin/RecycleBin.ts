@@ -10,6 +10,7 @@ import {
   DeleteOffenderMutation,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
+
 import { MutationUpdaterFn } from '@apollo/client';
 
 interface Return {
@@ -35,6 +36,7 @@ interface Return {
 
 const useRecycleBin = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
+
   const [currentId, setCurrentId] = useState<string | undefined>('');
   const [recycledId, setRecycledId] = useState<string | undefined>('');
 

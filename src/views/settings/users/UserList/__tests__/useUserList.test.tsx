@@ -1,0 +1,151 @@
+import React from 'react';
+import { render } from '@testing-library/react';
+import { MockedProvider } from '@apollo/client/testing';
+import { createStore, StoreProvider } from 'easy-peasy';
+import schemeModel from 'state/scheme-model';
+import { MemoryRouter } from 'react-router-dom';
+import {
+  QueryMode,
+  ListSchemeUsersDocument,
+  SchemeGroupsDocument,
+} from 'graphql/generated';
+import useUserList from '../useUserList';
+
+const mocks = [
+  {
+    request: {
+      query: ListSchemeUsersDocument,
+      variables: {
+        where: {
+          schemes: {
+            some: {
+              scheme: {
+                id: {
+                  equals: 'test schemeId',
+                },
+              },
+              recycled: {
+                equals: false,
+              },
+            },
+          },
+          recycled: {
+            equals: false,
+          },
+          groups: undefined,
+          OR: [
+            {
+              fullName: {
+                contains: '',
+                mode: QueryMode.Insensitive,
+              },
+            },
+            {
+              email: {
+                contains: '',
+                mode: QueryMode.Insensitive,
+              },
+            },
+            {
+              organisation: {
+                contains: '',
+                mode: QueryMode.Insensitive,
+              },
+            },
+          ],
+        },
+        groupWhere: {
+          scheme: {
+            id: {
+              equals: 'test schemeId',
+            },
+          },
+        },
+      },
+    },
+    result: {
+      data: {
+        users: [
+          {
+            id: 'test userId',
+            fullName: 'testUser',
+            email: 'user email',
+            organisation: 'user organisation',
+            status: 'enabled',
+            groups: [{ id: 'groupId', name: 'test group' }],
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: SchemeGroupsDocument,
+      variables: {
+        where: {
+          scheme: { id: { equals: 'test schemeId' } },
+        },
+      },
+    },
+    result: {
+      data: {
+        groups: [{ id: 'testId', name: 'TestName', description: null }],
+      },
+    },
+  },
+];
+
+const UseUserListTest = () => {
+  const { data, loading, groupsData, groupsLoading } = useUserList();
+  const Users =
+    data &&
+    data.users.map((el) => (
+      <div key={el.id}>
+        <span>{el.id}</span>
+        <span>{el.fullName}</span>
+      </div>
+    ));
+  const Groups =
+    groupsData &&
+    groupsData.groups.map((el) => (
+      <div key={el.id}>
+        <span>{el.id}</span>
+        <span>{el.name}</span>
+      </div>
+    ));
+
+  return (
+    <div>
+      {Users}
+      <span>{loading ? 'true' : 'false'}</span>
+      {Groups}
+      <span>{groupsLoading ? 'true' : 'false'}</span>
+    </div>
+  );
+};
+
+describe('useListUsers - hook', () => {
+  const store = createStore(schemeModel, {
+    initialState: {
+      scheme: {
+        id: 'test schemeId',
+      },
+    },
+  });
+  it('returns the expected values', async () => {
+    const { findByText, getAllByText } = render(
+      <StoreProvider store={store}>
+        <MemoryRouter>
+          <MockedProvider mocks={mocks} addTypename={false}>
+            <UseUserListTest />
+          </MockedProvider>
+        </MemoryRouter>
+      </StoreProvider>
+    );
+
+    expect(await findByText('testUser')).toBeInTheDocument();
+    expect(await findByText('TestName')).toBeInTheDocument();
+    // expect(await findByText('false')).toBeInTheDocument();
+    expect(getAllByText('false')).toHaveLength(2);
+  });
+});

@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import { useQuery } from "@apollo/client";
+import React, { useState } from 'react';
+import { useQuery } from '@apollo/client';
 
-import { Messages } from "graphql-src/chat/queries";
+import { Messages } from 'graphql-src/chat/queries';
 // import MarkAsRead from '../../../graphql/chat/mutations/MarkAsRead';
 // import ChatQuery from '../../../graphql/chat/queries/ChatQuery';
-import MessagesView from "../MessagesView/MessagesView";
+import MessagesView from '../MessagesView/MessagesView';
 // import query from '../../../graphql/chat/queries/MessagesQuery';
 // import MoreQuery from '../../../graphql/chat/queries/MoreMessagesQuery';
 // import MessageSubscription from '../../../graphql/chat/queries/MessageSubscription';
-import { MessagesSubscription } from "graphql-src/chat/subscriptions";
-import { useStoreActions, useStoreState } from "../../../state";
+import { MessagesSubscription } from 'graphql-src/chat/subscriptions';
+import { useStoreActions, useStoreState } from '../../../state';
 
 const MessagesQuery = ({ id, match }) => {
   const setTitle = useStoreActions((actions) => actions.theme.setTitle);
@@ -20,13 +20,14 @@ const MessagesQuery = ({ id, match }) => {
   const user = useStoreState((state) => state.user);
   const userId = useStoreState((state) => state.user.id);
   const bottomNav = useStoreState((state) => state.theme.bottomNav);
-
+  console.log('id', id);
+  console.log('match', match);
   // state
   const [loaded, setLoaded] = useState(false);
   const [fetching, setFetching] = useState(false);
   const [newReceived, setReceived] = useState(false);
   const [refetched, setRefetched] = useState(false);
-  const [after, setAfter] = useState("");
+  const [after, setAfter] = useState('');
 
   // queries
   // const { data: chatData } = useQuery(ChatQuery, {
@@ -47,9 +48,10 @@ const MessagesQuery = ({ id, match }) => {
       chat: id !== undefined ? id : match.params.id,
     },
     onCompleted: (res) => {
+      console.log(res);
       res.messages.length > 0 && setAfter(res.messages.slice(-1)[0].id);
     },
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: 'cache-and-network',
   });
 
   // mutations

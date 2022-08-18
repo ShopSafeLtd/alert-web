@@ -16,7 +16,6 @@ import {
   Build,
   useListOffendersQuery,
 } from 'graphql/generated';
-import { useParams } from 'react-router-dom';
 import { notification, Modal, message, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
@@ -83,8 +82,7 @@ interface Return {
   deleteConfirm: (value: string | undefined) => void;
 }
 
-const useEditIncident = (): Return => {
-  const incidentId = useParams().id;
+const useEditIncident = (incidentId: string): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
 

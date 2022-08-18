@@ -1,0 +1,43 @@
+import React from 'react';
+import { MemoryRouter } from 'react-router-dom';
+import { render } from '@testing-library/react';
+import UserList from '../UserList.view';
+
+describe('List Officer View', () => {
+  const data = {
+    users: [
+      {
+        id: 'test userId',
+        fullName: 'test user',
+        email: 'user.email',
+        organisation: 'user.organisation',
+        groups: [{ id: 'groupId', name: 'test group' }],
+      },
+    ],
+  };
+  const groupsData = {
+    groups: [{ id: 'groupId', name: 'test group' }],
+  };
+
+  it('renders the page', () => {
+    const { getByText } = render(
+      <MemoryRouter>
+        <UserList
+          data={data}
+          loading={false}
+          search=""
+          setSearch={jest.fn()}
+          groupsData={groupsData}
+          groupsLoading={false}
+          selectedGroups={['']}
+          setSelectedGroups={jest.fn()}
+          addUser={false}
+          toggleAddUser={jest.fn()}
+          updateUserList={jest.fn()}
+          updateExitingUserList={jest.fn()}
+        />
+      </MemoryRouter>
+    );
+    expect(getByText('test user')).toBeInTheDocument();
+  });
+});

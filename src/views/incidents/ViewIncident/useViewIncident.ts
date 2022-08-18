@@ -7,7 +7,7 @@ import {
   useViewIncidentQuery,
   ViewIncidentQuery,
 } from 'graphql/generated';
-import { useParams } from 'react-router-dom';
+
 import { useLightbox } from 'simple-react-lightbox';
 import { useStoreState } from 'state';
 import { notification, Modal } from 'antd';
@@ -20,7 +20,6 @@ interface Return {
   saving: boolean;
   openLightbox: (index: number) => void;
   addOffenderRights: boolean;
-  incidentId: string;
   editRights: boolean;
   deleteRights: boolean;
   onDelete: (id: string) => void;
@@ -29,9 +28,8 @@ interface Return {
   updateOffenderList: (value: string[] | undefined) => void;
 }
 
-const useViewIncident = (): Return => {
+const useViewIncident = (incidentId: string): Return => {
   const { openLightbox } = useLightbox();
-  const incidentId = useParams().id;
 
   const role = useStoreState((state) => state.user.role);
   const [saving, setSaving] = useState(false);
@@ -44,6 +42,8 @@ const useViewIncident = (): Return => {
       },
     },
   });
+  console.log(data);
+
   const [updateIncident] = useUpdateIncidentMutation({
     onCompleted: () => {
       setSaving(false);
@@ -129,7 +129,6 @@ const useViewIncident = (): Return => {
     addOffenderRights: role !== Role.User,
     editRights: role !== Role.User,
     deleteRights: role !== Role.User,
-    incidentId: incidentId || '',
     onDelete,
     addExistingOffender,
     toggleAddExistingOffender,

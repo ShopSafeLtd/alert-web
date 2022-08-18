@@ -1,22 +1,23 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import View from './ViewIncident.view';
 import useViewIncident from './useViewIncident';
 
 const ViewIncident = (): JSX.Element => {
+  const incidentId = useParams().id || '';
   const {
     data,
     loading,
     saving,
     openLightbox,
     addOffenderRights,
-    incidentId,
     onDelete,
     deleteRights,
     editRights,
     addExistingOffender,
     toggleAddExistingOffender,
     updateOffenderList,
-  } = useViewIncident();
+  } = useViewIncident(incidentId);
 
   return (
     <View

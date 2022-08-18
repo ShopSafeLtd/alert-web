@@ -1,9 +1,9 @@
-import React from "react";
-import styled from "styled-components";
-import { Route, Routes } from "react-router-dom";
+import React from 'react';
+import styled from 'styled-components';
+import { Route, Routes } from 'react-router-dom';
 
-import MessagesQuery from "../MessagesQuery/MessagesQuery";
-import ChatView from "../ChatView/ChatView";
+import MessagesQuery from '../MessagesQuery/MessagesQuery';
+import ChatView from '../ChatView/ChatView';
 
 const Container = styled.div`
   flex: 1;
