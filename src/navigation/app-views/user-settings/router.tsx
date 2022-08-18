@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router';
-import EditProfile from 'views/user-settings/EditProfile';
+import EditProfile from 'views/user-settings/editProfile';
 
 import Terms from 'views/onboard/Onboarded/Terms';
 // import Terms from 'components/onboarding/Terms';
@@ -9,7 +9,6 @@ import Terms from 'views/onboard/Onboarded/Terms';
 
 const UserSettings = (): JSX.Element => (
   <Routes>
-    {/* <Route path="*" element={AccountMenu} /> */}
     <Route path="*" element={<EditProfile />} />
     {/* <Route path="terms" element={<Terms />} /> */}
     <Route
