@@ -42,7 +42,6 @@ const useViewIncident = (incidentId: string): Return => {
       },
     },
   });
-  console.log(data);
 
   const [updateIncident] = useUpdateIncidentMutation({
     onCompleted: () => {

@@ -10,8 +10,8 @@ import Terms from 'views/onboard/Onboarded/Terms';
 const UserSettings = (): JSX.Element => (
   <Routes>
     <Route path="*" element={<EditProfile />} />
-    {/* <Route path="terms" element={<Terms />} /> */}
-    <Route
+    <Route path="terms" element={<Terms />} />
+    {/* <Route
       path="terms"
       element={() => (
         <div style={{ padding: '24px', backgroundColor: 'white' }}>
@@ -21,7 +21,7 @@ const UserSettings = (): JSX.Element => (
           />
         </div>
       )}
-    />
+    /> */}
   </Routes>
 );
 

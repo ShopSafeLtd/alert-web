@@ -47,7 +47,6 @@ const useEditUser = (): Return => {
   const { data: userData, loading } = useCurrentUserQuery({
     fetchPolicy: 'cache-and-network',
   });
-  console.log(userData);
 
   const [updateUser] = useUpdateUserMutation({
     onCompleted: () => {
