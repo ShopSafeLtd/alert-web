@@ -50,6 +50,7 @@ class MessagesView extends PureComponent {
   componentDidMount() {
     const { messages, refetch } = this.props;
     this.messages.addEventListener('scroll', this.onScroll, false);
+    // ??? scrollTop scrollHeight
     this.messages.scrollTop = this.messages.scrollHeight;
     // this.props.setNavbarAction("back");
     // if (chat !== undefined) {
@@ -62,6 +63,7 @@ class MessagesView extends PureComponent {
     if (messages.length > 0) {
       refetch();
       this.setState({
+        // ??? pop()  messages.slice(-1)[0].id
         recentMessage: messages.pop().id,
       });
     }
@@ -193,9 +195,11 @@ class MessagesView extends PureComponent {
           {datedMessages.map(
             ({ type, date, id, content, createdAt, from, sent }) => {
               if (type === 'MESSAGE') {
+                // ???
                 if (currentUser === from.id) {
                   return (
                     <Message
+                      // ???
                       sameUser
                       key={id}
                       id={id}
@@ -208,12 +212,12 @@ class MessagesView extends PureComponent {
                   currentUser = from.id;
                   return (
                     <Message
+                      user={from.fullName}
+                      initials={from.fullName[0]}
                       key={id}
                       id={id}
                       content={content}
-                      user={from.fullName}
                       fromId={from.id}
-                      initials={from.fullName[0]}
                       sent={sent}
                     />
                   );

@@ -20,8 +20,7 @@ const MessagesQuery = ({ id, match }) => {
   const user = useStoreState((state) => state.user);
   const userId = useStoreState((state) => state.user.id);
   const bottomNav = useStoreState((state) => state.theme.bottomNav);
-  console.log('id', id);
-  console.log('match', match);
+
   // state
   const [loaded, setLoaded] = useState(false);
   const [fetching, setFetching] = useState(false);
@@ -104,6 +103,14 @@ const MessagesQuery = ({ id, match }) => {
         //   },
         // })
       }
+      newRecived={newReceived}
+      resetRecived={() => setReceived(true)}
+      resetRefetched={() => setRefetched(true)}
+      refetched={refetched}
+      setBottomNav={setBottomNav}
+      bottomNav={bottomNav}
+      fromId={userId}
+      user={user}
       subscribeToMore={() => {
         subscribeToMore({
           document: MessagesSubscription,
@@ -124,14 +131,6 @@ const MessagesQuery = ({ id, match }) => {
           },
         });
       }}
-      newRecived={newReceived}
-      resetRecived={() => setReceived(true)}
-      resetRefetched={() => setRefetched(true)}
-      refetched={refetched}
-      setBottomNav={setBottomNav}
-      bottomNav={bottomNav}
-      fromId={userId}
-      user={user}
     />
   );
 };
