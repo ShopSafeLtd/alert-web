@@ -47,7 +47,7 @@ import { DeleteOutlined, UserAddOutlined } from '@ant-design/icons';
 import AddOffender from 'components/form-components/incident/offender/AddOffender';
 import AddExistingOffender from 'components/form-components/incident/offender/AddExisitingOffender';
 import AddNewLocation from 'components/form-components/incident/location/AddLocation';
-import AddPreviousLocation from 'components/form-components/incident/location/AddPreviousOffender';
+import AddPreviousLocation from 'components/form-components/incident/location/AddPreviousLocation';
 import AssignImageToOffender from 'components/form-components/incident/offender/AssignImageToOffender';
 
 const { Title, Paragraph } = Typography;
@@ -168,6 +168,7 @@ const EditIncident = ({
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader onBack={() => window.history.back()} title="Add Incident" />
+
     <Card>
       <Form onFinish={onSubmit}>
         <Row gutter={20} style={{ marginBottom: 30 }}>
@@ -175,6 +176,7 @@ const EditIncident = ({
             <Title level={4}>Incident Details</Title>
           </Col>
         </Row>
+
         <Row gutter={50}>
           <Col span={11}>
             <Form.Item

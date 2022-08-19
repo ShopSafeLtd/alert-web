@@ -18,11 +18,14 @@ interface Return {
   saving: boolean;
   data: Exclude<AddressesQuery['addresses'], undefined | null> | undefined;
   loading: boolean;
+  // checkedList: string;
+  // setCheckedList: (value: string) => void;
 }
 
 const useViewOffender = ({ onClose, update }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const userId = useStoreState((state) => state.user.id);
+  // const [checkedList, setCheckedList] = useState('');
 
   const { data: addressData, loading } = useAddressesQuery({
     variables: {
@@ -47,6 +50,8 @@ const useViewOffender = ({ onClose, update }: Props): Return => {
     saving,
     data: addressData?.addresses.filter(({ primary }) => !primary),
     loading,
+    // checkedList,
+    // setCheckedList,
   };
 };
 

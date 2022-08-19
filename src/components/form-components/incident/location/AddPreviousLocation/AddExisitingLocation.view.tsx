@@ -2,7 +2,19 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { AddressesQuery } from 'graphql/generated';
-import { Row, Col, Button, Skeleton, Form, Radio, Typography } from 'antd';
+import {
+  Row,
+  Col,
+  Button,
+  Skeleton,
+  Form,
+  Radio,
+  Typography,
+  // Checkbox,
+} from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationDot } from '@fortawesome/pro-light-svg-icons';
+
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faLocationDot } from '@fortawesome/pro-light-svg-icons';
 
@@ -12,11 +24,13 @@ interface FormData {
 }
 
 interface Props {
-  onClose: () => void;
   onSubmit: (value: FormData) => void;
+  onClose: () => void;
   saving: boolean;
   data: Exclude<AddressesQuery['addresses'], undefined | null> | undefined;
   loading: boolean;
+  // checkedList: string;
+  // setCheckedList: (value: string) => void;
 }
 
 const ViewOffender = ({
@@ -25,14 +39,14 @@ const ViewOffender = ({
   saving,
   data,
   loading,
-}: Props): JSX.Element =>
+}: // checkedList,
+// setCheckedList,
+Props): JSX.Element =>
   loading ? (
     <Skeleton />
   ) : (
     <>
       <Form layout="vertical" onFinish={onSubmit}>
-        {/* <Row>
-        <Col span={8}> */}
         <Form.Item
           name="selectedLocation"
           label="Previous Locations:"
@@ -46,18 +60,42 @@ const ViewOffender = ({
           <Radio.Group>
             {data?.map((location) => (
               <Row wrap={false} key={location.id}>
-                <Col>
-                  <Radio value={location.id} key={location.id}>
-                    <Paragraph ellipsis key={location.id}>
-                      {/* <FontAwesomeIcon icon={faLocationDot} /> */}
-                      {location.full}
-                    </Paragraph>
-                  </Radio>
-                </Col>
+                <Radio
+                  value={location.id}
+                  key={location.id}
+                  // style={{ height: 30, lineHeight: 30, marginLeft: 10 }}
+                >
+                  <Paragraph ellipsis key={location.id}>
+                    <FontAwesomeIcon
+                      style={{ marginRight: 6, color: 'rgb(222, 68, 54)' }}
+                      icon={faLocationDot}
+                    />
+                    {location.full}
+                  </Paragraph>
+                </Radio>
               </Row>
             ))}
           </Radio.Group>
         </Form.Item>
+        {/* <Checkbox.Group value={[checkedList]}>
+          {data?.map((location) => (
+            <Row wrap={false} key={location.id}>
+              <Checkbox
+                value={location.id}
+                key={location.id}
+                onChange={() => setCheckedList(location.id)}
+              >
+                <Paragraph ellipsis key={location.id}>
+                  <FontAwesomeIcon
+                    style={{ marginRight: 6, color: 'rgb(222, 68, 54)' }}
+                    icon={faLocationDot}
+                  />
+                  {location.full}
+                </Paragraph>
+              </Checkbox>
+            </Row>
+          ))}
+        </Checkbox.Group> */}
 
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={10} justify="end">

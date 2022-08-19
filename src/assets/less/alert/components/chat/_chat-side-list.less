@@ -1,0 +1,61 @@
+.offenders-side-list {
+  margin: 0;
+  padding: 0;
+  max-height: calc(100vh - 70px);
+  width: 100%;
+  border-right: 1px solid rgb(237, 242, 249);
+  overflow-y: scroll;
+
+  .offender-item {
+    width: 100%;
+    background-color: #fff;
+
+    &:hover {
+      background-color: #fafafa;
+    }
+
+    .offender-item-image {
+      height: 110px;
+      width: 100px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .offender-item-image-skeleton {
+      height: 110px;
+      width: 100px;
+    }
+
+    .offender-item-content {
+      padding: 10px;
+    }
+
+    .offender-item-divider {
+      margin: 0px;
+    }
+
+    .offender-item-desc {
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    .offender-item-detail {
+      font-size: 12px;
+      margin-bottom: 0px;
+    }
+
+    .offender-item-icon {
+      margin-right: 8px;
+      color: rgb(222, 68, 54);
+    }
+  }
+  .ant-pagination {
+    margin: 15px 0;
+    text-align: center;
+  }
+}
+
+.offender-item.current {
+  background-color: #fafafa;
+}

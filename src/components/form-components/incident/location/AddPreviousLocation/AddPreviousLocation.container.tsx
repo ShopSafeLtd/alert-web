@@ -1,14 +1,20 @@
 import React from 'react';
 
-import View from './AddExisitingOffender.view';
-import useViewOffender from './useAddPreviousOffender';
+import View from './AddExisitingLocation.view';
+import useViewOffender from './useAddPreviousLocation';
 
 interface Props {
   onClose: () => void;
   update: (value: string) => void;
 }
 const ViewOffender = ({ onClose, update }: Props): JSX.Element => {
-  const { onSubmit, saving, data, loading } = useViewOffender({
+  const {
+    onSubmit,
+    saving,
+    data,
+    loading,
+    // checkedList, setCheckedList
+  } = useViewOffender({
     onClose,
     update,
   });
@@ -20,6 +26,8 @@ const ViewOffender = ({ onClose, update }: Props): JSX.Element => {
       saving={saving}
       data={data}
       loading={loading}
+      // checkedList={checkedList}
+      // setCheckedList={setCheckedList}
     />
   );
 };
