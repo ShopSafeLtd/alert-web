@@ -50,7 +50,6 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
       where: {
         id: userId,
       },
-
       groupWhere: {
         scheme: {
           id: {
