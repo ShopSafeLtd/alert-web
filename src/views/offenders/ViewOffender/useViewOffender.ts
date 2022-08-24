@@ -19,7 +19,7 @@ interface Return {
   loading: boolean;
   saving: boolean;
   openLightbox: (index: number) => void;
-  addOffenderRights: boolean;
+  addIncidentRights: boolean;
   offenderId: string;
   editRights: boolean;
   deleteRights: boolean;
@@ -42,6 +42,7 @@ const useViewOffender = (offenderId: string): Return => {
       },
     },
   });
+
   const [updateOffender] = useUpdateOffenderMutation({
     onCompleted: () => {
       setSaving(false);
@@ -124,7 +125,7 @@ const useViewOffender = (offenderId: string): Return => {
     loading,
     saving,
     openLightbox,
-    addOffenderRights: role !== Role.User,
+    addIncidentRights: role !== Role.User,
     editRights: role !== Role.User,
     deleteRights: role !== Role.User,
     offenderId: offenderId || '',

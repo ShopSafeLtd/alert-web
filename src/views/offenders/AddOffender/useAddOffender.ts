@@ -282,10 +282,7 @@ const useAddOffender = (): Return => {
           age: ageCheck ? null : data.age || null,
           dateSource: ageCheck ? data.dateSource || null : null,
           dateOfBirth: ageCheck ? data.dateOfBirth || null : null,
-          groups:
-            data.groups.length > 0
-              ? { connect: data.groups.map((id) => ({ id })) }
-              : undefined,
+          groups: { connect: data.groups.map((id) => ({ id })) },
           tags:
             data.tags.length > 0
               ? { connect: data.tags.map((id) => ({ id })) }

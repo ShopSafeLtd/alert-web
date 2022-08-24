@@ -53,7 +53,7 @@ const EditProfile = ({
       title="Edit Account"
       subTitle="Amend your account details and then press the save button to update them."
       extra={[
-        <Button type="primary" onClick={resetConfirm} disabled={saving}>
+        <Button key="1" type="primary" onClick={resetConfirm} disabled={saving}>
           Reset Password
         </Button>,
       ]}

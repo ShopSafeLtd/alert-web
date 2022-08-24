@@ -185,7 +185,16 @@ const AddOffender = ({
         </Row>
         <Row gutter={50}>
           <Col span={11}>
-            <Form.Item name="groups" label="Groups">
+            <Form.Item
+              name="groups"
+              label="Groups"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please select at least one group for the offender.',
+                },
+              ]}
+            >
               <Select
                 loading={groupsLoading}
                 disabled={saving}

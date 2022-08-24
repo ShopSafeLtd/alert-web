@@ -76,7 +76,7 @@ const useIncidentFeed = (): Return => {
   );
   // Queries
   // Fetch scheme groups if scheme admin
-  const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
+  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
       where: {
         scheme: {
@@ -112,7 +112,7 @@ const useIncidentFeed = (): Return => {
         ...variables,
         groups:
           role === Role.SchemeAdmin
-            ? groupData?.groups.map((group) => group.id) || []
+            ? groupsData?.groups.map((group) => group.id) || []
             : groups.map((group) => group.id),
       },
       order,
@@ -197,6 +197,7 @@ const useIncidentFeed = (): Return => {
     },
     fetchPolicy: 'cache-and-network',
   });
+
   // update Incident list after deleting an item
   const updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation> = (
     store,
@@ -414,7 +415,7 @@ const useIncidentFeed = (): Return => {
     setSearch,
     groups:
       role === Role.SchemeAdmin
-        ? groupData?.groups.map((group) => ({
+        ? groupsData?.groups.map((group) => ({
             value: group.id,
             label: group.name,
           })) || []

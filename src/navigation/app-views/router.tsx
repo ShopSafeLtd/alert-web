@@ -32,13 +32,14 @@ export const AppViews = (): JSX.Element => {
       navigate('incidents');
     }
   }, [onboarded]);
+  console.log(onboarded);
 
   return (
     <Suspense fallback={<Loading cover="content" />}>
       <Routes>
         <Route
           index
-          element={<Navigate to={onboarded ? 'incidents' : 'onboarded'} />}
+          element={<Navigate to={onboarded ? 'incidents' : 'onboarding'} />}
         />
         {!onboarded && (
           <Route

@@ -1,6 +1,6 @@
 import React from 'react';
 import View from './AccountDetail.view';
-import useEditProfile from './AccountDetail';
+import useEditProfile from './useAccountDetail';
 
 interface AccountData {
   fullName: string;

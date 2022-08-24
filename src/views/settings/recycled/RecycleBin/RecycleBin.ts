@@ -44,22 +44,6 @@ const useRecycleBin = (): Return => {
   const [restoreOffender, setRestoreOffender] = useState(false);
   const [restoreIncident, setRestoreIncident] = useState(false);
 
-  const toggleRestoreOffender = () => {
-    setSaving(!saving);
-    setRestoreOffender(!restoreOffender);
-  };
-  const toggleRestoreIncident = () => {
-    setSaving(!saving);
-    setRestoreIncident(!restoreIncident);
-  };
-  const toggleRestore = (value: string | undefined) => {
-    setSaving(!saving);
-    if (value === 'Incident') {
-      setRestoreIncident(!restoreIncident);
-    } else if (value === 'Offender') {
-      setRestoreOffender(!restoreOffender);
-    }
-  };
   const { data, loading } = useRecycledItemsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -187,7 +171,23 @@ const useRecycleBin = (): Return => {
       },
     });
   };
-
+  // function
+  const toggleRestoreOffender = () => {
+    setSaving(!saving);
+    setRestoreOffender(!restoreOffender);
+  };
+  const toggleRestoreIncident = () => {
+    setSaving(!saving);
+    setRestoreIncident(!restoreIncident);
+  };
+  const toggleRestore = (value: string | undefined) => {
+    setSaving(!saving);
+    if (value === 'Incident') {
+      setRestoreIncident(!restoreIncident);
+    } else if (value === 'Offender') {
+      setRestoreOffender(!restoreOffender);
+    }
+  };
   return {
     data,
     loading,

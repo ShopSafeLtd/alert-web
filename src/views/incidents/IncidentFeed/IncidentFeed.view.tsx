@@ -19,16 +19,17 @@ interface Props {
   onPaginationChange: (page: number, pageSize: number) => void;
   pagination: { page: number; pageSize: number; sizeOptions: string[] };
   order: IncidentSort;
+  variables: {
+    groups: string[];
+    crimeTypes: string[];
+  };
   setOrder: (value: IncidentSort) => void;
   search: string;
   setSearch: (value: string) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
   onGroupsChange: (groups: string[]) => void;
-  variables: {
-    groups: string[];
-    crimeTypes: string[];
-  };
+
   crimeTypes: { value: string; label: string }[];
   onCrimeTypesChange: (crimeTypes: string[]) => void;
   tagsLoading: boolean;

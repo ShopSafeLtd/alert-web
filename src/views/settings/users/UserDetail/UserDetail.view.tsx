@@ -51,7 +51,7 @@ const userDetail = ({
       tags={<Tag color="red">{data?.user?.organisation}</Tag>}
       extra={[
         <Button
-          key="3"
+          key="4"
           type="primary"
           disabled={saving}
           onClick={inviteConfirm}
@@ -61,6 +61,7 @@ const userDetail = ({
         </Button>,
         data?.user?.disabled ? (
           <Button
+            key="3"
             type="primary"
             disabled={saving}
             onClick={enableConfirm}
@@ -70,6 +71,7 @@ const userDetail = ({
           </Button>
         ) : (
           <Button
+            key="2"
             type="primary"
             disabled={saving}
             onClick={disableConfirm}

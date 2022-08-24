@@ -24,16 +24,14 @@ export const { useStoreState } = typedHooks;
 interface GlobalStoreProps {
   children: ReactNode;
 }
-
+export const storeModel: StoreModel = {
+  auth: authModel,
+  theme: themeModel,
+  user: userModel,
+  scheme: schemeModel,
+  data: dataModel,
+};
 export const Store = ({ children }: GlobalStoreProps): JSX.Element => {
-  const storeModel: StoreModel = {
-    auth: authModel,
-    theme: themeModel,
-    user: userModel,
-    scheme: schemeModel,
-    data: dataModel,
-  };
-
   const store = createStore(storeModel);
 
   return <StoreProvider store={store}>{children}</StoreProvider>;

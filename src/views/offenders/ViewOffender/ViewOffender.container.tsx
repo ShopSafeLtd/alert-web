@@ -11,7 +11,7 @@ const ViewOffender = (): JSX.Element => {
     saving,
     loading,
     openLightbox,
-    addOffenderRights,
+    addIncidentRights,
     onDelete,
     deleteRights,
     editRights,
@@ -26,7 +26,7 @@ const ViewOffender = (): JSX.Element => {
       loading={loading}
       saving={saving}
       openLightbox={openLightbox}
-      addOffenderRights={addOffenderRights}
+      addIncidentRights={addIncidentRights}
       offenderId={offenderId}
       onDelete={onDelete}
       deleteRights={deleteRights}

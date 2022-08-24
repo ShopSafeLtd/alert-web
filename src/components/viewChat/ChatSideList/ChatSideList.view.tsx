@@ -37,7 +37,7 @@ const OffenderSideList = ({
   <div className="offenders-side-list" style={{ marginLeft: '-20px' }}>
     <List
       header={
-        <Title level={2} style={{ marginLeft: 15 }}>
+        <Title level={2} style={{ marginLeft: 30 }}>
           Chat Groups
         </Title>
       }
@@ -63,7 +63,11 @@ const OffenderSideList = ({
             <Row
               wrap={false}
               gutter={10}
-              style={{ marginLeft: 15, marginTop: 10, marginBottom: -10 }}
+              style={{
+                marginLeft: 15,
+                marginTop: 10,
+                marginBottom: -10,
+              }}
             >
               <Col>
                 <Avatar
@@ -80,17 +84,11 @@ const OffenderSideList = ({
                 <Title level={4}>
                   {name}
                   {!newMessages && (
-                    // <Tag
-                    //   className="incident-card-tag"
-                    //   color="red"
-
-                    // >
                     <FontAwesomeIcon
                       size="lg"
                       icon={faCommentPlus}
                       style={{ marginLeft: 10, color: 'rgb(222, 68, 54)' }}
                     />
-                    // </Tag>
                   )}
                 </Title>
 

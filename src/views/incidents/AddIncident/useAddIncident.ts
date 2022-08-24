@@ -117,7 +117,6 @@ const useEditIncident = (): Return => {
   const [form] = useForm<LocationFormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
-
   const groups = useStoreState((state) => state.user.groups);
   const role = useStoreState((state) => state.user.role);
   const pagination = useStoreState((state) => state.data.incidents.pagination);
@@ -148,6 +147,7 @@ const useEditIncident = (): Return => {
   const [addNewLocation, setAddNewLocation] = useState(false);
   const [addPreviousLocation, setAddPreviousLocation] = useState(false);
   const [assignImage, setAssignImage] = useState(false);
+  console.log(form);
 
   // Query
   const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({

@@ -4,6 +4,7 @@ import { Modal, notification } from 'antd';
 
 import { useStoreState } from 'state';
 import { useCurrentUserQuery, useUpdateUserMutation } from 'graphql/generated';
+import { useNavigate } from 'react-router-dom';
 
 interface AccountData {
   fullName: string;
@@ -32,10 +33,12 @@ const useOnboarding = (): Return => {
   const [accountDetail, setAccountDetail] = useState<AccountData | undefined>();
   const [termsSigned, setTermsSigned] = useState(false);
   const [saving, setSaving] = useState(false);
+  const navigate = useNavigate();
 
   const { data: userData } = useCurrentUserQuery({
     fetchPolicy: 'cache-and-network',
   });
+
   const onNext = () => {
     if (current < 1) {
       setCurrent(current + 1);
@@ -62,6 +65,7 @@ const useOnboarding = (): Return => {
   const [updateUser] = useUpdateUserMutation({
     onCompleted: () => {
       setSaving(false);
+      navigate('/app/incidents');
       notification.success({
         message: 'Successfully Updated!',
         description: 'Your account has been updated! ',
@@ -82,7 +86,8 @@ const useOnboarding = (): Return => {
     setSaving(true);
     if (!termsSigned) {
       Modal.warning({
-        title: 'Please agree to the terms and conditions!',
+        // title: 'Please agree to the terms and conditions!',
+        content: 'Please agree to the terms and conditions!',
       });
       setSaving(false);
     } else if (termsSigned && accountDetail) {

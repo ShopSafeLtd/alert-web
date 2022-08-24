@@ -77,7 +77,6 @@ const Onboarding = ({
               saving={saving}
               onBack={onBack}
               setCurrent={setCurrent}
-              hideForm={false}
             />
           }
         />

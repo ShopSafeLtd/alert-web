@@ -50,7 +50,7 @@ interface Props {
   loading: boolean;
   saving: boolean;
   openLightbox: (index: number) => void;
-  addOffenderRights: boolean;
+  addIncidentRights: boolean;
   offenderId: string;
   editRights: boolean;
   deleteRights: boolean;
@@ -65,7 +65,7 @@ const ViewOffender = ({
   loading,
   saving,
   openLightbox,
-  addOffenderRights,
+  addIncidentRights,
   offenderId,
   deleteRights,
   editRights,
@@ -485,7 +485,7 @@ const ViewOffender = ({
                           <Paragraph>
                             This offender does not appear in any incidents.
                           </Paragraph>
-                          {addOffenderRights && (
+                          {addIncidentRights && (
                             <div>
                               <Button
                                 onClick={toggleAddExistingIncident}
@@ -503,24 +503,6 @@ const ViewOffender = ({
                               </Button>
                             </div>
                           )}
-                        </div>
-                      )}{' '}
-                      {addOffenderRights && (
-                        <div>
-                          <Button
-                            onClick={toggleAddExistingIncident}
-                            disabled={saving}
-                            loading={saving}
-                            style={{ color: 'red' }}
-                            icon={
-                              <FontAwesomeIcon
-                                className="button-icon"
-                                icon={faPlus}
-                              />
-                            }
-                          >
-                            Link Incident
-                          </Button>
                         </div>
                       )}
                     </Col>

@@ -1,6 +1,5 @@
 import {
   ListOffendersQuery,
-  QueryMode,
   SortOrder,
   useListOffendersQuery,
 } from 'graphql/generated';
@@ -35,37 +34,10 @@ const useOffenderSideList = (): Return => {
       },
       take: pagination.pageSize,
       skip: (pagination.page - 1) * pagination.pageSize,
-      where: {
-        tags: variables.tags.length
-          ? {
-              some: {
-                id: {
-                  in: variables.tags,
-                },
-              },
-            }
-          : undefined,
-        groups: variables.groups.length
-          ? {
-              some: {
-                id: {
-                  in: variables.groups,
-                },
-              },
-            }
-          : undefined,
-        OR: [
-          {
-            name: {
-              contains: variables.search,
-              mode: QueryMode.Insensitive,
-            },
-          },
-        ],
-      },
     },
     fetchPolicy: 'cache-and-network',
   });
+  console.log(data);
 
   const onPaginationChange = (page: number, pageSize: number) => {
     setOffendersState({

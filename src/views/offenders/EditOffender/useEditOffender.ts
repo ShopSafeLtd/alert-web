@@ -195,7 +195,7 @@ const useEditOffender = (offenderId: string): Return => {
               set: data.groups.map((id) => ({ id })),
             },
             tags: {
-              set: data.tags.map((id) => ({ id })),
+              set: data.tags.map((id) => ({ id })) || undefined,
             },
             images: {
               upload:

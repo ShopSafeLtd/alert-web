@@ -179,6 +179,7 @@ const useOffenderFeed = (): Return => {
     },
     fetchPolicy: 'cache-and-network',
   });
+
   // update Offender list after deleting an item
   const updateOffenderList: MutationUpdaterFn<RecycleOffenderMutation> = (
     store,

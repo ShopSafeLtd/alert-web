@@ -10,7 +10,6 @@ interface Props {
   saving: boolean;
   onBack: () => void;
   setCurrent: (value: number) => void;
-  hideForm: boolean;
 }
 
 const SchemeTerms = ({
@@ -19,7 +18,6 @@ const SchemeTerms = ({
   saving,
   onBack,
   setCurrent,
-  hideForm,
 }: Props): JSX.Element => {
   setCurrent(1);
   return (
@@ -27,17 +25,12 @@ const SchemeTerms = ({
       <Row style={{ margin: 15 }}>
         <Col>
           <Title level={3}>Terms of Use</Title>
-          {hideForm ? (
-            <Text>
-              Below are the terms and conditions that you accepted during your
-              onboarding process as an Alert! user.
-            </Text>
-          ) : (
-            <Text>
-              Please read through our terms and conditions and accept them to
-              continue.
-            </Text>
-          )}
+
+          <Text>
+            Please read through our terms and conditions and accept them to
+            continue.
+          </Text>
+
           {/* <Text>
             Please read through our terms and conditions and accept them to
             continue.
@@ -685,37 +678,36 @@ const SchemeTerms = ({
           </Checkbox>
         </Col>
       </Row>
-      {hideForm && (
-        <Row style={{ marginTop: 30 }} gutter={10} justify="end">
-          <Col>
-            {/* <Link to="/app/onboarding"> */}
-            <Button
-              disabled={saving}
-              loading={saving}
-              type="primary"
-              onClick={() => {
-                window.history.back();
-                onBack();
-              }}
-            >
-              Back
-            </Button>
-            {/* </Link> */}
-          </Col>
 
-          <Col>
-            <Button
-              disabled={saving}
-              loading={saving}
-              onClick={onSubmit}
-              type="primary"
-              htmlType="submit"
-            >
-              Save
-            </Button>
-          </Col>
-        </Row>
-      )}
+      <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+        <Col>
+          {/* <Link to="/app/onboarding"> */}
+          <Button
+            disabled={saving}
+            loading={saving}
+            type="primary"
+            onClick={() => {
+              window.history.back();
+              onBack();
+            }}
+          >
+            Back
+          </Button>
+          {/* </Link> */}
+        </Col>
+
+        <Col>
+          <Button
+            disabled={saving}
+            loading={saving}
+            onClick={onSubmit}
+            type="primary"
+            htmlType="submit"
+          >
+            Save
+          </Button>
+        </Col>
+      </Row>
     </div>
   );
 };

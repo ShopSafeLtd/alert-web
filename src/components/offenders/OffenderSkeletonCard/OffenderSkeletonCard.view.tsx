@@ -10,7 +10,7 @@ const OffenderSkeletonCard = (): JSX.Element => (
           <Skeleton active />
         </div>
       </Tabs.TabPane>
-      <Tabs.TabPane key="OFFENDERS" tab="OFFENDERS" disabled>
+      <Tabs.TabPane key="INCIDENTS" tab="INCIDENTS" disabled>
         <div />
       </Tabs.TabPane>
     </Tabs>
