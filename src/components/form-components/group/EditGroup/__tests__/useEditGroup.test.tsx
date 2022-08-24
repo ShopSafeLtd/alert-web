@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import schemeModel from 'state/scheme-model';
@@ -8,10 +8,44 @@ import {
   GroupDocument,
   ListSchemeUsersDocument,
   SortOrder,
+  UpdateGroupDocument,
 } from 'graphql/generated';
 import useEditGroup from '../useEditGroup';
 
 const mocks = [
+  {
+    request: {
+      query: UpdateGroupDocument,
+      variables: {
+        where: {
+          id: 'groupId',
+        },
+        data: {
+          name: { set: 'new name' },
+          description: { set: 'new description' },
+          users: {
+            set: [{ id: '1' }],
+          },
+        },
+      },
+    },
+    result: {
+      data: {
+        updateGroup: {
+          id: '1',
+          name: '1',
+          description: '1',
+          users: [
+            {
+              id: '1',
+              fullName: 'test',
+              organisation: '1',
+            },
+          ],
+        },
+      },
+    },
+  },
   {
     request: {
       query: GroupDocument,
@@ -83,7 +117,7 @@ const mocks = [
 ];
 
 const UseEditGroupTest = () => {
-  const { data, loading, usersData, usersLoading } = useEditGroup({
+  const { data, loading, usersData, usersLoading, onSubmit } = useEditGroup({
     onClose: jest.fn(),
     groupId: 'groupId',
   });
@@ -111,6 +145,18 @@ const UseEditGroupTest = () => {
       <span>{loading ? 'true' : 'false'}</span>
       {Users}
       <span>{usersLoading ? 'true' : 'false'}</span>
+      <button
+        type="button"
+        onClick={() =>
+          onSubmit({
+            name: 'new name',
+            description: 'new description',
+            users: ['1'],
+          })
+        }
+      >
+        submit
+      </button>
     </div>
   );
 };
@@ -125,7 +171,7 @@ describe('useDetailGroups - hook', () => {
   });
 
   it('returns the expected values', async () => {
-    const { findByText, getAllByText } = render(
+    const { findByText, getAllByText, getByText, container } = render(
       <StoreProvider store={store}>
         <MemoryRouter>
           <MockedProvider mocks={mocks} addTypename={false}>
@@ -138,5 +184,8 @@ describe('useDetailGroups - hook', () => {
     expect(await findByText('test user')).toBeInTheDocument();
     expect(await findByText('testUser')).toBeInTheDocument();
     expect(getAllByText('false')).toHaveLength(2);
+    fireEvent.click(getByText('submit'));
+    expect(container).toBeInTheDocument();
+    expect(await findByText('Successfully Updated!')).toBeInTheDocument();
   });
 });
