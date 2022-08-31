@@ -71,7 +71,7 @@ const adminOnlyItems: NavItem[] = [
       {
         key: 'users',
         path: `${APP_PREFIX_PATH}/scheme-settings/users`,
-        title: 'User Management',
+        title: 'Users',
         icon: faUser,
         breadcrumb: true,
         submenu: [],
@@ -79,7 +79,7 @@ const adminOnlyItems: NavItem[] = [
       {
         key: 'groups',
         path: `${APP_PREFIX_PATH}/scheme-settings/groups`,
-        title: 'Group Management',
+        title: 'Groups',
         icon: faUsers,
         breadcrumb: true,
         submenu: [],

@@ -35,7 +35,10 @@ const Icon = ({ icon }: { icon: any }) => (
   />
 );
 const SubIcon = ({ icon }: { icon: any }) => (
-  <FontAwesomeIcon icon={icon} style={{ fontSize: 14, marginRight: 5 }} />
+  <FontAwesomeIcon
+    icon={icon}
+    style={{ fontSize: 14, marginRight: 5, width: 18 }}
+  />
 );
 
 interface SideNavContentProps {
