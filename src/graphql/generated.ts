@@ -10769,7 +10769,12 @@ export type StringNullableListFilter = {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  messages?: Maybe<Array<Maybe<Message>>>;
   newMessage?: Maybe<Message>;
+};
+
+export type SubscriptionMessagesArgs = {
+  chatId: Scalars['ID'];
 };
 
 export type SubscriptionNewMessageArgs = {
@@ -15484,20 +15489,20 @@ export type UserChatsQuery = {
   } | null;
 };
 
-export type NewMessageSubscriptionVariables = Exact<{
+export type MessagesSubscriptionSubscriptionVariables = Exact<{
   chat: Scalars['ID'];
 }>;
 
-export type NewMessageSubscription = {
+export type MessagesSubscriptionSubscription = {
   __typename?: 'Subscription';
-  newMessage?: {
+  messages?: Array<{
     __typename?: 'Message';
     id: string;
     content: string;
     createdAt: any;
     sent?: boolean | null;
     from: { __typename?: 'User'; id: string; fullName: string };
-  } | null;
+  } | null> | null;
 };
 
 export const CreateUserinAuth0Document = gql`
@@ -19476,9 +19481,9 @@ export type UserChatsQueryResult = Apollo.QueryResult<
   UserChatsQuery,
   UserChatsQueryVariables
 >;
-export const NewMessageDocument = gql`
-  subscription newMessage($chat: ID!) {
-    newMessage(chatId: $chat) {
+export const MessagesSubscriptionDocument = gql`
+  subscription MessagesSubscription($chat: ID!) {
+    messages(chatId: $chat) {
       id
       from {
         id
@@ -19492,35 +19497,35 @@ export const NewMessageDocument = gql`
 `;
 
 /**
- * __useNewMessageSubscription__
+ * __useMessagesSubscriptionSubscription__
  *
- * To run a query within a React component, call `useNewMessageSubscription` and pass it any options that fit your needs.
- * When your component renders, `useNewMessageSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useMessagesSubscriptionSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useMessagesSubscriptionSubscription` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useNewMessageSubscription({
+ * const { data, loading, error } = useMessagesSubscriptionSubscription({
  *   variables: {
  *      chat: // value for 'chat'
  *   },
  * });
  */
-export function useNewMessageSubscription(
+export function useMessagesSubscriptionSubscription(
   baseOptions: Apollo.SubscriptionHookOptions<
-    NewMessageSubscription,
-    NewMessageSubscriptionVariables
+    MessagesSubscriptionSubscription,
+    MessagesSubscriptionSubscriptionVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useSubscription<
-    NewMessageSubscription,
-    NewMessageSubscriptionVariables
-  >(NewMessageDocument, options);
+    MessagesSubscriptionSubscription,
+    MessagesSubscriptionSubscriptionVariables
+  >(MessagesSubscriptionDocument, options);
 }
-export type NewMessageSubscriptionHookResult = ReturnType<
-  typeof useNewMessageSubscription
+export type MessagesSubscriptionSubscriptionHookResult = ReturnType<
+  typeof useMessagesSubscriptionSubscription
 >;
-export type NewMessageSubscriptionResult =
-  Apollo.SubscriptionResult<NewMessageSubscription>;
+export type MessagesSubscriptionSubscriptionResult =
+  Apollo.SubscriptionResult<MessagesSubscriptionSubscription>;
