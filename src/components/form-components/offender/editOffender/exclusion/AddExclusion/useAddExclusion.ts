@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { CreateBanMutation, useCreateBanMutation } from 'graphql/generated';
-import { Modal, notification } from 'antd';
+import { notification } from 'antd';
 import { MutationUpdaterFn } from '@apollo/client';
 import { useStoreState } from 'state';
 import type { RangePickerProps } from 'antd/es/date-picker';
@@ -62,31 +62,23 @@ const useAddExclusion = ({ update, onClose, offenderId }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    if (data.startDate.valueOf() > data.endDate.valueOf()) {
-      Modal.warning({
-        title: 'The end date cannot be earlier than start date.',
-        content: 'Please select an another date.',
-      });
-      setSaving(false);
-    } else {
-      createBan({
-        variables: {
-          data: {
-            startDate: data.startDate,
-            endDate: data.endDate,
-            location: data.location,
-            description: data.description || '',
-            scheme: {
-              connect: {
-                id: schemeId,
-              },
+    createBan({
+      variables: {
+        data: {
+          startDate: data.startDate,
+          endDate: data.endDate,
+          location: data.location,
+          description: data.description || '',
+          scheme: {
+            connect: {
+              id: schemeId,
             },
-            createdBy: { connect: { id: userId } },
-            offender: { connect: { id: offenderId } },
           },
+          createdBy: { connect: { id: userId } },
+          offender: { connect: { id: offenderId } },
         },
-      });
-    }
+      },
+    });
   };
 
   return {

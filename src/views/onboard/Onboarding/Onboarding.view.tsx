@@ -1,10 +1,9 @@
 import React from 'react';
 
 import { Steps, Card } from 'antd';
-import AccountDetail from 'components/onboarding/AccountDetail';
-import Terms from 'components/onboarding/Terms';
+import AccountDetail from 'components/onboarding/Onboarding/AccountDetail';
+import Terms from 'components/onboarding/Onboarding/Terms';
 import { Route, Routes } from 'react-router';
-// import { Link } from 'react-router-dom';
 
 const { Step } = Steps;
 
@@ -22,7 +21,6 @@ interface Props {
   saving: boolean;
   current: number;
   setCurrent: (value: number) => void;
-  // onNext: () => void;
   onBack: () => void;
   updateAccountDetail: (value: AccountData | undefined) => void;
   updateTermsSigned: () => void;
@@ -33,7 +31,6 @@ const Onboarding = ({
   saving,
   current,
   setCurrent,
-  // onNext,
   onBack,
   updateAccountDetail,
   updateTermsSigned,

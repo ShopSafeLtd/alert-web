@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Modal, notification } from 'antd';
+import { notification } from 'antd';
 
 import { useStoreState } from 'state';
 import { useCurrentUserQuery, useUpdateUserMutation } from 'graphql/generated';
@@ -19,7 +19,6 @@ interface Return {
   onSubmit: () => void;
   saving: boolean;
   current: number;
-  // onNext: () => void;
   onBack: () => void;
   updateAccountDetail: (value: AccountData | undefined) => void;
   updateTermsSigned: () => void;
@@ -85,10 +84,6 @@ const useOnboarding = (): Return => {
   const onSubmit = () => {
     setSaving(true);
     if (!termsSigned) {
-      Modal.warning({
-        // title: 'Please agree to the terms and conditions!',
-        content: 'Please agree to the terms and conditions!',
-      });
       setSaving(false);
     } else if (termsSigned && accountDetail) {
       updateUser({
@@ -99,6 +94,8 @@ const useOnboarding = (): Return => {
           data: {
             fullName: { set: accountDetail.fullName },
             organisation: { set: accountDetail.organisation },
+            termsSigned: { set: true },
+            newUser: { set: false },
             addresses: {
               update: [
                 {
@@ -142,7 +139,6 @@ const useOnboarding = (): Return => {
     saving,
     current,
     setCurrent,
-    // onNext,
     onBack,
     updateAccountDetail,
     updateTermsSigned,

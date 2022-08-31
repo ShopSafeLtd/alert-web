@@ -13906,6 +13906,19 @@ export type UserWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
 };
 
+export type CreateUserinAuth0MutationVariables = Exact<{
+  id: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+export type CreateUserinAuth0Mutation = {
+  __typename?: 'Mutation';
+  createUserInAuth0?: {
+    __typename?: 'UserNewAuth0';
+    message?: string | null;
+  } | null;
+};
+
 export type ResetPasswordMutationVariables = Exact<{
   data: ResetPasswordData;
 }>;
@@ -15487,6 +15500,57 @@ export type NewMessageSubscription = {
   } | null;
 };
 
+export const CreateUserinAuth0Document = gql`
+  mutation createUserinAuth0($id: String!, $password: String!) {
+    createUserInAuth0(id: $id, password: $password) {
+      message
+    }
+  }
+`;
+export type CreateUserinAuth0MutationFn = Apollo.MutationFunction<
+  CreateUserinAuth0Mutation,
+  CreateUserinAuth0MutationVariables
+>;
+
+/**
+ * __useCreateUserinAuth0Mutation__
+ *
+ * To run a mutation, you first call `useCreateUserinAuth0Mutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUserinAuth0Mutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUserinAuth0Mutation, { data, loading, error }] = useCreateUserinAuth0Mutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      password: // value for 'password'
+ *   },
+ * });
+ */
+export function useCreateUserinAuth0Mutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateUserinAuth0Mutation,
+    CreateUserinAuth0MutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateUserinAuth0Mutation,
+    CreateUserinAuth0MutationVariables
+  >(CreateUserinAuth0Document, options);
+}
+export type CreateUserinAuth0MutationHookResult = ReturnType<
+  typeof useCreateUserinAuth0Mutation
+>;
+export type CreateUserinAuth0MutationResult =
+  Apollo.MutationResult<CreateUserinAuth0Mutation>;
+export type CreateUserinAuth0MutationOptions = Apollo.BaseMutationOptions<
+  CreateUserinAuth0Mutation,
+  CreateUserinAuth0MutationVariables
+>;
 export const ResetPasswordDocument = gql`
   mutation ResetPassword($data: ResetPasswordData!) {
     resetPassword(data: $data) {

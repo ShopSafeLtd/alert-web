@@ -22,7 +22,7 @@ interface Return {
   // setCheckedList: (value: string) => void;
 }
 
-const useViewOffender = ({ onClose, update }: Props): Return => {
+const useAddPreviousLocation = ({ onClose, update }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const userId = useStoreState((state) => state.user.id);
   // const [checkedList, setCheckedList] = useState('');
@@ -55,4 +55,4 @@ const useViewOffender = ({ onClose, update }: Props): Return => {
   };
 };
 
-export default useViewOffender;
+export default useAddPreviousLocation;

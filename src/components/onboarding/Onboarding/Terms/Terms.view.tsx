@@ -1,6 +1,15 @@
 import React from 'react';
-import { Card, Typography, Row, Col, Space, Checkbox, Button } from 'antd';
-// import { Link } from 'react-router-dom';
+import {
+  Card,
+  Typography,
+  Row,
+  Col,
+  Space,
+  Checkbox,
+  Button,
+  Form,
+} from 'antd';
+import { Link } from 'react-router-dom';
 
 const { Text, Title, Paragraph } = Typography;
 
@@ -668,46 +677,64 @@ const SchemeTerms = ({
           </Paragraph>
         </Space>
       </Card>
-      <Row gutter={10} justify="end">
-        <Col>
-          <Checkbox onChange={update}>
-            <Title level={4}>
-              I confirm that I have read and agree to the above terms and
-              conditions.
-            </Title>
-          </Checkbox>
-        </Col>
-      </Row>
+      <Form onFinish={onSubmit}>
+        <Row gutter={10} justify="end">
+          <Col>
+            <Form.Item
+              name="agreement"
+              valuePropName="checked"
+              rules={[
+                {
+                  validator: (_, value) =>
+                    value
+                      ? Promise.resolve()
+                      : Promise.reject(
+                          new Error('Please agree to the terms and conditions!')
+                        ),
+                },
+              ]}
+            >
+              <Checkbox onChange={update}>
+                <Title level={4}>
+                  I confirm that I have read and agree to the above terms and
+                  conditions.
+                </Title>
+              </Checkbox>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Form.Item>
+          <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+            <Col>
+              <Link to="/app/onboarding">
+                <Button
+                  disabled={saving}
+                  loading={saving}
+                  type="primary"
+                  onClick={() => {
+                    // window.history.back();
+                    onBack();
+                  }}
+                >
+                  Back
+                </Button>
+              </Link>
+            </Col>
 
-      <Row style={{ marginTop: 30 }} gutter={10} justify="end">
-        <Col>
-          {/* <Link to="/app/onboarding"> */}
-          <Button
-            disabled={saving}
-            loading={saving}
-            type="primary"
-            onClick={() => {
-              window.history.back();
-              onBack();
-            }}
-          >
-            Back
-          </Button>
-          {/* </Link> */}
-        </Col>
-
-        <Col>
-          <Button
-            disabled={saving}
-            loading={saving}
-            onClick={onSubmit}
-            type="primary"
-            htmlType="submit"
-          >
-            Save
-          </Button>
-        </Col>
-      </Row>
+            <Col>
+              <Button
+                disabled={saving}
+                loading={saving}
+                onClick={onSubmit}
+                type="primary"
+                htmlType="submit"
+              >
+                Save
+              </Button>
+            </Col>
+          </Row>
+        </Form.Item>
+      </Form>
     </div>
   );
 };

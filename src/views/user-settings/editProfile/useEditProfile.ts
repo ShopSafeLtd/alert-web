@@ -36,7 +36,7 @@ interface Return {
   saving: boolean;
 }
 
-const useEditUser = (): Return => {
+const useEditProfile = (): Return => {
   const navigate = useNavigate();
   const userId = useStoreState((state) => state.user.id);
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -146,4 +146,4 @@ const useEditUser = (): Return => {
   };
 };
 
-export default useEditUser;
+export default useEditProfile;

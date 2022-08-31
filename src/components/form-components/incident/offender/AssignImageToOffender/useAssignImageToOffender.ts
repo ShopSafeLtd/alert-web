@@ -16,7 +16,7 @@ interface Return {
   saving: boolean;
 }
 
-const useViewOffender = ({ onClose, update }: Props): Return => {
+const useAddExisitingOffender = ({ onClose, update }: Props): Return => {
   const [saving, setSaving] = useState(false);
 
   const onSubmit = (data: FormData) => {
@@ -31,4 +31,4 @@ const useViewOffender = ({ onClose, update }: Props): Return => {
   };
 };
 
-export default useViewOffender;
+export default useAddExisitingOffender;

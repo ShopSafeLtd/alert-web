@@ -37,7 +37,6 @@ const useOffenderSideList = (): Return => {
     },
     fetchPolicy: 'cache-and-network',
   });
-  console.log(data);
 
   const onPaginationChange = (page: number, pageSize: number) => {
     setOffendersState({

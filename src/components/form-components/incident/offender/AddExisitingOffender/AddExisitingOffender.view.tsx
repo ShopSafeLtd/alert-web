@@ -63,7 +63,7 @@ interface Props {
     | undefined;
 }
 
-const ViewOffender = ({
+const AddExisitingOffender = ({
   onClose,
   onSubmit,
   saving,
@@ -365,4 +365,4 @@ const ViewOffender = ({
   </Form>
 );
 
-export default ViewOffender;
+export default AddExisitingOffender;

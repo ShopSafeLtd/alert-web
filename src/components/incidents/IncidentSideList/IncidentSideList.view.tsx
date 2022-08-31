@@ -21,9 +21,8 @@ const IncidentSideList = ({
 }: Props): JSX.Element => (
   <div className="incidents-side-list">
     {data?.listIncidents?.incidents.map((incident) => (
-      <Link to={`/app/incidents/view/${incident.id}`}>
+      <Link to={`/app/incidents/view/${incident.id}`} key={incident.id}>
         <div
-          key={incident.id}
           className={
             current === incident.id ? 'incident-item current' : 'incident-item'
           }

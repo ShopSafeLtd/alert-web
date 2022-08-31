@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { BanQuery, useUpdateBanMutation, useBanQuery } from 'graphql/generated';
-import { Modal, notification } from 'antd';
+import { notification } from 'antd';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import type { Moment } from 'moment';
 
@@ -23,7 +23,7 @@ interface Return {
   disabledDate: RangePickerProps['disabledDate'];
 }
 
-const useEditBan = ({ onClose, banId }: Props): Return => {
+const useEditExclusion = ({ onClose, banId }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [startDate, setStartDate] = useState<Moment | Date | null>(null);
   // eslint-disable-next-line arrow-body-style
@@ -64,13 +64,7 @@ const useEditBan = ({ onClose, banId }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    if (data.startDate.valueOf() > data.endDate.valueOf()) {
-      Modal.warning({
-        title: 'The end date cannot be earlier than start date.',
-        content: 'Please select an another date.',
-      });
-      setSaving(false);
-    } else if (banId)
+    if (banId)
       updateBan({
         variables: {
           where: {
@@ -96,4 +90,4 @@ const useEditBan = ({ onClose, banId }: Props): Return => {
   };
 };
 
-export default useEditBan;
+export default useEditExclusion;

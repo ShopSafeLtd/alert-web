@@ -56,7 +56,7 @@ const useAddChat = ({ onClose, update }: Props): Return => {
       },
     },
   });
-  const [CreateChat] = useCreateChatMutation({
+  const [createChat] = useCreateChatMutation({
     onCompleted: () => {
       setSaving(false);
       onClose();
@@ -79,7 +79,7 @@ const useAddChat = ({ onClose, update }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    CreateChat({
+    createChat({
       variables: {
         data: {
           name: data.name,

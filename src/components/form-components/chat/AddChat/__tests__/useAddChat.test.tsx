@@ -1,13 +1,53 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
-import schemeModel from 'state/scheme-model';
+
 import { MemoryRouter } from 'react-router-dom';
-import { ListSchemeUsersDocument, SortOrder } from 'graphql/generated';
+import {
+  CreateChatDocument,
+  ListSchemeUsersDocument,
+  SortOrder,
+} from 'graphql/generated';
+import { storeModel } from 'state';
 import useAddChat from '../useAddChat';
 
 const mocks = [
+  {
+    request: {
+      query: CreateChatDocument,
+      variables: {
+        data: {
+          name: 'chatName',
+          description: 'chatdescription',
+          scheme: {
+            connect: {
+              id: 'schemeId',
+            },
+          },
+        },
+      },
+    },
+    result: {
+      data: {
+        createChat: {
+          id: 'chatId',
+          name: 'chatName',
+          description: 'chatdescription',
+          members: [
+            {
+              id: 'userChatId',
+              user: {
+                id: 'userId',
+                fullName: 'test user',
+                organisation: 'test organisation',
+              },
+            },
+          ],
+        },
+      },
+    },
+  },
   {
     request: {
       query: ListSchemeUsersDocument,
@@ -53,7 +93,7 @@ const mocks = [
 ];
 
 const UseAddChatTest = () => {
-  const { usersData, usersLoading } = useAddChat({
+  const { usersData, usersLoading, onSubmit } = useAddChat({
     onClose: jest.fn(),
     update: jest.fn(),
   });
@@ -71,12 +111,23 @@ const UseAddChatTest = () => {
     <div>
       {Users}
       <span>{usersLoading ? 'true' : 'false'}</span>
+      <button
+        type="button"
+        onClick={() =>
+          onSubmit({
+            name: 'chatName',
+            description: 'chatdescription',
+          })
+        }
+      >
+        submit
+      </button>
     </div>
   );
 };
 
 describe('useDetailChats - hook', () => {
-  const store = createStore(schemeModel, {
+  const store = createStore(storeModel, {
     initialState: {
       scheme: {
         id: 'schemeId',
@@ -85,7 +136,7 @@ describe('useDetailChats - hook', () => {
   });
 
   it('returns the expected values', async () => {
-    const { findByText } = render(
+    const { findByText, getByText, container } = render(
       <StoreProvider store={store}>
         <MemoryRouter>
           <MockedProvider mocks={mocks} addTypename={false}>
@@ -97,5 +148,8 @@ describe('useDetailChats - hook', () => {
 
     expect(await findByText('testUser')).toBeInTheDocument();
     expect(await findByText('false')).toBeInTheDocument();
+    fireEvent.click(getByText('submit'));
+    expect(container).toBeInTheDocument();
+    expect(await findByText('Successfully Added!')).toBeInTheDocument();
   });
 });

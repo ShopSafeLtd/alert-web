@@ -50,11 +50,24 @@ const EditExclusion = ({
         <Form.Item
           name="startDate"
           label="Start Date"
+          dependencies={['endDate']}
           rules={[
             {
               required: true,
               message: 'Please select a start date for the new exclusion.',
             },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (getFieldValue('endDate') < value) {
+                  return Promise.reject(
+                    new Error(
+                      'The start date cannot be later than the end date!'
+                    )
+                  );
+                }
+                return Promise.resolve();
+              },
+            }),
           ]}
         >
           <DatePicker

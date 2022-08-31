@@ -32,7 +32,6 @@ export const AppViews = (): JSX.Element => {
       navigate('incidents');
     }
   }, [onboarded]);
-  console.log(onboarded);
 
   return (
     <Suspense fallback={<Loading cover="content" />}>
@@ -41,7 +40,7 @@ export const AppViews = (): JSX.Element => {
           index
           element={<Navigate to={onboarded ? 'incidents' : 'onboarding'} />}
         />
-        {!onboarded && (
+        {onboarded && (
           <Route
             key="onboarding"
             path="onboarding/*"

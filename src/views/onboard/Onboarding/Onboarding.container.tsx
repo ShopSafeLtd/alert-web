@@ -7,7 +7,6 @@ const Onboarding = (): JSX.Element => {
     onSubmit,
     saving,
     current,
-    // onNext,
     onBack,
     updateAccountDetail,
     updateTermsSigned,
@@ -19,7 +18,6 @@ const Onboarding = (): JSX.Element => {
       saving={saving}
       current={current}
       setCurrent={setCurrent}
-      // onNext={onNext}
       onBack={onBack}
       onSubmit={onSubmit}
       updateTermsSigned={updateTermsSigned}

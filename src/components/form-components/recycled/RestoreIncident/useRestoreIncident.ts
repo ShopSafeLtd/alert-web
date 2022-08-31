@@ -38,11 +38,11 @@ const useRestoreIncident = ({
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
-        // id: recycledId,
         incidentId,
       },
     },
   });
+
   const [restoreIncident] = useRestoreIncidentMutation({
     onCompleted: () => {
       setSaving(false);

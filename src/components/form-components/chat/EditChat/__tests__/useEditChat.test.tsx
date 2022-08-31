@@ -1,30 +1,73 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
-import schemeModel from 'state/scheme-model';
+import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
 import {
   ChatDocument,
   ListSchemeUsersDocument,
   SortOrder,
+  UpdateChatDocument,
 } from 'graphql/generated';
 import useEditChat from '../useEditChat';
 
 const mocks = [
   {
     request: {
+      query: UpdateChatDocument,
+      variables: {
+        where: {
+          id: 'chatId',
+        },
+        data: {
+          name: { set: 'new name' },
+          description: { set: 'new description' },
+          members: {
+            create: [
+              {
+                user: { connect: { id: 'userId' } },
+                newMessages: true,
+              },
+            ],
+            delete: [{ id: 'userChatId' }],
+          },
+        },
+      },
+    },
+    result: {
+      data: {
+        updateChat: {
+          id: '1',
+          name: '1',
+          description: '1',
+          members: [
+            {
+              id: 'userChatId',
+              user: {
+                id: 'userId',
+                fullName: 'test user',
+                organisation: 'test organisation',
+              },
+            },
+          ],
+        },
+      },
+    },
+  },
+  {
+    request: {
       query: ChatDocument,
       variables: {
         where: {
-          id: 'ChatId',
+          id: 'chatId',
         },
       },
     },
     result: {
       data: {
         chat: {
-          id: 'ChatId',
+          id: 'chatId',
           name: 'test Chat',
           description: null,
           members: [
@@ -86,9 +129,9 @@ const mocks = [
 ];
 
 const UseEditChatTest = () => {
-  const { data, loading, usersData, usersLoading } = useEditChat({
+  const { data, loading, usersData, usersLoading, onSubmit } = useEditChat({
     onClose: jest.fn(),
-    chatId: 'ChatId',
+    chatId: 'chatId',
   });
   const Chat =
     data &&
@@ -113,12 +156,24 @@ const UseEditChatTest = () => {
       <span>{loading ? 'true' : 'false'}</span>
       {Users}
       <span>{usersLoading ? 'true' : 'false'}</span>
+      <button
+        type="button"
+        onClick={() =>
+          onSubmit({
+            name: 'new name',
+            description: 'new description',
+            user: ['userId'],
+          })
+        }
+      >
+        submit
+      </button>
     </div>
   );
 };
 
 describe('useDetailChats - hook', () => {
-  const store = createStore(schemeModel, {
+  const store = createStore(storeModel, {
     initialState: {
       scheme: {
         id: 'schemeId',
@@ -127,7 +182,7 @@ describe('useDetailChats - hook', () => {
   });
 
   it('returns the expected values', async () => {
-    const { findByText, getAllByText } = render(
+    const { findByText, getAllByText, getByText, container } = render(
       <StoreProvider store={store}>
         <MemoryRouter>
           <MockedProvider mocks={mocks} addTypename={false}>
@@ -140,5 +195,8 @@ describe('useDetailChats - hook', () => {
     expect(await findByText('test user')).toBeInTheDocument();
     expect(await findByText('testUser')).toBeInTheDocument();
     expect(getAllByText('false')).toHaveLength(2);
+    fireEvent.click(getByText('submit'));
+    expect(container).toBeInTheDocument();
+    expect(await findByText('Successfully Updated!')).toBeInTheDocument();
   });
 });

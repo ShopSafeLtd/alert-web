@@ -1,6 +1,6 @@
 import React from 'react';
 
-import View from './AddExisitingLocation.view';
+import View from './AddPreviousLocation.view';
 import useViewOffender from './useAddPreviousLocation';
 
 interface Props {

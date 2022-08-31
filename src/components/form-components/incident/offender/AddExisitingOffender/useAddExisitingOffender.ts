@@ -59,7 +59,7 @@ interface Return {
     | undefined;
 }
 
-const useViewOffender = ({ onClose, update }: Props): Return => {
+const useAddExisitingOffenderr = ({ onClose, update }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [currentId, setCurrentId] = useState<string | undefined>(undefined);
   // const [selectedOffender, setSelectedOffender] = useState<OffenderData[]>([]);
@@ -168,4 +168,4 @@ const useViewOffender = ({ onClose, update }: Props): Return => {
   };
 };
 
-export default useViewOffender;
+export default useAddExisitingOffenderr;

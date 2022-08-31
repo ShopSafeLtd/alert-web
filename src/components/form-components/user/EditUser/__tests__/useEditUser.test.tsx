@@ -1,14 +1,16 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
-import schemeModel from 'state/scheme-model';
+import { storeModel } from 'state';
+
 import { MemoryRouter } from 'react-router-dom';
 import {
   Role,
   SchemeChatsDocument,
   SchemeGroupsDocument,
   SortOrder,
+  UpdateUserDocument,
   UserDocument,
 } from 'graphql/generated';
 import useEditUser from '../useEditUser';
@@ -128,14 +130,137 @@ const mocks = [
       },
     },
   },
+  {
+    request: {
+      query: UpdateUserDocument,
+      variables: {
+        where: {
+          id: 'userId',
+        },
+        data: {
+          addresses: {
+            update: [
+              {
+                data: {
+                  postcode: { set: 'postcode' },
+                  street: { set: 'street ' },
+                  townCity: { set: 'townCity' },
+                  building: { set: 'building' },
+                  county: { set: 'county' },
+                },
+                where: {
+                  id: 'AddressId',
+                },
+              },
+            ],
+          },
+          email: { set: 'email' },
+          fullName: { set: 'fullName' },
+          organisation: { set: 'organisation' },
+          schemes: {
+            update: [
+              {
+                data: {
+                  role: { set: Role.User },
+                },
+                where: {
+                  id: 'schemeId',
+                },
+              },
+            ],
+          },
+          groups: {
+            set: [{ id: 'groupId' }],
+          },
+          chats: {
+            create: [
+              {
+                chat: { connect: { id: 'chatId' } },
+                newMessages: true,
+              },
+            ],
+            delete: [{ id: 'userChatId' }],
+          },
+        },
+        groupWhere: {
+          scheme: {
+            id: {
+              equals: 'schemeId',
+            },
+          },
+        },
+        chatWhere: {
+          chat: {
+            scheme: {
+              id: {
+                equals: 'schemeId',
+              },
+            },
+          },
+        },
+      },
+    },
+    result: {
+      data: {
+        updateUser: {
+          id: 'userId',
+          fullName: 'test user',
+          organisation: 'ShopSafe ',
+          email: '@shopsafe.uk',
+          disabled: false,
+          newUser: false,
+          addresses: [
+            {
+              building: 'building',
+              county: 'Suffolk',
+              id: 'ckshi0r5f9684229l4ckxvhld8',
+              postcode: 'IP313FA',
+              street: 'Unit 2 Sandy Lane',
+              townCity: 'Badwell Ash',
+            },
+          ],
+          groups: [
+            {
+              id: 'groupId',
+              name: 'test group',
+              description: null,
+            },
+          ],
+          chats: [
+            {
+              id: 'UserChatId',
+              chat: {
+                id: 'chatId',
+                name: 'test chat',
+                description: null,
+              },
+            },
+          ],
+          schemes: [
+            {
+              id: 'schemeId',
+              role: Role.ContentAdmin,
+            },
+          ],
+        },
+      },
+    },
+  },
 ];
 
 const UseEditUserTest = () => {
-  const { data, loading, groupsData, groupsLoading, chatsData, chatsLoading } =
-    useEditUser({
-      onClose: jest.fn(),
-      userId: 'userId',
-    });
+  const {
+    data,
+    loading,
+    groupsData,
+    groupsLoading,
+    chatsData,
+    chatsLoading,
+    onSubmit,
+  } = useEditUser({
+    onClose: jest.fn(),
+    userId: 'userId',
+  });
   const User = data && (
     <div key={data.user?.id}>
       <span>{data.user?.id}</span>
@@ -167,19 +292,39 @@ const UseEditUserTest = () => {
       <span>{groupsLoading ? 'true' : 'false'}</span>
       {Chats}
       <span>{chatsLoading ? 'true' : 'false'}</span>
+      <button
+        type="button"
+        onClick={() =>
+          onSubmit({
+            fullName: 'fullName',
+            email: 'email',
+            role: Role.User,
+            organisation: 'organisation',
+            postcode: 'postcode',
+            street: 'street ',
+            townCity: 'townCity',
+            building: 'building',
+            county: 'county',
+            groups: ['groupId'],
+            chats: ['chatId'],
+          })
+        }
+      >
+        submit
+      </button>
     </div>
   );
 };
 
 describe('useDetailUsers - hook', () => {
-  const store = createStore(schemeModel, {
+  const store = createStore(storeModel, {
     initialState: {
       scheme: { id: 'schemeId' },
     },
   });
 
   it('returns the expected values', async () => {
-    const { findByText, getAllByText } = render(
+    const { findByText, getAllByText, getByText, container } = render(
       <StoreProvider store={store}>
         <MemoryRouter>
           <MockedProvider mocks={mocks} addTypename={false}>
@@ -193,5 +338,8 @@ describe('useDetailUsers - hook', () => {
     expect(await findByText('groupName')).toBeInTheDocument();
     expect(await findByText('chatName')).toBeInTheDocument();
     expect(getAllByText('false')).toHaveLength(3);
+    fireEvent.click(getByText('submit'));
+    expect(container).toBeInTheDocument();
+    expect(await findByText('Successfully Updated!')).toBeInTheDocument();
   });
 });

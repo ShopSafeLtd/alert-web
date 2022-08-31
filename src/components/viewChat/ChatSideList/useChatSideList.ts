@@ -46,6 +46,7 @@ const useChatSideList = ({ onChangeId }: Props): Return => {
   const handleMarkAsRead = (userChatId: string | undefined) => {
     setSaving(true);
     if (userChatId) {
+      onChangeId(userChatId);
       updateUserChat({
         variables: {
           where: {

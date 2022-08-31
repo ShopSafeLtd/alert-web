@@ -12,7 +12,8 @@ import { UserNew, UserNewArgs, UserNewRes } from 'graphql-src/users/queries';
 import { useAuth0 } from '@auth0/auth0-react';
 import Loading from './auth-views/authentication/loading';
 
-import PrimaryOnboarding from '../old-components/users/onboard/Primary/PrimaryOnboarding';
+// import PrimaryOnboarding from '../old-components/users/onboard/Primary/PrimaryOnboarding';
+import PrimaryOnboarding from '../views/onboard/SetPassword';
 
 export const Views = (): JSX.Element => {
   const [newUserId, setNewUserId] = useState<string>('');
@@ -69,13 +70,17 @@ export const Views = (): JSX.Element => {
               <Route index element={<Navigate to="app" />} />
               <Route path="auth/*" element={<AuthLayout />} />
               <Route path="app/*" element={<AppLayout location={location} />} />
-              <Route
+              {/* <Route
                 path="onboarding"
                 element={
                   <PrimaryOnboarding
                     user={{ id: newUserId, email: data.userNew?.email }}
                   />
                 }
+              /> */}
+              <Route
+                path="onboarding/password"
+                element={<PrimaryOnboarding userId={newUserId} />}
               />
             </Route>
           </Routes>

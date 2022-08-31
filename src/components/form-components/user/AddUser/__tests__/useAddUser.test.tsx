@@ -1,10 +1,13 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
-import schemeModel from 'state/scheme-model';
+import { storeModel } from 'state';
+
 import { MemoryRouter } from 'react-router-dom';
 import {
+  CreateUserInDatabaseDocument,
+  InviteExistingUserDocument,
   Role,
   SchemeChatsDocument,
   SchemeGroupsDocument,
@@ -23,7 +26,6 @@ const mocks = [
         },
       },
     },
-    // skip: search === null,
     result: {
       data: {
         user: {
@@ -106,20 +108,175 @@ const mocks = [
       },
     },
   },
+  {
+    request: {
+      query: CreateUserInDatabaseDocument,
+      variables: {
+        data: {
+          addresses: {
+            postcode: 'postcode',
+            street: 'street',
+            townCity: 'townCity',
+            building: 'building',
+            county: 'county',
+            primary: true,
+          },
+          email: 'email',
+          fullName: 'fullName',
+          groups: [{ id: 'groupId' }],
+          organisation: 'organisation',
+          role: Role.User,
+          scheme: {
+            id: 'schemeId',
+          },
+          chats: [{ id: 'chatId' }],
+        },
+        groupWhere: {
+          scheme: {
+            id: {
+              equals: 'schemeId',
+            },
+          },
+        },
+      },
+    },
+    result: {
+      data: {
+        createUserInDatabase: {
+          id: 'userId',
+          fullName: 'test user',
+          organisation: 'ShopSafe ',
+          email: '@shopsafe.uk',
+          disabled: false,
+          newUser: false,
+          addresses: [
+            {
+              building: 'building',
+              county: 'Suffolk',
+              id: 'ckshi0r5f9684229l4ckxvhld8',
+              postcode: 'IP313FA',
+              street: 'Unit 2 Sandy Lane',
+              townCity: 'Badwell Ash',
+            },
+          ],
+          groups: [
+            {
+              id: 'groupId',
+              name: 'test group',
+              description: null,
+            },
+          ],
+          chats: [
+            {
+              id: 'UserChatId',
+              chat: {
+                id: 'chatId',
+                name: 'test chat',
+                description: null,
+              },
+            },
+          ],
+          schemes: [
+            {
+              id: 'schemeId',
+              role: Role.User,
+            },
+          ],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: InviteExistingUserDocument,
+      variables: {
+        where: {
+          id: 'userId',
+        },
+        data: {
+          groups: [{ id: 'groupId' }],
+          chats: {
+            create: [
+              {
+                chat: { connect: { id: 'chatId' } },
+                newMessages: true,
+              },
+            ],
+          },
+          schemes: {
+            create: [
+              {
+                role: Role.User,
+                scheme: {
+                  connect: { id: 'schemeId' },
+                },
+              },
+            ],
+          },
+        },
+        groupWhere: {
+          scheme: {
+            id: {
+              equals: 'schemeId',
+            },
+          },
+        },
+      },
+    },
+    result: {
+      data: {
+        inviteExistingUser: {
+          id: 'userId',
+          fullName: 'test user',
+          organisation: 'ShopSafe ',
+          email: '@shopsafe.uk',
+          disabled: false,
+          newUser: false,
+          addresses: [
+            {
+              building: 'building',
+              county: 'Suffolk',
+              id: 'ckshi0r5f9684229l4ckxvhld8',
+              postcode: 'IP313FA',
+              street: 'Unit 2 Sandy Lane',
+              townCity: 'Badwell Ash',
+            },
+          ],
+          groups: [
+            {
+              id: 'groupId',
+              name: 'test group',
+              description: null,
+            },
+          ],
+          chats: {
+            create: [
+              {
+                chat: { connect: { id: 'chatId' } },
+                newMessages: true,
+              },
+            ],
+          },
+          schemes: [
+            {
+              id: 'schemeId',
+              role: Role.User,
+            },
+          ],
+        },
+      },
+    },
+  },
 ];
 
 const UseAddUserTest = () => {
-  const { groupsData, groupsLoading, chatsData, chatsLoading } = useAddUser({
-    onClose: jest.fn(),
-    update: jest.fn(),
-    updateSearch: jest.fn(),
-  });
-  // const User = data && (
-  //   <div key={data.user?.id}>
-  //     <span>{data.user?.id}</span>
-  //     <span>{data.user?.fullName}</span>
-  //   </div>
-  // );
+  const { groupsData, groupsLoading, chatsData, chatsLoading, onSubmit } =
+    useAddUser({
+      onClose: jest.fn(),
+      update: jest.fn(),
+      updateSearch: jest.fn(),
+    });
+
   const Groups =
     groupsData &&
     groupsData.groups.map((el) => (
@@ -139,25 +296,43 @@ const UseAddUserTest = () => {
 
   return (
     <div>
-      {/* {User} */}
-
       {Groups}
       <span>{groupsLoading ? 'true' : 'false'}</span>
       {Chats}
       <span>{chatsLoading ? 'true' : 'false'}</span>
+      <button
+        type="button"
+        onClick={() =>
+          onSubmit({
+            email: 'email',
+            fullName: 'fullName',
+            organisation: 'organisation',
+            postcode: 'postcode',
+            street: 'street',
+            townCity: 'townCity',
+            building: 'building',
+            county: 'county',
+            role: Role.User,
+            groups: ['groupId'],
+            chats: ['chatId'],
+          })
+        }
+      >
+        submit
+      </button>
     </div>
   );
 };
 
 describe('useDetailUsers - hook', () => {
-  const store = createStore(schemeModel, {
+  const store = createStore(storeModel, {
     initialState: {
       scheme: { id: 'schemeId' },
     },
   });
 
   it('returns the expected values', async () => {
-    const { findByText, getAllByText } = render(
+    const { findByText, getAllByText, getByText, container } = render(
       <StoreProvider store={store}>
         <MemoryRouter>
           <MockedProvider mocks={mocks} addTypename={false}>
@@ -167,9 +342,11 @@ describe('useDetailUsers - hook', () => {
       </StoreProvider>
     );
 
-    // expect(await findByText('test user')).toBeInTheDocument();
     expect(await findByText('groupName')).toBeInTheDocument();
     expect(await findByText('chatName')).toBeInTheDocument();
     expect(getAllByText('false')).toHaveLength(2);
+    fireEvent.click(getByText('submit'));
+    expect(container).toBeInTheDocument();
+    expect(await findByText('Successfully Invited!')).toBeInTheDocument();
   });
 });

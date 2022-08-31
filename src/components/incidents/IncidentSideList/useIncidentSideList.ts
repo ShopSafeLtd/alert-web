@@ -8,7 +8,6 @@ import { useStoreState, IncidentSort, useStoreActions } from 'state';
 
 interface Return {
   data: ListIncidentsQuery | undefined;
-  // loading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
 }
 
@@ -21,10 +20,7 @@ const useIncidentSideList = (): Return => {
     (actions) => actions.data.setIncidents
   );
 
-  const {
-    data,
-    // loading
-  } = useListIncidentsQuery({
+  const { data } = useListIncidentsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       scheme: {
@@ -53,7 +49,6 @@ const useIncidentSideList = (): Return => {
 
   return {
     data,
-    // loading,
     onPaginationChange,
   };
 };

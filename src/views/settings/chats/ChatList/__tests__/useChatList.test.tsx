@@ -2,7 +2,8 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
-import schemeModel from 'state/scheme-model';
+import { storeModel } from 'state';
+
 import { MemoryRouter } from 'react-router-dom';
 import { QueryMode, SchemeChatsDocument } from 'graphql/generated';
 import useChatList from '../useChatList';
@@ -59,7 +60,7 @@ const UseChatListTest = () => {
 };
 
 describe('useListChats - hook', () => {
-  const store = createStore(schemeModel, {
+  const store = createStore(storeModel, {
     initialState: {
       scheme: {
         id: 'testScheme',

@@ -43,6 +43,7 @@ const useRestoreOffender = ({
       },
     },
   });
+
   const [restoreOffender] = useRestoreOffenderMutation({
     onCompleted: () => {
       setSaving(false);

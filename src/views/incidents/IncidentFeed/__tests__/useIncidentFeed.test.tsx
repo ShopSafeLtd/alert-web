@@ -97,8 +97,6 @@ const mocks = [
             },
           ],
         },
-        take: 1,
-        skip: 0,
       },
     },
   },

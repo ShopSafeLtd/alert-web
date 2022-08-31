@@ -2,7 +2,8 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
-import schemeModel from 'state/scheme-model';
+import { storeModel } from 'state';
+
 import { MemoryRouter } from 'react-router-dom';
 import { Role, ViewIncidentDocument } from 'graphql/generated';
 import useViewIncident from '../useViewIncident';
@@ -66,7 +67,7 @@ const UseViewIncidentTest = () => {
 };
 
 describe('useDetailGroups - hook', () => {
-  const store = createStore(schemeModel, {
+  const store = createStore(storeModel, {
     initialState: {
       id: 'incidentId',
       user: { role: Role.User },

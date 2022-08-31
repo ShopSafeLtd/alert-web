@@ -1,6 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
+import { Form } from 'antd';
 import AddUser from '../AddUser.view';
 
 describe('Detail Officer View', () => {
@@ -11,21 +12,28 @@ describe('Detail Officer View', () => {
     chats: [{ id: 'chatId', name: 'chatName', description: null }],
   };
 
+  const FormWrapper = () => {
+    const [form] = Form.useForm();
+
+    return (
+      <AddUser
+        onSubmit={jest.fn()}
+        onClose={jest.fn()}
+        groupsData={groupsData}
+        groupsLoading={false}
+        chatsData={chatsData}
+        chatsLoading={false}
+        saving={false}
+        onValuesChange={jest.fn()}
+        existingUser={false}
+        form={form}
+      />
+    );
+  };
   it('renders the page', () => {
     const { getByText } = render(
       <MemoryRouter>
-        <AddUser
-          onSubmit={jest.fn()}
-          onClose={jest.fn()}
-          groupsData={groupsData}
-          groupsLoading={false}
-          chatsData={chatsData}
-          chatsLoading={false}
-          saving={false}
-          onValuesChange={jest.fn()}
-          existingUser={false}
-          form={[]}
-        />
+        <FormWrapper />
       </MemoryRouter>
     );
     expect(getByText('Cancel')).toBeInTheDocument();

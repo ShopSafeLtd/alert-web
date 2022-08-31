@@ -77,7 +77,9 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
         placement: 'bottomRight',
       });
     },
-    onError: () => {
+    onError: (error) => {
+      console.log(error);
+
       setSaving(false);
       notification.error({
         message: 'Error!',

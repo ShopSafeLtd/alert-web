@@ -2,7 +2,7 @@ import React from 'react';
 import { Age, Gender, Race, Build } from 'graphql/generated';
 
 import View from './AddExisitingOffender.view';
-import useViewOffender from './useAddExisitingOffender';
+import useAddExisitingOffender from './useAddExisitingOffender';
 
 interface OffenderData {
   id: string;
@@ -28,7 +28,7 @@ interface Props {
   onClose: () => void;
   update: (value: OffenderData[] | undefined) => void;
 }
-const ViewOffender = ({ onClose, update }: Props): JSX.Element => {
+const AddExisitingOffender = ({ onClose, update }: Props): JSX.Element => {
   const {
     onSubmit,
     saving,
@@ -40,7 +40,7 @@ const ViewOffender = ({ onClose, update }: Props): JSX.Element => {
     onPaginationChange,
     setCurrentId,
     offenderData,
-  } = useViewOffender({ onClose, update });
+  } = useAddExisitingOffender({ onClose, update });
 
   return (
     <View
@@ -59,4 +59,4 @@ const ViewOffender = ({ onClose, update }: Props): JSX.Element => {
   );
 };
 
-export default ViewOffender;
+export default AddExisitingOffender;

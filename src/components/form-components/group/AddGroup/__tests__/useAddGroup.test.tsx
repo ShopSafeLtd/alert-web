@@ -1,10 +1,15 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
-import schemeModel from 'state/scheme-model';
+import { storeModel } from 'state';
+
 import { MemoryRouter } from 'react-router-dom';
-import { ListSchemeUsersDocument, SortOrder } from 'graphql/generated';
+import {
+  CreateGroupDocument,
+  ListSchemeUsersDocument,
+  SortOrder,
+} from 'graphql/generated';
 import useAddGroup from '../useAddGroup';
 
 const mocks = [
@@ -50,10 +55,40 @@ const mocks = [
       },
     },
   },
+  {
+    request: {
+      query: CreateGroupDocument,
+      variables: {
+        data: {
+          name: 'groupName',
+          description: 'group description',
+          scheme: {
+            connect: {
+              id: 'schemeId',
+            },
+          },
+        },
+      },
+    },
+    result: {
+      data: {
+        createGroup: {
+          id: 'groupId',
+          name: 'groupName',
+          description: 'group description',
+          user: {
+            id: 'userId',
+            fullName: 'test user',
+            organisation: 'test organisation',
+          },
+        },
+      },
+    },
+  },
 ];
 
 const UseAddGroupTest = () => {
-  const { usersData, usersLoading } = useAddGroup({
+  const { usersData, usersLoading, onSubmit } = useAddGroup({
     onClose: jest.fn(),
     update: jest.fn(),
   });
@@ -71,12 +106,23 @@ const UseAddGroupTest = () => {
     <div>
       {Users}
       <span>{usersLoading ? 'true' : 'false'}</span>
+      <button
+        type="button"
+        onClick={() =>
+          onSubmit({
+            name: 'groupName',
+            description: 'group description',
+          })
+        }
+      >
+        submit
+      </button>
     </div>
   );
 };
 
 describe('useDetailGroups - hook', () => {
-  const store = createStore(schemeModel, {
+  const store = createStore(storeModel, {
     initialState: {
       scheme: {
         id: 'schemeId',
@@ -85,7 +131,7 @@ describe('useDetailGroups - hook', () => {
   });
 
   it('returns the expected values', async () => {
-    const { findByText } = render(
+    const { findByText, getByText, container } = render(
       <StoreProvider store={store}>
         <MemoryRouter>
           <MockedProvider mocks={mocks} addTypename={false}>
@@ -97,5 +143,8 @@ describe('useDetailGroups - hook', () => {
 
     expect(await findByText('testUser')).toBeInTheDocument();
     expect(await findByText('false')).toBeInTheDocument();
+    fireEvent.click(getByText('submit'));
+    expect(container).toBeInTheDocument();
+    expect(await findByText('Successfully Added!')).toBeInTheDocument();
   });
 });

@@ -6,7 +6,7 @@ import useViewOffender from './useViewChat';
 const ViewOffender = (): JSX.Element => {
   const {
     // data,
-    loading,
+    // loading,
     // saving,
     currentId,
     onChangeId,
@@ -16,7 +16,7 @@ const ViewOffender = (): JSX.Element => {
   return (
     <View
       // data={data}
-      loading={loading}
+      // loading={loading}
       // saving={saving}
       currentId={currentId}
       onChangeId={onChangeId}

@@ -35,6 +35,7 @@ interface FormData {
   description: string;
   date: Date;
   time: Moment;
+  fullAddress: string;
   groups: string[];
   tags: string[];
   images: { id: string; url: string; optimised: string }[];
@@ -74,12 +75,9 @@ interface LocationData {
   postcode: string;
 }
 
-interface LocationFormData {
-  fullLocation: string;
-}
 interface Return {
   onSubmit: (value: FormData) => void;
-  form: FormInstance<LocationFormData>;
+  form: FormInstance<FormData>;
   saving: boolean;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
@@ -114,7 +112,7 @@ interface Return {
 }
 
 const useEditIncident = (): Return => {
-  const [form] = useForm<LocationFormData>();
+  const [form] = useForm<FormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
   const groups = useStoreState((state) => state.user.groups);
@@ -147,7 +145,6 @@ const useEditIncident = (): Return => {
   const [addNewLocation, setAddNewLocation] = useState(false);
   const [addPreviousLocation, setAddPreviousLocation] = useState(false);
   const [assignImage, setAssignImage] = useState(false);
-  console.log(form);
 
   // Query
   const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
@@ -345,10 +342,12 @@ const useEditIncident = (): Return => {
       setPreviousId(value);
       const previousLocation = addressData?.addresses.find(
         (location) => location.id === value
-      );
-      form.setFieldsValue({
-        fullLocation: previousLocation?.full || undefined,
-      });
+      )?.full;
+      if (previousLocation) {
+        form.setFieldsValue({
+          fullAddress: previousLocation,
+        });
+      }
     }
   };
 
@@ -357,7 +356,7 @@ const useEditIncident = (): Return => {
       setOption(LocationOptions.NEW);
       setNewLocation(value);
       form.setFieldsValue({
-        fullLocation: `${value.building && value.building}, ${value?.street},${
+        fullAddress: `${value.building && value.building}, ${value?.street},${
           value?.townCity
         },${value?.county && value?.county},${value?.postcode}`,
       });
@@ -481,7 +480,6 @@ const useEditIncident = (): Return => {
   });
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    // if (offendersData === undefined || offendersData.length === 0) {
     if (!offendersData || !offendersData.length) {
       confirm({
         title: 'No Offenders',

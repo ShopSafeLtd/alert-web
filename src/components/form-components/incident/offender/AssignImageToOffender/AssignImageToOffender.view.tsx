@@ -43,7 +43,7 @@ interface Props {
   data: OffenderData[] | undefined;
 }
 
-const ViewOffender = ({
+const AddExisitingOffender = ({
   onClose,
   onSubmit,
   saving,
@@ -117,4 +117,4 @@ const ViewOffender = ({
   </>
 );
 
-export default ViewOffender;
+export default AddExisitingOffender;

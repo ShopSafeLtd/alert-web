@@ -3,7 +3,7 @@ import React from 'react';
 import { Age, Gender, Race, Build } from 'graphql/generated';
 
 import View from './AssignImageToOffender.view';
-import useViewOffender from './useAssignImageToOffender';
+import useAddExisitingOffender from './useAssignImageToOffender';
 
 interface OffenderData {
   id: string;
@@ -35,8 +35,12 @@ interface Props {
   update: (value: string[] | undefined) => void;
   data: OffenderData[] | undefined;
 }
-const ViewOffender = ({ onClose, data, update }: Props): JSX.Element => {
-  const { onSubmit, saving } = useViewOffender({
+const AddExisitingOffender = ({
+  onClose,
+  data,
+  update,
+}: Props): JSX.Element => {
+  const { onSubmit, saving } = useAddExisitingOffender({
     onClose,
     update,
   });
@@ -46,4 +50,4 @@ const ViewOffender = ({ onClose, data, update }: Props): JSX.Element => {
   );
 };
 
-export default ViewOffender;
+export default AddExisitingOffender;

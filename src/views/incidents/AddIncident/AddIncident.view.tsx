@@ -57,9 +57,10 @@ interface FormData {
   description: string;
   date: Date;
   time: Moment;
+  fullAddress: string;
   groups: string[];
   tags: string[];
-  images: [{ id: string; url: string; optimised: string }];
+  images: { id: string; url: string; optimised: string }[];
 }
 
 interface OffenderData {
@@ -94,12 +95,9 @@ interface LocationData {
   county?: string | null;
   postcode: string;
 }
-interface LocationFormData {
-  fullLocation: string;
-}
 interface Props {
   onSubmit: (value: FormData) => void;
-  form: FormInstance<LocationFormData>;
+  form: FormInstance<FormData>;
   saving: boolean;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
@@ -170,7 +168,13 @@ const EditIncident = ({
     <PageHeader onBack={() => window.history.back()} title="Add Incident" />
 
     <Card>
-      <Form onFinish={onSubmit}>
+      <Form<FormData>
+        form={form}
+        initialValues={{
+          fullAddress: primaryAddress?.full || '',
+        }}
+        onFinish={onSubmit}
+      >
         <Row gutter={20} style={{ marginBottom: 30 }}>
           <Col>
             <Title level={4}>Incident Details</Title>
@@ -315,66 +319,58 @@ const EditIncident = ({
             </Button>
           </Col>
         </Row>
-
         {addressLoading ? (
           <Skeleton />
         ) : (
-          <Form<LocationFormData>
-            form={form}
-            initialValues={{
-              fullLocation: primaryAddress?.full || '',
-            }}
-          >
-            <Row gutter={10}>
-              <Col
-                // flex={1}
-                span={11}
+          <Row gutter={10}>
+            <Col
+              // flex={1}
+              span={11}
+            >
+              <Form.Item
+                name="fullAddress"
+                label="Location"
+                rules={[
+                  {
+                    required: true,
+                    message:
+                      'Please select or add a new location for the incident.',
+                  },
+                ]}
               >
-                <Form.Item
-                  name="fullLocation"
-                  label="Location"
-                  rules={[
-                    {
-                      required: true,
-                      message:
-                        'Please select or add a new location for the incident.',
-                    },
-                  ]}
-                >
-                  <Input disabled={saving} readOnly bordered={false} />
-                </Form.Item>
-              </Col>
-              <Col>
-                <Button
-                  disabled={saving}
-                  loading={saving}
-                  onClick={toggleAddPreviousLocation}
-                  style={{ color: 'red' }}
-                  icon={
-                    <FontAwesomeIcon
-                      icon={faMagnifyingGlass}
-                      style={{ marginRight: 5 }}
-                    />
-                  }
-                >
-                  Use Previous Locations
-                </Button>
-              </Col>
-              <Col>
-                <Button
-                  disabled={saving}
-                  loading={saving}
-                  onClick={toggleAddNewLocation}
-                  style={{ color: 'red' }}
-                  icon={
-                    <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
-                  }
-                >
-                  Add New Location
-                </Button>
-              </Col>
-            </Row>
-          </Form>
+                <Input disabled={saving} readOnly bordered={false} />
+              </Form.Item>
+            </Col>
+            <Col>
+              <Button
+                disabled={saving}
+                loading={saving}
+                onClick={toggleAddPreviousLocation}
+                style={{ color: 'red' }}
+                icon={
+                  <FontAwesomeIcon
+                    icon={faMagnifyingGlass}
+                    style={{ marginRight: 5 }}
+                  />
+                }
+              >
+                Use Previous Locations
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                disabled={saving}
+                loading={saving}
+                onClick={toggleAddNewLocation}
+                style={{ color: 'red' }}
+                icon={
+                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
+                }
+              >
+                Add New Location
+              </Button>
+            </Col>
+          </Row>
         )}
 
         <Row gutter={5} style={{ marginTop: 20 }}>

@@ -1,18 +1,18 @@
 import { useState } from 'react';
-import {
-  // NewMessageDocument,
-  // useMessagesQuery,
-  // useNewMessageSubscription,
-  // UserChatsQuery,
-  // useUpdateUserChatMutation,
-  useUserChatsQuery,
-} from 'graphql/generated';
+// import {
+//   NewMessageDocument,
+//   useMessagesQuery,
+//   useNewMessageSubscription,
+//   UserChatsQuery,
+//   useUpdateUserChatMutation,
+//   useUserChatsQuery,
+// } from 'graphql/generated';
 
-import { useStoreState } from 'state';
+// import { useStoreState } from 'state';
 
 interface Return {
   // data: UserChatsQuery | undefined;
-  loading: boolean;
+  // loading: boolean;
   // saving: boolean;
   currentId: string;
   onChangeId: (id: string) => void;
@@ -20,29 +20,12 @@ interface Return {
 }
 
 const useViewChat = (): Return => {
-  const userId = useStoreState((state) => state.user.id);
-  const schemeId = useStoreState((state) => state.scheme.id);
+  // const userId = useStoreState((state) => state.user.id);
+  // const schemeId = useStoreState((state) => state.scheme.id);
   // const [saving, setSaving] = useState(false);
   const [currentId, setCurrentId] = useState('');
 
   const onChangeId = (id: string) => setCurrentId(id);
-
-  const {
-    // data: chatData,
-    loading,
-    // refetch: chatRefetch,
-  } = useUserChatsQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        id: userId,
-      },
-      scheme: schemeId,
-    },
-    onCompleted: ({ user }) => {
-      if (user && user.chats.length > 0) setCurrentId(user.chats[0].id);
-    },
-  });
 
   // const {
   //   // data: messagesData,
@@ -51,7 +34,7 @@ const useViewChat = (): Return => {
   // } = useMessagesQuery({
   //   fetchPolicy: 'cache-and-network',
   //   variables: {
-  //     chat: chatId || currentId,
+  //     chat:  currentId,
   //   },
   // });
 
@@ -59,7 +42,7 @@ const useViewChat = (): Return => {
   //   subscribeToMore({
   //     document: NewMessageDocument,
   //     variables: {
-  //       chat: chatId || currentId,
+  //       chat:  currentId,
   //     },
   //     updateQuery: (prev, { subscriptionData }) => {
   //       // setReceived(true);
@@ -79,7 +62,7 @@ const useViewChat = (): Return => {
 
   return {
     // data: chatData,
-    loading,
+    // loading,
     // saving,
     currentId,
     onChangeId,

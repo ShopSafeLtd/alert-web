@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
-import schemeModel from 'state/scheme-model';
+import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
 import { Model, QueryMode, TagsDocument } from 'graphql/generated';
 import useTagList from '../useCrimeTypeList';
@@ -62,7 +62,7 @@ const UseTagListTest = () => {
 };
 
 describe('useListTags - hook', () => {
-  const store = createStore(schemeModel, {
+  const store = createStore(storeModel, {
     initialState: {
       scheme: {
         id: 'schemeId',
