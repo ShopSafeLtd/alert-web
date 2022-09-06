@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import type { Moment } from 'moment';
-import { Modal } from 'antd';
 
 interface FormData {
   endDate: Date;
@@ -39,22 +38,14 @@ const useEditBan = ({ onClose, update }: Props): Return => {
   };
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    if (data.startDate.valueOf() > data.endDate.valueOf()) {
-      Modal.warning({
-        title: 'The end date cannot be earlier than start date.',
-        content: 'Please select an another date.',
-      });
-      setSaving(false);
-    } else {
-      update({
-        startDate: data.startDate || null,
-        endDate: data.endDate || null,
-        location: data.location || '',
-        description: data.description || '',
-      });
-      onClose();
-      setSaving(false);
-    }
+    update({
+      startDate: data.startDate || null,
+      endDate: data.endDate || null,
+      location: data.location || '',
+      description: data.description || '',
+    });
+    onClose();
+    setSaving(false);
   };
 
   return {

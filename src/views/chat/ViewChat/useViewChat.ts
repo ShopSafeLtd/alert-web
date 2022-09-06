@@ -1,75 +1,82 @@
 import { useState } from 'react';
+import { useStoreState } from 'state';
 import {
-  MessagesSubscriptionDocument,
-  useMessagesQuery,
-  // UserChatsQuery,
-  // useUpdateUserChatMutation,
-  // useUserChatsQuery,
+  UserChatsQuery,
+  useUpdateUserChatMutation,
+  useUserChatsQuery,
 } from 'graphql/generated';
 
-// import { useStoreState } from 'state';
-
 interface Return {
-  // data: UserChatsQuery | undefined;
-  // loading: boolean;
-  // saving: boolean;
   currentId: string;
-  onChangeId: (id: string) => void;
-  subscribeToNewMessage: () => void;
+  data: UserChatsQuery | undefined;
+  loading: boolean;
+  saving: boolean;
+  handleMarkAsRead: (value: string | undefined) => void;
 }
 
 const useViewChat = (): Return => {
-  // const userId = useStoreState((state) => state.user.id);
-  // const schemeId = useStoreState((state) => state.scheme.id);
-  // const [saving, setSaving] = useState(false);
   const [currentId, setCurrentId] = useState('');
+  const userId = useStoreState((state) => state.user.id);
+  const schemeId = useStoreState((state) => state.scheme.id);
+  const [saving, setSaving] = useState(false);
 
-  const onChangeId = (id: string) => setCurrentId(id);
-
-  const {
-    // data: messagesData,
-    // loading: messagesLoading,
-    subscribeToMore,
-  } = useMessagesQuery({
+  const { data, loading, refetch } = useUserChatsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
-      chat: currentId,
+      where: {
+        id: userId,
+      },
+      scheme: schemeId,
+    },
+    onCompleted: ({ user }) => {
+      if (user && user.chats.length > 0) {
+        setCurrentId(user.chats[0].chat.id);
+      }
+      console.log(data);
     },
   });
 
-  const subscribeToNewMessage = () => {
-    subscribeToMore({
-      document: MessagesSubscriptionDocument,
-      variables: {
-        chat: currentId,
-      },
-      updateQuery: (prev, { subscriptionData }) => {
-        // setReceived(true);
-        //  if (!subscriptionData.data) return prev;
-        const test = prev.messages.find(
-          ({ id }) => id === subscriptionData.data.messages[0].id
-        );
-        if (test === undefined) {
-          return {
-            ...prev,
-            messages: [...prev.messages, ...subscriptionData.data.messages],
-          };
-        }
+  const [updateUserChat] = useUpdateUserChatMutation({
+    onCompleted: () => {
+      setSaving(false);
+      // ???
+      refetch();
+    },
+  });
 
-        return {
-          ...prev,
-        };
-      },
-    });
+  const handleMarkAsRead = (userChatId: string | undefined) => {
+    if (userChatId) {
+      setSaving(true);
+      updateUserChat({
+        variables: {
+          where: {
+            id: userId,
+          },
+          data: {
+            chats: {
+              update: [
+                {
+                  data: {
+                    newMessages: { set: false },
+                  },
+                  where: {
+                    id: userChatId,
+                  },
+                },
+              ],
+            },
+          },
+        },
+      });
+    }
   };
 
   return {
-    // data: chatData,
-    // loading,
-    // saving,
+    data,
+    loading,
+    saving,
+    handleMarkAsRead,
     currentId,
-    onChangeId,
-    subscribeToNewMessage,
   };
 };
 

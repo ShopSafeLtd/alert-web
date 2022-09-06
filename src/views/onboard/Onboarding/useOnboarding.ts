@@ -64,12 +64,12 @@ const useOnboarding = (): Return => {
   const [updateUser] = useUpdateUserMutation({
     onCompleted: () => {
       setSaving(false);
-      navigate('/app/incidents');
       notification.success({
         message: 'Successfully Updated!',
         description: 'Your account has been updated! ',
         placement: 'bottomRight',
       });
+      navigate('/app/incidents');
     },
     onError: () => {
       setSaving(false);
@@ -85,7 +85,9 @@ const useOnboarding = (): Return => {
     setSaving(true);
     if (!termsSigned) {
       setSaving(false);
-    } else if (termsSigned && accountDetail) {
+    }
+
+    if (termsSigned && accountDetail) {
       updateUser({
         variables: {
           where: {
@@ -107,7 +109,7 @@ const useOnboarding = (): Return => {
                     county: { set: accountDetail.county || '' },
                   },
                   where: {
-                    id: userData?.currentUser?.addresses[0].id,
+                    id: userData?.currentUser?.addresses[0].id || '',
                   },
                 },
               ],

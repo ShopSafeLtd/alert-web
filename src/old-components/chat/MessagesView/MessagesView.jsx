@@ -209,6 +209,7 @@ class MessagesView extends PureComponent {
                     />
                   );
                 } else {
+                  // ???
                   currentUser = from.id;
                   return (
                     <Message

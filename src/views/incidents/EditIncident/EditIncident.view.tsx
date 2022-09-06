@@ -59,7 +59,7 @@ interface FormData {
   postcode: string;
   groups: string[];
   tags: string[];
-  images: [{ id: string; url: string; optimised: string }];
+  images?: [{ id: string; url: string; optimised: string }];
 }
 
 interface OffenderData {

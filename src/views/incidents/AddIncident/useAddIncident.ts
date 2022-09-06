@@ -480,7 +480,7 @@ const useEditIncident = (): Return => {
   });
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    if (!offendersData || !offendersData.length) {
+    if (!offendersData) {
       confirm({
         title: 'No Offenders',
         content: 'Please select or add at least one offender for the incident.',

@@ -2,21 +2,9 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { AddressesQuery } from 'graphql/generated';
-import {
-  Row,
-  Col,
-  Button,
-  Skeleton,
-  Form,
-  Radio,
-  Typography,
-  // Checkbox,
-} from 'antd';
+import { Row, Col, Button, Skeleton, Form, Radio, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot } from '@fortawesome/pro-light-svg-icons';
-
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faLocationDot } from '@fortawesome/pro-light-svg-icons';
 
 const { Paragraph } = Typography;
 interface FormData {
@@ -60,11 +48,7 @@ Props): JSX.Element =>
           <Radio.Group>
             {data?.map((location) => (
               <Row wrap={false} key={location.id}>
-                <Radio
-                  value={location.id}
-                  key={location.id}
-                  // style={{ height: 30, lineHeight: 30, marginLeft: 10 }}
-                >
+                <Radio value={location.id} key={location.id}>
                   <Paragraph ellipsis key={location.id}>
                     <FontAwesomeIcon
                       style={{ marginRight: 6, color: 'rgb(222, 68, 54)' }}

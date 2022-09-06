@@ -1,0 +1,17 @@
+mutation createMessage($data: MessageCreateWithoutActionsInput!) {
+  createMessage(data: $data) {
+    id
+    sent
+    from {
+      id
+      fullName
+      organisation
+    }
+    chat {
+      id
+      name
+    }
+    content
+    createdAt
+  }
+}

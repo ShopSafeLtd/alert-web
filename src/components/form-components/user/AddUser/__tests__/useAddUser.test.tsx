@@ -113,7 +113,7 @@ const mocks = [
       query: CreateUserInDatabaseDocument,
       variables: {
         data: {
-          addresses: {
+          address: {
             postcode: 'postcode',
             street: 'street',
             townCity: 'townCity',
@@ -125,19 +125,11 @@ const mocks = [
           fullName: 'fullName',
           groups: [{ id: 'groupId' }],
           organisation: 'organisation',
-          role: Role.User,
-          scheme: {
-            id: 'schemeId',
-          },
+          role: 'USER',
+          scheme: { id: 'schemeId' },
           chats: [{ id: 'chatId' }],
         },
-        groupWhere: {
-          scheme: {
-            id: {
-              equals: 'schemeId',
-            },
-          },
-        },
+        groupWhere: { scheme: { id: { equals: 'schemeId' } } },
       },
     },
     result: {
@@ -149,6 +141,7 @@ const mocks = [
           email: '@shopsafe.uk',
           disabled: false,
           newUser: false,
+          status: 'active',
           addresses: [
             {
               building: 'building',
@@ -232,6 +225,7 @@ const mocks = [
           email: '@shopsafe.uk',
           disabled: false,
           newUser: false,
+          status: 'active',
           addresses: [
             {
               building: 'building',
@@ -270,13 +264,21 @@ const mocks = [
 ];
 
 const UseAddUserTest = () => {
-  const { groupsData, groupsLoading, chatsData, chatsLoading, onSubmit } =
-    useAddUser({
-      onClose: jest.fn(),
-      update: jest.fn(),
-      updateSearch: jest.fn(),
-    });
-
+  const {
+    groupsData,
+    groupsLoading,
+    chatsData,
+    chatsLoading,
+    onSubmit,
+    // existingUser,
+  } = useAddUser({
+    onClose: jest.fn(),
+    update: jest.fn(),
+    updateSearch: jest.fn(),
+  });
+  // const preSubmit = () => {
+  //    existingUser
+  // };
   const Groups =
     groupsData &&
     groupsData.groups.map((el) => (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import schemeModel from 'state/scheme-model';
@@ -61,7 +61,7 @@ const mocks = [
 ];
 
 const UseAccountDetailTest = () => {
-  const { data, loading } = useAccountDetail({
+  const { data, loading, onSubmit } = useAccountDetail({
     setCurrent: jest.fn(),
     update: jest.fn(),
   });
@@ -69,6 +69,22 @@ const UseAccountDetailTest = () => {
     <div key={data.currentUser?.id}>
       <span>{data.currentUser?.id}</span>
       <span>{data.currentUser?.fullName}</span>
+      <button
+        type="button"
+        onClick={() =>
+          onSubmit({
+            fullName: 'name',
+            organisation: 'organisation',
+            postcode: 'postcode',
+            street: 'street',
+            townCity: 'townCity',
+            building: 'building',
+            county: 'county',
+          })
+        }
+      >
+        submit
+      </button>
     </div>
   );
 
@@ -84,7 +100,7 @@ describe('useDetailUsers - hook', () => {
   const store = createStore(schemeModel);
 
   it('returns the expected values', async () => {
-    const { findByText } = render(
+    const { findByText, getByText, container } = render(
       <StoreProvider store={store}>
         <MemoryRouter>
           <MockedProvider mocks={mocks} addTypename={false}>
@@ -96,5 +112,7 @@ describe('useDetailUsers - hook', () => {
 
     expect(await findByText('test user')).toBeInTheDocument();
     expect(await findByText('false')).toBeInTheDocument();
+    fireEvent.click(getByText('submit'));
+    expect(container).toBeInTheDocument();
   });
 });

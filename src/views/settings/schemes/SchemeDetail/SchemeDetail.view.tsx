@@ -37,7 +37,7 @@ interface FormData {
   autoApproveOffenders: boolean;
   incidentRetention: number | null;
   offenderRetention: number | null;
-  logo: { id: string; url: string; optimised: string };
+  logo?: { id: string; url: string; optimised: string };
 }
 const options = [
   { value: -1, label: 'Disabled' },

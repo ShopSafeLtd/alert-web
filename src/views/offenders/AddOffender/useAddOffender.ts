@@ -31,12 +31,12 @@ interface FormData {
   build: Build;
   hair: string;
   peculiarities: string;
-  dateSource: string;
-  dateOfBirth: Date;
+  dateSource?: string;
+  dateOfBirth?: Date;
   groups: string[];
   tags: string[];
-  images: [{ id: string; url: string; optimised: string }];
-  bans: [
+  images?: [{ id: string; url: string; optimised: string }];
+  bans?: [
     { endDate: Date; startDate: Date; location: string; description: string }
   ];
 }

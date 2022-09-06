@@ -57,7 +57,9 @@ const useEditProfile = (): Return => {
         placement: 'bottomRight',
       });
     },
-    onError: () => {
+    onError: (error) => {
+      console.log(error);
+
       setSaving(false);
       notification.error({
         message: 'Error!',
@@ -120,6 +122,7 @@ const useEditProfile = (): Return => {
         },
       });
   };
+
   const [resetPassword] = useResetPasswordMutation();
   const resetConfirm = () => {
     confirm({
@@ -147,3 +150,32 @@ const useEditProfile = (): Return => {
 };
 
 export default useEditProfile;
+// const variables = {
+//   where: { id: 'userId' },
+//   data: {
+//     addresses: {
+//       update: [
+//         {
+//           data: {
+//             postcode: { set: 'postcode' },
+//             street: { set: 'street' },
+//             townCity: { set: 'townCity' },
+//             building: { set: 'building' },
+//             county: { set: 'county' },
+//           },
+//           where: { id: 'ckshi0r5f9684229l4ckxvhld8' },
+//         },
+//       ],
+//     },
+//     email: { set: 'email' },
+//     fullName: { set: 'name' },
+//     organisation: { set: 'organisation' },
+//     incidentEmail: { set: false },
+//     incidentPush: { set: false },
+//     offenderEmail: { set: false },
+//     offenderPush: { set: false },
+//     messagePush: { set: false },
+//   },
+//   groupWhere: { scheme: { id: { equals: 'schemeId' } } },
+//   chatWhere: { chat: { scheme: { id: { equals: 'schemeId' } } } },
+// };

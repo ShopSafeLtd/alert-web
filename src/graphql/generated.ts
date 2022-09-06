@@ -15417,6 +15417,28 @@ export type SearchUserQuery = {
   } | null;
 };
 
+export type CreateMessageMutationVariables = Exact<{
+  data: MessageCreateWithoutActionsInput;
+}>;
+
+export type CreateMessageMutation = {
+  __typename?: 'Mutation';
+  createMessage?: {
+    __typename?: 'Message';
+    id: string;
+    sent?: boolean | null;
+    content: string;
+    createdAt: any;
+    from: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      organisation: string;
+    };
+    chat: { __typename?: 'Chat'; id: string; name: string };
+  } | null;
+};
+
 export type UpdateUserChatMutationVariables = Exact<{
   where: UniqueId;
   data: UserUpdateInput;
@@ -19279,6 +19301,68 @@ export type SearchUserLazyQueryHookResult = ReturnType<
 export type SearchUserQueryResult = Apollo.QueryResult<
   SearchUserQuery,
   SearchUserQueryVariables
+>;
+export const CreateMessageDocument = gql`
+  mutation createMessage($data: MessageCreateWithoutActionsInput!) {
+    createMessage(data: $data) {
+      id
+      sent
+      from {
+        id
+        fullName
+        organisation
+      }
+      chat {
+        id
+        name
+      }
+      content
+      createdAt
+    }
+  }
+`;
+export type CreateMessageMutationFn = Apollo.MutationFunction<
+  CreateMessageMutation,
+  CreateMessageMutationVariables
+>;
+
+/**
+ * __useCreateMessageMutation__
+ *
+ * To run a mutation, you first call `useCreateMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMessageMutation, { data, loading, error }] = useCreateMessageMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateMessageMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateMessageMutation,
+    CreateMessageMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateMessageMutation,
+    CreateMessageMutationVariables
+  >(CreateMessageDocument, options);
+}
+export type CreateMessageMutationHookResult = ReturnType<
+  typeof useCreateMessageMutation
+>;
+export type CreateMessageMutationResult =
+  Apollo.MutationResult<CreateMessageMutation>;
+export type CreateMessageMutationOptions = Apollo.BaseMutationOptions<
+  CreateMessageMutation,
+  CreateMessageMutationVariables
 >;
 export const UpdateUserChatDocument = gql`
   mutation updateUserChat($where: UniqueId!, $data: UserUpdateInput!) {
