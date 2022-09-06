@@ -71,7 +71,7 @@ const ViewMessges = ({
           }
         >
           {datedMessages.map(({ type, date, id, content, sameUser, from }) => (
-            <>
+            <div key={id}>
               {/* {!sent && (
                   <Progress
                     type="circle"
@@ -87,7 +87,7 @@ const ViewMessges = ({
               {type === 'DATE' && <Title>{date}</Title>}
               {/* {type === 'Message' && <></>} */}
               {type === 'MESSAGE' && !sameUser && (
-                <Row key={id} justify={from?.id === userId ? 'end' : 'start'}>
+                <Row justify={from?.id === userId ? 'end' : 'start'}>
                   <Col>
                     <Avatar
                       style={{
@@ -103,13 +103,13 @@ const ViewMessges = ({
                 </Row>
               )}
               {type === 'MESSAGE' && (
-                <Row key={id} justify={from?.id === userId ? 'end' : 'start'}>
+                <Row justify={from?.id === userId ? 'end' : 'start'}>
                   <Col>
                     <Text>{content}</Text>
                   </Col>
                 </Row>
               )}
-            </>
+            </div>
           ))}
         </InfiniteScroll>
       </Col>

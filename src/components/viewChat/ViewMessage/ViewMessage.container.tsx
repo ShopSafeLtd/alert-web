@@ -5,7 +5,7 @@ import useViewMessages from './useViewMessage';
 interface Props {
   chatId: string;
 }
-const ViewMessges = ({ chatId }: Props): JSX.Element => {
+const ViewMessages = ({ chatId }: Props): JSX.Element => {
   const {
     onSubmit,
     form,
@@ -17,6 +17,8 @@ const ViewMessges = ({ chatId }: Props): JSX.Element => {
     userId,
     loadMore,
   } = useViewMessages({ chatId });
+
+  console.log(datedMessages);
 
   return (
     <View
@@ -33,4 +35,4 @@ const ViewMessges = ({ chatId }: Props): JSX.Element => {
   );
 };
 
-export default ViewMessges;
+export default ViewMessages;
