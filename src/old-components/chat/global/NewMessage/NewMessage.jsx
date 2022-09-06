@@ -61,6 +61,7 @@ const NewMessage = React.forwardRef((props, ref) => {
           chat: chatId,
         },
       });
+      //???
       store.writeQuery({
         query: Messages,
         data: {

@@ -36,7 +36,7 @@ interface FormData {
   postcode: string;
   groups: string[];
   tags: string[];
-  images: { id: string; url: string; optimised: string }[];
+  images?: { id: string; url: string; optimised: string }[];
 }
 
 interface OffenderData {
@@ -229,7 +229,8 @@ const useEditIncident = (incidentId: string): Return => {
         placement: 'bottomRight',
       });
     },
-    onError: () => {
+    onError: (error) => {
+      console.log(error);
       setSaving(false);
       notification.error({
         message: 'Error!',

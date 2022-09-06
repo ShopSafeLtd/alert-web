@@ -40,7 +40,7 @@ export const AppViews = (): JSX.Element => {
           index
           element={<Navigate to={onboarded ? 'incidents' : 'onboarding'} />}
         />
-        {onboarded && (
+        {!onboarded && (
           <Route
             key="onboarding"
             path="onboarding/*"

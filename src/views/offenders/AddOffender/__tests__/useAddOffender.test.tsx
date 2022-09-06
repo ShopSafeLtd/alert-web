@@ -1,13 +1,18 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { MemoryRouter } from 'react-router-dom';
 import {
+  Age,
+  Gender,
+  Race,
+  Build,
   SchemeGroupsDocument,
   TagsDocument,
   Model,
   Role,
+  CreateOffenderDocument,
 } from 'graphql/generated';
 import { OffenderSort, storeModel } from 'state';
 import useAddOffender from '../useAddOffender';
@@ -59,10 +64,66 @@ const mocks = [
       },
     },
   },
+  {
+    request: {
+      query: CreateOffenderDocument,
+      variables: {
+        data: {
+          name: 'offenderName',
+          gender: Gender.Unknown,
+          race: Race.Unknown,
+          build: Build.Unknown,
+          hair: 'hair',
+          peculiarities: 'peculiarities',
+          age: Age.Unknown,
+          dateSource: null,
+          dateOfBirth: null,
+          groups: { connect: [{ id: 'groupId' }] },
+          tags: { connect: [{ id: 'tagId' }] },
+          scheme: 'schemeId',
+          images: undefined,
+          bans: undefined,
+        },
+      },
+    },
+    result: {
+      data: {
+        createOffender: {
+          id: 'offenderId',
+          createdAt: '2022-08-10T10:40:06.191Z',
+          updatedAt: '2022-08-11T10:40:09.985Z',
+          age: null,
+          build: null,
+          dateOfBirth: null,
+          dateSource: null,
+          hair: null,
+          gender: null,
+          name: null,
+          race: null,
+          peculiarities: null,
+          approved: null,
+          active: null,
+          createdBy: {
+            fullName: 'aaa',
+            id: 'cl4pe3eu91312371op4c4k2lih2',
+            organisation: 'ShopSafe',
+          },
+          tags: [
+            { id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling ' },
+          ],
+          groups: [{ id: 'ckqtnb4r056540229myw4yk8zvq', name: 'NightSafe' }],
+          images: [],
+          bans: [],
+          incidents: [],
+        },
+      },
+    },
+  },
 ];
 
 const UseAddOffenderTest = () => {
-  const { groups, groupsLoading, tags, tagsLoading } = useAddOffender();
+  const { groups, groupsLoading, tags, tagsLoading, onSubmit } =
+    useAddOffender();
 
   const Groups =
     groups &&
@@ -88,6 +149,24 @@ const UseAddOffenderTest = () => {
       <span>{groupsLoading ? 'true' : 'false'}</span>
       {Tags}
       <span>{tagsLoading ? 'true' : 'false'}</span>
+      <button
+        type="button"
+        onClick={() =>
+          onSubmit({
+            name: 'offenderName',
+            gender: Gender.Unknown,
+            race: Race.Unknown,
+            build: Build.Unknown,
+            hair: 'hair',
+            peculiarities: 'peculiarities',
+            age: Age.Unknown,
+            groups: ['groupId'],
+            tags: ['tagId'],
+          })
+        }
+      >
+        submit
+      </button>
     </div>
   );
 };
@@ -118,7 +197,7 @@ describe('useListUsers - hook', () => {
     mockActions: true,
   });
   it('returns the expected values', async () => {
-    const { findByText, getAllByText } = render(
+    const { findByText, getAllByText, getByText, container } = render(
       <StoreProvider store={store}>
         <MemoryRouter>
           <MockedProvider mocks={mocks} addTypename={false}>
@@ -131,5 +210,8 @@ describe('useListUsers - hook', () => {
     expect(await findByText('Theft & Handling')).toBeInTheDocument();
     expect(await findByText('NightSafe')).toBeInTheDocument();
     expect(getAllByText('false')).toHaveLength(2);
+    fireEvent.click(getByText('submit'));
+    expect(container).toBeInTheDocument();
+    expect(await findByText('Successfully Added!')).toBeInTheDocument();
   });
 });

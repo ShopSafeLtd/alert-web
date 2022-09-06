@@ -55,7 +55,7 @@ const mocks = [
       data: {
         restoreIncident: {
           id: 'incidentId',
-          recycledId: 'recycledId',
+          recycled: true,
         },
       },
     },

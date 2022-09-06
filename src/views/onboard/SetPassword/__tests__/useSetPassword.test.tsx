@@ -12,17 +12,14 @@ const mocks = [
     request: {
       query: CreateUserinAuth0Document,
       variables: {
-        variables: {
-          id: 'userId',
-          password: 'data.password',
-        },
+        id: 'userId',
+        password: 'data.password',
       },
     },
     result: {
       data: {
         createUserInAuth0: {
-          id: 'userId',
-          password: 'data.password',
+          message: 'message',
         },
       },
     },

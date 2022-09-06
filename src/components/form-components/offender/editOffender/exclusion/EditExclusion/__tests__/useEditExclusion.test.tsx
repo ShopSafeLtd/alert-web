@@ -16,8 +16,8 @@ const mocks = [
           id: 'banId',
         },
         data: {
-          startDate: { set: new Date() },
-          endDate: { set: new Date() },
+          startDate: { set: new Date('2022-08-30T11:25:32.702Z') },
+          endDate: { set: new Date('2022-08-31T11:25:32.702Z') },
           location: { set: 'location' },
           description: { set: 'new description' },
         },
@@ -28,8 +28,8 @@ const mocks = [
         updateBan: {
           id: 'banId',
           active: false,
-          startDate: new Date(),
-          endDate: new Date(),
+          startDate: '2022-08-30T11:25:32.702Z',
+          endDate: '2022-08-31T11:25:32.702Z',
           location: 'location',
           description: 'new description',
           createdBy: {
@@ -90,8 +90,8 @@ const UseEditExclusionTest = () => {
         type="button"
         onClick={() =>
           onSubmit({
-            startDate: new Date(),
-            endDate: new Date(),
+            startDate: new Date('2022-08-30T11:25:32.702Z'),
+            endDate: new Date('2022-08-31T11:25:32.702Z'),
             location: 'location',
             description: 'new description',
           })

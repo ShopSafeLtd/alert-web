@@ -47,7 +47,7 @@ const MessagesQuery = ({ id, match }) => {
       chat: id !== undefined ? id : match.params.id,
     },
     onCompleted: (res) => {
-      console.log(res);
+      // console.log(res);
       res.messages.length > 0 && setAfter(res.messages.slice(-1)[0].id);
     },
     fetchPolicy: 'cache-and-network',

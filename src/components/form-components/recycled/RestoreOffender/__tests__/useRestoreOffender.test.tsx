@@ -52,7 +52,7 @@ const mocks = [
       data: {
         restoreOffender: {
           id: 'offenderId',
-          recycledId: 'recycledId',
+          recycled: true,
         },
       },
     },

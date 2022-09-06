@@ -1,8 +1,0 @@
-.ant-radio-inner {
-  position: relative;
-}
-.ant-radio-inner :after {
-  position: absolute;
-  top: 50% !important;
-  left: 50% !important;
-}

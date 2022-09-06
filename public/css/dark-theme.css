@@ -28399,8 +28399,8 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
   color: #d6d7dc;
 }
 .ant-radio-inner:after {
-  top: 3px;
-  left: 3px;
+  top: 0;
+  left: 0;
 }
 .ant-slider {
   margin: 10px 6px 30px;

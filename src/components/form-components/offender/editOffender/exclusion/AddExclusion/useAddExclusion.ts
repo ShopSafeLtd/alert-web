@@ -42,12 +42,12 @@ const useAddExclusion = ({ update, onClose, offenderId }: Props): Return => {
   const [createBan] = useCreateBanMutation({
     onCompleted: () => {
       setSaving(false);
-      onClose();
       notification.success({
         message: 'Successfully Added!',
         description: 'The exclusion has been added! ',
         placement: 'bottomRight',
       });
+      onClose();
     },
     onError: () => {
       setSaving(false);
@@ -57,6 +57,7 @@ const useAddExclusion = ({ update, onClose, offenderId }: Props): Return => {
         placement: 'bottomRight',
       });
     },
+
     update,
   });
 

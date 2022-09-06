@@ -111,12 +111,12 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
   const [updateUser] = useUpdateUserMutation({
     onCompleted: () => {
       setSaving(false);
-      onClose();
       notification.success({
         message: 'Successfully Updated!',
         description: 'The user has been Updated! ',
         placement: 'bottomRight',
       });
+      onClose();
     },
     onError: () => {
       setSaving(false);

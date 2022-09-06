@@ -138,7 +138,7 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
     onError: () => {
       setSaving(false);
       notification.error({
-        message: 'error!',
+        message: 'createUsererror!',
         description: 'Whoops, there are some errors. Please try again. ',
         placement: 'bottomRight',
       });
@@ -159,7 +159,7 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
     onError: () => {
       setSaving(false);
       notification.error({
-        message: 'error!',
+        message: 'ExistingUsererror!',
         description: 'Whoops, there are some errors. Please try again. ',
         placement: 'bottomRight',
       });

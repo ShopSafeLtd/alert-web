@@ -20,12 +20,12 @@ const useSetPassword = ({ userId }: Props): Return => {
   const [createUserInAuth0] = useCreateUserinAuth0Mutation({
     onCompleted: () => {
       setSaving(false);
-      loginWithRedirect();
       notification.success({
         message: 'Successfully Created!',
         description: 'Your Password has been created! ',
         placement: 'bottomRight',
       });
+      loginWithRedirect();
     },
     onError: () => {
       setSaving(false);

@@ -10,7 +10,7 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 interface FormData {
   name: string;
-  logo: { id: string; url: string; optimised: string };
+  logo?: { id: string; url: string; optimised: string };
   autoApproveOffenders: boolean;
   autoApproveIncidents: boolean;
   incidentRetention: number | null;
@@ -88,7 +88,7 @@ const useSchemeDetail = (): Return => {
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Success Updated!',
+        message: 'Successfully Updated!',
         description: 'The Scheme has been updated!',
         placement: 'bottomRight',
       });
@@ -134,7 +134,6 @@ const useSchemeDetail = (): Return => {
     loading,
     saving,
     onSubmit,
-
     beforeUpload,
     onPreview,
     imgChange,

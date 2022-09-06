@@ -45,12 +45,12 @@ const useEditExclusion = ({ onClose, banId }: Props): Return => {
   const [updateBan] = useUpdateBanMutation({
     onCompleted: () => {
       setSaving(false);
-      onClose();
       notification.success({
         message: 'Successfully Updated!',
         description: 'The exclusion has been updated! ',
         placement: 'bottomRight',
       });
+      onClose();
     },
     onError: () => {
       setSaving(false);

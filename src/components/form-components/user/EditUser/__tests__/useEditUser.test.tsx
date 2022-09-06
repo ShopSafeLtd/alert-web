@@ -87,7 +87,7 @@ const mocks = [
           schemes: [
             {
               id: 'schemeId',
-              role: Role.ContentAdmin,
+              role: Role.User,
             },
           ],
         },
@@ -143,13 +143,13 @@ const mocks = [
               {
                 data: {
                   postcode: { set: 'postcode' },
-                  street: { set: 'street ' },
+                  street: { set: 'street' },
                   townCity: { set: 'townCity' },
                   building: { set: 'building' },
                   county: { set: 'county' },
                 },
                 where: {
-                  id: 'AddressId',
+                  id: 'ckshi0r5f9684229l4ckxvhld8',
                 },
               },
             ],
@@ -173,13 +173,8 @@ const mocks = [
             set: [{ id: 'groupId' }],
           },
           chats: {
-            create: [
-              {
-                chat: { connect: { id: 'chatId' } },
-                newMessages: true,
-              },
-            ],
-            delete: [{ id: 'userChatId' }],
+            create: [],
+            delete: [],
           },
         },
         groupWhere: {
@@ -209,6 +204,11 @@ const mocks = [
           email: '@shopsafe.uk',
           disabled: false,
           newUser: false,
+          incidentEmail: { set: false },
+          incidentPush: { set: false },
+          offenderEmail: { set: false },
+          offenderPush: { set: false },
+          messagePush: { set: false },
           addresses: [
             {
               building: 'building',
@@ -301,7 +301,7 @@ const UseEditUserTest = () => {
             role: Role.User,
             organisation: 'organisation',
             postcode: 'postcode',
-            street: 'street ',
+            street: 'street',
             townCity: 'townCity',
             building: 'building',
             county: 'county',

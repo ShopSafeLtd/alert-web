@@ -1,14 +1,19 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { MemoryRouter } from 'react-router-dom';
 import {
+  Age,
+  Gender,
+  Race,
+  Build,
   SchemeGroupsDocument,
   TagsDocument,
   Model,
   Role,
   ViewOffenderDocument,
+  UpdateOffenderDocument,
 } from 'graphql/generated';
 import { OffenderSort, storeModel } from 'state';
 import useEditOffender from '../useEditOffender';
@@ -31,8 +36,8 @@ const mocks = [
           updatedAt: '2022-08-11T10:40:09.985Z',
           age: null,
           build: null,
-          dateOfBirth: null,
           dateSource: null,
+          dateOfBirth: null,
           hair: null,
           gender: null,
           name: 'offender name',
@@ -108,10 +113,75 @@ const mocks = [
       },
     },
   },
+  {
+    request: {
+      query: UpdateOffenderDocument,
+      variables: {
+        where: {
+          id: 'offenderId',
+        },
+        data: {
+          name: { set: 'offenderName' },
+          gender: { set: Gender.Unknown },
+          race: { set: Race.Unknown },
+          build: { set: Build.Unknown },
+          hair: { set: 'hair' },
+          peculiarities: { set: 'peculiarities' },
+          age: { set: Age.Unknown },
+          dateSource: { set: null },
+          dateOfBirth: { set: null },
+          groups: {
+            set: [{ id: 'groupId' }],
+          },
+          tags: {
+            set: [{ id: 'tagId' }],
+          },
+          images: {
+            upload: [],
+            delete: [],
+          },
+        },
+      },
+    },
+    result: {
+      data: {
+        updateOffender: {
+          id: 'offenderId',
+          createdAt: '2022-08-10T10:40:06.191Z',
+          updatedAt: '2022-08-11T10:40:09.985Z',
+          age: null,
+          build: null,
+          dateOfBirth: null,
+          dateSource: null,
+          hair: null,
+          gender: null,
+          name: null,
+          race: null,
+          peculiarities: null,
+          approved: null,
+          active: null,
+          createdBy: {
+            fullName: 'aaa',
+            id: 'cl4pe3eu91312371op4c4k2lih2',
+            organisation: 'ShopSafe',
+          },
+          tags: [
+            { id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling ' },
+          ],
+          groups: [{ id: 'ckqtnb4r056540229myw4yk8zvq', name: 'NightSafe' }],
+          images: [
+            { id: 'cl6owsuzo33227f9pe9zk4wone', optimised: null, url: null },
+          ],
+          bans: [],
+          incidents: [],
+        },
+      },
+    },
+  },
 ];
 
 const UseEditOffenderTest = () => {
-  const { data, loading, groups, groupsLoading, tags, tagsLoading } =
+  const { data, loading, groups, groupsLoading, tags, tagsLoading, onSubmit } =
     useEditOffender('offenderId');
   const Offender = data && (
     <div key={data.offender?.id}>
@@ -145,6 +215,24 @@ const UseEditOffenderTest = () => {
       <span>{groupsLoading ? 'true' : 'false'}</span>
       {Tags}
       <span>{tagsLoading ? 'true' : 'false'}</span>
+      <button
+        type="button"
+        onClick={() =>
+          onSubmit({
+            name: 'offenderName',
+            gender: Gender.Unknown,
+            race: Race.Unknown,
+            build: Build.Unknown,
+            hair: 'hair',
+            peculiarities: 'peculiarities',
+            age: Age.Unknown,
+            groups: ['groupId'],
+            tags: ['tagId'],
+          })
+        }
+      >
+        submit
+      </button>
     </div>
   );
 };
@@ -175,7 +263,7 @@ describe('useListUsers - hook', () => {
     mockActions: true,
   });
   it('returns the expected values', async () => {
-    const { findByText, getAllByText } = render(
+    const { findByText, getAllByText, getByText, container } = render(
       <StoreProvider store={store}>
         <MemoryRouter>
           <MockedProvider mocks={mocks} addTypename={false}>
@@ -189,5 +277,8 @@ describe('useListUsers - hook', () => {
     expect(await findByText('Theft & Handling')).toBeInTheDocument();
     expect(await findByText('NightSafe')).toBeInTheDocument();
     expect(getAllByText('false')).toHaveLength(3);
+    fireEvent.click(getByText('submit'));
+    expect(container).toBeInTheDocument();
+    expect(await findByText('Successfully Updated!')).toBeInTheDocument();
   });
 });
