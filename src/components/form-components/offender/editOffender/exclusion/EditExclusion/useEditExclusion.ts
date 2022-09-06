@@ -45,25 +45,42 @@ const useEditExclusion = ({ onClose, banId }: Props): Return => {
   const [updateBan] = useUpdateBanMutation({
     onCompleted: () => {
       setSaving(false);
-      onClose();
       notification.success({
         message: 'Successfully Updated!',
         description: 'The exclusion has been updated! ',
         placement: 'bottomRight',
       });
+      onClose();
     },
-    onError: () => {
+    onError: (error) => {
       setSaving(false);
       notification.error({
         message: 'Error!',
         description: 'Whoops, there are some errors. Please try again. ',
         placement: 'bottomRight',
       });
+      console.log(error);
     },
   });
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
+    console.log(
+      JSON.stringify({
+        variables: {
+          where: {
+            id: banId,
+          },
+          data: {
+            startDate: { set: data.startDate },
+            endDate: { set: data.endDate },
+            location: { set: data.location },
+            description: { set: data.description || null },
+          },
+        },
+      })
+    );
+
     if (banId)
       updateBan({
         variables: {
