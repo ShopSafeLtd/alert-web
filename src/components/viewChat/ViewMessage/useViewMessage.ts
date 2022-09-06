@@ -246,7 +246,7 @@ const useViewMessages = ({ chatId }: Props): Return => {
       if (!test.data.messages) {
         setLoadMore(false);
       }
-      // handleMessagesData(test.data.messages);
+      handleMessagesData(test.data.messages);
     }
   };
 
