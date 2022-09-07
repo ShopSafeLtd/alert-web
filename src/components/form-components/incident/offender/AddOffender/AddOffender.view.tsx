@@ -13,7 +13,7 @@ import {
   Typography,
 } from 'antd';
 
-import { ageValues, buildValues, genderValues, raceValues } from 'utils/enums';
+import { ageValues, buildValues, genderValues, raceValues } from 'types/enums';
 
 interface FormData {
   name: string;
@@ -110,7 +110,16 @@ const AddOffender = ({
     </Row>
     <Row gutter={50}>
       <Col span={12}>
-        <Form.Item name="groups" label="Groups">
+        <Form.Item
+          name="groups"
+          label="Groups"
+          rules={[
+            {
+              required: true,
+              message: 'Please select at least one group for the offender.',
+            },
+          ]}
+        >
           <Select
             loading={groupsLoading}
             disabled={saving}

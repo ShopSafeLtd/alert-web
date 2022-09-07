@@ -97,7 +97,7 @@ const useAddOffender = ({ onClose, update }: Props): Return => {
     update([
       {
         id: Math.floor(Math.random() * 1000).toString(),
-        name: data.name || 'Unidentified Offender' || null,
+        name: data.name || 'Unidentified Offender',
         gender: data.gender || null,
         race: data.race || null,
         build: data.build || null,
@@ -106,10 +106,7 @@ const useAddOffender = ({ onClose, update }: Props): Return => {
         age: ageCheck ? null : data.age || null,
         dateSource: ageCheck ? data.dateSource || null : null,
         dateOfBirth: ageCheck ? data.dateOfBirth || null : null,
-        groups:
-          data.groups && data.groups.length > 0
-            ? groups.map((group) => ({ id: group.id, name: group.name }))
-            : undefined,
+        groups: groups.map((group) => ({ id: group.id, name: group.name })),
       },
     ]);
 

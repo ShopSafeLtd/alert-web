@@ -7,16 +7,17 @@ import {
   Row,
   Col,
   Avatar,
-  Card,
+  // Card,
   Input,
   Button,
   Form,
   FormInstance,
-  // Progress,
+  Progress,
 } from 'antd';
 import { Moment } from 'moment';
+import { MessageType } from 'types';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 interface DatedMessages {
   type: string;
   date?: string;
@@ -29,7 +30,7 @@ interface DatedMessages {
   chat?: { id: string; name: string };
 }
 interface FormData {
-  newMessage: string;
+  newMessages: string;
 }
 interface Props {
   onSubmit: (value: FormData) => void;
@@ -41,6 +42,7 @@ interface Props {
   datedMessages: DatedMessages[];
   userId: string | undefined;
   loadMore: boolean;
+  ref: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 const ViewMessges = ({
@@ -53,41 +55,55 @@ const ViewMessges = ({
   datedMessages,
   userId,
   loadMore,
+  ref,
 }: Props): JSX.Element => (
-  <Card style={{ minHeight: '100vh' }}>
-    <Row align="top">
-      <Col flex={1}>
-        {' '}
-        <InfiniteScroll
-          dataLength={datedMessages.length || 0}
-          next={scrolledToTop}
-          hasMore={loadMore}
-          loader={loading && <h4>Loading...</h4>}
-          height={400}
-          endMessage={
-            <p style={{ textAlign: 'center' }}>
-              <b>No more messages</b>
-            </p>
-          }
-        >
-          {datedMessages.map(({ type, date, id, content, sameUser, from }) => (
-            <div key={id}>
-              {/* {!sent && (
-                  <Progress
-                    type="circle"
-                    percent={50}
-                    strokeColor={{
-                      '0%': '#f56a00',
-                      '100%': '#f5222d',
-                    }}
-                    format={() => 'Sending'}
-                    // style={{ fontSize: 10, weight: '10px' }}
-                  />
-                )} */}
-              {type === 'DATE' && <Title>{date}</Title>}
-              {/* {type === 'Message' && <></>} */}
-              {type === 'MESSAGE' && !sameUser && (
-                <Row justify={from?.id === userId ? 'end' : 'start'}>
+  <div className="messages-container">
+    {/* <Card style={{ minHeight: '100vh' }}> */}
+    <InfiniteScroll
+      className="message-view"
+      initialScrollY={0}
+      dataLength={datedMessages.length || 0}
+      next={scrolledToTop}
+      hasMore={loadMore}
+      loader={
+        loading && (
+          <div className="message-date-container">
+            <div className="date-line" />
+            <div className="date">Loading...</div>
+            <div className="date-line" />
+          </div>
+        )
+      }
+      height={800}
+    >
+      {datedMessages.map(
+        ({ type, date, id, content, sameUser, from, sent }) => (
+          <div key={id}>
+            {type === MessageType.date && (
+              <div className="message-date-container">
+                <div className="date-line" />
+                <div className="date">{date}</div>
+                <div className="date-line" />
+              </div>
+            )}
+            {type === MessageType.message && !sent && (
+              <Progress
+                type="circle"
+                percent={50}
+                strokeColor={{
+                  '0%': '#f56a00',
+                  '100%': '#f5222d',
+                }}
+                format={() => 'Sending'}
+                // style={{ fontSize: 10, weight: '10px' }}
+              />
+            )}
+            <div className="message-content-container">
+              {type === MessageType.message && !sameUser && (
+                <Row
+                  justify={from?.id === userId ? 'end' : 'start'}
+                  style={{ marginTop: 30 }}
+                >
                   <Col>
                     <Avatar
                       style={{
@@ -102,19 +118,23 @@ const ViewMessges = ({
                   <Col>{from?.id === userId ? 'You' : from?.fullName}</Col>
                 </Row>
               )}
-              {type === 'MESSAGE' && (
-                <Row justify={from?.id === userId ? 'end' : 'start'}>
-                  <Col>
-                    <Text>{content}</Text>
-                  </Col>
+              {type === MessageType.message && (
+                <Row key={id} justify={from?.id === userId ? 'end' : 'start'}>
+                  <div className="message-content">
+                    <Col>
+                      <Text>{content}</Text>
+                    </Col>
+                  </div>
                 </Row>
               )}
             </div>
-          ))}
-        </InfiniteScroll>
-      </Col>
-    </Row>
-    <Row align="bottom">
+          </div>
+        )
+      )}
+      <div ref={ref} />
+    </InfiniteScroll>
+
+    <Row align="bottom" gutter={20}>
       <Col flex={1}>
         <Form
           form={form}
@@ -160,7 +180,8 @@ const ViewMessges = ({
         </Form>
       </Col>
     </Row>
-  </Card>
+    {/* </Card> */}
+  </div>
 );
 
 export default ViewMessges;

@@ -273,7 +273,7 @@ const useAddOffender = (): Return => {
     createOffender({
       variables: {
         data: {
-          name: data.name || null,
+          name: data.name || 'Unidentified Offender',
           gender: data.gender || null,
           race: data.race || null,
           build: data.build || null,
@@ -284,7 +284,7 @@ const useAddOffender = (): Return => {
           dateOfBirth: ageCheck ? data.dateOfBirth || null : null,
           groups: { connect: data.groups.map((id) => ({ id })) },
           tags:
-            data.tags.length > 0
+            data.tags && data.tags.length > 0
               ? { connect: data.tags.map((id) => ({ id })) }
               : undefined,
           scheme: schemeId,

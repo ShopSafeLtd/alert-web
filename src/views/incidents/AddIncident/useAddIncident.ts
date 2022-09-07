@@ -20,7 +20,7 @@ import {
   AddressesQuery,
   useUpdateOffenderMutation,
 } from 'graphql/generated';
-import { LocationOptions } from 'utils/enums/LocationOptions';
+import { LocationOptions } from 'types/enums';
 import { notification, Modal, Form, FormInstance, Upload, message } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';

@@ -20,7 +20,7 @@ import {
 } from 'antd';
 
 import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
-import { ageValues, buildValues, genderValues, raceValues } from 'utils/enums';
+import { ageValues, buildValues, genderValues, raceValues } from 'types/enums';
 import {
   calcDuration,
   calcExpired,

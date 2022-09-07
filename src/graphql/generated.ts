@@ -15483,6 +15483,9 @@ export type MessagesQuery = {
 
 export type UserChatsQueryVariables = Exact<{
   where: UserWhereUniqueInput;
+  orderBy?: InputMaybe<
+    Array<UserChatOrderByWithRelationInput> | UserChatOrderByWithRelationInput
+  >;
   scheme: Scalars['String'];
 }>;
 
@@ -19495,10 +19498,17 @@ export type MessagesQueryResult = Apollo.QueryResult<
   MessagesQueryVariables
 >;
 export const UserChatsDocument = gql`
-  query userChats($where: UserWhereUniqueInput!, $scheme: String!) {
+  query userChats(
+    $where: UserWhereUniqueInput!
+    $orderBy: [UserChatOrderByWithRelationInput!]
+    $scheme: String!
+  ) {
     user(where: $where) {
       id
-      chats(where: { chat: { scheme: { id: { equals: $scheme } } } }) {
+      chats(
+        where: { chat: { scheme: { id: { equals: $scheme } } } }
+        orderBy: $orderBy
+      ) {
         id
         newMessages
         chat {
@@ -19532,6 +19542,7 @@ export const UserChatsDocument = gql`
  * const { data, loading, error } = useUserChatsQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
  *      scheme: // value for 'scheme'
  *   },
  * });

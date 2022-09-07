@@ -1,7 +1,14 @@
-query userChats($where: UserWhereUniqueInput!, $scheme: String!) {
+query userChats(
+  $where: UserWhereUniqueInput!
+  $orderBy: [UserChatOrderByWithRelationInput!]
+  $scheme: String!
+) {
   user(where: $where) {
     id
-    chats(where: { chat: { scheme: { id: { equals: $scheme } } } }) {
+    chats(
+      where: { chat: { scheme: { id: { equals: $scheme } } } }
+      orderBy: $orderBy
+    ) {
       id
       newMessages
       chat {

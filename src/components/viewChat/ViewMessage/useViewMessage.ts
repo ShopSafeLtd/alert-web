@@ -1,17 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   // CreateMessageMutation,
   MessagesDocument,
   MessagesQuery,
-  // MessagesQuery,
   MessagesSubscriptionDocument,
   useCreateMessageMutation,
   useMessagesQuery,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import moment, { Moment } from 'moment';
+import { MessageType } from 'types/enums';
 import { notification, Form, FormInstance } from 'antd';
+// import InfiniteScroll from 'react-infinite-scroll-component';
 // import { MutationUpdaterFn } from '@apollo/client';
+
 const { useForm } = Form;
 interface Props {
   chatId: string;
@@ -29,19 +31,18 @@ interface DatedMessages {
 }
 
 interface FormData {
-  newMessage: string;
+  newMessages: string;
 }
 interface Return {
   onSubmit: (value: FormData) => void;
   form: FormInstance<FormData>;
-  // data: MessagesQuery | undefined;
   loading: boolean;
   saving: boolean;
   scrolledToTop: () => void;
   datedMessages: DatedMessages[];
   userId: string | undefined;
   loadMore: boolean;
-  // subscribeToNewMessage: () => void;
+  ref: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 const useViewMessages = ({ chatId }: Props): Return => {
@@ -57,24 +58,13 @@ const useViewMessages = ({ chatId }: Props): Return => {
     },
   ]);
   const [currentChatId, setCurrentChatId] = useState('');
-
   const [loadMore, setLoadMore] = useState(false);
   const [fetching, setFetching] = useState(false);
-  // const [newReceived, setReceived] = useState(false);
-  // const [refetched, setRefetched] = useState(false);
-
-  // const [info, setInfo] = useState({
-  //   loadingMore: false,
-  //   refetch: true,
-  //   lastMessage: '',
-  //   sentMessage: '',
-  //   pristine: true,
-  //   recentMessage: '',
-  //   newMessageText: '',
-  // });
+  const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    console.log('chat-id', chatId);
+    console.log('chatId', currentChatId);
+
     if (chatId !== currentChatId) setCurrentChatId(chatId);
   }, [chatId]);
 
@@ -84,96 +74,60 @@ const useViewMessages = ({ chatId }: Props): Return => {
   ) => {
     if (messages && messages.length > 0) {
       let existingData = datedMessages;
-      let date = '';
-      let user = '';
+      let date = moment(existingData.slice(-1)[0].createdAt).format(
+        'dddd, MMMM Do'
+      );
+      let user = existingData.slice(-1)[0].from?.id;
+      // let user = '';
+      console.log('userId', existingData.slice(-1)[0].from?.id);
 
       if (clear) {
         existingData = [];
       }
 
       const finalMessages = messages?.map((message, index) => {
-        if (index === 0) {
+        if (index === 0 && clear) {
           date = moment(message.createdAt).format('dddd, MMMM Do');
           user = message.from.id;
           console.log('messages: ', [...existingData, message]);
           return [
             {
-              type: 'DATE',
+              type: MessageType.date,
               date: moment(message.createdAt).format('dddd, MMMM Do'),
             },
-            { type: 'MESSAGE', sameUser: false, ...message },
+            { type: MessageType.message, sameUser: false, ...message },
           ];
         }
         if (date === moment(message.createdAt).format('dddd, MMMM Do')) {
           if (user === message.from.id) {
-            return [{ type: 'MESSAGE', sameUser: true, ...message }];
+            return [
+              ...existingData,
+              { type: MessageType.message, sameUser: true, ...message },
+            ];
           }
           user = message.from.id;
           return [
             ...existingData,
-            { type: 'MESSAGE', sameUser: false, ...message },
+            { type: MessageType.message, sameUser: false, ...message },
           ];
         }
         date = moment(message.createdAt).format('dddd, MMMM Do');
         return [
           ...existingData,
           {
-            type: 'DATE',
+            type: MessageType.date,
             date: moment(message.createdAt).format('dddd, MMMM Do'),
           },
-          { type: 'MESSAGE', sameUser: false, ...message },
+          { type: MessageType.message, sameUser: false, ...message },
         ];
       });
+      console.log('finalMessages', finalMessages);
 
       setDatedMessages(finalMessages.flat());
-    }
-
-    // if (messages && messages.length > 0) {
-    //   let oldData = datedMessages;
-    //   if (clear) {
-    //     oldData = [
-    //       {
-    //         type: 'DATE',
-    //         date: moment(messages[0]?.createdAt).format('dddd, MMMM Do'),
-    //       },
-    //     ];
-    //   }
-
-    //   console.log(datedMessages)
-    //   console.log(oldData)
-
-    // messages?.forEach((message) => {
-    //   if (currentDate === moment(message.createdAt).format('DD/MM/YY')) {
-    //     if (currentUser === message.from.id) {
-    //       setDatedMessages([
-    //         ...oldData,
-    //         { type: 'MESSAGE', sameUser: true, ...message },
-    //       ]);
-    //     } else {
-    //       setDatedMessages([
-    //         ...oldData,
-    //         { type: 'MESSAGE', sameUser: false, ...message },
-    //       ]);
-    //     }
-    //   } else {
-    //     setCurrentDate(moment(message.createdAt).format('DD/MM/YY'));
-    //     setCurrentUser(message.from.id);
-    //     setDatedMessages([
-    //       ...oldData,
-    //       {
-    //         type: 'DATE',
-    //         date: moment(message.createdAt).format('dddd, MMMM Do'),
-    //       },
-    //       { type: 'MESSAGE', sameUser: false, ...message },
-    //     ]);
-    //   }
-    // });
-    //   console.log(datedMessages)
-    // }
+    } else setDatedMessages([]);
   };
 
   const {
-    // data: messagesData,
     loading,
     subscribeToMore,
     // refetch,
@@ -188,8 +142,13 @@ const useViewMessages = ({ chatId }: Props): Return => {
         setAfter(res.messages.slice(-1)[0].id);
         handleMessagesData(res.messages, true);
       }
+      if (res.messages.length === 0) {
+        handleMessagesData([], true);
+      }
+      console.log('res', res);
     },
   });
+
   const subscribeToNewMessage = () => {
     subscribeToMore({
       document: MessagesSubscriptionDocument,
@@ -201,6 +160,13 @@ const useViewMessages = ({ chatId }: Props): Return => {
           ({ id }) => id === subscriptionData.data.messages[0].id
         );
         if (test === undefined) {
+          if (ref.current) {
+            ref.current.scrollIntoView({
+              behavior: 'smooth',
+              block: 'end',
+              inline: 'nearest',
+            });
+          }
           return {
             ...prev,
             messages: [...prev.messages, ...subscriptionData.data.messages],
@@ -226,22 +192,6 @@ const useViewMessages = ({ chatId }: Props): Return => {
             id: after,
           },
         },
-        //   updateQuery: (previousResult, { fetchMoreResult }) => {
-        //     if (fetchMoreResult?.messages.length === 0) {
-        //       setLoadMore(false);
-        //     }
-        //     if (fetchMoreResult && fetchMoreResult.messages.length > 0) {
-        //       return {
-        //         messages: [
-        //           ...fetchMoreResult.messages,
-        //           ...previousResult.messages,
-        //         ],
-        //       };
-        //     }
-        //     return {
-        //       messages: [...previousResult.messages],
-        //     };
-        //   },
       });
       if (!test.data.messages) {
         setLoadMore(false);
@@ -259,12 +209,12 @@ const useViewMessages = ({ chatId }: Props): Return => {
   //   const existingData = store.readQuery<MessagesQuery>({
   //     query: MessagesDocument,
   //     variables: {
-  //       chat: chatId,
+  //       chat: currentChatId,
   //     },
   //   });
 
   //   if (existingData === null) return;
-  //   // if (existingData?.listOffenders?.offenders === undefined) return;
+  //   if (existingData.messages === undefined) return;
 
   //   store.writeQuery<MessagesQuery>({
   //     query: MessagesDocument,
@@ -273,17 +223,21 @@ const useViewMessages = ({ chatId }: Props): Return => {
   //       __typename: 'Query',
   //     },
   //     variables: {
-  //       chat: chatId,
+  //       chat: currentChatId,
   //     },
   //   });
   // };
 
   const [sendMessage] = useCreateMessageMutation({
-    onCompleted: () => {
+    onCompleted: (res) => {
       setSaving(false);
+      if (res.createMessage) {
+        handleMessagesData([res.createMessage]);
+      }
+      form.resetFields();
       // notification.success({
       //   message: 'Successfully Sent!',
-      //   description: 'Your has been added!',
+      //   description: 'Your message has been sent!',
       //   placement: 'bottomRight',
       // });
     },
@@ -300,7 +254,7 @@ const useViewMessages = ({ chatId }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    if (data.newMessage)
+    if (data.newMessages)
       sendMessage({
         variables: {
           data: {
@@ -319,7 +273,7 @@ const useViewMessages = ({ chatId }: Props): Return => {
                 id: userId,
               },
             },
-            content: data.newMessage,
+            content: data.newMessages,
           },
         },
       });
@@ -328,14 +282,13 @@ const useViewMessages = ({ chatId }: Props): Return => {
   return {
     onSubmit,
     form,
-    // data: messagesData,
     loading,
     saving,
     scrolledToTop,
     datedMessages,
     userId,
     loadMore,
-    // subscribeToNewMessage,
+    ref,
   };
 };
 

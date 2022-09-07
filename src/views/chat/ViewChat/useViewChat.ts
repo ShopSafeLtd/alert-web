@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
 import {
+  SortOrder,
   UserChatsQuery,
   useUpdateUserChatMutation,
   useUserChatsQuery,
@@ -27,12 +28,16 @@ const useViewChat = (): Return => {
         id: userId,
       },
       scheme: schemeId,
+      orderBy: {
+        chat: {
+          name: SortOrder.Desc,
+        },
+      },
     },
     onCompleted: ({ user }) => {
       if (user && user.chats.length > 0) {
         setCurrentId(user.chats[0].chat.id);
       }
-      console.log(data);
     },
   });
 

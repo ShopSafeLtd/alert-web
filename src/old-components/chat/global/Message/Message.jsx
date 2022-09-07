@@ -4,7 +4,12 @@ import MediaQuery from 'react-responsive';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useStoreState } from '../../../../state';
-
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 0 0 0 35px;
+`;
 const MessageContainer = styled.div`
   padding: 5px 0px 0;
   position: relative;
@@ -35,7 +40,7 @@ const Text = styled(Typography)`
   padding: 6px 14px;
   border-radius: 8px;
   border: 1px solid #f5f5f5;
-  display: inline-block;
+  display: inline-block;  
   font-size:14px;
   color:#585858
   ${({ current }) =>
@@ -78,13 +83,6 @@ const Avatar = styled(Typography)`
     background: #FF5252;
     color: #fff;
   `}
-`;
-
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  margin: 0 0 0 35px;
 `;
 
 const Message = ({ content, sameUser, user, initials, fromId, sent, id }) => {
