@@ -16,7 +16,7 @@ const ViewMessages = ({ chatId }: Props): JSX.Element => {
     datedMessages,
     userId,
     loadMore,
-    ref,
+    // ref,
   } = useViewMessages({ chatId });
 
   console.log(datedMessages);
@@ -32,7 +32,7 @@ const ViewMessages = ({ chatId }: Props): JSX.Element => {
       datedMessages={datedMessages}
       userId={userId}
       loadMore={loadMore}
-      ref={ref}
+      // ref={ref}
     />
   );
 };

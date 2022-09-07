@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   // CreateMessageMutation,
   MessagesDocument,
@@ -42,7 +42,6 @@ interface Return {
   datedMessages: DatedMessages[];
   userId: string | undefined;
   loadMore: boolean;
-  ref: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 const useViewMessages = ({ chatId }: Props): Return => {
@@ -60,7 +59,6 @@ const useViewMessages = ({ chatId }: Props): Return => {
   const [currentChatId, setCurrentChatId] = useState('');
   const [loadMore, setLoadMore] = useState(false);
   const [fetching, setFetching] = useState(false);
-  const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     console.log('chatId', currentChatId);
@@ -74,10 +72,23 @@ const useViewMessages = ({ chatId }: Props): Return => {
   ) => {
     if (messages && messages.length > 0) {
       let existingData = datedMessages;
-      let date = moment(existingData.slice(-1)[0].createdAt).format(
-        'dddd, MMMM Do'
-      );
-      let user = existingData.slice(-1)[0].from?.id;
+
+      let date = '';
+
+      let user = '';
+
+      if (datedMessages && datedMessages.length > 0) {
+        date = moment(existingData?.slice(-1)[0].createdAt).format(
+          'dddd, MMMM Do'
+        );
+
+        user = existingData.slice(-1)[0].from?.id || '';
+      }
+      // let existingData = datedMessages;
+      // let date = moment(existingData.slice(-1)[0].createdAt).format(
+      //   'dddd, MMMM Do'
+      // );
+      // let user = existingData.slice(-1)[0].from?.id;
       // let user = '';
       console.log('userId', existingData.slice(-1)[0].from?.id);
 
@@ -145,6 +156,7 @@ const useViewMessages = ({ chatId }: Props): Return => {
       if (res.messages.length === 0) {
         handleMessagesData([], true);
       }
+
       console.log('res', res);
     },
   });
@@ -159,14 +171,8 @@ const useViewMessages = ({ chatId }: Props): Return => {
         const test = prev.messages.find(
           ({ id }) => id === subscriptionData.data.messages[0].id
         );
+
         if (test === undefined) {
-          if (ref.current) {
-            ref.current.scrollIntoView({
-              behavior: 'smooth',
-              block: 'end',
-              inline: 'nearest',
-            });
-          }
           return {
             ...prev,
             messages: [...prev.messages, ...subscriptionData.data.messages],
@@ -235,6 +241,7 @@ const useViewMessages = ({ chatId }: Props): Return => {
         handleMessagesData([res.createMessage]);
       }
       form.resetFields();
+
       // notification.success({
       //   message: 'Successfully Sent!',
       //   description: 'Your message has been sent!',
@@ -288,7 +295,6 @@ const useViewMessages = ({ chatId }: Props): Return => {
     datedMessages,
     userId,
     loadMore,
-    ref,
   };
 };
 
