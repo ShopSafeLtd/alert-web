@@ -105,8 +105,7 @@ const useViewIncident = (incidentId: string): Return => {
     confirm({
       title: 'Are you sure?',
       content:
-        'Deleting this incident will remove it from the feed and move it to the recycle bin for 30 days before being deleted.',
-      okType: 'danger',
+        'Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
       okText: 'Delete',
       onOk() {
         recycleIncident({

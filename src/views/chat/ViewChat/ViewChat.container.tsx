@@ -5,15 +5,8 @@ import useViewOffender from './useViewChat';
 
 const ViewOffender = (): JSX.Element => {
   const chatId = useParams().id;
-  const {
-    data,
-    loading,
-    saving,
-    handleMarkAsRead,
-    currentId,
-    // setCurrentId,
-    // subscribeToNewMessage,
-  } = useViewOffender();
+  const { data, loading, saving, handleMarkAsRead, currentId } =
+    useViewOffender();
 
   return (
     <View
@@ -22,8 +15,6 @@ const ViewOffender = (): JSX.Element => {
       saving={saving}
       chatId={chatId || currentId}
       handleMarkAsRead={handleMarkAsRead}
-      // setCurrentId={setCurrentId}
-      // subscribeToNewMessage={subscribeToNewMessage}
     />
   );
 };

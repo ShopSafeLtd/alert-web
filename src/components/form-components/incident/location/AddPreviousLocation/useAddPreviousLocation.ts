@@ -16,16 +16,14 @@ interface Props {
 interface Return {
   onSubmit: (value: FormData) => void;
   saving: boolean;
-  data: Exclude<AddressesQuery['addresses'], undefined | null> | undefined;
+  data: AddressesQuery | undefined;
+  // data: Exclude<AddressesQuery['addresses'], undefined | null> | undefined;
   loading: boolean;
-  // checkedList: string;
-  // setCheckedList: (value: string) => void;
 }
 
 const useAddPreviousLocation = ({ onClose, update }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const userId = useStoreState((state) => state.user.id);
-  // const [checkedList, setCheckedList] = useState('');
 
   const { data: addressData, loading } = useAddressesQuery({
     variables: {
@@ -48,10 +46,9 @@ const useAddPreviousLocation = ({ onClose, update }: Props): Return => {
   return {
     onSubmit,
     saving,
-    data: addressData?.addresses.filter(({ primary }) => !primary),
+    // data: addressData?.addresses.filter(({ primary }) => !primary),
+    data: addressData,
     loading,
-    // checkedList,
-    // setCheckedList,
   };
 };
 

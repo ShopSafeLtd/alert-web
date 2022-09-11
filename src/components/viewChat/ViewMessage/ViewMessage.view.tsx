@@ -1,23 +1,21 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useEffect, useRef } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-// import { MessagesQuery } from 'graphql/generated';
+
 import {
-  Typography,
   Row,
   Col,
   Avatar,
-  // Card,
   Input,
   Button,
   Form,
   FormInstance,
-  Progress,
+  Popover,
 } from 'antd';
 import { Moment } from 'moment';
 import { MessageType } from 'types';
+import { DeleteOutlined } from '@ant-design/icons';
 
-const { Text } = Typography;
 interface DatedMessages {
   type: string;
   date?: string;
@@ -30,36 +28,36 @@ interface DatedMessages {
   chat?: { id: string; name: string };
 }
 interface FormData {
-  newMessages: string;
+  newMessage: string;
 }
 interface Props {
   onSubmit: (value: FormData) => void;
   form: FormInstance<FormData>;
-  // data: MessagesQuery | undefined;
-  loading: boolean;
   saving: boolean;
   scrolledToTop: () => void;
   datedMessages: DatedMessages[];
   userId: string | undefined;
   loadMore: boolean;
+  deleteConfirm: (value: string) => void;
+  deleteRights: boolean;
   // ref: React.MutableRefObject<HTMLDivElement | null>;
 }
 
 const ViewMessges = ({
   onSubmit,
   form,
-  // data,
-  loading,
   saving,
   scrolledToTop,
   datedMessages,
   userId,
   loadMore,
+  deleteConfirm,
+  deleteRights,
 }: // ref,
 Props): JSX.Element => {
   const ref = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    if (ref.current) {
+    if (ref.current && ref.current.scrollIntoView) {
       ref.current.scrollIntoView({
         behavior: 'smooth',
         block: 'end',
@@ -68,130 +66,133 @@ Props): JSX.Element => {
     }
   }, [datedMessages]);
   return (
-    <div className="messages-container">
-      {/* <Card style={{ minHeight: '100vh' }}> */}
+    <div className="view-message">
       <InfiniteScroll
-        className="message-view"
+        className="message-container"
         initialScrollY={0}
         dataLength={datedMessages.length || 0}
         next={scrolledToTop}
         hasMore={loadMore}
+        inverse
         loader={
-          loading && (
-            <div className="message-date-container">
-              <div className="date-line" />
-              <div className="date">Loading...</div>
-              <div className="date-line" />
-            </div>
-          )
+          <div className="message-date">
+            <div className="date-line" />
+            <div className="date">Loading...</div>
+            <div className="date-line" />
+          </div>
         }
-        height={500}
+        height="calc(100vh - 140px)"
       >
-        {datedMessages.map(
-          ({ type, date, id, content, sameUser, from, sent }) => (
-            <div key={id}>
-              {type === MessageType.date && (
-                <div className="message-date-container">
-                  <div className="date-line" />
-                  <div className="date">{date}</div>
-                  <div className="date-line" />
-                </div>
+        {datedMessages.map(({ type, date, id, content, sameUser, from }) => (
+          <div key={id}>
+            {type === MessageType.date && (
+              <div className="message-date">
+                <div className="date-line" />
+                <div className="date">{date}</div>
+                <div className="date-line" />
+              </div>
+            )}
+
+            <div className="message-content" key={id}>
+              {type === MessageType.message && !sameUser && (
+                <Row
+                  justify={from?.id === userId ? 'end' : 'start'}
+                  className="message-avatar-row"
+                >
+                  <Col>
+                    <Avatar
+                      style={{
+                        marginRight: 5,
+                      }}
+                      className={
+                        from?.id === userId ? 'current' : 'message-avatar'
+                      }
+                    >
+                      {from?.fullName[0]}
+                    </Avatar>
+                  </Col>
+                  <Col>{from?.fullName}</Col>
+                </Row>
               )}
-              {type === MessageType.message && !sent && (
-                <Progress
-                  type="circle"
-                  percent={50}
-                  strokeColor={{
-                    '0%': '#f56a00',
-                    '100%': '#f5222d',
-                  }}
-                  format={() => 'Sending'}
-                  // style={{ fontSize: 10, weight: '10px' }}
-                />
-              )}
-              <div className="message-content-container">
-                {type === MessageType.message && !sameUser && (
-                  <Row
-                    justify={from?.id === userId ? 'end' : 'start'}
-                    style={{ marginTop: 30 }}
+              {type === MessageType.message && (
+                <Row key={id} justify={from?.id === userId ? 'end' : 'start'}>
+                  <div
+                    className={
+                      from?.id === userId
+                        ? 'message-content-bubble current'
+                        : 'message-content-bubble'
+                    }
                   >
                     <Col>
-                      <Avatar
-                        style={{
-                          color: '#f56a00',
-                          backgroundColor: '#fde3cf',
-                          marginRight: 5,
-                        }}
-                      >
-                        {from?.fullName[0]}
-                      </Avatar>
+                      {deleteRights ? (
+                        <Popover
+                          // placement="topLeft"
+                          title="Options"
+                          content={
+                            deleteRights && (
+                              <Button
+                                type="primary"
+                                icon={<DeleteOutlined />}
+                                onClick={() => {
+                                  deleteConfirm(id || '');
+                                }}
+                              />
+                            )
+                          }
+                        >
+                          {content}
+                        </Popover>
+                      ) : (
+                        content
+                      )}
                     </Col>
-                    <Col>{from?.id === userId ? 'You' : from?.fullName}</Col>
-                  </Row>
-                )}
-                {type === MessageType.message && (
-                  <Row key={id} justify={from?.id === userId ? 'end' : 'start'}>
-                    <div className="message-content">
-                      <Col>
-                        <Text>{content}</Text>
-                      </Col>
-                    </div>
-                  </Row>
-                )}
-              </div>
+                  </div>
+                </Row>
+              )}
             </div>
-          )
-        )}
-        <div ref={ref}> s </div>
+          </div>
+        ))}
+        <div ref={ref} />
       </InfiniteScroll>
 
-      <Row align="bottom" gutter={20}>
-        <Col flex={1}>
-          <Form
-            form={form}
-            onFinish={onSubmit}
-            onKeyPress={(e) => {
-              if (e.key === 'Enter') {
-                form.submit();
-              }
-            }}
-          >
-            <Row>
-              <Col flex={1}>
-                <Form.Item
-                  name="newMessages"
-                  label=""
-                  rules={[
-                    {
-                      required: true,
-                      message: 'The message cannot be empty!',
-                    },
-                  ]}
-                >
-                  <Input
-                    // style={{ marginLeft: '-20' }}
-                    disabled={saving}
-                    placeholder="Type a message"
-                  />
-                </Form.Item>
-              </Col>
-              <Col>
-                <Form.Item>
-                  <Button
-                    disabled={saving}
-                    loading={saving}
-                    type="primary"
-                    htmlType="submit"
-                  >
-                    Send
-                  </Button>
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
-        </Col>
-      </Row>
-      {/* </Card> */}
+      <Form
+        form={form}
+        onFinish={onSubmit}
+        onKeyPress={(e) => {
+          if (e.key === 'Enter') {
+            form.submit();
+          }
+        }}
+      >
+        <Row gutter={10} style={{ height: '45px', margin: '0 10px' }}>
+          <Col flex={1} style={{ height: '40px' }}>
+            <Form.Item
+              name="newMessage"
+              label=""
+              rules={[
+                {
+                  required: true,
+                  message: 'The message cannot be empty!',
+                },
+              ]}
+            >
+              <Input disabled={saving} placeholder="Type a message" />
+            </Form.Item>
+          </Col>
+          <Col style={{ height: '40px' }}>
+            <Form.Item>
+              <Button
+                disabled={saving}
+                loading={saving}
+                type="primary"
+                htmlType="submit"
+              >
+                Send
+              </Button>
+            </Form.Item>
+          </Col>
+        </Row>
+      </Form>
     </div>
   );
 };

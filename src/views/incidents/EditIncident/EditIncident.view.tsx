@@ -91,6 +91,7 @@ interface Props {
   tags: { value: string; label: string }[];
   tagsLoading: boolean;
   imgChange: UploadProps['onChange'];
+  onPreview: (value: UploadFile) => void;
   fileList: UploadFile[];
   beforeUpload: (value: RcFile) => void;
   addIncidentTag: boolean;
@@ -103,6 +104,8 @@ interface Props {
   updateOffenderList: (value: OffenderData[] | undefined) => void;
   offendersData: OffenderData[] | undefined;
   deleteConfirm: (value: string | undefined) => void;
+  reviewed: boolean;
+  onReject: () => void;
 }
 
 const EditIncident = ({
@@ -115,6 +118,7 @@ const EditIncident = ({
   tags,
   tagsLoading,
   imgChange,
+  onPreview,
   fileList,
   beforeUpload,
   addIncidentTag,
@@ -127,9 +131,14 @@ const EditIncident = ({
   updateOffenderList,
   offendersData,
   deleteConfirm,
+  reviewed,
+  onReject,
 }: Props): JSX.Element => (
   <div className="list-view">
-    <PageHeader onBack={() => window.history.back()} title="Edit Incident" />
+    <PageHeader
+      onBack={() => window.history.back()}
+      title={reviewed ? 'Review Incident' : 'Edit Incident'}
+    />
     {loading ? (
       <Skeleton />
     ) : (
@@ -209,8 +218,7 @@ const EditIncident = ({
                     <DatePicker
                       disabled={saving}
                       disabledDate={(current) =>
-                        current &&
-                        current.valueOf() > Date.now() - 3600 * 1000 * 24
+                        current && current.valueOf() > Date.now()
                       }
                     />
                   </Form.Item>
@@ -374,8 +382,9 @@ const EditIncident = ({
                   listType="picture-card"
                   fileList={fileList}
                   onChange={imgChange}
+                  onPreview={onPreview}
                   beforeUpload={beforeUpload}
-                  accept=".png,.jpeg"
+                  accept=".png,.jpeg,.webp"
                   multiple
                 >
                   {fileList.length < 10 && '+ Upload'}
@@ -494,8 +503,13 @@ const EditIncident = ({
           <Form.Item>
             <Row style={{ marginTop: 30 }} gutter={10} justify="end">
               <Col>
-                <Button disabled={saving} onClick={() => window.history.back()}>
-                  Cancel
+                <Button
+                  disabled={saving}
+                  onClick={() =>
+                    reviewed ? onReject() : window.history.back()
+                  }
+                >
+                  {reviewed ? 'Reject' : 'Cancel'}
                 </Button>
               </Col>
               <Col>
@@ -505,7 +519,7 @@ const EditIncident = ({
                   type="primary"
                   htmlType="submit"
                 >
-                  Save
+                  {reviewed ? 'Approve' : 'Save'}
                 </Button>
               </Col>
             </Row>

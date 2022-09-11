@@ -73,7 +73,11 @@ const IncidentCard = ({
           <Title level={4} className="incident-card-approval-title">
             This incident is awaiting approval
           </Title>
-          {approvalRights && <Button>Review Incident</Button>}
+          {approvalRights && (
+            <Link to={`review/${incident?.id}`}>
+              <Button>Review Incident</Button>
+            </Link>
+          )}
         </div>
       )}
       {menuRights && (
@@ -95,8 +99,8 @@ const IncidentCard = ({
                     confirm({
                       title: 'Are you sure?',
                       content:
-                        'Click delete incident if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-                      okText: 'Delete Incident',
+                        'Click delete if you wish to delete this incident. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+                      okText: 'Delete',
                       onOk: () => onDelete(incident?.id || ''),
                     }),
                   icon: <FontAwesomeIcon size="lg" icon={faTrash} />,

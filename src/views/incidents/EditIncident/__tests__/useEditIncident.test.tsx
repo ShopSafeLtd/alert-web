@@ -223,7 +223,7 @@ const mocks = [
 
 const UseEditIncidentTest = () => {
   const { data, loading, groups, groupsLoading, tags, tagsLoading, onSubmit } =
-    useEditIncident('incidentId');
+    useEditIncident({ incidentId: 'incidentId', reviewed: false });
   const Incident = data && (
     <div key={data.incident?.id}>
       <span>{data.incident?.id}</span>

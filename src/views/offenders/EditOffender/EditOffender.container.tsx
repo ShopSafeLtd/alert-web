@@ -1,10 +1,12 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import View from './EditOffender.view';
-
 import useEditOffender from './useEditOffender';
 
-function EditOffender(): JSX.Element {
+interface Props {
+  reviewed: boolean;
+}
+function EditOffender({ reviewed }: Props): JSX.Element {
   const offenderId = useParams().id || '';
   const {
     onSubmit,
@@ -16,6 +18,8 @@ function EditOffender(): JSX.Element {
     tags,
     tagsLoading,
     imgChange,
+    onPreview,
+    beforeUpload,
     fileList,
     addOffenderTag,
     toggleAddOffenderTag,
@@ -30,7 +34,8 @@ function EditOffender(): JSX.Element {
     deleteConfirm,
     ageCheck,
     setAgeCheck,
-  } = useEditOffender(offenderId);
+    onReject,
+  } = useEditOffender({ offenderId, reviewed });
   return (
     <div>
       <View
@@ -43,6 +48,8 @@ function EditOffender(): JSX.Element {
         tags={tags}
         tagsLoading={tagsLoading}
         imgChange={imgChange}
+        onPreview={onPreview}
+        beforeUpload={beforeUpload}
         fileList={fileList}
         addOffenderTag={addOffenderTag}
         toggleAddOffenderTag={toggleAddOffenderTag}
@@ -57,6 +64,8 @@ function EditOffender(): JSX.Element {
         deleteConfirm={deleteConfirm}
         ageCheck={ageCheck}
         setAgeCheck={setAgeCheck}
+        reviewed={reviewed}
+        onReject={onReject}
       />
     </div>
   );

@@ -19,7 +19,7 @@ import {
   Table,
 } from 'antd';
 
-import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { ageValues, buildValues, genderValues, raceValues } from 'types/enums';
 import {
   calcDuration,
@@ -63,13 +63,14 @@ interface BanData {
 }
 interface Props {
   onSubmit: (value: FormData) => void;
-
   saving: boolean;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
   tags: { value: string; label: string }[];
   tagsLoading: boolean;
   imgChange: UploadProps['onChange'];
+  onPreview: (value: UploadFile) => void;
+  beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
   addOffenderTag: boolean;
   toggleAddOffenderTag: () => void;
@@ -96,6 +97,8 @@ const AddOffender = ({
   tags,
   tagsLoading,
   imgChange,
+  onPreview,
+  beforeUpload,
   fileList,
   addOffenderTag,
   toggleAddOffenderTag,
@@ -303,6 +306,8 @@ const AddOffender = ({
                 listType="picture-card"
                 fileList={fileList}
                 onChange={imgChange}
+                onPreview={onPreview}
+                beforeUpload={beforeUpload}
               >
                 {fileList.length < 10 && '+ Upload'}
               </Upload>

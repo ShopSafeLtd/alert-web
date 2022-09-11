@@ -103,11 +103,13 @@ interface Props {
   groupsLoading: boolean;
   tags: { value: string; label: string }[];
   tagsLoading: boolean;
-  primaryAddress:
-    | Exclude<AddressesQuery['addresses'], undefined | null>[0]
-    | undefined;
+  // primaryAddress:
+  //   | Exclude<AddressesQuery['addresses'], undefined | null>[0]
+  //   | undefined;
+  addressData: AddressesQuery | undefined;
   addressLoading: boolean;
   imgChange: UploadProps['onChange'];
+  onPreview: (value: UploadFile) => void;
   fileList: UploadFile[];
   beforeUpload: (value: RcFile) => void;
   addIncidentTag: boolean;
@@ -138,9 +140,11 @@ const EditIncident = ({
   groupsLoading,
   tags,
   tagsLoading,
-  primaryAddress,
+  // primaryAddress,
+  addressData,
   addressLoading,
   imgChange,
+  onPreview,
   fileList,
   beforeUpload,
   addIncidentTag,
@@ -171,7 +175,7 @@ const EditIncident = ({
       <Form<FormData>
         form={form}
         initialValues={{
-          fullAddress: primaryAddress?.full || '',
+          fullAddress: addressData?.addresses.find((el) => el.primary)?.full,
         }}
         onFinish={onSubmit}
       >
@@ -228,8 +232,7 @@ const EditIncident = ({
                   <DatePicker
                     disabled={saving}
                     disabledDate={(current) =>
-                      current &&
-                      current.valueOf() > Date.now() - 3600 * 1000 * 24
+                      current && current.valueOf() > Date.now()
                     }
                   />
                 </Form.Item>
@@ -341,22 +344,26 @@ const EditIncident = ({
                 <Input disabled={saving} readOnly bordered={false} />
               </Form.Item>
             </Col>
-            <Col>
-              <Button
-                disabled={saving}
-                loading={saving}
-                onClick={toggleAddPreviousLocation}
-                style={{ color: 'red' }}
-                icon={
-                  <FontAwesomeIcon
-                    icon={faMagnifyingGlass}
-                    style={{ marginRight: 5 }}
-                  />
-                }
-              >
-                Use Previous Locations
-              </Button>
-            </Col>
+            {addressData &&
+              addressData?.addresses.filter((el) => !el.primary).length > 0 && (
+                <Col>
+                  <Button
+                    disabled={saving}
+                    loading={saving}
+                    onClick={toggleAddPreviousLocation}
+                    style={{ color: 'red' }}
+                    icon={
+                      <FontAwesomeIcon
+                        icon={faMagnifyingGlass}
+                        style={{ marginRight: 5 }}
+                      />
+                    }
+                  >
+                    Use Previous Locations
+                  </Button>
+                </Col>
+              )}
+
             <Col>
               <Button
                 disabled={saving}
@@ -488,14 +495,11 @@ const EditIncident = ({
                 listType="picture-card"
                 fileList={fileList}
                 onChange={imgChange}
+                onPreview={onPreview}
                 beforeUpload={beforeUpload}
                 accept=".png,.jpeg,.webp"
-                // showUploadList={previewIcon}
-                // previewIcon={<Button>a</Button>}
                 showUploadList={{
-                  // showPreviewIcon: true,
                   showDownloadIcon: true,
-                  // previewIcon: <Button>a</Button>,
                   downloadIcon: <UserAddOutlined />,
                 }}
                 onDownload={() =>
@@ -509,7 +513,6 @@ const EditIncident = ({
                     },
                   })
                 }
-                // itemRender={(file) => <Button>{file.key}</Button>}
               >
                 {fileList.length < 10 && '+ Upload'}
                 {/* <Button>a</Button> */}

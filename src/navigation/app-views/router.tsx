@@ -32,7 +32,7 @@ export const AppViews = (): JSX.Element => {
       navigate('incidents');
     }
   }, [onboarded]);
-
+  console.log(onboarded);
   return (
     <Suspense fallback={<Loading cover="content" />}>
       <Routes>

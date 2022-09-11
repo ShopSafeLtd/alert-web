@@ -11,9 +11,11 @@ function EditIncident(): JSX.Element {
     groupsLoading,
     tags,
     tagsLoading,
-    primaryAddress,
+    // primaryAddress,
+    addressData,
     addressLoading,
     imgChange,
+    onPreview,
     fileList,
     beforeUpload,
     addIncidentTag,
@@ -46,9 +48,11 @@ function EditIncident(): JSX.Element {
         groupsLoading={groupsLoading}
         tags={tags}
         tagsLoading={tagsLoading}
-        primaryAddress={primaryAddress}
+        addressData={addressData}
+        // primaryAddress={primaryAddress}
         addressLoading={addressLoading}
         imgChange={imgChange}
+        onPreview={onPreview}
         fileList={fileList}
         beforeUpload={beforeUpload}
         addIncidentTag={addIncidentTag}

@@ -57,7 +57,6 @@ const useChatDetail = (chatId: string): Return => {
     confirm({
       title: 'Do you want to delete the chat group?',
       content: 'This action cannot be undone.',
-      okType: 'danger',
       okText: 'Delete',
       onOk() {
         setSaving(true);

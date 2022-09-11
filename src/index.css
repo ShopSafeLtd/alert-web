@@ -1373,19 +1373,16 @@
 .chats-side-list {
   margin: 0;
   padding: 0;
-  margin-left: -20px;
-  min-height: 100vh;
+  height: calc(100vh - 70px);
   width: 100%;
   border-right: 1px solid #e0e0e0;
   overflow-y: scroll;
-}
-.chats-side-list .chat-link {
-  border-bottom: 1px solid #f5f5f5;
+  overflow: hidden;
 }
 .chats-side-list .chat-item {
   width: 100%;
   background-color: #fff;
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom: 1px solid #f5f5f5 !important;
   align-items: center;
   cursor: pointer;
 }
@@ -1395,38 +1392,41 @@
 .chat-item.current {
   background-color: rgba(0, 0, 0, 0.05);
 }
-.messages-container {
+.view-message {
   display: flex;
   flex-direction: column;
-  margin: 30px, auto;
-  min-height: 100vh;
+  height: calc(100vh - 70px);
+  width: 100%;
 }
-.messages-container .message-view {
-  margin-bottom: 12px;
-  height: 90vh;
+.view-message .message-container {
+  margin-bottom: 10px;
   width: 100%;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   padding: 20px 0 0px;
 }
-.messages-container .message-view .message-date-container {
+.view-message .message-container .message-date {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin: 20px 0;
+  margin: 30px 0 -10px;
 }
-.messages-container .message-view .message-date-container .date-line {
+.view-message .message-container .message-date .date-line {
   width: 60px;
   border-top: 1px solid #e0e0e0;
 }
-.messages-container .message-view .message-date-container .date {
+.view-message .message-container .message-date .date {
   margin: 0 10px;
 }
-.messages-container .message-view .message-content-container {
+.view-message .message-container .message-content {
   margin: 0 35px;
 }
-.messages-container .message-view .message-content-container .message-content {
+.view-message .message-container .message-content .message-avatar-row {
+  margin: 30px 0 10px;
+  align-items: center;
+}
+.view-message .message-container .message-content .message-content-bubble {
   max-width: 100%;
   word-break: break-word;
   margin: 5px 0 0;
@@ -1437,6 +1437,14 @@
   display: inline-block;
   font-size: 14px;
   color: #585858;
+}
+.view-message .message-container .message-content .message-avatar {
+  background: #fde3cf;
+  color: #f56a00;
+}
+.view-message .message-container .message-content .current {
+  background: #ff5252;
+  color: #fff !important;
 }
 .button-icon {
   margin-right: 5px;

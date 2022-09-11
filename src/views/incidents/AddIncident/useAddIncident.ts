@@ -83,11 +83,13 @@ interface Return {
   groupsLoading: boolean;
   tags: { value: string; label: string }[];
   tagsLoading: boolean;
-  primaryAddress:
-    | Exclude<AddressesQuery['addresses'], undefined | null>[0]
-    | undefined;
+  // primaryAddress:
+  //   | Exclude<AddressesQuery['addresses'], undefined | null>[0]
+  // | undefined;
+  addressData: AddressesQuery | undefined;
   addressLoading: boolean;
   imgChange: UploadProps['onChange'];
+  onPreview: (value: UploadFile) => void;
   fileList: UploadFile[];
   beforeUpload: (value: RcFile) => void;
   addIncidentTag: boolean;
@@ -206,7 +208,7 @@ const useEditIncident = (): Return => {
     },
   });
 
-  // update mutation
+  //  mutation
   // update tag list after adding a new item
   const updateIncidentTag: MutationUpdaterFn<CreateTagMutation> = (
     store,
@@ -289,7 +291,6 @@ const useEditIncident = (): Return => {
   };
 
   // functions
-
   const toggleAddIncidentTag = () => {
     setAddIncidentTag(!addIncidentTag);
   };
@@ -334,8 +335,21 @@ const useEditIncident = (): Return => {
     setFileList([...info.fileList]);
     setImageChange(true);
   };
+  const onPreview = async (file: UploadFile) => {
+    let src = file.url as string;
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj as RcFile);
+        reader.onload = () => resolve(reader.result as string);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
+  };
 
-  // const onPreview = ()
   const updatePreviousLocation = (value: string | undefined) => {
     if (value) {
       setOption(LocationOptions.PREVIOUS);
@@ -376,6 +390,8 @@ const useEditIncident = (): Return => {
       } else setOffendersData(filterOffenders);
     }
   };
+
+  // mutation
   const [updateOffender] = useUpdateOffenderMutation({
     onCompleted: () => {
       setSaving(false);
@@ -396,6 +412,7 @@ const useEditIncident = (): Return => {
   });
   const updateAssignImage = (value: string[] | undefined) => {
     if (value && value.length > 0 && fileUid && fileList) {
+      // exsiting offender
       value
         .filter((item) =>
           ListOffendersData?.listOffenders?.offenders
@@ -421,6 +438,7 @@ const useEditIncident = (): Return => {
             },
           })
         );
+      // new offender
       value
         .filter(
           (item) =>
@@ -546,7 +564,7 @@ const useEditIncident = (): Return => {
                             .includes(item.id)
                       )
                       .map((offender) => ({
-                        name: offender.name || 'Unidentified Offender' || null,
+                        name: offender.name || 'Unidentified Offender',
                         gender: offender.gender || null,
                         race: offender.race || null,
                         build: offender.build || null,
@@ -608,9 +626,11 @@ const useEditIncident = (): Return => {
     tags:
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
     tagsLoading,
-    primaryAddress: addressData?.addresses.find(({ primary }) => primary),
+    // primaryAddress: addressData?.addresses.find(({ primary }) => primary),
+    addressData,
     addressLoading,
     imgChange,
+    onPreview,
     fileList,
     beforeUpload,
     addIncidentTag,

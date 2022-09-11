@@ -15,10 +15,8 @@ interface Props {
   onSubmit: (value: FormData) => void;
   onClose: () => void;
   saving: boolean;
-  data: Exclude<AddressesQuery['addresses'], undefined | null> | undefined;
+  data: AddressesQuery | undefined;
   loading: boolean;
-  // checkedList: string;
-  // setCheckedList: (value: string) => void;
 }
 
 const ViewOffender = ({
@@ -27,9 +25,7 @@ const ViewOffender = ({
   saving,
   data,
   loading,
-}: // checkedList,
-// setCheckedList,
-Props): JSX.Element =>
+}: Props): JSX.Element =>
   loading ? (
     <Skeleton />
   ) : (
@@ -46,7 +42,7 @@ Props): JSX.Element =>
           ]}
         >
           <Radio.Group>
-            {data?.map((location) => (
+            {data?.addresses.map((location) => (
               <Row wrap={false} key={location.id}>
                 <Radio value={location.id} key={location.id}>
                   <Paragraph ellipsis key={location.id}>
@@ -61,25 +57,6 @@ Props): JSX.Element =>
             ))}
           </Radio.Group>
         </Form.Item>
-        {/* <Checkbox.Group value={[checkedList]}>
-          {data?.map((location) => (
-            <Row wrap={false} key={location.id}>
-              <Checkbox
-                value={location.id}
-                key={location.id}
-                onChange={() => setCheckedList(location.id)}
-              >
-                <Paragraph ellipsis key={location.id}>
-                  <FontAwesomeIcon
-                    style={{ marginRight: 6, color: 'rgb(222, 68, 54)' }}
-                    icon={faLocationDot}
-                  />
-                  {location.full}
-                </Paragraph>
-              </Checkbox>
-            </Row>
-          ))}
-        </Checkbox.Group> */}
 
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={10} justify="end">

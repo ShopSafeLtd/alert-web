@@ -43,6 +43,7 @@ describe('List Officer View', () => {
           tags={[]}
           tagsLoading={false}
           imgChange={jest.fn()}
+          onPreview={jest.fn()}
           fileList={[]}
           beforeUpload={jest.fn()}
           addIncidentTag={false}
@@ -55,6 +56,8 @@ describe('List Officer View', () => {
           updateOffenderList={jest.fn()}
           offendersData={[]}
           deleteConfirm={jest.fn()}
+          reviewed={false}
+          onReject={jest.fn()}
         />
       </MemoryRouter>
     );

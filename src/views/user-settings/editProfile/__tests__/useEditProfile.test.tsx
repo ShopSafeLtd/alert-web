@@ -2,13 +2,13 @@ import React from 'react';
 import { fireEvent, render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
-import schemeModel from 'state/scheme-model';
 import { MemoryRouter } from 'react-router-dom';
 import {
   Role,
   CurrentUserDocument,
   UpdateUserDocument,
 } from 'graphql/generated';
+import { storeModel } from 'state';
 import useEditProfile from '../useEditProfile';
 
 const mocks = [
@@ -186,7 +186,7 @@ const UseEditProfileTest = () => {
 };
 
 describe('useDetailUsers - hook', () => {
-  const store = createStore(schemeModel, {
+  const store = createStore(storeModel, {
     initialState: {
       user: { id: 'userId' },
       scheme: { id: 'schemeId' },
@@ -211,32 +211,3 @@ describe('useDetailUsers - hook', () => {
     expect(await findByText('Successfully Updated!')).toBeInTheDocument();
   });
 });
-// const variables1 = {
-//   where: { id: 'userId' },
-//   data: {
-//     addresses: {
-//       update: [
-//         {
-//           data: {
-//             postcode: { set: 'postcode' },
-//             street: { set: 'street' },
-//             townCity: { set: 'townCity' },
-//             building: { set: 'building' },
-//             county: { set: 'county' },
-//           },
-//           where: { id: 'ckshi0r5f9684229l4ckxvhld8' },
-//         },
-//       ],
-//     },
-//     email: { set: 'email' },
-//     fullName: { set: 'fullName' },
-//     organisation: { set: 'organisation' },
-//     incidentEmail: { set: false },
-//     incidentPush: { set: false },
-//     offenderEmail: { set: false },
-//     offenderPush: { set: false },
-//     messagePush: { set: false },
-//   },
-//   groupWhere: { scheme: { id: { equals: 'schemeId' } } },
-//   chatWhere: { chat: { scheme: { id: { equals: 'schemeId' } } } },
-// };

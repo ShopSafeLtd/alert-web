@@ -30,7 +30,7 @@ const useViewChat = (): Return => {
       scheme: schemeId,
       orderBy: {
         chat: {
-          name: SortOrder.Desc,
+          name: SortOrder.Asc,
         },
       },
     },
@@ -44,7 +44,6 @@ const useViewChat = (): Return => {
   const [updateUserChat] = useUpdateUserChatMutation({
     onCompleted: () => {
       setSaving(false);
-      // ???
       refetch();
     },
   });

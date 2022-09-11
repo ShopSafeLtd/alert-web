@@ -276,9 +276,9 @@ const UseAddUserTest = () => {
     update: jest.fn(),
     updateSearch: jest.fn(),
   });
-  // const preSubmit = () => {
-  //    existingUser
-  // };
+  const preSubmit = () => {
+    //  const existingUser= true
+  };
   const Groups =
     groupsData &&
     groupsData.groups.map((el) => (
@@ -322,6 +322,14 @@ const UseAddUserTest = () => {
       >
         submit
       </button>
+      <button
+        type="button"
+        onClick={() => {
+          preSubmit();
+        }}
+      >
+        preSubmit
+      </button>
     </div>
   );
 };
@@ -347,6 +355,7 @@ describe('useDetailUsers - hook', () => {
     expect(await findByText('groupName')).toBeInTheDocument();
     expect(await findByText('chatName')).toBeInTheDocument();
     expect(getAllByText('false')).toHaveLength(2);
+    fireEvent.click(getByText('preSubmit'));
     fireEvent.click(getByText('submit'));
     expect(container).toBeInTheDocument();
     expect(await findByText('Successfully Invited!')).toBeInTheDocument();

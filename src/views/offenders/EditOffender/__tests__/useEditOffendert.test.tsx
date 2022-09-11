@@ -182,7 +182,7 @@ const mocks = [
 
 const UseEditOffenderTest = () => {
   const { data, loading, groups, groupsLoading, tags, tagsLoading, onSubmit } =
-    useEditOffender('offenderId');
+    useEditOffender({ offenderId: 'offenderId', reviewed: false });
   const Offender = data && (
     <div key={data.offender?.id}>
       <span>{data.offender?.id}</span>

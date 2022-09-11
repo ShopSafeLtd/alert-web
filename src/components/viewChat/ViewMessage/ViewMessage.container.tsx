@@ -9,29 +9,27 @@ const ViewMessages = ({ chatId }: Props): JSX.Element => {
   const {
     onSubmit,
     form,
-    // data,
     saving,
-    loading,
     scrolledToTop,
     datedMessages,
     userId,
     loadMore,
+    deleteConfirm,
+    deleteRights,
     // ref,
   } = useViewMessages({ chatId });
-
-  console.log(datedMessages);
 
   return (
     <View
       onSubmit={onSubmit}
       form={form}
-      // data={data}
-      loading={loading}
       saving={saving}
       scrolledToTop={scrolledToTop}
       datedMessages={datedMessages}
       userId={userId}
       loadMore={loadMore}
+      deleteConfirm={deleteConfirm}
+      deleteRights={deleteRights}
       // ref={ref}
     />
   );

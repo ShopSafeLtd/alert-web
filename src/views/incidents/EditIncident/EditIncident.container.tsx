@@ -3,7 +3,11 @@ import { useParams } from 'react-router-dom';
 import View from './EditIncident.view';
 import useEditIncident from './useEditIncident';
 
-function EditIncident(): JSX.Element {
+interface Props {
+  reviewed: boolean;
+}
+
+function EditIncident({ reviewed }: Props): JSX.Element {
   const incidentId = useParams().id || '';
 
   const {
@@ -16,6 +20,7 @@ function EditIncident(): JSX.Element {
     tags,
     tagsLoading,
     imgChange,
+    onPreview,
     fileList,
     beforeUpload,
     addIncidentTag,
@@ -28,7 +33,8 @@ function EditIncident(): JSX.Element {
     updateOffenderList,
     offendersData,
     deleteConfirm,
-  } = useEditIncident(incidentId);
+    onReject,
+  } = useEditIncident({ incidentId, reviewed });
   return (
     <div>
       <View
@@ -41,6 +47,7 @@ function EditIncident(): JSX.Element {
         tags={tags}
         tagsLoading={tagsLoading}
         imgChange={imgChange}
+        onPreview={onPreview}
         fileList={fileList}
         beforeUpload={beforeUpload}
         addIncidentTag={addIncidentTag}
@@ -53,6 +60,8 @@ function EditIncident(): JSX.Element {
         updateOffenderList={updateOffenderList}
         offendersData={offendersData}
         deleteConfirm={deleteConfirm}
+        reviewed={reviewed}
+        onReject={onReject}
       />
     </div>
   );

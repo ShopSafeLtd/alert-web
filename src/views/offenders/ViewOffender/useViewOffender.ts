@@ -105,8 +105,7 @@ const useViewOffender = (offenderId: string): Return => {
     confirm({
       title: 'Are you sure?',
       content:
-        'Deleting this Offender will remove it from the feed and move it to the recycle bin for 30 days before being deleted.',
-      okType: 'danger',
+        'Click delete if you wish to delete this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
       okText: 'Delete',
       onOk() {
         recycleOffender({

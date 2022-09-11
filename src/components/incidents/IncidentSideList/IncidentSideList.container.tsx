@@ -1,6 +1,6 @@
-import React from 'react'
-import View from './IncidentSideList.view'
-import useIncidentSideList from './useIncidentSideList'
+import React from 'react';
+import View from './IncidentSideList.view';
+import useIncidentSideList from './useIncidentSideList';
 
 interface Props {
   // eslint-disable-next-line react/require-default-props
@@ -8,18 +8,16 @@ interface Props {
 }
 
 const IncidentSideList = ({ current }: Props): JSX.Element => {
-  const {data,
-    //  loading,
-     onPaginationChange } = useIncidentSideList()
+  const { data, loading, onPaginationChange } = useIncidentSideList();
 
   return (
     <View
       data={data}
-      // loading={loading}
+      loading={loading}
       current={current}
       onPaginationChange={onPaginationChange}
     />
-  )
-}
+  );
+};
 
-export default IncidentSideList
+export default IncidentSideList;

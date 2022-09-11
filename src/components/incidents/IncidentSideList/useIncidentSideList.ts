@@ -1,6 +1,5 @@
 import {
   ListIncidentsQuery,
-  // QueryMode,
   SortOrder,
   useListIncidentsQuery,
 } from 'graphql/generated';
@@ -8,6 +7,7 @@ import { useStoreState, IncidentSort, useStoreActions } from 'state';
 
 interface Return {
   data: ListIncidentsQuery | undefined;
+  loading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
 }
 
@@ -20,7 +20,7 @@ const useIncidentSideList = (): Return => {
     (actions) => actions.data.setIncidents
   );
 
-  const { data } = useListIncidentsQuery({
+  const { data, loading } = useListIncidentsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       scheme: {
@@ -49,6 +49,7 @@ const useIncidentSideList = (): Return => {
 
   return {
     data,
+    loading,
     onPaginationChange,
   };
 };

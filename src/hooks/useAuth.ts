@@ -135,6 +135,7 @@ const useAuth = (): Return => {
         accessToken: window.localStorage.getItem('accessToken') || '',
         organisation: currentUser?.organisation || '',
         onboarded: !currentUser?.newUser,
+        // currentUser?.newUser !== undefined ? !currentUser?.newUser : true,
         // currentUser?.newUser === undefined ? false : !currentUser?.newUser,
         schemes: currentUser?.schemes || [],
         groups: currentUser?.groups || [],

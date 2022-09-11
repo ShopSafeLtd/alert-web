@@ -28149,8 +28149,8 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
   color: #1a3353;
 }
 .ant-radio-inner:after {
-  top: 0;
-  left: 0;
+  top: 10px '50%';
+  left: 10px '50%';
 }
 .ant-slider {
   margin: 10px 6px 30px;
@@ -28227,6 +28227,9 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
 .ant-upload-list-picture-card .ant-upload-list-item-actions .anticon-download,
 .ant-upload-list-picture-card .ant-upload-list-item-actions .anticon-eye {
   color: rgba(255, 255, 255, 0.85);
+}
+.ant-upload-list-picture-card .ant-upload-list-item-actions .anticon-delete {
+  margin-top: -6px;
 }
 .ant-upload-list-picture-card
   .ant-upload-list-item-actions

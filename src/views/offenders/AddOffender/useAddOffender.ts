@@ -16,9 +16,9 @@ import {
   TagsQuery,
   TagsDocument,
 } from 'graphql/generated';
-import { notification, Modal } from 'antd';
+import { notification, Modal, message, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
-import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { MutationUpdaterFn } from '@apollo/client';
 
 const { confirm } = Modal;
@@ -55,6 +55,8 @@ interface Return {
   tags: { value: string; label: string }[];
   tagsLoading: boolean;
   imgChange: UploadProps['onChange'];
+  onPreview: (value: UploadFile) => void;
+  beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
   addOffenderTag: boolean;
   toggleAddOffenderTag: () => void;
@@ -95,41 +97,6 @@ const useAddOffender = (): Return => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [addExclusion, setAddExclusion] = useState(false);
   const [editExclusion, setEditExclusion] = useState(false);
-
-  const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
-    setImageChange(true);
-  };
-  const toggleAddOffenderTag = () => {
-    setAddOffenderTag(!addOffenderTag);
-  };
-  const errorNotification = () => {
-    notification.error({
-      message: 'Error!',
-      description: 'Whoops, there are some errors. Please try again. ',
-      placement: 'bottomRight',
-    });
-  };
-  const toggleAddExclusion = () => {
-    setAddExclusion(!addExclusion);
-  };
-  const toggleEditExclusion = () => {
-    setEditExclusion(!editExclusion);
-  };
-  const updateAddExclusion = (value: BanData) =>
-    bansData && bansData.length > 0
-      ? bansData.push(value)
-      : setBansData([value]);
-
-  const updateEditExclusion = (value: BanData) =>
-    bansData && bansData.length > 1
-      ? bansData.map((ban) => {
-          if (ban.id === value.id) {
-            return value;
-          }
-          return ban;
-        })
-      : setBansData([value]);
 
   const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
     fetchPolicy: 'cache-and-network',
@@ -261,8 +228,12 @@ const useAddOffender = (): Return => {
       });
     },
     onError: () => {
-      errorNotification();
       setSaving(false);
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
     },
     update: updateOffender,
   });
@@ -316,10 +287,61 @@ const useAddOffender = (): Return => {
     });
   };
 
-  // delete
+  // function
+
+  const beforeUpload = (file: RcFile) => {
+    const isFileDuplicate = fileList.find((item) => item.name === file.name);
+    if (isFileDuplicate) {
+      message.error(
+        'This image has already existed, please choose another one.'
+      );
+    }
+
+    return !isFileDuplicate || Upload.LIST_IGNORE;
+  };
+  const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+    setImageChange(true);
+  };
+  const onPreview = async (file: UploadFile) => {
+    let src = file.url as string;
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj as RcFile);
+        reader.onload = () => resolve(reader.result as string);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
+  };
+  const toggleAddOffenderTag = () => {
+    setAddOffenderTag(!addOffenderTag);
+  };
+  const toggleAddExclusion = () => {
+    setAddExclusion(!addExclusion);
+  };
+  const toggleEditExclusion = () => {
+    setEditExclusion(!editExclusion);
+  };
+  const updateAddExclusion = (value: BanData) =>
+    bansData && bansData.length > 0
+      ? bansData.push(value)
+      : setBansData([value]);
+
+  const updateEditExclusion = (value: BanData) =>
+    bansData && bansData.length > 1
+      ? bansData.map((ban) => {
+          if (ban.id === value.id) {
+            return value;
+          }
+          return ban;
+        })
+      : setBansData([value]);
 
   const openDelete = (currentId: string | undefined) => {
-    // setSaving(true);
     setBansData(bansData.filter((ban) => currentId !== ban.id));
   };
 
@@ -335,7 +357,6 @@ const useAddOffender = (): Return => {
 
   return {
     onSubmit,
-
     saving,
     groups:
       role === Role.SchemeAdmin
@@ -351,6 +372,8 @@ const useAddOffender = (): Return => {
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
     tagsLoading,
     imgChange,
+    onPreview,
+    beforeUpload,
     fileList,
     addOffenderTag,
     toggleAddOffenderTag,

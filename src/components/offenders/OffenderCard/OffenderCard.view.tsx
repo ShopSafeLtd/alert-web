@@ -82,7 +82,11 @@ const OffenderCard = ({
           <Title level={4} className="offender-card-approval-title">
             This offender is awaiting approval
           </Title>
-          {approvalRights && <Button>Review Offender</Button>}
+          {approvalRights && (
+            <Link to={`review/${offender?.id}`}>
+              <Button>Review Offender</Button>
+            </Link>
+          )}
         </div>
       )}
       {menuRights && (
@@ -104,8 +108,8 @@ const OffenderCard = ({
                     confirm({
                       title: 'Are you sure?',
                       content:
-                        'Click delete offender if you wish to delete this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
-                      okText: 'Delete Offender',
+                        'Click delete if you wish to delete this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+                      okText: 'Delete',
                       onOk: () => onDelete(offender?.id || ''),
                     }),
                   icon: <FontAwesomeIcon size="lg" icon={faTrash} />,

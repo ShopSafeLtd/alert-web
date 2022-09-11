@@ -10,7 +10,8 @@ const Offenders = (): JSX.Element => (
     <Route index element={<OffenderFeed />} />
     <Route path="view/:id" element={<ViewOffender />} />
     <Route path="add" element={<AddOffender />} />
-    <Route path="edit/:id" element={<EditOffender />} />
+    <Route path="edit/:id" element={<EditOffender reviewed={false} />} />
+    <Route path="review/:id" element={<EditOffender reviewed />} />
   </Routes>
 );
 

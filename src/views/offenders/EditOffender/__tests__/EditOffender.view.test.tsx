@@ -52,6 +52,8 @@ describe('List Officer View', () => {
           tags={[]}
           tagsLoading={false}
           imgChange={jest.fn()}
+          onPreview={jest.fn()}
+          beforeUpload={jest.fn()}
           fileList={[]}
           addOffenderTag={false}
           toggleAddOffenderTag={jest.fn()}
@@ -66,6 +68,8 @@ describe('List Officer View', () => {
           deleteConfirm={jest.fn()}
           ageCheck={false}
           setAgeCheck={jest.fn()}
+          reviewed={false}
+          onReject={jest.fn()}
         />
       </MemoryRouter>
     );

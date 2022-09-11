@@ -28,7 +28,7 @@ import {
   Table,
 } from 'antd';
 
-import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { ageValues, buildValues, genderValues, raceValues } from 'types/enums';
 import {
   calcDuration,
@@ -72,7 +72,8 @@ interface Props {
   tags: { value: string; label: string }[];
   tagsLoading: boolean;
   imgChange: UploadProps['onChange'];
-
+  onPreview: (value: UploadFile) => void;
+  beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
   addExclusion: boolean;
   toggleAddExclusion: () => void;
@@ -87,6 +88,8 @@ interface Props {
   deleteConfirm: (value: string) => void;
   ageCheck: boolean;
   setAgeCheck: (value: boolean) => void;
+  reviewed: boolean;
+  onReject: () => void;
 }
 
 const EditOffender = ({
@@ -99,6 +102,8 @@ const EditOffender = ({
   tags,
   tagsLoading,
   imgChange,
+  onPreview,
+  beforeUpload,
   fileList,
   addOffenderTag,
   toggleAddOffenderTag,
@@ -113,9 +118,14 @@ const EditOffender = ({
   deleteConfirm,
   ageCheck,
   setAgeCheck,
+  reviewed,
+  onReject,
 }: Props): JSX.Element => (
   <div className="list-view">
-    <PageHeader onBack={() => window.history.back()} title="Edit Offender" />
+    <PageHeader
+      onBack={() => window.history.back()}
+      title={reviewed ? 'Review Offender' : 'Edit Offender'}
+    />
     {loading ? (
       <Skeleton />
     ) : (
@@ -334,6 +344,8 @@ const EditOffender = ({
                   listType="picture-card"
                   fileList={fileList}
                   onChange={imgChange}
+                  onPreview={onPreview}
+                  beforeUpload={beforeUpload}
                 >
                   {fileList.length < 10 && '+ Upload'}
                 </Upload>
@@ -470,8 +482,13 @@ const EditOffender = ({
           <Form.Item>
             <Row style={{ marginTop: 30 }} gutter={10} justify="end">
               <Col>
-                <Button disabled={saving} onClick={() => window.history.back()}>
-                  Cancel
+                <Button
+                  disabled={saving}
+                  onClick={() =>
+                    reviewed ? onReject() : window.history.back()
+                  }
+                >
+                  {reviewed ? 'Reject' : 'Cancel'}
                 </Button>
               </Col>
               <Col>
@@ -481,7 +498,7 @@ const EditOffender = ({
                   type="primary"
                   htmlType="submit"
                 >
-                  Save
+                  {reviewed ? 'Approve' : 'Save'}
                 </Button>
               </Col>
             </Row>

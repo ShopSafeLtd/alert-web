@@ -19,6 +19,7 @@ describe('List Officer View', () => {
         primaryAddress={undefined}
         addressLoading={false}
         imgChange={jest.fn()}
+        onPreview={jest.fn()}
         fileList={[]}
         beforeUpload={jest.fn()}
         addIncidentTag={false}

@@ -18,14 +18,19 @@ import {
   CreateTagMutation,
   TagsQuery,
   TagsDocument,
+  useRecycleOffenderMutation,
 } from 'graphql/generated';
-import { notification, Modal } from 'antd';
+import { notification, Modal, message, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
-import type { UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { MutationUpdaterFn } from '@apollo/client';
+import { useNavigate } from 'react-router';
 
 const { confirm } = Modal;
-
+interface Props {
+  offenderId: string;
+  reviewed: boolean;
+}
 interface FormData {
   name: string;
   age: Age;
@@ -52,8 +57,9 @@ interface Return {
   tagsLoading: boolean;
 
   imgChange: UploadProps['onChange'];
+  onPreview: (value: UploadFile) => void;
+  beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
-
   addExclusion: boolean;
   toggleAddExclusion: () => void;
   updateExclusion: MutationUpdaterFn<CreateBanMutation>;
@@ -67,9 +73,11 @@ interface Return {
   deleteConfirm: (value: string) => void;
   ageCheck: boolean;
   setAgeCheck: (value: boolean) => void;
+  onReject: () => void;
 }
 
-const useEditOffender = (offenderId: string): Return => {
+const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
+  const navigate = useNavigate();
   const schemeId = useStoreState((state) => state.scheme.id);
 
   const groups = useStoreState((state) => state.user.groups);
@@ -176,50 +184,98 @@ const useEditOffender = (offenderId: string): Return => {
     setSaving(true);
 
     if (offenderId) {
-      updateOffender({
-        variables: {
-          where: {
-            id: offenderId,
-          },
-          data: {
-            name: { set: data.name || '' },
-            gender: { set: data.gender || null },
-            race: { set: data.race || null },
-            build: { set: data.build || null },
-            hair: { set: data.hair || '' },
-            peculiarities: { set: data.peculiarities || '' },
-            age: { set: ageCheck ? null : data.age || null },
-            dateSource: { set: ageCheck ? data.dateSource || null : null },
-            dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
-            groups: {
-              set: data.groups.map((id) => ({ id })),
+      if (reviewed) {
+        updateOffender({
+          variables: {
+            where: {
+              id: offenderId,
             },
-            tags: {
-              set: data.tags.map((id) => ({ id })) || undefined,
-            },
-            images: {
-              upload:
-                imageChange && fileList.length > 0
-                  ? fileList
-                      .map((item) => ({
-                        file: item.originFileObj,
+            data: {
+              approved: { set: true },
+              name: { set: data.name || '' },
+              gender: { set: data.gender || null },
+              race: { set: data.race || null },
+              build: { set: data.build || null },
+              hair: { set: data.hair || '' },
+              peculiarities: { set: data.peculiarities || '' },
+              age: { set: ageCheck ? null : data.age || null },
+              dateSource: { set: ageCheck ? data.dateSource || null : null },
+              dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
+              groups: {
+                set: data.groups.map((id) => ({ id })),
+              },
+              tags: {
+                set: data.tags.map((id) => ({ id })) || undefined,
+              },
+              images: {
+                upload:
+                  imageChange && fileList.length > 0
+                    ? fileList
+                        .map((item) => ({
+                          file: item.originFileObj,
+                        }))
+                        .filter((obj) => obj.file !== undefined)
+                    : [],
+                delete: imageChange
+                  ? offenderData?.offender?.images
+                      .filter(
+                        (image) =>
+                          !fileList.map((item) => item.uid).includes(image.id)
+                      )
+                      .map((image) => ({
+                        id: image.id,
                       }))
-                      .filter((obj) => obj.file !== undefined)
                   : [],
-              delete: imageChange
-                ? offenderData?.offender?.images
-                    .filter(
-                      (image) =>
-                        !fileList.map((item) => item.uid).includes(image.id)
-                    )
-                    .map((image) => ({
-                      id: image.id,
-                    }))
-                : [],
+              },
             },
           },
-        },
-      });
+        });
+      } else {
+        updateOffender({
+          variables: {
+            where: {
+              id: offenderId,
+            },
+            data: {
+              name: { set: data.name || '' },
+              gender: { set: data.gender || null },
+              race: { set: data.race || null },
+              build: { set: data.build || null },
+              hair: { set: data.hair || '' },
+              peculiarities: { set: data.peculiarities || '' },
+              age: { set: ageCheck ? null : data.age || null },
+              dateSource: { set: ageCheck ? data.dateSource || null : null },
+              dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
+              groups: {
+                set: data.groups.map((id) => ({ id })),
+              },
+              tags: {
+                set: data.tags.map((id) => ({ id })) || undefined,
+              },
+              images: {
+                upload:
+                  imageChange && fileList.length > 0
+                    ? fileList
+                        .map((item) => ({
+                          file: item.originFileObj,
+                        }))
+                        .filter((obj) => obj.file !== undefined)
+                    : [],
+                delete: imageChange
+                  ? offenderData?.offender?.images
+                      .filter(
+                        (image) =>
+                          !fileList.map((item) => item.uid).includes(image.id)
+                      )
+                      .map((image) => ({
+                        id: image.id,
+                      }))
+                  : [],
+              },
+            },
+          },
+        });
+      }
     }
   };
   // update tag list after adding a new item
@@ -368,11 +424,71 @@ const useEditOffender = (offenderId: string): Return => {
         },
       });
   };
+
+  // delete incident
+  const [recycleOffender] = useRecycleOffenderMutation({
+    onCompleted: () => {
+      navigate(`/app/offenders`);
+      notification.success({
+        message: 'Successfully Rejected!',
+        description:
+          'The offender has been deleted from the feed and moved to the recycle bin.',
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
+    },
+  });
+  const onReject = () => {
+    confirm({
+      title: 'Are you sure?',
+      content:
+        'Click reject if you wish to reject the approvement of this offender. It will be removed from the feed and added to the recycle bin for 30 days before being permanently deleted.',
+      okText: 'Reject',
+      onOk() {
+        recycleOffender({
+          variables: {
+            where: { id: offenderId },
+          },
+        });
+      },
+    });
+  };
   // function
+  const beforeUpload = (file: RcFile) => {
+    const isFileDuplicate = fileList.find((item) => item.name === file.name);
+    if (isFileDuplicate) {
+      message.error(
+        'This image has already existed, please choose another one.'
+      );
+    }
+
+    return !isFileDuplicate || Upload.LIST_IGNORE;
+  };
   const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
     setImageChange(true);
   };
+  const onPreview = async (file: UploadFile) => {
+    let src = file.url as string;
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj as RcFile);
+        reader.onload = () => resolve(reader.result as string);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
+  };
+
   const toggleAddOffenderTag = () => {
     setAddOffenderTag(!addOffenderTag);
   };
@@ -411,6 +527,8 @@ const useEditOffender = (offenderId: string): Return => {
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
     tagsLoading,
     imgChange,
+    onPreview,
+    beforeUpload,
     fileList,
     addOffenderTag,
     toggleAddOffenderTag,
@@ -425,6 +543,7 @@ const useEditOffender = (offenderId: string): Return => {
     deleteConfirm,
     ageCheck,
     setAgeCheck,
+    onReject,
   };
 };
 

@@ -12,6 +12,8 @@ function AddOffender(): JSX.Element {
     tags,
     tagsLoading,
     imgChange,
+    onPreview,
+    beforeUpload,
     fileList,
     addOffenderTag,
     toggleAddOffenderTag,
@@ -40,6 +42,8 @@ function AddOffender(): JSX.Element {
         tags={tags}
         tagsLoading={tagsLoading}
         imgChange={imgChange}
+        onPreview={onPreview}
+        beforeUpload={beforeUpload}
         fileList={fileList}
         addOffenderTag={addOffenderTag}
         toggleAddOffenderTag={toggleAddOffenderTag}
