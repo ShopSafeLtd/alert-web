@@ -1,6 +1,6 @@
 import React from 'react';
 import { ListIncidentsQuery, RecycleIncidentMutation } from 'graphql/generated';
-import { Col, Input, Row, Select, Pagination, Button } from 'antd';
+import { Col, Input, Row, Select, Pagination, Button, Affix } from 'antd';
 import IncidentCard from 'components/incidents/IncidentCard';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
 import { SRLWrapper } from 'simple-react-lightbox';
@@ -59,82 +59,84 @@ const IncidentFeed = ({
   onNavigate,
 }: Props): JSX.Element => (
   <div className="feed-container">
-    <Row gutter={8} style={{ marginBottom: 10 }}>
-      <Col>
-        <Select
-          placeholder="Groups"
-          mode="multiple"
-          size="small"
-          maxTagCount={2}
-          style={{ minWidth: 150 }}
-          loading={groupsLoading}
-          onChange={onGroupsChange}
-          value={variables.groups}
-        >
-          {groups.map((group) => (
-            <Select.Option value={group.value}>{group.label}</Select.Option>
-          ))}
-        </Select>
-      </Col>
-      <Col>
-        <Select
-          placeholder="Crime Types"
-          mode="multiple"
-          size="small"
-          maxTagCount={2}
-          style={{ minWidth: 200 }}
-          onChange={onCrimeTypesChange}
-          value={variables.crimeTypes}
-          loading={tagsLoading}
-        >
-          {crimeTypes.map((crimeType) => (
-            <Select.Option value={crimeType.value}>
-              {crimeType.label}
-            </Select.Option>
-          ))}
-        </Select>
-      </Col>
-      <Col flex={1}>
-        <Input
-          size="small"
-          style={{ width: '80%' }}
-          placeholder="Search incidents..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </Col>
+    <Affix offsetTop={40}>
+      <Row gutter={8} style={{ marginBottom: 10, backgroundColor: '#f5f5f6' }}>
+        <Col>
+          <Select
+            placeholder="Groups"
+            mode="multiple"
+            size="small"
+            maxTagCount={2}
+            style={{ minWidth: 150 }}
+            loading={groupsLoading}
+            onChange={onGroupsChange}
+            value={variables.groups}
+          >
+            {groups.map((group) => (
+              <Select.Option value={group.value}>{group.label}</Select.Option>
+            ))}
+          </Select>
+        </Col>
+        <Col>
+          <Select
+            placeholder="Crime Types"
+            mode="multiple"
+            size="small"
+            maxTagCount={2}
+            style={{ minWidth: 200 }}
+            onChange={onCrimeTypesChange}
+            value={variables.crimeTypes}
+            loading={tagsLoading}
+          >
+            {crimeTypes.map((crimeType) => (
+              <Select.Option value={crimeType.value}>
+                {crimeType.label}
+              </Select.Option>
+            ))}
+          </Select>
+        </Col>
+        <Col flex={1}>
+          <Input
+            size="small"
+            style={{ width: '80%' }}
+            placeholder="Search incidents..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </Col>
 
-      <Col>
-        <Select
-          value={order}
-          onChange={setOrder}
-          size="small"
-          style={{ minWidth: 150, marginRight: 5 }}
-        >
-          <Select.Option value={IncidentSort.createdAtDesc}>
-            Newest First
-          </Select.Option>
-          <Select.Option value={IncidentSort.createdAtAsc}>
-            Oldest First
-          </Select.Option>
-        </Select>
-      </Col>
-      <Col>
-        <Button
-          type="primary"
-          onClick={onNavigate}
-          icon={
-            <FontAwesomeIcon
-              icon={faPlus}
-              size="lg"
-              style={{ marginRight: 10 }}
-            />
-          }
-        >
-          Add Incident
-        </Button>
-      </Col>
-    </Row>
+        <Col>
+          <Select
+            value={order}
+            onChange={setOrder}
+            size="small"
+            style={{ minWidth: 150, marginRight: 5 }}
+          >
+            <Select.Option value={IncidentSort.createdAtDesc}>
+              Newest First
+            </Select.Option>
+            <Select.Option value={IncidentSort.createdAtAsc}>
+              Oldest First
+            </Select.Option>
+          </Select>
+        </Col>
+        <Col>
+          <Button
+            type="primary"
+            onClick={onNavigate}
+            icon={
+              <FontAwesomeIcon
+                icon={faPlus}
+                size="lg"
+                style={{ marginRight: 10 }}
+              />
+            }
+          >
+            Add Incident
+          </Button>
+        </Col>
+      </Row>
+    </Affix>
 
     <Row gutter={8}>
       {loading && !data?.listIncidents?.incidents

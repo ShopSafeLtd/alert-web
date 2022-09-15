@@ -13,6 +13,7 @@ import { MutationUpdaterFn } from '@apollo/client';
 interface FormData {
   name: string;
   description: string;
+  users: string[];
 }
 
 interface Props {
@@ -53,7 +54,7 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
         },
       },
       orderBy: {
-        fullName: SortOrder.Desc,
+        fullName: SortOrder.Asc,
       },
     },
   });
@@ -86,6 +87,7 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
         data: {
           name: data.name,
           description: data.description,
+          users: { connect: data.users.map((id) => ({ id })) },
           scheme: {
             connect: {
               id: schemeId,

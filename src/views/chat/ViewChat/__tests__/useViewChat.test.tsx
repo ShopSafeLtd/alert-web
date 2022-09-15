@@ -36,6 +36,7 @@ const mocks = [
             {
               id: 'userChatId',
               newMessages: false,
+              user: {},
               chat: {
                 id: 'chatId',
                 name: 'name',

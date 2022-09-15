@@ -104,7 +104,7 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
         },
       },
       orderBy: {
-        name: SortOrder.Desc,
+        name: SortOrder.Asc,
       },
     },
   });
@@ -120,7 +120,7 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
         },
       },
       orderBy: {
-        name: SortOrder.Desc,
+        name: SortOrder.Asc,
       },
     },
   });
@@ -176,15 +176,12 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
             id: userData.user.id,
           },
           data: {
-            groups:
-              data.groups.length > 0
-                ? { connect: data.groups.map((id) => ({ id })) }
-                : undefined,
+            groups: { connect: data.groups.map((id) => ({ id })) },
             chats:
               data.chats.length > 0
                 ? {
                     create: data.chats.map((id) => ({
-                      newMessages: true,
+                      newMessages: false,
                       chat: {
                         connect: { id },
                       },

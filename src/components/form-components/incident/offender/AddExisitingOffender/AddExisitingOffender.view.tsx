@@ -89,7 +89,6 @@ const AddExisitingOffender = ({
     </Row>
     <Row>
       <Col span={8}>
-        {/* <OffenderSideList current={offenderId} /> */}
         <div className="offenders-side-list">
           <Form.Item
             name="selectedOffenderIds"
@@ -102,37 +101,41 @@ const AddExisitingOffender = ({
               },
             ]}
           >
-            <Checkbox.Group>
-              {data?.listOffenders?.offenders.map((offender) => (
-                <div key={offender.id} className="offender-item">
-                  <Row wrap={false} key={offender.id}>
-                    <Checkbox
-                      value={offender.id}
-                      onChange={() => setCurrentId(offender.id)}
-                      style={{ lineHeight: '32px', borderColor: 'black' }}
-                    >
-                      <Col>
-                        {offender.images.length > 0 ? (
-                          <div
-                            className="offender-item-image"
-                            style={{
-                              backgroundImage: `url(${offender.images[0].optimised})`,
-                            }}
-                          />
-                        ) : (
-                          <Skeleton.Image className="offender-item-image-skeleton" />
-                        )}
-                      </Col>
-                      <Col className="offender-item-content" flex={1}>
-                        <Text ellipsis>{offender.name}</Text>
-                      </Col>
-                    </Checkbox>
-                  </Row>
+            {loading ? (
+              <Skeleton />
+            ) : (
+              <Checkbox.Group>
+                {data?.listOffenders?.offenders.map((offender) => (
+                  <div key={offender.id} className="offender-item">
+                    <Row wrap={false} key={offender.id}>
+                      <Checkbox
+                        value={offender.id}
+                        onChange={() => setCurrentId(offender.id)}
+                        style={{ lineHeight: '32px', borderColor: 'black' }}
+                      >
+                        <Col>
+                          {offender.images.length > 0 ? (
+                            <div
+                              className="offender-item-image"
+                              style={{
+                                backgroundImage: `url(${offender.images[0].optimised})`,
+                              }}
+                            />
+                          ) : (
+                            <Skeleton.Image className="offender-item-image-skeleton" />
+                          )}
+                        </Col>
+                        <Col className="offender-item-content" flex={1}>
+                          <Text ellipsis>{offender.name}</Text>
+                        </Col>
+                      </Checkbox>
+                    </Row>
 
-                  <Divider className="offender-item-divider" />
-                </div>
-              ))}
-            </Checkbox.Group>
+                    <Divider className="offender-item-divider" />
+                  </div>
+                ))}
+              </Checkbox.Group>
+            )}
           </Form.Item>
 
           <Pagination
@@ -165,170 +168,142 @@ const AddExisitingOffender = ({
 
           <Tabs>
             <Tabs.TabPane key={0} tab="Details">
-              <Row>
-                <Col span={24} style={{ margin: 10 }}>
-                  <Title level={4}>{offenderData?.name}</Title>
-                  {offenderData?.groups?.map((group) => (
-                    <Text key={group.id} type="danger" ellipsis>
-                      {group.name}
-                    </Text>
-                  ))}
+              {loading ? (
+                <Skeleton />
+              ) : (
+                <Row>
+                  <Col span={24} style={{ margin: 10 }}>
+                    <Title level={4}>{offenderData?.name}</Title>
+                    {offenderData?.groups?.map((group) => (
+                      <Text key={group.id} type="danger" ellipsis>
+                        {group.name}
+                      </Text>
+                    ))}
 
-                  <Descriptions column={1} className="offender-descriptions">
-                    <Descriptions.Item
-                      span={2}
-                      label={
-                        <span>
-                          <FontAwesomeIcon
-                            className="offender-description-icon"
-                            icon={faClock}
-                          />
-                          Last updated
-                        </span>
-                      }
-                    >
-                      {loading ? (
-                        <Skeleton title={{ width: 100 }} paragraph={false} />
-                      ) : (
-                        moment(offenderData?.updatedAt || moment()).format(
+                    <Descriptions column={1} className="offender-descriptions">
+                      <Descriptions.Item
+                        span={2}
+                        label={
+                          <span>
+                            <FontAwesomeIcon
+                              className="offender-description-icon"
+                              icon={faClock}
+                            />
+                            Last updated
+                          </span>
+                        }
+                      >
+                        {moment(offenderData?.updatedAt || moment()).format(
                           `ddd MMM DD YYYY - HH:mm`
-                        )
-                      )}
-                    </Descriptions.Item>
-                    <Descriptions.Item
-                      label={
-                        <span>
-                          <FontAwesomeIcon
-                            className="offender-description-icon"
-                            icon={faUserClock}
-                          />
-                          Age
-                        </span>
-                      }
-                    >
-                      {loading ? (
-                        <Skeleton title={{ width: 100 }} paragraph={false} />
-                      ) : (
-                        (offenderData?.dateOfBirth &&
+                        )}
+                      </Descriptions.Item>
+                      <Descriptions.Item
+                        label={
+                          <span>
+                            <FontAwesomeIcon
+                              className="offender-description-icon"
+                              icon={faUserClock}
+                            />
+                            Age
+                          </span>
+                        }
+                      >
+                        {(offenderData?.dateOfBirth &&
                           calcAge(offenderData?.dateOfBirth)) ||
-                        getOffenderAge(offenderData?.age)
-                      )}
-                    </Descriptions.Item>
-                    <Descriptions.Item
-                      label={
-                        <span>
-                          <FontAwesomeIcon
-                            className="offender-description-icon"
-                            icon={faUserTag}
-                          />
-                          Build
-                        </span>
-                      }
-                    >
-                      {loading ? (
-                        <Skeleton title={{ width: 100 }} paragraph={false} />
-                      ) : (
-                        getOffenderBuild(offenderData?.build)
-                      )}
-                    </Descriptions.Item>
-                    {offenderData?.hair && (
+                          getOffenderAge(offenderData?.age)}
+                      </Descriptions.Item>
                       <Descriptions.Item
                         label={
                           <span>
                             <FontAwesomeIcon
                               className="offender-description-icon"
-                              icon={faUserHair}
+                              icon={faUserTag}
                             />
-                            Hair
+                            Build
                           </span>
                         }
                       >
-                        {loading ? (
-                          <Skeleton title={{ width: 100 }} paragraph={false} />
-                        ) : (
-                          offenderData?.hair
-                        )}
+                        {getOffenderBuild(offenderData?.build)}
                       </Descriptions.Item>
-                    )}
-                    <Descriptions.Item
-                      label={
-                        <span>
-                          <FontAwesomeIcon
-                            className="offender-description-icon"
-                            icon={faMarsAndVenus}
-                          />
-                          Sex
-                        </span>
-                      }
-                    >
-                      {loading ? (
-                        <Skeleton title={{ width: 100 }} paragraph={false} />
-                      ) : (
-                        getOffenderGender(offenderData?.gender)
+                      {offenderData?.hair && (
+                        <Descriptions.Item
+                          label={
+                            <span>
+                              <FontAwesomeIcon
+                                className="offender-description-icon"
+                                icon={faUserHair}
+                              />
+                              Hair
+                            </span>
+                          }
+                        >
+                          {offenderData?.hair}
+                        </Descriptions.Item>
                       )}
-                    </Descriptions.Item>
-                    <Descriptions.Item
-                      label={
-                        <span>
-                          <FontAwesomeIcon
-                            className="offender-description-icon"
-                            icon={faEarth}
-                          />
-                          Ethnicity
-                        </span>
-                      }
-                    >
-                      {loading ? (
-                        <Skeleton title={{ width: 100 }} paragraph={false} />
-                      ) : (
-                        getOffenderRace(offenderData?.race, false)
-                      )}
-                    </Descriptions.Item>
+                      <Descriptions.Item
+                        label={
+                          <span>
+                            <FontAwesomeIcon
+                              className="offender-description-icon"
+                              icon={faMarsAndVenus}
+                            />
+                            Sex
+                          </span>
+                        }
+                      >
+                        {getOffenderGender(offenderData?.gender)}
+                      </Descriptions.Item>
+                      <Descriptions.Item
+                        label={
+                          <span>
+                            <FontAwesomeIcon
+                              className="offender-description-icon"
+                              icon={faEarth}
+                            />
+                            Ethnicity
+                          </span>
+                        }
+                      >
+                        {getOffenderRace(offenderData?.race, false)}
+                      </Descriptions.Item>
 
-                    {offenderData?.peculiarities && (
-                      <Descriptions.Item
-                        span={2}
-                        label={
-                          <span>
-                            <FontAwesomeIcon
-                              className="offender-description-icon"
-                              icon={faCircleInfo}
-                            />
-                            Additional Info
-                          </span>
-                        }
-                      >
-                        {loading ? (
-                          <Skeleton title={{ width: 100 }} paragraph={false} />
-                        ) : (
-                          offenderData?.peculiarities
-                        )}
-                      </Descriptions.Item>
-                    )}
+                      {offenderData?.peculiarities && (
+                        <Descriptions.Item
+                          span={2}
+                          label={
+                            <span>
+                              <FontAwesomeIcon
+                                className="offender-description-icon"
+                                icon={faCircleInfo}
+                              />
+                              Additional Info
+                            </span>
+                          }
+                        >
+                          {offenderData?.peculiarities}
+                        </Descriptions.Item>
+                      )}
 
-                    {offenderData?.incidents[0]?.location && (
-                      <Descriptions.Item
-                        span={2}
-                        label={
-                          <span>
-                            <FontAwesomeIcon
-                              className="offender-description-icon"
-                              icon={faLocationDot}
-                            />
-                            Last offence
-                          </span>
-                        }
-                      >
-                        {loading ? (
-                          <Skeleton title={{ width: 100 }} paragraph={false} />
-                        ) : (
-                          getLastOffence(offenderData?.incidents)?.location
-                        )}
-                      </Descriptions.Item>
-                    )}
-                  </Descriptions>
-                </Col>
-              </Row>
+                      {offenderData?.incidents[0]?.location && (
+                        <Descriptions.Item
+                          span={2}
+                          label={
+                            <span>
+                              <FontAwesomeIcon
+                                className="offender-description-icon"
+                                icon={faLocationDot}
+                              />
+                              Last offence
+                            </span>
+                          }
+                        >
+                          {getLastOffence(offenderData?.incidents)?.location}
+                        </Descriptions.Item>
+                      )}
+                    </Descriptions>
+                  </Col>
+                </Row>
+              )}
             </Tabs.TabPane>
           </Tabs>
         </div>

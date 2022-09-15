@@ -1,12 +1,32 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import { Row, Col, Typography, List, Avatar, Divider } from 'antd';
-import { UserChatsQuery } from 'graphql/generated';
+import {
+  Row,
+  Col,
+  Typography,
+  List,
+  Avatar,
+  Button,
+  Drawer,
+  Empty,
+} from 'antd';
+import {
+  CreateChatMutation,
+  DeleteChatMutation,
+  UserChatsQuery,
+} from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCommentPlus } from '@fortawesome/pro-light-svg-icons';
+import {
+  faCommentPlus,
+  faPlus,
+  faUser,
+} from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
 import ViewMessage from 'components/viewChat/ViewMessage';
+import moment from 'moment';
+import AddChat from 'components/form-components/chat/AddChat';
+import { MutationUpdaterFn } from '@apollo/client';
 
 const { Title, Paragraph } = Typography;
 interface Props {
@@ -15,6 +35,11 @@ interface Props {
   saving: boolean;
   handleMarkAsRead: (value: string | undefined) => void;
   chatId: string;
+  addChat: boolean;
+  toggleAddChat: () => void;
+  updateAddUserChat: MutationUpdaterFn<CreateChatMutation>;
+  updateDeletedUserChat: MutationUpdaterFn<DeleteChatMutation>;
+  adminRights: boolean;
 }
 
 const ViewOffender = ({
@@ -22,96 +47,158 @@ const ViewOffender = ({
   loading,
   saving,
   handleMarkAsRead,
+  addChat,
+  toggleAddChat,
+  updateAddUserChat,
+  updateDeletedUserChat,
   chatId,
+  adminRights,
 }: Props): JSX.Element => (
   <div className="page-container">
     <Row>
       <Col span={7}>
         <div className="chats-side-list">
-          {/* {data?.user?.chats && data.user.chats.length > 0 ? ( */}
-          <List
-            header={
-              <Title level={2} style={{ marginLeft: 30, marginTop: 20 }}>
+          <Row style={{ margin: '20px 5px 5px 10px' }}>
+            <Col flex={1}>
+              <Title level={2} style={{ marginTop: 5 }}>
                 Chat Groups
               </Title>
-            }
-            itemLayout="horizontal"
-            loading={loading}
-            split
-            dataSource={data?.user?.chats}
-            renderItem={({
-              id: userChatId,
-              newMessages,
-              chat: { id, name, firstLetter, messages },
-            }) => (
-              <Link to={`/app/chat/${id}`} key={id}>
-                <List.Item
-                  onClick={() => !saving && handleMarkAsRead(userChatId)}
-                  key={id}
-                  className={chatId === id ? 'chat-item current' : 'chat-item'}
+            </Col>
+            {adminRights && (
+              <Col>
+                <Button
+                  type="primary"
+                  onClick={toggleAddChat}
+                  icon={
+                    <FontAwesomeIcon
+                      icon={faPlus}
+                      size="lg"
+                      style={{ marginRight: 10 }}
+                    />
+                  }
                 >
-                  <Row
-                    wrap={false}
-                    gutter={10}
-                    style={{
-                      marginLeft: 15,
-                      marginTop: 10,
-                    }}
-                  >
-                    <Col>
-                      <Avatar
-                        style={{
-                          color: '#f56a00',
-                          backgroundColor: '#fde3cf',
-                          marginRight: 5,
-                        }}
-                      >
-                        {firstLetter}
-                      </Avatar>
-                    </Col>
-                    <Col flex={1}>
-                      <Title level={4}>
-                        {name}
-                        {newMessages && (
-                          <FontAwesomeIcon
-                            size="lg"
-                            // icon="fa-solid fa-comment-plus"
-                            icon={faCommentPlus}
-                            style={{
-                              marginLeft: 10,
-                              color: 'rgb(222, 68, 54)',
-                            }}
-                          />
-                        )}
-                      </Title>
-
-                      <Paragraph ellipsis>
-                        {messages && messages.length > 0
-                          ? `${messages[0].from.fullName} : ${messages[0].content}`
-                          : 'No Messages'}
-                      </Paragraph>
-                    </Col>
-                  </Row>
-                </List.Item>
-              </Link>
+                  Create Chat
+                </Button>
+              </Col>
             )}
-          />
-          {/* ) : (
-            <div>
-              <Title level={2} style={{ marginLeft: 30, marginTop: 20 }}>
-                Chat Groups
-              </Title>
-              <Paragraph>You are not a member of any chat groups</Paragraph>
-            </div>
-          )} */}
-
-          <Divider className="chat-item-divider" />
+          </Row>
+          {data?.user?.chats && data.user.chats.length > 0 ? (
+            <List
+              itemLayout="horizontal"
+              loading={loading}
+              split
+              dataSource={data?.user?.chats}
+              renderItem={({
+                id: userChatId,
+                newMessages,
+                chat: { id, name, firstLetter, messages, totalMembers },
+              }) => (
+                <Link to={`/app/chat/${id}`} key={id}>
+                  <List.Item
+                    className={
+                      chatId === id ? 'chat-item current' : 'chat-item'
+                    }
+                    onClick={() => !saving && handleMarkAsRead(userChatId)}
+                    key={id}
+                  >
+                    <List.Item.Meta
+                      style={{ marginTop: 10 }}
+                      avatar={
+                        <Avatar
+                          style={{
+                            color: '#f56a00',
+                            backgroundColor: '#fde3cf',
+                            marginLeft: 15,
+                          }}
+                        >
+                          {firstLetter}
+                        </Avatar>
+                      }
+                      title={
+                        <Row>
+                          <Col>
+                            <Title level={4}>{name}</Title>
+                          </Col>
+                          <Col flex={1}>
+                            <span className="chat-item-tag" color="red">
+                              <FontAwesomeIcon
+                                size="lg"
+                                icon={faUser}
+                                style={{
+                                  marginRight: 3,
+                                  color: 'rgb(222, 68, 54)',
+                                }}
+                              />
+                              <span style={{ fontSize: '14px' }}>
+                                ({totalMembers})
+                              </span>
+                            </span>
+                          </Col>
+                          <Col>
+                            <Row>
+                              {messages && messages.length > 0 && (
+                                <Col>
+                                  {moment(
+                                    messages?.slice(-1)[0].createdAt
+                                  ).format('MM/DD/YYYY')}
+                                </Col>
+                              )}
+                            </Row>
+                          </Col>
+                        </Row>
+                      }
+                      description={
+                        <Row wrap={false}>
+                          <Col flex={1}>
+                            <Paragraph ellipsis>
+                              {messages && messages.length > 0
+                                ? `${messages[0].from.fullName} : ${messages[0].content}`
+                                : 'No Messages'}
+                            </Paragraph>
+                          </Col>
+                          <Col>
+                            {!newMessages && (
+                              <FontAwesomeIcon
+                                size="2x"
+                                icon={faCommentPlus}
+                                style={{
+                                  marginLeft: 10,
+                                  color: 'rgb(222, 68, 54)',
+                                }}
+                              />
+                            )}
+                          </Col>
+                        </Row>
+                      }
+                    />
+                  </List.Item>
+                </Link>
+              )}
+            />
+          ) : (
+            <Empty style={{ marginTop: 30 }} />
+          )}
         </div>
       </Col>
       <Col span={17}>
-        <ViewMessage chatId={chatId} />
+        <ViewMessage
+          chatId={chatId}
+          updateUserChatList={updateDeletedUserChat}
+        />
       </Col>
     </Row>
+    <Drawer
+      title="Create A New Chat"
+      visible={addChat}
+      width="400"
+      onClose={toggleAddChat}
+    >
+      {addChat ? (
+        <AddChat update={updateAddUserChat} onClose={toggleAddChat} />
+      ) : (
+        <div />
+      )}
+    </Drawer>
   </div>
 );
 

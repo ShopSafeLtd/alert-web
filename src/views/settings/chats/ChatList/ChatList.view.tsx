@@ -37,7 +37,7 @@ const ChatList = ({
       <Col flex={1} />
       <Col>
         <Button type="primary" onClick={toggleAddChat}>
-          Create New Chat Groups
+          Create New Chat
         </Button>
       </Col>
     </Row>
@@ -75,7 +75,7 @@ const ChatList = ({
     />
 
     <Drawer
-      title="Invite A New Chat Group"
+      title="Create A New Chat"
       visible={addChat}
       width="400"
       onClose={toggleAddChat}

@@ -62,7 +62,7 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
         },
       },
       orderBy: {
-        fullName: SortOrder.Desc,
+        fullName: SortOrder.Asc,
       },
     },
   });

@@ -11,13 +11,21 @@ query userChats(
     ) {
       id
       newMessages
+      updatedAt
+      user {
+        id
+        fullName
+        firstLetter
+      }
       chat {
         id
         name
         firstLetter
+        totalMembers
         messages {
           id
           content
+          createdAt
           from {
             id
             fullName

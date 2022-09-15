@@ -4,15 +4,17 @@ import {
   useState,
 } from 'react';
 import {
+  ChatQuery,
   CreateMessageMutation,
-  // CreateMessageMutation,
   DeleteMessageMutation,
-  // CreateMessageMutation,
+  DeleteChatMutation,
   MessagesDocument,
   MessagesQuery,
   MessagesSubscriptionDocument,
   Role,
+  useChatQuery,
   useCreateMessageMutation,
+  useDeleteChatMutation,
   useDeleteMessageMutation,
   useMessagesQuery,
 } from 'graphql/generated';
@@ -21,12 +23,14 @@ import moment, { Moment } from 'moment';
 import { MessageType } from 'types/enums';
 import { notification, Form, FormInstance, Modal } from 'antd';
 import { MutationUpdaterFn } from '@apollo/client';
+import { useNavigate } from 'react-router';
 
 const { confirm } = Modal;
 
 const { useForm } = Form;
 interface Props {
   chatId: string;
+  updateUserChatList: MutationUpdaterFn<DeleteChatMutation>;
 }
 interface DatedMessages {
   type: string;
@@ -45,21 +49,27 @@ interface FormData {
 }
 interface Return {
   onSubmit: (value: FormData) => void;
+  loading: boolean;
+  chatData: ChatQuery | undefined;
   form: FormInstance<FormData>;
   saving: boolean;
   scrolledToTop: () => void;
   datedMessages: DatedMessages[];
   userId: string | undefined;
   loadMore: boolean;
-  deleteConfirm: (value: string) => void;
-  deleteRights: boolean;
+  deleteMessageConfirm: (value: string) => void;
+  adminRights: boolean;
+  deleteChatConfirm: () => void;
+  manageChat: boolean;
+  toggleManageChat: () => void;
   // ref: React.MutableRefObject<HTMLDivElement | null>;
 }
 
-const useViewMessages = ({ chatId }: Props): Return => {
+const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
   const schemeId = useStoreState((state) => state.scheme.id);
+  const navigate = useNavigate();
 
   const [saving, setSaving] = useState(false);
   const [form] = useForm<FormData>();
@@ -69,6 +79,8 @@ const useViewMessages = ({ chatId }: Props): Return => {
 
   const [loadMore, setLoadMore] = useState(false);
   const [fetching, setFetching] = useState(false);
+  const [manageChat, setManageChat] = useState(false);
+
   // const ref = useRef<HTMLDivElement | null>(null);
   // useEffect(() => {
   //   if (ref.current) {
@@ -88,25 +100,14 @@ const useViewMessages = ({ chatId }: Props): Return => {
     messages: Exclude<MessagesQuery['messages'], undefined | null> | undefined,
     clear?: boolean
   ) => {
-    console.log('datedMessages', datedMessages);
     if (messages && messages.length > 0) {
       let existingData = datedMessages;
-      let date = '';
-      let user = '';
       if (clear) {
         existingData = [];
-      }
-      if (existingData && existingData.length > 0) {
-        date = moment(existingData?.slice(-1)[0].createdAt).format(
-          'dddd, MMMM Do'
-        );
-        user = existingData.slice(-1)[0].from?.id || '';
       }
 
       const finalMessages = messages?.map((message, index) => {
         if (index === 0 && clear) {
-          date = moment(message.createdAt).format('dddd, MMMM Do');
-          user = message.from.id;
           return [
             {
               type: MessageType.date,
@@ -115,20 +116,21 @@ const useViewMessages = ({ chatId }: Props): Return => {
             { type: MessageType.message, sameUser: false, ...message },
           ];
         }
-        if (date === moment(message.createdAt).format('dddd, MMMM Do')) {
-          if (user === message.from.id) {
+        if (
+          moment(messages[index - 1].createdAt).format('dddd, MMMM Do') ===
+          moment(message.createdAt).format('dddd, MMMM Do')
+        ) {
+          if (messages[index - 1].from.id === message.from.id) {
             return [
               ...existingData,
               { type: MessageType.message, sameUser: true, ...message },
             ];
           }
-          user = message.from.id;
           return [
             ...existingData,
             { type: MessageType.message, sameUser: false, ...message },
           ];
         }
-        date = moment(message.createdAt).format('dddd, MMMM Do');
         return [
           ...existingData,
           {
@@ -145,8 +147,8 @@ const useViewMessages = ({ chatId }: Props): Return => {
 
   const {
     subscribeToMore,
+    loading,
     // data: messagesData,
-    // refetch,
     fetchMore,
   } = useMessagesQuery({
     fetchPolicy: 'cache-and-network',
@@ -161,6 +163,14 @@ const useViewMessages = ({ chatId }: Props): Return => {
       if (res.messages.length === 0) {
         handleMessagesData([], true);
       }
+    },
+  });
+  const { data: chatData } = useChatQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      where: {
+        id: currentChatId,
+      },
     },
   });
 
@@ -210,7 +220,6 @@ const useViewMessages = ({ chatId }: Props): Return => {
   };
 
   // send message
-
   const updateData: MutationUpdaterFn<CreateMessageMutation> = (
     store,
     { data: res }
@@ -239,12 +248,8 @@ const useViewMessages = ({ chatId }: Props): Return => {
   };
 
   const [sendMessage] = useCreateMessageMutation({
-    onCompleted: (res) => {
+    onCompleted: () => {
       setSaving(false);
-      if (res.createMessage) {
-        console.log(res.createMessage);
-        // handleMessagesData([res.createMessage]);
-      }
       form.resetFields();
     },
     onError: () => {
@@ -286,14 +291,13 @@ const useViewMessages = ({ chatId }: Props): Return => {
   };
 
   // delete
-  // update list after deleting an item
-  const update: MutationUpdaterFn<DeleteMessageMutation> = (
+  // update list after deleting a message
+  const updateMessageList: MutationUpdaterFn<DeleteMessageMutation> = (
     store,
     { data: res }
   ) => {
     if (res === null || res === undefined) return;
 
-    // get existing Incident list data from Apollo store
     const existingData = store.readQuery<MessagesQuery>({
       query: MessagesDocument,
       variables: {
@@ -303,7 +307,6 @@ const useViewMessages = ({ chatId }: Props): Return => {
 
     if (existingData === null) return;
 
-    // write the new data to the Apollo store
     store.writeQuery<MessagesQuery>({
       query: MessagesDocument,
       data: {
@@ -319,16 +322,8 @@ const useViewMessages = ({ chatId }: Props): Return => {
   };
 
   const [deleteMessage] = useDeleteMessageMutation({
-    onCompleted: (res) => {
+    onCompleted: () => {
       setSaving(false);
-      if (datedMessages && datedMessages.length > 0 && res.deleteMessage) {
-        console.log(res.deleteMessage);
-
-        // const filteredData = messagesData?.messages.filter(
-        //   (el) => el.id !== res.deleteMessage?.id
-        // );
-        // handleMessagesData(filteredData, true);
-      }
       notification.success({
         message: 'Successfully Deleted!',
         description: 'The message has been deleted!',
@@ -343,7 +338,7 @@ const useViewMessages = ({ chatId }: Props): Return => {
         placement: 'bottomRight',
       });
     },
-    update,
+    update: updateMessageList,
   });
   const openDelete = (currentId: string) => {
     setSaving(true);
@@ -355,26 +350,70 @@ const useViewMessages = ({ chatId }: Props): Return => {
       });
     }
   };
-  const deleteConfirm = (currentId: string) => {
+  const deleteMessageConfirm = (currentId: string) => {
     confirm({
-      title: 'Do you want to delete the crime type?',
+      title: 'Do you want to delete the message?',
       content: 'This action cannot be undone.',
       onOk() {
         openDelete(currentId);
       },
     });
   };
+  const [deleteChat] = useDeleteChatMutation({
+    onCompleted: () => {
+      setSaving(false);
+      navigate('/app/chat');
+      notification.success({
+        message: 'Successfully Deleted!',
+        description: 'The chat has been deleted!',
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      setSaving(false);
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
+    },
+    update: updateUserChatList,
+  });
+  const deleteChatConfirm = () => {
+    confirm({
+      title: 'Do you want to delete the chat?',
+      content: 'This action cannot be undone.',
+      okText: 'Delete',
+      onOk() {
+        setSaving(true);
+        if (currentChatId)
+          deleteChat({
+            variables: {
+              id: currentChatId,
+            },
+          });
+      },
+    });
+  };
+  const toggleManageChat = () => {
+    setManageChat(!manageChat);
+  };
 
   return {
     onSubmit,
+    loading,
+    chatData,
     form,
     saving,
     scrolledToTop,
     datedMessages,
     userId,
     loadMore,
-    deleteConfirm,
-    deleteRights: role !== Role.User,
+    deleteMessageConfirm,
+    adminRights: role !== Role.User,
+    deleteChatConfirm,
+    manageChat,
+    toggleManageChat,
     // ref,
   };
 };

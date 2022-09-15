@@ -36,7 +36,7 @@ const ChatDetail = ({
           onClick={toggleEditChat}
           icon={<EditOutlined />}
         >
-          Edit Chat Group
+          Edit Chat
         </Button>,
         <Button
           key="1"
@@ -45,7 +45,7 @@ const ChatDetail = ({
           type="primary"
           icon={<DeleteOutlined />}
         >
-          Delete Chat Group
+          Delete Chat
         </Button>,
       ]}
     />

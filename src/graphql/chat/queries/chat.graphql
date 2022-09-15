@@ -3,12 +3,14 @@ query Chat($where: ChatWhereUniqueInput!) {
     id
     name
     description
+    totalMembers
     members {
       id
       user {
         id
         fullName
         organisation
+        firstLetter
       }
     }
   }
