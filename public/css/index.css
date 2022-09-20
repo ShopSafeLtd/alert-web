@@ -13,6 +13,112 @@
   align-items: center;
   justify-content: center;
 }
+.previous-location .ant-radio-wrapper {
+  align-items: center;
+}
+.previous-location .ant-radio-inner {
+  position: relative;
+}
+.previous-location .ant-radio-inner:after {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+}
+.incident-form-images .ant-upload-list-picture-card-container {
+  width: 500px;
+  height: 200px;
+  margin-right: 20px;
+}
+.incident-form-images .image-card {
+  height: 200px;
+  width: 500px;
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  border: 1px solid #edf2f9;
+  border-radius: 10px;
+}
+.incident-form-images .image-card .image-card-image {
+  min-width: 250px;
+  height: 200px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.incident-form-images .image-card .image-card-offenders {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
+.incident-form-images .image-card .image-card-offender {
+  display: flex;
+  align-items: center;
+  padding: 0 5px 5px;
+}
+.incident-form-images .image-card .image-card-offender-text {
+  flex: 1;
+}
+.incident-form-images .image-card-loading {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.incident-form-assign {
+  width: 900px;
+  height: 500px;
+  display: flex;
+}
+.incident-form-assign .incident-form-assign-image {
+  flex: 3;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  background-color: #edf2f9;
+  border-right: 1px solid #edf2f9;
+}
+.incident-form-assign .incident-form-assign-offenders {
+  flex: 2;
+  padding: 15px;
+}
+.incident-form-assign .incident-form-assign-offenders .offender-title {
+  margin-bottom: 10px;
+}
+.incident-form-assign .incident-form-assign-offender-list {
+  margin-bottom: 10px;
+  border-top: 1px solid #edf2f9;
+  max-height: 395px;
+  overflow: auto;
+}
+.incident-form-assign .incident-form-assign-offender-image {
+  height: 80px;
+  min-width: 80px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  background-color: #edf2f9;
+}
+.incident-form-assign .incident-form-assign-offender {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  border-bottom: 1px solid #edf2f9;
+  cursor: pointer;
+  padding-right: 10px;
+}
+.incident-form-assign .incident-form-assign-offender-content {
+  padding: 5px 10px;
+  height: 80px;
+}
 .feed-card .no-image.incident-card {
   height: 220px;
 }
@@ -390,8 +496,13 @@
 .page-container {
   height: calc(100vh - 70px);
 }
-.list-view {
+.list-view,
+.page-view {
   padding: 15px;
+}
+.page-view .ant-page-header {
+  padding-top: 0;
+  padding-bottom: 5px;
 }
 .feed-card .no-image.offender-card {
   height: 220px;
@@ -568,16 +679,37 @@
   width: 100%;
   height: 300px;
 }
-.offenders-side-list,
-.view-offender {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
+.add-existing-offender {
+  height: 100%;
+}
+.add-existing-offender .search-offender {
+  margin-bottom: 24px;
+}
+.add-existing-offender .view-offender {
+  flex: 1;
+  border-left: 1px solid #edf2f9;
+  height: auto;
+}
+.add-existing-offender .view-offender .offender-images {
+  height: 140px;
+}
+.add-existing-offender .view-offender .offender-image {
+  height: 130px;
+  width: 130px;
+}
+.add-existing-offender .view-offender .offender-image:hover {
+  height: 140px;
+  width: 140px;
+}
+.add-existing-offender-row {
+  height: calc(100% - 64px);
 }
 .offenders-side-list {
-  max-height: calc(100vh - 70px);
-  border-right: 1px solid #edf2f9;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   overflow-y: scroll;
+  padding-right: 30px;
 }
 .offenders-side-list .offender-item {
   width: 100%;
@@ -624,6 +756,9 @@
 }
 .view-offender {
   height: calc(100vh - 70px);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .view-offender .offender-images {
   width: 100%;
@@ -1399,6 +1534,9 @@
 .view-message .message-container .message-content .current {
   background: #ff5252;
   color: #fff !important;
+}
+.ant-switch-handle {
+  top: 6px !important;
 }
 .button-icon {
   margin-right: 5px;

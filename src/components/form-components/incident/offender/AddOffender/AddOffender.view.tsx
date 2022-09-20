@@ -32,8 +32,6 @@ interface Props {
   onClose: () => void;
   onSubmit: (value: FormData) => void;
   saving: boolean;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
   ageCheck: boolean;
   setAgeCheck: (value: boolean) => void;
 }
@@ -42,14 +40,12 @@ const AddOffender = ({
   onClose,
   onSubmit,
   saving,
-  groups,
-  groupsLoading,
   ageCheck,
   setAgeCheck,
 }: Props): JSX.Element => (
   <Form layout="vertical" onFinish={onSubmit}>
-    <Row gutter={50}>
-      <Col span={12}>
+    <Row gutter={16}>
+      <Col span={24}>
         <Form.Item name="name" label="Name">
           <Input
             disabled={saving}
@@ -58,7 +54,8 @@ const AddOffender = ({
           />
         </Form.Item>
       </Col>
-
+    </Row>
+    <Row gutter={16} wrap>
       <Col span={12}>
         <Form.Item name="build" label="Build">
           <Select
@@ -68,8 +65,6 @@ const AddOffender = ({
           />
         </Form.Item>
       </Col>
-    </Row>
-    <Row gutter={50}>
       <Col span={12}>
         <Form.Item name="gender" label="Sex">
           <Select
@@ -90,8 +85,8 @@ const AddOffender = ({
       </Col>
     </Row>
 
-    <Row gutter={50}>
-      <Col span={12}>
+    <Row gutter={16} wrap>
+      <Col span={24}>
         <Form.Item name="hair" label="Hair">
           <Input
             disabled={saving}
@@ -99,45 +94,39 @@ const AddOffender = ({
           />
         </Form.Item>
       </Col>
-      <Col span={12}>
+      <Col span={24}>
         <Form.Item name="peculiarities" label="Peculiarities">
-          <Input
+          <Input.TextArea
             disabled={saving}
             placeholder="Anything distinctive features of the offender."
           />
         </Form.Item>
       </Col>
     </Row>
-    <Row gutter={50}>
-      <Col span={12}>
-        <Form.Item
-          name="groups"
-          label="Groups"
-          rules={[
-            {
-              required: true,
-              message: 'Please select at least one group for the offender.',
-            },
-          ]}
-        >
-          <Select
-            loading={groupsLoading}
-            disabled={saving}
-            mode="multiple"
-            maxTagCount={3}
-            placeholder="Select the groups that you would like this offender to be visible to."
-          >
-            {groups.map((group) => (
-              <Select.Option key={group.value} value={group.value}>
-                {group.label}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-      </Col>
-    </Row>
-    <Row style={{ marginBottom: 20 }}>
-      <Col span={12}>
+    <Row gutter={16}>
+      {ageCheck ? (
+        <Col span={10}>
+          <Form.Item name="dateOfBirth" label="Date of Birth">
+            <DatePicker
+              disabled={saving}
+              disabledDate={(current) =>
+                current && current.valueOf() > Date.now()
+              }
+            />
+          </Form.Item>
+        </Col>
+      ) : (
+        <Col span={10}>
+          <Form.Item name="age" label="Age">
+            <Select
+              placeholder="Select an estimated age range of the offender if known."
+              options={ageValues}
+              disabled={saving}
+            />
+          </Form.Item>
+        </Col>
+      )}
+      <Col span={14} style={{ paddingTop: 14 }}>
         <Typography.Text>
           Do you know the offender&apos;s date of birth?
         </Typography.Text>
@@ -152,40 +141,18 @@ const AddOffender = ({
         />
       </Col>
     </Row>
-    <Row gutter={50}>
-      {ageCheck ? (
-        <>
-          <Col span={12}>
-            <Form.Item name="dateOfBirth" label="Date of Birth">
-              <DatePicker
-                disabled={saving}
-                disabledDate={(current) =>
-                  current && current.valueOf() > Date.now()
-                }
-              />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item name="dateSource" label="Information Source">
-              <Input
-                disabled={saving}
-                placeholder="Enter the information source of the offender's date of birth range of the offender ."
-              />
-            </Form.Item>
-          </Col>
-        </>
-      ) : (
-        <Col span={12}>
-          <Form.Item name="age" label="Age">
-            <Select
-              placeholder="Select an estimated age range of the offender if known."
-              options={ageValues}
+    {ageCheck && (
+      <Row gutter={16}>
+        <Col span={24}>
+          <Form.Item name="dateSource" label="Date of Birth Source">
+            <Input
               disabled={saving}
+              placeholder="Enter the information source of the offender's date of birth range of the offender ."
             />
           </Form.Item>
         </Col>
-      )}
-    </Row>
+      </Row>
+    )}
 
     <Form.Item>
       <Row style={{ marginTop: 30 }} gutter={10} justify="end">
@@ -201,7 +168,7 @@ const AddOffender = ({
             type="primary"
             htmlType="submit"
           >
-            Create A New Offender
+            Add Offender
           </Button>
         </Col>
       </Row>

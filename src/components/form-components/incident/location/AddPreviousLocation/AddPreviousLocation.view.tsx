@@ -2,9 +2,18 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { AddressesQuery } from 'graphql/generated';
-import { Row, Col, Button, Skeleton, Form, Radio, Typography } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot } from '@fortawesome/pro-light-svg-icons';
+import {
+  Row,
+  Col,
+  Button,
+  Skeleton,
+  Form,
+  Radio,
+  Typography,
+  // Checkbox,
+} from 'antd';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faLocationDot } from '@fortawesome/pro-light-svg-icons';
 
 const { Paragraph } = Typography;
 interface FormData {
@@ -30,7 +39,7 @@ const ViewOffender = ({
     <Skeleton />
   ) : (
     <>
-      <Form layout="vertical" onFinish={onSubmit}>
+      <Form layout="vertical" onFinish={onSubmit} className="previous-location">
         <Form.Item
           name="selectedLocation"
           label="Previous Locations:"
@@ -43,17 +52,19 @@ const ViewOffender = ({
         >
           <Radio.Group>
             {data?.addresses.map((location) => (
-              <Row wrap={false} key={location.id}>
-                <Radio value={location.id} key={location.id}>
-                  <Paragraph ellipsis key={location.id}>
-                    <FontAwesomeIcon
-                      style={{ marginRight: 6, color: 'rgb(222, 68, 54)' }}
-                      icon={faLocationDot}
-                    />
-                    {location.full}
-                  </Paragraph>
-                </Radio>
-              </Row>
+              <Radio
+                value={location.id}
+                key={location.id}
+                style={{ marginBottom: 10 }}
+              >
+                <Paragraph style={{ margin: 0 }} ellipsis key={location.id}>
+                  {/* <FontAwesomeIcon
+                    style={{ marginRight: 6, color: 'rgb(222, 68, 54)' }}
+                    icon={faLocationDot}
+                  /> */}
+                  {location.full}
+                </Paragraph>
+              </Radio>
             ))}
           </Radio.Group>
         </Form.Item>
@@ -72,7 +83,7 @@ const ViewOffender = ({
                 type="primary"
                 htmlType="submit"
               >
-                select location
+                Select Location
               </Button>
             </Col>
           </Row>

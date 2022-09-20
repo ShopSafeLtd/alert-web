@@ -4,76 +4,91 @@ import useEditIncident from './useAddIncident';
 
 function EditIncident(): JSX.Element {
   const {
-    onSubmit,
+    addExistingOffender,
+    addIncidentTag,
+    addNewLocation,
+    addOffender,
+    addPreviousLocation,
+    addRecentOffender,
+    addressLoading,
+    beforeUpload,
+    deleteConfirm,
+    fileList,
     form,
-    saving,
     groups,
     groupsLoading,
+    imgChange,
+    offendersData,
+    onSubmit,
+    primaryAddress,
+    recentOffenderData,
+    recentOffenderLoading,
+    saving,
+    setAddRecentOffender,
     tags,
     tagsLoading,
-    // primaryAddress,
-    addressData,
-    addressLoading,
-    imgChange,
-    onPreview,
-    fileList,
-    beforeUpload,
-    addIncidentTag,
-    toggleAddIncidentTag,
-    updateIncidentTag,
-    addOffender,
-    toggleAddOffender,
-    addExistingOffender,
     toggleAddExistingOffender,
-    updateOffenderList,
-    offendersData,
-    deleteConfirm,
-    addPreviousLocation,
-    toggleAddPreviousLocation,
-    updatePreviousLocation,
-    addNewLocation,
+    toggleAddIncidentTag,
     toggleAddNewLocation,
+    toggleAddOffender,
+    toggleAddPreviousLocation,
+    updateIncidentTag,
     updateNewLocation,
-    assignImage,
-    toggleAssignImage,
-    updateAssignImage,
+    updateOffenderList,
+    updatePreviousLocation,
+    searchOffenders,
+    setSearchOffenders,
+    newImage,
+    assignOffendersToImages,
+    onCancelNewImage,
+    setAssignToImage,
+    onPreview,
+    removeImageFromOffender,
   } = useEditIncident();
+
   return (
     <div>
       <View
-        onSubmit={onSubmit}
+        addExistingOffender={addExistingOffender}
+        addIncidentTag={addIncidentTag}
+        addNewLocation={addNewLocation}
+        addOffender={addOffender}
+        addPreviousLocation={addPreviousLocation}
+        addRecentOffender={addRecentOffender}
+        addressLoading={addressLoading}
+        beforeUpload={beforeUpload}
+        deleteConfirm={deleteConfirm}
+        fileList={fileList}
         form={form}
-        saving={saving}
         groups={groups}
         groupsLoading={groupsLoading}
+        imgChange={imgChange}
+        offendersData={offendersData}
+        onSubmit={onSubmit}
+        primaryAddress={primaryAddress}
+        recentOffenderData={recentOffenderData}
+        recentOffenderLoading={recentOffenderLoading}
+        saving={saving}
+        setAddRecentOffender={setAddRecentOffender}
         tags={tags}
         tagsLoading={tagsLoading}
-        addressData={addressData}
-        // primaryAddress={primaryAddress}
-        addressLoading={addressLoading}
-        imgChange={imgChange}
-        onPreview={onPreview}
-        fileList={fileList}
-        beforeUpload={beforeUpload}
-        addIncidentTag={addIncidentTag}
-        toggleAddIncidentTag={toggleAddIncidentTag}
-        updateIncidentTag={updateIncidentTag}
-        addOffender={addOffender}
-        toggleAddOffender={toggleAddOffender}
-        addExistingOffender={addExistingOffender}
         toggleAddExistingOffender={toggleAddExistingOffender}
-        updateOffenderList={updateOffenderList}
-        offendersData={offendersData}
-        deleteConfirm={deleteConfirm}
-        addPreviousLocation={addPreviousLocation}
-        toggleAddPreviousLocation={toggleAddPreviousLocation}
-        addNewLocation={addNewLocation}
+        toggleAddIncidentTag={toggleAddIncidentTag}
         toggleAddNewLocation={toggleAddNewLocation}
+        toggleAddOffender={toggleAddOffender}
+        toggleAddPreviousLocation={toggleAddPreviousLocation}
+        updateIncidentTag={updateIncidentTag}
         updateNewLocation={updateNewLocation}
+        updateOffenderList={updateOffenderList}
         updatePreviousLocation={updatePreviousLocation}
-        assignImage={assignImage}
-        toggleAssignImage={toggleAssignImage}
-        updateAssignImage={updateAssignImage}
+        searchOffenders={searchOffenders}
+        setSearchOffenders={setSearchOffenders}
+        newImage={newImage}
+        assignOffendersToImages={assignOffendersToImages}
+        onCancelNewImage={onCancelNewImage}
+        setAssignToImage={setAssignToImage}
+        onPreview={onPreview}
+        removeImageFromOffender={removeImageFromOffender}
       />
     </div>
   );

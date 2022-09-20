@@ -1,13 +1,5 @@
 import { useState } from 'react';
-import {
-  useSchemeGroupsQuery,
-  Role,
-  Age,
-  Gender,
-  Race,
-  Build,
-} from 'graphql/generated';
-import { useStoreActions, useStoreState } from 'state';
+import { Age, Gender, Race, Build } from 'graphql/generated';
 
 interface FormData {
   name: string;
@@ -48,49 +40,13 @@ interface Props {
 interface Return {
   onSubmit: (value: FormData) => void;
   saving: boolean;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
   ageCheck: boolean;
   setAgeCheck: (value: boolean) => void;
 }
 
 const useAddOffender = ({ onClose, update }: Props): Return => {
-  const schemeId = useStoreState((state) => state.scheme.id);
-
-  const groups = useStoreState((state) => state.user.groups);
-  const role = useStoreState((state) => state.user.role);
-  const pagination = useStoreState((state) => state.data.offenders.pagination);
-  const variables = useStoreState((state) => state.data.offenders.variables);
-  const order = useStoreState((state) => state.data.offenders.order);
-  const setOffendersState = useStoreActions(
-    (actions) => actions.data.setOffenders
-  );
   const [saving, setSaving] = useState(false);
   const [ageCheck, setAgeCheck] = useState(false);
-
-  const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-      },
-    },
-    skip: role !== Role.SchemeAdmin,
-    onCompleted: (result) => {
-      setOffendersState({
-        pagination,
-        variables: {
-          ...variables,
-          groups: result.groups.map((group) => group.id),
-        },
-        order,
-      });
-    },
-  });
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
@@ -106,7 +62,6 @@ const useAddOffender = ({ onClose, update }: Props): Return => {
         age: ageCheck ? null : data.age || null,
         dateSource: ageCheck ? data.dateSource || null : null,
         dateOfBirth: ageCheck ? data.dateOfBirth || null : null,
-        groups: groups.map((group) => ({ id: group.id, name: group.name })),
       },
     ]);
 
@@ -117,16 +72,6 @@ const useAddOffender = ({ onClose, update }: Props): Return => {
   return {
     onSubmit,
     saving,
-    groups:
-      role === Role.SchemeAdmin
-        ? groupData?.groups.map((group) => ({
-            value: group.id,
-            label: group.name,
-          })) || []
-        : groups
-            .filter((group) => group.id === schemeId)
-            .map((group) => ({ value: group.id, label: group.name })),
-    groupsLoading,
     ageCheck,
     setAgeCheck,
   };

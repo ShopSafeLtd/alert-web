@@ -1,10 +1,38 @@
+.add-existing-offender {
+  height: 100%;
+
+  .search-offender {
+    margin-bottom: 24px;
+  }
+
+  .view-offender {
+    flex: 1;
+    border-left: 1px solid rgb(237, 242, 249);
+    height: auto;
+
+    .offender-images {
+      height: 140px;
+    }
+    .offender-image {
+      height: 130px;
+      width: 130px;
+      &:hover {
+        height: 140px;
+        width: 140px;
+      }
+    }
+  }
+}
+.add-existing-offender-row {
+  height: calc(100% - 64px);
+}
+
 .offenders-side-list {
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - 70px);
-  width: 100%;
-  border-right: 1px solid rgb(237, 242, 249);
+  height: 100%;
   overflow-y: scroll;
+  padding-right: 30px;
 
   .offender-item {
     width: 100%;

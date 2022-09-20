@@ -2541,6 +2541,7 @@ export type Chat = {
   messages: Array<Message>;
   name: Scalars['String'];
   scheme: Scheme;
+  totalMembers?: Maybe<Scalars['Int']>;
   updatedAt: Scalars['DateTime'];
 };
 
@@ -2928,6 +2929,12 @@ export type CreateIncidentLocation = {
 export type CreateIncidentOffenders = {
   connect?: InputMaybe<Array<InputMaybe<UniqueId>>>;
   create?: InputMaybe<Array<InputMaybe<OffenderCreateWithoutIncidentsInput>>>;
+  update?: InputMaybe<Array<InputMaybe<CreateIncidentUpdateOffenders>>>;
+};
+
+export type CreateIncidentUpdateOffenders = {
+  data?: InputMaybe<OffenderUpdateWithoutIncidentsInput>;
+  where?: InputMaybe<OffenderWhereUniqueInput>;
 };
 
 export type CreateOffenderData = {
@@ -11397,6 +11404,12 @@ export type TagWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
 };
 
+export type UrlImage = {
+  filename: Scalars['String'];
+  mimetype: Scalars['String'];
+  url: Scalars['String'];
+};
+
 export type UniqueId = {
   id: Scalars['String'];
 };
@@ -11419,12 +11432,14 @@ export type UploadImage = {
 };
 
 export type UploadIncidentImage = {
-  file: Scalars['Upload'];
+  file?: InputMaybe<Scalars['Upload']>;
   offenders?: InputMaybe<Array<InputMaybe<ImageOffender>>>;
+  url?: InputMaybe<UrlImage>;
 };
 
 export type UploadOffenderImage = {
-  file: Scalars['Upload'];
+  file?: InputMaybe<Scalars['Upload']>;
+  url?: InputMaybe<UrlImage>;
 };
 
 export type UploadSchemeImage = {

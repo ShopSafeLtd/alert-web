@@ -27,16 +27,16 @@ interface Props {
   update: (value: OffenderData[] | undefined) => void;
 }
 function AddOffender({ onClose, update }: Props): JSX.Element {
-  const { onSubmit, saving, groups, groupsLoading, ageCheck, setAgeCheck } =
-    useAddOffender({ onClose, update });
+  const { onSubmit, saving, ageCheck, setAgeCheck } = useAddOffender({
+    onClose,
+    update,
+  });
   return (
     <div>
       <View
         onSubmit={onSubmit}
         onClose={onClose}
         saving={saving}
-        groups={groups}
-        groupsLoading={groupsLoading}
         ageCheck={ageCheck}
         setAgeCheck={setAgeCheck}
       />

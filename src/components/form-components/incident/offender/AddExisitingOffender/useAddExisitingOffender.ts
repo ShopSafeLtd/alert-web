@@ -56,6 +56,7 @@ interface Return {
         ListOffendersQuery['listOffenders'],
         undefined | null
       >['offenders'][0]
+    | null
     | undefined;
 }
 
@@ -164,7 +165,7 @@ const useAddExisitingOffenderr = ({ onClose, update }: Props): Return => {
       ? ListOffendersData?.listOffenders?.offenders.find(
           (offender) => offender.id === currentId
         )
-      : ListOffendersData?.listOffenders?.offenders[0],
+      : null,
   };
 };
 

@@ -6,15 +6,11 @@ import {
   Typography,
   Row,
   Col,
-  Tabs,
   Descriptions,
   Button,
   Input,
-  Divider,
   Skeleton,
   Pagination,
-  Form,
-  Checkbox,
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -38,8 +34,9 @@ import {
 
 import { SRLWrapper } from 'simple-react-lightbox';
 import moment from 'moment';
+import OffenderTile from 'components/offenders/OffenderTile';
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 interface FormData {
   selectedOffenderIds: string[];
 }
@@ -60,7 +57,8 @@ interface Props {
         ListOffendersQuery['listOffenders'],
         undefined | null
       >['offenders'][0]
-    | undefined;
+    | undefined
+    | null;
 }
 
 const AddExisitingOffender = ({
@@ -76,9 +74,9 @@ const AddExisitingOffender = ({
   setCurrentId,
   offenderData,
 }: Props): JSX.Element => (
-  <Form layout="vertical" onFinish={onSubmit}>
-    <Row gutter={8} style={{ marginBottom: 10 }}>
-      <Col span={22}>
+  <div className="add-existing-offender">
+    <Row gutter={8} className="search-offender">
+      <Col span={18}>
         <Input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
@@ -87,252 +85,236 @@ const AddExisitingOffender = ({
         />
       </Col>
     </Row>
-    <Row>
-      <Col span={8}>
-        {/* <OffenderSideList current={offenderId} /> */}
-        <div className="offenders-side-list">
-          <Form.Item
-            name="selectedOffenderIds"
-            label="Offenders:"
-            rules={[
-              {
-                required: true,
-                message:
-                  'Please at least select an existing offender for the incident.',
-              },
-            ]}
-          >
-            <Checkbox.Group>
-              {data?.listOffenders?.offenders.map((offender) => (
-                <div key={offender.id} className="offender-item">
-                  <Row wrap={false} key={offender.id}>
-                    <Checkbox
-                      value={offender.id}
-                      onChange={() => setCurrentId(offender.id)}
-                      style={{ lineHeight: '32px', borderColor: 'black' }}
-                    >
-                      <Col>
-                        {offender.images.length > 0 ? (
-                          <div
-                            className="offender-item-image"
-                            style={{
-                              backgroundImage: `url(${offender.images[0].optimised})`,
-                            }}
-                          />
-                        ) : (
-                          <Skeleton.Image className="offender-item-image-skeleton" />
-                        )}
-                      </Col>
-                      <Col className="offender-item-content" flex={1}>
-                        <Text ellipsis>{offender.name}</Text>
-                      </Col>
-                    </Checkbox>
-                  </Row>
+    <Row className="add-existing-offender-row">
+      <Col
+        span={offenderData !== null ? 10 : 24}
+        className="offenders-side-list"
+      >
+        <Row wrap gutter={16}>
+          {data?.listOffenders?.offenders.map((offender) => (
+            <Col
+              span={offenderData !== null ? 12 : 4}
+              key={offender.id}
+              className="offender-item"
+            >
+              <OffenderTile
+                offender={offender}
+                onClick={() => setCurrentId(offender.id)}
+              />
+            </Col>
+          ))}
+        </Row>
 
-                  <Divider className="offender-item-divider" />
-                </div>
-              ))}
-            </Checkbox.Group>
-          </Form.Item>
-
-          <Pagination
-            total={data?.listOffenders?.total}
-            size="small"
-            showSizeChanger={false}
-            onChange={onPaginationChange}
-          />
-        </div>
+        <Pagination
+          total={data?.listOffenders?.total}
+          size="small"
+          showSizeChanger={false}
+          onChange={onPaginationChange}
+        />
       </Col>
-      <Col span={14}>
-        <div className="view-offender">
-          <Row
-            gutter={8}
-            justify="start"
-            align="middle"
-            wrap={false}
-            className="offender-images"
-          >
-            {offenderData?.images.map((image, i) => (
-              <Col key={image.id}>
-                <div
-                  onClick={() => openLightbox(i)}
-                  className="offender-image"
-                  style={{ backgroundImage: `url(${image.optimised})` }}
-                />
-              </Col>
-            ))}
-          </Row>
-
-          <Tabs>
-            <Tabs.TabPane key={0} tab="Details">
-              <Row>
-                <Col span={24} style={{ margin: 10 }}>
-                  <Title level={4}>{offenderData?.name}</Title>
-                  {offenderData?.groups?.map((group) => (
-                    <Text key={group.id} type="danger" ellipsis>
-                      {group.name}
-                    </Text>
-                  ))}
-
-                  <Descriptions column={1} className="offender-descriptions">
-                    <Descriptions.Item
-                      span={2}
-                      label={
-                        <span>
-                          <FontAwesomeIcon
-                            className="offender-description-icon"
-                            icon={faClock}
-                          />
-                          Last updated
-                        </span>
-                      }
-                    >
-                      {loading ? (
-                        <Skeleton title={{ width: 100 }} paragraph={false} />
-                      ) : (
-                        moment(offenderData?.updatedAt || moment()).format(
-                          `ddd MMM DD YYYY - HH:mm`
-                        )
-                      )}
-                    </Descriptions.Item>
-                    <Descriptions.Item
-                      label={
-                        <span>
-                          <FontAwesomeIcon
-                            className="offender-description-icon"
-                            icon={faUserClock}
-                          />
-                          Age
-                        </span>
-                      }
-                    >
-                      {loading ? (
-                        <Skeleton title={{ width: 100 }} paragraph={false} />
-                      ) : (
-                        (offenderData?.dateOfBirth &&
-                          calcAge(offenderData?.dateOfBirth)) ||
-                        getOffenderAge(offenderData?.age)
-                      )}
-                    </Descriptions.Item>
-                    <Descriptions.Item
-                      label={
-                        <span>
-                          <FontAwesomeIcon
-                            className="offender-description-icon"
-                            icon={faUserTag}
-                          />
-                          Build
-                        </span>
-                      }
-                    >
-                      {loading ? (
-                        <Skeleton title={{ width: 100 }} paragraph={false} />
-                      ) : (
-                        getOffenderBuild(offenderData?.build)
-                      )}
-                    </Descriptions.Item>
-                    {offenderData?.hair && (
-                      <Descriptions.Item
-                        label={
-                          <span>
-                            <FontAwesomeIcon
-                              className="offender-description-icon"
-                              icon={faUserHair}
-                            />
-                            Hair
-                          </span>
-                        }
-                      >
-                        {loading ? (
-                          <Skeleton title={{ width: 100 }} paragraph={false} />
-                        ) : (
-                          offenderData?.hair
-                        )}
-                      </Descriptions.Item>
-                    )}
-                    <Descriptions.Item
-                      label={
-                        <span>
-                          <FontAwesomeIcon
-                            className="offender-description-icon"
-                            icon={faMarsAndVenus}
-                          />
-                          Sex
-                        </span>
-                      }
-                    >
-                      {loading ? (
-                        <Skeleton title={{ width: 100 }} paragraph={false} />
-                      ) : (
-                        getOffenderGender(offenderData?.gender)
-                      )}
-                    </Descriptions.Item>
-                    <Descriptions.Item
-                      label={
-                        <span>
-                          <FontAwesomeIcon
-                            className="offender-description-icon"
-                            icon={faEarth}
-                          />
-                          Ethnicity
-                        </span>
-                      }
-                    >
-                      {loading ? (
-                        <Skeleton title={{ width: 100 }} paragraph={false} />
-                      ) : (
-                        getOffenderRace(offenderData?.race, false)
-                      )}
-                    </Descriptions.Item>
-
-                    {offenderData?.peculiarities && (
-                      <Descriptions.Item
-                        span={2}
-                        label={
-                          <span>
-                            <FontAwesomeIcon
-                              className="offender-description-icon"
-                              icon={faCircleInfo}
-                            />
-                            Additional Info
-                          </span>
-                        }
-                      >
-                        {loading ? (
-                          <Skeleton title={{ width: 100 }} paragraph={false} />
-                        ) : (
-                          offenderData?.peculiarities
-                        )}
-                      </Descriptions.Item>
-                    )}
-
-                    {offenderData?.incidents[0]?.location && (
-                      <Descriptions.Item
-                        span={2}
-                        label={
-                          <span>
-                            <FontAwesomeIcon
-                              className="offender-description-icon"
-                              icon={faLocationDot}
-                            />
-                            Last offence
-                          </span>
-                        }
-                      >
-                        {loading ? (
-                          <Skeleton title={{ width: 100 }} paragraph={false} />
-                        ) : (
-                          getLastOffence(offenderData?.incidents)?.location
-                        )}
-                      </Descriptions.Item>
-                    )}
-                  </Descriptions>
+      {offenderData && (
+        <Col span={14} className="view-offender">
+          {offenderData && offenderData.images.length > 0 && (
+            <Row
+              gutter={8}
+              justify="start"
+              align="middle"
+              wrap={false}
+              className="offender-images"
+            >
+              {offenderData?.images.map((image, i) => (
+                <Col key={image.id}>
+                  <div
+                    onClick={() => openLightbox(i)}
+                    className="offender-image"
+                    style={{ backgroundImage: `url(${image.optimised})` }}
+                  />
                 </Col>
-              </Row>
-            </Tabs.TabPane>
-          </Tabs>
-        </div>
-      </Col>
+              ))}
+            </Row>
+          )}
+
+          <Row>
+            <Col span={24} style={{ margin: 10 }}>
+              <Title level={4}>{offenderData?.name}</Title>
+              <Descriptions column={1} className="offender-descriptions">
+                <Descriptions.Item
+                  span={2}
+                  label={
+                    <span>
+                      <FontAwesomeIcon
+                        className="offender-description-icon"
+                        icon={faClock}
+                      />
+                      Last updated
+                    </span>
+                  }
+                >
+                  {loading ? (
+                    <Skeleton title={{ width: 100 }} paragraph={false} />
+                  ) : (
+                    moment(offenderData?.updatedAt || moment()).format(
+                      `ddd MMM DD YYYY - HH:mm`
+                    )
+                  )}
+                </Descriptions.Item>
+                <Descriptions.Item
+                  label={
+                    <span>
+                      <FontAwesomeIcon
+                        className="offender-description-icon"
+                        icon={faUserClock}
+                      />
+                      Age
+                    </span>
+                  }
+                >
+                  {loading ? (
+                    <Skeleton title={{ width: 100 }} paragraph={false} />
+                  ) : (
+                    (offenderData?.dateOfBirth &&
+                      calcAge(offenderData?.dateOfBirth)) ||
+                    getOffenderAge(offenderData?.age)
+                  )}
+                </Descriptions.Item>
+                <Descriptions.Item
+                  label={
+                    <span>
+                      <FontAwesomeIcon
+                        className="offender-description-icon"
+                        icon={faUserTag}
+                      />
+                      Build
+                    </span>
+                  }
+                >
+                  {loading ? (
+                    <Skeleton title={{ width: 100 }} paragraph={false} />
+                  ) : (
+                    getOffenderBuild(offenderData?.build)
+                  )}
+                </Descriptions.Item>
+                {offenderData?.hair && (
+                  <Descriptions.Item
+                    label={
+                      <span>
+                        <FontAwesomeIcon
+                          className="offender-description-icon"
+                          icon={faUserHair}
+                        />
+                        Hair
+                      </span>
+                    }
+                  >
+                    {loading ? (
+                      <Skeleton title={{ width: 100 }} paragraph={false} />
+                    ) : (
+                      offenderData?.hair
+                    )}
+                  </Descriptions.Item>
+                )}
+                <Descriptions.Item
+                  label={
+                    <span>
+                      <FontAwesomeIcon
+                        className="offender-description-icon"
+                        icon={faMarsAndVenus}
+                      />
+                      Sex
+                    </span>
+                  }
+                >
+                  {loading ? (
+                    <Skeleton title={{ width: 100 }} paragraph={false} />
+                  ) : (
+                    getOffenderGender(offenderData?.gender)
+                  )}
+                </Descriptions.Item>
+                <Descriptions.Item
+                  label={
+                    <span>
+                      <FontAwesomeIcon
+                        className="offender-description-icon"
+                        icon={faEarth}
+                      />
+                      Ethnicity
+                    </span>
+                  }
+                >
+                  {loading ? (
+                    <Skeleton title={{ width: 100 }} paragraph={false} />
+                  ) : (
+                    getOffenderRace(offenderData?.race, false)
+                  )}
+                </Descriptions.Item>
+
+                {offenderData?.peculiarities && (
+                  <Descriptions.Item
+                    span={2}
+                    label={
+                      <span>
+                        <FontAwesomeIcon
+                          className="offender-description-icon"
+                          icon={faCircleInfo}
+                        />
+                        Additional Info
+                      </span>
+                    }
+                  >
+                    {loading ? (
+                      <Skeleton title={{ width: 100 }} paragraph={false} />
+                    ) : (
+                      offenderData?.peculiarities
+                    )}
+                  </Descriptions.Item>
+                )}
+
+                {offenderData?.incidents[0]?.location && (
+                  <Descriptions.Item
+                    span={2}
+                    label={
+                      <span>
+                        <FontAwesomeIcon
+                          className="offender-description-icon"
+                          icon={faLocationDot}
+                        />
+                        Last offence
+                      </span>
+                    }
+                  >
+                    {loading ? (
+                      <Skeleton title={{ width: 100 }} paragraph={false} />
+                    ) : (
+                      getLastOffence(offenderData?.incidents)?.location
+                    )}
+                  </Descriptions.Item>
+                )}
+              </Descriptions>
+            </Col>
+          </Row>
+          <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+            <Col>
+              <Button disabled={saving} onClick={onClose}>
+                Cancel
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                disabled={saving}
+                loading={saving}
+                type="primary"
+                onClick={() =>
+                  onSubmit({
+                    selectedOffenderIds: [offenderData?.id],
+                  })
+                }
+              >
+                Add Offender
+              </Button>
+            </Col>
+          </Row>
+        </Col>
+      )}
     </Row>
 
     <SRLWrapper
@@ -343,26 +325,7 @@ const AddExisitingOffender = ({
       }
       options={{ buttons: { showDownloadButton: false } }}
     />
-    <Form.Item>
-      <Row style={{ marginTop: 30 }} gutter={10} justify="end">
-        <Col>
-          <Button disabled={saving} onClick={onClose}>
-            Cancel
-          </Button>
-        </Col>
-        <Col>
-          <Button
-            disabled={saving}
-            loading={saving}
-            type="primary"
-            htmlType="submit"
-          >
-            Add Offender
-          </Button>
-        </Col>
-      </Row>
-    </Form.Item>
-  </Form>
+  </div>
 );
 
 export default AddExisitingOffender;

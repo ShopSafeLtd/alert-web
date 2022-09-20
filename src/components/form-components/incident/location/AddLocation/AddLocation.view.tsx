@@ -93,7 +93,7 @@ const AddOffender = ({ onClose, onSubmit, saving }: Props): JSX.Element => (
             type="primary"
             htmlType="submit"
           >
-            Create A New Location
+            Add New Location
           </Button>
         </Col>
       </Row>
