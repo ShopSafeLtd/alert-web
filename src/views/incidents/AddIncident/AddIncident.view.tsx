@@ -132,7 +132,6 @@ interface Props {
   primaryAddress:
     | Exclude<AddressesQuery['addresses'], undefined | null>[0]
     | undefined;
-  // addressData: AddressesQuery | undefined;
   addressLoading: boolean;
   imgChange: UploadProps['onChange'];
   onPreview: (value: Image) => void;
@@ -147,7 +146,6 @@ interface Props {
   toggleAddExistingOffender: () => void;
   updateOffenderList: (value: OffenderData[] | undefined) => void;
   offendersData: OffenderData[] | undefined;
-  deleteConfirm: (value: string | undefined) => void;
   addPreviousLocation: boolean;
   toggleAddPreviousLocation: () => void;
   updatePreviousLocation: (value: string | undefined) => void;
@@ -168,6 +166,8 @@ interface Props {
   }) => void;
   setAssignToImage: (image: Image) => void;
   removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
+  removeImage: (uid: string) => void;
+  removeOffender: (offenderId: string) => void;
 }
 
 const EditIncident = ({
@@ -193,7 +193,6 @@ const EditIncident = ({
   toggleAddExistingOffender,
   updateOffenderList,
   offendersData,
-  deleteConfirm,
   addPreviousLocation,
   toggleAddPreviousLocation,
   updatePreviousLocation,
@@ -212,6 +211,8 @@ const EditIncident = ({
   assignOffendersToImages,
   setAssignToImage,
   removeImageFromOffender,
+  removeImage,
+  removeOffender,
 }: Props): JSX.Element => (
   <div className="page-view">
     <PageHeader onBack={() => window.history.back()} title="Add Incident" />
@@ -529,7 +530,7 @@ const EditIncident = ({
                     key: 'images',
                     title: '',
                     dataIndex: 'images',
-                    render: (images) => {
+                    render: (images?: { id: string; optimised: string }[]) => {
                       if (images) {
                         return (
                           <img
@@ -540,7 +541,40 @@ const EditIncident = ({
                           />
                         );
                       }
-                      return <Button>Upload Image</Button>;
+                      return (
+                        <Upload
+                          action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                          fileList={fileList}
+                          onChange={imgChange}
+                          beforeUpload={beforeUpload}
+                          accept=".png,.jpeg,.webp"
+                          showUploadList={false}
+                          // onDownload={() =>
+                          //   confirm({
+                          //     title: 'Assign Offenders',
+                          //     content:
+                          //       'Do you Want to assign this image to any offenders shown in them?',
+                          //     okText: 'Yes',
+                          //     onOk() {
+                          //       toggleAssignImage();
+                          //     },
+                          //   })
+                          // }
+                          // itemRender={(file) => <Button>{file.key}</Button>}
+                        >
+                          <Button
+                            icon={
+                              <FontAwesomeIcon
+                                icon={faUpload}
+                                style={{ marginRight: 5 }}
+                              />
+                            }
+                            style={{ color: 'red' }}
+                          >
+                            Upload Image
+                          </Button>
+                        </Upload>
+                      );
                     },
                   },
                   {
@@ -574,14 +608,16 @@ const EditIncident = ({
                     title: 'Delete',
                     dataIndex: 'delete',
                     width: 100,
-                    render: (value, record) => (
-                      <Button
-                        disabled={saving}
-                        onClick={() => {
-                          deleteConfirm(record.key || undefined);
-                        }}
-                        icon={<DeleteOutlined />}
-                      />
+                    render: (_, record) => (
+                      <Popconfirm
+                        placement="topLeft"
+                        title="Remove the offender?"
+                        onConfirm={() => removeOffender(record.key)}
+                        okText="Yes"
+                        cancelText="No"
+                      >
+                        <Button disabled={saving} icon={<DeleteOutlined />} />
+                      </Popconfirm>
                     ),
                   },
                 ]}
@@ -809,6 +845,20 @@ const EditIncident = ({
                         <Spin />
                       </div>
                     )}
+                    <div className="image-remove-button">
+                      <Popconfirm
+                        placement="topLeft"
+                        title="Remove the image?"
+                        onConfirm={() => removeImage(file.uid)}
+                        okText="Yes"
+                        cancelText="No"
+                      >
+                        <Button
+                          size="small"
+                          icon={<FontAwesomeIcon icon={faTrash} />}
+                        />
+                      </Popconfirm>
+                    </div>
                     <div
                       className="image-card-image"
                       style={{

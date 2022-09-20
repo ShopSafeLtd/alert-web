@@ -108,7 +108,7 @@ const useAssignImageOffender = ({
 
   const submitImage = () => {
     setSelected([]);
-    if (image)
+    if (image) {
       onSubmit({
         image: {
           ...image,
@@ -122,7 +122,6 @@ const useAssignImageOffender = ({
           .map((offender) => {
             let images: OffenderData['images'] = [];
             if (offender.images) images = offender.images;
-
             return {
               ...offender,
               images: [
@@ -139,6 +138,7 @@ const useAssignImageOffender = ({
             };
           }),
       });
+    }
   };
 
   return {

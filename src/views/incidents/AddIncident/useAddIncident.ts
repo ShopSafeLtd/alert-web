@@ -141,6 +141,8 @@ interface Return {
   }) => void;
   setAssignToImage: (image: Image) => void;
   removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
+  removeImage: (uid: string) => void;
+  removeOffender: (offenderId: string) => void;
 }
 
 const useEditIncident = (): Return => {
@@ -672,6 +674,34 @@ const useEditIncident = (): Return => {
     image: Image;
     offenders: OffenderData[];
   }) => {
+    if (offendersData) {
+      const changedOffendersIds = data.offenders.map(({ id }) => id);
+      const originalOffendersIds = offendersData.map(({ id }) => id);
+      const originalImageOffendersIds =
+        fileList
+          .find(({ uid }) => uid === data.image.uid)
+          ?.offenders?.map(({ id }) => id) || [];
+      const updatedOffenders = offendersData
+        .map((offender) => {
+          if (changedOffendersIds.includes(offender.id))
+            return data.offenders.find(({ id }) => id === offender.id);
+          if (originalImageOffendersIds.includes(offender.id))
+            return {
+              ...offender,
+              images: offender.images?.filter(
+                ({ id }) => id !== data.image.uid
+              ),
+            };
+          return offender;
+        })
+        .filter(isOffenderData);
+      const newOffenders = data.offenders.filter(
+        (offender) => !originalOffendersIds.includes(offender.id)
+      );
+
+      setOffendersData([...updatedOffenders, ...newOffenders]);
+    }
+
     // find index of file in fileList array
     const fileIndex = fileList.map(({ uid }) => uid).indexOf(data.image.uid);
     // update the file object in the array with the new value, update will replace value in same place in array
@@ -682,23 +712,6 @@ const useEditIncident = (): Return => {
         },
       })
     );
-
-    if (offendersData) {
-      const changedOffendersIds = data.offenders.map(({ id }) => id);
-      const originalOffendersIds = offendersData.map(({ id }) => id);
-      const updatedOffenders = offendersData
-        .map((offender) => {
-          if (changedOffendersIds.includes(offender.id))
-            return data.offenders.find(({ id }) => id === offender.id);
-          return offender;
-        })
-        .filter(isOffenderData);
-      const newOffenders = data.offenders.filter(
-        (offender) => !originalOffendersIds.includes(offender.id)
-      );
-
-      setOffendersData([...updatedOffenders, ...newOffenders]);
-    }
 
     setNewImage(null);
   };
@@ -743,6 +756,16 @@ const useEditIncident = (): Return => {
           })
         );
     }
+  };
+
+  const removeImage = (uid: string) => {
+    setFileList(fileList.filter((image) => image.uid !== uid));
+  };
+
+  const removeOffender = (offenderId: string) => {
+    setOffendersData(
+      offendersData?.filter((offender) => offender.id !== offenderId)
+    );
   };
 
   return {
@@ -796,6 +819,8 @@ const useEditIncident = (): Return => {
     assignOffendersToImages,
     setAssignToImage,
     removeImageFromOffender,
+    removeImage,
+    removeOffender,
   };
 };
 

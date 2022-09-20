@@ -12,7 +12,6 @@ function EditIncident(): JSX.Element {
     addRecentOffender,
     addressLoading,
     beforeUpload,
-    deleteConfirm,
     fileList,
     form,
     groups,
@@ -44,6 +43,8 @@ function EditIncident(): JSX.Element {
     setAssignToImage,
     onPreview,
     removeImageFromOffender,
+    removeImage,
+    removeOffender,
   } = useEditIncident();
 
   return (
@@ -57,7 +58,6 @@ function EditIncident(): JSX.Element {
         addRecentOffender={addRecentOffender}
         addressLoading={addressLoading}
         beforeUpload={beforeUpload}
-        deleteConfirm={deleteConfirm}
         fileList={fileList}
         form={form}
         groups={groups}
@@ -89,6 +89,8 @@ function EditIncident(): JSX.Element {
         setAssignToImage={setAssignToImage}
         onPreview={onPreview}
         removeImageFromOffender={removeImageFromOffender}
+        removeImage={removeImage}
+        removeOffender={removeOffender}
       />
     </div>
   );

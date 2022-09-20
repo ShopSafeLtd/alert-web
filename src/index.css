@@ -60,6 +60,12 @@
 .incident-form-images .image-card .image-card-offender-text {
   flex: 1;
 }
+.incident-form-images .image-card .image-remove-button {
+  z-index: 1;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
 .incident-form-images .image-card-loading {
   position: absolute;
   z-index: 1;
