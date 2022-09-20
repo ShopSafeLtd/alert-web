@@ -62,17 +62,18 @@ const ViewIncident = ({
   addExistingOffender,
   toggleAddExistingOffender,
   updateOffenderList,
-}: Props): JSX.Element =>
-  loading ? (
-    <Skeleton />
-  ) : (
-    <div className="page-container">
-      <Row>
-        <Col span={6}>
-          <IncidentSideList current={incidentId} />
-        </Col>
-        <Col span={18}>
-          <div className="view-incident">
+}: Props): JSX.Element => (
+  <div className="page-container">
+    <Row>
+      <Col span={6}>
+        <IncidentSideList current={incidentId} />
+      </Col>
+
+      <Col span={18}>
+        <div className="view-incident">
+          {loading ? (
+            <Skeleton />
+          ) : (
             <Row
               gutter={8}
               justify="start"
@@ -90,61 +91,56 @@ const ViewIncident = ({
                 </Col>
               ))}
             </Row>
-            <div className="incident-content">
-              <Tabs
-                tabBarExtraContent={
-                  <Row>
-                    {editRights && (
-                      <Col>
-                        <Link to={`/app/incidents/edit/${incidentId}`}>
-                          <Button
-                            disabled={saving}
-                            loading={saving}
-                            type="text"
-                          >
-                            Edit Incident
-                          </Button>
-                        </Link>
-                      </Col>
-                    )}
-                    {deleteRights && (
-                      <Col>
-                        <Button
-                          onClick={() => {
-                            onDelete(incidentId);
-                          }}
-                          danger
-                          disabled={saving}
-                          loading={saving}
-                          type="text"
-                        >
-                          Delete Incident
+          )}
+          <div className="incident-content">
+            <Tabs
+              tabBarExtraContent={
+                <Row>
+                  {editRights && (
+                    <Col>
+                      <Link to={`/app/incidents/edit/${incidentId}`}>
+                        <Button disabled={saving} loading={saving} type="text">
+                          Edit Incident
                         </Button>
-                      </Col>
-                    )}
-                  </Row>
-                }
-              >
-                <Tabs.TabPane key={0} tab="Details">
+                      </Link>
+                    </Col>
+                  )}
+                  {deleteRights && (
+                    <Col>
+                      <Button
+                        onClick={() => {
+                          onDelete(incidentId);
+                        }}
+                        danger
+                        disabled={saving}
+                        loading={saving}
+                        type="text"
+                      >
+                        Delete Incident
+                      </Button>
+                    </Col>
+                  )}
+                </Row>
+              }
+            >
+              <Tabs.TabPane key={0} tab="Details">
+                {loading ? (
+                  <Skeleton />
+                ) : (
                   <div className="incident-tab-content">
                     <Row>
                       <Col span={13}>
                         <div className="incident-details-main">
-                          {loading ? (
-                            <Skeleton />
-                          ) : (
-                            <>
-                              <Title level={4}>{data?.incident?.subject}</Title>
-                              <Text>{data?.incident?.description}</Text>
-                              <Row className="incident-tags">
-                                {data?.incident?.crimeTypes.map((crimeType) => (
-                                  <Col key={crimeType.id}>
-                                    <Tag color="red">{crimeType.name}</Tag>
-                                  </Col>
-                                ))}
-                              </Row>
-                            </>
-                          )}
+                          <Title level={4}>{data?.incident?.subject}</Title>
+                          <Text>{data?.incident?.description}</Text>
+                          <Row className="incident-tags">
+                            {data?.incident?.crimeTypes.map((crimeType) => (
+                              <Col key={crimeType.id}>
+                                <Tag color="red">{crimeType.name}</Tag>
+                              </Col>
+                            ))}
+                          </Row>
+
                           <Descriptions
                             column={1}
                             className="incident-descriptions"
@@ -160,14 +156,7 @@ const ViewIncident = ({
                                 </span>
                               }
                             >
-                              {loading ? (
-                                <Skeleton
-                                  title={{ width: 100 }}
-                                  paragraph={false}
-                                />
-                              ) : (
-                                data?.incident?.dayTime
-                              )}
+                              {data?.incident?.dayTime}
                             </Descriptions.Item>
                             <Descriptions.Item
                               label={
@@ -180,15 +169,8 @@ const ViewIncident = ({
                                 </span>
                               }
                             >
-                              {loading ? (
-                                <Skeleton
-                                  title={{ width: 100 }}
-                                  paragraph={false}
-                                />
-                              ) : (
-                                `${data?.incident?.createdBy.fullName} -
-                              ${data?.incident?.createdBy.organisation}`
-                              )}
+                              {`${data?.incident?.createdBy.fullName} -
+                              ${data?.incident?.createdBy.organisation}`}
                             </Descriptions.Item>
                             <Descriptions.Item
                               label={
@@ -201,14 +183,7 @@ const ViewIncident = ({
                                 </span>
                               }
                             >
-                              {loading ? (
-                                <Skeleton
-                                  title={{ width: 100 }}
-                                  paragraph={false}
-                                />
-                              ) : (
-                                data?.incident?.location?.full
-                              )}
+                              {data?.incident?.location?.full}
                             </Descriptions.Item>
                           </Descriptions>
                         </div>
@@ -294,29 +269,30 @@ const ViewIncident = ({
                       </Col>
                     </Row>
                   </div>
-                </Tabs.TabPane>
-              </Tabs>
-            </div>
+                )}
+              </Tabs.TabPane>
+            </Tabs>
           </div>
-        </Col>
-      </Row>
+        </div>
+      </Col>
+    </Row>
 
-      <Drawer
-        title="Link Offenders"
-        visible={addExistingOffender}
-        width="600"
-        onClose={toggleAddExistingOffender}
-      >
-        {addExistingOffender ? (
-          <LinkOffender
-            update={updateOffenderList}
-            onClose={toggleAddExistingOffender}
-          />
-        ) : (
-          <div />
-        )}
-      </Drawer>
-    </div>
-  );
+    <Drawer
+      title="Link Offenders"
+      visible={addExistingOffender}
+      width="600"
+      onClose={toggleAddExistingOffender}
+    >
+      {addExistingOffender ? (
+        <LinkOffender
+          update={updateOffenderList}
+          onClose={toggleAddExistingOffender}
+        />
+      ) : (
+        <div />
+      )}
+    </Drawer>
+  </div>
+);
 
 export default ViewIncident;

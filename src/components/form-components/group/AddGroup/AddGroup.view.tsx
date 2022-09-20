@@ -5,6 +5,7 @@ import { ListSchemeUsersQuery } from 'graphql/generated';
 interface FormData {
   name: string;
   description: string;
+  users: string[];
 }
 
 interface Props {

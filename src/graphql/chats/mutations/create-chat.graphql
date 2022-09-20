@@ -3,5 +3,30 @@ mutation createChat($data: ChatCreateInput!) {
     id
     name
     description
+    members {
+      id
+      newMessages
+      updatedAt
+      user {
+        id
+        fullName
+        firstLetter
+        organisation
+      }
+      chat {
+        id
+        name
+        firstLetter
+        messages {
+          id
+          content
+          createdAt
+          from {
+            id
+            fullName
+          }
+        }
+      }
+    }
   }
 }

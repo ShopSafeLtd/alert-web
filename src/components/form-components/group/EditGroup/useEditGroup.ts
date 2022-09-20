@@ -62,7 +62,7 @@ const useEditGroup = ({ onClose, groupId }: Props): Return => {
         },
       },
       orderBy: {
-        fullName: SortOrder.Desc,
+        fullName: SortOrder.Asc,
       },
     },
   });

@@ -1458,17 +1458,18 @@
   margin-top: 8px;
   margin-left: -8px;
 }
-.chats-side-list,
-.view-message {
-  height: calc(100vh - 70px);
-  width: 100%;
-}
 .chats-side-list {
   margin: 0;
   padding: 0;
+  height: calc(100vh - 70px);
+  max-width: 100%;
   border-right: 1px solid #e0e0e0;
   overflow-y: scroll;
+}
+.chats-side-list .chat-list {
+  width: 100%;
   overflow: hidden;
+  background: pink;
 }
 .chats-side-list .chat-item {
   width: 100%;
@@ -1480,15 +1481,32 @@
 .chats-side-list .chat-item:hover {
   background-color: rgba(0, 0, 0, 0.02);
 }
+.chats-side-list .chat-item .chat-item-tag {
+  margin: 0 5px;
+  padding: 0 2px;
+  font-size: 10px;
+  color: #de4436;
+}
 .chat-item.current {
   background-color: rgba(0, 0, 0, 0.05);
 }
+.chat-title,
 .view-message {
   display: flex;
   flex-direction: column;
 }
+.chat-title {
+  margin-top: 30px;
+  align-items: center;
+  font-size: 16px;
+}
+.view-message {
+  height: calc(100vh - 70px);
+  width: 100%;
+}
 .view-message .message-container {
   margin-bottom: 10px;
+  height: calc(100vh - 275px);
   width: 100%;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;

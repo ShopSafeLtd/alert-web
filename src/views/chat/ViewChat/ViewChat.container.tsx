@@ -1,12 +1,22 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import View from './ViewChat.view';
-import useViewOffender from './useViewChat';
+import useViewChat from './useViewChat';
 
-const ViewOffender = (): JSX.Element => {
+const ViewChat = (): JSX.Element => {
   const chatId = useParams().id;
-  const { data, loading, saving, handleMarkAsRead, currentId } =
-    useViewOffender();
+  const {
+    data,
+    loading,
+    saving,
+    handleMarkAsRead,
+    currentId,
+    addChat,
+    toggleAddChat,
+    updateAddUserChat,
+    updateDeletedUserChat,
+    adminRights,
+  } = useViewChat();
 
   return (
     <View
@@ -15,8 +25,13 @@ const ViewOffender = (): JSX.Element => {
       saving={saving}
       chatId={chatId || currentId}
       handleMarkAsRead={handleMarkAsRead}
+      addChat={addChat}
+      toggleAddChat={toggleAddChat}
+      updateAddUserChat={updateAddUserChat}
+      updateDeletedUserChat={updateDeletedUserChat}
+      adminRights={adminRights}
     />
   );
 };
 
-export default ViewOffender;
+export default ViewChat;

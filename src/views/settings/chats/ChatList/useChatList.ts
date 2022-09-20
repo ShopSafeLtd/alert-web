@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   QueryMode,
   useSchemeChatsQuery,
   SchemeChatsQuery,
   SchemeChatsDocument,
   CreateChatMutation,
-} from "graphql/generated";
-import { useStoreState } from "state";
-import { MutationUpdaterFn } from "@apollo/client";
+} from 'graphql/generated';
+import { useStoreState } from 'state';
+import { MutationUpdaterFn } from '@apollo/client';
 
 interface Return {
   data: SchemeChatsQuery | undefined;
@@ -22,10 +22,10 @@ interface Return {
 const useChatList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const [addChat, setAddChat] = useState(false);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const { data, loading } = useSchemeChatsQuery({
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: 'cache-and-network',
     variables: {
       where: {
         scheme: { id: { equals: schemeId } },
@@ -46,6 +46,7 @@ const useChatList = (): Return => {
       },
     },
   });
+
   const toggleAddChat = () => {
     setAddChat(!addChat);
   };
@@ -87,7 +88,7 @@ const useChatList = (): Return => {
       query: SchemeChatsDocument,
       data: {
         chats: [...existingData.chats, res.createChat],
-        __typename: "Query",
+        __typename: 'Query',
       },
       variables: {
         where: {

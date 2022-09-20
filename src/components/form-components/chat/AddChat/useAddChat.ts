@@ -14,6 +14,7 @@ import { notification } from 'antd';
 interface FormData {
   name: string;
   description: string;
+  users?: string[];
 }
 interface Props {
   onClose: () => void;
@@ -52,7 +53,7 @@ const useAddChat = ({ onClose, update }: Props): Return => {
         },
       },
       orderBy: {
-        fullName: SortOrder.Desc,
+        fullName: SortOrder.Asc,
       },
     },
   });
@@ -62,7 +63,7 @@ const useAddChat = ({ onClose, update }: Props): Return => {
       onClose();
       notification.success({
         message: 'Successfully Added!',
-        description: 'The Chat Group has been added! ',
+        description: 'The Chat has been added! ',
         placement: 'bottomRight',
       });
     },
@@ -83,7 +84,16 @@ const useAddChat = ({ onClose, update }: Props): Return => {
       variables: {
         data: {
           name: data.name,
-          description: data.description || '',
+          description: data.description || null,
+          members:
+            data.users && data.users?.length > 0
+              ? {
+                  create: data.users?.map((id) => ({
+                    user: { connect: { id } },
+                    newMessages: false,
+                  })),
+                }
+              : undefined,
           scheme: {
             connect: {
               id: schemeId,

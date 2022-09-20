@@ -3,5 +3,9 @@ mutation createGroup($data: GroupCreateInput!) {
     id
     name
     description
+    users {
+      id
+      fullName
+    }
   }
 }

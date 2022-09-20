@@ -14086,6 +14086,7 @@ export type ChatQuery = {
     id: string;
     name: string;
     description?: string | null;
+    totalMembers?: number | null;
     members: Array<{
       __typename?: 'UserChat';
       id: string;
@@ -14094,6 +14095,7 @@ export type ChatQuery = {
         id: string;
         fullName: string;
         organisation: string;
+        firstLetter?: string | null;
       };
     }>;
   } | null;
@@ -14110,6 +14112,32 @@ export type CreateChatMutation = {
     id: string;
     name: string;
     description?: string | null;
+    members: Array<{
+      __typename?: 'UserChat';
+      id: string;
+      newMessages?: boolean | null;
+      updatedAt: any;
+      user: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        firstLetter?: string | null;
+        organisation: string;
+      };
+      chat: {
+        __typename?: 'Chat';
+        id: string;
+        name: string;
+        firstLetter?: string | null;
+        messages: Array<{
+          __typename?: 'Message';
+          id: string;
+          content: string;
+          createdAt: any;
+          from: { __typename?: 'User'; id: string; fullName: string };
+        }>;
+      };
+    }>;
   };
 };
 
@@ -14191,6 +14219,7 @@ export type CreateGroupMutation = {
     id: string;
     name: string;
     description?: string | null;
+    users: Array<{ __typename?: 'User'; id: string; fullName: string }>;
   };
 };
 
@@ -14601,25 +14630,6 @@ export type DeleteMessageMutation = {
   deleteMessage?: { __typename?: 'Message'; id: string } | null;
 };
 
-export type UpdateUserChatMutationVariables = Exact<{
-  where: UniqueId;
-  data: UserUpdateInput;
-}>;
-
-export type UpdateUserChatMutation = {
-  __typename?: 'Mutation';
-  updateUser?: {
-    __typename?: 'User';
-    id: string;
-    chats: Array<{
-      __typename?: 'UserChat';
-      id: string;
-      newMessages?: boolean | null;
-      chat: { __typename?: 'Chat'; id: string; name: string };
-    }>;
-  } | null;
-};
-
 export type MessagesQueryVariables = Exact<{
   chat?: InputMaybe<Scalars['String']>;
   after?: InputMaybe<MessageWhereUniqueInput>;
@@ -14641,39 +14651,6 @@ export type MessagesQuery = {
     };
     chat: { __typename?: 'Chat'; id: string; name: string };
   }>;
-};
-
-export type UserChatsQueryVariables = Exact<{
-  where: UserWhereUniqueInput;
-  orderBy?: InputMaybe<
-    Array<UserChatOrderByWithRelationInput> | UserChatOrderByWithRelationInput
-  >;
-  scheme: Scalars['String'];
-}>;
-
-export type UserChatsQuery = {
-  __typename?: 'Query';
-  user?: {
-    __typename?: 'User';
-    id: string;
-    chats: Array<{
-      __typename?: 'UserChat';
-      id: string;
-      newMessages?: boolean | null;
-      chat: {
-        __typename?: 'Chat';
-        id: string;
-        name: string;
-        firstLetter?: string | null;
-        messages: Array<{
-          __typename?: 'Message';
-          id: string;
-          content: string;
-          from: { __typename?: 'User'; id: string; fullName: string };
-        }>;
-      };
-    }>;
-  } | null;
 };
 
 export type MessagesSubscriptionSubscriptionVariables = Exact<{
@@ -15471,6 +15448,109 @@ export type UserQuery = {
   } | null;
 };
 
+export type CreateUserChatMutationVariables = Exact<{
+  data: UserChatCreateInput;
+}>;
+
+export type CreateUserChatMutation = {
+  __typename?: 'Mutation';
+  createUserChat: {
+    __typename?: 'UserChat';
+    id: string;
+    newMessages?: boolean | null;
+    updatedAt: any;
+    user: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      firstLetter?: string | null;
+    };
+    chat: {
+      __typename?: 'Chat';
+      id: string;
+      name: string;
+      firstLetter?: string | null;
+      messages: Array<{
+        __typename?: 'Message';
+        id: string;
+        content: string;
+        createdAt: any;
+        from: { __typename?: 'User'; id: string; fullName: string };
+      }>;
+    };
+  };
+};
+
+export type DeleteUserChatMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type DeleteUserChatMutation = {
+  __typename?: 'Mutation';
+  deleteUserChat?: { __typename?: 'UserChat'; id: string } | null;
+};
+
+export type UpdateUserChatMutationVariables = Exact<{
+  where: UniqueId;
+  data: UserUpdateInput;
+}>;
+
+export type UpdateUserChatMutation = {
+  __typename?: 'Mutation';
+  updateUser?: {
+    __typename?: 'User';
+    id: string;
+    chats: Array<{
+      __typename?: 'UserChat';
+      id: string;
+      newMessages?: boolean | null;
+      chat: { __typename?: 'Chat'; id: string; name: string };
+    }>;
+  } | null;
+};
+
+export type UserChatsQueryVariables = Exact<{
+  where: UserWhereUniqueInput;
+  orderBy?: InputMaybe<
+    Array<UserChatOrderByWithRelationInput> | UserChatOrderByWithRelationInput
+  >;
+  scheme: Scalars['String'];
+}>;
+
+export type UserChatsQuery = {
+  __typename?: 'Query';
+  user?: {
+    __typename?: 'User';
+    id: string;
+    chats: Array<{
+      __typename?: 'UserChat';
+      id: string;
+      newMessages?: boolean | null;
+      updatedAt: any;
+      user: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        firstLetter?: string | null;
+      };
+      chat: {
+        __typename?: 'Chat';
+        id: string;
+        name: string;
+        firstLetter?: string | null;
+        totalMembers?: number | null;
+        messages: Array<{
+          __typename?: 'Message';
+          id: string;
+          content: string;
+          createdAt: any;
+          from: { __typename?: 'User'; id: string; fullName: string };
+        }>;
+      };
+    }>;
+  } | null;
+};
+
 export type CreateUserInDatabaseMutationVariables = Exact<{
   data: CreateUserData;
   groupWhere?: InputMaybe<GroupWhereInput>;
@@ -15523,6 +15603,7 @@ export type ListSchemeUsersQuery = {
     __typename?: 'User';
     id: string;
     fullName: string;
+    firstLetter?: string | null;
     email: string;
     organisation: string;
     status?: string | null;
@@ -16077,12 +16158,14 @@ export const ChatDocument = gql`
       id
       name
       description
+      totalMembers
       members {
         id
         user {
           id
           fullName
           organisation
+          firstLetter
         }
       }
     }
@@ -16129,6 +16212,31 @@ export const CreateChatDocument = gql`
       id
       name
       description
+      members {
+        id
+        newMessages
+        updatedAt
+        user {
+          id
+          fullName
+          firstLetter
+          organisation
+        }
+        chat {
+          id
+          name
+          firstLetter
+          messages {
+            id
+            content
+            createdAt
+            from {
+              id
+              fullName
+            }
+          }
+        }
+      }
     }
   }
 `;
@@ -16406,6 +16514,10 @@ export const CreateGroupDocument = gql`
       id
       name
       description
+      users {
+        id
+        fullName
+      }
     }
   }
 `;
@@ -17330,65 +17442,6 @@ export type DeleteMessageMutationOptions = Apollo.BaseMutationOptions<
   DeleteMessageMutation,
   DeleteMessageMutationVariables
 >;
-export const UpdateUserChatDocument = gql`
-  mutation updateUserChat($where: UniqueId!, $data: UserUpdateInput!) {
-    updateUser(where: $where, data: $data) {
-      id
-      chats {
-        id
-        newMessages
-        chat {
-          id
-          name
-        }
-      }
-    }
-  }
-`;
-export type UpdateUserChatMutationFn = Apollo.MutationFunction<
-  UpdateUserChatMutation,
-  UpdateUserChatMutationVariables
->;
-
-/**
- * __useUpdateUserChatMutation__
- *
- * To run a mutation, you first call `useUpdateUserChatMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateUserChatMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateUserChatMutation, { data, loading, error }] = useUpdateUserChatMutation({
- *   variables: {
- *      where: // value for 'where'
- *      data: // value for 'data'
- *   },
- * });
- */
-export function useUpdateUserChatMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateUserChatMutation,
-    UpdateUserChatMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    UpdateUserChatMutation,
-    UpdateUserChatMutationVariables
-  >(UpdateUserChatDocument, options);
-}
-export type UpdateUserChatMutationHookResult = ReturnType<
-  typeof useUpdateUserChatMutation
->;
-export type UpdateUserChatMutationResult =
-  Apollo.MutationResult<UpdateUserChatMutation>;
-export type UpdateUserChatMutationOptions = Apollo.BaseMutationOptions<
-  UpdateUserChatMutation,
-  UpdateUserChatMutationVariables
->;
 export const MessagesDocument = gql`
   query messages($chat: String, $after: MessageWhereUniqueInput) {
     messages(
@@ -17459,85 +17512,6 @@ export type MessagesLazyQueryHookResult = ReturnType<
 export type MessagesQueryResult = Apollo.QueryResult<
   MessagesQuery,
   MessagesQueryVariables
->;
-export const UserChatsDocument = gql`
-  query userChats(
-    $where: UserWhereUniqueInput!
-    $orderBy: [UserChatOrderByWithRelationInput!]
-    $scheme: String!
-  ) {
-    user(where: $where) {
-      id
-      chats(
-        where: { chat: { scheme: { id: { equals: $scheme } } } }
-        orderBy: $orderBy
-      ) {
-        id
-        newMessages
-        chat {
-          id
-          name
-          firstLetter
-          messages {
-            id
-            content
-            from {
-              id
-              fullName
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
-/**
- * __useUserChatsQuery__
- *
- * To run a query within a React component, call `useUserChatsQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserChatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useUserChatsQuery({
- *   variables: {
- *      where: // value for 'where'
- *      orderBy: // value for 'orderBy'
- *      scheme: // value for 'scheme'
- *   },
- * });
- */
-export function useUserChatsQuery(
-  baseOptions: Apollo.QueryHookOptions<UserChatsQuery, UserChatsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<UserChatsQuery, UserChatsQueryVariables>(
-    UserChatsDocument,
-    options
-  );
-}
-export function useUserChatsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    UserChatsQuery,
-    UserChatsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<UserChatsQuery, UserChatsQueryVariables>(
-    UserChatsDocument,
-    options
-  );
-}
-export type UserChatsQueryHookResult = ReturnType<typeof useUserChatsQuery>;
-export type UserChatsLazyQueryHookResult = ReturnType<
-  typeof useUserChatsLazyQuery
->;
-export type UserChatsQueryResult = Apollo.QueryResult<
-  UserChatsQuery,
-  UserChatsQueryVariables
 >;
 export const MessagesSubscriptionDocument = gql`
   subscription MessagesSubscription($chat: ID!) {
@@ -19431,6 +19405,273 @@ export function useUserLazyQuery(
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
+export const CreateUserChatDocument = gql`
+  mutation createUserChat($data: UserChatCreateInput!) {
+    createUserChat(data: $data) {
+      id
+      newMessages
+      updatedAt
+      user {
+        id
+        fullName
+        firstLetter
+      }
+      chat {
+        id
+        name
+        firstLetter
+        messages {
+          id
+          content
+          createdAt
+          from {
+            id
+            fullName
+          }
+        }
+      }
+    }
+  }
+`;
+export type CreateUserChatMutationFn = Apollo.MutationFunction<
+  CreateUserChatMutation,
+  CreateUserChatMutationVariables
+>;
+
+/**
+ * __useCreateUserChatMutation__
+ *
+ * To run a mutation, you first call `useCreateUserChatMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUserChatMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUserChatMutation, { data, loading, error }] = useCreateUserChatMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateUserChatMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateUserChatMutation,
+    CreateUserChatMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateUserChatMutation,
+    CreateUserChatMutationVariables
+  >(CreateUserChatDocument, options);
+}
+export type CreateUserChatMutationHookResult = ReturnType<
+  typeof useCreateUserChatMutation
+>;
+export type CreateUserChatMutationResult =
+  Apollo.MutationResult<CreateUserChatMutation>;
+export type CreateUserChatMutationOptions = Apollo.BaseMutationOptions<
+  CreateUserChatMutation,
+  CreateUserChatMutationVariables
+>;
+export const DeleteUserChatDocument = gql`
+  mutation deleteUserChat($id: String!) {
+    deleteUserChat(where: { id: $id }) {
+      id
+    }
+  }
+`;
+export type DeleteUserChatMutationFn = Apollo.MutationFunction<
+  DeleteUserChatMutation,
+  DeleteUserChatMutationVariables
+>;
+
+/**
+ * __useDeleteUserChatMutation__
+ *
+ * To run a mutation, you first call `useDeleteUserChatMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteUserChatMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteUserChatMutation, { data, loading, error }] = useDeleteUserChatMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteUserChatMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteUserChatMutation,
+    DeleteUserChatMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteUserChatMutation,
+    DeleteUserChatMutationVariables
+  >(DeleteUserChatDocument, options);
+}
+export type DeleteUserChatMutationHookResult = ReturnType<
+  typeof useDeleteUserChatMutation
+>;
+export type DeleteUserChatMutationResult =
+  Apollo.MutationResult<DeleteUserChatMutation>;
+export type DeleteUserChatMutationOptions = Apollo.BaseMutationOptions<
+  DeleteUserChatMutation,
+  DeleteUserChatMutationVariables
+>;
+export const UpdateUserChatDocument = gql`
+  mutation updateUserChat($where: UniqueId!, $data: UserUpdateInput!) {
+    updateUser(where: $where, data: $data) {
+      id
+      chats {
+        id
+        newMessages
+        chat {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+export type UpdateUserChatMutationFn = Apollo.MutationFunction<
+  UpdateUserChatMutation,
+  UpdateUserChatMutationVariables
+>;
+
+/**
+ * __useUpdateUserChatMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserChatMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserChatMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserChatMutation, { data, loading, error }] = useUpdateUserChatMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateUserChatMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateUserChatMutation,
+    UpdateUserChatMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateUserChatMutation,
+    UpdateUserChatMutationVariables
+  >(UpdateUserChatDocument, options);
+}
+export type UpdateUserChatMutationHookResult = ReturnType<
+  typeof useUpdateUserChatMutation
+>;
+export type UpdateUserChatMutationResult =
+  Apollo.MutationResult<UpdateUserChatMutation>;
+export type UpdateUserChatMutationOptions = Apollo.BaseMutationOptions<
+  UpdateUserChatMutation,
+  UpdateUserChatMutationVariables
+>;
+export const UserChatsDocument = gql`
+  query userChats(
+    $where: UserWhereUniqueInput!
+    $orderBy: [UserChatOrderByWithRelationInput!]
+    $scheme: String!
+  ) {
+    user(where: $where) {
+      id
+      chats(
+        where: { chat: { scheme: { id: { equals: $scheme } } } }
+        orderBy: $orderBy
+      ) {
+        id
+        newMessages
+        updatedAt
+        user {
+          id
+          fullName
+          firstLetter
+        }
+        chat {
+          id
+          name
+          firstLetter
+          totalMembers
+          messages {
+            id
+            content
+            createdAt
+            from {
+              id
+              fullName
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useUserChatsQuery__
+ *
+ * To run a query within a React component, call `useUserChatsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserChatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserChatsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      scheme: // value for 'scheme'
+ *   },
+ * });
+ */
+export function useUserChatsQuery(
+  baseOptions: Apollo.QueryHookOptions<UserChatsQuery, UserChatsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<UserChatsQuery, UserChatsQueryVariables>(
+    UserChatsDocument,
+    options
+  );
+}
+export function useUserChatsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    UserChatsQuery,
+    UserChatsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<UserChatsQuery, UserChatsQueryVariables>(
+    UserChatsDocument,
+    options
+  );
+}
+export type UserChatsQueryHookResult = ReturnType<typeof useUserChatsQuery>;
+export type UserChatsLazyQueryHookResult = ReturnType<
+  typeof useUserChatsLazyQuery
+>;
+export type UserChatsQueryResult = Apollo.QueryResult<
+  UserChatsQuery,
+  UserChatsQueryVariables
+>;
 export const CreateUserInDatabaseDocument = gql`
   mutation createUserInDatabase(
     $data: CreateUserData!
@@ -19567,6 +19808,7 @@ export const ListSchemeUsersDocument = gql`
     users(where: $where, orderBy: $orderBy, after: $after) {
       id
       fullName
+      firstLetter
       email
       organisation
       status

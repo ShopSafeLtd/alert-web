@@ -1,6 +1,6 @@
 import React from 'react';
 import { ListOffendersQuery, RecycleOffenderMutation } from 'graphql/generated';
-import { Col, Input, Row, Select, Pagination, Button } from 'antd';
+import { Col, Input, Row, Select, Pagination, Button, Affix } from 'antd';
 import OffenderCard from 'components/offenders/OffenderCard';
 import OffenderSkeletonCard from 'components/offenders/OffenderSkeletonCard/OffenderSkeletonCard.view';
 import { SRLWrapper } from 'simple-react-lightbox';
@@ -58,79 +58,81 @@ const OffenderFeed = ({
   onNavigate,
 }: Props): JSX.Element => (
   <div className="feed-container">
-    <Row gutter={8} style={{ marginBottom: 10 }}>
-      <Col>
-        <Select
-          placeholder="Groups"
-          mode="multiple"
-          size="small"
-          maxTagCount={2}
-          style={{ minWidth: 150 }}
-          loading={groupsLoading}
-          onChange={onGroupsChange}
-          value={variables.groups}
-        >
-          {groups.map((group) => (
-            <Select.Option value={group.value}>{group.label}</Select.Option>
-          ))}
-        </Select>
-      </Col>
-      <Col>
-        <Select
-          placeholder="Offender Warnings "
-          mode="multiple"
-          size="small"
-          maxTagCount={2}
-          style={{ minWidth: 200 }}
-          onChange={onTagsChange}
-          value={variables.tags}
-          loading={tagsLoading}
-        >
-          {tags.map((tag) => (
-            <Select.Option value={tag.value}>{tag.label}</Select.Option>
-          ))}
-        </Select>
-      </Col>
-      <Col flex={1}>
-        <Input
-          size="small"
-          style={{ width: '80%' }}
-          placeholder="Search Offenders..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </Col>
-      <Col>
-        <Select
-          value={order}
-          onChange={setOrder}
-          size="small"
-          style={{ minWidth: 150, marginRight: 5 }}
-        >
-          <Select.Option value={OffenderSort.updatedAtDesc}>
-            Newest First
-          </Select.Option>
-          <Select.Option value={OffenderSort.updatedAtAsc}>
-            Oldest First
-          </Select.Option>
-        </Select>
-      </Col>
-      <Col>
-        <Button
-          type="primary"
-          onClick={onNavigate}
-          icon={
-            <FontAwesomeIcon
-              icon={faPlus}
-              size="lg"
-              style={{ marginRight: 10 }}
-            />
-          }
-        >
-          Add Offender
-        </Button>
-      </Col>
-    </Row>
+    <Affix offsetTop={40}>
+      <Row gutter={8} style={{ marginBottom: 10, backgroundColor: '#f5f5f6' }}>
+        <Col>
+          <Select
+            placeholder="Groups"
+            mode="multiple"
+            size="small"
+            maxTagCount={2}
+            style={{ minWidth: 150 }}
+            loading={groupsLoading}
+            onChange={onGroupsChange}
+            value={variables.groups}
+          >
+            {groups.map((group) => (
+              <Select.Option value={group.value}>{group.label}</Select.Option>
+            ))}
+          </Select>
+        </Col>
+        <Col>
+          <Select
+            placeholder="Offender Warnings "
+            mode="multiple"
+            size="small"
+            maxTagCount={2}
+            style={{ minWidth: 200 }}
+            onChange={onTagsChange}
+            value={variables.tags}
+            loading={tagsLoading}
+          >
+            {tags.map((tag) => (
+              <Select.Option value={tag.value}>{tag.label}</Select.Option>
+            ))}
+          </Select>
+        </Col>
+        <Col flex={1}>
+          <Input
+            size="small"
+            style={{ width: '80%' }}
+            placeholder="Search Offenders..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </Col>
+        <Col>
+          <Select
+            value={order}
+            onChange={setOrder}
+            size="small"
+            style={{ minWidth: 150, marginRight: 5 }}
+          >
+            <Select.Option value={OffenderSort.updatedAtDesc}>
+              Newest First
+            </Select.Option>
+            <Select.Option value={OffenderSort.updatedAtAsc}>
+              Oldest First
+            </Select.Option>
+          </Select>
+        </Col>
+        <Col>
+          <Button
+            type="primary"
+            onClick={onNavigate}
+            icon={
+              <FontAwesomeIcon
+                icon={faPlus}
+                size="lg"
+                style={{ marginRight: 10 }}
+              />
+            }
+          >
+            Add Offender
+          </Button>
+        </Col>
+      </Row>
+    </Affix>
     <Row gutter={8}>
       {loading && !data?.listOffenders?.offenders
         ? [

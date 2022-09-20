@@ -5,6 +5,7 @@ import { ListSchemeUsersQuery } from 'graphql/generated';
 interface FormData {
   name: string;
   description: string;
+  users?: string[];
 }
 
 interface Props {
@@ -79,7 +80,7 @@ const AddChat = ({
             disabled={saving}
             loading={saving}
           >
-            Create A New Chat Group
+            Create A New Chat
           </Button>
         </Col>
       </Row>
