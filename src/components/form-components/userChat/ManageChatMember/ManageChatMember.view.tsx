@@ -158,7 +158,7 @@ const EditChat = ({
           <AddUserToChat
             onClose={toggleAddMember}
             addMemberUpdate={addMemberUpdate}
-            usersData={usersData}
+            membersData={membersData}
           />
         ) : (
           <div />

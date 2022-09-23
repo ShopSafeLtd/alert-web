@@ -11,6 +11,7 @@ interface Props {
 const ViewMessages = ({ chatId, updateUserChatList }: Props): JSX.Element => {
   const {
     onSubmit,
+    data,
     loading,
     chatData,
     form,
@@ -24,12 +25,21 @@ const ViewMessages = ({ chatId, updateUserChatList }: Props): JSX.Element => {
     deleteChatConfirm,
     manageChat,
     toggleManageChat,
-    // ref,
+    membersData,
+    inputStr,
+    setInputStr,
+    showPicker,
+    toggleShowPicker,
+    imgChange,
+    onPreview,
+    beforeUpload,
+    fileList,
   } = useViewMessages({ chatId, updateUserChatList });
 
   return (
     <View
       onSubmit={onSubmit}
+      data={data}
       loading={loading}
       chatData={chatData}
       form={form}
@@ -44,7 +54,15 @@ const ViewMessages = ({ chatId, updateUserChatList }: Props): JSX.Element => {
       manageChat={manageChat}
       toggleManageChat={toggleManageChat}
       chatId={chatId}
-      // ref={ref}
+      membersData={membersData}
+      inputStr={inputStr}
+      setInputStr={setInputStr}
+      showPicker={showPicker}
+      toggleShowPicker={toggleShowPicker}
+      imgChange={imgChange}
+      onPreview={onPreview}
+      beforeUpload={beforeUpload}
+      fileList={fileList}
     />
   );
 };

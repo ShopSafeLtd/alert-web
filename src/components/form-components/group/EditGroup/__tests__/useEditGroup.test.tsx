@@ -95,7 +95,7 @@ const mocks = [
           },
         },
         orderBy: {
-          fullName: SortOrder.Desc,
+          fullName: SortOrder.Asc,
         },
       },
     },
@@ -105,6 +105,7 @@ const mocks = [
           {
             id: 'userId',
             fullName: 'testUser',
+            firstLetter: 't',
             email: 'user email',
             organisation: 'user organisation',
             status: 'enabled',

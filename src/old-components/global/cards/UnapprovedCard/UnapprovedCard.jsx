@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-import { UnapprovedCardOverlay, UnapprovedCardOptions } from '../';
+import { UnapprovedCardOverlay, UnapprovedCardOptions } from '..';
 
 const Awaiting = styled(Typography)`
   color: #fff;
@@ -16,24 +16,19 @@ class UnapprovedCard extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      approving: false
+      approving: false,
     };
   }
 
   toggleApproving = () => {
     this.setState({
-      approving: !this.state.approving
+      approving: !this.state.approving,
     });
   };
 
   render() {
-    const {
-      decline,
-      overlayButtonText,
-      optionsTop,
-      toggleApprove,
-      admin
-    } = this.props;
+    const { decline, overlayButtonText, optionsTop, toggleApprove, admin } =
+      this.props;
     const { approving } = this.state;
 
     let actions = [];

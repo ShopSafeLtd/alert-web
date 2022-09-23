@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { PullToRefresh as Resfresh } from 'react-js-pull-to-refresh';
 
-import { PullDownContent, ReleaseContent, RefreshContent } from '../';
+import { PullDownContent, ReleaseContent, RefreshContent } from '..';
 
 class PullToRefresh extends PureComponent {
   render() {

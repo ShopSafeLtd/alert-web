@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { WebFab } from '../';
+import { WebFab } from '..';
 
 class AddImagesFab extends React.Component {
   render() {

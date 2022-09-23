@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { FeedContainer } from '../../feed/';
+import { FeedContainer } from '../../feed';
 
 const Container = styled.div`
   flex: 1;

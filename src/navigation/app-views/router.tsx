@@ -28,11 +28,11 @@ export const AppViews = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    if (onboarded && location.pathname === '/app/onboarded') {
+    if (onboarded && location.pathname === '/app/onboarding') {
       navigate('incidents');
     }
   }, [onboarded]);
-  console.log(onboarded);
+
   return (
     <Suspense fallback={<Loading cover="content" />}>
       <Routes>

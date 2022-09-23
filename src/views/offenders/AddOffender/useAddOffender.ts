@@ -35,7 +35,7 @@ interface FormData {
   dateOfBirth?: Date;
   groups: string[];
   tags: string[];
-  images?: [{ id: string; url: string; optimised: string }];
+  images?: { id: string; url: string; optimised: string }[];
   bans?: [
     { endDate: Date; startDate: Date; location: string; description: string }
   ];
@@ -73,6 +73,7 @@ interface Return {
   bansData: BanData[];
   updateAddExclusion: (value: BanData) => void;
   updateEditExclusion: (value: BanData) => void;
+  adminRights: boolean;
 }
 
 const useAddOffender = (): Return => {
@@ -95,6 +96,7 @@ const useAddOffender = (): Return => {
 
   const [imageChange, setImageChange] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  // const [newImage, setNewImage] = useState<UploadFile[] | null>(null);
   const [addExclusion, setAddExclusion] = useState(false);
   const [editExclusion, setEditExclusion] = useState(false);
 
@@ -259,14 +261,40 @@ const useAddOffender = (): Return => {
               ? { connect: data.tags.map((id) => ({ id })) }
               : undefined,
           scheme: schemeId,
-          images:
-            imageChange && fileList.length > 0
-              ? fileList
-                  .map((item) => ({
-                    file: item.originFileObj,
+          // images:
+          //   imageChange && fileList.length > 0
+          //     ? fileList
+          //         .map((item) => ({
+          //           file: item.originFileObj,
+          //         }))
+          //         .filter((obj) => obj.file !== undefined)
+          //     : undefined,
+          // images: {
+          //   create:
+          //     imageChange && fileList.length > 0
+          //       ? fileList
+          //           .map((item) => ({
+          //             url: {
+          //               filename: item.fileName || '',
+          //               mimetype: item.type || '',
+          //               url: item.url || '',
+          //             },
+          //           }))
+          //           .filter((obj) => obj.url !== undefined)
+          //       : undefined,
+          // },
+          image: {
+            upload:
+              imageChange && fileList.length > 0
+                ? fileList.map((item) => ({
+                    url: {
+                      filename: item.fileName || '',
+                      mimetype: item.type || '',
+                      url: item.url || '',
+                    },
                   }))
-                  .filter((obj) => obj.file !== undefined)
-              : undefined,
+                : undefined,
+          },
           bans:
             bansData && bansData.length > 0
               ? bansData.map((ban) => ({
@@ -299,9 +327,32 @@ const useAddOffender = (): Return => {
 
     return !isFileDuplicate || Upload.LIST_IGNORE;
   };
-  const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
-    setImageChange(true);
+  // const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+  //   setFileList(newFileList);
+  //   setImageChange(true);
+  // };
+  const imgChange: UploadProps['onChange'] = (info) => {
+    if (info.file.response) {
+      // setNewImage({
+      //   ...info.file,
+      //   url: info.file.response[0].url,
+      //   fileName: info.file.response[0].blobName,
+      //   type: info.file.response[0].mimetype,
+      // });
+      setFileList([
+        ...fileList.filter((item) => item.uid !== info.file.uid),
+        {
+          ...info.file,
+          url: info.file.response[0].url,
+          fileName: info.file.response[0].blobName,
+          type: info.file.response[0].mimetype,
+        },
+      ]);
+      setImageChange(true);
+    } else {
+      setFileList(info.fileList);
+      setImageChange(true);
+    }
   };
   const onPreview = async (file: UploadFile) => {
     let src = file.url as string;
@@ -317,6 +368,7 @@ const useAddOffender = (): Return => {
     const imgWindow = window.open(src);
     imgWindow?.document.write(image.outerHTML);
   };
+
   const toggleAddOffenderTag = () => {
     setAddOffenderTag(!addOffenderTag);
   };
@@ -390,6 +442,7 @@ const useAddOffender = (): Return => {
     bansData,
     updateAddExclusion,
     updateEditExclusion,
+    adminRights: role !== Role.User,
   };
 };
 

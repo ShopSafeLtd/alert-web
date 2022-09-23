@@ -25,7 +25,7 @@ const mocks = [
           id: 'schemeId',
         },
         order: {
-          createdAt: SortOrder.Desc,
+          createdAt: SortOrder.Asc,
         },
         where: {
           crimeTypes: undefined,
@@ -205,7 +205,7 @@ describe('useIncidentFeed - hook', () => {
             groups: [],
             crimeTypes: [],
           },
-          order: IncidentSort.createdAtDesc,
+          order: IncidentSort.createdAtAsc,
         },
       },
     },

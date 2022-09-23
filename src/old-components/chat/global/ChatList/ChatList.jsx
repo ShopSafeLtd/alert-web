@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import styled from "styled-components";
-import MediaQuery from "react-responsive";
-import { APP_PREFIX_PATH } from "configs/AppConfig";
+import React, { Component } from 'react';
+import styled from 'styled-components';
+import MediaQuery from 'react-responsive';
+import { APP_PREFIX_PATH } from 'configs/AppConfig';
 
-import { EmptyState } from "../../../global/emptyStates";
+import { EmptyState } from '../../../global/emptyStates';
 import {
   List,
   ListHeader,
@@ -14,15 +14,15 @@ import {
   ChatName,
   ChatMessage,
   ChatSkeleton,
-} from "../";
-import Messages from "../../../../images/Messages";
+} from '..';
+import Messages from '../../../../images/Messages';
 
 const Container = styled.div`
   background-color: #fff;
   display: flex;
   @media (max-width: 1024px) {
     flex: 1;
-  };
+  } ;
 `;
 
 class ChatList extends Component {
@@ -31,10 +31,10 @@ class ChatList extends Component {
   }
 
   componentDidUpdate() {
-    if (this.props.activeChat === "") {
+    if (this.props.activeChat === '') {
       if (this.props.allChats !== undefined) {
         if (this.props.allChats.length > 0) {
-          if (this.props.activeChat === "") {
+          if (this.props.activeChat === '') {
             this.props.setActiveChat(this.props.allChats[0].chat.id);
           }
         }
@@ -87,10 +87,10 @@ class ChatList extends Component {
                         active={activeChat === id}
                         onClick={() => {
                           if (matches) {
-                            setActiveChat(id)
-                            handleMarkAsRead(userChatId)
+                            setActiveChat(id);
+                            handleMarkAsRead(userChatId);
                           } else {
-                            history.push(`${APP_PREFIX_PATH}/chat/${id}`)
+                            history.push(`${APP_PREFIX_PATH}/chat/${id}`);
                           }
                         }}
                       >
@@ -100,7 +100,7 @@ class ChatList extends Component {
                           <ChatMessage>
                             {messages?.length > 0
                               ? `${messages[0].from.fullName} : ${messages[0].content}`
-                              : "No Messages"}
+                              : 'No Messages'}
                           </ChatMessage>
                         </ChatText>
                       </ListItem>

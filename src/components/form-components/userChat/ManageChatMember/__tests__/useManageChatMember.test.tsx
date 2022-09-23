@@ -10,7 +10,7 @@ import {
   SortOrder,
   UpdateChatDocument,
 } from 'graphql/generated';
-import useAddUserToChat from '../AddUserToChat';
+import useManageChat from '../useManageChatMember';
 
 const mocks = [
   {
@@ -21,16 +21,14 @@ const mocks = [
           id: 'chatId',
         },
         data: {
-          name: { set: 'new name' },
-          description: { set: 'new description' },
           members: {
             create: [
-              {
-                user: { connect: { id: 'userId' } },
-                newMessages: true,
-              },
+              // {
+              //   user: { connect: { id: 'userId' } },
+              //   newMessages: true,
+              // },
             ],
-            delete: [{ id: 'userChatId' }],
+            delete: [],
           },
         },
       },
@@ -70,12 +68,14 @@ const mocks = [
           id: 'chatId',
           name: 'test Chat',
           description: null,
+          totalMembers: 1,
           members: [
             {
               id: 'userChatId',
               user: {
                 id: 'test userId',
                 fullName: 'test user',
+                firstLetter: 't',
                 organisation: 'test organisation',
               },
             },
@@ -107,7 +107,7 @@ const mocks = [
           },
         },
         orderBy: {
-          fullName: SortOrder.Desc,
+          fullName: SortOrder.Asc,
         },
       },
     },
@@ -117,6 +117,7 @@ const mocks = [
           {
             id: 'userId',
             fullName: 'testUser',
+            firstLetter: 't',
             email: 'user email',
             organisation: 'user organisation',
             status: 'enabled',
@@ -128,24 +129,15 @@ const mocks = [
   },
 ];
 
-const UseAddUserToChatTest = () => {
-  const { data, loading, usersData, usersLoading, onSubmit } = useAddUserToChat(
-    {
-      onClose: jest.fn(),
-      chatId: 'chatId',
-    }
-  );
-  const Chat =
-    data &&
-    data.chat?.members.map((el) => (
-      <div key={el.id}>
-        <span>{el.id}</span>
-        <span>{el.user.fullName}</span>
-      </div>
-    ));
+const UseManageChatTest = () => {
+  const { loading, usersData, onSubmit } = useManageChat({
+    onClose: jest.fn(),
+    chatId: 'chatId',
+  });
+
   const Users =
     usersData &&
-    usersData.users.map((el) => (
+    usersData.map((el) => (
       <div key={el.id}>
         <span>{el.id}</span>
         <span>{el.fullName}</span>
@@ -154,20 +146,10 @@ const UseAddUserToChatTest = () => {
     ));
   return (
     <div>
-      {Chat}
       <span>{loading ? 'true' : 'false'}</span>
       {Users}
-      <span>{usersLoading ? 'true' : 'false'}</span>
-      <button
-        type="button"
-        onClick={() =>
-          onSubmit({
-            name: 'new name',
-            description: 'new description',
-            user: ['userId'],
-          })
-        }
-      >
+
+      <button type="button" onClick={() => onSubmit()}>
         submit
       </button>
     </div>
@@ -184,19 +166,18 @@ describe('useDetailChats - hook', () => {
   });
 
   it('returns the expected values', async () => {
-    const { findByText, getAllByText, getByText, container } = render(
+    const { findByText, getByText, container } = render(
       <StoreProvider store={store}>
         <MemoryRouter>
           <MockedProvider mocks={mocks} addTypename={false}>
-            <UseAddUserToChatTest />
+            <UseManageChatTest />
           </MockedProvider>
         </MemoryRouter>
       </StoreProvider>
     );
 
-    expect(await findByText('test user')).toBeInTheDocument();
     expect(await findByText('testUser')).toBeInTheDocument();
-    expect(getAllByText('false')).toHaveLength(2);
+    expect(await findByText('false')).toBeInTheDocument();
     fireEvent.click(getByText('submit'));
     expect(container).toBeInTheDocument();
     expect(await findByText('Successfully Updated!')).toBeInTheDocument();

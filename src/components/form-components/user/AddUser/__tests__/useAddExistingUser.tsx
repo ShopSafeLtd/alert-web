@@ -6,45 +6,23 @@ import { storeModel } from 'state';
 
 import { MemoryRouter } from 'react-router-dom';
 import {
+  CreateUserInDatabaseDocument,
+  InviteExistingUserDocument,
   Role,
   SchemeChatsDocument,
   SchemeGroupsDocument,
+  SearchUserDocument,
   SortOrder,
-  UpdateUserDocument,
-  UserDocument,
 } from 'graphql/generated';
-import useEditUser from '../useEditUser';
+import useAddUser from '../useAddUser';
 
 const mocks = [
   {
     request: {
-      query: UserDocument,
+      query: SearchUserDocument,
       variables: {
         where: {
-          id: 'userId',
-        },
-        groupWhere: {
-          scheme: {
-            id: {
-              equals: 'schemeId',
-            },
-          },
-        },
-        chatWhere: {
-          chat: {
-            scheme: {
-              id: {
-                equals: 'schemeId',
-              },
-            },
-          },
-        },
-        schemeWhere: {
-          scheme: {
-            id: {
-              equals: 'schemeId',
-            },
-          },
+          email: 'email',
         },
       },
     },
@@ -54,7 +32,7 @@ const mocks = [
           id: 'userId',
           fullName: 'test user',
           organisation: 'ShopSafe ',
-          email: '@shopsafe.uk',
+          email: 'email',
           disabled: false,
           newUser: false,
           addresses: [
@@ -87,7 +65,7 @@ const mocks = [
           schemes: [
             {
               id: 'schemeId',
-              role: Role.User,
+              role: Role.ContentAdmin,
             },
           ],
         },
@@ -132,83 +110,38 @@ const mocks = [
   },
   {
     request: {
-      query: UpdateUserDocument,
+      query: CreateUserInDatabaseDocument,
       variables: {
-        where: {
-          id: 'userId',
-        },
         data: {
-          addresses: {
-            update: [
-              {
-                data: {
-                  postcode: { set: 'postcode' },
-                  street: { set: 'street' },
-                  townCity: { set: 'townCity' },
-                  building: { set: 'building' },
-                  county: { set: 'county' },
-                },
-                where: {
-                  id: 'ckshi0r5f9684229l4ckxvhld8',
-                },
-              },
-            ],
+          address: {
+            postcode: 'postcode',
+            street: 'street',
+            townCity: 'townCity',
+            building: 'building',
+            county: 'county',
+            primary: true,
           },
-          email: { set: 'email' },
-          fullName: { set: 'fullName' },
-          organisation: { set: 'organisation' },
-          schemes: {
-            update: [
-              {
-                data: {
-                  role: { set: Role.User },
-                },
-                where: {
-                  id: 'schemeId',
-                },
-              },
-            ],
-          },
-          groups: {
-            set: [{ id: 'groupId' }],
-          },
-          chats: {
-            create: [],
-            delete: [],
-          },
+          email: 'email',
+          fullName: 'fullName',
+          groups: [{ id: 'groupId' }],
+          organisation: 'organisation',
+          role: 'USER',
+          scheme: { id: 'schemeId' },
+          chats: [{ id: 'chatId' }],
         },
-        groupWhere: {
-          scheme: {
-            id: {
-              equals: 'schemeId',
-            },
-          },
-        },
-        chatWhere: {
-          chat: {
-            scheme: {
-              id: {
-                equals: 'schemeId',
-              },
-            },
-          },
-        },
+        groupWhere: { scheme: { id: { equals: 'schemeId' } } },
       },
     },
     result: {
       data: {
-        updateUser: {
+        createUserInDatabase: {
           id: 'userId',
           fullName: 'test user',
           organisation: 'ShopSafe ',
           email: '@shopsafe.uk',
           disabled: false,
           newUser: false,
-          incidentEmail: { set: false },
-          incidentPush: { set: false },
-          offenderEmail: { set: false },
-          offenderPush: { set: false },
-          messagePush: { set: false },
+          status: 'active',
           addresses: [
             {
               building: 'building',
@@ -239,7 +172,71 @@ const mocks = [
           schemes: [
             {
               id: 'schemeId',
-              role: Role.ContentAdmin,
+              role: Role.User,
+            },
+          ],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: InviteExistingUserDocument,
+      variables: {
+        where: { id: 'userId' },
+        data: {
+          groups: { connect: [{ id: 'groupId' }] },
+          chats: {
+            create: [
+              { newMessages: false, chat: { connect: { id: 'chatId' } } },
+            ],
+          },
+          schemes: {
+            create: [{ role: 'USER', scheme: { connect: { id: 'schemeId' } } }],
+          },
+        },
+        groupWhere: { scheme: { id: { equals: 'schemeId' } } },
+      },
+    },
+    result: {
+      data: {
+        inviteExistingUser: {
+          id: 'userId',
+          fullName: 'test user',
+          organisation: 'ShopSafe ',
+          email: '@shopsafe.uk',
+          disabled: false,
+          newUser: false,
+          status: 'active',
+          addresses: [
+            {
+              building: 'building',
+              county: 'Suffolk',
+              id: 'ckshi0r5f9684229l4ckxvhld8',
+              postcode: 'IP313FA',
+              street: 'Unit 2 Sandy Lane',
+              townCity: 'Badwell Ash',
+            },
+          ],
+          groups: [
+            {
+              id: 'groupId',
+              name: 'test group',
+              description: null,
+            },
+          ],
+          chats: {
+            create: [
+              {
+                chat: { connect: { id: 'chatId' } },
+                newMessages: true,
+              },
+            ],
+          },
+          schemes: [
+            {
+              id: 'schemeId',
+              role: Role.User,
             },
           ],
         },
@@ -248,25 +245,38 @@ const mocks = [
   },
 ];
 
-const UseEditUserTest = () => {
+const UseAddUserTest = () => {
   const {
-    data,
-    loading,
     groupsData,
     groupsLoading,
     chatsData,
     chatsLoading,
     onSubmit,
-  } = useEditUser({
+    onValuesChange,
+    // existingUser,
+  } = useAddUser({
     onClose: jest.fn(),
-    userId: 'userId',
+    update: jest.fn(),
+    updateSearch: jest.fn(),
   });
-  const User = data && (
-    <div key={data.user?.id}>
-      <span>{data.user?.id}</span>
-      <span>{data.user?.fullName}</span>
-    </div>
-  );
+
+  const preSubmit = () => {
+    const value = {
+      email: 'email',
+      fullName: '',
+      organisation: '',
+      role: Role.ContentAdmin,
+      postcode: '',
+      street: '',
+      townCity: '',
+      building: '',
+      county: '',
+      groups: [],
+      chats: [],
+    };
+    const changedValues = { email: 'email' };
+    onValuesChange(changedValues, value);
+  };
   const Groups =
     groupsData &&
     groupsData.groups.map((el) => (
@@ -286,8 +296,6 @@ const UseEditUserTest = () => {
 
   return (
     <div>
-      {User}
-      <span>{loading ? 'true' : 'false'}</span>
       {Groups}
       <span>{groupsLoading ? 'true' : 'false'}</span>
       {Chats}
@@ -296,21 +304,29 @@ const UseEditUserTest = () => {
         type="button"
         onClick={() =>
           onSubmit({
-            fullName: 'fullName',
             email: 'email',
-            role: Role.User,
+            fullName: 'fullName',
             organisation: 'organisation',
             postcode: 'postcode',
             street: 'street',
             townCity: 'townCity',
             building: 'building',
             county: 'county',
+            role: Role.User,
             groups: ['groupId'],
             chats: ['chatId'],
           })
         }
       >
         submit
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          preSubmit();
+        }}
+      >
+        preSubmit
       </button>
     </div>
   );
@@ -328,18 +344,20 @@ describe('useDetailUsers - hook', () => {
       <StoreProvider store={store}>
         <MemoryRouter>
           <MockedProvider mocks={mocks} addTypename={false}>
-            <UseEditUserTest />
+            <UseAddUserTest />
           </MockedProvider>
         </MemoryRouter>
       </StoreProvider>
     );
 
-    expect(await findByText('test user')).toBeInTheDocument();
     expect(await findByText('groupName')).toBeInTheDocument();
     expect(await findByText('chatName')).toBeInTheDocument();
-    expect(getAllByText('false')).toHaveLength(3);
+    expect(getAllByText('false')).toHaveLength(2);
+    fireEvent.click(getByText('preSubmit'));
+    expect(await findByText('OK')).toBeInTheDocument();
+    fireEvent.click(getByText('OK'));
     fireEvent.click(getByText('submit'));
     expect(container).toBeInTheDocument();
-    expect(await findByText('Successfully Updated!')).toBeInTheDocument();
+    expect(await findByText('Successfully Invited!')).toBeInTheDocument();
   });
 });

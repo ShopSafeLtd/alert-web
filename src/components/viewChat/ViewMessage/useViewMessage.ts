@@ -1,8 +1,4 @@
-import {
-  useEffect,
-  // useRef,
-  useState,
-} from 'react';
+import { useEffect, useState } from 'react';
 import {
   ChatQuery,
   CreateMessageMutation,
@@ -21,9 +17,10 @@ import {
 import { useStoreState } from 'state';
 import moment, { Moment } from 'moment';
 import { MessageType } from 'types/enums';
-import { notification, Form, FormInstance, Modal } from 'antd';
+import { notification, Form, FormInstance, Modal, message, Upload } from 'antd';
 import { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 const { confirm } = Modal;
 
@@ -43,14 +40,22 @@ interface DatedMessages {
   from?: { id: string; fullName: string; organisation: string };
   chat?: { id: string; name: string };
 }
-
-interface FormData {
-  newMessage: string;
+interface MemberData {
+  id: string;
+  fullName: string;
+  organisation: string;
+  firstLetter?: string | null;
 }
+// interface FormData {
+//   newMessage: string;
+// }
 interface Return {
-  onSubmit: (value: FormData) => void;
+  // onSubmit: (value: string) => void;
+  onSubmit: () => void;
+  data: MessagesQuery | undefined;
   loading: boolean;
   chatData: ChatQuery | undefined;
+  // form: FormInstance<FormData>;
   form: FormInstance<FormData>;
   saving: boolean;
   scrolledToTop: () => void;
@@ -62,7 +67,15 @@ interface Return {
   deleteChatConfirm: () => void;
   manageChat: boolean;
   toggleManageChat: () => void;
-  // ref: React.MutableRefObject<HTMLDivElement | null>;
+  membersData: MemberData[] | undefined;
+  inputStr: string;
+  setInputStr: (value: string) => void;
+  showPicker: boolean;
+  toggleShowPicker: () => void;
+  imgChange: UploadProps['onChange'];
+  onPreview: (value: UploadFile) => void;
+  beforeUpload: (value: RcFile) => void;
+  fileList: UploadFile[];
 }
 
 const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
@@ -80,17 +93,21 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const [loadMore, setLoadMore] = useState(false);
   const [fetching, setFetching] = useState(false);
   const [manageChat, setManageChat] = useState(false);
+  const [membersData, setMembersData] = useState<MemberData[] | undefined>([]);
+  const [inputStr, setInputStr] = useState('');
+  const [showPicker, setShowPicker] = useState(false);
+  const [imageChange, setImageChange] = useState(false);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
-  // const ref = useRef<HTMLDivElement | null>(null);
-  // useEffect(() => {
-  //   if (ref.current) {
-  //     ref.current.scrollIntoView({
-  //       behavior: 'smooth',
-  //       block: 'end',
-  //       inline: 'nearest',
-  //     });
-  //   }
-  // }, [datedMessages]);
+  console.log(imageChange);
+
+  const toggleShowPicker = () => setShowPicker(!showPicker);
+  const errorNotification = () =>
+    notification.error({
+      message: 'Error!',
+      description: 'Whoops, there are some errors. Please try again. ',
+      placement: 'bottomRight',
+    });
 
   useEffect(() => {
     if (chatId !== currentChatId) setCurrentChatId(chatId);
@@ -106,38 +123,38 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
         existingData = [];
       }
 
-      const finalMessages = messages?.map((message, index) => {
+      const finalMessages = messages?.map((el, index) => {
         if (index === 0 && clear) {
           return [
             {
               type: MessageType.date,
-              date: moment(message.createdAt).format('dddd, MMMM Do'),
+              date: moment(el.createdAt).format('dddd, MMMM Do'),
             },
-            { type: MessageType.message, sameUser: false, ...message },
+            { type: MessageType.message, sameUser: false, ...el },
           ];
         }
         if (
           moment(messages[index - 1].createdAt).format('dddd, MMMM Do') ===
-          moment(message.createdAt).format('dddd, MMMM Do')
+          moment(el.createdAt).format('dddd, MMMM Do')
         ) {
-          if (messages[index - 1].from.id === message.from.id) {
+          if (messages[index - 1].from.id === el.from.id) {
             return [
               ...existingData,
-              { type: MessageType.message, sameUser: true, ...message },
+              { type: MessageType.message, sameUser: true, ...el },
             ];
           }
           return [
             ...existingData,
-            { type: MessageType.message, sameUser: false, ...message },
+            { type: MessageType.message, sameUser: false, ...el },
           ];
         }
         return [
           ...existingData,
           {
             type: MessageType.date,
-            date: moment(message.createdAt).format('dddd, MMMM Do'),
+            date: moment(el.createdAt).format('dddd, MMMM Do'),
           },
-          { type: MessageType.message, sameUser: false, ...message },
+          { type: MessageType.message, sameUser: false, ...el },
         ];
       });
 
@@ -145,12 +162,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     } else setDatedMessages([]);
   };
 
-  const {
-    subscribeToMore,
-    loading,
-    // data: messagesData,
-    fetchMore,
-  } = useMessagesQuery({
+  const { subscribeToMore, data, loading, fetchMore } = useMessagesQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       chat: currentChatId,
@@ -159,9 +171,8 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       if (res.messages.length > 0) {
         setAfter(res.messages.slice(-1)[0].id);
         handleMessagesData(res.messages, true);
-      }
-      if (res.messages.length === 0) {
-        handleMessagesData([], true);
+      } else {
+        handleMessagesData([]);
       }
     },
   });
@@ -172,6 +183,11 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
         id: currentChatId,
       },
     },
+    onCompleted: ({ chat }) => {
+      if (chat?.members && chat.members.length > 0) {
+        setMembersData(chat.members.map((userChat) => userChat.user));
+      }
+    },
   });
 
   const subscribeToNewMessage = () => {
@@ -181,15 +197,17 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
         chat: currentChatId,
       },
       updateQuery: (prev, { subscriptionData }) => {
-        const test = prev.messages.find(
-          ({ id }) => id === subscriptionData.data.messages[0].id
-        );
+        if (prev && prev.messages) {
+          const test = prev.messages.find(
+            ({ id }) => id === subscriptionData.data.messages[0].id
+          );
 
-        if (test === undefined) {
-          return {
-            ...prev,
-            messages: [...prev.messages, ...subscriptionData.data.messages],
-          };
+          if (test === undefined) {
+            return {
+              ...prev,
+              messages: [...prev.messages, ...subscriptionData.data.messages],
+            };
+          }
         }
         return {
           ...prev,
@@ -253,19 +271,19 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       form.resetFields();
     },
     onError: () => {
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
       setSaving(false);
     },
+    // setSaving(true);
     update: updateData,
+    // setSaving(false);
   });
 
-  const onSubmit = (data: FormData) => {
-    setSaving(true);
-    if (data.newMessage)
+  const onSubmit = () => {
+    if (!inputStr || !fileList) {
+      message.info('The message cannot be empty!');
+    } else {
+      setSaving(true);
       sendMessage({
         variables: {
           data: {
@@ -284,10 +302,13 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                 id: userId,
               },
             },
-            content: data.newMessage,
+            content: inputStr,
           },
         },
       });
+      setInputStr('');
+      setFileList([]);
+    }
   };
 
   // delete
@@ -311,7 +332,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       query: MessagesDocument,
       data: {
         messages: existingData.messages.filter(
-          (message) => message.id !== res?.deleteMessage?.id
+          (el) => el.id !== res?.deleteMessage?.id
         ),
         __typename: 'Query',
       },
@@ -332,11 +353,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
     update: updateMessageList,
   });
@@ -371,11 +388,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
     update: updateUserChatList,
   });
@@ -398,9 +411,38 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const toggleManageChat = () => {
     setManageChat(!manageChat);
   };
+  const beforeUpload = (file: RcFile) => {
+    const isFileDuplicate = fileList.find((item) => item.name === file.name);
+    if (isFileDuplicate) {
+      message.error(
+        'This image has already existed, please choose another one.'
+      );
+    }
+
+    return !isFileDuplicate || Upload.LIST_IGNORE;
+  };
+  const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+    setImageChange(true);
+  };
+  const onPreview = async (file: UploadFile) => {
+    let src = file.url as string;
+    if (!src) {
+      src = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file.originFileObj as RcFile);
+        reader.onload = () => resolve(reader.result as string);
+      });
+    }
+    const image = new Image();
+    image.src = src;
+    const imgWindow = window.open(src);
+    imgWindow?.document.write(image.outerHTML);
+  };
 
   return {
     onSubmit,
+    data,
     loading,
     chatData,
     form,
@@ -414,7 +456,15 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     deleteChatConfirm,
     manageChat,
     toggleManageChat,
-    // ref,
+    membersData,
+    inputStr,
+    setInputStr,
+    showPicker,
+    toggleShowPicker,
+    imgChange,
+    onPreview,
+    beforeUpload,
+    fileList,
   };
 };
 

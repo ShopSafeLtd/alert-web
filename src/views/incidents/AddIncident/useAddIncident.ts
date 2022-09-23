@@ -105,7 +105,6 @@ interface Return {
   primaryAddress:
     | Exclude<AddressesQuery['addresses'], undefined | null>[0]
     | undefined;
-  addressData: AddressesQuery | undefined;
   addressLoading: boolean;
   imgChange: UploadProps['onChange'];
   onPreview: (value: Image) => void;
@@ -143,6 +142,7 @@ interface Return {
   removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
   removeImage: (uid: string) => void;
   removeOffender: (offenderId: string) => void;
+  adminRights: boolean;
 }
 
 const useEditIncident = (): Return => {
@@ -785,7 +785,6 @@ const useEditIncident = (): Return => {
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
     tagsLoading,
     primaryAddress: addressData?.addresses.find(({ primary }) => primary),
-    addressData,
     addressLoading,
     imgChange,
     onPreview,
@@ -821,6 +820,7 @@ const useEditIncident = (): Return => {
     removeImageFromOffender,
     removeImage,
     removeOffender,
+    adminRights: role !== Role.User,
   };
 };
 

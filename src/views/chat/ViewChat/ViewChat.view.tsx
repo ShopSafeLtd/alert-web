@@ -47,11 +47,12 @@ const ViewOffender = ({
   loading,
   saving,
   handleMarkAsRead,
+  chatId,
   addChat,
   toggleAddChat,
   updateAddUserChat,
   updateDeletedUserChat,
-  chatId,
+
   adminRights,
 }: Props): JSX.Element => (
   <div className="page-container">
@@ -104,18 +105,12 @@ const ViewOffender = ({
                     <List.Item.Meta
                       style={{ marginTop: 10 }}
                       avatar={
-                        <Avatar
-                          style={{
-                            color: '#f56a00',
-                            backgroundColor: '#fde3cf',
-                            marginLeft: 15,
-                          }}
-                        >
+                        <Avatar className="chat-item-avatar">
                           {firstLetter}
                         </Avatar>
                       }
                       title={
-                        <Row>
+                        <Row style={{ marginRight: 5 }}>
                           <Col>
                             <Title level={4}>{name}</Title>
                           </Col>
@@ -148,7 +143,7 @@ const ViewOffender = ({
                         </Row>
                       }
                       description={
-                        <Row wrap={false}>
+                        <Row wrap={false} style={{ marginRight: 5 }}>
                           <Col flex={1}>
                             <Paragraph ellipsis>
                               {messages && messages.length > 0

@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import WifiIcon from '@material-ui/icons/WifiOff';
 
-import { FAB } from '../../actions/';
+import { FAB } from '../../actions';
 
 const Container = styled.div`
   height: calc(100vh - 112px);

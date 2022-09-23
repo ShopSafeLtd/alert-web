@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import styled from "styled-components";
-import Button from "@material-ui/core/Button";
-import MediaQuery from "react-responsive";
-import { isEqual } from "lodash-es";
-import onClickOutside from "react-onclickoutside";
+import React, { Component } from 'react';
+import styled from 'styled-components';
+import Button from '@material-ui/core/Button';
+import MediaQuery from 'react-responsive';
+import { isEqual } from 'lodash-es';
+import onClickOutside from 'react-onclickoutside';
 
-import { PopOver, PopOverContainer } from "../../../global/layout/";
-import { BackButton } from "../../../global/actions";
-import CrimeTypeList from "../CrimeTypeList/CrimeTypeList";
+import { PopOver, PopOverContainer } from '../../../global/layout';
+import { BackButton } from '../../../global/actions';
+import CrimeTypeList from '../CrimeTypeList/CrimeTypeList';
 
 const Grow = styled.div`
   flex: 1;
@@ -83,7 +83,7 @@ class CrimeTypePopOver extends Component {
             noPadding
             width={matches ? 400 : window.innerWidth - 15}
             handleClose={close}
-            title={"Crime Types"}
+            title={'Crime Types'}
             actions={[
               <BackButton
                 key={0}

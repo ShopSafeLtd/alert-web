@@ -69,6 +69,7 @@ const mocks = [
           {
             id: 'test userId',
             fullName: 'testUser',
+            firstLetter: 't',
             email: 'user email',
             organisation: 'user organisation',
             status: 'enabled',

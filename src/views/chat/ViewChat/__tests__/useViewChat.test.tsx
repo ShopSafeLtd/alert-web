@@ -36,15 +36,23 @@ const mocks = [
             {
               id: 'userChatId',
               newMessages: false,
-              user: {},
+              updatedAt: '2022-08-11T10:40:09.985Z',
+              user: {
+                id: 'userId',
+                fullName: 'test user',
+                firstLetter: 't',
+                organisation: 'test organisation',
+              },
               chat: {
                 id: 'chatId',
                 name: 'name',
+                totalMembers: 1,
                 firstLetter: 'a',
                 messages: [
                   {
                     id: 'messageId',
                     content: 'content',
+                    createdAt: '2022-08-11T10:40:09.985Z',
                     from: {
                       id: 'userId',
                       fullName: 'fullName',

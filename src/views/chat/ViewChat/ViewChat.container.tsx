@@ -23,7 +23,7 @@ const ViewChat = (): JSX.Element => {
       data={data}
       loading={loading}
       saving={saving}
-      chatId={chatId || currentId}
+      chatId={chatId || currentId || ''}
       handleMarkAsRead={handleMarkAsRead}
       addChat={addChat}
       toggleAddChat={toggleAddChat}

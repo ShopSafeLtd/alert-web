@@ -60,12 +60,6 @@
 .incident-form-images .image-card .image-card-offender-text {
   flex: 1;
 }
-.incident-form-images .image-card .image-remove-button {
-  z-index: 1;
-  position: absolute;
-  top: 5px;
-  left: 5px;
-}
 .incident-form-images .image-card-loading {
   position: absolute;
   z-index: 1;
@@ -1541,6 +1535,11 @@
   padding: 0 2px;
   font-size: 10px;
   color: #de4436;
+}
+.chats-side-list .chat-item .chat-item-avatar {
+  color: '#f56a00';
+  background: '#fde3cf';
+  margin-left: 15;
 }
 .chat-item.current {
   background-color: rgba(0, 0, 0, 0.05);

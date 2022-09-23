@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useStoreState } from 'state';
 import {
   CreateChatMutation,
@@ -11,6 +11,7 @@ import {
   useUserChatsQuery,
 } from 'graphql/generated';
 import { MutationUpdaterFn } from '@apollo/client';
+import { useNavigate } from 'react-router';
 
 interface Return {
   currentId: string;
@@ -29,8 +30,10 @@ const useViewChat = (): Return => {
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
   const schemeId = useStoreState((state) => state.scheme.id);
+  const navigate = useNavigate();
   const [addChat, setAddChat] = useState(false);
   const [currentId, setCurrentId] = useState('');
+  // const [currentSchemeId, setCurrentSchemeId] = useState(schemeId);
   const [saving, setSaving] = useState(false);
 
   const { data, loading, refetch } = useUserChatsQuery({
@@ -52,15 +55,10 @@ const useViewChat = (): Return => {
       }
     },
   });
-  // const { data:chatData } = useChatQuery({
-  //   fetchPolicy: 'cache-and-network',
-  //   variables: {
-  //     where: {
-  //       id: chatId,
-  //     },
-  //   },
-  // });
-
+  useEffect(() => {
+    refetch();
+    navigate('/app/chat');
+  }, [schemeId]);
   const [updateUserChat] = useUpdateUserChatMutation({
     onCompleted: () => {
       setSaving(false);
@@ -159,20 +157,6 @@ const useViewChat = (): Return => {
               : res.createChat.members.filter(
                   (userChat) => userChat.chat.id === res.createChat.id
                 ),
-          // chats:
-          //   existingData?.user?.chats && existingData.user.chats.length > 0
-          //     ? [
-          //         ...existingData.user.chats,
-          //         res.createChat.members.find(
-          //           (userChat) => userChat.chat.id === res.createChat.id
-          //         ),
-          //       ]
-          //     : res.createChat.members.filter(
-          //         (userChat) => userChat.chat.id === res.createChat.id
-          //       ),
-          // chats: [
-          //   ...existingData?.user?.chats,res.createChat.members.find((userChat)=>userChat.chat.id===res.createChat.id)
-          // ],
         },
         __typename: 'Query',
       },

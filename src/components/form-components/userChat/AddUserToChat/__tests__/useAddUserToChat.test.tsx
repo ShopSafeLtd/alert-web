@@ -3,14 +3,13 @@ import { fireEvent, render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
-
 import { MemoryRouter } from 'react-router-dom';
 import {
-  CreateGroupDocument,
   ListSchemeUsersDocument,
+  QueryMode,
   SortOrder,
 } from 'graphql/generated';
-import useAddGroup from '../useAddGroup';
+import useAddUserToChat from '../useAddUserToChat';
 
 const mocks = [
   {
@@ -27,6 +26,20 @@ const mocks = [
               },
             },
           },
+          OR: [
+            {
+              fullName: {
+                contains: '',
+                mode: QueryMode.Insensitive,
+              },
+            },
+            {
+              organisation: {
+                contains: '',
+                mode: QueryMode.Insensitive,
+              },
+            },
+          ],
         },
         groupWhere: {
           scheme: {
@@ -46,8 +59,8 @@ const mocks = [
           {
             id: 'userId',
             fullName: 'testUser',
-            email: 'user email',
             firstLetter: 't',
+            email: 'user email',
             organisation: 'user organisation',
             status: 'enabled',
             groups: [{ id: 'groupId', name: 'test group' }],
@@ -56,75 +69,36 @@ const mocks = [
       },
     },
   },
-  {
-    request: {
-      query: CreateGroupDocument,
-      variables: {
-        data: {
-          name: 'groupName',
-          description: 'group description',
-          users: { connect: [{ id: 'id' }] },
-          scheme: {
-            connect: {
-              id: 'schemeId',
-            },
-          },
-        },
-      },
-    },
-    result: {
-      data: {
-        createGroup: {
-          id: 'groupId',
-          name: 'groupName',
-          description: 'group description',
-          users: {
-            id: 'userId',
-            fullName: 'test user',
-            organisation: 'test organisation',
-          },
-        },
-      },
-    },
-  },
 ];
 
-const UseAddGroupTest = () => {
-  const { usersData, usersLoading, onSubmit } = useAddGroup({
+const UseAddUserToChatTest = () => {
+  const { usersData, loading, onSubmit } = useAddUserToChat({
     onClose: jest.fn(),
-    update: jest.fn(),
+    membersData: [],
+    addMemberUpdate: jest.fn(),
   });
+
   const Users =
     usersData &&
-    usersData.users.map((el) => (
+    usersData.map((el) => (
       <div key={el.id}>
         <span>{el.id}</span>
         <span>{el.fullName}</span>
         <span>{el.organisation}</span>
       </div>
     ));
-
   return (
     <div>
+      <span>{loading ? 'true' : 'false'}</span>
       {Users}
-      <span>{usersLoading ? 'true' : 'false'}</span>
-      <button
-        type="button"
-        onClick={() =>
-          onSubmit({
-            name: 'groupName',
-            description: 'group description',
-            users: ['id'],
-          })
-        }
-      >
+      <button type="button" onClick={() => onSubmit({ user: ['userId'] })}>
         submit
       </button>
     </div>
   );
 };
 
-describe('useDetailGroups - hook', () => {
+describe('useDetailChats - hook', () => {
   const store = createStore(storeModel, {
     initialState: {
       scheme: {
@@ -138,7 +112,7 @@ describe('useDetailGroups - hook', () => {
       <StoreProvider store={store}>
         <MemoryRouter>
           <MockedProvider mocks={mocks} addTypename={false}>
-            <UseAddGroupTest />
+            <UseAddUserToChatTest />
           </MockedProvider>
         </MemoryRouter>
       </StoreProvider>
@@ -148,6 +122,5 @@ describe('useDetailGroups - hook', () => {
     expect(await findByText('false')).toBeInTheDocument();
     fireEvent.click(getByText('submit'));
     expect(container).toBeInTheDocument();
-    expect(await findByText('Successfully Added!')).toBeInTheDocument();
   });
 });

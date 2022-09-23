@@ -57,7 +57,12 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
   const [existingUser, setExistingUser] = useState(false);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState<string | null>(null);
-
+  const errorNotification = () =>
+    notification.error({
+      message: 'Error!',
+      description: 'Whoops, there are some errors. Please try again. ',
+      placement: 'bottomRight',
+    });
   const { data: userData } = useSearchUserQuery({
     variables: {
       where: {
@@ -137,11 +142,7 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'createUsererror!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
     update,
   });
@@ -158,11 +159,7 @@ const useAddUser = ({ onClose, update, updateSearch }: Props): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'ExistingUsererror!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
     update: updateSearch,
   });

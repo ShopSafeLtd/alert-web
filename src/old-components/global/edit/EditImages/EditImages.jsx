@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import Button from "@material-ui/core/Button";
-import AddSvg from "@material-ui/icons/Add";
-import MediaQuery from "react-responsive";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import Button from '@material-ui/core/Button';
+import AddSvg from '@material-ui/icons/Add';
+import MediaQuery from 'react-responsive';
 
-import { SubHeader, EmptyText } from "../../typography";
-import { EmptySection } from "../../emptyStates";
-import Images from "../../../../images/Images";
-import { Row, Section, Grow, SectionLoading } from "../../layout/";
-import { FileButton } from "../../../global/actions";
-import ConfirmDialog from "../../ConfirmDialog/ConfirmDialog";
-import { useStoreActions } from "../../../../state";
+import { SubHeader, EmptyText } from '../../typography';
+import { EmptySection } from '../../emptyStates';
+import Images from '../../../../images/Images';
+import { Row, Section, Grow, SectionLoading } from '../../layout';
+import { FileButton } from '../../actions';
+import ConfirmDialog from '../../ConfirmDialog/ConfirmDialog';
+import { useStoreActions } from '../../../../state';
 
 const AddIcon = styled(AddSvg)`
   margin-right: 5px;
@@ -92,13 +92,13 @@ const EditImages = ({
 }) => {
   const toggleLightbox = useStoreActions((state) => state.theme.toggleLightBox);
 
-  const [removeId, setRemoveId] = useState("");
+  const [removeId, setRemoveId] = useState('');
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   return (
     <MediaQuery minDeviceWidth={1024}>
       {(matches) => (
-        <Section width={matches ? "50%" : "100%"} elevation={1}>
+        <Section width={matches ? '50%' : '100%'} elevation={1}>
           {!!loading && <SectionLoading />}
           <Row right row>
             <SubHeader>Images</SubHeader>

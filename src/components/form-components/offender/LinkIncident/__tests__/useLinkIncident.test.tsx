@@ -16,7 +16,7 @@ const mocks = [
           id: 'schemeId',
         },
         order: {
-          createdAt: SortOrder.Desc,
+          createdAt: SortOrder.Asc,
         },
         take: 1,
         skip: 0,
@@ -137,7 +137,7 @@ describe('useDetailGroups - hook', () => {
             groups: [],
             tags: [],
           },
-          order: IncidentSort.createdAtDesc,
+          order: IncidentSort.createdAtAsc,
         },
       },
     },

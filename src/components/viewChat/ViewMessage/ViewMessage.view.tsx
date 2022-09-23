@@ -1,12 +1,13 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Picker from 'emoji-picker-react';
+
 import {
   Row,
   Col,
   Avatar,
-  Input,
+  // Input,
   Button,
   Form,
   FormInstance,
@@ -17,16 +18,23 @@ import {
   Divider,
   Drawer,
   Upload,
+  Mentions,
 } from 'antd';
 import { Moment } from 'moment';
 import { MessageType } from 'types';
-import { DeleteOutlined, UploadOutlined } from '@ant-design/icons';
-import { faTrash, faUsers } from '@fortawesome/pro-light-svg-icons';
+import {
+  // faImage,
+  faTrash,
+  faUpload,
+  faUsers,
+} from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ChatQuery } from 'graphql/generated';
+import { ChatQuery, MessagesQuery } from 'graphql/generated';
 import { faUser } from '@fortawesome/pro-solid-svg-icons';
 import AddUserChat from 'components/form-components/userChat/ManageChatMember';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
+const { Option } = Mentions;
 interface DatedMessages {
   type: string;
   date?: string;
@@ -38,11 +46,18 @@ interface DatedMessages {
   from?: { id: string; fullName: string; organisation: string };
   chat?: { id: string; name: string };
 }
-interface FormData {
-  newMessage: string;
+// interface FormData {
+//   newMessage: string;
+// }
+interface MemberData {
+  id: string;
+  fullName: string;
+  organisation: string;
+  firstLetter?: string | null;
 }
 interface Props {
-  onSubmit: (value: FormData) => void;
+  onSubmit: () => void;
+  data: MessagesQuery | undefined;
   loading: boolean;
   chatData: ChatQuery | undefined;
   form: FormInstance<FormData>;
@@ -57,11 +72,20 @@ interface Props {
   manageChat: boolean;
   toggleManageChat: () => void;
   chatId: string;
-  // ref: React.MutableRefObject<HTMLDivElement | null>;
+  membersData: MemberData[] | undefined;
+  inputStr: string;
+  setInputStr: (value: string) => void;
+  showPicker: boolean;
+  toggleShowPicker: () => void;
+  imgChange: UploadProps['onChange'];
+  onPreview: (value: UploadFile) => void;
+  beforeUpload: (value: RcFile) => void;
+  fileList: UploadFile[];
 }
 
 const ViewMessges = ({
   onSubmit,
+  data,
   loading,
   chatData,
   form,
@@ -76,9 +100,19 @@ const ViewMessges = ({
   manageChat,
   toggleManageChat,
   chatId,
-}: // ref,
-Props): JSX.Element => {
+  membersData,
+  inputStr,
+  setInputStr,
+  showPicker,
+  toggleShowPicker,
+  imgChange,
+  onPreview,
+  beforeUpload,
+  fileList,
+}: Props): JSX.Element => {
   const ref = useRef<HTMLDivElement | null>(null);
+  const uploadRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     if (ref.current && ref.current.scrollIntoView) {
       ref.current.scrollIntoView({
@@ -88,10 +122,22 @@ Props): JSX.Element => {
       });
     }
   }, [datedMessages]);
-  const [inputStr, setInputStr] = useState('');
-  const [showPicker, setShowPicker] = useState(false);
+  useEffect(() => {
+    if (
+      uploadRef.current &&
+      uploadRef.current.scrollIntoView &&
+      fileList &&
+      fileList.length > 0
+    ) {
+      uploadRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'end',
+        inline: 'nearest',
+      });
+    }
+  }, [fileList]);
 
-  return loading ? (
+  return !data && loading ? (
     <Skeleton active />
   ) : (
     <div className="view-message">
@@ -108,7 +154,7 @@ Props): JSX.Element => {
               }}
             />
             <span style={{ fontSize: '16px' }}>
-              {chatData?.chat?.members.map((el) => el.user).length}
+              {chatData?.chat?.totalMembers}
             </span>
           </Tag>
         }
@@ -117,7 +163,7 @@ Props): JSX.Element => {
             <Button
               key="2"
               type="primary"
-              disabled={saving}
+              disabled={loading}
               onClick={toggleManageChat}
               icon={
                 <FontAwesomeIcon
@@ -148,6 +194,7 @@ Props): JSX.Element => {
         }
       />
       <Divider style={{ margin: 0 }} />
+
       {datedMessages && datedMessages.length > 0 ? (
         <InfiniteScroll
           className="message-container"
@@ -214,7 +261,13 @@ Props): JSX.Element => {
                               adminRights && (
                                 <Button
                                   type="primary"
-                                  icon={<DeleteOutlined />}
+                                  icon={
+                                    <FontAwesomeIcon
+                                      icon={faTrash}
+                                      size="lg"
+                                      // style={{ marginRight: 10 }}
+                                    />
+                                  }
                                   onClick={() => {
                                     deleteMessageConfirm(id || '');
                                   }}
@@ -245,6 +298,31 @@ Props): JSX.Element => {
           </div>
         </div>
       )}
+
+      {/* <Row gutter={5} style={{ height: '45px' }}>
+        <Col flex={1} style={{ height: '40px' }}>
+          <Input
+            disabled={saving}
+            placeholder="Type a message"
+            value={inputStr}
+            onChange={(e) => {
+              setInputStr(e.target.value);
+            }}
+          />
+        </Col>
+
+        <Col style={{ height: '40px' }}>
+          <Button
+            disabled={saving}
+            loading={saving}
+            type="primary"
+            onClick={() => inputStr && onSubmit({ newMessage: inputStr })}
+          >
+            Send
+          </Button>
+        </Col>
+      </Row> */}
+
       <Form
         form={form}
         onFinish={onSubmit}
@@ -254,71 +332,116 @@ Props): JSX.Element => {
           }
         }}
       >
-        <Form.Item
-          name="newMessage"
-          label=""
-          rules={[
-            {
-              required: true,
-              message: 'The message cannot be empty!',
-            },
-          ]}
-          style={{ margin: '0 15px' }}
-        >
-          <Row gutter={5} style={{ height: '45px' }}>
-            <Col flex={1} style={{ height: '40px' }}>
-              <Input
+        <Row gutter={5} style={{ height: '45px', margin: '0 10px' }}>
+          <Col flex={1} style={{ height: '40px' }}>
+            {/* <Form.Item
+              name="newMessage"
+              label=""
+              // rules={[
+              //   {
+              //     required: true,
+              //     message: 'The message cannot be empty!',
+              //   },
+              // ]}
+            > */}
+            {/* <Input
                 disabled={saving}
                 placeholder="Type a message"
                 value={inputStr}
-                onChange={(e) => setInputStr(e.target.value)}
-              />
-            </Col>
+                onChange={(e) => {
+                  setInputStr(e.target.value);
+                }}
+              /> */}
+            <Mentions
+              // rows={1}
+              style={{ height: 40 }}
+              value={inputStr}
+              onChange={(value) => {
+                setInputStr(value);
+                console.log('value', value);
+              }}
+              prefix="@@"
+            >
+              {membersData?.map(({ id, fullName }) => (
+                <Option key={id} value={fullName}>
+                  {fullName}
+                </Option>
+              ))}
+            </Mentions>
+            {/* </Form.Item> */}
+          </Col>
 
-            <Col style={{ height: '40px' }}>
-              <Form.Item>
-                <Button
-                  disabled={saving}
-                  loading={saving}
-                  type="primary"
-                  htmlType="submit"
-                >
-                  Send
-                </Button>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={10}>
-            <Col>
+          <Col style={{ height: '40px' }}>
+            <Form.Item>
               <Button
-                onClick={() => setShowPicker((val) => !val)}
-                style={{ width: '40px' }}
+                disabled={saving}
+                loading={saving}
+                type="primary"
+                htmlType="submit"
               >
-                <img
-                  style={{ marginLeft: -8 }}
-                  className="emoji-icon"
-                  alt="emoji picker"
-                  src="https://icons.getbootstrap.com/assets/icons/emoji-smile.svg"
-                />
+                Send
               </Button>
-              {showPicker && (
-                <Picker
-                  pickerStyle={{ width: '100%' }}
-                  onEmojiClick={(e, emojiObject) => {
-                    console.log(e);
-                    setInputStr((prevInput) => prevInput + emojiObject.emoji);
-                    setShowPicker(false);
-                  }}
-                />
-              )}
-            </Col>
-            <Col>
-              <Upload>
-                <Button icon={<UploadOutlined />} />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={5} style={{ height: '45px', margin: '0 10px' }}>
+          <Col>
+            <Row className="emoji-container" style={{ marginBottom: 5 }}>
+              <Col>
+                <Popover
+                  visible={showPicker}
+                  style={{ width: '50%' }}
+                  content={
+                    <Picker
+                      pickerStyle={{ width: '100%' }}
+                      onEmojiClick={(_e, emojiObject) => {
+                        setInputStr(inputStr + emojiObject.emoji);
+                        toggleShowPicker();
+                      }}
+                    />
+                  }
+                  title="Title"
+                >
+                  <Button onClick={toggleShowPicker} style={{ width: '40px' }}>
+                    <img
+                      style={{ marginLeft: -8 }}
+                      className="emoji-icon"
+                      alt="emoji picker"
+                      src="https://icons.getbootstrap.com/assets/icons/emoji-smile.svg"
+                    />
+                  </Button>
+                </Popover>
+              </Col>
+              <Col>
+                <Upload
+                  action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                  fileList={fileList}
+                  onChange={imgChange}
+                  beforeUpload={beforeUpload}
+                  showUploadList={false}
+                >
+                  <Button
+                    icon={<FontAwesomeIcon icon={faUpload} size="lg" />}
+                  />
+                </Upload>
+              </Col>
+            </Row>
+            <Form.Item name="images">
+              <Upload
+                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                listType="picture-card"
+                fileList={fileList}
+                onChange={imgChange}
+                onPreview={onPreview}
+                beforeUpload={beforeUpload}
+                // accept=".png,.jpeg,.webp"
+              >
+                {/* <Button icon={<FontAwesomeIcon icon={faImage} size="lg" />} /> */}
               </Upload>
-            </Col>
-          </Row>
-        </Form.Item>
+              <div ref={uploadRef}> </div>
+            </Form.Item>
+          </Col>
+        </Row>
       </Form>
 
       <Drawer

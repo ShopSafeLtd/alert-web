@@ -460,14 +460,14 @@ const EditOffender = ({
                     key: ban.id,
                     duration: `${new Date(
                       ban?.startDate
-                    ).toDateString()}  >  ${new Date(
+                    ).toDateString()}  -->  ${new Date(
                       ban?.endDate
                     ).toDateString()}`,
                     activeDay: calcDuration(
                       new Date(ban?.startDate),
                       new Date(ban?.endDate)
                     ),
-                    location: ban.description,
+                    location: ban.location,
                     description: ban.description,
                   }))}
                 />

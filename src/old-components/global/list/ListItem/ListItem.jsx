@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { ListBody } from '../';
+import { ListBody } from '..';
 
 const Item = styled.div`
   width: 100%;
@@ -22,7 +22,7 @@ class ListItem extends React.Component {
     let disabledStyle, text;
     if (disabled) {
       disabledStyle = {
-        backgroundColor: '#F5F5F5'
+        backgroundColor: '#F5F5F5',
       };
       text = (
         <span>

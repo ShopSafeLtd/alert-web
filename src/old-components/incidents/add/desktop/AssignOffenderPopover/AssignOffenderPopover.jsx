@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import Button from "@material-ui/core/Button";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import Button from '@material-ui/core/Button';
 
-import OffendersImage from "../../../../../images/Offenders";
-import { PopOver, PopOverContainer } from "../../../../global/layout/";
-import { BackButton } from "../../../../global/actions";
-import OffenderItem from "../OffenderItem/OffenderItem";
+import OffendersImage from '../../../../../images/Offenders';
+import { PopOver, PopOverContainer } from '../../../../global/layout';
+import { BackButton } from '../../../../global/actions';
+import OffenderItem from '../OffenderItem/OffenderItem';
 
 const EmptyText = styled.p`
   margin-top: 10px;
@@ -70,11 +70,11 @@ const AssignOffenderPopover = ({
   let actions = [];
   actions.push(
     <BackButton
-      variant={offenders.length === 0 ? "contained" : "text"}
-      color={offenders.length === 0 ? "primary" : "default"}
+      variant={offenders.length === 0 ? 'contained' : 'text'}
+      color={offenders.length === 0 ? 'primary' : 'default'}
       onClick={handleClose}
     >
-      {offenders.length > 0 ? "Cancel" : "Close"}
+      {offenders.length > 0 ? 'Cancel' : 'Close'}
     </BackButton>
   );
   actions.push(
@@ -96,7 +96,7 @@ const AssignOffenderPopover = ({
       open={open}
       width={400}
       handleClose={handleClose}
-      title={"Assigned offenders"}
+      title={'Assigned offenders'}
       actions={actions}
     >
       <Grow>

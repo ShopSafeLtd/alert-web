@@ -1,8 +1,8 @@
 import NativeAddImage from './NavtiveAddImage/NativeAddImage';
 import WebAddImages from './WebAddImages/WebAddImages';
-import AddImage from '../images/AddImages/AddImages';
-import AddImagesFab from '../images/AddImagesFab/AddImagesFab';
-import Image from '../images/Image/Image';
+import AddImage from './AddImages/AddImages';
+import AddImagesFab from './AddImagesFab/AddImagesFab';
+import Image from './Image/Image';
 import NativeFab from './NativeFab/NativeFab';
 import WebFab from './WebFab/WebFab';
 import ImageGrid from './ImagesGrid/ImageGrid';
@@ -19,5 +19,5 @@ export {
   Image,
   ImageGrid,
   ImageSkeleton,
-  UploadingImage
+  UploadingImage,
 };

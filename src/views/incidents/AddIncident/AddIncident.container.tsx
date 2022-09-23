@@ -45,6 +45,7 @@ function EditIncident(): JSX.Element {
     removeImageFromOffender,
     removeImage,
     removeOffender,
+    adminRights,
   } = useEditIncident();
 
   return (
@@ -91,6 +92,7 @@ function EditIncident(): JSX.Element {
         removeImageFromOffender={removeImageFromOffender}
         removeImage={removeImage}
         removeOffender={removeOffender}
+        adminRights={adminRights}
       />
     </div>
   );

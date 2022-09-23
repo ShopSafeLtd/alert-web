@@ -1,6 +1,6 @@
 import React from 'react';
 import View from './ManageChatMember.view';
-import useManageChat from './ManageChatMember';
+import useManageChat from './useManageChatMember';
 
 interface Props {
   onClose: () => void;
@@ -22,7 +22,6 @@ const ManageChat = ({ onClose, chatId }: Props): JSX.Element => {
     onClose,
     chatId,
   });
-  console.log('usersData', usersData);
 
   return (
     <View

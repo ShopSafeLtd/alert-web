@@ -1,6 +1,6 @@
 import React from 'react';
 import View from './AddUserToChat.view';
-import useAddUserToChat from './AddUserToChat';
+import useAddUserToChat from './useAddUserToChat';
 
 interface FormData {
   user: string[];
@@ -12,7 +12,7 @@ interface MemberData {
   firstLetter?: string | null;
 }
 interface Props {
-  usersData: MemberData[] | undefined;
+  membersData: MemberData[] | undefined;
   onClose: () => void;
   addMemberUpdate: (value: FormData) => void;
 }
@@ -20,17 +20,22 @@ interface Props {
 const AddUserToChat = ({
   onClose,
   addMemberUpdate,
-  usersData,
+  membersData,
 }: Props): JSX.Element => {
-  const { onSubmit, saving } = useAddUserToChat({
-    onClose,
-    addMemberUpdate,
-  });
+  const { onSubmit, usersData, loading, search, setSearch, saving } =
+    useAddUserToChat({
+      onClose,
+      membersData,
+      addMemberUpdate,
+    });
   return (
     <View
       onSubmit={onSubmit}
       onClose={onClose}
       usersData={usersData}
+      loading={loading}
+      search={search}
+      setSearch={setSearch}
       saving={saving}
     />
   );

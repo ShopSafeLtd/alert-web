@@ -5,8 +5,10 @@ import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
 import {
+  ChatDocument,
   CreateMessageDocument,
   MessagesDocument,
+  MessagesSubscriptionDocument,
   Role,
 } from 'graphql/generated';
 import useViewMessage from '../useViewMessage';
@@ -79,19 +81,120 @@ const mocks = [
       },
     },
   },
+  {
+    request: {
+      query: ChatDocument,
+      variables: {
+        where: {
+          id: 'chatId',
+        },
+      },
+    },
+    result: {
+      data: {
+        chat: {
+          id: 'chatId',
+          name: 'test Chat',
+          description: null,
+          totalMembers: 1,
+          members: [
+            {
+              id: 'userChatId',
+              user: {
+                id: 'test userId',
+                firstLetter: 't',
+                fullName: 'test user',
+                organisation: 'test organisation',
+              },
+            },
+          ],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MessagesSubscriptionDocument,
+      variables: {
+        chat: 'chatId',
+      },
+    },
+    result: {
+      data: {
+        messages: [
+          {
+            id: 'messageId',
+            sent: true,
+            content: 'content',
+            createdAt: 'createdAt',
+            from: {
+              id: 'userId',
+              fullName: 'fullName',
+              organisation: 'organisation',
+            },
+            chat: { id: 'chatId', name: 'chatName' },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: MessagesSubscriptionDocument,
+      variables: {
+        chat: '',
+      },
+    },
+    result: {
+      data: {
+        messages: [
+          {
+            id: 'messageId',
+            sent: true,
+            content: 'content',
+            createdAt: 'createdAt',
+            from: {
+              id: 'userId',
+              fullName: 'fullName',
+              organisation: 'organisation',
+            },
+            chat: { id: 'chatId', name: 'chatName' },
+          },
+        ],
+      },
+    },
+  },
 ];
 
 const UseViewMessageTest = () => {
-  const { onSubmit } = useViewMessage({
+  const { loading, chatData, setInputStr, onSubmit } = useViewMessage({
     chatId: 'chatId',
+    updateUserChatList: jest.fn(),
   });
+  const Chat = chatData && (
+    <div key={chatData.chat?.id}>
+      <span>{chatData.chat?.id}</span>
+      <span>{chatData.chat?.name}</span>
+    </div>
+  );
+  const preSubmit = () => {
+    setInputStr('newMessages');
+  };
+
   return (
     <div>
+      {Chat}
+      <span>{loading ? 'true' : 'false'}</span>
+      <button type="button" onClick={() => onSubmit()}>
+        submit
+      </button>
       <button
         type="button"
-        onClick={() => onSubmit({ newMessage: 'newMessages' })}
+        onClick={() => {
+          preSubmit();
+        }}
       >
-        submit
+        preSubmit
       </button>
     </div>
   );
@@ -108,7 +211,7 @@ describe('useDetailGroups - hook', () => {
   });
 
   it('returns the expected values', async () => {
-    const { getByText, container } = render(
+    const { findByText, getByText, container } = render(
       <StoreProvider store={store}>
         <MemoryRouter>
           <MockedProvider mocks={mocks} addTypename={false}>
@@ -117,8 +220,10 @@ describe('useDetailGroups - hook', () => {
         </MemoryRouter>
       </StoreProvider>
     );
+    expect(await findByText('test Chat')).toBeInTheDocument();
+    expect(await findByText('false')).toBeInTheDocument();
+    fireEvent.click(getByText('preSubmit'));
     fireEvent.click(getByText('submit'));
     expect(container).toBeInTheDocument();
-    // expect(await findByText('Successfully Updated!')).toBeInTheDocument();
   });
 });

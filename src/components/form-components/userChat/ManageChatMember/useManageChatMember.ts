@@ -18,9 +18,6 @@ interface MemberData {
   fullName: string;
   organisation: string;
   firstLetter?: string | null;
-  // email?: string;
-  // status?: string | null | undefined;
-  // groups?: string[];
 }
 interface Props {
   onClose: () => void;
@@ -87,7 +84,6 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
       },
     },
   });
-  console.log('usersData1', usersData);
 
   const [updateChat] = useUpdateChatMutation({
     onCompleted: () => {
@@ -99,7 +95,9 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
         placement: 'bottomRight',
       });
     },
-    onError: () => {
+    onError: (error) => {
+      console.log(error);
+
       setSaving(false);
       notification.error({
         message: 'Error!',

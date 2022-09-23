@@ -11,14 +11,27 @@ describe('List Officer View', () => {
     return (
       <ViewMessage
         onSubmit={jest.fn()}
+        loading={false}
+        chatData={{}}
         saving={false}
         form={form}
         scrolledToTop={jest.fn()}
         datedMessages={[]}
         loadMore={false}
-        deleteConfirm={jest.fn()}
         userId=""
-        deleteRights
+        deleteMessageConfirm={jest.fn()}
+        adminRights
+        deleteChatConfirm={jest.fn()}
+        manageChat={false}
+        toggleManageChat={jest.fn()}
+        chatId=""
+        membersData={[
+          { id: 'id', fullName: '', organisation: '', firstLetter: '' },
+        ]}
+        inputStr=""
+        setInputStr={jest.fn()}
+        showPicker={false}
+        toggleShowPicker={jest.fn()}
       />
     );
   };
@@ -28,6 +41,6 @@ describe('List Officer View', () => {
         <FormWrapper />
       </MemoryRouter>
     );
-    expect(getByText('Send')).toBeInTheDocument();
+    expect(getByText('Manage Chat Members')).toBeInTheDocument();
   });
 });

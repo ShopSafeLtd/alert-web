@@ -20,13 +20,22 @@ describe('Detail Officer View', () => {
         {
           id: 'userChatId',
           newMessage: false,
+          updatedAt: '2022-08-11T10:40:09.985Z',
+          user: {
+            id: 'userId',
+            fullName: 'test user',
+            firstLetter: 't',
+            organisation: 'test organisation',
+          },
           chat: {
             id: 'chatId',
             name: 'name',
+            totalMembers: 1,
             firstLetter: 'a',
             messages: [
               {
                 id: 'messageId',
+                createdAt: '2022-08-11T10:40:09.985Z',
                 content: 'content',
                 from: {
                   id: 'userId',
@@ -50,6 +59,11 @@ describe('Detail Officer View', () => {
               saving={false}
               handleMarkAsRead={jest.fn()}
               chatId="chatId"
+              addChat={false}
+              toggleAddChat={jest.fn()}
+              updateAddUserChat={jest.fn()}
+              updateDeletedUserChat={jest.fn()}
+              adminRights={false}
             />
           </MockedProvider>
         </MemoryRouter>

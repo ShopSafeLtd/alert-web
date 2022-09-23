@@ -19,12 +19,13 @@ const mocks = [
       variables: {
         data: {
           name: 'chatName',
-          description: 'chatdescription',
-          scheme: {
-            connect: {
-              id: 'schemeId',
-            },
+          description: 'chatDescription',
+          members: {
+            create: [
+              { user: { connect: { id: 'userChatId' } }, newMessages: false },
+            ],
           },
+          scheme: { connect: { id: 'schemeId' } },
         },
       },
     },
@@ -33,14 +34,31 @@ const mocks = [
         createChat: {
           id: 'chatId',
           name: 'chatName',
-          description: 'chatdescription',
+          description: 'chatDescription',
           members: [
             {
               id: 'userChatId',
+              newMessages: false,
+              updatedAt: '2022-08-11T10:40:09.985Z',
               user: {
                 id: 'userId',
                 fullName: 'test user',
+                firstLetter: 't',
                 organisation: 'test organisation',
+              },
+              chat: {
+                id: 'chatId',
+                name: 'chatName',
+                firstLetter: 'c',
+                messages: {
+                  id: 'messageId',
+                  content: 'content',
+                  createdAt: '2022-08-11T10:40:09.985Z',
+                  from: {
+                    id: 'userId',
+                    fullName: 'test user',
+                  },
+                },
               },
             },
           ],
@@ -71,7 +89,7 @@ const mocks = [
           },
         },
         orderBy: {
-          fullName: SortOrder.Desc,
+          fullName: SortOrder.Asc,
         },
       },
     },
@@ -82,9 +100,21 @@ const mocks = [
             id: 'userId',
             fullName: 'testUser',
             email: 'user email',
+            firstLetter: 't',
             organisation: 'user organisation',
             status: 'enabled',
             groups: [{ id: 'groupId', name: 'test group' }],
+            members: [
+              {
+                id: 'userChatId',
+                user: {
+                  id: 'userId',
+                  fullName: 'test user',
+                  firstLetter: 't',
+                  organisation: 'test organisation',
+                },
+              },
+            ],
           },
         ],
       },
@@ -116,7 +146,8 @@ const UseAddChatTest = () => {
         onClick={() =>
           onSubmit({
             name: 'chatName',
-            description: 'chatdescription',
+            description: 'chatDescription',
+            users: ['userChatId'],
           })
         }
       >

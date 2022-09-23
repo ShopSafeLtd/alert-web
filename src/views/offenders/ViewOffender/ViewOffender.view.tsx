@@ -236,6 +236,7 @@ const ViewOffender = ({
                               {getOffenderGender(data?.offender?.gender)}
                             </Descriptions.Item>
                             <Descriptions.Item
+                              span={2}
                               label={
                                 <span>
                                   <FontAwesomeIcon
@@ -342,10 +343,10 @@ const ViewOffender = ({
                                 endDate: ban.endDate,
                                 duration: `${new Date(
                                   ban?.startDate
-                                ).toDateString()}  >  ${new Date(
+                                ).toDateString()}  -->  ${new Date(
                                   ban?.endDate
                                 ).toDateString()}`,
-                                location: ban.description,
+                                location: ban.location,
                               }))}
                             />
                           ) : (

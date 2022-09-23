@@ -26,7 +26,7 @@ describe('Detail Officer View', () => {
               { id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling ' },
             ],
           },
-          order: IncidentSort.createdAtDesc,
+          order: IncidentSort.createdAtAsc,
         },
       },
     },
@@ -70,7 +70,7 @@ describe('Detail Officer View', () => {
               openLightbox={jest.fn()}
               onPaginationChange={jest.fn()}
               pagination={{ page: 1, pageSize: 1, sizeOptions: [] }}
-              order={IncidentSort.createdAtDesc}
+              order={IncidentSort.createdAtAsc}
               variables={{ groups: [], crimeTypes: [] }}
               setOrder={jest.fn()}
               search=""

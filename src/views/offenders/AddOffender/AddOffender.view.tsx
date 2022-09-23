@@ -17,6 +17,7 @@ import {
   Switch,
   DatePicker,
   Table,
+  Divider,
 } from 'antd';
 
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
@@ -32,10 +33,10 @@ import AddOffenderTag from 'components/form-components/tags/offenderWarnings/Add
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { faPlus, faUpload } from '@fortawesome/pro-light-svg-icons';
 import { MutationUpdaterFn } from '@apollo/client';
 
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 interface FormData {
   name: string;
@@ -87,6 +88,7 @@ interface Props {
   bansData: BanData[];
   updateAddExclusion: (value: BanData) => void;
   updateEditExclusion: (value: BanData) => void;
+  adminRights: boolean;
 }
 
 const AddOffender = ({
@@ -115,82 +117,88 @@ const AddOffender = ({
   bansData,
   updateAddExclusion,
   updateEditExclusion,
+  adminRights,
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader onBack={() => window.history.back()} title="Add Offender" />
-
     <Card>
-      <Form onFinish={onSubmit}>
-        <Row gutter={20} style={{ marginBottom: 30 }}>
+      <Form onFinish={onSubmit} layout="vertical">
+        <Row align="bottom" style={{ marginBottom: 30 }}>
           <Col>
-            <Title level={4}>Offender Details</Title>
+            <Title style={{ marginBottom: 0 }} level={4}>
+              1.{' '}
+            </Title>
+          </Col>
+          <Col>
+            <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
+              Offender Details
+            </Title>
+          </Col>
+          <Col>
+            <Paragraph
+              style={{ marginBottom: 1, marginLeft: 5 }}
+              type="secondary"
+              italic
+            >
+              - Please complete the basic details for the offender.
+            </Paragraph>
           </Col>
         </Row>
-        <Row gutter={50}>
-          <Col span={11}>
-            <Form.Item name="name" label="Name">
-              <Input
-                disabled={saving}
-                placeholder="Enter the offenders name if you know it, if not leave this field
+        <Row gutter={60}>
+          <Col span={8}>
+            <Form.Item
+              name="name"
+              label="Name"
+              tooltip="Enter the offenders name if you know it, if not leave this field
                 blank."
-              />
+            >
+              <Input disabled={saving} />
             </Form.Item>
           </Col>
 
-          <Col span={11}>
-            <Form.Item name="build" label="Build">
-              <Select
-                options={buildValues}
-                disabled={saving}
-                placeholder="Select the build of the offender if known."
-              />
+          <Col span={7}>
+            <Form.Item
+              name="build"
+              label="Build"
+              tooltip="Select the build of the offender if known."
+            >
+              <Select options={buildValues} disabled={saving} />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item
+              name="gender"
+              label="Sex"
+              tooltip="Select the gender of the offender if known."
+            >
+              <Select options={genderValues} disabled={saving} />
             </Form.Item>
           </Col>
         </Row>
-        <Row gutter={50}>
-          <Col span={11}>
-            <Form.Item name="gender" label="Sex">
-              <Select
-                options={genderValues}
-                disabled={saving}
-                placeholder="Select the gender of the offender if known."
-              />
+        <Row gutter={60}>
+          <Col span={8}>
+            <Form.Item
+              name="race"
+              label="Ethnicity"
+              tooltip="Select the ethnicity of the offender if known."
+            >
+              <Select options={raceValues} disabled={saving} />
             </Form.Item>
           </Col>
-          <Col span={11}>
-            <Form.Item name="race" label="Ethnicity">
-              <Select
-                options={raceValues}
-                disabled={saving}
-                placeholder="Select the ethnicity of the offender if known."
-              />
+          <Col span={7}>
+            <Form.Item
+              name="hair"
+              label="Hair"
+              tooltip="The style and colour of the offenders hair if known."
+            >
+              <Input disabled={saving} />
             </Form.Item>
           </Col>
-        </Row>
-
-        <Row gutter={50}>
-          <Col span={11}>
-            <Form.Item name="hair" label="Hair">
-              <Input
-                disabled={saving}
-                placeholder="The style and colour of the offenders hair if known."
-              />
-            </Form.Item>
-          </Col>
-          <Col span={11}>
-            <Form.Item name="peculiarities" label="Peculiarities">
-              <Input
-                disabled={saving}
-                placeholder="Anything distinctive features of the offender."
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={50}>
-          <Col span={11}>
+          <Col span={8}>
             <Form.Item
               name="groups"
               label="Groups"
+              tooltip="Select the groups that you would like this offender to be visible to."
               rules={[
                 {
                   required: true,
@@ -203,7 +211,6 @@ const AddOffender = ({
                 disabled={saving}
                 mode="multiple"
                 maxTagCount={3}
-                placeholder="Select the groups that you would like this offender to be visible to."
               >
                 {groups.map((group) => (
                   <Select.Option key={group.value} value={group.value}>
@@ -213,43 +220,44 @@ const AddOffender = ({
               </Select>
             </Form.Item>
           </Col>
-          <Col span={11}>
-            <Row gutter={3}>
-              <Col flex={1}>
-                <Form.Item name="tags" label="Offender Warnings">
-                  <Select
-                    loading={tagsLoading}
-                    disabled={saving}
-                    mode="multiple"
-                    maxTagCount={3}
-                    placeholder="select any warning labels that are relevant to this offender or add your own."
-                  >
-                    {tags.map((tag) => (
-                      <Select.Option value={tag.value}>
-                        {tag.label}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col>
-                <Button
-                  disabled={saving}
-                  loading={saving}
-                  style={{ color: 'red', padding: 8 }}
-                  onClick={toggleAddOffenderTag}
-                  icon={
-                    <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
-                  }
-                >
-                  Add Label
-                </Button>
-              </Col>
-            </Row>
-          </Col>
         </Row>
-        <Row gutter={50}>
-          <Col span={11}>
+        <Row gutter={10} align="middle">
+          <Col span={12}>
+            <Form.Item
+              name="tags"
+              label="Offender Warnings"
+              tooltip="select any warning labels that are relevant to this offender or add your own."
+            >
+              <Select
+                loading={tagsLoading}
+                disabled={saving}
+                mode="multiple"
+                maxTagCount={3}
+              >
+                {tags.map((tag) => (
+                  <Select.Option value={tag.value}>{tag.label}</Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+          {adminRights && (
+            <Col>
+              <Button
+                disabled={saving}
+                loading={saving}
+                style={{ color: 'red', padding: 8 }}
+                onClick={toggleAddOffenderTag}
+                icon={
+                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
+                }
+              >
+                Add Label
+              </Button>
+            </Col>
+          )}
+        </Row>
+        <Row gutter={60}>
+          <Col span={8}>
             <Form.Item
               name="ageCheck"
               label="Do you know the offender's date of birth?"
@@ -265,10 +273,15 @@ const AddOffender = ({
               />
             </Form.Item>
           </Col>
+
           {ageCheck ? (
             <>
-              <Col span={11}>
-                <Form.Item name="dateOfBirth" label="Date of Birth">
+              <Col span={7}>
+                <Form.Item
+                  name="dateOfBirth"
+                  label="Date of Birth"
+                  tooltip="Enter the offender's date of birth if known."
+                >
                   <DatePicker
                     disabled={saving}
                     disabledDate={(current) =>
@@ -276,53 +289,66 @@ const AddOffender = ({
                     }
                   />
                 </Form.Item>
-
-                <Form.Item name="dateSource" label="Information Source">
-                  <Input
-                    disabled={saving}
-                    placeholder="Enter the information source of the offender's date of birth range of the offender ."
-                  />
+              </Col>
+              <Col span={8}>
+                <Form.Item
+                  name="dateSource"
+                  label="Information Source"
+                  tooltip="Enter the information source of the offender's date of birth range of the offender ."
+                >
+                  <Input disabled={saving} />
                 </Form.Item>
               </Col>
             </>
           ) : (
-            <Col span={11}>
-              <Form.Item name="age" label="Age">
-                <Select
-                  placeholder="Select an estimated age range of the offender if known."
-                  options={ageValues}
-                  disabled={saving}
-                />
+            <Col span={7}>
+              <Form.Item
+                name="age"
+                label="Age"
+                tooltip="Select an estimated age range of the offender if known."
+              >
+                <Select options={ageValues} disabled={saving} />
               </Form.Item>
             </Col>
           )}
         </Row>
-        <Row gutter={20}>
-          <Col>
-            <Title level={4}>Images</Title>
-            <Form.Item name="images">
-              <Upload
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                listType="picture-card"
-                fileList={fileList}
-                onChange={imgChange}
-                onPreview={onPreview}
-                beforeUpload={beforeUpload}
-              >
-                {fileList.length < 10 && '+ Upload'}
-              </Upload>
+
+        <Row gutter={16}>
+          <Col span={24}>
+            <Form.Item
+              name="peculiarities"
+              label="Peculiarities"
+              tooltip="Enter any distinctive features of the offender."
+            >
+              <Input.TextArea disabled={saving} />
             </Form.Item>
           </Col>
         </Row>
-        <Row gutter={5}>
-          <Col>
-            <Title level={4}>Exclusions:</Title>
-          </Col>
-          <Col flex={1} style={{ marginTop: 2 }}>
-            <Text type="secondary">
-              Create exclusions for this offender to exclusion them from areas
-              or premises.
-            </Text>
+        {/* <Divider /> */}
+        <Row gutter={5} style={{ marginTop: 50 }}>
+          <Col flex={1}>
+            <Row align="bottom" style={{ marginBottom: 20 }}>
+              <Col>
+                <Title style={{ marginBottom: 0 }} level={4}>
+                  2.{' '}
+                </Title>
+              </Col>
+              <Col>
+                <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                  Exclusions
+                </Title>
+              </Col>
+              <Col>
+                <Paragraph
+                  style={{ marginBottom: 1, marginLeft: 5 }}
+                  type="secondary"
+                  italic
+                >
+                  - Create exclusions for this offender to exclusion them from
+                  areas or premises.
+                </Paragraph>
+              </Col>
+            </Row>
           </Col>
           <Col>
             <Button
@@ -338,9 +364,9 @@ const AddOffender = ({
             </Button>
           </Col>
         </Row>
-        <Row gutter={20}>
-          <Col>
-            {bansData && bansData.length > 0 && (
+        {bansData && bansData.length > 0 ? (
+          <Row gutter={20}>
+            <Col>
               <Table
                 size="small"
                 pagination={{
@@ -374,7 +400,7 @@ const AddOffender = ({
                     key: 'activeDay',
                     title: 'Active Days',
                     dataIndex: 'activeDay',
-                    width: 100,
+                    width: 150,
                   },
                   {
                     key: 'location',
@@ -420,18 +446,80 @@ const AddOffender = ({
                   item: ban,
                   duration: `${new Date(
                     ban?.startDate
-                  ).toDateString()}  >  ${new Date(
+                  ).toDateString()}  -->  ${new Date(
                     ban?.endDate
                   ).toDateString()}`,
                   activeDay: calcDuration(
                     new Date(ban?.startDate),
                     new Date(ban?.endDate)
                   ),
-                  location: ban.description,
+                  location: ban.location,
                   description: ban.description,
                 }))}
               />
-            )}
+            </Col>
+          </Row>
+        ) : (
+          <Divider />
+        )}
+
+        <Row style={{ marginTop: 50 }}>
+          <Col>
+            <Row align="middle" style={{ marginBottom: 20 }}>
+              <Col>
+                <Title style={{ marginBottom: 0 }} level={4}>
+                  3.{' '}
+                </Title>
+              </Col>
+              <Col>
+                <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                  Images
+                </Title>
+              </Col>
+              <Col>
+                <Paragraph
+                  style={{ marginBottom: 1, marginLeft: 5 }}
+                  type="secondary"
+                  italic
+                >
+                  - Please add any images that you have of the offender.
+                </Paragraph>
+              </Col>
+              <Col style={{ marginLeft: 30 }}>
+                <Upload
+                  action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                  fileList={fileList}
+                  onChange={imgChange}
+                  beforeUpload={beforeUpload}
+                  showUploadList={false}
+                >
+                  <Button
+                    icon={
+                      <FontAwesomeIcon
+                        icon={faUpload}
+                        style={{ marginRight: 5 }}
+                      />
+                    }
+                    style={{ color: 'red' }}
+                  >
+                    Upload Image
+                  </Button>
+                </Upload>
+              </Col>
+            </Row>
+
+            <Form.Item name="images">
+              <Upload
+                action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                listType="picture-card"
+                fileList={fileList}
+                onChange={imgChange}
+                onPreview={onPreview}
+                beforeUpload={beforeUpload}
+              >
+                {fileList.length < 10 && '+ Upload'}
+              </Upload>
+            </Form.Item>
           </Col>
         </Row>
 
@@ -455,7 +543,6 @@ const AddOffender = ({
           </Row>
         </Form.Item>
       </Form>
-
       <Drawer
         title="Add Offender Warning"
         visible={addOffenderTag}

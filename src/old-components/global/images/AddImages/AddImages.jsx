@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 
-import { WebAddImages } from '../';
+import { WebAddImages } from '..';
 
 class AddImages extends PureComponent {
   render() {

@@ -30,6 +30,7 @@ function AddOffender(): JSX.Element {
     deleteConfirm,
     ageCheck,
     setAgeCheck,
+    adminRights,
   } = useAddOffender();
   return (
     <div>
@@ -59,6 +60,7 @@ function AddOffender(): JSX.Element {
         deleteConfirm={deleteConfirm}
         ageCheck={ageCheck}
         setAgeCheck={setAgeCheck}
+        adminRights={adminRights}
       />
     </div>
   );

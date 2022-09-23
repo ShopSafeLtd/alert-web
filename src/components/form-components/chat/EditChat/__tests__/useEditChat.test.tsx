@@ -47,6 +47,7 @@ const mocks = [
               user: {
                 id: 'userId',
                 fullName: 'test user',
+                firstLetter: 't',
                 organisation: 'test organisation',
               },
             },
@@ -70,11 +71,13 @@ const mocks = [
           id: 'chatId',
           name: 'test Chat',
           description: null,
+          totalMembers: 1,
           members: [
             {
               id: 'userChatId',
               user: {
                 id: 'test userId',
+                firstLetter: 't',
                 fullName: 'test user',
                 organisation: 'test organisation',
               },
@@ -107,7 +110,7 @@ const mocks = [
           },
         },
         orderBy: {
-          fullName: SortOrder.Desc,
+          fullName: SortOrder.Asc,
         },
       },
     },
@@ -117,8 +120,9 @@ const mocks = [
           {
             id: 'userId',
             fullName: 'testUser',
+            firstLetter: 't',
             email: 'user email',
-            organisation: 'user organisation',
+            organisation: 'organisation',
             status: 'enabled',
             groups: [{ id: 'groupId', name: 'test group' }],
           },
@@ -146,7 +150,6 @@ const UseEditChatTest = () => {
     usersData.users.map((el) => (
       <div key={el.id}>
         <span>{el.id}</span>
-        <span>{el.fullName}</span>
         <span>{el.organisation}</span>
       </div>
     ));
@@ -193,7 +196,7 @@ describe('useDetailChats - hook', () => {
     );
 
     expect(await findByText('test user')).toBeInTheDocument();
-    expect(await findByText('testUser')).toBeInTheDocument();
+    expect(await findByText('organisation')).toBeInTheDocument();
     expect(getAllByText('false')).toHaveLength(2);
     fireEvent.click(getByText('submit'));
     expect(container).toBeInTheDocument();

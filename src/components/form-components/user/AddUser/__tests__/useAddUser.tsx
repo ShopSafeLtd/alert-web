@@ -32,7 +32,7 @@ const mocks = [
           id: 'userId',
           fullName: 'test user',
           organisation: 'ShopSafe ',
-          email: '@shopsafe.uk',
+          email: 'email',
           disabled: false,
           newUser: false,
           addresses: [
@@ -80,7 +80,7 @@ const mocks = [
           scheme: { id: { equals: 'schemeId' } },
         },
         orderBy: {
-          name: SortOrder.Desc,
+          name: SortOrder.Asc,
         },
       },
     },
@@ -98,7 +98,7 @@ const mocks = [
           scheme: { id: { equals: 'schemeId' } },
         },
         orderBy: {
-          name: SortOrder.Desc,
+          name: SortOrder.Asc,
         },
       },
     },
@@ -183,37 +183,19 @@ const mocks = [
     request: {
       query: InviteExistingUserDocument,
       variables: {
-        where: {
-          id: 'userId',
-        },
+        where: { id: 'userId' },
         data: {
-          groups: [{ id: 'groupId' }],
+          groups: { connect: [{ id: 'groupId' }] },
           chats: {
             create: [
-              {
-                chat: { connect: { id: 'chatId' } },
-                newMessages: true,
-              },
+              { newMessages: false, chat: { connect: { id: 'chatId' } } },
             ],
           },
           schemes: {
-            create: [
-              {
-                role: Role.User,
-                scheme: {
-                  connect: { id: 'schemeId' },
-                },
-              },
-            ],
+            create: [{ role: 'USER', scheme: { connect: { id: 'schemeId' } } }],
           },
         },
-        groupWhere: {
-          scheme: {
-            id: {
-              equals: 'schemeId',
-            },
-          },
-        },
+        groupWhere: { scheme: { id: { equals: 'schemeId' } } },
       },
     },
     result: {
@@ -264,21 +246,13 @@ const mocks = [
 ];
 
 const UseAddUserTest = () => {
-  const {
-    groupsData,
-    groupsLoading,
-    chatsData,
-    chatsLoading,
-    onSubmit,
-    // existingUser,
-  } = useAddUser({
-    onClose: jest.fn(),
-    update: jest.fn(),
-    updateSearch: jest.fn(),
-  });
-  const preSubmit = () => {
-    //  const existingUser= true
-  };
+  const { groupsData, groupsLoading, chatsData, chatsLoading, onSubmit } =
+    useAddUser({
+      onClose: jest.fn(),
+      update: jest.fn(),
+      updateSearch: jest.fn(),
+    });
+
   const Groups =
     groupsData &&
     groupsData.groups.map((el) => (
@@ -322,14 +296,6 @@ const UseAddUserTest = () => {
       >
         submit
       </button>
-      <button
-        type="button"
-        onClick={() => {
-          preSubmit();
-        }}
-      >
-        preSubmit
-      </button>
     </div>
   );
 };
@@ -355,7 +321,6 @@ describe('useDetailUsers - hook', () => {
     expect(await findByText('groupName')).toBeInTheDocument();
     expect(await findByText('chatName')).toBeInTheDocument();
     expect(getAllByText('false')).toHaveLength(2);
-    fireEvent.click(getByText('preSubmit'));
     fireEvent.click(getByText('submit'));
     expect(container).toBeInTheDocument();
     expect(await findByText('Successfully Invited!')).toBeInTheDocument();

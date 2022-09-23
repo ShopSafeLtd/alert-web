@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 
-import { Image, UploadingImage } from '../';
+import { Image, UploadingImage } from '..';
 
 const Grid = styled.div`
   display: flex;

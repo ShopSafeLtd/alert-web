@@ -24,7 +24,7 @@ describe('Detail Officer View', () => {
               { id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling ' },
             ],
           },
-          order: IncidentSort.createdAtDesc,
+          order: IncidentSort.createdAtAsc,
         },
       },
     },

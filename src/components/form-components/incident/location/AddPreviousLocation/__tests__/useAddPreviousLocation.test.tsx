@@ -47,7 +47,7 @@ const UseAddPreviousLocationTest = () => {
   });
   const Addresses =
     data &&
-    data.map((el) => (
+    data.addresses.map((el) => (
       <div key={el.id}>
         <span>{el.id}</span>
         <span>{el.postcode}</span>

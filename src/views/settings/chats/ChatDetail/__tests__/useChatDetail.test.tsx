@@ -23,6 +23,7 @@ const mocks = [
         chat: {
           id: 'ChatId',
           name: 'test Chat',
+          totalMembers: 1,
           description: null,
           members: [
             {
@@ -30,6 +31,7 @@ const mocks = [
               user: {
                 id: 'test userId',
                 fullName: 'test user',
+                firstLetter: 't',
                 organisation: 'test organisation',
               },
             },

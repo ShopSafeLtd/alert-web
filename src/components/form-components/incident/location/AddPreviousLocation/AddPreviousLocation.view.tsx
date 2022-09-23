@@ -12,6 +12,8 @@ import {
   Typography,
   // Checkbox,
 } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLocationDot } from '@fortawesome/pro-light-svg-icons';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faLocationDot } from '@fortawesome/pro-light-svg-icons';
 
@@ -51,21 +53,20 @@ const ViewOffender = ({
           ]}
         >
           <Radio.Group>
-            {data?.addresses.map((location) => (
-              <Radio
-                value={location.id}
-                key={location.id}
-                style={{ marginBottom: 10 }}
-              >
-                <Paragraph style={{ margin: 0 }} ellipsis key={location.id}>
-                  {/* <FontAwesomeIcon
-                    style={{ marginRight: 6, color: 'rgb(222, 68, 54)' }}
-                    icon={faLocationDot}
-                  /> */}
-                  {location.full}
-                </Paragraph>
-              </Radio>
-            ))}
+            {data?.addresses &&
+              data.addresses.map((location) => (
+                <Row wrap={false} key={location.id} align="bottom">
+                  <Radio value={location.id} key={location.id}>
+                    <Paragraph ellipsis key={location.id}>
+                      <FontAwesomeIcon
+                        style={{ marginRight: 6, color: 'rgb(222, 68, 54)' }}
+                        icon={faLocationDot}
+                      />
+                      {location.full}
+                    </Paragraph>
+                  </Radio>
+                </Row>
+              ))}
           </Radio.Group>
         </Form.Item>
 

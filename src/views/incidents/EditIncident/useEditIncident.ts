@@ -252,224 +252,113 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const onSubmit = (data: FormData) => {
     setSaving(true);
     if (incidentId) {
-      if (reviewed) {
-        updateIncident({
-          variables: {
-            where: {
-              id: incidentId,
+      updateIncident({
+        variables: {
+          where: {
+            id: incidentId,
+          },
+          data: {
+            approved: { set: true },
+            subject: { set: data.subject },
+            description: { set: data.description },
+            date: { set: data.date },
+            time: { set: data.time },
+            location: {
+              update: {
+                building: { set: data.building },
+                street: { set: data.street },
+                townCity: { set: data.townCity },
+                county: { set: data.county },
+                postcode: { set: data.postcode },
+              },
             },
-            data: {
-              approved: { set: true },
-              subject: { set: data.subject },
-              description: { set: data.description },
-              date: { set: data.date },
-              time: { set: data.time },
-              location: {
-                update: {
-                  building: { set: data.building },
-                  street: { set: data.street },
-                  townCity: { set: data.townCity },
-                  county: { set: data.county },
-                  postcode: { set: data.postcode },
-                },
-              },
-              groups: {
-                set: data.groups.map((id) => ({ id })),
-              },
-              crimeTypes: {
-                set: data.tags.map((id) => ({ id })),
-              },
-              offenders: {
-                connect:
-                  offendersData && offendersData.length > 0
-                    ? offendersData
-                        .filter((item) =>
-                          ListOffendersData?.listOffenders?.offenders
+            groups: {
+              set: data.groups.map((id) => ({ id })),
+            },
+            crimeTypes: {
+              set: data.tags.map((id) => ({ id })),
+            },
+            offenders: {
+              connect:
+                offendersData && offendersData.length > 0
+                  ? offendersData
+                      .filter((item) =>
+                        ListOffendersData?.listOffenders?.offenders
+                          ?.map((offender) => offender.id)
+                          .includes(item.id)
+                      )
+                      .map((offender) => ({ id: offender.id }))
+                  : undefined,
+              create:
+                offendersData && offendersData.length > 0
+                  ? offendersData
+                      .filter(
+                        (item) =>
+                          !ListOffendersData?.listOffenders?.offenders
                             ?.map((offender) => offender.id)
                             .includes(item.id)
-                        )
-                        .map((offender) => ({ id: offender.id }))
-                    : undefined,
-                create:
-                  offendersData && offendersData.length > 0
-                    ? offendersData
-                        .filter(
-                          (item) =>
-                            !ListOffendersData?.listOffenders?.offenders
-                              ?.map((offender) => offender.id)
-                              .includes(item.id)
-                        )
-                        .map((offender) => ({
-                          name:
-                            offender.name || 'Unidentified Offender' || null,
-                          gender: offender.gender || null,
-                          race: offender.race || null,
-                          build: offender.build || null,
-                          hair: offender.hair || null,
-                          peculiarities: offender.peculiarities || null,
-                          age: offender.age || null,
-                          dateSource: offender.dateSource || null,
-                          dateOfBirth: offender.dateOfBirth || null,
-                          groups:
-                            offender.groups && offender.groups.length > 0
-                              ? {
-                                  connect: offender.groups.map(({ id }) => ({
-                                    id,
-                                  })),
-                                }
-                              : undefined,
-                          scheme: { connect: { id: schemeId } },
-                          createdBy: { connect: { id: userId } },
-                          localId: offender.id,
-                        }))
-                    : undefined,
-
-                delete:
-                  IncidentData?.incident?.offenders &&
-                  IncidentData.incident.offenders.length > 0
-                    ? IncidentData.incident.offenders
-                        .filter(
-                          (offender) =>
-                            !offendersData
-                              ?.map((item) => item.id)
-                              .includes(offender.id)
-                        )
-                        .map((offender) => ({ id: offender.id }))
-                    : undefined,
-              },
-
-              images: {
-                upload:
-                  imageChange && fileList.length > 0
-                    ? fileList
-                        .map((item) => ({
-                          file: item.originFileObj,
-                        }))
-                        .filter((obj) => obj.file !== undefined)
-                    : [],
-                delete: imageChange
-                  ? IncidentData?.incident?.images
-                      .filter(
-                        (image) =>
-                          !fileList.map((item) => item.uid).includes(image.id)
                       )
-                      .map((image) => ({
-                        id: image.id,
+                      .map((offender) => ({
+                        name: offender.name || 'Unidentified Offender' || null,
+                        gender: offender.gender || null,
+                        race: offender.race || null,
+                        build: offender.build || null,
+                        hair: offender.hair || null,
+                        peculiarities: offender.peculiarities || null,
+                        age: offender.age || null,
+                        dateSource: offender.dateSource || null,
+                        dateOfBirth: offender.dateOfBirth || null,
+                        groups:
+                          offender.groups && offender.groups.length > 0
+                            ? {
+                                connect: offender.groups.map(({ id }) => ({
+                                  id,
+                                })),
+                              }
+                            : undefined,
+                        scheme: { connect: { id: schemeId } },
+                        createdBy: { connect: { id: userId } },
+                        localId: offender.id,
                       }))
+                  : undefined,
+
+              delete:
+                IncidentData?.incident?.offenders &&
+                IncidentData.incident.offenders.length > 0
+                  ? IncidentData.incident.offenders
+                      .filter(
+                        (offender) =>
+                          !offendersData
+                            ?.map((item) => item.id)
+                            .includes(offender.id)
+                      )
+                      .map((offender) => ({ id: offender.id }))
+                  : undefined,
+            },
+
+            images: {
+              upload:
+                imageChange && fileList.length > 0
+                  ? fileList
+                      .map((item) => ({
+                        file: item.originFileObj,
+                      }))
+                      .filter((obj) => obj.file !== undefined)
                   : [],
-              },
+              delete: imageChange
+                ? IncidentData?.incident?.images
+                    .filter(
+                      (image) =>
+                        !fileList.map((item) => item.uid).includes(image.id)
+                    )
+                    .map((image) => ({
+                      id: image.id,
+                    }))
+                : [],
             },
           },
-        });
-      } else {
-        updateIncident({
-          variables: {
-            where: {
-              id: incidentId,
-            },
-            data: {
-              subject: { set: data.subject },
-              description: { set: data.description },
-              date: { set: data.date },
-              time: { set: data.time },
-              location: {
-                update: {
-                  building: { set: data.building },
-                  street: { set: data.street },
-                  townCity: { set: data.townCity },
-                  county: { set: data.county },
-                  postcode: { set: data.postcode },
-                },
-              },
-              groups: {
-                set: data.groups.map((id) => ({ id })),
-              },
-              crimeTypes: {
-                set: data.tags.map((id) => ({ id })),
-              },
-              offenders: {
-                connect:
-                  offendersData && offendersData.length > 0
-                    ? offendersData
-                        .filter((item) =>
-                          ListOffendersData?.listOffenders?.offenders
-                            ?.map((offender) => offender.id)
-                            .includes(item.id)
-                        )
-                        .map((offender) => ({ id: offender.id }))
-                    : undefined,
-                create:
-                  offendersData && offendersData.length > 0
-                    ? offendersData
-                        .filter(
-                          (item) =>
-                            !ListOffendersData?.listOffenders?.offenders
-                              ?.map((offender) => offender.id)
-                              .includes(item.id)
-                        )
-                        .map((offender) => ({
-                          name:
-                            offender.name || 'Unidentified Offender' || null,
-                          gender: offender.gender || null,
-                          race: offender.race || null,
-                          build: offender.build || null,
-                          hair: offender.hair || null,
-                          peculiarities: offender.peculiarities || null,
-                          age: offender.age || null,
-                          dateSource: offender.dateSource || null,
-                          dateOfBirth: offender.dateOfBirth || null,
-                          groups:
-                            offender.groups && offender.groups.length > 0
-                              ? {
-                                  connect: offender.groups.map(({ id }) => ({
-                                    id,
-                                  })),
-                                }
-                              : undefined,
-                          scheme: { connect: { id: schemeId } },
-                          createdBy: { connect: { id: userId } },
-                          localId: offender.id,
-                        }))
-                    : undefined,
-
-                delete:
-                  IncidentData?.incident?.offenders &&
-                  IncidentData.incident.offenders.length > 0
-                    ? IncidentData.incident.offenders
-                        .filter(
-                          (offender) =>
-                            !offendersData
-                              ?.map((item) => item.id)
-                              .includes(offender.id)
-                        )
-                        .map((offender) => ({ id: offender.id }))
-                    : undefined,
-              },
-
-              images: {
-                upload:
-                  imageChange && fileList.length > 0
-                    ? fileList
-                        .map((item) => ({
-                          file: item.originFileObj,
-                        }))
-                        .filter((obj) => obj.file !== undefined)
-                    : [],
-                delete: imageChange
-                  ? IncidentData?.incident?.images
-                      .filter(
-                        (image) =>
-                          !fileList.map((item) => item.uid).includes(image.id)
-                      )
-                      .map((image) => ({
-                        id: image.id,
-                      }))
-                  : [],
-              },
-            },
-          },
-        });
-      }
+        },
+      });
     }
   };
 

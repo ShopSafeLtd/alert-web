@@ -170,7 +170,9 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
       setSaving(false);
       notification.success({
         message: 'Successfully Updated!',
-        description: 'The offender has been updated!',
+        description: reviewed
+          ? 'The offender has been approved!'
+          : 'The offender has been updated!',
         placement: 'bottomRight',
       });
     },
@@ -182,100 +184,52 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-
     if (offenderId) {
-      if (reviewed) {
-        updateOffender({
-          variables: {
-            where: {
-              id: offenderId,
+      updateOffender({
+        variables: {
+          where: {
+            id: offenderId,
+          },
+          data: {
+            approved: { set: true },
+            name: { set: data.name || 'Unidentified Offender' },
+            gender: { set: data.gender || null },
+            race: { set: data.race || null },
+            build: { set: data.build || null },
+            hair: { set: data.hair || 'Unknown' },
+            peculiarities: { set: data.peculiarities || '' },
+            age: { set: ageCheck ? null : data.age || null },
+            dateSource: { set: ageCheck ? data.dateSource || null : null },
+            dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
+            groups: {
+              set: data.groups.map((id) => ({ id })),
             },
-            data: {
-              approved: { set: true },
-              name: { set: data.name || '' },
-              gender: { set: data.gender || null },
-              race: { set: data.race || null },
-              build: { set: data.build || null },
-              hair: { set: data.hair || '' },
-              peculiarities: { set: data.peculiarities || '' },
-              age: { set: ageCheck ? null : data.age || null },
-              dateSource: { set: ageCheck ? data.dateSource || null : null },
-              dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
-              groups: {
-                set: data.groups.map((id) => ({ id })),
-              },
-              tags: {
-                set: data.tags.map((id) => ({ id })) || undefined,
-              },
-              images: {
-                upload:
-                  imageChange && fileList.length > 0
-                    ? fileList
-                        .map((item) => ({
-                          file: item.originFileObj,
-                        }))
-                        .filter((obj) => obj.file !== undefined)
-                    : [],
-                delete: imageChange
-                  ? offenderData?.offender?.images
-                      .filter(
-                        (image) =>
-                          !fileList.map((item) => item.uid).includes(image.id)
-                      )
-                      .map((image) => ({
-                        id: image.id,
+            tags: {
+              set: data.tags.map((id) => ({ id })) || undefined,
+            },
+            images: {
+              upload:
+                imageChange && fileList.length > 0
+                  ? fileList
+                      .map((item) => ({
+                        file: item.originFileObj,
                       }))
+                      .filter((obj) => obj.file !== undefined)
                   : [],
-              },
+              delete: imageChange
+                ? offenderData?.offender?.images
+                    .filter(
+                      (image) =>
+                        !fileList.map((item) => item.uid).includes(image.id)
+                    )
+                    .map((image) => ({
+                      id: image.id,
+                    }))
+                : [],
             },
           },
-        });
-      } else {
-        updateOffender({
-          variables: {
-            where: {
-              id: offenderId,
-            },
-            data: {
-              name: { set: data.name || '' },
-              gender: { set: data.gender || null },
-              race: { set: data.race || null },
-              build: { set: data.build || null },
-              hair: { set: data.hair || '' },
-              peculiarities: { set: data.peculiarities || '' },
-              age: { set: ageCheck ? null : data.age || null },
-              dateSource: { set: ageCheck ? data.dateSource || null : null },
-              dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
-              groups: {
-                set: data.groups.map((id) => ({ id })),
-              },
-              tags: {
-                set: data.tags.map((id) => ({ id })) || undefined,
-              },
-              images: {
-                upload:
-                  imageChange && fileList.length > 0
-                    ? fileList
-                        .map((item) => ({
-                          file: item.originFileObj,
-                        }))
-                        .filter((obj) => obj.file !== undefined)
-                    : [],
-                delete: imageChange
-                  ? offenderData?.offender?.images
-                      .filter(
-                        (image) =>
-                          !fileList.map((item) => item.uid).includes(image.id)
-                      )
-                      .map((image) => ({
-                        id: image.id,
-                      }))
-                  : [],
-              },
-            },
-          },
-        });
-      }
+        },
+      });
     }
   };
   // update tag list after adding a new item

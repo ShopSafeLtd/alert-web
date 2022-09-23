@@ -87,7 +87,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
         },
       },
       orderBy: {
-        name: SortOrder.Desc,
+        name: SortOrder.Asc,
       },
     },
   });
@@ -103,7 +103,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
         },
       },
       orderBy: {
-        name: SortOrder.Desc,
+        name: SortOrder.Asc,
       },
     },
   });

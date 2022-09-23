@@ -148,7 +148,7 @@ const UseAddIncidentTest = () => {
     groupsLoading,
     tags,
     tagsLoading,
-    primaryAddress,
+    addressData,
     addressLoading,
   } = useAddIncident();
 
@@ -161,12 +161,14 @@ const UseAddIncidentTest = () => {
       </div>
     ));
 
-  const Addresses = primaryAddress && (
-    <div key={primaryAddress.id}>
-      <span>{primaryAddress.id}</span>
-      <span>{primaryAddress.postcode}</span>
-    </div>
-  );
+  const Addresses =
+    addressData &&
+    addressData.addresses.map((el) => (
+      <div key={el.id}>
+        <span>{el.id}</span>
+        <span>{el.postcode}</span>
+      </div>
+    ));
 
   const Tags =
     tags &&
