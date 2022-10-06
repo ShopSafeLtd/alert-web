@@ -487,6 +487,7 @@ const AddOffender = ({
               </Col>
               <Col style={{ marginLeft: 30 }}>
                 <Upload
+                  accept=".png,.jpeg,.webp"
                   action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
                   fileList={fileList}
                   onChange={imgChange}
@@ -510,6 +511,7 @@ const AddOffender = ({
 
             <Form.Item name="images">
               <Upload
+                accept=".png,.jpeg,.webp"
                 action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
                 listType="picture-card"
                 fileList={fileList}

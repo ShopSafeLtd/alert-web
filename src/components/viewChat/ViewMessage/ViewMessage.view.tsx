@@ -414,6 +414,7 @@ const ViewMessges = ({
               </Col>
               <Col>
                 <Upload
+                  accept=".png,.jpeg,.webp"
                   action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
                   fileList={fileList}
                   onChange={imgChange}
@@ -428,7 +429,8 @@ const ViewMessges = ({
             </Row>
             <Form.Item name="images">
               <Upload
-                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                accept=".png,.jpeg,.webp"
+                action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
                 listType="picture-card"
                 fileList={fileList}
                 onChange={imgChange}
