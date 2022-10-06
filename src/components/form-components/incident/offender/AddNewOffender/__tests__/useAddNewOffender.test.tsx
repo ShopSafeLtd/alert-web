@@ -12,7 +12,7 @@ import {
   Role,
   SchemeGroupsDocument,
 } from 'graphql/generated';
-import useAddOffender from '../useAddOffender';
+import useAddNewOffender from '../useAddNewOffender';
 
 const mocks = [
   {
@@ -32,8 +32,8 @@ const mocks = [
   },
 ];
 
-const UseAddOffenderTest = () => {
-  const { groups, groupsLoading, onSubmit } = useAddOffender({
+const UseAddNewOffenderTest = () => {
+  const { groups, groupsLoading, onSubmit } = useAddNewOffender({
     onClose: jest.fn(),
     update: jest.fn(),
   });
@@ -103,7 +103,7 @@ describe('useDetailGroups - hook', () => {
       <StoreProvider store={store}>
         <MemoryRouter>
           <MockedProvider mocks={mocks} addTypename={false}>
-            <UseAddOffenderTest />
+            <UseAddNewOffenderTest />
           </MockedProvider>
         </MemoryRouter>
       </StoreProvider>

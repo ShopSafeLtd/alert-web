@@ -6,29 +6,28 @@ import {
   Typography,
   Row,
   Col,
-  Tabs,
   Descriptions,
   Button,
   Input,
-  Divider,
   Skeleton,
   Pagination,
-  Form,
-  Checkbox,
+  Tag,
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faUser } from '@fortawesome/pro-light-svg-icons';
+import {
+  faClock,
+  faLocationDot,
+  faUser,
+} from '@fortawesome/pro-light-svg-icons';
 
-import { SRLWrapper } from 'simple-react-lightbox';
+// import { SRLWrapper } from 'simple-react-lightbox';
+import IncidentTile from 'components/incidents/IncidentTile';
 
-const { Title, Text } = Typography;
-interface FormData {
-  selectedIncidentIds: string[];
-}
+const { Title, Paragraph } = Typography;
 
 interface Props {
   onClose: () => void;
-  onSubmit: (value: FormData) => void;
+  onSubmit: (value: string | undefined) => void;
   saving: boolean;
   data: ListIncidentsQuery | undefined;
   loading: boolean;
@@ -37,11 +36,12 @@ interface Props {
   onPaginationChange: (page: number, pageSize: number) => void;
   openLightbox: (index: number) => void;
   setCurrentId: (value: string | undefined) => void;
-  incidentData:
+  selectedIncident:
     | Exclude<
         ListIncidentsQuery['listIncidents'],
         undefined | null
       >['incidents'][0]
+    | null
     | undefined;
 }
 
@@ -56,11 +56,11 @@ const LinkIncident = ({
   openLightbox,
   onPaginationChange,
   setCurrentId,
-  incidentData,
+  selectedIncident,
 }: Props): JSX.Element => (
-  <Form layout="vertical" onFinish={onSubmit}>
-    <Row gutter={8} style={{ marginBottom: 10 }}>
-      <Col span={22}>
+  <div className="add-existing-offender">
+    <Row gutter={8} className="search-offender">
+      <Col span={18}>
         <Input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
@@ -69,171 +69,148 @@ const LinkIncident = ({
         />
       </Col>
     </Row>
-    <Row>
-      <Col span={8}>
-        <div className="incidents-side-list">
-          <Form.Item
-            name="selectedIncidentIds"
-            label="incidents:"
-            rules={[
-              {
-                required: true,
-                message:
-                  'Please at least select an existing incident for the offender.',
-              },
-            ]}
-          >
-            <Checkbox.Group>
-              {data?.listIncidents?.incidents.map((incident) => (
-                <div key={incident.id} className="incident-item">
-                  <Row wrap={false}>
-                    <Checkbox
-                      value={incident.id}
-                      onChange={() => setCurrentId(incident.id)}
-                      style={{ lineHeight: '32px', borderColor: 'black' }}
-                    >
-                      <Col>
-                        {incident.images.length > 0 ? (
-                          <div
-                            className="incident-item-image"
-                            style={{
-                              backgroundImage: `url(${incident.images[0].optimised})`,
-                            }}
-                          />
-                        ) : (
-                          <Skeleton.Image className="incident-item-image-skeleton" />
-                        )}
-                      </Col>
-                      <Col className="incident-item-content" flex={1}>
-                        <Text ellipsis>{incident.subject}</Text>
-                      </Col>
-                    </Checkbox>
-                  </Row>
 
-                  <Divider className="incident-item-divider" />
-                </div>
-              ))}
-            </Checkbox.Group>
-          </Form.Item>
-
-          <Pagination
-            total={data?.listIncidents?.total}
-            size="small"
-            showSizeChanger={false}
-            onChange={onPaginationChange}
-          />
-        </div>
-      </Col>
-      <Col span={14}>
-        <div className="view-incident">
-          <Row
-            gutter={8}
-            justify="start"
-            align="middle"
-            className="incident-images"
-            wrap={false}
-          >
-            {incidentData?.images.map((image, i) => (
-              <Col key={image.id}>
-                <div
-                  onClick={() => openLightbox(i)}
-                  className="incident-image"
-                  style={{ backgroundImage: `url(${image.optimised})` }}
+    <Row className="add-existing-offender-row">
+      <Col
+        span={selectedIncident !== null ? 10 : 24}
+        className="offenders-side-list"
+      >
+        {!data && loading ? (
+          <Skeleton />
+        ) : (
+          <Row wrap gutter={16}>
+            {data?.listIncidents?.incidents.map((incident) => (
+              <Col
+                span={selectedIncident !== null ? 12 : 4}
+                key={incident.id}
+                className="offender-item"
+              >
+                <IncidentTile
+                  incident={incident}
+                  onClick={() => setCurrentId(incident.id)}
                 />
               </Col>
             ))}
           </Row>
+        )}
 
-          <Tabs>
-            <Tabs.TabPane key={0} tab="Details">
-              <Row>
-                <Col span={24} style={{ margin: 10 }}>
-                  {loading ? (
-                    <Skeleton />
-                  ) : (
-                    <>
-                      <Title level={4}>{incidentData?.subject}</Title>
-                      {incidentData?.groups?.map((group) => (
-                        <Text key={group.id} type="danger" ellipsis>
-                          {group.name}
-                        </Text>
-                      ))}
-                    </>
-                  )}
-                  <Descriptions column={1} className="incident-descriptions">
-                    <Descriptions.Item
-                      span={2}
-                      label={
-                        <span>
-                          <FontAwesomeIcon
-                            className="incident-description-icon"
-                            icon={faClock}
-                          />
-                          Created At
-                        </span>
-                      }
-                    >
-                      {loading ? (
-                        <Skeleton title={{ width: 100 }} paragraph={false} />
-                      ) : (
-                        incidentData?.dayTime
-                      )}
-                    </Descriptions.Item>
-                    <Descriptions.Item
-                      label={
-                        <span>
-                          <FontAwesomeIcon
-                            className="incident-description-icon"
-                            icon={faUser}
-                          />
-                          Created By
-                        </span>
-                      }
-                    >
-                      {loading ? (
-                        <Skeleton title={{ width: 100 }} paragraph={false} />
-                      ) : (
-                        `${incidentData?.createdBy?.fullName} -
-                        ${incidentData?.createdBy?.organisation}`
-                      )}
-                    </Descriptions.Item>
-                  </Descriptions>
-                </Col>
-              </Row>
-            </Tabs.TabPane>
-          </Tabs>
-        </div>
+        <Pagination
+          total={data?.listIncidents?.total}
+          size="small"
+          showSizeChanger={false}
+          onChange={onPaginationChange}
+          pageSize={24}
+        />
       </Col>
+      {selectedIncident && (
+        <Col span={14} className="view-offender">
+          {selectedIncident && selectedIncident.images.length > 0 && (
+            <Row
+              gutter={8}
+              justify="start"
+              align="middle"
+              wrap={false}
+              className="offender-images"
+            >
+              {selectedIncident?.images.map((image, i) => (
+                <Col key={image.id}>
+                  <div
+                    onClick={() => openLightbox(i)}
+                    className="offender-image"
+                    style={{ backgroundImage: `url(${image.optimised})` }}
+                  />
+                </Col>
+              ))}
+            </Row>
+          )}
+
+          <Row>
+            <Col span={24} style={{ margin: 10 }}>
+              <Title level={4}>{selectedIncident?.subject}</Title>
+              <Row className="incident-tags">
+                {selectedIncident?.crimeTypes.map((crimeType) => (
+                  <Col key={crimeType.id}>
+                    <Tag color="red">{crimeType.name}</Tag>
+                  </Col>
+                ))}
+              </Row>{' '}
+              <Paragraph type="secondary" style={{ marginTop: 10 }}>
+                {selectedIncident?.description}
+              </Paragraph>
+              <Descriptions column={1} className="offender-descriptions">
+                <Descriptions.Item
+                  label={
+                    <span>
+                      <FontAwesomeIcon
+                        className="offender-description-icon"
+                        icon={faClock}
+                      />
+                      Created At
+                    </span>
+                  }
+                >
+                  {selectedIncident?.dayTime}
+                </Descriptions.Item>
+                <Descriptions.Item
+                  label={
+                    <span>
+                      <FontAwesomeIcon
+                        className="offender-description-icon"
+                        icon={faUser}
+                      />
+                      Created By
+                    </span>
+                  }
+                >
+                  {`${selectedIncident?.createdBy.fullName} -
+                              ${selectedIncident?.createdBy.organisation}`}
+                </Descriptions.Item>
+                <Descriptions.Item
+                  label={
+                    <span>
+                      <FontAwesomeIcon
+                        className="offender-description-icon"
+                        icon={faLocationDot}
+                      />
+                      Location
+                    </span>
+                  }
+                >
+                  {selectedIncident?.location?.full}
+                </Descriptions.Item>
+              </Descriptions>
+            </Col>
+          </Row>
+          <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+            <Col>
+              <Button disabled={saving} onClick={onClose}>
+                Cancel
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                disabled={saving}
+                loading={saving}
+                type="primary"
+                onClick={() => onSubmit(selectedIncident?.id)}
+              >
+                Add Incident
+              </Button>
+            </Col>
+          </Row>
+        </Col>
+      )}
     </Row>
 
-    <SRLWrapper
+    {/* <SRLWrapper
       elements={
-        incidentData?.images.map((image) => ({
+        selectedIncident?.images.map((image) => ({
           src: image.optimised || '',
         })) || []
       }
       options={{ buttons: { showDownloadButton: false } }}
-    />
-    <Form.Item>
-      <Row style={{ marginTop: 30 }} gutter={10} justify="end">
-        <Col>
-          <Button disabled={saving} onClick={onClose}>
-            Cancel
-          </Button>
-        </Col>
-        <Col>
-          <Button
-            disabled={saving}
-            loading={saving}
-            type="primary"
-            htmlType="submit"
-          >
-            Link incident
-          </Button>
-        </Col>
-      </Row>
-    </Form.Item>
-  </Form>
+    /> */}
+  </div>
 );
 
 export default LinkIncident;

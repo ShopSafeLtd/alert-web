@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { MemoryRouter } from 'react-router-dom';
@@ -10,6 +10,8 @@ import {
   ListOffendersDocument,
   Role,
   AddressesDocument,
+  SortOrder,
+  CreateIncidentDocument,
 } from 'graphql/generated';
 import { IncidentSort, storeModel } from 'state';
 import useAddIncident from '../useAddIncident';
@@ -129,13 +131,134 @@ const mocks = [
                 {
                   id: 'cl6owsuzo33227f9pe9zk4wone',
                   optimised: null,
-                  // url: null,
                 },
               ],
               bans: [],
               incidents: [],
             },
           ],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: ListOffendersDocument,
+      variables: {
+        scheme: {
+          id: 'schemeId',
+        },
+        order: {
+          updatedAt: SortOrder.Asc,
+        },
+        take: 20,
+      },
+    },
+    result: {
+      data: {
+        listOffenders: {
+          total: 1,
+          offenders: [
+            {
+              id: 'offenderId',
+              createdAt: '2022-08-10T10:40:06.191Z',
+              updatedAt: '2022-08-11T10:40:09.985Z',
+              age: null,
+              build: null,
+              dateOfBirth: null,
+              dateSource: null,
+              hair: null,
+              gender: null,
+              name: 'offender name',
+              race: null,
+              peculiarities: null,
+              approved: null,
+              active: null,
+              createdBy: {
+                fullName: 'aaa',
+                id: 'cl4pe3eu91312371op4c4k2lih2',
+                organisation: 'ShopSafe',
+              },
+              tags: [
+                { id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling ' },
+              ],
+              groups: [
+                { id: 'ckqtnb4r056540229myw4yk8zvq', name: 'NightSafe' },
+              ],
+              images: [
+                {
+                  id: 'cl6owsuzo33227f9pe9zk4wone',
+                  optimised: null,
+                  url: null,
+                },
+              ],
+              incidents: [],
+            },
+          ],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CreateIncidentDocument,
+      variables: {
+        data: {
+          subject: 'subject',
+          description: 'description',
+          date: new Date('2022-08-30T11:25:32.702Z'),
+          location: {
+            account: true,
+            create: {
+              building: 'building',
+              street: 'street',
+              townCity: 'townCity',
+              county: 'county',
+              postcode: 'postcode',
+            },
+          },
+          groups: {
+            set: [{ id: 'groupId' }],
+          },
+          crimeTypes: {
+            set: [{ id: 'tagId' }],
+          },
+          offenders: {
+            connect: undefined,
+            create: undefined,
+            delete: undefined,
+          },
+          images: {
+            upload: [],
+            delete: [],
+          },
+        },
+      },
+    },
+    result: {
+      data: {
+        createIncident: {
+          id: 'incidentId',
+          date: '2022-08-10T10:40:06.191Z',
+          time: '2022-08-11T10:40:09.985Z',
+          dayTime: '11:40 - Wed 10, Aug 22',
+          description: 'test description',
+          subject: 'test subject ',
+          location: null,
+          approved: null,
+          createdBy: {
+            fullName: 'aaa',
+            id: 'cl4pe3eu91312371op4c4k2lih2',
+            organisation: 'ShopSafe',
+          },
+          crimeTypes: [
+            { id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling ' },
+          ],
+          groups: [{ id: 'ckqtnb4r056540229myw4yk8zvq', name: 'NightSafe' }],
+          images: [
+            { id: 'cl6owsuzo33227f9pe9zk4wone', optimised: null, url: null },
+          ],
+          offenders: [],
         },
       },
     },
@@ -148,8 +271,11 @@ const UseAddIncidentTest = () => {
     groupsLoading,
     tags,
     tagsLoading,
-    addressData,
+    primaryAddress,
     addressLoading,
+    recentOffenderData,
+    recentOffenderLoading,
+    onSubmit,
   } = useAddIncident();
 
   const Groups =
@@ -161,14 +287,12 @@ const UseAddIncidentTest = () => {
       </div>
     ));
 
-  const Addresses =
-    addressData &&
-    addressData.addresses.map((el) => (
-      <div key={el.id}>
-        <span>{el.id}</span>
-        <span>{el.postcode}</span>
-      </div>
-    ));
+  const Addresses = primaryAddress && (
+    <div key={primaryAddress.id}>
+      <span>{primaryAddress.id}</span>
+      <span>{primaryAddress.postcode}</span>
+    </div>
+  );
 
   const Tags =
     tags &&
@@ -176,6 +300,14 @@ const UseAddIncidentTest = () => {
       <div key={el.value}>
         <span>{el.value}</span>
         <span>{el.label}</span>
+      </div>
+    ));
+  const RecentOffenders =
+    recentOffenderData &&
+    recentOffenderData.listOffenders?.offenders.map((el) => (
+      <div key={el.id}>
+        <span>{el.id}</span>
+        <span>{el.createdAt}</span>
       </div>
     ));
 
@@ -187,6 +319,24 @@ const UseAddIncidentTest = () => {
       <span>{addressLoading ? 'true' : 'false'}</span>
       {Tags}
       <span>{tagsLoading ? 'true' : 'false'}</span>
+      {RecentOffenders}
+      <span>{recentOffenderLoading ? 'true' : 'false'}</span>
+      <button
+        type="button"
+        onClick={() =>
+          onSubmit({
+            subject: 'subject',
+            description: 'description',
+            date: new Date('2022-08-30T11:25:32.702Z'),
+            fullAddress: 'fullAddress',
+            groups: ['groupId'],
+            tags: ['tagId'],
+            images: [],
+          })
+        }
+      >
+        submit
+      </button>
     </div>
   );
 };
@@ -217,7 +367,7 @@ describe('useListUsers - hook', () => {
     mockActions: true,
   });
   it('returns the expected values', async () => {
-    const { findByText, getAllByText } = render(
+    const { findByText, getAllByText, getByText, container } = render(
       <StoreProvider store={store}>
         <MemoryRouter>
           <MockedProvider mocks={mocks} addTypename={false}>
@@ -230,6 +380,10 @@ describe('useListUsers - hook', () => {
     expect(await findByText('s3 7ab')).toBeInTheDocument();
     expect(await findByText('Theft & Handling')).toBeInTheDocument();
     expect(await findByText('NightSafe')).toBeInTheDocument();
-    expect(getAllByText('false')).toHaveLength(3);
+    expect(await findByText('2022-08-10T10:40:06.191Z')).toBeInTheDocument();
+    expect(getAllByText('false')).toHaveLength(4);
+    fireEvent.click(getByText('submit'));
+    expect(container).toBeInTheDocument();
+    expect(await findByText('Successfully Added!')).toBeInTheDocument();
   });
 });

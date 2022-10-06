@@ -1,14 +1,14 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import AddOffender from '../AddOffender.view';
+import AddNewOffender from '../AddNewOffender.view';
 
 describe('Detail Officer View', () => {
   const groups = [{ value: 'groupId', label: 'groupName' }];
   it('renders the page', () => {
     const { getByText } = render(
       <MemoryRouter>
-        <AddOffender
+        <AddNewOffender
           onSubmit={jest.fn()}
           onClose={jest.fn()}
           groups={groups}

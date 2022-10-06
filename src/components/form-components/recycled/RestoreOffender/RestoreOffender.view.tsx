@@ -17,7 +17,7 @@ const RestoreOffender = ({
   loading,
   saving,
 }: Props): JSX.Element =>
-  loading ? (
+  !data && loading ? (
     <Skeleton />
   ) : (
     <div>

@@ -1,11 +1,13 @@
 import React from 'react';
 import { Table, Row, Col, Input, Drawer, Button, Typography } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+
 import { CreateTagMutation, TagsQuery } from 'graphql/generated';
 import AddOffender from 'components/form-components/tags/offenderWarnings/AddOffenderWarning';
 import EditOffender from 'components/form-components/tags/offenderWarnings/EditOffenderWarning';
 
 import { MutationUpdaterFn } from '@apollo/client';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
 
 interface Props {
   data: TagsQuery | undefined;
@@ -101,14 +103,14 @@ const OffenderWarningList = ({
                   setOffenderId(record.key);
                   toggleEditOffender();
                 }}
-                icon={<EditOutlined />}
+                icon={<FontAwesomeIcon size="lg" icon={faPenToSquare} />}
               />
               <Button
                 disabled={saving}
                 onClick={() => {
                   deleteConfirm(record.key);
                 }}
-                icon={<DeleteOutlined />}
+                icon={<FontAwesomeIcon size="lg" icon={faTrash} />}
               />
             </>
           ),

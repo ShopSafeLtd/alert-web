@@ -59,7 +59,10 @@ const OffenderFeed = ({
 }: Props): JSX.Element => (
   <div className="feed-container">
     <Affix offsetTop={40}>
-      <Row gutter={8} style={{ marginBottom: 10, backgroundColor: '#f5f5f6' }}>
+      <Row
+        gutter={8}
+        style={{ paddingBottom: 5, backgroundColor: 'rgb(250, 250, 251)' }}
+      >
         <Col>
           <Select
             placeholder="Groups"

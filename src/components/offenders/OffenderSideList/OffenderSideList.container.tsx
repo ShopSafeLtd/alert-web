@@ -8,16 +8,12 @@ interface Props {
 }
 
 const OffenderSideList = ({ current }: Props): JSX.Element => {
-  const {
-    data,
-    //  loading,
-    onPaginationChange,
-  } = useOffenderSideList();
+  const { data, loading, onPaginationChange } = useOffenderSideList();
 
   return (
     <View
       data={data}
-      // loading={loading}
+      loading={loading}
       current={current}
       onPaginationChange={onPaginationChange}
     />

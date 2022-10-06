@@ -11,6 +11,7 @@ import {
   Role,
   ViewIncidentDocument,
   UpdateIncidentDocument,
+  SortOrder,
 } from 'graphql/generated';
 import { IncidentSort, storeModel } from 'state';
 import moment from 'moment';
@@ -154,6 +155,64 @@ const mocks = [
   },
   {
     request: {
+      query: ListOffendersDocument,
+      variables: {
+        scheme: {
+          id: 'schemeId',
+        },
+        order: {
+          updatedAt: SortOrder.Asc,
+        },
+        take: 20,
+      },
+    },
+    result: {
+      data: {
+        listOffenders: {
+          total: 1,
+          offenders: [
+            {
+              id: 'offenderId',
+              createdAt: '2022-08-10T10:40:06.191Z',
+              updatedAt: '2022-08-11T10:40:09.985Z',
+              age: null,
+              build: null,
+              dateOfBirth: null,
+              dateSource: null,
+              hair: null,
+              gender: null,
+              name: 'offender name',
+              race: null,
+              peculiarities: null,
+              approved: null,
+              active: null,
+              createdBy: {
+                fullName: 'aaa',
+                id: 'cl4pe3eu91312371op4c4k2lih2',
+                organisation: 'ShopSafe',
+              },
+              tags: [
+                { id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling ' },
+              ],
+              groups: [
+                { id: 'ckqtnb4r056540229myw4yk8zvq', name: 'NightSafe' },
+              ],
+              images: [
+                {
+                  id: 'cl6owsuzo33227f9pe9zk4wone',
+                  optimised: null,
+                  url: null,
+                },
+              ],
+              incidents: [],
+            },
+          ],
+        },
+      },
+    },
+  },
+  {
+    request: {
       query: UpdateIncidentDocument,
       variables: {
         where: {
@@ -222,8 +281,17 @@ const mocks = [
 ];
 
 const UseEditIncidentTest = () => {
-  const { data, loading, groups, groupsLoading, tags, tagsLoading, onSubmit } =
-    useEditIncident({ incidentId: 'incidentId', reviewed: false });
+  const {
+    data,
+    loading,
+    groups,
+    groupsLoading,
+    tags,
+    tagsLoading,
+    recentOffenderData,
+    recentOffenderLoading,
+    onSubmit,
+  } = useEditIncident({ incidentId: 'incidentId', reviewed: false });
   const Incident = data && (
     <div key={data.incident?.id}>
       <span>{data.incident?.id}</span>
@@ -247,7 +315,14 @@ const UseEditIncidentTest = () => {
         <span>{el.label}</span>
       </div>
     ));
-
+  const RecentOffenders =
+    recentOffenderData &&
+    recentOffenderData.listOffenders?.offenders.map((el) => (
+      <div key={el.id}>
+        <span>{el.id}</span>
+        <span>{el.createdAt}</span>
+      </div>
+    ));
   return (
     <div>
       {Incident}
@@ -256,6 +331,8 @@ const UseEditIncidentTest = () => {
       <span>{groupsLoading ? 'true' : 'false'}</span>
       {Tags}
       <span>{tagsLoading ? 'true' : 'false'}</span>
+      {RecentOffenders}
+      <span>{recentOffenderLoading ? 'true' : 'false'}</span>
       <button
         type="button"
         onClick={() =>
@@ -263,7 +340,6 @@ const UseEditIncidentTest = () => {
             subject: 'subject',
             description: 'description',
             date: new Date('2022-08-30T11:25:32.702Z'),
-            time: moment('2022-08-10T10:40:06.191Z'),
             building: 'building',
             street: 'street',
             townCity: 'townCity',
@@ -319,7 +395,8 @@ describe('useListUsers - hook', () => {
     expect(await findByText('test description')).toBeInTheDocument();
     expect(await findByText('Theft & Handling')).toBeInTheDocument();
     expect(await findByText('NightSafe')).toBeInTheDocument();
-    expect(getAllByText('false')).toHaveLength(3);
+    expect(await findByText('2022-08-10T10:40:06.191Z')).toBeInTheDocument();
+    expect(getAllByText('false')).toHaveLength(4);
     fireEvent.click(getByText('submit'));
     expect(container).toBeInTheDocument();
     expect(await findByText('Successfully Updated!')).toBeInTheDocument();

@@ -1,13 +1,7 @@
 import React from 'react';
 import { UserQuery } from 'graphql/generated';
 import { RoleValues } from 'types';
-import {
-  SendOutlined,
-  LockOutlined,
-  UnlockOutlined,
-  DeleteOutlined,
-  EditOutlined,
-} from '@ant-design/icons';
+import { SendOutlined, LockOutlined, UnlockOutlined } from '@ant-design/icons';
 
 import {
   Button,
@@ -19,6 +13,8 @@ import {
   Drawer,
 } from 'antd';
 import EditUser from 'components/form-components/user/EditUser';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
 
 interface Props {
   data: UserQuery | undefined;
@@ -85,7 +81,7 @@ const userDetail = ({
           disabled={saving}
           onClick={deleteConfirm}
           type="primary"
-          icon={<DeleteOutlined />}
+          icon={<FontAwesomeIcon size="lg" icon={faTrash} />}
         >
           Delete User
         </Button>,
@@ -97,7 +93,10 @@ const userDetail = ({
         <Descriptions
           title="Details"
           extra={
-            <Button icon={<EditOutlined />} onClick={toggleEditUser}>
+            <Button
+              icon={<FontAwesomeIcon size="lg" icon={faPenToSquare} />}
+              onClick={toggleEditUser}
+            >
               Edit Details
             </Button>
           }

@@ -34,6 +34,17 @@ const ViewMessages = ({ chatId, updateUserChatList }: Props): JSX.Element => {
     onPreview,
     beforeUpload,
     fileList,
+    offendersData,
+    incidentsData,
+    linkIncident,
+    linkOffender,
+    toggleLinkIncident,
+    toggleLinkOffender,
+    updateIncidentList,
+    updateOffendersList,
+    removeOffender,
+    removeIncident,
+    removeImage,
   } = useViewMessages({ chatId, updateUserChatList });
 
   return (
@@ -63,6 +74,17 @@ const ViewMessages = ({ chatId, updateUserChatList }: Props): JSX.Element => {
       onPreview={onPreview}
       beforeUpload={beforeUpload}
       fileList={fileList}
+      offendersData={offendersData}
+      incidentsData={incidentsData}
+      linkIncident={linkIncident}
+      linkOffender={linkOffender}
+      toggleLinkIncident={toggleLinkIncident}
+      toggleLinkOffender={toggleLinkOffender}
+      updateIncidentList={updateIncidentList}
+      updateOffendersList={updateOffendersList}
+      removeOffender={removeOffender}
+      removeIncident={removeIncident}
+      removeImage={removeImage}
     />
   );
 };

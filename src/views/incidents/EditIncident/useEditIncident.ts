@@ -16,25 +16,32 @@ import {
   Build,
   useListOffendersQuery,
   useRecycleIncidentMutation,
+  ListOffendersQuery,
+  SortOrder,
+  QueryMode,
+  IncidentUpdateInput,
 } from 'graphql/generated';
 import { notification, Modal, message, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { MutationUpdaterFn } from '@apollo/client';
-import { Moment } from 'moment';
 import { useNavigate } from 'react-router';
+import update from 'immutability-helper';
+import { UploadChangeParam } from 'antd/lib/upload';
 
 const { confirm } = Modal;
 interface Props {
   incidentId: string;
   reviewed: boolean;
 }
-
+type Offender = Exclude<
+  ListOffendersQuery['listOffenders'],
+  null | undefined
+>['offenders'][0];
 interface FormData {
   subject: string;
   description: string;
   date: Date;
-  time: Moment;
   building: string;
   street: string;
   townCity: string;
@@ -63,6 +70,22 @@ interface OffenderData {
         name: string;
       }[]
     | undefined;
+  images?: {
+    id: string;
+    optimised?: string | null;
+    url?: string | null;
+    fileName?: string | null;
+    type?: string | null;
+    new?: boolean;
+  }[];
+  imageUid?: string[] | undefined;
+}
+interface Image extends UploadFile {
+  offenders?: {
+    id: string;
+    name?: string | undefined | null;
+  }[];
+  optimised?: string | null;
 }
 interface Return {
   onSubmit: (value: FormData) => void;
@@ -74,8 +97,8 @@ interface Return {
   tags: { value: string; label: string }[];
   tagsLoading: boolean;
   imgChange: UploadProps['onChange'];
-  onPreview: (value: UploadFile) => void;
-  fileList: UploadFile[];
+  onPreview: (value: Image) => void;
+  fileList: Image[];
   beforeUpload: (value: RcFile) => void;
   addIncidentTag: boolean;
   toggleAddIncidentTag: () => void;
@@ -84,17 +107,37 @@ interface Return {
   toggleAddOffender: () => void;
   addExistingOffender: boolean;
   toggleAddExistingOffender: () => void;
-  updateOffenderList: (value: OffenderData[] | undefined) => void;
-  offendersData: OffenderData[] | undefined;
-  deleteConfirm: (value: string | undefined) => void;
+  updateOffendersList: (value: OffenderData) => void;
+  offendersData: OffenderData[];
   onReject: () => void;
+  recentOffenderData: ListOffendersQuery | undefined;
+  recentOffenderLoading: boolean;
+  addRecentOffender: Offender | null;
+  setAddRecentOffender: (value: Offender | null) => void;
+  searchOffenders: string;
+  setSearchOffenders: (value: string) => void;
+  newImage: Image | null;
+  onCancelNewImage: () => void;
+  assignOffendersToImages: (data: {
+    image: Image;
+    offenders: OffenderData[];
+  }) => void;
+  setAssignToImage: (image: Image) => void;
+  removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
+  removeImage: (uid: string) => void;
+  removeOffender: (offenderId: string) => void;
+  listOffendersData: ListOffendersQuery | undefined;
+  adminRights: boolean;
+  offenderImgChange: (
+    info: UploadChangeParam<UploadFile>,
+    currentId: string
+  ) => void;
 }
 
 const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const navigate = useNavigate();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
-
   const groups = useStoreState((state) => state.user.groups);
   const role = useStoreState((state) => state.user.role);
   const pagination = useStoreState((state) => state.data.incidents.pagination);
@@ -108,11 +151,14 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const [addIncidentTag, setAddIncidentTag] = useState(false);
   const [addOffender, setAddOffender] = useState(false);
   const [addExistingOffender, setAddExistingOffender] = useState(false);
-  const [offendersData, setOffendersData] = useState<
-    OffenderData[] | undefined
-  >([]);
+  const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
+  const [addRecentOffender, setAddRecentOffender] = useState<Offender | null>(
+    null
+  );
+  const [searchOffenders, setSearchOffenders] = useState<string>('');
   const [imageChange, setImageChange] = useState(false);
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [fileList, setFileList] = useState<Image[]>([]);
+  const [newImage, setNewImage] = useState<Image | null>(null);
 
   // Query
   const { data: IncidentData, loading } = useViewIncidentQuery({
@@ -135,9 +181,12 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             name: `${image.id}.png`,
             status: 'done',
             url: `${image.url}`,
+            optimised: `${image.optimised}`,
           }))
         );
       }
+      console.log('incident', incident);
+      console.log('offenders', incident?.offenders);
     },
   });
 
@@ -181,14 +230,34 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     },
   });
 
-  const { data: ListOffendersData } = useListOffendersQuery({
+  const { data: listOffendersData } = useListOffendersQuery({
     variables: {
       scheme: {
         id: schemeId,
       },
     },
   });
-
+  const { data: recentOffenderData, loading: recentOffenderLoading } =
+    useListOffendersQuery({
+      variables: {
+        scheme: {
+          id: schemeId,
+        },
+        order: {
+          updatedAt: SortOrder.Asc,
+        },
+        take: 20,
+        where:
+          searchOffenders.length > 0
+            ? {
+                name: {
+                  contains: searchOffenders,
+                  mode: QueryMode.Insensitive,
+                },
+              }
+            : undefined,
+      },
+    });
   // mutation
   // update tag list after adding a new item
   const updateIncidentTag: MutationUpdaterFn<CreateTagMutation> = (
@@ -249,119 +318,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     },
   });
 
-  const onSubmit = (data: FormData) => {
-    setSaving(true);
-    if (incidentId) {
-      updateIncident({
-        variables: {
-          where: {
-            id: incidentId,
-          },
-          data: {
-            approved: { set: true },
-            subject: { set: data.subject },
-            description: { set: data.description },
-            date: { set: data.date },
-            time: { set: data.time },
-            location: {
-              update: {
-                building: { set: data.building },
-                street: { set: data.street },
-                townCity: { set: data.townCity },
-                county: { set: data.county },
-                postcode: { set: data.postcode },
-              },
-            },
-            groups: {
-              set: data.groups.map((id) => ({ id })),
-            },
-            crimeTypes: {
-              set: data.tags.map((id) => ({ id })),
-            },
-            offenders: {
-              connect:
-                offendersData && offendersData.length > 0
-                  ? offendersData
-                      .filter((item) =>
-                        ListOffendersData?.listOffenders?.offenders
-                          ?.map((offender) => offender.id)
-                          .includes(item.id)
-                      )
-                      .map((offender) => ({ id: offender.id }))
-                  : undefined,
-              create:
-                offendersData && offendersData.length > 0
-                  ? offendersData
-                      .filter(
-                        (item) =>
-                          !ListOffendersData?.listOffenders?.offenders
-                            ?.map((offender) => offender.id)
-                            .includes(item.id)
-                      )
-                      .map((offender) => ({
-                        name: offender.name || 'Unidentified Offender' || null,
-                        gender: offender.gender || null,
-                        race: offender.race || null,
-                        build: offender.build || null,
-                        hair: offender.hair || null,
-                        peculiarities: offender.peculiarities || null,
-                        age: offender.age || null,
-                        dateSource: offender.dateSource || null,
-                        dateOfBirth: offender.dateOfBirth || null,
-                        groups:
-                          offender.groups && offender.groups.length > 0
-                            ? {
-                                connect: offender.groups.map(({ id }) => ({
-                                  id,
-                                })),
-                              }
-                            : undefined,
-                        scheme: { connect: { id: schemeId } },
-                        createdBy: { connect: { id: userId } },
-                        localId: offender.id,
-                      }))
-                  : undefined,
-
-              delete:
-                IncidentData?.incident?.offenders &&
-                IncidentData.incident.offenders.length > 0
-                  ? IncidentData.incident.offenders
-                      .filter(
-                        (offender) =>
-                          !offendersData
-                            ?.map((item) => item.id)
-                            .includes(offender.id)
-                      )
-                      .map((offender) => ({ id: offender.id }))
-                  : undefined,
-            },
-
-            images: {
-              upload:
-                imageChange && fileList.length > 0
-                  ? fileList
-                      .map((item) => ({
-                        file: item.originFileObj,
-                      }))
-                      .filter((obj) => obj.file !== undefined)
-                  : [],
-              delete: imageChange
-                ? IncidentData?.incident?.images
-                    .filter(
-                      (image) =>
-                        !fileList.map((item) => item.uid).includes(image.id)
-                    )
-                    .map((image) => ({
-                      id: image.id,
-                    }))
-                : [],
-            },
-          },
-        },
-      });
-    }
-  };
-
   // delete incident
   const [recycleIncident] = useRecycleIncidentMutation({
     onCompleted: () => {
@@ -408,9 +364,28 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
 
     return !isFileDuplicate || Upload.LIST_IGNORE;
   };
-  const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
-    setImageChange(true);
+  const imgChange: UploadProps['onChange'] = (info) => {
+    if (info.file.response) {
+      setNewImage({
+        ...info.file,
+        url: info.file.response[0].url,
+        fileName: info.file.response[0].blobName,
+        type: info.file.response[0].mimetype,
+      });
+      setFileList([
+        ...fileList.filter((item) => item.uid !== info.file.uid),
+        {
+          ...info.file,
+          url: info.file.response[0].url,
+          fileName: info.file.response[0].blobName,
+          type: info.file.response[0].mimetype,
+        },
+      ]);
+      setImageChange(true);
+    } else {
+      setFileList(info.fileList);
+      setImageChange(true);
+    }
   };
   const onPreview = async (file: UploadFile) => {
     let src = file.url as string;
@@ -436,32 +411,435 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const toggleAddExistingOffender = () => {
     setAddExistingOffender(!addExistingOffender);
   };
-  const updateOffenderList = (filterOffenders: OffenderData[] | undefined) => {
-    if (filterOffenders) {
-      if (offendersData && offendersData.length > 0) {
-        setOffendersData(
-          offendersData.concat(
-            filterOffenders.filter(
-              (item) =>
-                !offendersData?.map((offender) => offender.id).includes(item.id)
-            )
-          )
-        );
-      } else setOffendersData(filterOffenders);
-    }
-  };
-  const deleteConfirm = (offenderId: string | undefined) => {
-    confirm({
-      title: 'Do you want to delete the exclusion?',
-      content: 'This action cannot be undone.',
-      onOk() {
-        setOffendersData(
-          offendersData?.filter((offender) => offender.id !== offenderId)
-        );
-      },
-    });
+  const updateOffendersList = (selectedOffender: OffenderData) => {
+    setOffendersData([...offendersData, selectedOffender]);
   };
 
+  const onSubmit = (data: FormData) => {
+    setSaving(true);
+    if (!offendersData) {
+      confirm({
+        title: 'No Offenders',
+        content: 'Please select or add at least one offender for the incident.',
+        cancelText: 'Find Offenders',
+        onCancel() {
+          toggleAddExistingOffender();
+        },
+        okText: 'Add New Offender',
+        onOk() {
+          toggleAddOffender();
+        },
+      });
+      setSaving(false);
+    } else {
+      const getOffenders = (): IncidentUpdateInput['offenders'] => {
+        if (offendersData && listOffendersData?.listOffenders) {
+          const offendersIds = listOffendersData.listOffenders.offenders.map(
+            (offender) => offender.id
+          );
+          const existingOffenders = offendersData.filter((item) =>
+            offendersIds.includes(item.id)
+          );
+          const existingOffendersWithImages = existingOffenders
+            .filter((offender) =>
+              offender.images?.map((image) => image.new).includes(true)
+            )
+            .map((offender) => ({
+              ...offender,
+              images: offender.images?.filter((image) => image.new),
+            }));
+          const newOffenders = offendersData.filter(
+            (item) => !offendersIds.includes(item.id)
+          );
+
+          return {
+            connect:
+              existingOffenders.length > 0
+                ? existingOffenders.map((offender) => ({ id: offender.id }))
+                : undefined,
+            update: existingOffendersWithImages.map((offender) => ({
+              where: { id: offender.id },
+              data: {
+                images: {
+                  upload: offender.images?.map((image) => ({
+                    url: {
+                      filename: image.fileName || '',
+                      mimetype: image.type || '',
+                      url: image.url || '',
+                    },
+                  })),
+                },
+              },
+            })),
+            create:
+              newOffenders.length > 0
+                ? newOffenders.map((offender) => ({
+                    name: offender.name || 'Unidentified Offender',
+                    gender: offender.gender || null,
+                    race: offender.race || null,
+                    build: offender.build || null,
+                    hair: offender.hair || null,
+                    peculiarities: offender.peculiarities || null,
+                    age: offender.age || null,
+                    dateSource: offender.dateSource || null,
+                    dateOfBirth: offender.dateOfBirth || null,
+                    groups:
+                      data.groups.length > 0
+                        ? { connect: data.groups.map((id) => ({ id })) }
+                        : undefined,
+                    scheme: { connect: { id: schemeId } },
+                    createdBy: { connect: { id: userId } },
+                    localId: offender.id,
+                    images: {
+                      // create:
+                      upload: offender.images
+                        ?.filter((image) => image.new === true)
+                        .map((image) => ({
+                          url: {
+                            filename: image.fileName || '',
+                            mimetype: image.type || '',
+                            url: image.url || '',
+                          },
+                        })),
+                    },
+                  }))
+                : undefined,
+            // delete:
+            //   IncidentData?.incident?.offenders &&
+            //   IncidentData.incident.offenders.length > 0
+            //     ? IncidentData.incident.offenders
+            //         .filter(
+            //           (offender) =>
+            //             !offendersData
+            //               ?.map((item) => item.id)
+            //               .includes(offender.id)
+            //         )
+            //         .map((offender) => ({ id: offender.id }))
+            //     : undefined,
+          };
+        }
+
+        return {
+          connect: undefined,
+          create: undefined,
+          // delete: undefined,
+        };
+      };
+
+      updateIncident({
+        variables: {
+          where: {
+            id: incidentId,
+          },
+          data: {
+            approved: { set: true },
+            subject: { set: data.subject },
+            description: { set: data.description },
+            date: { set: data.date },
+            time: { set: data.date },
+            location: {
+              update: {
+                building: { set: data.building },
+                street: { set: data.street },
+                townCity: { set: data.townCity },
+                county: { set: data.county },
+                postcode: { set: data.postcode },
+              },
+            },
+            groups: {
+              // set: data.groups.map((id) => ({ id })),
+              set:
+                groups.length > 1
+                  ? data.groups.map((id) => ({ id }))
+                  : groups.map(({ id }) => ({ id })),
+            },
+            crimeTypes: {
+              set: data.tags.map((id) => ({ id })),
+            },
+            offenders: getOffenders(),
+            // {
+            //   connect:
+            //     offendersData && offendersData.length > 0
+            //       ? offendersData
+            //           .filter((item) =>
+            //             listOffendersData?.listOffenders?.offenders
+            //               ?.map((offender) => offender.id)
+            //               .includes(item.id)
+            //           )
+            //           .map((offender) => ({ id: offender.id }))
+            //       : undefined,
+            //   update: offendersData
+            //     .filter((item) =>
+            //       listOffendersData?.listOffenders?.offenders
+            //         .map((offender) => offender.id)
+            //         .includes(item.id)
+            //     )
+            //     .filter((offender) =>
+            //       offender.images?.map((image) => image.new).includes(true)
+            //     )
+            //     .map((offender) => ({
+            //       ...offender,
+            //       images: offender.images?.filter((image) => image.new),
+            //     }))
+            //     .map((offender) => ({
+            //       where: { id: offender.id },
+            //       data: {
+            //         images: {
+            //           upload: offender.images?.map((image) => ({
+            //             url: {
+            //               filename: image.fileName || '',
+            //               mimetype: image.type || '',
+            //               url: image.url || '',
+            //             },
+            //           })),
+            //         },
+            //       },
+            //     })),
+            //   create:
+            //     offendersData && offendersData.length > 0
+            //       ? offendersData
+            //           .filter(
+            //             (item) =>
+            //               !listOffendersData?.listOffenders?.offenders
+            //                 ?.map((offender) => offender.id)
+            //                 .includes(item.id)
+            //           )
+            //           .map((offender) => ({
+            //             name: offender.name || 'Unidentified Offender',
+            //             gender: offender.gender || null,
+            //             race: offender.race || null,
+            //             build: offender.build || null,
+            //             hair: offender.hair || null,
+            //             peculiarities: offender.peculiarities || null,
+            //             age: offender.age || null,
+            //             dateSource: offender.dateSource || null,
+            //             dateOfBirth: offender.dateOfBirth || null,
+            //             groups:
+            //               offender.groups && offender.groups.length > 0
+            //                 ? {
+            //                     connect: offender.groups.map(({ id }) => ({
+            //                       id,
+            //                     })),
+            //                   }
+            //                 : undefined,
+            //             scheme: { connect: { id: schemeId } },
+            //             createdBy: { connect: { id: userId } },
+            //             localId: offender.id,
+            //           }))
+            //       : undefined,
+
+            //   delete:
+            //     IncidentData?.incident?.offenders &&
+            //     IncidentData.incident.offenders.length > 0
+            //       ? IncidentData.incident.offenders
+            //           .filter(
+            //             (offender) =>
+            //               !offendersData
+            //                 ?.map((item) => item.id)
+            //                 .includes(offender.id)
+            //           )
+            //           .map((offender) => ({ id: offender.id }))
+            //       : undefined,
+            // },
+
+            images: {
+              // create:
+              //   imageChange && fileList.length > 0
+              //     ? fileList
+              //         .map((item) => ({
+              //           url: {
+              //             filename: item.fileName || '',
+              //             mimetype: item.type || '',
+              //             url: item.url || '',
+              //           },
+              //         }))
+              //         .filter((obj) => obj.url !== undefined)
+              //     : undefined,
+              upload:
+                imageChange && fileList.length > 0
+                  ? fileList
+                      .map((item) => ({
+                        file: item.originFileObj,
+                      }))
+                      .filter((obj) => obj.file !== undefined)
+                  : [],
+              delete: imageChange
+                ? IncidentData?.incident?.images
+                    .filter(
+                      (image) =>
+                        !fileList.map((item) => item.uid).includes(image.id)
+                    )
+                    .map((image) => ({
+                      id: image.id,
+                    }))
+                : [],
+            },
+          },
+        },
+      });
+    }
+  };
+
+  const onCancelNewImage = () => {
+    setNewImage(null);
+  };
+
+  const setAssignToImage = (image: Image) => {
+    setNewImage(image);
+  };
+
+  const isOffenderData = (
+    item: OffenderData | undefined
+  ): item is OffenderData => !!item;
+
+  const assignOffendersToImages = (data: {
+    image: Image;
+    offenders: OffenderData[];
+  }) => {
+    if (offendersData) {
+      const changedOffendersIds = data.offenders.map(({ id }) => id);
+      const originalOffendersIds = offendersData.map(({ id }) => id);
+      const originalImageOffendersIds =
+        fileList
+          .find(({ uid }) => uid === data.image.uid)
+          ?.offenders?.map(({ id }) => id) || [];
+      const updatedOffenders = offendersData
+        .map((offender) => {
+          if (changedOffendersIds.includes(offender.id))
+            return data.offenders.find(({ id }) => id === offender.id);
+          if (originalImageOffendersIds.includes(offender.id))
+            return {
+              ...offender,
+              images: offender.images?.filter(
+                ({ id }) => id !== data.image.uid
+              ),
+            };
+          return offender;
+        })
+        .filter(isOffenderData);
+      const newOffenders = data.offenders.filter(
+        (offender) => !originalOffendersIds.includes(offender.id)
+      );
+
+      setOffendersData([...updatedOffenders, ...newOffenders]);
+    }
+
+    // find index of file in fileList array
+    const fileIndex = fileList.map(({ uid }) => uid).indexOf(data.image.uid);
+    // update the file object in the array with the new value, update will replace value in same place in array
+    setFileList(
+      update(fileList, {
+        [fileIndex]: {
+          $set: data.image,
+        },
+      })
+    );
+
+    setNewImage(null);
+  };
+
+  const removeImageFromOffender = (data: {
+    image: Image;
+    offenderId: string;
+  }) => {
+    // find index of file in fileList array
+    const fileIndex = fileList.map(({ uid }) => uid).indexOf(data.image.uid);
+    // update the file object in the array with the new value, update will replace value in same place in array
+    setFileList(
+      update(fileList, {
+        [fileIndex]: {
+          $set: {
+            ...data.image,
+            offenders: data.image.offenders?.filter(
+              ({ id }) => id !== data.offenderId
+            ),
+          },
+        },
+      })
+    );
+
+    if (offendersData) {
+      // find index of file in fileList array
+      const offenderIndex = offendersData
+        .map(({ id }) => id)
+        .indexOf(data.offenderId);
+      const offender = offendersData.find(({ id }) => data.offenderId === id);
+      if (offender && offender.images)
+        setOffendersData(
+          update(offendersData, {
+            [offenderIndex]: {
+              $set: {
+                ...offender,
+                images: offender.images.filter(
+                  ({ id }) => id !== data.image.uid
+                ),
+              },
+            },
+          })
+        );
+    }
+  };
+
+  const removeImage = (uid: string) => {
+    setFileList(fileList.filter((image) => image.uid !== uid));
+  };
+
+  const removeOffender = (offenderId: string) => {
+    setOffendersData(
+      offendersData?.filter((offender) => offender.id !== offenderId)
+    );
+  };
+
+  const offenderImgChange = (
+    info: UploadChangeParam<UploadFile>,
+    currentId: string
+  ) => {
+    if (info.file.response) {
+      setFileList([
+        ...fileList.filter((item) => item.uid !== info.file.uid),
+        {
+          ...info.file,
+          url: info.file.response[0].url,
+          fileName: info.file.response[0].blobName,
+          type: info.file.response[0].mimetype,
+        },
+      ]);
+      const currentOffender = offendersData.find(({ id }) => id === currentId);
+
+      if (currentOffender) {
+        assignOffendersToImages({
+          image: {
+            ...info.file,
+            url: info.file.response[0].url,
+            fileName: info.file.response[0].blobName,
+            type: info.file.response[0].mimetype,
+            uid: info.file.uid,
+            offenders: [currentOffender],
+          },
+          offenders: [currentOffender].map((offender) => {
+            let images: OffenderData['images'] = [];
+            if (offender.images) images = offender.images;
+            return {
+              ...offender,
+              images: [
+                ...images,
+                {
+                  id: info.file.uid,
+                  new: true,
+                  optimised: info.file.response[0].url,
+                  url: info.file.response[0].url,
+                  fileName: info.file.response[0].blobName,
+                  type: info.file.response[0].mimetype,
+                },
+              ],
+            };
+          }),
+        });
+      }
+    } else {
+      setFileList(info.fileList);
+    }
+  };
   return {
     onSubmit,
     data: IncidentData,
@@ -491,10 +869,26 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     toggleAddOffender,
     addExistingOffender,
     toggleAddExistingOffender,
-    updateOffenderList,
+    updateOffendersList,
     offendersData,
-    deleteConfirm,
+    // deleteConfirm,
     onReject,
+    recentOffenderData,
+    recentOffenderLoading,
+    addRecentOffender,
+    setAddRecentOffender,
+    searchOffenders,
+    setSearchOffenders,
+    newImage,
+    onCancelNewImage,
+    assignOffendersToImages,
+    setAssignToImage,
+    removeImageFromOffender,
+    removeImage,
+    removeOffender,
+    listOffendersData,
+    adminRights: role !== Role.User,
+    offenderImgChange,
   };
 };
 

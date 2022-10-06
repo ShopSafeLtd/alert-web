@@ -147,7 +147,9 @@ const ViewOffender = ({
                           <Col flex={1}>
                             <Paragraph ellipsis>
                               {messages && messages.length > 0
-                                ? `${messages[0].from.fullName} : ${messages[0].content}`
+                                ? `${messages?.slice(-1)[0].from.fullName} : ${
+                                    messages?.slice(-1)[0].content
+                                  }`
                                 : 'No Messages'}
                             </Paragraph>
                           </Col>

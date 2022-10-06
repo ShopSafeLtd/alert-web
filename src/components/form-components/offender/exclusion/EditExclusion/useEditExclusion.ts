@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import type { RangePickerProps } from 'antd/es/date-picker';
 import type { Moment } from 'moment';
 
@@ -10,17 +9,18 @@ interface FormData {
   description: string;
 }
 interface BanData {
-  id?: string | undefined;
+  id: string;
+  title?: string | null | undefined;
   endDate: Date;
   startDate: Date;
   location: string;
-  description: string;
+  description?: string | null | undefined;
 }
 interface Props {
   onClose: () => void;
   update: (value: BanData) => void;
+  banData: BanData | null;
 }
-
 interface Return {
   onSubmit: (value: FormData) => void;
   saving: boolean;
@@ -28,25 +28,25 @@ interface Return {
   disabledDate: RangePickerProps['disabledDate'];
 }
 
-const useAddExclusion = ({ update, onClose }: Props): Return => {
+const useEditBan = ({ onClose, update, banData }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [startDate, setStartDate] = useState<Moment | Date | null>(null);
-  // eslint-disable-next-line arrow-body-style
+
   const disabledDate: RangePickerProps['disabledDate'] = (current) => {
     if (startDate && startDate?.valueOf() > Date.now()) {
       return current && current.valueOf() < startDate.valueOf();
     }
     return current && current.valueOf() < Date.now() - 3600 * 1000 * 24;
   };
-
   const onSubmit = (data: FormData) => {
     setSaving(true);
     update({
-      id: Math.floor(Math.random() * 1000).toString(),
-      startDate: data.startDate || null,
-      endDate: data.endDate || null,
+      id: banData?.id || '',
+      title: banData?.title || null,
+      startDate: data.startDate,
+      endDate: data.endDate,
       location: data.location || '',
-      description: data.description || '',
+      description: data.description || null,
     });
     onClose();
     setSaving(false);
@@ -59,4 +59,5 @@ const useAddExclusion = ({ update, onClose }: Props): Return => {
     disabledDate,
   };
 };
-export default useAddExclusion;
+
+export default useEditBan;

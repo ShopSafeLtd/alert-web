@@ -1,11 +1,11 @@
-.view-message {
+.view-message-container {
   display: flex;
   flex-direction: column;
   height: calc(100vh - 70px);
   width: 100%;
   .message-container {
     margin-bottom: 10px;
-    height: calc(100vh - 275px);
+    height: calc(100vh - 250px);
     width: 100%;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
@@ -50,6 +50,84 @@
       .current {
         background: #ff5252;
         color: #fff !important;
+      }
+    }
+  }
+  .ant-upload-list-picture-card-container {
+    width: 100px;
+    height: 100px;
+  }
+  .image-card {
+    height: 100px;
+    width: 100px;
+    overflow: hidden;
+    border: 1px solid #edf2f9;
+    border-radius: 10px;
+    .image-card-image {
+      // position: relative;
+      min-width: 100px;
+      height: 100px;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    .image-card-loading {
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  .info-container {
+    // max-height: 100px;
+    // margin: 0;
+    // margin-bottom: 5;
+    // overflow: auto;
+    .ant-upload-list {
+      display: flex;
+      flex-wrap: nowrap;
+    }
+    .info-remove-button {
+      position: absolute;
+      top: -12px;
+      left: -15px;
+    }
+    .info-upload-card {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      // overflow: hidden;
+      border: 1px solid #edf2f9;
+      border-radius: 10px;
+      .info-image {
+        height: 90px;
+        width: 90px;
+        margin: 5px;
+        // background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+    }
+    .info-card {
+      position: relative;
+      width: 370px;
+      height: 100px;
+      margin: 0;
+      .info-image {
+        height: 80px;
+        width: 80px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      .info-image-skeleton {
+        height: 80px;
+        width: 80px;
       }
     }
   }

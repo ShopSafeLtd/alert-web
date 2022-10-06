@@ -30,10 +30,25 @@ function EditIncident({ reviewed }: Props): JSX.Element {
     toggleAddOffender,
     addExistingOffender,
     toggleAddExistingOffender,
-    updateOffenderList,
+    updateOffendersList,
     offendersData,
-    deleteConfirm,
     onReject,
+    recentOffenderData,
+    recentOffenderLoading,
+    addRecentOffender,
+    setAddRecentOffender,
+    searchOffenders,
+    setSearchOffenders,
+    newImage,
+    assignOffendersToImages,
+    onCancelNewImage,
+    setAssignToImage,
+    removeImageFromOffender,
+    removeImage,
+    removeOffender,
+    adminRights,
+    listOffendersData,
+    offenderImgChange,
   } = useEditIncident({ incidentId, reviewed });
   return (
     <div>
@@ -57,11 +72,27 @@ function EditIncident({ reviewed }: Props): JSX.Element {
         toggleAddOffender={toggleAddOffender}
         addExistingOffender={addExistingOffender}
         toggleAddExistingOffender={toggleAddExistingOffender}
-        updateOffenderList={updateOffenderList}
+        updateOffendersList={updateOffendersList}
         offendersData={offendersData}
-        deleteConfirm={deleteConfirm}
+        // deleteConfirm={deleteConfirm}
         reviewed={reviewed}
         onReject={onReject}
+        recentOffenderData={recentOffenderData}
+        recentOffenderLoading={recentOffenderLoading}
+        addRecentOffender={addRecentOffender}
+        setAddRecentOffender={setAddRecentOffender}
+        searchOffenders={searchOffenders}
+        setSearchOffenders={setSearchOffenders}
+        newImage={newImage}
+        assignOffendersToImages={assignOffendersToImages}
+        onCancelNewImage={onCancelNewImage}
+        setAssignToImage={setAssignToImage}
+        removeImageFromOffender={removeImageFromOffender}
+        removeImage={removeImage}
+        removeOffender={removeOffender}
+        adminRights={adminRights}
+        listOffendersData={listOffendersData}
+        offenderImgChange={offenderImgChange}
       />
     </div>
   );

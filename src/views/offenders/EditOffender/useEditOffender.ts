@@ -11,14 +11,11 @@ import {
   Gender,
   Race,
   Build,
-  ViewOffenderDocument,
-  CreateBanMutation,
-  useDeleteBanMutation,
-  DeleteBanMutation,
   CreateTagMutation,
   TagsQuery,
   TagsDocument,
   useRecycleOffenderMutation,
+  OffenderUpdateInput,
 } from 'graphql/generated';
 import { notification, Modal, message, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
@@ -30,6 +27,14 @@ const { confirm } = Modal;
 interface Props {
   offenderId: string;
   reviewed: boolean;
+}
+interface BanData {
+  id: string;
+  title?: string | null | undefined;
+  endDate: Date;
+  startDate: Date;
+  location: string;
+  description?: string | null | undefined;
 }
 interface FormData {
   name: string;
@@ -43,7 +48,13 @@ interface FormData {
   dateOfBirth?: Date;
   groups: string[];
   tags: string[];
-  images?: [{ id: string; url: string; optimised: string }];
+  images?: { id: string; url: string; optimised: string }[];
+  bans?: {
+    endDate: Date;
+    startDate: Date;
+    location: string;
+    description: string;
+  }[];
 }
 
 interface Return {
@@ -60,26 +71,34 @@ interface Return {
   onPreview: (value: UploadFile) => void;
   beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
-  addExclusion: boolean;
-  toggleAddExclusion: () => void;
-  updateExclusion: MutationUpdaterFn<CreateBanMutation>;
   addOffenderTag: boolean;
   toggleAddOffenderTag: () => void;
   updateOffenderTag: MutationUpdaterFn<CreateTagMutation>;
+  addExclusion: boolean;
+  toggleAddExclusion: () => void;
   editExclusion: boolean;
   toggleEditExclusion: () => void;
-  banId: string;
-  setBanId: (value: string) => void;
-  deleteConfirm: (value: string) => void;
+  updateExclusion: (value: BanData) => void;
+  bansData: BanData[];
+  banData: BanData | null;
+  setBanData: (value: BanData | null) => void;
+  // updateExclusion: MutationUpdaterFn<CreateBanMutation>;
+  // banId: string;
+  // setBanId: (value: string) => void;
+  // deleteConfirm: (value: string) => void;
   ageCheck: boolean;
   setAgeCheck: (value: boolean) => void;
   onReject: () => void;
+  deleteConfirm: (value: string) => void;
+  // updateAddExclusion: (value: BanData) => void;
+  // updateEditExclusion: (value: BanData) => void;
+  adminRights: boolean;
 }
 
 const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   const navigate = useNavigate();
   const schemeId = useStoreState((state) => state.scheme.id);
-
+  const userId = useStoreState((state) => state.user.id);
   const groups = useStoreState((state) => state.user.groups);
   const role = useStoreState((state) => state.user.role);
   const pagination = useStoreState((state) => state.data.offenders.pagination);
@@ -91,11 +110,12 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [ageCheck, setAgeCheck] = useState(false);
   const [addOffenderTag, setAddOffenderTag] = useState(false);
-  const [banId, setBanId] = useState('');
   const [imageChange, setImageChange] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [addExclusion, setAddExclusion] = useState(false);
   const [editExclusion, setEditExclusion] = useState(false);
+  const [bansData, setBansData] = useState<BanData[]>([]);
+  const [banData, setBanData] = useState<BanData | null>(null);
 
   const errorNotification = () => {
     notification.error({
@@ -123,6 +143,9 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
             url: `${image.url}`,
           }))
         );
+      }
+      if (offender?.bans && offender.bans.length > 0) {
+        setBansData(offender.bans);
       }
     },
   });
@@ -184,53 +207,118 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    if (offenderId) {
-      updateOffender({
-        variables: {
-          where: {
-            id: offenderId,
+    const getBans = (): OffenderUpdateInput['bans'] => {
+      if (
+        offenderData?.offender?.bans &&
+        offenderData?.offender?.bans.length > 0
+      ) {
+        const offenderBanIds = offenderData?.offender?.bans.map(
+          (ban) => ban.id
+        );
+        const existingBans = bansData.filter(({ id }) =>
+          offenderBanIds?.includes(id)
+        );
+        const newBans = bansData.filter(
+          ({ id }) => !offenderBanIds?.includes(id)
+        );
+        const deleteBanIds = offenderBanIds.filter((banId) =>
+          bansData.map((ban) => ban.id).includes(banId)
+        );
+        return {
+          update:
+            existingBans.length > 0
+              ? existingBans.map((ban) => ({
+                  where: { id: ban.id },
+                  data: {
+                    startDate: { set: ban.startDate },
+                    endDate: { set: ban.endDate },
+                    location: { set: ban.location },
+                    description: { set: ban.description || null },
+                  },
+                }))
+              : undefined,
+          create:
+            newBans.length > 0
+              ? newBans.map((ban) => ({
+                  startDate: ban?.startDate,
+                  endDate: ban?.endDate,
+                  location: ban?.location,
+                  description: ban?.description || null,
+                  scheme: {
+                    connect: {
+                      id: schemeId,
+                    },
+                  },
+                  createdBy: { connect: { id: userId } },
+                }))
+              : undefined,
+          delete:
+            deleteBanIds.length > 0
+              ? deleteBanIds.map((banId) => ({ id: banId }))
+              : undefined,
+        };
+      }
+      return {
+        create: undefined,
+        delete: undefined,
+      };
+    };
+
+    updateOffender({
+      variables: {
+        where: {
+          id: offenderId,
+        },
+        data: {
+          approved: { set: true },
+          name: { set: data.name || 'Unidentified Offender' },
+          gender: { set: data.gender || null },
+          race: { set: data.race || null },
+          build: { set: data.build || null },
+          hair: { set: data.hair || 'Unknown' },
+          peculiarities: { set: data.peculiarities || '' },
+          age: { set: ageCheck ? null : data.age || null },
+          dateSource: { set: ageCheck ? data.dateSource || null : null },
+          dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
+          groups: {
+            set: data.groups.map((id) => ({ id })),
           },
-          data: {
-            approved: { set: true },
-            name: { set: data.name || 'Unidentified Offender' },
-            gender: { set: data.gender || null },
-            race: { set: data.race || null },
-            build: { set: data.build || null },
-            hair: { set: data.hair || 'Unknown' },
-            peculiarities: { set: data.peculiarities || '' },
-            age: { set: ageCheck ? null : data.age || null },
-            dateSource: { set: ageCheck ? data.dateSource || null : null },
-            dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
-            groups: {
-              set: data.groups.map((id) => ({ id })),
-            },
-            tags: {
-              set: data.tags.map((id) => ({ id })) || undefined,
-            },
-            images: {
-              upload:
-                imageChange && fileList.length > 0
-                  ? fileList
-                      .map((item) => ({
-                        file: item.originFileObj,
-                      }))
-                      .filter((obj) => obj.file !== undefined)
-                  : [],
-              delete: imageChange
-                ? offenderData?.offender?.images
-                    .filter(
-                      (image) =>
-                        !fileList.map((item) => item.uid).includes(image.id)
-                    )
-                    .map((image) => ({
-                      id: image.id,
-                    }))
-                : [],
-            },
+          tags: {
+            set: data.tags.map((id) => ({ id })) || undefined,
+          },
+          bans: getBans(),
+          images: {
+            upload:
+              imageChange && fileList.length > 0
+                ? fileList.map((item) => ({
+                    url: {
+                      filename: item.fileName || '',
+                      mimetype: item.type || '',
+                      url: item.url || '',
+                    },
+                  }))
+                : undefined,
+            // imageChange && fileList.length > 0
+            //   ? fileList
+            //       .map((item) => ({
+            //         file: item.originFileObj,
+            //       }))
+            //       .filter((obj) => obj.file !== undefined)
+            //   : [],
+            delete: imageChange
+              ? offenderData?.offender?.images
+                  .filter(
+                    (image) =>
+                      !fileList.map((item) => item.uid).includes(image.id)
+                  )
+                  .map((image) => ({
+                    id: image.id,
+                  }))
+              : [],
           },
         },
-      });
-    }
+      },
+    });
   };
   // update tag list after adding a new item
   const updateOffenderTag: MutationUpdaterFn<CreateTagMutation> = (
@@ -268,115 +356,6 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
         },
       },
     });
-  };
-  // update Exclusion list after adding a new item
-  const updateExclusion: MutationUpdaterFn<CreateBanMutation> = (
-    store,
-    { data: res }
-  ) => {
-    if (res === null || res === undefined) return;
-
-    // get existing group list data from Apollo store
-    const existingData = store.readQuery<ViewOffenderQuery>({
-      query: ViewOffenderDocument,
-      variables: {
-        where: {
-          id: offenderId || '',
-        },
-      },
-    });
-
-    if (existingData === null) return;
-    if (existingData?.offender?.id === undefined) return;
-
-    // write the new data to the Apollo store
-    store.writeQuery<ViewOffenderQuery>({
-      query: ViewOffenderDocument,
-      data: {
-        offender: {
-          ...existingData.offender,
-          bans:
-            existingData?.offender?.bans &&
-            existingData.offender.bans.length > 0
-              ? existingData?.offender?.bans.concat(res.createBan)
-              : [res.createBan],
-        },
-        __typename: 'Query',
-      },
-      variables: {
-        where: {
-          id: offenderId || '',
-        },
-      },
-    });
-  };
-
-  // update Exclusion list after deleting an item
-  const update: MutationUpdaterFn<DeleteBanMutation> = (
-    store,
-    { data: res }
-  ) => {
-    if (res === null || res === undefined) return;
-
-    // get existing group list data from Apollo store
-    const existingData = store.readQuery<ViewOffenderQuery>({
-      query: ViewOffenderDocument,
-      variables: {
-        where: {
-          id: offenderId,
-        },
-      },
-    });
-
-    if (existingData === null) return;
-    if (existingData?.offender?.id === undefined) return;
-
-    // write the new data to the Apollo store
-    store.writeQuery<ViewOffenderQuery>({
-      query: ViewOffenderDocument,
-      data: {
-        offender: {
-          ...existingData.offender,
-          bans: existingData.offender?.bans?.filter(
-            (ban) => ban.id !== res?.deleteBan?.id
-          ),
-        },
-        // existingData.offender?.bans?.filter((ban) => ban.id !== res?.deleteBan?.id),
-        __typename: 'Query',
-      },
-      variables: {
-        where: {
-          id: offenderId,
-        },
-      },
-    });
-  };
-
-  // delete
-  const [deleteBan] = useDeleteBanMutation({
-    onCompleted: () => {
-      setSaving(false);
-      notification.success({
-        message: 'Successfully Deleted!',
-        description:
-          'The offender has been deleted from the feed and moved to the recycle bin.',
-        placement: 'bottomRight',
-      });
-    },
-    onError: () => {
-      setSaving(false);
-      errorNotification();
-    },
-    update,
-  });
-  const openDelete = (currentId: string) => {
-    setSaving(true);
-    if (currentId)
-      deleteBan({
-        variables: {
-          id: currentId,
-        },
-      });
   };
 
   // delete incident
@@ -424,9 +403,25 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
 
     return !isFileDuplicate || Upload.LIST_IGNORE;
   };
-  const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
-    setImageChange(true);
+  const imgChange: UploadProps['onChange'] = (info) => {
+    if (info.file.response && info.file.status === 'done') {
+      // ???
+      // if (info.file.response && (info.file.status === 'done'||'success';) {
+      setFileList([
+        ...fileList.filter((item) => item.uid !== info.file.uid),
+        {
+          ...info.file,
+          url: info.file.response[0].url,
+          fileName: info.file.response[0].blobName,
+          type: info.file.response[0].mimetype,
+        },
+      ]);
+
+      setImageChange(true);
+    } else {
+      setFileList(info.fileList);
+      setImageChange(true);
+    }
   };
   const onPreview = async (file: UploadFile) => {
     let src = file.url as string;
@@ -452,6 +447,9 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   const toggleEditExclusion = () => {
     setEditExclusion(!editExclusion);
   };
+  const openDelete = (currentId: string | undefined) => {
+    setBansData(bansData.filter((ban) => currentId !== ban.id));
+  };
   const deleteConfirm = (currentId: string) => {
     confirm({
       title: 'Do you want to delete the exclusion?',
@@ -460,6 +458,24 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
         openDelete(currentId);
       },
     });
+  };
+  const updateExclusion = (value: BanData) => {
+    if (bansData && bansData.length > 0) {
+      if (bansData.find(({ id }) => id === value.id)) {
+        setBansData(
+          bansData.map((ban) => {
+            if (ban.id === value.id) {
+              return value;
+            }
+            return ban;
+          })
+        );
+      } else {
+        setBansData([...bansData, value]);
+      }
+    } else if (bansData) {
+      setBansData([value]);
+    }
   };
 
   return {
@@ -492,12 +508,14 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     editExclusion,
     toggleEditExclusion,
     updateExclusion,
-    banId,
-    setBanId,
+    banData,
+    setBanData,
+    bansData,
     deleteConfirm,
     ageCheck,
     setAgeCheck,
     onReject,
+    adminRights: role !== Role.User,
   };
 };
 

@@ -35,12 +35,14 @@ export type Action = {
 export type ActionCreateInput = {
   Address?: InputMaybe<AddressCreateNestedOneWithoutActionsInput>;
   Ban?: InputMaybe<BanCreateNestedOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatCreateNestedOneWithoutActionInput>;
+  Group?: InputMaybe<GroupCreateNestedOneWithoutActionInput>;
   byUser: UserCreateNestedOneWithoutActionsByUserInput;
-  chat?: InputMaybe<ChatCreateNestedOneWithoutActionsInput>;
+  chatId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   dataType: Model;
   description?: InputMaybe<Scalars['String']>;
-  groups?: InputMaybe<GroupCreateNestedOneWithoutActionsInput>;
+  groupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedOneWithoutActionsInput>;
   inScheme: SchemeCreateNestedOneWithoutActionsInSchemeInput;
@@ -134,8 +136,8 @@ export type ActionCreateManyByUserInputEnvelope = {
 
 export type ActionCreateManyChatInput = {
   addressId?: InputMaybe<Scalars['String']>;
-  banId?: InputMaybe<Scalars['String']>;
   byUserId: Scalars['String'];
+  chatId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   dataType: Model;
   description?: InputMaybe<Scalars['String']>;
@@ -158,14 +160,14 @@ export type ActionCreateManyChatInputEnvelope = {
   skipDuplicates?: InputMaybe<Scalars['Boolean']>;
 };
 
-export type ActionCreateManyGroupsInput = {
+export type ActionCreateManyGroupInput = {
   addressId?: InputMaybe<Scalars['String']>;
-  banId?: InputMaybe<Scalars['String']>;
   byUserId: Scalars['String'];
   chatId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   dataType: Model;
   description?: InputMaybe<Scalars['String']>;
+  groupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   imageId?: InputMaybe<Scalars['String']>;
   inSchemeId: Scalars['String'];
@@ -179,8 +181,8 @@ export type ActionCreateManyGroupsInput = {
   userId?: InputMaybe<Scalars['String']>;
 };
 
-export type ActionCreateManyGroupsInputEnvelope = {
-  data?: InputMaybe<Array<ActionCreateManyGroupsInput>>;
+export type ActionCreateManyGroupInputEnvelope = {
+  data?: InputMaybe<Array<ActionCreateManyGroupInput>>;
   skipDuplicates?: InputMaybe<Scalars['Boolean']>;
 };
 
@@ -420,11 +422,11 @@ export type ActionCreateNestedManyWithoutChatInput = {
   createMany?: InputMaybe<ActionCreateManyChatInputEnvelope>;
 };
 
-export type ActionCreateNestedManyWithoutGroupsInput = {
+export type ActionCreateNestedManyWithoutGroupInput = {
   connect?: InputMaybe<Array<ActionWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<ActionCreateOrConnectWithoutGroupsInput>>;
-  create?: InputMaybe<Array<ActionCreateWithoutGroupsInput>>;
-  createMany?: InputMaybe<ActionCreateManyGroupsInputEnvelope>;
+  connectOrCreate?: InputMaybe<Array<ActionCreateOrConnectWithoutGroupInput>>;
+  create?: InputMaybe<Array<ActionCreateWithoutGroupInput>>;
+  createMany?: InputMaybe<ActionCreateManyGroupInputEnvelope>;
 };
 
 export type ActionCreateNestedManyWithoutImagesInput = {
@@ -509,8 +511,8 @@ export type ActionCreateOrConnectWithoutChatInput = {
   where: ActionWhereUniqueInput;
 };
 
-export type ActionCreateOrConnectWithoutGroupsInput = {
-  create: ActionCreateWithoutGroupsInput;
+export type ActionCreateOrConnectWithoutGroupInput = {
+  create: ActionCreateWithoutGroupInput;
   where: ActionWhereUniqueInput;
 };
 
@@ -556,12 +558,14 @@ export type ActionCreateOrConnectWithoutUserInput = {
 
 export type ActionCreateWithoutAddressInput = {
   Ban?: InputMaybe<BanCreateNestedOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatCreateNestedOneWithoutActionInput>;
+  Group?: InputMaybe<GroupCreateNestedOneWithoutActionInput>;
   byUser: UserCreateNestedOneWithoutActionsByUserInput;
-  chat?: InputMaybe<ChatCreateNestedOneWithoutActionsInput>;
+  chatId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   dataType: Model;
   description?: InputMaybe<Scalars['String']>;
-  groups?: InputMaybe<GroupCreateNestedOneWithoutActionsInput>;
+  groupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedOneWithoutActionsInput>;
   inScheme: SchemeCreateNestedOneWithoutActionsInSchemeInput;
@@ -577,12 +581,14 @@ export type ActionCreateWithoutAddressInput = {
 
 export type ActionCreateWithoutBanInput = {
   Address?: InputMaybe<AddressCreateNestedOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatCreateNestedOneWithoutActionInput>;
+  Group?: InputMaybe<GroupCreateNestedOneWithoutActionInput>;
   byUser: UserCreateNestedOneWithoutActionsByUserInput;
-  chat?: InputMaybe<ChatCreateNestedOneWithoutActionsInput>;
+  chatId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   dataType: Model;
   description?: InputMaybe<Scalars['String']>;
-  groups?: InputMaybe<GroupCreateNestedOneWithoutActionsInput>;
+  groupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedOneWithoutActionsInput>;
   inScheme: SchemeCreateNestedOneWithoutActionsInSchemeInput;
@@ -599,11 +605,13 @@ export type ActionCreateWithoutBanInput = {
 export type ActionCreateWithoutByUserInput = {
   Address?: InputMaybe<AddressCreateNestedOneWithoutActionsInput>;
   Ban?: InputMaybe<BanCreateNestedOneWithoutActionsInput>;
-  chat?: InputMaybe<ChatCreateNestedOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatCreateNestedOneWithoutActionInput>;
+  Group?: InputMaybe<GroupCreateNestedOneWithoutActionInput>;
+  chatId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   dataType: Model;
   description?: InputMaybe<Scalars['String']>;
-  groups?: InputMaybe<GroupCreateNestedOneWithoutActionsInput>;
+  groupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedOneWithoutActionsInput>;
   inScheme: SchemeCreateNestedOneWithoutActionsInSchemeInput;
@@ -620,11 +628,13 @@ export type ActionCreateWithoutByUserInput = {
 export type ActionCreateWithoutChatInput = {
   Address?: InputMaybe<AddressCreateNestedOneWithoutActionsInput>;
   Ban?: InputMaybe<BanCreateNestedOneWithoutActionsInput>;
+  Group?: InputMaybe<GroupCreateNestedOneWithoutActionInput>;
   byUser: UserCreateNestedOneWithoutActionsByUserInput;
+  chatId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   dataType: Model;
   description?: InputMaybe<Scalars['String']>;
-  groups?: InputMaybe<GroupCreateNestedOneWithoutActionsInput>;
+  groupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedOneWithoutActionsInput>;
   inScheme: SchemeCreateNestedOneWithoutActionsInSchemeInput;
@@ -638,14 +648,16 @@ export type ActionCreateWithoutChatInput = {
   user?: InputMaybe<UserCreateNestedOneWithoutActionsInput>;
 };
 
-export type ActionCreateWithoutGroupsInput = {
+export type ActionCreateWithoutGroupInput = {
   Address?: InputMaybe<AddressCreateNestedOneWithoutActionsInput>;
   Ban?: InputMaybe<BanCreateNestedOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatCreateNestedOneWithoutActionInput>;
   byUser: UserCreateNestedOneWithoutActionsByUserInput;
-  chat?: InputMaybe<ChatCreateNestedOneWithoutActionsInput>;
+  chatId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   dataType: Model;
   description?: InputMaybe<Scalars['String']>;
+  groupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedOneWithoutActionsInput>;
   inScheme: SchemeCreateNestedOneWithoutActionsInSchemeInput;
@@ -662,12 +674,14 @@ export type ActionCreateWithoutGroupsInput = {
 export type ActionCreateWithoutImagesInput = {
   Address?: InputMaybe<AddressCreateNestedOneWithoutActionsInput>;
   Ban?: InputMaybe<BanCreateNestedOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatCreateNestedOneWithoutActionInput>;
+  Group?: InputMaybe<GroupCreateNestedOneWithoutActionInput>;
   byUser: UserCreateNestedOneWithoutActionsByUserInput;
-  chat?: InputMaybe<ChatCreateNestedOneWithoutActionsInput>;
+  chatId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   dataType: Model;
   description?: InputMaybe<Scalars['String']>;
-  groups?: InputMaybe<GroupCreateNestedOneWithoutActionsInput>;
+  groupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   inScheme: SchemeCreateNestedOneWithoutActionsInSchemeInput;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutActionsInput>;
@@ -683,12 +697,14 @@ export type ActionCreateWithoutImagesInput = {
 export type ActionCreateWithoutInSchemeInput = {
   Address?: InputMaybe<AddressCreateNestedOneWithoutActionsInput>;
   Ban?: InputMaybe<BanCreateNestedOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatCreateNestedOneWithoutActionInput>;
+  Group?: InputMaybe<GroupCreateNestedOneWithoutActionInput>;
   byUser: UserCreateNestedOneWithoutActionsByUserInput;
-  chat?: InputMaybe<ChatCreateNestedOneWithoutActionsInput>;
+  chatId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   dataType: Model;
   description?: InputMaybe<Scalars['String']>;
-  groups?: InputMaybe<GroupCreateNestedOneWithoutActionsInput>;
+  groupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedOneWithoutActionsInput>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutActionsInput>;
@@ -704,12 +720,14 @@ export type ActionCreateWithoutInSchemeInput = {
 export type ActionCreateWithoutIncidentInput = {
   Address?: InputMaybe<AddressCreateNestedOneWithoutActionsInput>;
   Ban?: InputMaybe<BanCreateNestedOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatCreateNestedOneWithoutActionInput>;
+  Group?: InputMaybe<GroupCreateNestedOneWithoutActionInput>;
   byUser: UserCreateNestedOneWithoutActionsByUserInput;
-  chat?: InputMaybe<ChatCreateNestedOneWithoutActionsInput>;
+  chatId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   dataType: Model;
   description?: InputMaybe<Scalars['String']>;
-  groups?: InputMaybe<GroupCreateNestedOneWithoutActionsInput>;
+  groupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedOneWithoutActionsInput>;
   inScheme: SchemeCreateNestedOneWithoutActionsInSchemeInput;
@@ -725,12 +743,14 @@ export type ActionCreateWithoutIncidentInput = {
 export type ActionCreateWithoutMessageInput = {
   Address?: InputMaybe<AddressCreateNestedOneWithoutActionsInput>;
   Ban?: InputMaybe<BanCreateNestedOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatCreateNestedOneWithoutActionInput>;
+  Group?: InputMaybe<GroupCreateNestedOneWithoutActionInput>;
   byUser: UserCreateNestedOneWithoutActionsByUserInput;
-  chat?: InputMaybe<ChatCreateNestedOneWithoutActionsInput>;
+  chatId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   dataType: Model;
   description?: InputMaybe<Scalars['String']>;
-  groups?: InputMaybe<GroupCreateNestedOneWithoutActionsInput>;
+  groupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedOneWithoutActionsInput>;
   inScheme: SchemeCreateNestedOneWithoutActionsInSchemeInput;
@@ -746,12 +766,14 @@ export type ActionCreateWithoutMessageInput = {
 export type ActionCreateWithoutOffenderInput = {
   Address?: InputMaybe<AddressCreateNestedOneWithoutActionsInput>;
   Ban?: InputMaybe<BanCreateNestedOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatCreateNestedOneWithoutActionInput>;
+  Group?: InputMaybe<GroupCreateNestedOneWithoutActionInput>;
   byUser: UserCreateNestedOneWithoutActionsByUserInput;
-  chat?: InputMaybe<ChatCreateNestedOneWithoutActionsInput>;
+  chatId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   dataType: Model;
   description?: InputMaybe<Scalars['String']>;
-  groups?: InputMaybe<GroupCreateNestedOneWithoutActionsInput>;
+  groupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedOneWithoutActionsInput>;
   inScheme: SchemeCreateNestedOneWithoutActionsInSchemeInput;
@@ -767,12 +789,14 @@ export type ActionCreateWithoutOffenderInput = {
 export type ActionCreateWithoutSchemeInput = {
   Address?: InputMaybe<AddressCreateNestedOneWithoutActionsInput>;
   Ban?: InputMaybe<BanCreateNestedOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatCreateNestedOneWithoutActionInput>;
+  Group?: InputMaybe<GroupCreateNestedOneWithoutActionInput>;
   byUser: UserCreateNestedOneWithoutActionsByUserInput;
-  chat?: InputMaybe<ChatCreateNestedOneWithoutActionsInput>;
+  chatId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   dataType: Model;
   description?: InputMaybe<Scalars['String']>;
-  groups?: InputMaybe<GroupCreateNestedOneWithoutActionsInput>;
+  groupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedOneWithoutActionsInput>;
   inScheme: SchemeCreateNestedOneWithoutActionsInSchemeInput;
@@ -788,12 +812,14 @@ export type ActionCreateWithoutSchemeInput = {
 export type ActionCreateWithoutTagInput = {
   Address?: InputMaybe<AddressCreateNestedOneWithoutActionsInput>;
   Ban?: InputMaybe<BanCreateNestedOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatCreateNestedOneWithoutActionInput>;
+  Group?: InputMaybe<GroupCreateNestedOneWithoutActionInput>;
   byUser: UserCreateNestedOneWithoutActionsByUserInput;
-  chat?: InputMaybe<ChatCreateNestedOneWithoutActionsInput>;
+  chatId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   dataType: Model;
   description?: InputMaybe<Scalars['String']>;
-  groups?: InputMaybe<GroupCreateNestedOneWithoutActionsInput>;
+  groupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedOneWithoutActionsInput>;
   inScheme: SchemeCreateNestedOneWithoutActionsInSchemeInput;
@@ -809,12 +835,14 @@ export type ActionCreateWithoutTagInput = {
 export type ActionCreateWithoutUserInput = {
   Address?: InputMaybe<AddressCreateNestedOneWithoutActionsInput>;
   Ban?: InputMaybe<BanCreateNestedOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatCreateNestedOneWithoutActionInput>;
+  Group?: InputMaybe<GroupCreateNestedOneWithoutActionInput>;
   byUser: UserCreateNestedOneWithoutActionsByUserInput;
-  chat?: InputMaybe<ChatCreateNestedOneWithoutActionsInput>;
+  chatId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   dataType: Model;
   description?: InputMaybe<Scalars['String']>;
-  groups?: InputMaybe<GroupCreateNestedOneWithoutActionsInput>;
+  groupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedOneWithoutActionsInput>;
   inScheme: SchemeCreateNestedOneWithoutActionsInSchemeInput;
@@ -840,17 +868,17 @@ export type ActionOrderByRelationAggregateInput = {
 export type ActionOrderByWithRelationInput = {
   Address?: InputMaybe<AddressOrderByWithRelationInput>;
   Ban?: InputMaybe<BanOrderByWithRelationInput>;
+  Chat?: InputMaybe<ChatOrderByWithRelationInput>;
+  Group?: InputMaybe<GroupOrderByWithRelationInput>;
   addressId?: InputMaybe<SortOrder>;
   banId?: InputMaybe<SortOrder>;
   byUser?: InputMaybe<UserOrderByWithRelationInput>;
   byUserId?: InputMaybe<SortOrder>;
-  chat?: InputMaybe<ChatOrderByWithRelationInput>;
   chatId?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   dataType?: InputMaybe<SortOrder>;
   description?: InputMaybe<SortOrder>;
   groupId?: InputMaybe<SortOrder>;
-  groups?: InputMaybe<GroupOrderByWithRelationInput>;
   id?: InputMaybe<SortOrder>;
   imageId?: InputMaybe<SortOrder>;
   images?: InputMaybe<ImageOrderByWithRelationInput>;
@@ -914,12 +942,14 @@ export enum ActionType {
 export type ActionUpdateInput = {
   Address?: InputMaybe<AddressUpdateOneWithoutActionsInput>;
   Ban?: InputMaybe<BanUpdateOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatUpdateOneWithoutActionInput>;
+  Group?: InputMaybe<GroupUpdateOneWithoutActionInput>;
   byUser?: InputMaybe<UserUpdateOneRequiredWithoutActionsByUserInput>;
-  chat?: InputMaybe<ChatUpdateOneWithoutActionsInput>;
+  chatId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  groups?: InputMaybe<GroupUpdateOneWithoutActionsInput>;
+  groupId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateOneWithoutActionsInput>;
   inScheme?: InputMaybe<SchemeUpdateOneRequiredWithoutActionsInSchemeInput>;
@@ -934,9 +964,11 @@ export type ActionUpdateInput = {
 };
 
 export type ActionUpdateManyMutationInput = {
+  chatId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  groupId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   reason?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumActionTypeFieldUpdateOperationsInput>;
@@ -962,7 +994,7 @@ export type ActionUpdateManyWithWhereWithoutChatInput = {
   where: ActionScalarWhereInput;
 };
 
-export type ActionUpdateManyWithWhereWithoutGroupsInput = {
+export type ActionUpdateManyWithWhereWithoutGroupInput = {
   data: ActionUpdateManyMutationInput;
   where: ActionScalarWhereInput;
 };
@@ -1063,18 +1095,18 @@ export type ActionUpdateManyWithoutChatInput = {
   upsert?: InputMaybe<Array<ActionUpsertWithWhereUniqueWithoutChatInput>>;
 };
 
-export type ActionUpdateManyWithoutGroupsInput = {
+export type ActionUpdateManyWithoutGroupInput = {
   connect?: InputMaybe<Array<ActionWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<ActionCreateOrConnectWithoutGroupsInput>>;
-  create?: InputMaybe<Array<ActionCreateWithoutGroupsInput>>;
-  createMany?: InputMaybe<ActionCreateManyGroupsInputEnvelope>;
+  connectOrCreate?: InputMaybe<Array<ActionCreateOrConnectWithoutGroupInput>>;
+  create?: InputMaybe<Array<ActionCreateWithoutGroupInput>>;
+  createMany?: InputMaybe<ActionCreateManyGroupInputEnvelope>;
   delete?: InputMaybe<Array<ActionWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<ActionScalarWhereInput>>;
   disconnect?: InputMaybe<Array<ActionWhereUniqueInput>>;
   set?: InputMaybe<Array<ActionWhereUniqueInput>>;
-  update?: InputMaybe<Array<ActionUpdateWithWhereUniqueWithoutGroupsInput>>;
-  updateMany?: InputMaybe<Array<ActionUpdateManyWithWhereWithoutGroupsInput>>;
-  upsert?: InputMaybe<Array<ActionUpsertWithWhereUniqueWithoutGroupsInput>>;
+  update?: InputMaybe<Array<ActionUpdateWithWhereUniqueWithoutGroupInput>>;
+  updateMany?: InputMaybe<Array<ActionUpdateManyWithWhereWithoutGroupInput>>;
+  upsert?: InputMaybe<Array<ActionUpsertWithWhereUniqueWithoutGroupInput>>;
 };
 
 export type ActionUpdateManyWithoutImagesInput = {
@@ -1215,8 +1247,8 @@ export type ActionUpdateWithWhereUniqueWithoutChatInput = {
   where: ActionWhereUniqueInput;
 };
 
-export type ActionUpdateWithWhereUniqueWithoutGroupsInput = {
-  data: ActionUpdateWithoutGroupsInput;
+export type ActionUpdateWithWhereUniqueWithoutGroupInput = {
+  data: ActionUpdateWithoutGroupInput;
   where: ActionWhereUniqueInput;
 };
 
@@ -1262,12 +1294,14 @@ export type ActionUpdateWithWhereUniqueWithoutUserInput = {
 
 export type ActionUpdateWithoutAddressInput = {
   Ban?: InputMaybe<BanUpdateOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatUpdateOneWithoutActionInput>;
+  Group?: InputMaybe<GroupUpdateOneWithoutActionInput>;
   byUser?: InputMaybe<UserUpdateOneRequiredWithoutActionsByUserInput>;
-  chat?: InputMaybe<ChatUpdateOneWithoutActionsInput>;
+  chatId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  groups?: InputMaybe<GroupUpdateOneWithoutActionsInput>;
+  groupId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateOneWithoutActionsInput>;
   inScheme?: InputMaybe<SchemeUpdateOneRequiredWithoutActionsInSchemeInput>;
@@ -1283,12 +1317,14 @@ export type ActionUpdateWithoutAddressInput = {
 
 export type ActionUpdateWithoutBanInput = {
   Address?: InputMaybe<AddressUpdateOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatUpdateOneWithoutActionInput>;
+  Group?: InputMaybe<GroupUpdateOneWithoutActionInput>;
   byUser?: InputMaybe<UserUpdateOneRequiredWithoutActionsByUserInput>;
-  chat?: InputMaybe<ChatUpdateOneWithoutActionsInput>;
+  chatId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  groups?: InputMaybe<GroupUpdateOneWithoutActionsInput>;
+  groupId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateOneWithoutActionsInput>;
   inScheme?: InputMaybe<SchemeUpdateOneRequiredWithoutActionsInSchemeInput>;
@@ -1305,11 +1341,13 @@ export type ActionUpdateWithoutBanInput = {
 export type ActionUpdateWithoutByUserInput = {
   Address?: InputMaybe<AddressUpdateOneWithoutActionsInput>;
   Ban?: InputMaybe<BanUpdateOneWithoutActionsInput>;
-  chat?: InputMaybe<ChatUpdateOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatUpdateOneWithoutActionInput>;
+  Group?: InputMaybe<GroupUpdateOneWithoutActionInput>;
+  chatId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  groups?: InputMaybe<GroupUpdateOneWithoutActionsInput>;
+  groupId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateOneWithoutActionsInput>;
   inScheme?: InputMaybe<SchemeUpdateOneRequiredWithoutActionsInSchemeInput>;
@@ -1326,11 +1364,13 @@ export type ActionUpdateWithoutByUserInput = {
 export type ActionUpdateWithoutChatInput = {
   Address?: InputMaybe<AddressUpdateOneWithoutActionsInput>;
   Ban?: InputMaybe<BanUpdateOneWithoutActionsInput>;
+  Group?: InputMaybe<GroupUpdateOneWithoutActionInput>;
   byUser?: InputMaybe<UserUpdateOneRequiredWithoutActionsByUserInput>;
+  chatId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  groups?: InputMaybe<GroupUpdateOneWithoutActionsInput>;
+  groupId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateOneWithoutActionsInput>;
   inScheme?: InputMaybe<SchemeUpdateOneRequiredWithoutActionsInSchemeInput>;
@@ -1344,14 +1384,16 @@ export type ActionUpdateWithoutChatInput = {
   user?: InputMaybe<UserUpdateOneWithoutActionsInput>;
 };
 
-export type ActionUpdateWithoutGroupsInput = {
+export type ActionUpdateWithoutGroupInput = {
   Address?: InputMaybe<AddressUpdateOneWithoutActionsInput>;
   Ban?: InputMaybe<BanUpdateOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatUpdateOneWithoutActionInput>;
   byUser?: InputMaybe<UserUpdateOneRequiredWithoutActionsByUserInput>;
-  chat?: InputMaybe<ChatUpdateOneWithoutActionsInput>;
+  chatId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  groupId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateOneWithoutActionsInput>;
   inScheme?: InputMaybe<SchemeUpdateOneRequiredWithoutActionsInSchemeInput>;
@@ -1368,12 +1410,14 @@ export type ActionUpdateWithoutGroupsInput = {
 export type ActionUpdateWithoutImagesInput = {
   Address?: InputMaybe<AddressUpdateOneWithoutActionsInput>;
   Ban?: InputMaybe<BanUpdateOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatUpdateOneWithoutActionInput>;
+  Group?: InputMaybe<GroupUpdateOneWithoutActionInput>;
   byUser?: InputMaybe<UserUpdateOneRequiredWithoutActionsByUserInput>;
-  chat?: InputMaybe<ChatUpdateOneWithoutActionsInput>;
+  chatId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  groups?: InputMaybe<GroupUpdateOneWithoutActionsInput>;
+  groupId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   inScheme?: InputMaybe<SchemeUpdateOneRequiredWithoutActionsInSchemeInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutActionsInput>;
@@ -1389,12 +1433,14 @@ export type ActionUpdateWithoutImagesInput = {
 export type ActionUpdateWithoutInSchemeInput = {
   Address?: InputMaybe<AddressUpdateOneWithoutActionsInput>;
   Ban?: InputMaybe<BanUpdateOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatUpdateOneWithoutActionInput>;
+  Group?: InputMaybe<GroupUpdateOneWithoutActionInput>;
   byUser?: InputMaybe<UserUpdateOneRequiredWithoutActionsByUserInput>;
-  chat?: InputMaybe<ChatUpdateOneWithoutActionsInput>;
+  chatId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  groups?: InputMaybe<GroupUpdateOneWithoutActionsInput>;
+  groupId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateOneWithoutActionsInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutActionsInput>;
@@ -1410,12 +1456,14 @@ export type ActionUpdateWithoutInSchemeInput = {
 export type ActionUpdateWithoutIncidentInput = {
   Address?: InputMaybe<AddressUpdateOneWithoutActionsInput>;
   Ban?: InputMaybe<BanUpdateOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatUpdateOneWithoutActionInput>;
+  Group?: InputMaybe<GroupUpdateOneWithoutActionInput>;
   byUser?: InputMaybe<UserUpdateOneRequiredWithoutActionsByUserInput>;
-  chat?: InputMaybe<ChatUpdateOneWithoutActionsInput>;
+  chatId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  groups?: InputMaybe<GroupUpdateOneWithoutActionsInput>;
+  groupId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateOneWithoutActionsInput>;
   inScheme?: InputMaybe<SchemeUpdateOneRequiredWithoutActionsInSchemeInput>;
@@ -1431,12 +1479,14 @@ export type ActionUpdateWithoutIncidentInput = {
 export type ActionUpdateWithoutMessageInput = {
   Address?: InputMaybe<AddressUpdateOneWithoutActionsInput>;
   Ban?: InputMaybe<BanUpdateOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatUpdateOneWithoutActionInput>;
+  Group?: InputMaybe<GroupUpdateOneWithoutActionInput>;
   byUser?: InputMaybe<UserUpdateOneRequiredWithoutActionsByUserInput>;
-  chat?: InputMaybe<ChatUpdateOneWithoutActionsInput>;
+  chatId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  groups?: InputMaybe<GroupUpdateOneWithoutActionsInput>;
+  groupId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateOneWithoutActionsInput>;
   inScheme?: InputMaybe<SchemeUpdateOneRequiredWithoutActionsInSchemeInput>;
@@ -1452,12 +1502,14 @@ export type ActionUpdateWithoutMessageInput = {
 export type ActionUpdateWithoutOffenderInput = {
   Address?: InputMaybe<AddressUpdateOneWithoutActionsInput>;
   Ban?: InputMaybe<BanUpdateOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatUpdateOneWithoutActionInput>;
+  Group?: InputMaybe<GroupUpdateOneWithoutActionInput>;
   byUser?: InputMaybe<UserUpdateOneRequiredWithoutActionsByUserInput>;
-  chat?: InputMaybe<ChatUpdateOneWithoutActionsInput>;
+  chatId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  groups?: InputMaybe<GroupUpdateOneWithoutActionsInput>;
+  groupId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateOneWithoutActionsInput>;
   inScheme?: InputMaybe<SchemeUpdateOneRequiredWithoutActionsInSchemeInput>;
@@ -1473,12 +1525,14 @@ export type ActionUpdateWithoutOffenderInput = {
 export type ActionUpdateWithoutSchemeInput = {
   Address?: InputMaybe<AddressUpdateOneWithoutActionsInput>;
   Ban?: InputMaybe<BanUpdateOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatUpdateOneWithoutActionInput>;
+  Group?: InputMaybe<GroupUpdateOneWithoutActionInput>;
   byUser?: InputMaybe<UserUpdateOneRequiredWithoutActionsByUserInput>;
-  chat?: InputMaybe<ChatUpdateOneWithoutActionsInput>;
+  chatId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  groups?: InputMaybe<GroupUpdateOneWithoutActionsInput>;
+  groupId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateOneWithoutActionsInput>;
   inScheme?: InputMaybe<SchemeUpdateOneRequiredWithoutActionsInSchemeInput>;
@@ -1494,12 +1548,14 @@ export type ActionUpdateWithoutSchemeInput = {
 export type ActionUpdateWithoutTagInput = {
   Address?: InputMaybe<AddressUpdateOneWithoutActionsInput>;
   Ban?: InputMaybe<BanUpdateOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatUpdateOneWithoutActionInput>;
+  Group?: InputMaybe<GroupUpdateOneWithoutActionInput>;
   byUser?: InputMaybe<UserUpdateOneRequiredWithoutActionsByUserInput>;
-  chat?: InputMaybe<ChatUpdateOneWithoutActionsInput>;
+  chatId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  groups?: InputMaybe<GroupUpdateOneWithoutActionsInput>;
+  groupId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateOneWithoutActionsInput>;
   inScheme?: InputMaybe<SchemeUpdateOneRequiredWithoutActionsInSchemeInput>;
@@ -1515,12 +1571,14 @@ export type ActionUpdateWithoutTagInput = {
 export type ActionUpdateWithoutUserInput = {
   Address?: InputMaybe<AddressUpdateOneWithoutActionsInput>;
   Ban?: InputMaybe<BanUpdateOneWithoutActionsInput>;
+  Chat?: InputMaybe<ChatUpdateOneWithoutActionInput>;
+  Group?: InputMaybe<GroupUpdateOneWithoutActionInput>;
   byUser?: InputMaybe<UserUpdateOneRequiredWithoutActionsByUserInput>;
-  chat?: InputMaybe<ChatUpdateOneWithoutActionsInput>;
+  chatId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
-  groups?: InputMaybe<GroupUpdateOneWithoutActionsInput>;
+  groupId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateOneWithoutActionsInput>;
   inScheme?: InputMaybe<SchemeUpdateOneRequiredWithoutActionsInSchemeInput>;
@@ -1557,9 +1615,9 @@ export type ActionUpsertWithWhereUniqueWithoutChatInput = {
   where: ActionWhereUniqueInput;
 };
 
-export type ActionUpsertWithWhereUniqueWithoutGroupsInput = {
-  create: ActionCreateWithoutGroupsInput;
-  update: ActionUpdateWithoutGroupsInput;
+export type ActionUpsertWithWhereUniqueWithoutGroupInput = {
+  create: ActionCreateWithoutGroupInput;
+  update: ActionUpdateWithoutGroupInput;
   where: ActionWhereUniqueInput;
 };
 
@@ -1615,19 +1673,19 @@ export type ActionWhereInput = {
   AND?: InputMaybe<Array<ActionWhereInput>>;
   Address?: InputMaybe<AddressWhereInput>;
   Ban?: InputMaybe<BanWhereInput>;
+  Chat?: InputMaybe<ChatWhereInput>;
+  Group?: InputMaybe<GroupWhereInput>;
   NOT?: InputMaybe<Array<ActionWhereInput>>;
   OR?: InputMaybe<Array<ActionWhereInput>>;
   addressId?: InputMaybe<StringNullableFilter>;
   banId?: InputMaybe<StringNullableFilter>;
   byUser?: InputMaybe<UserWhereInput>;
   byUserId?: InputMaybe<StringFilter>;
-  chat?: InputMaybe<ChatWhereInput>;
   chatId?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   dataType?: InputMaybe<EnumModelFilter>;
   description?: InputMaybe<StringNullableFilter>;
   groupId?: InputMaybe<StringNullableFilter>;
-  groups?: InputMaybe<GroupWhereInput>;
   id?: InputMaybe<StringFilter>;
   imageId?: InputMaybe<StringNullableFilter>;
   images?: InputMaybe<ImageWhereInput>;
@@ -2532,7 +2590,6 @@ export enum Build {
 
 export type Chat = {
   __typename?: 'Chat';
-  actions: Array<Action>;
   createdAt: Scalars['DateTime'];
   description?: Maybe<Scalars['String']>;
   firstLetter?: Maybe<Scalars['String']>;
@@ -2543,15 +2600,6 @@ export type Chat = {
   scheme: Scheme;
   totalMembers?: Maybe<Scalars['Int']>;
   updatedAt: Scalars['DateTime'];
-};
-
-export type ChatActionsArgs = {
-  after?: InputMaybe<ActionWhereUniqueInput>;
-  before?: InputMaybe<ActionWhereUniqueInput>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
-  where?: InputMaybe<ActionWhereInput>;
 };
 
 export type ChatMembersArgs = {
@@ -2573,7 +2621,7 @@ export type ChatMessagesArgs = {
 };
 
 export type ChatCreateInput = {
-  actions?: InputMaybe<ActionCreateNestedManyWithoutChatInput>;
+  Action?: InputMaybe<ActionCreateNestedManyWithoutChatInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
@@ -2606,10 +2654,10 @@ export type ChatCreateNestedManyWithoutSchemeInput = {
   createMany?: InputMaybe<ChatCreateManySchemeInputEnvelope>;
 };
 
-export type ChatCreateNestedOneWithoutActionsInput = {
+export type ChatCreateNestedOneWithoutActionInput = {
   connect?: InputMaybe<ChatWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<ChatCreateOrConnectWithoutActionsInput>;
-  create?: InputMaybe<ChatCreateWithoutActionsInput>;
+  connectOrCreate?: InputMaybe<ChatCreateOrConnectWithoutActionInput>;
+  create?: InputMaybe<ChatCreateWithoutActionInput>;
 };
 
 export type ChatCreateNestedOneWithoutMembersInput = {
@@ -2624,8 +2672,8 @@ export type ChatCreateNestedOneWithoutMessagesInput = {
   create?: InputMaybe<ChatCreateWithoutMessagesInput>;
 };
 
-export type ChatCreateOrConnectWithoutActionsInput = {
-  create: ChatCreateWithoutActionsInput;
+export type ChatCreateOrConnectWithoutActionInput = {
+  create: ChatCreateWithoutActionInput;
   where: ChatWhereUniqueInput;
 };
 
@@ -2644,7 +2692,7 @@ export type ChatCreateOrConnectWithoutSchemeInput = {
   where: ChatWhereUniqueInput;
 };
 
-export type ChatCreateWithoutActionsInput = {
+export type ChatCreateWithoutActionInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
@@ -2657,7 +2705,7 @@ export type ChatCreateWithoutActionsInput = {
 };
 
 export type ChatCreateWithoutMembersInput = {
-  actions?: InputMaybe<ActionCreateNestedManyWithoutChatInput>;
+  Action?: InputMaybe<ActionCreateNestedManyWithoutChatInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
@@ -2669,7 +2717,7 @@ export type ChatCreateWithoutMembersInput = {
 };
 
 export type ChatCreateWithoutMessagesInput = {
-  actions?: InputMaybe<ActionCreateNestedManyWithoutChatInput>;
+  Action?: InputMaybe<ActionCreateNestedManyWithoutChatInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
@@ -2681,7 +2729,7 @@ export type ChatCreateWithoutMessagesInput = {
 };
 
 export type ChatCreateWithoutSchemeInput = {
-  actions?: InputMaybe<ActionCreateNestedManyWithoutChatInput>;
+  Action?: InputMaybe<ActionCreateNestedManyWithoutChatInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
@@ -2703,7 +2751,7 @@ export type ChatOrderByRelationAggregateInput = {
 };
 
 export type ChatOrderByWithRelationInput = {
-  actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
+  Action?: InputMaybe<ActionOrderByRelationAggregateInput>;
   createdAt?: InputMaybe<SortOrder>;
   description?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
@@ -2730,7 +2778,7 @@ export type ChatScalarWhereInput = {
 };
 
 export type ChatUpdateInput = {
-  actions?: InputMaybe<ActionUpdateManyWithoutChatInput>;
+  Action?: InputMaybe<ActionUpdateManyWithoutChatInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -2786,14 +2834,14 @@ export type ChatUpdateOneRequiredWithoutMessagesInput = {
   upsert?: InputMaybe<ChatUpsertWithoutMessagesInput>;
 };
 
-export type ChatUpdateOneWithoutActionsInput = {
+export type ChatUpdateOneWithoutActionInput = {
   connect?: InputMaybe<ChatWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<ChatCreateOrConnectWithoutActionsInput>;
-  create?: InputMaybe<ChatCreateWithoutActionsInput>;
+  connectOrCreate?: InputMaybe<ChatCreateOrConnectWithoutActionInput>;
+  create?: InputMaybe<ChatCreateWithoutActionInput>;
   delete?: InputMaybe<Scalars['Boolean']>;
   disconnect?: InputMaybe<Scalars['Boolean']>;
-  update?: InputMaybe<ChatUpdateWithoutActionsInput>;
-  upsert?: InputMaybe<ChatUpsertWithoutActionsInput>;
+  update?: InputMaybe<ChatUpdateWithoutActionInput>;
+  upsert?: InputMaybe<ChatUpsertWithoutActionInput>;
 };
 
 export type ChatUpdateWithWhereUniqueWithoutSchemeInput = {
@@ -2801,7 +2849,7 @@ export type ChatUpdateWithWhereUniqueWithoutSchemeInput = {
   where: ChatWhereUniqueInput;
 };
 
-export type ChatUpdateWithoutActionsInput = {
+export type ChatUpdateWithoutActionInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -2814,7 +2862,7 @@ export type ChatUpdateWithoutActionsInput = {
 };
 
 export type ChatUpdateWithoutMembersInput = {
-  actions?: InputMaybe<ActionUpdateManyWithoutChatInput>;
+  Action?: InputMaybe<ActionUpdateManyWithoutChatInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -2826,7 +2874,7 @@ export type ChatUpdateWithoutMembersInput = {
 };
 
 export type ChatUpdateWithoutMessagesInput = {
-  actions?: InputMaybe<ActionUpdateManyWithoutChatInput>;
+  Action?: InputMaybe<ActionUpdateManyWithoutChatInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -2838,7 +2886,7 @@ export type ChatUpdateWithoutMessagesInput = {
 };
 
 export type ChatUpdateWithoutSchemeInput = {
-  actions?: InputMaybe<ActionUpdateManyWithoutChatInput>;
+  Action?: InputMaybe<ActionUpdateManyWithoutChatInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -2855,9 +2903,9 @@ export type ChatUpsertWithWhereUniqueWithoutSchemeInput = {
   where: ChatWhereUniqueInput;
 };
 
-export type ChatUpsertWithoutActionsInput = {
-  create: ChatCreateWithoutActionsInput;
-  update: ChatUpdateWithoutActionsInput;
+export type ChatUpsertWithoutActionInput = {
+  create: ChatCreateWithoutActionInput;
+  update: ChatUpdateWithoutActionInput;
 };
 
 export type ChatUpsertWithoutMembersInput = {
@@ -2872,9 +2920,9 @@ export type ChatUpsertWithoutMessagesInput = {
 
 export type ChatWhereInput = {
   AND?: InputMaybe<Array<ChatWhereInput>>;
+  Action?: InputMaybe<ActionListRelationFilter>;
   NOT?: InputMaybe<Array<ChatWhereInput>>;
   OR?: InputMaybe<Array<ChatWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   description?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
@@ -2934,7 +2982,7 @@ export type CreateIncidentOffenders = {
 
 export type CreateIncidentUpdateOffenders = {
   data?: InputMaybe<OffenderUpdateWithoutIncidentsInput>;
-  where?: InputMaybe<OffenderWhereUniqueInput>;
+  where?: InputMaybe<IncidentOffenderWhereInput>;
 };
 
 export type CreateOffenderData = {
@@ -3224,6 +3272,17 @@ export type File = {
   path?: Maybe<Scalars['String']>;
 };
 
+export type FloatNullableFilter = {
+  equals?: InputMaybe<Scalars['Float']>;
+  gt?: InputMaybe<Scalars['Float']>;
+  gte?: InputMaybe<Scalars['Float']>;
+  in?: InputMaybe<Array<Scalars['Float']>>;
+  lt?: InputMaybe<Scalars['Float']>;
+  lte?: InputMaybe<Scalars['Float']>;
+  not?: InputMaybe<NestedFloatNullableFilter>;
+  notIn?: InputMaybe<Array<Scalars['Float']>>;
+};
+
 export enum Gender {
   Female = 'FEMALE',
   Male = 'MALE',
@@ -3232,7 +3291,6 @@ export enum Gender {
 
 export type Group = {
   __typename?: 'Group';
-  actions: Array<Action>;
   createdAt: Scalars['DateTime'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['String'];
@@ -3243,15 +3301,6 @@ export type Group = {
   updatedAt: Scalars['DateTime'];
   uploaded: Scalars['Boolean'];
   users: Array<User>;
-};
-
-export type GroupActionsArgs = {
-  after?: InputMaybe<ActionWhereUniqueInput>;
-  before?: InputMaybe<ActionWhereUniqueInput>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<ActionOrderByWithRelationInput>>;
-  where?: InputMaybe<ActionWhereInput>;
 };
 
 export type GroupIncidentsArgs = {
@@ -3278,7 +3327,7 @@ export type GroupUsersArgs = {
 };
 
 export type GroupCreateInput = {
-  actions?: InputMaybe<ActionCreateNestedManyWithoutGroupsInput>;
+  Action?: InputMaybe<ActionCreateNestedManyWithoutGroupInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
@@ -3334,14 +3383,14 @@ export type GroupCreateNestedManyWithoutUsersInput = {
   create?: InputMaybe<Array<GroupCreateWithoutUsersInput>>;
 };
 
-export type GroupCreateNestedOneWithoutActionsInput = {
+export type GroupCreateNestedOneWithoutActionInput = {
   connect?: InputMaybe<GroupWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<GroupCreateOrConnectWithoutActionsInput>;
-  create?: InputMaybe<GroupCreateWithoutActionsInput>;
+  connectOrCreate?: InputMaybe<GroupCreateOrConnectWithoutActionInput>;
+  create?: InputMaybe<GroupCreateWithoutActionInput>;
 };
 
-export type GroupCreateOrConnectWithoutActionsInput = {
-  create: GroupCreateWithoutActionsInput;
+export type GroupCreateOrConnectWithoutActionInput = {
+  create: GroupCreateWithoutActionInput;
   where: GroupWhereUniqueInput;
 };
 
@@ -3365,7 +3414,7 @@ export type GroupCreateOrConnectWithoutUsersInput = {
   where: GroupWhereUniqueInput;
 };
 
-export type GroupCreateWithoutActionsInput = {
+export type GroupCreateWithoutActionInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
@@ -3379,7 +3428,7 @@ export type GroupCreateWithoutActionsInput = {
 };
 
 export type GroupCreateWithoutIncidentsInput = {
-  actions?: InputMaybe<ActionCreateNestedManyWithoutGroupsInput>;
+  Action?: InputMaybe<ActionCreateNestedManyWithoutGroupInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
@@ -3392,7 +3441,7 @@ export type GroupCreateWithoutIncidentsInput = {
 };
 
 export type GroupCreateWithoutOffendersInput = {
-  actions?: InputMaybe<ActionCreateNestedManyWithoutGroupsInput>;
+  Action?: InputMaybe<ActionCreateNestedManyWithoutGroupInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
@@ -3405,7 +3454,7 @@ export type GroupCreateWithoutOffendersInput = {
 };
 
 export type GroupCreateWithoutSchemeInput = {
-  actions?: InputMaybe<ActionCreateNestedManyWithoutGroupsInput>;
+  Action?: InputMaybe<ActionCreateNestedManyWithoutGroupInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
@@ -3418,7 +3467,7 @@ export type GroupCreateWithoutSchemeInput = {
 };
 
 export type GroupCreateWithoutUsersInput = {
-  actions?: InputMaybe<ActionCreateNestedManyWithoutGroupsInput>;
+  Action?: InputMaybe<ActionCreateNestedManyWithoutGroupInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
@@ -3441,7 +3490,7 @@ export type GroupOrderByRelationAggregateInput = {
 };
 
 export type GroupOrderByWithRelationInput = {
-  actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
+  Action?: InputMaybe<ActionOrderByRelationAggregateInput>;
   createdAt?: InputMaybe<SortOrder>;
   description?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
@@ -3469,7 +3518,7 @@ export type GroupScalarWhereInput = {
 };
 
 export type GroupUpdateInput = {
-  actions?: InputMaybe<ActionUpdateManyWithoutGroupsInput>;
+  Action?: InputMaybe<ActionUpdateManyWithoutGroupInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -3568,14 +3617,14 @@ export type GroupUpdateManyWithoutUsersInput = {
   upsert?: InputMaybe<Array<GroupUpsertWithWhereUniqueWithoutUsersInput>>;
 };
 
-export type GroupUpdateOneWithoutActionsInput = {
+export type GroupUpdateOneWithoutActionInput = {
   connect?: InputMaybe<GroupWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<GroupCreateOrConnectWithoutActionsInput>;
-  create?: InputMaybe<GroupCreateWithoutActionsInput>;
+  connectOrCreate?: InputMaybe<GroupCreateOrConnectWithoutActionInput>;
+  create?: InputMaybe<GroupCreateWithoutActionInput>;
   delete?: InputMaybe<Scalars['Boolean']>;
   disconnect?: InputMaybe<Scalars['Boolean']>;
-  update?: InputMaybe<GroupUpdateWithoutActionsInput>;
-  upsert?: InputMaybe<GroupUpsertWithoutActionsInput>;
+  update?: InputMaybe<GroupUpdateWithoutActionInput>;
+  upsert?: InputMaybe<GroupUpsertWithoutActionInput>;
 };
 
 export type GroupUpdateWithWhereUniqueWithoutIncidentsInput = {
@@ -3598,7 +3647,7 @@ export type GroupUpdateWithWhereUniqueWithoutUsersInput = {
   where: GroupWhereUniqueInput;
 };
 
-export type GroupUpdateWithoutActionsInput = {
+export type GroupUpdateWithoutActionInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -3612,7 +3661,7 @@ export type GroupUpdateWithoutActionsInput = {
 };
 
 export type GroupUpdateWithoutIncidentsInput = {
-  actions?: InputMaybe<ActionUpdateManyWithoutGroupsInput>;
+  Action?: InputMaybe<ActionUpdateManyWithoutGroupInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -3625,7 +3674,7 @@ export type GroupUpdateWithoutIncidentsInput = {
 };
 
 export type GroupUpdateWithoutOffendersInput = {
-  actions?: InputMaybe<ActionUpdateManyWithoutGroupsInput>;
+  Action?: InputMaybe<ActionUpdateManyWithoutGroupInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -3638,7 +3687,7 @@ export type GroupUpdateWithoutOffendersInput = {
 };
 
 export type GroupUpdateWithoutSchemeInput = {
-  actions?: InputMaybe<ActionUpdateManyWithoutGroupsInput>;
+  Action?: InputMaybe<ActionUpdateManyWithoutGroupInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -3651,7 +3700,7 @@ export type GroupUpdateWithoutSchemeInput = {
 };
 
 export type GroupUpdateWithoutUsersInput = {
-  actions?: InputMaybe<ActionUpdateManyWithoutGroupsInput>;
+  Action?: InputMaybe<ActionUpdateManyWithoutGroupInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -3687,16 +3736,16 @@ export type GroupUpsertWithWhereUniqueWithoutUsersInput = {
   where: GroupWhereUniqueInput;
 };
 
-export type GroupUpsertWithoutActionsInput = {
-  create: GroupCreateWithoutActionsInput;
-  update: GroupUpdateWithoutActionsInput;
+export type GroupUpsertWithoutActionInput = {
+  create: GroupCreateWithoutActionInput;
+  update: GroupUpdateWithoutActionInput;
 };
 
 export type GroupWhereInput = {
   AND?: InputMaybe<Array<GroupWhereInput>>;
+  Action?: InputMaybe<ActionListRelationFilter>;
   NOT?: InputMaybe<Array<GroupWhereInput>>;
   OR?: InputMaybe<Array<GroupWhereInput>>;
-  actions?: InputMaybe<ActionListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   description?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
@@ -3759,6 +3808,7 @@ export type ImageCreateInput = {
   incident?: InputMaybe<IncidentCreateNestedOneWithoutImagesInput>;
   intel?: InputMaybe<IntelCreateNestedOneWithoutImageInput>;
   low?: InputMaybe<Scalars['String']>;
+  message?: InputMaybe<MessageCreateNestedOneWithoutImagesInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutImagesInput>;
   optimised?: InputMaybe<Scalars['String']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
@@ -3774,6 +3824,7 @@ export type ImageCreateManyIncidentInput = {
   fileNames?: InputMaybe<ImageCreatefileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
+  messageId?: InputMaybe<Scalars['String']>;
   optimised?: InputMaybe<Scalars['String']>;
   schemeId: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -3787,6 +3838,26 @@ export type ImageCreateManyIncidentInputEnvelope = {
   skipDuplicates?: InputMaybe<Scalars['Boolean']>;
 };
 
+export type ImageCreateManyMessageInput = {
+  card?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
+  id?: InputMaybe<Scalars['String']>;
+  incidentId?: InputMaybe<Scalars['String']>;
+  low?: InputMaybe<Scalars['String']>;
+  optimised?: InputMaybe<Scalars['String']>;
+  schemeId: Scalars['String'];
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploaded?: InputMaybe<Scalars['Boolean']>;
+  uploadedById: Scalars['String'];
+  url?: InputMaybe<Scalars['String']>;
+};
+
+export type ImageCreateManyMessageInputEnvelope = {
+  data?: InputMaybe<Array<ImageCreateManyMessageInput>>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
 export type ImageCreateManySchemeInput = {
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -3794,6 +3865,7 @@ export type ImageCreateManySchemeInput = {
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
+  messageId?: InputMaybe<Scalars['String']>;
   optimised?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
@@ -3813,6 +3885,7 @@ export type ImageCreateManyUploadedByInput = {
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   low?: InputMaybe<Scalars['String']>;
+  messageId?: InputMaybe<Scalars['String']>;
   optimised?: InputMaybe<Scalars['String']>;
   schemeId: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -3830,6 +3903,13 @@ export type ImageCreateNestedManyWithoutIncidentInput = {
   connectOrCreate?: InputMaybe<Array<ImageCreateOrConnectWithoutIncidentInput>>;
   create?: InputMaybe<Array<ImageCreateWithoutIncidentInput>>;
   createMany?: InputMaybe<ImageCreateManyIncidentInputEnvelope>;
+};
+
+export type ImageCreateNestedManyWithoutMessageInput = {
+  connect?: InputMaybe<Array<ImageWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<ImageCreateOrConnectWithoutMessageInput>>;
+  create?: InputMaybe<Array<ImageCreateWithoutMessageInput>>;
+  createMany?: InputMaybe<ImageCreateManyMessageInputEnvelope>;
 };
 
 export type ImageCreateNestedManyWithoutOffendersInput = {
@@ -3890,6 +3970,11 @@ export type ImageCreateOrConnectWithoutIntelInput = {
   where: ImageWhereUniqueInput;
 };
 
+export type ImageCreateOrConnectWithoutMessageInput = {
+  create: ImageCreateWithoutMessageInput;
+  where: ImageWhereUniqueInput;
+};
+
 export type ImageCreateOrConnectWithoutOffendersInput = {
   create: ImageCreateWithoutOffendersInput;
   where: ImageWhereUniqueInput;
@@ -3914,6 +3999,7 @@ export type ImageCreateWithoutActionsInput = {
   incident?: InputMaybe<IncidentCreateNestedOneWithoutImagesInput>;
   intel?: InputMaybe<IntelCreateNestedOneWithoutImageInput>;
   low?: InputMaybe<Scalars['String']>;
+  message?: InputMaybe<MessageCreateNestedOneWithoutImagesInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutImagesInput>;
   optimised?: InputMaybe<Scalars['String']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
@@ -3932,6 +4018,7 @@ export type ImageCreateWithoutIncidentInput = {
   id?: InputMaybe<Scalars['String']>;
   intel?: InputMaybe<IntelCreateNestedOneWithoutImageInput>;
   low?: InputMaybe<Scalars['String']>;
+  message?: InputMaybe<MessageCreateNestedOneWithoutImagesInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutImagesInput>;
   optimised?: InputMaybe<Scalars['String']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
@@ -3950,6 +4037,26 @@ export type ImageCreateWithoutIntelInput = {
   fileNames?: InputMaybe<ImageCreatefileNamesInput>;
   id?: InputMaybe<Scalars['String']>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutImagesInput>;
+  low?: InputMaybe<Scalars['String']>;
+  message?: InputMaybe<MessageCreateNestedOneWithoutImagesInput>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutImagesInput>;
+  optimised?: InputMaybe<Scalars['String']>;
+  scheme: SchemeCreateNestedOneWithoutImagesInput;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploaded?: InputMaybe<Scalars['Boolean']>;
+  uploadedBy: UserCreateNestedOneWithoutImagesInput;
+  url?: InputMaybe<Scalars['String']>;
+};
+
+export type ImageCreateWithoutMessageInput = {
+  Scheme?: InputMaybe<SchemeCreateNestedManyWithoutLogoInput>;
+  actions?: InputMaybe<ActionCreateNestedManyWithoutImagesInput>;
+  card?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
+  id?: InputMaybe<Scalars['String']>;
+  incident?: InputMaybe<IncidentCreateNestedOneWithoutImagesInput>;
+  intel?: InputMaybe<IntelCreateNestedOneWithoutImageInput>;
   low?: InputMaybe<Scalars['String']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutImagesInput>;
   optimised?: InputMaybe<Scalars['String']>;
@@ -3970,6 +4077,7 @@ export type ImageCreateWithoutOffendersInput = {
   incident?: InputMaybe<IncidentCreateNestedOneWithoutImagesInput>;
   intel?: InputMaybe<IntelCreateNestedOneWithoutImageInput>;
   low?: InputMaybe<Scalars['String']>;
+  message?: InputMaybe<MessageCreateNestedOneWithoutImagesInput>;
   optimised?: InputMaybe<Scalars['String']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -3987,6 +4095,7 @@ export type ImageCreateWithoutSchemeInput = {
   incident?: InputMaybe<IncidentCreateNestedOneWithoutImagesInput>;
   intel?: InputMaybe<IntelCreateNestedOneWithoutImageInput>;
   low?: InputMaybe<Scalars['String']>;
+  message?: InputMaybe<MessageCreateNestedOneWithoutImagesInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutImagesInput>;
   optimised?: InputMaybe<Scalars['String']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
@@ -4006,6 +4115,7 @@ export type ImageCreateWithoutUploadedByInput = {
   incident?: InputMaybe<IncidentCreateNestedOneWithoutImagesInput>;
   intel?: InputMaybe<IntelCreateNestedOneWithoutImageInput>;
   low?: InputMaybe<Scalars['String']>;
+  message?: InputMaybe<MessageCreateNestedOneWithoutImagesInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutImagesInput>;
   optimised?: InputMaybe<Scalars['String']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
@@ -4044,6 +4154,8 @@ export type ImageOrderByWithRelationInput = {
   incidentId?: InputMaybe<SortOrder>;
   intel?: InputMaybe<IntelOrderByWithRelationInput>;
   low?: InputMaybe<SortOrder>;
+  message?: InputMaybe<MessageOrderByWithRelationInput>;
+  messageId?: InputMaybe<SortOrder>;
   offenders?: InputMaybe<OffenderOrderByRelationAggregateInput>;
   optimised?: InputMaybe<SortOrder>;
   scheme?: InputMaybe<SchemeOrderByWithRelationInput>;
@@ -4065,6 +4177,7 @@ export type ImageScalarWhereInput = {
   id?: InputMaybe<StringFilter>;
   incidentId?: InputMaybe<StringNullableFilter>;
   low?: InputMaybe<StringNullableFilter>;
+  messageId?: InputMaybe<StringNullableFilter>;
   optimised?: InputMaybe<StringNullableFilter>;
   schemeId?: InputMaybe<StringFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -4083,6 +4196,7 @@ export type ImageUpdateInput = {
   incident?: InputMaybe<IncidentUpdateOneWithoutImagesInput>;
   intel?: InputMaybe<IntelUpdateOneWithoutImageInput>;
   low?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  message?: InputMaybe<MessageUpdateOneWithoutImagesInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutImagesInput>;
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesInput>;
@@ -4105,6 +4219,11 @@ export type ImageUpdateManyMutationInput = {
 };
 
 export type ImageUpdateManyWithWhereWithoutIncidentInput = {
+  data: ImageUpdateManyMutationInput;
+  where: ImageScalarWhereInput;
+};
+
+export type ImageUpdateManyWithWhereWithoutMessageInput = {
   data: ImageUpdateManyMutationInput;
   where: ImageScalarWhereInput;
 };
@@ -4137,6 +4256,20 @@ export type ImageUpdateManyWithoutIncidentInput = {
   updateMany?: InputMaybe<Array<ImageUpdateManyWithWhereWithoutIncidentInput>>;
   upload?: InputMaybe<Array<InputMaybe<UploadIncidentImage>>>;
   upsert?: InputMaybe<Array<ImageUpsertWithWhereUniqueWithoutIncidentInput>>;
+};
+
+export type ImageUpdateManyWithoutMessageInput = {
+  connect?: InputMaybe<Array<ImageWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<ImageCreateOrConnectWithoutMessageInput>>;
+  create?: InputMaybe<Array<ImageCreateWithoutMessageInput>>;
+  createMany?: InputMaybe<ImageCreateManyMessageInputEnvelope>;
+  delete?: InputMaybe<Array<ImageWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<ImageScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<ImageWhereUniqueInput>>;
+  set?: InputMaybe<Array<ImageWhereUniqueInput>>;
+  update?: InputMaybe<Array<ImageUpdateWithWhereUniqueWithoutMessageInput>>;
+  updateMany?: InputMaybe<Array<ImageUpdateManyWithWhereWithoutMessageInput>>;
+  upsert?: InputMaybe<Array<ImageUpsertWithWhereUniqueWithoutMessageInput>>;
 };
 
 export type ImageUpdateManyWithoutOffendersInput = {
@@ -4223,6 +4356,11 @@ export type ImageUpdateWithWhereUniqueWithoutIncidentInput = {
   where: ImageWhereUniqueInput;
 };
 
+export type ImageUpdateWithWhereUniqueWithoutMessageInput = {
+  data: ImageUpdateWithoutMessageInput;
+  where: ImageWhereUniqueInput;
+};
+
 export type ImageUpdateWithWhereUniqueWithoutOffendersInput = {
   data: ImageUpdateWithoutOffendersInput;
   where: ImageWhereUniqueInput;
@@ -4247,6 +4385,7 @@ export type ImageUpdateWithoutActionsInput = {
   incident?: InputMaybe<IncidentUpdateOneWithoutImagesInput>;
   intel?: InputMaybe<IntelUpdateOneWithoutImageInput>;
   low?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  message?: InputMaybe<MessageUpdateOneWithoutImagesInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutImagesInput>;
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesInput>;
@@ -4265,6 +4404,7 @@ export type ImageUpdateWithoutIncidentInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   intel?: InputMaybe<IntelUpdateOneWithoutImageInput>;
   low?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  message?: InputMaybe<MessageUpdateOneWithoutImagesInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutImagesInput>;
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesInput>;
@@ -4282,6 +4422,26 @@ export type ImageUpdateWithoutIntelInput = {
   fileNames?: InputMaybe<ImageUpdatefileNamesInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutImagesInput>;
+  low?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  message?: InputMaybe<MessageUpdateOneWithoutImagesInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutImagesInput>;
+  optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploaded?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  uploadedBy?: InputMaybe<UserUpdateOneRequiredWithoutImagesInput>;
+  url?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+};
+
+export type ImageUpdateWithoutMessageInput = {
+  Scheme?: InputMaybe<SchemeUpdateManyWithoutLogoInput>;
+  actions?: InputMaybe<ActionUpdateManyWithoutImagesInput>;
+  card?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  fileNames?: InputMaybe<ImageUpdatefileNamesInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  incident?: InputMaybe<IncidentUpdateOneWithoutImagesInput>;
+  intel?: InputMaybe<IntelUpdateOneWithoutImageInput>;
   low?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutImagesInput>;
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -4302,6 +4462,7 @@ export type ImageUpdateWithoutOffendersInput = {
   incident?: InputMaybe<IncidentUpdateOneWithoutImagesInput>;
   intel?: InputMaybe<IntelUpdateOneWithoutImageInput>;
   low?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  message?: InputMaybe<MessageUpdateOneWithoutImagesInput>;
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -4319,6 +4480,7 @@ export type ImageUpdateWithoutSchemeInput = {
   incident?: InputMaybe<IncidentUpdateOneWithoutImagesInput>;
   intel?: InputMaybe<IntelUpdateOneWithoutImageInput>;
   low?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  message?: InputMaybe<MessageUpdateOneWithoutImagesInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutImagesInput>;
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesInput>;
@@ -4338,6 +4500,7 @@ export type ImageUpdateWithoutUploadedByInput = {
   incident?: InputMaybe<IncidentUpdateOneWithoutImagesInput>;
   intel?: InputMaybe<IntelUpdateOneWithoutImageInput>;
   low?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  message?: InputMaybe<MessageUpdateOneWithoutImagesInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutImagesInput>;
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesInput>;
@@ -4354,6 +4517,12 @@ export type ImageUpdatefileNamesInput = {
 export type ImageUpsertWithWhereUniqueWithoutIncidentInput = {
   create: ImageCreateWithoutIncidentInput;
   update: ImageUpdateWithoutIncidentInput;
+  where: ImageWhereUniqueInput;
+};
+
+export type ImageUpsertWithWhereUniqueWithoutMessageInput = {
+  create: ImageCreateWithoutMessageInput;
+  update: ImageUpdateWithoutMessageInput;
   where: ImageWhereUniqueInput;
 };
 
@@ -4404,6 +4573,8 @@ export type ImageWhereInput = {
   incidentId?: InputMaybe<StringNullableFilter>;
   intel?: InputMaybe<IntelWhereInput>;
   low?: InputMaybe<StringNullableFilter>;
+  message?: InputMaybe<MessageWhereInput>;
+  messageId?: InputMaybe<StringNullableFilter>;
   offenders?: InputMaybe<OffenderListRelationFilter>;
   optimised?: InputMaybe<StringNullableFilter>;
   scheme?: InputMaybe<SchemeWhereInput>;
@@ -4515,7 +4686,9 @@ export type IncidentCreateInput = {
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutIncidentInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
@@ -4523,6 +4696,7 @@ export type IncidentCreateInput = {
   time: Scalars['DateTime'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
+  value?: InputMaybe<Scalars['Float']>;
 };
 
 export type IncidentCreateManyCreatedByInput = {
@@ -4531,12 +4705,14 @@ export type IncidentCreateManyCreatedByInput = {
   date: Scalars['DateTime'];
   description: Scalars['String'];
   id?: InputMaybe<Scalars['String']>;
+  recoveredValue?: InputMaybe<Scalars['Float']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   schemeId: Scalars['String'];
   subject?: InputMaybe<Scalars['String']>;
   time: Scalars['DateTime'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
+  value?: InputMaybe<Scalars['Float']>;
 };
 
 export type IncidentCreateManyCreatedByInputEnvelope = {
@@ -4551,11 +4727,13 @@ export type IncidentCreateManySchemeInput = {
   date: Scalars['DateTime'];
   description: Scalars['String'];
   id?: InputMaybe<Scalars['String']>;
+  recoveredValue?: InputMaybe<Scalars['Float']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   time: Scalars['DateTime'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
+  value?: InputMaybe<Scalars['Float']>;
 };
 
 export type IncidentCreateManySchemeInputEnvelope = {
@@ -4586,6 +4764,14 @@ export type IncidentCreateNestedManyWithoutGroupsInput = {
     Array<IncidentCreateOrConnectWithoutGroupsInput>
   >;
   create?: InputMaybe<Array<IncidentCreateWithoutGroupsInput>>;
+};
+
+export type IncidentCreateNestedManyWithoutMessagesInput = {
+  connect?: InputMaybe<Array<IncidentWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<IncidentCreateOrConnectWithoutMessagesInput>
+  >;
+  create?: InputMaybe<Array<IncidentCreateWithoutMessagesInput>>;
 };
 
 export type IncidentCreateNestedManyWithoutOffendersInput = {
@@ -4670,6 +4856,11 @@ export type IncidentCreateOrConnectWithoutLocationInput = {
   where: IncidentWhereUniqueInput;
 };
 
+export type IncidentCreateOrConnectWithoutMessagesInput = {
+  create: IncidentCreateWithoutMessagesInput;
+  where: IncidentWhereUniqueInput;
+};
+
 export type IncidentCreateOrConnectWithoutOffendersInput = {
   create: IncidentCreateWithoutOffendersInput;
   where: IncidentWhereUniqueInput;
@@ -4697,7 +4888,9 @@ export type IncidentCreateWithoutActionsInput = {
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutIncidentInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
@@ -4705,6 +4898,7 @@ export type IncidentCreateWithoutActionsInput = {
   time: Scalars['DateTime'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
+  value?: InputMaybe<Scalars['Float']>;
 };
 
 export type IncidentCreateWithoutCreatedByInput = {
@@ -4719,7 +4913,9 @@ export type IncidentCreateWithoutCreatedByInput = {
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutIncidentInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
@@ -4727,6 +4923,7 @@ export type IncidentCreateWithoutCreatedByInput = {
   time: Scalars['DateTime'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
+  value?: InputMaybe<Scalars['Float']>;
 };
 
 export type IncidentCreateWithoutCrimeTypesInput = {
@@ -4741,7 +4938,9 @@ export type IncidentCreateWithoutCrimeTypesInput = {
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutIncidentInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
@@ -4749,6 +4948,7 @@ export type IncidentCreateWithoutCrimeTypesInput = {
   time: Scalars['DateTime'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
+  value?: InputMaybe<Scalars['Float']>;
 };
 
 export type IncidentCreateWithoutGroupsInput = {
@@ -4763,7 +4963,9 @@ export type IncidentCreateWithoutGroupsInput = {
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutIncidentInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
@@ -4771,6 +4973,7 @@ export type IncidentCreateWithoutGroupsInput = {
   time: Scalars['DateTime'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
+  value?: InputMaybe<Scalars['Float']>;
 };
 
 export type IncidentCreateWithoutImagesInput = {
@@ -4785,7 +4988,9 @@ export type IncidentCreateWithoutImagesInput = {
   id?: InputMaybe<Scalars['String']>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutIncidentInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
@@ -4793,6 +4998,7 @@ export type IncidentCreateWithoutImagesInput = {
   time: Scalars['DateTime'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
+  value?: InputMaybe<Scalars['Float']>;
 };
 
 export type IncidentCreateWithoutIntelInput = {
@@ -4807,7 +5013,9 @@ export type IncidentCreateWithoutIntelInput = {
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
@@ -4815,6 +5023,7 @@ export type IncidentCreateWithoutIntelInput = {
   time: Scalars['DateTime'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
+  value?: InputMaybe<Scalars['Float']>;
 };
 
 export type IncidentCreateWithoutLocationInput = {
@@ -4829,7 +5038,9 @@ export type IncidentCreateWithoutLocationInput = {
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutIncidentInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
@@ -4837,6 +5048,32 @@ export type IncidentCreateWithoutLocationInput = {
   time: Scalars['DateTime'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
+  value?: InputMaybe<Scalars['Float']>;
+};
+
+export type IncidentCreateWithoutMessagesInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutIncidentInput>;
+  approved?: InputMaybe<Scalars['Boolean']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdBy: UserCreateNestedOneWithoutIncidentsInput;
+  crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
+  date: Scalars['DateTime'];
+  description: Scalars['String'];
+  groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
+  intel?: InputMaybe<IntelCreateNestedManyWithoutIncidentInput>;
+  location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<Scalars['Float']>;
+  recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
+  scheme: SchemeCreateNestedOneWithoutIncidentsInput;
+  subject?: InputMaybe<Scalars['String']>;
+  time: Scalars['DateTime'];
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploaded?: InputMaybe<Scalars['Boolean']>;
+  value?: InputMaybe<Scalars['Float']>;
 };
 
 export type IncidentCreateWithoutOffendersInput = {
@@ -4852,6 +5089,8 @@ export type IncidentCreateWithoutOffendersInput = {
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutIncidentInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
@@ -4859,6 +5098,7 @@ export type IncidentCreateWithoutOffendersInput = {
   time: Scalars['DateTime'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
+  value?: InputMaybe<Scalars['Float']>;
 };
 
 export type IncidentCreateWithoutRecycleBinInput = {
@@ -4874,13 +5114,16 @@ export type IncidentCreateWithoutRecycleBinInput = {
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutIncidentInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<Scalars['Float']>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   scheme: SchemeCreateNestedOneWithoutIncidentsInput;
   subject?: InputMaybe<Scalars['String']>;
   time: Scalars['DateTime'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
+  value?: InputMaybe<Scalars['Float']>;
 };
 
 export type IncidentCreateWithoutSchemeInput = {
@@ -4896,13 +5139,16 @@ export type IncidentCreateWithoutSchemeInput = {
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutIncidentInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<Scalars['Float']>;
   recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutIncidentInput>;
   recycled?: InputMaybe<Scalars['Boolean']>;
   subject?: InputMaybe<Scalars['String']>;
   time: Scalars['DateTime'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
+  value?: InputMaybe<Scalars['Float']>;
 };
 
 export type IncidentListRelationFilter = {
@@ -4934,7 +5180,9 @@ export type IncidentOrderByWithRelationInput = {
   images?: InputMaybe<ImageOrderByRelationAggregateInput>;
   intel?: InputMaybe<IntelOrderByRelationAggregateInput>;
   location?: InputMaybe<AddressOrderByWithRelationInput>;
+  messages?: InputMaybe<MessageOrderByRelationAggregateInput>;
   offenders?: InputMaybe<OffenderOrderByRelationAggregateInput>;
+  recoveredValue?: InputMaybe<SortOrder>;
   recycleBin?: InputMaybe<RecycledItemOrderByWithRelationInput>;
   recycled?: InputMaybe<SortOrder>;
   scheme?: InputMaybe<SchemeOrderByWithRelationInput>;
@@ -4943,6 +5191,7 @@ export type IncidentOrderByWithRelationInput = {
   time?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
   uploaded?: InputMaybe<SortOrder>;
+  value?: InputMaybe<SortOrder>;
 };
 
 export type IncidentScalarWhereInput = {
@@ -4955,12 +5204,14 @@ export type IncidentScalarWhereInput = {
   date?: InputMaybe<DateTimeFilter>;
   description?: InputMaybe<StringFilter>;
   id?: InputMaybe<StringFilter>;
+  recoveredValue?: InputMaybe<FloatNullableFilter>;
   recycled?: InputMaybe<BoolFilter>;
   schemeId?: InputMaybe<StringFilter>;
   subject?: InputMaybe<StringNullableFilter>;
   time?: InputMaybe<DateTimeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   uploaded?: InputMaybe<BoolNullableFilter>;
+  value?: InputMaybe<FloatNullableFilter>;
 };
 
 export type IncidentUpdateInput = {
@@ -4976,7 +5227,9 @@ export type IncidentUpdateInput = {
   images?: InputMaybe<ImageUpdateManyWithoutIncidentInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutIncidentInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsInput>;
@@ -4984,6 +5237,7 @@ export type IncidentUpdateInput = {
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateManyMutationInput = {
@@ -4992,11 +5246,13 @@ export type IncidentUpdateManyMutationInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateManyWithWhereWithoutCreatedByInput = {
@@ -5010,6 +5266,11 @@ export type IncidentUpdateManyWithWhereWithoutCrimeTypesInput = {
 };
 
 export type IncidentUpdateManyWithWhereWithoutGroupsInput = {
+  data: IncidentUpdateManyMutationInput;
+  where: IncidentScalarWhereInput;
+};
+
+export type IncidentUpdateManyWithWhereWithoutMessagesInput = {
   data: IncidentUpdateManyMutationInput;
   where: IncidentScalarWhereInput;
 };
@@ -5080,6 +5341,23 @@ export type IncidentUpdateManyWithoutGroupsInput = {
   update?: InputMaybe<Array<IncidentUpdateWithWhereUniqueWithoutGroupsInput>>;
   updateMany?: InputMaybe<Array<IncidentUpdateManyWithWhereWithoutGroupsInput>>;
   upsert?: InputMaybe<Array<IncidentUpsertWithWhereUniqueWithoutGroupsInput>>;
+};
+
+export type IncidentUpdateManyWithoutMessagesInput = {
+  connect?: InputMaybe<Array<IncidentWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<IncidentCreateOrConnectWithoutMessagesInput>
+  >;
+  create?: InputMaybe<Array<IncidentCreateWithoutMessagesInput>>;
+  delete?: InputMaybe<Array<IncidentWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<IncidentScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<IncidentWhereUniqueInput>>;
+  set?: InputMaybe<Array<IncidentWhereUniqueInput>>;
+  update?: InputMaybe<Array<IncidentUpdateWithWhereUniqueWithoutMessagesInput>>;
+  updateMany?: InputMaybe<
+    Array<IncidentUpdateManyWithWhereWithoutMessagesInput>
+  >;
+  upsert?: InputMaybe<Array<IncidentUpsertWithWhereUniqueWithoutMessagesInput>>;
 };
 
 export type IncidentUpdateManyWithoutOffendersInput = {
@@ -5184,6 +5462,11 @@ export type IncidentUpdateWithWhereUniqueWithoutGroupsInput = {
   where: IncidentWhereUniqueInput;
 };
 
+export type IncidentUpdateWithWhereUniqueWithoutMessagesInput = {
+  data: IncidentUpdateWithoutMessagesInput;
+  where: IncidentWhereUniqueInput;
+};
+
 export type IncidentUpdateWithWhereUniqueWithoutOffendersInput = {
   data: IncidentUpdateWithoutOffendersInput;
   where: IncidentWhereUniqueInput;
@@ -5206,7 +5489,9 @@ export type IncidentUpdateWithoutActionsInput = {
   images?: InputMaybe<ImageUpdateManyWithoutIncidentInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutIncidentInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsInput>;
@@ -5214,6 +5499,7 @@ export type IncidentUpdateWithoutActionsInput = {
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutCreatedByInput = {
@@ -5228,7 +5514,9 @@ export type IncidentUpdateWithoutCreatedByInput = {
   images?: InputMaybe<ImageUpdateManyWithoutIncidentInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutIncidentInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsInput>;
@@ -5236,6 +5524,7 @@ export type IncidentUpdateWithoutCreatedByInput = {
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutCrimeTypesInput = {
@@ -5250,7 +5539,9 @@ export type IncidentUpdateWithoutCrimeTypesInput = {
   images?: InputMaybe<ImageUpdateManyWithoutIncidentInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutIncidentInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsInput>;
@@ -5258,6 +5549,7 @@ export type IncidentUpdateWithoutCrimeTypesInput = {
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutGroupsInput = {
@@ -5272,7 +5564,9 @@ export type IncidentUpdateWithoutGroupsInput = {
   images?: InputMaybe<ImageUpdateManyWithoutIncidentInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutIncidentInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsInput>;
@@ -5280,6 +5574,7 @@ export type IncidentUpdateWithoutGroupsInput = {
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutImagesInput = {
@@ -5294,7 +5589,9 @@ export type IncidentUpdateWithoutImagesInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutIncidentInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsInput>;
@@ -5302,6 +5599,7 @@ export type IncidentUpdateWithoutImagesInput = {
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutIntelInput = {
@@ -5316,7 +5614,9 @@ export type IncidentUpdateWithoutIntelInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsInput>;
@@ -5324,6 +5624,7 @@ export type IncidentUpdateWithoutIntelInput = {
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutLocationInput = {
@@ -5338,7 +5639,9 @@ export type IncidentUpdateWithoutLocationInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutIncidentInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsInput>;
@@ -5346,6 +5649,32 @@ export type IncidentUpdateWithoutLocationInput = {
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
+};
+
+export type IncidentUpdateWithoutMessagesInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutIncidentInput>;
+  approved?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdBy?: InputMaybe<UserUpdateOneRequiredWithoutIncidentsInput>;
+  crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsInput>;
+  date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<StringFieldUpdateOperationsInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutIncidentsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutIncidentInput>;
+  intel?: InputMaybe<IntelUpdateManyWithoutIncidentInput>;
+  location?: InputMaybe<AddressUpdateOneWithoutIncidentInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
+  recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsInput>;
+  subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutOffendersInput = {
@@ -5361,6 +5690,8 @@ export type IncidentUpdateWithoutOffendersInput = {
   images?: InputMaybe<ImageUpdateManyWithoutIncidentInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutIncidentInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsInput>;
@@ -5368,6 +5699,7 @@ export type IncidentUpdateWithoutOffendersInput = {
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutRecycleBinInput = {
@@ -5383,13 +5715,16 @@ export type IncidentUpdateWithoutRecycleBinInput = {
   images?: InputMaybe<ImageUpdateManyWithoutIncidentInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutIncidentInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutIncidentsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutSchemeInput = {
@@ -5405,13 +5740,16 @@ export type IncidentUpdateWithoutSchemeInput = {
   images?: InputMaybe<ImageUpdateManyWithoutIncidentInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutIncidentInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutIncidentsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsInput>;
+  recoveredValue?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutIncidentInput>;
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subject?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   time?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -5429,6 +5767,12 @@ export type IncidentUpsertWithWhereUniqueWithoutCrimeTypesInput = {
 export type IncidentUpsertWithWhereUniqueWithoutGroupsInput = {
   create: IncidentCreateWithoutGroupsInput;
   update: IncidentUpdateWithoutGroupsInput;
+  where: IncidentWhereUniqueInput;
+};
+
+export type IncidentUpsertWithWhereUniqueWithoutMessagesInput = {
+  create: IncidentCreateWithoutMessagesInput;
+  update: IncidentUpdateWithoutMessagesInput;
   where: IncidentWhereUniqueInput;
 };
 
@@ -5486,7 +5830,9 @@ export type IncidentWhereInput = {
   images?: InputMaybe<ImageListRelationFilter>;
   intel?: InputMaybe<IntelListRelationFilter>;
   location?: InputMaybe<AddressWhereInput>;
+  messages?: InputMaybe<MessageListRelationFilter>;
   offenders?: InputMaybe<OffenderListRelationFilter>;
+  recoveredValue?: InputMaybe<FloatNullableFilter>;
   recycleBin?: InputMaybe<RecycledItemWhereInput>;
   recycled?: InputMaybe<BoolFilter>;
   scheme?: InputMaybe<SchemeWhereInput>;
@@ -5495,6 +5841,7 @@ export type IncidentWhereInput = {
   time?: InputMaybe<DateTimeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   uploaded?: InputMaybe<BoolNullableFilter>;
+  value?: InputMaybe<FloatNullableFilter>;
 };
 
 export type IncidentWhereUniqueInput = {
@@ -6133,6 +6480,9 @@ export type Message = {
   daysAgo?: Maybe<Scalars['String']>;
   from: User;
   id: Scalars['String'];
+  images: Array<Image>;
+  incidents: Array<Incident>;
+  offenders: Array<Offender>;
   scheme: Scheme;
   sent?: Maybe<Scalars['Boolean']>;
   updatedAt: Scalars['DateTime'];
@@ -6147,6 +6497,27 @@ export type MessageActionsArgs = {
   where?: InputMaybe<ActionWhereInput>;
 };
 
+export type MessageImagesArgs = {
+  after?: InputMaybe<ImageWhereUniqueInput>;
+  before?: InputMaybe<ImageWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type MessageIncidentsArgs = {
+  after?: InputMaybe<IncidentWhereUniqueInput>;
+  before?: InputMaybe<IncidentWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type MessageOffendersArgs = {
+  after?: InputMaybe<OffenderWhereUniqueInput>;
+  before?: InputMaybe<OffenderWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
 export type MessageCreateInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutMessageInput>;
   chat: ChatCreateNestedOneWithoutMessagesInput;
@@ -6154,6 +6525,10 @@ export type MessageCreateInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   from: UserCreateNestedOneWithoutMessagesInput;
   id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutMessageInput>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutMessagesInput>;
+  mentions?: InputMaybe<UserCreateNestedManyWithoutMessageMentionsInput>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutMessagesInput>;
   scheme: SchemeCreateNestedOneWithoutMessagesInput;
   sent?: InputMaybe<Scalars['Boolean']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -6218,6 +6593,30 @@ export type MessageCreateNestedManyWithoutFromInput = {
   createMany?: InputMaybe<MessageCreateManyFromInputEnvelope>;
 };
 
+export type MessageCreateNestedManyWithoutIncidentsInput = {
+  connect?: InputMaybe<Array<MessageWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<MessageCreateOrConnectWithoutIncidentsInput>
+  >;
+  create?: InputMaybe<Array<MessageCreateWithoutIncidentsInput>>;
+};
+
+export type MessageCreateNestedManyWithoutMentionsInput = {
+  connect?: InputMaybe<Array<MessageWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<MessageCreateOrConnectWithoutMentionsInput>
+  >;
+  create?: InputMaybe<Array<MessageCreateWithoutMentionsInput>>;
+};
+
+export type MessageCreateNestedManyWithoutOffendersInput = {
+  connect?: InputMaybe<Array<MessageWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<MessageCreateOrConnectWithoutOffendersInput>
+  >;
+  create?: InputMaybe<Array<MessageCreateWithoutOffendersInput>>;
+};
+
 export type MessageCreateNestedManyWithoutSchemeInput = {
   connect?: InputMaybe<Array<MessageWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<Array<MessageCreateOrConnectWithoutSchemeInput>>;
@@ -6229,6 +6628,12 @@ export type MessageCreateNestedOneWithoutActionsInput = {
   connect?: InputMaybe<MessageWhereUniqueInput>;
   connectOrCreate?: InputMaybe<MessageCreateOrConnectWithoutActionsInput>;
   create?: InputMaybe<MessageCreateWithoutActionsInput>;
+};
+
+export type MessageCreateNestedOneWithoutImagesInput = {
+  connect?: InputMaybe<MessageWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<MessageCreateOrConnectWithoutImagesInput>;
+  create?: InputMaybe<MessageCreateWithoutImagesInput>;
 };
 
 export type MessageCreateOrConnectWithoutActionsInput = {
@@ -6246,6 +6651,26 @@ export type MessageCreateOrConnectWithoutFromInput = {
   where: MessageWhereUniqueInput;
 };
 
+export type MessageCreateOrConnectWithoutImagesInput = {
+  create: MessageCreateWithoutImagesInput;
+  where: MessageWhereUniqueInput;
+};
+
+export type MessageCreateOrConnectWithoutIncidentsInput = {
+  create: MessageCreateWithoutIncidentsInput;
+  where: MessageWhereUniqueInput;
+};
+
+export type MessageCreateOrConnectWithoutMentionsInput = {
+  create: MessageCreateWithoutMentionsInput;
+  where: MessageWhereUniqueInput;
+};
+
+export type MessageCreateOrConnectWithoutOffendersInput = {
+  create: MessageCreateWithoutOffendersInput;
+  where: MessageWhereUniqueInput;
+};
+
 export type MessageCreateOrConnectWithoutSchemeInput = {
   create: MessageCreateWithoutSchemeInput;
   where: MessageWhereUniqueInput;
@@ -6257,6 +6682,10 @@ export type MessageCreateWithoutActionsInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   from: UserCreateNestedOneWithoutMessagesInput;
   id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<Array<InputMaybe<UrlImage>>>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutMessagesInput>;
+  mentions?: InputMaybe<UserCreateNestedManyWithoutMessageMentionsInput>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutMessagesInput>;
   scheme: SchemeCreateNestedOneWithoutMessagesInput;
   sent?: InputMaybe<Scalars['Boolean']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -6268,6 +6697,10 @@ export type MessageCreateWithoutChatInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   from: UserCreateNestedOneWithoutMessagesInput;
   id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutMessageInput>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutMessagesInput>;
+  mentions?: InputMaybe<UserCreateNestedManyWithoutMessageMentionsInput>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutMessagesInput>;
   scheme: SchemeCreateNestedOneWithoutMessagesInput;
   sent?: InputMaybe<Scalars['Boolean']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -6279,6 +6712,70 @@ export type MessageCreateWithoutFromInput = {
   content: Scalars['String'];
   createdAt?: InputMaybe<Scalars['DateTime']>;
   id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutMessageInput>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutMessagesInput>;
+  mentions?: InputMaybe<UserCreateNestedManyWithoutMessageMentionsInput>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutMessagesInput>;
+  scheme: SchemeCreateNestedOneWithoutMessagesInput;
+  sent?: InputMaybe<Scalars['Boolean']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type MessageCreateWithoutImagesInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutMessageInput>;
+  chat: ChatCreateNestedOneWithoutMessagesInput;
+  content: Scalars['String'];
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  from: UserCreateNestedOneWithoutMessagesInput;
+  id?: InputMaybe<Scalars['String']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutMessagesInput>;
+  mentions?: InputMaybe<UserCreateNestedManyWithoutMessageMentionsInput>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutMessagesInput>;
+  scheme: SchemeCreateNestedOneWithoutMessagesInput;
+  sent?: InputMaybe<Scalars['Boolean']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type MessageCreateWithoutIncidentsInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutMessageInput>;
+  chat: ChatCreateNestedOneWithoutMessagesInput;
+  content: Scalars['String'];
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  from: UserCreateNestedOneWithoutMessagesInput;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutMessageInput>;
+  mentions?: InputMaybe<UserCreateNestedManyWithoutMessageMentionsInput>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutMessagesInput>;
+  scheme: SchemeCreateNestedOneWithoutMessagesInput;
+  sent?: InputMaybe<Scalars['Boolean']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type MessageCreateWithoutMentionsInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutMessageInput>;
+  chat: ChatCreateNestedOneWithoutMessagesInput;
+  content: Scalars['String'];
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  from: UserCreateNestedOneWithoutMessagesInput;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutMessageInput>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutMessagesInput>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutMessagesInput>;
+  scheme: SchemeCreateNestedOneWithoutMessagesInput;
+  sent?: InputMaybe<Scalars['Boolean']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type MessageCreateWithoutOffendersInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutMessageInput>;
+  chat: ChatCreateNestedOneWithoutMessagesInput;
+  content: Scalars['String'];
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  from: UserCreateNestedOneWithoutMessagesInput;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutMessageInput>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutMessagesInput>;
+  mentions?: InputMaybe<UserCreateNestedManyWithoutMessageMentionsInput>;
   scheme: SchemeCreateNestedOneWithoutMessagesInput;
   sent?: InputMaybe<Scalars['Boolean']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -6291,6 +6788,10 @@ export type MessageCreateWithoutSchemeInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   from: UserCreateNestedOneWithoutMessagesInput;
   id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutMessageInput>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutMessagesInput>;
+  mentions?: InputMaybe<UserCreateNestedManyWithoutMessageMentionsInput>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutMessagesInput>;
   sent?: InputMaybe<Scalars['Boolean']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -6314,6 +6815,10 @@ export type MessageOrderByWithRelationInput = {
   from?: InputMaybe<UserOrderByWithRelationInput>;
   fromId?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
+  images?: InputMaybe<ImageOrderByRelationAggregateInput>;
+  incidents?: InputMaybe<IncidentOrderByRelationAggregateInput>;
+  mentions?: InputMaybe<UserOrderByRelationAggregateInput>;
+  offenders?: InputMaybe<OffenderOrderByRelationAggregateInput>;
   scheme?: InputMaybe<SchemeOrderByWithRelationInput>;
   schemeId?: InputMaybe<SortOrder>;
   sent?: InputMaybe<SortOrder>;
@@ -6341,6 +6846,10 @@ export type MessageUpdateInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   from?: InputMaybe<UserUpdateOneRequiredWithoutMessagesInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutMessageInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutMessagesInput>;
+  mentions?: InputMaybe<UserUpdateManyWithoutMessageMentionsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutMessagesInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutMessagesInput>;
   sent?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -6360,6 +6869,21 @@ export type MessageUpdateManyWithWhereWithoutChatInput = {
 };
 
 export type MessageUpdateManyWithWhereWithoutFromInput = {
+  data: MessageUpdateManyMutationInput;
+  where: MessageScalarWhereInput;
+};
+
+export type MessageUpdateManyWithWhereWithoutIncidentsInput = {
+  data: MessageUpdateManyMutationInput;
+  where: MessageScalarWhereInput;
+};
+
+export type MessageUpdateManyWithWhereWithoutMentionsInput = {
+  data: MessageUpdateManyMutationInput;
+  where: MessageScalarWhereInput;
+};
+
+export type MessageUpdateManyWithWhereWithoutOffendersInput = {
   data: MessageUpdateManyMutationInput;
   where: MessageScalarWhereInput;
 };
@@ -6397,6 +6921,57 @@ export type MessageUpdateManyWithoutFromInput = {
   upsert?: InputMaybe<Array<MessageUpsertWithWhereUniqueWithoutFromInput>>;
 };
 
+export type MessageUpdateManyWithoutIncidentsInput = {
+  connect?: InputMaybe<Array<MessageWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<MessageCreateOrConnectWithoutIncidentsInput>
+  >;
+  create?: InputMaybe<Array<MessageCreateWithoutIncidentsInput>>;
+  delete?: InputMaybe<Array<MessageWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<MessageScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<MessageWhereUniqueInput>>;
+  set?: InputMaybe<Array<MessageWhereUniqueInput>>;
+  update?: InputMaybe<Array<MessageUpdateWithWhereUniqueWithoutIncidentsInput>>;
+  updateMany?: InputMaybe<
+    Array<MessageUpdateManyWithWhereWithoutIncidentsInput>
+  >;
+  upsert?: InputMaybe<Array<MessageUpsertWithWhereUniqueWithoutIncidentsInput>>;
+};
+
+export type MessageUpdateManyWithoutMentionsInput = {
+  connect?: InputMaybe<Array<MessageWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<MessageCreateOrConnectWithoutMentionsInput>
+  >;
+  create?: InputMaybe<Array<MessageCreateWithoutMentionsInput>>;
+  delete?: InputMaybe<Array<MessageWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<MessageScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<MessageWhereUniqueInput>>;
+  set?: InputMaybe<Array<MessageWhereUniqueInput>>;
+  update?: InputMaybe<Array<MessageUpdateWithWhereUniqueWithoutMentionsInput>>;
+  updateMany?: InputMaybe<
+    Array<MessageUpdateManyWithWhereWithoutMentionsInput>
+  >;
+  upsert?: InputMaybe<Array<MessageUpsertWithWhereUniqueWithoutMentionsInput>>;
+};
+
+export type MessageUpdateManyWithoutOffendersInput = {
+  connect?: InputMaybe<Array<MessageWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<MessageCreateOrConnectWithoutOffendersInput>
+  >;
+  create?: InputMaybe<Array<MessageCreateWithoutOffendersInput>>;
+  delete?: InputMaybe<Array<MessageWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<MessageScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<MessageWhereUniqueInput>>;
+  set?: InputMaybe<Array<MessageWhereUniqueInput>>;
+  update?: InputMaybe<Array<MessageUpdateWithWhereUniqueWithoutOffendersInput>>;
+  updateMany?: InputMaybe<
+    Array<MessageUpdateManyWithWhereWithoutOffendersInput>
+  >;
+  upsert?: InputMaybe<Array<MessageUpsertWithWhereUniqueWithoutOffendersInput>>;
+};
+
 export type MessageUpdateManyWithoutSchemeInput = {
   connect?: InputMaybe<Array<MessageWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<Array<MessageCreateOrConnectWithoutSchemeInput>>;
@@ -6421,6 +6996,16 @@ export type MessageUpdateOneWithoutActionsInput = {
   upsert?: InputMaybe<MessageUpsertWithoutActionsInput>;
 };
 
+export type MessageUpdateOneWithoutImagesInput = {
+  connect?: InputMaybe<MessageWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<MessageCreateOrConnectWithoutImagesInput>;
+  create?: InputMaybe<MessageCreateWithoutImagesInput>;
+  delete?: InputMaybe<Scalars['Boolean']>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+  update?: InputMaybe<MessageUpdateWithoutImagesInput>;
+  upsert?: InputMaybe<MessageUpsertWithoutImagesInput>;
+};
+
 export type MessageUpdateWithWhereUniqueWithoutChatInput = {
   data: MessageUpdateWithoutChatInput;
   where: MessageWhereUniqueInput;
@@ -6428,6 +7013,21 @@ export type MessageUpdateWithWhereUniqueWithoutChatInput = {
 
 export type MessageUpdateWithWhereUniqueWithoutFromInput = {
   data: MessageUpdateWithoutFromInput;
+  where: MessageWhereUniqueInput;
+};
+
+export type MessageUpdateWithWhereUniqueWithoutIncidentsInput = {
+  data: MessageUpdateWithoutIncidentsInput;
+  where: MessageWhereUniqueInput;
+};
+
+export type MessageUpdateWithWhereUniqueWithoutMentionsInput = {
+  data: MessageUpdateWithoutMentionsInput;
+  where: MessageWhereUniqueInput;
+};
+
+export type MessageUpdateWithWhereUniqueWithoutOffendersInput = {
+  data: MessageUpdateWithoutOffendersInput;
   where: MessageWhereUniqueInput;
 };
 
@@ -6442,6 +7042,10 @@ export type MessageUpdateWithoutActionsInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   from?: InputMaybe<UserUpdateOneRequiredWithoutMessagesInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutMessageInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutMessagesInput>;
+  mentions?: InputMaybe<UserUpdateManyWithoutMessageMentionsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutMessagesInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutMessagesInput>;
   sent?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -6453,6 +7057,10 @@ export type MessageUpdateWithoutChatInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   from?: InputMaybe<UserUpdateOneRequiredWithoutMessagesInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutMessageInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutMessagesInput>;
+  mentions?: InputMaybe<UserUpdateManyWithoutMessageMentionsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutMessagesInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutMessagesInput>;
   sent?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -6464,6 +7072,70 @@ export type MessageUpdateWithoutFromInput = {
   content?: InputMaybe<StringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutMessageInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutMessagesInput>;
+  mentions?: InputMaybe<UserUpdateManyWithoutMessageMentionsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutMessagesInput>;
+  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutMessagesInput>;
+  sent?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type MessageUpdateWithoutImagesInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutMessageInput>;
+  chat?: InputMaybe<ChatUpdateOneRequiredWithoutMessagesInput>;
+  content?: InputMaybe<StringFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  from?: InputMaybe<UserUpdateOneRequiredWithoutMessagesInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutMessagesInput>;
+  mentions?: InputMaybe<UserUpdateManyWithoutMessageMentionsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutMessagesInput>;
+  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutMessagesInput>;
+  sent?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type MessageUpdateWithoutIncidentsInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutMessageInput>;
+  chat?: InputMaybe<ChatUpdateOneRequiredWithoutMessagesInput>;
+  content?: InputMaybe<StringFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  from?: InputMaybe<UserUpdateOneRequiredWithoutMessagesInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutMessageInput>;
+  mentions?: InputMaybe<UserUpdateManyWithoutMessageMentionsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutMessagesInput>;
+  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutMessagesInput>;
+  sent?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type MessageUpdateWithoutMentionsInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutMessageInput>;
+  chat?: InputMaybe<ChatUpdateOneRequiredWithoutMessagesInput>;
+  content?: InputMaybe<StringFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  from?: InputMaybe<UserUpdateOneRequiredWithoutMessagesInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutMessageInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutMessagesInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutMessagesInput>;
+  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutMessagesInput>;
+  sent?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type MessageUpdateWithoutOffendersInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutMessageInput>;
+  chat?: InputMaybe<ChatUpdateOneRequiredWithoutMessagesInput>;
+  content?: InputMaybe<StringFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  from?: InputMaybe<UserUpdateOneRequiredWithoutMessagesInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutMessageInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutMessagesInput>;
+  mentions?: InputMaybe<UserUpdateManyWithoutMessageMentionsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutMessagesInput>;
   sent?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -6476,6 +7148,10 @@ export type MessageUpdateWithoutSchemeInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   from?: InputMaybe<UserUpdateOneRequiredWithoutMessagesInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutMessageInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutMessagesInput>;
+  mentions?: InputMaybe<UserUpdateManyWithoutMessageMentionsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutMessagesInput>;
   sent?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -6492,6 +7168,24 @@ export type MessageUpsertWithWhereUniqueWithoutFromInput = {
   where: MessageWhereUniqueInput;
 };
 
+export type MessageUpsertWithWhereUniqueWithoutIncidentsInput = {
+  create: MessageCreateWithoutIncidentsInput;
+  update: MessageUpdateWithoutIncidentsInput;
+  where: MessageWhereUniqueInput;
+};
+
+export type MessageUpsertWithWhereUniqueWithoutMentionsInput = {
+  create: MessageCreateWithoutMentionsInput;
+  update: MessageUpdateWithoutMentionsInput;
+  where: MessageWhereUniqueInput;
+};
+
+export type MessageUpsertWithWhereUniqueWithoutOffendersInput = {
+  create: MessageCreateWithoutOffendersInput;
+  update: MessageUpdateWithoutOffendersInput;
+  where: MessageWhereUniqueInput;
+};
+
 export type MessageUpsertWithWhereUniqueWithoutSchemeInput = {
   create: MessageCreateWithoutSchemeInput;
   update: MessageUpdateWithoutSchemeInput;
@@ -6501,6 +7195,11 @@ export type MessageUpsertWithWhereUniqueWithoutSchemeInput = {
 export type MessageUpsertWithoutActionsInput = {
   create: MessageCreateWithoutActionsInput;
   update: MessageUpdateWithoutActionsInput;
+};
+
+export type MessageUpsertWithoutImagesInput = {
+  create: MessageCreateWithoutImagesInput;
+  update: MessageUpdateWithoutImagesInput;
 };
 
 export type MessageWhereInput = {
@@ -6515,6 +7214,10 @@ export type MessageWhereInput = {
   from?: InputMaybe<UserWhereInput>;
   fromId?: InputMaybe<StringFilter>;
   id?: InputMaybe<StringFilter>;
+  images?: InputMaybe<ImageListRelationFilter>;
+  incidents?: InputMaybe<IncidentListRelationFilter>;
+  mentions?: InputMaybe<UserListRelationFilter>;
+  offenders?: InputMaybe<OffenderListRelationFilter>;
   scheme?: InputMaybe<SchemeWhereInput>;
   schemeId?: InputMaybe<StringFilter>;
   sent?: InputMaybe<BoolNullableFilter>;
@@ -7123,6 +7826,17 @@ export type NestedEnumRoleFilter = {
   notIn?: InputMaybe<Array<Role>>;
 };
 
+export type NestedFloatNullableFilter = {
+  equals?: InputMaybe<Scalars['Float']>;
+  gt?: InputMaybe<Scalars['Float']>;
+  gte?: InputMaybe<Scalars['Float']>;
+  in?: InputMaybe<Array<Scalars['Float']>>;
+  lt?: InputMaybe<Scalars['Float']>;
+  lte?: InputMaybe<Scalars['Float']>;
+  not?: InputMaybe<NestedFloatNullableFilter>;
+  notIn?: InputMaybe<Array<Scalars['Float']>>;
+};
+
 export type NestedIntNullableFilter = {
   equals?: InputMaybe<Scalars['Int']>;
   gt?: InputMaybe<Scalars['Int']>;
@@ -7184,6 +7898,14 @@ export type NullableEnumGenderFieldUpdateOperationsInput = {
 
 export type NullableEnumRaceFieldUpdateOperationsInput = {
   set?: InputMaybe<Race>;
+};
+
+export type NullableFloatFieldUpdateOperationsInput = {
+  decrement?: InputMaybe<Scalars['Float']>;
+  divide?: InputMaybe<Scalars['Float']>;
+  increment?: InputMaybe<Scalars['Float']>;
+  multiply?: InputMaybe<Scalars['Float']>;
+  set?: InputMaybe<Scalars['Float']>;
 };
 
 export type NullableIntFieldUpdateOperationsInput = {
@@ -7313,6 +8035,7 @@ export type OffenderCreateInput = {
   images?: InputMaybe<ImageCreateNestedManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutOffendersInput>;
   name?: InputMaybe<Scalars['String']>;
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
@@ -7408,6 +8131,14 @@ export type OffenderCreateNestedManyWithoutIncidentsInput = {
   create?: InputMaybe<Array<OffenderCreateWithoutIncidentsInput>>;
 };
 
+export type OffenderCreateNestedManyWithoutMessagesInput = {
+  connect?: InputMaybe<Array<OffenderWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<OffenderCreateOrConnectWithoutMessagesInput>
+  >;
+  create?: InputMaybe<Array<OffenderCreateWithoutMessagesInput>>;
+};
+
 export type OffenderCreateNestedManyWithoutSchemeInput = {
   connect?: InputMaybe<Array<OffenderWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<
@@ -7488,6 +8219,11 @@ export type OffenderCreateOrConnectWithoutIntelInput = {
   where: OffenderWhereUniqueInput;
 };
 
+export type OffenderCreateOrConnectWithoutMessagesInput = {
+  create: OffenderCreateWithoutMessagesInput;
+  where: OffenderWhereUniqueInput;
+};
+
 export type OffenderCreateOrConnectWithoutRecycleBinInput = {
   create: OffenderCreateWithoutRecycleBinInput;
   where: OffenderWhereUniqueInput;
@@ -7525,6 +8261,7 @@ export type OffenderCreateWithoutActionsInput = {
   images?: InputMaybe<ImageCreateNestedManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutOffendersInput>;
   name?: InputMaybe<Scalars['String']>;
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
@@ -7554,6 +8291,7 @@ export type OffenderCreateWithoutBansInput = {
   images?: InputMaybe<ImageCreateNestedManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutOffendersInput>;
   name?: InputMaybe<Scalars['String']>;
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
@@ -7583,6 +8321,7 @@ export type OffenderCreateWithoutCreatedByInput = {
   images?: InputMaybe<ImageCreateNestedManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutOffendersInput>;
   name?: InputMaybe<Scalars['String']>;
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
@@ -7612,6 +8351,7 @@ export type OffenderCreateWithoutGroupsInput = {
   images?: InputMaybe<ImageCreateNestedManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutOffendersInput>;
   name?: InputMaybe<Scalars['String']>;
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
@@ -7641,6 +8381,7 @@ export type OffenderCreateWithoutImagesInput = {
   id?: InputMaybe<Scalars['String']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutOffendersInput>;
   name?: InputMaybe<Scalars['String']>;
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
@@ -7671,6 +8412,7 @@ export type OffenderCreateWithoutIncidentsInput = {
   images?: InputMaybe<ImageCreateNestedManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutOffenderInput>;
   localId: Scalars['String'];
+  messages?: InputMaybe<MessageCreateNestedManyWithoutOffendersInput>;
   name?: InputMaybe<Scalars['String']>;
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
@@ -7700,6 +8442,37 @@ export type OffenderCreateWithoutIntelInput = {
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutOffendersInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutOffendersInput>;
+  name?: InputMaybe<Scalars['String']>;
+  peculiarities?: InputMaybe<Scalars['String']>;
+  race?: InputMaybe<Race>;
+  recycleBin?: InputMaybe<RecycledItemCreateNestedOneWithoutOffenderInput>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
+  scheme: SchemeCreateNestedOneWithoutOffendersInput;
+  suggestedIds?: InputMaybe<IntelCreateNestedManyWithoutSuggestedOffenderInput>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutOffendersInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploaded?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type OffenderCreateWithoutMessagesInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutOffenderInput>;
+  active?: InputMaybe<Scalars['Boolean']>;
+  age?: InputMaybe<Age>;
+  approved?: InputMaybe<Scalars['Boolean']>;
+  bans?: InputMaybe<BanCreateNestedManyWithoutOffenderInput>;
+  build?: InputMaybe<Build>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdBy: UserCreateNestedOneWithoutOffendersInput;
+  dateOfBirth?: InputMaybe<Scalars['DateTime']>;
+  dateSource?: InputMaybe<Scalars['String']>;
+  gender?: InputMaybe<Gender>;
+  groups?: InputMaybe<GroupCreateNestedManyWithoutOffendersInput>;
+  hair?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutOffendersInput>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutOffendersInput>;
+  intel?: InputMaybe<IntelCreateNestedManyWithoutOffenderInput>;
   name?: InputMaybe<Scalars['String']>;
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
@@ -7730,6 +8503,7 @@ export type OffenderCreateWithoutRecycleBinInput = {
   images?: InputMaybe<ImageCreateNestedManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutOffendersInput>;
   name?: InputMaybe<Scalars['String']>;
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
@@ -7759,6 +8533,7 @@ export type OffenderCreateWithoutSchemeInput = {
   images?: InputMaybe<ImageCreateNestedManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutOffendersInput>;
   name?: InputMaybe<Scalars['String']>;
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
@@ -7788,6 +8563,7 @@ export type OffenderCreateWithoutSuggestedIdsInput = {
   images?: InputMaybe<ImageCreateNestedManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutOffendersInput>;
   name?: InputMaybe<Scalars['String']>;
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
@@ -7817,6 +8593,7 @@ export type OffenderCreateWithoutTagsInput = {
   images?: InputMaybe<ImageCreateNestedManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutOffendersInput>;
   name?: InputMaybe<Scalars['String']>;
   peculiarities?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Race>;
@@ -7857,6 +8634,7 @@ export type OffenderOrderByWithRelationInput = {
   images?: InputMaybe<ImageOrderByRelationAggregateInput>;
   incidents?: InputMaybe<IncidentOrderByRelationAggregateInput>;
   intel?: InputMaybe<IntelOrderByRelationAggregateInput>;
+  messages?: InputMaybe<MessageOrderByRelationAggregateInput>;
   name?: InputMaybe<SortOrder>;
   peculiarities?: InputMaybe<SortOrder>;
   race?: InputMaybe<SortOrder>;
@@ -7912,6 +8690,7 @@ export type OffenderUpdateInput = {
   images?: InputMaybe<ImageUpdateManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutOffendersInput>;
   name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
@@ -7959,6 +8738,11 @@ export type OffenderUpdateManyWithWhereWithoutImagesInput = {
 };
 
 export type OffenderUpdateManyWithWhereWithoutIncidentsInput = {
+  data: OffenderUpdateManyMutationInput;
+  where: OffenderScalarWhereInput;
+};
+
+export type OffenderUpdateManyWithWhereWithoutMessagesInput = {
   data: OffenderUpdateManyMutationInput;
   where: OffenderScalarWhereInput;
 };
@@ -8044,6 +8828,23 @@ export type OffenderUpdateManyWithoutIncidentsInput = {
   upsert?: InputMaybe<
     Array<OffenderUpsertWithWhereUniqueWithoutIncidentsInput>
   >;
+};
+
+export type OffenderUpdateManyWithoutMessagesInput = {
+  connect?: InputMaybe<Array<OffenderWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<OffenderCreateOrConnectWithoutMessagesInput>
+  >;
+  create?: InputMaybe<Array<OffenderCreateWithoutMessagesInput>>;
+  delete?: InputMaybe<Array<OffenderWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<OffenderScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<OffenderWhereUniqueInput>>;
+  set?: InputMaybe<Array<OffenderWhereUniqueInput>>;
+  update?: InputMaybe<Array<OffenderUpdateWithWhereUniqueWithoutMessagesInput>>;
+  updateMany?: InputMaybe<
+    Array<OffenderUpdateManyWithWhereWithoutMessagesInput>
+  >;
+  upsert?: InputMaybe<Array<OffenderUpsertWithWhereUniqueWithoutMessagesInput>>;
 };
 
 export type OffenderUpdateManyWithoutSchemeInput = {
@@ -8143,6 +8944,11 @@ export type OffenderUpdateWithWhereUniqueWithoutIncidentsInput = {
   where: OffenderWhereUniqueInput;
 };
 
+export type OffenderUpdateWithWhereUniqueWithoutMessagesInput = {
+  data: OffenderUpdateWithoutMessagesInput;
+  where: OffenderWhereUniqueInput;
+};
+
 export type OffenderUpdateWithWhereUniqueWithoutSchemeInput = {
   data: OffenderUpdateWithoutSchemeInput;
   where: OffenderWhereUniqueInput;
@@ -8170,6 +8976,7 @@ export type OffenderUpdateWithoutActionsInput = {
   images?: InputMaybe<ImageUpdateManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutOffendersInput>;
   name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
@@ -8199,6 +9006,7 @@ export type OffenderUpdateWithoutBansInput = {
   images?: InputMaybe<ImageUpdateManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutOffendersInput>;
   name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
@@ -8228,6 +9036,7 @@ export type OffenderUpdateWithoutCreatedByInput = {
   images?: InputMaybe<ImageUpdateManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutOffendersInput>;
   name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
@@ -8257,6 +9066,7 @@ export type OffenderUpdateWithoutGroupsInput = {
   images?: InputMaybe<ImageUpdateManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutOffendersInput>;
   name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
@@ -8286,6 +9096,7 @@ export type OffenderUpdateWithoutImagesInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutOffendersInput>;
   name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
@@ -8315,6 +9126,7 @@ export type OffenderUpdateWithoutIncidentsInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutOffendersInput>;
   name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
@@ -8344,6 +9156,37 @@ export type OffenderUpdateWithoutIntelInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutOffendersInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutOffendersInput>;
+  name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
+  recycleBin?: InputMaybe<RecycledItemUpdateOneWithoutOffenderInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutOffendersInput>;
+  suggestedIds?: InputMaybe<IntelUpdateManyWithoutSuggestedOffenderInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutOffendersInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+};
+
+export type OffenderUpdateWithoutMessagesInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutOffenderInput>;
+  active?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  age?: InputMaybe<NullableEnumAgeFieldUpdateOperationsInput>;
+  approved?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  bans?: InputMaybe<BanUpdateManyWithoutOffenderInput>;
+  build?: InputMaybe<NullableEnumBuildFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdBy?: InputMaybe<UserUpdateOneRequiredWithoutOffendersInput>;
+  dateOfBirth?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  dateSource?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  gender?: InputMaybe<NullableEnumGenderFieldUpdateOperationsInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutOffendersInput>;
+  hair?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutOffendersInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutOffendersInput>;
+  intel?: InputMaybe<IntelUpdateManyWithoutOffenderInput>;
   name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
@@ -8374,6 +9217,7 @@ export type OffenderUpdateWithoutRecycleBinInput = {
   images?: InputMaybe<ImageUpdateManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutOffendersInput>;
   name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
@@ -8403,6 +9247,7 @@ export type OffenderUpdateWithoutSchemeInput = {
   images?: InputMaybe<ImageUpdateManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutOffendersInput>;
   name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
@@ -8432,6 +9277,7 @@ export type OffenderUpdateWithoutSuggestedIdsInput = {
   images?: InputMaybe<ImageUpdateManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutOffendersInput>;
   name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
@@ -8461,6 +9307,7 @@ export type OffenderUpdateWithoutTagsInput = {
   images?: InputMaybe<ImageUpdateManyWithoutOffendersInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutOffendersInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutOffenderInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutOffendersInput>;
   name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   peculiarities?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   race?: InputMaybe<NullableEnumRaceFieldUpdateOperationsInput>;
@@ -8493,6 +9340,12 @@ export type OffenderUpsertWithWhereUniqueWithoutImagesInput = {
 export type OffenderUpsertWithWhereUniqueWithoutIncidentsInput = {
   create: OffenderCreateWithoutIncidentsInput;
   update: OffenderUpdateWithoutIncidentsInput;
+  where: OffenderWhereUniqueInput;
+};
+
+export type OffenderUpsertWithWhereUniqueWithoutMessagesInput = {
+  create: OffenderCreateWithoutMessagesInput;
+  update: OffenderUpdateWithoutMessagesInput;
   where: OffenderWhereUniqueInput;
 };
 
@@ -8555,6 +9408,7 @@ export type OffenderWhereInput = {
   images?: InputMaybe<ImageListRelationFilter>;
   incidents?: InputMaybe<IncidentListRelationFilter>;
   intel?: InputMaybe<IntelListRelationFilter>;
+  messages?: InputMaybe<MessageListRelationFilter>;
   name?: InputMaybe<StringNullableFilter>;
   peculiarities?: InputMaybe<StringNullableFilter>;
   race?: InputMaybe<EnumRaceNullableFilter>;
@@ -11850,6 +12704,7 @@ export type UserCreateInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<Scalars['String']>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
   messagePush?: InputMaybe<Scalars['Boolean']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
   newUser?: InputMaybe<Scalars['Boolean']>;
@@ -11874,6 +12729,14 @@ export type UserCreateNestedManyWithoutGroupsInput = {
   connect?: InputMaybe<Array<UserWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<Array<UserCreateOrConnectWithoutGroupsInput>>;
   create?: InputMaybe<Array<UserCreateWithoutGroupsInput>>;
+};
+
+export type UserCreateNestedManyWithoutMessageMentionsInput = {
+  connect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<UserCreateOrConnectWithoutMessageMentionsInput>
+  >;
+  create?: InputMaybe<Array<UserCreateWithoutMessageMentionsInput>>;
 };
 
 export type UserCreateNestedManyWithoutTagsInput = {
@@ -12010,6 +12873,11 @@ export type UserCreateOrConnectWithoutIntelInput = {
   where: UserWhereUniqueInput;
 };
 
+export type UserCreateOrConnectWithoutMessageMentionsInput = {
+  create: UserCreateWithoutMessageMentionsInput;
+  where: UserWhereUniqueInput;
+};
+
 export type UserCreateOrConnectWithoutMessagesInput = {
   create: UserCreateWithoutMessagesInput;
   where: UserWhereUniqueInput;
@@ -12055,6 +12923,7 @@ export type UserCreateWithoutActionsByUserInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<Scalars['String']>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
   messagePush?: InputMaybe<Scalars['Boolean']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
   newUser?: InputMaybe<Scalars['Boolean']>;
@@ -12095,6 +12964,7 @@ export type UserCreateWithoutActionsInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<Scalars['String']>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
   messagePush?: InputMaybe<Scalars['Boolean']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
   newUser?: InputMaybe<Scalars['Boolean']>;
@@ -12135,6 +13005,7 @@ export type UserCreateWithoutAddressesInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<Scalars['String']>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
   messagePush?: InputMaybe<Scalars['Boolean']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
   newUser?: InputMaybe<Scalars['Boolean']>;
@@ -12175,6 +13046,7 @@ export type UserCreateWithoutBansInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<Scalars['String']>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
   messagePush?: InputMaybe<Scalars['Boolean']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
   newUser?: InputMaybe<Scalars['Boolean']>;
@@ -12215,6 +13087,7 @@ export type UserCreateWithoutChatsInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<Scalars['String']>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
   messagePush?: InputMaybe<Scalars['Boolean']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
   newUser?: InputMaybe<Scalars['Boolean']>;
@@ -12255,6 +13128,7 @@ export type UserCreateWithoutCreatedTagsInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<Scalars['String']>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
   messagePush?: InputMaybe<Scalars['Boolean']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
   newUser?: InputMaybe<Scalars['Boolean']>;
@@ -12295,6 +13169,7 @@ export type UserCreateWithoutGroupsInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<Scalars['String']>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
   messagePush?: InputMaybe<Scalars['Boolean']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
   newUser?: InputMaybe<Scalars['Boolean']>;
@@ -12335,6 +13210,7 @@ export type UserCreateWithoutImagesInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<Scalars['String']>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
   messagePush?: InputMaybe<Scalars['Boolean']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
   newUser?: InputMaybe<Scalars['Boolean']>;
@@ -12375,6 +13251,7 @@ export type UserCreateWithoutIncidentsInput = {
   incidentPush?: InputMaybe<Scalars['Boolean']>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<Scalars['String']>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
   messagePush?: InputMaybe<Scalars['Boolean']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
   newUser?: InputMaybe<Scalars['Boolean']>;
@@ -12414,6 +13291,48 @@ export type UserCreateWithoutIntelInput = {
   incidentEmail?: InputMaybe<Scalars['Boolean']>;
   incidentPush?: InputMaybe<Scalars['Boolean']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
+  ipAddress?: InputMaybe<Scalars['String']>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
+  messagePush?: InputMaybe<Scalars['Boolean']>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
+  newUser?: InputMaybe<Scalars['Boolean']>;
+  offenderEmail?: InputMaybe<Scalars['Boolean']>;
+  offenderPush?: InputMaybe<Scalars['Boolean']>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutCreatedByInput>;
+  onboardSteps?: InputMaybe<OnboardSteps>;
+  oneSignalIds?: InputMaybe<OneSignalIdCreateNestedManyWithoutUserInput>;
+  organisation: Scalars['String'];
+  platform?: InputMaybe<Scalars['String']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
+  recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
+  schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
+  termsSigned?: InputMaybe<Scalars['Boolean']>;
+  timeSigned?: InputMaybe<Scalars['DateTime']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploaded?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type UserCreateWithoutMessageMentionsInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
+  actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
+  addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  auth0Id?: InputMaybe<Scalars['String']>;
+  bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
+  chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
+  disabled?: InputMaybe<Scalars['Boolean']>;
+  email: Scalars['String'];
+  expoPushTokens?: InputMaybe<ExpoPushTokenCreateNestedManyWithoutUserInput>;
+  fullName: Scalars['String'];
+  groups?: InputMaybe<GroupCreateNestedManyWithoutUsersInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutUploadedByInput>;
+  incidentEmail?: InputMaybe<Scalars['Boolean']>;
+  incidentPush?: InputMaybe<Scalars['Boolean']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
+  intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<Scalars['String']>;
   messagePush?: InputMaybe<Scalars['Boolean']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
@@ -12456,6 +13375,7 @@ export type UserCreateWithoutMessagesInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<Scalars['String']>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
   messagePush?: InputMaybe<Scalars['Boolean']>;
   newUser?: InputMaybe<Scalars['Boolean']>;
   offenderEmail?: InputMaybe<Scalars['Boolean']>;
@@ -12496,6 +13416,7 @@ export type UserCreateWithoutOffendersInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<Scalars['String']>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
   messagePush?: InputMaybe<Scalars['Boolean']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
   newUser?: InputMaybe<Scalars['Boolean']>;
@@ -12536,6 +13457,7 @@ export type UserCreateWithoutRecycledItemsInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<Scalars['String']>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
   messagePush?: InputMaybe<Scalars['Boolean']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
   newUser?: InputMaybe<Scalars['Boolean']>;
@@ -12576,6 +13498,7 @@ export type UserCreateWithoutSchemesInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<Scalars['String']>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
   messagePush?: InputMaybe<Scalars['Boolean']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
   newUser?: InputMaybe<Scalars['Boolean']>;
@@ -12616,6 +13539,7 @@ export type UserCreateWithoutTagsInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<Scalars['String']>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
   messagePush?: InputMaybe<Scalars['Boolean']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
   newUser?: InputMaybe<Scalars['Boolean']>;
@@ -12679,6 +13603,7 @@ export type UserOrderByWithRelationInput = {
   incidents?: InputMaybe<IncidentOrderByRelationAggregateInput>;
   intel?: InputMaybe<IntelOrderByRelationAggregateInput>;
   ipAddress?: InputMaybe<SortOrder>;
+  messageMentions?: InputMaybe<MessageOrderByRelationAggregateInput>;
   messagePush?: InputMaybe<SortOrder>;
   messages?: InputMaybe<MessageOrderByRelationAggregateInput>;
   newUser?: InputMaybe<SortOrder>;
@@ -12999,6 +13924,7 @@ export type UserUpdateInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsInput>;
   messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutFromInput>;
   newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -13048,6 +13974,11 @@ export type UserUpdateManyWithWhereWithoutGroupsInput = {
   where: UserScalarWhereInput;
 };
 
+export type UserUpdateManyWithWhereWithoutMessageMentionsInput = {
+  data: UserUpdateManyMutationInput;
+  where: UserScalarWhereInput;
+};
+
 export type UserUpdateManyWithWhereWithoutTagsInput = {
   data: UserUpdateManyMutationInput;
   where: UserScalarWhereInput;
@@ -13064,6 +13995,27 @@ export type UserUpdateManyWithoutGroupsInput = {
   update?: InputMaybe<Array<UserUpdateWithWhereUniqueWithoutGroupsInput>>;
   updateMany?: InputMaybe<Array<UserUpdateManyWithWhereWithoutGroupsInput>>;
   upsert?: InputMaybe<Array<UserUpsertWithWhereUniqueWithoutGroupsInput>>;
+};
+
+export type UserUpdateManyWithoutMessageMentionsInput = {
+  connect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<UserCreateOrConnectWithoutMessageMentionsInput>
+  >;
+  create?: InputMaybe<Array<UserCreateWithoutMessageMentionsInput>>;
+  delete?: InputMaybe<Array<UserWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<UserScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  set?: InputMaybe<Array<UserWhereUniqueInput>>;
+  update?: InputMaybe<
+    Array<UserUpdateWithWhereUniqueWithoutMessageMentionsInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<UserUpdateManyWithWhereWithoutMessageMentionsInput>
+  >;
+  upsert?: InputMaybe<
+    Array<UserUpsertWithWhereUniqueWithoutMessageMentionsInput>
+  >;
 };
 
 export type UserUpdateManyWithoutTagsInput = {
@@ -13194,6 +14146,11 @@ export type UserUpdateWithWhereUniqueWithoutGroupsInput = {
   where: UserWhereUniqueInput;
 };
 
+export type UserUpdateWithWhereUniqueWithoutMessageMentionsInput = {
+  data: UserUpdateWithoutMessageMentionsInput;
+  where: UserWhereUniqueInput;
+};
+
 export type UserUpdateWithWhereUniqueWithoutTagsInput = {
   data: UserUpdateWithoutTagsInput;
   where: UserWhereUniqueInput;
@@ -13219,6 +14176,7 @@ export type UserUpdateWithoutActionsByUserInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsInput>;
   messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutFromInput>;
   newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -13259,6 +14217,7 @@ export type UserUpdateWithoutActionsInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsInput>;
   messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutFromInput>;
   newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -13299,6 +14258,7 @@ export type UserUpdateWithoutAddressesInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsInput>;
   messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutFromInput>;
   newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -13339,6 +14299,7 @@ export type UserUpdateWithoutBansInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsInput>;
   messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutFromInput>;
   newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -13379,6 +14340,7 @@ export type UserUpdateWithoutChatsInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsInput>;
   messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutFromInput>;
   newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -13419,6 +14381,7 @@ export type UserUpdateWithoutCreatedTagsInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsInput>;
   messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutFromInput>;
   newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -13459,6 +14422,7 @@ export type UserUpdateWithoutGroupsInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsInput>;
   messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutFromInput>;
   newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -13499,6 +14463,7 @@ export type UserUpdateWithoutImagesInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsInput>;
   messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutFromInput>;
   newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -13539,6 +14504,7 @@ export type UserUpdateWithoutIncidentsInput = {
   incidentPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsInput>;
   messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutFromInput>;
   newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -13578,6 +14544,48 @@ export type UserUpdateWithoutIntelInput = {
   incidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByInput>;
+  ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsInput>;
+  messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutFromInput>;
+  newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutCreatedByInput>;
+  onboardSteps?: InputMaybe<EnumOnboardStepsFieldUpdateOperationsInput>;
+  oneSignalIds?: InputMaybe<OneSignalIdUpdateManyWithoutUserInput>;
+  organisation?: InputMaybe<StringFieldUpdateOperationsInput>;
+  platform?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByInput>;
+  schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutUsersInput>;
+  termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploaded?: InputMaybe<BoolFieldUpdateOperationsInput>;
+};
+
+export type UserUpdateWithoutMessageMentionsInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutUserInput>;
+  actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserInput>;
+  addresses?: InputMaybe<AddressUpdateManyWithoutUserInput>;
+  auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  bans?: InputMaybe<BanUpdateManyWithoutCreatedByInput>;
+  chats?: InputMaybe<UserChatUpdateManyWithoutUserInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByInput>;
+  disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  email?: InputMaybe<StringFieldUpdateOperationsInput>;
+  expoPushTokens?: InputMaybe<ExpoPushTokenUpdateManyWithoutUserInput>;
+  fullName?: InputMaybe<StringFieldUpdateOperationsInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutUsersInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutUploadedByInput>;
+  incidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidentPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByInput>;
+  intel?: InputMaybe<IntelUpdateManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutFromInput>;
@@ -13620,6 +14628,7 @@ export type UserUpdateWithoutMessagesInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsInput>;
   messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
   offenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -13660,6 +14669,7 @@ export type UserUpdateWithoutOffendersInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsInput>;
   messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutFromInput>;
   newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -13700,6 +14710,7 @@ export type UserUpdateWithoutRecycledItemsInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsInput>;
   messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutFromInput>;
   newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -13740,6 +14751,7 @@ export type UserUpdateWithoutSchemesInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsInput>;
   messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutFromInput>;
   newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -13780,6 +14792,7 @@ export type UserUpdateWithoutTagsInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCreatedByInput>;
   ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsInput>;
   messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutFromInput>;
   newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -13802,6 +14815,12 @@ export type UserUpdateWithoutTagsInput = {
 export type UserUpsertWithWhereUniqueWithoutGroupsInput = {
   create: UserCreateWithoutGroupsInput;
   update: UserUpdateWithoutGroupsInput;
+  where: UserWhereUniqueInput;
+};
+
+export type UserUpsertWithWhereUniqueWithoutMessageMentionsInput = {
+  create: UserCreateWithoutMessageMentionsInput;
+  update: UserUpdateWithoutMessageMentionsInput;
   where: UserWhereUniqueInput;
 };
 
@@ -13900,6 +14919,7 @@ export type UserWhereInput = {
   incidents?: InputMaybe<IncidentListRelationFilter>;
   intel?: InputMaybe<IntelListRelationFilter>;
   ipAddress?: InputMaybe<StringNullableFilter>;
+  messageMentions?: InputMaybe<MessageListRelationFilter>;
   messagePush?: InputMaybe<BoolFilter>;
   messages?: InputMaybe<MessageListRelationFilter>;
   newUser?: InputMaybe<BoolFilter>;
@@ -14618,6 +15638,41 @@ export type CreateMessageMutation = {
       organisation: string;
     };
     chat: { __typename?: 'Chat'; id: string; name: string };
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+    }>;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+      description: string;
+      dayTime?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      age?: Age | null;
+      build?: Build | null;
+      dateOfBirth?: any | null;
+      name?: string | null;
+      race?: Race | null;
+      gender?: Gender | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
   } | null;
 };
 
@@ -14650,6 +15705,41 @@ export type MessagesQuery = {
       organisation: string;
     };
     chat: { __typename?: 'Chat'; id: string; name: string };
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+    }>;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+      description: string;
+      dayTime?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      age?: Age | null;
+      build?: Build | null;
+      dateOfBirth?: any | null;
+      name?: string | null;
+      race?: Race | null;
+      gender?: Gender | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
   }>;
 };
 
@@ -17346,6 +18436,36 @@ export const CreateMessageDocument = gql`
       }
       content
       createdAt
+      images {
+        id
+        url
+        optimised
+      }
+      incidents {
+        id
+        subject
+        description
+        dayTime
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      offenders {
+        id
+        age
+        build
+        dateOfBirth
+        name
+        race
+        gender
+        images {
+          id
+          url
+          optimised
+        }
+      }
     }
   }
 `;
@@ -17463,6 +18583,36 @@ export const MessagesDocument = gql`
       }
       content
       createdAt
+      images {
+        id
+        url
+        optimised
+      }
+      incidents {
+        id
+        subject
+        description
+        dayTime
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      offenders {
+        id
+        age
+        build
+        dateOfBirth
+        name
+        race
+        gender
+        images {
+          id
+          url
+          optimised
+        }
+      }
     }
   }
 `;

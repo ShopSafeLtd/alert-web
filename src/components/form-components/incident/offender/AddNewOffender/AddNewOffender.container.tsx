@@ -1,7 +1,7 @@
 import React from 'react';
 import { Age, Gender, Race, Build } from 'graphql/generated';
-import useAddOffender from './useAddOffender';
-import View from './AddOffender.view';
+import useAddNewOffender from './useAddNewOffender';
+import View from './AddNewOffender.view';
 
 interface OffenderData {
   id: string;
@@ -24,10 +24,18 @@ interface OffenderData {
 }
 interface Props {
   onClose: () => void;
-  update: (value: OffenderData[] | undefined) => void;
+  update: (value: OffenderData) => void;
 }
-function AddOffender({ onClose, update }: Props): JSX.Element {
-  const { onSubmit, saving, ageCheck, setAgeCheck } = useAddOffender({
+function AddNewOffender({ onClose, update }: Props): JSX.Element {
+  const {
+    onSubmit,
+    saving,
+    ageCheck,
+    setAgeCheck,
+    imgChange,
+    beforeUpload,
+    fileList,
+  } = useAddNewOffender({
     onClose,
     update,
   });
@@ -39,9 +47,12 @@ function AddOffender({ onClose, update }: Props): JSX.Element {
         saving={saving}
         ageCheck={ageCheck}
         setAgeCheck={setAgeCheck}
+        imgChange={imgChange}
+        beforeUpload={beforeUpload}
+        fileList={fileList}
       />
     </div>
   );
 }
 
-export default AddOffender;
+export default AddNewOffender;

@@ -15,8 +15,8 @@ const ViewOffender = (): JSX.Element => {
     onDelete,
     deleteRights,
     editRights,
-    addExistingIncident,
-    toggleAddExistingIncident,
+    linkIncident,
+    toggleLinkIncident,
     updateIncidentList,
   } = useViewOffender(offenderId);
 
@@ -31,8 +31,8 @@ const ViewOffender = (): JSX.Element => {
       onDelete={onDelete}
       deleteRights={deleteRights}
       editRights={editRights}
-      addExistingIncident={addExistingIncident}
-      toggleAddExistingIncident={toggleAddExistingIncident}
+      linkIncident={linkIncident}
+      toggleLinkIncident={toggleLinkIncident}
       updateIncidentList={updateIncidentList}
     />
   );

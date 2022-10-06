@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, Col, Form, Input, Row, DatePicker } from 'antd';
+import { Button, Col, DatePicker, Form, Input, Row } from 'antd';
+import moment from 'moment';
 import type { Moment } from 'moment';
-
 import type { RangePickerProps } from 'antd/es/date-picker';
 
 interface FormData {
@@ -10,23 +10,42 @@ interface FormData {
   location: string;
   description: string;
 }
+interface BanData {
+  id: string;
+  title?: string | null | undefined;
+  endDate: Date;
+  startDate: Date;
+  location: string;
+  description?: string | null | undefined;
+}
 
 interface Props {
   onSubmit: (value: FormData) => void;
   onClose: () => void;
+  banData: BanData | null;
   saving: boolean;
   setStartDate: (value: Moment | Date | null) => void;
   disabledDate: RangePickerProps['disabledDate'];
 }
 
-const AddExclusion = ({
+const EditExclusion = ({
   onSubmit,
+  banData,
   onClose,
   saving,
   setStartDate,
   disabledDate,
 }: Props): JSX.Element => (
-  <Form layout="vertical" onFinish={onSubmit}>
+  <Form
+    initialValues={{
+      startDate: moment(banData?.startDate, 'YYYY-MM-DD'),
+      endDate: moment(banData?.endDate, 'YYYY-MM-DD'),
+      location: banData?.location,
+      description: banData?.description || '',
+    }}
+    layout="vertical"
+    onFinish={onSubmit}
+  >
     <Row gutter={16}>
       <Col span={11}>
         <Form.Item
@@ -96,7 +115,7 @@ const AddExclusion = ({
     <Row gutter={16}>
       <Col span={21}>
         <Form.Item name="description" label="Exclusion Description">
-          <Input disabled={saving} />
+          <Input.TextArea disabled={saving} />
         </Form.Item>
       </Col>
     </Row>
@@ -115,11 +134,12 @@ const AddExclusion = ({
             disabled={saving}
             loading={saving}
           >
-            Add Exclusion
+            save
           </Button>
         </Col>
       </Row>
     </Form.Item>
   </Form>
 );
-export default AddExclusion;
+
+export default EditExclusion;

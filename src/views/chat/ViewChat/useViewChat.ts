@@ -33,7 +33,6 @@ const useViewChat = (): Return => {
   const navigate = useNavigate();
   const [addChat, setAddChat] = useState(false);
   const [currentId, setCurrentId] = useState('');
-  // const [currentSchemeId, setCurrentSchemeId] = useState(schemeId);
   const [saving, setSaving] = useState(false);
 
   const { data, loading, refetch } = useUserChatsQuery({
@@ -52,6 +51,8 @@ const useViewChat = (): Return => {
     onCompleted: ({ user }) => {
       if (user && user.chats.length > 0) {
         setCurrentId(user.chats[0].chat.id);
+      } else {
+        setCurrentId('');
       }
     },
   });
@@ -59,6 +60,7 @@ const useViewChat = (): Return => {
     refetch();
     navigate('/app/chat');
   }, [schemeId]);
+
   const [updateUserChat] = useUpdateUserChatMutation({
     onCompleted: () => {
       setSaving(false);
@@ -125,21 +127,6 @@ const useViewChat = (): Return => {
       existingData?.user.chats === undefined
     )
       return;
-
-    console.log('chats', [
-      ...existingData?.user.chats,
-      res.createChat.members.find(
-        (userChat) => userChat.chat.id === res.createChat.id
-      ),
-    ]);
-    console.log(
-      'chats2',
-      existingData.user.chats.concat(
-        res.createChat.members.filter(
-          (userChat) => userChat.chat.id === res.createChat.id
-        )
-      )
-    );
 
     store.writeQuery<UserChatsQuery>({
       query: UserChatsDocument,

@@ -53,7 +53,7 @@ const EditChat = ({
   membersData,
   deleteConfirm,
 }: Props): JSX.Element =>
-  loading ? (
+  !usersData && loading ? (
     <Skeleton />
   ) : (
     <div>
@@ -108,7 +108,7 @@ const EditChat = ({
             )}
           />
         ) : (
-          <Empty />
+          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
         )}
         {usersData && usersData.length > 0 && (
           <Row style={{ marginTop: 15 }} gutter={16} justify="end">

@@ -13,6 +13,7 @@ function AddOffender(): JSX.Element {
     tagsLoading,
     imgChange,
     onPreview,
+    removeImage,
     beforeUpload,
     fileList,
     addOffenderTag,
@@ -23,8 +24,7 @@ function AddOffender(): JSX.Element {
     editExclusion,
     toggleEditExclusion,
     bansData,
-    updateAddExclusion,
-    updateEditExclusion,
+    updateExclusion,
     banData,
     setBanData,
     deleteConfirm,
@@ -43,6 +43,7 @@ function AddOffender(): JSX.Element {
         tags={tags}
         tagsLoading={tagsLoading}
         imgChange={imgChange}
+        removeImage={removeImage}
         onPreview={onPreview}
         beforeUpload={beforeUpload}
         fileList={fileList}
@@ -53,8 +54,7 @@ function AddOffender(): JSX.Element {
         toggleAddExclusion={toggleAddExclusion}
         editExclusion={editExclusion}
         toggleEditExclusion={toggleEditExclusion}
-        updateAddExclusion={updateAddExclusion}
-        updateEditExclusion={updateEditExclusion}
+        updateExclusion={updateExclusion}
         banData={banData}
         setBanData={setBanData}
         deleteConfirm={deleteConfirm}

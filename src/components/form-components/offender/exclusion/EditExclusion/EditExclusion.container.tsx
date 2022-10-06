@@ -3,11 +3,12 @@ import View from './EditExclusion.view';
 import useEditExclusion from './useEditExclusion';
 
 interface BanData {
-  id?: string | undefined;
+  id: string;
+  title?: string | null | undefined;
   endDate: Date;
   startDate: Date;
   location: string;
-  description: string;
+  description?: string | null | undefined;
 }
 interface Props {
   onClose: () => void;
@@ -18,6 +19,7 @@ interface Props {
 const EditExclusion = ({ onClose, banData, update }: Props): JSX.Element => {
   const { onSubmit, saving, setStartDate, disabledDate } = useEditExclusion({
     onClose,
+    banData,
     update,
   });
   return (

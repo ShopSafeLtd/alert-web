@@ -9,7 +9,6 @@ function EditIncident(): JSX.Element {
     addNewLocation,
     addOffender,
     addPreviousLocation,
-    addRecentOffender,
     addressLoading,
     beforeUpload,
     fileList,
@@ -20,9 +19,10 @@ function EditIncident(): JSX.Element {
     offendersData,
     onSubmit,
     primaryAddress,
+    saving,
     recentOffenderData,
     recentOffenderLoading,
-    saving,
+    addRecentOffender,
     setAddRecentOffender,
     tags,
     tagsLoading,
@@ -33,7 +33,7 @@ function EditIncident(): JSX.Element {
     toggleAddPreviousLocation,
     updateIncidentTag,
     updateNewLocation,
-    updateOffenderList,
+    updateOffendersList,
     updatePreviousLocation,
     searchOffenders,
     setSearchOffenders,
@@ -41,11 +41,12 @@ function EditIncident(): JSX.Element {
     assignOffendersToImages,
     onCancelNewImage,
     setAssignToImage,
-    onPreview,
     removeImageFromOffender,
     removeImage,
     removeOffender,
     adminRights,
+    listOffendersData,
+    offenderImgChange,
   } = useEditIncident();
 
   return (
@@ -56,7 +57,6 @@ function EditIncident(): JSX.Element {
         addNewLocation={addNewLocation}
         addOffender={addOffender}
         addPreviousLocation={addPreviousLocation}
-        addRecentOffender={addRecentOffender}
         addressLoading={addressLoading}
         beforeUpload={beforeUpload}
         fileList={fileList}
@@ -66,10 +66,11 @@ function EditIncident(): JSX.Element {
         imgChange={imgChange}
         offendersData={offendersData}
         onSubmit={onSubmit}
+        saving={saving}
         primaryAddress={primaryAddress}
         recentOffenderData={recentOffenderData}
         recentOffenderLoading={recentOffenderLoading}
-        saving={saving}
+        addRecentOffender={addRecentOffender}
         setAddRecentOffender={setAddRecentOffender}
         tags={tags}
         tagsLoading={tagsLoading}
@@ -80,7 +81,7 @@ function EditIncident(): JSX.Element {
         toggleAddPreviousLocation={toggleAddPreviousLocation}
         updateIncidentTag={updateIncidentTag}
         updateNewLocation={updateNewLocation}
-        updateOffenderList={updateOffenderList}
+        updateOffendersList={updateOffendersList}
         updatePreviousLocation={updatePreviousLocation}
         searchOffenders={searchOffenders}
         setSearchOffenders={setSearchOffenders}
@@ -88,11 +89,12 @@ function EditIncident(): JSX.Element {
         assignOffendersToImages={assignOffendersToImages}
         onCancelNewImage={onCancelNewImage}
         setAssignToImage={setAssignToImage}
-        onPreview={onPreview}
         removeImageFromOffender={removeImageFromOffender}
         removeImage={removeImage}
         removeOffender={removeOffender}
         adminRights={adminRights}
+        listOffendersData={listOffendersData}
+        offenderImgChange={offenderImgChange}
       />
     </div>
   );

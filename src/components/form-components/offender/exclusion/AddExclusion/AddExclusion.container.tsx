@@ -4,11 +4,12 @@ import View from './AddExclusion.view';
 import useAddExclusion from './useAddExclusion';
 
 interface BanData {
-  id?: string | undefined;
+  id: string;
+  title?: string | null | undefined;
   endDate: Date;
   startDate: Date;
   location: string;
-  description: string;
+  description?: string | null | undefined;
 }
 interface Props {
   onClose: () => void;

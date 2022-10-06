@@ -5,7 +5,6 @@ import {
   Gender,
   Race,
   Build,
-  CreateBanMutation,
   CreateTagMutation,
 } from 'graphql/generated';
 
@@ -26,6 +25,8 @@ import {
   Switch,
   DatePicker,
   Table,
+  // Divider,
+  Empty,
 } from 'antd';
 
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
@@ -35,14 +36,18 @@ import {
   calcExpired,
 } from 'utils/offender/get-offender-exclusion';
 import { MutationUpdaterFn } from '@apollo/client';
-import AddExclusion from 'components/form-components/offender/editOffender/exclusion/AddExclusion';
-import EditExclusion from 'components/form-components/offender/editOffender/exclusion/EditExclusion';
+import AddExclusion from 'components/form-components/offender/exclusion/AddExclusion';
+import EditExclusion from 'components/form-components/offender/exclusion/EditExclusion';
 
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 // import type { RangePickerProps } from 'antd/es/date-picker';
 import AddOffenderTag from 'components/form-components/tags/offenderWarnings/AddOffenderWarning';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import {
+  faPenToSquare,
+  faPlus,
+  faTrash,
+  faUpload,
+} from '@fortawesome/pro-light-svg-icons';
 import moment from 'moment';
 
 const { Title, Text, Paragraph } = Typography;
@@ -61,7 +66,14 @@ interface FormData {
   tags: string[];
   images?: [{ id: string; url: string; optimised: string }];
 }
-
+interface BanData {
+  id: string;
+  title?: string | null | undefined;
+  endDate: Date;
+  startDate: Date;
+  location: string;
+  description?: string | null | undefined;
+}
 interface Props {
   onSubmit: (value: FormData) => void;
   data: ViewOffenderQuery | undefined;
@@ -77,19 +89,21 @@ interface Props {
   fileList: UploadFile[];
   addExclusion: boolean;
   toggleAddExclusion: () => void;
-  updateExclusion: MutationUpdaterFn<CreateBanMutation>;
   editExclusion: boolean;
   toggleEditExclusion: () => void;
   addOffenderTag: boolean;
   toggleAddOffenderTag: () => void;
   updateOffenderTag: MutationUpdaterFn<CreateTagMutation>;
-  banId: string;
-  setBanId: (value: string) => void;
+  updateExclusion: (value: BanData) => void;
+  bansData: BanData[];
+  banData: BanData | null;
+  setBanData: (value: BanData | null) => void;
   deleteConfirm: (value: string) => void;
   ageCheck: boolean;
   setAgeCheck: (value: boolean) => void;
   reviewed: boolean;
   onReject: () => void;
+  adminRights: boolean;
 }
 
 const EditOffender = ({
@@ -113,13 +127,15 @@ const EditOffender = ({
   editExclusion,
   toggleEditExclusion,
   updateExclusion,
-  banId,
-  setBanId,
+  banData,
+  setBanData,
+  bansData,
   deleteConfirm,
   ageCheck,
   setAgeCheck,
   reviewed,
   onReject,
+  adminRights,
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader
@@ -132,6 +148,7 @@ const EditOffender = ({
       <Card>
         <Form
           onFinish={onSubmit}
+          layout="vertical"
           initialValues={{
             name: data?.offender?.name || null,
             age: data?.offender?.age || null,
@@ -153,76 +170,197 @@ const EditOffender = ({
                 : [],
           }}
         >
-          <Row gutter={20} style={{ marginBottom: 30 }}>
+          <Row align="bottom" style={{ marginBottom: 30 }}>
             <Col>
-              <Title level={4}>Offender Details</Title>
+              <Title style={{ marginBottom: 0 }} level={4}>
+                1.{' '}
+              </Title>
+            </Col>
+            <Col>
+              <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
+                Offender Details
+              </Title>
+            </Col>
+            <Col>
+              <Paragraph
+                style={{ marginBottom: 1, marginLeft: 5 }}
+                type="secondary"
+                italic
+              >
+                - Please complete the basic details for the offender.
+              </Paragraph>
             </Col>
           </Row>
-          <Row gutter={50}>
-            <Col span={11}>
-              <Form.Item name="name" label="Name">
-                <Input
-                  disabled={saving}
-                  placeholder="Enter the offenders name if you know it, if not leave this field
+          <Row gutter={60}>
+            <Col span={8}>
+              <Form.Item
+                name="name"
+                label="Name"
+                tooltip="Enter the offenders name if you know it, if not leave this field
                 blank."
+              >
+                <Input disabled={saving} />
+              </Form.Item>
+            </Col>
+
+            <Col span={7}>
+              <Form.Item
+                name="build"
+                label="Build"
+                tooltip="Select the build of the offender if known."
+              >
+                <Select options={buildValues} disabled={saving} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                name="gender"
+                label="Sex"
+                tooltip="Select the gender of the offender if known."
+              >
+                <Select options={genderValues} disabled={saving} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={60}>
+            <Col span={8}>
+              <Form.Item
+                name="race"
+                label="Ethnicity"
+                tooltip="Select the ethnicity of the offender if known."
+              >
+                <Select options={raceValues} disabled={saving} />
+              </Form.Item>
+            </Col>
+            <Col span={7}>
+              <Form.Item
+                name="hair"
+                label="Hair"
+                tooltip="The style and colour of the offenders hair if known."
+              >
+                <Input disabled={saving} />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Row gutter={5} align="middle">
+                <Col flex={1}>
+                  <Form.Item
+                    name="tags"
+                    label="Offender Warnings"
+                    tooltip="select any warning labels that are relevant to this offender or add your own."
+                  >
+                    <Select
+                      loading={tagsLoading}
+                      disabled={saving}
+                      mode="multiple"
+                      maxTagCount={3}
+                    >
+                      {tags.map((tag) => (
+                        <Select.Option value={tag.value}>
+                          {tag.label}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </Col>
+                {adminRights && (
+                  <Col>
+                    <Button
+                      disabled={saving}
+                      loading={saving}
+                      style={{ color: 'red', padding: 8 }}
+                      onClick={toggleAddOffenderTag}
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          style={{ marginRight: 5 }}
+                        />
+                      }
+                    >
+                      Add Label
+                    </Button>
+                  </Col>
+                )}
+              </Row>
+            </Col>
+          </Row>
+
+          <Row gutter={60}>
+            <Col span={8}>
+              <Form.Item
+                name="ageCheck"
+                label="Do you know the offender's date of birth?"
+              >
+                <Switch
+                  style={{ width: 70, height: 30, marginLeft: 10 }}
+                  checked={ageCheck}
+                  checkedChildren="Yes"
+                  unCheckedChildren="No"
+                  onChange={() => {
+                    setAgeCheck(!ageCheck);
+                  }}
                 />
               </Form.Item>
             </Col>
 
-            <Col span={11}>
-              <Form.Item name="build" label="Build">
-                <Select
-                  options={buildValues}
-                  disabled={saving}
-                  placeholder="Select the build of the offender if known."
-                />
-              </Form.Item>
-            </Col>
+            {ageCheck ? (
+              <>
+                <Col span={7}>
+                  <Form.Item
+                    name="dateOfBirth"
+                    label="Date of Birth"
+                    tooltip="Enter the offender's date of birth if known."
+                  >
+                    <DatePicker
+                      disabled={saving}
+                      disabledDate={(current) =>
+                        current && current.valueOf() > Date.now()
+                      }
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={8}>
+                  <Form.Item
+                    name="dateSource"
+                    label="Information Source"
+                    tooltip="Enter the information source of the offender's date of birth range of the offender ."
+                  >
+                    <Input.TextArea disabled={saving} />
+                  </Form.Item>
+                </Col>
+              </>
+            ) : (
+              <Col span={7}>
+                <Form.Item
+                  name="age"
+                  label="Age"
+                  tooltip="Select an estimated age range of the offender if known."
+                >
+                  <Select options={ageValues} disabled={saving} />
+                </Form.Item>
+              </Col>
+            )}
           </Row>
-          <Row gutter={50}>
-            <Col span={11}>
-              <Form.Item name="gender" label="Sex">
-                <Select
-                  options={genderValues}
-                  disabled={saving}
-                  placeholder="Select the gender of the offender if known."
-                />
-              </Form.Item>
-            </Col>
-            <Col span={11}>
-              <Form.Item name="race" label="Ethnicity">
-                <Select
-                  options={raceValues}
-                  disabled={saving}
-                  placeholder="Select the ethnicity of the offender if known."
-                />
+
+          <Row gutter={16}>
+            <Col span={23}>
+              <Form.Item
+                name="peculiarities"
+                label="Peculiarities"
+                tooltip="Enter any distinctive features of the offender."
+              >
+                <Input.TextArea disabled={saving} />
               </Form.Item>
             </Col>
           </Row>
 
-          <Row gutter={50}>
-            <Col span={11}>
-              <Form.Item name="hair" label="Hair">
-                <Input
-                  disabled={saving}
-                  placeholder="The style and colour of the offenders hair if known."
-                />
-              </Form.Item>
-            </Col>
-            <Col span={11}>
-              <Form.Item name="peculiarities" label="Peculiarities">
-                <Input
-                  disabled={saving}
-                  placeholder="Anything distinctive features of the offender."
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={50}>
-            <Col span={11}>
+          <Row>
+            {' '}
+            <Col span={8}>
               <Form.Item
                 name="groups"
                 label="Groups"
+                tooltip="Select the groups that you would like this offender to be visible to."
                 rules={[
                   {
                     required: true,
@@ -236,7 +374,6 @@ const EditOffender = ({
                   disabled={saving}
                   mode="multiple"
                   maxTagCount={3}
-                  placeholder="Select the groups that you would like this offender to be visible to."
                 >
                   {groups.map((group) => (
                     <Select.Option key={group.value} value={group.value}>
@@ -246,123 +383,28 @@ const EditOffender = ({
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={11}>
-              <Row gutter={3}>
-                <Col flex={1}>
-                  <Form.Item name="tags" label="Offender Warnings">
-                    <Select
-                      loading={tagsLoading}
-                      disabled={saving}
-                      mode="multiple"
-                      maxTagCount={3}
-                      placeholder="select any warning labels that are relevant to this offender or add your own."
-                    >
-                      {tags.map((tag) => (
-                        <Select.Option value={tag.value}>
-                          {tag.label}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                </Col>
-                <Col>
-                  <Button
-                    disabled={saving}
-                    loading={saving}
-                    style={{ color: 'red', padding: 8 }}
-                    onClick={toggleAddOffenderTag}
-                    icon={
-                      <FontAwesomeIcon
-                        icon={faPlus}
-                        style={{ marginRight: 5 }}
-                      />
-                    }
-                  >
-                    Add Label
-                  </Button>
-                </Col>
-              </Row>
-            </Col>
           </Row>
-          <Row gutter={50}>
-            <Col span={11}>
-              <Form.Item
-                name="ageCheck"
-                label="Do you know the offender's date of birth?"
-                valuePropName="checked"
+          <Row align="middle" style={{ marginTop: 70, marginBottom: 20 }}>
+            <Col>
+              <Title style={{ marginBottom: 0 }} level={4}>
+                2.{' '}
+              </Title>
+            </Col>
+            <Col>
+              <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                Exclusions
+              </Title>
+            </Col>
+            <Col style={{ marginRight: 10 }}>
+              <Paragraph
+                style={{ marginBottom: 1, marginLeft: 5 }}
+                type="secondary"
+                italic
               >
-                <Switch
-                  style={{ width: 70, height: 30, marginLeft: 10 }}
-                  checked={ageCheck}
-                  // defaultChecked={!!data?.offender?.dateOfBirth}
-                  checkedChildren="Yes"
-                  unCheckedChildren="No"
-                  onChange={() => {
-                    setAgeCheck(!ageCheck);
-                  }}
-                />
-              </Form.Item>
+                - Create exclusions for this offender to exclusion them from
+                areas or premises.
+              </Paragraph>
             </Col>
-            {ageCheck ? (
-              <>
-                <Col span={11}>
-                  <Form.Item name="dateOfBirth" label="Date of Birth">
-                    <DatePicker
-                      disabled={saving}
-                      disabledDate={(current) =>
-                        current && current.valueOf() > Date.now()
-                      }
-                    />
-                  </Form.Item>
-                  <Form.Item name="dateSource" label="Information Source">
-                    <Input
-                      disabled={saving}
-                      placeholder="Enter the information source of the
-                      offender's date of birth."
-                    />
-                  </Form.Item>
-                </Col>
-              </>
-            ) : (
-              <Col span={11}>
-                <Form.Item name="age" label="Age">
-                  <Select
-                    placeholder="Select an estimated age range of the offender if known."
-                    options={ageValues}
-                    disabled={saving}
-                  />
-                </Form.Item>
-              </Col>
-            )}
-          </Row>
-          <Row gutter={20}>
-            <Col>
-              <Title level={4}>Images</Title>
-              <Form.Item name="images">
-                <Upload
-                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                  listType="picture-card"
-                  fileList={fileList}
-                  onChange={imgChange}
-                  onPreview={onPreview}
-                  beforeUpload={beforeUpload}
-                >
-                  {fileList.length < 10 && '+ Upload'}
-                </Upload>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={5}>
-            <Col>
-              <Title level={4}>Exclusions:</Title>
-            </Col>
-            <Col flex={1} style={{ marginTop: 2 }}>
-              <Text type="secondary">
-                Create exclusions for this offender to exclusion them from areas
-                or premises.
-              </Text>
-            </Col>
-
             <Col>
               <Button
                 disabled={saving}
@@ -378,12 +420,11 @@ const EditOffender = ({
             </Col>
           </Row>
 
-          <Row gutter={20}>
-            <Col>
-              {data?.offender?.bans && data?.offender?.bans?.length > 0 ? (
+          {bansData && bansData.length > 0 ? (
+            <Row gutter={20}>
+              <Col>
                 <Table
                   size="small"
-                  loading={loading}
                   pagination={{
                     defaultPageSize: 20,
                     pageSize: 20,
@@ -415,7 +456,7 @@ const EditOffender = ({
                       key: 'activeDay',
                       title: 'Active Days',
                       dataIndex: 'activeDay',
-                      width: 100,
+                      width: 150,
                     },
                     {
                       key: 'location',
@@ -439,25 +480,28 @@ const EditOffender = ({
                           <Button
                             disabled={saving}
                             onClick={() => {
-                              setBanId(record.key);
+                              setBanData(record.item);
                               toggleEditExclusion();
                             }}
-                            icon={<EditOutlined />}
+                            icon={
+                              <FontAwesomeIcon size="lg" icon={faPenToSquare} />
+                            }
                           />
                           <Button
                             disabled={saving}
                             onClick={() => {
-                              deleteConfirm(record.key);
+                              deleteConfirm(record.key || '');
                             }}
-                            icon={<DeleteOutlined />}
+                            icon={<FontAwesomeIcon size="lg" icon={faTrash} />}
                           />
                         </>
                       ),
                     },
                   ]}
-                  dataSource={data?.offender?.bans.map((ban) => ({
+                  dataSource={bansData.map((ban) => ({
                     endDate: ban.endDate,
                     key: ban.id,
+                    item: ban,
                     duration: `${new Date(
                       ban?.startDate
                     ).toDateString()}  -->  ${new Date(
@@ -471,11 +515,78 @@ const EditOffender = ({
                     description: ban.description,
                   }))}
                 />
-              ) : (
-                <Paragraph type="secondary">
-                  This offender does not have any exclusions.
-                </Paragraph>
-              )}
+              </Col>
+            </Row>
+          ) : (
+            <>
+              <Row justify="start">
+                <Empty
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  description="There are no exclusion for this offender."
+                />
+              </Row>
+              {/* <Divider /> */}
+            </>
+          )}
+
+          <Row style={{ marginTop: 70 }}>
+            <Col>
+              <Row align="middle" style={{ marginBottom: 20 }}>
+                <Col>
+                  <Title style={{ marginBottom: 0 }} level={4}>
+                    3.{' '}
+                  </Title>
+                </Col>
+                <Col>
+                  <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                    Images
+                  </Title>
+                </Col>
+                <Col>
+                  <Paragraph
+                    style={{ marginBottom: 1, marginLeft: 5 }}
+                    type="secondary"
+                    italic
+                  >
+                    - Please add any images that you have of the offender.
+                  </Paragraph>
+                </Col>
+                <Col style={{ marginLeft: 30 }}>
+                  <Upload
+                    action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                    fileList={fileList}
+                    onChange={imgChange}
+                    beforeUpload={beforeUpload}
+                    showUploadList={false}
+                  >
+                    <Button
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faUpload}
+                          style={{ marginRight: 5 }}
+                        />
+                      }
+                      style={{ color: 'red' }}
+                    >
+                      Upload Image
+                    </Button>
+                  </Upload>
+                </Col>
+              </Row>
+
+              <Form.Item name="images">
+                <Upload
+                  action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                  listType="picture-card"
+                  fileList={fileList}
+                  onChange={imgChange}
+                  onPreview={onPreview}
+                  beforeUpload={beforeUpload}
+                  accept=".png,.jpeg,.webp"
+                >
+                  {fileList.length < 10 && '+ Upload'}
+                </Upload>
+              </Form.Item>
             </Col>
           </Row>
 
@@ -529,7 +640,7 @@ const EditOffender = ({
             <AddExclusion
               update={updateExclusion}
               onClose={toggleAddExclusion}
-              offenderId={data?.offender?.id}
+              // offenderId={data?.offender?.id}
             />
           ) : (
             <div />
@@ -542,7 +653,11 @@ const EditOffender = ({
           onClose={toggleEditExclusion}
         >
           {editExclusion ? (
-            <EditExclusion onClose={toggleEditExclusion} banId={banId} />
+            <EditExclusion
+              update={updateExclusion}
+              onClose={toggleEditExclusion}
+              banData={banData}
+            />
           ) : (
             <div />
           )}

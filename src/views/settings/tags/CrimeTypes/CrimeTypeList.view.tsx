@@ -1,11 +1,12 @@
 import React from 'react';
 import { Table, Row, Col, Input, Drawer, Button, Typography } from 'antd';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { CreateTagMutation, TagsQuery } from 'graphql/generated';
 import AddIncident from 'components/form-components/tags/crimeTypes/AddCrimeType';
 import EditIncident from 'components/form-components/tags/crimeTypes/EditCrimeType';
 
 import { MutationUpdaterFn } from '@apollo/client';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
 
 interface Props {
   data: TagsQuery | undefined;
@@ -99,14 +100,14 @@ const CrimeTypeList = ({
                   setIncidentId(record.key);
                   toggleEditIncident();
                 }}
-                icon={<EditOutlined />}
+                icon={<FontAwesomeIcon size="lg" icon={faPenToSquare} />}
               />
               <Button
                 disabled={saving}
                 onClick={() => {
                   deleteConfirm(record.key);
                 }}
-                icon={<DeleteOutlined />}
+                icon={<FontAwesomeIcon size="lg" icon={faTrash} />}
               />
             </>
           ),

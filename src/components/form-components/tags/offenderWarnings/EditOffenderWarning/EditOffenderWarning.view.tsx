@@ -24,7 +24,7 @@ const EditOffenderWarning = ({
   loading,
   saving,
 }: Props): JSX.Element =>
-  loading ? (
+  !data && loading ? (
     <Skeleton />
   ) : (
     <Form
@@ -61,7 +61,7 @@ const EditOffenderWarning = ({
       <Row gutter={16}>
         <Col span={23}>
           <Form.Item name="description" label="Description">
-            <Input disabled={saving} />
+            <Input.TextArea disabled={saving} />
           </Form.Item>
         </Col>
       </Row>
