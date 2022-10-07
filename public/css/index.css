@@ -1587,9 +1587,52 @@
   background: #fde3cf;
   color: #f56a00;
 }
-.view-message-container .message-container .message-content .current {
+.view-message-container .message-container .message-content .currentUser {
   background: #ff5252;
   color: #fff !important;
+}
+.view-message-container .message-container .message-content .info-upload-card {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border: 1px solid #edf2f9;
+  border-radius: 10px;
+}
+.view-message-container
+  .message-container
+  .message-content
+  .info-upload-card
+  .info-image {
+  height: 90px;
+  width: 90px;
+  margin: 5px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.view-message-container .message-container .message-content .info-card {
+  position: relative;
+  width: 370px;
+  height: 100px;
+  margin: 0;
+}
+.view-message-container
+  .message-container
+  .message-content
+  .info-card
+  .info-image {
+  height: 80px;
+  width: 80px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.view-message-container
+  .message-container
+  .message-content
+  .info-card
+  .info-image-skeleton {
+  height: 80px;
+  width: 80px;
 }
 .view-message-container .ant-upload-list-picture-card-container {
   width: 100px;

@@ -82,16 +82,10 @@ interface Return {
   bansData: BanData[];
   banData: BanData | null;
   setBanData: (value: BanData | null) => void;
-  // updateExclusion: MutationUpdaterFn<CreateBanMutation>;
-  // banId: string;
-  // setBanId: (value: string) => void;
-  // deleteConfirm: (value: string) => void;
   ageCheck: boolean;
   setAgeCheck: (value: boolean) => void;
   onReject: () => void;
   deleteConfirm: (value: string) => void;
-  // updateAddExclusion: (value: BanData) => void;
-  // updateEditExclusion: (value: BanData) => void;
   adminRights: boolean;
 }
 
@@ -140,7 +134,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
             uid: `${image.id}`,
             name: `${image.id}.png`,
             status: 'done',
-            url: `${image.url}`,
+            url: `${image.optimised || image.url}`,
           }))
         );
       }
@@ -286,6 +280,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           tags: {
             set: data.tags.map((id) => ({ id })) || undefined,
           },
+          scheme: { connect: { id: schemeId } },
           bans: getBans(),
           images: {
             upload:

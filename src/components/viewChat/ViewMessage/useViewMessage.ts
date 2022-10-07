@@ -561,50 +561,50 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     imgWindow?.document.write(image.outerHTML);
   };
   const onSubmit = () => {
-    // !inputStr ||
-    // if (!fileList || !incidentsData || !offendersData) {
-    //   message.info('The message cannot be empty!');
-    // } else {
-    setSaving(true);
-    sendMessage({
-      variables: {
-        data: {
-          chat: {
-            connect: {
-              id: chatId,
+    //
+    if (!inputStr && !fileList && !incidentsData && !offendersData) {
+      message.info('The message cannot be empty!');
+    } else {
+      setSaving(true);
+      sendMessage({
+        variables: {
+          data: {
+            chat: {
+              connect: {
+                id: chatId,
+              },
             },
-          },
-          scheme: {
-            connect: {
-              id: schemeId,
+            scheme: {
+              connect: {
+                id: schemeId,
+              },
             },
-          },
-          from: {
-            connect: {
-              id: userId,
+            from: {
+              connect: {
+                id: userId,
+              },
             },
+            content: inputStr,
+            images:
+              imageChange && fileList.length > 0
+                ? fileList
+                    .map((item) => ({
+                      filename: item.fileName || '',
+                      mimetype: item.type || '',
+                      url: item.url || '',
+                    }))
+                    .filter((obj) => obj.url !== undefined)
+                : undefined,
+            incidents: { connect: incidentsData?.map(({ id }) => ({ id })) },
+            offenders: { connect: offendersData?.map(({ id }) => ({ id })) },
           },
-          content: inputStr,
-          images:
-            imageChange && fileList.length > 0
-              ? fileList
-                  .map((item) => ({
-                    filename: item.fileName || '',
-                    mimetype: item.type || '',
-                    url: item.url || '',
-                  }))
-                  .filter((obj) => obj.url !== undefined)
-              : undefined,
-          incidents: { connect: incidentsData?.map(({ id }) => ({ id })) },
-          offenders: { connect: offendersData?.map(({ id }) => ({ id })) },
         },
-      },
-    });
-    setInputStr('');
-    setFileList([]);
-    setIncidentsData([]);
-    setOffendersData([]);
-    // }
+      });
+      setInputStr('');
+      setFileList([]);
+      setIncidentsData([]);
+      setOffendersData([]);
+    }
   };
 
   return {

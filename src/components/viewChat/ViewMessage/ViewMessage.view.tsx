@@ -329,7 +329,9 @@ const ViewMessges = ({
                             marginRight: 5,
                           }}
                           className={
-                            from?.id === userId ? 'current' : 'message-avatar'
+                            from?.id === userId
+                              ? 'currentUser'
+                              : 'message-avatar'
                           }
                         >
                           {from?.fullName[0]}
@@ -338,15 +340,16 @@ const ViewMessges = ({
                       <Col>{from?.fullName}</Col>
                     </Row>
                   )}
-                  {type === MessageType.message && (
+                  {type === MessageType.message && content && (
                     <Row
                       key={id}
                       justify={from?.id === userId ? 'end' : 'start'}
+                      style={{ marginBottom: 10 }}
                     >
                       <div
                         className={
                           from?.id === userId
-                            ? 'message-content-bubble current'
+                            ? 'message-content-bubble currentUser'
                             : 'message-content-bubble'
                         }
                       >
@@ -354,6 +357,7 @@ const ViewMessges = ({
                           {adminRights ? (
                             <Popover
                               // placement="topLeft"
+                              // visible={adminRights}
                               title="Options"
                               content={
                                 adminRights && (
@@ -381,57 +385,57 @@ const ViewMessges = ({
                       </div>
                     </Row>
                   )}
-                  {type === MessageType.message &&
-                    images &&
-                    images.length > 0 &&
-                    images.map((image) => (
-                      <Row
-                        key={image.id}
-                        justify={from?.id === userId ? 'end' : 'start'}
-                      >
-                        <Col>
+
+                  {type === MessageType.message && images && images.length > 0 && (
+                    <Row
+                      justify={from?.id === userId ? 'end' : 'start'}
+                      style={{ marginBottom: 10 }}
+                    >
+                      {images.map((image) => (
+                        <Col key={image.id}>
                           <div className="info-upload-card">
                             <div>
-                              <Popconfirm
-                                placement="topLeft"
-                                trigger="hover"
-                                title="Remove the image?"
-                                // onConfirm={() => removeImage(file.uid)}
-                                okText="Yes"
-                                cancelText="No"
-                              >
-                                <Button
-                                  size="small"
-                                  className="info-remove-button"
-                                  shape="circle"
-                                  type="text"
-                                  icon={
-                                    <FontAwesomeIcon
-                                      icon={faCircleXmark}
-                                      size="lg"
-                                    />
+                              {adminRights ? (
+                                <Popover
+                                  title="Options"
+                                  content={
+                                    adminRights && (
+                                      <Button
+                                        type="primary"
+                                        icon={
+                                          <FontAwesomeIcon
+                                            icon={faTrash}
+                                            size="lg"
+                                          />
+                                        }
+                                        onClick={() => {
+                                          deleteMessageConfirm(id || '');
+                                        }}
+                                      />
+                                    )
                                   }
+                                >
+                                  <div
+                                    className="info-image"
+                                    style={{
+                                      backgroundImage: `url(${image.optimised})`,
+                                    }}
+                                  />
+                                </Popover>
+                              ) : (
+                                <div
+                                  className="info-image"
+                                  style={{
+                                    backgroundImage: `url(${image.optimised})`,
+                                  }}
                                 />
-                              </Popconfirm>
-                            </div>
-
-                            <div
-                              className="info-image"
-                              // style={{
-                              //   backgroundImage: `url(${image.optimised})`,
-                              // }}
-                            >
-                              <img
-                                // className="info-image"
-                                src={image.optimised || ''}
-                                alt=""
-                                style={{ width: 100, height: 100 }}
-                              />
+                              )}
                             </div>
                           </div>
                         </Col>
-                      </Row>
-                    ))}
+                      ))}
+                    </Row>
+                  )}
                   {type === MessageType.message &&
                     offenders &&
                     offenders.length > 0 &&
@@ -439,68 +443,113 @@ const ViewMessges = ({
                       <Row
                         key={offender.id}
                         justify={from?.id === userId ? 'end' : 'start'}
+                        style={{ marginBottom: 10 }}
                       >
                         <Col key={offender.id}>
                           <Card size="small" className="info-card">
-                            <Row gutter={5} wrap={false}>
-                              <Popconfirm
-                                placement="topLeft"
-                                trigger="hover"
-                                title="Remove the offender?"
-                                // onConfirm={() => removeOffender(offender.id)}
-                                okText="Yes"
-                                cancelText="No"
-                              >
-                                <Button
-                                  size="small"
-                                  className="info-remove-button"
-                                  shape="circle"
-                                  type="text"
-                                  icon={
-                                    <FontAwesomeIcon
-                                      icon={faCircleXmark}
-                                      size="lg"
+                            {adminRights ? (
+                              <Popover
+                                title="Options"
+                                content={
+                                  adminRights && (
+                                    <Button
+                                      type="primary"
+                                      icon={
+                                        <FontAwesomeIcon
+                                          icon={faTrash}
+                                          size="lg"
+                                        />
+                                      }
+                                      onClick={() => {
+                                        deleteMessageConfirm(id || '');
+                                      }}
                                     />
-                                  }
-                                />
-                              </Popconfirm>
+                                  )
+                                }
+                              >
+                                <Row gutter={5} wrap={false}>
+                                  <Col>
+                                    {offender.images &&
+                                    offender.images.length > 0 ? (
+                                      <div
+                                        className="info-image"
+                                        style={{
+                                          backgroundImage: `url(${offender.images[0].optimised})`,
+                                        }}
+                                      />
+                                    ) : (
+                                      <Skeleton.Image className="info-image-skeleton" />
+                                    )}
+                                  </Col>
 
-                              <Col>
-                                {offender.images &&
-                                offender.images.length > 0 ? (
-                                  <div
-                                    className="info-image"
-                                    style={{
-                                      backgroundImage: `url(${offender.images[0].optimised})`,
-                                    }}
-                                  />
-                                ) : (
-                                  <Skeleton.Image className="info-image-skeleton" />
-                                )}
-                              </Col>
+                                  <Col flex={1}>
+                                    <Descriptions size="small" column={2}>
+                                      <Descriptions.Item
+                                        label="Offender"
+                                        span={2}
+                                      >
+                                        {offender.name}
+                                      </Descriptions.Item>
+                                      <Descriptions.Item label="Gender">
+                                        {getOffenderGender(offender.gender)}
+                                      </Descriptions.Item>
+                                      <Descriptions.Item label="Build">
+                                        {getOffenderBuild(offender.build)}
+                                      </Descriptions.Item>
+                                      <Descriptions.Item label="Age">
+                                        {offender.dateOfBirth
+                                          ? calcAge(offender.dateOfBirth)
+                                          : getOffenderAge(offender.age)}
+                                      </Descriptions.Item>
+                                      <Descriptions.Item label="Ethnicity">
+                                        {getOffenderRace(offender.race, true)}
+                                      </Descriptions.Item>
+                                    </Descriptions>
+                                  </Col>
+                                </Row>
+                              </Popover>
+                            ) : (
+                              <Row gutter={5} wrap={false}>
+                                <Col>
+                                  {offender.images &&
+                                  offender.images.length > 0 ? (
+                                    <div
+                                      className="info-image"
+                                      style={{
+                                        backgroundImage: `url(${offender.images[0].optimised})`,
+                                      }}
+                                    />
+                                  ) : (
+                                    <Skeleton.Image className="info-image-skeleton" />
+                                  )}
+                                </Col>
 
-                              <Col flex={1}>
-                                <Descriptions size="small" column={2}>
-                                  <Descriptions.Item label="Offender" span={2}>
-                                    {offender.name}
-                                  </Descriptions.Item>
-                                  <Descriptions.Item label="Gender">
-                                    {getOffenderGender(offender.gender)}
-                                  </Descriptions.Item>
-                                  <Descriptions.Item label="Build">
-                                    {getOffenderBuild(offender.build)}
-                                  </Descriptions.Item>
-                                  <Descriptions.Item label="Age">
-                                    {offender.dateOfBirth
-                                      ? calcAge(offender.dateOfBirth)
-                                      : getOffenderAge(offender.age)}
-                                  </Descriptions.Item>
-                                  <Descriptions.Item label="Ethnicity">
-                                    {getOffenderRace(offender.race, true)}
-                                  </Descriptions.Item>
-                                </Descriptions>
-                              </Col>
-                            </Row>
+                                <Col flex={1}>
+                                  <Descriptions size="small" column={2}>
+                                    <Descriptions.Item
+                                      label="Offender"
+                                      span={2}
+                                    >
+                                      {offender.name}
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Gender">
+                                      {getOffenderGender(offender.gender)}
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Build">
+                                      {getOffenderBuild(offender.build)}
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Age">
+                                      {offender.dateOfBirth
+                                        ? calcAge(offender.dateOfBirth)
+                                        : getOffenderAge(offender.age)}
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="Ethnicity">
+                                      {getOffenderRace(offender.race, true)}
+                                    </Descriptions.Item>
+                                  </Descriptions>
+                                </Col>
+                              </Row>
+                            )}
                           </Card>
                         </Col>
                       </Row>
@@ -512,69 +561,109 @@ const ViewMessges = ({
                       <Row
                         key={incident.id}
                         justify={from?.id === userId ? 'end' : 'start'}
+                        style={{ marginBottom: 10 }}
                       >
                         <Col key={incident.id}>
                           <Card size="small" className="info-card">
-                            <Row gutter={5} wrap={false}>
-                              <Popconfirm
-                                placement="topLeft"
-                                trigger="hover"
-                                title="Remove the incident?"
-                                onConfirm={() => removeIncident(incident.id)}
-                                okText="Yes"
-                                cancelText="No"
-                              >
-                                <Button
-                                  size="small"
-                                  className="info-remove-button"
-                                  shape="circle"
-                                  type="text"
-                                  icon={
-                                    <FontAwesomeIcon
-                                      icon={faCircleXmark}
-                                      size="lg"
-                                    />
-                                  }
-                                />
-                              </Popconfirm>
-
-                              <Col>
-                                {incident?.images &&
-                                  incident.images.length > 0 && (
-                                    <div
-                                      className="info-image"
-                                      style={{
-                                        backgroundImage: `url(${incident.images[0].optimised})`,
+                            {adminRights ? (
+                              <Popover
+                                title="Options"
+                                content={
+                                  adminRights && (
+                                    <Button
+                                      type="primary"
+                                      icon={
+                                        <FontAwesomeIcon
+                                          icon={faTrash}
+                                          size="lg"
+                                        />
+                                      }
+                                      onClick={() => {
+                                        deleteMessageConfirm(id || '');
                                       }}
                                     />
-                                  )}
-                              </Col>
-                              <Col flex={1}>
-                                <Typography.Paragraph
-                                  className="incident-item-desc"
-                                  type="secondary"
-                                  ellipsis
-                                >
-                                  <span style={{ marginRight: 5 }}>
-                                    {' '}
-                                    Incident:{' '}
-                                  </span>
-                                  {incident.description}
-                                </Typography.Paragraph>
-                                <Descriptions size="small" column={1}>
-                                  <Descriptions.Item label="CreatedAt">
-                                    {incident.dayTime}
-                                  </Descriptions.Item>
-                                </Descriptions>{' '}
-                                <Typography.Paragraph
-                                  className="incident-item-desc"
-                                  type="secondary"
-                                  ellipsis
-                                >
-                                  {incident.description}
-                                </Typography.Paragraph>
-                              </Col>
-                            </Row>
+                                  )
+                                }
+                              >
+                                <Row gutter={5} wrap={false}>
+                                  <Col>
+                                    {incident?.images &&
+                                      incident.images.length > 0 && (
+                                        <div
+                                          className="info-image"
+                                          style={{
+                                            backgroundImage: `url(${incident.images[0].optimised})`,
+                                          }}
+                                        />
+                                      )}
+                                  </Col>
+                                  <Col flex={1}>
+                                    <Typography.Paragraph
+                                      className="incident-item-desc"
+                                      type="secondary"
+                                      ellipsis
+                                    >
+                                      <span style={{ marginRight: 5 }}>
+                                        {' '}
+                                        Incident:{' '}
+                                      </span>
+                                      {incident.description}
+                                    </Typography.Paragraph>
+                                    <Descriptions size="small" column={1}>
+                                      <Descriptions.Item label="CreatedAt">
+                                        {incident.dayTime}
+                                      </Descriptions.Item>
+                                    </Descriptions>{' '}
+                                    <Typography.Paragraph
+                                      className="incident-item-desc"
+                                      type="secondary"
+                                      ellipsis
+                                    >
+                                      {incident.description}
+                                    </Typography.Paragraph>
+                                  </Col>
+                                </Row>
+                              </Popover>
+                            ) : (
+                              <Row gutter={5} wrap={false}>
+                                <Col>
+                                  {incident?.images &&
+                                    incident.images.length > 0 && (
+                                      <div
+                                        className="info-image"
+                                        style={{
+                                          backgroundImage: `url(${incident.images[0].optimised})`,
+                                        }}
+                                      />
+                                    )}
+                                </Col>
+                                <Col flex={1}>
+                                  <Typography.Paragraph
+                                    className="incident-item-desc"
+                                    type="secondary"
+                                    ellipsis
+                                  >
+                                    <span style={{ marginRight: 5 }}>
+                                      {' '}
+                                      Incident:{' '}
+                                    </span>
+                                    {incident.description}
+                                  </Typography.Paragraph>
+                                  <Descriptions size="small" column={1}>
+                                    <Descriptions.Item label="CreatedAt">
+                                      {incident.dayTime}
+                                    </Descriptions.Item>
+                                  </Descriptions>{' '}
+                                  <Typography.Paragraph
+                                    className="incident-item-desc"
+                                    type="secondary"
+                                    ellipsis
+                                  >
+                                    {incident.description}
+                                  </Typography.Paragraph>
+                                </Col>
+                              </Row>
+                            )}
                           </Card>
                         </Col>
                       </Row>
@@ -629,6 +718,7 @@ const ViewMessges = ({
           <Col style={{ marginLeft: 10, marginRight: -2 }}>
             <Upload
               action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+              accept=".png,.jpeg,.webp"
               listType="picture-card"
               fileList={fileList}
               onChange={imgChange}
@@ -883,6 +973,7 @@ const ViewMessges = ({
           <Col>
             <Upload
               action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+              accept=".png,.jpeg,.webp"
               fileList={fileList}
               onChange={imgChange}
               beforeUpload={beforeUpload}

@@ -47,9 +47,43 @@
         background: #fde3cf;
         color: #f56a00;
       }
-      .current {
+      .currentUser {
         background: #ff5252;
         color: #fff !important;
+      }
+      .info-upload-card {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        // overflow: hidden;
+        border: 1px solid #edf2f9;
+        border-radius: 10px;
+        .info-image {
+          height: 90px;
+          width: 90px;
+          margin: 5px;
+          // background-position: center;
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+      }
+
+      .info-card {
+        position: relative;
+        width: 370px;
+        height: 100px;
+        margin: 0;
+        .info-image {
+          height: 80px;
+          width: 80px;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: cover;
+        }
+        .info-image-skeleton {
+          height: 80px;
+          width: 80px;
+        }
       }
     }
   }
@@ -113,6 +147,7 @@
         background-size: cover;
       }
     }
+
     .info-card {
       position: relative;
       width: 370px;
