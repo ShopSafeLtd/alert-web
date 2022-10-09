@@ -247,6 +247,8 @@ const useAddOffender = (): Return => {
   // const [createBan] = useCreateBanMutation();
   const onSubmit = (data: FormData) => {
     setSaving(true);
+    console.log('fileList-offender', fileList);
+
     createOffender({
       variables: {
         data: {

@@ -34,7 +34,13 @@ const GroupDetail = ({
           type="primary"
           disabled={saving}
           onClick={toggleEditGroup}
-          icon={<FontAwesomeIcon size="lg" icon={faPenToSquare} />}
+          icon={
+            <FontAwesomeIcon
+              size="lg"
+              icon={faPenToSquare}
+              style={{ marginRight: 5 }}
+            />
+          }
         >
           Edit Group
         </Button>,
@@ -43,7 +49,13 @@ const GroupDetail = ({
           disabled={saving}
           onClick={deleteConfirm}
           type="primary"
-          icon={<FontAwesomeIcon size="lg" icon={faTrash} />}
+          icon={
+            <FontAwesomeIcon
+              size="lg"
+              icon={faTrash}
+              style={{ marginRight: 5 }}
+            />
+          }
         >
           Delete Group
         </Button>,

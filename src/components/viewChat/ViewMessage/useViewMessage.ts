@@ -20,6 +20,7 @@ import {
   Gender,
   Race,
   Build,
+  useUpdateMessageMutation,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import moment, { Moment } from 'moment';
@@ -145,6 +146,10 @@ interface Return {
   removeOffender: (value: string | undefined) => void;
   removeIncident: (value: string | undefined) => void;
   removeImage: (uid: string) => void;
+  setMentionedUser: (id: string[]) => void;
+  deleteImageConfirm: (messageId: string, imageId: string) => void;
+  deleteOffenderConfirm: (messageId: string, offenderId: string) => void;
+  deleteIncidentConfirm: (messageId: string, incidentId: string) => void;
 }
 
 const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
@@ -157,8 +162,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const [form] = useForm<FormData>();
   const [after, setAfter] = useState('');
   const [datedMessages, setDatedMessages] = useState<DatedMessages[]>([]);
-  // const [currentChatId, setCurrentChatId] = useState('');
-
   const [loadMore, setLoadMore] = useState(false);
   const [fetching, setFetching] = useState(false);
   const [manageChat, setManageChat] = useState(false);
@@ -170,6 +173,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const [linkIncident, setLinkIncident] = useState(false);
   const [linkOffender, setLinkOffender] = useState(false);
   const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
+  const [mentionedUser, setMentionedUser] = useState<string[]>([]);
 
   const [incidentsData, setIncidentsData] = useState<
     | Exclude<
@@ -245,19 +249,12 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       if (res.messages.length > 0) {
         setAfter(res.messages.slice(-1)[0].id);
         handleMessagesData(res.messages, true);
-        // console.log(res.messages.map((el)=>el.));
       } else {
         handleMessagesData([]);
       }
     },
   });
-  // useEffect(() => {
 
-  //   // console.log('currentChatId1', currentChatId);
-  //   // if (chatId !== currentChatId) {
-  //   // setCurrentChatId(chatId);
-  //   // refetch();
-  // }, [chatId]);
   const { data: chatData } = useChatQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -400,6 +397,92 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       },
     });
   };
+  const [updateMessage] = useUpdateMessageMutation({
+    onCompleted: () => {
+      setSaving(false);
+    },
+    onError: () => {
+      setSaving(false);
+      errorNotification();
+    },
+  });
+  const deleteImageConfirm = (messageId: string, imageId: string) => {
+    confirm({
+      title: 'Do you want to remove the image from the message?',
+      content: 'This action cannot be undone.',
+      onOk() {
+        setSaving(true);
+        updateMessage({
+          variables: {
+            where: {
+              id: messageId,
+            },
+            data: {
+              images: {
+                delete: [
+                  {
+                    id: imageId,
+                  },
+                ],
+              },
+            },
+          },
+        });
+      },
+    });
+  };
+
+  const deleteOffenderConfirm = (messageId: string, offenderId: string) => {
+    confirm({
+      title: 'Do you want to remove the offender from the message?',
+      content: 'This action cannot be undone.',
+      onOk() {
+        setSaving(true);
+        updateMessage({
+          variables: {
+            where: {
+              id: messageId,
+            },
+            data: {
+              offenders: {
+                delete: [
+                  {
+                    id: offenderId,
+                  },
+                ],
+              },
+            },
+          },
+        });
+      },
+    });
+  };
+
+  const deleteIncidentConfirm = (messageId: string, incidentId: string) => {
+    confirm({
+      title: 'Do you want to remove the incident from the message?',
+      content: 'This action cannot be undone.',
+      onOk() {
+        setSaving(true);
+        updateMessage({
+          variables: {
+            where: {
+              id: messageId,
+            },
+            data: {
+              incidents: {
+                delete: [
+                  {
+                    id: incidentId,
+                  },
+                ],
+              },
+            },
+          },
+        });
+      },
+    });
+  };
 
   const [deleteMessage] = useDeleteMessageMutation({
     onCompleted: () => {
@@ -435,6 +518,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       },
     });
   };
+
   const [deleteChat] = useDeleteChatMutation({
     onCompleted: () => {
       setSaving(false);
@@ -560,8 +644,9 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     const imgWindow = window.open(src);
     imgWindow?.document.write(image.outerHTML);
   };
+  console.log('mentionedUser', mentionedUser);
+
   const onSubmit = () => {
-    //
     if (!inputStr && !fileList && !incidentsData && !offendersData) {
       message.info('The message cannot be empty!');
     } else {
@@ -584,6 +669,12 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                 id: userId,
               },
             },
+            mentions: {
+              connect:
+                mentionedUser && mentionedUser.length > 0
+                  ? mentionedUser.map((id) => ({ id }))
+                  : undefined,
+            },
             content: inputStr,
             images:
               imageChange && fileList.length > 0
@@ -595,8 +686,18 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                     }))
                     .filter((obj) => obj.url !== undefined)
                 : undefined,
-            incidents: { connect: incidentsData?.map(({ id }) => ({ id })) },
-            offenders: { connect: offendersData?.map(({ id }) => ({ id })) },
+            incidents: {
+              connect:
+                incidentsData && incidentsData.length > 0
+                  ? incidentsData.map(({ id }) => ({ id }))
+                  : undefined,
+            },
+            offenders: {
+              connect:
+                offendersData && offendersData.length > 0
+                  ? offendersData.map(({ id }) => ({ id }))
+                  : undefined,
+            },
           },
         },
       });
@@ -604,6 +705,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       setFileList([]);
       setIncidentsData([]);
       setOffendersData([]);
+      setMentionedUser([]);
     }
   };
 
@@ -643,6 +745,10 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     removeOffender,
     removeIncident,
     removeImage,
+    setMentionedUser,
+    deleteImageConfirm,
+    deleteOffenderConfirm,
+    deleteIncidentConfirm,
   };
 };
 

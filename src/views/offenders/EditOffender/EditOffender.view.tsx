@@ -395,7 +395,7 @@ const EditOffender = ({
                 Exclusions
               </Title>
             </Col>
-            <Col style={{ marginRight: 10 }}>
+            <Col style={{ marginRight: 5 }}>
               <Paragraph
                 style={{ marginBottom: 1, marginLeft: 5 }}
                 type="secondary"
@@ -484,7 +484,10 @@ const EditOffender = ({
                               toggleEditExclusion();
                             }}
                             icon={
-                              <FontAwesomeIcon size="lg" icon={faPenToSquare} />
+                              <FontAwesomeIcon
+                                icon={faPenToSquare}
+                                style={{ marginRight: 5 }}
+                              />
                             }
                           />
                           <Button
@@ -492,7 +495,12 @@ const EditOffender = ({
                             onClick={() => {
                               deleteConfirm(record.key || '');
                             }}
-                            icon={<FontAwesomeIcon size="lg" icon={faTrash} />}
+                            icon={
+                              <FontAwesomeIcon
+                                icon={faTrash}
+                                style={{ marginRight: 5 }}
+                              />
+                            }
                           />
                         </>
                       ),

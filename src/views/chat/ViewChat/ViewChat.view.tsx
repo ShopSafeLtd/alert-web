@@ -18,7 +18,7 @@ import {
 } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faCommentPlus,
+  // faCommentPlus,
   faPlus,
   faUser,
 } from '@fortawesome/pro-light-svg-icons';
@@ -74,7 +74,7 @@ const ViewOffender = ({
                     <FontAwesomeIcon
                       icon={faPlus}
                       size="lg"
-                      style={{ marginRight: 10 }}
+                      style={{ marginRight: 5 }}
                     />
                   }
                 >
@@ -92,6 +92,7 @@ const ViewOffender = ({
               renderItem={({
                 id: userChatId,
                 newMessages,
+                mentioned,
                 chat: { id, name, firstLetter, messages, totalMembers },
               }) => (
                 <Link to={`/app/chat/${id}`} key={id}>
@@ -112,7 +113,13 @@ const ViewOffender = ({
                       title={
                         <Row style={{ marginRight: 5 }}>
                           <Col>
-                            <Title level={4}>{name}</Title>
+                            <Paragraph
+                              style={{ fontSize: 16, marginBottom: '0.5rem' }}
+                              // strong={!newMessages}
+                              strong={newMessages || false}
+                            >
+                              {name}
+                            </Paragraph>
                           </Col>
                           <Col flex={1}>
                             <span className="chat-item-tag" color="red">
@@ -145,15 +152,24 @@ const ViewOffender = ({
                       description={
                         <Row wrap={false} style={{ marginRight: 5 }}>
                           <Col flex={1}>
-                            <Paragraph ellipsis>
+                            <Paragraph
+                              style={{ fontSize: 14 }}
+                              ellipsis
+                              // strong={!newMessages}
+                              strong={newMessages || false}
+                            >
                               {messages && messages.length > 0
-                                ? `${messages?.slice(-1)[0].from.fullName} : ${
+                                ? `${mentioned && '[You were mentioned]'}${
+                                    messages?.slice(-1)[0].from.fullName
+                                  } : ${
                                     messages?.slice(-1)[0].content
+                                    // ???
+                                    // messages?.slice(-1)[0].images
                                   }`
                                 : 'No Messages'}
                             </Paragraph>
                           </Col>
-                          <Col>
+                          {/* <Col>
                             {!newMessages && (
                               <FontAwesomeIcon
                                 size="2x"
@@ -164,7 +180,7 @@ const ViewOffender = ({
                                 }}
                               />
                             )}
-                          </Col>
+                          </Col> */}
                         </Row>
                       }
                     />

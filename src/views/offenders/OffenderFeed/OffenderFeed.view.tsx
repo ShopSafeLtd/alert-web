@@ -127,7 +127,7 @@ const OffenderFeed = ({
               <FontAwesomeIcon
                 icon={faPlus}
                 size="lg"
-                style={{ marginRight: 10 }}
+                style={{ marginRight: 5 }}
               />
             }
           >

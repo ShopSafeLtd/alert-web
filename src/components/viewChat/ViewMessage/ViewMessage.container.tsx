@@ -45,6 +45,10 @@ const ViewMessages = ({ chatId, updateUserChatList }: Props): JSX.Element => {
     removeOffender,
     removeIncident,
     removeImage,
+    setMentionedUser,
+    deleteImageConfirm,
+    deleteOffenderConfirm,
+    deleteIncidentConfirm,
   } = useViewMessages({ chatId, updateUserChatList });
 
   return (
@@ -85,6 +89,10 @@ const ViewMessages = ({ chatId, updateUserChatList }: Props): JSX.Element => {
       removeOffender={removeOffender}
       removeIncident={removeIncident}
       removeImage={removeImage}
+      setMentionedUser={setMentionedUser}
+      deleteImageConfirm={deleteImageConfirm}
+      deleteOffenderConfirm={deleteOffenderConfirm}
+      deleteIncidentConfirm={deleteIncidentConfirm}
     />
   );
 };

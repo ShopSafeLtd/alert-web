@@ -6482,6 +6482,7 @@ export type Message = {
   id: Scalars['String'];
   images: Array<Image>;
   incidents: Array<Incident>;
+  mentions: Array<User>;
   offenders: Array<Offender>;
   scheme: Scheme;
   sent?: Maybe<Scalars['Boolean']>;
@@ -6507,6 +6508,13 @@ export type MessageImagesArgs = {
 export type MessageIncidentsArgs = {
   after?: InputMaybe<IncidentWhereUniqueInput>;
   before?: InputMaybe<IncidentWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type MessageMentionsArgs = {
+  after?: InputMaybe<UserWhereUniqueInput>;
+  before?: InputMaybe<UserWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
 };
@@ -12297,7 +12305,8 @@ export type UploadOffenderImage = {
 };
 
 export type UploadSchemeImage = {
-  file: Scalars['Upload'];
+  file?: InputMaybe<Scalars['Upload']>;
+  url?: InputMaybe<UrlImage>;
 };
 
 export type User = {
@@ -12460,6 +12469,7 @@ export type UserChat = {
   chat: Chat;
   createdAt: Scalars['DateTime'];
   id: Scalars['String'];
+  mentioned?: Maybe<Scalars['Boolean']>;
   newMessages?: Maybe<Scalars['Boolean']>;
   updatedAt: Scalars['DateTime'];
   user: User;
@@ -12469,6 +12479,7 @@ export type UserChatCreateInput = {
   chat: ChatCreateNestedOneWithoutMembersInput;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   id?: InputMaybe<Scalars['String']>;
+  mentioned?: InputMaybe<Scalars['Boolean']>;
   newMessages?: InputMaybe<Scalars['Boolean']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   user: UserCreateNestedOneWithoutChatsInput;
@@ -12477,6 +12488,7 @@ export type UserChatCreateInput = {
 export type UserChatCreateManyChatInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   id?: InputMaybe<Scalars['String']>;
+  mentioned?: InputMaybe<Scalars['Boolean']>;
   newMessages?: InputMaybe<Scalars['Boolean']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   userId: Scalars['String'];
@@ -12491,6 +12503,7 @@ export type UserChatCreateManyUserInput = {
   chatId: Scalars['String'];
   createdAt?: InputMaybe<Scalars['DateTime']>;
   id?: InputMaybe<Scalars['String']>;
+  mentioned?: InputMaybe<Scalars['Boolean']>;
   newMessages?: InputMaybe<Scalars['Boolean']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -12527,6 +12540,7 @@ export type UserChatCreateOrConnectWithoutUserInput = {
 export type UserChatCreateWithoutChatInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   id?: InputMaybe<Scalars['String']>;
+  mentioned?: InputMaybe<Scalars['Boolean']>;
   newMessages?: InputMaybe<Scalars['Boolean']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   user: UserCreateNestedOneWithoutChatsInput;
@@ -12536,6 +12550,7 @@ export type UserChatCreateWithoutUserInput = {
   chat: ChatCreateNestedOneWithoutMembersInput;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   id?: InputMaybe<Scalars['String']>;
+  mentioned?: InputMaybe<Scalars['Boolean']>;
   newMessages?: InputMaybe<Scalars['Boolean']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -12555,6 +12570,7 @@ export type UserChatOrderByWithRelationInput = {
   chatId?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
+  mentioned?: InputMaybe<SortOrder>;
   newMessages?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
   user?: InputMaybe<UserOrderByWithRelationInput>;
@@ -12568,6 +12584,7 @@ export type UserChatScalarWhereInput = {
   chatId?: InputMaybe<StringFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<StringFilter>;
+  mentioned?: InputMaybe<BoolNullableFilter>;
   newMessages?: InputMaybe<BoolNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   userId?: InputMaybe<StringFilter>;
@@ -12577,6 +12594,7 @@ export type UserChatUpdateInput = {
   chat?: InputMaybe<ChatUpdateOneRequiredWithoutMembersInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  mentioned?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   newMessages?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   user?: InputMaybe<UserUpdateOneRequiredWithoutChatsInput>;
@@ -12585,6 +12603,7 @@ export type UserChatUpdateInput = {
 export type UserChatUpdateManyMutationInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  mentioned?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   newMessages?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -12640,6 +12659,7 @@ export type UserChatUpdateWithWhereUniqueWithoutUserInput = {
 export type UserChatUpdateWithoutChatInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  mentioned?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   newMessages?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   user?: InputMaybe<UserUpdateOneRequiredWithoutChatsInput>;
@@ -12649,6 +12669,7 @@ export type UserChatUpdateWithoutUserInput = {
   chat?: InputMaybe<ChatUpdateOneRequiredWithoutMembersInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  mentioned?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   newMessages?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -12673,6 +12694,7 @@ export type UserChatWhereInput = {
   chatId?: InputMaybe<StringFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<StringFilter>;
+  mentioned?: InputMaybe<BoolNullableFilter>;
   newMessages?: InputMaybe<BoolNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   user?: InputMaybe<UserWhereInput>;
@@ -15685,6 +15707,64 @@ export type DeleteMessageMutation = {
   deleteMessage?: { __typename?: 'Message'; id: string } | null;
 };
 
+export type UpdateMessageMutationVariables = Exact<{
+  where: MessageWhereUniqueInput;
+  data: MessageUpdateInput;
+}>;
+
+export type UpdateMessageMutation = {
+  __typename?: 'Mutation';
+  updateMessage?: {
+    __typename?: 'Message';
+    id: string;
+    sent?: boolean | null;
+    content: string;
+    createdAt: any;
+    from: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      organisation: string;
+    };
+    chat: { __typename?: 'Chat'; id: string; name: string };
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+    }>;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+      description: string;
+      dayTime?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      age?: Age | null;
+      build?: Build | null;
+      dateOfBirth?: any | null;
+      name?: string | null;
+      race?: Race | null;
+      gender?: Gender | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
+  } | null;
+};
+
 export type MessagesQueryVariables = Exact<{
   chat?: InputMaybe<Scalars['String']>;
   after?: InputMaybe<MessageWhereUniqueInput>;
@@ -16616,6 +16696,7 @@ export type UserChatsQuery = {
       __typename?: 'UserChat';
       id: string;
       newMessages?: boolean | null;
+      mentioned?: boolean | null;
       updatedAt: any;
       user: {
         __typename?: 'User';
@@ -18561,6 +18642,102 @@ export type DeleteMessageMutationResult =
 export type DeleteMessageMutationOptions = Apollo.BaseMutationOptions<
   DeleteMessageMutation,
   DeleteMessageMutationVariables
+>;
+export const UpdateMessageDocument = gql`
+  mutation updateMessage(
+    $where: MessageWhereUniqueInput!
+    $data: MessageUpdateInput!
+  ) {
+    updateMessage(where: $where, data: $data) {
+      id
+      sent
+      from {
+        id
+        fullName
+        organisation
+      }
+      chat {
+        id
+        name
+      }
+      content
+      createdAt
+      images {
+        id
+        url
+        optimised
+      }
+      incidents {
+        id
+        subject
+        description
+        dayTime
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      offenders {
+        id
+        age
+        build
+        dateOfBirth
+        name
+        race
+        gender
+        images {
+          id
+          url
+          optimised
+        }
+      }
+    }
+  }
+`;
+export type UpdateMessageMutationFn = Apollo.MutationFunction<
+  UpdateMessageMutation,
+  UpdateMessageMutationVariables
+>;
+
+/**
+ * __useUpdateMessageMutation__
+ *
+ * To run a mutation, you first call `useUpdateMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateMessageMutation, { data, loading, error }] = useUpdateMessageMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateMessageMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateMessageMutation,
+    UpdateMessageMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateMessageMutation,
+    UpdateMessageMutationVariables
+  >(UpdateMessageDocument, options);
+}
+export type UpdateMessageMutationHookResult = ReturnType<
+  typeof useUpdateMessageMutation
+>;
+export type UpdateMessageMutationResult =
+  Apollo.MutationResult<UpdateMessageMutation>;
+export type UpdateMessageMutationOptions = Apollo.BaseMutationOptions<
+  UpdateMessageMutation,
+  UpdateMessageMutationVariables
 >;
 export const MessagesDocument = gql`
   query messages($chat: String, $after: MessageWhereUniqueInput) {
@@ -20749,6 +20926,7 @@ export const UserChatsDocument = gql`
       ) {
         id
         newMessages
+        mentioned
         updatedAt
         user {
           id

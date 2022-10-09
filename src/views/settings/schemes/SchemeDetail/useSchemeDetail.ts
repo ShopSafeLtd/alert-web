@@ -49,7 +49,7 @@ const useSchemeDetail = (): Return => {
             uid: `${scheme?.logo?.id}`,
             name: 'image.png',
             status: 'done',
-            url: `${scheme?.logo?.url}`,
+            url: `${scheme?.logo?.optimised || scheme?.logo?.url}`,
           },
         ]);
       }
@@ -78,39 +78,37 @@ const useSchemeDetail = (): Return => {
   const onSubmit = (data: FormData) => {
     setSaving(true);
 
-    if (schemeId)
-      updateScheme({
-        variables: {
-          where: {
-            id: schemeId,
-          },
-          data: {
-            name: { set: data.name },
-            autoApproveIncidents: { set: data.autoApproveOffenders },
-            autoApproveOffenders: { set: data.autoApproveIncidents },
-            incidentRetention: { set: data.incidentRetention },
-            offenderRetention: { set: data.offenderRetention },
-            logo: {
-              // ???
-              // ...(imageChange && fileList.length > 0
-              //   ? {
-              //       upload: {
-              //         url: {
-              //           filename: fileList[0].fileName || '',
-              //           mimetype: fileList[0].type || '',
-              //           url: fileList[0].url || '',
-              //         },
-              //       },
-              //     }
-              //   : undefined),
-              ...(imageChange && fileList.length > 0
-                ? { upload: { file: fileList[0]?.originFileObj } }
-                : {}),
-              ...(imageChange && fileList.length === 0 ? { delete: true } : {}),
-            },
+    updateScheme({
+      variables: {
+        where: {
+          id: schemeId,
+        },
+        data: {
+          name: { set: data.name },
+          autoApproveIncidents: { set: data.autoApproveOffenders },
+          autoApproveOffenders: { set: data.autoApproveIncidents },
+          incidentRetention: { set: data.incidentRetention },
+          offenderRetention: { set: data.offenderRetention },
+          logo: {
+            ...(imageChange && fileList.length > 0
+              ? {
+                  upload: {
+                    url: {
+                      filename: fileList[0].fileName || '',
+                      mimetype: fileList[0].type || '',
+                      url: fileList[0].url || '',
+                    },
+                  },
+                }
+              : undefined),
+            // ...(imageChange && fileList.length > 0
+            //   ? { upload: { file: fileList[0]?.originFileObj } }
+            //   : {}),
+            ...(imageChange && fileList.length === 0 ? { delete: true } : {}),
           },
         },
-      });
+      },
+    });
   };
 
   // image
