@@ -7,7 +7,11 @@ import EditOffender from 'components/form-components/tags/offenderWarnings/EditO
 
 import { MutationUpdaterFn } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
+import {
+  faPenToSquare,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
 
 interface Props {
   data: TagsQuery | undefined;
@@ -52,8 +56,18 @@ const OffenderWarningList = ({
       </Col>
       <Col flex={1} />
       <Col>
-        <Button type="primary" onClick={toggleAddOffender}>
-          Add
+        <Button
+          type="primary"
+          onClick={toggleAddOffender}
+          icon={
+            <FontAwesomeIcon
+              icon={faPlus}
+              size="lg"
+              style={{ marginRight: 5 }}
+            />
+          }
+        >
+          Add Offender Warning
         </Button>
       </Col>
     </Row>
@@ -103,14 +117,21 @@ const OffenderWarningList = ({
                   setOffenderId(record.key);
                   toggleEditOffender();
                 }}
-                icon={<FontAwesomeIcon size="lg" icon={faPenToSquare} />}
+                icon={
+                  <FontAwesomeIcon
+                    icon={faPenToSquare}
+                    style={{ marginRight: 10 }}
+                  />
+                }
               />
               <Button
                 disabled={saving}
                 onClick={() => {
                   deleteConfirm(record.key);
                 }}
-                icon={<FontAwesomeIcon size="lg" icon={faTrash} />}
+                icon={
+                  <FontAwesomeIcon icon={faTrash} style={{ marginRight: 5 }} />
+                }
               />
             </>
           ),

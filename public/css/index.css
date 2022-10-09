@@ -1536,6 +1536,35 @@
   height: calc(100vh - 70px);
   width: 100%;
 }
+.view-message-container .message-upload-card {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border: 1px solid #edf2f9;
+  border-radius: 10px;
+}
+.view-message-container .message-card {
+  position: relative;
+  width: 370px;
+  height: 100px;
+  margin: 0;
+  overflow: hidden;
+}
+.view-message-container .message-image {
+  height: 100px;
+  width: 100px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.view-message-container .message-image-skeleton {
+  height: 100px;
+  width: 100px;
+}
+.view-message-container .ant-card-small > .ant-card-body {
+  padding: 0;
+}
 .view-message-container .message-container {
   margin-bottom: 10px;
   height: calc(100vh - 250px);
@@ -1591,53 +1620,6 @@
   background: #ff5252;
   color: #fff !important;
 }
-.view-message-container .message-container .message-content .info-upload-card {
-  position: relative;
-  width: 100px;
-  height: 100px;
-  border: 1px solid #edf2f9;
-  border-radius: 10px;
-}
-.view-message-container
-  .message-container
-  .message-content
-  .info-upload-card
-  .info-image {
-  height: 90px;
-  width: 90px;
-  margin: 5px;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-.view-message-container .message-container .message-content .info-card {
-  position: relative;
-  width: 370px;
-  height: 100px;
-  margin: 0;
-}
-.view-message-container
-  .message-container
-  .message-content
-  .info-card
-  .info-image {
-  height: 80px;
-  width: 80px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-.view-message-container
-  .message-container
-  .message-content
-  .info-card
-  .info-image-skeleton {
-  height: 80px;
-  width: 80px;
-}
-.view-message-container .ant-upload-list-picture-card-container {
-  width: 100px;
-  height: 100px;
-}
 .view-message-container .image-card {
   height: 100px;
   width: 100px;
@@ -1669,42 +1651,21 @@
 }
 .view-message-container .info-container .info-remove-button {
   position: absolute;
-  top: -12px;
-  left: -15px;
+  top: -5px;
+  right: -5px;
+  z-index: 100;
 }
-.view-message-container .info-container .info-upload-card {
-  position: relative;
+.view-message-container
+  .info-container
+  .ant-upload-list-picture-card-container {
   width: 100px;
   height: 100px;
-  border: 1px solid #edf2f9;
-  border-radius: 10px;
-}
-.view-message-container .info-container .info-upload-card .info-image {
-  height: 90px;
-  width: 90px;
-  margin: 5px;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-.view-message-container .info-container .info-card {
-  position: relative;
-  width: 370px;
-  height: 100px;
-  margin: 0;
-}
-.view-message-container .info-container .info-card .info-image {
-  height: 80px;
-  width: 80px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-.view-message-container .info-container .info-card .info-image-skeleton {
-  height: 80px;
-  width: 80px;
 }
 .ant-switch-handle {
   top: 6px !important;
+}
+.scheme-detail-switch .ant-switch-handle {
+  top: 2px !important;
 }
 .button-icon {
   margin-right: 5px;

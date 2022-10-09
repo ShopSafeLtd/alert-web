@@ -442,16 +442,14 @@ const AddOffender = ({
                             setBanData(record.item);
                             toggleEditExclusion();
                           }}
-                          icon={
-                            <FontAwesomeIcon size="lg" icon={faPenToSquare} />
-                          }
+                          icon={<FontAwesomeIcon icon={faPenToSquare} />}
                         />
                         <Button
                           disabled={saving}
                           onClick={() => {
                             deleteConfirm(record.key);
                           }}
-                          icon={<FontAwesomeIcon size="lg" icon={faTrash} />}
+                          icon={<FontAwesomeIcon icon={faTrash} />}
                         />
                       </>
                     ),

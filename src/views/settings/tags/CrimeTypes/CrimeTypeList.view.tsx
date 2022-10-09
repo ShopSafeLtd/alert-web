@@ -6,7 +6,11 @@ import EditIncident from 'components/form-components/tags/crimeTypes/EditCrimeTy
 
 import { MutationUpdaterFn } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
+import {
+  faPenToSquare,
+  faPlus,
+  faTrash,
+} from '@fortawesome/pro-light-svg-icons';
 
 interface Props {
   data: TagsQuery | undefined;
@@ -51,8 +55,18 @@ const CrimeTypeList = ({
       </Col>
       <Col flex={1} />
       <Col>
-        <Button type="primary" onClick={toggleAddIncident}>
-          Add
+        <Button
+          type="primary"
+          onClick={toggleAddIncident}
+          icon={
+            <FontAwesomeIcon
+              icon={faPlus}
+              size="lg"
+              style={{ marginRight: 5 }}
+            />
+          }
+        >
+          Add Crime Type
         </Button>
       </Col>
     </Row>
@@ -100,14 +114,21 @@ const CrimeTypeList = ({
                   setIncidentId(record.key);
                   toggleEditIncident();
                 }}
-                icon={<FontAwesomeIcon size="lg" icon={faPenToSquare} />}
+                icon={
+                  <FontAwesomeIcon
+                    icon={faPenToSquare}
+                    style={{ marginRight: 5 }}
+                  />
+                }
               />
               <Button
                 disabled={saving}
                 onClick={() => {
                   deleteConfirm(record.key);
                 }}
-                icon={<FontAwesomeIcon size="lg" icon={faTrash} />}
+                icon={
+                  <FontAwesomeIcon icon={faTrash} style={{ marginRight: 5 }} />
+                }
               />
             </>
           ),

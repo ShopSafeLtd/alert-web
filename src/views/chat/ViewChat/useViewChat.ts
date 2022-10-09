@@ -82,6 +82,7 @@ const useViewChat = (): Return => {
                 {
                   data: {
                     newMessages: { set: false },
+                    mentioned: { set: false },
                   },
                   where: {
                     id: userChatId,

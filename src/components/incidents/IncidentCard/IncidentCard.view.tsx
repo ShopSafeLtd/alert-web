@@ -90,7 +90,7 @@ const IncidentCard = ({
                   key: 0,
                   label: 'Edit Incident',
                   onClick: () => onNavigate(incident?.id || ''),
-                  icon: <FontAwesomeIcon size="lg" icon={faEdit} />,
+                  icon: <FontAwesomeIcon icon={faEdit} />,
                 },
                 {
                   key: 1,
@@ -103,7 +103,7 @@ const IncidentCard = ({
                       okText: 'Delete',
                       onOk: () => onDelete(incident?.id || ''),
                     }),
-                  icon: <FontAwesomeIcon size="lg" icon={faTrash} />,
+                  icon: <FontAwesomeIcon icon={faTrash} />,
                 },
               ].filter((item) => item.key !== 1 || deleteRights)}
             />
@@ -112,7 +112,7 @@ const IncidentCard = ({
           arrow={{ pointAtCenter: true }}
         >
           <Button className="incident-card-menu">
-            <FontAwesomeIcon size="lg" icon={faEllipsisV} />
+            <FontAwesomeIcon icon={faEllipsisV} />
           </Button>
         </Dropdown>
       )}
@@ -148,7 +148,6 @@ const IncidentCard = ({
         <Row className="incident-card-controls">
           <Col>
             <FontAwesomeIcon
-              size="lg"
               className="incident-card-control"
               icon={faAngleLeft}
               onClick={() => imagesRef.current?.prev()}
@@ -157,7 +156,6 @@ const IncidentCard = ({
           <Col flex={1} />
           <Col>
             <FontAwesomeIcon
-              size="lg"
               className="incident-card-control"
               icon={faAngleRight}
               onClick={() => imagesRef.current?.next()}
@@ -167,7 +165,6 @@ const IncidentCard = ({
       )}
       {incident && incident.images.length > 0 && (
         <FontAwesomeIcon
-          size="lg"
           className="incident-card-expand"
           icon={faArrowsMaximize}
           onClick={() =>

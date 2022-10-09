@@ -4,6 +4,8 @@ import { CreateGroupMutation, SchemeGroupsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import AddGroup from 'components/form-components/group/AddGroup';
 import { MutationUpdaterFn } from '@apollo/client';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/pro-light-svg-icons';
 
 interface Props {
   data: SchemeGroupsQuery | undefined;
@@ -36,7 +38,17 @@ const GroupList = ({
       </Col>
       <Col flex={1} />
       <Col>
-        <Button type="primary" onClick={toggleAddGroup}>
+        <Button
+          type="primary"
+          onClick={toggleAddGroup}
+          icon={
+            <FontAwesomeIcon
+              icon={faPlus}
+              size="lg"
+              style={{ marginRight: 5 }}
+            />
+          }
+        >
           Create New Groups
         </Button>
       </Col>

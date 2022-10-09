@@ -4,6 +4,8 @@ import { CreateChatMutation, SchemeChatsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import AddChat from 'components/form-components/chat/AddChat';
 import { MutationUpdaterFn } from '@apollo/client';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/pro-light-svg-icons';
 
 interface Props {
   data: SchemeChatsQuery | undefined;
@@ -36,7 +38,17 @@ const ChatList = ({
       </Col>
       <Col flex={1} />
       <Col>
-        <Button type="primary" onClick={toggleAddChat}>
+        <Button
+          type="primary"
+          onClick={toggleAddChat}
+          icon={
+            <FontAwesomeIcon
+              icon={faPlus}
+              size="lg"
+              style={{ marginRight: 5 }}
+            />
+          }
+        >
           Create New Chat
         </Button>
       </Col>

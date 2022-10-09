@@ -109,7 +109,7 @@ const SchemeDetail = ({
               <Form.Item name="logo" label="Scheme Logo">
                 <ImgCrop rotate>
                   <Upload
-                    action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                    action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
                     listType="picture-card"
                     fileList={fileList}
                     beforeUpload={beforeUpload}
@@ -141,14 +141,22 @@ const SchemeDetail = ({
                 name="autoApproveIncidents"
                 valuePropName="checked"
               >
-                <Switch disabled={saving} style={{ marginLeft: 5 }} />
+                <Switch
+                  disabled={saving}
+                  style={{ marginLeft: 5 }}
+                  className="scheme-detail-switch"
+                />
               </Form.Item>
               <Form.Item
                 name="autoApproveOffenders"
                 label="Auto Approve Offenders"
                 valuePropName="checked"
               >
-                <Switch disabled={saving} style={{ marginLeft: 5 }} />
+                <Switch
+                  disabled={saving}
+                  style={{ marginLeft: 5 }}
+                  className="scheme-detail-switch"
+                />
               </Form.Item>
             </Col>
           </Row>

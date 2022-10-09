@@ -1,7 +1,6 @@
 import React from 'react';
 import { UserQuery } from 'graphql/generated';
 import { RoleValues } from 'types';
-import { SendOutlined, LockOutlined, UnlockOutlined } from '@ant-design/icons';
 
 import {
   Button,
@@ -14,7 +13,13 @@ import {
 } from 'antd';
 import EditUser from 'components/form-components/user/EditUser';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
+import {
+  faLockKeyhole,
+  faPaperPlaneTop,
+  faPenToSquare,
+  faTrash,
+  faUnlockKeyhole,
+} from '@fortawesome/pro-light-svg-icons';
 
 interface Props {
   data: UserQuery | undefined;
@@ -51,7 +56,13 @@ const userDetail = ({
           type="primary"
           disabled={saving}
           onClick={inviteConfirm}
-          icon={<SendOutlined />}
+          icon={
+            <FontAwesomeIcon
+              style={{ marginRight: 5 }}
+              size="lg"
+              icon={faPaperPlaneTop}
+            />
+          }
         >
           Send Invite
         </Button>,
@@ -61,7 +72,13 @@ const userDetail = ({
             type="primary"
             disabled={saving}
             onClick={enableConfirm}
-            icon={<UnlockOutlined />}
+            icon={
+              <FontAwesomeIcon
+                style={{ marginRight: 5 }}
+                size="lg"
+                icon={faUnlockKeyhole}
+              />
+            }
           >
             Enable User
           </Button>
@@ -71,7 +88,13 @@ const userDetail = ({
             type="primary"
             disabled={saving}
             onClick={disableConfirm}
-            icon={<LockOutlined />}
+            icon={
+              <FontAwesomeIcon
+                style={{ marginRight: 5 }}
+                size="lg"
+                icon={faLockKeyhole}
+              />
+            }
           >
             Disable User
           </Button>
@@ -81,7 +104,13 @@ const userDetail = ({
           disabled={saving}
           onClick={deleteConfirm}
           type="primary"
-          icon={<FontAwesomeIcon size="lg" icon={faTrash} />}
+          icon={
+            <FontAwesomeIcon
+              size="lg"
+              style={{ marginRight: 5 }}
+              icon={faTrash}
+            />
+          }
         >
           Delete User
         </Button>,
@@ -94,7 +123,13 @@ const userDetail = ({
           title="Details"
           extra={
             <Button
-              icon={<FontAwesomeIcon size="lg" icon={faPenToSquare} />}
+              icon={
+                <FontAwesomeIcon
+                  style={{ marginRight: 5 }}
+                  size="lg"
+                  icon={faPenToSquare}
+                />
+              }
               onClick={toggleEditUser}
             >
               Edit Details

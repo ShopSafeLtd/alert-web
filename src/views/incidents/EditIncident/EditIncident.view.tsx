@@ -636,7 +636,7 @@ const EditIncident = ({
                         >
                           <Button
                             disabled={saving}
-                            icon={<FontAwesomeIcon size="lg" icon={faTrash} />}
+                            icon={<FontAwesomeIcon icon={faTrash} />}
                           />
                         </Popconfirm>
                       ),
@@ -882,9 +882,7 @@ const EditIncident = ({
                             >
                               <Button
                                 size="small"
-                                icon={
-                                  <FontAwesomeIcon icon={faTrash} size="lg" />
-                                }
+                                icon={<FontAwesomeIcon icon={faTrash} />}
                                 style={{ color: 'red' }}
                               />
                             </Popconfirm>
@@ -898,8 +896,7 @@ const EditIncident = ({
                           icon={
                             <FontAwesomeIcon
                               icon={faUsers}
-                              size="lg"
-                              style={{ marginRight: 10 }}
+                              style={{ marginRight: 5 }}
                             />
                           }
                         >
