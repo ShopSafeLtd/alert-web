@@ -13,17 +13,6 @@
   align-items: center;
   justify-content: center;
 }
-.previous-location .ant-radio-wrapper {
-  align-items: center;
-}
-.previous-location .ant-radio-inner {
-  position: relative;
-}
-.previous-location .ant-radio-inner:after {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-}
 .incident-form-images .ant-upload-list-picture-card-container {
   width: 500px;
   height: 200px;
@@ -32,17 +21,24 @@
 .incident-form-images .image-card {
   height: 200px;
   width: 500px;
-  position: relative;
   display: flex;
   overflow: hidden;
   border: 1px solid #edf2f9;
   border-radius: 10px;
 }
 .incident-form-images .image-card .image-card-image {
+  position: relative;
   min-width: 250px;
   height: 200px;
   background-repeat: no-repeat;
   background-size: cover;
+}
+.incident-form-images .image-card .image-card-image .image-remove-button {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: calc(100% - 50px);
+  z-index: 10;
 }
 .incident-form-images .image-card .image-card-offenders {
   padding: 10px;
@@ -59,12 +55,6 @@
 }
 .incident-form-images .image-card .image-card-offender-text {
   flex: 1;
-}
-.incident-form-images .image-card .image-remove-button {
-  z-index: 1;
-  position: absolute;
-  top: 5px;
-  left: 5px;
 }
 .incident-form-images .image-card-loading {
   position: absolute;
@@ -431,8 +421,8 @@
   padding: 10px 20px;
 }
 .view-incident .offender-image-skeleton {
-  height: 100px;
-  width: 100px;
+  height: 160px;
+  width: 140px;
 }
 .view-incident .offender-image {
   height: 160px;
@@ -452,6 +442,37 @@
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+.upload-images .ant-upload-list-picture-card-container,
+.upload-images .ant-upload-select-picture-card {
+  width: 100px;
+  height: 100px;
+}
+.incident-form-offender-card {
+  width: 120;
+  height: 120;
+  position: relative;
+  background-size: cover;
+  padding: 0;
+  border-radius: 0.625rem;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.incident-form-offender-Paragraph {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 3px 10px;
 }
 .feed-container {
   padding: 10px;
@@ -710,12 +731,17 @@
 .add-existing-offender-row {
   height: calc(100% - 64px);
 }
-.offenders-side-list {
+.offenders-side-list,
+.view-offender {
+  width: 100%;
   display: flex;
   flex-direction: column;
+}
+.offenders-side-list {
   height: 100%;
   overflow-y: scroll;
-  padding-right: 30px;
+  max-height: calc(100vh - 70px);
+  border-right: 1px solid #edf2f9;
 }
 .offenders-side-list .offender-item {
   width: 100%;
@@ -762,9 +788,6 @@
 }
 .view-offender {
   height: calc(100vh - 70px);
-  width: 100%;
-  display: flex;
-  flex-direction: column;
 }
 .view-offender .offender-images {
   width: 100%;
@@ -846,8 +869,8 @@
   padding: 10px 20px;
 }
 .view-offender .incident-image-skeleton {
-  height: 100px;
-  width: 100px;
+  height: 160px;
+  width: 140px;
 }
 .feed-card .image-carousel img,
 .view-offender .incident-image,
@@ -1493,53 +1516,91 @@
   font-size: 10px;
   color: #de4436;
 }
-.chat-item.current {
-  background-color: rgba(0, 0, 0, 0.05);
+.chats-side-list .chat-item .chat-item-avatar {
+  background: #fde3cf;
+  color: #f56a00;
 }
-.chat-title,
-.view-message {
-  display: flex;
-  flex-direction: column;
+.chat-item .current {
+  background-color: rgba(0, 0, 0, 0.05);
 }
 .chat-title {
   margin-top: 30px;
+  display: flex;
   align-items: center;
+  flex-direction: column;
   font-size: 16px;
 }
-.view-message {
+.view-message-container {
+  display: flex;
+  flex-direction: column;
   height: calc(100vh - 70px);
   width: 100%;
 }
-.view-message .message-container {
+.view-message-container .message-upload-card {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border: 1px solid #edf2f9;
+  border-radius: 10px;
+}
+.view-message-container .message-card {
+  position: relative;
+  width: 370px;
+  height: 100px;
+  margin: 0;
+  overflow: hidden;
+}
+.view-message-container .message-image {
+  height: 100px;
+  width: 100px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.view-message-container .message-image-skeleton {
+  height: 100px;
+  width: 100px;
+}
+.view-message-container .ant-card-small > .ant-card-body {
+  padding: 0;
+}
+.view-message-container .message-container {
   margin-bottom: 10px;
-  height: calc(100vh - 275px);
+  height: calc(100vh - 250px);
   width: 100%;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   padding: 20px 0 0;
 }
-.view-message .message-container .message-date {
+.view-message-container .message-container .message-date {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   margin: 30px 0 -10px;
 }
-.view-message .message-container .message-date .date-line {
+.view-message-container .message-container .message-date .date-line {
   width: 60px;
   border-top: 1px solid #e0e0e0;
 }
-.view-message .message-container .message-date .date {
+.view-message-container .message-container .message-date .date {
   margin: 0 10px;
 }
-.view-message .message-container .message-content {
+.view-message-container .message-container .message-content {
   margin: 0 35px;
 }
-.view-message .message-container .message-content .message-avatar-row {
+.view-message-container
+  .message-container
+  .message-content
+  .message-avatar-row {
   margin: 30px 0 10px;
   align-items: center;
 }
-.view-message .message-container .message-content .message-content-bubble {
+.view-message-container
+  .message-container
+  .message-content
+  .message-content-bubble {
   max-width: 100%;
   word-break: break-word;
   margin: 5px 0 0;
@@ -1551,16 +1612,60 @@
   font-size: 14px;
   color: #585858;
 }
-.view-message .message-container .message-content .message-avatar {
+.view-message-container .message-container .message-content .message-avatar {
   background: #fde3cf;
   color: #f56a00;
 }
-.view-message .message-container .message-content .current {
+.view-message-container .message-container .message-content .currentUser {
   background: #ff5252;
   color: #fff !important;
 }
+.view-message-container .image-card {
+  height: 100px;
+  width: 100px;
+  overflow: hidden;
+  border: 1px solid #edf2f9;
+  border-radius: 10px;
+}
+.view-message-container .image-card .image-card-image {
+  min-width: 100px;
+  height: 100px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.view-message-container .image-card .image-card-loading {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.view-message-container .info-container .ant-upload-list {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.view-message-container .info-container .info-remove-button {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  z-index: 100;
+}
+.view-message-container
+  .info-container
+  .ant-upload-list-picture-card-container {
+  width: 100px;
+  height: 100px;
+}
 .ant-switch-handle {
   top: 6px !important;
+}
+.scheme-detail-switch .ant-switch-handle {
+  top: 2px !important;
 }
 .button-icon {
   margin-right: 5px;

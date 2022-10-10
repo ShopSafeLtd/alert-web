@@ -6,6 +6,10 @@ import {
   useUpdateIncidentMutation,
   useViewIncidentQuery,
   ViewIncidentQuery,
+  Age,
+  Gender,
+  Race,
+  Build,
 } from 'graphql/generated';
 
 import { useLightbox } from 'simple-react-lightbox';
@@ -13,7 +17,34 @@ import { useStoreState } from 'state';
 import { notification, Modal } from 'antd';
 
 const { confirm } = Modal;
-
+interface OffenderData {
+  id: string;
+  name?: string | null;
+  age?: Age | null;
+  gender?: Gender | null;
+  race?: Race | null;
+  build?: Build | null;
+  dateOfBirth?: Date | null;
+  hair?: string | null;
+  dateSource?: string | null;
+  peculiarities?: string | null;
+  approved?: boolean | null;
+  groups?:
+    | {
+        id: string;
+        name: string;
+      }[]
+    | undefined;
+  images?: {
+    id: string;
+    optimised?: string | null;
+    url?: string | null;
+    fileName?: string | null;
+    type?: string | null;
+    new?: boolean;
+  }[];
+  imageUid?: string[] | undefined;
+}
 interface Return {
   data: ViewIncidentQuery | undefined;
   loading: boolean;
@@ -23,9 +54,9 @@ interface Return {
   editRights: boolean;
   deleteRights: boolean;
   onDelete: (id: string) => void;
-  addExistingOffender: boolean;
-  toggleAddExistingOffender: () => void;
-  updateOffenderList: (value: string[] | undefined) => void;
+  linkOffender: boolean;
+  toggleLinkOffender: () => void;
+  updateOffendersList: (value: OffenderData) => void;
 }
 
 const useViewIncident = (incidentId: string): Return => {
@@ -33,7 +64,7 @@ const useViewIncident = (incidentId: string): Return => {
 
   const role = useStoreState((state) => state.user.role);
   const [saving, setSaving] = useState(false);
-  const [addExistingOffender, setAddExistingOffender] = useState(false);
+  const [linkOffender, setLinkOffender] = useState(false);
 
   const { data, loading } = useViewIncidentQuery({
     variables: {
@@ -62,9 +93,9 @@ const useViewIncident = (incidentId: string): Return => {
     },
   });
 
-  const updateOffenderList = (selectOffenders: string[] | undefined) => {
+  const updateOffendersList = (selectedOffender: OffenderData) => {
     setSaving(true);
-    if (incidentId) {
+    if (incidentId && selectedOffender) {
       updateIncident({
         variables: {
           where: {
@@ -72,15 +103,13 @@ const useViewIncident = (incidentId: string): Return => {
           },
           data: {
             offenders: {
-              connect:
-                selectOffenders && selectOffenders.length > 0
-                  ? selectOffenders.map((id) => ({ id }))
-                  : undefined,
+              connect: [{ id: selectedOffender.id }],
             },
           },
         },
       });
     }
+    setSaving(false);
   };
 
   const [recycleIncident] = useRecycleIncidentMutation({
@@ -116,8 +145,8 @@ const useViewIncident = (incidentId: string): Return => {
       },
     });
   };
-  const toggleAddExistingOffender = () => {
-    setAddExistingOffender(!addExistingOffender);
+  const toggleLinkOffender = () => {
+    setLinkOffender(!linkOffender);
   };
   return {
     data,
@@ -128,9 +157,9 @@ const useViewIncident = (incidentId: string): Return => {
     editRights: role !== Role.User,
     deleteRights: role !== Role.User,
     onDelete,
-    addExistingOffender,
-    toggleAddExistingOffender,
-    updateOffenderList,
+    linkOffender,
+    toggleLinkOffender,
+    updateOffendersList,
   };
 };
 

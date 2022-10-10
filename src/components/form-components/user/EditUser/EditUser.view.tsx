@@ -55,7 +55,7 @@ const EditUser = ({
   chatsLoading,
   saving,
 }: Props): JSX.Element =>
-  loading ? (
+  !data && loading ? (
     <Skeleton />
   ) : (
     <Form

@@ -18,6 +18,8 @@ import {
 import { Link } from 'react-router-dom';
 import AddUser from 'components/form-components/user/AddUser';
 import { MutationUpdaterFn } from '@apollo/client';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/pro-light-svg-icons';
 
 interface Props {
   data: ListSchemeUsersQuery | undefined;
@@ -77,7 +79,17 @@ const UserList = ({
       </Col>
       <Col flex={1} />
       <Col>
-        <Button type="primary" onClick={toggleAddUser}>
+        <Button
+          type="primary"
+          onClick={toggleAddUser}
+          icon={
+            <FontAwesomeIcon
+              icon={faPlus}
+              size="lg"
+              style={{ marginRight: 5 }}
+            />
+          }
+        >
           Invite New User
         </Button>
       </Col>

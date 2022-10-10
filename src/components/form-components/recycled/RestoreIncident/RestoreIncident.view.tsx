@@ -18,7 +18,7 @@ const RestoreIncident = ({
   loading,
   saving,
 }: Props): JSX.Element =>
-  loading ? (
+  !data && loading ? (
     <Skeleton />
   ) : (
     <div>

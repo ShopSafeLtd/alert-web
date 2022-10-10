@@ -4,9 +4,10 @@ import useLinkIncident from './useLinkIncident';
 
 interface Props {
   onClose: () => void;
-  update: (value: string[] | undefined) => void;
+  update: (value: string) => void;
+  incidentIds: string[] | undefined;
 }
-const LinkIncident = ({ onClose, update }: Props): JSX.Element => {
+const LinkIncident = ({ onClose, update, incidentIds }: Props): JSX.Element => {
   const {
     onSubmit,
     saving,
@@ -17,8 +18,8 @@ const LinkIncident = ({ onClose, update }: Props): JSX.Element => {
     openLightbox,
     onPaginationChange,
     setCurrentId,
-    incidentData,
-  } = useLinkIncident({ onClose, update });
+    selectedIncident,
+  } = useLinkIncident({ onClose, update, incidentIds });
 
   return (
     <View
@@ -32,7 +33,7 @@ const LinkIncident = ({ onClose, update }: Props): JSX.Element => {
       onClose={onClose}
       onPaginationChange={onPaginationChange}
       setCurrentId={setCurrentId}
-      incidentData={incidentData}
+      selectedIncident={selectedIncident}
     />
   );
 };

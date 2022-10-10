@@ -30,6 +30,7 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { MutationUpdaterFn } from '@apollo/client';
 import { Moment } from 'moment';
 import update from 'immutability-helper';
+import { UploadChangeParam } from 'antd/lib/upload';
 
 const { confirm } = Modal;
 const { useForm } = Form;
@@ -107,7 +108,6 @@ interface Return {
     | undefined;
   addressLoading: boolean;
   imgChange: UploadProps['onChange'];
-  onPreview: (value: Image) => void;
   fileList: Image[];
   beforeUpload: (value: RcFile) => void;
   addIncidentTag: boolean;
@@ -117,8 +117,8 @@ interface Return {
   toggleAddOffender: () => void;
   addExistingOffender: boolean;
   toggleAddExistingOffender: () => void;
-  updateOffenderList: (value: OffenderData[] | undefined) => void;
-  offendersData: OffenderData[] | undefined;
+  updateOffendersList: (value: OffenderData) => void;
+  offendersData: OffenderData[];
   deleteConfirm: (value: string | undefined) => void;
   addPreviousLocation: boolean;
   toggleAddPreviousLocation: () => void;
@@ -142,7 +142,12 @@ interface Return {
   removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
   removeImage: (uid: string) => void;
   removeOffender: (offenderId: string) => void;
+  listOffendersData: ListOffendersQuery | undefined;
   adminRights: boolean;
+  offenderImgChange: (
+    info: UploadChangeParam<UploadFile>,
+    currentId: string
+  ) => void;
 }
 
 const useEditIncident = (): Return => {
@@ -167,14 +172,11 @@ const useEditIncident = (): Return => {
   const [searchOffenders, setSearchOffenders] = useState<string>('');
   const [addExistingOffender, setAddExistingOffender] = useState(false);
 
-  const [offendersData, setOffendersData] = useState<
-    OffenderData[] | undefined
-  >([]);
+  const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
 
   const [imageChange, setImageChange] = useState(false);
   const [fileList, setFileList] = useState<Image[]>([]);
   const [newImage, setNewImage] = useState<Image | null>(null);
-
   const [option, setOption] = useState<LocationOptions>(
     LocationOptions.ACCOUNT
   );
@@ -235,7 +237,7 @@ const useEditIncident = (): Return => {
       },
     },
   });
-  const { data: ListOffendersData } = useListOffendersQuery({
+  const { data: listOffendersData } = useListOffendersQuery({
     variables: {
       scheme: {
         id: schemeId,
@@ -250,7 +252,7 @@ const useEditIncident = (): Return => {
           id: schemeId,
         },
         order: {
-          updatedAt: SortOrder.Desc,
+          updatedAt: SortOrder.Asc,
         },
         take: 20,
         where:
@@ -396,20 +398,6 @@ const useEditIncident = (): Return => {
       setImageChange(true);
     }
   };
-  const onPreview = async (file: Image) => {
-    let src = file.url as string;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj as RcFile);
-        reader.onload = () => resolve(reader.result as string);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
-  };
 
   const updatePreviousLocation = (value: string | undefined) => {
     if (value) {
@@ -437,19 +425,8 @@ const useEditIncident = (): Return => {
       });
     }
   };
-  const updateOffenderList = (filterOffenders: OffenderData[] | undefined) => {
-    if (filterOffenders) {
-      if (offendersData && offendersData.length > 0) {
-        setOffendersData(
-          offendersData.concat(
-            filterOffenders.filter(
-              (item) =>
-                !offendersData?.map((offender) => offender.id).includes(item.id)
-            )
-          )
-        );
-      } else setOffendersData(filterOffenders);
-    }
+  const updateOffendersList = (selectedOffender: OffenderData) => {
+    setOffendersData([...offendersData, selectedOffender]);
   };
 
   const deleteConfirm = (offenderId: string | undefined) => {
@@ -538,10 +515,9 @@ const useEditIncident = (): Return => {
           previous: { id: previousId },
         };
       };
-
       const getOffenders = (): CreatIncidentData['offenders'] => {
-        if (offendersData && ListOffendersData?.listOffenders) {
-          const offendersIds = ListOffendersData.listOffenders.offenders.map(
+        if (offendersData && listOffendersData?.listOffenders) {
+          const offendersIds = listOffendersData.listOffenders.offenders.map(
             (offender) => offender.id
           );
           const existingOffenders = offendersData.filter((item) =>
@@ -613,7 +589,6 @@ const useEditIncident = (): Return => {
                 : undefined,
           };
         }
-
         return {
           connect: undefined,
           create: undefined,
@@ -700,7 +675,6 @@ const useEditIncident = (): Return => {
       const newOffenders = data.offenders.filter(
         (offender) => !originalOffendersIds.includes(offender.id)
       );
-
       setOffendersData([...updatedOffenders, ...newOffenders]);
     }
 
@@ -769,7 +743,60 @@ const useEditIncident = (): Return => {
       offendersData?.filter((offender) => offender.id !== offenderId)
     );
   };
+  const offenderImgChange = (
+    info: UploadChangeParam<UploadFile>,
+    currentId: string
+  ) => {
+    if (info.file.response) {
+      setFileList([
+        ...fileList.filter((item) => item.uid !== info.file.uid),
+        {
+          ...info.file,
+          url: info.file.response[0].url,
+          fileName: info.file.response[0].blobName,
+          type: info.file.response[0].mimetype,
+        },
+      ]);
+      const currentOffender = offendersData.filter(
+        ({ id }) => id === currentId
+      );
 
+      if (currentOffender) {
+        assignOffendersToImages({
+          image: {
+            ...info.file,
+            url: info.file.response[0].url,
+            fileName: info.file.response[0].blobName,
+            type: info.file.response[0].mimetype,
+            uid: info.file.uid,
+            offenders: currentOffender,
+          },
+          offenders: currentOffender.map((offender) => {
+            let images: OffenderData['images'] = [];
+            if (offender.images) images = offender.images;
+            return {
+              ...offender,
+              images: [
+                ...images,
+                {
+                  id: info.file.uid,
+                  new: true,
+                  optimised: info.file.response[0].url,
+                  url: info.file.response[0].url,
+                  fileName: info.file.response[0].blobName,
+                  type: info.file.response[0].mimetype,
+                },
+              ],
+            };
+          }),
+        });
+      }
+      setImageChange(true);
+    } else {
+      setFileList(info.fileList);
+      setImageChange(true);
+    }
+  };
   return {
     onSubmit,
     saving,
@@ -789,7 +816,6 @@ const useEditIncident = (): Return => {
     primaryAddress: addressData?.addresses.find(({ primary }) => primary),
     addressLoading,
     imgChange,
-    onPreview,
     fileList,
     beforeUpload,
     addIncidentTag,
@@ -799,7 +825,7 @@ const useEditIncident = (): Return => {
     toggleAddOffender,
     addExistingOffender,
     toggleAddExistingOffender,
-    updateOffenderList,
+    updateOffendersList,
     offendersData,
     deleteConfirm,
     addPreviousLocation,
@@ -822,7 +848,9 @@ const useEditIncident = (): Return => {
     removeImageFromOffender,
     removeImage,
     removeOffender,
+    listOffendersData,
     adminRights: role !== Role.User,
+    offenderImgChange,
   };
 };
 

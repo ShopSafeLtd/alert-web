@@ -23,11 +23,10 @@ import {
   PageHeader,
   Drawer,
   DatePicker,
-  // TimePicker,
   Table,
   Skeleton,
   Modal,
-  Divider,
+  // Divider,
   Tooltip,
   Descriptions,
   Spin,
@@ -56,12 +55,13 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 
 import moment, { Moment } from 'moment';
-import { DeleteOutlined, UserAddOutlined } from '@ant-design/icons';
-import AddOffender from 'components/form-components/incident/offender/AddOffender';
+
+import AddOffender from 'components/form-components/incident/offender/AddNewOffender';
 import AddExistingOffender from 'components/form-components/incident/offender/AddExisitingOffender';
 import AddNewLocation from 'components/form-components/incident/location/AddLocation';
 import AddPreviousLocation from 'components/form-components/incident/location/AddPreviousLocation';
 import AssignImageOffender from 'components/form-components/incident/image/AssignImageOffenders';
+import { UploadChangeParam } from 'antd/lib/upload';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -132,10 +132,8 @@ interface Props {
   primaryAddress:
     | Exclude<AddressesQuery['addresses'], undefined | null>[0]
     | undefined;
-  // addressData: AddressesQuery | undefined;
   addressLoading: boolean;
   imgChange: UploadProps['onChange'];
-  onPreview: (value: Image) => void;
   fileList: Image[];
   beforeUpload: (value: RcFile) => void;
   addIncidentTag: boolean;
@@ -145,8 +143,8 @@ interface Props {
   toggleAddOffender: () => void;
   addExistingOffender: boolean;
   toggleAddExistingOffender: () => void;
-  updateOffenderList: (value: OffenderData[] | undefined) => void;
-  offendersData: OffenderData[] | undefined;
+  updateOffendersList: (value: OffenderData) => void;
+  offendersData: OffenderData[];
   addPreviousLocation: boolean;
   toggleAddPreviousLocation: () => void;
   updatePreviousLocation: (value: string | undefined) => void;
@@ -170,6 +168,11 @@ interface Props {
   removeImage: (uid: string) => void;
   removeOffender: (offenderId: string) => void;
   adminRights: boolean;
+  listOffendersData: ListOffendersQuery | undefined;
+  offenderImgChange: (
+    info: UploadChangeParam<UploadFile>,
+    currentId: string
+  ) => void;
 }
 
 const EditIncident = ({
@@ -180,10 +183,8 @@ const EditIncident = ({
   tags,
   tagsLoading,
   primaryAddress,
-  // addressData,
   addressLoading,
   imgChange,
-  onPreview,
   fileList,
   beforeUpload,
   addIncidentTag,
@@ -193,7 +194,7 @@ const EditIncident = ({
   toggleAddOffender,
   addExistingOffender,
   toggleAddExistingOffender,
-  updateOffenderList,
+  updateOffendersList,
   offendersData,
   addPreviousLocation,
   toggleAddPreviousLocation,
@@ -216,10 +217,11 @@ const EditIncident = ({
   removeImage,
   removeOffender,
   adminRights,
+  listOffendersData,
+  offenderImgChange,
 }: Props): JSX.Element => (
   <div className="page-view">
     <PageHeader onBack={() => window.history.back()} title="Add Incident" />
-
     <Card>
       <Form<FormData>
         form={form}
@@ -230,29 +232,27 @@ const EditIncident = ({
         onFinish={onSubmit}
         layout="vertical"
       >
-        <div>
-          <Row align="bottom" style={{ marginBottom: 20 }}>
-            <Col>
-              <Title style={{ marginBottom: 0 }} level={4}>
-                1.{' '}
-              </Title>
-            </Col>
-            <Col>
-              <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
-                Incident Details
-              </Title>
-            </Col>
-            <Col>
-              <Paragraph
-                style={{ marginBottom: 1, marginLeft: 5 }}
-                type="secondary"
-                italic
-              >
-                - Please complete the basic details for the incident.
-              </Paragraph>
-            </Col>
-          </Row>
-        </div>
+        <Row align="bottom" style={{ marginBottom: 20 }}>
+          <Col>
+            <Title style={{ marginBottom: 0 }} level={4}>
+              1.
+            </Title>
+          </Col>
+          <Col>
+            <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+              Incident Details
+            </Title>
+          </Col>
+          <Col>
+            <Paragraph
+              style={{ marginBottom: 1, marginLeft: 5 }}
+              type="secondary"
+              italic
+            >
+              - Please complete the basic details for the incident.
+            </Paragraph>
+          </Col>
+        </Row>
 
         <Row gutter={50}>
           <Col span={8}>
@@ -327,26 +327,9 @@ const EditIncident = ({
             </Col>
           )}
         </Row>
-        <Row gutter={16}>
-          <Col span={24}>
-            <Form.Item
-              name="description"
-              label="Description"
-              tooltip="A more detailed description of the incident."
-              rules={[
-                {
-                  required: true,
-                  message: 'Please enter a description for the incident.',
-                },
-              ]}
-            >
-              <Input.TextArea disabled={saving} />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={50}>
-          <Col span={10}>
-            <Row gutter={10} align="middle">
+        <Row wrap={false}>
+          <Col span={14}>
+            <Row gutter={5} align="middle">
               <Col flex={1}>
                 <Form.Item
                   name="tags"
@@ -393,12 +376,14 @@ const EditIncident = ({
               )}
             </Row>
           </Col>
+        </Row>
 
-          <Col span={14}>
+        <Row>
+          <Col span={16}>
             {addressLoading ? (
               <Skeleton paragraph={false} />
             ) : (
-              <Row gutter={10} align="middle">
+              <Row gutter={5} align="middle">
                 {primaryAddress && (
                   <Col flex={1}>
                     <Form.Item
@@ -461,97 +446,82 @@ const EditIncident = ({
               </Row>
             )}
           </Col>
-
-          {/* {groups.length > 1 && (
-            <Col span={8}>
-              <Form.Item
-                name="groups"
-                label="Groups"
-                tooltip="Please select the relevant groups to report this incident to, for GDPR it is important that the data is relevant to the groups."
-                rules={[
-                  {
-                    required: true,
-                    message:
-                      'Please add at least one group that you would like this incident to be visible to.',
-                  },
-                ]}
-              >
-                <Select
-                  loading={groupsLoading}
-                  disabled={saving}
-                  mode="multiple"
-                  maxTagCount={3}
-                  placeholder="Select the groups that you would like this incident to be visible to."
-                >
-                  {groups.map((group) => (
-                    <Select.Option key={group.value} value={group.value}>
-                      {group.label}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-          )} */}
+        </Row>
+        <Row gutter={16}>
+          <Col span={20}>
+            <Form.Item
+              name="description"
+              label="Description"
+              tooltip="A more detailed description of the incident."
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter a description for the incident.',
+                },
+              ]}
+            >
+              <Input.TextArea disabled={saving} />
+            </Form.Item>
+          </Col>
         </Row>
 
-        <Divider />
-        <Row gutter={5} style={{ marginTop: 50 }}>
-          <Col flex={1}>
-            <Row align="bottom" style={{ marginBottom: 20 }}>
-              <Col>
-                <Title style={{ marginBottom: 0 }} level={4}>
-                  2.{' '}
-                </Title>
-              </Col>
-              <Col>
-                <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
-                  Offenders
-                </Title>
-              </Col>
-              <Col>
-                <Paragraph
-                  style={{ marginBottom: 1, marginLeft: 5 }}
-                  type="secondary"
-                  italic
-                >
-                  - Please add the offenders that were involved in the incident.
-                </Paragraph>
-              </Col>
-            </Row>
+        {/* <Divider /> */}
+
+        {/* <Row gutter={30} style={{ marginTop: 70 }}>
+            <Col> */}
+        <Row align="middle" style={{ marginTop: 70, marginBottom: 20 }}>
+          <Col>
+            <Title style={{ marginBottom: 0 }} level={4}>
+              2.{' '}
+            </Title>
           </Col>
-          {offendersData && offendersData.length > 0 && (
-            <Col>
-              <Button
-                disabled={saving}
-                loading={saving}
-                onClick={toggleAddExistingOffender}
-                style={{ color: 'red' }}
-                icon={
-                  <FontAwesomeIcon
-                    icon={faMagnifyingGlass}
-                    style={{ marginRight: 5 }}
-                  />
-                }
-              >
-                Add Existing Offenders
-              </Button>
-            </Col>
-          )}
-          {offendersData && offendersData.length > 0 && (
-            <Col>
-              <Button
-                disabled={saving}
-                loading={saving}
-                onClick={toggleAddOffender}
-                style={{ color: 'red' }}
-                icon={
-                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
-                }
-              >
-                Create New Offender
-              </Button>
-            </Col>
-          )}
+          <Col>
+            <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+              Offenders
+            </Title>
+          </Col>
+          <Col style={{ marginRight: 30 }}>
+            <Paragraph
+              style={{ marginBottom: 1, marginLeft: 5 }}
+              type="secondary"
+              italic
+            >
+              - Please add the offenders that were involved in the incident.
+            </Paragraph>
+          </Col>
+          {listOffendersData?.listOffenders &&
+            listOffendersData.listOffenders?.total > 0 && (
+              <Col>
+                <Button
+                  disabled={saving}
+                  loading={saving}
+                  onClick={toggleAddExistingOffender}
+                  style={{ color: 'red' }}
+                  icon={
+                    <FontAwesomeIcon
+                      icon={faMagnifyingGlass}
+                      style={{ marginRight: 5 }}
+                    />
+                  }
+                >
+                  Add Existing Offenders
+                </Button>
+              </Col>
+            )}
+
+          <Col>
+            <Button
+              disabled={saving}
+              loading={saving}
+              onClick={toggleAddOffender}
+              style={{ color: 'red' }}
+              icon={
+                <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
+              }
+            >
+              Create New Offender
+            </Button>
+          </Col>
         </Row>
 
         <Row gutter={20} style={{ marginTop: 10 }}>
@@ -568,37 +538,30 @@ const EditIncident = ({
                     key: 'images',
                     title: '',
                     dataIndex: 'images',
-                    render: (images?: { id: string; optimised: string }[]) => {
-                      if (images) {
+                    width: 150,
+                    render: (
+                      _,
+                      record
+                      // images?: { id: string; optimised: string }[],
+                    ) => {
+                      if (record.images && record.images.length) {
                         return (
                           <img
                             style={{ width: 80 }}
-                            key={images[0]?.id || ''}
-                            src={images[0]?.optimised || ''}
-                            alt={images[0]?.optimised}
+                            key={record.images[0]?.id || ''}
+                            src={record.images[0]?.optimised || ''}
+                            alt={record.images[0]?.optimised || ''}
                           />
                         );
                       }
                       return (
                         <Upload
                           action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
-                          fileList={fileList}
-                          onChange={imgChange}
-                          beforeUpload={beforeUpload}
+                          onChange={(info) =>
+                            offenderImgChange(info, record.key)
+                          }
                           accept=".png,.jpeg,.webp"
                           showUploadList={false}
-                          // onDownload={() =>
-                          //   confirm({
-                          //     title: 'Assign Offenders',
-                          //     content:
-                          //       'Do you Want to assign this image to any offenders shown in them?',
-                          //     okText: 'Yes',
-                          //     onOk() {
-                          //       toggleAssignImage();
-                          //     },
-                          //   })
-                          // }
-                          // itemRender={(file) => <Button>{file.key}</Button>}
                         >
                           <Button
                             icon={
@@ -654,7 +617,10 @@ const EditIncident = ({
                         okText="Yes"
                         cancelText="No"
                       >
-                        <Button disabled={saving} icon={<DeleteOutlined />} />
+                        <Button
+                          disabled={saving}
+                          icon={<FontAwesomeIcon icon={faTrash} />}
+                        />
                       </Popconfirm>
                     ),
                   },
@@ -676,43 +642,11 @@ const EditIncident = ({
                 <Row gutter={8} style={{ marginBottom: 15 }}>
                   <Col>
                     <Input
-                      style={{ width: 400 }}
+                      style={{ width: 600 }}
                       placeholder="Search all existing offenders... "
                       value={searchOffenders}
                       onChange={(e) => setSearchOffenders(e.target.value)}
                     />
-                  </Col>
-                  <Col>
-                    <Button
-                      disabled={saving}
-                      loading={saving}
-                      onClick={toggleAddOffender}
-                      style={{ color: 'red' }}
-                      icon={
-                        <FontAwesomeIcon
-                          icon={faPlus}
-                          style={{ marginRight: 5 }}
-                        />
-                      }
-                    >
-                      Create New Offender
-                    </Button>
-                  </Col>
-                  <Col>
-                    <Button
-                      disabled={saving}
-                      loading={saving}
-                      onClick={toggleAddExistingOffender}
-                      style={{ color: 'red' }}
-                      icon={
-                        <FontAwesomeIcon
-                          icon={faUsers}
-                          style={{ marginRight: 5 }}
-                        />
-                      }
-                    >
-                      Add Existing Offenders
-                    </Button>
                   </Col>
                 </Row>
                 {searchOffenders.length === 0 && (
@@ -742,7 +676,11 @@ const EditIncident = ({
                 ) : (
                   <Row
                     gutter={8}
-                    style={{ overflow: 'auto', flexWrap: 'nowrap' }}
+                    style={{
+                      overflow: 'auto',
+                      flexWrap: 'nowrap',
+                      marginBottom: 20,
+                    }}
                   >
                     {recentOffenderData?.listOffenders?.offenders.map(
                       (offender) => (
@@ -753,6 +691,7 @@ const EditIncident = ({
                           >
                             <Card
                               onClick={() => setAddRecentOffender(offender)}
+                              className="offender-card"
                               bodyStyle={{
                                 width: 120,
                                 height: 120,
@@ -803,8 +742,8 @@ const EditIncident = ({
             )}
           </Col>
         </Row>
+        {/* <Divider /> */}
 
-        <Divider />
         <Row gutter={20} style={{ marginTop: 50 }}>
           <Col>
             <Row align="middle" style={{ marginBottom: 20 }}>
@@ -857,13 +796,8 @@ const EditIncident = ({
                 listType="picture-card"
                 fileList={fileList}
                 onChange={imgChange}
-                onPreview={onPreview}
                 beforeUpload={beforeUpload}
                 accept=".png,.jpeg,.webp"
-                showUploadList={{
-                  showDownloadIcon: true,
-                  downloadIcon: <UserAddOutlined />,
-                }}
                 itemRender={(el, file: Image) => (
                   <div className="image-card" key={el.key}>
                     {file.url === undefined && (
@@ -871,26 +805,29 @@ const EditIncident = ({
                         <Spin />
                       </div>
                     )}
-                    {/* <div className="image-remove-button">
-                      <Popconfirm
-                        placement="topLeft"
-                        title="Remove the image?"
-                        onConfirm={() => removeImage(file.uid)}
-                        okText="Yes"
-                        cancelText="No"
-                      >
-                        <Button
-                          size="small"
-                          icon={<FontAwesomeIcon icon={faTrash} />}
-                        />
-                      </Popconfirm>
-                    </div> */}
+
                     <div
                       className="image-card-image"
                       style={{
                         backgroundImage: `url(${file.url || file.thumbUrl})`,
                       }}
-                    />
+                    >
+                      <div className="image-remove-button">
+                        <Popconfirm
+                          placement="topLeft"
+                          trigger="hover"
+                          title="Remove the image?"
+                          onConfirm={() => removeImage(file.uid)}
+                          okText="Yes"
+                          cancelText="No"
+                        >
+                          <Button
+                            size="small"
+                            icon={<FontAwesomeIcon icon={faTrash} />}
+                          />
+                        </Popconfirm>
+                      </div>
+                    </div>
                     <div className="image-card-offenders">
                       <Text strong>Offenders:</Text>
                       {file.offenders && file.offenders.length === 0 && (
@@ -917,9 +854,7 @@ const EditIncident = ({
                           >
                             <Button
                               size="small"
-                              icon={
-                                <FontAwesomeIcon icon={faTrash} size="lg" />
-                              }
+                              icon={<FontAwesomeIcon icon={faTrash} />}
                               style={{ color: 'red' }}
                             />
                           </Popconfirm>
@@ -933,42 +868,17 @@ const EditIncident = ({
                         icon={
                           <FontAwesomeIcon
                             icon={faUsers}
-                            size="lg"
-                            style={{ marginRight: 10 }}
+                            style={{ marginRight: 5 }}
                           />
                         }
                       >
                         Assign Offenders
                       </Button>
-                      <Popconfirm
-                        placement="topLeft"
-                        title="Remove the image?"
-                        onConfirm={() => removeImage(file.uid)}
-                        okText="Yes"
-                        cancelText="No"
-                      >
-                        <Button
-                          size="small"
-                          type="primary"
-                          style={{ marginTop: 10 }}
-                          // disabled={loading}
-                          icon={
-                            <FontAwesomeIcon
-                              icon={faTrash}
-                              size="lg"
-                              style={{ marginRight: 10 }}
-                            />
-                          }
-                        >
-                          Remove Image
-                        </Button>
-                      </Popconfirm>
                     </div>
                   </div>
                 )}
               >
                 {fileList.length < 10 && '+ Upload'}
-                {/* <Button>a</Button> */}
               </Upload>
             </Form.Item>
           </Col>
@@ -1049,7 +959,7 @@ const EditIncident = ({
       zIndex={1001}
     >
       {addOffender ? (
-        <AddOffender update={updateOffenderList} onClose={toggleAddOffender} />
+        <AddOffender update={updateOffendersList} onClose={toggleAddOffender} />
       ) : (
         <div />
       )}
@@ -1064,7 +974,8 @@ const EditIncident = ({
     >
       {addExistingOffender ? (
         <AddExistingOffender
-          update={updateOffenderList}
+          update={updateOffendersList}
+          offenderIds={offendersData.map(({ id }) => id)}
           onClose={toggleAddExistingOffender}
         />
       ) : (
@@ -1076,7 +987,7 @@ const EditIncident = ({
       onCancel={() => setAddRecentOffender(null)}
       visible={addRecentOffender !== null}
       onOk={() => {
-        if (addRecentOffender) updateOffenderList([addRecentOffender]);
+        if (addRecentOffender) updateOffendersList(addRecentOffender);
         setAddRecentOffender(null);
       }}
       okText="Add to incident"
@@ -1098,6 +1009,7 @@ const EditIncident = ({
             />
           </Col>
         )}
+
         <Col span={16} style={{ padding: '10px 20px' }}>
           <Descriptions column={1} size="small">
             <Descriptions.Item label="Age">

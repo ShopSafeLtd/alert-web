@@ -11,6 +11,7 @@ query userChats(
     ) {
       id
       newMessages
+      mentioned
       updatedAt
       user {
         id

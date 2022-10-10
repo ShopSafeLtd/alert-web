@@ -29,8 +29,10 @@ function EditOffender({ reviewed }: Props): JSX.Element {
     editExclusion,
     toggleEditExclusion,
     updateExclusion,
-    banId,
-    setBanId,
+    banData,
+    setBanData,
+    bansData,
+    adminRights,
     deleteConfirm,
     ageCheck,
     setAgeCheck,
@@ -59,13 +61,15 @@ function EditOffender({ reviewed }: Props): JSX.Element {
         editExclusion={editExclusion}
         toggleEditExclusion={toggleEditExclusion}
         updateExclusion={updateExclusion}
-        banId={banId}
-        setBanId={setBanId}
+        bansData={bansData}
+        banData={banData}
+        setBanData={setBanData}
         deleteConfirm={deleteConfirm}
         ageCheck={ageCheck}
         setAgeCheck={setAgeCheck}
         reviewed={reviewed}
         onReject={onReject}
+        adminRights={adminRights}
       />
     </div>
   );

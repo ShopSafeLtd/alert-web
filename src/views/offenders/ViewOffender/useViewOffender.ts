@@ -24,16 +24,16 @@ interface Return {
   editRights: boolean;
   deleteRights: boolean;
   onDelete: (id: string) => void;
-  addExistingIncident: boolean;
-  toggleAddExistingIncident: () => void;
-  updateIncidentList: (value: string[] | undefined) => void;
+  linkIncident: boolean;
+  toggleLinkIncident: () => void;
+  updateIncidentList: (value: string) => void;
 }
 
 const useViewOffender = (offenderId: string): Return => {
   const { openLightbox } = useLightbox();
   const role = useStoreState((state) => state.user.role);
   const [saving, setSaving] = useState(false);
-  const [addExistingIncident, setAddExistingIncident] = useState(false);
+  const [linkIncident, setLinkIncident] = useState(false);
 
   const { data, loading } = useViewOffenderQuery({
     variables: {
@@ -62,9 +62,9 @@ const useViewOffender = (offenderId: string): Return => {
     },
   });
 
-  const updateIncidentList = (value: string[] | undefined) => {
+  const updateIncidentList = (selectedIncidentId: string) => {
     setSaving(true);
-    if (offenderId) {
+    if (offenderId && selectedIncidentId) {
       updateOffender({
         variables: {
           where: {
@@ -72,10 +72,7 @@ const useViewOffender = (offenderId: string): Return => {
           },
           data: {
             incidents: {
-              connect:
-                value && value.length > 0
-                  ? value.map((id) => ({ id }))
-                  : undefined,
+              connect: [{ id: selectedIncidentId }],
             },
           },
         },
@@ -116,8 +113,8 @@ const useViewOffender = (offenderId: string): Return => {
       },
     });
   };
-  const toggleAddExistingIncident = () => {
-    setAddExistingIncident(!addExistingIncident);
+  const toggleLinkIncident = () => {
+    setLinkIncident(!linkIncident);
   };
   return {
     data,
@@ -129,8 +126,8 @@ const useViewOffender = (offenderId: string): Return => {
     deleteRights: role !== Role.User,
     offenderId: offenderId || '',
     onDelete,
-    addExistingIncident,
-    toggleAddExistingIncident,
+    linkIncident,
+    toggleLinkIncident,
     updateIncidentList,
   };
 };

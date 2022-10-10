@@ -7,7 +7,7 @@ import { useStoreState, OffenderSort, useStoreActions } from 'state';
 
 interface Return {
   data: ListOffendersQuery | undefined;
-  // loading: boolean;
+  loading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
 }
 
@@ -20,10 +20,7 @@ const useOffenderSideList = (): Return => {
     (actions) => actions.data.setOffenders
   );
 
-  const {
-    data,
-    // loading
-  } = useListOffendersQuery({
+  const { data, loading } = useListOffendersQuery({
     variables: {
       scheme: {
         id: schemeId,
@@ -52,7 +49,7 @@ const useOffenderSideList = (): Return => {
 
   return {
     data,
-    // loading,
+    loading,
     onPaginationChange,
   };
 };

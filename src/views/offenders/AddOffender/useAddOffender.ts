@@ -36,16 +36,20 @@ interface FormData {
   groups: string[];
   tags: string[];
   images?: { id: string; url: string; optimised: string }[];
-  bans?: [
-    { endDate: Date; startDate: Date; location: string; description: string }
-  ];
+  bans?: {
+    endDate: Date;
+    startDate: Date;
+    location: string;
+    description: string;
+  }[];
 }
 interface BanData {
-  id?: string | undefined;
+  id: string;
+  title?: string | null | undefined;
   endDate: Date;
   startDate: Date;
   location: string;
-  description: string;
+  description?: string | null | undefined;
 }
 interface Return {
   onSubmit: (value: FormData) => void;
@@ -56,6 +60,7 @@ interface Return {
   tagsLoading: boolean;
   imgChange: UploadProps['onChange'];
   onPreview: (value: UploadFile) => void;
+  removeImage: (value: UploadFile) => void;
   beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
   addOffenderTag: boolean;
@@ -71,8 +76,7 @@ interface Return {
   ageCheck: boolean;
   setAgeCheck: (value: boolean) => void;
   bansData: BanData[];
-  updateAddExclusion: (value: BanData) => void;
-  updateEditExclusion: (value: BanData) => void;
+  updateExclusion: (value: BanData) => void;
   adminRights: boolean;
 }
 
@@ -89,17 +93,17 @@ const useAddOffender = (): Return => {
     (actions) => actions.data.setOffenders
   );
   const [saving, setSaving] = useState(false);
-  const [bansData, setBansData] = useState<BanData[]>([]);
-  const [banData, setBanData] = useState<BanData | null>(null);
+
   const [ageCheck, setAgeCheck] = useState(false);
   const [addOffenderTag, setAddOffenderTag] = useState(false);
 
   const [imageChange, setImageChange] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-  // const [newImage, setNewImage] = useState<UploadFile[] | null>(null);
+
   const [addExclusion, setAddExclusion] = useState(false);
   const [editExclusion, setEditExclusion] = useState(false);
-
+  const [bansData, setBansData] = useState<BanData[]>([]);
+  const [banData, setBanData] = useState<BanData | null>(null);
   const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -243,6 +247,8 @@ const useAddOffender = (): Return => {
   // const [createBan] = useCreateBanMutation();
   const onSubmit = (data: FormData) => {
     setSaving(true);
+    console.log('fileList-offender', fileList);
+
     createOffender({
       variables: {
         data: {
@@ -327,18 +333,8 @@ const useAddOffender = (): Return => {
 
     return !isFileDuplicate || Upload.LIST_IGNORE;
   };
-  // const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-  //   setFileList(newFileList);
-  //   setImageChange(true);
-  // };
   const imgChange: UploadProps['onChange'] = (info) => {
-    if (info.file.response) {
-      // setNewImage({
-      //   ...info.file,
-      //   url: info.file.response[0].url,
-      //   fileName: info.file.response[0].blobName,
-      //   type: info.file.response[0].mimetype,
-      // });
+    if (info.file.response && info.file.status === 'done') {
       setFileList([
         ...fileList.filter((item) => item.uid !== info.file.uid),
         {
@@ -369,6 +365,13 @@ const useAddOffender = (): Return => {
     imgWindow?.document.write(image.outerHTML);
   };
 
+  const removeImage = (file: UploadFile) => {
+    if (fileList.length === 1) {
+      setFileList([]);
+    } else {
+      setFileList(fileList.filter(({ uid }) => uid !== file.uid));
+    }
+  };
   const toggleAddOffenderTag = () => {
     setAddOffenderTag(!addOffenderTag);
   };
@@ -378,20 +381,25 @@ const useAddOffender = (): Return => {
   const toggleEditExclusion = () => {
     setEditExclusion(!editExclusion);
   };
-  const updateAddExclusion = (value: BanData) =>
-    bansData && bansData.length > 0
-      ? bansData.push(value)
-      : setBansData([value]);
 
-  const updateEditExclusion = (value: BanData) =>
-    bansData && bansData.length > 1
-      ? bansData.map((ban) => {
-          if (ban.id === value.id) {
-            return value;
-          }
-          return ban;
-        })
-      : setBansData([value]);
+  const updateExclusion = (value: BanData) => {
+    if (bansData && bansData.length > 0) {
+      if (bansData.find(({ id }) => id === value.id)) {
+        setBansData(
+          bansData.map((ban) => {
+            if (ban.id === value.id) {
+              return value;
+            }
+            return ban;
+          })
+        );
+      } else {
+        setBansData([...bansData, value]);
+      }
+    } else if (bansData) {
+      setBansData([value]);
+    }
+  };
 
   const openDelete = (currentId: string | undefined) => {
     setBansData(bansData.filter((ban) => currentId !== ban.id));
@@ -425,6 +433,7 @@ const useAddOffender = (): Return => {
     tagsLoading,
     imgChange,
     onPreview,
+    removeImage,
     beforeUpload,
     fileList,
     addOffenderTag,
@@ -440,8 +449,7 @@ const useAddOffender = (): Return => {
     ageCheck,
     setAgeCheck,
     bansData,
-    updateAddExclusion,
-    updateEditExclusion,
+    updateExclusion,
     adminRights: role !== Role.User,
   };
 };

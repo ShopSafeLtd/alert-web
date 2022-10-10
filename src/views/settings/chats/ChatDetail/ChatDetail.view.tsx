@@ -1,10 +1,10 @@
 import React from 'react';
 import { ChatQuery } from 'graphql/generated';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-
 import { Button, PageHeader, Card, Table, Drawer } from 'antd';
 import EditChat from 'components/form-components/chat/EditChat';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
 
 interface Props {
   data: ChatQuery | undefined;
@@ -34,7 +34,13 @@ const ChatDetail = ({
           type="primary"
           disabled={saving}
           onClick={toggleEditChat}
-          icon={<EditOutlined />}
+          icon={
+            <FontAwesomeIcon
+              size="lg"
+              icon={faPenToSquare}
+              style={{ marginRight: 5 }}
+            />
+          }
         >
           Edit Chat
         </Button>,
@@ -43,7 +49,13 @@ const ChatDetail = ({
           disabled={saving}
           onClick={deleteConfirm}
           type="primary"
-          icon={<DeleteOutlined />}
+          icon={
+            <FontAwesomeIcon
+              size="lg"
+              icon={faTrash}
+              style={{ marginRight: 5 }}
+            />
+          }
         >
           Delete Chat
         </Button>,

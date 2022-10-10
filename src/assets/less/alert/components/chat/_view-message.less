@@ -1,11 +1,40 @@
-.view-message {
+.view-message-container {
   display: flex;
   flex-direction: column;
   height: calc(100vh - 70px);
   width: 100%;
+  .message-upload-card {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border: 1px solid #edf2f9;
+    border-radius: 10px;
+  }
+  .message-card {
+    position: relative;
+    width: 370px;
+    height: 100px;
+    margin: 0;
+    overflow: hidden;
+  }
+  .message-image {
+    height: 100px;
+    width: 100px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .message-image-skeleton {
+    height: 100px;
+    width: 100px;
+  }
+  .ant-card-small > .ant-card-body {
+    padding: 0;
+  }
   .message-container {
     margin-bottom: 10px;
-    height: calc(100vh - 275px);
+    height: calc(100vh - 250px);
     width: 100%;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
@@ -47,10 +76,56 @@
         background: #fde3cf;
         color: #f56a00;
       }
-      .current {
+      .currentUser {
         background: #ff5252;
         color: #fff !important;
       }
+    }
+  }
+
+  .image-card {
+    height: 100px;
+    width: 100px;
+    overflow: hidden;
+    border: 1px solid #edf2f9;
+    border-radius: 10px;
+    .image-card-image {
+      min-width: 100px;
+      height: 100px;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    .image-card-loading {
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  .info-container {
+    // max-height: 100px;
+    // margin: 0;
+    // margin-bottom: 5;
+    // overflow: auto;
+    .ant-upload-list {
+      display: flex;
+      flex-wrap: nowrap;
+    }
+    .info-remove-button {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      z-index: 100;
+    }
+    .ant-upload-list-picture-card-container {
+      width: 100px;
+      height: 100px;
     }
   }
 }

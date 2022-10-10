@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import { ViewIncidentQuery } from 'graphql/generated';
+import { ViewIncidentQuery, Age, Gender, Race, Build } from 'graphql/generated';
 import {
   Typography,
   Row,
@@ -30,10 +30,37 @@ import {
 } from 'utils/offender/get-offender-desc';
 import IncidentSideList from 'components/incidents/IncidentSideList';
 import { Link } from 'react-router-dom';
-import LinkOffender from 'components/form-components/incident/offender/LinkOffender';
+import LinkOffender from 'components/form-components/incident/offender/AddExisitingOffender';
 
 const { Title, Text, Paragraph } = Typography;
-
+interface OffenderData {
+  id: string;
+  name?: string | null;
+  age?: Age | null;
+  gender?: Gender | null;
+  race?: Race | null;
+  build?: Build | null;
+  dateOfBirth?: Date | null;
+  hair?: string | null;
+  dateSource?: string | null;
+  peculiarities?: string | null;
+  approved?: boolean | null;
+  groups?:
+    | {
+        id: string;
+        name: string;
+      }[]
+    | undefined;
+  images?: {
+    id: string;
+    optimised?: string | null;
+    url?: string | null;
+    fileName?: string | null;
+    type?: string | null;
+    new?: boolean;
+  }[];
+  imageUid?: string[] | undefined;
+}
 interface Props {
   data: ViewIncidentQuery | undefined;
   loading: boolean;
@@ -44,9 +71,9 @@ interface Props {
   editRights: boolean;
   deleteRights: boolean;
   onDelete: (id: string) => void;
-  addExistingOffender: boolean;
-  toggleAddExistingOffender: () => void;
-  updateOffenderList: (value: string[] | undefined) => void;
+  linkOffender: boolean;
+  toggleLinkOffender: () => void;
+  updateOffendersList: (value: OffenderData) => void;
 }
 
 const ViewIncident = ({
@@ -59,9 +86,9 @@ const ViewIncident = ({
   deleteRights,
   editRights,
   onDelete,
-  addExistingOffender,
-  toggleAddExistingOffender,
-  updateOffenderList,
+  linkOffender,
+  toggleLinkOffender,
+  updateOffendersList,
 }: Props): JSX.Element => (
   <div className="page-container">
     <Row>
@@ -132,15 +159,16 @@ const ViewIncident = ({
                       <Col span={13}>
                         <div className="incident-details-main">
                           <Title level={4}>{data?.incident?.subject}</Title>
-                          <Text>{data?.incident?.description}</Text>
                           <Row className="incident-tags">
                             {data?.incident?.crimeTypes.map((crimeType) => (
                               <Col key={crimeType.id}>
                                 <Tag color="red">{crimeType.name}</Tag>
                               </Col>
                             ))}
-                          </Row>
-
+                          </Row>{' '}
+                          <Paragraph type="secondary" style={{ marginTop: 10 }}>
+                            {data?.incident?.description}
+                          </Paragraph>
                           <Descriptions
                             column={1}
                             className="incident-descriptions"
@@ -223,7 +251,7 @@ const ViewIncident = ({
                                           {getOffenderGender(offender.gender)}
                                         </Descriptions.Item>
                                         <Descriptions.Item label="Ethnicity">
-                                          {getOffenderRace(offender.race)}
+                                          {getOffenderRace(offender.race, true)}
                                         </Descriptions.Item>
                                         <Descriptions.Item label="Age">
                                           {offender.dateOfBirth
@@ -249,7 +277,7 @@ const ViewIncident = ({
                             {addOffenderRights && (
                               <div>
                                 <Button
-                                  onClick={toggleAddExistingOffender}
+                                  onClick={toggleLinkOffender}
                                   disabled={saving}
                                   loading={saving}
                                   style={{ color: 'red' }}
@@ -267,6 +295,20 @@ const ViewIncident = ({
                           </div>
                         )}
                       </Col>
+                      <Button
+                        onClick={toggleLinkOffender}
+                        disabled={saving}
+                        loading={saving}
+                        style={{ color: 'red' }}
+                        icon={
+                          <FontAwesomeIcon
+                            className="button-icon"
+                            icon={faPlus}
+                          />
+                        }
+                      >
+                        Link Offender
+                      </Button>
                     </Row>
                   </div>
                 )}
@@ -279,14 +321,15 @@ const ViewIncident = ({
 
     <Drawer
       title="Link Offenders"
-      visible={addExistingOffender}
-      width="600"
-      onClose={toggleAddExistingOffender}
+      visible={linkOffender}
+      width="800"
+      onClose={toggleLinkOffender}
     >
-      {addExistingOffender ? (
+      {linkOffender ? (
         <LinkOffender
-          update={updateOffenderList}
-          onClose={toggleAddExistingOffender}
+          update={updateOffendersList}
+          onClose={toggleLinkOffender}
+          offenderIds={data?.incident?.offenders.map(({ id }) => id)}
         />
       ) : (
         <div />

@@ -37,7 +37,7 @@ const ViewOffender = ({
   data,
   loading,
 }: Props): JSX.Element =>
-  loading ? (
+  !data && loading ? (
     <Skeleton />
   ) : (
     <>

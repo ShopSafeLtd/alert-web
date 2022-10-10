@@ -8,16 +8,24 @@
   .image-card {
     height: 200px;
     width: 500px;
-    position: relative;
     display: flex;
     overflow: hidden;
     border: 1px solid #edf2f9;
     border-radius: 10px;
+
     .image-card-image {
+      position: relative;
       min-width: 250px;
       height: 200px;
       background-repeat: no-repeat;
       background-size: cover;
+      .image-remove-button {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        width: calc(100% - 50px);
+        z-index: 10;
+      }
     }
     .image-card-offenders {
       padding: 10px;
@@ -33,7 +41,7 @@
       padding: 0px 5px 5px;
     }
     .image-card-offender-text {
-      flex: 1
+      flex: 1;
     }
   }
 
@@ -44,7 +52,7 @@
     bottom: 0;
     right: 0;
     left: 0;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;

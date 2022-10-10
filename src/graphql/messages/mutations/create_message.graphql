@@ -13,5 +13,35 @@ mutation createMessage($data: MessageCreateWithoutActionsInput!) {
     }
     content
     createdAt
+    images {
+      id
+      url
+      optimised
+    }
+    incidents {
+      id
+      subject
+      description
+      dayTime
+      images {
+        id
+        url
+        optimised
+      }
+    }
+    offenders {
+      id
+      age
+      build
+      dateOfBirth
+      name
+      race
+      gender
+      images {
+        id
+        url
+        optimised
+      }
+    }
   }
 }

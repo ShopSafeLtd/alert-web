@@ -17,7 +17,6 @@ const ViewChat = (): JSX.Element => {
     updateDeletedUserChat,
     adminRights,
   } = useViewChat();
-
   return (
     <View
       data={data}

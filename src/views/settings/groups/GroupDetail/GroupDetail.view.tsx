@@ -1,9 +1,10 @@
 import React from 'react';
 import { GroupQuery } from 'graphql/generated';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, PageHeader, Card, Table, Drawer } from 'antd';
 import EditGroup from 'components/form-components/group/EditGroup';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
 
 interface Props {
   data: GroupQuery | undefined;
@@ -33,7 +34,13 @@ const GroupDetail = ({
           type="primary"
           disabled={saving}
           onClick={toggleEditGroup}
-          icon={<EditOutlined />}
+          icon={
+            <FontAwesomeIcon
+              size="lg"
+              icon={faPenToSquare}
+              style={{ marginRight: 5 }}
+            />
+          }
         >
           Edit Group
         </Button>,
@@ -42,7 +49,13 @@ const GroupDetail = ({
           disabled={saving}
           onClick={deleteConfirm}
           type="primary"
-          icon={<DeleteOutlined />}
+          icon={
+            <FontAwesomeIcon
+              size="lg"
+              icon={faTrash}
+              style={{ marginRight: 5 }}
+            />
+          }
         >
           Delete Group
         </Button>,

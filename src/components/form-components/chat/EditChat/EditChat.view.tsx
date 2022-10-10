@@ -27,7 +27,7 @@ const EditChat = ({
   usersLoading,
   saving,
 }: Props): JSX.Element =>
-  loading ? (
+  !data && loading ? (
     <Skeleton />
   ) : (
     <Form
@@ -61,7 +61,7 @@ const EditChat = ({
       <Row gutter={16}>
         <Col span={23}>
           <Form.Item name="description" label="Chat Group Description">
-            <Input disabled={saving} />
+            <Input.TextArea disabled={saving} />
           </Form.Item>
         </Col>
       </Row>

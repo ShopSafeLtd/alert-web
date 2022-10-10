@@ -4,11 +4,10 @@ import {
   SchemeQuery,
   useUpdateSchemeMutation,
 } from 'graphql/generated';
-import { notification, message } from 'antd';
+import { notification, message, Upload } from 'antd';
 import { useStoreState } from 'state';
-// import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import type { RcFile, UploadProps } from 'antd/es/upload';
-import type { UploadFile } from 'antd/es/upload/interface';
+
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 interface FormData {
   name: string;
@@ -50,7 +49,7 @@ const useSchemeDetail = (): Return => {
             uid: `${scheme?.logo?.id}`,
             name: 'image.png',
             status: 'done',
-            url: `${scheme?.logo?.url}`,
+            url: `${scheme?.logo?.optimised || scheme?.logo?.url}`,
           },
         ]);
       }
@@ -79,44 +78,72 @@ const useSchemeDetail = (): Return => {
   const onSubmit = (data: FormData) => {
     setSaving(true);
 
-    if (schemeId)
-      updateScheme({
-        variables: {
-          where: {
-            id: schemeId,
-          },
-          data: {
-            name: { set: data.name },
-            autoApproveIncidents: { set: data.autoApproveOffenders },
-            autoApproveOffenders: { set: data.autoApproveIncidents },
-            incidentRetention: { set: data.incidentRetention },
-            offenderRetention: { set: data.offenderRetention },
-            logo: {
-              ...(imageChange && fileList.length > 0
-                ? { upload: { file: fileList[0]?.originFileObj } }
-                : {}),
-              ...(imageChange && fileList.length === 0 ? { delete: true } : {}),
-            },
+    updateScheme({
+      variables: {
+        where: {
+          id: schemeId,
+        },
+        data: {
+          name: { set: data.name },
+          autoApproveIncidents: { set: data.autoApproveOffenders },
+          autoApproveOffenders: { set: data.autoApproveIncidents },
+          incidentRetention: { set: data.incidentRetention },
+          offenderRetention: { set: data.offenderRetention },
+          logo: {
+            ...(imageChange && fileList.length > 0
+              ? {
+                  upload: {
+                    url: {
+                      filename: fileList[0].fileName || '',
+                      mimetype: fileList[0].type || '',
+                      url: fileList[0].url || '',
+                    },
+                  },
+                }
+              : undefined),
+            // ...(imageChange && fileList.length > 0
+            //   ? { upload: { file: fileList[0]?.originFileObj } }
+            //   : {}),
+            ...(imageChange && fileList.length === 0 ? { delete: true } : {}),
           },
         },
-      });
+      },
+    });
   };
 
   // image
   // check the size / type if image before uploading
-  const imgChange: UploadProps['onChange'] = ({ fileList: newFileList }) => {
-    setFileList(newFileList);
-    setImageChange(true);
-  };
-
   const beforeUpload = (file: RcFile) => {
+    const isFileDuplicate = fileList.find((item) => item.name === file.name);
     const isLt2M = file.size / 1024 / 1024 < 2;
+    if (isFileDuplicate) {
+      message.error(
+        'This image has already existed, please choose another one.'
+      );
+    }
     if (!isLt2M) {
       message.error('Image must smaller than 2MB!');
     }
-    return isLt2M;
+    return !isFileDuplicate || isLt2M || Upload.LIST_IGNORE;
   };
 
+  const imgChange: UploadProps['onChange'] = (info) => {
+    if (info.file.response && info.file.status === 'done') {
+      setFileList([
+        ...fileList.filter((item) => item.uid !== info.file.uid),
+        {
+          ...info.file,
+          url: info.file.response[0].url,
+          fileName: info.file.response[0].blobName,
+          type: info.file.response[0].mimetype,
+        },
+      ]);
+      setImageChange(true);
+    } else {
+      setFileList(info.fileList);
+      setImageChange(true);
+    }
+  };
   const onPreview = async (file: UploadFile) => {
     let src = file.url as string;
     if (!src) {

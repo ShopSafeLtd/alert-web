@@ -45,12 +45,12 @@ interface Props {
 }
 
 interface Return {
-  offenders: OffenderData[];
+  offendersData: OffenderData[];
   addOffender: boolean;
   toggleAddOffender: () => void;
   addExistingOffender: boolean;
   toggleAddExistingOffender: () => void;
-  updateOffenders: (data: OffenderData[] | undefined) => void;
+  updateOffendersList: (value: OffenderData) => void;
   toggleOffender: (id: string) => void;
   selected: string[];
   submitImage: () => void;
@@ -61,7 +61,7 @@ const useAssignImageOffender = ({
   image,
   onSubmit,
 }: Props): Return => {
-  const [offenders, setOffenders] = useState<OffenderData[]>([]);
+  const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
   const [addOffender, setAddOffender] = useState(false);
   const [addExistingOffender, setAddExistingOffender] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
@@ -71,7 +71,7 @@ const useAssignImageOffender = ({
   }, [image]);
 
   useEffect(() => {
-    setOffenders(offenderData);
+    setOffendersData(offenderData);
   }, [offenderData]);
 
   const toggleAddExistingOffender = () => {
@@ -90,16 +90,9 @@ const useAssignImageOffender = ({
     }
   };
 
-  const updateOffenders = (data: OffenderData[] | undefined) => {
-    if (data) {
-      setOffenders([
-        ...offenders,
-        ...data.filter(
-          ({ id }) => !offenders.map((offender) => offender.id).includes(id)
-        ),
-      ]);
-      data.forEach(({ id }) => toggleOffender(id));
-    }
+  const updateOffendersList = (data: OffenderData) => {
+    setOffendersData([...offendersData, data]);
+    toggleOffender(data.id);
   };
 
   const isOffenderData = (
@@ -113,11 +106,11 @@ const useAssignImageOffender = ({
         image: {
           ...image,
           offenders: selected
-            .map((id) => offenders.find((offender) => offender.id === id))
+            .map((id) => offendersData.find((offender) => offender.id === id))
             .filter(isOffenderData),
         },
         offenders: selected
-          .map((id) => offenders.find((offender) => offender.id === id))
+          .map((id) => offendersData.find((offender) => offender.id === id))
           .filter(isOffenderData)
           .map((offender) => {
             let images: OffenderData['images'] = [];
@@ -142,12 +135,12 @@ const useAssignImageOffender = ({
   };
 
   return {
-    offenders,
+    offendersData,
     addExistingOffender,
     toggleAddExistingOffender,
     addOffender,
     toggleAddOffender,
-    updateOffenders,
+    updateOffendersList,
     toggleOffender,
     selected,
     submitImage,

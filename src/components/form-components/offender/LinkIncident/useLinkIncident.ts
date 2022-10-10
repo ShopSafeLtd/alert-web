@@ -9,19 +9,16 @@ import {
 
 import { useLightbox } from 'simple-react-lightbox';
 
-import { useStoreState, IncidentSort, useStoreActions } from 'state';
-
-interface FormData {
-  selectedIncidentIds: string[];
-}
+import { useStoreState, useStoreActions } from 'state';
 
 interface Props {
   onClose: () => void;
-  update: (value: string[] | undefined) => void;
+  update: (value: string) => void;
+  incidentIds: string[] | undefined;
 }
 
 interface Return {
-  onSubmit: (value: FormData) => void;
+  onSubmit: (value: string | undefined) => void;
   saving: boolean;
   data: ListIncidentsQuery | undefined;
   loading: boolean;
@@ -30,15 +27,16 @@ interface Return {
   onPaginationChange: (page: number, pageSize: number) => void;
   openLightbox: (index: number) => void;
   setCurrentId: (value: string | undefined) => void;
-  incidentData:
+  selectedIncident:
     | Exclude<
         ListIncidentsQuery['listIncidents'],
         undefined | null
       >['incidents'][0]
+    | null
     | undefined;
 }
 
-const useLinkIncident = ({ onClose, update }: Props): Return => {
+const useLinkIncident = ({ onClose, update, incidentIds }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [currentId, setCurrentId] = useState<string | undefined>(undefined);
   const { openLightbox } = useLightbox();
@@ -50,18 +48,20 @@ const useLinkIncident = ({ onClose, update }: Props): Return => {
     (actions) => actions.data.setIncidents
   );
 
-  const { data: ListIncidentsData, loading } = useListIncidentsQuery({
+  const { data, loading } = useListIncidentsQuery({
     variables: {
       scheme: {
         id: schemeId,
       },
       order: {
-        createdAt:
-          order === IncidentSort.createdAtDesc ? SortOrder.Desc : SortOrder.Asc,
+        createdAt: SortOrder.Asc,
       },
       take: pagination.pageSize,
       skip: (pagination.page - 1) * pagination.pageSize,
       where: {
+        id: {
+          notIn: incidentIds,
+        },
         OR: [
           {
             subject: {
@@ -93,12 +93,11 @@ const useLinkIncident = ({ onClose, update }: Props): Return => {
     fetchPolicy: 'cache-and-network',
   });
 
-  const onPaginationChange = (page: number, pageSize: number) => {
+  const onPaginationChange = (page: number) => {
     setIncidentsState({
       pagination: {
         ...pagination,
         page,
-        pageSize,
       },
       variables,
       order,
@@ -114,27 +113,29 @@ const useLinkIncident = ({ onClose, update }: Props): Return => {
       order,
     });
   };
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (selectedIncidentId: string | undefined) => {
     setSaving(true);
-    update(data.selectedIncidentIds);
+    if (selectedIncidentId) {
+      update(selectedIncidentId);
+    }
     setSaving(false);
     onClose();
   };
   return {
     onSubmit,
     saving,
-    data: ListIncidentsData,
+    data,
     loading,
     search: variables.search,
     setSearch,
     onPaginationChange,
     openLightbox,
     setCurrentId,
-    incidentData: currentId
-      ? ListIncidentsData?.listIncidents?.incidents.find(
+    selectedIncident: currentId
+      ? data?.listIncidents?.incidents.find(
           (Incident) => Incident.id === currentId
         )
-      : ListIncidentsData?.listIncidents?.incidents[0],
+      : null,
   };
 };
 

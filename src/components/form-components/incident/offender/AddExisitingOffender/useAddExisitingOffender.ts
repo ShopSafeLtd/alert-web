@@ -4,19 +4,15 @@ import {
   QueryMode,
   SortOrder,
   useListOffendersQuery,
+  ListOffendersQuery,
   Age,
   Gender,
   Race,
   Build,
-  ListOffendersQuery,
 } from 'graphql/generated';
 import { useLightbox } from 'simple-react-lightbox';
+import { useStoreState, useStoreActions } from 'state';
 
-import { useStoreState, OffenderSort, useStoreActions } from 'state';
-
-interface FormData {
-  selectedOffenderIds: string[];
-}
 interface OffenderData {
   id: string;
   name?: string | null;
@@ -35,14 +31,24 @@ interface OffenderData {
         name: string;
       }[]
     | undefined;
+  images?: {
+    id: string;
+    optimised?: string | null;
+    url?: string | null;
+    fileName?: string | null;
+    type?: string | null;
+    new?: boolean;
+  }[];
+  imageUid?: string[] | undefined;
 }
 interface Props {
   onClose: () => void;
-  update: (value: OffenderData[] | undefined) => void;
+  update: (value: OffenderData) => void;
+  offenderIds: string[] | undefined;
 }
 
 interface Return {
-  onSubmit: (value: FormData) => void;
+  onSubmit: (value: string | undefined) => void;
   saving: boolean;
   data: ListOffendersQuery | undefined;
   loading: boolean;
@@ -51,7 +57,7 @@ interface Return {
   onPaginationChange: (page: number, pageSize: number) => void;
   openLightbox: (index: number) => void;
   setCurrentId: (value: string | undefined) => void;
-  offenderData:
+  selectedOffender:
     | Exclude<
         ListOffendersQuery['listOffenders'],
         undefined | null
@@ -60,10 +66,13 @@ interface Return {
     | undefined;
 }
 
-const useAddExisitingOffenderr = ({ onClose, update }: Props): Return => {
+const useAddExisitingOffenderr = ({
+  onClose,
+  update,
+  offenderIds,
+}: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [currentId, setCurrentId] = useState<string | undefined>(undefined);
-  // const [selectedOffender, setSelectedOffender] = useState<OffenderData[]>([]);
   const { openLightbox } = useLightbox();
   const schemeId = useStoreState((state) => state.scheme.id);
   const order = useStoreState((state) => state.data.offenders.order);
@@ -73,18 +82,20 @@ const useAddExisitingOffenderr = ({ onClose, update }: Props): Return => {
     (actions) => actions.data.setOffenders
   );
 
-  const { data: ListOffendersData, loading } = useListOffendersQuery({
+  const { data, loading } = useListOffendersQuery({
     variables: {
       scheme: {
         id: schemeId,
       },
       order: {
-        updatedAt:
-          order === OffenderSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
+        updatedAt: SortOrder.Asc,
       },
       take: pagination.pageSize,
       skip: (pagination.page - 1) * pagination.pageSize,
       where: {
+        id: {
+          notIn: offenderIds,
+        },
         OR: [
           {
             name: {
@@ -98,12 +109,11 @@ const useAddExisitingOffenderr = ({ onClose, update }: Props): Return => {
     fetchPolicy: 'cache-and-network',
   });
 
-  const onPaginationChange = (page: number, pageSize: number) => {
+  const onPaginationChange = (page: number) => {
     setOffendersState({
       pagination: {
         ...pagination,
         page,
-        pageSize,
       },
       variables,
       order,
@@ -119,34 +129,31 @@ const useAddExisitingOffenderr = ({ onClose, update }: Props): Return => {
       order,
     });
   };
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (selectedOffenderId: string | undefined) => {
     setSaving(true);
     if (
-      ListOffendersData?.listOffenders?.offenders &&
-      ListOffendersData.listOffenders.offenders.length > 0
+      data?.listOffenders?.offenders &&
+      data.listOffenders.offenders.length > 0
     ) {
-      const filterOffenders = ListOffendersData.listOffenders.offenders
-        .filter((offender) =>
-          data?.selectedOffenderIds
-            ?.map((offenderId) => offenderId)
-            .includes(offender.id)
-        )
-        .map((offender) => ({
-          id: offender.id,
-          name: offender.name || null,
-          age: offender.age || null,
-          gender: offender.gender || null,
-          race: offender.race || null,
-          build: offender.build || null,
-          dateOfBirth: offender.dateOfBirth || null,
+      const selectedOffender = data.listOffenders.offenders.find(
+        ({ id }) => selectedOffenderId === id
+      );
+      if (selectedOffender) {
+        update({
+          id: selectedOffender.id,
+          name: selectedOffender.name || 'Unidentified Offender',
+          age: selectedOffender.age || null,
+          gender: selectedOffender.gender || null,
+          race: selectedOffender.race || null,
+          build: selectedOffender.build || null,
+          dateOfBirth: selectedOffender.dateOfBirth || null,
           images:
-            offender.images.map(({ id, optimised }) => ({
+            selectedOffender.images.map(({ id, optimised }) => ({
               id,
               optimised,
             })) || null,
-        }));
-
-      update(filterOffenders);
+        });
+      }
     }
     setSaving(false);
     onClose();
@@ -154,15 +161,15 @@ const useAddExisitingOffenderr = ({ onClose, update }: Props): Return => {
   return {
     onSubmit,
     saving,
-    data: ListOffendersData,
+    data,
     loading,
     search: variables.search,
     setSearch,
     onPaginationChange,
     openLightbox,
     setCurrentId,
-    offenderData: currentId
-      ? ListOffendersData?.listOffenders?.offenders.find(
+    selectedOffender: currentId
+      ? data?.listOffenders?.offenders.find(
           (offender) => offender.id === currentId
         )
       : null,

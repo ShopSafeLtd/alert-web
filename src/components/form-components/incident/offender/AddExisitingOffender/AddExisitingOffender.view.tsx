@@ -37,13 +37,10 @@ import moment from 'moment';
 import OffenderTile from 'components/offenders/OffenderTile';
 
 const { Title } = Typography;
-interface FormData {
-  selectedOffenderIds: string[];
-}
 
 interface Props {
   onClose: () => void;
-  onSubmit: (value: FormData) => void;
+  onSubmit: (value: string | undefined) => void;
   saving: boolean;
   data: ListOffendersQuery | undefined;
   loading: boolean;
@@ -52,7 +49,7 @@ interface Props {
   onPaginationChange: (page: number, pageSize: number) => void;
   openLightbox: (index: number) => void;
   setCurrentId: (value: string | undefined) => void;
-  offenderData:
+  selectedOffender:
     | Exclude<
         ListOffendersQuery['listOffenders'],
         undefined | null
@@ -72,7 +69,7 @@ const AddExisitingOffender = ({
   openLightbox,
   onPaginationChange,
   setCurrentId,
-  offenderData,
+  selectedOffender,
 }: Props): JSX.Element => (
   <div className="add-existing-offender">
     <Row gutter={8} className="search-offender">
@@ -85,36 +82,42 @@ const AddExisitingOffender = ({
         />
       </Col>
     </Row>
+
     <Row className="add-existing-offender-row">
       <Col
-        span={offenderData !== null ? 10 : 24}
+        span={selectedOffender !== null ? 10 : 24}
         className="offenders-side-list"
       >
-        <Row wrap gutter={16}>
-          {data?.listOffenders?.offenders.map((offender) => (
-            <Col
-              span={offenderData !== null ? 12 : 4}
-              key={offender.id}
-              className="offender-item"
-            >
-              <OffenderTile
-                offender={offender}
-                onClick={() => setCurrentId(offender.id)}
-              />
-            </Col>
-          ))}
-        </Row>
+        {!data && loading ? (
+          <Skeleton />
+        ) : (
+          <Row wrap gutter={16}>
+            {data?.listOffenders?.offenders.map((offender) => (
+              <Col
+                span={selectedOffender !== null ? 12 : 4}
+                key={offender.id}
+                className="offender-item"
+              >
+                <OffenderTile
+                  offender={offender}
+                  onClick={() => setCurrentId(offender.id)}
+                />
+              </Col>
+            ))}
+          </Row>
+        )}
 
         <Pagination
           total={data?.listOffenders?.total}
           size="small"
           showSizeChanger={false}
           onChange={onPaginationChange}
+          pageSize={24}
         />
       </Col>
-      {offenderData && (
+      {selectedOffender && (
         <Col span={14} className="view-offender">
-          {offenderData && offenderData.images.length > 0 && (
+          {selectedOffender && selectedOffender.images.length > 0 && (
             <Row
               gutter={8}
               justify="start"
@@ -122,7 +125,7 @@ const AddExisitingOffender = ({
               wrap={false}
               className="offender-images"
             >
-              {offenderData?.images.map((image, i) => (
+              {selectedOffender?.images.map((image, i) => (
                 <Col key={image.id}>
                   <div
                     onClick={() => openLightbox(i)}
@@ -136,10 +139,9 @@ const AddExisitingOffender = ({
 
           <Row>
             <Col span={24} style={{ margin: 10 }}>
-              <Title level={4}>{offenderData?.name}</Title>
+              <Title level={4}>{selectedOffender?.name}</Title>
               <Descriptions column={1} className="offender-descriptions">
                 <Descriptions.Item
-                  span={2}
                   label={
                     <span>
                       <FontAwesomeIcon
@@ -150,12 +152,8 @@ const AddExisitingOffender = ({
                     </span>
                   }
                 >
-                  {loading ? (
-                    <Skeleton title={{ width: 100 }} paragraph={false} />
-                  ) : (
-                    moment(offenderData?.updatedAt || moment()).format(
-                      `ddd MMM DD YYYY - HH:mm`
-                    )
+                  {moment(selectedOffender.updatedAt || moment()).format(
+                    `ddd MMM DD YYYY - HH:mm`
                   )}
                 </Descriptions.Item>
                 <Descriptions.Item
@@ -169,50 +167,10 @@ const AddExisitingOffender = ({
                     </span>
                   }
                 >
-                  {loading ? (
-                    <Skeleton title={{ width: 100 }} paragraph={false} />
-                  ) : (
-                    (offenderData?.dateOfBirth &&
-                      calcAge(offenderData?.dateOfBirth)) ||
-                    getOffenderAge(offenderData?.age)
-                  )}
+                  {selectedOffender.dateOfBirth
+                    ? calcAge(selectedOffender.dateOfBirth)
+                    : getOffenderAge(selectedOffender.age)}
                 </Descriptions.Item>
-                <Descriptions.Item
-                  label={
-                    <span>
-                      <FontAwesomeIcon
-                        className="offender-description-icon"
-                        icon={faUserTag}
-                      />
-                      Build
-                    </span>
-                  }
-                >
-                  {loading ? (
-                    <Skeleton title={{ width: 100 }} paragraph={false} />
-                  ) : (
-                    getOffenderBuild(offenderData?.build)
-                  )}
-                </Descriptions.Item>
-                {offenderData?.hair && (
-                  <Descriptions.Item
-                    label={
-                      <span>
-                        <FontAwesomeIcon
-                          className="offender-description-icon"
-                          icon={faUserHair}
-                        />
-                        Hair
-                      </span>
-                    }
-                  >
-                    {loading ? (
-                      <Skeleton title={{ width: 100 }} paragraph={false} />
-                    ) : (
-                      offenderData?.hair
-                    )}
-                  </Descriptions.Item>
-                )}
                 <Descriptions.Item
                   label={
                     <span>
@@ -224,11 +182,37 @@ const AddExisitingOffender = ({
                     </span>
                   }
                 >
-                  {loading ? (
-                    <Skeleton title={{ width: 100 }} paragraph={false} />
-                  ) : (
-                    getOffenderGender(offenderData?.gender)
-                  )}
+                  {getOffenderGender(selectedOffender.gender)}
+                </Descriptions.Item>
+
+                {selectedOffender.hair && (
+                  <Descriptions.Item
+                    label={
+                      <span>
+                        <FontAwesomeIcon
+                          className="offender-description-icon"
+                          icon={faUserHair}
+                        />
+                        Hair
+                      </span>
+                    }
+                  >
+                    {selectedOffender.hair}
+                  </Descriptions.Item>
+                )}
+                <Descriptions.Item
+                  //
+                  label={
+                    <span>
+                      <FontAwesomeIcon
+                        className="offender-description-icon"
+                        icon={faUserTag}
+                      />
+                      Build
+                    </span>
+                  }
+                >
+                  {getOffenderBuild(selectedOffender.build)}
                 </Descriptions.Item>
                 <Descriptions.Item
                   label={
@@ -241,16 +225,11 @@ const AddExisitingOffender = ({
                     </span>
                   }
                 >
-                  {loading ? (
-                    <Skeleton title={{ width: 100 }} paragraph={false} />
-                  ) : (
-                    getOffenderRace(offenderData?.race, false)
-                  )}
+                  {getOffenderRace(selectedOffender.race, false)}
                 </Descriptions.Item>
 
-                {offenderData?.peculiarities && (
+                {selectedOffender.peculiarities && (
                   <Descriptions.Item
-                    span={2}
                     label={
                       <span>
                         <FontAwesomeIcon
@@ -261,17 +240,12 @@ const AddExisitingOffender = ({
                       </span>
                     }
                   >
-                    {loading ? (
-                      <Skeleton title={{ width: 100 }} paragraph={false} />
-                    ) : (
-                      offenderData?.peculiarities
-                    )}
+                    {selectedOffender.peculiarities}
                   </Descriptions.Item>
                 )}
 
-                {offenderData?.incidents[0]?.location && (
+                {selectedOffender.incidents[0]?.location && (
                   <Descriptions.Item
-                    span={2}
                     label={
                       <span>
                         <FontAwesomeIcon
@@ -282,11 +256,7 @@ const AddExisitingOffender = ({
                       </span>
                     }
                   >
-                    {loading ? (
-                      <Skeleton title={{ width: 100 }} paragraph={false} />
-                    ) : (
-                      getLastOffence(offenderData?.incidents)?.location
-                    )}
+                    {getLastOffence(selectedOffender.incidents)?.location}
                   </Descriptions.Item>
                 )}
               </Descriptions>
@@ -303,11 +273,7 @@ const AddExisitingOffender = ({
                 disabled={saving}
                 loading={saving}
                 type="primary"
-                onClick={() =>
-                  onSubmit({
-                    selectedOffenderIds: [offenderData?.id],
-                  })
-                }
+                onClick={() => onSubmit(selectedOffender?.id)}
               >
                 Add Offender
               </Button>
@@ -319,7 +285,7 @@ const AddExisitingOffender = ({
 
     <SRLWrapper
       elements={
-        offenderData?.images.map((image) => ({
+        selectedOffender?.images.map((image) => ({
           src: image.optimised || '',
         })) || []
       }

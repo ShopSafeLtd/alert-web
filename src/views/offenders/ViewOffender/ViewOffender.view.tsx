@@ -55,9 +55,9 @@ interface Props {
   editRights: boolean;
   deleteRights: boolean;
   onDelete: (id: string) => void;
-  addExistingIncident: boolean;
-  toggleAddExistingIncident: () => void;
-  updateIncidentList: (value: string[] | undefined) => void;
+  linkIncident: boolean;
+  toggleLinkIncident: () => void;
+  updateIncidentList: (value: string) => void;
 }
 
 const ViewOffender = ({
@@ -70,8 +70,8 @@ const ViewOffender = ({
   deleteRights,
   editRights,
   onDelete,
-  addExistingIncident,
-  toggleAddExistingIncident,
+  linkIncident,
+  toggleLinkIncident,
   updateIncidentList,
 }: Props): JSX.Element => (
   <div className="page-container">
@@ -160,25 +160,9 @@ const ViewOffender = ({
                             ))}
                           </Row>
                           <Descriptions
-                            column={2}
+                            column={1}
                             className="offender-descriptions"
                           >
-                            <Descriptions.Item
-                              span={2}
-                              label={
-                                <span>
-                                  <FontAwesomeIcon
-                                    className="offender-description-icon"
-                                    icon={faClock}
-                                  />
-                                  Last updated
-                                </span>
-                              }
-                            >
-                              {moment(
-                                data?.offender?.updatedAt || moment()
-                              ).format(`ddd MMM DD YYYY - HH:mm`)}
-                            </Descriptions.Item>
                             <Descriptions.Item
                               label={
                                 <span>
@@ -194,6 +178,21 @@ const ViewOffender = ({
                                 ? calcAge(data?.offender?.dateOfBirth)
                                 : getOffenderAge(data?.offender?.age)}
                             </Descriptions.Item>
+
+                            <Descriptions.Item
+                              label={
+                                <span>
+                                  <FontAwesomeIcon
+                                    className="offender-description-icon"
+                                    icon={faMarsAndVenus}
+                                  />
+                                  Sex
+                                </span>
+                              }
+                            >
+                              {getOffenderGender(data?.offender?.gender)}
+                            </Descriptions.Item>
+
                             <Descriptions.Item
                               label={
                                 <span>
@@ -206,6 +205,19 @@ const ViewOffender = ({
                               }
                             >
                               {getOffenderBuild(data?.offender?.build)}
+                            </Descriptions.Item>
+                            <Descriptions.Item
+                              label={
+                                <span>
+                                  <FontAwesomeIcon
+                                    className="offender-description-icon"
+                                    icon={faEarth}
+                                  />
+                                  Ethnicity
+                                </span>
+                              }
+                            >
+                              {getOffenderRace(data?.offender?.race, false)}
                             </Descriptions.Item>
                             {data?.offender?.hair && (
                               <Descriptions.Item
@@ -222,37 +234,24 @@ const ViewOffender = ({
                                 {data?.offender?.hair}
                               </Descriptions.Item>
                             )}
-                            <Descriptions.Item
-                              label={
-                                <span>
-                                  <FontAwesomeIcon
-                                    className="offender-description-icon"
-                                    icon={faMarsAndVenus}
-                                  />
-                                  Sex
-                                </span>
-                              }
-                            >
-                              {getOffenderGender(data?.offender?.gender)}
-                            </Descriptions.Item>
-                            <Descriptions.Item
-                              span={2}
-                              label={
-                                <span>
-                                  <FontAwesomeIcon
-                                    className="offender-description-icon"
-                                    icon={faEarth}
-                                  />
-                                  Ethnicity
-                                </span>
-                              }
-                            >
-                              {getOffenderRace(data?.offender?.race, false)}
-                            </Descriptions.Item>
 
+                            <Descriptions.Item
+                              label={
+                                <span>
+                                  <FontAwesomeIcon
+                                    className="offender-description-icon"
+                                    icon={faClock}
+                                  />
+                                  Last updated
+                                </span>
+                              }
+                            >
+                              {moment(
+                                data?.offender?.updatedAt || moment()
+                              ).format(`ddd MMM DD YYYY - HH:mm`)}
+                            </Descriptions.Item>
                             {data?.offender?.peculiarities && (
                               <Descriptions.Item
-                                span={2}
                                 label={
                                   <span>
                                     <FontAwesomeIcon
@@ -269,7 +268,6 @@ const ViewOffender = ({
 
                             {data?.offender?.incidents[0]?.location && (
                               <Descriptions.Item
-                                span={2}
                                 label={
                                   <span>
                                     <FontAwesomeIcon
@@ -451,7 +449,7 @@ const ViewOffender = ({
                             {addIncidentRights && (
                               <div>
                                 <Button
-                                  onClick={toggleAddExistingIncident}
+                                  onClick={toggleLinkIncident}
                                   disabled={saving}
                                   loading={saving}
                                   style={{ color: 'red' }}
@@ -481,14 +479,15 @@ const ViewOffender = ({
 
     <Drawer
       title="Link Incidents"
-      visible={addExistingIncident}
-      width="600"
-      onClose={toggleAddExistingIncident}
+      visible={linkIncident}
+      width="800"
+      onClose={toggleLinkIncident}
     >
-      {addExistingIncident ? (
+      {linkIncident ? (
         <LinkIncident
           update={updateIncidentList}
-          onClose={toggleAddExistingIncident}
+          onClose={toggleLinkIncident}
+          incidentIds={data?.offender?.incidents.map(({ id }) => id) || []}
         />
       ) : (
         <div />

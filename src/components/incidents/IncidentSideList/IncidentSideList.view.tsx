@@ -19,7 +19,7 @@ const IncidentSideList = ({
   current,
   onPaginationChange,
 }: Props): JSX.Element =>
-  loading ? (
+  !data && loading ? (
     <Skeleton />
   ) : (
     <div className="incidents-side-list">

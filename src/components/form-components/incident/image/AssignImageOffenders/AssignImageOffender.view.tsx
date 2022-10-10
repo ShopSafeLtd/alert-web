@@ -1,5 +1,14 @@
 import React from 'react';
-import { Typography, Row, Col, Button, Drawer, Checkbox, Modal } from 'antd';
+import {
+  Typography,
+  Row,
+  Col,
+  Button,
+  Drawer,
+  Checkbox,
+  Modal,
+  Skeleton,
+} from 'antd';
 import { Age, Build, Gender, Race } from 'graphql/generated';
 import {
   getOffenderAge,
@@ -9,7 +18,7 @@ import {
 } from 'utils/offender/get-offender-desc';
 import { UploadFile } from 'antd/lib/upload/interface';
 import AddExistingOffender from '../../offender/AddExisitingOffender';
-import AddOffender from '../../offender/AddOffender';
+import AddOffender from '../../offender/AddNewOffender';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -49,12 +58,12 @@ interface Image extends UploadFile {
 
 interface Props {
   image: Image | undefined;
-  offenders: OffenderData[];
+  offendersData: OffenderData[];
   toggleAddOffender: () => void;
   toggleAddExistingOffender: () => void;
   addExistingOffender: boolean;
   addOffender: boolean;
-  updateOffenders: (data: OffenderData[] | undefined) => void;
+  updateOffendersList: (value: OffenderData) => void;
   toggleOffender: (id: string) => void;
   selected: string[];
   onCancel: () => void;
@@ -63,12 +72,12 @@ interface Props {
 
 const AssignImageOffender = ({
   image,
-  offenders,
+  offendersData,
   toggleAddExistingOffender,
   toggleAddOffender,
   addExistingOffender,
   addOffender,
-  updateOffenders,
+  updateOffendersList,
   selected,
   toggleOffender,
   onCancel,
@@ -92,29 +101,35 @@ const AssignImageOffender = ({
       />
       <div className="incident-form-assign-offenders">
         <Title level={4} className="offender-title">
-          {offenders.length > 0 ? 'Select' : 'Add'} Offenders
+          {offendersData.length > 0 ? 'Select' : 'Add'} Offenders
         </Title>
-        {offenders.length === 0 && (
+        {offendersData.length === 0 && (
           <Paragraph>
             You have not added any offenders to the incident yet, please add
             offenders if any are present in the image.
           </Paragraph>
         )}
         <div className="incident-form-assign-offender-list">
-          {offenders.map((offender) => (
+          {offendersData.map((offender) => (
             <Row
               className="incident-form-assign-offender"
               key={offender.id}
               onClick={() => toggleOffender(offender.id)}
               wrap={false}
             >
-              {offender.images && (
-                <Col
-                  className="incident-form-assign-offender-image"
-                  style={{
-                    backgroundImage: `url(${offender.images[0]?.optimised})`,
-                  }}
-                />
+              {offender.images && offender.images.length > 0 ? (
+                <Col>
+                  <div
+                    className="incident-form-assign-offender-image"
+                    style={{
+                      backgroundImage: `url(${offender.images[0]?.optimised})`,
+                    }}
+                  />
+                </Col>
+              ) : (
+                <Col>
+                  <Skeleton.Image style={{ height: 80, width: 80 }} />
+                </Col>
               )}
               <Col className="incident-form-assign-offender-content">
                 <Text strong>{offender.name}</Text>
@@ -175,7 +190,10 @@ const AssignImageOffender = ({
         zIndex={1001}
       >
         {addOffender && (
-          <AddOffender onClose={toggleAddOffender} update={updateOffenders} />
+          <AddOffender
+            onClose={toggleAddOffender}
+            update={updateOffendersList}
+          />
         )}
       </Drawer>
 
@@ -189,7 +207,8 @@ const AssignImageOffender = ({
         {addExistingOffender && (
           <AddExistingOffender
             onClose={toggleAddExistingOffender}
-            update={updateOffenders}
+            offenderIds={offendersData.map(({ id }) => id)}
+            update={updateOffendersList}
           />
         )}
       </Drawer>

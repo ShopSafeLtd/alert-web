@@ -54,10 +54,10 @@ const AssignImageOffender = ({
   const {
     addExistingOffender,
     addOffender,
-    offenders,
+    offendersData,
     toggleAddExistingOffender,
     toggleAddOffender,
-    updateOffenders,
+    updateOffendersList,
     selected,
     toggleOffender,
     submitImage,
@@ -70,12 +70,12 @@ const AssignImageOffender = ({
   return (
     <View
       image={image}
-      offenders={offenders}
+      offendersData={offendersData}
       toggleAddExistingOffender={toggleAddExistingOffender}
       toggleAddOffender={toggleAddOffender}
       addExistingOffender={addExistingOffender}
       addOffender={addOffender}
-      updateOffenders={updateOffenders}
+      updateOffendersList={updateOffendersList}
       selected={selected}
       toggleOffender={toggleOffender}
       onCancel={onCancel}

@@ -22,13 +22,27 @@ interface OffenderData {
         name: string;
       }[]
     | undefined;
+  images?: {
+    id: string;
+    optimised?: string | null;
+    url?: string | null;
+    fileName?: string | null;
+    type?: string | null;
+    new?: boolean;
+  }[];
+  imageUid?: string[] | undefined;
 }
 
 interface Props {
   onClose: () => void;
-  update: (value: OffenderData[] | undefined) => void;
+  update: (value: OffenderData) => void;
+  offenderIds: string[] | undefined;
 }
-const AddExisitingOffender = ({ onClose, update }: Props): JSX.Element => {
+const AddExisitingOffender = ({
+  onClose,
+  update,
+  offenderIds,
+}: Props): JSX.Element => {
   const {
     onSubmit,
     saving,
@@ -39,8 +53,8 @@ const AddExisitingOffender = ({ onClose, update }: Props): JSX.Element => {
     openLightbox,
     onPaginationChange,
     setCurrentId,
-    offenderData,
-  } = useAddExisitingOffender({ onClose, update });
+    selectedOffender,
+  } = useAddExisitingOffender({ onClose, update, offenderIds });
 
   return (
     <View
@@ -54,7 +68,7 @@ const AddExisitingOffender = ({ onClose, update }: Props): JSX.Element => {
       onClose={onClose}
       onPaginationChange={onPaginationChange}
       setCurrentId={setCurrentId}
-      offenderData={offenderData}
+      selectedOffender={selectedOffender}
     />
   );
 };
