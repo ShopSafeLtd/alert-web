@@ -385,18 +385,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     });
   };
 
-  const [sendMessage] = useCreateMessageMutation({
-    onCompleted: () => {
-      setSaving(false);
-      form.resetFields();
-    },
-    onError: () => {
-      errorNotification();
-      setSaving(false);
-    },
-    update: updateData,
-  });
-
   // delete
   // update list after deleting a message
   const updateMessageList: MutationUpdaterFn<DeleteMessageMutation> = (
@@ -676,6 +664,22 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   };
   console.log('mentionedUser', mentionedUser);
 
+  const [sendMessage] = useCreateMessageMutation({
+    onCompleted: () => {
+      setSaving(false);
+      form.resetFields();
+      setInputStr('');
+      setFileList([]);
+      setIncidentsData([]);
+      setOffendersData([]);
+      setMentionedUser([]);
+    },
+    onError: () => {
+      errorNotification();
+      setSaving(false);
+    },
+    update: updateData,
+  });
   const onSubmit = () => {
     if (!inputStr && !fileList && !incidentsData && !offendersData) {
       message.info('The message cannot be empty!');
@@ -731,11 +735,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
           },
         },
       });
-      setInputStr('');
-      setFileList([]);
-      setIncidentsData([]);
-      setOffendersData([]);
-      setMentionedUser([]);
     }
   };
 
