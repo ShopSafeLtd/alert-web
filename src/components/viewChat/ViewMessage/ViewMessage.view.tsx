@@ -939,27 +939,36 @@ const ViewMessges = ({
               style={{ height: 40 }}
               value={inputStr}
               onChange={(value) => {
-                setInputStr(value);
-                setInputStr(value.split('$')[0]);
-                // setMentionedUser([value.split('$')[1]]);
+                // setInputStr(value);
+                const newMesage = value.split('$')[0];
+                const newMetioned = value.split('$')[1];
+                console.log('newMesage', newMesage);
+                console.log('newMetioned', newMetioned);
+
+                // console.log('value1', value);
+                setMentionedUser([value.split('$')[1]]);
                 setMentionedUser(
-                  getMentions(value, { prefix: '@' }).map(
+                  getMentions(value, { prefix: '$' }).map(
                     (mention) => mention.value
                   )
                 );
-                console.log('value', value);
-                console.log('getMentions', getMentions(value, { prefix: '@' }));
-                console.log('0', value.split('$')[0]);
-                console.log('1', value.split('$')[1]);
+                setInputStr(value.split('$')[0]);
+
+                // console.log('value', value);
+                // console.log('getMentions', getMentions(value, { prefix: '@' }));
+                // console.log('0', value.split('$')[0]);
+                // console.log('1', value.split('$'));
               }}
-              // onSelect={(value) => {
-              // setInputStr(value.split('$')[0]);
-              // setMentionedUser(value);
-              // }}
+              onSelect={(value) => {
+                // setInputStr(value.split('$')[0]);
+                // setMentionedUser(value);
+                console.log('selectValue', value);
+              }}
               prefix="@"
             >
               {membersData?.map(({ id, fullName }) => (
                 <Option key={id} value={`${fullName}$${id}`}>
+                  {/* value={`${fullName}$${id}`} */}
                   {fullName}
                 </Option>
               ))}
