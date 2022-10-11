@@ -595,6 +595,8 @@ const useEditIncident = (): Return => {
         };
       };
 
+      console.log(getOffenders());
+
       createIncident({
         variables: {
           data: {

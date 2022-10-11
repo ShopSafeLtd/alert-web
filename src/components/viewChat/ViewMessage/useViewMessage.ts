@@ -146,7 +146,8 @@ interface Return {
   removeOffender: (value: string | undefined) => void;
   removeIncident: (value: string | undefined) => void;
   removeImage: (uid: string) => void;
-  setMentionedUser: (id: string[]) => void;
+  mentionedUser: { id: string; value: string }[];
+  setMentionedUser: (value: { id: string; value: string }[]) => void;
   deleteImageConfirm: (messageId: string, imageId: string) => void;
   deleteOffenderConfirm: (messageId: string, offenderId: string) => void;
   deleteIncidentConfirm: (messageId: string, incidentId: string) => void;
@@ -173,7 +174,13 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const [linkIncident, setLinkIncident] = useState(false);
   const [linkOffender, setLinkOffender] = useState(false);
   const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
-  const [mentionedUser, setMentionedUser] = useState<string[]>([]);
+  const [mentionedUser, setMentionedUser] = useState<
+    { id: string; value: string }[]
+  >([]);
+
+  useEffect(() => {
+    console.log(mentionedUser);
+  }, [mentionedUser]);
 
   const [incidentsData, setIncidentsData] = useState<
     | Exclude<
@@ -264,7 +271,30 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     },
     onCompleted: ({ chat }) => {
       if (chat?.members && chat.members.length > 0) {
-        setMembersData(chat.members.map((userChat) => userChat.user));
+        setMembersData(
+          chat.members
+            .map((userChat) => userChat.user)
+            .map((member, i, arr) => {
+              const arrBeforeMember = arr
+                .slice(0, i)
+                .map(({ fullName }) => fullName);
+              console.log(arrBeforeMember);
+              if (arrBeforeMember.includes(member.fullName)) {
+                console.log('duplicate');
+                const { length } = arrBeforeMember.filter(
+                  (item) => item === member.fullName
+                );
+                return {
+                  ...member,
+                  fullName: `${member.fullName.replace(' ', '_')}_${length}`,
+                };
+              }
+              return {
+                ...member,
+                fullName: member.fullName.replace(' ', '_'),
+              };
+            })
+        );
       }
     },
   });
@@ -676,7 +706,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
             mentions: {
               connect:
                 mentionedUser && mentionedUser.length > 0
-                  ? mentionedUser.map((id) => ({ id }))
+                  ? mentionedUser.map(({ id }) => ({ id }))
                   : undefined,
             },
             content: inputStr,
@@ -744,6 +774,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     removeOffender,
     removeIncident,
     removeImage,
+    mentionedUser,
     setMentionedUser,
     deleteImageConfirm,
     deleteOffenderConfirm,
