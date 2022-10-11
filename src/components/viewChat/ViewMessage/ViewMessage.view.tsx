@@ -164,7 +164,7 @@ interface Props {
   removeOffender: (value: string | undefined) => void;
   removeIncident: (value: string | undefined) => void;
   removeImage: (uid: string) => void;
-  setMentionedUser: (id: string[]) => void;
+  setMentionedUser: (value: { id: string; value: string }[]) => void;
   deleteImageConfirm: (messageId: string, imageId: string) => void;
   deleteOffenderConfirm: (messageId: string, offenderId: string) => void;
   deleteIncidentConfirm: (messageId: string, incidentId: string) => void;
@@ -940,27 +940,45 @@ const ViewMessges = ({
               value={inputStr}
               onChange={(value) => {
                 setInputStr(value);
-                setInputStr(value.split('$')[0]);
+                // setInputStr(value.split('$')[0]);
                 // setMentionedUser([value.split('$')[1]]);
+                // setMentionedUser(
+                //   // getMentions(value, { prefix: '@' }).map(
+                //   //   (mention) => mention.value
+                //   // )
+                // );
+                const mentions = getMentions(value, { prefix: '@' });
                 setMentionedUser(
-                  getMentions(value, { prefix: '@' }).map(
-                    (mention) => mention.value
-                  )
+                  mentions
+                    .map((mention) =>
+                      membersData?.find(
+                        (member) => mention.value === member.fullName
+                      )
+                    )
+                    .map((item) => ({
+                      id: item?.id || '',
+                      value: item?.fullName || '',
+                    }))
+                    .filter((item) => item.value !== '')
                 );
-                console.log('value', value);
-                console.log('getMentions', getMentions(value, { prefix: '@' }));
-                console.log('0', value.split('$')[0]);
-                console.log('1', value.split('$')[1]);
               }}
               // onSelect={(value) => {
-              // setInputStr(value.split('$')[0]);
-              // setMentionedUser(value);
+              //   if (value.key && value.value) {
+              //     // console.log('setMentions', mentionedUser, value);
+              //     setMentionedUser([
+              //       ...mentionedUser,
+              //       {
+              //         id: value.key,
+              //         value: value.value,
+              //       },
+              //     ]);
+              //   }
               // }}
               prefix="@"
             >
-              {membersData?.map(({ id, fullName }) => (
-                <Option key={id} value={`${fullName}$${id}`}>
-                  {fullName}
+              {membersData?.map(({ id, fullName, organisation }) => (
+                <Option key={id} value={fullName}>
+                  {fullName} ({organisation}){' '}
                 </Option>
               ))}
             </Mentions>
