@@ -31,6 +31,7 @@ mutation createMessage($data: MessageCreateWithoutActionsInput!) {
     }
     offenders {
       id
+      updatedAt
       age
       build
       dateOfBirth

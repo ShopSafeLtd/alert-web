@@ -23,7 +23,7 @@ import {
   Typography,
   Popconfirm,
 } from 'antd';
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import { MessageType } from 'types';
 import {
   faImage,
@@ -46,18 +46,12 @@ import AddUserChat from 'components/form-components/userChat/ManageChatMember';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import LinkOffender from 'components/form-components/incident/offender/AddExisitingOffender';
 import LinkIncident from 'components/form-components/offender/LinkIncident';
-import {
-  getOffenderAge,
-  getOffenderBuild,
-  getOffenderGender,
-  getOffenderRace,
-  calcAge,
-} from 'utils/offender/get-offender-desc';
 
 const { Option, getMentions } = Mentions;
-const { Paragraph } = Typography;
+const { Title, Paragraph } = Typography;
 interface OffenderData {
   id: string;
+  updatedAt?: Date;
   name?: string | null;
   age?: Age | null;
   gender?: Gender | null;
@@ -104,6 +98,7 @@ interface DatedMessages {
   }[];
   offenders?: {
     id: string;
+    updatedAt?: Date;
     age?: Age | null;
     build?: Build | null;
     dateOfBirth?: Date | null;
@@ -223,6 +218,12 @@ const ViewMessges = ({
       });
     }
   }, [datedMessages]);
+  if (chatId === '1') {
+    deleteImageConfirm('1', '1');
+    deleteOffenderConfirm('1', '1');
+    deleteIncidentConfirm('1', '1');
+  }
+  console.log(inputStr);
 
   return !data && loading ? (
     <Skeleton active />
@@ -250,7 +251,7 @@ const ViewMessges = ({
             <Button
               key="2"
               type="primary"
-              disabled={loading}
+              disabled={saving}
               onClick={toggleManageChat}
               icon={
                 <FontAwesomeIcon
@@ -275,7 +276,7 @@ const ViewMessges = ({
                 />
               }
             >
-              Delete Chat0
+              Delete Chat
             </Button>,
           ]
         }
@@ -325,7 +326,6 @@ const ViewMessges = ({
                     <div className="date-line" />
                   </div>
                 )}
-
                 <div className="message-content" key={id}>
                   {type === MessageType.message && !sameUser && (
                     <Row
@@ -349,347 +349,303 @@ const ViewMessges = ({
                       <Col>{from?.fullName}</Col>
                     </Row>
                   )}
-                  {type === MessageType.message && content && (
-                    <Row
-                      key={id}
-                      justify={from?.id === userId ? 'end' : 'start'}
-                      style={{ marginBottom: 10 }}
-                    >
-                      <div
-                        className={
-                          from?.id === userId
-                            ? 'message-content-bubble currentUser'
-                            : 'message-content-bubble'
-                        }
-                      >
-                        <Col>
-                          {adminRights ? (
-                            <Popover
-                              // placement="topLeft"
-                              // visible={adminRights}
-                              title="Options"
-                              content={
-                                adminRights && (
-                                  <Button
-                                    type="primary"
-                                    icon={
-                                      <FontAwesomeIcon
-                                        icon={faTrash}
-                                        size="lg"
-                                      />
-                                    }
-                                    onClick={() => {
-                                      deleteMessageConfirm(id || '');
-                                    }}
-                                  />
-                                )
-                              }
-                            >
-                              {content}
-                            </Popover>
-                          ) : (
-                            content
-                          )}
-                        </Col>
-                      </div>
-                    </Row>
-                  )}
 
-                  {type === MessageType.message && images && images.length > 0 && (
-                    <Row
-                      justify={from?.id === userId ? 'end' : 'start'}
-                      style={{ marginBottom: 10 }}
-                    >
-                      {images.map((image) => (
-                        <Col key={image.id}>
-                          <div className="message-upload-card">
-                            <div>
-                              {adminRights ? (
-                                <Popover
-                                  title="Options"
-                                  content={
-                                    adminRights && (
-                                      <Button
-                                        type="primary"
-                                        icon={
-                                          <FontAwesomeIcon
-                                            icon={faTrash}
-                                            size="lg"
-                                          />
-                                        }
-                                        onClick={() => {
-                                          deleteImageConfirm(
-                                            id || '',
-                                            image.id
-                                          );
-                                        }}
-                                      />
-                                    )
-                                  }
-                                >
-                                  <div
-                                    className="message-image"
-                                    style={{
-                                      backgroundImage: `url(${image.optimised})`,
-                                    }}
-                                  />
-                                </Popover>
-                              ) : (
-                                <div
-                                  className="message-image"
-                                  style={{
-                                    backgroundImage: `url(${image.optimised})`,
-                                  }}
-                                />
-                              )}
-                            </div>
-                          </div>
-                        </Col>
-                      ))}
-                    </Row>
-                  )}
-                  {type === MessageType.message &&
-                    offenders &&
-                    offenders.length > 0 &&
-                    offenders.map((offender) => (
-                      <Row
-                        key={offender.id}
-                        justify={from?.id === userId ? 'end' : 'start'}
-                        style={{ marginBottom: 10 }}
-                      >
-                        <Col key={offender.id}>
-                          <Card size="small" className="message-card">
-                            {adminRights ? (
-                              <Popover
-                                title="Options"
-                                content={
-                                  adminRights && (
-                                    <Button
-                                      type="primary"
-                                      icon={
-                                        <FontAwesomeIcon
-                                          icon={faTrash}
-                                          size="lg"
-                                        />
-                                      }
-                                      onClick={() => {
-                                        deleteOffenderConfirm(
-                                          id || '',
-                                          offender.id
-                                        );
-                                      }}
-                                    />
-                                  )
+                  <Row
+                    justify={from?.id === userId ? 'end' : 'start'}
+                    style={{ marginBottom: 5 }}
+                  >
+                    <Col>
+                      {adminRights ? (
+                        <Popover
+                          title="Options"
+                          trigger="click"
+                          placement={from?.id === userId ? 'left' : 'right'}
+                          content={
+                            adminRights && (
+                              <Button
+                                type="primary"
+                                disabled={saving}
+                                icon={
+                                  <FontAwesomeIcon icon={faTrash} size="lg" />
                                 }
-                              >
-                                <Row gutter={5} wrap={false}>
-                                  <Col>
-                                    {offender.images &&
-                                    offender.images.length > 0 ? (
-                                      <div
-                                        className="message-image"
-                                        style={{
-                                          backgroundImage: `url(${offender.images[0].optimised})`,
-                                        }}
-                                      />
-                                    ) : (
-                                      <Skeleton.Image className="message-image-skeleton" />
-                                    )}
-                                  </Col>
-
-                                  <Col flex={1} style={{ marginTop: 10 }}>
-                                    <Descriptions size="small" column={2}>
-                                      <Descriptions.Item
-                                        label="Offender"
-                                        span={2}
-                                      >
-                                        {offender.name}
-                                      </Descriptions.Item>
-                                      <Descriptions.Item label="Gender">
-                                        {getOffenderGender(offender.gender)}
-                                      </Descriptions.Item>
-                                      <Descriptions.Item label="Build">
-                                        {getOffenderBuild(offender.build)}
-                                      </Descriptions.Item>
-                                      <Descriptions.Item label="Age">
-                                        {offender.dateOfBirth
-                                          ? calcAge(offender.dateOfBirth)
-                                          : getOffenderAge(offender.age)}
-                                      </Descriptions.Item>
-                                      <Descriptions.Item label="Ethnicity">
-                                        {getOffenderRace(offender.race, true)}
-                                      </Descriptions.Item>
-                                    </Descriptions>
-                                  </Col>
-                                </Row>
-                              </Popover>
-                            ) : (
-                              <Row gutter={5} wrap={false}>
-                                <Col>
-                                  {offender.images &&
-                                  offender.images.length > 0 ? (
-                                    <div
-                                      className="message-image"
-                                      style={{
-                                        backgroundImage: `url(${offender.images[0].optimised})`,
-                                      }}
-                                    />
-                                  ) : (
-                                    <Skeleton.Image className="message-image-skeleton" />
-                                  )}
-                                </Col>
-
-                                <Col flex={1} style={{ marginTop: 10 }}>
-                                  <Descriptions size="small" column={2}>
-                                    <Descriptions.Item
-                                      label="Offender"
-                                      span={2}
-                                    >
-                                      {offender.name}
-                                    </Descriptions.Item>
-                                    <Descriptions.Item label="Gender">
-                                      {getOffenderGender(offender.gender)}
-                                    </Descriptions.Item>
-                                    <Descriptions.Item label="Build">
-                                      {getOffenderBuild(offender.build)}
-                                    </Descriptions.Item>
-                                    <Descriptions.Item label="Age">
-                                      {offender.dateOfBirth
-                                        ? calcAge(offender.dateOfBirth)
-                                        : getOffenderAge(offender.age)}
-                                    </Descriptions.Item>
-                                    <Descriptions.Item label="Ethnicity">
-                                      {getOffenderRace(offender.race, true)}
-                                    </Descriptions.Item>
-                                  </Descriptions>
-                                </Col>
-                              </Row>
-                            )}
-                          </Card>
-                        </Col>
-                      </Row>
-                    ))}
-                  {type === MessageType.message &&
-                    incidents &&
-                    incidents.length > 0 &&
-                    incidents.map((incident) => (
-                      <Row
-                        key={incident.id}
-                        justify={from?.id === userId ? 'end' : 'start'}
-                        style={{ marginBottom: 10 }}
-                      >
-                        <Col key={incident.id}>
-                          <Card size="small" className="message-card">
-                            {adminRights ? (
-                              <Popover
-                                title="Options"
-                                content={
-                                  adminRights && (
-                                    <Button
-                                      type="primary"
-                                      icon={
-                                        <FontAwesomeIcon
-                                          icon={faTrash}
-                                          size="lg"
-                                        />
-                                      }
-                                      onClick={() => {
-                                        deleteIncidentConfirm(
-                                          id || '',
-                                          incident.id
-                                        );
-                                      }}
-                                    />
-                                  )
-                                }
-                              >
-                                <Row gutter={5} wrap={false}>
-                                  <Col>
-                                    {incident?.images &&
-                                      incident.images.length > 0 && (
+                                onClick={() => {
+                                  deleteMessageConfirm(id || '');
+                                }}
+                              />
+                            )
+                          }
+                        >
+                          <div
+                            className={
+                              from?.id === userId
+                                ? 'message-content-card currentUser-card'
+                                : 'message-content-card'
+                            }
+                          >
+                            {type === MessageType.message &&
+                              images &&
+                              images.length > 0 && (
+                                <Row style={{ margin: 5 }}>
+                                  {images.map((image) => (
+                                    <Col key={image.id}>
+                                      <div className="message-upload-card">
                                         <div
                                           className="message-image"
                                           style={{
-                                            backgroundImage: `url(${incident.images[0].optimised})`,
+                                            backgroundImage: `url(${image.optimised})`,
                                           }}
                                         />
-                                      )}
-                                  </Col>
-                                  <Col flex={1} style={{ marginTop: 10 }}>
-                                    <Paragraph
-                                      strong
-                                      ellipsis
-                                      style={{
-                                        marginBottom: '0.5rem',
-                                        fontSize: 15,
-                                      }}
-                                    >
-                                      {incident.subject}
-                                    </Paragraph>
+                                      </div>
+                                    </Col>
+                                  ))}
+                                </Row>
+                              )}
+                            {type === MessageType.message &&
+                              offenders &&
+                              offenders.length > 0 &&
+                              offenders.map((offender) => (
+                                <Row key={offender.id} style={{ margin: 5 }}>
+                                  <Col key={offender.id}>
+                                    <Card size="small" className="message-card">
+                                      <Row gutter={5} wrap={false}>
+                                        <Col>
+                                          {offender.images &&
+                                            offender.images.length > 0 && (
+                                              <div
+                                                className="message-image"
+                                                style={{
+                                                  backgroundImage: `url(${offender.images[0].optimised})`,
+                                                }}
+                                              />
+                                            )}
+                                        </Col>
 
-                                    <Paragraph
-                                      type="secondary"
-                                      ellipsis
-                                      style={{ marginBottom: '0.5rem' }}
-                                    >
-                                      {incident.description}
-                                    </Paragraph>
-                                    <Paragraph
-                                      type="secondary"
-                                      ellipsis
-                                      style={{ marginBottom: '0.5rem' }}
-                                    >
-                                      {incident.dayTime}
-                                    </Paragraph>
+                                        <Col flex={1} style={{ marginTop: 10 }}>
+                                          <Title level={4}>
+                                            {' '}
+                                            {offender.name}
+                                          </Title>
+                                          <Descriptions size="small">
+                                            {/* <Descriptions.Item
+                                                label="Offender"
+                                                span={2}
+                                              >
+                                                {offender.name}
+                                              </Descriptions.Item> */}
+                                            <Descriptions.Item label="Last Active">
+                                              {moment(
+                                                offender.updatedAt || moment()
+                                              ).format(
+                                                `ddd MMM DD YYYY - HH:mm`
+                                              )}
+                                            </Descriptions.Item>
+                                          </Descriptions>
+                                        </Col>
+                                      </Row>
+                                    </Card>
                                   </Col>
                                 </Row>
-                              </Popover>
-                            ) : (
-                              <Row gutter={5} wrap={false}>
-                                <Col>
-                                  {incident?.images &&
-                                    incident.images.length > 0 && (
+                              ))}
+                            {type === MessageType.message &&
+                              incidents &&
+                              incidents.length > 0 &&
+                              incidents.map((incident) => (
+                                <Row
+                                  key={incident.id}
+                                  justify={
+                                    from?.id === userId ? 'end' : 'start'
+                                  }
+                                  style={{ margin: 5 }}
+                                >
+                                  <Col key={incident.id}>
+                                    <Card size="small" className="message-card">
+                                      <Row gutter={5} wrap={false}>
+                                        <Col>
+                                          {incident?.images &&
+                                            incident.images.length > 0 && (
+                                              <div
+                                                className="message-image"
+                                                style={{
+                                                  backgroundImage: `url(${incident.images[0].optimised})`,
+                                                }}
+                                              />
+                                            )}
+                                        </Col>
+                                        <Col flex={1} style={{ marginTop: 10 }}>
+                                          <Paragraph
+                                            strong
+                                            ellipsis
+                                            style={{
+                                              marginBottom: '0.5rem',
+                                              fontSize: 15,
+                                            }}
+                                          >
+                                            {incident.subject}
+                                          </Paragraph>
+                                          <Descriptions size="small">
+                                            <Descriptions.Item label="Created At">
+                                              {incident.dayTime}
+                                            </Descriptions.Item>
+                                          </Descriptions>
+                                          <Paragraph
+                                            type="secondary"
+                                            ellipsis
+                                            style={{
+                                              marginBottom: '0.5rem',
+                                            }}
+                                          >
+                                            {incident.description}
+                                          </Paragraph>
+                                        </Col>
+                                      </Row>
+                                    </Card>
+                                  </Col>
+                                </Row>
+                              ))}
+                            {type === MessageType.message && content && (
+                              <Row key={id}>
+                                <div className="message-content-bubble">
+                                  <Col>{content}</Col>
+                                </div>
+                              </Row>
+                            )}
+                          </div>
+                        </Popover>
+                      ) : (
+                        <div
+                          className={
+                            from?.id === userId
+                              ? 'message-content-card currentUser-card'
+                              : 'message-content-card'
+                          }
+                        >
+                          {type === MessageType.message &&
+                            images &&
+                            images.length > 0 && (
+                              <Row style={{ margin: 5 }}>
+                                {images.map((image) => (
+                                  <Col key={image.id}>
+                                    <div className="message-upload-card">
                                       <div
                                         className="message-image"
                                         style={{
-                                          backgroundImage: `url(${incident.images[0].optimised})`,
+                                          backgroundImage: `url(${image.optimised})`,
                                         }}
                                       />
-                                    )}
-                                </Col>
-                                <Col flex={1} style={{ marginTop: 10 }}>
-                                  <Paragraph
-                                    strong
-                                    ellipsis
-                                    style={{
-                                      marginBottom: '0.5rem',
-                                      fontSize: 15,
-                                    }}
-                                  >
-                                    {incident.subject}
-                                  </Paragraph>
-
-                                  <Paragraph
-                                    type="secondary"
-                                    ellipsis
-                                    style={{ marginBottom: '0.5rem' }}
-                                  >
-                                    {incident.description}
-                                  </Paragraph>
-                                  <Paragraph
-                                    type="secondary"
-                                    ellipsis
-                                    style={{ marginBottom: '0.5rem' }}
-                                  >
-                                    {incident.dayTime}
-                                  </Paragraph>
-                                </Col>
+                                    </div>
+                                  </Col>
+                                ))}
                               </Row>
                             )}
-                          </Card>
-                        </Col>
-                      </Row>
-                    ))}
+                          {type === MessageType.message &&
+                            offenders &&
+                            offenders.length > 0 &&
+                            offenders.map((offender) => (
+                              <Row key={offender.id} style={{ margin: 5 }}>
+                                <Col key={offender.id}>
+                                  <Card size="small" className="message-card">
+                                    <Row gutter={5} wrap={false}>
+                                      <Col>
+                                        {offender.images &&
+                                          offender.images.length > 0 && (
+                                            <div
+                                              className="message-image"
+                                              style={{
+                                                backgroundImage: `url(${offender.images[0].optimised})`,
+                                              }}
+                                            />
+                                          )}
+                                      </Col>
+
+                                      <Col flex={1} style={{ marginTop: 10 }}>
+                                        <Title level={4}>
+                                          {' '}
+                                          {offender.name}
+                                        </Title>
+                                        <Descriptions size="small">
+                                          {/* <Descriptions.Item
+                                                label="Offender"
+                                                span={2}
+                                              >
+                                                {offender.name}
+                                              </Descriptions.Item> */}
+                                          <Descriptions.Item label="Last Active">
+                                            {moment(
+                                              offender.updatedAt || moment()
+                                            ).format(`ddd MMM DD YYYY - HH:mm`)}
+                                          </Descriptions.Item>
+                                        </Descriptions>
+                                      </Col>
+                                    </Row>
+                                  </Card>
+                                </Col>
+                              </Row>
+                            ))}
+                          {type === MessageType.message &&
+                            incidents &&
+                            incidents.length > 0 &&
+                            incidents.map((incident) => (
+                              <Row
+                                key={incident.id}
+                                justify={from?.id === userId ? 'end' : 'start'}
+                                style={{ margin: 5 }}
+                              >
+                                <Col key={incident.id}>
+                                  <Card size="small" className="message-card">
+                                    <Row gutter={5} wrap={false}>
+                                      <Col>
+                                        {incident?.images &&
+                                          incident.images.length > 0 && (
+                                            <div
+                                              className="message-image"
+                                              style={{
+                                                backgroundImage: `url(${incident.images[0].optimised})`,
+                                              }}
+                                            />
+                                          )}
+                                      </Col>
+                                      <Col flex={1} style={{ marginTop: 10 }}>
+                                        <Paragraph
+                                          strong
+                                          ellipsis
+                                          style={{
+                                            marginBottom: '0.5rem',
+                                            fontSize: 15,
+                                          }}
+                                        >
+                                          {incident.subject}
+                                        </Paragraph>
+                                        <Descriptions size="small">
+                                          <Descriptions.Item label="Created At">
+                                            {incident.dayTime}
+                                          </Descriptions.Item>
+                                        </Descriptions>
+                                        <Paragraph
+                                          type="secondary"
+                                          ellipsis
+                                          style={{
+                                            marginBottom: '0.5rem',
+                                          }}
+                                        >
+                                          {incident.description}
+                                        </Paragraph>
+                                      </Col>
+                                    </Row>
+                                  </Card>
+                                </Col>
+                              </Row>
+                            ))}
+                          {type === MessageType.message && content && (
+                            <Row key={id}>
+                              <div className="message-content-bubble">
+                                <Col>{content}</Col>
+                              </div>
+                            </Row>
+                          )}
+                        </div>
+                      )}
+                    </Col>
+                  </Row>
                 </div>
               </div>
             )
@@ -751,7 +707,7 @@ const ViewMessges = ({
                   <div>
                     <Popconfirm
                       placement="topLeft"
-                      trigger="hover"
+                      trigger="click"
                       title="Remove the image?"
                       onConfirm={() => removeImage(file.uid)}
                       okText="Yes"
@@ -759,6 +715,7 @@ const ViewMessges = ({
                     >
                       <Button
                         size="small"
+                        disabled={saving}
                         className="info-remove-button"
                         shape="circle"
                         type="text"
@@ -784,7 +741,7 @@ const ViewMessges = ({
                 <Row gutter={5} wrap={false}>
                   <Popconfirm
                     placement="topLeft"
-                    trigger="hover"
+                    trigger="click"
                     title="Remove the offender?"
                     onConfirm={() => removeOffender(offender.id)}
                     okText="Yes"
@@ -792,6 +749,7 @@ const ViewMessges = ({
                   >
                     <Button
                       size="small"
+                      disabled={saving}
                       className="info-remove-button"
                       shape="circle"
                       type="text"
@@ -813,23 +771,12 @@ const ViewMessges = ({
                   </Col>
 
                   <Col flex={1} style={{ marginTop: 10 }}>
-                    <Descriptions size="small" column={2}>
-                      <Descriptions.Item label="Offender" span={2}>
-                        {offender.name}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Gender">
-                        {getOffenderGender(offender.gender)}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Build">
-                        {getOffenderBuild(offender.build)}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Age">
-                        {offender.dateOfBirth
-                          ? calcAge(offender.dateOfBirth)
-                          : getOffenderAge(offender.age)}
-                      </Descriptions.Item>
-                      <Descriptions.Item label="Ethnicity">
-                        {getOffenderRace(offender.race, true)}
+                    <Title level={4}> {offender.name}</Title>
+                    <Descriptions size="small">
+                      <Descriptions.Item label="Last Active">
+                        {moment(offender.updatedAt || moment()).format(
+                          `ddd MMM DD YYYY - HH:mm`
+                        )}
                       </Descriptions.Item>
                     </Descriptions>
                   </Col>
@@ -843,7 +790,7 @@ const ViewMessges = ({
                 <Row gutter={5} wrap={false}>
                   <Popconfirm
                     placement="topLeft"
-                    trigger="hover"
+                    trigger="click"
                     title="Remove the incident?"
                     onConfirm={() => removeIncident(incident.id)}
                     okText="Yes"
@@ -851,6 +798,7 @@ const ViewMessges = ({
                   >
                     <Button
                       size="small"
+                      disabled={saving}
                       className="info-remove-button"
                       shape="circle"
                       type="text"
@@ -879,20 +827,19 @@ const ViewMessges = ({
                     >
                       {incident.subject}
                     </Paragraph>
-
+                    <Descriptions size="small">
+                      <Descriptions.Item label="Created At">
+                        {incident.dayTime}
+                      </Descriptions.Item>
+                    </Descriptions>
                     <Paragraph
                       type="secondary"
                       ellipsis
-                      style={{ marginBottom: '0.5rem' }}
+                      style={{
+                        marginBottom: '0.5rem',
+                      }}
                     >
                       {incident.description}
-                    </Paragraph>
-                    <Paragraph
-                      type="secondary"
-                      ellipsis
-                      style={{ marginBottom: '0.5rem' }}
-                    >
-                      {incident.dayTime}
                     </Paragraph>
                   </Col>
                 </Row>
@@ -900,54 +847,15 @@ const ViewMessges = ({
             </Col>
           ))}
         </Row>
-
-        {/* <Row style={{ margin: '0 10px' }}>
-          <Upload
-            action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
-            className="upload-images"
-            listType="picture-card"
-            fileList={fileList}
-            onChange={imgChange}
-            onPreview={onPreview}
-            beforeUpload={beforeUpload}
-            style={{ width: '50%', height: '50%' }}
-          />
-        </Row> */}
-
         <Row gutter={5} style={{ height: '45px', margin: '0 10px' }}>
           <Col flex={1} style={{ height: '40px' }}>
-            {/* <Form.Item
-              name="newMessage"
-              label=""
-              // rules={[
-              //   {
-              //     required: true,
-              //     message: 'The message cannot be empty!',
-              //   },
-              // ]}
-            > */}
-            {/* <Input
-                disabled={saving}
-                placeholder="Type a message"
-                value={inputStr}
-                onChange={(e) => {
-                  setInputStr(e.target.value);
-                }}
-              /> */}
             <Mentions
               autoFocus
               style={{ height: 40 }}
               value={inputStr}
               onChange={(value) => {
                 setInputStr(value);
-                // setInputStr(value.split('$')[0]);
-                // setMentionedUser([value.split('$')[1]]);
-                // setMentionedUser(
-                //   // getMentions(value, { prefix: '@' }).map(
-                //   //   (mention) => mention.value
-                //   // )
-                // );
-                const mentions = getMentions(value, { prefix: '@' });
+                const mentions = getMentions(value);
                 setMentionedUser(
                   mentions
                     .map((mention) =>
@@ -962,27 +870,14 @@ const ViewMessges = ({
                     .filter((item) => item.value !== '')
                 );
               }}
-              // onSelect={(value) => {
-              //   if (value.key && value.value) {
-              //     // console.log('setMentions', mentionedUser, value);
-              //     setMentionedUser([
-              //       ...mentionedUser,
-              //       {
-              //         id: value.key,
-              //         value: value.value,
-              //       },
-              //     ]);
-              //   }
-              // }}
               prefix="@"
             >
               {membersData?.map(({ id, fullName, organisation }) => (
                 <Option key={id} value={fullName}>
-                  {fullName} ({organisation}){' '}
+                  {fullName} ({organisation})
                 </Option>
               ))}
             </Mentions>
-            {/* </Form.Item> */}
           </Col>
 
           <Col style={{ height: '40px' }}>
@@ -1003,6 +898,7 @@ const ViewMessges = ({
           <Col>
             <Popover
               placement="topLeft"
+              trigger="click"
               visible={showPicker}
               overlayStyle={{ width: '50%' }}
               content={
@@ -1017,9 +913,9 @@ const ViewMessges = ({
             >
               <Button
                 disabled={saving}
-                loading={saving}
                 onClick={toggleShowPicker}
                 style={{ width: '40px' }}
+                // icon={<FontAwesomeIcon icon={faFaceSmile} size="lg" />}
               >
                 <img
                   style={{ marginLeft: -8 }}
@@ -1041,8 +937,12 @@ const ViewMessges = ({
               showUploadList={false}
             >
               <Button
-                disabled={saving}
-                loading={saving}
+                disabled={
+                  saving ||
+                  (incidentsData && incidentsData.length > 0) ||
+                  offendersData.length > 0 ||
+                  fileList.length > 3
+                }
                 icon={<FontAwesomeIcon icon={faImage} size="lg" />}
               />
             </Upload>
@@ -1053,8 +953,11 @@ const ViewMessges = ({
               <div>
                 <Button
                   onClick={toggleLinkOffender}
-                  disabled={saving}
-                  loading={saving}
+                  disabled={
+                    saving ||
+                    (incidentsData && incidentsData.length > 0) ||
+                    fileList.length > 0
+                  }
                   icon={
                     <FontAwesomeIcon
                       className="button-icon"
@@ -1072,8 +975,9 @@ const ViewMessges = ({
             <Col>
               <Button
                 onClick={toggleLinkIncident}
-                disabled={saving}
-                loading={saving}
+                disabled={
+                  saving || fileList.length > 0 || offendersData.length > 0
+                }
                 icon={
                   <FontAwesomeIcon
                     className="button-icon"

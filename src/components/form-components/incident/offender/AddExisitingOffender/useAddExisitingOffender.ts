@@ -15,6 +15,7 @@ import { useStoreState, useStoreActions } from 'state';
 
 interface OffenderData {
   id: string;
+  updatedAt?: Date;
   name?: string | null;
   age?: Age | null;
   gender?: Gender | null;
@@ -141,6 +142,7 @@ const useAddExisitingOffenderr = ({
       if (selectedOffender) {
         update({
           id: selectedOffender.id,
+          updatedAt: selectedOffender.updatedAt,
           name: selectedOffender.name || 'Unidentified Offender',
           age: selectedOffender.age || null,
           gender: selectedOffender.gender || null,

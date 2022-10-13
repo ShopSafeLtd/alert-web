@@ -2952,9 +2952,11 @@ export type CreatIncidentData = {
   images: CreatIncidentImages;
   location?: InputMaybe<CreateIncidentLocation>;
   offenders: CreateIncidentOffenders;
+  recoveredValue?: InputMaybe<Scalars['Float']>;
   scheme: Scalars['String'];
   subject: Scalars['String'];
   time: Scalars['DateTime'];
+  value?: InputMaybe<Scalars['Float']>;
 };
 
 export type CreatIncidentImages = {
@@ -4606,6 +4608,7 @@ export type Incident = {
   intel: Array<Intel>;
   location?: Maybe<Address>;
   offenders: Array<Offender>;
+  recoveredValue?: Maybe<Scalars['Float']>;
   recycleBin?: Maybe<RecycledItem>;
   recycled: Scalars['Boolean'];
   scheme: Scheme;
@@ -4613,6 +4616,7 @@ export type Incident = {
   time: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   uploaded?: Maybe<Scalars['Boolean']>;
+  value?: Maybe<Scalars['Float']>;
 };
 
 export type IncidentActionsArgs = {
@@ -15159,6 +15163,7 @@ export type CreateChatMutation = {
       id: string;
       newMessages?: boolean | null;
       updatedAt: any;
+      createdAt: any;
       user: {
         __typename?: 'User';
         id: string;
@@ -15177,6 +15182,22 @@ export type CreateChatMutation = {
           content: string;
           createdAt: any;
           from: { __typename?: 'User'; id: string; fullName: string };
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+          incidents: Array<{
+            __typename?: 'Incident';
+            id: string;
+            subject?: string | null;
+          }>;
+          offenders: Array<{
+            __typename?: 'Offender';
+            id: string;
+            name?: string | null;
+          }>;
         }>;
       };
     }>;
@@ -15296,6 +15317,8 @@ export type CreateIncidentMutation = {
     dayTime?: string | null;
     date: any;
     time: any;
+    value?: number | null;
+    recoveredValue?: number | null;
     approved?: boolean | null;
     crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
     location?: {
@@ -15369,6 +15392,8 @@ export type UpdateIncidentMutation = {
   updateIncident?: {
     __typename?: 'Incident';
     id: string;
+    value?: number | null;
+    recoveredValue?: number | null;
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
@@ -15587,6 +15612,8 @@ export type ViewIncidentQuery = {
     dayTime?: string | null;
     date: any;
     time: any;
+    value?: number | null;
+    recoveredValue?: number | null;
     approved?: boolean | null;
     crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
     location?: {
@@ -15682,6 +15709,7 @@ export type CreateMessageMutation = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
+      updatedAt: any;
       age?: Age | null;
       build?: Build | null;
       dateOfBirth?: any | null;
@@ -15749,6 +15777,7 @@ export type UpdateMessageMutation = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
+      updatedAt: any;
       age?: Age | null;
       build?: Build | null;
       dateOfBirth?: any | null;
@@ -15807,6 +15836,7 @@ export type MessagesQuery = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
+      updatedAt: any;
       age?: Age | null;
       build?: Build | null;
       dateOfBirth?: any | null;
@@ -15836,6 +15866,22 @@ export type MessagesSubscriptionSubscription = {
     createdAt: any;
     sent?: boolean | null;
     from: { __typename?: 'User'; id: string; fullName: string };
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+    }>;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+    }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      name?: string | null;
+    }>;
   } | null> | null;
 };
 
@@ -16674,7 +16720,45 @@ export type UpdateUserChatMutation = {
       __typename?: 'UserChat';
       id: string;
       newMessages?: boolean | null;
-      chat: { __typename?: 'Chat'; id: string; name: string };
+      mentioned?: boolean | null;
+      updatedAt: any;
+      createdAt: any;
+      user: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        firstLetter?: string | null;
+      };
+      chat: {
+        __typename?: 'Chat';
+        id: string;
+        name: string;
+        firstLetter?: string | null;
+        totalMembers?: number | null;
+        messages: Array<{
+          __typename?: 'Message';
+          id: string;
+          content: string;
+          createdAt: any;
+          from: { __typename?: 'User'; id: string; fullName: string };
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+          incidents: Array<{
+            __typename?: 'Incident';
+            id: string;
+            subject?: string | null;
+          }>;
+          offenders: Array<{
+            __typename?: 'Offender';
+            id: string;
+            name?: string | null;
+          }>;
+        }>;
+      };
     }>;
   } | null;
 };
@@ -16698,6 +16782,7 @@ export type UserChatsQuery = {
       newMessages?: boolean | null;
       mentioned?: boolean | null;
       updatedAt: any;
+      createdAt: any;
       user: {
         __typename?: 'User';
         id: string;
@@ -16716,6 +16801,22 @@ export type UserChatsQuery = {
           content: string;
           createdAt: any;
           from: { __typename?: 'User'; id: string; fullName: string };
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+          incidents: Array<{
+            __typename?: 'Incident';
+            id: string;
+            subject?: string | null;
+          }>;
+          offenders: Array<{
+            __typename?: 'Offender';
+            id: string;
+            name?: string | null;
+          }>;
         }>;
       };
     }>;
@@ -17387,6 +17488,7 @@ export const CreateChatDocument = gql`
         id
         newMessages
         updatedAt
+        createdAt
         user {
           id
           fullName
@@ -17404,6 +17506,19 @@ export const CreateChatDocument = gql`
             from {
               id
               fullName
+            }
+            images {
+              id
+              url
+              optimised
+            }
+            incidents {
+              id
+              subject
+            }
+            offenders {
+              id
+              name
             }
           }
         }
@@ -17808,6 +17923,8 @@ export const CreateIncidentDocument = gql`
       dayTime
       date
       time
+      value
+      recoveredValue
       crimeTypes {
         id
         name
@@ -17963,6 +18080,8 @@ export const UpdateIncidentDocument = gql`
   mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
     updateIncident(where: $where, data: $data) {
       id
+      value
+      recoveredValue
       offenders {
         id
         createdAt
@@ -18392,6 +18511,8 @@ export const ViewIncidentDocument = gql`
       dayTime
       date
       time
+      value
+      recoveredValue
       crimeTypes {
         id
         name
@@ -18535,6 +18656,7 @@ export const CreateMessageDocument = gql`
       }
       offenders {
         id
+        updatedAt
         age
         build
         dateOfBirth
@@ -18680,6 +18802,7 @@ export const UpdateMessageDocument = gql`
       }
       offenders {
         id
+        updatedAt
         age
         build
         dateOfBirth
@@ -18778,6 +18901,7 @@ export const MessagesDocument = gql`
       }
       offenders {
         id
+        updatedAt
         age
         build
         dateOfBirth
@@ -18851,6 +18975,19 @@ export const MessagesSubscriptionDocument = gql`
       content
       createdAt
       sent
+      images {
+        id
+        url
+        optimised
+      }
+      incidents {
+        id
+        subject
+      }
+      offenders {
+        id
+        name
+      }
     }
   }
 `;
@@ -20860,9 +20997,41 @@ export const UpdateUserChatDocument = gql`
       chats {
         id
         newMessages
+        mentioned
+        updatedAt
+        createdAt
+        user {
+          id
+          fullName
+          firstLetter
+        }
         chat {
           id
           name
+          firstLetter
+          totalMembers
+          messages {
+            id
+            content
+            createdAt
+            from {
+              id
+              fullName
+            }
+            images {
+              id
+              url
+              optimised
+            }
+            incidents {
+              id
+              subject
+            }
+            offenders {
+              id
+              name
+            }
+          }
         }
       }
     }
@@ -20928,6 +21097,7 @@ export const UserChatsDocument = gql`
         newMessages
         mentioned
         updatedAt
+        createdAt
         user {
           id
           fullName
@@ -20945,6 +21115,19 @@ export const UserChatsDocument = gql`
             from {
               id
               fullName
+            }
+            images {
+              id
+              url
+              optimised
+            }
+            incidents {
+              id
+              subject
+            }
+            offenders {
+              id
+              name
             }
           }
         }

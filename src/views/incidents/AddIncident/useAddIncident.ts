@@ -45,6 +45,8 @@ interface FormData {
   description: string;
   date: Date;
   time: Moment;
+  value?: number;
+  recoveredValue?: number;
   fullAddress: string;
   groups: string[];
   tags: string[];
@@ -255,15 +257,14 @@ const useEditIncident = (): Return => {
           updatedAt: SortOrder.Asc,
         },
         take: 20,
-        where:
-          searchOffenders.length > 0
-            ? {
-                name: {
-                  contains: searchOffenders,
-                  mode: QueryMode.Insensitive,
-                },
-              }
-            : undefined,
+        where: searchOffenders.length
+          ? {
+              name: {
+                contains: searchOffenders,
+                mode: QueryMode.Insensitive,
+              },
+            }
+          : undefined,
       },
     });
 
@@ -333,7 +334,7 @@ const useEditIncident = (): Return => {
           ...existingData.listIncidents,
           incidents:
             existingData?.listIncidents?.incidents &&
-            existingData.listIncidents.incidents.length > 0
+            existingData.listIncidents.incidents.length
               ? existingData?.listIncidents?.incidents.concat(
                   res.createIncident
                 )
@@ -536,57 +537,57 @@ const useEditIncident = (): Return => {
           );
 
           return {
-            connect:
-              existingOffenders.length > 0
-                ? existingOffenders.map((offender) => ({ id: offender.id }))
-                : undefined,
+            connect: existingOffenders.length
+              ? existingOffenders.map((offender) => ({ id: offender.id }))
+              : undefined,
             update: existingOffendersWithImages.map((offender) => ({
               where: { id: offender.id },
               data: {
-                images: {
-                  upload: offender.images?.map((image) => ({
-                    url: {
-                      filename: image.fileName || '',
-                      mimetype: image.type || '',
-                      url: image.url || '',
-                    },
-                  })),
-                },
-              },
-            })),
-            create:
-              newOffenders.length > 0
-                ? newOffenders.map((offender) => ({
-                    name: offender.name || 'Unidentified Offender',
-                    gender: offender.gender || null,
-                    race: offender.race || null,
-                    build: offender.build || null,
-                    hair: offender.hair || null,
-                    peculiarities: offender.peculiarities || null,
-                    age: offender.age || null,
-                    dateSource: offender.dateSource || null,
-                    dateOfBirth: offender.dateOfBirth || null,
-                    groups:
-                      data.groups.length > 0
-                        ? { connect: data.groups.map((id) => ({ id })) }
-                        : undefined,
-                    scheme: { connect: { id: schemeId } },
-                    createdBy: { connect: { id: userId } },
-                    localId: offender.id,
-                    images: {
-                      // create:
-                      upload: offender.images
-                        ?.filter((image) => image.new === true)
-                        .map((image) => ({
+                images:
+                  offender.images && offender.images.length
+                    ? {
+                        upload: offender.images?.map((image) => ({
                           url: {
                             filename: image.fileName || '',
                             mimetype: image.type || '',
                             url: image.url || '',
                           },
                         })),
-                    },
-                  }))
-                : undefined,
+                      }
+                    : {},
+              },
+            })),
+            create: newOffenders.length
+              ? newOffenders.map((offender) => ({
+                  name: offender.name || 'Unidentified Offender',
+                  gender: offender.gender || null,
+                  race: offender.race || null,
+                  build: offender.build || null,
+                  hair: offender.hair || null,
+                  peculiarities: offender.peculiarities || null,
+                  age: offender.age || null,
+                  dateSource: offender.dateSource || null,
+                  dateOfBirth: offender.dateOfBirth || null,
+                  groups: data.groups.length
+                    ? { connect: data.groups.map((id) => ({ id })) }
+                    : undefined,
+                  scheme: { connect: { id: schemeId } },
+                  createdBy: { connect: { id: userId } },
+                  localId: offender.id,
+                  images: {
+                    // create:
+                    upload: offender.images
+                      ?.filter((image) => image.new === true)
+                      .map((image) => ({
+                        url: {
+                          filename: image.fileName || '',
+                          mimetype: image.type || '',
+                          url: image.url || '',
+                        },
+                      })),
+                  },
+                }))
+              : undefined,
           };
         }
         return {
@@ -595,8 +596,6 @@ const useEditIncident = (): Return => {
         };
       };
 
-      console.log(getOffenders());
-
       createIncident({
         variables: {
           data: {
@@ -604,20 +603,21 @@ const useEditIncident = (): Return => {
             description: data.description,
             date: data.date,
             time: data.date,
+            value: data.value || null,
+            recoveredValue: data.recoveredValue || null,
             groups:
               groups.length > 1
                 ? data.groups.map((id) => ({ id }))
                 : groups.map(({ id }) => ({ id })),
             scheme: schemeId,
-            crimeTypes:
-              data.tags.length > 0
-                ? data.tags.map((id) => ({ id }))
-                : undefined,
+            crimeTypes: data.tags.length
+              ? data.tags.map((id) => ({ id }))
+              : undefined,
             location: getLocation(),
             offenders: getOffenders(),
             images: {
               create:
-                imageChange && fileList.length > 0
+                imageChange && fileList.length
                   ? fileList
                       .map((item) => ({
                         url: {

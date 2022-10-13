@@ -13,6 +13,7 @@ query userChats(
       newMessages
       mentioned
       updatedAt
+      createdAt
       user {
         id
         fullName
@@ -30,6 +31,19 @@ query userChats(
           from {
             id
             fullName
+          }
+          images {
+            id
+            url
+            optimised
+          }
+          incidents {
+            id
+            subject
+          }
+          offenders {
+            id
+            name
           }
         }
       }

@@ -6,6 +6,8 @@ mutation createIncident($data: CreatIncidentData!) {
     dayTime
     date
     time
+    value
+    recoveredValue
     crimeTypes {
       id
       name

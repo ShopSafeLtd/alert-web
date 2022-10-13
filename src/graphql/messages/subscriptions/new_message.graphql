@@ -8,5 +8,18 @@ subscription MessagesSubscription($chat: ID!) {
     content
     createdAt
     sent
+    images {
+      id
+      url
+      optimised
+    }
+    incidents {
+      id
+      subject
+    }
+    offenders {
+      id
+      name
+    }
   }
 }

@@ -16,7 +16,16 @@ const ViewChat = (): JSX.Element => {
     updateAddUserChat,
     updateDeletedUserChat,
     adminRights,
+    refetch,
   } = useViewChat();
+  console.log(
+    'createdAt',
+    data?.user?.chats.map((el) => el.createdAt)
+  );
+  console.log(
+    'message createdAt',
+    data?.user?.chats.map((el) => el.chat.messages)
+  );
   return (
     <View
       data={data}
@@ -29,6 +38,7 @@ const ViewChat = (): JSX.Element => {
       updateAddUserChat={updateAddUserChat}
       updateDeletedUserChat={updateDeletedUserChat}
       adminRights={adminRights}
+      refetch={refetch}
     />
   );
 };

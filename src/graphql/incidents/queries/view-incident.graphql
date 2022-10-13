@@ -6,6 +6,8 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     dayTime
     date
     time
+    value
+    recoveredValue
     crimeTypes {
       id
       name
