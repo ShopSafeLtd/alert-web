@@ -31,6 +31,7 @@ import {
   Tooltip,
   Descriptions,
   Modal,
+  InputNumber,
 } from 'antd';
 import {
   getOffenderAge,
@@ -66,7 +67,8 @@ interface FormData {
   subject: string;
   description: string;
   date: Date;
-  // time: Moment;
+  value?: number;
+  recoveredValue?: number;
   building: string;
   street: string;
   townCity: string;
@@ -74,7 +76,7 @@ interface FormData {
   postcode: string;
   groups: string[];
   tags: string[];
-  images?: [{ id: string; url: string; optimised: string }];
+  images: [{ id: string; url: string; optimised: string }];
 }
 interface Image extends UploadFile {
   offenders?: {
@@ -219,7 +221,8 @@ const EditIncident = ({
             subject: data?.incident?.subject,
             description: data?.incident?.description,
             date: moment(data?.incident?.date, 'YYYY-MM-DD,HH:mm:ss'),
-            // time: moment(data?.incident?.time, 'HH:mm:ss'),
+            value: data?.incident?.value || null,
+            recoveredValue: data?.incident?.recoveredValue || null,
             building: data?.incident?.location?.building || '',
             street: data?.incident?.location?.street || '',
             townCity: data?.incident?.location?.townCity,
@@ -298,7 +301,68 @@ const EditIncident = ({
                 </Form.Item>
               </Row>
             </Col>
-
+            <Col span={4}>
+              <Form.Item
+                name="value"
+                label="Value"
+                tooltip="Please enter a value for the incident."
+                // rules={[
+                //   {
+                //     pattern: /^[0-9]*$/,
+                //     message: 'Price must be a number!',
+                //   },
+                //   {
+                //     validator: (_, value: number) => {
+                //       if (Number.isNaN(value)) {
+                //         return Promise.reject(
+                //           new Error('Price must be a number!')
+                //         );
+                //       }
+                //       return Promise.resolve();
+                //     },
+                //   },
+                // ]}
+              >
+                <InputNumber
+                  prefix="£"
+                  // onChange={onNumberChange}
+                  disabled={saving}
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={4}>
+              <Form.Item
+                name="recoveredValue"
+                label="RecoveredValue"
+                tooltip="Please enter a recoveredValue for the incident."
+              >
+                <InputNumber
+                  prefix="£"
+                  disabled={saving}
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={20}>
+              <Form.Item
+                name="description"
+                label="Description"
+                tooltip="A more detailed description of the incident."
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please enter a description for the incident.',
+                  },
+                ]}
+              >
+                <Input.TextArea disabled={saving} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row wrap={false} gutter={50}>
             {groups.length > 1 && (
               <Col span={8}>
                 <Form.Item
@@ -329,9 +393,7 @@ const EditIncident = ({
                 </Form.Item>
               </Col>
             )}
-          </Row>
-          <Row>
-            <Col span={14}>
+            <Col span={12}>
               <Row gutter={5} align="middle" wrap={false}>
                 <Col flex={1}>
                   <Form.Item
@@ -380,23 +442,7 @@ const EditIncident = ({
               </Row>
             </Col>
           </Row>
-          <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item
-                name="description"
-                label="Description"
-                tooltip="A more detailed description of the incident."
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please enter a description for the incident.',
-                  },
-                ]}
-              >
-                <Input.TextArea disabled={saving} />
-              </Form.Item>
-            </Col>
-          </Row>
+
           <Row align="bottom" style={{ marginTop: 50, marginBottom: 20 }}>
             <Col>
               <Title style={{ marginBottom: 0 }} level={4}>
@@ -488,23 +534,23 @@ const EditIncident = ({
               </Form.Item>
             </Col>
           </Row>
-          <Row align="middle" style={{ marginTop: 70, marginBottom: 20 }}>
+          <Row
+            gutter={5}
+            align="middle"
+            style={{ marginTop: 70, marginBottom: 20 }}
+          >
             <Col>
               <Title style={{ marginBottom: 0 }} level={4}>
                 3.{' '}
               </Title>
             </Col>
             <Col>
-              <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+              <Title style={{ marginBottom: 0 }} level={4}>
                 Offenders
               </Title>
             </Col>
-            <Col style={{ marginRight: 30 }}>
-              <Paragraph
-                style={{ marginBottom: 1, marginLeft: 5 }}
-                type="secondary"
-                italic
-              >
+            <Col style={{ marginRight: 20 }}>
+              <Paragraph style={{ marginBottom: 1 }} type="secondary" italic>
                 - Please add the offenders that were involved in the incident.
               </Paragraph>
             </Col>

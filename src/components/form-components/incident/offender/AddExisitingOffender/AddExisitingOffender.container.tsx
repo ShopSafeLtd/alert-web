@@ -6,6 +6,7 @@ import useAddExisitingOffender from './useAddExisitingOffender';
 
 interface OffenderData {
   id: string;
+  updatedAt?: Date;
   name?: string | null;
   age?: Age | null;
   gender?: Gender | null;

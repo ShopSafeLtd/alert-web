@@ -4,9 +4,41 @@ mutation updateUserChat($where: UniqueId!, $data: UserUpdateInput!) {
     chats {
       id
       newMessages
+      mentioned
+      updatedAt
+      createdAt
+      user {
+        id
+        fullName
+        firstLetter
+      }
       chat {
         id
         name
+        firstLetter
+        totalMembers
+        messages {
+          id
+          content
+          createdAt
+          from {
+            id
+            fullName
+          }
+          images {
+            id
+            url
+            optimised
+          }
+          incidents {
+            id
+            subject
+          }
+          offenders {
+            id
+            name
+          }
+        }
       }
     }
   }

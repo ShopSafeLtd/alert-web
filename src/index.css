@@ -1652,15 +1652,24 @@
 .view-message-container
   .message-container
   .message-content
+  .message-content-card {
+  display: inline-block;
+  max-width: 100%;
+  background: #ebebeb;
+  border: 1px solid #f5f5f5;
+  border-radius: 10px;
+}
+.view-message-container .message-container .message-content .currentUser-card {
+  background: rgba(222, 68, 54, 0.1);
+}
+.view-message-container
+  .message-container
+  .message-content
   .message-content-bubble {
   max-width: 100%;
   word-break: break-word;
-  margin: 5px 0 0;
-  background: #ebebeb;
   padding: 6px 14px;
   border-radius: 8px;
-  border: 1px solid #f5f5f5;
-  display: inline-block;
   font-size: 14px;
   color: #585858;
 }

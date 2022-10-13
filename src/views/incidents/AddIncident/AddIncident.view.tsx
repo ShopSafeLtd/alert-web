@@ -31,6 +31,7 @@ import {
   Descriptions,
   Spin,
   Popconfirm,
+  InputNumber,
 } from 'antd';
 import {
   getOffenderAge,
@@ -75,6 +76,8 @@ interface FormData {
   description: string;
   date: Date;
   time: Moment;
+  value?: number;
+  recoveredValue?: number;
   fullAddress: string;
   groups: string[];
   tags: string[];
@@ -295,7 +298,51 @@ const EditIncident = ({
               </Form.Item>
             </Row>
           </Col>
-
+          <Col span={4}>
+            <Form.Item
+              name="value"
+              label="Value"
+              tooltip="Please enter a value for the incident."
+            >
+              <InputNumber
+                prefix="£"
+                disabled={saving}
+                style={{ width: '100%' }}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={4}>
+            <Form.Item
+              name="recoveredValue"
+              label="RecoveredValue"
+              tooltip="Please enter a recoveredValue for the incident."
+            >
+              <InputNumber
+                prefix="£"
+                disabled={saving}
+                style={{ width: '100%' }}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={20}>
+            <Form.Item
+              name="description"
+              label="Description"
+              tooltip="A more detailed description of the incident."
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter a description for the incident.',
+                },
+              ]}
+            >
+              <Input.TextArea disabled={saving} />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row wrap={false} gutter={50}>
           {groups.length > 1 && (
             <Col span={8}>
               <Form.Item
@@ -326,9 +373,7 @@ const EditIncident = ({
               </Form.Item>
             </Col>
           )}
-        </Row>
-        <Row wrap={false}>
-          <Col span={14}>
+          <Col span={12}>
             <Row gutter={5} align="middle">
               <Col flex={1}>
                 <Form.Item
@@ -412,7 +457,6 @@ const EditIncident = ({
                 <Col>
                   <Button
                     disabled={saving}
-                    // size="small"
                     loading={saving}
                     onClick={toggleAddPreviousLocation}
                     style={{ color: 'red', padding: 8 }}
@@ -430,7 +474,6 @@ const EditIncident = ({
                   <Button
                     disabled={saving}
                     loading={saving}
-                    // size="small"
                     onClick={toggleAddNewLocation}
                     style={{ color: 'red', padding: 8 }}
                     icon={
@@ -447,45 +490,26 @@ const EditIncident = ({
             )}
           </Col>
         </Row>
-        <Row gutter={16}>
-          <Col span={20}>
-            <Form.Item
-              name="description"
-              label="Description"
-              tooltip="A more detailed description of the incident."
-              rules={[
-                {
-                  required: true,
-                  message: 'Please enter a description for the incident.',
-                },
-              ]}
-            >
-              <Input.TextArea disabled={saving} />
-            </Form.Item>
-          </Col>
-        </Row>
 
         {/* <Divider /> */}
 
-        {/* <Row gutter={30} style={{ marginTop: 70 }}>
-            <Col> */}
-        <Row align="middle" style={{ marginTop: 70, marginBottom: 20 }}>
+        <Row
+          gutter={5}
+          align="middle"
+          style={{ marginTop: 70, marginBottom: 20 }}
+        >
           <Col>
             <Title style={{ marginBottom: 0 }} level={4}>
               2.{' '}
             </Title>
           </Col>
           <Col>
-            <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+            <Title style={{ marginBottom: 0 }} level={4}>
               Offenders
             </Title>
           </Col>
-          <Col style={{ marginRight: 30 }}>
-            <Paragraph
-              style={{ marginBottom: 1, marginLeft: 5 }}
-              type="secondary"
-              italic
-            >
+          <Col style={{ marginRight: 20 }}>
+            <Paragraph style={{ marginBottom: 1 }} type="secondary" italic>
               - Please add the offenders that were involved in the incident.
             </Paragraph>
           </Col>

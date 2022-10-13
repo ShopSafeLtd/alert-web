@@ -42,6 +42,8 @@ interface FormData {
   subject: string;
   description: string;
   date: Date;
+  value?: number;
+  recoveredValue?: number;
   building: string;
   street: string;
   townCity: string;
@@ -49,7 +51,7 @@ interface FormData {
   postcode: string;
   groups: string[];
   tags: string[];
-  images?: { id: string; url: string; optimised: string }[];
+  images: { id: string; url: string; optimised: string }[];
 }
 
 interface OffenderData {
@@ -161,7 +163,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const [newImage, setNewImage] = useState<Image | null>(null);
 
   // Query
-  const { data: IncidentData, loading } = useViewIncidentQuery({
+  const { data: incidentData, loading } = useViewIncidentQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
@@ -170,14 +172,14 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     },
 
     onCompleted: ({ incident }) => {
-      if (incident?.offenders && incident.offenders.length > 0) {
+      if (incident?.offenders && incident.offenders.length) {
         setOffendersData(incident.offenders);
       }
       // imageList
-      if (incident?.images && incident.images.length > 0) {
+      if (incident?.images && incident.images.length) {
         setFileList(
           incident?.images.map((image) => ({
-            uid: `-${image.id}`,
+            uid: `${image.id}`,
             name: `${image.id}.png`,
             status: 'done',
             url: `${image.url}`,
@@ -185,8 +187,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           }))
         );
       }
-      console.log('incident', incident);
-      console.log('offenders', incident?.offenders);
     },
   });
 
@@ -247,15 +247,14 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           updatedAt: SortOrder.Asc,
         },
         take: 20,
-        where:
-          searchOffenders.length > 0
-            ? {
-                name: {
-                  contains: searchOffenders,
-                  mode: QueryMode.Insensitive,
-                },
-              }
-            : undefined,
+        where: searchOffenders.length
+          ? {
+              name: {
+                contains: searchOffenders,
+                mode: QueryMode.Insensitive,
+              },
+            }
+          : undefined,
       },
     });
   // mutation
@@ -433,7 +432,11 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
       setSaving(false);
     } else {
       const getOffenders = (): IncidentUpdateInput['offenders'] => {
-        if (offendersData && listOffendersData?.listOffenders) {
+        if (
+          offendersData &&
+          listOffendersData?.listOffenders &&
+          incidentData?.incident
+        ) {
           const offendersIds = listOffendersData.listOffenders.offenders.map(
             (offender) => offender.id
           );
@@ -451,78 +454,102 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           const newOffenders = offendersData.filter(
             (item) => !offendersIds.includes(item.id)
           );
+          const deletedOffenders = incidentData?.incident?.offenders?.filter(
+            (offender) =>
+              !offendersData?.map((item) => item.id).includes(offender.id)
+          );
+
+          // const newOffenderImage = newOffenders?.map((offender) =>
+          //   offender.images?.filter((image) => image.new === true)
+          // );
 
           return {
-            connect:
-              existingOffenders.length > 0
-                ? existingOffenders.map((offender) => ({ id: offender.id }))
-                : undefined,
+            connect: existingOffenders.length
+              ? existingOffenders.map((offender) => ({ id: offender.id }))
+              : undefined,
             update: existingOffendersWithImages.map((offender) => ({
               where: { id: offender.id },
               data: {
-                images: {
-                  upload: offender.images?.map((image) => ({
-                    url: {
-                      filename: image.fileName || '',
-                      mimetype: image.type || '',
-                      url: image.url || '',
-                    },
-                  })),
-                },
-              },
-            })),
-            create:
-              newOffenders.length > 0
-                ? newOffenders.map((offender) => ({
-                    name: offender.name || 'Unidentified Offender',
-                    gender: offender.gender || null,
-                    race: offender.race || null,
-                    build: offender.build || null,
-                    hair: offender.hair || null,
-                    peculiarities: offender.peculiarities || null,
-                    age: offender.age || null,
-                    dateSource: offender.dateSource || null,
-                    dateOfBirth: offender.dateOfBirth || null,
-                    groups:
-                      data.groups.length > 0
-                        ? { connect: data.groups.map((id) => ({ id })) }
-                        : undefined,
-                    scheme: { connect: { id: schemeId } },
-                    createdBy: { connect: { id: userId } },
-                    localId: offender.id,
-                    images: {
-                      // create:
-                      upload: offender.images
-                        ?.filter((image) => image.new === true)
-                        .map((image) => ({
+                images:
+                  offender.images && offender.images.length
+                    ? {
+                        upload: offender.images?.map((image) => ({
                           url: {
                             filename: image.fileName || '',
                             mimetype: image.type || '',
                             url: image.url || '',
                           },
                         })),
-                    },
-                  }))
-                : undefined,
-            // delete:
-            //   IncidentData?.incident?.offenders &&
-            //   IncidentData.incident.offenders.length > 0
-            //     ? IncidentData.incident.offenders
-            //         .filter(
-            //           (offender) =>
-            //             !offendersData
-            //               ?.map((item) => item.id)
-            //               .includes(offender.id)
-            //         )
-            //         .map((offender) => ({ id: offender.id }))
-            //     : undefined,
+                      }
+                    : {},
+                // ???  undefined
+              },
+            })),
+            create: newOffenders.length
+              ? newOffenders.map((offender) => ({
+                  name: offender.name || 'Unidentified Offender',
+                  gender: offender.gender || null,
+                  race: offender.race || null,
+                  build: offender.build || null,
+                  hair: offender.hair || null,
+                  peculiarities: offender.peculiarities || null,
+                  age: offender.age || null,
+                  dateSource: offender.dateSource || null,
+                  dateOfBirth: offender.dateOfBirth || null,
+                  groups: data.groups.length
+                    ? { connect: data.groups.map((id) => ({ id })) }
+                    : undefined,
+                  scheme: { connect: { id: schemeId } },
+                  createdBy: { connect: { id: userId } },
+                  localId: offender.id,
+                  images:
+                    // newOffenderImage && newOffenderImage[0]
+                    //   ? {
+                    //       upload: {
+                    //         url: {
+                    //           filename: newOffenderImage[0].fileName || '',
+                    //           mimetype: newOffenderImage.type || '',
+                    //           url: newOffenderImage.url || '',
+                    //         },
+                    //       },
+                    //     }
+                    //   : {},
+                    // upload: offender.images
+                    //     ?.filter((image) => image.new === true)
+                    //        .map((image) => ({
+                    //       url: {
+                    //         filename: image.fileName || '',
+                    //         mimetype: image.type || '',
+                    //         url: image.url || '',
+                    //       },
+                    //     })),
+                    // },
+                    offender?.images &&
+                    offender.images.length &&
+                    offender.images?.filter((image) => image.new === true)
+                      ? {
+                          upload: offender.images
+                            ?.filter((image) => image.new === true)
+                            .map((image) => ({
+                              url: {
+                                filename: image.fileName || '',
+                                mimetype: image.type || '',
+                                url: image.url || '',
+                              },
+                            })),
+                        }
+                      : {},
+                }))
+              : undefined,
+            disconnect: deletedOffenders.length
+              ? deletedOffenders.map((offender) => ({ id: offender.id }))
+              : undefined,
           };
         }
 
         return {
           connect: undefined,
           create: undefined,
-          // delete: undefined,
         };
       };
 
@@ -537,6 +564,8 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             description: { set: data.description },
             date: { set: data.date },
             time: { set: data.date },
+            value: { set: data.value },
+            recoveredValue: { set: data.recoveredValue },
             location: {
               update: {
                 building: { set: data.building },
@@ -547,7 +576,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
               },
             },
             groups: {
-              // set: data.groups.map((id) => ({ id })),
+              // ??? groups:required/optional?
               set:
                 groups.length > 1
                   ? data.groups.map((id) => ({ id }))
@@ -557,114 +586,23 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
               set: data.tags.map((id) => ({ id })),
             },
             offenders: getOffenders(),
-            // {
-            //   connect:
-            //     offendersData && offendersData.length > 0
-            //       ? offendersData
-            //           .filter((item) =>
-            //             listOffendersData?.listOffenders?.offenders
-            //               ?.map((offender) => offender.id)
-            //               .includes(item.id)
-            //           )
-            //           .map((offender) => ({ id: offender.id }))
-            //       : undefined,
-            //   update: offendersData
-            //     .filter((item) =>
-            //       listOffendersData?.listOffenders?.offenders
-            //         .map((offender) => offender.id)
-            //         .includes(item.id)
-            //     )
-            //     .filter((offender) =>
-            //       offender.images?.map((image) => image.new).includes(true)
-            //     )
-            //     .map((offender) => ({
-            //       ...offender,
-            //       images: offender.images?.filter((image) => image.new),
-            //     }))
-            //     .map((offender) => ({
-            //       where: { id: offender.id },
-            //       data: {
-            //         images: {
-            //           upload: offender.images?.map((image) => ({
-            //             url: {
-            //               filename: image.fileName || '',
-            //               mimetype: image.type || '',
-            //               url: image.url || '',
-            //             },
-            //           })),
-            //         },
-            //       },
-            //     })),
-            //   create:
-            //     offendersData && offendersData.length > 0
-            //       ? offendersData
-            //           .filter(
-            //             (item) =>
-            //               !listOffendersData?.listOffenders?.offenders
-            //                 ?.map((offender) => offender.id)
-            //                 .includes(item.id)
-            //           )
-            //           .map((offender) => ({
-            //             name: offender.name || 'Unidentified Offender',
-            //             gender: offender.gender || null,
-            //             race: offender.race || null,
-            //             build: offender.build || null,
-            //             hair: offender.hair || null,
-            //             peculiarities: offender.peculiarities || null,
-            //             age: offender.age || null,
-            //             dateSource: offender.dateSource || null,
-            //             dateOfBirth: offender.dateOfBirth || null,
-            //             groups:
-            //               offender.groups && offender.groups.length > 0
-            //                 ? {
-            //                     connect: offender.groups.map(({ id }) => ({
-            //                       id,
-            //                     })),
-            //                   }
-            //                 : undefined,
-            //             scheme: { connect: { id: schemeId } },
-            //             createdBy: { connect: { id: userId } },
-            //             localId: offender.id,
-            //           }))
-            //       : undefined,
-
-            //   delete:
-            //     IncidentData?.incident?.offenders &&
-            //     IncidentData.incident.offenders.length > 0
-            //       ? IncidentData.incident.offenders
-            //           .filter(
-            //             (offender) =>
-            //               !offendersData
-            //                 ?.map((item) => item.id)
-            //                 .includes(offender.id)
-            //           )
-            //           .map((offender) => ({ id: offender.id }))
-            //       : undefined,
-            // },
 
             images: {
-              // create:
-              //   imageChange && fileList.length > 0
-              //     ? fileList
-              //         .map((item) => ({
-              //           url: {
-              //             filename: item.fileName || '',
-              //             mimetype: item.type || '',
-              //             url: item.url || '',
-              //           },
-              //         }))
-              //         .filter((obj) => obj.url !== undefined)
-              //     : undefined,
               upload:
-                imageChange && fileList.length > 0
+                imageChange && fileList.length
                   ? fileList
                       .map((item) => ({
-                        file: item.originFileObj,
+                        url: {
+                          filename: item.fileName || '',
+                          mimetype: item.type || '',
+                          url: item.url || '',
+                        },
                       }))
-                      .filter((obj) => obj.file !== undefined)
-                  : [],
+                      .filter((obj) => obj.url !== undefined)
+                  : undefined,
+
               delete: imageChange
-                ? IncidentData?.incident?.images
+                ? incidentData?.incident?.images
                     .filter(
                       (image) =>
                         !fileList.map((item) => item.uid).includes(image.id)
@@ -842,7 +780,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   };
   return {
     onSubmit,
-    data: IncidentData,
+    data: incidentData,
     loading,
     saving,
     groups:

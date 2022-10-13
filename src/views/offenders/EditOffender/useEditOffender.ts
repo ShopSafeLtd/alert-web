@@ -401,7 +401,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   const imgChange: UploadProps['onChange'] = (info) => {
     if (info.file.response && info.file.status === 'done') {
       // ???
-      // if (info.file.response && (info.file.status === 'done'||'success';) {
+      // if (info.file.response && (info.file.status === 'done'||'success') {
       setFileList([
         ...fileList.filter((item) => item.uid !== info.file.uid),
         {

@@ -36,9 +36,11 @@ const { useForm } = Form;
 interface Props {
   chatId: string;
   updateUserChatList: MutationUpdaterFn<DeleteChatMutation>;
+  refetch: () => void;
 }
 interface OffenderData {
   id: string;
+  updatedAt?: Date;
   name?: string | null;
   age?: Age | null;
   gender?: Gender | null;
@@ -85,6 +87,7 @@ interface DatedMessages {
   }[];
   offenders?: {
     id: string;
+    updatedAt?: Date;
     age?: Age | null;
     build?: Build | null;
     dateOfBirth?: Date | null;
@@ -100,16 +103,11 @@ interface MemberData {
   organisation: string;
   firstLetter?: string | null;
 }
-// interface FormData {
-//   newMessage: string;
-// }
 interface Return {
-  // onSubmit: (value: string) => void;
   onSubmit: () => void;
   data: MessagesQuery | undefined;
   loading: boolean;
   chatData: ChatQuery | undefined;
-  // form: FormInstance<FormData>;
   form: FormInstance<FormData>;
   saving: boolean;
   scrolledToTop: () => void;
@@ -153,7 +151,11 @@ interface Return {
   deleteIncidentConfirm: (messageId: string, incidentId: string) => void;
 }
 
-const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
+const useViewMessages = ({
+  chatId,
+  updateUserChatList,
+  refetch,
+}: Props): Return => {
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -177,10 +179,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const [mentionedUser, setMentionedUser] = useState<
     { id: string; value: string }[]
   >([]);
-
-  useEffect(() => {
-    console.log(mentionedUser);
-  }, [mentionedUser]);
 
   const [incidentsData, setIncidentsData] = useState<
     | Exclude<
@@ -218,6 +216,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
             { type: MessageType.message, sameUser: false, ...el },
           ];
         }
+
         if (
           moment(messages[index - 1].createdAt).format('dddd, MMMM Do') ===
           moment(el.createdAt).format('dddd, MMMM Do')
@@ -662,11 +661,11 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     const imgWindow = window.open(src);
     imgWindow?.document.write(image.outerHTML);
   };
-  console.log('mentionedUser', mentionedUser);
 
   const [sendMessage] = useCreateMessageMutation({
     onCompleted: () => {
       setSaving(false);
+      refetch();
       form.resetFields();
       setInputStr('');
       setFileList([]);

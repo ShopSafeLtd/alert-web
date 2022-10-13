@@ -20,6 +20,7 @@ import {
   faClock,
   faUser,
   faPlus,
+  faMoneyBill1Wave,
 } from '@fortawesome/pro-light-svg-icons';
 import {
   getOffenderAge,
@@ -200,6 +201,36 @@ const ViewIncident = ({
                               {`${data?.incident?.createdBy.fullName} -
                               ${data?.incident?.createdBy.organisation}`}
                             </Descriptions.Item>
+                            {data?.incident?.value && (
+                              <Descriptions.Item
+                                label={
+                                  <span>
+                                    <FontAwesomeIcon
+                                      className="incident-description-icon"
+                                      icon={faMoneyBill1Wave}
+                                    />
+                                    Value
+                                  </span>
+                                }
+                              >
+                                £{data?.incident?.value}
+                              </Descriptions.Item>
+                            )}
+                            {data?.incident?.recoveredValue && (
+                              <Descriptions.Item
+                                label={
+                                  <span>
+                                    <FontAwesomeIcon
+                                      className="incident-description-icon"
+                                      icon={faMoneyBill1Wave}
+                                    />
+                                    Recovered Value
+                                  </span>
+                                }
+                              >
+                                £{data?.incident?.recoveredValue}
+                              </Descriptions.Item>
+                            )}
                             <Descriptions.Item
                               label={
                                 <span>

@@ -36,6 +36,7 @@ query messages($chat: String, $after: MessageWhereUniqueInput) {
     }
     offenders {
       id
+      updatedAt
       age
       build
       dateOfBirth

@@ -24,6 +24,7 @@ interface Return {
   updateAddUserChat: MutationUpdaterFn<CreateChatMutation>;
   updateDeletedUserChat: MutationUpdaterFn<DeleteChatMutation>;
   adminRights: boolean;
+  refetch: () => void;
 }
 
 const useViewChat = (): Return => {
@@ -228,6 +229,7 @@ const useViewChat = (): Return => {
     updateAddUserChat,
     updateDeletedUserChat,
     adminRights: role !== Role.User,
+    refetch,
   };
 };
 
