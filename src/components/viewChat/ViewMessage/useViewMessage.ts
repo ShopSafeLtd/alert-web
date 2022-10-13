@@ -33,6 +33,7 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 const { confirm } = Modal;
 
 const { useForm } = Form;
+
 interface Props {
   chatId: string;
   updateUserChatList: MutationUpdaterFn<DeleteChatMutation>;

@@ -46,6 +46,7 @@ import AddUserChat from 'components/form-components/userChat/ManageChatMember';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import LinkOffender from 'components/form-components/incident/offender/AddExisitingOffender';
 import LinkIncident from 'components/form-components/offender/LinkIncident';
+import Content from '../Message/Message.view';
 
 const { Option, getMentions } = Mentions;
 const { Title, Paragraph } = Typography;
@@ -375,274 +376,28 @@ const ViewMessges = ({
                             )
                           }
                         >
-                          <div
-                            className={
-                              from?.id === userId
-                                ? 'message-content-card currentUser-card'
-                                : 'message-content-card'
-                            }
-                          >
-                            {type === MessageType.message &&
-                              images &&
-                              images.length > 0 && (
-                                <Row style={{ margin: 5 }}>
-                                  {images.map((image) => (
-                                    <Col key={image.id}>
-                                      <div className="message-upload-card">
-                                        <div
-                                          className="message-image"
-                                          style={{
-                                            backgroundImage: `url(${image.optimised})`,
-                                          }}
-                                        />
-                                      </div>
-                                    </Col>
-                                  ))}
-                                </Row>
-                              )}
-                            {type === MessageType.message &&
-                              offenders &&
-                              offenders.length > 0 &&
-                              offenders.map((offender) => (
-                                <Row key={offender.id} style={{ margin: 5 }}>
-                                  <Col key={offender.id}>
-                                    <Card size="small" className="message-card">
-                                      <Row gutter={5} wrap={false}>
-                                        <Col>
-                                          {offender.images &&
-                                            offender.images.length > 0 && (
-                                              <div
-                                                className="message-image"
-                                                style={{
-                                                  backgroundImage: `url(${offender.images[0].optimised})`,
-                                                }}
-                                              />
-                                            )}
-                                        </Col>
-
-                                        <Col flex={1} style={{ marginTop: 10 }}>
-                                          <Title level={4}>
-                                            {' '}
-                                            {offender.name}
-                                          </Title>
-                                          <Descriptions size="small">
-                                            {/* <Descriptions.Item
-                                                label="Offender"
-                                                span={2}
-                                              >
-                                                {offender.name}
-                                              </Descriptions.Item> */}
-                                            <Descriptions.Item label="Last Active">
-                                              {moment(
-                                                offender.updatedAt || moment()
-                                              ).format(
-                                                `ddd MMM DD YYYY - HH:mm`
-                                              )}
-                                            </Descriptions.Item>
-                                          </Descriptions>
-                                        </Col>
-                                      </Row>
-                                    </Card>
-                                  </Col>
-                                </Row>
-                              ))}
-                            {type === MessageType.message &&
-                              incidents &&
-                              incidents.length > 0 &&
-                              incidents.map((incident) => (
-                                <Row
-                                  key={incident.id}
-                                  justify={
-                                    from?.id === userId ? 'end' : 'start'
-                                  }
-                                  style={{ margin: 5 }}
-                                >
-                                  <Col key={incident.id}>
-                                    <Card size="small" className="message-card">
-                                      <Row gutter={5} wrap={false}>
-                                        <Col>
-                                          {incident?.images &&
-                                            incident.images.length > 0 && (
-                                              <div
-                                                className="message-image"
-                                                style={{
-                                                  backgroundImage: `url(${incident.images[0].optimised})`,
-                                                }}
-                                              />
-                                            )}
-                                        </Col>
-                                        <Col flex={1} style={{ marginTop: 10 }}>
-                                          <Paragraph
-                                            strong
-                                            ellipsis
-                                            style={{
-                                              marginBottom: '0.5rem',
-                                              fontSize: 15,
-                                            }}
-                                          >
-                                            {incident.subject}
-                                          </Paragraph>
-                                          <Descriptions size="small">
-                                            <Descriptions.Item label="Created At">
-                                              {incident.dayTime}
-                                            </Descriptions.Item>
-                                          </Descriptions>
-                                          <Paragraph
-                                            type="secondary"
-                                            ellipsis
-                                            style={{
-                                              marginBottom: '0.5rem',
-                                            }}
-                                          >
-                                            {incident.description}
-                                          </Paragraph>
-                                        </Col>
-                                      </Row>
-                                    </Card>
-                                  </Col>
-                                </Row>
-                              ))}
-                            {type === MessageType.message && content && (
-                              <Row key={id}>
-                                <div className="message-content-bubble">
-                                  <Col>{content}</Col>
-                                </div>
-                              </Row>
-                            )}
-                          </div>
+                          <Content
+                            type={type}
+                            id={id}
+                            content={content}
+                            from={from}
+                            images={images}
+                            incidents={incidents}
+                            offenders={offenders}
+                            userId={userId}
+                          />
                         </Popover>
                       ) : (
-                        <div
-                          className={
-                            from?.id === userId
-                              ? 'message-content-card currentUser-card'
-                              : 'message-content-card'
-                          }
-                        >
-                          {type === MessageType.message &&
-                            images &&
-                            images.length > 0 && (
-                              <Row style={{ margin: 5 }}>
-                                {images.map((image) => (
-                                  <Col key={image.id}>
-                                    <div className="message-upload-card">
-                                      <div
-                                        className="message-image"
-                                        style={{
-                                          backgroundImage: `url(${image.optimised})`,
-                                        }}
-                                      />
-                                    </div>
-                                  </Col>
-                                ))}
-                              </Row>
-                            )}
-                          {type === MessageType.message &&
-                            offenders &&
-                            offenders.length > 0 &&
-                            offenders.map((offender) => (
-                              <Row key={offender.id} style={{ margin: 5 }}>
-                                <Col key={offender.id}>
-                                  <Card size="small" className="message-card">
-                                    <Row gutter={5} wrap={false}>
-                                      <Col>
-                                        {offender.images &&
-                                          offender.images.length > 0 && (
-                                            <div
-                                              className="message-image"
-                                              style={{
-                                                backgroundImage: `url(${offender.images[0].optimised})`,
-                                              }}
-                                            />
-                                          )}
-                                      </Col>
-
-                                      <Col flex={1} style={{ marginTop: 10 }}>
-                                        <Title level={4}>
-                                          {' '}
-                                          {offender.name}
-                                        </Title>
-                                        <Descriptions size="small">
-                                          {/* <Descriptions.Item
-                                                label="Offender"
-                                                span={2}
-                                              >
-                                                {offender.name}
-                                              </Descriptions.Item> */}
-                                          <Descriptions.Item label="Last Active">
-                                            {moment(
-                                              offender.updatedAt || moment()
-                                            ).format(`ddd MMM DD YYYY - HH:mm`)}
-                                          </Descriptions.Item>
-                                        </Descriptions>
-                                      </Col>
-                                    </Row>
-                                  </Card>
-                                </Col>
-                              </Row>
-                            ))}
-                          {type === MessageType.message &&
-                            incidents &&
-                            incidents.length > 0 &&
-                            incidents.map((incident) => (
-                              <Row
-                                key={incident.id}
-                                justify={from?.id === userId ? 'end' : 'start'}
-                                style={{ margin: 5 }}
-                              >
-                                <Col key={incident.id}>
-                                  <Card size="small" className="message-card">
-                                    <Row gutter={5} wrap={false}>
-                                      <Col>
-                                        {incident?.images &&
-                                          incident.images.length > 0 && (
-                                            <div
-                                              className="message-image"
-                                              style={{
-                                                backgroundImage: `url(${incident.images[0].optimised})`,
-                                              }}
-                                            />
-                                          )}
-                                      </Col>
-                                      <Col flex={1} style={{ marginTop: 10 }}>
-                                        <Paragraph
-                                          strong
-                                          ellipsis
-                                          style={{
-                                            marginBottom: '0.5rem',
-                                            fontSize: 15,
-                                          }}
-                                        >
-                                          {incident.subject}
-                                        </Paragraph>
-                                        <Descriptions size="small">
-                                          <Descriptions.Item label="Created At">
-                                            {incident.dayTime}
-                                          </Descriptions.Item>
-                                        </Descriptions>
-                                        <Paragraph
-                                          type="secondary"
-                                          ellipsis
-                                          style={{
-                                            marginBottom: '0.5rem',
-                                          }}
-                                        >
-                                          {incident.description}
-                                        </Paragraph>
-                                      </Col>
-                                    </Row>
-                                  </Card>
-                                </Col>
-                              </Row>
-                            ))}
-                          {type === MessageType.message && content && (
-                            <Row key={id}>
-                              <div className="message-content-bubble">
-                                <Col>{content}</Col>
-                              </div>
-                            </Row>
-                          )}
-                        </div>
+                        <Content
+                          type={type}
+                          id={id}
+                          content={content}
+                          from={from}
+                          images={images}
+                          incidents={incidents}
+                          offenders={offenders}
+                          userId={userId}
+                        />
                       )}
                     </Col>
                   </Row>
