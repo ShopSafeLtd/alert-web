@@ -37,7 +37,7 @@ const { useForm } = Form;
 interface Props {
   chatId: string;
   updateUserChatList: MutationUpdaterFn<DeleteChatMutation>;
-  refetch: () => void;
+  userChatRefetch: () => void;
 }
 interface OffenderData {
   id: string;
@@ -155,7 +155,7 @@ interface Return {
 const useViewMessages = ({
   chatId,
   updateUserChatList,
-  refetch,
+  userChatRefetch,
 }: Props): Return => {
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
@@ -247,20 +247,21 @@ const useViewMessages = ({
     } else setDatedMessages([]);
   };
 
-  const { subscribeToMore, data, loading, fetchMore } = useMessagesQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      chat: chatId,
-    },
-    onCompleted: (res) => {
-      if (res.messages.length > 0) {
-        setAfter(res.messages.slice(-1)[0].id);
-        handleMessagesData(res.messages, true);
-      } else {
-        handleMessagesData([]);
-      }
-    },
-  });
+  const { subscribeToMore, data, loading, fetchMore, refetch } =
+    useMessagesQuery({
+      fetchPolicy: 'cache-and-network',
+      variables: {
+        chat: chatId,
+      },
+      onCompleted: (res) => {
+        if (res.messages.length > 0) {
+          setAfter(res.messages.slice(-1)[0].id);
+          handleMessagesData(res.messages, true);
+        } else {
+          handleMessagesData([]);
+        }
+      },
+    });
 
   const { data: chatData } = useChatQuery({
     fetchPolicy: 'cache-and-network',
@@ -278,9 +279,7 @@ const useViewMessages = ({
               const arrBeforeMember = arr
                 .slice(0, i)
                 .map(({ fullName }) => fullName);
-              console.log(arrBeforeMember);
               if (arrBeforeMember.includes(member.fullName)) {
-                console.log('duplicate');
                 const { length } = arrBeforeMember.filter(
                   (item) => item === member.fullName
                 );
@@ -334,6 +333,9 @@ const useViewMessages = ({
         };
       },
     });
+    // ???
+    userChatRefetch();
+    refetch();
   };
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   useEffect(() => subscribeToNewMessage(), [chatId]);
@@ -666,7 +668,7 @@ const useViewMessages = ({
   const [sendMessage] = useCreateMessageMutation({
     onCompleted: () => {
       setSaving(false);
-      refetch();
+      userChatRefetch();
       form.resetFields();
       setInputStr('');
       setFileList([]);

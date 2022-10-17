@@ -275,7 +275,10 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           dateSource: { set: ageCheck ? data.dateSource || null : null },
           dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
           groups: {
-            set: data.groups.map((id) => ({ id })),
+            set:
+              groups.length > 1
+                ? data.groups.map((id) => ({ id }))
+                : groups.map(({ id }) => ({ id })),
           },
           tags: {
             set: data.tags.map((id) => ({ id })) || undefined,

@@ -267,7 +267,6 @@ const EditOffender = ({
                   <Col>
                     <Button
                       disabled={saving}
-                      loading={saving}
                       style={{ color: 'red', padding: 8 }}
                       onClick={toggleAddOffenderTag}
                       icon={
@@ -353,37 +352,37 @@ const EditOffender = ({
               </Form.Item>
             </Col>
           </Row>
-
-          <Row>
-            {' '}
-            <Col span={8}>
-              <Form.Item
-                name="groups"
-                label="Groups"
-                tooltip="Select the groups that you would like this offender to be visible to."
-                rules={[
-                  {
-                    required: true,
-                    message:
-                      'Please select at least one group for the offender.',
-                  },
-                ]}
-              >
-                <Select
-                  loading={groupsLoading}
-                  disabled={saving}
-                  mode="multiple"
-                  maxTagCount={3}
+          {groups.length > 1 && (
+            <Row>
+              <Col span={8}>
+                <Form.Item
+                  name="groups"
+                  label="Groups"
+                  tooltip="Select the groups that you would like this offender to be visible to."
+                  rules={[
+                    {
+                      required: true,
+                      message:
+                        'Please select at least one group for the offender.',
+                    },
+                  ]}
                 >
-                  {groups.map((group) => (
-                    <Select.Option key={group.value} value={group.value}>
-                      {group.label}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
+                  <Select
+                    loading={groupsLoading}
+                    disabled={saving}
+                    mode="multiple"
+                    maxTagCount={3}
+                  >
+                    {groups.map((group) => (
+                      <Select.Option key={group.value} value={group.value}>
+                        {group.label}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
+          )}
           <Row align="middle" style={{ marginTop: 70, marginBottom: 20 }}>
             <Col>
               <Title style={{ marginBottom: 0 }} level={4}>
@@ -408,7 +407,6 @@ const EditOffender = ({
             <Col>
               <Button
                 disabled={saving}
-                loading={saving}
                 onClick={toggleAddExclusion}
                 style={{ marginTop: -30, marginLeft: 15, color: 'red' }}
                 icon={
