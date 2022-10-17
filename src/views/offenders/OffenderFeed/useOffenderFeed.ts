@@ -113,7 +113,9 @@ const useOffenderFeed = (): Return => {
         groups:
           role === Role.SchemeAdmin
             ? groupData?.groups.map((group) => group.id) || []
-            : groups.map((group) => group.id),
+            : groups
+                .filter((group) => group.id === schemeId)
+                .map((group) => group.id),
       },
       order,
     });

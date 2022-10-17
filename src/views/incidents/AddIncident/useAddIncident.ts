@@ -378,6 +378,11 @@ const useEditIncident = (): Return => {
 
   const imgChange: UploadProps['onChange'] = (info) => {
     if (info.file.response) {
+      console.log('imgChange fileList1', fileList);
+      console.log(
+        'imgChange filter',
+        fileList.filter((item) => item.uid !== info.file.uid)
+      );
       setNewImage({
         ...info.file,
         url: info.file.response[0].url,
@@ -396,6 +401,7 @@ const useEditIncident = (): Return => {
       setImageChange(true);
     } else {
       setFileList(info.fileList);
+      console.log('imgChange info.fileList', info.fileList);
       setImageChange(true);
     }
   };
@@ -420,9 +426,11 @@ const useEditIncident = (): Return => {
       setOption(LocationOptions.NEW);
       setNewLocation(value);
       form.setFieldsValue({
-        fullAddress: `${value.building && value.building}, ${value?.street},${
-          value?.townCity
-        },${value?.county && value?.county},${value?.postcode}`,
+        fullAddress: `${value.building ? `${value.building}, ` : ''}  ${
+          value?.street
+        }, ${value?.townCity}, ${value.county ? `${value.county}, ` : ''}${
+          value?.postcode
+        }`,
       });
     }
   };
@@ -568,9 +576,15 @@ const useEditIncident = (): Return => {
                   age: offender.age || null,
                   dateSource: offender.dateSource || null,
                   dateOfBirth: offender.dateOfBirth || null,
-                  groups: data.groups.length
-                    ? { connect: data.groups.map((id) => ({ id })) }
-                    : undefined,
+                  groups: {
+                    connect:
+                      groups.length > 1
+                        ? data.groups.map((id) => ({ id }))
+                        : groups.map(({ id }) => ({ id })),
+                  },
+                  // groups.length > 1
+                  //   ? { connect: data.groups.map((id) => ({ id })) }
+                  //   : { connect: groups.map(({ id }) => ({ id })) },
                   scheme: { connect: { id: schemeId } },
                   createdBy: { connect: { id: userId } },
                   localId: offender.id,
@@ -688,6 +702,14 @@ const useEditIncident = (): Return => {
         },
       })
     );
+    console.log(
+      'update',
+      update(fileList, {
+        [fileIndex]: {
+          $set: data.image,
+        },
+      })
+    );
 
     setNewImage(null);
   };
@@ -747,7 +769,13 @@ const useEditIncident = (): Return => {
     info: UploadChangeParam<UploadFile>,
     currentId: string
   ) => {
-    if (info.file.response) {
+    if (info.file.response && info.file.status === 'done') {
+      console.log('fileList1', fileList);
+      console.log(
+        'filter',
+        fileList.filter((item) => item.uid === info.file.uid)
+      );
+
       setFileList([
         ...fileList.filter((item) => item.uid !== info.file.uid),
         {
@@ -757,6 +785,8 @@ const useEditIncident = (): Return => {
           type: info.file.response[0].mimetype,
         },
       ]);
+      console.log('fileList', fileList);
+
       const currentOffender = offendersData.filter(
         ({ id }) => id === currentId
       );
@@ -794,6 +824,8 @@ const useEditIncident = (): Return => {
       setImageChange(true);
     } else {
       setFileList(info.fileList);
+      console.log('info.fileList', info.fileList);
+
       setImageChange(true);
     }
   };

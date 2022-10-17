@@ -24,6 +24,7 @@ const IncidentFeed = (): JSX.Element => {
     updateIncidentList,
     onNavigate,
   } = useIncidentFeed();
+
   return (
     <View
       data={data}

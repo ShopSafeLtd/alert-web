@@ -18,14 +18,7 @@ const ViewChat = (): JSX.Element => {
     adminRights,
     refetch,
   } = useViewChat();
-  console.log(
-    'createdAt',
-    data?.user?.chats.map((el) => el.createdAt)
-  );
-  console.log(
-    'message createdAt',
-    data?.user?.chats.map((el) => el.chat.messages)
-  );
+
   return (
     <View
       data={data}

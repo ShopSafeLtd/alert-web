@@ -709,7 +709,6 @@ const SchemeTerms = ({
               <Link to="/app/onboarding">
                 <Button
                   disabled={saving}
-                  loading={saving}
                   type="primary"
                   onClick={() => {
                     // window.history.back();

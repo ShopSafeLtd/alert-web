@@ -326,20 +326,6 @@ const ViewIncident = ({
                           </div>
                         )}
                       </Col>
-                      <Button
-                        onClick={toggleLinkOffender}
-                        disabled={saving}
-                        loading={saving}
-                        style={{ color: 'red' }}
-                        icon={
-                          <FontAwesomeIcon
-                            className="button-icon"
-                            icon={faPlus}
-                          />
-                        }
-                      >
-                        Link Offender
-                      </Button>
                     </Row>
                   </div>
                 )}

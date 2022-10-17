@@ -1560,7 +1560,7 @@
 }
 .view-message-container .message-image-skeleton {
   height: 100px;
-  width: 100px;
+  width: 10px;
 }
 .view-message-container .ant-card-small > .ant-card-body {
   padding: 0;

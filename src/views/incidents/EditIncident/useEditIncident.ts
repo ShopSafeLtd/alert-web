@@ -482,7 +482,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                         })),
                       }
                     : {},
-                // ???  undefined
               },
             })),
             create: newOffenders.length

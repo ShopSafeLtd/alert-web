@@ -224,7 +224,6 @@ const AddOffender = ({
                 <Col>
                   <Button
                     disabled={saving}
-                    loading={saving}
                     style={{ color: 'red', padding: 8 }}
                     onClick={toggleAddOffenderTag}
                     icon={
@@ -311,35 +310,37 @@ const AddOffender = ({
           </Col>
         </Row>
 
-        <Row>
-          {' '}
-          <Col span={8}>
-            <Form.Item
-              name="groups"
-              label="Groups"
-              tooltip="Select the groups that you would like this offender to be visible to."
-              rules={[
-                {
-                  required: true,
-                  message: 'Please select at least one group for the offender.',
-                },
-              ]}
-            >
-              <Select
-                loading={groupsLoading}
-                disabled={saving}
-                mode="multiple"
-                maxTagCount={3}
+        {groups.length > 1 && (
+          <Row>
+            <Col span={8}>
+              <Form.Item
+                name="groups"
+                label="Groups"
+                tooltip="Select the groups that you would like this offender to be visible to."
+                rules={[
+                  {
+                    required: true,
+                    message:
+                      'Please select at least one group for the offender.',
+                  },
+                ]}
               >
-                {groups.map((group) => (
-                  <Select.Option key={group.value} value={group.value}>
-                    {group.label}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col>
-        </Row>
+                <Select
+                  loading={groupsLoading}
+                  disabled={saving}
+                  mode="multiple"
+                  maxTagCount={3}
+                >
+                  {groups.map((group) => (
+                    <Select.Option key={group.value} value={group.value}>
+                      {group.label}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+        )}
         {/* <Divider /> */}
         {/* <Row gutter={5} style={{ marginTop: 50 }}>
           <Col flex={1}> */}
@@ -367,7 +368,6 @@ const AddOffender = ({
           <Col>
             <Button
               disabled={saving}
-              loading={saving}
               onClick={toggleAddExclusion}
               style={{ marginTop: -30, marginLeft: 15, color: 'red' }}
               icon={

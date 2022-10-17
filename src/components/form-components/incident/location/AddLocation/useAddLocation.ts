@@ -23,10 +23,10 @@ const useAddOffender = ({ onClose, update }: Props): Return => {
   const onSubmit = (data: LocationData) => {
     setSaving(true);
     update({
-      building: data.building || null,
+      building: data.building,
       street: data.street,
       townCity: data.townCity,
-      county: data.county || null,
+      county: data.county,
       postcode: data.postcode,
     });
     onClose();

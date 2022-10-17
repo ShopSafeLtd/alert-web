@@ -405,7 +405,6 @@ const EditIncident = ({
                 <Col>
                   <Button
                     disabled={saving}
-                    loading={saving}
                     style={{ color: 'red', padding: 8 }}
                     onClick={toggleAddIncidentTag}
                     icon={
@@ -457,7 +456,6 @@ const EditIncident = ({
                 <Col>
                   <Button
                     disabled={saving}
-                    loading={saving}
                     onClick={toggleAddPreviousLocation}
                     style={{ color: 'red', padding: 8 }}
                     icon={
@@ -473,7 +471,6 @@ const EditIncident = ({
                 <Col>
                   <Button
                     disabled={saving}
-                    loading={saving}
                     onClick={toggleAddNewLocation}
                     style={{ color: 'red', padding: 8 }}
                     icon={
@@ -518,7 +515,6 @@ const EditIncident = ({
               <Col>
                 <Button
                   disabled={saving}
-                  loading={saving}
                   onClick={toggleAddExistingOffender}
                   style={{ color: 'red' }}
                   icon={
@@ -536,7 +532,6 @@ const EditIncident = ({
           <Col>
             <Button
               disabled={saving}
-              loading={saving}
               onClick={toggleAddOffender}
               style={{ color: 'red' }}
               icon={

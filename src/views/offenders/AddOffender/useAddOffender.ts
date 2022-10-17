@@ -187,7 +187,6 @@ const useAddOffender = (): Return => {
   ) => {
     if (res === null || res === undefined) return;
     if (res.createOffender === null || res.createOffender === undefined) return;
-    // get existing group list data from Apollo store
     const existingData = store.readQuery<ListOffendersQuery>({
       query: ListOffendersDocument,
       variables: {
@@ -200,7 +199,6 @@ const useAddOffender = (): Return => {
     if (existingData === null) return;
     if (existingData?.listOffenders?.offenders === undefined) return;
 
-    // write the new data to the Apollo store
     store.writeQuery<ListOffendersQuery>({
       query: ListOffendersDocument,
       data: {
@@ -244,11 +242,8 @@ const useAddOffender = (): Return => {
     update: updateOffender,
   });
 
-  // const [createBan] = useCreateBanMutation();
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    console.log('fileList-offender', fileList);
-
     createOffender({
       variables: {
         data: {
@@ -261,7 +256,12 @@ const useAddOffender = (): Return => {
           age: ageCheck ? null : data.age || null,
           dateSource: ageCheck ? data.dateSource || null : null,
           dateOfBirth: ageCheck ? data.dateOfBirth || null : null,
-          groups: { connect: data.groups.map((id) => ({ id })) },
+          groups: {
+            connect:
+              groups.length > 1
+                ? data.groups.map((id) => ({ id }))
+                : groups.map(({ id }) => ({ id })),
+          },
           tags:
             data.tags && data.tags.length > 0
               ? { connect: data.tags.map((id) => ({ id })) }

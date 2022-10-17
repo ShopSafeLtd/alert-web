@@ -1,6 +1,6 @@
 /* eslint-disable react/require-default-props */
 import React from 'react';
-import { Row, Col, Card, Descriptions, Typography } from 'antd';
+import { Row, Col, Card, Descriptions, Typography, Image } from 'antd';
 import { MessageType } from 'types';
 import moment from 'moment';
 
@@ -53,12 +53,7 @@ const Content = ({
         {images.map((image) => (
           <Col key={image.id}>
             <div className="message-upload-card">
-              <div
-                className="message-image"
-                style={{
-                  backgroundImage: `url(${image.optimised})`,
-                }}
-              />
+              <Image width={100} height={100} src={image.optimised || ''} />
             </div>
           </Col>
         ))}
@@ -74,24 +69,23 @@ const Content = ({
               <Row gutter={5} wrap={false}>
                 <Col>
                   {offender.images && offender.images.length > 0 && (
-                    <div
-                      className="message-image"
-                      style={{
-                        backgroundImage: `url(${offender.images[0].optimised})`,
-                      }}
+                    <Image
+                      width={100}
+                      height={100}
+                      src={offender.images[0].optimised || ''}
                     />
                   )}
                 </Col>
 
-                <Col flex={1} style={{ marginTop: 10 }}>
+                <Col
+                  flex={1}
+                  style={{
+                    marginTop: 10,
+                    marginLeft: 5,
+                  }}
+                >
                   <Title level={4}> {offender.name}</Title>
                   <Descriptions size="small">
-                    {/* <Descriptions.Item
-                                                  label="Offender"
-                                                  span={2}
-                                                >
-                                                  {offender.name}
-                                                </Descriptions.Item> */}
                     <Descriptions.Item label="Last Active">
                       {moment(offender.updatedAt || moment()).format(
                         `ddd MMM DD YYYY - HH:mm`
@@ -118,15 +112,20 @@ const Content = ({
               <Row gutter={5} wrap={false}>
                 <Col>
                   {incident?.images && incident.images.length > 0 && (
-                    <div
-                      className="message-image"
-                      style={{
-                        backgroundImage: `url(${incident.images[0].optimised})`,
-                      }}
+                    <Image
+                      width={100}
+                      height={100}
+                      src={incident.images[0].optimised || ''}
                     />
                   )}
                 </Col>
-                <Col flex={1} style={{ marginTop: 10 }}>
+                <Col
+                  flex={1}
+                  style={{
+                    marginTop: 10,
+                    marginLeft: 5,
+                  }}
+                >
                   <Paragraph
                     strong
                     ellipsis

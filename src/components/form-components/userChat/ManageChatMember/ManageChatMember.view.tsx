@@ -115,7 +115,6 @@ const EditChat = ({
             <Col>
               <Button
                 disabled={saving}
-                loading={saving}
                 onClick={toggleAddMember}
                 style={{ color: 'red' }}
                 icon={

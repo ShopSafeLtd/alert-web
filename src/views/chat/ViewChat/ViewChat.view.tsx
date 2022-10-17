@@ -50,194 +50,173 @@ const ViewOffender = ({
   updateAddUserChat,
   updateDeletedUserChat,
   refetch,
-
   adminRights,
-}: Props): JSX.Element => {
-  console.log('chat', data?.user?.chats[0]);
-
-  return (
-    <div className="page-container">
-      <Row>
-        <Col span={7}>
-          <div className="chats-side-list">
-            <Row style={{ margin: '20px 5px 5px 10px' }}>
-              <Col flex={1}>
-                <Title level={2} style={{ marginTop: 5 }}>
-                  Chat Groups
-                </Title>
+}: Props): JSX.Element => (
+  <div className="page-container">
+    <Row>
+      <Col span={7}>
+        <div className="chats-side-list">
+          <Row style={{ margin: '20px 5px 5px 10px' }}>
+            <Col flex={1}>
+              <Title level={2} style={{ marginTop: 5 }}>
+                Chat Groups
+              </Title>
+            </Col>
+            {adminRights && (
+              <Col>
+                <Button
+                  type="primary"
+                  onClick={toggleAddChat}
+                  icon={
+                    <FontAwesomeIcon
+                      icon={faPlus}
+                      size="lg"
+                      style={{ marginRight: 5 }}
+                    />
+                  }
+                >
+                  Create Chat
+                </Button>
               </Col>
-              {adminRights && (
-                <Col>
-                  <Button
-                    type="primary"
-                    onClick={toggleAddChat}
-                    icon={
-                      <FontAwesomeIcon
-                        icon={faPlus}
-                        size="lg"
-                        style={{ marginRight: 5 }}
-                      />
+            )}
+          </Row>
+          {data?.user?.chats && data.user.chats.length > 0 ? (
+            <List
+              itemLayout="horizontal"
+              loading={loading}
+              split
+              dataSource={data?.user?.chats}
+              renderItem={({
+                id: userChatId,
+                newMessages,
+                createdAt,
+                mentioned,
+                chat: { id, name, firstLetter, messages, totalMembers },
+              }) => (
+                <Link to={`/app/chat/${id}`} key={id}>
+                  <List.Item
+                    className={
+                      chatId === id ? 'chat-item current' : 'chat-item'
                     }
+                    onClick={() => !saving && handleMarkAsRead(userChatId)}
+                    key={id}
                   >
-                    Create Chat
-                  </Button>
-                </Col>
-              )}
-            </Row>
-            {data?.user?.chats && data.user.chats.length > 0 ? (
-              <List
-                itemLayout="horizontal"
-                loading={loading}
-                split
-                dataSource={data?.user?.chats}
-                renderItem={({
-                  id: userChatId,
-                  newMessages,
-                  createdAt,
-                  mentioned,
-                  chat: { id, name, firstLetter, messages, totalMembers },
-                }) => (
-                  <Link to={`/app/chat/${id}`} key={id}>
-                    <List.Item
-                      className={
-                        chatId === id ? 'chat-item current' : 'chat-item'
+                    <List.Item.Meta
+                      style={{ marginTop: 10 }}
+                      avatar={
+                        <Avatar className="chat-item-avatar">
+                          {firstLetter}
+                        </Avatar>
                       }
-                      onClick={() => !saving && handleMarkAsRead(userChatId)}
-                      key={id}
-                    >
-                      <List.Item.Meta
-                        style={{ marginTop: 10 }}
-                        avatar={
-                          <Avatar className="chat-item-avatar">
-                            {firstLetter}
-                          </Avatar>
-                        }
-                        title={
-                          <Row style={{ marginRight: 5 }}>
-                            <Col>
-                              <Paragraph
-                                style={{ fontSize: 16, marginBottom: '0.5rem' }}
-                                // strong={!newMessages}
-                                strong={newMessages || mentioned || false}
-                              >
-                                {name}
-                              </Paragraph>
-                            </Col>
-                            <Col flex={1}>
-                              <span className="chat-item-tag" color="red">
-                                <FontAwesomeIcon
-                                  size="lg"
-                                  icon={faUser}
-                                  style={{
-                                    marginRight: 3,
-                                    color: 'rgb(222, 68, 54)',
-                                  }}
-                                />
-                                <span style={{ fontSize: '14px' }}>
-                                  ({totalMembers})
-                                </span>
-                              </span>
-                            </Col>
-                            <Col>
-                              <Row>
-                                {messages && messages.length > 0 ? (
-                                  <Col>
-                                    {moment(
-                                      messages?.slice(-1)[0].createdAt
-                                    ).format('MM/DD/YYYY')}
-                                  </Col>
-                                ) : (
-                                  <Col>
-                                    {moment(createdAt).format('MM/DD/YYYY')}
-                                  </Col>
-                                )}
-                              </Row>
-                            </Col>
-                          </Row>
-                        }
-                        description={
-                          <Row wrap={false} style={{ marginRight: 5 }}>
-                            <Col flex={1}>
-                              <Paragraph
-                                style={{ fontSize: 14 }}
-                                ellipsis
-                                // strong={!newMessages}
-                                strong={newMessages || mentioned || false}
-                              >
-                                {mentioned && (
-                                  <Text
-                                    type="danger"
-                                    style={{ marginRight: 3 }}
-                                  >
-                                    [You were mentioned]
-                                  </Text>
-                                )}
-                                {messages && messages.length
-                                  ? `${
-                                      messages?.slice(-1)[0].from.fullName
-                                    } : ${
-                                      messages?.slice(-1)[0].content ||
-                                      (messages?.slice(-1)[0].images &&
-                                        messages?.slice(-1)[0].images.length &&
-                                        'Sent an image') ||
-                                      (messages?.slice(-1)[0].offenders &&
-                                        messages?.slice(-1)[0].offenders
-                                          .length &&
-                                        'Linked an offender') ||
-                                      (messages?.slice(-1)[0].incidents &&
-                                        messages?.slice(-1)[0].incidents
-                                          .length &&
-                                        'Linked an incident')
-                                    }`
-                                  : 'No Messages'}
-                              </Paragraph>
-                            </Col>
-                            {/* <Col>
-                            {!newMessages && (
+                      title={
+                        <Row style={{ marginRight: 5 }}>
+                          <Col>
+                            <Paragraph
+                              style={{
+                                fontSize: newMessages || mentioned ? 20 : 18,
+                                marginBottom: 3,
+                              }}
+                              strong={newMessages || mentioned || false}
+                            >
+                              {name}
+                            </Paragraph>
+                          </Col>
+                          <Col flex={1}>
+                            <span className="chat-item-tag" color="red">
                               <FontAwesomeIcon
-                                size="2x"
-                                icon={faCommentPlus}
+                                size="lg"
+                                icon={faUser}
                                 style={{
-                                  marginLeft: 10,
+                                  marginRight: 3,
                                   color: 'rgb(222, 68, 54)',
                                 }}
                               />
-                            )}
-                          </Col> */}
-                          </Row>
-                        }
-                      />
-                    </List.Item>
-                  </Link>
-                )}
-              />
-            ) : (
-              <Empty style={{ marginTop: 30 }} />
-            )}
-          </div>
-        </Col>
-        <Col span={17}>
-          <ViewMessage
-            chatId={chatId}
-            updateUserChatList={updateDeletedUserChat}
-            refetch={refetch}
-          />
-        </Col>
-      </Row>
-      <Drawer
-        title="Create A New Chat"
-        visible={addChat}
-        width="400"
-        onClose={toggleAddChat}
-      >
-        {addChat ? (
-          <AddChat update={updateAddUserChat} onClose={toggleAddChat} />
-        ) : (
-          <div />
-        )}
-      </Drawer>
-    </div>
-  );
-};
+                              <span style={{ fontSize: '14px' }}>
+                                ({totalMembers})
+                              </span>
+                            </span>
+                          </Col>
+                          <Col>
+                            <Row>
+                              {messages && messages.length > 0 ? (
+                                <Col>
+                                  {moment(
+                                    messages?.slice(-1)[0].createdAt
+                                  ).format('MM/DD/YYYY')}
+                                </Col>
+                              ) : (
+                                <Col>
+                                  {moment(createdAt).format('MM/DD/YYYY')}
+                                </Col>
+                              )}
+                            </Row>
+                          </Col>
+                        </Row>
+                      }
+                      description={
+                        <Row wrap={false} style={{ marginRight: 5 }}>
+                          <Col flex={1}>
+                            <Paragraph
+                              style={{
+                                fontSize: newMessages || mentioned ? 16 : 14,
+                              }}
+                              ellipsis
+                              strong={newMessages || mentioned || false}
+                            >
+                              {mentioned && (
+                                <Text type="danger" style={{ marginRight: 3 }}>
+                                  [You were mentioned]
+                                </Text>
+                              )}
+                              {messages && messages.length
+                                ? `${messages?.slice(-1)[0].from.fullName} : ${
+                                    messages?.slice(-1)[0].content ||
+                                    (messages?.slice(-1)[0].images &&
+                                      messages?.slice(-1)[0].images.length &&
+                                      'Sent an image') ||
+                                    (messages?.slice(-1)[0].offenders &&
+                                      messages?.slice(-1)[0].offenders.length &&
+                                      'Linked an offender') ||
+                                    (messages?.slice(-1)[0].incidents &&
+                                      messages?.slice(-1)[0].incidents.length &&
+                                      'Linked an incident')
+                                  }`
+                                : 'No Messages'}
+                            </Paragraph>
+                          </Col>
+                        </Row>
+                      }
+                    />
+                  </List.Item>
+                </Link>
+              )}
+            />
+          ) : (
+            <Empty style={{ marginTop: 30 }} />
+          )}
+        </div>
+      </Col>
+      <Col span={17}>
+        <ViewMessage
+          chatId={chatId}
+          updateUserChatList={updateDeletedUserChat}
+          userChatRefetch={refetch}
+        />
+      </Col>
+    </Row>
+    <Drawer
+      title="Create A New Chat"
+      visible={addChat}
+      width="400"
+      onClose={toggleAddChat}
+    >
+      {addChat ? (
+        <AddChat update={updateAddUserChat} onClose={toggleAddChat} />
+      ) : (
+        <div />
+      )}
+    </Drawer>
+  </div>
+);
 
 export default ViewOffender;
