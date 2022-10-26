@@ -32,6 +32,7 @@ function AddOffender(): JSX.Element {
     setAgeCheck,
     adminRights,
   } = useAddOffender();
+
   return (
     <div>
       <View

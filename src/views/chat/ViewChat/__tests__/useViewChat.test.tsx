@@ -36,7 +36,9 @@ const mocks = [
             {
               id: 'userChatId',
               newMessages: false,
+              mentioned: false,
               updatedAt: '2022-08-11T10:40:09.985Z',
+              createdAt: '2022-08-10T10:40:09.985Z',
               user: {
                 id: 'userId',
                 fullName: 'test user',
@@ -57,6 +59,9 @@ const mocks = [
                       id: 'userId',
                       fullName: 'fullName',
                     },
+                    images: [],
+                    incidents: [],
+                    offenders: [],
                   },
                 ],
               },

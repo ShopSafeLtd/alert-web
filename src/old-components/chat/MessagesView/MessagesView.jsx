@@ -50,7 +50,6 @@ class MessagesView extends PureComponent {
   componentDidMount() {
     const { messages, refetch } = this.props;
     this.messages.addEventListener('scroll', this.onScroll, false);
-    // ??? scrollTop scrollHeight
     this.messages.scrollTop = this.messages.scrollHeight;
     // this.props.setNavbarAction("back");
     // if (chat !== undefined) {

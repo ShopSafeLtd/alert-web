@@ -15876,11 +15876,26 @@ export type MessagesSubscriptionSubscription = {
       __typename?: 'Incident';
       id: string;
       subject?: string | null;
+      description: string;
+      dayTime?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
     }>;
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
+      updatedAt: any;
       name?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
     }>;
   } | null> | null;
 };
@@ -18983,10 +18998,23 @@ export const MessagesSubscriptionDocument = gql`
       incidents {
         id
         subject
+        description
+        dayTime
+        images {
+          id
+          url
+          optimised
+        }
       }
       offenders {
         id
+        updatedAt
         name
+        images {
+          id
+          url
+          optimised
+        }
       }
     }
   }

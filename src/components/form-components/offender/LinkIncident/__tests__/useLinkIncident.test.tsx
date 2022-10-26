@@ -21,6 +21,9 @@ const mocks = [
         take: 1,
         skip: 0,
         where: {
+          id: {
+            notIn: [],
+          },
           OR: [
             {
               subject: {
@@ -95,6 +98,7 @@ const UseLinkIncidentTest = () => {
   const { data, loading, onSubmit } = useLinkIncident({
     onClose: jest.fn(),
     update: jest.fn(),
+    incidentIds: [],
   });
   const ListIncidents =
     data &&
@@ -109,14 +113,7 @@ const UseLinkIncidentTest = () => {
     <div>
       {ListIncidents}
       <span>{loading ? 'true' : 'false'}</span>
-      <button
-        type="button"
-        onClick={() =>
-          onSubmit({
-            selectedIncidentIds: ['incidentId'],
-          })
-        }
-      >
+      <button type="button" onClick={() => onSubmit('incidentId')}>
         submit
       </button>
     </div>

@@ -19,6 +19,9 @@ const mocks = [
           updatedAt: SortOrder.Asc,
         },
         where: {
+          id: {
+            notIn: [],
+          },
           OR: [
             {
               name: {
@@ -85,6 +88,7 @@ const UseAddExisitingOffenderTest = () => {
   const { data, loading, onSubmit } = useAddExisitingOffender({
     onClose: jest.fn(),
     update: jest.fn(),
+    offenderIds: [],
   });
   const ListOffenders =
     data &&
@@ -99,14 +103,7 @@ const UseAddExisitingOffenderTest = () => {
     <div>
       {ListOffenders}
       <span>{loading ? 'true' : 'false'}</span>
-      <button
-        type="button"
-        onClick={() =>
-          onSubmit({
-            selectedOffenderIds: ['offenderId'],
-          })
-        }
-      >
+      <button type="button" onClick={() => onSubmit('offenderId')}>
         submit
       </button>
     </div>

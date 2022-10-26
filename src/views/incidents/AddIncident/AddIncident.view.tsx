@@ -55,7 +55,7 @@ import {
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
 
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 
 import AddOffender from 'components/form-components/incident/offender/AddNewOffender';
 import AddExistingOffender from 'components/form-components/incident/offender/AddExisitingOffender';
@@ -75,13 +75,12 @@ interface FormData {
   subject: string;
   description: string;
   date: Date;
-  time: Moment;
   value?: number;
   recoveredValue?: number;
   fullAddress: string;
   groups: string[];
   tags: string[];
-  images: { id: string; url: string; optimised: string }[];
+  images?: { id: string; url: string; optimised: string }[];
 }
 
 interface Image extends UploadFile {

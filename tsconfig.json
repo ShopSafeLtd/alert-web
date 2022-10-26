@@ -20,6 +20,7 @@
   },
   "include": [
     "src",
-    "src/components/form-components/recycled/RestoreIncident/__tests__/.view.test.tsx"
+    "src/components/form-components/recycled/RestoreIncident/__tests__/.view.test.tsx",
+    "src/components/incidents/IncidentCard/__tests__/.test.tsx"
   ]
 }

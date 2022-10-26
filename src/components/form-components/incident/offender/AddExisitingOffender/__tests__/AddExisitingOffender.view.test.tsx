@@ -90,7 +90,7 @@ describe('Detail Officer View', () => {
           openLightbox={jest.fn()}
           onPaginationChange={jest.fn()}
           setCurrentId={jest.fn()}
-          offenderData={offenderData}
+          selectedOffender={offenderData}
         />
       </MemoryRouter>
     );

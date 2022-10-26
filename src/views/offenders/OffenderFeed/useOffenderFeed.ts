@@ -114,7 +114,7 @@ const useOffenderFeed = (): Return => {
           role === Role.SchemeAdmin
             ? groupData?.groups.map((group) => group.id) || []
             : groups
-                .filter((group) => group.id === schemeId)
+                // .filter((group) => group.id === schemeId)
                 .map((group) => group.id),
       },
       order,
@@ -367,9 +367,7 @@ const useOffenderFeed = (): Return => {
             value: group.id,
             label: group.name,
           })) || []
-        : groups
-            .filter((group) => group.id === schemeId)
-            .map((group) => ({ value: group.id, label: group.name })),
+        : groups.map((group) => ({ value: group.id, label: group.name })),
     groupsLoading,
     onGroupsChange,
     variables,

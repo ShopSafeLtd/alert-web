@@ -6,6 +6,10 @@ import { storeModel } from 'state';
 
 import { MemoryRouter } from 'react-router-dom';
 import {
+  Age,
+  Gender,
+  Race,
+  Build,
   Role,
   UpdateIncidentDocument,
   ViewIncidentDocument,
@@ -29,6 +33,8 @@ const mocks = [
           date: '2022-08-10T10:40:06.191Z',
           time: '2022-08-11T10:40:09.985Z',
           dayTime: '11:40 - Wed 10, Aug 22',
+          value: 1,
+          recoveredValue: 1,
           description: 'test description',
           subject: 'test subject ',
           location: null,
@@ -70,6 +76,8 @@ const mocks = [
           id: 'incidentId',
           date: '2022-08-10T10:40:06.191Z',
           time: '2022-08-11T10:40:09.985Z',
+          value: 1,
+          recoveredValue: 1,
           dayTime: '11:40 - Wed 10, Aug 22',
           description: 'test description',
           subject: 'test subject ',
@@ -95,7 +103,7 @@ const mocks = [
 ];
 
 const UseViewIncidentTest = () => {
-  const { data, loading, updateOffenderList } = useViewIncident('incidentId');
+  const { data, loading, updateOffendersList } = useViewIncident('incidentId');
   const Group = data && (
     <div key={data.incident?.id}>
       <span>{data.incident?.id}</span>
@@ -108,7 +116,23 @@ const UseViewIncidentTest = () => {
     <div>
       {Group}
       <span>{loading ? 'true' : 'false'}</span>
-      <button type="button" onClick={() => updateOffenderList(['offenderId'])}>
+      <button
+        type="button"
+        onClick={() =>
+          updateOffendersList({
+            id: 'offenderId',
+            name: 'offender name',
+            age: Age.Unknown,
+            gender: Gender.Unknown,
+            race: Race.Unknown,
+            build: Build.Unknown,
+            hair: 'unknown',
+            peculiarities: 'unknown',
+            dateSource: 'unknown',
+            dateOfBirth: new Date(),
+          })
+        }
+      >
         submit
       </button>
     </div>

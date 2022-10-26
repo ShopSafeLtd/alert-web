@@ -78,7 +78,7 @@ describe('Detail Officer View', () => {
           openLightbox={jest.fn()}
           onPaginationChange={jest.fn()}
           setCurrentId={jest.fn()}
-          incidentData={incidentData}
+          selectedIncident={incidentData}
         />
       </MemoryRouter>
     );

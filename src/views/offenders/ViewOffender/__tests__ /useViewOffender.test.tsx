@@ -121,7 +121,7 @@ const UseViewOffenderTest = () => {
     <div>
       {Group}
       <span>{loading ? 'true' : 'false'}</span>
-      <button type="button" onClick={() => updateIncidentList(['incidentId'])}>
+      <button type="button" onClick={() => updateIncidentList('incidentId')}>
         submit
       </button>
     </div>

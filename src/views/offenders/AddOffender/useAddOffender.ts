@@ -104,6 +104,7 @@ const useAddOffender = (): Return => {
   const [editExclusion, setEditExclusion] = useState(false);
   const [bansData, setBansData] = useState<BanData[]>([]);
   const [banData, setBanData] = useState<BanData | null>(null);
+
   const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -322,7 +323,6 @@ const useAddOffender = (): Return => {
   };
 
   // function
-
   const beforeUpload = (file: RcFile) => {
     const isFileDuplicate = fileList.find((item) => item.name === file.name);
     if (isFileDuplicate) {
@@ -424,9 +424,7 @@ const useAddOffender = (): Return => {
             value: group.id,
             label: group.name,
           })) || []
-        : groups
-            .filter((group) => group.id === schemeId)
-            .map((group) => ({ value: group.id, label: group.name })),
+        : groups.map((group) => ({ value: group.id, label: group.name })),
     groupsLoading,
     tags:
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],

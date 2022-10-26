@@ -307,7 +307,9 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
         placement: 'bottomRight',
       });
     },
-    onError: () => {
+    onError: (error) => {
+      console.log(error);
+
       setSaving(false);
       notification.error({
         message: 'Error!',
@@ -575,7 +577,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
               },
             },
             groups: {
-              // ??? groups:required/optional?
               set:
                 groups.length > 1
                   ? data.groups.map((id) => ({ id }))
@@ -585,7 +586,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
               set: data.tags.map((id) => ({ id })),
             },
             offenders: getOffenders(),
-
             images: {
               upload:
                 imageChange && fileList.length
@@ -732,17 +732,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     currentId: string
   ) => {
     if (info.file.response) {
-      setFileList([
-        ...fileList.filter((item) => item.uid !== info.file.uid),
-        {
-          ...info.file,
-          url: info.file.response[0].url,
-          fileName: info.file.response[0].blobName,
-          type: info.file.response[0].mimetype,
-        },
-      ]);
       const currentOffender = offendersData.find(({ id }) => id === currentId);
-
       if (currentOffender) {
         assignOffendersToImages({
           image: {
@@ -774,7 +764,15 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
         });
       }
     } else {
-      setFileList(info.fileList);
+      setFileList([
+        ...fileList.filter((item) => item.uid !== info.file.uid),
+        {
+          ...info.file,
+          url: info.fileList[0].url,
+          fileName: info.fileList[0].fileName,
+          type: info.fileList[0].type,
+        },
+      ]);
     }
   };
   return {
@@ -788,9 +786,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             value: group.id,
             label: group.name,
           })) || []
-        : groups
-            .filter((group) => group.id === schemeId)
-            .map((group) => ({ value: group.id, label: group.name })),
+        : groups.map((group) => ({ value: group.id, label: group.name })),
     groupsLoading,
     tags:
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
@@ -830,3 +826,5 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
 };
 
 export default useEditIncident;
+// const variable = { "where": { "id": "incidentId" }, "data": { "approved": { "set": true }, "subject": { "set": "subject" }, "description": { "set": "description" }, "date": { "set": "2022-08-30T11:25:32.702Z" }, "time": { "set": "2022-08-30T11:25:32.702Z" }, "value": { "set": 1 }, "recoveredValue": { "set": 1 }, "location": { "update": { "building": { "set": "building" }, "street": { "set": "street" }, "townCity": { "set": "townCity" }, "county": { "set": "county" }, "postcode": { "set": "postcode" } } }, "groups": { "set": [] }, "crimeTypes": { "set": [{ "id": "tagId" }] }, "offenders": { "connect": <undefined>, "update": [], "create": <undefined>, "disconnect": <undefined>}, "images": { "upload": <undefined>, "delete": [] } } }
+// const variabl1 = {"where":  {"id":"incidentId"},   "data":{"approved":{"set":true},       "subject":{"set":"subject"},     "description":{"set":"description"},    "date":{"set":"2022-08-30T11:25:32.702Z"},     "time":{"set":"2022-08-30T11:25:32.702Z"},     "value":{"set":1},"recoveredValue":{"set":1},            "location":{"update":{"building":{"set":"building"},      "street":{"set":"street"},        "townCity":{"set":"townCity"},    "county":{"set":"county"},    "postcode":{"set":"postcode"}}},          "groups":{"set":[]},"crimeTypes":{"set":[{"id":"tagId"}]},"offenders":{"connect":<undefined>,"update":[],"create":<undefined>,"disconnect":<undefined>},"images":{"upload":<undefined>,"delete":[]}}}

@@ -14,7 +14,6 @@ import {
   SortOrder,
 } from 'graphql/generated';
 import { IncidentSort, storeModel } from 'state';
-import moment from 'moment';
 import useEditIncident from '../useEditIncident';
 
 const mocks = [
@@ -31,24 +30,36 @@ const mocks = [
       data: {
         incident: {
           id: 'incidentId',
-          subject: 'test subject',
-          location: null,
-          approved: null,
-          date: '2022-08-10T10:40:06.191Z',
-          time: '2022-08-11T10:40:09.985Z',
-          dayTime: '11:40 - Wed 10, Aug 22',
-          description: 'test description',
+          date: '2022-08-30T11:25:32.702Z',
+          time: '2022-08-30T11:25:32.702Z',
+          dayTime: '11:25 - Tue 30, Aug 22',
+          description: 'description',
+          subject: 'subject ',
+          location: {
+            id: 'locationId',
+            building: 'building',
+            street: 'street',
+            townCity: 'townCity',
+            county: 'county',
+            postcode: 'postcode',
+            full: 'full address',
+          },
+          approved: true,
+          value: 1,
+          recoveredValue: 1,
           createdBy: {
             fullName: 'aaa',
             id: 'cl4pe3eu91312371op4c4k2lih2',
             organisation: 'ShopSafe',
           },
-          crimeTypes: [
-            { id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling' },
-          ],
-          groups: [{ id: 'ckqtnb4r056540229myw4yk8zvq', name: 'NightSafe' }],
+          crimeTypes: [{ id: 'tagId', name: 'Theft & Handling ' }],
+          groups: [{ id: 'groupId', name: 'NightSafe' }],
           images: [
-            { id: 'cl6owsuzo33227f9pe9zk4wone', optimised: null, url: null },
+            {
+              id: 'cl6owsuzo33227f9pe9zk4wone',
+              optimised: 'optimised',
+              url: 'url',
+            },
           ],
           offenders: [],
         },
@@ -215,14 +226,15 @@ const mocks = [
     request: {
       query: UpdateIncidentDocument,
       variables: {
-        where: {
-          id: 'incidentId',
-        },
+        where: { id: 'incidentId' },
         data: {
+          approved: { set: true },
           subject: { set: 'subject' },
           description: { set: 'description' },
-          date: { set: new Date('2022-08-30T11:25:32.702Z') },
-          time: { set: moment('2022-08-10T10:40:06.191Z') },
+          date: { set: '2022-08-30T11:25:32.702Z' },
+          time: { set: '2022-08-30T11:25:32.702Z' },
+          value: { set: 1 },
+          recoveredValue: { set: 1 },
           location: {
             update: {
               building: { set: 'building' },
@@ -232,21 +244,15 @@ const mocks = [
               postcode: { set: 'postcode' },
             },
           },
-          groups: {
-            set: [{ id: 'groupId' }],
-          },
-          crimeTypes: {
-            set: [{ id: 'tagId' }],
-          },
+          groups: { set: [] },
+          crimeTypes: { set: [{ id: 'tagId' }] },
           offenders: {
             connect: undefined,
+            update: [],
             create: undefined,
-            delete: undefined,
+            disconnect: undefined,
           },
-          images: {
-            upload: [],
-            delete: [],
-          },
+          images: { upload: undefined, delete: [] },
         },
       },
     },
@@ -254,24 +260,36 @@ const mocks = [
       data: {
         updateIncident: {
           id: 'incidentId',
-          date: '2022-08-10T10:40:06.191Z',
-          time: '2022-08-11T10:40:09.985Z',
-          dayTime: '11:40 - Wed 10, Aug 22',
-          description: 'test description',
-          subject: 'test subject ',
-          location: null,
-          approved: null,
+          date: '2022-08-30T11:25:32.702Z',
+          time: '2022-08-30T11:25:32.702Z',
+          dayTime: '11:25 - Tue 30, Aug 22',
+          description: 'description',
+          subject: 'subject ',
+          location: {
+            id: 'locationId',
+            building: 'building',
+            street: 'street',
+            townCity: 'townCity',
+            county: 'county',
+            postcode: 'postcode',
+            full: 'full address',
+          },
+          approved: true,
+          value: 1,
+          recoveredValue: 1,
           createdBy: {
             fullName: 'aaa',
             id: 'cl4pe3eu91312371op4c4k2lih2',
             organisation: 'ShopSafe',
           },
-          crimeTypes: [
-            { id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling ' },
-          ],
-          groups: [{ id: 'ckqtnb4r056540229myw4yk8zvq', name: 'NightSafe' }],
+          crimeTypes: [{ id: 'tagId', name: 'Theft & Handling ' }],
+          groups: [{ id: 'groupId', name: 'NightSafe' }],
           images: [
-            { id: 'cl6owsuzo33227f9pe9zk4wone', optimised: null, url: null },
+            {
+              id: 'cl6owsuzo33227f9pe9zk4wone',
+              optimised: 'optimised',
+              url: 'url',
+            },
           ],
           offenders: [],
         },
@@ -340,6 +358,8 @@ const UseEditIncidentTest = () => {
             subject: 'subject',
             description: 'description',
             date: new Date('2022-08-30T11:25:32.702Z'),
+            value: 1,
+            recoveredValue: 1,
             building: 'building',
             street: 'street',
             townCity: 'townCity',
@@ -347,6 +367,13 @@ const UseEditIncidentTest = () => {
             postcode: 'postcode',
             groups: ['groupId'],
             tags: ['tagId'],
+            images: [
+              {
+                id: 'cl6owsuzo33227f9pe9zk4wone',
+                optimised: 'optimised',
+                url: 'url',
+              },
+            ],
           })
         }
       >
@@ -392,7 +419,7 @@ describe('useListUsers - hook', () => {
       </StoreProvider>
     );
 
-    expect(await findByText('test description')).toBeInTheDocument();
+    expect(await findByText('description')).toBeInTheDocument();
     expect(await findByText('Theft & Handling')).toBeInTheDocument();
     expect(await findByText('NightSafe')).toBeInTheDocument();
     expect(await findByText('2022-08-10T10:40:06.191Z')).toBeInTheDocument();

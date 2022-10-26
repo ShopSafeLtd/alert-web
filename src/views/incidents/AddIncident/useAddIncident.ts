@@ -28,7 +28,6 @@ import { notification, Modal, Form, FormInstance, Upload, message } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { MutationUpdaterFn } from '@apollo/client';
-import { Moment } from 'moment';
 import update from 'immutability-helper';
 import { UploadChangeParam } from 'antd/lib/upload';
 
@@ -44,13 +43,12 @@ interface FormData {
   subject: string;
   description: string;
   date: Date;
-  time: Moment;
   value?: number;
   recoveredValue?: number;
   fullAddress: string;
   groups: string[];
   tags: string[];
-  images: { id: string; url: string; optimised: string }[];
+  images?: { id: string; url: string; optimised: string }[];
 }
 
 interface OffenderData {
@@ -377,11 +375,13 @@ const useEditIncident = (): Return => {
   };
 
   const imgChange: UploadProps['onChange'] = (info) => {
+    console.log('info', info);
+    // ???
     if (info.file.response) {
-      console.log('imgChange fileList1', fileList);
+      console.log('info.file.response', info);
       console.log(
-        'imgChange filter',
-        fileList.filter((item) => item.uid !== info.file.uid)
+        'unfilter',
+        fileList.filter((item) => item.uid === info.file.uid)
       );
       setNewImage({
         ...info.file,
@@ -400,8 +400,8 @@ const useEditIncident = (): Return => {
       ]);
       setImageChange(true);
     } else {
+      console.log('else', info);
       setFileList(info.fileList);
-      console.log('imgChange info.fileList', info.fileList);
       setImageChange(true);
     }
   };
@@ -461,7 +461,9 @@ const useEditIncident = (): Return => {
         placement: 'bottomRight',
       });
     },
-    onError: () => {
+    onError: (error) => {
+      console.log(error);
+
       setSaving(false);
       notification.error({
         message: 'Error!',
@@ -702,15 +704,6 @@ const useEditIncident = (): Return => {
         },
       })
     );
-    console.log(
-      'update',
-      update(fileList, {
-        [fileIndex]: {
-          $set: data.image,
-        },
-      })
-    );
-
     setNewImage(null);
   };
 
@@ -769,24 +762,7 @@ const useEditIncident = (): Return => {
     info: UploadChangeParam<UploadFile>,
     currentId: string
   ) => {
-    if (info.file.response && info.file.status === 'done') {
-      console.log('fileList1', fileList);
-      console.log(
-        'filter',
-        fileList.filter((item) => item.uid === info.file.uid)
-      );
-
-      setFileList([
-        ...fileList.filter((item) => item.uid !== info.file.uid),
-        {
-          ...info.file,
-          url: info.file.response[0].url,
-          fileName: info.file.response[0].blobName,
-          type: info.file.response[0].mimetype,
-        },
-      ]);
-      console.log('fileList', fileList);
-
+    if (info.file.response) {
       const currentOffender = offendersData.filter(
         ({ id }) => id === currentId
       );
@@ -823,9 +799,15 @@ const useEditIncident = (): Return => {
       }
       setImageChange(true);
     } else {
-      setFileList(info.fileList);
-      console.log('info.fileList', info.fileList);
-
+      setFileList([
+        ...fileList.filter((item) => item.uid !== info.file.uid),
+        {
+          ...info.file,
+          url: info.fileList[0].url,
+          fileName: info.fileList[0].fileName,
+          type: info.fileList[0].type,
+        },
+      ]);
       setImageChange(true);
     }
   };
@@ -838,9 +820,7 @@ const useEditIncident = (): Return => {
             value: group.id,
             label: group.name,
           })) || []
-        : groups
-            .filter((group) => group.id === schemeId)
-            .map((group) => ({ value: group.id, label: group.name })),
+        : groups.map((group) => ({ value: group.id, label: group.name })),
     groupsLoading,
     tags:
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],

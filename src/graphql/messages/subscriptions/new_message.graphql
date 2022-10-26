@@ -4,6 +4,7 @@ subscription MessagesSubscription($chat: ID!) {
     from {
       id
       fullName
+      organisation
     }
     content
     createdAt
@@ -16,10 +17,23 @@ subscription MessagesSubscription($chat: ID!) {
     incidents {
       id
       subject
+      description
+      dayTime
+      images {
+        id
+        url
+        optimised
+      }
     }
     offenders {
       id
+      updatedAt
       name
+      images {
+        id
+        url
+        optimised
+      }
     }
   }
 }

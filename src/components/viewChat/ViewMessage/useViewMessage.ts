@@ -247,21 +247,20 @@ const useViewMessages = ({
     } else setDatedMessages([]);
   };
 
-  const { subscribeToMore, data, loading, fetchMore, refetch } =
-    useMessagesQuery({
-      fetchPolicy: 'cache-and-network',
-      variables: {
-        chat: chatId,
-      },
-      onCompleted: (res) => {
-        if (res.messages.length > 0) {
-          setAfter(res.messages.slice(-1)[0].id);
-          handleMessagesData(res.messages, true);
-        } else {
-          handleMessagesData([]);
-        }
-      },
-    });
+  const { subscribeToMore, data, loading, fetchMore } = useMessagesQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      chat: chatId,
+    },
+    onCompleted: (res) => {
+      if (res.messages.length > 0) {
+        setAfter(res.messages.slice(-1)[0].id);
+        handleMessagesData(res.messages, true);
+      } else {
+        handleMessagesData([]);
+      }
+    },
+  });
 
   const { data: chatData } = useChatQuery({
     fetchPolicy: 'cache-and-network',
@@ -310,12 +309,15 @@ const useViewMessages = ({
   });
 
   const subscribeToNewMessage = () => {
+    console.log('subscribeToNewMessage');
+
     subscribeToMore({
       document: MessagesSubscriptionDocument,
       variables: {
         chat: chatId,
       },
       updateQuery: (prev, { subscriptionData }) => {
+        console.log('subscribe update');
         if (prev && prev.messages) {
           const test = prev.messages.find(
             ({ id }) => id === subscriptionData.data.messages[0].id
@@ -333,9 +335,6 @@ const useViewMessages = ({
         };
       },
     });
-    // ???
-    userChatRefetch();
-    refetch();
   };
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   useEffect(() => subscribeToNewMessage(), [chatId]);
@@ -519,6 +518,7 @@ const useViewMessages = ({
     },
     update: updateMessageList,
   });
+
   const openDelete = (currentId: string) => {
     setSaving(true);
     if (currentId) {

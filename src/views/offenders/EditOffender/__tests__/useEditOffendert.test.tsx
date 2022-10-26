@@ -121,6 +121,7 @@ const mocks = [
           id: 'offenderId',
         },
         data: {
+          approved: { set: true },
           name: { set: 'offenderName' },
           gender: { set: Gender.Unknown },
           race: { set: Race.Unknown },
@@ -131,13 +132,18 @@ const mocks = [
           dateSource: { set: null },
           dateOfBirth: { set: null },
           groups: {
-            set: [{ id: 'groupId' }],
+            set: [],
           },
           tags: {
             set: [{ id: 'tagId' }],
           },
+          scheme: { connect: { id: 'schemeId' } },
+          bans: {
+            create: undefined,
+            delete: undefined,
+          },
           images: {
-            upload: [],
+            upload: undefined,
             delete: [],
           },
         },

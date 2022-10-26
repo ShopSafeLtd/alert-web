@@ -854,8 +854,8 @@ const ViewMessges = ({
                 disabled={
                   saving ||
                   (incidentsData && incidentsData.length > 0) ||
-                  offendersData.length > 0 ||
-                  fileList.length > 3
+                  (offendersData && offendersData.length > 0) ||
+                  (fileList && fileList.length > 3)
                 }
                 icon={<FontAwesomeIcon icon={faImage} size="lg" />}
               />
@@ -870,7 +870,7 @@ const ViewMessges = ({
                   disabled={
                     saving ||
                     (incidentsData && incidentsData.length > 0) ||
-                    fileList.length > 0
+                    (fileList && fileList.length > 0)
                   }
                   icon={
                     <FontAwesomeIcon
@@ -890,7 +890,9 @@ const ViewMessges = ({
               <Button
                 onClick={toggleLinkIncident}
                 disabled={
-                  saving || fileList.length > 0 || offendersData.length > 0
+                  saving ||
+                  (fileList && fileList.length > 0) ||
+                  (offendersData && offendersData.length > 0)
                 }
                 icon={
                   <FontAwesomeIcon

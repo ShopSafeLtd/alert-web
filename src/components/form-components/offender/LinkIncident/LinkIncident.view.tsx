@@ -194,7 +194,7 @@ const LinkIncident = ({
                 type="primary"
                 onClick={() => onSubmit(selectedIncident?.id)}
               >
-                Add Incident
+                Link Incident
               </Button>
             </Col>
           </Row>

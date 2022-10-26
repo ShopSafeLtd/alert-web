@@ -368,11 +368,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
       });
     },
     onError: () => {
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
   const onReject = () => {
@@ -487,9 +483,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
             value: group.id,
             label: group.name,
           })) || []
-        : groups
-            .filter((group) => group.id === schemeId)
-            .map((group) => ({ value: group.id, label: group.name })),
+        : groups.map((group) => ({ value: group.id, label: group.name })),
     groupsLoading,
     tags:
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],

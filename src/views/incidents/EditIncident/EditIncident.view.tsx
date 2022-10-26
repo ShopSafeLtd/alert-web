@@ -709,7 +709,7 @@ const EditIncident = ({
                       />
                     </Col>
                   </Row>
-                  {searchOffenders.length === 0 && (
+                  {searchOffenders && searchOffenders.length === 0 && (
                     <Paragraph
                       style={{ fontSize: 14, fontWeight: 500 }}
                       type="secondary"

@@ -101,9 +101,10 @@ const AssignImageOffender = ({
       />
       <div className="incident-form-assign-offenders">
         <Title level={4} className="offender-title">
-          {offendersData.length > 0 ? 'Select' : 'Add'} Offenders
+          {offendersData && offendersData.length > 0 ? 'Select' : 'Add'}{' '}
+          Offenders
         </Title>
-        {offendersData.length === 0 && (
+        {offendersData && offendersData.length === 0 && (
           <Paragraph>
             You have not added any offenders to the incident yet, please add
             offenders if any are present in the image.
