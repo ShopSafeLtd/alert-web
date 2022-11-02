@@ -375,14 +375,7 @@ const useEditIncident = (): Return => {
   };
 
   const imgChange: UploadProps['onChange'] = (info) => {
-    console.log('info', info);
-    // ???
     if (info.file.response) {
-      console.log('info.file.response', info);
-      console.log(
-        'unfilter',
-        fileList.filter((item) => item.uid === info.file.uid)
-      );
       setNewImage({
         ...info.file,
         url: info.file.response[0].url,
@@ -400,7 +393,6 @@ const useEditIncident = (): Return => {
       ]);
       setImageChange(true);
     } else {
-      console.log('else', info);
       setFileList(info.fileList);
       setImageChange(true);
     }
@@ -461,9 +453,7 @@ const useEditIncident = (): Return => {
         placement: 'bottomRight',
       });
     },
-    onError: (error) => {
-      console.log(error);
-
+    onError: () => {
       setSaving(false);
       notification.error({
         message: 'Error!',

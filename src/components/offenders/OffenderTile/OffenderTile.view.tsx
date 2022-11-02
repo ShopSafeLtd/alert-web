@@ -13,7 +13,7 @@ interface Props {
   onClick: () => void;
 }
 
-const OffenderTile = ({ offender, onClick }: Props) => (
+const OffenderTile = ({ offender, onClick }: Props): JSX.Element => (
   <Tooltip placement="bottom" title={`Add ${offender.name} to incident`}>
     <Card
       onClick={onClick}

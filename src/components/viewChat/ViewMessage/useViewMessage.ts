@@ -309,15 +309,12 @@ const useViewMessages = ({
   });
 
   const subscribeToNewMessage = () => {
-    console.log('subscribeToNewMessage');
-
     subscribeToMore({
       document: MessagesSubscriptionDocument,
       variables: {
         chat: chatId,
       },
       updateQuery: (prev, { subscriptionData }) => {
-        console.log('subscribe update');
         if (prev && prev.messages) {
           const test = prev.messages.find(
             ({ id }) => id === subscriptionData.data.messages[0].id

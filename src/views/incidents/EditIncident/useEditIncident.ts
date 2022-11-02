@@ -307,9 +307,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
         placement: 'bottomRight',
       });
     },
-    onError: (error) => {
-      console.log(error);
-
+    onError: () => {
       setSaving(false);
       notification.error({
         message: 'Error!',
