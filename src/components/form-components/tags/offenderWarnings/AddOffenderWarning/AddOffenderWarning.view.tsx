@@ -30,7 +30,7 @@ const AddOffenderWarning = ({
       </Col>
     </Row>
     <Row gutter={16}>
-      <Col span={21}>
+      <Col span={24}>
         <Form.Item
           name="name"
           label="Name"
@@ -45,9 +45,9 @@ const AddOffenderWarning = ({
         </Form.Item>
       </Col>
 
-      <Col span={21}>
+      <Col span={24}>
         <Form.Item name="description" label="Description">
-          <Input.TextArea disabled={saving} />
+          <Input.TextArea rows={10} disabled={saving} />
         </Form.Item>
       </Col>
     </Row>
