@@ -291,8 +291,8 @@ const ViewMessges = ({
             (fileList && fileList.length > 0) ||
             (offendersData && offendersData.length > 0) ||
             (incidentsData && incidentsData.length > 0)
-              ? 'calc(100vh - 365px)'
-              : 'calc(100vh - 255px)'
+              ? 'calc(100vh - 377px)'
+              : 'calc(100vh - 267px)'
           }
           className="message-container"
           initialScrollY={0}
@@ -359,21 +359,28 @@ const ViewMessges = ({
                     <Col>
                       {adminRights ? (
                         <Popover
-                          title="Options"
                           trigger="click"
                           placement={from?.id === userId ? 'left' : 'right'}
+                          overlayClassName="message-popover"
                           content={
                             adminRights && (
                               <Button
-                                type="primary"
+                                type="text"
                                 disabled={saving}
                                 icon={
-                                  <FontAwesomeIcon icon={faTrash} size="lg" />
+                                  <FontAwesomeIcon
+                                    style={{ marginRight: 5 }}
+                                    icon={faTrash}
+                                    size="lg"
+                                  />
                                 }
                                 onClick={() => {
                                   deleteMessageConfirm(id || '');
                                 }}
-                              />
+                                size="small"
+                              >
+                                Delete Message
+                              </Button>
                             )
                           }
                         >
@@ -761,7 +768,7 @@ const ViewMessges = ({
             </Col>
           ))}
         </Row>
-        <Row gutter={5} style={{ height: '45px', margin: '0 10px' }}>
+        <Row gutter={5} style={{ height: '45px', margin: '0px 10px' }}>
           <Col flex={1} style={{ height: '40px' }}>
             <Mentions
               autoFocus
@@ -808,7 +815,7 @@ const ViewMessges = ({
           </Col>
         </Row>
 
-        <Row gutter={5} style={{ height: '45px', margin: '0 10px' }}>
+        <Row gutter={5} style={{ height: '45px', margin: '0 10px 10px' }}>
           <Col>
             <Popover
               placement="topLeft"

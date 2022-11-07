@@ -1722,6 +1722,9 @@
   width: 100px;
   height: 100px;
 }
+.message-popover .ant-popover-inner-content {
+  padding: 0px;
+}
 .ant-switch-handle {
   top: 6px !important;
 }
