@@ -1,5 +1,14 @@
 import React from 'react';
-import { Table, Row, Col, Input, Drawer, Button, Typography } from 'antd';
+import {
+  Table,
+  Row,
+  Col,
+  Input,
+  Drawer,
+  Button,
+  Typography,
+  Tooltip,
+} from 'antd';
 
 import { CreateTagMutation, TagsQuery } from 'graphql/generated';
 import AddOffender from 'components/form-components/tags/offenderWarnings/AddOffenderWarning';
@@ -50,7 +59,7 @@ const OffenderWarningList = ({
         <Input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search for an Offender..."
+          placeholder="Search offender tags..."
           allowClear
         />
       </Col>
@@ -109,31 +118,34 @@ const OffenderWarningList = ({
           title: 'Options',
           dataIndex: 'Options',
           width: 100,
-          render: (value, record) => (
-            <>
-              <Button
-                disabled={saving}
-                onClick={() => {
-                  setOffenderId(record.key);
-                  toggleEditOffender();
-                }}
-                icon={
-                  <FontAwesomeIcon
-                    icon={faPenToSquare}
-                    style={{ marginRight: 10 }}
+          render: (_, record) => (
+            <Row gutter={8}>
+              <Col>
+                <Tooltip title="Edit Tag">
+                  <Button
+                    size="small"
+                    disabled={saving}
+                    onClick={() => {
+                      setOffenderId(record.key);
+                      toggleEditOffender();
+                    }}
+                    icon={<FontAwesomeIcon icon={faPenToSquare} />}
                   />
-                }
-              />
-              <Button
-                disabled={saving}
-                onClick={() => {
-                  deleteConfirm(record.key);
-                }}
-                icon={
-                  <FontAwesomeIcon icon={faTrash} style={{ marginRight: 5 }} />
-                }
-              />
-            </>
+                </Tooltip>
+              </Col>
+              <Col>
+                <Tooltip title="Delete Tag">
+                  <Button
+                    size="small"
+                    disabled={saving}
+                    onClick={() => {
+                      deleteConfirm(record.key);
+                    }}
+                    icon={<FontAwesomeIcon icon={faTrash} />}
+                  />
+                </Tooltip>
+              </Col>
+            </Row>
           ),
         },
       ]}
