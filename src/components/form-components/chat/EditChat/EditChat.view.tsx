@@ -46,7 +46,7 @@ const EditChat = ({
         <Col span={23}>
           <Form.Item
             name="name"
-            label="Chat Group Name"
+            label="Name"
             rules={[
               {
                 required: true,
@@ -60,7 +60,7 @@ const EditChat = ({
       </Row>
       <Row gutter={16}>
         <Col span={23}>
-          <Form.Item name="description" label="Chat Group Description">
+          <Form.Item name="description" label="Description">
             <Input.TextArea disabled={saving} />
           </Form.Item>
         </Col>
@@ -68,19 +68,19 @@ const EditChat = ({
 
       <Row gutter={16}>
         <Col span={23}>
-          <Form.Item name="user" label="users">
+          <Form.Item name="user" label="Users">
             <Select
               loading={usersLoading}
               disabled={saving}
               mode="multiple"
               maxTagCount={3}
-            >
-              {usersData?.users.map((user) => (
-                <Select.Option key={user.id} value={user.id}>
-                  {user.fullName}-{user.organisation}
-                </Select.Option>
-              ))}
-            </Select>
+              filterOption
+              optionFilterProp="label"
+              options={usersData?.users.map((user) => ({
+                value: user.id,
+                label: `${user.fullName} (${user.organisation})`,
+              }))}
+            />
           </Form.Item>
         </Col>
       </Row>

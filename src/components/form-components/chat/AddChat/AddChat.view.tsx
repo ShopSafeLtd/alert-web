@@ -28,7 +28,7 @@ const AddChat = ({
       <Col span={21}>
         <Form.Item
           name="name"
-          label="name"
+          label="Name"
           rules={[
             {
               required: true,
@@ -49,19 +49,19 @@ const AddChat = ({
 
     <Row gutter={16}>
       <Col span={21}>
-        <Form.Item name="users" label="users">
+        <Form.Item name="users" label="Users">
           <Select
             loading={usersLoading}
-            mode="multiple"
-            maxTagCount={2}
             disabled={saving}
-          >
-            {usersData?.users.map((user) => (
-              <Select.Option key={user.id} value={user.id}>
-                {user.fullName}
-              </Select.Option>
-            ))}
-          </Select>
+            mode="multiple"
+            maxTagCount={3}
+            filterOption
+            optionFilterProp="label"
+            options={usersData?.users.map((user) => ({
+              value: user.id,
+              label: `${user.fullName} (${user.organisation})`,
+            }))}
+          />
         </Form.Item>
       </Col>
     </Row>
@@ -80,7 +80,7 @@ const AddChat = ({
             disabled={saving}
             loading={saving}
           >
-            Create A New Chat
+            Create Chat Group
           </Button>
         </Col>
       </Row>

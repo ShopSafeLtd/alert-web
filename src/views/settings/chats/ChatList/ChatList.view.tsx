@@ -39,8 +39,8 @@ const ChatList = ({
       <Col flex={1} />
       <Col>
         <Button
-          type="primary"
           onClick={toggleAddChat}
+          type="primary"
           icon={
             <FontAwesomeIcon
               icon={faPlus}
@@ -49,7 +49,7 @@ const ChatList = ({
             />
           }
         >
-          Create New Chat
+          New Chat Group
         </Button>
       </Col>
     </Row>
@@ -74,7 +74,7 @@ const ChatList = ({
         },
         {
           key: 'description',
-          title: 'description',
+          title: 'Description',
           dataIndex: 'description',
           ellipsis: true,
         },
@@ -87,7 +87,7 @@ const ChatList = ({
     />
 
     <Drawer
-      title="Create A New Chat"
+      title="Create New Chat Group"
       visible={addChat}
       width="400"
       onClose={toggleAddChat}

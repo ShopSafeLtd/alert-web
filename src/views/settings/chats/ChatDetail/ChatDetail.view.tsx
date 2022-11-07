@@ -31,7 +31,6 @@ const ChatDetail = ({
       extra={[
         <Button
           key="2"
-          type="primary"
           disabled={saving}
           onClick={toggleEditChat}
           icon={
@@ -48,7 +47,6 @@ const ChatDetail = ({
           key="1"
           disabled={saving}
           onClick={deleteConfirm}
-          type="primary"
           icon={
             <FontAwesomeIcon
               size="lg"
@@ -83,7 +81,7 @@ const ChatDetail = ({
           },
           {
             key: 'organisation',
-            title: 'organisation',
+            title: 'Organisation',
             dataIndex: 'organisation',
           },
         ]}
