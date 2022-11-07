@@ -9,6 +9,7 @@ import {
   DeleteOffenderMutation,
 } from 'graphql/generated';
 import { MutationUpdaterFn } from '@apollo/client';
+import moment from 'moment';
 
 import EditIncident from 'components/form-components/recycled/RestoreIncident';
 import EditOffender from 'components/form-components/recycled/RestoreOffender';
@@ -106,12 +107,14 @@ const RecycleBin = ({
           title: 'Deleted At',
           dataIndex: 'deletedAt',
           ellipsis: true,
+          render: (value) => moment(value).format('hh:mm DD/MM/YYYY'),
         },
         {
           key: 'expiresAt',
           title: 'Scheduled Deletion',
           dataIndex: 'expiresAt',
           ellipsis: true,
+          render: (value) => moment(value).format('hh:mm DD/MM/YYYY'),
         },
         {
           key: 'restore',
@@ -127,6 +130,7 @@ const RecycleBin = ({
                 toggleRestore(record.type);
               }}
               icon={<SyncOutlined />}
+              size="small"
             />
           ),
         },
@@ -139,7 +143,9 @@ const RecycleBin = ({
         title: item?.incident?.subject || item?.offender?.name,
         deletedAt: item?.deletedAt,
         expiresAt: item?.expiresAt,
-        deletedBy: `${item?.deletedBy?.fullName}, ${item?.deletedBy?.organisation}.`,
+        deletedBy: item?.deletedBy
+          ? `${item?.deletedBy?.fullName}, ${item?.deletedBy?.organisation}.`
+          : 'Automatically Expired',
       }))}
     />
     <Drawer
