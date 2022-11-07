@@ -1,5 +1,14 @@
 import React from 'react';
-import { Table, Row, Col, Input, Drawer, Button, Typography } from 'antd';
+import {
+  Table,
+  Row,
+  Col,
+  Input,
+  Drawer,
+  Button,
+  Typography,
+  Tooltip,
+} from 'antd';
 import { CreateTagMutation, TagsQuery } from 'graphql/generated';
 import AddIncident from 'components/form-components/tags/crimeTypes/AddCrimeType';
 import EditIncident from 'components/form-components/tags/crimeTypes/EditCrimeType';
@@ -49,7 +58,7 @@ const CrimeTypeList = ({
         <Input
           value={search}
           onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search for an Incident..."
+          placeholder="Search crime types..."
           allowClear
         />
       </Col>
@@ -103,34 +112,37 @@ const CrimeTypeList = ({
         },
         {
           key: 'Options',
-          title: 'Options',
+          title: '',
           dataIndex: 'Options',
           width: 100,
-          render: (value, record) => (
-            <>
-              <Button
-                disabled={saving}
-                onClick={() => {
-                  setIncidentId(record.key);
-                  toggleEditIncident();
-                }}
-                icon={
-                  <FontAwesomeIcon
-                    icon={faPenToSquare}
-                    style={{ marginRight: 5 }}
+          render: (_, record) => (
+            <Row gutter={8}>
+              <Col>
+                <Tooltip title="Edit Crime Type">
+                  <Button
+                    size="small"
+                    disabled={saving}
+                    onClick={() => {
+                      setIncidentId(record.key);
+                      toggleEditIncident();
+                    }}
+                    icon={<FontAwesomeIcon icon={faPenToSquare} />}
                   />
-                }
-              />
-              <Button
-                disabled={saving}
-                onClick={() => {
-                  deleteConfirm(record.key);
-                }}
-                icon={
-                  <FontAwesomeIcon icon={faTrash} style={{ marginRight: 5 }} />
-                }
-              />
-            </>
+                </Tooltip>
+              </Col>
+              <Col>
+                <Tooltip title="Delete Crime Type">
+                  <Button
+                    size="small"
+                    disabled={saving}
+                    onClick={() => {
+                      deleteConfirm(record.key);
+                    }}
+                    icon={<FontAwesomeIcon icon={faTrash} />}
+                  />
+                </Tooltip>
+              </Col>
+            </Row>
           ),
         },
       ]}
