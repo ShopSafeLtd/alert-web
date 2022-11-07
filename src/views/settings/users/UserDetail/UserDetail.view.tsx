@@ -53,7 +53,6 @@ const userDetail = ({
       extra={[
         <Button
           key="4"
-          type="primary"
           disabled={saving}
           onClick={inviteConfirm}
           icon={
@@ -64,12 +63,11 @@ const userDetail = ({
             />
           }
         >
-          Send Invite
+          Resend Invite
         </Button>,
         data?.user?.disabled ? (
           <Button
             key="3"
-            type="primary"
             disabled={saving}
             onClick={enableConfirm}
             icon={
@@ -85,7 +83,6 @@ const userDetail = ({
         ) : (
           <Button
             key="2"
-            type="primary"
             disabled={saving}
             onClick={disableConfirm}
             icon={
@@ -103,7 +100,6 @@ const userDetail = ({
           key="1"
           disabled={saving}
           onClick={deleteConfirm}
-          type="primary"
           icon={
             <FontAwesomeIcon
               size="lg"
@@ -167,9 +163,11 @@ const userDetail = ({
         <Descriptions title="Groups">
           {data?.user?.groups && data?.user?.groups.length > 0 ? (
             <Descriptions.Item>
-              {data?.user?.groups
-                .map(({ name }, index) => (index === 0 ? name : ` ${name}`))
-                .toString()}
+              {data?.user?.groups.map(({ name, id }) => (
+                <Tag color="blue" key={id}>
+                  {name}
+                </Tag>
+              ))}
             </Descriptions.Item>
           ) : (
             <Descriptions.Item>
@@ -186,8 +184,11 @@ const userDetail = ({
             <Descriptions.Item>
               {data?.user?.chats
                 .map(({ chat }) => chat)
-                .map(({ name }, index) => (index === 0 ? name : ` ${name}`))
-                .toString()}
+                .map(({ name, id }) => (
+                  <Tag color="blue" key={id}>
+                    {name}
+                  </Tag>
+                ))}
             </Descriptions.Item>
           ) : (
             <Descriptions.Item>

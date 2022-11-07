@@ -129,7 +129,7 @@ const AddUser = ({
             { required: true, message: 'Please select a role for the user.' },
           ]}
         >
-          <Select>
+          <Select disabled={saving}>
             <Select.Option key={Role.User} value={Role.User}>
               User
             </Select.Option>
@@ -147,39 +147,21 @@ const AddUser = ({
     <Title level={4} style={{ marginBottom: 15 }}>
       User Address:
     </Title>
-    <Row gutter={60}>
+    <Row gutter={16}>
       <Col span={8}>
         <Form.Item name="building" label="Building">
           <Input disabled={saving} />
         </Form.Item>
       </Col>
       <Col span={8}>
-        <Form.Item
-          name="street"
-          label="Street"
-          rules={[
-            {
-              required: true,
-              message: 'Please enter a town/city for the address.',
-            },
-          ]}
-        >
+        <Form.Item name="street" label="Street">
           <Input disabled={saving} />
         </Form.Item>
       </Col>
     </Row>
-    <Row gutter={60}>
+    <Row gutter={16}>
       <Col span={8}>
-        <Form.Item
-          name="townCity"
-          label="Town/City"
-          rules={[
-            {
-              required: true,
-              message: 'Please enter a town/city for the address.',
-            },
-          ]}
-        >
+        <Form.Item name="townCity" label="Town/City">
           <Input disabled={saving} />
         </Form.Item>
       </Col>
@@ -191,16 +173,7 @@ const AddUser = ({
     </Row>
     <Row gutter={60}>
       <Col span={8}>
-        <Form.Item
-          name="postcode"
-          label="Postcode"
-          rules={[
-            {
-              required: true,
-              message: 'Please enter postcode for the address.',
-            },
-          ]}
-        >
+        <Form.Item name="postcode" label="Postcode">
           <Input disabled={saving} />
         </Form.Item>
       </Col>

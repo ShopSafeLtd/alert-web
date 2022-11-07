@@ -137,7 +137,7 @@ const EditUser = ({
               { required: true, message: 'Please select a role for the user.' },
             ]}
           >
-            <Select>
+            <Select disabled={saving}>
               <Select.Option key={Role.User} value={Role.User}>
                 User
               </Select.Option>
@@ -234,13 +234,13 @@ const EditUser = ({
               disabled={saving}
               mode="multiple"
               maxTagCount={2}
-            >
-              {groupsData?.groups.map((group) => (
-                <Select.Option key={group.id} value={group.id}>
-                  {group.name}
-                </Select.Option>
-              ))}
-            </Select>
+              options={groupsData?.groups.map((group) => ({
+                value: group.id,
+                label: group.name,
+              }))}
+              optionFilterProp="label"
+              optionLabelProp="label"
+            />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -250,6 +250,12 @@ const EditUser = ({
               disabled={saving}
               mode="multiple"
               maxTagCount={2}
+              options={chatsData?.chats.map((chat) => ({
+                value: chat.id,
+                label: chat.name,
+              }))}
+              optionFilterProp="label"
+              optionLabelProp="label"
             >
               {chatsData?.chats.map((chat) => (
                 <Select.Option key={chat.id} value={chat.id}>
