@@ -69,13 +69,13 @@ const UserList = ({
           value={selectedGroups}
           onChange={setSelectedGroups}
           placeholder="Filter Groups"
-        >
-          {groupsData?.groups.map((group) => (
-            <Select.Option key={group.name} value={group.id}>
-              {group.name}
-            </Select.Option>
-          ))}
-        </Select>
+          options={groupsData?.groups.map((group) => ({
+            value: group.id,
+            label: group.name,
+          }))}
+          optionFilterProp="label"
+          optionLabelProp="label"
+        />
       </Col>
       <Col flex={1} />
       <Col>
