@@ -115,7 +115,7 @@ const OffenderWarningList = ({
 
         {
           key: 'Options',
-          title: 'Options',
+          title: '',
           dataIndex: 'Options',
           width: 100,
           render: (_, record) => (
