@@ -31,7 +31,6 @@ const GroupDetail = ({
       extra={[
         <Button
           key="2"
-          type="primary"
           disabled={saving}
           onClick={toggleEditGroup}
           icon={
@@ -48,7 +47,6 @@ const GroupDetail = ({
           key="1"
           disabled={saving}
           onClick={deleteConfirm}
-          type="primary"
           icon={
             <FontAwesomeIcon
               size="lg"
@@ -83,7 +81,7 @@ const GroupDetail = ({
           },
           {
             key: 'organisation',
-            title: 'organisation',
+            title: 'Organisation',
             dataIndex: 'organisation',
           },
         ]}

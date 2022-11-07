@@ -25,7 +25,7 @@ const AddChat = ({
 }: Props): JSX.Element => (
   <Form layout="vertical" onFinish={onSubmit}>
     <Row gutter={16}>
-      <Col span={21}>
+      <Col span={23}>
         <Form.Item
           name="name"
           label="Name"
@@ -40,7 +40,7 @@ const AddChat = ({
         </Form.Item>
       </Col>
 
-      <Col span={21}>
+      <Col span={23}>
         <Form.Item name="description" label="Description">
           <Input.TextArea disabled={saving} />
         </Form.Item>
@@ -48,7 +48,7 @@ const AddChat = ({
     </Row>
 
     <Row gutter={16}>
-      <Col span={21}>
+      <Col span={23}>
         <Form.Item name="users" label="Users">
           <Select
             loading={usersLoading}

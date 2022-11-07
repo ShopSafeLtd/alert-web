@@ -49,7 +49,7 @@ const GroupList = ({
             />
           }
         >
-          Create New Groups
+          New Group
         </Button>
       </Col>
     </Row>
@@ -74,7 +74,7 @@ const GroupList = ({
         },
         {
           key: 'description',
-          title: 'description',
+          title: 'Description',
           dataIndex: 'description',
           ellipsis: true,
         },
@@ -87,7 +87,7 @@ const GroupList = ({
     />
 
     <Drawer
-      title="Invite New Group"
+      title="Create New Group"
       visible={addGroup}
       width="400"
       onClose={toggleAddGroup}
