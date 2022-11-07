@@ -7,10 +7,7 @@ const Terms = (): JSX.Element => (
     <Card>
       <Table
         size="small"
-        pagination={{
-          defaultPageSize: 20,
-          pageSize: 20,
-        }}
+        pagination={false}
         columns={[
           {
             key: 'term',
