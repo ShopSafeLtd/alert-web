@@ -226,6 +226,12 @@ const AddUser = ({
             disabled={saving}
             mode="multiple"
             maxTagCount={2}
+            options={groupsData?.groups.map((group) => ({
+              value: group.id,
+              label: group.name,
+            }))}
+            optionFilterProp="label"
+            optionLabelProp="label"
           >
             {groupsData?.groups.map((group) => (
               <Select.Option key={group.id} value={group.id}>
@@ -236,19 +242,19 @@ const AddUser = ({
         </Form.Item>
       </Col>
       <Col span={12}>
-        <Form.Item name="chats" label="Chats">
+        <Form.Item name="chats" label="Chat Groups">
           <Select
             loading={chatsLoading}
             disabled={saving}
             mode="multiple"
             maxTagCount={2}
-          >
-            {chatsData?.chats.map((chat) => (
-              <Select.Option key={chat.id} value={chat.id}>
-                {chat.name}
-              </Select.Option>
-            ))}
-          </Select>
+            options={chatsData?.chats.map((chat) => ({
+              value: chat.id,
+              label: chat.name,
+            }))}
+            optionFilterProp="label"
+            optionLabelProp="label"
+          />
         </Form.Item>
       </Col>
     </Row>
