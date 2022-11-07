@@ -15,7 +15,6 @@ import {
   Upload,
   Space,
 } from 'antd';
-import ImgCrop from 'antd-img-crop';
 
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
@@ -107,20 +106,18 @@ const SchemeDetail = ({
           <Row gutter={20}>
             <Col span={20}>
               <Form.Item name="logo" label="Scheme Logo">
-                <ImgCrop rotate>
-                  <Upload
-                    action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
-                    listType="picture-card"
-                    fileList={fileList}
-                    beforeUpload={beforeUpload}
-                    onChange={imgChange}
-                    onPreview={onPreview}
-                    maxCount={1}
-                    accept=".png,.jpeg,.webp"
-                  >
-                    {fileList.length < 2 && '+ Upload'}
-                  </Upload>
-                </ImgCrop>
+                <Upload
+                  action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                  listType="picture-card"
+                  fileList={fileList}
+                  beforeUpload={beforeUpload}
+                  onChange={imgChange}
+                  onPreview={onPreview}
+                  maxCount={1}
+                  accept=".png,.jpeg,.webp"
+                >
+                  {fileList.length === 0 && '+ Upload'}
+                </Upload>
               </Form.Item>
             </Col>
           </Row>
@@ -215,7 +212,7 @@ const SchemeDetail = ({
                   <ExclamationCircleOutlined
                     style={{ margin: 8, color: '#f5222d' }}
                   />
-                  Once this period has elapsed, the item will be transfered to
+                  Once this period has elapsed, the item will be transferred to
                   the recycle bin.
                 </Text>
 

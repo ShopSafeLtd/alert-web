@@ -34,7 +34,6 @@ const useSchemeDetail = (): Return => {
   const [saving, setSaving] = useState(false);
   const [imageChange, setImageChange] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
-
   const { data: schemeData, loading } = useSchemeQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
