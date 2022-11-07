@@ -25,7 +25,7 @@ const AddCrimeType = ({ onSubmit, onClose, saving }: Props): JSX.Element => (
       </Col>
     </Row>
     <Row gutter={16}>
-      <Col span={21}>
+      <Col span={24}>
         <Form.Item
           name="name"
           label="Name"
@@ -40,7 +40,7 @@ const AddCrimeType = ({ onSubmit, onClose, saving }: Props): JSX.Element => (
         </Form.Item>
       </Col>
 
-      <Col>
+      <Col span={24}>
         <Form.Item name="description" label="Description">
           <Input.TextArea rows={10} disabled={saving} />
         </Form.Item>
