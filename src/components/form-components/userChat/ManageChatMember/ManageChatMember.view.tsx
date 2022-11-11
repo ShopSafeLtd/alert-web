@@ -3,6 +3,7 @@ import {
   Avatar,
   Button,
   Col,
+  Divider,
   Drawer,
   Empty,
   Form,
@@ -110,8 +111,9 @@ const EditChat = ({
         ) : (
           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
         )}
+        <Divider style={{ marginBottom: 15 }} />
         {usersData && usersData.length > 0 && (
-          <Row style={{ marginTop: 15 }} gutter={16} justify="end">
+          <Row style={{ marginTop: 0 }} gutter={16} justify="center">
             <Col>
               <Button
                 disabled={saving}

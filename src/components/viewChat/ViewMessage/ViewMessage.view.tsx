@@ -6,12 +6,10 @@ import Picker from 'emoji-picker-react';
 import {
   Row,
   Col,
-  Avatar,
   Button,
   Form,
   FormInstance,
   Popover,
-  Skeleton,
   Tag,
   PageHeader,
   Divider,
@@ -23,19 +21,14 @@ import {
   Typography,
   Popconfirm,
   Image,
+  Empty,
+  Skeleton,
 } from 'antd';
 import moment, { Moment } from 'moment';
-import { MessageType } from 'types';
-import {
-  faImage,
-  faPlus,
-  faTrash,
-  faUsers,
-} from '@fortawesome/pro-light-svg-icons';
+import { faImage, faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   ChatQuery,
-  MessagesQuery,
   ListIncidentsQuery,
   Age,
   Gender,
@@ -48,9 +41,10 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import LinkOffender from 'components/form-components/incident/offender/AddExisitingOffender';
 import LinkIncident from 'components/form-components/offender/LinkIncident';
 import Content from '../Message/Message.view';
+import ViewMessageSkeleton from './ViewMessageSkeleton';
 
 const { Option, getMentions } = Mentions;
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph, Text } = Typography;
 interface OffenderData {
   id: string;
   updatedAt?: Date;
@@ -81,33 +75,46 @@ interface OffenderData {
   imageUid?: string[] | undefined;
 }
 interface DatedMessages {
-  type: string;
-  date?: string;
-  id?: string;
-  sameUser?: boolean | null;
-  sent?: boolean | null;
-  content?: string;
-  createdAt?: Moment;
-  from?: { id: string; fullName: string; organisation: string };
-  chat?: { id: string; name: string };
-  images?: { id: string; optimised?: string | null; url?: string | null }[];
-  incidents?: {
+  day: string;
+  messages: {
     id: string;
-    subject?: string | null;
-    description: string;
-    dayTime?: string | null;
-    images?: { id: string; optimised?: string | null; url?: string | null }[];
-  }[];
-  offenders?: {
-    id: string;
-    updatedAt?: Date;
-    age?: Age | null;
-    build?: Build | null;
-    dateOfBirth?: Date | null;
-    name?: string | null;
-    race?: Race | null;
-    gender?: Gender | null;
-    images?: { id: string; optimised?: string | null; url?: string | null }[];
+    from?: { id: string; fullName: string; organisation: string };
+    messages: {
+      id?: string;
+      sameUser?: boolean | null;
+      sent?: boolean | null;
+      content?: string;
+      createdAt?: Moment;
+      from?: { id: string; fullName: string; organisation: string };
+      chat?: { id: string; name: string };
+      images?: { id: string; optimised?: string | null; url?: string | null }[];
+      incidents?: {
+        id: string;
+        subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        images?: {
+          id: string;
+          optimised?: string | null;
+          url?: string | null;
+        }[];
+      }[];
+      offenders?: {
+        id: string;
+        updatedAt?: Date;
+        age?: Age | null;
+        build?: Build | null;
+        dateOfBirth?: Date | null;
+        name?: string | null;
+        race?: Race | null;
+        gender?: Gender | null;
+        images?: {
+          id: string;
+          optimised?: string | null;
+          url?: string | null;
+        }[];
+      }[];
+    }[];
   }[];
 }
 // interface FormData {
@@ -122,13 +129,12 @@ interface MemberData {
 
 interface Props {
   onSubmit: () => void;
-  data: MessagesQuery | undefined;
   loading: boolean;
   chatData: ChatQuery | undefined;
   form: FormInstance<FormData>;
   saving: boolean;
   scrolledToTop: () => void;
-  datedMessages: DatedMessages[];
+  datedMessages: DatedMessages[] | null;
   userId: string | undefined;
   loadMore: boolean;
   deleteMessageConfirm: (value: string) => void;
@@ -170,7 +176,6 @@ interface Props {
 
 const ViewMessges = ({
   onSubmit,
-  data,
   loading,
   chatData,
   form,
@@ -215,7 +220,7 @@ const ViewMessges = ({
   useEffect(() => {
     if (ref.current && ref.current.scrollIntoView) {
       ref.current.scrollIntoView({
-        behavior: 'smooth',
+        // behavior: 'smooth',
         block: 'end',
         inline: 'nearest',
       });
@@ -227,14 +232,29 @@ const ViewMessges = ({
     deleteIncidentConfirm('1', '1');
   }
 
-  return !data && loading ? (
-    <Skeleton active />
-  ) : (
+  return (
     <div className="view-message-container">
       <PageHeader
-        title={chatData?.chat?.name}
+        style={{ padding: '4px 24px 1px' }}
+        title={
+          chatData?.chat?.name || (
+            <Skeleton.Input
+              active
+              style={{
+                borderRadius: 5,
+                marginLeft: 20,
+                height: 35,
+                marginTop: 10,
+              }}
+            />
+          )
+        }
         subTitle={
-          <Tag color="red">
+          <Tag
+            color="red"
+            style={{ cursor: 'pointer' }}
+            onClick={toggleManageChat}
+          >
             <FontAwesomeIcon
               size="lg"
               icon={faUser}
@@ -251,25 +271,11 @@ const ViewMessges = ({
         extra={
           adminRights && [
             <Button
-              key="2"
-              type="primary"
-              disabled={saving}
-              onClick={toggleManageChat}
-              icon={
-                <FontAwesomeIcon
-                  icon={faUsers}
-                  size="lg"
-                  style={{ marginRight: 5 }}
-                />
-              }
-            >
-              Manage Chat Members
-            </Button>,
-            <Button
               key="1"
               disabled={saving}
               onClick={deleteChatConfirm}
-              type="primary"
+              type="text"
+              size="small"
               icon={
                 <FontAwesomeIcon
                   icon={faTrash}
@@ -285,308 +291,139 @@ const ViewMessges = ({
       />
       <Divider style={{ margin: 0 }} />
 
-      {datedMessages && datedMessages.length > 0 ? (
-        <InfiniteScroll
-          height={
-            (fileList && fileList.length > 0) ||
-            (offendersData && offendersData.length > 0) ||
-            (incidentsData && incidentsData.length > 0)
-              ? 'calc(100vh - 377px)'
-              : 'calc(100vh - 267px)'
-          }
-          className="message-container"
-          initialScrollY={0}
-          dataLength={datedMessages.length}
-          next={scrolledToTop}
-          hasMore={loadMore}
-          inverse
-          loader={
-            <div className="message-date">
-              <div className="date-line" />
-              <div className="date">Loading...</div>
-              <div className="date-line" />
-            </div>
-          }
-        >
-          {datedMessages.map(
-            ({
-              type,
-              date,
-              id,
-              content,
-              sameUser,
-              from,
-              images,
-              incidents,
-              offenders,
-            }) => (
-              <div key={id}>
-                {type === MessageType.date && (
-                  <div className="message-date">
-                    <div className="date-line" />
-                    <div className="date">{date}</div>
-                    <div className="date-line" />
-                  </div>
-                )}
-                <div className="message-content" key={id}>
-                  {type === MessageType.message && !sameUser && (
-                    <Row
-                      justify={from?.id === userId ? 'end' : 'start'}
-                      className="message-avatar-row"
-                    >
-                      <Col>
-                        <Avatar
-                          style={{
-                            marginRight: 5,
-                          }}
-                          className={
-                            from?.id === userId
-                              ? 'currentUser'
-                              : 'message-avatar'
-                          }
-                        >
-                          {from?.fullName[0]}
-                        </Avatar>
-                      </Col>
-                      <Col>{from?.fullName}</Col>
-                    </Row>
-                  )}
-
-                  <Row
-                    justify={from?.id === userId ? 'end' : 'start'}
-                    style={{ marginBottom: 5 }}
-                  >
-                    <Col>
-                      {adminRights ? (
-                        <Popover
-                          trigger="click"
-                          placement={from?.id === userId ? 'left' : 'right'}
-                          overlayClassName="message-popover"
-                          content={
-                            adminRights && (
-                              <Button
-                                type="text"
-                                disabled={saving}
-                                icon={
-                                  <FontAwesomeIcon
-                                    style={{ marginRight: 5 }}
-                                    icon={faTrash}
-                                    size="lg"
-                                  />
-                                }
-                                onClick={() => {
-                                  deleteMessageConfirm(id || '');
-                                }}
-                                size="small"
-                              >
-                                Delete Message
-                              </Button>
-                            )
-                          }
-                        >
-                          <div
-                            className={
-                              from?.id === userId
-                                ? 'message-content-card currentUser-card'
-                                : 'message-content-card'
-                            }
-                          >
-                            {type === MessageType.message &&
-                              images &&
-                              images.length > 0 && (
-                                <Row style={{ margin: 5 }}>
-                                  {images.map((image) => (
-                                    <Col key={image.id}>
-                                      <div className="message-upload-card">
-                                        {/* <div
-                                          className="message-image"
-                                          style={{
-                                            backgroundImage: `url(${image.optimised})`,
-                                          }}
-                                        /> */}
-                                        <Image
-                                          width={100}
-                                          height={100}
-                                          src={image.optimised || ''}
-                                        />
-                                      </div>
-                                    </Col>
-                                  ))}
-                                </Row>
-                              )}
-                            {type === MessageType.message &&
-                              offenders &&
-                              offenders.length > 0 &&
-                              offenders.map((offender) => (
-                                <Row key={offender.id} style={{ margin: 5 }}>
-                                  <Col key={offender.id}>
-                                    <Card size="small" className="message-card">
-                                      <Row gutter={5} wrap={false}>
-                                        <Col>
-                                          {offender.images &&
-                                            offender.images.length > 0 && (
-                                              //   <div
-                                              //     className="message-image"
-                                              //     style={{
-                                              //       backgroundImage: `url(${offender.images[0].optimised})`,
-                                              //     }}
-                                              // />
-                                              <Image
-                                                width={100}
-                                                height={100}
-                                                src={
-                                                  offender.images[0]
-                                                    .optimised || ''
-                                                }
-                                              />
-                                            )}
-                                        </Col>
-
-                                        <Col
-                                          flex={1}
-                                          style={{
-                                            marginTop: 10,
-                                            marginLeft: 5,
-                                          }}
-                                        >
-                                          <Title level={4}>
-                                            {' '}
-                                            {offender.name}
-                                          </Title>
-                                          <Descriptions size="small">
-                                            {/* <Descriptions.Item
-                                                  label="Offender"
-                                                  span={2}
-                                                >
-                                                  {offender.name}
-                                                </Descriptions.Item> */}
-                                            <Descriptions.Item label="Last Active">
-                                              {moment(
-                                                offender.updatedAt || moment()
-                                              ).format(
-                                                `ddd MMM DD YYYY - HH:mm`
-                                              )}
-                                            </Descriptions.Item>
-                                          </Descriptions>
-                                        </Col>
-                                      </Row>
-                                    </Card>
-                                  </Col>
-                                </Row>
-                              ))}
-                            {type === MessageType.message &&
-                              incidents &&
-                              incidents.length > 0 &&
-                              incidents.map((incident) => (
-                                <Row
-                                  key={incident.id}
-                                  justify={
-                                    from?.id === userId ? 'end' : 'start'
-                                  }
-                                  style={{ margin: 5 }}
-                                >
-                                  <Col key={incident.id}>
-                                    <Card size="small" className="message-card">
-                                      <Row gutter={5} wrap={false}>
-                                        <Col>
-                                          {incident?.images &&
-                                            incident.images.length > 0 && (
-                                              <Image
-                                                width={100}
-                                                height={100}
-                                                src={
-                                                  incident.images[0]
-                                                    .optimised || ''
-                                                }
-                                              />
-                                            )}
-                                        </Col>
-                                        <Col
-                                          flex={1}
-                                          style={{
-                                            marginTop: 10,
-                                            marginLeft: 5,
-                                          }}
-                                        >
-                                          <Paragraph
-                                            strong
-                                            ellipsis
-                                            style={{
-                                              marginBottom: '0.5rem',
-                                              fontSize: 15,
-                                            }}
-                                          >
-                                            {incident.subject}
-                                          </Paragraph>
-                                          <Descriptions size="small">
-                                            <Descriptions.Item label="Created At">
-                                              {incident.dayTime}
-                                            </Descriptions.Item>
-                                          </Descriptions>
-                                          <Paragraph
-                                            type="secondary"
-                                            ellipsis
-                                            style={{
-                                              marginBottom: '0.5rem',
-                                            }}
-                                          >
-                                            {incident.description}
-                                          </Paragraph>
-                                        </Col>
-                                      </Row>
-                                    </Card>
-                                  </Col>
-                                </Row>
-                              ))}
-                            {type === MessageType.message && content && (
-                              <Row key={id}>
-                                <div className="message-content-bubble">
-                                  <Col>{content}</Col>
-                                </div>
-                              </Row>
-                            )}
-                          </div>
-                        </Popover>
-                      ) : (
-                        <Content
-                          type={type}
-                          id={id}
-                          content={content}
-                          from={from}
-                          images={images}
-                          incidents={incidents}
-                          offenders={offenders}
-                          userId={userId}
-                        />
-                      )}
-                    </Col>
-                  </Row>
-                </div>
-              </div>
-            )
-          )}
-
-          <div ref={ref} />
-        </InfiniteScroll>
-      ) : (
-        <div
-          className="message-container"
-          style={{
-            height:
-              (fileList && fileList.length > 0) ||
-              (offendersData && offendersData.length > 0) ||
-              (incidentsData && incidentsData.length > 0)
-                ? 'calc(100vh - 365px)'
-                : 'calc(100vh - 255px)',
-          }}
-        >
+      <InfiniteScroll
+        height={
+          (fileList && fileList.length > 0) ||
+          (offendersData && offendersData.length > 0) ||
+          (incidentsData && incidentsData.length > 0)
+            ? 'calc(100vh - 349px)'
+            : 'calc(100vh - 239px)'
+        }
+        className="message-container"
+        initialScrollY={0}
+        dataLength={datedMessages?.length || 0}
+        next={scrolledToTop}
+        hasMore={loadMore}
+        inverse
+        style={{
+          justifyContent: 'end',
+          // display: 'flex',
+          flexDirection: 'column',
+        }}
+        loader={
           <div className="message-date">
             <div className="date-line" />
-            <div className="date">No messages in this chat.</div>
+            <div className="date">Loading...</div>
             <div className="date-line" />
           </div>
-        </div>
-      )}
+        }
+      >
+        {!datedMessages && <ViewMessageSkeleton />}
+        {!datedMessages || (loading && <ViewMessageSkeleton />)}
+        {!loading && datedMessages?.length === 0 && (
+          <div
+            style={{
+              height:
+                (fileList && fileList.length > 0) ||
+                (offendersData && offendersData.length > 0) ||
+                (incidentsData && incidentsData.length > 0)
+                  ? 'calc(100vh - 349px)'
+                  : 'calc(100vh - 239px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Empty description="This is an empty chat group, type the first message below." />
+          </div>
+        )}
+        {!loading &&
+          datedMessages &&
+          datedMessages.length > 0 &&
+          datedMessages?.map((message) => (
+            <div key={message.day}>
+              <div className="message-date">
+                <div className="date-line" />
+                <Text className="date" type="secondary">
+                  {message.day}
+                </Text>
+                <div className="date-line" />
+              </div>
+              {message.messages.map((user) => (
+                <div className="message-content" key={user.id}>
+                  {user.messages.map((m, index) => (
+                    <Row
+                      justify={m.from?.id === userId ? 'end' : 'start'}
+                      style={{ marginBottom: 5 }}
+                      key={m.id}
+                    >
+                      <Col>
+                        {adminRights ? (
+                          <Popover
+                            trigger="click"
+                            placement={m.from?.id === userId ? 'left' : 'right'}
+                            overlayClassName="message-popover"
+                            content={
+                              adminRights && (
+                                <Button
+                                  type="text"
+                                  disabled={saving}
+                                  icon={
+                                    <FontAwesomeIcon
+                                      style={{ marginRight: 5 }}
+                                      icon={faTrash}
+                                      size="lg"
+                                    />
+                                  }
+                                  onClick={() => {
+                                    deleteMessageConfirm(m.id || '');
+                                  }}
+                                  size="small"
+                                >
+                                  Delete Message
+                                </Button>
+                              )
+                            }
+                          >
+                            <div>
+                              <Content
+                                id={m.id}
+                                content={m.content}
+                                from={m.from}
+                                images={m.images}
+                                incidents={m.incidents}
+                                offenders={m.offenders}
+                                userId={userId}
+                                showUser={m.from?.id === userId}
+                                showDate={index === 0}
+                                createdAt={m.createdAt}
+                              />
+                            </div>
+                          </Popover>
+                        ) : (
+                          <Content
+                            id={m.id}
+                            content={m.content}
+                            from={m.from}
+                            images={m.images}
+                            incidents={m.incidents}
+                            offenders={m.offenders}
+                            showUser={m.from?.id === userId}
+                            showDate={index === 0}
+                            userId={userId}
+                            createdAt={m.createdAt}
+                          />
+                        )}
+                      </Col>
+                    </Row>
+                  ))}
+                </div>
+              ))}
+            </div>
+          ))}
+
+        <div ref={ref} />
+      </InfiniteScroll>
 
       <Form
         form={form}

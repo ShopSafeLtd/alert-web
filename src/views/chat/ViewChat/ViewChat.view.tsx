@@ -17,7 +17,7 @@ import {
   UserChatsQuery,
 } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faUser } from '@fortawesome/pro-light-svg-icons';
+import { faPenToSquare, faUser } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
 import ViewMessage from 'components/viewChat/ViewMessage';
 import moment from 'moment';
@@ -25,9 +25,15 @@ import AddChat from 'components/form-components/chat/AddChat';
 import { MutationUpdaterFn } from '@apollo/client';
 
 const { Title, Paragraph, Text } = Typography;
+
+const formatChatDate = (date: Date) => {
+  if (moment(date).format('DD/MM/YY') === moment().format('DD/MM/YY'))
+    return moment(date).format('hh:mm');
+  return moment(date).format('hh:mm DD/MM');
+};
+
 interface Props {
   data: UserChatsQuery | undefined;
-  loading: boolean;
   saving: boolean;
   handleMarkAsRead: (value: string | undefined) => void;
   chatId: string;
@@ -41,7 +47,6 @@ interface Props {
 
 const ViewOffender = ({
   data,
-  loading,
   saving,
   handleMarkAsRead,
   chatId,
@@ -54,28 +59,30 @@ const ViewOffender = ({
 }: Props): JSX.Element => (
   <div className="page-container">
     <Row>
-      <Col span={7}>
+      <Col span={7} style={{ backgroundColor: '#FFF' }}>
         <div className="chats-side-list">
-          <Row style={{ margin: '20px 5px 5px 10px' }}>
+          <Row style={{ margin: '12px 5px 5px 10px' }}>
             <Col flex={1}>
-              <Title level={2} style={{ marginTop: 5 }}>
-                Chat Groups
+              <Title level={3} style={{ marginTop: 5 }}>
+                Chats
               </Title>
             </Col>
             {adminRights && (
               <Col>
                 <Button
-                  type="primary"
+                  type="ghost"
+                  danger
+                  size="small"
                   onClick={toggleAddChat}
                   icon={
                     <FontAwesomeIcon
-                      icon={faPlus}
+                      icon={faPenToSquare}
                       size="lg"
                       style={{ marginRight: 5 }}
                     />
                   }
                 >
-                  Create Chat
+                  New Chat
                 </Button>
               </Col>
             )}
@@ -83,7 +90,7 @@ const ViewOffender = ({
           {data?.user?.chats && data.user.chats.length > 0 ? (
             <List
               itemLayout="horizontal"
-              loading={loading}
+              loading={!data}
               split
               dataSource={data?.user?.chats}
               renderItem={({
@@ -102,7 +109,6 @@ const ViewOffender = ({
                     key={id}
                   >
                     <List.Item.Meta
-                      style={{ marginTop: 10 }}
                       avatar={
                         <Avatar className="chat-item-avatar">
                           {firstLetter}
@@ -113,10 +119,11 @@ const ViewOffender = ({
                           <Col>
                             <Paragraph
                               style={{
-                                fontSize: newMessages || mentioned ? 20 : 18,
-                                marginBottom: 3,
+                                fontSize: 16,
+                                marginBottom: 0,
+                                fontWeight:
+                                  newMessages || mentioned ? 600 : 400,
                               }}
-                              strong={newMessages || mentioned || false}
                             >
                               {name}
                             </Paragraph>
@@ -137,18 +144,24 @@ const ViewOffender = ({
                             </span>
                           </Col>
                           <Col>
-                            <Row>
-                              {messages && messages.length > 0 ? (
-                                <Col>
-                                  {moment(
-                                    messages?.slice(-1)[0].createdAt
-                                  ).format('MM/DD/YYYY')}
-                                </Col>
-                              ) : (
-                                <Col>
-                                  {moment(createdAt).format('MM/DD/YYYY')}
-                                </Col>
-                              )}
+                            <Row align="middle">
+                              <Col>
+                                <Paragraph
+                                  style={{
+                                    fontSize: 13,
+                                    marginTop: 3,
+                                    marginBottom: 3,
+                                    fontWeight:
+                                      newMessages || mentioned ? 600 : 400,
+                                  }}
+                                >
+                                  {messages && messages.length > 0
+                                    ? formatChatDate(
+                                        messages?.slice(-1)[0].createdAt
+                                      )
+                                    : formatChatDate(createdAt)}
+                                </Paragraph>
+                              </Col>
                             </Row>
                           </Col>
                         </Row>
@@ -158,7 +171,8 @@ const ViewOffender = ({
                           <Col flex={1}>
                             <Paragraph
                               style={{
-                                fontSize: newMessages || mentioned ? 16 : 14,
+                                fontSize: 12,
+                                marginBottom: 0,
                               }}
                               ellipsis
                               strong={newMessages || mentioned || false}

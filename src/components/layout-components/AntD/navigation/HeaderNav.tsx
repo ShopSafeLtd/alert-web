@@ -1,24 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { Layout } from "antd";
-// eslint-disable-next-line
-import Logo from "./Logo";
-// eslint-disable-next-line
-import NavPanel from "./NavPanel";
-// eslint-disable-next-line
-import NavSearch from "../NavSearch";
-// eslint-disable-next-line
-import SearchInput from "../NavSearch/SearchInput";
-import NavProfile from "./NavProfile";
-import NavScheme from "./NavScheme";
-// eslint-disable-next-line
-import NavNotification from "./NavNotification";
-
+import React, { useState, useEffect } from 'react';
+import { Layout } from 'antd';
+import Logo from './Logo';
+import NavPanel from './NavPanel';
+import NavProfile from './NavProfile';
+import NavScheme from './NavScheme';
 import {
   SIDE_NAV_COLLAPSED_WIDTH,
   SIDE_NAV_WIDTH,
-} from "constants/ThemeConstant";
-import utils from "utils";
-import { useStoreState, NavType } from "state";
+} from 'constants/ThemeConstant';
+import utils from 'utils';
+import { useStoreState, NavType } from 'state';
 
 const { Header } = Layout;
 
@@ -56,7 +47,7 @@ export const HeaderNav = (props: Props) => {
   const mode = () => {
     if (!headerNavColor) {
       return utils.getColorContrast(
-        currentTheme === "dark" ? "#00000" : "#ffffff"
+        currentTheme === 'dark' ? '#00000' : '#ffffff'
       );
     }
     return utils.getColorContrast(headerNavColor);
@@ -64,7 +55,7 @@ export const HeaderNav = (props: Props) => {
   const navMode = mode();
   const getNavWidth = () => {
     if (isNavTop || isMobile) {
-      return "0px";
+      return '0px';
     }
     if (navCollapsed) {
       return `${SIDE_NAV_COLLAPSED_WIDTH}px`;
@@ -84,7 +75,7 @@ export const HeaderNav = (props: Props) => {
       className={`app-header ${navMode}`}
       style={{ backgroundColor: headerNavColor }}
     >
-      <div className={`app-header-wrapper ${isNavTop ? "layout-top-nav" : ""}`}>
+      <div className={`app-header-wrapper ${isNavTop ? 'layout-top-nav' : ''}`}>
         <Logo logoType={navMode} />
         <div className="nav" style={{ width: `calc(100% - ${getNavWidth()})` }}>
           <div className="nav-left">

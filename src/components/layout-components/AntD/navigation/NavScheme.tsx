@@ -12,7 +12,7 @@ import { useStoreState, Scheme, useStoreActions } from 'state';
 
 const { Text } = Typography;
 
-export const NavNotification = () => {
+export const NavScheme = () => {
   const schemes = useStoreState((state) => state.user.schemes);
   const activeScheme = useStoreState((state) => state.scheme.id);
   const activeSchemeName = useStoreState((state) => state.scheme.name);
@@ -91,26 +91,34 @@ export const NavNotification = () => {
       visible={visible}
       trigger={['click']}
     >
-      <Menu mode="horizontal">
-        <Menu.Item>
-          <FontAwesomeIcon
-            style={{ fontSize: 20, color: '#424242', marginRight: 10 }}
-            icon={faCity}
-          />
-          <Text>{activeSchemeName}</Text>
-          <FontAwesomeIcon
-            style={{
-              fontSize: 20,
-              color: '#424242',
-              marginLeft: 10,
-              marginBottom: -3,
-            }}
-            icon={faCaretDown}
-          />
-        </Menu.Item>
-      </Menu>
+      <Menu
+        mode="horizontal"
+        items={[
+          {
+            key: 0,
+            label: (
+              <>
+                <FontAwesomeIcon
+                  style={{ fontSize: 20, color: '#424242', marginRight: 10 }}
+                  icon={faCity}
+                />
+                <Text>{activeSchemeName}</Text>
+                <FontAwesomeIcon
+                  style={{
+                    fontSize: 20,
+                    color: '#424242',
+                    marginLeft: 10,
+                    marginBottom: -3,
+                  }}
+                  icon={faCaretDown}
+                />
+              </>
+            ),
+          },
+        ]}
+      />
     </Dropdown>
   );
 };
 
-export default NavNotification;
+export default NavScheme;

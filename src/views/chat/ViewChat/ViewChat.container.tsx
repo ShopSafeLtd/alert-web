@@ -7,7 +7,6 @@ const ViewChat = (): JSX.Element => {
   const chatId = useParams().id;
   const {
     data,
-    loading,
     saving,
     handleMarkAsRead,
     currentId,
@@ -22,7 +21,6 @@ const ViewChat = (): JSX.Element => {
   return (
     <View
       data={data}
-      loading={loading}
       saving={saving}
       chatId={chatId || currentId || ''}
       handleMarkAsRead={handleMarkAsRead}

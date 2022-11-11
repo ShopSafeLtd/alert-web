@@ -24,7 +24,6 @@ import {
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import moment, { Moment } from 'moment';
-import { MessageType } from 'types/enums';
 import { notification, Form, FormInstance, Modal, message, Upload } from 'antd';
 import { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router';
@@ -69,33 +68,46 @@ interface OffenderData {
   imageUid?: string[] | undefined;
 }
 interface DatedMessages {
-  type: string;
-  date?: string;
-  id?: string;
-  sameUser?: boolean | null;
-  sent?: boolean | null;
-  content?: string;
-  createdAt?: Moment;
-  from?: { id: string; fullName: string; organisation: string };
-  chat?: { id: string; name: string };
-  images?: { id: string; optimised?: string | null; url?: string | null }[];
-  incidents?: {
+  day: string;
+  messages: {
     id: string;
-    subject?: string | null;
-    description: string;
-    dayTime?: string | null;
-    images?: { id: string; optimised?: string | null; url?: string | null }[];
-  }[];
-  offenders?: {
-    id: string;
-    updatedAt?: Date;
-    age?: Age | null;
-    build?: Build | null;
-    dateOfBirth?: Date | null;
-    name?: string | null;
-    race?: Race | null;
-    gender?: Gender | null;
-    images?: { id: string; optimised?: string | null; url?: string | null }[];
+    from?: { id: string; fullName: string; organisation: string };
+    messages: {
+      id?: string;
+      sameUser?: boolean | null;
+      sent?: boolean | null;
+      content?: string;
+      createdAt?: Moment;
+      from?: { id: string; fullName: string; organisation: string };
+      chat?: { id: string; name: string };
+      images?: { id: string; optimised?: string | null; url?: string | null }[];
+      incidents?: {
+        id: string;
+        subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        images?: {
+          id: string;
+          optimised?: string | null;
+          url?: string | null;
+        }[];
+      }[];
+      offenders?: {
+        id: string;
+        updatedAt?: Date;
+        age?: Age | null;
+        build?: Build | null;
+        dateOfBirth?: Date | null;
+        name?: string | null;
+        race?: Race | null;
+        gender?: Gender | null;
+        images?: {
+          id: string;
+          optimised?: string | null;
+          url?: string | null;
+        }[];
+      }[];
+    }[];
   }[];
 }
 interface MemberData {
@@ -112,7 +124,7 @@ interface Return {
   form: FormInstance<FormData>;
   saving: boolean;
   scrolledToTop: () => void;
-  datedMessages: DatedMessages[];
+  datedMessages: DatedMessages[] | null;
   userId: string | undefined;
   loadMore: boolean;
   deleteMessageConfirm: (value: string) => void;
@@ -165,7 +177,10 @@ const useViewMessages = ({
   const [saving, setSaving] = useState(false);
   const [form] = useForm<FormData>();
   const [after, setAfter] = useState('');
-  const [datedMessages, setDatedMessages] = useState<DatedMessages[]>([]);
+  const [datedMessages, setDatedMessages] = useState<DatedMessages[] | null>(
+    null
+  );
+  const [loading, setLoading] = useState(true);
   const [loadMore, setLoadMore] = useState(false);
   const [fetching, setFetching] = useState(false);
   const [manageChat, setManageChat] = useState(false);
@@ -189,6 +204,10 @@ const useViewMessages = ({
     | undefined
   >();
 
+  useEffect(() => {
+    setLoading(true);
+  }, [chatId]);
+
   const toggleShowPicker = () => setShowPicker(!showPicker);
   const errorNotification = () =>
     notification.error({
@@ -197,70 +216,95 @@ const useViewMessages = ({
       placement: 'bottomRight',
     });
 
+  const getDay = (date: Moment) => {
+    if (date?.weekYear() === moment().weekYear()) {
+      if (
+        date.format('DD/MM/YY') === moment().add(-1, 'days').format('DD/MM/YY')
+      )
+        return `Yesterday`;
+      return date.format('dddd');
+    }
+    return date?.format('DD/MM/YY');
+  };
+
   const handleMessagesData = (
-    messages: Exclude<MessagesQuery['messages'], undefined | null> | undefined,
-    clear?: boolean
+    messages: Exclude<MessagesQuery['messages'], undefined | null> | undefined
   ) => {
-    if (messages && messages.length > 0) {
-      let existingData = datedMessages;
-      if (clear) {
-        existingData = [];
-      }
-
-      const finalMessages = messages?.map((el, index) => {
-        if (index === 0 && clear) {
-          return [
-            {
-              type: MessageType.date,
-              date: moment(el.createdAt).format('dddd, MMMM Do'),
+    if (!messages) {
+      setDatedMessages(null);
+    } else if (messages.length > 0) {
+      const momentMessages = messages?.map((item) => ({
+        ...item,
+        createdAt: moment(item.createdAt),
+        day: getDay(moment(item.createdAt)),
+      }));
+      const messageDays = [
+        ...new Set(momentMessages.map((item) => item.day)),
+      ].map((day) => ({ day, messages: [] }));
+      const groupedMessages = messageDays.map((item) => ({
+        ...item,
+        messages: momentMessages
+          .filter((m) => m.day === item.day)
+          .map((i) => ({
+            id: i.id,
+            sent: i.sent,
+            content: i.content,
+            createdAt: i.createdAt,
+            from: {
+              id: i.from.id,
+              fullName: i.from.fullName,
+              organisation: i.from.organisation,
             },
-            { type: MessageType.message, sameUser: false, ...el },
-          ];
-        }
+            chat: i.chat,
+            images: i.images,
+            incidents: i.incidents,
+            offenders: i.offenders,
+          })),
+      }));
+      const groupedUsers = groupedMessages.map((item) => ({
+        ...item,
+        messages: [
+          ...new Set(
+            item.messages.map(
+              (m) => `${m.from.id}-${m.createdAt.format('hh:mm')}`
+            )
+          ),
+        ].map((user) => ({
+          id: user,
+          from: item.messages.find(
+            (m) => `${m.from.id}-${m.createdAt.format('hh:mm')}` === user
+          )?.from,
+          messages: item.messages.filter(
+            (m) => `${m.from.id}-${m.createdAt.format('hh:mm')}` === user
+          ),
+        })),
+      }));
 
-        if (
-          moment(messages[index - 1].createdAt).format('dddd, MMMM Do') ===
-          moment(el.createdAt).format('dddd, MMMM Do')
-        ) {
-          if (messages[index - 1].from.id === el.from.id) {
-            return [
-              ...existingData,
-              { type: MessageType.message, sameUser: true, ...el },
-            ];
-          }
-          return [
-            ...existingData,
-            { type: MessageType.message, sameUser: false, ...el },
-          ];
-        }
-        return [
-          ...existingData,
-          {
-            type: MessageType.date,
-            date: moment(el.createdAt).format('dddd, MMMM Do'),
-          },
-          { type: MessageType.message, sameUser: false, ...el },
-        ];
-      });
-
-      setDatedMessages(finalMessages.flat());
+      setDatedMessages(groupedUsers);
     } else setDatedMessages([]);
   };
 
-  const { subscribeToMore, data, loading, fetchMore } = useMessagesQuery({
+  const { subscribeToMore, data, fetchMore } = useMessagesQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       chat: chatId,
     },
+    skip: !chatId,
     onCompleted: (res) => {
+      setLoading(false);
       if (res.messages.length > 0) {
         setAfter(res.messages.slice(-1)[0].id);
-        handleMessagesData(res.messages, true);
+        handleMessagesData(res.messages);
       } else {
         handleMessagesData([]);
       }
     },
   });
+
+  // useEffect(() => {
+  //   if (data && data.messages.length > 0)
+  //     setLoading(false);
+  // }, [data])
 
   const { data: chatData } = useChatQuery({
     fetchPolicy: 'cache-and-network',

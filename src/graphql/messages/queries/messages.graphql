@@ -1,9 +1,9 @@
 query messages($chat: String, $after: MessageWhereUniqueInput) {
   messages(
     where: { chat: { id: { equals: $chat } } }
-    first: 30
+    last: 30
     orderBy: { createdAt: asc }
-    after: $after
+    before: $after
   ) {
     id
     sent

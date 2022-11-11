@@ -16,7 +16,6 @@ const ViewMessages = ({
 }: Props): JSX.Element => {
   const {
     onSubmit,
-    data,
     loading,
     chatData,
     form,
@@ -59,7 +58,6 @@ const ViewMessages = ({
   return (
     <View
       onSubmit={onSubmit}
-      data={data}
       loading={loading}
       chatData={chatData}
       form={form}

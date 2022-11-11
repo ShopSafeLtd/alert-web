@@ -28,7 +28,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
 
   const wsClient = new SubscriptionClient(
     // "wss://alert-api-dev.azurewebsites.net/graphql",
-    'wss://alert-api-dev-development.azurewebsites.net/graphql',
+    'wss://alert-dev-api.herokuapp.com/graphql',
     {
       reconnect: true,
       connectionParams: {

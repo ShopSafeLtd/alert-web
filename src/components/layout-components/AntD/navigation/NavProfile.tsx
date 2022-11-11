@@ -95,13 +95,20 @@ export const NavProfile = () => {
   );
   return (
     <Dropdown placement="bottomRight" overlay={profileMenu} trigger={['click']}>
-      <Menu className="d-flex align-item-center" mode="horizontal">
-        <Menu.Item>
-          <Avatar style={{ backgroundColor: 'rgb(222, 68, 54)' }}>
-            {name?.charAt(0)}
-          </Avatar>
-        </Menu.Item>
-      </Menu>
+      <Menu
+        className="d-flex align-item-center"
+        mode="horizontal"
+        items={[
+          {
+            key: 0,
+            label: (
+              <Avatar style={{ backgroundColor: 'rgb(222, 68, 54)' }}>
+                {name?.charAt(0)}
+              </Avatar>
+            ),
+          },
+        ]}
+      />
     </Dropdown>
   );
 };
