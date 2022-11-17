@@ -1,6 +1,6 @@
 /* eslint-disable react/require-default-props */
 import React, { useState } from 'react';
-import { Row, Col, Card, Descriptions, Typography, Image, Avatar } from 'antd';
+import { Row, Col, Card, Descriptions, Typography, Image } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import moment, { Moment } from 'moment';
 
@@ -8,7 +8,7 @@ const { Title, Paragraph, Text } = Typography;
 
 interface DatedMessages {
   id?: string;
-  content?: string;
+  content?: string | undefined | null;
   from?: { id: string; fullName: string; organisation: string };
   images?: { id: string; optimised?: string | null; url?: string | null }[];
   incidents?: {
@@ -106,7 +106,7 @@ const CollageImage = ({ index, length, src }: CollageImageProps) => {
       onKeyPress={() => setVisible(true)}
       role="button"
       tabIndex={index}
-      className="chat-collage-image"
+      className="update-collage-image"
       style={{
         backgroundColor: 'grey',
         height: getImageHeight(length, index),
@@ -148,7 +148,7 @@ const getContent = (content: string) =>
     return <Text key={item}>{item}</Text>;
   });
 
-const Content = ({
+const UpdateContent = ({
   from,
   images,
   offenders,
@@ -163,23 +163,16 @@ const Content = ({
   <Row
     gutter={8}
     style={{
-      flexDirection: showUser ? 'row-reverse' : 'row',
       marginTop: showDate ? 10 : 0,
     }}
+    className="update-container"
   >
-    {!showUser && showDate && (
-      <Col>
-        <Avatar className={showUser ? 'currentUser' : 'message-avatar'}>
-          {from?.fullName[0]}
-        </Avatar>
-      </Col>
-    )}
-    <Col style={{ marginLeft: !showUser && showDate ? 0 : 48 }}>
+    <Col>
       <div
         className={
           showUser
-            ? 'message-content-card currentUser-card'
-            : 'message-content-card'
+            ? 'update-content-card currentUser-card'
+            : 'update-content-card'
         }
       >
         {showDate && (
@@ -190,22 +183,20 @@ const Content = ({
               marginRight: 10,
               marginBottom: 0,
             }}
-            justify={userId === from?.id ? 'end' : 'start'}
           >
-            {userId !== from?.id && (
-              <Col
-                style={{
-                  marginRight: 20,
-                }}
-              >
-                <Text style={{ fontSize: 13 }} strong>
-                  {from?.fullName}
-                </Text>
-              </Col>
-            )}
+            <Col
+              style={{
+                marginRight: 20,
+              }}
+              flex={1}
+            >
+              <Text ellipsis style={{ fontSize: 13 }} strong>
+                {userId !== from?.id ? from?.fullName : 'You'}
+              </Text>
+            </Col>
             <Col>
               <Text style={{ fontSize: 13 }} type="secondary">
-                {getMessageDate(createdAt)}
+                {getMessageDate(moment(createdAt))}
               </Text>
             </Col>
           </Row>
@@ -217,7 +208,7 @@ const Content = ({
                 <Col key={image.id}>
                   <div>
                     <Image
-                      style={{ maxWidth: 300 }}
+                      style={{ maxWidth: 240 }}
                       src={image.optimised || ''}
                       alt={image.id}
                     />
@@ -240,7 +231,6 @@ const Content = ({
           </Row>
         )}
         {offenders &&
-          offenders.length > 0 &&
           offenders.map((offender) => (
             <Row key={offender.id} style={{ margin: 5 }}>
               <Col key={offender.id}>
@@ -282,7 +272,6 @@ const Content = ({
             </Row>
           ))}
         {incidents &&
-          incidents.length > 0 &&
           incidents.map((incident) => (
             <Row
               key={incident.id}
@@ -293,7 +282,7 @@ const Content = ({
                 <Card
                   style={{ borderRadius: 5 }}
                   size="small"
-                  className="message-card"
+                  className="update-card"
                 >
                   <Row gutter={5} wrap={false}>
                     <Col>
@@ -344,7 +333,7 @@ const Content = ({
           ))}
         {content && (
           <Row key={id}>
-            <div className="message-content-bubble">
+            <div className="update-content-bubble">
               <Col>
                 <Text>{getContent(content)}</Text>
               </Col>
@@ -356,4 +345,4 @@ const Content = ({
   </Row>
 );
 
-export default Content;
+export default UpdateContent;

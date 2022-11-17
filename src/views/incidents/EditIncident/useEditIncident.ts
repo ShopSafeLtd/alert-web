@@ -598,16 +598,14 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                       .filter((obj) => obj.url !== undefined)
                   : undefined,
 
-              delete: imageChange
-                ? incidentData?.incident?.images
-                    .filter(
-                      (image) =>
-                        !fileList.map((item) => item.uid).includes(image.id)
-                    )
-                    .map((image) => ({
-                      id: image.id,
-                    }))
-                : [],
+              disconnect: incidentData?.incident?.images
+                .filter(
+                  (image) =>
+                    !fileList.map((item) => item.uid).includes(image.id)
+                )
+                .map((image) => ({
+                  id: image.id,
+                })),
             },
           },
         },

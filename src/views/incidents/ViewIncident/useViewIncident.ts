@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   Role,
@@ -10,7 +10,15 @@ import {
   Gender,
   Race,
   Build,
+  useSubscribeToIncidentMutation,
+  useUnsubscribeFromIncidentMutation,
+  useAddImagesToIncidentMutation,
+  useDeleteUpdateMutation,
+  ViewIncidentQueryVariables,
+  ViewIncidentDocument,
+  useUpdateUpdateMutation,
 } from 'graphql/generated';
+import update from 'immutability-helper';
 
 import { useLightbox } from 'simple-react-lightbox';
 import { useStoreState } from 'state';
@@ -57,16 +65,77 @@ interface Return {
   linkOffender: boolean;
   toggleLinkOffender: () => void;
   updateOffendersList: (value: OffenderData) => void;
+  loadMore: boolean;
+  scrolledToTop: () => void;
+  userId: string;
+  replyTo: {
+    id: string;
+    text: string;
+    createdAt: string;
+    createdBy: string;
+  } | null;
+  setReplyTo: (
+    value: {
+      id: string;
+      text: string;
+      createdAt: string;
+      createdBy: string;
+    } | null
+  ) => void;
+  toggleSubscribe: () => void;
+  confirmUpdateImages: (images: { id: string; url: string }[]) => void;
+  addUpdateImages: (images: { id: string }[]) => void;
+  addImages:
+    | {
+        id: string;
+        url: string;
+      }[]
+    | null;
+  closeAddImages: () => void;
+  toggleSelectImages: (id: string) => void;
+  selectedImages: string[];
+  confirmDeleteUpdate: (updateId: string) => void;
+  editUpdate: { id: string; text: string } | null;
+  setEditUpdate: (value: { id: string; text: string } | null) => void;
+  handleEditUpdate: () => void;
+  editUpdateInput: string;
+  setEditUpdateInput: (value: string) => void;
 }
 
 const useViewIncident = (incidentId: string): Return => {
   const { openLightbox } = useLightbox();
 
   const role = useStoreState((state) => state.user.role);
+  const userId = useStoreState((state) => state.user.id);
   const [saving, setSaving] = useState(false);
   const [linkOffender, setLinkOffender] = useState(false);
+  const [loadMore, setLoadMore] = useState(false);
+  const [editUpdate, setEditUpdate] = useState<{
+    id: string;
+    text: string;
+  } | null>(null);
+  const [editUpdateInput, setEditUpdateInput] = useState('');
+  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [addImages, setAddImages] = useState<
+    | {
+        id: string;
+        url: string;
+      }[]
+    | null
+  >(null);
+  const [replyTo, setReplyTo] = useState<{
+    id: string;
+    text: string;
+    createdAt: string;
+    createdBy: string;
+  } | null>(null);
 
-  const { data, loading } = useViewIncidentQuery({
+  useEffect(() => {
+    if (editUpdate) setEditUpdateInput(editUpdate.text);
+  }, [editUpdate]);
+
+  const { data } = useViewIncidentQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       where: {
         id: incidentId,
@@ -148,9 +217,219 @@ const useViewIncident = (incidentId: string): Return => {
   const toggleLinkOffender = () => {
     setLinkOffender(!linkOffender);
   };
+
+  const scrolledToTop = () => {
+    setLoadMore(true);
+  };
+
+  const [subscribeToIncident] = useSubscribeToIncidentMutation();
+  const [unsubscribeFromIncident] = useUnsubscribeFromIncidentMutation();
+
+  const toggleSubscribe = () => {
+    if (data?.incident?.subscribed) {
+      unsubscribeFromIncident({
+        variables: {
+          where: { id: incidentId },
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          unsubscribeFromIncident: {
+            id: incidentId,
+            __typename: 'Incident',
+            subscribed: false,
+          },
+        },
+      });
+    } else {
+      subscribeToIncident({
+        variables: {
+          where: { id: incidentId },
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          subscribeToIncident: {
+            id: incidentId,
+            __typename: 'Incident',
+            subscribed: true,
+          },
+        },
+      });
+    }
+  };
+
+  const [addImagesToIncident] = useAddImagesToIncidentMutation();
+
+  const addUpdateImages = (images: { id: string }[]) => {
+    addImagesToIncident({
+      variables: {
+        images,
+        incident: {
+          id: incidentId,
+        },
+      },
+    });
+    setAddImages(null);
+    setSelectedImages([]);
+  };
+
+  const confirmUpdateImages = (images: { id: string; url: string }[]) => {
+    if (images.length > 1) {
+      setAddImages(images);
+    } else {
+      confirm({
+        title: 'Are you sure?',
+        content:
+          'Adding this image will notify any other users following the incident.',
+        onOk() {
+          addUpdateImages(images.map(({ id }) => ({ id })));
+        },
+        okText: 'Add Images',
+      });
+    }
+  };
+
+  const closeAddImages = () => {
+    setAddImages(null);
+  };
+
+  const toggleSelectImages = (id: string) => {
+    if (selectedImages.includes(id)) {
+      setSelectedImages(selectedImages.filter((item) => item !== id));
+    } else {
+      setSelectedImages([...selectedImages, id]);
+    }
+  };
+
+  const [deleteUpdate] = useDeleteUpdateMutation();
+
+  const handleDeleteUpdate = (updateId: string) => {
+    deleteUpdate({
+      variables: {
+        where: {
+          id: updateId,
+        },
+      },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        deleteUpdate: {
+          id: updateId,
+          __typename: 'Update',
+          replyToId: '',
+        },
+      },
+      update: (store, result) => {
+        if (result.data?.deleteUpdate) {
+          const oldData = store.readQuery<
+            ViewIncidentQuery,
+            ViewIncidentQueryVariables
+          >({
+            query: ViewIncidentDocument,
+            variables: {
+              where: {
+                id: incidentId,
+              },
+            },
+          });
+
+          if (oldData?.incident)
+            if (result.data.deleteUpdate.replyToId) {
+              const updateItem = oldData.incident.updates.find(
+                (item) => item.id === result.data?.deleteUpdate?.replyToId
+              );
+              if (updateItem) {
+                store.writeQuery<ViewIncidentQuery, ViewIncidentQueryVariables>(
+                  {
+                    query: ViewIncidentDocument,
+                    variables: {
+                      where: {
+                        id: incidentId,
+                      },
+                    },
+                    data: {
+                      incident: {
+                        ...oldData.incident,
+                        updates: update(oldData.incident.updates, {
+                          [oldData.incident.updates
+                            .map((item) => item.id)
+                            .indexOf(result.data.deleteUpdate.replyToId)]: {
+                            replies: {
+                              $set: updateItem.replies.filter(
+                                (item) =>
+                                  item.id !== result.data?.deleteUpdate?.id
+                              ),
+                            },
+                          },
+                        }),
+                      },
+                    },
+                  }
+                );
+              }
+            } else {
+              store.writeQuery<ViewIncidentQuery, ViewIncidentQueryVariables>({
+                query: ViewIncidentDocument,
+                variables: {
+                  where: {
+                    id: incidentId,
+                  },
+                },
+                data: {
+                  incident: {
+                    ...oldData.incident,
+                    updates: [
+                      ...oldData.incident.updates.filter(
+                        (item) => item.id !== result.data?.deleteUpdate?.id
+                      ),
+                    ],
+                  },
+                },
+              });
+            }
+        }
+      },
+    });
+  };
+
+  const confirmDeleteUpdate = (updateId: string) => {
+    confirm({
+      title: 'Are you sure?',
+      content: 'The update will be permanently deleted.',
+      onOk() {
+        handleDeleteUpdate(updateId);
+      },
+      okText: 'Delete',
+    });
+  };
+
+  const [updateUpdate] = useUpdateUpdateMutation();
+
+  const handleEditUpdate = () => {
+    if (editUpdate !== null)
+      updateUpdate({
+        variables: {
+          data: {
+            text: editUpdateInput,
+          },
+          where: {
+            id: editUpdate.id,
+          },
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateUpdate: {
+            id: editUpdate.id || '',
+            __typename: 'Update',
+            text: editUpdateInput,
+          },
+        },
+      });
+    setEditUpdate(null);
+    setEditUpdateInput('');
+  };
+
   return {
     data,
-    loading,
+    loading: data === null && data === undefined,
     saving,
     openLightbox,
     addOffenderRights: role !== Role.User,
@@ -160,6 +439,24 @@ const useViewIncident = (incidentId: string): Return => {
     linkOffender,
     toggleLinkOffender,
     updateOffendersList,
+    loadMore,
+    scrolledToTop,
+    userId,
+    replyTo,
+    setReplyTo,
+    toggleSubscribe,
+    confirmUpdateImages,
+    addUpdateImages,
+    addImages,
+    closeAddImages,
+    toggleSelectImages,
+    selectedImages,
+    confirmDeleteUpdate,
+    setEditUpdate,
+    editUpdate,
+    handleEditUpdate,
+    editUpdateInput,
+    setEditUpdateInput,
   };
 };
 

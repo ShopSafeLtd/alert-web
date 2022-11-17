@@ -17,6 +17,24 @@ const ViewIncident = (): JSX.Element => {
     linkOffender,
     toggleLinkOffender,
     updateOffendersList,
+    loadMore,
+    scrolledToTop,
+    userId,
+    replyTo,
+    setReplyTo,
+    confirmUpdateImages,
+    addImages,
+    addUpdateImages,
+    closeAddImages,
+    toggleSubscribe,
+    selectedImages,
+    toggleSelectImages,
+    confirmDeleteUpdate,
+    editUpdate,
+    editUpdateInput,
+    handleEditUpdate,
+    setEditUpdate,
+    setEditUpdateInput,
   } = useViewIncident(incidentId);
 
   return (
@@ -33,6 +51,24 @@ const ViewIncident = (): JSX.Element => {
       linkOffender={linkOffender}
       toggleLinkOffender={toggleLinkOffender}
       updateOffendersList={updateOffendersList}
+      loadMore={loadMore}
+      scrolledToTop={scrolledToTop}
+      userId={userId}
+      replyTo={replyTo}
+      setReplyTo={setReplyTo}
+      confirmUpdateImages={confirmUpdateImages}
+      addImages={addImages}
+      addUpdateImages={addUpdateImages}
+      closeAddImages={closeAddImages}
+      toggleSubscribe={toggleSubscribe}
+      selectedImages={selectedImages}
+      toggleSelectImages={toggleSelectImages}
+      confirmDeleteUpdate={confirmDeleteUpdate}
+      editUpdate={editUpdate}
+      editUpdateInput={editUpdateInput}
+      handleEditUpdate={handleEditUpdate}
+      setEditUpdate={setEditUpdate}
+      setEditUpdateInput={setEditUpdateInput}
     />
   );
 };

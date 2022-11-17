@@ -1,0 +1,14 @@
+mutation AddImagesToIncident(
+  $incident: IncidentWhereUniqueInput!
+  $images: [ImageWhereUniqueInput!]!
+) {
+  addImagesToIncident(incident: $incident, images: $images) {
+    id
+    images {
+      id
+      url
+      optimised
+      card
+    }
+  }
+}

@@ -24,13 +24,21 @@ import {
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import moment, { Moment } from 'moment';
-import { notification, Form, FormInstance, Modal, message, Upload } from 'antd';
+import {
+  notification,
+  Form,
+  FormInstance,
+  Modal,
+  message,
+  Upload,
+  Mentions,
+} from 'antd';
 import { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 const { confirm } = Modal;
-
+const { getMentions } = Mentions;
 const { useForm } = Form;
 
 interface Props {
@@ -724,6 +732,26 @@ const useViewMessages = ({
     update: updateData,
   });
   const onSubmit = () => {
+    const getText = (text: string) => {
+      const mentions = getMentions(text);
+      let newText = text;
+
+      for (let i = 0; i < mentions.length; i++) {
+        const mention = mentions[i];
+
+        const mentioned = membersData?.find(
+          (member) => mention.value === member.fullName
+        );
+        if (mentioned)
+          newText = newText.replace(
+            `@${mention.value}`,
+            `@[${mentioned.fullName}](${mentioned.id})`
+          );
+      }
+
+      return newText;
+    };
+
     if (!inputStr && !fileList && !incidentsData && !offendersData) {
       message.info('The message cannot be empty!');
     } else {
@@ -752,7 +780,7 @@ const useViewMessages = ({
                   ? mentionedUser.map(({ id }) => ({ id }))
                   : undefined,
             },
-            content: inputStr,
+            content: getText(inputStr),
             images:
               imageChange && fileList.length > 0
                 ? fileList

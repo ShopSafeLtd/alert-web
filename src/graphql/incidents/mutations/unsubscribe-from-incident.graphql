@@ -1,0 +1,6 @@
+mutation UnsubscribeFromIncident($where: IncidentWhereUniqueInput!) {
+  unsubscribeFromIncident(where: $where) {
+    id
+    subscribed
+  }
+}

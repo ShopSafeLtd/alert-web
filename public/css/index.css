@@ -343,12 +343,12 @@
 }
 .view-incident .incident-images {
   width: 100%;
-  height: 180px;
+  min-height: 180px;
   padding: 0 10px;
 }
 @media only screen and (min-height: 800px) {
   .view-incident .incident-images {
-    height: 250px;
+    min-height: 250px;
   }
 }
 .view-incident .incident-image {
@@ -362,22 +362,27 @@
   transition: all 0.3s ease-in-out;
 }
 .view-incident .incident-image:hover {
-  height: 180px;
-  width: 180px;
+  height: 170px;
+  width: 170px;
 }
 @media only screen and (min-height: 800px) {
   .view-incident .incident-image:hover {
-    height: 250px;
-    width: 250px;
+    height: 240px;
+    width: 240px;
   }
   .view-incident .incident-image {
     height: 230px;
     width: 230px;
   }
 }
+.view-incident .incident-tab-content {
+  flex: 1;
+}
 .view-incident .incident-content {
   flex: 1;
   background-color: #fff;
+  display: flex;
+  flex-direction: column;
 }
 .view-incident .ant-tabs-bottom > .ant-tabs-nav,
 .view-incident .ant-tabs-bottom > div > .ant-tabs-nav,
@@ -386,9 +391,16 @@
 .view-incident .incident-descriptions .ant-skeleton-title {
   margin: 0;
 }
+.view-incident .incident-header-bar {
+  border-bottom: 1px solid #edf2f9;
+  padding: 5px;
+  display: flex;
+  justify-content: flex-end;
+}
 .view-incident .incident-details-main {
   border-right: 1px solid #edf2f9;
   padding: 15px;
+  flex: 1;
 }
 .view-incident .incident-descriptions {
   margin-top: 10px;
@@ -421,15 +433,18 @@
   padding: 10px 20px;
 }
 .view-incident .offender-image-skeleton {
-  height: 160px;
-  width: 140px;
+  height: 110px;
+  width: 120px;
+}
+.update-collage-image,
+.view-incident .offender-image {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 .view-incident .offender-image {
-  height: 160px;
-  width: 140px;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
+  height: 110px;
+  width: 120px;
 }
 .view-incident .ant-divider-horizontal {
   margin: 0;
@@ -443,6 +458,117 @@
   align-items: center;
   flex-direction: column;
 }
+.view-incident .incident-offender-container {
+  margin-top: 20px;
+}
+.update-collage-image {
+  cursor: pointer;
+  position: relative;
+}
+.update-collage-image .chat-collage-image-overlay {
+  opacity: 0;
+  transition: opacity 0.3s ease 0s;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  justify-content: center;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.update-collage-image:hover .chat-collage-image-overlay {
+  opacity: 1;
+}
+.update-container .currentUser {
+  background: #ff5252;
+  color: #fff !important;
+}
+.update-container .update-avatar {
+  background: #fde3cf;
+  color: #f56a00;
+}
+.update-container .currentUser-card {
+  background: rgba(222, 68, 54, 0.1);
+}
+.update-container .update-content-card {
+  display: inline-block;
+  max-width: 100%;
+  background: #eceff1;
+  border: 1px solid #f5f5f5;
+  border-radius: 5px;
+}
+.update-container .update-card {
+  position: relative;
+  width: 370px;
+  height: 100px;
+  margin: 0;
+  overflow: hidden;
+}
+.update-container .update-content-bubble {
+  max-width: 100%;
+  word-break: break-word;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #585858;
+}
+.update-reply {
+  margin-left: 48px;
+}
+.update-wrapper {
+  margin-bottom: 10px;
+}
+.update-scroll {
+  padding: 15px;
+}
+.incident-updates {
+  position: relative;
+  height: calc(100vh - 371px);
+}
+.update-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+  padding-top: 2px;
+  border-top: 1px solid #edf2f9;
+}
+.reply-to-highlight {
+  width: 3px;
+  background-color: #f56a00;
+  margin-right: 5px;
+  height: 35px;
+}
+.update-info-card,
+.update-upload-card {
+  position: relative;
+  height: 100px;
+  overflow: hidden;
+}
+.update-upload-card {
+  width: 100px;
+  border: 1px solid #edf2f9;
+  border-radius: 10px;
+}
+.update-info-card {
+  width: 370px;
+  margin: 0;
+}
+.update-info-container .ant-upload-list {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.update-info-container .info-remove-button {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  z-index: 100;
+}
+.update-info-container .ant-upload-list-picture-card-container,
 .upload-images .ant-upload-list-picture-card-container,
 .upload-images .ant-upload-select-picture-card {
   width: 100px;

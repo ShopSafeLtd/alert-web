@@ -45,6 +45,18 @@ interface Props {
   refetch: () => void;
 }
 
+const getContent = (content: string) =>
+  content
+    .split('@[')
+    .map((item) => {
+      if (item.includes('](')) {
+        return `${item.split('](')[0]} `;
+      }
+      return item;
+    })
+    .toString()
+    .replace(',', '');
+
 const ViewOffender = ({
   data,
   saving,
@@ -184,7 +196,9 @@ const ViewOffender = ({
                               )}
                               {messages && messages.length
                                 ? `${messages?.slice(-1)[0].from.fullName} : ${
-                                    messages?.slice(-1)[0].content ||
+                                    getContent(
+                                      messages?.slice(-1)[0].content
+                                    ) ||
                                     (messages?.slice(-1)[0].images &&
                                       messages?.slice(-1)[0].images.length &&
                                       'Sent an image') ||

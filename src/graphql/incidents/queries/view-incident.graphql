@@ -8,6 +8,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     time
     value
     recoveredValue
+    subscribed
     crimeTypes {
       id
       name
@@ -61,6 +62,92 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       tags {
         id
         name
+      }
+    }
+    updates(orderBy: { createdAt: desc }) {
+      id
+      text
+      type
+      createdAt
+      images {
+        id
+        url
+        optimised
+        card
+      }
+      linkedIncidents {
+        id
+        subject
+        description
+        dayTime
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      linkedOffenders {
+        id
+        updatedAt
+        age
+        build
+        dateOfBirth
+        name
+        race
+        gender
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      createdBy {
+        id
+        fullName
+        organisation
+      }
+      replies {
+        id
+        text
+        type
+        createdAt
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        linkedIncidents {
+          id
+          subject
+          description
+          dayTime
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        linkedOffenders {
+          id
+          updatedAt
+          age
+          build
+          dateOfBirth
+          name
+          race
+          gender
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        createdBy {
+          id
+          fullName
+          organisation
+        }
       }
     }
   }

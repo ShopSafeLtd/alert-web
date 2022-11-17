@@ -1,0 +1,9 @@
+mutation UpdateUpdate(
+  $where: UpdateWhereUniqueInput!
+  $data: UpdateUpdateDataInput!
+) {
+  updateUpdate(where: $where, data: $data) {
+    id
+    text
+  }
+}

@@ -631,7 +631,7 @@ const ViewMessges = ({
               prefix="@"
             >
               {membersData?.map(({ id, fullName, organisation }) => (
-                <Option key={id} value={fullName}>
+                <Option key={id} value={fullName.replace(' ', '_')}>
                   {fullName} ({organisation})
                 </Option>
               ))}
