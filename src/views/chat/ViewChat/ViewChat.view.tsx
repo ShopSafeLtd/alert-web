@@ -47,15 +47,14 @@ interface Props {
 
 const getContent = (content: string) =>
   content
-    .split('@[')
+    .split(/(@\[.*?\]\(.*?\))/)
     .map((item) => {
-      if (item.includes('](')) {
-        return `${item.split('](')[0]} `;
+      if (item.includes('@[')) {
+        return `${item.replace('@[', '').replace(/(]\(.*?\))/, '')} `;
       }
       return item;
     })
-    .toString()
-    .replace(',', '');
+    .join('');
 
 const ViewOffender = ({
   data,

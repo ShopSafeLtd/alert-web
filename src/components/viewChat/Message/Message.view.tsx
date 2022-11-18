@@ -137,11 +137,11 @@ interface Props extends DatedMessages {
 }
 
 const getContent = (content: string) =>
-  content.split('@[').map((item) => {
-    if (item.includes('](')) {
+  content.split(/(@\[.*?\]\(.*?\))/).map((item) => {
+    if (item.includes('@[')) {
       return (
         <Text strong key={item}>
-          {item.split('](')[0]}{' '}
+          {item.replace('@[', '').replace(/(]\(.*?\))/, '')}{' '}
         </Text>
       );
     }
