@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Role,
@@ -23,6 +23,11 @@ import update from 'immutability-helper';
 import { useLightbox } from 'simple-react-lightbox';
 import { useStoreState } from 'state';
 import { notification, Modal } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit } from '@fortawesome/pro-solid-svg-icons';
+import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import { ItemType } from 'antd/lib/menu/hooks/useItems';
+import { useNavigate } from 'react-router';
 
 const { confirm } = Modal;
 interface OffenderData {
@@ -100,10 +105,15 @@ interface Return {
   handleEditUpdate: () => void;
   editUpdateInput: string;
   setEditUpdateInput: (value: string) => void;
+  optionMenuItems: ItemType[];
+  lightboxElements: {
+    src: string;
+  }[];
 }
 
 const useViewIncident = (incidentId: string): Return => {
   const { openLightbox } = useLightbox();
+  const navigate = useNavigate();
 
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
@@ -129,6 +139,10 @@ const useViewIncident = (incidentId: string): Return => {
     createdAt: string;
     createdBy: string;
   } | null>(null);
+  const [optionMenuItems, setOptionsMenuItems] = useState<ItemType[]>([]);
+  const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
+    []
+  );
 
   useEffect(() => {
     if (editUpdate) setEditUpdateInput(editUpdate.text);
@@ -140,6 +154,13 @@ const useViewIncident = (incidentId: string): Return => {
       where: {
         id: incidentId,
       },
+    },
+    onCompleted: (res) => {
+      setLightboxElements(
+        res.incident?.images.map((image) => ({
+          src: image.optimised || '',
+        })) || []
+      );
     },
   });
 
@@ -427,6 +448,27 @@ const useViewIncident = (incidentId: string): Return => {
     setEditUpdateInput('');
   };
 
+  useEffect(() => {
+    if (
+      [Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin].includes(role)
+    ) {
+      setOptionsMenuItems([
+        {
+          label: 'Edit',
+          key: '1',
+          icon: <FontAwesomeIcon size="3x" icon={faEdit} />,
+          onClick: () => navigate(`/app/incidents/edit/${incidentId}`),
+        },
+        {
+          label: 'Delete',
+          key: '2',
+          icon: <FontAwesomeIcon icon={faTrash} />,
+          onClick: () => onDelete(incidentId),
+        },
+      ]);
+    }
+  }, [role]);
+
   return {
     data,
     loading: data === null && data === undefined,
@@ -457,6 +499,8 @@ const useViewIncident = (incidentId: string): Return => {
     handleEditUpdate,
     editUpdateInput,
     setEditUpdateInput,
+    optionMenuItems,
+    lightboxElements,
   };
 };
 

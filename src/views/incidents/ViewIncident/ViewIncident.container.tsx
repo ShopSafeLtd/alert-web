@@ -10,8 +10,6 @@ const ViewIncident = (): JSX.Element => {
     loading,
     saving,
     openLightbox,
-    addOffenderRights,
-    onDelete,
     deleteRights,
     editRights,
     linkOffender,
@@ -35,6 +33,8 @@ const ViewIncident = (): JSX.Element => {
     handleEditUpdate,
     setEditUpdate,
     setEditUpdateInput,
+    optionMenuItems,
+    lightboxElements,
   } = useViewIncident(incidentId);
 
   return (
@@ -43,9 +43,7 @@ const ViewIncident = (): JSX.Element => {
       loading={loading}
       saving={saving}
       openLightbox={openLightbox}
-      addOffenderRights={addOffenderRights}
       incidentId={incidentId}
-      onDelete={onDelete}
       deleteRights={deleteRights}
       editRights={editRights}
       linkOffender={linkOffender}
@@ -69,6 +67,8 @@ const ViewIncident = (): JSX.Element => {
       handleEditUpdate={handleEditUpdate}
       setEditUpdate={setEditUpdate}
       setEditUpdateInput={setEditUpdateInput}
+      optionMenuItems={optionMenuItems}
+      lightboxElements={lightboxElements}
     />
   );
 };

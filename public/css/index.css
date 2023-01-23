@@ -292,6 +292,7 @@
 }
 .incidents-side-list {
   max-height: calc(100vh - 70px);
+  max-width: 300px;
   border-right: 1px solid #edf2f9;
   overflow-y: scroll;
 }
@@ -326,10 +327,6 @@
 .incidents-side-list .incident-item .incident-item-detail {
   font-size: 12px;
   margin-bottom: 0;
-}
-.incidents-side-list .incident-item .incident-item-icon {
-  margin-right: 8px;
-  color: #de4436;
 }
 .incidents-side-list .ant-pagination {
   margin: 15px 0;
