@@ -256,7 +256,7 @@ const AddExisitingOffender = ({
                       </span>
                     }
                   >
-                    {getLastOffence(selectedOffender.incidents)?.location}
+                    {getLastOffence(selectedOffender.incidents)}
                   </Descriptions.Item>
                 )}
               </Descriptions>

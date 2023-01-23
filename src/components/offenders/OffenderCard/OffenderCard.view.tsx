@@ -275,7 +275,7 @@ const OffenderCard = ({
 
           <Col span={23}>
             <Text style={{ width: '100%' }} ellipsis type="secondary">
-              Last offence: {getLastOffence(offender.incidents)?.location}
+              Last offence: {getLastOffence(offender.incidents)}
             </Text>
           </Col>
         </Row>

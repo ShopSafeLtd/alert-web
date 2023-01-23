@@ -2,20 +2,8 @@ import React from 'react';
 import { ListOffendersQuery } from 'graphql/generated';
 import { Row, Col, Skeleton, Typography, Divider, Pagination } from 'antd';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faEarth,
-  faMarsAndVenus,
-  faUserClock,
-  faUserTag,
-} from '@fortawesome/pro-light-svg-icons';
-import {
-  getOffenderAge,
-  getOffenderBuild,
-  getOffenderGender,
-  getOffenderRace,
-  calcAge,
-} from 'utils/offender/get-offender-desc';
+import { getLastOffence } from 'utils/offender/get-offender-desc';
+import useStyles from './OffenderSideList.styles';
 
 const { Text, Paragraph } = Typography;
 interface Props {
@@ -31,89 +19,47 @@ const OffenderSideList = ({
   loading,
   current,
   onPaginationChange,
-}: Props): JSX.Element =>
-  !data && loading ? (
+}: Props): JSX.Element => {
+  const classes = useStyles();
+  return !data && loading ? (
     <Skeleton />
   ) : (
-    <div className="offenders-side-list">
+    <div className={classes.offenderSideList}>
       {data?.listOffenders?.offenders.map((offender) => (
         <Link to={`/app/offenders/view/${offender.id}`} key={offender.id}>
           <div
             key={offender.id}
-            className={
-              current === offender.id
-                ? 'offender-item current'
-                : 'offender-item'
-            }
+            className={`${classes.offenderItem} ${
+              current === offender.id ? 'current' : ''
+            }`}
           >
             <Row wrap={false}>
               <Col>
                 {offender.images.length > 0 ? (
                   <div
-                    className="offender-item-image"
+                    className={classes.image}
                     style={{
                       backgroundImage: `url(${offender.images[0].optimised})`,
                     }}
                   />
                 ) : (
-                  <Skeleton.Image className="offender-item-image-skeleton" />
+                  <Skeleton.Image className={classes.imageSkeleton} />
                 )}
               </Col>
-              <Col className="offender-item-content" flex={1}>
-                <Text strong={current === offender.id} ellipsis>
+              <Col className={classes.content} flex={1}>
+                <Text
+                  className={classes.name}
+                  strong={current === offender.id}
+                  ellipsis
+                >
                   {offender.name}
                 </Text>
-
-                <Paragraph
-                  className="offender-item-detail"
-                  type="secondary"
-                  ellipsis
-                >
-                  <FontAwesomeIcon
-                    className="offender-item-icon"
-                    icon={faUserClock}
-                  />
-                  Age:{' '}
-                  {offender.dateOfBirth
-                    ? calcAge(offender.dateOfBirth)
-                    : getOffenderAge(offender.age)}
-                </Paragraph>
-                <Paragraph
-                  className="offender-item-detail"
-                  type="secondary"
-                  ellipsis
-                >
-                  <FontAwesomeIcon
-                    className="offender-item-icon"
-                    icon={faUserTag}
-                  />
-                  Build:{getOffenderBuild(offender.build)}
-                </Paragraph>
-                <Paragraph
-                  className="offender-item-detail"
-                  type="secondary"
-                  ellipsis
-                >
-                  <FontAwesomeIcon
-                    className="offender-item-icon"
-                    icon={faMarsAndVenus}
-                  />
-                  Sex: {getOffenderGender(offender.gender)}
-                </Paragraph>
-                <Paragraph
-                  className="offender-item-detail"
-                  type="secondary"
-                  ellipsis
-                >
-                  <FontAwesomeIcon
-                    className="offender-item-icon"
-                    icon={faEarth}
-                  />
-                  Ethnicity: {getOffenderRace(offender.race, true)}
+                <Paragraph>
+                  Last Offense: {getLastOffence(offender.incidents, true)}
                 </Paragraph>
               </Col>
             </Row>
-            <Divider className="offender-item-divider" />
+            <Divider className={classes.divider} />
           </div>
         </Link>
       ))}
@@ -125,5 +71,6 @@ const OffenderSideList = ({
       />
     </div>
   );
+};
 
 export default OffenderSideList;

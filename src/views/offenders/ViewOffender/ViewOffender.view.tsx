@@ -149,12 +149,12 @@ const ViewOffender = ({
   const navigate = useNavigate();
   return (
     <div className="page-container">
-      <Row>
-        <Col span={6}>
+      <Row wrap={false}>
+        <Col>
           <OffenderSideList current={offenderId} />
         </Col>
 
-        <Col span={18}>
+        <Col flex={1}>
           <div className={classes.viewOffender}>
             <Row className={classes.headerBar}>
               <Col className={classes.detailsHeader} span={12}>
@@ -774,7 +774,7 @@ const ViewOffender = ({
                   </InfiniteScroll>
                   <UpdateBar
                     replyTo={replyTo}
-                    incidentId={offenderId}
+                    offenderId={offenderId}
                     setReplyTo={setReplyTo}
                     subscribed={data?.offender?.subscribed || false}
                   />

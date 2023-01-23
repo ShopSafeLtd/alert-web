@@ -9,7 +9,8 @@ interface Props {
     createdAt: string;
     createdBy: string;
   } | null;
-  incidentId: string;
+  incidentId?: string;
+  offenderId?: string;
   setReplyTo: (
     value: {
       id: string;
@@ -21,7 +22,13 @@ interface Props {
   subscribed: boolean;
 }
 
-const UpdateBar = ({ replyTo, incidentId, setReplyTo, subscribed }: Props) => {
+const UpdateBar = ({
+  replyTo,
+  offenderId,
+  incidentId,
+  setReplyTo,
+  subscribed,
+}: Props) => {
   const {
     beforeUpdateImageUpload,
     onSubmitUpdate,
@@ -51,6 +58,7 @@ const UpdateBar = ({ replyTo, incidentId, setReplyTo, subscribed }: Props) => {
     incidentId,
     setReplyTo,
     subscribed,
+    offenderId,
   });
 
   return (

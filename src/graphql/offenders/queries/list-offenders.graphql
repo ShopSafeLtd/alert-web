@@ -49,6 +49,7 @@ query listOffenders(
         subject
         description
         dayTime
+        date
         crimeTypes {
           id
           name

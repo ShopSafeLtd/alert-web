@@ -12,12 +12,17 @@ import {
   UpdateIcon,
   UpdateType,
   useCreateUpdateOnIncidentMutation,
+  useCreateUpdateOnOffenderMutation,
   useListIncidentsQuery,
   useListSchemeUsersQuery,
   useSubscribeToIncidentMutation,
+  useSubscribeToOffenderMutation,
   ViewIncidentDocument,
   ViewIncidentQuery,
   ViewIncidentQueryVariables,
+  ViewOffenderDocument,
+  ViewOffenderQuery,
+  ViewOffenderQueryVariables,
 } from 'graphql/generated';
 import { useState } from 'react';
 import { useStoreState } from 'state';
@@ -101,7 +106,8 @@ interface Props {
     createdAt: string;
     createdBy: string;
   } | null;
-  incidentId: string;
+  incidentId?: string;
+  offenderId?: string;
   setReplyTo: (
     value: {
       id: string;
@@ -147,6 +153,7 @@ const useUpdateBar = ({
   incidentId,
   setReplyTo,
   subscribed,
+  offenderId,
 }: Props): Return => {
   const [updateForm] = Form.useForm<FormData>();
 
@@ -249,7 +256,17 @@ const useUpdateBar = ({
   });
 
   const [subscribeToIncident] = useSubscribeToIncidentMutation();
-  const [createUpdate] = useCreateUpdateOnIncidentMutation({
+  const [subscribeToOffender] = useSubscribeToOffenderMutation();
+  const [createIncidentUpdate] = useCreateUpdateOnIncidentMutation({
+    onError: () => {
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
+    },
+  });
+  const [createOffenderUpdate] = useCreateUpdateOnOffenderMutation({
     onError: () => {
       notification.error({
         message: 'Error!',
@@ -271,167 +288,307 @@ const useUpdateBar = ({
     return !isFileDuplicate || Upload.LIST_IGNORE;
   };
   const onSubmitUpdate = () => {
-    setUpdateInput('');
-    setReplyTo(null);
-    setUpdateFileList([]);
-    setUpdateIncidents([]);
-    setUpdateOffenders([]);
+    if (updateInput) {
+      setUpdateInput('');
+      setReplyTo(null);
+      setUpdateFileList([]);
+      setUpdateIncidents([]);
+      setUpdateOffenders([]);
 
-    if (!subscribed)
-      subscribeToIncident({
-        variables: {
-          where: {
-            id: incidentId,
-          },
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          subscribeToIncident: {
-            id: incidentId,
-            __typename: 'Incident',
-            subscribed: true,
-          },
-        },
-      });
-
-    const getUpdateType = () => {
-      if (updateFileList.length > 0) return UpdateType.Image;
-      if (updateIncidents && updateIncidents.length > 0)
-        return UpdateType.LinkedIncident;
-      if (updateOffenders.length > 0) return UpdateType.LinkedOffender;
-      return UpdateType.Text;
-    };
-
-    const getText = (text: string) => {
-      const mentions = getMentions(text);
-      let newText = text;
-
-      for (let i = 0; i < mentions.length; i++) {
-        const mention = mentions[i];
-
-        const mentioned = schemeUsers?.find(
-          (member) => mention.value === member.fullName
-        );
-        if (mentioned)
-          newText = newText.replace(
-            `@${mention.value}`,
-            `@[${mentioned.oldFullName}](${mentioned.id})`
-          );
-      }
-
-      return newText;
-    };
-
-    createUpdate({
-      variables: {
-        data: {
-          icon: UpdateIcon.Comment,
-          type: getUpdateType(),
-          text: getText(updateInput),
-          replyTo: replyTo
-            ? {
-                id: replyTo.id,
-              }
-            : undefined,
-          images:
-            updateFileList.length > 0
-              ? updateFileList.map((image) => ({
-                  filename: image.fileName || '',
-                  mimetype: image.type || '',
-                  url: image.url || '',
-                }))
-              : undefined,
-          linkedOffenders:
-            updateOffenders.length > 0
-              ? updateOffenders.map(({ id }) => ({ id }))
-              : undefined,
-          linkedIncidents:
-            updateIncidents && updateIncidents.length > 0
-              ? updateIncidents.map(({ id }) => ({ id }))
-              : undefined,
-          mentionedUsers:
-            mentionedUser.length > 0
-              ? mentionedUser.map(({ id }) => ({ id }))
-              : undefined,
-        },
-        incident: {
-          id: incidentId,
-        },
-      },
-      optimisticResponse: {
-        __typename: 'Mutation',
-        createUpdateOnIncident: {
-          createdAt: new Date(),
-          createdBy: {
-            fullName,
-            id: userId,
-            organisation,
-            __typename: 'User',
-          },
-          id: `optimistic-${new Date().toISOString()}`,
-          images:
-            updateFileList.length > 0
-              ? updateFileList.map((image) => ({
-                  id: image.uid,
-                  __typename: 'Image',
-                  card: image.url,
-                  optimised: image.url,
-                  url: image.url,
-                }))
-              : [],
-          replies: [],
-          type: getUpdateType(),
-          __typename: 'Update',
-          text: getText(updateInput),
-          linkedIncidents: [],
-          linkedOffenders: [],
-        },
-      },
-      update: (store, result) => {
-        if (result.data?.createUpdateOnIncident) {
-          const oldData = store.readQuery<
-            ViewIncidentQuery,
-            ViewIncidentQueryVariables
-          >({
-            query: ViewIncidentDocument,
+      if (!subscribed) {
+        if (incidentId) {
+          subscribeToIncident({
             variables: {
               where: {
                 id: incidentId,
               },
             },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              subscribeToIncident: {
+                id: incidentId,
+                __typename: 'Incident',
+                subscribed: true,
+              },
+            },
           });
-
-          if (oldData?.incident)
-            store.writeQuery<ViewIncidentQuery, ViewIncidentQueryVariables>({
-              query: ViewIncidentDocument,
-              variables: {
-                where: {
-                  id: incidentId,
-                },
-              },
-              data: {
-                incident: {
-                  ...oldData.incident,
-                  updates: replyTo
-                    ? update(oldData.incident.updates, {
-                        [oldData.incident.updates
-                          .map((item) => item.id)
-                          .indexOf(replyTo.id)]: {
-                          replies: {
-                            $push: [result.data.createUpdateOnIncident],
-                          },
-                        },
-                      })
-                    : [
-                        result.data.createUpdateOnIncident,
-                        ...oldData.incident.updates,
-                      ],
-                },
-              },
-            });
         }
-      },
-    });
+        if (offenderId) {
+          subscribeToOffender({
+            variables: {
+              where: {
+                id: offenderId,
+              },
+            },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              subscribeToOffender: {
+                id: offenderId,
+                __typename: 'Offender',
+                subscribed: true,
+              },
+            },
+          });
+        }
+      }
+
+      const getUpdateType = () => {
+        if (updateFileList.length > 0) return UpdateType.Image;
+        if (updateIncidents && updateIncidents.length > 0)
+          return UpdateType.LinkedIncident;
+        if (updateOffenders.length > 0) return UpdateType.LinkedOffender;
+        return UpdateType.Text;
+      };
+
+      const getText = (text: string) => {
+        const mentions = getMentions(text);
+        let newText = text;
+
+        for (let i = 0; i < mentions.length; i++) {
+          const mention = mentions[i];
+
+          const mentioned = schemeUsers?.find(
+            (member) => mention.value === member.fullName
+          );
+          if (mentioned)
+            newText = newText.replace(
+              `@${mention.value}`,
+              `@[${mentioned.oldFullName}](${mentioned.id})`
+            );
+        }
+
+        return newText;
+      };
+
+      if (incidentId) {
+        createIncidentUpdate({
+          variables: {
+            data: {
+              icon: UpdateIcon.Comment,
+              type: getUpdateType(),
+              text: getText(updateInput),
+              replyTo: replyTo
+                ? {
+                    id: replyTo.id,
+                  }
+                : undefined,
+              images:
+                updateFileList.length > 0
+                  ? updateFileList.map((image) => ({
+                      filename: image.fileName || '',
+                      mimetype: image.type || '',
+                      url: image.url || '',
+                    }))
+                  : undefined,
+              linkedOffenders:
+                updateOffenders.length > 0
+                  ? updateOffenders.map(({ id }) => ({ id }))
+                  : undefined,
+              linkedIncidents:
+                updateIncidents && updateIncidents.length > 0
+                  ? updateIncidents.map(({ id }) => ({ id }))
+                  : undefined,
+              mentionedUsers:
+                mentionedUser.length > 0
+                  ? mentionedUser.map(({ id }) => ({ id }))
+                  : undefined,
+            },
+            incident: {
+              id: incidentId,
+            },
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            createUpdateOnIncident: {
+              createdAt: new Date(),
+              createdBy: {
+                fullName,
+                id: userId,
+                organisation,
+                __typename: 'User',
+              },
+              id: `optimistic-${new Date().toISOString()}`,
+              images:
+                updateFileList.length > 0
+                  ? updateFileList.map((image) => ({
+                      id: image.uid,
+                      __typename: 'Image',
+                      card: image.url,
+                      optimised: image.url,
+                      url: image.url,
+                    }))
+                  : [],
+              replies: [],
+              type: getUpdateType(),
+              __typename: 'Update',
+              text: getText(updateInput),
+              linkedIncidents: [],
+              linkedOffenders: [],
+            },
+          },
+          update: (store, result) => {
+            if (result.data?.createUpdateOnIncident) {
+              const oldData = store.readQuery<
+                ViewIncidentQuery,
+                ViewIncidentQueryVariables
+              >({
+                query: ViewIncidentDocument,
+                variables: {
+                  where: {
+                    id: incidentId,
+                  },
+                },
+              });
+
+              if (oldData?.incident)
+                store.writeQuery<ViewIncidentQuery, ViewIncidentQueryVariables>(
+                  {
+                    query: ViewIncidentDocument,
+                    variables: {
+                      where: {
+                        id: incidentId,
+                      },
+                    },
+                    data: {
+                      incident: {
+                        ...oldData.incident,
+                        updates: replyTo
+                          ? update(oldData.incident.updates, {
+                              [oldData.incident.updates
+                                .map((item) => item.id)
+                                .indexOf(replyTo.id)]: {
+                                replies: {
+                                  $push: [result.data.createUpdateOnIncident],
+                                },
+                              },
+                            })
+                          : [
+                              result.data.createUpdateOnIncident,
+                              ...oldData.incident.updates,
+                            ],
+                      },
+                    },
+                  }
+                );
+            }
+          },
+        });
+      }
+      if (offenderId) {
+        createOffenderUpdate({
+          variables: {
+            data: {
+              icon: UpdateIcon.Comment,
+              type: getUpdateType(),
+              text: getText(updateInput),
+              replyTo: replyTo
+                ? {
+                    id: replyTo.id,
+                  }
+                : undefined,
+              images:
+                updateFileList.length > 0
+                  ? updateFileList.map((image) => ({
+                      filename: image.fileName || '',
+                      mimetype: image.type || '',
+                      url: image.url || '',
+                    }))
+                  : undefined,
+              linkedOffenders:
+                updateOffenders.length > 0
+                  ? updateOffenders.map(({ id }) => ({ id }))
+                  : undefined,
+              linkedIncidents:
+                updateIncidents && updateIncidents.length > 0
+                  ? updateIncidents.map(({ id }) => ({ id }))
+                  : undefined,
+              mentionedUsers:
+                mentionedUser.length > 0
+                  ? mentionedUser.map(({ id }) => ({ id }))
+                  : undefined,
+            },
+            offender: {
+              id: offenderId,
+            },
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            createUpdateOnOffender: {
+              createdAt: new Date(),
+              createdBy: {
+                fullName,
+                id: userId,
+                organisation,
+                __typename: 'User',
+              },
+              id: `optimistic-${new Date().toISOString()}`,
+              images:
+                updateFileList.length > 0
+                  ? updateFileList.map((image) => ({
+                      id: image.uid,
+                      __typename: 'Image',
+                      card: image.url,
+                      optimised: image.url,
+                      url: image.url,
+                    }))
+                  : [],
+              replies: [],
+              type: getUpdateType(),
+              __typename: 'Update',
+              text: getText(updateInput),
+              linkedIncidents: [],
+              linkedOffenders: [],
+            },
+          },
+          update: (store, result) => {
+            if (result.data?.createUpdateOnOffender) {
+              const oldData = store.readQuery<
+                ViewOffenderQuery,
+                ViewOffenderQueryVariables
+              >({
+                query: ViewOffenderDocument,
+                variables: {
+                  where: {
+                    id: offenderId,
+                  },
+                },
+              });
+
+              if (oldData?.offender)
+                store.writeQuery<ViewOffenderQuery, ViewOffenderQueryVariables>(
+                  {
+                    query: ViewOffenderDocument,
+                    variables: {
+                      where: {
+                        id: offenderId,
+                      },
+                    },
+                    data: {
+                      offender: {
+                        ...oldData.offender,
+                        updates: replyTo
+                          ? update(oldData.offender.updates, {
+                              [oldData.offender.updates
+                                .map((item) => item.id)
+                                .indexOf(replyTo.id)]: {
+                                replies: {
+                                  $push: [result.data.createUpdateOnOffender],
+                                },
+                              },
+                            })
+                          : [
+                              result.data.createUpdateOnOffender,
+                              ...oldData.offender.updates,
+                            ],
+                      },
+                    },
+                  }
+                );
+            }
+          },
+        });
+      }
+    }
   };
   const onUpdateImageChange: UploadProps['onChange'] = (info) => {
     if (info.file.response) {

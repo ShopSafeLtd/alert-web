@@ -10,6 +10,7 @@ import {
   ViewOffenderQueryVariables,
   useAddImagesToOffenderMutation,
   useUpdateUpdateMutation,
+  useSubscribeToOffenderMutation,
 } from 'graphql/generated';
 
 import { useLightbox } from 'simple-react-lightbox';
@@ -196,7 +197,25 @@ const useViewOffender = (offenderId: string): Return => {
     setLinkIncident(!linkIncident);
   };
 
-  const toggleSubscribe = () => {};
+  const [subscribe] = useSubscribeToOffenderMutation();
+
+  const toggleSubscribe = () => {
+    subscribe({
+      variables: {
+        where: {
+          id: offenderId,
+        },
+      },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        subscribeToOffender: {
+          id: offenderId,
+          __typename: 'Offender',
+          subscribed: data?.offender?.subscribed,
+        },
+      },
+    });
+  };
 
   const scrolledToTop = () => {
     setLoadMore(true);

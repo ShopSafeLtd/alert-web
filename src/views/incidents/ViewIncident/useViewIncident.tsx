@@ -358,6 +358,7 @@ const useViewIncident = (incidentId: string): Return => {
                 (item) => item.id === result.data?.deleteUpdate?.replyToId
               );
               if (updateItem) {
+                console.log(updateItem);
                 store.writeQuery<ViewIncidentQuery, ViewIncidentQueryVariables>(
                   {
                     query: ViewIncidentDocument,
@@ -470,37 +471,37 @@ const useViewIncident = (incidentId: string): Return => {
   }, [role]);
 
   return {
-    data,
-    loading: data === null && data === undefined,
-    saving,
-    openLightbox,
-    addOffenderRights: role !== Role.User,
-    editRights: role !== Role.User,
-    deleteRights: role !== Role.User,
-    onDelete,
-    linkOffender,
-    toggleLinkOffender,
-    updateOffendersList,
-    loadMore,
-    scrolledToTop,
-    userId,
-    replyTo,
-    setReplyTo,
-    toggleSubscribe,
-    confirmUpdateImages,
-    addUpdateImages,
     addImages,
+    addOffenderRights: role !== Role.User,
+    addUpdateImages,
     closeAddImages,
-    toggleSelectImages,
-    selectedImages,
     confirmDeleteUpdate,
-    setEditUpdate,
+    confirmUpdateImages,
+    data,
+    deleteRights: role !== Role.User,
+    editRights: role !== Role.User,
     editUpdate,
-    handleEditUpdate,
     editUpdateInput,
-    setEditUpdateInput,
-    optionMenuItems,
+    handleEditUpdate,
     lightboxElements,
+    linkOffender,
+    loadMore,
+    loading: data === null && data === undefined,
+    onDelete,
+    openLightbox,
+    optionMenuItems,
+    replyTo,
+    saving,
+    scrolledToTop,
+    selectedImages,
+    setEditUpdate,
+    setEditUpdateInput,
+    setReplyTo,
+    toggleLinkOffender,
+    toggleSelectImages,
+    toggleSubscribe,
+    updateOffendersList,
+    userId,
   };
 };
 

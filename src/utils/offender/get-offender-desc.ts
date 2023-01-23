@@ -62,8 +62,9 @@ export const calcAge = (date: string | Date): number => {
  */
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const getLastOffence = (
-  incidentsArray: any[]
-): { days: number; location: string } | undefined => {
+  incidentsArray: any[],
+  short?: boolean
+): string | undefined => {
   if (!incidentsArray) return;
   const incidents = [...incidentsArray];
 
@@ -80,10 +81,10 @@ export const getLastOffence = (
 
     // @ts-expect-error doesnt like date arithmatic
     // eslint-disable-next-line consistent-return
-    return `${((now - incident) / 1000 / 60 / 60 / 24).toFixed(
-      0
-    )} days ago, reported by ${location}`;
+    return `${((now - incident) / 1000 / 60 / 60 / 24).toFixed(0)} days ago${
+      short ? '' : `, reported by ${location}`
+    }`;
   }
   // eslint-disable-next-line consistent-return
-  return { days: -1, location: 'Unknown' };
+  return 'No offense';
 };

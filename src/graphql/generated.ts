@@ -27084,6 +27084,19 @@ export type RecycleOffenderMutation = {
   recycleOffender?: { __typename?: 'Offender'; id: string } | null;
 };
 
+export type SubscribeToOffenderMutationVariables = Exact<{
+  where: OffenderWhereUniqueInput;
+}>;
+
+export type SubscribeToOffenderMutation = {
+  __typename?: 'Mutation';
+  subscribeToOffender?: {
+    __typename?: 'Offender';
+    id: string;
+    subscribed?: boolean | null;
+  } | null;
+};
+
 export type UpdateOffenderMutationVariables = Exact<{
   where: UniqueId;
   data: OffenderUpdateInput;
@@ -27180,6 +27193,7 @@ export type ListOffendersQuery = {
         subject?: string | null;
         description: string;
         dayTime?: string | null;
+        date: any;
         approved?: boolean | null;
         crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
         location?: {
@@ -30909,6 +30923,57 @@ export type RecycleOffenderMutationOptions = Apollo.BaseMutationOptions<
   RecycleOffenderMutation,
   RecycleOffenderMutationVariables
 >;
+export const SubscribeToOffenderDocument = gql`
+  mutation SubscribeToOffender($where: OffenderWhereUniqueInput!) {
+    subscribeToOffender(where: $where) {
+      id
+      subscribed
+    }
+  }
+`;
+export type SubscribeToOffenderMutationFn = Apollo.MutationFunction<
+  SubscribeToOffenderMutation,
+  SubscribeToOffenderMutationVariables
+>;
+
+/**
+ * __useSubscribeToOffenderMutation__
+ *
+ * To run a mutation, you first call `useSubscribeToOffenderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSubscribeToOffenderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [subscribeToOffenderMutation, { data, loading, error }] = useSubscribeToOffenderMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useSubscribeToOffenderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SubscribeToOffenderMutation,
+    SubscribeToOffenderMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    SubscribeToOffenderMutation,
+    SubscribeToOffenderMutationVariables
+  >(SubscribeToOffenderDocument, options);
+}
+export type SubscribeToOffenderMutationHookResult = ReturnType<
+  typeof useSubscribeToOffenderMutation
+>;
+export type SubscribeToOffenderMutationResult =
+  Apollo.MutationResult<SubscribeToOffenderMutation>;
+export type SubscribeToOffenderMutationOptions = Apollo.BaseMutationOptions<
+  SubscribeToOffenderMutation,
+  SubscribeToOffenderMutationVariables
+>;
 export const UpdateOffenderDocument = gql`
   mutation updateOffender($where: UniqueId!, $data: OffenderUpdateInput!) {
     updateOffender(where: $where, data: $data) {
@@ -31050,6 +31115,7 @@ export const ListOffendersDocument = gql`
           subject
           description
           dayTime
+          date
           crimeTypes {
             id
             name
