@@ -11,13 +11,31 @@ const ViewOffender = (): JSX.Element => {
     saving,
     loading,
     openLightbox,
-    addIncidentRights,
-    onDelete,
     deleteRights,
     editRights,
     linkIncident,
     toggleLinkIncident,
     updateIncidentList,
+    optionMenuItems,
+    toggleSubscribe,
+    lightboxElements,
+    confirmDeleteUpdate,
+    confirmUpdateImages,
+    editUpdate,
+    loadMore,
+    replyTo,
+    scrolledToTop,
+    selectedImages,
+    setEditUpdate,
+    setReplyTo,
+    userId,
+    addImages,
+    addUpdateImages,
+    closeAddImages,
+    editUpdateInput,
+    handleEditUpdate,
+    setEditUpdateInput,
+    toggleSelectImages,
   } = useViewOffender(offenderId);
 
   return (
@@ -26,14 +44,32 @@ const ViewOffender = (): JSX.Element => {
       loading={loading}
       saving={saving}
       openLightbox={openLightbox}
-      addIncidentRights={addIncidentRights}
       offenderId={offenderId}
-      onDelete={onDelete}
       deleteRights={deleteRights}
       editRights={editRights}
       linkIncident={linkIncident}
       toggleLinkIncident={toggleLinkIncident}
       updateIncidentList={updateIncidentList}
+      optionMenuItems={optionMenuItems}
+      lightboxElements={lightboxElements}
+      toggleSubscribe={toggleSubscribe}
+      confirmDeleteUpdate={confirmDeleteUpdate}
+      confirmUpdateImages={confirmUpdateImages}
+      editUpdate={editUpdate}
+      loadMore={loadMore}
+      replyTo={replyTo}
+      scrolledToTop={scrolledToTop}
+      selectedImages={selectedImages}
+      setEditUpdate={setEditUpdate}
+      setReplyTo={setReplyTo}
+      userId={userId}
+      addImages={addImages}
+      addUpdateImages={addUpdateImages}
+      closeAddImages={closeAddImages}
+      editUpdateInput={editUpdateInput}
+      handleEditUpdate={handleEditUpdate}
+      setEditUpdateInput={setEditUpdateInput}
+      toggleSelectImages={toggleSelectImages}
     />
   );
 };

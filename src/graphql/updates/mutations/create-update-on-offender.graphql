@@ -1,0 +1,91 @@
+mutation createUpdateOnOffender(
+  $offender: UniqueId!
+  $data: CreateUpdateData!
+) {
+  createUpdateOnOffender(offender: $offender, data: $data) {
+    id
+    text
+    type
+    createdAt
+    images {
+      id
+      url
+      optimised
+      card
+    }
+    linkedIncidents {
+      id
+      subject
+      description
+      dayTime
+      images {
+        id
+        url
+        optimised
+      }
+    }
+    linkedOffenders {
+      id
+      updatedAt
+      age
+      build
+      dateOfBirth
+      name
+      race
+      gender
+      images {
+        id
+        url
+        optimised
+      }
+    }
+    createdBy {
+      id
+      fullName
+      organisation
+    }
+    replies {
+      id
+      text
+      type
+      createdAt
+      images {
+        id
+        url
+        optimised
+        card
+      }
+      linkedIncidents {
+        id
+        subject
+        description
+        dayTime
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      linkedOffenders {
+        id
+        updatedAt
+        age
+        build
+        dateOfBirth
+        name
+        race
+        gender
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      createdBy {
+        id
+        fullName
+        organisation
+      }
+    }
+  }
+}

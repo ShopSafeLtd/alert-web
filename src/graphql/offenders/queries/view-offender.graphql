@@ -12,6 +12,7 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
     name
     race
     peculiarities
+    subscribed
     approved
     active
     images {
@@ -42,26 +43,101 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
     }
     incidents {
       id
-      subject
-      description
       dayTime
+      date
       crimeTypes {
         id
         name
       }
-      approved
-      location {
+      createdBy {
         id
-        full
+        organisation
+      }
+    }
+    updates(orderBy: { createdAt: desc }) {
+      id
+      text
+      type
+      createdAt
+      images {
+        id
+        url
+        optimised
+        card
+      }
+      linkedIncidents {
+        id
+        subject
+        description
+        dayTime
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      linkedOffenders {
+        id
+        updatedAt
+        age
+        build
+        dateOfBirth
+        name
+        race
+        gender
+        images {
+          id
+          url
+          optimised
+        }
       }
       createdBy {
         id
         fullName
         organisation
       }
-      images {
+      replies {
         id
-        optimised
+        text
+        type
+        createdAt
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        linkedIncidents {
+          id
+          subject
+          description
+          dayTime
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        linkedOffenders {
+          id
+          updatedAt
+          age
+          build
+          dateOfBirth
+          name
+          race
+          gender
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        createdBy {
+          id
+          fullName
+          organisation
+        }
       }
     }
   }

@@ -42,30 +42,7 @@ query listIncidents(
       }
       offenders {
         id
-        createdAt
-        updatedAt
-        age
-        build
-        dateOfBirth
-        dateSource
-        gender
-        hair
         name
-        peculiarities
-        race
-        approved
-        uploaded
-        active
-        images {
-          id
-          url
-          optimised
-          card
-        }
-        tags {
-          id
-          name
-        }
       }
     }
     total

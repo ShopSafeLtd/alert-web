@@ -1,4 +1,4 @@
-mutation createIncident($data: CreatIncidentData!) {
+mutation createIncident($data: CreateIncidentData!) {
   createIncident(data: $data) {
     id
     subject

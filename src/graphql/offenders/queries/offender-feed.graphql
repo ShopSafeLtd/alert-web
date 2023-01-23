@@ -57,38 +57,10 @@ query offenderFeed(
       id
       name
     }
-    tags {
-      id
-      name
-    }
     createdBy {
       id
       fullName
       organisation
-    }
-    incidents {
-      id
-      subject
-      description
-      dayTime
-      crimeTypes {
-        id
-        name
-      }
-      approved
-      location {
-        id
-        full
-      }
-      createdBy {
-        id
-        fullName
-        organisation
-      }
-      images {
-        id
-        optimised
-      }
     }
   }
 }

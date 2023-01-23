@@ -21,7 +21,7 @@ import {
   SortOrder,
   ListOffendersQuery,
   QueryMode,
-  CreatIncidentData,
+  CreateIncidentData,
 } from 'graphql/generated';
 import { LocationOptions } from 'types/enums';
 import { notification, Modal, Form, FormInstance, Upload, message } from 'antd';
@@ -480,7 +480,7 @@ const useEditIncident = (): Return => {
       });
       setSaving(false);
     } else {
-      const getLocation = (): CreatIncidentData['location'] => {
+      const getLocation = (): CreateIncidentData['location'] => {
         if (option === LocationOptions.ACCOUNT) {
           const location = addressData?.addresses.find(
             ({ primary }) => primary
@@ -516,7 +516,7 @@ const useEditIncident = (): Return => {
           previous: { id: previousId },
         };
       };
-      const getOffenders = (): CreatIncidentData['offenders'] => {
+      const getOffenders = (): CreateIncidentData['offenders'] => {
         if (offendersData && listOffendersData?.listOffenders) {
           const offendersIds = listOffendersData.listOffenders.offenders.map(
             (offender) => offender.id

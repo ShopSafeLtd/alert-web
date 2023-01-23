@@ -74,13 +74,15 @@ export const getLastOffence = (
         new Date(b.date) - new Date(a.date)
     );
     const incident = new Date(incidents[0].date);
-    const location = incidents[0]?.location?.full;
+    const location = incidents[0]?.createdBy.organisation;
 
     const now = Date.now();
 
     // @ts-expect-error doesnt like date arithmatic
     // eslint-disable-next-line consistent-return
-    return { days: (now - incident) / 1000 / 60 / 60 / 24, location };
+    return `${((now - incident) / 1000 / 60 / 60 / 24).toFixed(
+      0
+    )} days ago, reported by ${location}`;
   }
   // eslint-disable-next-line consistent-return
   return { days: -1, location: 'Unknown' };

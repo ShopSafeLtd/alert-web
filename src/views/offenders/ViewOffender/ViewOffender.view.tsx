@@ -1,32 +1,43 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import { ViewOffenderQuery } from 'graphql/generated';
+import { UpdateType, ViewOffenderQuery } from 'graphql/generated';
 import {
   Typography,
   Row,
   Col,
-  Tabs,
   Descriptions,
   Tag,
-  Divider,
   Skeleton,
   Button,
   Table,
   Drawer,
+  Dropdown,
+  Menu,
+  Space,
+  Tooltip,
+  Popover,
+  Modal,
+  Checkbox,
+  Image,
+  Input,
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faLocationDot,
   faClock,
-  faPlus,
   faUserTag,
   faUserClock,
   faEarth,
   faMarsAndVenus,
   faUserHair,
   faCircleInfo,
-  faUser,
+  faChevronDown,
+  faBellSlash,
+  faBell,
+  faArrowUpRightFromSquare,
+  faEdit,
+  faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import {
   getOffenderAge,
@@ -36,28 +47,70 @@ import {
   getLastOffence,
   calcAge,
 } from 'utils/offender/get-offender-desc';
-
+import { ItemType } from 'antd/lib/menu/hooks/useItems';
 import { calcExpired } from 'utils/offender/get-offender-exclusion';
 import OffenderSideList from 'components/offenders/OffenderSideList';
-import { Link } from 'react-router-dom';
 import moment from 'moment';
 import LinkIncident from 'components/form-components/offender/LinkIncident';
+import { useNavigate } from 'react-router';
+import { SRLWrapper } from 'simple-react-lightbox';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import UpdateContent from 'views/incidents/ViewIncident/Update.view';
+import UpdateBar from 'components/form-components/update-bar';
+import useStyles from './ViewOffender.styles';
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Text } = Typography;
 
 interface Props {
   data: ViewOffenderQuery | undefined;
   loading: boolean;
   saving: boolean;
   openLightbox: (index: number) => void;
-  addIncidentRights: boolean;
   offenderId: string;
   editRights: boolean;
   deleteRights: boolean;
-  onDelete: (id: string) => void;
   linkIncident: boolean;
   toggleLinkIncident: () => void;
   updateIncidentList: (value: string) => void;
+  optionMenuItems: ItemType[];
+  toggleSubscribe: () => void;
+  lightboxElements: {
+    src: string;
+  }[];
+  scrolledToTop: () => void;
+  loadMore: boolean;
+  userId: string;
+  replyTo: {
+    id: string;
+    text: string;
+    createdAt: string;
+    createdBy: string;
+  } | null;
+  setReplyTo: (
+    value: {
+      id: string;
+      text: string;
+      createdAt: string;
+      createdBy: string;
+    } | null
+  ) => void;
+  setEditUpdate: (value: { id: string; text: string } | null) => void;
+  confirmDeleteUpdate: (updateId: string) => void;
+  confirmUpdateImages: (images: { id: string; url: string }[]) => void;
+  editUpdate: { id: string; text: string } | null;
+  selectedImages: string[];
+  addImages:
+    | {
+        id: string;
+        url: string;
+      }[]
+    | null;
+  handleEditUpdate: () => void;
+  editUpdateInput: string;
+  setEditUpdateInput: (value: string) => void;
+  toggleSelectImages: (id: string) => void;
+  addUpdateImages: (images: { id: string }[]) => void;
+  closeAddImages: () => void;
 }
 
 const ViewOffender = ({
@@ -65,435 +118,744 @@ const ViewOffender = ({
   loading,
   saving,
   openLightbox,
-  addIncidentRights,
   offenderId,
   deleteRights,
   editRights,
-  onDelete,
   linkIncident,
   toggleLinkIncident,
   updateIncidentList,
-}: Props): JSX.Element => (
-  <div className="page-container">
-    <Row>
-      <Col span={6}>
-        <OffenderSideList current={offenderId} />
-      </Col>
+  optionMenuItems,
+  toggleSubscribe,
+  lightboxElements,
+  scrolledToTop,
+  loadMore,
+  userId,
+  setEditUpdate,
+  confirmDeleteUpdate,
+  setReplyTo,
+  confirmUpdateImages,
+  replyTo,
+  addImages,
+  editUpdate,
+  selectedImages,
+  editUpdateInput,
+  handleEditUpdate,
+  setEditUpdateInput,
+  addUpdateImages,
+  closeAddImages,
+  toggleSelectImages,
+}: Props): JSX.Element => {
+  const classes = useStyles();
+  const navigate = useNavigate();
+  return (
+    <div className="page-container">
+      <Row>
+        <Col span={6}>
+          <OffenderSideList current={offenderId} />
+        </Col>
 
-      <Col span={18}>
-        <div className="view-offender">
-          {loading ? (
-            <Skeleton />
-          ) : (
-            <Row
-              gutter={8}
-              justify="start"
-              align="middle"
-              wrap={false}
-              className="offender-images"
-            >
-              {data?.offender?.images.map((image, i) => (
-                <Col key={image.id}>
-                  <div
-                    onClick={() => openLightbox(i)}
-                    className="offender-image"
-                    style={{ backgroundImage: `url(${image.optimised})` }}
-                  />
-                </Col>
-              ))}
+        <Col span={18}>
+          <div className={classes.viewOffender}>
+            <Row className={classes.headerBar}>
+              <Col className={classes.detailsHeader} span={12}>
+                <Row>
+                  <Col className={classes.centerCell} flex={1}>
+                    <Title className={classes.headerTitle} level={4}>
+                      {data?.offender?.name}
+                    </Title>
+                  </Col>
+                  {(editRights || deleteRights) && (
+                    <Dropdown overlay={<Menu items={optionMenuItems} />}>
+                      <Button type="text">
+                        <Space>
+                          Options
+                          <FontAwesomeIcon icon={faChevronDown} />
+                        </Space>
+                      </Button>
+                    </Dropdown>
+                  )}
+                </Row>
+              </Col>
+              <Col span={12}>
+                <Row>
+                  <Col className={classes.centerCell} flex={1}>
+                    <Title className={classes.headerTitle} level={4}>
+                      Updates
+                    </Title>
+                  </Col>
+                  <Col>
+                    <Tooltip
+                      title={
+                        data?.offender?.subscribed
+                          ? 'Stop getting notified about updates.'
+                          : 'Get notified about updates.'
+                      }
+                    >
+                      <Button
+                        onClick={toggleSubscribe}
+                        disabled={saving}
+                        loading={saving}
+                        type="text"
+                        color={
+                          data?.offender?.subscribed ? undefined : 'danger'
+                        }
+                      >
+                        <FontAwesomeIcon
+                          size="1x"
+                          style={{ marginRight: 8 }}
+                          icon={
+                            data?.offender?.subscribed ? faBellSlash : faBell
+                          }
+                        />
+                        {data?.offender?.subscribed
+                          ? 'Un-follow Updates'
+                          : 'Follow Updates'}
+                      </Button>
+                    </Tooltip>
+                  </Col>
+                </Row>
+              </Col>
             </Row>
-          )}
-          <div className="offender-content">
-            {loading ? (
-              <Skeleton />
-            ) : (
-              <Tabs
-                tabBarExtraContent={
-                  <Row>
-                    {editRights && (
-                      <Col>
-                        <Link to={`/app/offenders/edit/${offenderId}`}>
-                          <Button
-                            disabled={saving}
-                            loading={saving}
-                            type="text"
-                          >
-                            Edit Offender
-                          </Button>
-                        </Link>
+            <Row className={classes.content}>
+              <Col span={12} className={classes.detailsContent}>
+                {loading ? (
+                  <Skeleton />
+                ) : (
+                  <Row
+                    gutter={8}
+                    justify="start"
+                    align="middle"
+                    wrap={false}
+                    className={classes.images}
+                    style={{
+                      height:
+                        data?.offender?.images &&
+                        data?.offender?.images.length > 0
+                          ? undefined
+                          : 0,
+                    }}
+                  >
+                    {data?.offender?.images.map((image, i) => (
+                      <Col key={image.id}>
+                        <div
+                          onClick={() => openLightbox(i)}
+                          className={classes.image}
+                          style={{ backgroundImage: `url(${image.optimised})` }}
+                        />
                       </Col>
-                    )}
-                    {deleteRights && (
-                      <Col>
-                        <Button
-                          onClick={() => {
-                            onDelete(offenderId);
-                          }}
-                          disabled={saving}
-                          loading={saving}
-                          danger
-                          type="text"
-                        >
-                          Delete Offender
-                        </Button>
-                      </Col>
-                    )}
+                    ))}
                   </Row>
-                }
-              >
-                <Tabs.TabPane key={0} tab="Details">
-                  <div className="offender-tab-content">
-                    <Row>
-                      <Col span={13}>
-                        <div className="offender-details-main">
-                          <Title level={4}>{data?.offender?.name}</Title>
-                          {data?.offender?.groups?.map((group) => (
-                            <Text key={group.id} type="danger" ellipsis>
-                              {group.name}
-                            </Text>
-                          ))}
-                          <Row className="offender-tags">
-                            {data?.offender?.tags.map((tag) => (
-                              <Col key={tag.id}>
-                                <Tag color="red">{tag.name}</Tag>
-                              </Col>
-                            ))}
-                          </Row>
-                          <Descriptions
-                            column={1}
-                            className="offender-descriptions"
+                )}
+                <div className={classes.details}>
+                  {loading ? (
+                    <Skeleton />
+                  ) : (
+                    <div>
+                      <Title level={4}>{data?.offender?.name}</Title>
+                      {data?.offender?.groups?.map((group) => (
+                        <Text key={group.id} type="danger" ellipsis>
+                          {group.name}
+                        </Text>
+                      ))}
+                      <Row className="offender-tags">
+                        {data?.offender?.tags.map((tag) => (
+                          <Col key={tag.id}>
+                            <Tag color="red">{tag.name}</Tag>
+                          </Col>
+                        ))}
+                      </Row>
+                      <Descriptions column={2}>
+                        <Descriptions.Item
+                          label={
+                            <span>
+                              <FontAwesomeIcon
+                                className={classes.descIcon}
+                                icon={faUserClock}
+                              />
+                              Age
+                            </span>
+                          }
+                        >
+                          {data?.offender?.dateOfBirth
+                            ? calcAge(data?.offender?.dateOfBirth)
+                            : getOffenderAge(data?.offender?.age)}
+                        </Descriptions.Item>
+
+                        <Descriptions.Item
+                          label={
+                            <span>
+                              <FontAwesomeIcon
+                                className={classes.descIcon}
+                                icon={faMarsAndVenus}
+                              />
+                              Sex
+                            </span>
+                          }
+                        >
+                          {getOffenderGender(data?.offender?.gender)}
+                        </Descriptions.Item>
+
+                        <Descriptions.Item
+                          label={
+                            <span>
+                              <FontAwesomeIcon
+                                className={classes.descIcon}
+                                icon={faUserTag}
+                              />
+                              Build
+                            </span>
+                          }
+                        >
+                          {getOffenderBuild(data?.offender?.build)}
+                        </Descriptions.Item>
+                        <Descriptions.Item
+                          label={
+                            <span>
+                              <FontAwesomeIcon
+                                className={classes.descIcon}
+                                icon={faEarth}
+                              />
+                              Ethnicity
+                            </span>
+                          }
+                        >
+                          {getOffenderRace(data?.offender?.race, false)}
+                        </Descriptions.Item>
+                        {data?.offender?.hair && (
+                          <Descriptions.Item
+                            label={
+                              <span>
+                                <FontAwesomeIcon
+                                  className={classes.descIcon}
+                                  icon={faUserHair}
+                                />
+                                Hair
+                              </span>
+                            }
                           >
-                            <Descriptions.Item
-                              label={
-                                <span>
-                                  <FontAwesomeIcon
-                                    className="offender-description-icon"
-                                    icon={faUserClock}
-                                  />
-                                  Age
-                                </span>
-                              }
-                            >
-                              {data?.offender?.dateOfBirth
-                                ? calcAge(data?.offender?.dateOfBirth)
-                                : getOffenderAge(data?.offender?.age)}
-                            </Descriptions.Item>
-
-                            <Descriptions.Item
-                              label={
-                                <span>
-                                  <FontAwesomeIcon
-                                    className="offender-description-icon"
-                                    icon={faMarsAndVenus}
-                                  />
-                                  Sex
-                                </span>
-                              }
-                            >
-                              {getOffenderGender(data?.offender?.gender)}
-                            </Descriptions.Item>
-
-                            <Descriptions.Item
-                              label={
-                                <span>
-                                  <FontAwesomeIcon
-                                    className="offender-description-icon"
-                                    icon={faUserTag}
-                                  />
-                                  Build
-                                </span>
-                              }
-                            >
-                              {getOffenderBuild(data?.offender?.build)}
-                            </Descriptions.Item>
-                            <Descriptions.Item
-                              label={
-                                <span>
-                                  <FontAwesomeIcon
-                                    className="offender-description-icon"
-                                    icon={faEarth}
-                                  />
-                                  Ethnicity
-                                </span>
-                              }
-                            >
-                              {getOffenderRace(data?.offender?.race, false)}
-                            </Descriptions.Item>
-                            {data?.offender?.hair && (
-                              <Descriptions.Item
-                                label={
-                                  <span>
-                                    <FontAwesomeIcon
-                                      className="offender-description-icon"
-                                      icon={faUserHair}
-                                    />
-                                    Hair
-                                  </span>
-                                }
-                              >
-                                {data?.offender?.hair}
-                              </Descriptions.Item>
-                            )}
-
-                            <Descriptions.Item
-                              label={
-                                <span>
-                                  <FontAwesomeIcon
-                                    className="offender-description-icon"
-                                    icon={faClock}
-                                  />
-                                  Last updated
-                                </span>
-                              }
-                            >
-                              {moment(
-                                data?.offender?.updatedAt || moment()
-                              ).format(`ddd MMM DD YYYY - HH:mm`)}
-                            </Descriptions.Item>
-                            {data?.offender?.peculiarities && (
-                              <Descriptions.Item
-                                label={
-                                  <span>
-                                    <FontAwesomeIcon
-                                      className="offender-description-icon"
-                                      icon={faCircleInfo}
-                                    />
-                                    Additional Info
-                                  </span>
-                                }
-                              >
-                                {data?.offender?.peculiarities}
-                              </Descriptions.Item>
-                            )}
-
-                            {data?.offender?.incidents[0]?.location && (
-                              <Descriptions.Item
-                                label={
-                                  <span>
-                                    <FontAwesomeIcon
-                                      className="offender-description-icon"
-                                      icon={faLocationDot}
-                                    />
-                                    Last offence
-                                  </span>
-                                }
-                              >
-                                {
-                                  getLastOffence(data?.offender?.incidents)
-                                    ?.location
-                                }
-                              </Descriptions.Item>
-                            )}
-                          </Descriptions>
-                          <Title level={4}>Exclusions</Title>
-                          {data?.offender?.bans &&
-                          data.offender.bans.length > 0 ? (
-                            <Table
-                              size="small"
-                              loading={loading}
-                              pagination={{
-                                defaultPageSize: 20,
-                                pageSize: 20,
-                              }}
-                              columns={[
-                                {
-                                  key: 'duration',
-                                  title: 'Duration',
-                                  dataIndex: 'duration',
-                                  render: (value, record) => (
-                                    <>
-                                      <Text>{value}</Text>
-                                      {calcExpired(
-                                        new Date(record.endDate)
-                                      ) && (
-                                        <Tag
-                                          color="red"
-                                          style={{
-                                            marginLeft: 10,
-                                          }}
-                                        >
-                                          EXPIRED
-                                        </Tag>
-                                      )}
-                                    </>
-                                  ),
-                                },
-
-                                {
-                                  key: 'location',
-                                  title: 'Location',
-                                  dataIndex: 'location',
-                                  ellipsis: true,
-                                  render: (value) => (
-                                    <span>
-                                      {value && (
-                                        <FontAwesomeIcon
-                                          className="offender-description-icon"
-                                          icon={faLocationDot}
-                                        />
-                                      )}
-                                      {value}
-                                    </span>
-                                  ),
-                                },
-                              ]}
-                              dataSource={data?.offender?.bans.map((ban) => ({
-                                endDate: ban.endDate,
-                                duration: `${new Date(
-                                  ban?.startDate
-                                ).toDateString()}  -->  ${new Date(
-                                  ban?.endDate
-                                ).toDateString()}`,
-                                location: ban.location,
-                              }))}
-                            />
-                          ) : (
-                            <Paragraph>
-                              No one has added an exclusion to this offender
-                              yet.
-                            </Paragraph>
-                          )}
-                        </div>
-                      </Col>
-                      <Col span={11}>
+                            {data?.offender?.hair}
+                          </Descriptions.Item>
+                        )}
+                      </Descriptions>
+                      <Descriptions column={1} className={classes.desc}>
+                        {data?.offender?.peculiarities && (
+                          <Descriptions.Item
+                            label={
+                              <span>
+                                <FontAwesomeIcon
+                                  className={classes.descIcon}
+                                  icon={faCircleInfo}
+                                />
+                                Additional Info
+                              </span>
+                            }
+                          >
+                            {data?.offender?.peculiarities}
+                          </Descriptions.Item>
+                        )}
                         {data?.offender?.incidents &&
-                        data.offender.incidents.length > 0 ? (
-                          <div className="offender-incidents">
-                            {data?.offender?.incidents.map((incident) => (
-                              <Link to={`/app/incidents/view/${incident.id}`}>
-                                <div className="offender-incident">
-                                  <Row wrap={false}>
-                                    <Col>
-                                      {incident.images.length > 0 ? (
-                                        <div
-                                          className="incident-image"
-                                          style={{
-                                            backgroundImage: `url(${incident.images[0].optimised})`,
-                                          }}
-                                        />
-                                      ) : (
-                                        <Skeleton.Image className="incident-image-skeleton" />
-                                      )}
-                                    </Col>
-                                    <Col
-                                      flex={1}
-                                      className="offender-incident-content"
-                                    >
-                                      <Title
-                                        level={4}
-                                        className="offender-incident-name"
-                                      >
-                                        {incident.subject}
-                                      </Title>
-                                      <Descriptions size="small" column={1}>
-                                        <Descriptions.Item
-                                          label={
-                                            <span>
-                                              <FontAwesomeIcon
-                                                className="offender-description-icon"
-                                                icon={faClock}
-                                              />
-                                              Created At
-                                            </span>
-                                          }
-                                        >
-                                          {incident.dayTime}
-                                        </Descriptions.Item>
-                                        <Descriptions.Item
-                                          label={
-                                            <span>
-                                              <FontAwesomeIcon
-                                                className="offender-description-icon"
-                                                icon={faUser}
-                                              />
-                                              Created By
-                                            </span>
-                                          }
-                                        >
-                                          {loading ? (
-                                            <Skeleton
-                                              title={{ width: 100 }}
-                                              paragraph={false}
-                                            />
-                                          ) : (
-                                            `${incident?.createdBy.fullName} -
-                              ${incident?.createdBy.organisation}`
-                                          )}
-                                        </Descriptions.Item>
-                                        <Descriptions.Item
-                                          label={
-                                            <span>
-                                              <FontAwesomeIcon
-                                                className="offender-description-icon"
-                                                icon={faLocationDot}
-                                              />
-                                              Location
-                                            </span>
-                                          }
-                                        >
-                                          {incident?.location?.full}
-                                        </Descriptions.Item>
-                                      </Descriptions>
-                                    </Col>
-                                  </Row>
-                                  <Divider />
-                                </div>
-                              </Link>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="offender-incidents-empty">
-                            <Paragraph>
-                              This offender does not appear in any incidents.
-                            </Paragraph>
-                            {addIncidentRights && (
-                              <div>
+                          data?.offender?.incidents.length > 0 && (
+                            <Descriptions.Item
+                              label={
+                                <span>
+                                  <FontAwesomeIcon
+                                    className={classes.descIcon}
+                                    icon={faLocationDot}
+                                  />
+                                  Last offence
+                                </span>
+                              }
+                            >
+                              {getLastOffence(data?.offender?.incidents)}
+                            </Descriptions.Item>
+                          )}
+                        <Descriptions.Item
+                          label={
+                            <span>
+                              <FontAwesomeIcon
+                                className={classes.descIcon}
+                                icon={faClock}
+                              />
+                              Last updated
+                            </span>
+                          }
+                        >
+                          {moment(data?.offender?.updatedAt || moment()).format(
+                            `ddd MMM DD YYYY - HH:mm`
+                          )}
+                        </Descriptions.Item>
+                      </Descriptions>
+                      <Title level={4}>Exclusions</Title>
+                      <Table
+                        size="small"
+                        loading={loading}
+                        pagination={
+                          data?.offender?.incidents &&
+                          data?.offender?.incidents.length > 10
+                            ? {
+                                pageSize: 10,
+                              }
+                            : false
+                        }
+                        className={classes.exclusions}
+                        columns={[
+                          {
+                            key: 'duration',
+                            title: 'Duration',
+                            dataIndex: 'duration',
+                            render: (value) => (
+                              <>
+                                <Text>{value}</Text>
+                              </>
+                            ),
+                          },
+                          {
+                            key: 'status',
+                            title: 'Status',
+                            dataIndex: 'status',
+                            render: (value, record) => (
+                              <>
+                                {calcExpired(new Date(record.endDate)) ? (
+                                  <Tag
+                                    color="red"
+                                    style={{
+                                      marginLeft: 10,
+                                    }}
+                                  >
+                                    EXPIRED
+                                  </Tag>
+                                ) : (
+                                  <Tag
+                                    color="success"
+                                    style={{
+                                      marginLeft: 10,
+                                    }}
+                                  >
+                                    ACTIVE
+                                  </Tag>
+                                )}
+                              </>
+                            ),
+                          },
+                          {
+                            key: 'location',
+                            title: 'Location',
+                            dataIndex: 'location',
+                            ellipsis: true,
+                          },
+                        ]}
+                        dataSource={data?.offender?.bans.map((ban) => ({
+                          endDate: ban.endDate,
+                          duration: `${new Date(
+                            ban?.startDate
+                          ).toDateString()}  -->  ${new Date(
+                            ban?.endDate
+                          ).toDateString()}`,
+                          status: `${new Date(
+                            ban?.startDate
+                          ).toDateString()}  -->  ${new Date(
+                            ban?.endDate
+                          ).toDateString()}`,
+                          location: ban.location,
+                        }))}
+                      />
+                      <Title level={4}>Incidents</Title>
+                      <Table
+                        size="small"
+                        loading={loading}
+                        columns={[
+                          {
+                            key: 'types',
+                            title: 'Types',
+                            dataIndex: 'types',
+                          },
+                          {
+                            key: 'date',
+                            title: 'Date',
+                            dataIndex: 'date',
+                          },
+                          {
+                            key: 'location',
+                            title: 'Location',
+                            dataIndex: 'location',
+                          },
+                          {
+                            title: '',
+                            dataIndex: 'actions',
+                            key: 'actions',
+                            render: (_, record) => (
+                              <Button type="text" size="small">
+                                <FontAwesomeIcon
+                                  icon={faArrowUpRightFromSquare}
+                                  onClick={() =>
+                                    navigate(
+                                      `/app/offenders/view/${record.key}`
+                                    )
+                                  }
+                                />
+                              </Button>
+                            ),
+                          },
+                        ]}
+                        dataSource={data?.offender?.incidents.map(
+                          (incident) => ({
+                            types: incident.crimeTypes.map(
+                              (type, index) =>
+                                `${index > 0 ? ' ' : ''}${type.name}`
+                            ),
+                            date: incident.dayTime,
+                            location: incident.createdBy.organisation,
+                            key: incident.id,
+                          })
+                        )}
+                        pagination={
+                          data?.offender?.incidents &&
+                          data?.offender?.incidents.length > 10
+                            ? {
+                                pageSize: 10,
+                              }
+                            : false
+                        }
+                      />
+                    </div>
+                  )}
+                </div>
+              </Col>
+              <Col span={12}>
+                <div className={classes.updatesContainer}>
+                  <InfiniteScroll
+                    height="calc(100vh - 225px)"
+                    className="update-scroll"
+                    initialScrollY={0}
+                    dataLength={data?.offender?.updates?.length || 0}
+                    next={scrolledToTop}
+                    hasMore={loadMore}
+                    inverse
+                    style={{
+                      justifyContent: 'end',
+                      // display: 'flex',
+                      flexDirection: 'column',
+                    }}
+                    loader={
+                      <div className="message-date">
+                        <div className="date-line" />
+                        <div className="date">Loading...</div>
+                        <div className="date-line" />
+                      </div>
+                    }
+                  >
+                    {data?.offender?.updates.map((update) => (
+                      <div key={update.id} className="update-wrapper">
+                        {editRights && update.type !== UpdateType.System ? (
+                          <Popover
+                            trigger="click"
+                            placement={
+                              update.createdBy.id === userId ? 'left' : 'right'
+                            }
+                            overlayClassName="message-popover"
+                            content={
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                }}
+                              >
                                 <Button
-                                  onClick={toggleLinkIncident}
+                                  type="text"
                                   disabled={saving}
-                                  loading={saving}
-                                  style={{ color: 'red' }}
                                   icon={
                                     <FontAwesomeIcon
-                                      className="button-icon"
-                                      icon={faPlus}
+                                      style={{ marginRight: 5 }}
+                                      icon={faEdit}
+                                      size="lg"
                                     />
                                   }
+                                  onClick={() => {
+                                    setEditUpdate({
+                                      id: update.id,
+                                      text: update.text || '',
+                                    });
+                                  }}
+                                  size="small"
                                 >
-                                  Link Incident
+                                  Edit Update
+                                </Button>
+                                <Button
+                                  type="text"
+                                  disabled={saving}
+                                  icon={
+                                    <FontAwesomeIcon
+                                      style={{ marginRight: 5 }}
+                                      icon={faTrash}
+                                      size="lg"
+                                    />
+                                  }
+                                  onClick={() => {
+                                    confirmDeleteUpdate(update.id);
+                                  }}
+                                  size="small"
+                                >
+                                  Delete Update
                                 </Button>
                               </div>
+                            }
+                          >
+                            <div>
+                              <UpdateContent
+                                userId={userId}
+                                content={update.text}
+                                createdAt={update.createdAt}
+                                from={update.createdBy}
+                                id={update.id}
+                                images={update.images}
+                                incidents={update.linkedIncidents}
+                                offenders={update.linkedOffenders}
+                                showDate
+                                showUser
+                              />
+                            </div>
+                          </Popover>
+                        ) : (
+                          <UpdateContent
+                            userId={userId}
+                            content={update.text}
+                            createdAt={update.createdAt}
+                            from={update.createdBy}
+                            id={update.id}
+                            images={update.images}
+                            incidents={update.linkedIncidents}
+                            offenders={update.linkedOffenders}
+                            showDate
+                            showUser
+                          />
+                        )}
+                        {update.replies.map((reply) => (
+                          <div className="update-reply">
+                            {editRights ? (
+                              <Popover
+                                trigger="click"
+                                placement={
+                                  reply.createdBy.id === userId
+                                    ? 'left'
+                                    : 'right'
+                                }
+                                overlayClassName="message-popover"
+                                content={
+                                  <div
+                                    style={{
+                                      display: 'flex',
+                                      flexDirection: 'column',
+                                    }}
+                                  >
+                                    <Button
+                                      type="text"
+                                      disabled={saving}
+                                      icon={
+                                        <FontAwesomeIcon
+                                          style={{ marginRight: 5 }}
+                                          icon={faEdit}
+                                          size="lg"
+                                        />
+                                      }
+                                      onClick={() => {
+                                        setEditUpdate({
+                                          id: reply.id,
+                                          text: reply.text || '',
+                                        });
+                                      }}
+                                      size="small"
+                                    >
+                                      Edit Update
+                                    </Button>
+                                    <Button
+                                      type="text"
+                                      disabled={saving}
+                                      icon={
+                                        <FontAwesomeIcon
+                                          style={{ marginRight: 5 }}
+                                          icon={faTrash}
+                                          size="lg"
+                                        />
+                                      }
+                                      onClick={() => {
+                                        confirmDeleteUpdate(reply.id);
+                                      }}
+                                      size="small"
+                                    >
+                                      Delete Update
+                                    </Button>
+                                  </div>
+                                }
+                              >
+                                <div>
+                                  <UpdateContent
+                                    userId={userId}
+                                    content={reply.text}
+                                    createdAt={reply.createdAt}
+                                    from={reply.createdBy}
+                                    id={reply.id}
+                                    images={reply.images}
+                                    incidents={reply.linkedIncidents}
+                                    offenders={reply.linkedOffenders}
+                                    showDate
+                                    showUser
+                                  />
+                                </div>
+                              </Popover>
+                            ) : (
+                              <UpdateContent
+                                userId={userId}
+                                content={reply.text}
+                                createdAt={reply.createdAt}
+                                from={reply.createdBy}
+                                id={reply.id}
+                                images={reply.images}
+                                incidents={reply.linkedIncidents}
+                                offenders={reply.linkedOffenders}
+                                showDate
+                                showUser
+                              />
                             )}
                           </div>
-                        )}
-                      </Col>
-                    </Row>
-                  </div>
-                </Tabs.TabPane>
-              </Tabs>
-            )}
+                        ))}
+                        <Row>
+                          {update.type !== UpdateType.System && (
+                            <Col>
+                              <Button
+                                style={{
+                                  marginLeft:
+                                    update.replies.length > 0 ? 48 : 0,
+                                }}
+                                type="text"
+                                danger
+                                size="small"
+                                onClick={() =>
+                                  setReplyTo({
+                                    createdAt: update.createdAt,
+                                    createdBy:
+                                      userId === update.createdBy.id
+                                        ? 'You'
+                                        : `${update.createdBy.fullName} - ${update.createdBy.organisation}`,
+                                    id: update.id,
+                                    text: update.text || '',
+                                  })
+                                }
+                              >
+                                Reply
+                              </Button>
+                            </Col>
+                          )}
+                          {update.type === UpdateType.Image && editRights && (
+                            <Col>
+                              <Button
+                                style={{
+                                  marginLeft:
+                                    update.replies.length > 0 ? 48 : 0,
+                                }}
+                                type="text"
+                                danger
+                                size="small"
+                                onClick={() =>
+                                  confirmUpdateImages(
+                                    update.images.map(({ id, optimised }) => ({
+                                      id,
+                                      url: optimised || '',
+                                    }))
+                                  )
+                                }
+                              >
+                                Add Image To Incident
+                              </Button>
+                            </Col>
+                          )}
+                        </Row>
+                      </div>
+                    ))}
+                  </InfiniteScroll>
+                  <UpdateBar
+                    replyTo={replyTo}
+                    incidentId={offenderId}
+                    setReplyTo={setReplyTo}
+                    subscribed={data?.offender?.subscribed || false}
+                  />
+                </div>
+              </Col>
+            </Row>
           </div>
-        </div>
-      </Col>
-    </Row>
+        </Col>
+      </Row>
 
-    <Drawer
-      title="Link Incidents"
-      visible={linkIncident}
-      width="800"
-      onClose={toggleLinkIncident}
-    >
-      {linkIncident ? (
-        <LinkIncident
-          update={updateIncidentList}
-          onClose={toggleLinkIncident}
-          incidentIds={data?.offender?.incidents.map(({ id }) => id) || []}
+      <Drawer
+        title="Link Incidents"
+        visible={linkIncident}
+        width="800"
+        onClose={toggleLinkIncident}
+      >
+        {linkIncident ? (
+          <LinkIncident
+            update={updateIncidentList}
+            onClose={toggleLinkIncident}
+            incidentIds={data?.offender?.incidents.map(({ id }) => id) || []}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+
+      <Modal
+        title="Select Images To Add"
+        visible={addImages !== null}
+        onOk={() => addUpdateImages(selectedImages.map((id) => ({ id })))}
+        onCancel={closeAddImages}
+        width={addImages ? addImages.length * 250 : 400}
+        okText="Add Images"
+      >
+        <Row justify="center" gutter={8}>
+          {addImages?.map((image) => (
+            <Col
+              key={image.id}
+              style={{
+                position: 'relative',
+              }}
+            >
+              <Checkbox
+                onChange={() => toggleSelectImages(image.id)}
+                checked={selectedImages.includes(image.id)}
+                style={{
+                  position: 'absolute',
+                  top: 5,
+                  left: 10,
+                  zIndex: 100,
+                }}
+              />
+              <Image
+                src={image.url}
+                style={{ maxWidth: 200, marginBottom: 10 }}
+              />
+            </Col>
+          ))}
+        </Row>
+      </Modal>
+
+      <Modal
+        title="Edit Update Content"
+        visible={editUpdate !== null}
+        onOk={handleEditUpdate}
+        onCancel={() => setEditUpdate(null)}
+        okText="Save"
+      >
+        <Input
+          value={editUpdateInput}
+          onChange={(e) => setEditUpdateInput(e.target.value)}
         />
-      ) : (
-        <div />
-      )}
-    </Drawer>
-  </div>
-);
+      </Modal>
+
+      <SRLWrapper
+        elements={lightboxElements}
+        options={{ buttons: { showDownloadButton: false } }}
+      />
+    </div>
+  );
+};
 
 export default ViewOffender;
