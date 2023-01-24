@@ -7,8 +7,6 @@ import {
   ListIncidentsQuery,
 } from 'graphql/generated';
 
-import { useLightbox } from 'simple-react-lightbox';
-
 import { useStoreState, useStoreActions } from 'state';
 
 interface Props {
@@ -18,28 +16,19 @@ interface Props {
 }
 
 interface Return {
-  onSubmit: (value: string | undefined) => void;
+  onSubmit: () => void;
   saving: boolean;
   data: ListIncidentsQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
   onPaginationChange: (page: number, pageSize: number) => void;
-  openLightbox: (index: number) => void;
-  setCurrentId: (value: string | undefined) => void;
-  selectedIncident:
-    | Exclude<
-        ListIncidentsQuery['listIncidents'],
-        undefined | null
-      >['incidents'][0]
-    | null
-    | undefined;
+  onSelect: (item: { key: string }) => void;
 }
 
 const useLinkIncident = ({ onClose, update, incidentIds }: Props): Return => {
   const [saving, setSaving] = useState(false);
-  const [currentId, setCurrentId] = useState<string | undefined>(undefined);
-  const { openLightbox } = useLightbox();
+  const [selected, setSelected] = useState<string | undefined>();
   const schemeId = useStoreState((state) => state.scheme.id);
   const order = useStoreState((state) => state.data.incidents.order);
   const pagination = useStoreState((state) => state.data.incidents.pagination);
@@ -113,29 +102,28 @@ const useLinkIncident = ({ onClose, update, incidentIds }: Props): Return => {
       order,
     });
   };
-  const onSubmit = (selectedIncidentId: string | undefined) => {
+  const onSubmit = () => {
     setSaving(true);
-    if (selectedIncidentId) {
-      update(selectedIncidentId);
+    if (selected) {
+      update(selected);
     }
     setSaving(false);
     onClose();
   };
+
+  const onSelect = (item: { key: string }) => {
+    setSelected(item.key);
+  };
+
   return {
     onSubmit,
     saving,
     data,
-    loading,
+    loading: data?.listIncidents ? false : loading,
     search: variables.search,
     setSearch,
     onPaginationChange,
-    openLightbox,
-    setCurrentId,
-    selectedIncident: currentId
-      ? data?.listIncidents?.incidents.find(
-          (Incident) => Incident.id === currentId
-        )
-      : null,
+    onSelect,
   };
 };
 

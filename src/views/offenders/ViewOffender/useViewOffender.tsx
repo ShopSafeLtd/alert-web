@@ -414,7 +414,7 @@ const useViewOffender = (offenderId: string): Return => {
 
   return {
     data,
-    loading,
+    loading: data?.offender ? false : loading,
     saving,
     openLightbox,
     editRights: role !== Role.User,

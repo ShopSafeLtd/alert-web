@@ -49,7 +49,7 @@ const useOffenderSideList = (): Return => {
 
   return {
     data,
-    loading,
+    loading: data?.listOffenders ? false : loading,
     onPaginationChange,
   };
 };

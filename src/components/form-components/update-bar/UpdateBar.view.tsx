@@ -494,7 +494,7 @@ const UpdateBar = ({
     <Drawer
       title="Link Incidents"
       visible={linkIncident}
-      width="800"
+      width="1000"
       onClose={toggleLinkUpdateIncident}
     >
       {linkIncident ? (

@@ -49,7 +49,7 @@ const useIncidentSideList = (): Return => {
 
   return {
     data,
-    loading,
+    loading: data?.listIncidents ? false : loading,
     onPaginationChange,
   };
 };

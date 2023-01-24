@@ -89,7 +89,7 @@ const useAddExisitingOffenderr = ({
         id: schemeId,
       },
       order: {
-        updatedAt: SortOrder.Asc,
+        updatedAt: SortOrder.Desc,
       },
       take: pagination.pageSize,
       skip: (pagination.page - 1) * pagination.pageSize,
@@ -164,7 +164,7 @@ const useAddExisitingOffenderr = ({
     onSubmit,
     saving,
     data,
-    loading,
+    loading: data?.listOffenders ? false : loading,
     search: variables.search,
     setSearch,
     onPaginationChange,

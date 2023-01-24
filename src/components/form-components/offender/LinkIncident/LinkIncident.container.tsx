@@ -15,10 +15,8 @@ const LinkIncident = ({ onClose, update, incidentIds }: Props): JSX.Element => {
     loading,
     search,
     setSearch,
-    openLightbox,
     onPaginationChange,
-    setCurrentId,
-    selectedIncident,
+    onSelect,
   } = useLinkIncident({ onClose, update, incidentIds });
 
   return (
@@ -29,11 +27,9 @@ const LinkIncident = ({ onClose, update, incidentIds }: Props): JSX.Element => {
       search={search}
       setSearch={setSearch}
       loading={loading}
-      openLightbox={openLightbox}
       onClose={onClose}
       onPaginationChange={onPaginationChange}
-      setCurrentId={setCurrentId}
-      selectedIncident={selectedIncident}
+      onSelect={onSelect}
     />
   );
 };
