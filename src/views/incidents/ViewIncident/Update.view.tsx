@@ -237,14 +237,17 @@ const UpdateContent = ({
                 <Card
                   style={{ borderRadius: 5 }}
                   size="small"
-                  className="message-card"
+                  className="update-card"
+                  bodyStyle={{
+                    padding: 0,
+                  }}
                 >
                   <Row gutter={5} wrap={false}>
                     <Col>
                       {offender.images && offender.images.length > 0 && (
                         <Image
-                          width={100}
-                          height={100}
+                          width={80}
+                          height={80}
                           src={offender.images[0].optimised || ''}
                         />
                       )}
@@ -283,6 +286,9 @@ const UpdateContent = ({
                   style={{ borderRadius: 5 }}
                   size="small"
                   className="update-card"
+                  bodyStyle={{
+                    padding: 0,
+                  }}
                 >
                   <Row gutter={5} wrap={false}>
                     <Col>
@@ -311,19 +317,24 @@ const UpdateContent = ({
                       >
                         {incident.subject}
                       </Paragraph>
-                      <Descriptions size="small">
-                        <Descriptions.Item label="Created At">
-                          {incident.dayTime}
-                        </Descriptions.Item>
-                      </Descriptions>
+
                       <Paragraph
                         type="secondary"
                         ellipsis
                         style={{
-                          marginBottom: '0.5rem',
+                          marginBottom: '10px',
                         }}
                       >
                         {incident.description}
+                      </Paragraph>
+                      <Paragraph
+                        type="secondary"
+                        ellipsis
+                        style={{
+                          marginBottom: '0',
+                        }}
+                      >
+                        {incident.dayTime}
                       </Paragraph>
                     </Col>
                   </Row>
