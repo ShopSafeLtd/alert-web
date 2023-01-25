@@ -244,7 +244,6 @@ const useViewMessages = ({
   const handleMessagesData = (
     messages: Exclude<MessagesQuery['messages'], undefined | null> | undefined
   ) => {
-    console.log('top format data');
     if (!messages) {
       setDatedMessages([]);
     } else if (messages.length > 0) {
@@ -402,35 +401,20 @@ const useViewMessages = ({
   useEffect(() => subscribeToNewMessage(), [chatId]);
 
   const scrolledToTop = async () => {
-    console.log('top');
     setLoadMore(true);
     setFetching(true);
-    try {
-      console.log(
-        'top',
-        data && data?.messages?.length > 0 && !loadMore && !fetching
-      );
-      if (data && data?.messages?.length > 0 && !loadMore && !fetching) {
-        console.log('top', {
+    if (data && data?.messages?.length > 0 && !loadMore && !fetching) {
+      await fetchMore<MessagesQuery, MessagesQueryVariables>({
+        query: MessagesDocument,
+        variables: {
           chat: chatId,
           before: {
             id: after,
           },
-        });
-        await fetchMore<MessagesQuery, MessagesQueryVariables>({
-          query: MessagesDocument,
-          variables: {
-            chat: chatId,
-            before: {
-              id: after,
-            },
-          },
-        });
-        setLoadMore(false);
-        setFetching(false);
-      }
-    } catch (err) {
-      console.log(err);
+        },
+      });
+      setLoadMore(false);
+      setFetching(false);
     }
   };
 

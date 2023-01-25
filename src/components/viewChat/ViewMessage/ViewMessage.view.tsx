@@ -130,14 +130,12 @@ interface MemberData {
 
 interface Props {
   onSubmit: () => void;
-  loading: boolean;
   chatData: ChatQuery | undefined;
   form: FormInstance<FormData>;
   saving: boolean;
   scrolledToTop: () => void;
   datedMessages: DatedMessages[] | null;
   userId: string | undefined;
-  loadMore: boolean;
   deleteMessageConfirm: (value: string) => void;
   adminRights: boolean;
   deleteChatConfirm: () => void;
@@ -177,14 +175,12 @@ interface Props {
 
 const ViewMessges = ({
   onSubmit,
-  loading,
   chatData,
   form,
   saving,
   scrolledToTop,
   datedMessages,
   userId,
-  loadMore,
   deleteMessageConfirm,
   adminRights,
   deleteChatConfirm,
@@ -217,7 +213,6 @@ const ViewMessges = ({
   deleteIncidentConfirm,
 }: Props): JSX.Element => {
   const ref = useRef<HTMLDivElement | null>(null);
-  console.log(loadMore, userId, deleteMessageConfirm, loading);
   useEffect(() => {
     if (ref.current && ref.current.scrollIntoView) {
       ref.current.scrollIntoView({

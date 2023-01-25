@@ -16,14 +16,12 @@ const ViewMessages = ({
 }: Props): JSX.Element => {
   const {
     onSubmit,
-    loading,
     chatData,
     form,
     saving,
     scrolledToTop,
     datedMessages,
     userId,
-    loadMore,
     deleteMessageConfirm,
     adminRights,
     deleteChatConfirm,
@@ -58,14 +56,12 @@ const ViewMessages = ({
   return (
     <View
       onSubmit={onSubmit}
-      loading={loading}
       chatData={chatData}
       form={form}
       saving={saving}
       scrolledToTop={scrolledToTop}
       datedMessages={datedMessages}
       userId={userId}
-      loadMore={loadMore}
       deleteMessageConfirm={deleteMessageConfirm}
       adminRights={adminRights}
       deleteChatConfirm={deleteChatConfirm}
