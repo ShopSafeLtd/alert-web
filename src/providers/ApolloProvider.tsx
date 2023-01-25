@@ -28,8 +28,8 @@ const Apollo = ({ children }: Props): JSX.Element => {
 
   const wsClient = new SubscriptionClient(
     // "wss://alert-api-dev.azurewebsites.net/graphql",
-    // 'wss://alert-dev-api.herokuapp.com/graphql',
-    'ws://localhost:4000/graphql',
+    'wss://alert-dev-api.herokuapp.com/graphql',
+    // 'ws://localhost:4000/graphql',
     {
       reconnect: true,
       connectionParams: {
@@ -212,6 +212,25 @@ const Apollo = ({ children }: Props): JSX.Element => {
           users: {
             keyArgs: ['id'],
             merge(_existing = [], incoming: any[]) {
+              return [...incoming];
+            },
+          },
+          messages: {
+            keyArgs: ['where'],
+            merge(existing, incoming, { readField, args }) {
+              if (existing) {
+                const existingIds = existing.map((el: any) =>
+                  readField('id', el)
+                );
+
+                return [
+                  ...existing,
+                  ...incoming.filter(
+                    (el: any) => !existingIds.includes(readField('id', el))
+                  ),
+                ];
+                // return [...incoming]
+              }
               return [...incoming];
             },
           },

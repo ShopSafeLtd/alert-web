@@ -21,6 +21,7 @@ import {
   Race,
   Build,
   useUpdateMessageMutation,
+  MessagesQueryVariables,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import moment, { Moment } from 'moment';
@@ -225,7 +226,12 @@ const useViewMessages = ({
     });
 
   const getDay = (date: Moment) => {
-    if (date?.weekYear() === moment().weekYear()) {
+    if (
+      `${date?.year()}${date?.weekYear()}` ===
+      `${date?.year()}${moment().weekYear()}`
+    ) {
+      if (date.format('DD/MM/YY') === moment().format('DD/MM/YY'))
+        return `Today`;
       if (
         date.format('DD/MM/YY') === moment().add(-1, 'days').format('DD/MM/YY')
       )
@@ -238,14 +244,17 @@ const useViewMessages = ({
   const handleMessagesData = (
     messages: Exclude<MessagesQuery['messages'], undefined | null> | undefined
   ) => {
+    console.log('top format data');
     if (!messages) {
-      setDatedMessages(null);
+      setDatedMessages([]);
     } else if (messages.length > 0) {
-      const momentMessages = messages?.map((item) => ({
-        ...item,
-        createdAt: moment(item.createdAt),
-        day: getDay(moment(item.createdAt)),
-      }));
+      const momentMessages = messages
+        ?.map((item) => ({
+          ...item,
+          createdAt: moment(item.createdAt),
+          day: getDay(moment(item.createdAt)),
+        }))
+        .sort((a, b) => a.createdAt.valueOf() - b.createdAt.valueOf());
       const messageDays = [
         ...new Set(momentMessages.map((item) => item.day)),
       ].map((day) => ({ day, messages: [] }));
@@ -288,26 +297,30 @@ const useViewMessages = ({
         })),
       }));
 
-      setDatedMessages(groupedUsers);
+      // setDatedMessages([]);
+      if (momentMessages.length > 0) {
+        setAfter(momentMessages[0]?.id);
+      }
+      setDatedMessages(groupedUsers.reverse());
     } else setDatedMessages([]);
   };
 
   const { subscribeToMore, data, fetchMore } = useMessagesQuery({
-    fetchPolicy: 'cache-and-network',
+    fetchPolicy: 'network-only',
     variables: {
       chat: chatId,
     },
     skip: !chatId,
-    onCompleted: (res) => {
+    onCompleted: () => {
       setLoading(false);
-      if (res.messages.length > 0) {
-        setAfter(res.messages.slice(-1)[0].id);
-        handleMessagesData(res.messages);
-      } else {
-        handleMessagesData([]);
-      }
     },
   });
+
+  useEffect(() => {
+    if (data && data.messages.length) {
+      handleMessagesData(data.messages);
+    }
+  }, [data]);
 
   // useEffect(() => {
   //   if (data && data.messages.length > 0)
@@ -389,21 +402,35 @@ const useViewMessages = ({
   useEffect(() => subscribeToNewMessage(), [chatId]);
 
   const scrolledToTop = async () => {
-    if (loadMore && !fetching) {
-      setFetching(true);
-      const test = await fetchMore({
-        query: MessagesDocument,
-        variables: {
+    console.log('top');
+    setLoadMore(true);
+    setFetching(true);
+    try {
+      console.log(
+        'top',
+        data && data?.messages?.length > 0 && !loadMore && !fetching
+      );
+      if (data && data?.messages?.length > 0 && !loadMore && !fetching) {
+        console.log('top', {
           chat: chatId,
-          after: {
+          before: {
             id: after,
           },
-        },
-      });
-      if (!test.data.messages) {
+        });
+        await fetchMore<MessagesQuery, MessagesQueryVariables>({
+          query: MessagesDocument,
+          variables: {
+            chat: chatId,
+            before: {
+              id: after,
+            },
+          },
+        });
         setLoadMore(false);
+        setFetching(false);
       }
-      handleMessagesData(test.data.messages);
+    } catch (err) {
+      console.log(err);
     }
   };
 

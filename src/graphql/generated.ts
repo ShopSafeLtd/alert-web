@@ -5604,6 +5604,7 @@ export type CreateUpdateData = {
   linkedIncidents?: InputMaybe<Array<UniqueId>>;
   linkedOffenders?: InputMaybe<Array<UniqueId>>;
   mentionedUsers?: InputMaybe<Array<UniqueId>>;
+  optimisticImages?: InputMaybe<Array<OptimisticImage>>;
   replyTo?: InputMaybe<UniqueId>;
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
@@ -13254,6 +13255,7 @@ export type Mutation = {
   addImageIntel?: Maybe<Intel>;
   addImagesToIncident?: Maybe<Incident>;
   addImagesToOffender?: Maybe<Offender>;
+  addImagesToUpdate?: Maybe<Update>;
   approveIncident?: Maybe<Incident>;
   approveOffender?: Maybe<Offender>;
   clearUnusedImages?: Maybe<SystemTask>;
@@ -13366,6 +13368,11 @@ export type MutationAddImagesToIncidentArgs = {
 export type MutationAddImagesToOffenderArgs = {
   images: Array<ImageWhereUniqueInput>;
   offender: OffenderWhereUniqueInput;
+};
+
+export type MutationAddImagesToUpdateArgs = {
+  data: Array<UrlImage>;
+  where: UniqueId;
 };
 
 export type MutationApproveIncidentArgs = {
@@ -16765,6 +16772,12 @@ export type OneSignalIdWhereInput = {
 
 export type OneSignalIdWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
+};
+
+export type OptimisticImage = {
+  filename: Scalars['String'];
+  id: Scalars['String'];
+  uri: Scalars['String'];
 };
 
 export type Query = {
@@ -20182,6 +20195,7 @@ export type Update = {
   mentionedUsers: Array<User>;
   offender?: Maybe<Offender>;
   offenderId?: Maybe<Scalars['String']>;
+  optimisticImages?: Maybe<Array<Image>>;
   replies: Array<Update>;
   replyTo?: Maybe<Update>;
   replyToId?: Maybe<Scalars['String']>;
@@ -26872,7 +26886,7 @@ export type UpdateMessageMutation = {
 
 export type MessagesQueryVariables = Exact<{
   chat?: InputMaybe<Scalars['String']>;
-  after?: InputMaybe<MessageWhereUniqueInput>;
+  before?: InputMaybe<MessageWhereUniqueInput>;
 }>;
 
 export type MessagesQuery = {
@@ -30523,12 +30537,12 @@ export type UpdateMessageMutationOptions = Apollo.BaseMutationOptions<
   UpdateMessageMutationVariables
 >;
 export const MessagesDocument = gql`
-  query messages($chat: String, $after: MessageWhereUniqueInput) {
+  query messages($chat: String, $before: MessageWhereUniqueInput) {
     messages(
       where: { chat: { id: { equals: $chat } } }
       last: 30
       orderBy: { createdAt: asc }
-      before: $after
+      before: $before
     ) {
       id
       sent
@@ -30591,7 +30605,7 @@ export const MessagesDocument = gql`
  * const { data, loading, error } = useMessagesQuery({
  *   variables: {
  *      chat: // value for 'chat'
- *      after: // value for 'after'
+ *      before: // value for 'before'
  *   },
  * });
  */
