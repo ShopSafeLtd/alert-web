@@ -1,26 +1,26 @@
 import React, { useRef } from 'react';
 import {
+  Button,
   Card,
   Carousel,
-  Tag,
-  Row,
   Col,
-  Typography,
-  Button,
-  Menu,
   Dropdown,
+  Menu,
   Modal,
+  Row,
   Skeleton,
+  Tag,
+  Typography,
 } from 'antd';
 import { ListIncidentsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faLocationDot,
   faClock,
-  faUser,
-  faEllipsisV,
-  faTrash,
   faEdit,
+  faEllipsisV,
+  faLocationDot,
+  faTrash,
+  faUser,
 } from '@fortawesome/pro-light-svg-icons';
 import {
   faAngleLeft,
@@ -103,7 +103,11 @@ const IncidentCard = ({
           arrow={{ pointAtCenter: true }}
         >
           <Button className="incident-card-menu">
-            <FontAwesomeIcon icon={faEllipsisV} />
+            <FontAwesomeIcon
+              // size="5x"
+              style={{ height: '100%' }}
+              icon={faEllipsisV}
+            />
           </Button>
         </Dropdown>
       )}
@@ -133,7 +137,7 @@ const IncidentCard = ({
           ))}
         </Carousel>
       ) : (
-        <Skeleton.Image />
+        <Skeleton.Image style={{ height: 280 }} />
       )}
       {incident && incident.images.length > 1 && (
         <Row className="incident-card-controls">
@@ -172,55 +176,64 @@ const IncidentCard = ({
         <Title level={4} ellipsis>
           {incident?.subject}
         </Title>
-        <Paragraph
-          style={{ height: incident.offenders.length > 0 ? 43 : 80 }}
-          className="incident-card-desc"
-          type="secondary"
-        >
-          {incident?.description}
-        </Paragraph>
-        {incident.offenders.length > 0 && (
-          <Row wrap={false} style={{ overflowX: 'auto', marginBottom: 15 }}>
-            {incident.offenders.map((offender) => (
-              <Tag key={offender.id}>{offender.name || 'Unknown Offender'}</Tag>
-            ))}
+        <Link to={`/app/incidents/view/${incident?.id}`}>
+          <Paragraph
+            style={{ height: incident.offenders.length > 0 ? 43 : 80 }}
+            className="incident-card-desc"
+            type="secondary"
+          >
+            {incident?.description}
+          </Paragraph>
+          {incident.offenders.length > 0 && (
+            <Row wrap={false} style={{ overflowX: 'auto', marginBottom: 15 }}>
+              {incident.offenders.map((offender) => (
+                <Link
+                  to={offender.id ? `/app/offenders/view/${offender.id}` : ``}
+                >
+                  <Tag key={offender.id}>
+                    {offender.name || 'Unknown Offender'}
+                  </Tag>
+                </Link>
+              ))}
+            </Row>
+          )}
+          <Row>
+            <Col flex={1}>
+              <FontAwesomeIcon
+                size="sm"
+                className="incident-card-icon"
+                icon={faClock}
+              />
+              <Text type="secondary">{incident?.dayTime}</Text>
+            </Col>
+            <Col>
+              <FontAwesomeIcon
+                size="sm"
+                className="incident-card-icon"
+                icon={faUser}
+              />
+              <Text type="secondary">
+                {incident?.createdBy.fullName} -{' '}
+                {incident?.createdBy.organisation}
+              </Text>
+            </Col>
           </Row>
-        )}
-        <Row>
-          <Col flex={1}>
-            <FontAwesomeIcon
-              size="sm"
-              className="incident-card-icon"
-              icon={faClock}
-            />
-            <Text type="secondary">{incident?.dayTime}</Text>
-          </Col>
-          <Col>
-            <FontAwesomeIcon
-              size="sm"
-              className="incident-card-icon"
-              icon={faUser}
-            />
-            <Text type="secondary">
-              {incident?.createdBy.fullName} -{' '}
-              {incident?.createdBy.organisation}
-            </Text>
-          </Col>
-        </Row>
-        <Row gutter={8} className="incident-card-location-row">
-          <Col span={1}>
-            <FontAwesomeIcon
-              size="sm"
-              className="incident-card-icon"
-              icon={faLocationDot}
-            />
-          </Col>
-          <Col span={23}>
-            <Text style={{ width: '100%' }} ellipsis type="secondary">
-              {incident?.location?.full}
-            </Text>
-          </Col>
-        </Row>
+          <Row gutter={8} className="incident-card-location-row">
+            <Col span={1}>
+              <FontAwesomeIcon
+                size="sm"
+                className="incident-card-icon"
+                icon={faLocationDot}
+              />
+            </Col>
+            <Col span={23}>
+              <Text style={{ width: '100%' }} ellipsis type="secondary">
+                {incident?.location?.full}
+              </Text>
+            </Col>
+          </Row>
+        </Link>
+
         <Row justify="center">
           <Col>
             <Link to={`view/${incident?.id}`}>

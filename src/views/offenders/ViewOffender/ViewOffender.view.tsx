@@ -3,49 +3,49 @@
 import React from 'react';
 import { UpdateType, ViewOffenderQuery } from 'graphql/generated';
 import {
-  Typography,
-  Row,
+  Button,
+  Checkbox,
   Col,
   Descriptions,
-  Tag,
-  Skeleton,
-  Button,
-  Table,
   Drawer,
   Dropdown,
-  Menu,
-  Space,
-  Tooltip,
-  Popover,
-  Modal,
-  Checkbox,
   Image,
   Input,
+  Menu,
+  Modal,
+  Popover,
+  Row,
+  Skeleton,
+  Space,
+  Table,
+  Tag,
+  Tooltip,
+  Typography,
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faLocationDot,
-  faClock,
-  faUserTag,
-  faUserClock,
-  faEarth,
-  faMarsAndVenus,
-  faUserHair,
-  faCircleInfo,
-  faChevronDown,
-  faBellSlash,
-  faBell,
   faArrowUpRightFromSquare,
+  faBell,
+  faBellSlash,
+  faChevronDown,
+  faCircleInfo,
+  faClock,
+  faEarth,
   faEdit,
+  faLocationDot,
+  faMarsAndVenus,
   faTrash,
+  faUserClock,
+  faUserHair,
+  faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
 import {
+  calcAge,
+  getLastOffence,
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
   getOffenderRace,
-  getLastOffence,
-  calcAge,
 } from 'utils/offender/get-offender-desc';
 import { ItemType } from 'antd/lib/menu/hooks/useItems';
 import { calcExpired } from 'utils/offender/get-offender-exclusion';
@@ -366,7 +366,10 @@ const ViewOffender = ({
                                 </span>
                               }
                             >
-                              {getLastOffence(data?.offender?.incidents)}
+                              {
+                                getLastOffence(data?.offender?.incidents)
+                                  .message
+                              }
                             </Descriptions.Item>
                           )}
                         <Descriptions.Item

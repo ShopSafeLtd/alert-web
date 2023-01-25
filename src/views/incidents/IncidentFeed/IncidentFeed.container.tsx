@@ -5,7 +5,7 @@ import useIncidentFeed from './useIncidentFeed';
 const IncidentFeed = (): JSX.Element => {
   const {
     data,
-    loading,
+    // loading,
     lightboxElements,
     openLightbox,
     onPaginationChange,
@@ -23,6 +23,7 @@ const IncidentFeed = (): JSX.Element => {
     tagsLoading,
     updateIncidentList,
     onNavigate,
+    loading,
   } = useIncidentFeed();
 
   return (

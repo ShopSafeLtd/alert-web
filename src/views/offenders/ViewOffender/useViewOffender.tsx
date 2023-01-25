@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import {
   Role,
+  useAddImagesToOffenderMutation,
   useDeleteUpdateMutation,
   useRecycleOffenderMutation,
+  useSubscribeToOffenderMutation,
   useUpdateOffenderMutation,
+  useUpdateUpdateMutation,
   useViewOffenderQuery,
   ViewOffenderDocument,
   ViewOffenderQuery,
   ViewOffenderQueryVariables,
-  useAddImagesToOffenderMutation,
-  useUpdateUpdateMutation,
-  useSubscribeToOffenderMutation,
 } from 'graphql/generated';
 
 import { useLightbox } from 'simple-react-lightbox';
@@ -400,7 +400,7 @@ const useViewOffender = (offenderId: string): Return => {
           label: 'Edit',
           key: '1',
           icon: <FontAwesomeIcon size="3x" icon={faEdit} />,
-          onClick: () => navigate(`/app/incidents/edit/${offenderId}`),
+          onClick: () => navigate(`/app/offenders/edit/${offenderId}`),
         },
         {
           label: 'Delete',

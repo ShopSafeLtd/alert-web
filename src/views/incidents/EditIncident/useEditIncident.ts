@@ -1,27 +1,27 @@
 import { useState } from 'react';
 import {
-  useViewIncidentQuery,
-  useSchemeGroupsQuery,
-  ViewIncidentQuery,
-  Role,
-  useTagsQuery,
-  Model,
-  useUpdateIncidentMutation,
-  CreateTagMutation,
-  TagsQuery,
-  TagsDocument,
   Age,
-  Gender,
-  Race,
   Build,
+  CreateTagMutation,
+  Gender,
+  IncidentUpdateInput,
+  ListOffendersQuery,
+  Model,
+  QueryMode,
+  Race,
+  Role,
+  SortOrder,
+  TagsDocument,
+  TagsQuery,
   useListOffendersQuery,
   useRecycleIncidentMutation,
-  ListOffendersQuery,
-  SortOrder,
-  QueryMode,
-  IncidentUpdateInput,
+  useSchemeGroupsQuery,
+  useTagsQuery,
+  useUpdateIncidentMutation,
+  useViewIncidentQuery,
+  ViewIncidentQuery,
 } from 'graphql/generated';
-import { notification, Modal, message, Upload } from 'antd';
+import { message, Modal, notification, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { MutationUpdaterFn } from '@apollo/client';
@@ -30,14 +30,17 @@ import update from 'immutability-helper';
 import { UploadChangeParam } from 'antd/lib/upload';
 
 const { confirm } = Modal;
+
 interface Props {
   incidentId: string;
   reviewed: boolean;
 }
+
 type Offender = Exclude<
   ListOffendersQuery['listOffenders'],
   null | undefined
 >['offenders'][0];
+
 interface FormData {
   subject: string;
   description: string;
@@ -82,6 +85,7 @@ interface OffenderData {
   }[];
   imageUid?: string[] | undefined;
 }
+
 interface Image extends UploadFile {
   offenders?: {
     id: string;
@@ -89,6 +93,7 @@ interface Image extends UploadFile {
   }[];
   optimised?: string | null;
 }
+
 interface Return {
   onSubmit: (value: FormData) => void;
   data: ViewIncidentQuery | undefined;
@@ -306,6 +311,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           : 'The Incident has been updated!',
         placement: 'bottomRight',
       });
+      navigate(`/app/incidents`);
     },
     onError: () => {
       setSaving(false);

@@ -2,22 +2,12 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { AddressesQuery } from 'graphql/generated';
-import {
-  Row,
-  Col,
-  Button,
-  Skeleton,
-  Form,
-  Radio,
-  Typography,
-  // Checkbox,
-} from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot } from '@fortawesome/pro-light-svg-icons';
+import { Button, Col, Form, Radio, Row, Skeleton, Typography } from 'antd';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faLocationDot } from '@fortawesome/pro-light-svg-icons';
 
 const { Paragraph } = Typography;
+
 interface FormData {
   selectedLocation: string;
 }
@@ -56,12 +46,12 @@ const ViewOffender = ({
             {data?.addresses &&
               data.addresses.map((location) => (
                 <Row wrap={false} key={location.id} align="bottom">
-                  <Radio value={location.id} key={location.id}>
+                  <Radio
+                    value={location.id}
+                    key={location.id}
+                    style={{ placeItems: 'normal' }}
+                  >
                     <Paragraph ellipsis key={location.id}>
-                      <FontAwesomeIcon
-                        style={{ marginRight: 6, color: 'rgb(222, 68, 54)' }}
-                        icon={faLocationDot}
-                      />
                       {location.full}
                     </Paragraph>
                   </Radio>

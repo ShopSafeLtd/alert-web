@@ -1,35 +1,36 @@
 import { useState } from 'react';
 import {
-  useSchemeGroupsQuery,
-  Role,
-  useTagsQuery,
-  Model,
-  CreateTagMutation,
-  TagsQuery,
-  TagsDocument,
+  AddressesQuery,
   Age,
-  Gender,
-  Race,
   Build,
-  useCreateIncidentMutation,
+  CreateIncidentData,
   CreateIncidentMutation,
+  CreateTagMutation,
+  Gender,
   ListIncidentsDocument,
   ListIncidentsQuery,
-  useListOffendersQuery,
-  useAddressesQuery,
-  AddressesQuery,
-  SortOrder,
   ListOffendersQuery,
+  Model,
   QueryMode,
-  CreateIncidentData,
+  Race,
+  Role,
+  SortOrder,
+  TagsDocument,
+  TagsQuery,
+  useAddressesQuery,
+  useCreateIncidentMutation,
+  useListOffendersQuery,
+  useSchemeGroupsQuery,
+  useTagsQuery,
 } from 'graphql/generated';
 import { LocationOptions } from 'types/enums';
-import { notification, Modal, Form, FormInstance, Upload, message } from 'antd';
+import { Form, FormInstance, message, Modal, notification, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { MutationUpdaterFn } from '@apollo/client';
 import update from 'immutability-helper';
 import { UploadChangeParam } from 'antd/lib/upload';
+import { useNavigate } from 'react-router-dom';
 
 const { confirm } = Modal;
 const { useForm } = Form;
@@ -184,6 +185,8 @@ const useEditIncident = (): Return => {
   const [previousId, setPreviousId] = useState<string>('');
   const [addNewLocation, setAddNewLocation] = useState(false);
   const [addPreviousLocation, setAddPreviousLocation] = useState(false);
+
+  const navigate = useNavigate();
 
   // Query
   const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
@@ -452,6 +455,7 @@ const useEditIncident = (): Return => {
         description: 'The Incident has been added!',
         placement: 'bottomRight',
       });
+      navigate(`/app/incidents`);
     },
     onError: () => {
       setSaving(false);

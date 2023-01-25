@@ -1,6 +1,6 @@
 import React from 'react';
 import { ListIncidentsQuery, RecycleIncidentMutation } from 'graphql/generated';
-import { Col, Input, Row, Select, Pagination, Button, Affix } from 'antd';
+import { Affix, Button, Col, Input, Pagination, Row, Select } from 'antd';
 import IncidentCard from 'components/incidents/IncidentCard';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
 import { SRLWrapper } from 'simple-react-lightbox';
@@ -57,141 +57,151 @@ const IncidentFeed = ({
   tagsLoading,
   updateIncidentList,
   onNavigate,
-}: Props): JSX.Element => (
-  <div className="feed-container">
-    <Affix offsetTop={40}>
-      <Row
-        gutter={8}
-        style={{ paddingBottom: 5, backgroundColor: 'rgb(250, 250, 251)' }}
-      >
-        <Col>
-          <Select
-            placeholder="Groups"
-            mode="multiple"
-            size="small"
-            maxTagCount={2}
-            style={{ minWidth: 150 }}
-            loading={groupsLoading}
-            onChange={onGroupsChange}
-            value={variables.groups}
-          >
-            {groups.map((group) => (
-              <Select.Option value={group.value}>{group.label}</Select.Option>
-            ))}
-          </Select>
-        </Col>
-        <Col>
-          <Select
-            placeholder="Crime Types"
-            mode="multiple"
-            size="small"
-            maxTagCount={2}
-            style={{ minWidth: 200 }}
-            onChange={onCrimeTypesChange}
-            value={variables.crimeTypes}
-            loading={tagsLoading}
-          >
-            {crimeTypes.map((crimeType) => (
-              <Select.Option value={crimeType.value}>
-                {crimeType.label}
+}: Props): JSX.Element => {
+  const [affix, setAffix] = React.useState(false);
+  return (
+    <div className="feed-container">
+      <Affix offsetTop={40} onChange={(affixed) => setAffix(!!affixed)}>
+        <Row
+          gutter={8}
+          style={{
+            paddingBottom: 10,
+            backgroundColor: !affix ? 'rgb(250, 250, 251)' : 'white',
+            paddingTop: affix ? 10 : 0,
+            marginRight: -8, // fix for cutoff from container
+            marginLeft: -8, // fix for cutoff from container
+            borderBottom: affix ? '1px solid #e8e8e8' : 'none',
+          }}
+        >
+          <Col>
+            <Select
+              placeholder="Groups"
+              mode="multiple"
+              size="small"
+              maxTagCount={2}
+              style={{ minWidth: 150 }}
+              loading={groupsLoading}
+              onChange={onGroupsChange}
+              value={variables.groups}
+            >
+              {groups.map((group) => (
+                <Select.Option value={group.value}>{group.label}</Select.Option>
+              ))}
+            </Select>
+          </Col>
+          <Col>
+            <Select
+              placeholder="Crime Types"
+              mode="multiple"
+              size="small"
+              maxTagCount={2}
+              style={{ minWidth: 200 }}
+              onChange={onCrimeTypesChange}
+              value={variables.crimeTypes}
+              loading={tagsLoading}
+            >
+              {crimeTypes.map((crimeType) => (
+                <Select.Option value={crimeType.value}>
+                  {crimeType.label}
+                </Select.Option>
+              ))}
+            </Select>
+          </Col>
+          <Col flex={1}>
+            <Input
+              size="small"
+              style={{ width: '80%' }}
+              placeholder="Search incidents..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </Col>
+
+          <Col>
+            <Select
+              value={order}
+              onChange={setOrder}
+              size="small"
+              style={{ minWidth: 150, marginRight: 5 }}
+            >
+              <Select.Option value={IncidentSort.createdAtDesc}>
+                Newest First
               </Select.Option>
+              <Select.Option value={IncidentSort.createdAtAsc}>
+                Oldest First
+              </Select.Option>
+            </Select>
+          </Col>
+          <Col>
+            <Button
+              type="primary"
+              onClick={onNavigate}
+              icon={
+                <FontAwesomeIcon
+                  icon={faPlus}
+                  size="lg"
+                  style={{ marginRight: 5 }}
+                />
+              }
+            >
+              Add Incident
+            </Button>
+          </Col>
+        </Row>
+      </Affix>
+
+      <Row gutter={8}>
+        {loading
+          ? [
+              <Col key="0" sm={24} md={12} lg={12} xl={8} xxl={6}>
+                <IncidentSkeletonCard />
+              </Col>,
+              <Col key="1" sm={24} md={12} lg={12} xl={8} xxl={6}>
+                <IncidentSkeletonCard />
+              </Col>,
+              <Col key="2" sm={24} md={12} lg={12} xl={8} xxl={6}>
+                <IncidentSkeletonCard />
+              </Col>,
+              <Col key="3" sm={24} md={12} lg={12} xl={8} xxl={6}>
+                <IncidentSkeletonCard />
+              </Col>,
+              <Col key="4" sm={24} md={12} lg={12} xl={8} xxl={6}>
+                <IncidentSkeletonCard />
+              </Col>,
+              <Col key="5" sm={24} md={12} lg={12} xl={8} xxl={6}>
+                <IncidentSkeletonCard />
+              </Col>,
+            ]
+          : data?.listIncidents?.incidents?.map((el) => (
+              <Col sm={24} md={12} lg={12} xl={8} xxl={6} key={el?.id}>
+                <IncidentCard
+                  incident={el}
+                  openLightbox={openLightbox}
+                  update={updateIncidentList}
+                />
+              </Col>
             ))}
-          </Select>
-        </Col>
-        <Col flex={1}>
-          <Input
-            size="small"
-            style={{ width: '80%' }}
-            placeholder="Search incidents..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+      </Row>
+
+      <Row justify="center">
+        <Col>
+          <Pagination
+            total={data?.listIncidents?.total}
+            pageSizeOptions={pagination.sizeOptions}
+            pageSize={pagination.pageSize}
+            current={pagination.page}
+            onChange={onPaginationChange}
+            showTotal={(total) => `Total Incidents: ${total}`}
           />
         </Col>
-
-        <Col>
-          <Select
-            value={order}
-            onChange={setOrder}
-            size="small"
-            style={{ minWidth: 150, marginRight: 5 }}
-          >
-            <Select.Option value={IncidentSort.createdAtDesc}>
-              Newest First
-            </Select.Option>
-            <Select.Option value={IncidentSort.createdAtAsc}>
-              Oldest First
-            </Select.Option>
-          </Select>
-        </Col>
-        <Col>
-          <Button
-            type="primary"
-            onClick={onNavigate}
-            icon={
-              <FontAwesomeIcon
-                icon={faPlus}
-                size="lg"
-                style={{ marginRight: 5 }}
-              />
-            }
-          >
-            Add Incident
-          </Button>
-        </Col>
       </Row>
-    </Affix>
 
-    <Row gutter={8}>
-      {loading && !data?.listIncidents?.incidents
-        ? [
-            <Col key="0" sm={24} md={12} lg={12} xl={8} xxl={6}>
-              <IncidentSkeletonCard />
-            </Col>,
-            <Col key="1" sm={24} md={12} lg={12} xl={8} xxl={6}>
-              <IncidentSkeletonCard />
-            </Col>,
-            <Col key="2" sm={24} md={12} lg={12} xl={8} xxl={6}>
-              <IncidentSkeletonCard />
-            </Col>,
-            <Col key="3" sm={24} md={12} lg={12} xl={8} xxl={6}>
-              <IncidentSkeletonCard />
-            </Col>,
-            <Col key="4" sm={24} md={12} lg={12} xl={8} xxl={6}>
-              <IncidentSkeletonCard />
-            </Col>,
-            <Col key="5" sm={24} md={12} lg={12} xl={8} xxl={6}>
-              <IncidentSkeletonCard />
-            </Col>,
-          ]
-        : data?.listIncidents?.incidents?.map((el) => (
-            <Col sm={24} md={12} lg={12} xl={8} xxl={6} key={el?.id}>
-              <IncidentCard
-                incident={el}
-                openLightbox={openLightbox}
-                update={updateIncidentList}
-              />
-            </Col>
-          ))}
-    </Row>
-
-    <Row justify="center">
-      <Col>
-        <Pagination
-          total={data?.listIncidents?.total}
-          pageSizeOptions={pagination.sizeOptions}
-          pageSize={pagination.pageSize}
-          current={pagination.page}
-          onChange={onPaginationChange}
-          showTotal={(total) => `Total Incidents: ${total}`}
-        />
-      </Col>
-    </Row>
-
-    <SRLWrapper
-      elements={lightboxElements}
-      options={{ buttons: { showDownloadButton: false } }}
-    />
-  </div>
-);
+      <SRLWrapper
+        elements={lightboxElements}
+        options={{ buttons: { showDownloadButton: false } }}
+      />
+    </div>
+  );
+};
 
 export default IncidentFeed;

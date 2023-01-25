@@ -2783,6 +2783,18 @@
     schema-utils "^2.6.5"
     source-map "^0.7.3"
 
+"@react-buddy/ide-toolbox@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@react-buddy/ide-toolbox/-/ide-toolbox-2.3.1.tgz#4e3815eab3198dddcb360b9874640dbd468cb870"
+  integrity sha512-xH4rVPvG8nADggIFJk3mlAQtZg05HwhPcsdnPhHw9JMuxSQi8qXG+0ImQSS58QjIFY9BGtAv2geAbIPBuh9q0w==
+
+"@react-buddy/palette-antd@^4.18.1":
+  version "4.18.1"
+  resolved "https://registry.yarnpkg.com/@react-buddy/palette-antd/-/palette-antd-4.18.1.tgz#8b84b446d03d38a8d4bd1359e2621988725aced5"
+  integrity sha512-F+doJ1kH/Z0rwy1RksGVgkCpYRQsD7W5g4IfkHJRN0kIJgEvuQ2MovC0TpUkpEBY1Wc8uHGMlqyrT1P53r4zOA==
+  dependencies:
+    "@react-buddy/ide-toolbox" "^2.3.1"
+
 "@react-dnd/asap@^4.0.0":
   version "4.0.0"
   resolved "https://registry.npmjs.org/@react-dnd/asap/-/asap-4.0.0.tgz"

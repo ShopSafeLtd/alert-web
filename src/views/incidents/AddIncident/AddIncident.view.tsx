@@ -1,44 +1,43 @@
 import React from 'react';
 import {
+  AddressesQuery,
   Age,
-  Gender,
-  Race,
   Build,
   CreateTagMutation,
-  AddressesQuery,
+  Gender,
   ListOffendersQuery,
+  Race,
 } from 'graphql/generated';
 
 import {
-  Card,
-  Typography,
   Button,
+  Card,
+  Col,
+  DatePicker,
+  Descriptions,
+  Drawer,
   Form,
   FormInstance,
   Input,
-  Select,
-  Row,
-  Col,
-  Upload,
-  PageHeader,
-  Drawer,
-  DatePicker,
-  Table,
-  Skeleton,
-  Modal,
-  // Divider,
-  Tooltip,
-  Descriptions,
-  Spin,
-  Popconfirm,
   InputNumber,
+  Modal,
+  PageHeader,
+  Popconfirm,
+  Row,
+  Select,
+  Skeleton,
+  Spin,
+  Table,
+  Tooltip,
+  Typography,
+  Upload,
 } from 'antd';
 import {
+  calcAge,
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
   getOffenderRace,
-  calcAge,
 } from 'utils/offender/get-offender-desc';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
@@ -116,6 +115,7 @@ interface OffenderData {
   }[];
   imageUid?: string[] | undefined;
 }
+
 interface LocationData {
   building?: string | null;
   street: string;
@@ -123,6 +123,7 @@ interface LocationData {
   county?: string | null;
   postcode: string;
 }
+
 interface Props {
   onSubmit: (value: FormData) => void;
   form: FormInstance<FormData>;
@@ -313,8 +314,8 @@ const EditIncident = ({
           <Col span={4}>
             <Form.Item
               name="recoveredValue"
-              label="RecoveredValue"
-              tooltip="Please enter a recoveredValue for the incident."
+              label="Recovered Value"
+              tooltip="The value of the lost goods if any."
             >
               <InputNumber
                 prefix="£"

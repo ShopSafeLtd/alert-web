@@ -1,18 +1,20 @@
 import React, { lazy, Suspense, useEffect } from 'react';
 import {
-  Routes,
-  Route,
   Navigate,
+  Route,
+  Routes,
   useLocation,
   useNavigate,
 } from 'react-router-dom';
 import Loading from 'components/shared-components/AntD/Loading';
 import { useAuth } from 'hooks';
 import { useStoreState } from 'state';
+import Incidents from './incidents/router';
+import Offenders from './offenders/router';
 
 const Onboarding = lazy(() => import(`./onboarding/router`));
-const Incidents = lazy(() => import(`./incidents/router`));
-const Offenders = lazy(() => import(`./offenders/router`));
+// const Incidents = lazy(() => import(`./incidents/router`));
+// const Offenders = lazy(() => import(`./offenders/router`));
 const Chat = lazy(() => import(`./chat/router`));
 const User = lazy(() => import(`./user-settings/router`));
 const Scheme = lazy(() => import(`./scheme-settings/router`));

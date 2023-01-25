@@ -2,52 +2,53 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import {
-  ViewIncidentQuery,
   Age,
+  Build,
   Gender,
   Race,
-  Build,
   UpdateType,
+  ViewIncidentQuery,
 } from 'graphql/generated';
 import {
-  Typography,
-  Row,
+  Button,
+  Checkbox,
   Col,
   Descriptions,
-  Tag,
-  Skeleton,
-  Button,
   Drawer,
-  Tooltip,
-  Modal,
-  Image,
-  Checkbox,
-  Popover,
-  Input,
   Dropdown,
-  Space,
+  Empty,
+  Image,
+  Input,
   Menu,
+  Modal,
+  Popover,
+  Row,
+  Skeleton,
+  Space,
   Table,
+  Tag,
+  Tooltip,
+  Typography,
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faLocationDot,
-  faClock,
-  faUser,
-  faMoneyBill1Wave,
+  faArrowUpRightFromSquare,
   faBell,
   faBellSlash,
-  faTrash,
-  faEdit,
   faChevronDown,
-  faArrowUpRightFromSquare,
+  faClock,
+  faEdit,
+  faLocationDot,
+  faMoneyBill1Wave,
+  faTrash,
+  faUser,
 } from '@fortawesome/pro-light-svg-icons';
 import {
+  calcAge,
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
   getOffenderRace,
-  calcAge,
 } from 'utils/offender/get-offender-desc';
 import IncidentSideList from 'components/incidents/IncidentSideList';
 import UpdateBar from 'components/form-components/update-bar';
@@ -60,6 +61,7 @@ import UpdateContent from './Update.view';
 import useStyles from './ViewIncident.styles';
 
 const { Title, Paragraph } = Typography;
+
 interface OffenderData {
   id: string;
   name?: string | null;
@@ -88,6 +90,7 @@ interface OffenderData {
   }[];
   imageUid?: string[] | undefined;
 }
+
 interface Props {
   data: ViewIncidentQuery | undefined;
   loading: boolean;
@@ -361,74 +364,81 @@ const ViewIncident = ({
                       </Descriptions>
                       <div className="incident-offender-container">
                         <Title level={4}>Offenders</Title>
-                        <Table
-                          columns={[
-                            {
-                              title: 'Name',
-                              dataIndex: 'name',
-                              key: 'name',
-                            },
-                            {
-                              title: 'Gender',
-                              dataIndex: 'gender',
-                              key: 'gender',
-                            },
-                            {
-                              title: 'Ethnicity',
-                              dataIndex: 'ethnicity',
-                              key: 'ethnicity',
-                            },
-                            {
-                              title: 'Age',
-                              dataIndex: 'age',
-                              key: 'age',
-                            },
-                            {
-                              title: 'Build',
-                              dataIndex: 'build',
-                              key: 'build',
-                            },
-                            {
-                              title: '',
-                              dataIndex: 'actions',
-                              key: 'actions',
-                              render: (_, record) => (
-                                <Button type="text" size="small">
-                                  <FontAwesomeIcon
-                                    icon={faArrowUpRightFromSquare}
-                                    onClick={() =>
-                                      navigate(
-                                        `/app/offenders/view/${record.key}`
-                                      )
-                                    }
-                                  />
-                                </Button>
-                              ),
-                            },
-                          ]}
-                          dataSource={data?.incident?.offenders.map(
-                            (offender) => ({
-                              key: offender.id,
-                              name: offender.name,
-                              gender: getOffenderGender(offender.gender),
-                              ethnicity: getOffenderRace(offender.race, true),
-                              age: offender.dateOfBirth
-                                ? calcAge(offender.dateOfBirth)
-                                : getOffenderAge(offender.age),
-                              build: getOffenderBuild(offender.build),
-                            })
-                          )}
-                          size="small"
-                          pagination={
-                            data?.incident?.offenders &&
-                            data?.incident?.offenders.length > 5
-                              ? {
-                                  pageSize: 5,
-                                }
-                              : false
-                          }
-                          rowClassName={classes.offenderRow}
-                        />
+                        {data?.incident?.offenders.length && !loading ? (
+                          <Table
+                            columns={[
+                              {
+                                title: 'Name',
+                                dataIndex: 'name',
+                                key: 'name',
+                              },
+                              {
+                                title: 'Gender',
+                                dataIndex: 'gender',
+                                key: 'gender',
+                              },
+                              {
+                                title: 'Ethnicity',
+                                dataIndex: 'ethnicity',
+                                key: 'ethnicity',
+                              },
+                              {
+                                title: 'Age',
+                                dataIndex: 'age',
+                                key: 'age',
+                              },
+                              {
+                                title: 'Build',
+                                dataIndex: 'build',
+                                key: 'build',
+                              },
+                              {
+                                title: '',
+                                dataIndex: 'actions',
+                                key: 'actions',
+                                render: (_, record) => (
+                                  <Button type="text" size="small">
+                                    <FontAwesomeIcon
+                                      icon={faArrowUpRightFromSquare}
+                                      onClick={() =>
+                                        navigate(
+                                          `/app/offenders/view/${record.key}`
+                                        )
+                                      }
+                                    />
+                                  </Button>
+                                ),
+                              },
+                            ]}
+                            dataSource={data?.incident?.offenders.map(
+                              (offender) => ({
+                                key: offender.id,
+                                name: offender.name,
+                                gender: getOffenderGender(offender.gender),
+                                ethnicity: getOffenderRace(offender.race, true),
+                                age: offender.dateOfBirth
+                                  ? calcAge(offender.dateOfBirth)
+                                  : getOffenderAge(offender.age),
+                                build: getOffenderBuild(offender.build),
+                              })
+                            )}
+                            size="small"
+                            pagination={
+                              data?.incident?.offenders &&
+                              data?.incident?.offenders.length > 5
+                                ? {
+                                    pageSize: 5,
+                                  }
+                                : false
+                            }
+                            rowClassName={classes.offenderRow}
+                          />
+                        ) : (
+                          <Empty
+                            description="No offenders on incident"
+                            image={Empty.PRESENTED_IMAGE_SIMPLE}
+                          />
+                        )}
                       </div>
                     </div>
                   )}
