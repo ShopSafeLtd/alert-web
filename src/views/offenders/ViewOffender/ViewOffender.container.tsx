@@ -36,10 +36,12 @@ const ViewOffender = (): JSX.Element => {
     handleEditUpdate,
     setEditUpdateInput,
     toggleSelectImages,
+    lightBoxOpen,
   } = useViewOffender(offenderId);
 
   return (
     <View
+      lightBoxOpen={lightBoxOpen}
       data={data}
       loading={loading}
       saving={saving}

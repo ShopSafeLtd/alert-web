@@ -20,7 +20,6 @@ import {
 } from 'graphql/generated';
 import update from 'immutability-helper';
 
-import { useLightbox } from 'simple-react-lightbox';
 import { useStoreState } from 'state';
 import { Modal, notification } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -64,7 +63,6 @@ interface Return {
   data: ViewIncidentQuery | undefined;
   loading: boolean;
   saving: boolean;
-  openLightbox: (index: number) => void;
   addOffenderRights: boolean;
   editRights: boolean;
   deleteRights: boolean;
@@ -111,10 +109,14 @@ interface Return {
   lightboxElements: {
     src: string;
   }[];
+  openLightbox: (index: number) => void;
+  lightBoxOpen: {
+    open: boolean;
+    index: number;
+  };
 }
 
 const useViewIncident = (incidentId: string): Return => {
-  const { openLightbox } = useLightbox();
   const navigate = useNavigate();
 
   const role = useStoreState((state) => state.user.role);
@@ -145,6 +147,15 @@ const useViewIncident = (incidentId: string): Return => {
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
   );
+
+  const [lightBoxOpen, setLightBoxOpen] = useState({
+    open: false,
+    index: 0,
+  });
+
+  const openLightbox = (index: number) => {
+    setLightBoxOpen({ open: !lightBoxOpen.open, index });
+  };
 
   useEffect(() => {
     if (editUpdate) setEditUpdateInput(editUpdate.text);
@@ -490,7 +501,6 @@ const useViewIncident = (incidentId: string): Return => {
     loadMore,
     loading: (data === null || data === undefined) && loading,
     onDelete,
-    openLightbox,
     optionMenuItems,
     replyTo,
     saving,
@@ -504,6 +514,8 @@ const useViewIncident = (incidentId: string): Return => {
     toggleSubscribe,
     updateOffendersList,
     userId,
+    openLightbox,
+    lightBoxOpen,
   };
 };
 

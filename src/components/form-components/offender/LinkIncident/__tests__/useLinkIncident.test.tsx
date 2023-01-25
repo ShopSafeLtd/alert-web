@@ -113,7 +113,7 @@ const UseLinkIncidentTest = () => {
     <div>
       {ListIncidents}
       <span>{loading ? 'true' : 'false'}</span>
-      <button type="button" onClick={() => onSubmit('incidentId')}>
+      <button type="button" onClick={() => onSubmit()}>
         submit
       </button>
     </div>

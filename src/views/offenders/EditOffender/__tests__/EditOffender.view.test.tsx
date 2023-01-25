@@ -2,10 +2,13 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import EditOffender from '../EditOffender.view';
+import { ViewOffenderQuery } from '../../../../graphql/generated';
 
 describe('List Officer View', () => {
-  const data = {
+  const data: ViewOffenderQuery = {
     offender: {
+      updates: [],
+      subscribed: false,
       id: 'offenderId',
       createdAt: '2022-08-10T10:40:06.191Z',
       updatedAt: '2022-08-11T10:40:09.985Z',
@@ -43,6 +46,17 @@ describe('List Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <EditOffender
+          adminRights
+          banData={{
+            id: 'ckqtnb4r056540229myw4yk8zvq',
+            description: 'NightSafe',
+            endDate: new Date(),
+            startDate: new Date(),
+            location: 'NightSafe',
+            title: 'NightSafe',
+          }}
+          bansData={[]}
+          setBanData={jest.fn()}
           onSubmit={jest.fn()}
           data={data}
           loading={false}
@@ -63,8 +77,6 @@ describe('List Officer View', () => {
           editExclusion={false}
           toggleEditExclusion={jest.fn()}
           updateExclusion={jest.fn()}
-          banId=""
-          setBanId={jest.fn()}
           deleteConfirm={jest.fn()}
           ageCheck={false}
           setAgeCheck={jest.fn()}

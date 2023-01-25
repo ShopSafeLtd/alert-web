@@ -1,17 +1,16 @@
 import { useState } from 'react';
 
 import {
+  Age,
+  Build,
+  Gender,
+  ListOffendersQuery,
   QueryMode,
+  Race,
   SortOrder,
   useListOffendersQuery,
-  ListOffendersQuery,
-  Age,
-  Gender,
-  Race,
-  Build,
 } from 'graphql/generated';
-import { useLightbox } from 'simple-react-lightbox';
-import { useStoreState, useStoreActions } from 'state';
+import { useStoreActions, useStoreState } from 'state';
 
 interface OffenderData {
   id: string;
@@ -42,6 +41,7 @@ interface OffenderData {
   }[];
   imageUid?: string[] | undefined;
 }
+
 interface Props {
   onClose: () => void;
   update: (value: OffenderData) => void;
@@ -54,9 +54,9 @@ interface Return {
   data: ListOffendersQuery | undefined;
   loading: boolean;
   search: string;
+
   setSearch: (value: string) => void;
   onPaginationChange: (page: number, pageSize: number) => void;
-  openLightbox: (index: number) => void;
   setCurrentId: (value: string | undefined) => void;
   selectedOffender:
     | Exclude<
@@ -74,7 +74,6 @@ const useAddExisitingOffenderr = ({
 }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [currentId, setCurrentId] = useState<string | undefined>(undefined);
-  const { openLightbox } = useLightbox();
   const schemeId = useStoreState((state) => state.scheme.id);
   const order = useStoreState((state) => state.data.offenders.order);
   const pagination = useStoreState((state) => state.data.offenders.pagination);
@@ -168,7 +167,6 @@ const useAddExisitingOffenderr = ({
     search: variables.search,
     setSearch,
     onPaginationChange,
-    openLightbox,
     setCurrentId,
     selectedOffender: currentId
       ? data?.listOffenders?.offenders.find(

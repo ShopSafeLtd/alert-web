@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import SimpleReactLightbox from 'simple-react-lightbox';
+// import SimpleReactLightbox from 'simple-react-lightbox';
 import { Auth0Provider } from '@auth0/auth0-react';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -14,9 +14,9 @@ ReactDOM.render(
     audience="https://app.shopsafealert.co.uk"
     scope="read:current_user update:current_user_metadata"
   >
-    <SimpleReactLightbox>
-      <App />
-    </SimpleReactLightbox>
+    {/* <SimpleReactLightbox> */}
+    <App />
+    {/* </SimpleReactLightbox> */}
   </Auth0Provider>,
   document.getElementById('root')
 );

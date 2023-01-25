@@ -22,6 +22,7 @@ describe('List Officer View', () => {
         offender: null,
         scheme: { id: 'schemeId' },
       },
+      scheme: { id: 'schemeId' },
     },
   };
   it('renders the page', () => {

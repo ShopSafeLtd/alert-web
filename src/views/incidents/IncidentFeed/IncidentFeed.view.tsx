@@ -3,11 +3,12 @@ import { ListIncidentsQuery, RecycleIncidentMutation } from 'graphql/generated';
 import { Affix, Button, Col, Input, Pagination, Row, Select } from 'antd';
 import IncidentCard from 'components/incidents/IncidentCard';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
-import { SRLWrapper } from 'simple-react-lightbox';
 import { IncidentSort } from 'state';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { MutationUpdaterFn } from '@apollo/client';
+import Lightbox from 'yet-another-react-lightbox';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 
 interface Props {
   data: ListIncidentsQuery | undefined;
@@ -35,6 +36,10 @@ interface Props {
   tagsLoading: boolean;
   updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
   onNavigate: () => void;
+  lightBoxOpen: {
+    open: boolean;
+    index: number;
+  };
 }
 
 const IncidentFeed = ({
@@ -56,6 +61,7 @@ const IncidentFeed = ({
   onCrimeTypesChange,
   tagsLoading,
   updateIncidentList,
+  lightBoxOpen,
   onNavigate,
 }: Props): JSX.Element => {
   const [affix, setAffix] = React.useState(false);
@@ -196,9 +202,12 @@ const IncidentFeed = ({
         </Col>
       </Row>
 
-      <SRLWrapper
-        elements={lightboxElements}
-        options={{ buttons: { showDownloadButton: false } }}
+      <Lightbox
+        open={lightBoxOpen.open}
+        close={() => openLightbox([], 0)}
+        plugins={[Zoom]}
+        index={lightBoxOpen.index}
+        slides={lightboxElements}
       />
     </div>
   );

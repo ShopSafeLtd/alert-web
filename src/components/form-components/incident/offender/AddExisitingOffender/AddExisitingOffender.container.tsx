@@ -1,5 +1,5 @@
 import React from 'react';
-import { Age, Gender, Race, Build } from 'graphql/generated';
+import { Age, Build, Gender, Race } from 'graphql/generated';
 
 import View from './AddExisitingOffender.view';
 import useAddExisitingOffender from './useAddExisitingOffender';
@@ -39,6 +39,7 @@ interface Props {
   update: (value: OffenderData) => void;
   offenderIds: string[] | undefined;
 }
+
 const AddExisitingOffender = ({
   onClose,
   update,
@@ -51,7 +52,6 @@ const AddExisitingOffender = ({
     loading,
     search,
     setSearch,
-    openLightbox,
     onPaginationChange,
     setCurrentId,
     selectedOffender,
@@ -65,7 +65,6 @@ const AddExisitingOffender = ({
       search={search}
       setSearch={setSearch}
       loading={loading}
-      openLightbox={openLightbox}
       onClose={onClose}
       onPaginationChange={onPaginationChange}
       setCurrentId={setCurrentId}

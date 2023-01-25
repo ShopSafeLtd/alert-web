@@ -24,10 +24,12 @@ const IncidentFeed = (): JSX.Element => {
     updateIncidentList,
     onNavigate,
     loading,
+    lightBoxOpen,
   } = useIncidentFeed();
 
   return (
     <View
+      lightBoxOpen={lightBoxOpen}
       data={data}
       loading={loading}
       lightboxElements={lightboxElements}

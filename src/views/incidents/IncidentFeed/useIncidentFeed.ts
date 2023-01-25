@@ -1,18 +1,17 @@
 import {
+  ListIncidentsDocument,
   ListIncidentsQuery,
+  Model,
   QueryMode,
+  RecycleIncidentMutation,
   Role,
   SortOrder,
   useListIncidentsQuery,
   useSchemeGroupsQuery,
   useTagsQuery,
-  Model,
-  RecycleIncidentMutation,
-  ListIncidentsDocument,
 } from 'graphql/generated';
-import { useState, useEffect } from 'react';
-import { useStoreActions, useStoreState, IncidentSort } from 'state';
-import { useLightbox } from 'simple-react-lightbox';
+import { useEffect, useState } from 'react';
+import { IncidentSort, useStoreActions, useStoreState } from 'state';
 import { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,6 +21,10 @@ interface Return {
   lightboxElements: {
     src: string;
   }[];
+  lightBoxOpen: {
+    open: boolean;
+    index: number;
+  };
   openLightbox: (elements: { src: string }[], index: number) => void;
   onPaginationChange: (page: number, pageSize: number) => void;
   pagination: { page: number; pageSize: number; sizeOptions: string[] };
@@ -54,8 +57,6 @@ const getSizeOptions = () => {
 };
 
 const useIncidentFeed = (): Return => {
-  // Lightbox hook
-  const { openLightbox } = useLightbox();
   const navigate = useNavigate();
   const onNavigate = () => navigate(`/app/incidents/add`);
 
@@ -74,6 +75,11 @@ const useIncidentFeed = (): Return => {
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
   );
+  const [lightBoxOpen, setLightBoxOpen] = useState({
+    open: false,
+    index: 0,
+  });
+
   // Queries
   // Fetch scheme groups if scheme admin
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
@@ -346,7 +352,15 @@ const useIncidentFeed = (): Return => {
   // Functions
   const triggerLightbox = (elements: { src: string }[], index: number) => {
     setLightboxElements(elements);
-    setTimeout(() => openLightbox(index), 0.3);
+
+    setTimeout(
+      () =>
+        setLightBoxOpen({
+          open: !lightBoxOpen.open,
+          index,
+        }),
+      0.3
+    );
   };
 
   const onPaginationChange = (page: number, pageSize: number) => {
@@ -405,7 +419,6 @@ const useIncidentFeed = (): Return => {
   return {
     data,
     loading,
-    openLightbox: triggerLightbox,
     lightboxElements,
     onPaginationChange,
     pagination,
@@ -429,6 +442,8 @@ const useIncidentFeed = (): Return => {
     tagsLoading,
     updateIncidentList,
     onNavigate,
+    lightBoxOpen,
+    openLightbox: triggerLightbox,
   };
 };
 

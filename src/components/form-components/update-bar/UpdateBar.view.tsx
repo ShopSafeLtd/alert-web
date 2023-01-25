@@ -10,17 +10,17 @@ import {
   Button,
   Card,
   Col,
+  Descriptions,
+  Drawer,
   Form,
   FormInstance,
   Image,
-  Popconfirm,
-  Row,
-  Upload,
-  Typography,
   Mentions,
-  Descriptions,
+  Popconfirm,
   Popover,
-  Drawer,
+  Row,
+  Typography,
+  Upload,
 } from 'antd';
 import { RcFile, UploadFile, UploadProps } from 'antd/lib/upload/interface';
 import {
@@ -199,7 +199,7 @@ const UpdateBar = ({
       >
         <Col style={{ marginLeft: 10, marginRight: -8 }}>
           <Upload
-            action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+            action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
             accept=".png,.jpeg,.webp"
             listType="picture-card"
             fileList={updateFileList}
@@ -417,7 +417,7 @@ const UpdateBar = ({
 
         <Col>
           <Upload
-            action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+            action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
             accept=".png,.jpeg,.webp"
             fileList={updateFileList}
             onChange={onUpdateImageChange}

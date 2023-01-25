@@ -575,7 +575,9 @@ const EditIncident = ({
                       }
                       return (
                         <Upload
-                          action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                          action={
+                            import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
+                          }
                           onChange={(info) =>
                             offenderImgChange(info, record.key)
                           }
@@ -787,7 +789,7 @@ const EditIncident = ({
               </Col>
               <Col style={{ marginLeft: 30 }}>
                 <Upload
-                  action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                  action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
                   fileList={fileList}
                   onChange={imgChange}
                   beforeUpload={beforeUpload}
@@ -810,7 +812,7 @@ const EditIncident = ({
             </Row>
             <Form.Item name="images">
               <Upload<Image>
-                action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
                 className="incident-form-images"
                 listType="picture-card"
                 fileList={fileList}

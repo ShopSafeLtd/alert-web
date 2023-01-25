@@ -30,11 +30,12 @@ import {
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 
-import { SRLWrapper } from 'simple-react-lightbox';
 import moment from 'moment';
 import OffenderTile from 'components/offenders/OffenderTile';
 import OffenderTileSkeleton from 'components/offenders/OffenderTileSkeleton';
+import { Lightbox } from 'yet-another-react-lightbox';
 
 const { Title } = Typography;
 
@@ -47,7 +48,6 @@ interface Props {
   search: string;
   setSearch: (value: string) => void;
   onPaginationChange: (page: number, pageSize: number) => void;
-  openLightbox: (index: number) => void;
   setCurrentId: (value: string | undefined) => void;
   selectedOffender:
     | Exclude<
@@ -66,7 +66,6 @@ const AddExisitingOffender = ({
   loading,
   search,
   setSearch,
-  openLightbox,
   onPaginationChange,
   setCurrentId,
   selectedOffender,
@@ -291,14 +290,15 @@ const AddExisitingOffender = ({
         </Col>
       )}
     </Row>
-
-    <SRLWrapper
-      elements={
+    <Lightbox
+      open={lightBoxOpen.open}
+      close={() => openLightbox(0)}
+      plugins={[Zoom]}
+      slides={
         selectedOffender?.images.map((image) => ({
           src: image.optimised || '',
         })) || []
       }
-      options={{ buttons: { showDownloadButton: false } }}
     />
   </div>
 );

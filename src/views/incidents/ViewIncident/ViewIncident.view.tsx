@@ -55,8 +55,9 @@ import UpdateBar from 'components/form-components/update-bar';
 import LinkOffender from 'components/form-components/incident/offender/AddExisitingOffender';
 import { ItemType } from 'antd/lib/menu/hooks/useItems';
 import { useNavigate } from 'react-router';
-import { SRLWrapper } from 'simple-react-lightbox';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Lightbox from 'yet-another-react-lightbox';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import UpdateContent from './Update.view';
 import useStyles from './ViewIncident.styles';
 
@@ -141,6 +142,10 @@ interface Props {
   lightboxElements: {
     src: string;
   }[];
+  lightBoxOpen: {
+    open: boolean;
+    index: number;
+  };
 }
 
 const ViewIncident = ({
@@ -174,6 +179,7 @@ const ViewIncident = ({
   setEditUpdateInput,
   optionMenuItems,
   lightboxElements,
+  lightBoxOpen,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -772,10 +778,12 @@ const ViewIncident = ({
           <div />
         )}
       </Drawer>
-
-      <SRLWrapper
-        elements={lightboxElements}
-        options={{ buttons: { showDownloadButton: false } }}
+      <Lightbox
+        open={lightBoxOpen.open}
+        close={() => openLightbox(0)}
+        plugins={[Zoom]}
+        index={lightBoxOpen.index}
+        slides={lightboxElements}
       />
     </div>
   );
