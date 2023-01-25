@@ -58,6 +58,10 @@ describe('Detail Officer View', () => {
         <MemoryRouter>
           <MockedProvider mocks={[]} addTypename={false}>
             <ViewOffender
+              lightBoxOpen={{
+                open: false,
+                index: 0,
+              }}
               addImages={null}
               addUpdateImages={jest.fn()}
               closeAddImages={jest.fn()}

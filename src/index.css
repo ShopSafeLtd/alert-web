@@ -1,3 +1,5 @@
+@import '~/yet-another-react-lightbox/dist/styles.css';
+
 .loading.cover-content {
   position: absolute;
   left: 50%;
@@ -5,6 +7,7 @@
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
+
 .loading.cover-page {
   position: fixed;
   width: 100%;
@@ -13,11 +16,13 @@
   align-items: center;
   justify-content: center;
 }
+
 .incident-form-images .ant-upload-list-picture-card-container {
   width: 500px;
   height: 200px;
   margin-right: 20px;
 }
+
 .incident-form-images .image-card {
   height: 200px;
   width: 500px;
@@ -26,6 +31,7 @@
   border: 1px solid #edf2f9;
   border-radius: 10px;
 }
+
 .incident-form-images .image-card .image-card-image {
   position: relative;
   min-width: 250px;
@@ -33,6 +39,7 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 .incident-form-images .image-card .image-card-image .image-remove-button {
   position: absolute;
   top: 5px;
@@ -40,6 +47,7 @@
   width: calc(100% - 50px);
   z-index: 10;
 }
+
 .incident-form-images .image-card .image-card-offenders {
   padding: 10px;
   display: flex;
@@ -48,14 +56,17 @@
   height: 100%;
   overflow: auto;
 }
+
 .incident-form-images .image-card .image-card-offender {
   display: flex;
   align-items: center;
   padding: 0px 5px 5px;
 }
+
 .incident-form-images .image-card .image-card-offender-text {
   flex: 1;
 }
+
 .incident-form-images .image-card-loading {
   position: absolute;
   z-index: 1;
@@ -68,11 +79,13 @@
   align-items: center;
   justify-content: center;
 }
+
 .incident-form-assign {
   width: 900px;
   height: 500px;
   display: flex;
 }
+
 .incident-form-assign .incident-form-assign-image {
   flex: 3;
   background-repeat: no-repeat;
@@ -81,19 +94,23 @@
   background-color: #edf2f9;
   border-right: 1px solid #edf2f9;
 }
+
 .incident-form-assign .incident-form-assign-offenders {
   flex: 2;
   padding: 15px;
 }
+
 .incident-form-assign .incident-form-assign-offenders .offender-title {
   margin-bottom: 10px;
 }
+
 .incident-form-assign .incident-form-assign-offender-list {
   margin-bottom: 10px;
   border-top: 1px solid #edf2f9;
   max-height: 395px;
   overflow: auto;
 }
+
 .incident-form-assign .incident-form-assign-offender-image {
   height: 80px;
   min-width: 80px;
@@ -102,6 +119,7 @@
   background-position: center;
   background-color: #edf2f9;
 }
+
 .incident-form-assign .incident-form-assign-offender {
   display: flex;
   flex-direction: row;
@@ -111,41 +129,51 @@
   cursor: pointer;
   padding-right: 10px;
 }
+
 .incident-form-assign .incident-form-assign-offender-content {
   padding: 5px 10px;
   height: 80px;
 }
+
 .feed-card .no-image.incident-card {
   height: 220px;
 }
+
 .feed-card .incident-title h3 {
   margin-bottom: -3px;
 }
+
 .feed-card .incident-card-date {
   font-size: 12px;
   margin-right: 3px;
 }
+
 .feed-card .incident-groups .group {
   margin-right: 4px;
 }
+
 .feed-card .alert-crime-tags {
   display: flex;
   flex-wrap: wrap;
   margin: 3px 0px 6px 0;
 }
+
 .feed-card .alert-crime-tags .main-tag {
   width: auto;
   margin-left: 0;
   font-size: 12px;
 }
+
 .incident-card {
   margin: 5px 5px 10px 5px;
 }
+
 .incident-card .ant-card-body {
   position: relative;
   padding: 0px;
   overflow: hidden;
 }
+
 .incident-card .incident-card-image {
   width: 100%;
   height: 280px;
@@ -155,6 +183,7 @@
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
+
 .incident-card .incident-card-tags {
   position: absolute;
   top: 10px;
@@ -162,18 +191,22 @@
   width: calc(100% - 50px);
   z-index: 1;
 }
+
 .incident-card .incident-card-tag {
   background: #ffffff;
   border-color: #de4436;
   font-weight: 500;
   color: #de4436;
 }
+
 .incident-card .ant-tabs-nav {
   margin: 0;
 }
+
 .incident-card .ant-tabs-nav-list {
   width: 100%;
 }
+
 .incident-card .ant-tabs-tab {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -183,24 +216,29 @@
   display: flex;
   justify-content: center;
 }
+
 .incident-card .ant-tabs > .ant-tabs-nav .ant-tabs-nav-operations,
 .incident-card .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-operations {
   display: none;
 }
+
 .incident-card .incident-card-content {
   padding: 10px 10px 5px;
   height: 235px;
   overflow: auto;
 }
+
 .incident-card .incident-card-desc {
   height: 80px;
   margin-bottom: 15px;
   overflow: hidden;
 }
+
 .incident-card .incident-card-location-row {
   margin-top: 5px;
   margin-bottom: 5px;
 }
+
 .incident-card .incident-card-menu {
   position: absolute;
   top: 0;
@@ -211,10 +249,12 @@
   border-top-left-radius: 0px;
   border-top-right-radius: 8px;
 }
+
 .incident-card .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item,
 .incident-card .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu {
   padding: 0px 15px;
 }
+
 .incident-card .incident-card-overlay {
   position: absolute;
   top: 0px;
@@ -229,10 +269,12 @@
   flex-direction: column;
   border-radius: 10px;
 }
+
 .incident-card .incident-card-approval-title {
   color: #fff;
   margin-bottom: 15px;
 }
+
 .incident-card .incident-card-controls {
   position: absolute;
   left: 0;
@@ -240,20 +282,24 @@
   top: 135px;
   z-index: 2;
 }
+
 .incident-card .incident-card-control {
   color: #fff;
   cursor: pointer;
   padding: 15px;
   transition: all 0.2s ease;
 }
+
 .incident-card .incident-card-control:hover {
   font-size: 1.8em;
   margin-top: -4px;
 }
+
 .incident-card .incident-card-icon {
   margin-right: 5px;
   color: #de4436;
 }
+
 .incident-card .incident-card-expand {
   position: absolute;
   right: 0;
@@ -264,10 +310,12 @@
   font-size: 1.6em;
   transition: all 0.2s ease;
 }
+
 .incident-card .incident-card-expand:hover {
   font-size: 1.8em;
   top: 228px;
 }
+
 .incident-card .incident-card-offender-image {
   height: 85px;
   width: 85px;
@@ -276,26 +324,32 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 .incident-card .incident-card-offender-content {
   margin-left: 5px;
 }
+
 .incident-card .incident-card-offender-placeholder {
   height: 85px;
   width: 85px;
   border-radius: 5px;
   background-color: #e0e0e0;
 }
+
 .incident-card .incident-card-offender {
   margin-top: 10px;
   margin-bottom: 20px;
 }
+
 .incident-card .ant-skeleton-element {
   width: 100%;
 }
+
 .incident-card .ant-skeleton-image {
   width: 100%;
   height: 300px;
 }
+
 .incidents-side-list {
   display: flex;
   flex-direction: column;
@@ -305,13 +359,16 @@
   border-right: 1px solid #edf2f9;
   overflow-y: scroll;
 }
+
 .incidents-side-list .incident-item {
   width: 100%;
   background-color: #fff;
 }
+
 .incidents-side-list .incident-item:hover {
   background-color: #fafafa;
 }
+
 .incidents-side-list .incident-item .incident-item-image {
   height: 110px;
   width: 100px;
@@ -319,47 +376,58 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 .incidents-side-list .incident-item .incident-item-image-skeleton {
   height: 110px;
   width: 100px;
 }
+
 .incidents-side-list .incident-item .incident-item-content {
   padding: 10px;
 }
+
 .incidents-side-list .incident-item .incident-item-divider {
   margin: 0px;
 }
+
 .incidents-side-list .incident-item .incident-item-desc {
   font-size: 12px;
   margin-bottom: 10px;
 }
+
 .incidents-side-list .incident-item .incident-item-detail {
   font-size: 12px;
   margin-bottom: 0px;
 }
+
 .incidents-side-list .ant-pagination {
   margin: 15px 0;
   text-align: center;
 }
+
 .incident-item.current {
   background-color: #fafafa;
 }
+
 .view-incident {
   height: calc(100vh - 70px);
   width: 100%;
   display: flex;
   flex-direction: column;
 }
+
 .view-incident .incident-images {
   width: 100%;
   min-height: 180px;
   padding: 0px 10px;
 }
+
 @media only screen and (min-height: 800px) {
   .view-incident .incident-images {
     min-height: 250px;
   }
 }
+
 .view-incident .incident-image {
   height: 160px;
   width: 160px;
@@ -370,85 +438,105 @@
   border-radius: 5px;
   transition: all 0.3s ease-in-out;
 }
+
 .view-incident .incident-image:hover {
   height: 170px;
   width: 170px;
 }
+
 @media only screen and (min-height: 800px) {
   .view-incident .incident-image:hover {
     height: 240px;
     width: 240px;
   }
 }
+
 @media only screen and (min-height: 800px) {
   .view-incident .incident-image {
     height: 230px;
     width: 230px;
   }
 }
+
 .view-incident .incident-tab-content {
   flex: 1;
 }
+
 .view-incident .incident-content {
   flex: 1;
   background-color: #fff;
   display: flex;
   flex-direction: column;
 }
+
 .view-incident .ant-tabs-bottom > .ant-tabs-nav,
 .view-incident .ant-tabs-bottom > div > .ant-tabs-nav,
 .view-incident .ant-tabs-top > .ant-tabs-nav,
 .view-incident .ant-tabs-top > div > .ant-tabs-nav {
   margin: 0px;
 }
+
 .view-incident .incident-header-bar {
   border-bottom: 1px solid #edf2f9;
   padding: 5px;
   display: flex;
   justify-content: flex-end;
 }
+
 .view-incident .incident-details-main {
   border-right: 1px solid #edf2f9;
   padding: 15px;
   flex: 1;
 }
+
 .view-incident .incident-descriptions {
   margin-top: 10px;
 }
+
 .view-incident .incident-descriptions .ant-skeleton-title {
   margin: 0px;
 }
+
 .view-incident .incident-descriptions .ant-descriptions-item {
   padding-bottom: 10px;
 }
+
 .view-incident .incident-description-icon {
   margin-right: 5px;
   color: #de4436;
 }
+
 .view-incident .incident-tags {
   margin-top: 10px;
   margin-bottom: 5px;
 }
+
 .view-incident .incident-offenders-title {
   margin-top: 10px;
   margin-left: 10px;
 }
+
 .view-incident .incident-offenders {
   margin-top: 0px;
 }
+
 .view-incident .incident-offender {
   background-color: #fff;
 }
+
 .view-incident .incident-offender:hover {
   background-color: #fafafa;
 }
+
 .view-incident .incident-offender-content {
   padding: 10px 20px;
 }
+
 .view-incident .offender-image-skeleton {
   height: 110px;
   width: 120px;
 }
+
 .view-incident .offender-image {
   height: 110px;
   width: 120px;
@@ -456,21 +544,26 @@
   background-size: cover;
   background-position: center;
 }
+
 .view-incident .ant-divider-horizontal {
   margin: 0px;
 }
+
 .view-incident .incident-offender-name {
   font-size: 14px;
 }
+
 .view-incident .incident-offenders-empty {
   margin-top: 30px;
   display: flex;
   align-items: center;
   flex-direction: column;
 }
+
 .view-incident .incident-offender-container {
   margin-top: 20px;
 }
+
 .update-collage-image {
   background-repeat: no-repeat;
   background-position: center;
@@ -478,6 +571,7 @@
   cursor: pointer;
   position: relative;
 }
+
 .update-collage-image .chat-collage-image-overlay {
   opacity: 0;
   transition: opacity 0.3s ease 0s;
@@ -492,20 +586,25 @@
   color: #fff;
   background-color: rgba(0, 0, 0, 0.5);
 }
+
 .update-collage-image:hover .chat-collage-image-overlay {
   opacity: 1;
 }
+
 .update-container .currentUser {
   background: #ff5252;
   color: #fff !important;
 }
+
 .update-container .update-avatar {
   background: #fde3cf;
   color: #f56a00;
 }
+
 .update-container .currentUser-card {
   background: rgba(222, 68, 54, 0.1);
 }
+
 .update-container .update-content-card {
   display: inline-block;
   max-width: 100%;
@@ -513,12 +612,14 @@
   border: 1px solid #f5f5f5;
   border-radius: 5px;
 }
+
 .update-container .update-card {
   position: relative;
   width: 370px;
   margin: 0;
   overflow: hidden;
 }
+
 .update-container .update-content-bubble {
   max-width: 100%;
   word-break: break-word;
@@ -527,20 +628,25 @@
   font-size: 14px;
   color: #585858;
 }
+
 .update-reply {
   margin-left: 48px;
 }
+
 .update-wrapper {
   margin-bottom: 10px;
 }
+
 .update-scroll {
   padding-right: 10px;
   padding: 15px;
 }
+
 .incident-updates {
   position: relative;
   height: calc(100vh - 371px);
 }
+
 .update-bar {
   position: absolute;
   bottom: 0;
@@ -550,12 +656,14 @@
   padding-top: 2px;
   border-top: 1px solid #edf2f9;
 }
+
 .reply-to-highlight {
   width: 3px;
   background-color: #f56a00;
   margin-right: 5px;
   height: 35px;
 }
+
 .update-upload-card {
   position: relative;
   width: 100px;
@@ -564,6 +672,7 @@
   border: 1px solid #edf2f9;
   border-radius: 10px;
 }
+
 .update-info-card {
   position: relative;
   width: 370px;
@@ -571,28 +680,34 @@
   margin: 0;
   overflow: hidden;
 }
+
 .update-info-container .ant-upload-list {
   display: flex;
   flex-wrap: nowrap;
 }
+
 .update-info-container .info-remove-button {
   position: absolute;
   top: -5px;
   right: -5px;
   z-index: 100;
 }
+
 .update-info-container .ant-upload-list-picture-card-container {
   width: 100px;
   height: 100px;
 }
+
 .upload-images .ant-upload-select-picture-card {
   width: 100px;
   height: 100px;
 }
+
 .upload-images .ant-upload-list-picture-card-container {
   width: 100px;
   height: 100px;
 }
+
 .incident-form-offender-card {
   width: 120;
   height: 120;
@@ -606,6 +721,7 @@
   justify-content: center;
   cursor: pointer;
 }
+
 .incident-form-offender-Paragraph {
   white-space: nowrap;
   overflow: hidden;
@@ -619,31 +735,37 @@
   margin: 0;
   padding: 3px 10px 3px;
 }
+
 .feed-container {
   padding: 10px;
 }
+
 .feed-container .add-button {
   position: fixed;
   bottom: 10px;
   right: 10px;
   z-index: 33;
 }
+
 .unsupported-screen-size-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
+
 .unsupported-screen-size-container .main-logo {
   height: 150px;
   margin-bottom: 48px;
 }
+
 .unsupported-screen-size-container .title-text {
   margin-bottom: 12px;
   width: 70%;
   min-width: 280px;
   text-align: center;
 }
+
 .unsupported-screen-size-container .subtitle-text {
   font-size: 16px;
   margin-bottom: 56px;
@@ -652,63 +774,79 @@
   text-align: center;
   font-weight: normal;
 }
+
 .unsupported-screen-size-container .google-logo {
   height: 80px;
 }
+
 .unsupported-screen-size-container .apple-logo-container {
   display: inline-block;
   overflow: hidden;
   border-radius: 13px;
   height: 60px;
 }
+
 .unsupported-screen-size-container .apple-logo {
   border-radius: 13px;
   height: 60px;
 }
+
 .page-container {
   height: calc(100vh - 70px);
 }
+
 .list-view {
   padding: 15px;
 }
+
 .page-view {
   padding: 15px;
 }
+
 .page-view .ant-page-header {
   padding-top: 0px;
   padding-bottom: 5px;
 }
+
 .feed-card .no-image.offender-card {
   height: 220px;
 }
+
 .feed-card .offender-title h3 {
   margin-bottom: -3px;
 }
+
 .feed-card .offender-card-date {
   font-size: 12px;
   margin-right: 3px;
 }
+
 .feed-card .offender-groups .group {
   margin-right: 4px;
 }
+
 .feed-card .alert-crime-tags {
   display: flex;
   flex-wrap: wrap;
   margin: 3px 0px 6px 0;
 }
+
 .feed-card .alert-crime-tags .main-tag {
   width: auto;
   margin-left: 0;
   font-size: 12px;
 }
+
 .offender-card {
   margin: 5px 5px 10px 5px;
 }
+
 .offender-card .ant-card-body {
   position: relative;
   padding: 0px;
   overflow: hidden;
 }
+
 .offender-card .offender-card-image {
   width: 100%;
   height: 300px;
@@ -718,6 +856,7 @@
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
+
 .offender-card .offender-card-tags {
   position: absolute;
   top: 10px;
@@ -725,18 +864,22 @@
   width: calc(100% - 50px);
   z-index: 1;
 }
+
 .offender-card .offender-card-tag {
   background: #ffffff;
   border-color: #de4436;
   font-weight: 500;
   color: #de4436;
 }
+
 .offender-card .ant-tabs-nav {
   margin: 0;
 }
+
 .offender-card .ant-tabs-nav-list {
   width: 100%;
 }
+
 .offender-card .ant-tabs-tab {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -746,24 +889,29 @@
   display: flex;
   justify-content: center;
 }
+
 .offender-card .ant-tabs > .ant-tabs-nav .ant-tabs-nav-operations,
 .offender-card .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-operations {
   display: none;
 }
+
 .offender-card .offender-card-content {
   padding: 10px 10px 5px;
   height: 215px;
   overflow: auto;
 }
+
 .offender-card .offender-card-desc {
   height: 54px;
   margin-bottom: 15px;
   overflow: hidden;
 }
+
 .offender-card .offender-card-location-row {
   margin-top: 5px;
   margin-bottom: 5px;
 }
+
 .offender-card .offender-card-menu {
   position: absolute;
   top: 0;
@@ -774,10 +922,12 @@
   border-top-left-radius: 0px;
   border-top-right-radius: 8px;
 }
+
 .offender-card .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item,
 .offender-card .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu {
   padding: 0px 15px;
 }
+
 .offender-card .offender-card-overlay {
   position: absolute;
   top: 0px;
@@ -792,10 +942,12 @@
   flex-direction: column;
   border-radius: 10px;
 }
+
 .offender-card .offender-card-approval-title {
   color: #fff;
   margin-bottom: 15px;
 }
+
 .offender-card .offender-card-controls {
   position: absolute;
   left: 0;
@@ -803,20 +955,24 @@
   top: 135px;
   z-index: 2;
 }
+
 .offender-card .offender-card-control {
   color: #fff;
   cursor: pointer;
   padding: 15px;
   transition: all 0.2s ease;
 }
+
 .offender-card .offender-card-control:hover {
   font-size: 1.8em;
   margin-top: -4px;
 }
+
 .offender-card .offender-card-icon {
   margin-right: 5px;
   color: #de4436;
 }
+
 .offender-card .offender-card-expand {
   position: absolute;
   right: 0;
@@ -827,10 +983,12 @@
   font-size: 1.6em;
   transition: all 0.2s ease;
 }
+
 .offender-card .offender-card-expand:hover {
   font-size: 1.8em;
   top: 246px;
 }
+
 .offender-card .offender-card-incident-image {
   height: 85px;
   width: 85px;
@@ -839,51 +997,64 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 .offender-card .offender-card-incident-content {
   margin-left: 5px;
 }
+
 .offender-card .offender-card-incident-placeholder {
   height: 85px;
   width: 85px;
   border-radius: 5px;
   background-color: #e0e0e0;
 }
+
 .offender-card .offender-card-incident {
   margin-top: 10px;
   margin-bottom: 20px;
 }
+
 .offender-card .ant-skeleton-element {
   width: 100%;
 }
+
 .offender-card .ant-skeleton-image {
   width: 100%;
   height: 300px;
 }
+
 .add-existing-offender {
   height: 100%;
 }
+
 .add-existing-offender .search-offender {
   margin-bottom: 24px;
 }
+
 .add-existing-offender .view-offender {
   flex: 1;
   border-left: 1px solid #edf2f9;
   height: auto;
 }
+
 .add-existing-offender .view-offender .offender-images {
   height: 140px;
 }
+
 .add-existing-offender .view-offender .offender-image {
   height: 130px;
   width: 130px;
 }
+
 .add-existing-offender .view-offender .offender-image:hover {
   height: 140px;
   width: 140px;
 }
+
 .add-existing-offender-row {
   height: calc(100% - 64px);
 }
+
 .offenders-side-list {
   display: flex;
   flex-direction: column;
@@ -894,13 +1065,16 @@
   width: 100%;
   border-right: 1px solid #edf2f9;
 }
+
 .offenders-side-list .offender-item {
   width: 100%;
   background-color: #fff;
 }
+
 .offenders-side-list .offender-item:hover {
   background-color: #fafafa;
 }
+
 .offenders-side-list .offender-item .offender-item-image {
   height: 110px;
   width: 100px;
@@ -908,51 +1082,63 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 .offenders-side-list .offender-item .offender-item-image-skeleton {
   height: 110px;
   width: 100px;
 }
+
 .offenders-side-list .offender-item .offender-item-content {
   padding: 10px;
 }
+
 .offenders-side-list .offender-item .offender-item-divider {
   margin: 0px;
 }
+
 .offenders-side-list .offender-item .offender-item-desc {
   font-size: 12px;
   margin-bottom: 10px;
 }
+
 .offenders-side-list .offender-item .offender-item-detail {
   font-size: 12px;
   margin-bottom: 0px;
 }
+
 .offenders-side-list .offender-item .offender-item-icon {
   margin-right: 8px;
   color: #de4436;
 }
+
 .offenders-side-list .ant-pagination {
   margin: 15px 0;
   text-align: center;
 }
+
 .offender-item.current {
   background-color: #fafafa;
 }
+
 .view-offender {
   height: calc(100vh - 70px);
   width: 100%;
   display: flex;
   flex-direction: column;
 }
+
 .view-offender .offender-images {
   width: 100%;
   height: 180px;
   padding: 0px 10px;
 }
+
 @media only screen and (min-height: 800px) {
   .view-offender .offender-images {
     height: 250px;
   }
 }
+
 .view-offender .offender-image {
   height: 160px;
   width: 160px;
@@ -963,73 +1149,91 @@
   border-radius: 5px;
   transition: all 0.3s ease-in-out;
 }
+
 .view-offender .offender-image:hover {
   height: 180px;
   width: 180px;
 }
+
 @media only screen and (min-height: 800px) {
   .view-offender .offender-image:hover {
     height: 250px;
     width: 250px;
   }
 }
+
 @media only screen and (min-height: 800px) {
   .view-offender .offender-image {
     height: 230px;
     width: 230px;
   }
 }
+
 .view-offender .offender-content {
   flex: 1;
   background-color: #fff;
 }
+
 .view-offender .ant-tabs-bottom > .ant-tabs-nav,
 .view-offender .ant-tabs-bottom > div > .ant-tabs-nav,
 .view-offender .ant-tabs-top > .ant-tabs-nav,
 .view-offender .ant-tabs-top > div > .ant-tabs-nav {
   margin: 0px;
 }
+
 .view-offender .offender-details-main {
   border-right: 1px solid #edf2f9;
   padding: 15px;
 }
+
 .view-offender .offender-descriptions {
   margin-top: 10px;
 }
+
 .view-offender .offender-descriptions .ant-skeleton-title {
   margin: 0px;
 }
+
 .view-offender .offender-descriptions .ant-descriptions-item {
   padding-bottom: 10px;
 }
+
 .view-offender .offender-description-icon {
   margin-right: 5px;
   color: #de4436;
 }
+
 .view-offender .offender-tags {
   margin-top: 10px;
   margin-bottom: 5px;
 }
+
 .view-offender .offender-incidents-title {
   margin-top: 10px;
   margin-left: 10px;
 }
+
 .view-offender .offender-incidents {
   margin-top: 0px;
 }
+
 .view-offender .offender-incident {
   background-color: #fff;
 }
+
 .view-offender .offender-incident:hover {
   background-color: #fafafa;
 }
+
 .view-offender .offender-incident-content {
   padding: 10px 20px;
 }
+
 .view-offender .incident-image-skeleton {
   height: 160px;
   width: 140px;
 }
+
 .view-offender .incident-image {
   height: 160px;
   width: 140px;
@@ -1037,31 +1241,39 @@
   background-size: cover;
   background-position: center;
 }
+
 .view-offender .ant-divider-horizontal {
   margin: 0px;
 }
+
 .view-offender .offender-incident-name {
   font-size: 14px;
 }
+
 .view-offender .offender-incidents-empty {
   margin-top: 30px;
   display: flex;
   align-items: center;
   flex-direction: column;
 }
+
 .view-offender-title .title h3 {
   margin-bottom: -4px;
 }
+
 .view-offender-title .title span {
   font-size: 12px;
   font-weight: 400;
 }
+
 .view-offender-drawer .ant-drawer-header {
   padding: 12px 24px 6px 24px;
 }
+
 .view-offender-drawer .ant-drawer-body {
   padding: 12px 24px 24px 24px;
 }
+
 .view-offender-drawer .image-carousel {
   position: relative;
   height: 265px;
@@ -1069,6 +1281,7 @@
   border-radius: 6px;
   overflow: hidden;
 }
+
 .view-offender-drawer .image-carousel img {
   width: 100%;
   height: 265px;
@@ -1076,6 +1289,7 @@
   background-repeat: no-repeat;
   background-position: center;
 }
+
 .view-offender-drawer .no-image {
   height: 265px;
   display: flex;
@@ -1085,38 +1299,47 @@
   position: relative;
   background-color: #d7d7d7;
 }
+
 .view-offender-drawer .no-image .ant-typography {
   color: #959595;
   margin-top: 4px;
 }
+
 .view-offender-drawer .location .icon-container {
   display: flex;
   padding-top: 1px;
   margin-right: 4px;
 }
+
 .view-offender-drawer .location .icon-container span {
   color: #de4436;
 }
+
 .view-offender-drawer .location span {
   font-size: 12px;
   font-weight: 400;
 }
+
 .view-offender-drawer .offender-content-container {
   padding: 0px 14px;
   cursor: pointer;
 }
+
 .view-offender-drawer .offender-details {
   padding: 0px 14px;
   cursor: pointer;
 }
+
 .view-offender-drawer .offender-details .offender-groups {
   margin-bottom: 5px;
 }
+
 .view-offender-drawer .offender-details .offender-groups .group {
   border-radius: 3px;
   padding-right: 6px;
   margin-right: 3px;
 }
+
 .view-offender-drawer
   .offender-details
   .offender-groups
@@ -1126,18 +1349,22 @@
   font-weight: 500;
   font-size: 16px;
 }
+
 .view-offender-drawer .offender-details .additional-info {
   font-size: 16px;
   margin-top: 12px;
 }
+
 .view-offender-drawer .offender-details .location {
   margin-top: 12px;
 }
+
 .view-offender-drawer .tags-container {
   display: flex;
   flex-wrap: wrap;
   margin: 6px 0 0 0;
 }
+
 .view-offender-drawer .main-tag {
   background-color: #df4032;
   color: #fff;
@@ -1145,12 +1372,15 @@
   padding: 2px 8px;
   margin: 6px 6px 0 0;
 }
+
 .view-offender-drawer .ant-divider.ant-divider-horizontal {
   margin: 24px 0 12px 0;
 }
+
 .view-offender-drawer .list-offender-items-exclusion .ant-collapse-item {
   margin-bottom: 12px;
 }
+
 .view-offender-drawer
   .list-offender-items-exclusion
   .ant-collapse
@@ -1159,6 +1389,7 @@
   padding: 0;
   display: flex;
 }
+
 .view-offender-drawer
   .list-offender-items-exclusion
   .ant-collapse
@@ -1168,27 +1399,32 @@
   margin-top: 4px;
   margin-right: 6px;
 }
+
 .view-offender-drawer .list-offender-items-exclusion .exclusion-list-item {
   width: 253px;
 }
+
 .view-offender-drawer
   .list-offender-items-exclusion
   .exclusion-list-item
   .exclusion-title {
   margin-bottom: 0px;
 }
+
 .view-offender-drawer
   .list-offender-items-exclusion
   .exclusion-list-item
   .expired {
   margin-left: 4px;
 }
+
 .view-offender-drawer
   .list-offender-items-exclusion
   .exclusion-list-item
   .location {
   margin-top: 2px;
 }
+
 .view-offender-drawer
   .list-offender-items-exclusion
   .exclusion-list-item
@@ -1196,6 +1432,7 @@
   .icon-container {
   padding-top: 2px;
 }
+
 .view-offender-drawer
   .list-offender-items-exclusion
   .ant-collapse-ghost
@@ -1206,6 +1443,7 @@
   padding-left: 24px;
   padding-top: 3px;
 }
+
 .view-offender-drawer
   .list-offender-items-exclusion
   .ant-collapse-ghost
@@ -1216,6 +1454,7 @@
   margin: 3px 0 6px 0;
   line-height: 1.1;
 }
+
 .view-offender-drawer
   .list-offender-items-exclusion
   .ant-collapse-ghost
@@ -1227,6 +1466,7 @@
   line-height: 1.1;
   font-size: 12px;
 }
+
 .view-offender-drawer
   .list-offender-items-exclusion
   .ant-collapse-ghost
@@ -1238,14 +1478,17 @@
   font-size: 12px;
   line-height: 1.1;
 }
+
 .view-offender-drawer
   .list-offender-items-exclusion
   .ant-divider.ant-divider-horizontal {
   margin: 12px 0 6px 0;
 }
+
 .view-offender-drawer .list-offender-items-incident .ant-collapse-item {
   margin-bottom: 12px;
 }
+
 .view-offender-drawer
   .list-offender-items-incident
   .ant-collapse
@@ -1254,6 +1497,7 @@
   padding: 0;
   display: flex;
 }
+
 .view-offender-drawer
   .list-offender-items-incident
   .ant-collapse
@@ -1263,15 +1507,18 @@
   margin-top: 4px;
   margin-right: 6px;
 }
+
 .view-offender-drawer .list-offender-items-incident .incident-list-item {
   width: 278px;
 }
+
 .view-offender-drawer
   .list-offender-items-incident
   .incident-list-item
   .incident-title {
   margin-bottom: 0px;
 }
+
 .view-offender-drawer
   .list-offender-items-incident
   .incident-list-item
@@ -1280,12 +1527,14 @@
   margin-top: -2px;
   margin-bottom: 3px;
 }
+
 .view-offender-drawer
   .list-offender-items-incident
   .incident-list-item
   .location {
   margin-top: 2px;
 }
+
 .view-offender-drawer
   .list-offender-items-incident
   .incident-list-item
@@ -1293,6 +1542,7 @@
   .icon-container {
   padding-top: 2px;
 }
+
 .view-offender-drawer
   .list-offender-items-incident
   .ant-collapse-ghost
@@ -1303,6 +1553,7 @@
   padding-left: 18px;
   padding-top: 3px;
 }
+
 .view-offender-drawer
   .list-offender-items-incident
   .ant-collapse-ghost
@@ -1313,6 +1564,7 @@
   margin: 3px 0 6px 0;
   line-height: 1.1;
 }
+
 .view-offender-drawer
   .list-offender-items-incident
   .ant-collapse-ghost
@@ -1323,6 +1575,7 @@
   span {
   line-height: 1.2;
 }
+
 .view-offender-drawer
   .list-offender-items-incident
   .ant-collapse-ghost
@@ -1333,6 +1586,7 @@
   span {
   font-size: 12px;
 }
+
 .view-offender-drawer .list-offender-items-incident .incident-image {
   border-radius: 5px;
   width: 100%;
@@ -1341,6 +1595,7 @@
   background-repeat: no-repeat;
   background-position: center;
 }
+
 .view-offender-drawer .list-offender-items-incident .no-image {
   border-radius: 5px;
   height: 75px;
@@ -1351,19 +1606,23 @@
   position: relative;
   background-color: #d7d7d7;
 }
+
 .view-offender-drawer .list-offender-items-incident .no-image .ant-typography {
   color: #959595;
   margin-top: 4px;
   font-size: 10px;
 }
+
 .view-offender-drawer .list-offender-items-incident .description {
   font-size: 12px;
 }
+
 .view-offender-drawer
   .list-offender-items-incident
   .ant-divider.ant-divider-horizontal {
   margin: 12px 0 6px 0;
 }
+
 .view-offender-drawer .list-offender-items-incident button {
   color: #de4436;
   padding: 0 6px;
@@ -1371,9 +1630,11 @@
   height: 26px;
   border-radius: 5px;
 }
+
 .view-offender-drawer .empty-list {
   padding-right: 24px;
 }
+
 .feed-card {
   max-width: 100%;
   min-width: 100%;
@@ -1385,6 +1646,7 @@
   border: 0.5px solid #72849a36;
   position: relative;
 }
+
 @media (min-width: 650px) {
   .feed-card {
     width: calc(50% - 1rem);
@@ -1393,6 +1655,7 @@
     margin: 0.5rem;
   }
 }
+
 @media (min-width: 1240px) {
   .feed-card {
     width: calc(33.33% - 10px);
@@ -1401,6 +1664,7 @@
     margin: 5px;
   }
 }
+
 @media (min-width: 1800px) {
   .feed-card {
     width: calc(25% - 1.6rem);
@@ -1409,9 +1673,11 @@
     margin: 0.8rem;
   }
 }
+
 .feed-card .ant-card-body {
   padding: 0;
 }
+
 .feed-card .dropdown-menu {
   position: absolute;
   top: 0;
@@ -1423,6 +1689,7 @@
   z-index: 5;
   cursor: pointer;
 }
+
 .feed-card .dropdown-menu .kebab {
   height: 42px;
   width: 42px;
@@ -1432,17 +1699,20 @@
   justify-content: space-around;
   padding: 8px 0;
 }
+
 .feed-card .dropdown-menu .kebab .dot {
   width: 4px;
   height: 4px;
   border-radius: 10px;
   background-color: #757575;
 }
+
 .feed-card .image-carousel {
   position: relative;
   height: 265px;
   width: 100%;
 }
+
 .feed-card .image-carousel img {
   width: 100%;
   height: 265px;
@@ -1450,6 +1720,7 @@
   background-repeat: no-repeat;
   background-position: center;
 }
+
 .feed-card .image-carousel .arrow {
   display: flex;
   align-items: center;
@@ -1465,22 +1736,28 @@
   cursor: pointer;
   transition: 0.2s;
 }
+
 .feed-card .image-carousel .arrow:active {
   background-color: rgba(44, 44, 44, 0.6);
 }
+
 .feed-card .image-carousel .left {
   left: 0;
 }
+
 .feed-card .image-carousel .right {
   right: 0;
 }
+
 .feed-card .image-carousel button {
   border: none;
   background-color: transparent;
 }
+
 .feed-card .image-carousel .dots {
   margin-bottom: 25px;
 }
+
 .feed-card .no-image {
   height: 265px;
   display: flex;
@@ -1490,10 +1767,12 @@
   position: relative;
   background-color: #d7d7d7;
 }
+
 .feed-card .no-image .ant-typography {
   color: #959595;
   margin-top: 4px;
 }
+
 .feed-card .ant-tabs > .ant-tabs-nav .ant-tabs-nav-list,
 .feed-card .ant-tabs > div > .ant-tabs-nav .ant-tabs-nav-list {
   position: relative;
@@ -1503,30 +1782,36 @@
   flex: 1;
   margin: 0;
 }
+
 .feed-card .ant-tabs-bottom > .ant-tabs-nav,
 .feed-card .ant-tabs-bottom > div > .ant-tabs-nav,
 .feed-card .ant-tabs-top > .ant-tabs-nav,
 .feed-card .ant-tabs-top > div > .ant-tabs-nav {
   margin: 0;
 }
+
 .feed-card .ant-tabs-tab {
   margin: 0;
   width: 32%;
   display: flex;
   justify-content: center;
 }
+
 .feed-card .ant-tabs-tab + .ant-tabs-tab {
   margin: 0;
   width: 32%;
   display: flex;
   justify-content: center;
 }
+
 .feed-card .tab-pane-content {
   height: 215px;
 }
+
 .feed-card .empty-content span.ant-typography {
   text-align: center;
 }
+
 .feed-card .unapproved-overlay {
   position: absolute;
   top: 0;
@@ -1541,15 +1826,18 @@
   z-index: 8;
   margin: 0;
 }
+
 .feed-card .unapproved-overlay h3.ant-typography {
   color: #fff;
 }
+
 .feed-card .unapproved-overlay span.ant-typography {
   color: #fff;
   text-align: center;
   font-weight: 300;
   font-size: 16px;
 }
+
 .feed-card .unapproved-options {
   position: absolute;
   top: 225px;
@@ -1562,6 +1850,7 @@
   justify-content: flex-start;
   align-items: center;
 }
+
 .feed-card .unapproved-options .option {
   margin-top: 0;
   margin-bottom: 0;
@@ -1575,55 +1864,67 @@
   justify-content: flex-start;
   align-items: center;
 }
+
 .feed-card .unapproved-options .approve {
   color: #4caf50;
 }
+
 .feed-card .unapproved-options .decline {
   color: #f44336;
   flex: 1;
 }
+
 .feed-card .unapproved-options .cancel {
   color: #bdbdbd;
 }
+
 .expanded-menu {
   margin-right: 3px;
   border-radius: 5px;
   overflow: hidden;
   background-color: #fff;
 }
+
 .expanded-menu .menu-item {
   display: flex;
   align-items: center;
 }
+
 .expanded-menu .menu-item span {
   font-size: 14px;
   color: #757575;
   margin-left: 8px;
 }
+
 .expanded-menu .delete span {
   font-size: 14px;
   color: #ef5350;
   margin-left: 8px;
 }
+
 .feed-search-filter-container {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin-bottom: 10px;
 }
+
 .feed-search-filter-container .spacer {
   width: 30%;
 }
+
 .feed-search-filter-container .search-filter-bar-container {
   display: flex;
   align-items: center;
   width: 35%;
 }
+
 .feed-search-filter-container .applied-filters-container {
   display: flex;
   justify-content: center;
   width: 30%;
 }
+
 .feed-search-filter-container .applied-filters-container .applied-filters {
   display: flex;
   flex-direction: column;
@@ -1634,44 +1935,54 @@
   user-select: none;
   margin-right: 36px;
 }
+
 .search-filter-bar {
   display: flex;
   width: 100%;
 }
+
 .search-filter-bar .input-container {
   display: flex;
   width: 100%;
   align-items: center;
 }
+
 .search-filter-bar .input-container .search-icon {
   font-size: 22px;
   color: #ef5350;
   margin-right: 10px;
 }
+
 .search-filter-bar .icons-container {
   display: flex;
   align-items: center;
   margin-left: 16px;
   cursor: pointer;
 }
+
 .search-filter-bar .icons-container .icon {
   color: #ef5350;
 }
+
 .search-filter-bar .icons-container .filter {
   font-size: 28px;
   margin-right: 5px;
 }
+
 .search-filter-bar .icons-container .arrow {
   font-size: 21px;
   color: #ef5350;
 }
+
 .search-filter-bar .icons-container .up {
   margin-bottom: 8px;
 }
+
 .search-filter-bar .icons-container .down {
   margin-top: 8px;
   margin-left: -8px;
 }
+
 .chats-side-list {
   margin: 0;
   padding: 0;
@@ -1680,11 +1991,13 @@
   border-right: 1px solid #e0e0e0;
   overflow-y: scroll;
 }
+
 .chats-side-list .chat-list {
   width: 100%;
   overflow: hidden;
   background: pink;
 }
+
 .chats-side-list .chat-item {
   width: 100%;
   background-color: #fff;
@@ -1692,22 +2005,27 @@
   align-items: center;
   cursor: pointer;
 }
+
 .chats-side-list .chat-item:hover {
   background-color: rgba(0, 0, 0, 0.02);
 }
+
 .chats-side-list .chat-item .chat-item-tag {
   margin: 0 5px;
   padding: 0 2px;
   font-size: 10px;
   color: #de4436;
 }
+
 .chats-side-list .chat-item .chat-item-avatar {
   background: #fde3cf;
   color: #f56a00;
 }
+
 .chats-side-list .chat-item.current {
   background-color: rgba(0, 0, 0, 0.05);
 }
+
 .chat-title {
   margin-top: 30px;
   display: flex;
@@ -1715,12 +2033,14 @@
   flex-direction: column;
   font-size: 16px;
 }
+
 .view-message-container {
   display: flex;
   flex-direction: column;
   height: calc(100vh - 70px);
   width: 100%;
 }
+
 .view-message-container .message-upload-card {
   position: relative;
   width: 100px;
@@ -1729,6 +2049,7 @@
   border: 1px solid #edf2f9;
   border-radius: 10px;
 }
+
 .view-message-container .message-card {
   position: relative;
   width: 370px;
@@ -1736,6 +2057,7 @@
   margin: 0;
   overflow: hidden;
 }
+
 .view-message-container .message-image {
   height: 100px;
   width: 100px;
@@ -1743,13 +2065,16 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 .view-message-container .message-image-skeleton {
   height: 100px;
   width: 10px;
 }
+
 .view-message-container .ant-card-small > .ant-card-body {
   padding: 0;
 }
+
 .view-message-container .message-container {
   margin-bottom: 10px;
   height: calc(100vh - 250px);
@@ -1758,6 +2083,7 @@
   -webkit-overflow-scrolling: touch;
   padding: 20px 0 0px;
 }
+
 .view-message-container .message-container .message-date {
   display: flex;
   align-items: center;
@@ -1765,16 +2091,20 @@
   width: 100%;
   margin: 30px 0 -10px;
 }
+
 .view-message-container .message-container .message-date .date-line {
   width: 60px;
   border-top: 1px solid #e0e0e0;
 }
+
 .view-message-container .message-container .message-date .date {
   margin: 0 10px;
 }
+
 .view-message-container .message-container .message-content {
   margin: 0 35px;
 }
+
 .view-message-container
   .message-container
   .message-content
@@ -1782,6 +2112,7 @@
   margin: 30px 0 10px;
   align-items: center;
 }
+
 .view-message-container
   .message-container
   .message-content
@@ -1792,9 +2123,11 @@
   border: 1px solid #f5f5f5;
   border-radius: 5px;
 }
+
 .view-message-container .message-container .message-content .currentUser-card {
   background: rgba(222, 68, 54, 0.1);
 }
+
 .view-message-container
   .message-container
   .message-content
@@ -1806,14 +2139,17 @@
   font-size: 14px;
   color: #585858;
 }
+
 .view-message-container .message-container .message-content .message-avatar {
   background: #fde3cf;
   color: #f56a00;
 }
+
 .view-message-container .message-container .message-content .currentUser {
   background: #ff5252;
   color: #fff !important;
 }
+
 .view-message-container .image-card {
   height: 100px;
   width: 100px;
@@ -1821,12 +2157,14 @@
   border: 1px solid #edf2f9;
   border-radius: 10px;
 }
+
 .view-message-container .image-card .image-card-image {
   min-width: 100px;
   height: 100px;
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 .view-message-container .image-card .image-card-loading {
   position: absolute;
   z-index: 1;
@@ -1839,25 +2177,30 @@
   align-items: center;
   justify-content: center;
 }
+
 .view-message-container .info-container .ant-upload-list {
   display: flex;
   flex-wrap: nowrap;
 }
+
 .view-message-container .info-container .info-remove-button {
   position: absolute;
   top: -5px;
   right: -5px;
   z-index: 100;
 }
+
 .view-message-container
   .info-container
   .ant-upload-list-picture-card-container {
   width: 100px;
   height: 100px;
 }
+
 .message-popover .ant-popover-inner-content {
   padding: 0px;
 }
+
 .chat-collage-image {
   background-repeat: no-repeat;
   background-position: center;
@@ -1865,6 +2208,7 @@
   cursor: pointer;
   position: relative;
 }
+
 .chat-collage-image .chat-collage-image-overlay {
   opacity: 0;
   transition: opacity 0.3s ease 0s;
@@ -1879,24 +2223,31 @@
   color: #fff;
   background-color: rgba(0, 0, 0, 0.5);
 }
+
 .chat-collage-image:hover .chat-collage-image-overlay {
   opacity: 1;
 }
+
 .ant-switch-handle {
   top: 6px !important;
 }
+
 .scheme-detail-switch .ant-switch-handle {
   top: 2px !important;
 }
+
 .button-icon {
   margin-right: 5px;
 }
+
 .loading .ant-spin {
   color: #de4436;
 }
+
 .clickable-row {
   cursor: pointer;
 }
+
 .footer {
   font-size: 12px;
   height: 30px;

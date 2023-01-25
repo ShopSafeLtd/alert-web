@@ -65,6 +65,7 @@ interface Return {
       >['offenders'][0]
     | null
     | undefined;
+  openLightbox: (index: number) => void;
 }
 
 const useAddExisitingOffenderr = ({
@@ -159,6 +160,11 @@ const useAddExisitingOffenderr = ({
     setSaving(false);
     onClose();
   };
+
+  // TODO: Add lightbox
+  const openLightbox = (i: number) => {
+    console.log(i);
+  };
   return {
     onSubmit,
     saving,
@@ -168,6 +174,7 @@ const useAddExisitingOffenderr = ({
     setSearch,
     onPaginationChange,
     setCurrentId,
+    openLightbox,
     selectedOffender: currentId
       ? data?.listOffenders?.offenders.find(
           (offender) => offender.id === currentId

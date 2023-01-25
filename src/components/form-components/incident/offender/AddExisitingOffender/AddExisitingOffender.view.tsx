@@ -35,7 +35,7 @@ import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import moment from 'moment';
 import OffenderTile from 'components/offenders/OffenderTile';
 import OffenderTileSkeleton from 'components/offenders/OffenderTileSkeleton';
-import { Lightbox } from 'yet-another-react-lightbox';
+import Lightbox from 'yet-another-react-lightbox';
 
 const { Title } = Typography;
 
@@ -56,6 +56,7 @@ interface Props {
       >['offenders'][0]
     | undefined
     | null;
+  openLightbox: (index: number) => void;
 }
 
 const AddExisitingOffender = ({
@@ -68,6 +69,7 @@ const AddExisitingOffender = ({
   setSearch,
   onPaginationChange,
   setCurrentId,
+  openLightbox,
   selectedOffender,
 }: Props): JSX.Element => (
   <div className="add-existing-offender">
@@ -291,8 +293,8 @@ const AddExisitingOffender = ({
       )}
     </Row>
     <Lightbox
-      open={lightBoxOpen.open}
-      close={() => openLightbox(0)}
+      open={false}
+      close={() => console.log('close')}
       plugins={[Zoom]}
       slides={
         selectedOffender?.images.map((image) => ({

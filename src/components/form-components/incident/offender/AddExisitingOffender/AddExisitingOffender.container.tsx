@@ -55,10 +55,12 @@ const AddExisitingOffender = ({
     onPaginationChange,
     setCurrentId,
     selectedOffender,
+    openLightbox,
   } = useAddExisitingOffender({ onClose, update, offenderIds });
 
   return (
     <View
+      openLightbox={openLightbox}
       onSubmit={onSubmit}
       saving={saving}
       data={data}

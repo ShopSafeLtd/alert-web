@@ -142,6 +142,12 @@
       "last 1 safari version"
     ]
   },
+  "exports": {
+    "./dist/styles.css": {
+      "import": "./dist/style.css",
+      "require": "./dist/style.css"
+    }
+  },
   "devDependencies": {
     "@graphql-codegen/cli": "2.6.2",
     "@graphql-codegen/typescript": "2.4.5",

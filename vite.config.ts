@@ -4,6 +4,12 @@ import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 import envCompatible from 'vite-plugin-env-compatible';
 
+const path = require('path');
+
+const pathResolve = (pathStr: string) => {
+  return path.resolve(__dirname, pathStr);
+};
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -28,7 +34,7 @@ export default defineConfig({
       // { find: '@', replacement: path.resolve(__dirname, 'src') },
       // fix less import by: @import ~
       // https://github.com/vitejs/vite/issues/2185#issuecomment-784637827
-      { find: /^~/, replacement: '' },
+      { find: /^~/, replacement: pathResolve('./node_modules') },
     ],
   },
   css: {
