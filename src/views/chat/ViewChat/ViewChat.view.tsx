@@ -74,7 +74,29 @@ const ViewOffender = ({
   const list = () => {
     if (loading && !data?.user?.chats?.length)
       return (
-        <Skeleton className="chat-item" avatar paragraph={{ rows: 1 }} active />
+        <>
+          <Skeleton
+            className="chat-item"
+            avatar
+            paragraph={{ rows: 1 }}
+            style={{ paddingLeft: 10, paddingRight: 10 }}
+            active
+          />
+          <Skeleton
+            className="chat-item"
+            avatar
+            paragraph={{ rows: 1 }}
+            style={{ paddingLeft: 10, paddingRight: 10 }}
+            active
+          />
+          <Skeleton
+            className="chat-item"
+            avatar
+            paragraph={{ rows: 1 }}
+            style={{ paddingLeft: 10, paddingRight: 10 }}
+            active
+          />
+        </>
       );
     if (!data?.user?.chats?.length) return <Empty description="No chats" />;
     return (
