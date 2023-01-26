@@ -301,14 +301,21 @@ const useOffenderFeed = (): Return => {
   const triggerLightbox = (elements: { src: string }[], index: number) => {
     setLightboxElements(elements);
 
-    setTimeout(
-      () =>
-        setLightBoxOpen({
-          open: !lightBoxOpen.open,
-          index,
-        }),
-      0.3
-    );
+    if (lightBoxOpen.open) {
+      setLightBoxOpen({
+        open: !lightBoxOpen.open,
+        index,
+      });
+    } else {
+      setTimeout(
+        () =>
+          setLightBoxOpen({
+            open: !lightBoxOpen.open,
+            index,
+          }),
+        0.3
+      );
+    }
   };
   const onPaginationChange = (page: number, pageSize: number) => {
     setOffendersState({
