@@ -46,6 +46,9 @@ describe('List Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <EditOffender
+          selectedItems={[]}
+          form={undefined}
+          setSelectedItems={jest.fn()}
           adminRights
           banData={{
             id: 'ckqtnb4r056540229myw4yk8zvq',

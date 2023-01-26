@@ -98,7 +98,7 @@ interface Props {
   adminRights: boolean;
   selectedItems: string[];
   setSelectedItems: (value: string[]) => void;
-  form: FormInstance<FormData>;
+  form: FormInstance<FormData> | undefined;
 }
 
 const AddOffender = ({

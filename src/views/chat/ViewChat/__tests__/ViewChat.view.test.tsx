@@ -57,6 +57,7 @@ describe('Detail Officer View', () => {
         <MemoryRouter>
           <MockedProvider mocks={[]} addTypename={false}>
             <ViewChat
+              loading={false}
               refetch={jest.fn()}
               data={data}
               saving={false}
