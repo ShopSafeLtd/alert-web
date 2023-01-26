@@ -26952,15 +26952,16 @@ export type MessagesSubscriptionSubscription = {
   messages?: Array<{
     __typename?: 'Message';
     id: string;
+    sent?: boolean | null;
     content: string;
     createdAt: any;
-    sent?: boolean | null;
     from: {
       __typename?: 'User';
       id: string;
       fullName: string;
       organisation: string;
     };
+    chat: { __typename?: 'Chat'; id: string; name: string };
     images: Array<{
       __typename?: 'Image';
       id: string;
@@ -30642,14 +30643,18 @@ export const MessagesSubscriptionDocument = gql`
   subscription MessagesSubscription($chat: ID!) {
     messages(chatId: $chat) {
       id
+      sent
       from {
         id
         fullName
         organisation
       }
+      chat {
+        id
+        name
+      }
       content
       createdAt
-      sent
       images {
         id
         url

@@ -1,14 +1,18 @@
 subscription MessagesSubscription($chat: ID!) {
   messages(chatId: $chat) {
     id
+    sent
     from {
       id
       fullName
       organisation
     }
+    chat {
+      id
+      name
+    }
     content
     createdAt
-    sent
     images {
       id
       url
