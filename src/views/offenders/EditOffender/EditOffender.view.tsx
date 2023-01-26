@@ -1,32 +1,25 @@
 import React from 'react';
-import {
-  ViewOffenderQuery,
-  Age,
-  Gender,
-  Race,
-  Build,
-  CreateTagMutation,
-} from 'graphql/generated';
+import { CreateTagMutation, ViewOffenderQuery } from 'graphql/generated';
 
 import {
-  Card,
-  Skeleton,
-  Typography,
   Button,
-  Form,
-  Input,
-  Select,
-  Row,
+  Card,
   Col,
-  Upload,
-  PageHeader,
-  Drawer,
-  Tag,
-  Switch,
   DatePicker,
-  Table,
-  // Divider,
+  Drawer,
   Empty,
+  Form,
+  FormInstance,
+  Input,
+  PageHeader,
+  Row,
+  Select,
+  Skeleton,
+  Switch,
+  Table,
+  Tag,
+  Typography,
+  Upload,
 } from 'antd';
 
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
@@ -49,23 +42,25 @@ import {
   faUpload,
 } from '@fortawesome/pro-light-svg-icons';
 import moment from 'moment';
+import { FormData } from './useEditOffender';
 
 const { Title, Text, Paragraph } = Typography;
 
-interface FormData {
-  name: string;
-  age: Age;
-  gender: Gender;
-  race: Race;
-  build: Build;
-  hair: string;
-  peculiarities: string;
-  dateSource?: string;
-  dateOfBirth?: Date;
-  groups: string[];
-  tags: string[];
-  images?: [{ id: string; url: string; optimised: string }];
-}
+// interface FormData {
+//   name: string;
+//   age: Age;
+//   gender: Gender;
+//   race: Race;
+//   build: Build;
+//   hair: string;
+//   peculiarities: string;
+//   dateSource?: string;
+//   dateOfBirth?: Date;
+//   groups: string[];
+//   tags: string[];
+//   images?: [{ id: string; url: string; optimised: string }];
+// }
+
 interface BanData {
   id: string;
   title?: string | null | undefined;
@@ -74,6 +69,7 @@ interface BanData {
   location: string;
   description?: string | null | undefined;
 }
+
 interface Props {
   onSubmit: (value: FormData) => void;
   data: ViewOffenderQuery | undefined;
@@ -104,6 +100,9 @@ interface Props {
   reviewed: boolean;
   onReject: () => void;
   adminRights: boolean;
+  selectedItems: string[];
+  setSelectedItems: (value: string[]) => void;
+  form: FormInstance<FormData>;
 }
 
 const EditOffender = ({
@@ -135,6 +134,9 @@ const EditOffender = ({
   setAgeCheck,
   reviewed,
   onReject,
+  selectedItems,
+  setSelectedItems,
+  form,
   adminRights,
 }: Props): JSX.Element => (
   <div className="list-view">
@@ -149,6 +151,7 @@ const EditOffender = ({
         <Form
           onFinish={onSubmit}
           layout="vertical"
+          form={form}
           initialValues={{
             name: data?.offender?.name || null,
             age: data?.offender?.age || null,
@@ -158,7 +161,9 @@ const EditOffender = ({
             hair: data?.offender?.hair || null,
             ageCheck: !!data?.offender?.dateOfBirth,
             peculiarities: data?.offender?.peculiarities || null,
-            dateOfBirth: moment(data?.offender?.dateOfBirth, 'YYYY-MM-DD'),
+            dateOfBirth: data?.offender?.dateOfBirth
+              ? moment(data?.offender?.dateOfBirth, 'YYYY-MM-DD')
+              : null,
             dateSource: data?.offender?.dateSource || null,
             groups:
               data?.offender?.groups && data?.offender?.groups.length > 0
@@ -254,9 +259,12 @@ const EditOffender = ({
                       disabled={saving}
                       mode="multiple"
                       maxTagCount={3}
+                      value={selectedItems}
+                      onChange={setSelectedItems}
+                      optionFilterProp="label"
                     >
                       {tags.map((tag) => (
-                        <Select.Option value={tag.value}>
+                        <Select.Option value={tag.value} label={tag.label}>
                           {tag.label}
                         </Select.Option>
                       ))}
@@ -559,7 +567,7 @@ const EditOffender = ({
                 </Col>
                 <Col style={{ marginLeft: 30 }}>
                   <Upload
-                    action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                    action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
                     fileList={fileList}
                     onChange={imgChange}
                     beforeUpload={beforeUpload}
@@ -582,7 +590,7 @@ const EditOffender = ({
 
               <Form.Item name="images">
                 <Upload
-                  action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                  action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
                   listType="picture-card"
                   fileList={fileList}
                   onChange={imgChange}

@@ -1,14 +1,7 @@
-/* eslint-disable no-console */
-import { useApolloClient } from '@apollo/client';
-import { useStoreActions, useStoreState, SetUserPayload } from 'state';
-import jwtDecode from 'jwt-decode';
+// import { useApolloClient } from "@apollo/client";
+import { SetUserPayload, useStoreActions, useStoreState } from 'state';
 import LogRocket from 'logrocket';
-import {
-  useCurrentUserLazyQuery,
-  // useSignInMutation,
-  CurrentUserDocument,
-  CurrentUserQuery,
-} from 'graphql/generated';
+import { useCurrentUserLazyQuery } from 'graphql/generated';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect } from 'react';
 
@@ -17,19 +10,20 @@ import { useEffect } from 'react';
 //   password: string;
 // }
 
-interface DecodedToken {
-  aud: string;
-  email: string;
-  email_verified: boolean;
-  exp: number;
-  iat: number;
-  iss: string;
-  name: string;
-  nickname: string;
-  picture: string;
-  sub: string;
-  updated_at: string;
-}
+// interface DecodedToken {
+//   aud: string;
+//   email: string;
+//   email_verified: boolean;
+//   exp: number;
+//   iat: number;
+//   iss: string;
+//   name: string;
+//   nickname: string;
+//   picture: string;
+//   sub: string;
+//   updated_at: string;
+// }
+
 interface Return {
   // login: ({ email, password }: LoginArgs) => void;
   rehydrateAuth: () => void;
@@ -38,13 +32,15 @@ interface Return {
   getCurrentUser: () => void;
   loading: boolean;
 }
+
 interface OnLoginSuccessArgs extends SetUserPayload {
   accessToken: string;
 }
-const useAuth = (): Return => {
-  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 
-  const client = useApolloClient();
+const useAuth = (): Return => {
+  const { getAccessTokenSilently, isAuthenticated, user } = useAuth0();
+
+  // const client = useApolloClient();
   const authenticated = useStoreActions(
     (actions) => actions.auth.authenticated
   );
@@ -73,7 +69,7 @@ const useAuth = (): Return => {
     schemes,
     groups,
   }: HandleSuccessArgs) => {
-    window.localStorage.setItem('accessToken', accessToken);
+    window.localStorage.setItem('access_token', accessToken);
 
     const handleNoValidScheme = () => {
       const schemeDetails = schemes[0]?.scheme;
@@ -122,6 +118,7 @@ const useAuth = (): Return => {
       onboarded,
       schemes,
       groups,
+      isSet: true,
     });
     authenticated(accessToken);
   };
@@ -132,13 +129,14 @@ const useAuth = (): Return => {
         id: currentUser?.id || '',
         email: currentUser?.email || '',
         fullName: currentUser?.fullName || '',
-        accessToken: window.localStorage.getItem('accessToken') || '',
+        accessToken: window.localStorage.getItem('access_token') || '',
         organisation: currentUser?.organisation || '',
         onboarded: !currentUser?.newUser,
         // currentUser?.newUser !== undefined ? !currentUser?.newUser : true,
         // currentUser?.newUser === undefined ? false : !currentUser?.newUser,
         schemes: currentUser?.schemes || [],
         groups: currentUser?.groups || [],
+        isSet: true,
       });
     },
     onError: () => expired(),
@@ -146,31 +144,48 @@ const useAuth = (): Return => {
   });
 
   const rehydrateAuth = () => {
-    const accessToken = localStorage.getItem('accessToken');
-    if (accessToken) {
-      const token: DecodedToken = jwtDecode(accessToken);
-      if (new Date().getTime() < token.exp * 1000) {
-        if (token.iss === 'https://alert.eu.auth0.com/') {
-          getCurrentUser({
-            context: {
-              headers: {
-                authorization: `Bearer ${accessToken}`,
-              },
-            },
-          });
+    if (user !== undefined) {
+      if (new Date().getTime() < user.exp * 1000) {
+        if (user.iss === 'https://alert.eu.auth0.com/') {
+          getCurrentUser();
+        } else if (isAuthenticated) {
+          getCurrentUser();
         } else {
           expired();
         }
       } else {
         expired();
       }
+    } else if (isAuthenticated) {
+      getCurrentUser();
     } else {
       expired();
     }
+    // const accessToken = localStorage.getItem('accessToken');
+    // if (accessToken) {
+    //   const token: DecodedToken = jwtDecode(accessToken);
+    //   if (new Date().getTime() < token.exp * 1000) {
+    //     if (token.iss === 'https://alert.eu.auth0.com/') {
+    //       getCurrentUser({
+    //         context: {
+    //           headers: {
+    //             authorization: `Bearer ${accessToken}`,
+    //           },
+    //         },
+    //       });
+    //     } else {
+    //       expired();
+    //     }
+    //   } else {
+    //     expired();
+    //   }
+    // } else {
+    //   expired();
+    // }
   };
 
   const onLoginSuccess = (data: OnLoginSuccessArgs) => {
-    window.localStorage.setItem('accessToken', data.accessToken);
+    window.localStorage.setItem('access_token', data.accessToken);
 
     const scheme = window.localStorage.getItem('currentScheme');
     if (!scheme) {
@@ -191,70 +206,85 @@ const useAuth = (): Return => {
       organisation: data.organisation,
       schemes: data.schemes,
       groups: data.groups,
+      isSet: true,
     });
   };
 
+  // useEffect(() => {
+  //   // authenticated from auth0
+  //   if (isAuthenticated) {
+  //     (async () => {
+  //       try {
+  //         const token = await getAccessTokenSilently();
+  //         authenticated(token);
+  //         window.localStorage.setItem('accessToken', token);
+  //         try {
+  //           const { data } = await client.query<CurrentUserQuery>({
+  //             query: CurrentUserDocument,
+  //             fetchPolicy: 'network-only',
+  //             context: {
+  //               headers: {
+  //                 authorization: `Bearer ${token}`,
+  //               },
+  //             },
+  //           });
+  //           console.log(data);
+  //           // Adding this in breaks the side and top navs. Not sure why atm
+  //           // onLoginSuccess({
+  //           //   accessToken: token || '',
+  //           //   email: data.currentUser?.email || '',
+  //           //   fullName: data.currentUser?.fullName || '',
+  //           //   id: data.currentUser?.id || '',
+  //           //   onboarded: data.currentUser?.newUser || false,
+  //           //   organisation: data.currentUser?.organisation || '',
+  //           //   schemes: data.currentUser?.schemes || [],
+  //           //   groups: data.currentUser?.groups || [],
+  //           // });
+  //           // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //         } catch (err: any) {
+  //           setAuthMessage(err.message);
+  //           console.log(err);
+  //         }
+  //       } catch (e) {
+  //         // eslint-disable-next-line no-console
+  //         console.error(e);
+  //       }
+  //
+  //       // try {
+  //
+  //       //   onLoginSuccess({
+  //       //     accessToken: token || '',
+  //       //     email: data.currentUser?.email || '',
+  //       //     fullName: data.currentUser?.fullName || '',
+  //       //     id: data.currentUser?.id || '',
+  //       //     onboarded: data.currentUser?.newUser || false,
+  //       //     organisation: data.currentUser?.organisation || '',
+  //       //     schemes: data.currentUser?.schemes || [],
+  //       //     groups: data.currentUser?.groups || [],
+  //       //   });
+  //       //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //       // } catch (err: any) {
+  //       //   setAuthMessage(err.message);
+  //       //   console.log(err);
+  //       // }
+  //     })();
+  //   }
+  // }, [isAuthenticated]);
   useEffect(() => {
-    // authenticated from auth0
     if (isAuthenticated) {
       (async () => {
         try {
-          const token = await getAccessTokenSilently();
-          authenticated(token);
-          window.localStorage.setItem('accessToken', token);
-          try {
-            const { data } = await client.query<CurrentUserQuery>({
-              query: CurrentUserDocument,
-              fetchPolicy: 'network-only',
-              context: {
-                headers: {
-                  authorization: `Bearer ${token}`,
-                },
-              },
-            });
-            console.log(data);
-            // Adding this in breaks the side and top navs. Not sure why atm
-            // onLoginSuccess({
-            //   accessToken: token || '',
-            //   email: data.currentUser?.email || '',
-            //   fullName: data.currentUser?.fullName || '',
-            //   id: data.currentUser?.id || '',
-            //   onboarded: data.currentUser?.newUser || false,
-            //   organisation: data.currentUser?.organisation || '',
-            //   schemes: data.currentUser?.schemes || [],
-            //   groups: data.currentUser?.groups || [],
-            // });
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          } catch (err: any) {
-            setAuthMessage(err.message);
-            console.log(err);
-          }
+          const newToken = await getAccessTokenSilently();
+
+          authenticated(newToken);
+          window.localStorage.setItem('access_token', newToken);
         } catch (e) {
-          // eslint-disable-next-line no-console
-          console.error(e);
+          if (e instanceof Error) setAuthMessage(e.message);
+          // console.error(e);
         }
-
-        // try {
-
-        //   onLoginSuccess({
-        //     accessToken: token || '',
-        //     email: data.currentUser?.email || '',
-        //     fullName: data.currentUser?.fullName || '',
-        //     id: data.currentUser?.id || '',
-        //     onboarded: data.currentUser?.newUser || false,
-        //     organisation: data.currentUser?.organisation || '',
-        //     schemes: data.currentUser?.schemes || [],
-        //     groups: data.currentUser?.groups || [],
-        //   });
-        //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        // } catch (err: any) {
-        //   setAuthMessage(err.message);
-        //   console.log(err);
-        // }
       })();
     }
   }, [isAuthenticated]);
-
   // const login = ({ email, password }: LoginArgs) => {
   //   window.localStorage.removeItem('accessToken');
   //   handleLogin({

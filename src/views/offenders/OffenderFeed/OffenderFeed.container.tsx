@@ -23,9 +23,11 @@ const IncidentFeed = (): JSX.Element => {
     tagsLoading,
     updateOffenderList,
     onNavigate,
+    lightBoxOpen,
   } = useIncidentFeed();
   return (
     <View
+      lightBoxOpen={lightBoxOpen}
       data={data}
       loading={loading}
       lightboxElements={lightboxElements}

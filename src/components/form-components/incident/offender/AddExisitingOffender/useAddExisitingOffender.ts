@@ -1,17 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
+  Age,
+  Build,
+  Gender,
+  ListOffendersQuery,
   QueryMode,
+  Race,
   SortOrder,
   useListOffendersQuery,
-  ListOffendersQuery,
-  Age,
-  Gender,
-  Race,
-  Build,
 } from 'graphql/generated';
-import { useLightbox } from 'simple-react-lightbox';
-import { useStoreState, useStoreActions } from 'state';
+import { useStoreActions, useStoreState } from 'state';
 
 interface OffenderData {
   id: string;
@@ -42,6 +41,7 @@ interface OffenderData {
   }[];
   imageUid?: string[] | undefined;
 }
+
 interface Props {
   onClose: () => void;
   update: (value: OffenderData) => void;
@@ -54,9 +54,9 @@ interface Return {
   data: ListOffendersQuery | undefined;
   loading: boolean;
   search: string;
+
   setSearch: (value: string) => void;
   onPaginationChange: (page: number, pageSize: number) => void;
-  openLightbox: (index: number) => void;
   setCurrentId: (value: string | undefined) => void;
   selectedOffender:
     | Exclude<
@@ -65,6 +65,11 @@ interface Return {
       >['offenders'][0]
     | null
     | undefined;
+  openLightbox: (index: number) => void;
+  lightBoxOpen: {
+    open: boolean;
+    index: number;
+  };
 }
 
 const useAddExisitingOffenderr = ({
@@ -74,7 +79,15 @@ const useAddExisitingOffenderr = ({
 }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [currentId, setCurrentId] = useState<string | undefined>(undefined);
-  const { openLightbox } = useLightbox();
+
+  const [selectedOffender, setSelectedOffender] = useState<
+    | Exclude<
+        ListOffendersQuery['listOffenders'],
+        undefined | null
+      >['offenders'][0]
+    | null
+    | undefined
+  >(undefined);
   const schemeId = useStoreState((state) => state.scheme.id);
   const order = useStoreState((state) => state.data.offenders.order);
   const pagination = useStoreState((state) => state.data.offenders.pagination);
@@ -82,7 +95,10 @@ const useAddExisitingOffenderr = ({
   const setOffendersState = useStoreActions(
     (actions) => actions.data.setOffenders
   );
-
+  const [lightBoxOpen, setLightBoxOpen] = useState({
+    open: false,
+    index: 0,
+  });
   const { data, loading } = useListOffendersQuery({
     variables: {
       scheme: {
@@ -130,15 +146,12 @@ const useAddExisitingOffenderr = ({
       order,
     });
   };
-  const onSubmit = (selectedOffenderId: string | undefined) => {
+  const onSubmit = () => {
     setSaving(true);
     if (
       data?.listOffenders?.offenders &&
       data.listOffenders.offenders.length > 0
     ) {
-      const selectedOffender = data.listOffenders.offenders.find(
-        ({ id }) => selectedOffenderId === id
-      );
       if (selectedOffender) {
         update({
           id: selectedOffender.id,
@@ -160,6 +173,20 @@ const useAddExisitingOffenderr = ({
     setSaving(false);
     onClose();
   };
+
+  const openLightbox = (index: number) => {
+    setLightBoxOpen({ open: !lightBoxOpen.open, index });
+  };
+
+  useEffect(() => {
+    if (currentId) {
+      setSelectedOffender(
+        data?.listOffenders?.offenders.find(
+          (offender) => offender.id === currentId
+        )
+      );
+    }
+  }, [currentId]);
   return {
     onSubmit,
     saving,
@@ -168,13 +195,10 @@ const useAddExisitingOffenderr = ({
     search: variables.search,
     setSearch,
     onPaginationChange,
-    openLightbox,
     setCurrentId,
-    selectedOffender: currentId
-      ? data?.listOffenders?.offenders.find(
-          (offender) => offender.id === currentId
-        )
-      : null,
+    openLightbox,
+    lightBoxOpen,
+    selectedOffender,
   };
 };
 

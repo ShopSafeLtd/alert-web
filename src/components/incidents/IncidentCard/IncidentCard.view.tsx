@@ -58,7 +58,7 @@ const IncidentCard = ({
   const imagesRef = useRef<CarouselRef>(null);
 
   return (
-    <Card className="incident-card">
+    <Card className="incident-card" key={incident.id || ''}>
       {!incident?.approved && (
         <div className="incident-card-overlay">
           <Title level={4} className="incident-card-approval-title">
@@ -184,19 +184,22 @@ const IncidentCard = ({
           >
             {incident?.description}
           </Paragraph>
-          {incident.offenders.length > 0 && (
-            <Row wrap={false} style={{ overflowX: 'auto', marginBottom: 15 }}>
-              {incident.offenders.map((offender) => (
-                <Link
-                  to={offender.id ? `/app/offenders/view/${offender.id}` : ``}
-                >
-                  <Tag key={offender.id}>
-                    {offender.name || 'Unknown Offender'}
-                  </Tag>
-                </Link>
-              ))}
-            </Row>
-          )}
+        </Link>
+
+        {incident.offenders.length > 0 && (
+          <Row wrap={false} style={{ overflowX: 'auto', marginBottom: 15 }}>
+            {incident.offenders.map((offender) => (
+              <Link
+                to={offender.id ? `/app/offenders/view/${offender.id}` : ``}
+              >
+                <Tag key={offender.id}>
+                  {offender.name || 'Unknown Offender'}
+                </Tag>
+              </Link>
+            ))}
+          </Row>
+        )}
+        <Link to={`/app/incidents/view/${incident?.id}`}>
           <Row>
             <Col flex={1}>
               <FontAwesomeIcon

@@ -78,6 +78,10 @@ describe('Detail Officer View', () => {
         <MemoryRouter>
           <MockedProvider mocks={[]} addTypename={false}>
             <OffenderFeed
+              lightBoxOpen={{
+                open: false,
+                index: 0,
+              }}
               data={data}
               loading={false}
               lightboxElements={[]}

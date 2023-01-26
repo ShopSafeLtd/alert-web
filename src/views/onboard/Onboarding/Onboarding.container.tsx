@@ -12,7 +12,6 @@ const Onboarding = (): JSX.Element => {
     updateTermsSigned,
     setCurrent,
   } = useOnboarding();
-
   return (
     <View
       saving={saving}

@@ -2,10 +2,15 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import EditIncident from '../EditIncident.view';
+import { ViewIncidentQuery } from '../../../../graphql/generated';
 
 describe('List Officer View', () => {
-  const data = {
+  const data: ViewIncidentQuery = {
     incident: {
+      value: 0,
+      subscribed: false,
+      updates: [],
+      recoveredValue: 0,
       id: 'incidentId',
       subject: 'test subject ',
       location: null,
@@ -53,11 +58,26 @@ describe('List Officer View', () => {
           toggleAddOffender={jest.fn()}
           addExistingOffender={false}
           toggleAddExistingOffender={jest.fn()}
-          updateOffenderList={jest.fn()}
           offendersData={[]}
-          deleteConfirm={jest.fn()}
           reviewed={false}
           onReject={jest.fn()}
+          addRecentOffender={null}
+          adminRights
+          assignOffendersToImages={jest.fn()}
+          listOffendersData={undefined}
+          newImage={null}
+          offenderImgChange={jest.fn()}
+          onCancelNewImage={jest.fn()}
+          recentOffenderData={undefined}
+          recentOffenderLoading={false}
+          removeImage={jest.fn()}
+          removeImageFromOffender={jest.fn()}
+          removeOffender={jest.fn()}
+          searchOffenders=""
+          setAddRecentOffender={jest.fn()}
+          setAssignToImage={jest.fn()}
+          setSearchOffenders={jest.fn()}
+          updateOffendersList={jest.fn()}
         />
       </MemoryRouter>
     );

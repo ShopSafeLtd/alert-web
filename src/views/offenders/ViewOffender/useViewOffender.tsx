@@ -13,7 +13,6 @@ import {
   ViewOffenderQueryVariables,
 } from 'graphql/generated';
 
-import { useLightbox } from 'simple-react-lightbox';
 import { Modal, notification } from 'antd';
 import { useStoreState } from 'state';
 import { ItemType } from 'antd/lib/menu/hooks/useItems';
@@ -28,7 +27,6 @@ interface Return {
   data: ViewOffenderQuery | undefined;
   loading: boolean;
   saving: boolean;
-  openLightbox: (index: number) => void;
   editRights: boolean;
   deleteRights: boolean;
   linkIncident: boolean;
@@ -72,13 +70,17 @@ interface Return {
   setEditUpdateInput: (value: string) => void;
   toggleSelectImages: (id: string) => void;
   addUpdateImages: (images: { id: string }[]) => void;
+  openLightbox: (index: number) => void;
+  lightBoxOpen: {
+    open: boolean;
+    index: number;
+  };
   closeAddImages: () => void;
 }
 
 const useViewOffender = (offenderId: string): Return => {
   const navigate = useNavigate();
 
-  const { openLightbox } = useLightbox();
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
   const [saving, setSaving] = useState(false);
@@ -87,6 +89,15 @@ const useViewOffender = (offenderId: string): Return => {
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
   );
+  const [lightBoxOpen, setLightBoxOpen] = useState({
+    open: false,
+    index: 0,
+  });
+
+  const openLightbox = (index: number) => {
+    setLightBoxOpen({ open: !lightBoxOpen.open, index });
+  };
+
   const [loadMore, setLoadMore] = useState(false);
   const [replyTo, setReplyTo] = useState<{
     id: string;
@@ -416,7 +427,6 @@ const useViewOffender = (offenderId: string): Return => {
     data,
     loading: data?.offender ? false : loading,
     saving,
-    openLightbox,
     editRights: role !== Role.User,
     deleteRights: role !== Role.User,
     linkIncident,
@@ -442,6 +452,8 @@ const useViewOffender = (offenderId: string): Return => {
     editUpdateInput,
     setEditUpdateInput,
     toggleSelectImages,
+    openLightbox,
+    lightBoxOpen,
   };
 };
 

@@ -1,14 +1,9 @@
 import React, { lazy, Suspense, useEffect } from 'react';
-import {
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Loading from 'components/shared-components/AntD/Loading';
 import { useAuth } from 'hooks';
 import { useStoreState } from 'state';
+import { useAuth0 } from '@auth0/auth0-react';
 import Incidents from './incidents/router';
 import Offenders from './offenders/router';
 
@@ -20,21 +15,23 @@ const User = lazy(() => import(`./user-settings/router`));
 const Scheme = lazy(() => import(`./scheme-settings/router`));
 
 export const AppViews = (): JSX.Element => {
-  const { getCurrentUser } = useAuth();
-  const { role, onboarded } = useStoreState((state) => state.user);
-  const navigate = useNavigate();
-  const location = useLocation();
+  const { isLoading } = useAuth0();
+  const { getCurrentUser, loading } = useAuth();
+  const { role, onboarded, isSet } = useStoreState((state) => state.user);
+  // const navigate = useNavigate();
+  // const location = useLocation();
 
   useEffect(() => {
     getCurrentUser();
   }, []);
 
-  useEffect(() => {
-    if (onboarded && location.pathname === '/app/onboarding') {
-      navigate('incidents');
-    }
-  }, [onboarded]);
+  // useEffect(() => {
+  //   if (onboarded && location.pathname === '/app/onboarding') {
+  //     navigate('incidents');
+  //   }
+  // }, [onboarded]);
 
+  if (loading || isLoading || !isSet) return <Loading cover="content" />;
   return (
     <Suspense fallback={<Loading cover="content" />}>
       <Routes>

@@ -11,13 +11,11 @@ describe('List Officer View', () => {
     return (
       <ViewMessage
         onSubmit={jest.fn()}
-        loading={false}
         chatData={{}}
         saving={false}
         form={form}
         scrolledToTop={jest.fn()}
         datedMessages={[]}
-        loadMore={false}
         userId=""
         deleteMessageConfirm={jest.fn()}
         adminRights
@@ -32,6 +30,25 @@ describe('List Officer View', () => {
         setInputStr={jest.fn()}
         showPicker={false}
         toggleShowPicker={jest.fn()}
+        imgChange={undefined}
+        onPreview={jest.fn()}
+        beforeUpload={jest.fn()}
+        fileList={[]}
+        updateOffendersList={jest.fn()}
+        offendersData={[]}
+        incidentsData={undefined}
+        linkIncident={false}
+        linkOffender={false}
+        toggleLinkIncident={jest.fn()}
+        toggleLinkOffender={jest.fn()}
+        updateIncidentList={jest.fn()}
+        removeOffender={jest.fn()}
+        removeIncident={jest.fn()}
+        removeImage={jest.fn()}
+        setMentionedUser={jest.fn()}
+        deleteImageConfirm={jest.fn()}
+        deleteOffenderConfirm={jest.fn()}
+        deleteIncidentConfirm={jest.fn()}
       />
     );
   };

@@ -118,51 +118,51 @@ type Offender = Exclude<
 >['offenders'][0];
 
 interface Props {
-  onSubmit: (value: FormData) => void;
-  data: ViewIncidentQuery | undefined;
-  loading: boolean;
-  saving: boolean;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  tags: { value: string; label: string }[];
-  tagsLoading: boolean;
-  imgChange: UploadProps['onChange'];
-  onPreview: (value: Image) => void;
-  fileList: Image[];
-  beforeUpload: (value: RcFile) => void;
-  addIncidentTag: boolean;
-  toggleAddIncidentTag: () => void;
-  updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
-  addOffender: boolean;
-  toggleAddOffender: () => void;
   addExistingOffender: boolean;
-  toggleAddExistingOffender: () => void;
-  updateOffendersList: (value: OffenderData) => void;
-  offendersData: OffenderData[];
-  reviewed: boolean;
-  onReject: () => void;
-  recentOffenderData: ListOffendersQuery | undefined;
-  recentOffenderLoading: boolean;
+  addIncidentTag: boolean;
+  addOffender: boolean;
   addRecentOffender: Offender | null;
-  setAddRecentOffender: (value: Offender | null) => void;
-  searchOffenders: string;
-  setSearchOffenders: (value: string) => void;
-  newImage: Image | null;
-  onCancelNewImage: () => void;
+  adminRights: boolean;
   assignOffendersToImages: (data: {
     image: Image;
     offenders: OffenderData[];
   }) => void;
-  setAssignToImage: (image: Image) => void;
-  removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
-  removeImage: (uid: string) => void;
-  removeOffender: (offenderId: string) => void;
+  beforeUpload: (value: RcFile) => void;
+  data: ViewIncidentQuery | undefined;
+  fileList: Image[];
+  groups: { value: string; label: string }[];
+  groupsLoading: boolean;
+  imgChange: UploadProps['onChange'];
   listOffendersData: ListOffendersQuery | undefined;
-  adminRights: boolean;
+  loading: boolean;
+  newImage: Image | null;
   offenderImgChange: (
     info: UploadChangeParam<UploadFile>,
     currentId: string
   ) => void;
+  offendersData: OffenderData[];
+  onCancelNewImage: () => void;
+  onPreview: (value: Image) => void;
+  onReject: () => void;
+  onSubmit: (value: FormData) => void;
+  recentOffenderData: ListOffendersQuery | undefined;
+  recentOffenderLoading: boolean;
+  removeImage: (uid: string) => void;
+  removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
+  removeOffender: (offenderId: string) => void;
+  reviewed: boolean;
+  saving: boolean;
+  searchOffenders: string;
+  setAddRecentOffender: (value: Offender | null) => void;
+  setAssignToImage: (image: Image) => void;
+  setSearchOffenders: (value: string) => void;
+  tags: { value: string; label: string }[];
+  tagsLoading: boolean;
+  toggleAddExistingOffender: () => void;
+  toggleAddIncidentTag: () => void;
+  toggleAddOffender: () => void;
+  updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
+  updateOffendersList: (value: OffenderData) => void;
 }
 
 const EditIncident = ({
@@ -616,7 +616,9 @@ const EditIncident = ({
                         }
                         return (
                           <Upload
-                            action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                            action={
+                              import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT
+                            }
                             onChange={(info) =>
                               offenderImgChange(info, record.key)
                             }
@@ -835,7 +837,7 @@ const EditIncident = ({
                 </Col>
                 <Col style={{ marginLeft: 30 }}>
                   <Upload
-                    action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                    action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
                     fileList={fileList}
                     onChange={imgChange}
                     beforeUpload={beforeUpload}
@@ -858,7 +860,7 @@ const EditIncident = ({
               </Row>
               <Form.Item name="images">
                 <Upload<Image>
-                  action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                  action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
                   className="incident-form-images"
                   listType="picture-card"
                   fileList={fileList}

@@ -1,15 +1,15 @@
 import React from 'react';
-import { Age, Gender, Race, Build } from 'graphql/generated';
+import { Age, Build, Gender, Race } from 'graphql/generated';
 
 import {
   Button,
+  Col,
+  DatePicker,
   Form,
   Input,
-  Select,
   Row,
-  Col,
+  Select,
   Switch,
-  DatePicker,
   Typography,
   Upload,
 } from 'antd';
@@ -172,7 +172,7 @@ const AddNewOffender = ({
           tooltip="Please add any images that you have of the offender."
         >
           <Upload
-            action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+            action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
             className="upload-images"
             style={{ width: '50%', height: '50%' }}
             listType="picture-card"

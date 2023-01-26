@@ -1,20 +1,23 @@
-import React, { useRef, useEffect } from 'react';
-import { Form, Button, FormInstance, Row, FormItemProps } from 'antd';
+import React, { useEffect, useRef } from 'react';
+import { Button, Form, FormInstance, FormItemProps, Row } from 'antd';
 import { Grow } from 'components/layout-components/AntD';
 
 interface Field extends FormItemProps {
-  render(props: { disabled: boolean }): JSX.Element;
   checkbox?: boolean;
+
+  render(props: { disabled: boolean }): JSX.Element;
 }
 
 interface Props<T> {
-  onClose(): void;
-  onSubmit(data: T): void;
   loading?: boolean;
   saving: boolean;
   data?: T;
   initialValues: T;
   fields: Field[];
+
+  onClose(): void;
+
+  onSubmit(data: T): void;
 }
 
 export const StandardForm = <T,>({
@@ -34,6 +37,8 @@ export const StandardForm = <T,>({
 
   useEffect(() => {
     if (data) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       formRef.current?.setFieldsValue(data);
     }
   }, [data]);
@@ -54,6 +59,8 @@ export const StandardForm = <T,>({
       onFinishFailed={() => {}}
       ref={formRef}
       style={{ display: 'flex', flexDirection: 'column', flex: 1 }}
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       initialValues={initialValues}
       layout="vertical"
     >

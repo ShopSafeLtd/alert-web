@@ -53,7 +53,8 @@ import OffenderSideList from 'components/offenders/OffenderSideList';
 import moment from 'moment';
 import LinkIncident from 'components/form-components/offender/LinkIncident';
 import { useNavigate } from 'react-router';
-import { SRLWrapper } from 'simple-react-lightbox';
+import Lightbox from 'yet-another-react-lightbox';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import UpdateContent from 'views/incidents/ViewIncident/Update.view';
 import UpdateBar from 'components/form-components/update-bar';
@@ -111,6 +112,10 @@ interface Props {
   toggleSelectImages: (id: string) => void;
   addUpdateImages: (images: { id: string }[]) => void;
   closeAddImages: () => void;
+  lightBoxOpen: {
+    open: boolean;
+    index: number;
+  };
 }
 
 const ViewOffender = ({
@@ -144,6 +149,7 @@ const ViewOffender = ({
   addUpdateImages,
   closeAddImages,
   toggleSelectImages,
+  lightBoxOpen,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -852,10 +858,15 @@ const ViewOffender = ({
           onChange={(e) => setEditUpdateInput(e.target.value)}
         />
       </Modal>
-
-      <SRLWrapper
-        elements={lightboxElements}
-        options={{ buttons: { showDownloadButton: false } }}
+      <Lightbox
+        open={lightBoxOpen.open}
+        close={() => openLightbox(0)}
+        plugins={[Zoom]}
+        index={lightBoxOpen.index}
+        slides={lightboxElements}
+        controller={{
+          closeOnBackdropClick: true,
+        }}
       />
     </div>
   );

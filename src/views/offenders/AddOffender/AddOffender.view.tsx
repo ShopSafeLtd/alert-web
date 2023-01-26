@@ -1,24 +1,24 @@
 import React from 'react';
-import { Age, Gender, Race, Build, CreateTagMutation } from 'graphql/generated';
+import { CreateTagMutation } from 'graphql/generated';
 
 import {
-  Card,
-  Typography,
   Button,
-  Form,
-  Input,
-  Select,
-  Row,
+  Card,
   Col,
-  Upload,
-  PageHeader,
-  Drawer,
-  Tag,
-  Switch,
   DatePicker,
-  Table,
-  // Divider,
+  Drawer,
   Empty,
+  Form,
+  FormInstance,
+  Input,
+  PageHeader,
+  Row,
+  Select,
+  Switch,
+  Table,
+  Tag,
+  Typography,
+  Upload,
 } from 'antd';
 
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
@@ -38,26 +38,28 @@ import {
   faUpload,
 } from '@fortawesome/pro-light-svg-icons';
 import { MutationUpdaterFn } from '@apollo/client';
+import { FormData } from './useAddOffender';
 
 const { Title, Text, Paragraph } = Typography;
 
-interface FormData {
-  name: string;
-  age: Age;
-  gender: Gender;
-  race: Race;
-  build: Build;
-  hair: string;
-  peculiarities: string;
-  dateSource?: string;
-  dateOfBirth?: Date;
-  groups: string[];
-  tags: string[];
-  images?: [{ id: string; url: string; optimised: string }];
-  bans?: [
-    { endDate: Date; startDate: Date; location: string; description: string }
-  ];
-}
+// interface FormData {
+//   name: string;
+//   age: Age;
+//   gender: Gender;
+//   race: Race;
+//   build: Build;
+//   hair: string;
+//   peculiarities: string;
+//   dateSource?: string;
+//   dateOfBirth?: Date;
+//   groups: string[];
+//   tags: string[];
+//   images?: [{ id: string; url: string; optimised: string }];
+//   bans?: [
+//     { endDate: Date; startDate: Date; location: string; description: string }
+//   ];
+// }
+
 interface BanData {
   id: string;
   title?: string | null | undefined;
@@ -66,6 +68,7 @@ interface BanData {
   location: string;
   description?: string | null | undefined;
 }
+
 interface Props {
   onSubmit: (value: FormData) => void;
   saving: boolean;
@@ -93,6 +96,9 @@ interface Props {
   bansData: BanData[];
   updateExclusion: (value: BanData) => void;
   adminRights: boolean;
+  selectedItems: string[];
+  setSelectedItems: (value: string[]) => void;
+  form: FormInstance<FormData>;
 }
 
 const AddOffender = ({
@@ -122,11 +128,14 @@ const AddOffender = ({
   bansData,
   updateExclusion,
   adminRights,
+  selectedItems,
+  setSelectedItems,
+  form,
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader onBack={() => window.history.back()} title="Add Offender" />
     <Card>
-      <Form onFinish={onSubmit} layout="vertical">
+      <Form form={form} onFinish={onSubmit} layout="vertical">
         <Row align="bottom" style={{ marginBottom: 30 }}>
           <Col>
             <Title style={{ marginBottom: 0 }} level={4}>
@@ -211,9 +220,12 @@ const AddOffender = ({
                     disabled={saving}
                     mode="multiple"
                     maxTagCount={3}
+                    optionFilterProp="label"
+                    value={selectedItems}
+                    onChange={setSelectedItems}
                   >
                     {tags.map((tag) => (
-                      <Select.Option value={tag.value}>
+                      <Select.Option value={tag.value} label={tag.label}>
                         {tag.label}
                       </Select.Option>
                     ))}
@@ -511,7 +523,7 @@ const AddOffender = ({
               <Col style={{ marginLeft: 30 }}>
                 <Upload
                   accept=".png,.jpeg,.webp"
-                  action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                  action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
                   fileList={fileList}
                   onChange={imgChange}
                   beforeUpload={beforeUpload}
@@ -535,7 +547,7 @@ const AddOffender = ({
             <Form.Item name="images">
               <Upload
                 accept=".png,.jpeg,.webp"
-                action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
                 listType="picture-card"
                 fileList={fileList}
                 onChange={imgChange}

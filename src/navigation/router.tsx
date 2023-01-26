@@ -10,7 +10,7 @@ import { useAuth } from 'hooks';
 import { useQuery } from '@apollo/client';
 import { UserNew, UserNewArgs, UserNewRes } from 'graphql-src/users/queries';
 import { useAuth0 } from '@auth0/auth0-react';
-import Loading from './auth-views/authentication/loading';
+import Loading from '../components/loading';
 
 import PrimaryOnboarding from '../views/onboard/SetPassword';
 
@@ -26,7 +26,7 @@ export const Views = (): JSX.Element => {
 
   const currentAppLocale = AppLocale[locale];
 
-  const { rehydrateAuth } = useAuth();
+  const { rehydrateAuth, loading } = useAuth();
 
   useEffect(() => {
     rehydrateAuth();
@@ -55,7 +55,7 @@ export const Views = (): JSX.Element => {
       id: newUserId,
     },
   });
-  if (isLoading) return <Loading />;
+  if (loading || isLoading || !isSet) return <Loading />;
 
   return (
     <IntlProvider

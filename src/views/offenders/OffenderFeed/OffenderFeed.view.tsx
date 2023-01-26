@@ -3,11 +3,12 @@ import { ListOffendersQuery, RecycleOffenderMutation } from 'graphql/generated';
 import { Affix, Button, Col, Input, Pagination, Row, Select } from 'antd';
 import OffenderCard from 'components/offenders/OffenderCard';
 import OffenderSkeletonCard from 'components/offenders/OffenderSkeletonCard/OffenderSkeletonCard.view';
-import { SRLWrapper } from 'simple-react-lightbox';
 import { OffenderSort } from 'state';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { MutationUpdaterFn } from '@apollo/client';
+import Lightbox from 'yet-another-react-lightbox';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 
 interface Props {
   data: ListOffendersQuery | undefined;
@@ -34,6 +35,10 @@ interface Props {
   tagsLoading: boolean;
   updateOffenderList: MutationUpdaterFn<RecycleOffenderMutation>;
   onNavigate: () => void;
+  lightBoxOpen: {
+    open: boolean;
+    index: number;
+  };
 }
 
 const OffenderFeed = ({
@@ -56,6 +61,7 @@ const OffenderFeed = ({
   updateOffenderList,
   tagsLoading,
   onNavigate,
+  lightBoxOpen,
 }: Props): JSX.Element => (
   <div className="feed-container">
     <Affix offsetTop={40}>
@@ -138,26 +144,12 @@ const OffenderFeed = ({
     </Affix>
     <Row gutter={8}>
       {loading
-        ? [
-            <Col key="0" sm={24} md={12} lg={12} xl={8} xxl={6}>
+        ? Array.from({ length: 8 }).map((_, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Col key={index} sm={24} md={12} lg={12} xl={8} xxl={6}>
               <OffenderSkeletonCard />
-            </Col>,
-            <Col key="1" sm={24} md={12} lg={12} xl={8} xxl={6}>
-              <OffenderSkeletonCard />
-            </Col>,
-            <Col key="2" sm={24} md={12} lg={12} xl={8} xxl={6}>
-              <OffenderSkeletonCard />
-            </Col>,
-            <Col key="3" sm={24} md={12} lg={12} xl={8} xxl={6}>
-              <OffenderSkeletonCard />
-            </Col>,
-            <Col key="4" sm={24} md={12} lg={12} xl={8} xxl={6}>
-              <OffenderSkeletonCard />
-            </Col>,
-            <Col key="5" sm={24} md={12} lg={12} xl={8} xxl={6}>
-              <OffenderSkeletonCard />
-            </Col>,
-          ]
+            </Col>
+          ))
         : data?.listOffenders?.offenders?.map((item) => (
             <Col sm={24} md={12} lg={12} xl={8} xxl={6} key={item?.id}>
               <OffenderCard
@@ -178,13 +170,20 @@ const OffenderFeed = ({
           current={pagination.page}
           onChange={onPaginationChange}
           showTotal={(total) => `Total Offenders: ${total}`}
+          hideOnSinglePage
         />
       </Col>
     </Row>
 
-    <SRLWrapper
-      elements={lightboxElements}
-      options={{ buttons: { showDownloadButton: false } }}
+    <Lightbox
+      open={lightBoxOpen.open}
+      close={() => openLightbox([], 0)}
+      plugins={[Zoom]}
+      index={lightBoxOpen.index}
+      slides={lightboxElements}
+      controller={{
+        closeOnBackdropClick: true,
+      }}
     />
   </div>
 );

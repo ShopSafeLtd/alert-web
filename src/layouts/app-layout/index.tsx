@@ -6,18 +6,18 @@ import MobileNav from 'components/layout-components/AntD/navigation/MobileNav';
 import HeaderNav from 'components/layout-components/AntD/navigation/HeaderNav';
 // import PageHeader from 'components/layout-components/AntD/PageHeader';
 import AppViews from 'navigation/app-views/router';
-import { Layout, Grid } from 'antd';
+import { Grid, Layout } from 'antd';
 
 import { ScreenSizeUnsupported } from 'components/layout-components';
 
 import navigationConfig from 'configs/NavigationConfig';
 import {
-  SIDE_NAV_WIDTH,
   SIDE_NAV_COLLAPSED_WIDTH,
+  SIDE_NAV_WIDTH,
 } from 'constants/ThemeConstant';
 import utils from 'utils';
-import { useThemeSwitcher } from 'react-css-theme-switcher';
-import { useStoreState, NavType } from 'state';
+import { useThemeSwitcher } from 'react-css-theme-switcher/src';
+import { NavType, useStoreState } from 'state';
 import { Navigate } from 'react-router-dom';
 
 const { Content } = Layout;
