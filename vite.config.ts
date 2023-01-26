@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 import envCompatible from 'vite-plugin-env-compatible';
+import removeConsole from 'vite-plugin-remove-console';
 
 const path = require('path');
 
@@ -17,6 +18,8 @@ export default defineConfig({
     envCompatible(),
     viteTsconfigPaths(),
     svgrPlugin(),
+    removeConsole(), // will remove console from prod builds, remove if testing is needed on live
+
     // vitePluginImp({
     //   libList: [
     //     {
