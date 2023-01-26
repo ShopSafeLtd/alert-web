@@ -187,7 +187,6 @@ const useAddExisitingOffenderr = ({
       );
     }
   }, [currentId]);
-  console.log(selectedOffender);
   return {
     onSubmit,
     saving,
