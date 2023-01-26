@@ -43,7 +43,7 @@ const useLinkIncident = ({ onClose, update, incidentIds }: Props): Return => {
         id: schemeId,
       },
       order: {
-        createdAt: SortOrder.Asc,
+        createdAt: SortOrder.Desc,
       },
       take: pagination.pageSize,
       skip: (pagination.page - 1) * pagination.pageSize,
