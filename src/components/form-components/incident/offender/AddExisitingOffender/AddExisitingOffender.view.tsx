@@ -95,7 +95,7 @@ const AddExisitingOffender = ({
         <Row wrap gutter={16}>
           {data?.listOffenders?.offenders.map((offender) => (
             <Col
-              span={selectedOffender !== null ? 12 : 4}
+              span={selectedOffender ? 12 : 4}
               key={offender.id}
               className="offender-item"
             >
@@ -131,20 +131,23 @@ const AddExisitingOffender = ({
 
       <Row className="add-existing-offender-row">
         <Col
-          span={selectedOffender !== null ? 10 : 24}
-          className={selectedOffender !== null ? 'offenders-side-list' : ''}
+          span={selectedOffender ? 10 : 24}
+          className={selectedOffender ? 'offenders-side-list' : ''}
         >
           {existingOffenders()}
-          {data && !loading && (
-            <Pagination
-              total={data?.listOffenders?.total}
-              size="small"
-              showSizeChanger={false}
-              onChange={onPaginationChange}
-              pageSize={24}
-              hideOnSinglePage
-            />
-          )}
+          <Pagination
+            style={{
+              display: 'flex',
+              width: '100%',
+              justifyContent: 'center',
+            }}
+            total={data?.listOffenders?.total}
+            size="small"
+            showSizeChanger={false}
+            onChange={onPaginationChange}
+            pageSize={24}
+            hideOnSinglePage
+          />
         </Col>
         {selectedOffender && (
           <Col span={14} className="view-offender">
@@ -313,7 +316,6 @@ const AddExisitingOffender = ({
           </Col>
         )}
       </Row>
-      {/* TODO: Fix */}
       <Lightbox
         open={lightBoxOpen.open}
         close={() => openLightbox(0)}

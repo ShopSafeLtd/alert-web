@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   Age,
@@ -79,6 +79,15 @@ const useAddExisitingOffenderr = ({
 }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [currentId, setCurrentId] = useState<string | undefined>(undefined);
+
+  const [selectedOffender, setSelectedOffender] = useState<
+    | Exclude<
+        ListOffendersQuery['listOffenders'],
+        undefined | null
+      >['offenders'][0]
+    | null
+    | undefined
+  >(undefined);
   const schemeId = useStoreState((state) => state.scheme.id);
   const order = useStoreState((state) => state.data.offenders.order);
   const pagination = useStoreState((state) => state.data.offenders.pagination);
@@ -137,15 +146,12 @@ const useAddExisitingOffenderr = ({
       order,
     });
   };
-  const onSubmit = (selectedOffenderId: string | undefined) => {
+  const onSubmit = () => {
     setSaving(true);
     if (
       data?.listOffenders?.offenders &&
       data.listOffenders.offenders.length > 0
     ) {
-      const selectedOffender = data.listOffenders.offenders.find(
-        ({ id }) => selectedOffenderId === id
-      );
       if (selectedOffender) {
         update({
           id: selectedOffender.id,
@@ -172,6 +178,16 @@ const useAddExisitingOffenderr = ({
     setLightBoxOpen({ open: !lightBoxOpen.open, index });
   };
 
+  useEffect(() => {
+    if (currentId) {
+      setSelectedOffender(
+        data?.listOffenders?.offenders.find(
+          (offender) => offender.id === currentId
+        )
+      );
+    }
+  }, [currentId]);
+  console.log(selectedOffender);
   return {
     onSubmit,
     saving,
@@ -183,11 +199,7 @@ const useAddExisitingOffenderr = ({
     setCurrentId,
     openLightbox,
     lightBoxOpen,
-    selectedOffender: currentId
-      ? data?.listOffenders?.offenders.find(
-          (offender) => offender.id === currentId
-        )
-      : null,
+    selectedOffender,
   };
 };
 
