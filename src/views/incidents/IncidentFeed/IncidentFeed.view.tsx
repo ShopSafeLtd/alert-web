@@ -194,6 +194,9 @@ const IncidentFeed = ({
         plugins={[Zoom]}
         index={lightBoxOpen.index}
         slides={lightboxElements}
+        controller={{
+          closeOnBackdropClick: true,
+        }}
       />
     </div>
   );

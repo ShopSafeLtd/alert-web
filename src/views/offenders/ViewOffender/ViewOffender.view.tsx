@@ -864,6 +864,9 @@ const ViewOffender = ({
         plugins={[Zoom]}
         index={lightBoxOpen.index}
         slides={lightboxElements}
+        controller={{
+          closeOnBackdropClick: true,
+        }}
       />
     </div>
   );

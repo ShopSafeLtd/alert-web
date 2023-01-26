@@ -1,17 +1,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from 'react';
-import { ListOffendersQuery } from 'graphql/generated';
-import {
-  Button,
-  Col,
-  Descriptions,
-  Input,
-  Pagination,
-  Row,
-  Typography,
-} from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from "react";
+import { ListOffendersQuery } from "graphql/generated";
+import { Button, Col, Descriptions, Input, Pagination, Row, Typography } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleInfo,
   faClock,
@@ -20,22 +12,22 @@ import {
   faMarsAndVenus,
   faUserClock,
   faUserHair,
-  faUserTag,
-} from '@fortawesome/pro-light-svg-icons';
+  faUserTag
+} from "@fortawesome/pro-light-svg-icons";
 import {
   calcAge,
   getLastOffence,
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
-  getOffenderRace,
-} from 'utils/offender/get-offender-desc';
-import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+  getOffenderRace
+} from "utils/offender/get-offender-desc";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
 
-import moment from 'moment';
-import OffenderTile from 'components/offenders/OffenderTile';
-import OffenderTileSkeleton from 'components/offenders/OffenderTileSkeleton';
-import Lightbox from 'yet-another-react-lightbox';
+import moment from "moment";
+import OffenderTile from "components/offenders/OffenderTile";
+import OffenderTileSkeleton from "components/offenders/OffenderTileSkeleton";
+import Lightbox from "yet-another-react-lightbox";
 
 const { Title } = Typography;
 
@@ -292,10 +284,14 @@ const AddExisitingOffender = ({
         </Col>
       )}
     </Row>
+    {/* TODO: Fix */}
     <Lightbox
       open={false}
       close={() => console.log('close')}
       plugins={[Zoom]}
+      controller={{
+        closeOnBackdropClick: true,
+      }}
       slides={
         selectedOffender?.images.map((image) => ({
           src: image.optimised || '',
