@@ -23,7 +23,7 @@ describe('Detail Officer View', () => {
         <AddPreviousLocation
           onSubmit={jest.fn()}
           onClose={jest.fn()}
-          data={data}
+          data={{ addresses: data }}
           loading={false}
           saving={false}
         />

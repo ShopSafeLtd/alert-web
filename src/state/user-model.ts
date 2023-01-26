@@ -13,6 +13,7 @@ export interface SetUserPayload {
     id: string;
     name: string;
   }[];
+  isSet: boolean;
 }
 
 export interface SetUserRole {
@@ -43,6 +44,7 @@ export interface UserModel {
     name: string;
   }[];
   role: Role;
+  isSet: boolean;
   setUser: Action<UserModel, SetUserPayload>;
   setRole: Action<UserModel, SetUserRole>;
   clearUser: Action<UserModel>;
@@ -55,6 +57,7 @@ const userModel: UserModel = {
   picture: '',
   organisation: '',
   onboarded: false,
+  isSet: false,
   role: Role.User,
   schemes: [],
   groups: [],
@@ -67,6 +70,7 @@ const userModel: UserModel = {
     state.organisation = payload.organisation;
     state.schemes = payload.schemes;
     state.groups = payload.groups;
+    state.isSet = payload.isSet;
   }),
   setRole: action((state, payload) => {
     state.role = payload.role;
@@ -80,6 +84,7 @@ const userModel: UserModel = {
     state.onboarded = false;
     state.schemes = [];
     state.role = Role.User;
+    state.isSet = false;
   }),
 };
 

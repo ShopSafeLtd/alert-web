@@ -8,6 +8,10 @@ describe('List Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <AddOffender
+          updateExclusion={jest.fn()}
+          adminRights={false}
+          removeImage={jest.fn()}
+          key={0}
           onSubmit={jest.fn()}
           saving={false}
           groups={[]}
@@ -31,8 +35,6 @@ describe('List Officer View', () => {
           ageCheck={false}
           setAgeCheck={jest.fn()}
           bansData={[]}
-          updateAddExclusion={jest.fn()}
-          updateEditExclusion={jest.fn()}
         />
       </MemoryRouter>
     );

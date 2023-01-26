@@ -5,6 +5,7 @@ import { createStore, StoreProvider } from 'easy-peasy';
 import { MockedProvider } from '@apollo/client/testing';
 import { storeModel } from 'state';
 import ViewChat from '../ViewChat.view';
+import { UserChatsQuery } from '../../../../graphql/generated';
 
 describe('Detail Officer View', () => {
   const store = createStore(storeModel, {
@@ -13,19 +14,18 @@ describe('Detail Officer View', () => {
       scheme: { id: 'schemeId' },
     },
   });
-  const data = {
+  const data: UserChatsQuery = {
     user: {
       id: 'userId',
       chats: [
         {
+          createdAt: '2022-08-11T10:40:09.985Z',
           id: 'userChatId',
-          newMessage: false,
           updatedAt: '2022-08-11T10:40:09.985Z',
           user: {
             id: 'userId',
             fullName: 'test user',
             firstLetter: 't',
-            organisation: 'test organisation',
           },
           chat: {
             id: 'chatId',
@@ -34,6 +34,9 @@ describe('Detail Officer View', () => {
             firstLetter: 'a',
             messages: [
               {
+                images: [],
+                offenders: [],
+                incidents: [],
                 id: 'messageId',
                 createdAt: '2022-08-11T10:40:09.985Z',
                 content: 'content',
@@ -54,8 +57,8 @@ describe('Detail Officer View', () => {
         <MemoryRouter>
           <MockedProvider mocks={[]} addTypename={false}>
             <ViewChat
+              refetch={jest.fn()}
               data={data}
-              loading={false}
               saving={false}
               handleMarkAsRead={jest.fn()}
               chatId="chatId"

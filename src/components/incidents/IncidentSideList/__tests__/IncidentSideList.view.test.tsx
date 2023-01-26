@@ -63,7 +63,11 @@ describe('Detail Officer View', () => {
       <StoreProvider store={store}>
         <MemoryRouter>
           <MockedProvider mocks={[]} addTypename={false}>
-            <IncidentSideList data={data} onPaginationChange={jest.fn()} />
+            <IncidentSideList
+              data={data}
+              onPaginationChange={jest.fn()}
+              loading={false}
+            />
           </MockedProvider>
         </MemoryRouter>
       </StoreProvider>

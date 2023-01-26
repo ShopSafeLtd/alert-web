@@ -2,9 +2,10 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import RestoreOffender from '../RestoreOffender.view';
+import { RecycledItemQuery } from '../../../../../graphql/generated';
 
 describe('List Officer View', () => {
-  const data = {
+  const data: RecycledItemQuery = {
     recycledItem: {
       id: 'recycledId',
       systemTask: false,
@@ -14,9 +15,9 @@ describe('List Officer View', () => {
         name: 'test offender',
         race: null,
         recycled: true,
-        incident: null,
-        scheme: { id: 'schemeId' },
+        incidents: [],
       },
+      scheme: { id: 'schemeId' },
     },
   };
   it('renders the page', () => {

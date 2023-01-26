@@ -2,18 +2,18 @@ import React from 'react';
 import { SchemeQuery } from 'graphql/generated';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import {
-  Card,
-  Skeleton,
-  Switch,
-  Typography,
   Button,
+  Card,
+  Col,
   Form,
   Input,
-  Select,
   Row,
-  Col,
-  Upload,
+  Select,
+  Skeleton,
   Space,
+  Switch,
+  Typography,
+  Upload,
 } from 'antd';
 
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
@@ -30,6 +30,7 @@ interface Props {
   fileList: UploadFile[];
   imgChange: UploadProps['onChange'];
 }
+
 interface FormData {
   name: string;
   autoApproveIncidents: boolean;
@@ -38,6 +39,7 @@ interface FormData {
   offenderRetention: number | null;
   logo?: { id: string; url: string; optimised: string };
 }
+
 const options = [
   { value: -1, label: 'Disabled' },
   { value: 91, label: '3 months' },
@@ -107,7 +109,7 @@ const SchemeDetail = ({
             <Col span={20}>
               <Form.Item name="logo" label="Scheme Logo">
                 <Upload
-                  action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                  action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
                   listType="picture-card"
                   fileList={fileList}
                   beforeUpload={beforeUpload}

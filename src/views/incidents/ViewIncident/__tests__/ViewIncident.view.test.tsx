@@ -1,7 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import { Role } from 'graphql/generated';
+import { Role, ViewIncidentQuery } from 'graphql/generated';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { IncidentSort, storeModel } from 'state';
 import { MockedProvider } from '@apollo/client/testing';
@@ -29,8 +29,12 @@ describe('Detail Officer View', () => {
       },
     },
   });
-  const data = {
+  const data: ViewIncidentQuery = {
     incident: {
+      value: 0,
+      recoveredValue: 0,
+      updates: [],
+      subscribed: false,
       id: 'incidentId',
       date: '2022-08-10T10:40:06.191Z',
       time: '2022-08-11T10:40:09.985Z',
@@ -60,18 +64,40 @@ describe('Detail Officer View', () => {
         <MemoryRouter>
           <MockedProvider mocks={[]} addTypename={false}>
             <ViewIncident
+              lightBoxOpen={{
+                open: false,
+                index: 0,
+              }}
               data={data}
               loading={false}
               saving={false}
               openLightbox={jest.fn()}
-              addOffenderRights={false}
               incidentId=""
               deleteRights={false}
               editRights={false}
-              onDelete={jest.fn()}
-              addExistingOffender={false}
-              toggleAddExistingOffender={jest.fn()}
-              updateOffenderList={jest.fn()}
+              linkOffender={false}
+              toggleLinkOffender={jest.fn()}
+              updateOffendersList={jest.fn()}
+              scrolledToTop={jest.fn()}
+              loadMore={false}
+              userId=""
+              replyTo={null}
+              setReplyTo={jest.fn()}
+              confirmUpdateImages={jest.fn()}
+              addUpdateImages={jest.fn()}
+              addImages={null}
+              closeAddImages={jest.fn()}
+              toggleSubscribe={jest.fn()}
+              toggleSelectImages={jest.fn()}
+              selectedImages={[]}
+              confirmDeleteUpdate={jest.fn()}
+              editUpdate={null}
+              setEditUpdate={jest.fn()}
+              handleEditUpdate={jest.fn()}
+              editUpdateInput=""
+              setEditUpdateInput={jest.fn()}
+              optionMenuItems={[]}
+              lightboxElements={[]}
             />
           </MockedProvider>
         </MemoryRouter>

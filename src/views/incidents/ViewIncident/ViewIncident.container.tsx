@@ -35,6 +35,7 @@ const ViewIncident = (): JSX.Element => {
     setEditUpdateInput,
     optionMenuItems,
     lightboxElements,
+    lightBoxOpen,
   } = useViewIncident(incidentId);
 
   return (
@@ -69,6 +70,7 @@ const ViewIncident = (): JSX.Element => {
       setEditUpdateInput={setEditUpdateInput}
       optionMenuItems={optionMenuItems}
       lightboxElements={lightboxElements}
+      lightBoxOpen={lightBoxOpen}
     />
   );
 };

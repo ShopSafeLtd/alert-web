@@ -3,11 +3,12 @@ import { ListIncidentsQuery, RecycleIncidentMutation } from 'graphql/generated';
 import { Affix, Button, Col, Input, Pagination, Row, Select } from 'antd';
 import IncidentCard from 'components/incidents/IncidentCard';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
-import { SRLWrapper } from 'simple-react-lightbox';
 import { IncidentSort } from 'state';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { MutationUpdaterFn } from '@apollo/client';
+import Lightbox from 'yet-another-react-lightbox';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 
 interface Props {
   data: ListIncidentsQuery | undefined;
@@ -35,6 +36,10 @@ interface Props {
   tagsLoading: boolean;
   updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
   onNavigate: () => void;
+  lightBoxOpen: {
+    open: boolean;
+    index: number;
+  };
 }
 
 const IncidentFeed = ({
@@ -56,6 +61,7 @@ const IncidentFeed = ({
   onCrimeTypesChange,
   tagsLoading,
   updateIncidentList,
+  lightBoxOpen,
   onNavigate,
 }: Props): JSX.Element => {
   const [affix, setAffix] = React.useState(false);
@@ -152,26 +158,12 @@ const IncidentFeed = ({
 
       <Row gutter={8}>
         {loading
-          ? [
-              <Col key="0" sm={24} md={12} lg={12} xl={8} xxl={6}>
+          ? Array.from({ length: 8 }).map((_, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <Col key={index} sm={24} md={12} lg={12} xl={8} xxl={6}>
                 <IncidentSkeletonCard />
-              </Col>,
-              <Col key="1" sm={24} md={12} lg={12} xl={8} xxl={6}>
-                <IncidentSkeletonCard />
-              </Col>,
-              <Col key="2" sm={24} md={12} lg={12} xl={8} xxl={6}>
-                <IncidentSkeletonCard />
-              </Col>,
-              <Col key="3" sm={24} md={12} lg={12} xl={8} xxl={6}>
-                <IncidentSkeletonCard />
-              </Col>,
-              <Col key="4" sm={24} md={12} lg={12} xl={8} xxl={6}>
-                <IncidentSkeletonCard />
-              </Col>,
-              <Col key="5" sm={24} md={12} lg={12} xl={8} xxl={6}>
-                <IncidentSkeletonCard />
-              </Col>,
-            ]
+              </Col>
+            ))
           : data?.listIncidents?.incidents?.map((el) => (
               <Col sm={24} md={12} lg={12} xl={8} xxl={6} key={el?.id}>
                 <IncidentCard
@@ -196,9 +188,15 @@ const IncidentFeed = ({
         </Col>
       </Row>
 
-      <SRLWrapper
-        elements={lightboxElements}
-        options={{ buttons: { showDownloadButton: false } }}
+      <Lightbox
+        open={lightBoxOpen.open}
+        close={() => openLightbox([], 0)}
+        plugins={[Zoom]}
+        index={lightBoxOpen.index}
+        slides={lightboxElements}
+        controller={{
+          closeOnBackdropClick: true,
+        }}
       />
     </div>
   );

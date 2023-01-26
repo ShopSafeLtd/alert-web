@@ -1,12 +1,26 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "ESNext",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext",
+      "esnext.intl",
+      "es2017.intl",
+      "es2018.intl"
+    ],
+    "types": [
+      "vite/client",
+      "vite-plugin-svgr/client"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "sourceRoot": "/",
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
@@ -19,8 +33,6 @@
     "downlevelIteration": true
   },
   "include": [
-    "src",
-    "src/components/form-components/recycled/RestoreIncident/__tests__/.view.test.tsx",
-    "src/components/incidents/IncidentCard/__tests__/.test.tsx"
+    "src"
   ]
 }

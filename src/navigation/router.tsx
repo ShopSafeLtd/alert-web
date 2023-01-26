@@ -10,7 +10,7 @@ import { useAuth } from 'hooks';
 import { useQuery } from '@apollo/client';
 import { UserNew, UserNewArgs, UserNewRes } from 'graphql-src/users/queries';
 import { useAuth0 } from '@auth0/auth0-react';
-import Loading from './auth-views/authentication/loading';
+import Loading from '../components/loading';
 
 import PrimaryOnboarding from '../views/onboard/SetPassword';
 
@@ -56,7 +56,6 @@ export const Views = (): JSX.Element => {
     },
   });
   if (isLoading) return <Loading />;
-
   return (
     <IntlProvider
       locale={currentAppLocale.locale}

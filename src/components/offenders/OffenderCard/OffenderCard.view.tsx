@@ -72,7 +72,7 @@ const OffenderCard = ({
   const imagesRef = useRef<CarouselRef>(null);
 
   return (
-    <Card className="offender-card">
+    <Card className="offender-card" key={offender.id || ''}>
       {!offender?.approved && (
         <div className="offender-card-overlay">
           <Title level={4} className="offender-card-approval-title">

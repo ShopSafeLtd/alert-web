@@ -1,17 +1,9 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from 'react';
-import { ListOffendersQuery } from 'graphql/generated';
-import {
-  Button,
-  Col,
-  Descriptions,
-  Input,
-  Pagination,
-  Row,
-  Typography,
-} from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from "react";
+import { ListOffendersQuery } from "graphql/generated";
+import { Button, Col, Descriptions, Input, Pagination, Row, Typography } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCircleInfo,
   faClock,
@@ -20,21 +12,22 @@ import {
   faMarsAndVenus,
   faUserClock,
   faUserHair,
-  faUserTag,
-} from '@fortawesome/pro-light-svg-icons';
+  faUserTag
+} from "@fortawesome/pro-light-svg-icons";
 import {
   calcAge,
   getLastOffence,
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
-  getOffenderRace,
-} from 'utils/offender/get-offender-desc';
+  getOffenderRace
+} from "utils/offender/get-offender-desc";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
 
-import { SRLWrapper } from 'simple-react-lightbox';
-import moment from 'moment';
-import OffenderTile from 'components/offenders/OffenderTile';
-import OffenderTileSkeleton from 'components/offenders/OffenderTileSkeleton';
+import moment from "moment";
+import OffenderTile from "components/offenders/OffenderTile";
+import OffenderTileSkeleton from "components/offenders/OffenderTileSkeleton";
+import Lightbox from "yet-another-react-lightbox";
 
 const { Title } = Typography;
 
@@ -47,7 +40,6 @@ interface Props {
   search: string;
   setSearch: (value: string) => void;
   onPaginationChange: (page: number, pageSize: number) => void;
-  openLightbox: (index: number) => void;
   setCurrentId: (value: string | undefined) => void;
   selectedOffender:
     | Exclude<
@@ -56,6 +48,7 @@ interface Props {
       >['offenders'][0]
     | undefined
     | null;
+  openLightbox: (index: number) => void;
 }
 
 const AddExisitingOffender = ({
@@ -66,9 +59,9 @@ const AddExisitingOffender = ({
   loading,
   search,
   setSearch,
-  openLightbox,
   onPaginationChange,
   setCurrentId,
+  openLightbox,
   selectedOffender,
 }: Props): JSX.Element => (
   <div className="add-existing-offender">
@@ -291,14 +284,19 @@ const AddExisitingOffender = ({
         </Col>
       )}
     </Row>
-
-    <SRLWrapper
-      elements={
+    {/* TODO: Fix */}
+    <Lightbox
+      open={false}
+      close={() => console.log('close')}
+      plugins={[Zoom]}
+      controller={{
+        closeOnBackdropClick: true,
+      }}
+      slides={
         selectedOffender?.images.map((image) => ({
           src: image.optimised || '',
         })) || []
       }
-      options={{ buttons: { showDownloadButton: false } }}
     />
   </div>
 );

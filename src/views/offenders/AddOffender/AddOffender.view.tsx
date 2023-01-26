@@ -1,24 +1,23 @@
 import React from 'react';
-import { Age, Gender, Race, Build, CreateTagMutation } from 'graphql/generated';
+import { Age, Build, CreateTagMutation, Gender, Race } from 'graphql/generated';
 
 import {
-  Card,
-  Typography,
   Button,
+  Card,
+  Col,
+  DatePicker,
+  Drawer,
+  Empty,
   Form,
   Input,
-  Select,
-  Row,
-  Col,
-  Upload,
   PageHeader,
-  Drawer,
-  Tag,
+  Row,
+  Select,
   Switch,
-  DatePicker,
   Table,
-  // Divider,
-  Empty,
+  Tag,
+  Typography,
+  Upload,
 } from 'antd';
 
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
@@ -58,6 +57,7 @@ interface FormData {
     { endDate: Date; startDate: Date; location: string; description: string }
   ];
 }
+
 interface BanData {
   id: string;
   title?: string | null | undefined;
@@ -66,6 +66,7 @@ interface BanData {
   location: string;
   description?: string | null | undefined;
 }
+
 interface Props {
   onSubmit: (value: FormData) => void;
   saving: boolean;
@@ -511,7 +512,7 @@ const AddOffender = ({
               <Col style={{ marginLeft: 30 }}>
                 <Upload
                   accept=".png,.jpeg,.webp"
-                  action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                  action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
                   fileList={fileList}
                   onChange={imgChange}
                   beforeUpload={beforeUpload}
@@ -535,7 +536,7 @@ const AddOffender = ({
             <Form.Item name="images">
               <Upload
                 accept=".png,.jpeg,.webp"
-                action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
                 listType="picture-card"
                 fileList={fileList}
                 onChange={imgChange}

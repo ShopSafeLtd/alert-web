@@ -1,32 +1,31 @@
 import React from 'react';
 import {
-  ViewOffenderQuery,
   Age,
-  Gender,
-  Race,
   Build,
   CreateTagMutation,
+  Gender,
+  Race,
+  ViewOffenderQuery,
 } from 'graphql/generated';
 
 import {
-  Card,
-  Skeleton,
-  Typography,
   Button,
+  Card,
+  Col,
+  DatePicker,
+  Drawer,
+  Empty,
   Form,
   Input,
-  Select,
-  Row,
-  Col,
-  Upload,
   PageHeader,
-  Drawer,
-  Tag,
+  Row,
+  Select,
+  Skeleton,
   Switch,
-  DatePicker,
   Table,
-  // Divider,
-  Empty,
+  Tag,
+  Typography,
+  Upload,
 } from 'antd';
 
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
@@ -66,6 +65,7 @@ interface FormData {
   tags: string[];
   images?: [{ id: string; url: string; optimised: string }];
 }
+
 interface BanData {
   id: string;
   title?: string | null | undefined;
@@ -74,6 +74,7 @@ interface BanData {
   location: string;
   description?: string | null | undefined;
 }
+
 interface Props {
   onSubmit: (value: FormData) => void;
   data: ViewOffenderQuery | undefined;
@@ -158,7 +159,9 @@ const EditOffender = ({
             hair: data?.offender?.hair || null,
             ageCheck: !!data?.offender?.dateOfBirth,
             peculiarities: data?.offender?.peculiarities || null,
-            dateOfBirth: moment(data?.offender?.dateOfBirth, 'YYYY-MM-DD'),
+            dateOfBirth: data?.offender?.dateOfBirth
+              ? moment(data?.offender?.dateOfBirth, 'YYYY-MM-DD')
+              : null,
             dateSource: data?.offender?.dateSource || null,
             groups:
               data?.offender?.groups && data?.offender?.groups.length > 0
@@ -559,7 +562,7 @@ const EditOffender = ({
                 </Col>
                 <Col style={{ marginLeft: 30 }}>
                   <Upload
-                    action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                    action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
                     fileList={fileList}
                     onChange={imgChange}
                     beforeUpload={beforeUpload}
@@ -582,7 +585,7 @@ const EditOffender = ({
 
               <Form.Item name="images">
                 <Upload
-                  action={process.env.REACT_APP_IMAGE_UPLOAD_ENDPOINT}
+                  action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
                   listType="picture-card"
                   fileList={fileList}
                   onChange={imgChange}

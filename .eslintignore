@@ -25,7 +25,10 @@ src/constants/*
 src/components/shared-components/*
 src/components/util-components/*
 src/components/layout-components/*
-
+vite.config.ts
+jest.config.js
+src/vite-env.d.ts
+dist
 src/images/*
 
 *.css

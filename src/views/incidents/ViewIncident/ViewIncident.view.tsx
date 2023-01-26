@@ -1,14 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from 'react';
-import {
-  Age,
-  Build,
-  Gender,
-  Race,
-  UpdateType,
-  ViewIncidentQuery,
-} from 'graphql/generated';
+import React from "react";
+import { Age, Build, Gender, Race, UpdateType, ViewIncidentQuery } from "graphql/generated";
 import {
   Button,
   Checkbox,
@@ -28,9 +21,9 @@ import {
   Table,
   Tag,
   Tooltip,
-  Typography,
-} from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+  Typography
+} from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowUpRightFromSquare,
   faBell,
@@ -41,24 +34,25 @@ import {
   faLocationDot,
   faMoneyBill1Wave,
   faTrash,
-  faUser,
-} from '@fortawesome/pro-light-svg-icons';
+  faUser
+} from "@fortawesome/pro-light-svg-icons";
 import {
   calcAge,
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
-  getOffenderRace,
-} from 'utils/offender/get-offender-desc';
-import IncidentSideList from 'components/incidents/IncidentSideList';
-import UpdateBar from 'components/form-components/update-bar';
-import LinkOffender from 'components/form-components/incident/offender/AddExisitingOffender';
-import { ItemType } from 'antd/lib/menu/hooks/useItems';
-import { useNavigate } from 'react-router';
-import { SRLWrapper } from 'simple-react-lightbox';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import UpdateContent from './Update.view';
-import useStyles from './ViewIncident.styles';
+  getOffenderRace
+} from "utils/offender/get-offender-desc";
+import IncidentSideList from "components/incidents/IncidentSideList";
+import UpdateBar from "components/form-components/update-bar";
+import LinkOffender from "components/form-components/incident/offender/AddExisitingOffender";
+import { ItemType } from "antd/lib/menu/hooks/useItems";
+import { useNavigate } from "react-router";
+import InfiniteScroll from "react-infinite-scroll-component";
+import Lightbox from "yet-another-react-lightbox";
+import Zoom from "yet-another-react-lightbox/plugins/zoom";
+import UpdateContent from "./Update.view";
+import useStyles from "./ViewIncident.styles";
 
 const { Title, Paragraph } = Typography;
 
@@ -141,6 +135,10 @@ interface Props {
   lightboxElements: {
     src: string;
   }[];
+  lightBoxOpen: {
+    open: boolean;
+    index: number;
+  };
 }
 
 const ViewIncident = ({
@@ -174,6 +172,7 @@ const ViewIncident = ({
   setEditUpdateInput,
   optionMenuItems,
   lightboxElements,
+  lightBoxOpen,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -772,10 +771,15 @@ const ViewIncident = ({
           <div />
         )}
       </Drawer>
-
-      <SRLWrapper
-        elements={lightboxElements}
-        options={{ buttons: { showDownloadButton: false } }}
+      <Lightbox
+        open={lightBoxOpen.open}
+        close={() => openLightbox(0)}
+        plugins={[Zoom]}
+        index={lightBoxOpen.index}
+        slides={lightboxElements}
+        controller={{
+          closeOnBackdropClick: true,
+        }}
       />
     </div>
   );

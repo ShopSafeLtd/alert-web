@@ -10,6 +10,7 @@ const UseEditExclusionTest = () => {
   const { onSubmit } = useEditExclusion({
     onClose: jest.fn(),
     update: jest.fn(),
+    banData: null,
   });
 
   return (

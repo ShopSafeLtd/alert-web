@@ -1,18 +1,17 @@
 import {
+  ListOffendersDocument,
   ListOffendersQuery,
+  Model,
   QueryMode,
+  RecycleOffenderMutation,
   Role,
   SortOrder,
   useListOffendersQuery,
   useSchemeGroupsQuery,
   useTagsQuery,
-  Model,
-  ListOffendersDocument,
-  RecycleOffenderMutation,
 } from 'graphql/generated';
-import { useState, useEffect } from 'react';
-import { useStoreActions, useStoreState, OffenderSort } from 'state';
-import { useLightbox } from 'simple-react-lightbox';
+import { useEffect, useState } from 'react';
+import { OffenderSort, useStoreActions, useStoreState } from 'state';
 import { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 
@@ -36,6 +35,10 @@ interface Return {
     groups: string[];
     tags: string[];
   };
+  lightBoxOpen: {
+    open: boolean;
+    index: number;
+  };
   tags: { value: string; label: string }[];
   onTagsChange: (tags: string[]) => void;
   tagsLoading: boolean;
@@ -54,8 +57,6 @@ const getSizeOptions = () => {
 };
 
 const useOffenderFeed = (): Return => {
-  // Lightbox hook
-  const { openLightbox } = useLightbox();
   const navigate = useNavigate();
   const onNavigate = () => navigate(`/app/offenders/add`);
 
@@ -74,6 +75,11 @@ const useOffenderFeed = (): Return => {
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
   );
+  const [lightBoxOpen, setLightBoxOpen] = useState({
+    open: false,
+    index: 0,
+  });
+
   // Queries
   // Fetch scheme groups if scheme admin
   const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
@@ -294,9 +300,23 @@ const useOffenderFeed = (): Return => {
   // Functions
   const triggerLightbox = (elements: { src: string }[], index: number) => {
     setLightboxElements(elements);
-    setTimeout(() => openLightbox(index), 0.3);
-  };
 
+    if (lightBoxOpen.open) {
+      setLightBoxOpen({
+        open: !lightBoxOpen.open,
+        index,
+      });
+    } else {
+      setTimeout(
+        () =>
+          setLightBoxOpen({
+            open: !lightBoxOpen.open,
+            index,
+          }),
+        0.3
+      );
+    }
+  };
   const onPaginationChange = (page: number, pageSize: number) => {
     setOffendersState({
       pagination: {
@@ -353,6 +373,7 @@ const useOffenderFeed = (): Return => {
   return {
     data,
     loading,
+    lightBoxOpen,
     openLightbox: triggerLightbox,
     lightboxElements,
     onPaginationChange,
