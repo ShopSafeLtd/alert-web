@@ -878,6 +878,10 @@
   width: 100%;
   display: flex;
 }
+.add-existing-offender .view-offender .offender-image:hover {
+  height: 130px;
+  width: 100%;
+}
 .add-existing-offender .view-offender .offender-image-controls {
   position: absolute;
   left: 0;

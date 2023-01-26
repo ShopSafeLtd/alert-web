@@ -784,7 +784,6 @@
   padding: 15px;
   transition: all 0.2s ease;
 }
-.add-existing-offender .view-offender .offender-image-control:hover,
 .offender-card .offender-card-control:hover {
   font-size: 1.8em;
   margin-top: -4px;
@@ -854,6 +853,10 @@
   width: 100%;
   display: flex;
 }
+.add-existing-offender .view-offender .offender-image:hover {
+  height: 130px;
+  width: 100%;
+}
 .add-existing-offender .view-offender .offender-image-controls {
   position: absolute;
   left: 0;
@@ -866,6 +869,10 @@
   cursor: pointer;
   padding: 15px;
   transition: all 0.2s ease;
+}
+.add-existing-offender .view-offender .offender-image-control:hover {
+  font-size: 1.8em;
+  margin-top: -4px;
 }
 .add-existing-offender-row {
   height: calc(100% - 64px);
