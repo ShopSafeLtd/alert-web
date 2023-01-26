@@ -16,10 +16,12 @@ const ViewChat = (): JSX.Element => {
     updateDeletedUserChat,
     adminRights,
     refetch,
+    loading,
   } = useViewChat();
 
   return (
     <View
+      loading={loading}
       data={data}
       saving={saving}
       chatId={chatId || currentId || ''}
