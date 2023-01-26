@@ -26,7 +26,7 @@ export const Views = (): JSX.Element => {
 
   const currentAppLocale = AppLocale[locale];
 
-  const { rehydrateAuth } = useAuth();
+  const { rehydrateAuth, loading } = useAuth();
 
   useEffect(() => {
     rehydrateAuth();
@@ -55,7 +55,8 @@ export const Views = (): JSX.Element => {
       id: newUserId,
     },
   });
-  if (isLoading) return <Loading />;
+  if (loading || isLoading || !isSet) return <Loading />;
+
   return (
     <IntlProvider
       locale={currentAppLocale.locale}

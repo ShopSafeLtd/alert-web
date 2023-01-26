@@ -6,6 +6,7 @@ import useEditOffender from './useEditOffender';
 interface Props {
   reviewed: boolean;
 }
+
 function EditOffender({ reviewed }: Props): JSX.Element {
   const offenderId = useParams().id || '';
   const {
@@ -37,10 +38,16 @@ function EditOffender({ reviewed }: Props): JSX.Element {
     ageCheck,
     setAgeCheck,
     onReject,
+    selectedItems,
+    setSelectedItems,
+    form,
   } = useEditOffender({ offenderId, reviewed });
   return (
     <div>
       <View
+        form={form}
+        selectedItems={selectedItems}
+        setSelectedItems={setSelectedItems}
         onSubmit={onSubmit}
         data={data}
         loading={loading}
