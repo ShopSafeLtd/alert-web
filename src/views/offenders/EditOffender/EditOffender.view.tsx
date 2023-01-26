@@ -159,7 +159,9 @@ const EditOffender = ({
             hair: data?.offender?.hair || null,
             ageCheck: !!data?.offender?.dateOfBirth,
             peculiarities: data?.offender?.peculiarities || null,
-            dateOfBirth: moment(data?.offender?.dateOfBirth, 'YYYY-MM-DD'),
+            dateOfBirth: data?.offender?.dateOfBirth
+              ? moment(data?.offender?.dateOfBirth, 'YYYY-MM-DD')
+              : null,
             dateSource: data?.offender?.dateSource || null,
             groups:
               data?.offender?.groups && data?.offender?.groups.length > 0
