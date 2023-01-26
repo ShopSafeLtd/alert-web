@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Age,
-  Build,
-  CreateTagMutation,
-  Gender,
-  Race,
-  ViewOffenderQuery,
-} from 'graphql/generated';
+import { CreateTagMutation, ViewOffenderQuery } from 'graphql/generated';
 
 import {
   Button,
@@ -16,6 +9,7 @@ import {
   Drawer,
   Empty,
   Form,
+  FormInstance,
   Input,
   PageHeader,
   Row,
@@ -48,23 +42,24 @@ import {
   faUpload,
 } from '@fortawesome/pro-light-svg-icons';
 import moment from 'moment';
+import { FormData } from './useEditOffender';
 
 const { Title, Text, Paragraph } = Typography;
 
-interface FormData {
-  name: string;
-  age: Age;
-  gender: Gender;
-  race: Race;
-  build: Build;
-  hair: string;
-  peculiarities: string;
-  dateSource?: string;
-  dateOfBirth?: Date;
-  groups: string[];
-  tags: string[];
-  images?: [{ id: string; url: string; optimised: string }];
-}
+// interface FormData {
+//   name: string;
+//   age: Age;
+//   gender: Gender;
+//   race: Race;
+//   build: Build;
+//   hair: string;
+//   peculiarities: string;
+//   dateSource?: string;
+//   dateOfBirth?: Date;
+//   groups: string[];
+//   tags: string[];
+//   images?: [{ id: string; url: string; optimised: string }];
+// }
 
 interface BanData {
   id: string;
@@ -105,6 +100,9 @@ interface Props {
   reviewed: boolean;
   onReject: () => void;
   adminRights: boolean;
+  selectedItems: string[];
+  setSelectedItems: (value: string[]) => void;
+  form: FormInstance<FormData>;
 }
 
 const EditOffender = ({
@@ -136,6 +134,9 @@ const EditOffender = ({
   setAgeCheck,
   reviewed,
   onReject,
+  selectedItems,
+  setSelectedItems,
+  form,
   adminRights,
 }: Props): JSX.Element => (
   <div className="list-view">
@@ -150,6 +151,7 @@ const EditOffender = ({
         <Form
           onFinish={onSubmit}
           layout="vertical"
+          form={form}
           initialValues={{
             name: data?.offender?.name || null,
             age: data?.offender?.age || null,
@@ -257,9 +259,12 @@ const EditOffender = ({
                       disabled={saving}
                       mode="multiple"
                       maxTagCount={3}
+                      value={selectedItems}
+                      onChange={setSelectedItems}
+                      optionFilterProp="label"
                     >
                       {tags.map((tag) => (
-                        <Select.Option value={tag.value}>
+                        <Select.Option value={tag.value} label={tag.label}>
                           {tag.label}
                         </Select.Option>
                       ))}

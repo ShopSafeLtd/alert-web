@@ -30,12 +30,18 @@ function AddOffender(): JSX.Element {
     deleteConfirm,
     ageCheck,
     setAgeCheck,
+    selectedItems,
+    setSelectedItems,
+    form,
     adminRights,
   } = useAddOffender();
 
   return (
     <div>
       <View
+        form={form}
+        selectedItems={selectedItems}
+        setSelectedItems={setSelectedItems}
         onSubmit={onSubmit}
         bansData={bansData}
         saving={saving}

@@ -1,33 +1,35 @@
 import { useState } from 'react';
 import {
-  useViewOffenderQuery,
-  useSchemeGroupsQuery,
-  ViewOffenderQuery,
-  Role,
-  useTagsQuery,
-  Model,
-  useUpdateOffenderMutation,
   Age,
-  Gender,
-  Race,
   Build,
   CreateTagMutation,
-  TagsQuery,
-  TagsDocument,
-  useRecycleOffenderMutation,
+  Gender,
+  Model,
   OffenderUpdateInput,
+  Race,
+  Role,
+  TagsDocument,
+  TagsQuery,
+  useRecycleOffenderMutation,
+  useSchemeGroupsQuery,
+  useTagsQuery,
+  useUpdateOffenderMutation,
+  useViewOffenderQuery,
+  ViewOffenderQuery,
 } from 'graphql/generated';
-import { notification, Modal, message, Upload } from 'antd';
+import { Form, FormInstance, message, Modal, notification, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router';
 
 const { confirm } = Modal;
+
 interface Props {
   offenderId: string;
   reviewed: boolean;
 }
+
 interface BanData {
   id: string;
   title?: string | null | undefined;
@@ -36,7 +38,8 @@ interface BanData {
   location: string;
   description?: string | null | undefined;
 }
-interface FormData {
+
+export interface FormData {
   name: string;
   age: Age;
   gender: Gender;
@@ -87,10 +90,14 @@ interface Return {
   onReject: () => void;
   deleteConfirm: (value: string) => void;
   adminRights: boolean;
+  form: FormInstance<FormData>;
+  selectedItems: string[];
+  setSelectedItems: (value: string[]) => void;
 }
 
 const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   const navigate = useNavigate();
+  const [form] = Form.useForm<FormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
   const groups = useStoreState((state) => state.user.groups);
@@ -110,6 +117,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   const [editExclusion, setEditExclusion] = useState(false);
   const [bansData, setBansData] = useState<BanData[]>([]);
   const [banData, setBanData] = useState<BanData | null>(null);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   const errorNotification = () => {
     notification.error({
@@ -336,7 +344,8 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
         },
       },
     });
-
+    setSelectedItems([...selectedItems, res.createTag.id]);
+    form.setFieldsValue({ tags: [...selectedItems, res.createTag.id] });
     if (existingData === null) return;
 
     store.writeQuery<TagsQuery>({
@@ -507,7 +516,10 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     ageCheck,
     setAgeCheck,
     onReject,
+    selectedItems,
+    setSelectedItems,
     adminRights: role !== Role.User,
+    form,
   };
 };
 

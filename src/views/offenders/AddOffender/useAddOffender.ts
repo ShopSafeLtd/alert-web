@@ -16,7 +16,7 @@ import {
   useSchemeGroupsQuery,
   useTagsQuery,
 } from 'graphql/generated';
-import { message, Modal, notification, Upload } from 'antd';
+import { Form, FormInstance, message, Modal, notification, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { MutationUpdaterFn } from '@apollo/client';
@@ -24,7 +24,7 @@ import { useNavigate } from 'react-router-dom';
 
 const { confirm } = Modal;
 
-interface FormData {
+export interface FormData {
   name: string;
   age: Age;
   gender: Gender;
@@ -81,9 +81,14 @@ interface Return {
   bansData: BanData[];
   updateExclusion: (value: BanData) => void;
   adminRights: boolean;
+  selectedItems: string[];
+  setSelectedItems: (value: string[]) => void;
+  form: FormInstance<FormData>;
 }
 
 const useAddOffender = (): Return => {
+  const [form] = Form.useForm<FormData>();
+
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
 
@@ -99,6 +104,7 @@ const useAddOffender = (): Return => {
 
   const [ageCheck, setAgeCheck] = useState(false);
   const [addOffenderTag, setAddOffenderTag] = useState(false);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   const [imageChange, setImageChange] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
@@ -131,7 +137,6 @@ const useAddOffender = (): Return => {
       });
     },
   });
-
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -165,7 +170,8 @@ const useAddOffender = (): Return => {
         },
       },
     });
-
+    setSelectedItems([...selectedItems, res.createTag.id]);
+    form.setFieldsValue({ tags: [...selectedItems, res.createTag.id] });
     if (existingData === null) return;
 
     store.writeQuery<TagsQuery>({
@@ -250,6 +256,7 @@ const useAddOffender = (): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
+
     createOffender({
       variables: {
         data: {
@@ -454,6 +461,9 @@ const useAddOffender = (): Return => {
     bansData,
     updateExclusion,
     adminRights: role !== Role.User,
+    selectedItems,
+    setSelectedItems,
+    form,
   };
 };
 
