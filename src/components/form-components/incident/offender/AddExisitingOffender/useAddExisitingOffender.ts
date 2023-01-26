@@ -66,6 +66,10 @@ interface Return {
     | null
     | undefined;
   openLightbox: (index: number) => void;
+  lightBoxOpen: {
+    open: boolean;
+    index: number;
+  };
 }
 
 const useAddExisitingOffenderr = ({
@@ -82,7 +86,10 @@ const useAddExisitingOffenderr = ({
   const setOffendersState = useStoreActions(
     (actions) => actions.data.setOffenders
   );
-
+  const [lightBoxOpen, setLightBoxOpen] = useState({
+    open: false,
+    index: 0,
+  });
   const { data, loading } = useListOffendersQuery({
     variables: {
       scheme: {
@@ -161,10 +168,10 @@ const useAddExisitingOffenderr = ({
     onClose();
   };
 
-  // TODO: Add lightbox
-  const openLightbox = (i: number) => {
-    console.log(i);
+  const openLightbox = (index: number) => {
+    setLightBoxOpen({ open: !lightBoxOpen.open, index });
   };
+
   return {
     onSubmit,
     saving,
@@ -175,6 +182,7 @@ const useAddExisitingOffenderr = ({
     onPaginationChange,
     setCurrentId,
     openLightbox,
+    lightBoxOpen,
     selectedOffender: currentId
       ? data?.listOffenders?.offenders.find(
           (offender) => offender.id === currentId

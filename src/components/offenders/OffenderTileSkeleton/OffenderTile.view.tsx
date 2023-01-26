@@ -1,8 +1,6 @@
 import React from 'react';
-import { Card, Spin } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
-
-const Icon = <LoadingOutlined style={{ fontSize: 35 }} spin />;
+import { Card } from 'antd';
+import SkeletonAvatar from 'antd/es/skeleton/Avatar';
 
 const OffenderTileSkeleton = (): JSX.Element => (
   <Card
@@ -21,7 +19,7 @@ const OffenderTileSkeleton = (): JSX.Element => (
       cursor: 'pointer',
     }}
   >
-    <Spin indicator={Icon} />
+    <SkeletonAvatar active size={120} shape="square" />
   </Card>
 );
 

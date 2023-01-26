@@ -56,10 +56,12 @@ const AddExisitingOffender = ({
     setCurrentId,
     selectedOffender,
     openLightbox,
+    lightBoxOpen,
   } = useAddExisitingOffender({ onClose, update, offenderIds });
 
   return (
     <View
+      lightBoxOpen={lightBoxOpen}
       openLightbox={openLightbox}
       onSubmit={onSubmit}
       saving={saving}
