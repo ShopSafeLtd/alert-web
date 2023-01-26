@@ -91,6 +91,10 @@ describe('Detail Officer View', () => {
           onPaginationChange={jest.fn()}
           setCurrentId={jest.fn()}
           selectedOffender={offenderData}
+          lightBoxOpen={{
+            open: false,
+            index: 0,
+          }}
         />
       </MemoryRouter>
     );

@@ -4,6 +4,7 @@ import { Auth0Provider } from '@auth0/auth0-react';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
+import '~/yet-another-react-lightbox/dist/styles.css';
 
 ReactDOM.render(
   <Auth0Provider

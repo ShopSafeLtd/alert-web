@@ -8,6 +8,9 @@ describe('List Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <AddOffender
+          setSelectedItems={jest.fn()}
+          selectedItems={[]}
+          form={undefined}
           updateExclusion={jest.fn()}
           adminRights={false}
           removeImage={jest.fn()}

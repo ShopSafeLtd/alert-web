@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from 'react';
+import React, { useRef } from 'react';
 import { ListOffendersQuery } from 'graphql/generated';
 import {
   Button,
+  Carousel,
   Col,
   Descriptions,
   Input,
@@ -36,6 +37,8 @@ import moment from 'moment';
 import OffenderTile from 'components/offenders/OffenderTile';
 import OffenderTileSkeleton from 'components/offenders/OffenderTileSkeleton';
 import Lightbox from 'yet-another-react-lightbox';
+import { CarouselRef } from 'antd/lib/carousel';
+import { faAngleLeft, faAngleRight } from '@fortawesome/pro-solid-svg-icons';
 
 const { Title } = Typography;
 
@@ -77,6 +80,8 @@ const AddExisitingOffender = ({
   selectedOffender,
   lightBoxOpen,
 }: Props): JSX.Element => {
+  const imagesRef = useRef<CarouselRef>(null);
+
   const existingOffenders = (): JSX.Element => {
     if (!data?.listOffenders && loading)
       return (
@@ -92,7 +97,7 @@ const AddExisitingOffender = ({
       );
     if (data && data.listOffenders && data.listOffenders.offenders.length > 0) {
       return (
-        <Row wrap gutter={16}>
+        <Row wrap gutter={16} style={{ marginRight: 0 }}>
           {data?.listOffenders?.offenders.map((offender) => (
             <Col
               span={selectedOffender ? 12 : 4}
@@ -131,7 +136,7 @@ const AddExisitingOffender = ({
 
       <Row className="add-existing-offender-row">
         <Col
-          span={selectedOffender ? 10 : 24}
+          span={selectedOffender ? 12 : 24}
           className={selectedOffender ? 'offenders-side-list' : ''}
         >
           {existingOffenders()}
@@ -150,7 +155,7 @@ const AddExisitingOffender = ({
           />
         </Col>
         {selectedOffender && (
-          <Col span={14} className="view-offender">
+          <Col span={12} className="view-offender">
             {selectedOffender && selectedOffender.images.length > 0 && (
               <Row
                 gutter={8}
@@ -159,15 +164,51 @@ const AddExisitingOffender = ({
                 wrap={false}
                 className="offender-images"
               >
-                {selectedOffender?.images.map((image, i) => (
-                  <Col key={image.id}>
-                    <div
-                      onClick={() => openLightbox(i)}
-                      className="offender-image"
-                      style={{ backgroundImage: `url(${image.optimised})` }}
-                    />
-                  </Col>
-                ))}
+                <Col span={12}>
+                  <Carousel ref={imagesRef}>
+                    {selectedOffender?.images.map((image, i) => (
+                      <div key={image.id}>
+                        <div
+                          className="offender-image"
+                          onClick={() => openLightbox(i)}
+                          style={{
+                            backgroundImage: `url(${image.optimised})`,
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </Carousel>
+                  {selectedOffender && selectedOffender.images.length > 1 && (
+                    <Row className="offender-image-controls">
+                      <Col>
+                        <FontAwesomeIcon
+                          size="lg"
+                          className="offender-image-control"
+                          icon={faAngleLeft}
+                          onClick={() => imagesRef.current?.prev()}
+                        />
+                      </Col>
+                      <Col flex={1} />
+                      <Col>
+                        <FontAwesomeIcon
+                          size="lg"
+                          className="offender-image-control"
+                          icon={faAngleRight}
+                          onClick={() => imagesRef.current?.next()}
+                        />
+                      </Col>
+                    </Row>
+                  )}
+                </Col>
+                {/* {selectedOffender?.images.map((image, i) => ( */}
+                {/*  <Col key={image.id}> */}
+                {/*    <div */}
+                {/*      onClick={() => openLightbox(i)} */}
+                {/*      className="offender-image" */}
+                {/*      style={{ backgroundImage: `url(${image.optimised})` }} */}
+                {/*    /> */}
+                {/*  </Col> */}
+                {/* ))} */}
               </Row>
             )}
 

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Spin, Typography, Form, Input, Button } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Card, Col, Form, Input, Row, Spin, Typography } from 'antd';
 import { LockOutlined } from '@ant-design/icons';
 import { useStoreState } from 'state';
 import { useMutation, useQuery } from '@apollo/client';
@@ -78,6 +78,7 @@ const LoginOne = (): JSX.Element => {
     setLoading(false);
     if (verifiedData?.verifyUser)
       onLoginSuccess({
+        isSet: true,
         accessToken: verifiedData.verifyUser.access_token,
         email: verifiedData.verifyUser.email,
         fullName: verifiedData.verifyUser.fullName,
