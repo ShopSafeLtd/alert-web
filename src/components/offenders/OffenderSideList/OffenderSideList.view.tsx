@@ -1,11 +1,12 @@
 import React from 'react';
 import { ListOffendersQuery } from 'graphql/generated';
-import { Row, Col, Skeleton, Typography, Divider, Pagination } from 'antd';
+import { Col, Divider, Pagination, Row, Skeleton, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import { getLastOffence } from 'utils/offender/get-offender-desc';
 import useStyles from './OffenderSideList.styles';
 
 const { Text, Paragraph } = Typography;
+
 interface Props {
   data: ListOffendersQuery | undefined;
   loading: boolean;
@@ -55,7 +56,8 @@ const OffenderSideList = ({
                   {offender.name}
                 </Text>
                 <Paragraph>
-                  Last Offense: {getLastOffence(offender.incidents, true)}
+                  Last Offense:{' '}
+                  {getLastOffence(offender.incidents, true).message}
                 </Paragraph>
               </Col>
             </Row>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ListOffendersQuery, RecycleOffenderMutation } from 'graphql/generated';
-import { Col, Input, Row, Select, Pagination, Button, Affix } from 'antd';
+import { Affix, Button, Col, Input, Pagination, Row, Select } from 'antd';
 import OffenderCard from 'components/offenders/OffenderCard';
 import OffenderSkeletonCard from 'components/offenders/OffenderSkeletonCard/OffenderSkeletonCard.view';
 import { SRLWrapper } from 'simple-react-lightbox';
@@ -137,7 +137,7 @@ const OffenderFeed = ({
       </Row>
     </Affix>
     <Row gutter={8}>
-      {loading && !data?.listOffenders?.offenders
+      {loading
         ? [
             <Col key="0" sm={24} md={12} lg={12} xl={8} xxl={6}>
               <OffenderSkeletonCard />

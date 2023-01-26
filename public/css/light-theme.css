@@ -23233,6 +23233,7 @@ span.ant-radio + * {
 }
 .ant-table-thead > tr > th {
   color: #1a3353;
+  font-weight: 500;
   text-align: left;
   background: 0 0;
   border-bottom: 1px solid #edf2f9;
@@ -28418,12 +28419,10 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
 .api-container table {
   border: 1px solid #edf2f9;
 }
-.ant-card-meta-title,
-.ant-table-thead > tr > th {
+.ant-card-meta-title {
   font-weight: 700;
 }
-.ant-card-type-inner .ant-card-head,
-.ant-table-fixed-header .ant-table-thead > tr > th {
+.ant-card-type-inner .ant-card-head {
   background: #f7f7f8;
 }
 .ant-picker-calendar .ant-picker-panel .ant-picker-body {
@@ -28672,9 +28671,6 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
 .ant-tabs-card.ant-tabs-top > div > .ant-tabs-nav .ant-tabs-tab {
   border-radius: 0.25rem 0.25rem 0 0;
 }
-.ant-table-thead th.ant-table-column-has-sorters:hover {
-  background: #f2f2f2;
-}
 .ant-message-notice-content {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -28684,6 +28680,9 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
 }
 .ant-popover-inner {
   box-shadow: 0 2px 8px rgba(26, 51, 83, 0.15);
+}
+.ant-popover-inner .ant-popover-inner-content {
+  padding: 0 !important;
 }
 .loading.cover-content {
   position: absolute;

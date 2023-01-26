@@ -1,29 +1,29 @@
 import React, { useRef } from 'react';
 import {
+  Button,
   Card,
   Carousel,
-  Tag,
-  Row,
   Col,
-  Typography,
-  Button,
-  Menu,
   Dropdown,
+  Menu,
   Modal,
+  Row,
   Skeleton,
+  Tag,
+  Typography,
 } from 'antd';
 import { ListOffendersQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faLocationDot,
-  faEllipsisV,
-  faTrash,
-  faEdit,
-  faUserTag,
   faClock,
-  faUserClock,
-  faMarsAndVenus,
   faEarth,
+  faEdit,
+  faEllipsisV,
+  faLocationDot,
+  faMarsAndVenus,
+  faTrash,
+  faUserClock,
+  faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
 import {
   faAngleLeft,
@@ -31,12 +31,12 @@ import {
   faArrowsMaximize,
 } from '@fortawesome/pro-solid-svg-icons';
 import {
+  calcAge,
+  getLastOffence,
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
   getOffenderRace,
-  getLastOffence,
-  calcAge,
 } from 'utils/offender/get-offender-desc';
 
 import { CarouselRef } from 'antd/lib/carousel';
@@ -186,100 +186,106 @@ const OffenderCard = ({
         />
       )}
       <div className="offender-card-content">
-        <div className="offender-card-desc">
-          <Title level={4} ellipsis>
-            {offender?.name}
-          </Title>
-          <Row style={{ marginTop: -5, marginBottom: 10 }}>
+        <Link to={`view/${offender?.id}`}>
+          <div className="offender-card-desc">
+            <Title level={4} ellipsis>
+              {offender?.name}
+            </Title>
+            <Row style={{ marginTop: -5, marginBottom: 10 }}>
+              <Col>
+                <FontAwesomeIcon
+                  size="sm"
+                  className="offender-card-icon"
+                  icon={faClock}
+                />
+                <Text type="secondary">
+                  Last updated:{' '}
+                  {moment(offender?.updatedAt || moment()).format(
+                    `ddd MMM DD YYYY - HH:mm`
+                  )}
+                </Text>
+              </Col>
+            </Row>
+            <Row gutter={8}>
+              {offender?.groups?.map((group) => (
+                <Col key={group.id}>
+                  <Text type="danger" ellipsis>
+                    {group.name}
+                  </Text>
+                </Col>
+              ))}
+            </Row>
+          </div>
+
+          <Row>
+            <Col flex={1}>
+              <FontAwesomeIcon
+                size="sm"
+                className="offender-card-icon"
+                icon={faUserClock}
+              />
+              <Text type="secondary">
+                Age:{' '}
+                {offender.dateOfBirth
+                  ? calcAge(offender.dateOfBirth)
+                  : getOffenderAge(offender.age)}
+              </Text>
+            </Col>
             <Col>
               <FontAwesomeIcon
                 size="sm"
                 className="offender-card-icon"
-                icon={faClock}
+                icon={faUserTag}
               />
               <Text type="secondary">
-                Last updated:{' '}
-                {moment(offender?.updatedAt || moment()).format(
-                  `ddd MMM DD YYYY - HH:mm`
-                )}
+                Build:{getOffenderBuild(offender.build)}
               </Text>
             </Col>
           </Row>
-          <Row gutter={8}>
-            {offender?.groups?.map((group) => (
-              <Col key={group.id}>
-                <Text type="danger" ellipsis>
-                  {group.name}
-                </Text>
-              </Col>
-            ))}
+          <Row>
+            <Col flex={1}>
+              <FontAwesomeIcon
+                size="sm"
+                className="offender-card-icon"
+                icon={faMarsAndVenus}
+              />
+              <Text type="secondary">
+                Sex: {getOffenderGender(offender.gender)}
+              </Text>
+            </Col>
           </Row>
-        </div>
+          <Row>
+            <Col>
+              <FontAwesomeIcon
+                size="sm"
+                className="offender-card-icon"
+                icon={faEarth}
+              />
+              <Text type="secondary">
+                Ethnicity: {getOffenderRace(offender.race, false)}
+              </Text>
+            </Col>
+          </Row>
+        </Link>
+        <Link
+          to={`/app/incidents/view/${getLastOffence(offender.incidents).id}`}
+        >
+          <Row gutter={8} className="offender-card-location-row">
+            <Col span={1}>
+              <FontAwesomeIcon
+                size="sm"
+                className="offender-card-icon"
+                icon={faLocationDot}
+              />
+            </Col>
 
-        <Row>
-          <Col flex={1}>
-            <FontAwesomeIcon
-              size="sm"
-              className="offender-card-icon"
-              icon={faUserClock}
-            />
-            <Text type="secondary">
-              Age:{' '}
-              {offender.dateOfBirth
-                ? calcAge(offender.dateOfBirth)
-                : getOffenderAge(offender.age)}
-            </Text>
-          </Col>
-          <Col>
-            <FontAwesomeIcon
-              size="sm"
-              className="offender-card-icon"
-              icon={faUserTag}
-            />
-            <Text type="secondary">
-              Build:{getOffenderBuild(offender.build)}
-            </Text>
-          </Col>
-        </Row>
-        <Row>
-          <Col flex={1}>
-            <FontAwesomeIcon
-              size="sm"
-              className="offender-card-icon"
-              icon={faMarsAndVenus}
-            />
-            <Text type="secondary">
-              Sex: {getOffenderGender(offender.gender)}
-            </Text>
-          </Col>
-          <Col>
-            <FontAwesomeIcon
-              size="sm"
-              className="offender-card-icon"
-              icon={faEarth}
-            />
-            <Text type="secondary">
-              Ethnicity: {getOffenderRace(offender.race, false)}
-            </Text>
-          </Col>
-        </Row>
-
-        <Row gutter={8} className="offender-card-location-row">
-          <Col span={1}>
-            <FontAwesomeIcon
-              size="sm"
-              className="offender-card-icon"
-              icon={faLocationDot}
-            />
-          </Col>
-
-          <Col span={23}>
-            <Text style={{ width: '100%' }} ellipsis type="secondary">
-              Last offence: {getLastOffence(offender.incidents)}
-            </Text>
-          </Col>
-        </Row>
-
+            <Col span={23}>
+              <Text style={{ width: '100%' }} ellipsis type="secondary">
+                Last offence: {getLastOffence(offender.incidents).message}
+              </Text>
+            </Col>
+          </Row>
+        </Link>
         <Row justify="center">
           <Col>
             <Link to={`view/${offender?.id}`}>

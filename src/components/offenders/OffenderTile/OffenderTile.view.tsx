@@ -23,6 +23,7 @@ const OffenderTile = ({ offender, onClick }: Props): JSX.Element => (
         position: 'relative',
         backgroundImage: `url(${offender.images[0]?.optimised})`,
         backgroundSize: 'cover',
+
         backgroundRepeat: 'no-repeat',
         padding: 0,
         borderRadius: '0.625rem',

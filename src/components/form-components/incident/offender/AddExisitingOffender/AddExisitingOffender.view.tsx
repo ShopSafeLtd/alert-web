@@ -3,38 +3,38 @@
 import React from 'react';
 import { ListOffendersQuery } from 'graphql/generated';
 import {
-  Typography,
-  Row,
+  Button,
   Col,
   Descriptions,
-  Button,
   Input,
-  Skeleton,
   Pagination,
+  Row,
+  Typography,
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faLocationDot,
-  faClock,
-  faUserTag,
-  faUserClock,
-  faEarth,
-  faMarsAndVenus,
-  faUserHair,
   faCircleInfo,
+  faClock,
+  faEarth,
+  faLocationDot,
+  faMarsAndVenus,
+  faUserClock,
+  faUserHair,
+  faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
 import {
+  calcAge,
+  getLastOffence,
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
   getOffenderRace,
-  getLastOffence,
-  calcAge,
 } from 'utils/offender/get-offender-desc';
 
 import { SRLWrapper } from 'simple-react-lightbox';
 import moment from 'moment';
 import OffenderTile from 'components/offenders/OffenderTile';
+import OffenderTileSkeleton from 'components/offenders/OffenderTileSkeleton';
 
 const { Title } = Typography;
 
@@ -86,10 +86,18 @@ const AddExisitingOffender = ({
     <Row className="add-existing-offender-row">
       <Col
         span={selectedOffender !== null ? 10 : 24}
-        className="offenders-side-list"
+        className={selectedOffender !== null ? 'offenders-side-list' : ''}
       >
         {!data && loading ? (
-          <Skeleton />
+          <Row wrap gutter={16}>
+            {Array(24)
+              .fill(0)
+              .map(() => (
+                <Col span={12} className="offender-item">
+                  <OffenderTileSkeleton />
+                </Col>
+              ))}
+          </Row>
         ) : (
           <Row wrap gutter={16}>
             {data?.listOffenders?.offenders.map((offender) => (
@@ -113,6 +121,7 @@ const AddExisitingOffender = ({
           showSizeChanger={false}
           onChange={onPaginationChange}
           pageSize={24}
+          hideOnSinglePage
         />
       </Col>
       {selectedOffender && (
@@ -256,7 +265,7 @@ const AddExisitingOffender = ({
                       </span>
                     }
                   >
-                    {getLastOffence(selectedOffender.incidents)}
+                    {getLastOffence(selectedOffender.incidents).message}
                   </Descriptions.Item>
                 )}
               </Descriptions>

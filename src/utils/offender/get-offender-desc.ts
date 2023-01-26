@@ -1,4 +1,4 @@
-import { Age, Build, Gender, Race } from 'graphql/generated';
+import { Age, Build, Gender, Incident, Race } from 'graphql/generated';
 
 export const getOffenderGender = (
   gender: Gender | undefined | null
@@ -47,26 +47,27 @@ export const getOffenderAge = (age: Age | undefined | null): string => {
  */
 export const calcAge = (date: string | Date): number => {
   if (!date) return -1;
-  const birthDate = new Date(date);
-  const now = new Date(Date.now());
+  const birthDate = new Date(date).getTime();
+  const now = new Date(Date.now()).getTime();
 
-  // @ts-expect-error doesnt like subtracting dates
   return Math.floor((now - birthDate) / 1000 / 60 / 60 / 24 / 365.25);
 };
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  *
  * @param incidentsArray Array of incidents which must each include a date and location property
+ * @param short
  * @returns Object - { days, location } where days is the number of days since the incident, and location is the location.full of the incident
  */
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const getLastOffence = (
-  incidentsArray: any[],
+  incidentsArray: unknown[],
   short?: boolean
-): string | undefined => {
-  if (!incidentsArray) return;
-  const incidents = [...incidentsArray];
+): {
+  message: string | undefined;
+  id: string | undefined;
+} => {
+  if (!incidentsArray) return { message: undefined, id: undefined };
+  const incidents = [...incidentsArray] as Incident[];
 
   if (incidents.length > 0) {
     incidents.sort(
@@ -74,17 +75,19 @@ export const getLastOffence = (
         // @ts-expect-error doesnt like date arithmatic
         new Date(b.date) - new Date(a.date)
     );
-    const incident = new Date(incidents[0].date);
+    const incident = new Date(incidents[0].date).getTime();
     const location = incidents[0]?.createdBy.organisation;
 
     const now = Date.now();
 
-    // @ts-expect-error doesnt like date arithmatic
     // eslint-disable-next-line consistent-return
-    return `${((now - incident) / 1000 / 60 / 60 / 24).toFixed(0)} days ago${
-      short ? '' : `, reported by ${location}`
-    }`;
+    return {
+      message: `${((now - incident) / 1000 / 60 / 60 / 24).toFixed(
+        0
+      )} days ago${short ? '' : `, reported by ${location}`}`,
+      id: incidents[0].id,
+    };
   }
   // eslint-disable-next-line consistent-return
-  return 'No offense';
+  return { message: 'No offense', id: undefined };
 };

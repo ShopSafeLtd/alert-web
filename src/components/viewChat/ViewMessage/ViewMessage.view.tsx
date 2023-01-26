@@ -1,40 +1,38 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useEffect, useRef } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Picker from 'emoji-picker-react';
 
 import {
-  Row,
-  Col,
   Button,
-  Form,
-  FormInstance,
-  Popover,
-  Tag,
-  PageHeader,
+  Card,
+  Col,
+  Descriptions,
   Divider,
   Drawer,
-  Upload,
-  Mentions,
-  Descriptions,
-  Card,
-  Typography,
-  Popconfirm,
+  Form,
+  FormInstance,
   Image,
-  // Empty,
+  Mentions,
+  PageHeader,
+  Popconfirm,
+  Popover,
+  Row,
   Skeleton,
   Spin,
+  Tag,
+  Typography,
+  Upload,
 } from 'antd';
 import moment, { Moment } from 'moment';
 import { faImage, faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  ChatQuery,
-  ListIncidentsQuery,
   Age,
-  Gender,
-  Race,
   Build,
+  ChatQuery,
+  Gender,
+  ListIncidentsQuery,
+  Race,
 } from 'graphql/generated';
 import { faCircleXmark, faUser } from '@fortawesome/pro-solid-svg-icons';
 import AddUserChat from 'components/form-components/userChat/ManageChatMember';
@@ -42,10 +40,10 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import LinkOffender from 'components/form-components/incident/offender/AddExisitingOffender';
 import LinkIncident from 'components/form-components/offender/LinkIncident';
 import Content from '../Message/Message.view';
-// import ViewMessageSkeleton from './ViewMessageSkeleton';
 
 const { Option, getMentions } = Mentions;
 const { Title, Paragraph, Text } = Typography;
+
 interface OffenderData {
   id: string;
   updatedAt?: Date;
@@ -75,6 +73,7 @@ interface OffenderData {
   }[];
   imageUid?: string[] | undefined;
 }
+
 interface DatedMessages {
   day: string;
   messages: {
@@ -118,6 +117,7 @@ interface DatedMessages {
     }[];
   }[];
 }
+
 // interface FormData {
 //   newMessage: string;
 // }

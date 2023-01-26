@@ -1,46 +1,44 @@
 import React from 'react';
 import {
-  ViewIncidentQuery,
   Age,
-  Gender,
-  Race,
   Build,
   CreateTagMutation,
+  Gender,
   ListOffendersQuery,
+  Race,
+  ViewIncidentQuery,
 } from 'graphql/generated';
 
 import {
-  Card,
-  Skeleton,
-  Typography,
   Button,
+  Card,
+  Col,
+  DatePicker,
+  Descriptions,
+  Drawer,
   Form,
   Input,
-  Select,
-  Row,
-  Col,
-  Upload,
-  PageHeader,
-  Drawer,
-  DatePicker,
-  Table,
-  // Empty,
-  // Divider,
-  Popconfirm,
-  Spin,
-  Tooltip,
-  Descriptions,
-  Modal,
   InputNumber,
+  Modal,
+  PageHeader,
+  Popconfirm,
+  Row,
+  Select,
+  Skeleton,
+  Spin,
+  Table,
+  Tooltip,
+  Typography,
+  Upload,
 } from 'antd';
 import {
+  calcAge,
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
   getOffenderRace,
-  calcAge,
 } from 'utils/offender/get-offender-desc';
-import type { RcFile, UploadProps, UploadFile } from 'antd/es/upload/interface';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 import { MutationUpdaterFn } from '@apollo/client';
 
@@ -78,6 +76,7 @@ interface FormData {
   tags: string[];
   images: [{ id: string; url: string; optimised: string }];
 }
+
 interface Image extends UploadFile {
   offenders?: {
     id: string;
@@ -85,6 +84,7 @@ interface Image extends UploadFile {
   }[];
   optimised?: string | null;
 }
+
 interface OffenderData {
   id: string;
   name?: string | null;
@@ -116,6 +116,7 @@ type Offender = Exclude<
   ListOffendersQuery['listOffenders'],
   null | undefined
 >['offenders'][0];
+
 interface Props {
   onSubmit: (value: FormData) => void;
   data: ViewIncidentQuery | undefined;
@@ -334,8 +335,8 @@ const EditIncident = ({
             <Col span={4}>
               <Form.Item
                 name="recoveredValue"
-                label="RecoveredValue"
-                tooltip="Please enter a recoveredValue for the incident."
+                label="Recovered Value"
+                tooltip="The value of the lost goods if any."
               >
                 <InputNumber
                   prefix="£"

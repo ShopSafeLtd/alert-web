@@ -1,25 +1,26 @@
 import { useState } from 'react';
 import {
-  useSchemeGroupsQuery,
-  ListOffendersQuery,
-  Role,
-  useTagsQuery,
-  Model,
-  useCreateOffenderMutation,
   Age,
-  Gender,
-  Race,
   Build,
-  ListOffendersDocument,
   CreateOffenderMutation,
   CreateTagMutation,
-  TagsQuery,
+  Gender,
+  ListOffendersDocument,
+  ListOffendersQuery,
+  Model,
+  Race,
+  Role,
   TagsDocument,
+  TagsQuery,
+  useCreateOffenderMutation,
+  useSchemeGroupsQuery,
+  useTagsQuery,
 } from 'graphql/generated';
-import { notification, Modal, message, Upload } from 'antd';
+import { message, Modal, notification, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { MutationUpdaterFn } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
 
 const { confirm } = Modal;
 
@@ -43,6 +44,7 @@ interface FormData {
     description: string;
   }[];
 }
+
 interface BanData {
   id: string;
   title?: string | null | undefined;
@@ -51,6 +53,7 @@ interface BanData {
   location: string;
   description?: string | null | undefined;
 }
+
 interface Return {
   onSubmit: (value: FormData) => void;
   saving: boolean;
@@ -104,7 +107,7 @@ const useAddOffender = (): Return => {
   const [editExclusion, setEditExclusion] = useState(false);
   const [bansData, setBansData] = useState<BanData[]>([]);
   const [banData, setBanData] = useState<BanData | null>(null);
-
+  const navigate = useNavigate();
   const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -231,6 +234,8 @@ const useAddOffender = (): Return => {
         description: 'The offender has been added!',
         placement: 'bottomRight',
       });
+
+      navigate('/app/offenders');
     },
     onError: () => {
       setSaving(false);

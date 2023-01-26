@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from 'react';
 
 import {
-  Role,
-  useRecycleIncidentMutation,
-  useUpdateIncidentMutation,
-  useViewIncidentQuery,
-  ViewIncidentQuery,
   Age,
+  Build,
   Gender,
   Race,
-  Build,
-  useSubscribeToIncidentMutation,
-  useUnsubscribeFromIncidentMutation,
+  Role,
   useAddImagesToIncidentMutation,
   useDeleteUpdateMutation,
-  ViewIncidentQueryVariables,
-  ViewIncidentDocument,
+  useRecycleIncidentMutation,
+  useSubscribeToIncidentMutation,
+  useUnsubscribeFromIncidentMutation,
+  useUpdateIncidentMutation,
   useUpdateUpdateMutation,
+  useViewIncidentQuery,
+  ViewIncidentDocument,
+  ViewIncidentQuery,
+  ViewIncidentQueryVariables,
 } from 'graphql/generated';
 import update from 'immutability-helper';
 
 import { useLightbox } from 'simple-react-lightbox';
 import { useStoreState } from 'state';
-import { notification, Modal } from 'antd';
+import { Modal, notification } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/pro-solid-svg-icons';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
@@ -30,6 +30,7 @@ import { ItemType } from 'antd/lib/menu/hooks/useItems';
 import { useNavigate } from 'react-router';
 
 const { confirm } = Modal;
+
 interface OffenderData {
   id: string;
   name?: string | null;
@@ -58,6 +59,7 @@ interface OffenderData {
   }[];
   imageUid?: string[] | undefined;
 }
+
 interface Return {
   data: ViewIncidentQuery | undefined;
   loading: boolean;
@@ -148,7 +150,7 @@ const useViewIncident = (incidentId: string): Return => {
     if (editUpdate) setEditUpdateInput(editUpdate.text);
   }, [editUpdate]);
 
-  const { data } = useViewIncidentQuery({
+  const { data, loading } = useViewIncidentQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
@@ -486,7 +488,7 @@ const useViewIncident = (incidentId: string): Return => {
     lightboxElements,
     linkOffender,
     loadMore,
-    loading: data === null && data === undefined,
+    loading: (data === null || data === undefined) && loading,
     onDelete,
     openLightbox,
     optionMenuItems,
