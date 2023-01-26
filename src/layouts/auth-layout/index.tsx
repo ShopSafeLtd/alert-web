@@ -4,7 +4,7 @@ import { useStoreState } from 'state';
 import { ScreenSizeUnsupported } from 'components/layout-components';
 import { Navigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
-import Loading from 'navigation/auth-views/authentication/loading';
+import Loading from 'components/loading';
 
 export const AuthLayout = (): JSX.Element => {
   const { isAuthenticated, isLoading } = useAuth0();

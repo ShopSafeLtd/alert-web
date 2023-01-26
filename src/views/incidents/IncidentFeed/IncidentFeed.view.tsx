@@ -158,26 +158,12 @@ const IncidentFeed = ({
 
       <Row gutter={8}>
         {loading
-          ? [
-              <Col key="0" sm={24} md={12} lg={12} xl={8} xxl={6}>
+          ? Array.from({ length: 8 }).map((_, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <Col key={index} sm={24} md={12} lg={12} xl={8} xxl={6}>
                 <IncidentSkeletonCard />
-              </Col>,
-              <Col key="1" sm={24} md={12} lg={12} xl={8} xxl={6}>
-                <IncidentSkeletonCard />
-              </Col>,
-              <Col key="2" sm={24} md={12} lg={12} xl={8} xxl={6}>
-                <IncidentSkeletonCard />
-              </Col>,
-              <Col key="3" sm={24} md={12} lg={12} xl={8} xxl={6}>
-                <IncidentSkeletonCard />
-              </Col>,
-              <Col key="4" sm={24} md={12} lg={12} xl={8} xxl={6}>
-                <IncidentSkeletonCard />
-              </Col>,
-              <Col key="5" sm={24} md={12} lg={12} xl={8} xxl={6}>
-                <IncidentSkeletonCard />
-              </Col>,
-            ]
+              </Col>
+            ))
           : data?.listIncidents?.incidents?.map((el) => (
               <Col sm={24} md={12} lg={12} xl={8} xxl={6} key={el?.id}>
                 <IncidentCard

@@ -144,26 +144,12 @@ const OffenderFeed = ({
     </Affix>
     <Row gutter={8}>
       {loading
-        ? [
-            <Col key="0" sm={24} md={12} lg={12} xl={8} xxl={6}>
+        ? Array.from({ length: 8 }).map((_, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Col key={index} sm={24} md={12} lg={12} xl={8} xxl={6}>
               <OffenderSkeletonCard />
-            </Col>,
-            <Col key="1" sm={24} md={12} lg={12} xl={8} xxl={6}>
-              <OffenderSkeletonCard />
-            </Col>,
-            <Col key="2" sm={24} md={12} lg={12} xl={8} xxl={6}>
-              <OffenderSkeletonCard />
-            </Col>,
-            <Col key="3" sm={24} md={12} lg={12} xl={8} xxl={6}>
-              <OffenderSkeletonCard />
-            </Col>,
-            <Col key="4" sm={24} md={12} lg={12} xl={8} xxl={6}>
-              <OffenderSkeletonCard />
-            </Col>,
-            <Col key="5" sm={24} md={12} lg={12} xl={8} xxl={6}>
-              <OffenderSkeletonCard />
-            </Col>,
-          ]
+            </Col>
+          ))
         : data?.listOffenders?.offenders?.map((item) => (
             <Col sm={24} md={12} lg={12} xl={8} xxl={6} key={item?.id}>
               <OffenderCard
@@ -184,6 +170,7 @@ const OffenderFeed = ({
           current={pagination.page}
           onChange={onPaginationChange}
           showTotal={(total) => `Total Offenders: ${total}`}
+          hideOnSinglePage
         />
       </Col>
     </Row>

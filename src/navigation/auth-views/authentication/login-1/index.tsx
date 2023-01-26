@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import { Card, Row, Col } from 'antd';
+import { Card, Col, Row } from 'antd';
 import { useStoreState } from 'state';
 import { useAuth0 } from '@auth0/auth0-react';
 import { LoginForm, Props } from '../../components/LoginForm';
-import Loading from '../loading';
+import Loading from '../../../../components/loading';
 
 const LoginOne = (props: Props): JSX.Element => {
   const theme = useStoreState((state) => state.theme.currentTheme);
