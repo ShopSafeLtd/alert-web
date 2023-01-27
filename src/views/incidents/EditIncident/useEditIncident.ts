@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Age,
   Build,
@@ -139,6 +139,9 @@ interface Return {
     info: UploadChangeParam<UploadFile>,
     currentId: string
   ) => void;
+  selected: string;
+  setSelected: (value: string) => void;
+  updateOffender: (value: OffenderData) => void;
 }
 
 const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
@@ -166,7 +169,26 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const [imageChange, setImageChange] = useState(false);
   const [fileList, setFileList] = useState<Image[]>([]);
   const [newImage, setNewImage] = useState<Image | null>(null);
+  const [editedOffender, setEditedOffender] = useState<
+    OffenderData | undefined
+  >();
+  const [selected, setSelected] = useState<string>('');
 
+  const updateOffender = (offender: OffenderData) => {
+    setEditedOffender(offender);
+  };
+
+  useEffect(() => {
+    if (editedOffender) {
+      setOffendersData([
+        ...(offendersData?.filter(({ id }) => id !== editedOffender.id) || []),
+        {
+          ...editedOffender,
+        },
+      ]);
+      setEditedOffender(undefined);
+    }
+  }, [editedOffender]);
   // Query
   const { data: incidentData, loading } = useViewIncidentQuery({
     fetchPolicy: 'cache-and-network',
@@ -824,9 +846,10 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     listOffendersData,
     adminRights: role !== Role.User,
     offenderImgChange,
+    selected,
+    setSelected,
+    updateOffender,
   };
 };
 
 export default useEditIncident;
-// const variable = { "where": { "id": "incidentId" }, "data": { "approved": { "set": true }, "subject": { "set": "subject" }, "description": { "set": "description" }, "date": { "set": "2022-08-30T11:25:32.702Z" }, "time": { "set": "2022-08-30T11:25:32.702Z" }, "value": { "set": 1 }, "recoveredValue": { "set": 1 }, "location": { "update": { "building": { "set": "building" }, "street": { "set": "street" }, "townCity": { "set": "townCity" }, "county": { "set": "county" }, "postcode": { "set": "postcode" } } }, "groups": { "set": [] }, "crimeTypes": { "set": [{ "id": "tagId" }] }, "offenders": { "connect": <undefined>, "update": [], "create": <undefined>, "disconnect": <undefined>}, "images": { "upload": <undefined>, "delete": [] } } }
-// const variabl1 = {"where":  {"id":"incidentId"},   "data":{"approved":{"set":true},       "subject":{"set":"subject"},     "description":{"set":"description"},    "date":{"set":"2022-08-30T11:25:32.702Z"},     "time":{"set":"2022-08-30T11:25:32.702Z"},     "value":{"set":1},"recoveredValue":{"set":1},            "location":{"update":{"building":{"set":"building"},      "street":{"set":"street"},        "townCity":{"set":"townCity"},    "county":{"set":"county"},    "postcode":{"set":"postcode"}}},          "groups":{"set":[]},"crimeTypes":{"set":[{"id":"tagId"}]},"offenders":{"connect":<undefined>,"update":[],"create":<undefined>,"disconnect":<undefined>},"images":{"upload":<undefined>,"delete":[]}}}
