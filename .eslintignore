@@ -30,7 +30,7 @@ jest.config.js
 src/vite-env.d.ts
 dist
 src/images/*
-
+src/setupTests.ts
 *.css
 
 src/graphql/generated/*
