@@ -39,6 +39,9 @@ describe('List Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <EditIncident
+          selected=""
+          setSelected={jest.fn()}
+          updateOffender={jest.fn()}
           onSubmit={jest.fn()}
           data={data}
           loading={false}
