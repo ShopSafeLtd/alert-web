@@ -47,11 +47,17 @@ function EditIncident(): JSX.Element {
     adminRights,
     listOffendersData,
     offenderImgChange,
+    selected,
+    setSelected,
+    updateOffender,
   } = useEditIncident();
 
   return (
     <div>
       <View
+        updateOffender={updateOffender}
+        selected={selected}
+        setSelected={setSelected}
         addExistingOffender={addExistingOffender}
         addIncidentTag={addIncidentTag}
         addNewLocation={addNewLocation}

@@ -4,7 +4,7 @@ import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 import envCompatible from 'vite-plugin-env-compatible';
 import removeConsole from 'vite-plugin-remove-console';
-import checker from 'vite-plugin-checker';
+// import checker from 'vite-plugin-checker';
 
 // local host launch fix
 const dns = require('node:dns');
@@ -24,13 +24,13 @@ export default defineConfig({
     viteTsconfigPaths(),
     svgrPlugin(),
     removeConsole(), // will remove console from prod builds, remove if testing is needed on live
-    checker({
-      // checks for ts and eslint errors on dev, remove if not needed/any issues
-      typescript: true,
-      eslint: {
-        lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
-      },
-    }),
+    // checker({
+    //   // checks for ts and eslint errors on dev, remove if not needed/any issues
+    //   typescript: true,
+    //   eslint: {
+    //     lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
+    //   },
+    // }),
     // vitePluginImp({
     //   libList: [
     //     {

@@ -44,7 +44,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
     // uri: "https://alert-api-dev.azurewebsites.net/graphql",
     // uri: "https://alert-api-dev-development.azurewebsites.net/graphql",
     // uri: 'http://localhost:4000/graphql',
-    uri: 'https://alert-dev-api.herokuapp.com/graphql',
+    uri: 'https://alert-dev-api.herokuapp.com/graphql', // use
   });
 
   const middlewareLink = setContext(async (_, { headers, ...context }) => {

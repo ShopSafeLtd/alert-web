@@ -158,7 +158,7 @@ const IncidentFeed = ({
 
       <Row gutter={8}>
         {loading
-          ? Array.from({ length: 8 }).map((_, index) => (
+          ? Array.from({ length: 24 }).map((_, index) => (
               // eslint-disable-next-line react/no-array-index-key
               <Col key={index} sm={24} md={12} lg={12} xl={8} xxl={6}>
                 <IncidentSkeletonCard />

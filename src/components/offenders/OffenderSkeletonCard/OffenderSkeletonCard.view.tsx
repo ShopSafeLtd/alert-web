@@ -5,7 +5,10 @@ const OffenderSkeletonCard = (): JSX.Element => (
   <Card className="offender-card">
     <Skeleton.Image />
 
-    <div style={{ paddingLeft: 10 }} className="incident-card-content">
+    <div
+      style={{ paddingLeft: 10, paddingRight: 10 }}
+      className="incident-card-content"
+    >
       <Skeleton active />
     </div>
   </Card>

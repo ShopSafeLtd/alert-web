@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   AddressesQuery,
   Age,
@@ -149,6 +149,9 @@ interface Return {
     info: UploadChangeParam<UploadFile>,
     currentId: string
   ) => void;
+  selected: string;
+  setSelected: (value: string) => void;
+  updateOffender: (value: OffenderData) => void;
 }
 
 const useEditIncident = (): Return => {
@@ -164,6 +167,7 @@ const useEditIncident = (): Return => {
     (actions) => actions.data.setIncidents
   );
   const [saving, setSaving] = useState(false);
+  const [selected, setSelected] = useState<string>('');
 
   const [addIncidentTag, setAddIncidentTag] = useState(false);
   const [addOffender, setAddOffender] = useState(false);
@@ -185,6 +189,26 @@ const useEditIncident = (): Return => {
   const [previousId, setPreviousId] = useState<string>('');
   const [addNewLocation, setAddNewLocation] = useState(false);
   const [addPreviousLocation, setAddPreviousLocation] = useState(false);
+
+  const [editedOffender, setEditedOffender] = useState<
+    OffenderData | undefined
+  >();
+
+  const updateOffender = (offender: OffenderData) => {
+    setEditedOffender(offender);
+  };
+
+  useEffect(() => {
+    if (editedOffender) {
+      setOffendersData([
+        ...(offendersData?.filter(({ id }) => id !== editedOffender.id) || []),
+        {
+          ...editedOffender,
+        },
+      ]);
+      setEditedOffender(undefined);
+    }
+  }, [editedOffender]);
 
   const navigate = useNavigate();
 
@@ -805,6 +829,7 @@ const useEditIncident = (): Return => {
       setImageChange(true);
     }
   };
+
   return {
     onSubmit,
     saving,
@@ -857,6 +882,9 @@ const useEditIncident = (): Return => {
     listOffendersData,
     adminRights: role !== Role.User,
     offenderImgChange,
+    selected,
+    setSelected,
+    updateOffender,
   };
 };
 

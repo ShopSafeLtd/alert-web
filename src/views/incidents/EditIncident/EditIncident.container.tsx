@@ -49,10 +49,16 @@ function EditIncident({ reviewed }: Props): JSX.Element {
     adminRights,
     listOffendersData,
     offenderImgChange,
+    selected,
+    setSelected,
+    updateOffender,
   } = useEditIncident({ incidentId, reviewed });
   return (
     <div>
       <View
+        updateOffender={updateOffender}
+        selected={selected}
+        setSelected={setSelected}
         onSubmit={onSubmit}
         data={data}
         loading={loading}

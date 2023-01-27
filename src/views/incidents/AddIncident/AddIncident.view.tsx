@@ -46,6 +46,7 @@ import { MutationUpdaterFn } from '@apollo/client';
 import AddIncidentTag from 'components/form-components/tags/crimeTypes/AddCrimeType';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faEdit,
   faMagnifyingGlass,
   faPlus,
   faTrash,
@@ -62,6 +63,7 @@ import AddNewLocation from 'components/form-components/incident/location/AddLoca
 import AddPreviousLocation from 'components/form-components/incident/location/AddPreviousLocation';
 import AssignImageOffender from 'components/form-components/incident/image/AssignImageOffenders';
 import { UploadChangeParam } from 'antd/lib/upload';
+import EditOffender from '../../../components/form-components/incident/offender/EditOffender';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -176,6 +178,9 @@ interface Props {
     info: UploadChangeParam<UploadFile>,
     currentId: string
   ) => void;
+  selected: string;
+  setSelected: (arg0: string) => void;
+  updateOffender: (value: OffenderData) => void;
 }
 
 const EditIncident = ({
@@ -222,6 +227,9 @@ const EditIncident = ({
   adminRights,
   listOffendersData,
   offenderImgChange,
+  selected,
+  setSelected,
+  updateOffender,
 }: Props): JSX.Element => (
   <div className="page-view">
     <PageHeader onBack={() => window.history.back()} title="Add Incident" />
@@ -624,7 +632,19 @@ const EditIncident = ({
                     title: 'Ethnicity',
                     dataIndex: 'race',
                   },
-
+                  {
+                    key: 'edit',
+                    title: 'Edit',
+                    dataIndex: '',
+                    width: 100,
+                    render: (_, record) => (
+                      <Button
+                        onClick={() => setSelected(record.key)}
+                        disabled={saving}
+                        icon={<FontAwesomeIcon icon={faEdit} />}
+                      />
+                    ),
+                  },
                   {
                     key: 'delete',
                     title: 'Delete',
@@ -951,6 +971,22 @@ const EditIncident = ({
         <AddNewLocation
           update={updateNewLocation}
           onClose={toggleAddNewLocation}
+        />
+      ) : (
+        <div />
+      )}
+    </Drawer>
+    <Drawer
+      title="Edit Offender"
+      visible={!!selected}
+      width="1000"
+      onClose={() => setSelected('')}
+    >
+      {selected ? (
+        <EditOffender
+          id={selected}
+          onClose={() => setSelected('')}
+          update={updateOffender}
         />
       ) : (
         <div />
