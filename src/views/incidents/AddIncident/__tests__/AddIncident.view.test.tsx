@@ -81,6 +81,9 @@ describe('List Officer View', () => {
 
     return (
       <AddIncident
+        updateOffender={jest.fn()}
+        selected=""
+        setSelected={jest.fn()}
         onSubmit={jest.fn()}
         saving={false}
         groups={[]}
