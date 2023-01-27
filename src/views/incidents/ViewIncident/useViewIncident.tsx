@@ -371,7 +371,6 @@ const useViewIncident = (incidentId: string): Return => {
                 (item) => item.id === result.data?.deleteUpdate?.replyToId
               );
               if (updateItem) {
-                console.log(updateItem);
                 store.writeQuery<ViewIncidentQuery, ViewIncidentQueryVariables>(
                   {
                     query: ViewIncidentDocument,
