@@ -5,6 +5,10 @@ import svgrPlugin from 'vite-plugin-svgr';
 import envCompatible from 'vite-plugin-env-compatible';
 import removeConsole from 'vite-plugin-remove-console';
 
+// local host launch fix
+const dns = require('node:dns');
+dns.setDefaultResultOrder('verbatim');
+
 const path = require('path');
 
 const pathResolve = (pathStr: string) => {
