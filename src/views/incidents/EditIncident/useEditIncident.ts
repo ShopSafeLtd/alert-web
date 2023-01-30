@@ -616,6 +616,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
               upload:
                 imageChange && fileList.length
                   ? fileList
+                      .filter((item) => !item.optimised)
                       .map((item) => ({
                         url: {
                           filename: item.fileName || '',

@@ -28,8 +28,8 @@ const Apollo = ({ children }: Props): JSX.Element => {
 
   const wsClient = new SubscriptionClient(
     // "wss://alert-api-dev.azurewebsites.net/graphql",
-    'wss://alert-dev-api.herokuapp.com/graphql',
-    // 'ws://localhost:4000/graphql',
+    // 'wss://alert-dev-api.herokuapp.com/graphql',
+    'ws://localhost:4000/graphql',
     {
       reconnect: true,
       connectionParams: {
@@ -43,8 +43,8 @@ const Apollo = ({ children }: Props): JSX.Element => {
   const httpLink = createUploadLink({
     // uri: "https://alert-api-dev.azurewebsites.net/graphql",
     // uri: "https://alert-api-dev-development.azurewebsites.net/graphql",
-    // uri: 'http://localhost:4000/graphql',
-    uri: 'https://alert-dev-api.herokuapp.com/graphql', // use
+    uri: 'http://localhost:4000/graphql',
+    // uri: 'https://alert-dev-api.herokuapp.com/graphql',
   });
 
   const middlewareLink = setContext(async (_, { headers, ...context }) => {

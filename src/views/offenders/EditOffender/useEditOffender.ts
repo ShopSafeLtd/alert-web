@@ -60,6 +60,14 @@ export interface FormData {
   }[];
 }
 
+interface Image extends UploadFile {
+  offenders?: {
+    id: string;
+    name?: string | undefined | null;
+  }[];
+  optimised?: string | null;
+}
+
 interface Return {
   onSubmit: (value: FormData) => void;
   data: ViewOffenderQuery | undefined;
@@ -112,7 +120,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   const [ageCheck, setAgeCheck] = useState(false);
   const [addOffenderTag, setAddOffenderTag] = useState(false);
   const [imageChange, setImageChange] = useState(false);
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [fileList, setFileList] = useState<Image[]>([]);
   const [addExclusion, setAddExclusion] = useState(false);
   const [editExclusion, setEditExclusion] = useState(false);
   const [bansData, setBansData] = useState<BanData[]>([]);
@@ -143,6 +151,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
             name: `${image.id}.png`,
             status: 'done',
             url: `${image.optimised || image.url}`,
+            optimised: `${image.optimised || image.url}`,
           }))
         );
       }
@@ -296,13 +305,15 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           images: {
             upload:
               imageChange && fileList.length > 0
-                ? fileList.map((item) => ({
-                    url: {
-                      filename: item.fileName || '',
-                      mimetype: item.type || '',
-                      url: item.url || '',
-                    },
-                  }))
+                ? fileList
+                    .filter((item) => !item.optimised)
+                    .map((item) => ({
+                      url: {
+                        filename: item.fileName || '',
+                        mimetype: item.type || '',
+                        url: item.url || '',
+                      },
+                    }))
                 : undefined,
             // imageChange && fileList.length > 0
             //   ? fileList
@@ -325,6 +336,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
         },
       },
     });
+    navigate(`/app/offenders`);
   };
   // update tag list after adding a new item
   const updateOffenderTag: MutationUpdaterFn<CreateTagMutation> = (
