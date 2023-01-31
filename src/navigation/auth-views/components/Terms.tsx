@@ -1,8 +1,7 @@
 /* eslint-disable no-irregular-whitespace */
 import React from 'react';
 import styled from 'styled-components';
-import Typography from '@material-ui/core/Typography';
-
+import { Typography } from 'antd';
 import { useStoreState } from 'state';
 import logo from '../../../images/icon-192.png';
 
@@ -92,10 +91,10 @@ const Terms = (): JSX.Element => {
                 </strong>
                 <br />
                 <ul>
-                  <li>Used fairly, lawfully and transparently</li>
-                  <li>Used for specified, explicit purposes </li>
+                  <li>Used fairly, lawfully and transparently</li>
+                  <li>Used for specified, explicit purposes</li>
                   <li>
-                    Used in a way that is adequate, relevant and limited to only
+                    Used in a way that is adequate, relevant and limited to only
                     what is necessary
                   </li>
                   <li>Accurate and, where necessary, kept up to date</li>
@@ -103,7 +102,7 @@ const Terms = (): JSX.Element => {
                   <li>
                     Handled in a way that ensures appropriate security,
                     including protection against unlawful or unauthorised
-                    processing, access, loss, copying, destruction or damage
+                    processing, access, loss, copying, destruction or damage
                   </li>
                 </ul>
                 <strong>
@@ -313,7 +312,7 @@ const Terms = (): JSX.Element => {
                   the Services, and in particular for the following purposes:
                   <br />
                   <ul>
-                    <li>To manage your access and use of the Services </li>
+                    <li>To manage your access and use of the Services</li>
                     <li>
                       To ensure compliance to the{' '}
                       <BoldItalic>Data Protection Laws</BoldItalic>
@@ -404,16 +403,18 @@ const Terms = (): JSX.Element => {
                 between ShopSafe, the Organisation and their Members who are
                 Users of the Services
                 <br />
-                11.2 <BoldItalic>&quot;Data Protection Laws&quot;</BoldItalic> and{' '}
-                <BoldItalic>“UK GDPR”</BoldItalic> and{' '}
-                <BoldItalic>“Applicable Law”</BoldItalic> means the UK General
-                Data Protection Regulation (UK GDPR), tailored by the Data
+                11.2 <BoldItalic>
+                  &quot;Data Protection Laws&quot;
+                </BoldItalic>{' '}
+                and <BoldItalic>“UK GDPR”</BoldItalic> and{' '}
+                <BoldItalic>“Applicable Law”</BoldItalic> means the UK General
+                Data Protection Regulation (UK GDPR), tailored by the Data
                 Protection Act 2018.
                 <br />
-                11.3 <BoldItalic>&quot;Personal Data&quot;</BoldItalic> includes “any
-                information relating to an identified or identifiable natural
-                person” as defined in GDPR, article 4 (1) (1) (the ”Personal
-                Data”);
+                11.3 <BoldItalic>&quot;Personal Data&quot;</BoldItalic> includes
+                “any information relating to an identified or identifiable
+                natural person” as defined in GDPR, article 4 (1) (1) (the
+                ”Personal Data”);
                 <br />
                 11.4 <BoldItalic>“Data Subject”</BoldItalic> shall mean a person
                 who can be identified, directly or indirectly, by reference to
