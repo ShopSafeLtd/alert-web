@@ -34,3 +34,5 @@ src/setupTests.ts
 *.css
 
 src/graphql/generated/*
+
+postInstall.js
