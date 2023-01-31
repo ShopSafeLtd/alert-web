@@ -20,7 +20,8 @@
     "@typescript-eslint"
   ],
   "ignorePatterns": [
-    ".eslintrc.js"
+    ".eslintrc.js",
+    "postInstall.js"
   ],
   "rules": {
     "@typescript-eslint/no-unused-vars": "error",
