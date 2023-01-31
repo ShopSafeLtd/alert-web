@@ -65,6 +65,7 @@ const IncidentFeed = ({
   onNavigate,
 }: Props): JSX.Element => {
   const [affix, setAffix] = React.useState(false);
+
   return (
     <div className="feed-container">
       <Affix offsetTop={40} onChange={(affixed) => setAffix(!!affixed)}>

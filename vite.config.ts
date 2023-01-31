@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 import envCompatible from 'vite-plugin-env-compatible';
-import removeConsole from 'vite-plugin-remove-console';
 // import checker from 'vite-plugin-checker';
 
 // local host launch fix
@@ -23,7 +22,7 @@ export default defineConfig({
     envCompatible(),
     viteTsconfigPaths(),
     svgrPlugin(),
-    removeConsole(), // will remove console from prod builds, remove if testing is needed on live
+    // removeConsole(), // will remove console from prod builds, remove if testing is needed on live
     // checker({
     //   // checks for ts and eslint errors on dev, remove if not needed/any issues
     //   typescript: true,
@@ -42,6 +41,8 @@ export default defineConfig({
   ],
   build: {
     outDir: 'build',
+    sourcemap: 'inline',
+    minify: 'esbuild',
   },
   resolve: {
     alias: [
@@ -54,7 +55,6 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       less: {
-        // modifyVars: { 'primary-color': '#13c2c2' },
         javascriptEnabled: true,
       },
     },
