@@ -7,7 +7,7 @@ interface Props {
   className?: string;
 }
 
-const CustomIcon = React.forwardRef((props: Props) => (
+const CustomIcon = React.forwardRef((props: Props, ref) => (
   <Icon component={props.svg} className={props.className} />
 ));
 
