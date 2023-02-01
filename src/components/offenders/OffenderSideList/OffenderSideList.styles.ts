@@ -7,7 +7,7 @@ const useStyles = createUseStyles({
     height: '100%',
     overflowY: 'scroll',
     maxHeight: 'calc(100vh - 70px)',
-    width: 320,
+    width: 290,
     borderRight: '1px solid rgb(237, 242, 249)',
     '&.current': {
       backgroundColor: '#fafafa',

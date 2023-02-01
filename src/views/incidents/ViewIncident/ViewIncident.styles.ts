@@ -24,7 +24,7 @@ const useStyles = createUseStyles({
   },
   content: {
     width: '100%',
-    height: '100%',
+    height: 'calc(100vh - 123px)',
   },
   detailsHeader: {
     paddingRight: 20,

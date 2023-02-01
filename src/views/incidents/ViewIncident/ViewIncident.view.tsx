@@ -1,7 +1,14 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from "react";
-import { Age, Build, Gender, Race, UpdateType, ViewIncidentQuery } from "graphql/generated";
+import React from 'react';
+import {
+  Age,
+  Build,
+  Gender,
+  Race,
+  UpdateType,
+  ViewIncidentQuery,
+} from 'graphql/generated';
 import {
   Button,
   Checkbox,
@@ -21,38 +28,34 @@ import {
   Table,
   Tag,
   Tooltip,
-  Typography
-} from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+  Typography,
+} from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowUpRightFromSquare,
   faBell,
   faBellSlash,
   faChevronDown,
-  faClock,
   faEdit,
-  faLocationDot,
-  faMoneyBill1Wave,
   faTrash,
-  faUser
-} from "@fortawesome/pro-light-svg-icons";
+} from '@fortawesome/pro-light-svg-icons';
 import {
   calcAge,
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
-  getOffenderRace
-} from "utils/offender/get-offender-desc";
-import IncidentSideList from "components/incidents/IncidentSideList";
-import UpdateBar from "components/form-components/update-bar";
-import LinkOffender from "components/form-components/incident/offender/AddExisitingOffender";
-import { ItemType } from "antd/lib/menu/hooks/useItems";
-import { useNavigate } from "react-router";
-import InfiniteScroll from "react-infinite-scroll-component";
-import Lightbox from "yet-another-react-lightbox";
-import Zoom from "yet-another-react-lightbox/plugins/zoom";
-import UpdateContent from "./Update.view";
-import useStyles from "./ViewIncident.styles";
+  getOffenderRace,
+} from 'utils/offender/get-offender-desc';
+import IncidentSideList from 'components/incidents/IncidentSideList';
+import UpdateBar from 'components/form-components/update-bar';
+import LinkOffender from 'components/form-components/incident/offender/AddExisitingOffender';
+import { ItemType } from 'antd/lib/menu/hooks/useItems';
+import { useNavigate } from 'react-router';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import Lightbox from 'yet-another-react-lightbox';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import UpdateContent from './Update.view';
+import useStyles from './ViewIncident.styles';
 
 const { Title, Paragraph } = Typography;
 
@@ -292,72 +295,36 @@ const ViewIncident = ({
                         {data?.incident?.description}
                       </Paragraph>
                       <Descriptions column={1} className={classes.desc}>
-                        <Descriptions.Item
-                          label={
-                            <span>
-                              <FontAwesomeIcon
-                                className={classes.descIcon}
-                                icon={faClock}
-                              />
-                              Created At
-                            </span>
-                          }
-                        >
+                        <Descriptions.Item label="Reference">
+                          {data?.incident?.reference}
+                          {data?.incident?.policeRef
+                            ? ` / Crime Ref: ${data?.incident?.policeRef}`
+                            : ''}
+                        </Descriptions.Item>
+                        <Descriptions.Item label={<span>Created At</span>}>
                           {data?.incident?.dayTime}
                         </Descriptions.Item>
-                        <Descriptions.Item
-                          label={
-                            <span>
-                              <FontAwesomeIcon
-                                className={classes.descIcon}
-                                icon={faUser}
-                              />
-                              Created By
-                            </span>
-                          }
-                        >
+                        <Descriptions.Item label={<span>Created By</span>}>
                           {`${data?.incident?.createdBy.fullName} -
                               ${data?.incident?.createdBy.organisation}`}
                         </Descriptions.Item>
-                        <Descriptions.Item
-                          label={
-                            <span>
-                              <FontAwesomeIcon
-                                className={classes.descIcon}
-                                icon={faMoneyBill1Wave}
-                              />
-                              Value
-                            </span>
-                          }
-                        >
+                        <Descriptions.Item label={<span>Value</span>}>
                           {data?.incident?.value ? '£' : ''}
                           {data?.incident?.value || 'Unknown'}
                         </Descriptions.Item>
-                        <Descriptions.Item
-                          label={
-                            <span>
-                              <FontAwesomeIcon
-                                className={classes.descIcon}
-                                icon={faMoneyBill1Wave}
-                              />
-                              Recovered Value
-                            </span>
-                          }
-                        >
+                        <Descriptions.Item label={<span>Recovered Value</span>}>
                           {data?.incident?.value ? '£' : ''}
                           {data?.incident?.recoveredValue || 'Unknown'}
                         </Descriptions.Item>
                         <Descriptions.Item
-                          label={
-                            <span>
-                              <FontAwesomeIcon
-                                className={classes.descIcon}
-                                icon={faLocationDot}
-                              />
-                              Location
-                            </span>
-                          }
+                          label={<span>Report To Police</span>}
                         >
+                          {data?.incident?.policeReported ? 'Yes' : 'No'}
+                        </Descriptions.Item>
+                        <Descriptions.Item label={<span>Police Involved</span>}>
+                          {data?.incident?.policeInvolved ? 'Yes' : 'No'}
+                        </Descriptions.Item>
+                        <Descriptions.Item label={<span>Location</span>}>
                           {data?.incident?.location?.full}
                         </Descriptions.Item>
                       </Descriptions>

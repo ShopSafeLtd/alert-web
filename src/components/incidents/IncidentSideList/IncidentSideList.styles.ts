@@ -5,8 +5,8 @@ const useStyles = createUseStyles({
     display: 'flex',
     flexDirection: 'column',
     maxHeight: 'calc(100vh - 70px)',
-    width: 300,
-    maxWidth: 300,
+    width: 250,
+    maxWidth: 250,
     borderRight: '1px solid rgb(237, 242, 249)',
     overflowY: 'scroll',
 

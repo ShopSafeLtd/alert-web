@@ -46,6 +46,9 @@ interface FormData {
   date: Date;
   value?: number;
   recoveredValue?: number;
+  policeReported?: boolean;
+  policeInvolved?: boolean;
+  policeRef?: string;
   fullAddress: string;
   groups: string[];
   tags: string[];
@@ -279,7 +282,7 @@ const useEditIncident = (): Return => {
           id: schemeId,
         },
         order: {
-          updatedAt: SortOrder.Asc,
+          updatedAt: SortOrder.Desc,
         },
         take: 20,
         where: searchOffenders.length
@@ -639,6 +642,9 @@ const useEditIncident = (): Return => {
             time: data.date,
             value: data.value || null,
             recoveredValue: data.recoveredValue || null,
+            policeInvolved: data.policeInvolved,
+            policeRef: data.policeRef,
+            policeReported: data.policeReported,
             groups:
               groups.length > 1
                 ? data.groups.map((id) => ({ id }))

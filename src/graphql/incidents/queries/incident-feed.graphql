@@ -22,6 +22,8 @@ query incidentFeed(
     subject
     description
     dayTime
+    reference
+    policeRef
     crimeTypes {
       id
       name
@@ -52,45 +54,7 @@ query incidentFeed(
     }
     offenders {
       id
-      createdAt
-      updatedAt
-      age
-      build
-      dateOfBirth
-      dateSource
-      hair
-      gender
       name
-      race
-      peculiarities
-      approved
-      active
-      images {
-        id
-        url
-        optimised
-      }
-      groups {
-        id
-        name
-      }
-      tags {
-        id
-        name
-      }
-      bans {
-        id
-        title
-        location
-        description
-        startDate
-        endDate
-      }
-      createdBy {
-        id
-        fullName
-        organisation
-      }
     }
   }
 }
