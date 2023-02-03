@@ -5,9 +5,10 @@ import useOffenderSideList from './useOffenderSideList';
 interface Props {
   // eslint-disable-next-line react/require-default-props
   current?: string;
+  to?: string;
 }
 
-const OffenderSideList = ({ current }: Props): JSX.Element => {
+const OffenderSideList = ({ current, to }: Props): JSX.Element => {
   const { data, loading, onPaginationChange } = useOffenderSideList();
 
   return (
@@ -16,6 +17,7 @@ const OffenderSideList = ({ current }: Props): JSX.Element => {
       loading={loading}
       current={current}
       onPaginationChange={onPaginationChange}
+      to={to}
     />
   );
 };

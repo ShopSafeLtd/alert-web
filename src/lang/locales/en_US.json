@@ -2,5 +2,6 @@
 	"sidenav.incidents": "Incidents",
 	"sidenav.offenders": "Offenders",
 	"sidenav.chat": "Chat",
-	"sidenav.scheme": "Scheme"
+	"sidenav.settings": "Settings",
+	"sidenav.reports": "Reports"
 }

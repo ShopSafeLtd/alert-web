@@ -13,6 +13,7 @@ interface Props {
   // eslint-disable-next-line react/require-default-props
   current?: string;
   onPaginationChange: (page: number, pageSize: number) => void;
+  to?: string;
 }
 
 const OffenderSideList = ({
@@ -20,6 +21,7 @@ const OffenderSideList = ({
   loading,
   current,
   onPaginationChange,
+  to,
 }: Props): JSX.Element => {
   const classes = useStyles();
   return !data && loading ? (
@@ -27,7 +29,10 @@ const OffenderSideList = ({
   ) : (
     <div className={classes.offenderSideList}>
       {data?.listOffenders?.offenders.map((offender) => (
-        <Link to={`/app/offenders/view/${offender.id}`} key={offender.id}>
+        <Link
+          to={`${to || '/app/offenders/view/'}${offender.id}`}
+          key={offender.id}
+        >
           <div
             key={offender.id}
             className={`${classes.offenderItem} ${
