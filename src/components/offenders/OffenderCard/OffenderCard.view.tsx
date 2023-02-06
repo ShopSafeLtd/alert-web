@@ -57,7 +57,7 @@ interface Props {
   deleteRights: boolean;
   menuRights: boolean;
   openLightbox: (elements: { src: string }[], index: number) => void;
-  onNavigate: (id: string) => void;
+  onNavigate: (id?: string | undefined, url?: string | undefined) => void;
   onDelete: (id: string) => void;
 }
 
@@ -102,7 +102,10 @@ const OffenderCard = ({
                   key: 1,
                   label: 'Compare Offender',
                   onClick: () =>
-                    onNavigate(`/app/offenders/compare/${offender?.id}`),
+                    onNavigate(
+                      undefined,
+                      `/app/offenders/compare/${offender?.id}`
+                    ),
                   icon: <FontAwesomeIcon size="lg" icon={faPeople} />,
                 },
                 {

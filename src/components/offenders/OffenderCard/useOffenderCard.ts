@@ -16,7 +16,7 @@ interface Return {
   approvalRights: boolean;
   deleteRights: boolean;
   menuRights: boolean;
-  onNavigate: (id: string) => void;
+  onNavigate: (id?: string | undefined, url?: string | undefined) => void;
   onDelete: (id: string) => void;
 }
 const useOffenderCard = ({ createdById, update }: Props): Return => {
@@ -28,7 +28,14 @@ const useOffenderCard = ({ createdById, update }: Props): Return => {
   const menuRights = role !== Role.User || userId === createdById;
   const deleteRights = role !== Role.User;
 
-  const onNavigate = (id: string) => navigate(`/app/offenders/edit/${id}`);
+  const onNavigate = (id: string | undefined, url: string | undefined) => {
+    if (id) {
+      navigate(`/app/offenders/edit/${id}`);
+    }
+    if (url) {
+      navigate(`${url}`);
+    }
+  };
   const [recycleOffender] = useRecycleOffenderMutation({
     onCompleted: () => {
       notification.success({
