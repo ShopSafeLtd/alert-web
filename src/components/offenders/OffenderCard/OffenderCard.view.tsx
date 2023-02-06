@@ -279,7 +279,11 @@ const OffenderCard = ({
           </Row>
         </Link>
         <Link
-          to={`/app/incidents/view/${getLastOffence(offender.incidents).id}`}
+          to={
+            getLastOffence(offender.incidents).id
+              ? `/app/incidents/view/${getLastOffence(offender.incidents).id}`
+              : ''
+          }
         >
           <Row gutter={8} className="offender-card-location-row">
             <Col span={1}>
