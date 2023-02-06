@@ -44,10 +44,10 @@ export interface OffenderData {
     new?: boolean;
   }[];
   imageUid?: string[] | undefined;
-  lastActive: {
-    id: string | undefined | null;
-    dayTime?: string | undefined | null;
-  } | null;
+  lastActive:
+    | { id: string; dayTime?: string | null | undefined }
+    | null
+    | undefined;
 }
 
 interface Props {
