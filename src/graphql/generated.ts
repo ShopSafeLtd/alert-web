@@ -6387,6 +6387,17 @@ export type EnumBuildNullableFilter = {
   notIn?: InputMaybe<Array<Build>>;
 };
 
+export type EnumFeedItemTypeFieldUpdateOperationsInput = {
+  set?: InputMaybe<FeedItemType>;
+};
+
+export type EnumFeedItemTypeFilter = {
+  equals?: InputMaybe<FeedItemType>;
+  in?: InputMaybe<Array<FeedItemType>>;
+  not?: InputMaybe<NestedEnumFeedItemTypeFilter>;
+  notIn?: InputMaybe<Array<FeedItemType>>;
+};
+
 export type EnumGenderNullableFilter = {
   equals?: InputMaybe<Gender>;
   in?: InputMaybe<Array<Gender>>;
@@ -6413,6 +6424,13 @@ export type EnumModelFilter = {
   equals?: InputMaybe<Model>;
   in?: InputMaybe<Array<Model>>;
   not?: InputMaybe<NestedEnumModelFilter>;
+  notIn?: InputMaybe<Array<Model>>;
+};
+
+export type EnumModelNullableFilter = {
+  equals?: InputMaybe<Model>;
+  in?: InputMaybe<Array<Model>>;
+  not?: InputMaybe<NestedEnumModelNullableFilter>;
   notIn?: InputMaybe<Array<Model>>;
 };
 
@@ -6617,7 +6635,7 @@ export type FeedItem = {
   incident?: Maybe<Incident>;
   incidentId?: Maybe<Scalars['String']>;
   message: Scalars['String'];
-  model: Model;
+  model?: Maybe<Model>;
   offender?: Maybe<Offender>;
   offenderId?: Maybe<Scalars['String']>;
   updatedAt: Scalars['DateTime'];
@@ -6635,8 +6653,9 @@ export type FeedItemCreateManyArticleInput = {
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   message: Scalars['String'];
-  model: Model;
+  model?: InputMaybe<Model>;
   offenderId?: InputMaybe<Scalars['String']>;
+  type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -6650,8 +6669,9 @@ export type FeedItemCreateManyIncidentInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   id?: InputMaybe<Scalars['String']>;
   message: Scalars['String'];
-  model: Model;
+  model?: InputMaybe<Model>;
   offenderId?: InputMaybe<Scalars['String']>;
+  type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -6666,7 +6686,8 @@ export type FeedItemCreateManyOffenderInput = {
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   message: Scalars['String'];
-  model: Model;
+  model?: InputMaybe<Model>;
+  type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -6736,8 +6757,9 @@ export type FeedItemCreateWithoutArticleInput = {
   id?: InputMaybe<Scalars['String']>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutFeedItemsInput>;
   message: Scalars['String'];
-  model: Model;
+  model?: InputMaybe<Model>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
+  type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -6747,8 +6769,9 @@ export type FeedItemCreateWithoutGroupsInput = {
   id?: InputMaybe<Scalars['String']>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutFeedItemsInput>;
   message: Scalars['String'];
-  model: Model;
+  model?: InputMaybe<Model>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
+  type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -6758,8 +6781,9 @@ export type FeedItemCreateWithoutIncidentInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutFeedItemsInput>;
   id?: InputMaybe<Scalars['String']>;
   message: Scalars['String'];
-  model: Model;
+  model?: InputMaybe<Model>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
+  type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -6770,7 +6794,8 @@ export type FeedItemCreateWithoutOffenderInput = {
   id?: InputMaybe<Scalars['String']>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutFeedItemsInput>;
   message: Scalars['String'];
-  model: Model;
+  model?: InputMaybe<Model>;
+  type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -6796,6 +6821,7 @@ export type FeedItemOrderByWithRelationInput = {
   model?: InputMaybe<SortOrder>;
   offender?: InputMaybe<OffenderOrderByWithRelationInput>;
   offenderId?: InputMaybe<SortOrder>;
+  type?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
 };
 
@@ -6808,16 +6834,29 @@ export type FeedItemScalarWhereInput = {
   id?: InputMaybe<StringFilter>;
   incidentId?: InputMaybe<StringNullableFilter>;
   message?: InputMaybe<StringFilter>;
-  model?: InputMaybe<EnumModelFilter>;
+  model?: InputMaybe<EnumModelNullableFilter>;
   offenderId?: InputMaybe<StringNullableFilter>;
+  type?: InputMaybe<EnumFeedItemTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
+
+export enum FeedItemType {
+  Incident = 'INCIDENT',
+  IncidentImage = 'INCIDENT_IMAGE',
+  IncidentIntel = 'INCIDENT_INTEL',
+  NewIncident = 'NEW_INCIDENT',
+  NewOffender = 'NEW_OFFENDER',
+  Offender = 'OFFENDER',
+  OffenderImage = 'OFFENDER_IMAGE',
+  OffenderIntel = 'OFFENDER_INTEL',
+}
 
 export type FeedItemUpdateManyMutationInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
-  model?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
+  model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
+  type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
@@ -6936,8 +6975,9 @@ export type FeedItemUpdateWithoutArticleInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutFeedItemsInput>;
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
-  model?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
+  model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
   offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsInput>;
+  type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
@@ -6947,8 +6987,9 @@ export type FeedItemUpdateWithoutGroupsInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutFeedItemsInput>;
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
-  model?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
+  model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
   offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsInput>;
+  type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
@@ -6958,8 +6999,9 @@ export type FeedItemUpdateWithoutIncidentInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutFeedItemsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
-  model?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
+  model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
   offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsInput>;
+  type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
@@ -6970,7 +7012,8 @@ export type FeedItemUpdateWithoutOffenderInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutFeedItemsInput>;
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
-  model?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
+  model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
+  type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
@@ -7010,9 +7053,10 @@ export type FeedItemWhereInput = {
   incident?: InputMaybe<IncidentWhereInput>;
   incidentId?: InputMaybe<StringNullableFilter>;
   message?: InputMaybe<StringFilter>;
-  model?: InputMaybe<EnumModelFilter>;
+  model?: InputMaybe<EnumModelNullableFilter>;
   offender?: InputMaybe<OffenderWhereInput>;
   offenderId?: InputMaybe<StringNullableFilter>;
+  type?: InputMaybe<EnumFeedItemTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
@@ -13396,14 +13440,8 @@ export enum Model {
   Group = 'GROUP',
   Image = 'IMAGE',
   Incident = 'INCIDENT',
-  Incidentimage = 'INCIDENTIMAGE',
-  Incidentintel = 'INCIDENTINTEL',
   Message = 'MESSAGE',
-  Newincident = 'NEWINCIDENT',
-  Newoffender = 'NEWOFFENDER',
   Offender = 'OFFENDER',
-  Offenderimage = 'OFFENDERIMAGE',
-  Offenderintel = 'OFFENDERINTEL',
   Remove = 'REMOVE',
   Scheme = 'SCHEME',
   Send = 'SEND',
@@ -14042,6 +14080,13 @@ export type NestedEnumBuildNullableFilter = {
   notIn?: InputMaybe<Array<Build>>;
 };
 
+export type NestedEnumFeedItemTypeFilter = {
+  equals?: InputMaybe<FeedItemType>;
+  in?: InputMaybe<Array<FeedItemType>>;
+  not?: InputMaybe<NestedEnumFeedItemTypeFilter>;
+  notIn?: InputMaybe<Array<FeedItemType>>;
+};
+
 export type NestedEnumGenderNullableFilter = {
   equals?: InputMaybe<Gender>;
   in?: InputMaybe<Array<Gender>>;
@@ -14060,6 +14105,13 @@ export type NestedEnumModelFilter = {
   equals?: InputMaybe<Model>;
   in?: InputMaybe<Array<Model>>;
   not?: InputMaybe<NestedEnumModelFilter>;
+  notIn?: InputMaybe<Array<Model>>;
+};
+
+export type NestedEnumModelNullableFilter = {
+  equals?: InputMaybe<Model>;
+  in?: InputMaybe<Array<Model>>;
+  not?: InputMaybe<NestedEnumModelNullableFilter>;
   notIn?: InputMaybe<Array<Model>>;
 };
 
@@ -14184,6 +14236,10 @@ export type NullableEnumBuildFieldUpdateOperationsInput = {
 
 export type NullableEnumGenderFieldUpdateOperationsInput = {
   set?: InputMaybe<Gender>;
+};
+
+export type NullableEnumModelFieldUpdateOperationsInput = {
+  set?: InputMaybe<Model>;
 };
 
 export type NullableEnumRaceFieldUpdateOperationsInput = {
@@ -27436,6 +27492,39 @@ export type UpdateOffenderMutation = {
   } | null;
 };
 
+export type ViewOffenderCompareQueryVariables = Exact<{
+  where: OffenderWhereUniqueInput;
+}>;
+
+export type ViewOffenderCompareQuery = {
+  __typename?: 'Query';
+  offender?: {
+    __typename?: 'Offender';
+    id: string;
+    updatedAt: any;
+    age?: Age | null;
+    build?: Build | null;
+    dateOfBirth?: any | null;
+    dateSource?: string | null;
+    hair?: string | null;
+    gender?: Gender | null;
+    name?: string | null;
+    race?: Race | null;
+    peculiarities?: string | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      optimised?: string | null;
+    }>;
+    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    lastActive?: {
+      __typename?: 'Incident';
+      id: string;
+      dayTime?: string | null;
+    } | null;
+  } | null;
+};
+
 export type ListOffendersQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
   where?: InputMaybe<OffenderWhereInput>;
@@ -27465,13 +27554,18 @@ export type ListOffendersQuery = {
       peculiarities?: string | null;
       approved?: boolean | null;
       active?: boolean | null;
+      lastActive?: {
+        __typename?: 'Incident';
+        id: string;
+        dayTime?: string | null;
+      } | null;
+      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
       images: Array<{
         __typename?: 'Image';
         id: string;
         optimised?: string | null;
       }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
       createdBy: {
         __typename?: 'User';
         id: string;
@@ -27565,6 +27659,98 @@ export type OffenderFeedQuery = {
       organisation: string;
     };
   } | null> | null;
+};
+
+export type OffenderProfileQueryVariables = Exact<{
+  where: OffenderWhereUniqueInput;
+  orderBy?: InputMaybe<
+    Array<BanOrderByWithRelationInput> | BanOrderByWithRelationInput
+  >;
+  first?: InputMaybe<Scalars['Int']>;
+  incidentsOrderBy?: InputMaybe<
+    Array<IncidentOrderByWithRelationInput> | IncidentOrderByWithRelationInput
+  >;
+}>;
+
+export type OffenderProfileQuery = {
+  __typename?: 'Query';
+  offender?: {
+    __typename?: 'Offender';
+    age?: Age | null;
+    dateOfBirth?: any | null;
+    dateSource?: string | null;
+    gender?: Gender | null;
+    hair?: string | null;
+    build?: Build | null;
+    id: string;
+    name?: string | null;
+    peculiarities?: string | null;
+    race?: Race | null;
+    reference?: number | null;
+    totalIncidents?: number | null;
+    totalRecoveredValue?: number | null;
+    totalTheftSuccess?: number | null;
+    totalValue?: number | null;
+    updatedAt: any;
+    bans: Array<{
+      __typename?: 'Ban';
+      id: string;
+      endDate: any;
+      active: boolean;
+      startDate: any;
+      title?: string | null;
+    }>;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      reference: string;
+    }>;
+    incidentTotals?: {
+      __typename?: 'IncidentTotal';
+      months?: Array<string> | null;
+      data?: Array<{
+        __typename?: 'TagTotal';
+        name: string;
+        count?: Array<number> | null;
+      }> | null;
+    } | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      optimised?: string | null;
+    }>;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      dayTime?: string | null;
+      date: any;
+      value?: number | null;
+      recoveredValue?: number | null;
+      reference?: number | null;
+      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      createdBy: { __typename?: 'User'; id: string; organisation: string };
+    }>;
+    lastActive?: {
+      __typename?: 'Incident';
+      id: string;
+      dayTime?: string | null;
+      date: any;
+      value?: number | null;
+      recoveredValue?: number | null;
+      reference?: number | null;
+      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      createdBy: { __typename?: 'User'; id: string; organisation: string };
+    } | null;
+    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      id: string;
+      make?: string | null;
+      model?: string | null;
+      registration?: string | null;
+      colour?: string | null;
+    }>;
+  } | null;
 };
 
 export type SearchOffendersQueryVariables = Exact<{
@@ -27924,98 +28110,6 @@ export type RecycledItemsQuery = {
     } | null;
     scheme: { __typename?: 'Scheme'; id: string };
   } | null> | null;
-};
-
-export type OffenderProfileQueryVariables = Exact<{
-  where: OffenderWhereUniqueInput;
-  orderBy?: InputMaybe<
-    Array<BanOrderByWithRelationInput> | BanOrderByWithRelationInput
-  >;
-  first?: InputMaybe<Scalars['Int']>;
-  incidentsOrderBy?: InputMaybe<
-    Array<IncidentOrderByWithRelationInput> | IncidentOrderByWithRelationInput
-  >;
-}>;
-
-export type OffenderProfileQuery = {
-  __typename?: 'Query';
-  offender?: {
-    __typename?: 'Offender';
-    age?: Age | null;
-    dateOfBirth?: any | null;
-    dateSource?: string | null;
-    gender?: Gender | null;
-    hair?: string | null;
-    build?: Build | null;
-    id: string;
-    name?: string | null;
-    peculiarities?: string | null;
-    race?: Race | null;
-    reference?: number | null;
-    totalIncidents?: number | null;
-    totalRecoveredValue?: number | null;
-    totalTheftSuccess?: number | null;
-    totalValue?: number | null;
-    updatedAt: any;
-    bans: Array<{
-      __typename?: 'Ban';
-      id: string;
-      endDate: any;
-      active: boolean;
-      startDate: any;
-      title?: string | null;
-    }>;
-    crimeGroups: Array<{
-      __typename?: 'CrimeGroup';
-      id: string;
-      reference: string;
-    }>;
-    incidentTotals?: {
-      __typename?: 'IncidentTotal';
-      months?: Array<string> | null;
-      data?: Array<{
-        __typename?: 'TagTotal';
-        name: string;
-        count?: Array<number> | null;
-      }> | null;
-    } | null;
-    images: Array<{
-      __typename?: 'Image';
-      id: string;
-      optimised?: string | null;
-    }>;
-    incidents: Array<{
-      __typename?: 'Incident';
-      id: string;
-      dayTime?: string | null;
-      date: any;
-      value?: number | null;
-      recoveredValue?: number | null;
-      reference?: number | null;
-      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-      createdBy: { __typename?: 'User'; id: string; organisation: string };
-    }>;
-    lastActive?: {
-      __typename?: 'Incident';
-      id: string;
-      dayTime?: string | null;
-      date: any;
-      value?: number | null;
-      recoveredValue?: number | null;
-      reference?: number | null;
-      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-      createdBy: { __typename?: 'User'; id: string; organisation: string };
-    } | null;
-    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-    vehicles: Array<{
-      __typename?: 'Vehicle';
-      id: string;
-      make?: string | null;
-      model?: string | null;
-      registration?: string | null;
-      colour?: string | null;
-    }>;
-  } | null;
 };
 
 export type UpdateSchemeMutationVariables = Exact<{
@@ -31503,6 +31597,86 @@ export type UpdateOffenderMutationOptions = Apollo.BaseMutationOptions<
   UpdateOffenderMutation,
   UpdateOffenderMutationVariables
 >;
+export const ViewOffenderCompareDocument = gql`
+  query ViewOffenderCompare($where: OffenderWhereUniqueInput!) {
+    offender(where: $where) {
+      id
+      updatedAt
+      age
+      build
+      dateOfBirth
+      dateSource
+      hair
+      gender
+      name
+      race
+      peculiarities
+      images {
+        id
+        optimised
+      }
+      tags {
+        id
+        name
+      }
+      lastActive {
+        id
+        dayTime
+      }
+    }
+  }
+`;
+
+/**
+ * __useViewOffenderCompareQuery__
+ *
+ * To run a query within a React component, call `useViewOffenderCompareQuery` and pass it any options that fit your needs.
+ * When your component renders, `useViewOffenderCompareQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useViewOffenderCompareQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useViewOffenderCompareQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ViewOffenderCompareQuery,
+    ViewOffenderCompareQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ViewOffenderCompareQuery,
+    ViewOffenderCompareQueryVariables
+  >(ViewOffenderCompareDocument, options);
+}
+export function useViewOffenderCompareLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ViewOffenderCompareQuery,
+    ViewOffenderCompareQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ViewOffenderCompareQuery,
+    ViewOffenderCompareQueryVariables
+  >(ViewOffenderCompareDocument, options);
+}
+export type ViewOffenderCompareQueryHookResult = ReturnType<
+  typeof useViewOffenderCompareQuery
+>;
+export type ViewOffenderCompareLazyQueryHookResult = ReturnType<
+  typeof useViewOffenderCompareLazyQuery
+>;
+export type ViewOffenderCompareQueryResult = Apollo.QueryResult<
+  ViewOffenderCompareQuery,
+  ViewOffenderCompareQueryVariables
+>;
 export const ListOffendersDocument = gql`
   query listOffenders(
     $scheme: SchemeWhereUniqueInput!
@@ -31533,6 +31707,14 @@ export const ListOffendersDocument = gql`
         peculiarities
         approved
         active
+        lastActive {
+          id
+          dayTime
+        }
+        tags {
+          id
+          name
+        }
         images {
           id
           optimised
@@ -31765,6 +31947,152 @@ export type OffenderFeedLazyQueryHookResult = ReturnType<
 export type OffenderFeedQueryResult = Apollo.QueryResult<
   OffenderFeedQuery,
   OffenderFeedQueryVariables
+>;
+export const OffenderProfileDocument = gql`
+  query OffenderProfile(
+    $where: OffenderWhereUniqueInput!
+    $orderBy: [BanOrderByWithRelationInput!]
+    $first: Int
+    $incidentsOrderBy: [IncidentOrderByWithRelationInput!]
+  ) {
+    offender(where: $where) {
+      age
+      bans(orderBy: $orderBy) {
+        id
+        endDate
+        active
+        startDate
+        title
+      }
+      crimeGroups {
+        id
+        reference
+      }
+      dateOfBirth
+      dateSource
+      gender
+      hair
+      build
+      id
+      incidentTotals {
+        months
+        data {
+          name
+          count
+        }
+      }
+      images(first: $first) {
+        id
+        optimised
+      }
+      incidents(orderBy: $incidentsOrderBy) {
+        id
+        dayTime
+        date
+        crimeTypes {
+          id
+          name
+        }
+        value
+        recoveredValue
+        reference
+        createdBy {
+          id
+          organisation
+        }
+      }
+      lastActive {
+        id
+        dayTime
+        date
+        crimeTypes {
+          id
+          name
+        }
+        createdBy {
+          id
+          organisation
+        }
+        value
+        recoveredValue
+        reference
+      }
+      name
+      peculiarities
+      race
+      reference
+      tags {
+        id
+        name
+      }
+      totalIncidents
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+      updatedAt
+      vehicles {
+        id
+        make
+        model
+        registration
+        colour
+      }
+    }
+  }
+`;
+
+/**
+ * __useOffenderProfileQuery__
+ *
+ * To run a query within a React component, call `useOffenderProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOffenderProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOffenderProfileQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      first: // value for 'first'
+ *      incidentsOrderBy: // value for 'incidentsOrderBy'
+ *   },
+ * });
+ */
+export function useOffenderProfileQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    OffenderProfileQuery,
+    OffenderProfileQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OffenderProfileQuery, OffenderProfileQueryVariables>(
+    OffenderProfileDocument,
+    options
+  );
+}
+export function useOffenderProfileLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    OffenderProfileQuery,
+    OffenderProfileQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    OffenderProfileQuery,
+    OffenderProfileQueryVariables
+  >(OffenderProfileDocument, options);
+}
+export type OffenderProfileQueryHookResult = ReturnType<
+  typeof useOffenderProfileQuery
+>;
+export type OffenderProfileLazyQueryHookResult = ReturnType<
+  typeof useOffenderProfileLazyQuery
+>;
+export type OffenderProfileQueryResult = Apollo.QueryResult<
+  OffenderProfileQuery,
+  OffenderProfileQueryVariables
 >;
 export const SearchOffendersDocument = gql`
   query searchOffenders(
@@ -32480,152 +32808,6 @@ export type RecycledItemsLazyQueryHookResult = ReturnType<
 export type RecycledItemsQueryResult = Apollo.QueryResult<
   RecycledItemsQuery,
   RecycledItemsQueryVariables
->;
-export const OffenderProfileDocument = gql`
-  query OffenderProfile(
-    $where: OffenderWhereUniqueInput!
-    $orderBy: [BanOrderByWithRelationInput!]
-    $first: Int
-    $incidentsOrderBy: [IncidentOrderByWithRelationInput!]
-  ) {
-    offender(where: $where) {
-      age
-      bans(orderBy: $orderBy) {
-        id
-        endDate
-        active
-        startDate
-        title
-      }
-      crimeGroups {
-        id
-        reference
-      }
-      dateOfBirth
-      dateSource
-      gender
-      hair
-      build
-      id
-      incidentTotals {
-        months
-        data {
-          name
-          count
-        }
-      }
-      images(first: $first) {
-        id
-        optimised
-      }
-      incidents(orderBy: $incidentsOrderBy) {
-        id
-        dayTime
-        date
-        crimeTypes {
-          id
-          name
-        }
-        value
-        recoveredValue
-        reference
-        createdBy {
-          id
-          organisation
-        }
-      }
-      lastActive {
-        id
-        dayTime
-        date
-        crimeTypes {
-          id
-          name
-        }
-        createdBy {
-          id
-          organisation
-        }
-        value
-        recoveredValue
-        reference
-      }
-      name
-      peculiarities
-      race
-      reference
-      tags {
-        id
-        name
-      }
-      totalIncidents
-      totalRecoveredValue
-      totalTheftSuccess
-      totalValue
-      updatedAt
-      vehicles {
-        id
-        make
-        model
-        registration
-        colour
-      }
-    }
-  }
-`;
-
-/**
- * __useOffenderProfileQuery__
- *
- * To run a query within a React component, call `useOffenderProfileQuery` and pass it any options that fit your needs.
- * When your component renders, `useOffenderProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useOffenderProfileQuery({
- *   variables: {
- *      where: // value for 'where'
- *      orderBy: // value for 'orderBy'
- *      first: // value for 'first'
- *      incidentsOrderBy: // value for 'incidentsOrderBy'
- *   },
- * });
- */
-export function useOffenderProfileQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    OffenderProfileQuery,
-    OffenderProfileQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<OffenderProfileQuery, OffenderProfileQueryVariables>(
-    OffenderProfileDocument,
-    options
-  );
-}
-export function useOffenderProfileLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    OffenderProfileQuery,
-    OffenderProfileQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    OffenderProfileQuery,
-    OffenderProfileQueryVariables
-  >(OffenderProfileDocument, options);
-}
-export type OffenderProfileQueryHookResult = ReturnType<
-  typeof useOffenderProfileQuery
->;
-export type OffenderProfileLazyQueryHookResult = ReturnType<
-  typeof useOffenderProfileLazyQuery
->;
-export type OffenderProfileQueryResult = Apollo.QueryResult<
-  OffenderProfileQuery,
-  OffenderProfileQueryVariables
 >;
 export const UpdateSchemeDocument = gql`
   mutation updateScheme($where: UniqueId!, $data: SchemeUpdateInput!) {

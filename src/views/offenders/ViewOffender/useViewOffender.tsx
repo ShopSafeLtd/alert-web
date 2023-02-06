@@ -17,7 +17,7 @@ import { Modal, notification } from 'antd';
 import { useStoreState } from 'state';
 import { ItemType } from 'antd/lib/menu/hooks/useItems';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/pro-light-svg-icons';
+import { faEdit, faPeople, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { useNavigate } from 'react-router';
 import update from 'immutability-helper';
 
@@ -407,6 +407,12 @@ const useViewOffender = (offenderId: string): Return => {
       [Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin].includes(role)
     ) {
       setOptionsMenuItems([
+        {
+          label: 'Compare',
+          key: '0',
+          icon: <FontAwesomeIcon size="3x" icon={faPeople} />,
+          onClick: () => navigate(`/app/offenders/compare/${offenderId}`),
+        },
         {
           label: 'Edit',
           key: '1',

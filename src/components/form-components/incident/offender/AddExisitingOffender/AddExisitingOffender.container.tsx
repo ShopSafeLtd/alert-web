@@ -4,7 +4,7 @@ import { Age, Build, Gender, Race } from 'graphql/generated';
 import View from './AddExisitingOffender.view';
 import useAddExisitingOffender from './useAddExisitingOffender';
 
-interface OffenderData {
+export interface OffenderData {
   id: string;
   updatedAt?: Date;
   name?: string | null;
@@ -32,6 +32,14 @@ interface OffenderData {
     new?: boolean;
   }[];
   imageUid?: string[] | undefined;
+  tags: {
+    id: string;
+    name: string;
+  }[];
+  lastActive: {
+    id: string;
+    dayTime: string;
+  };
 }
 
 interface Props {

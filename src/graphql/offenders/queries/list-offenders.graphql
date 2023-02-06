@@ -27,6 +27,14 @@ query listOffenders(
       peculiarities
       approved
       active
+      lastActive {
+        id
+        dayTime
+      }
+      tags {
+        id
+        name
+      }
       images {
         id
         optimised

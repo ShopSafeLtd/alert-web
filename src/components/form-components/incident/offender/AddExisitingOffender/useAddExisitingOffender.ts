@@ -12,7 +12,7 @@ import {
 } from 'graphql/generated';
 import { useStoreActions, useStoreState } from 'state';
 
-interface OffenderData {
+export interface OffenderData {
   id: string;
   updatedAt?: Date;
   name?: string | null;
@@ -31,6 +31,10 @@ interface OffenderData {
         name: string;
       }[]
     | undefined;
+  tags: {
+    id: string;
+    name: string;
+  }[];
   images?: {
     id: string;
     optimised?: string | null;
@@ -162,6 +166,9 @@ const useAddExisitingOffenderr = ({
           race: selectedOffender.race || null,
           build: selectedOffender.build || null,
           dateOfBirth: selectedOffender.dateOfBirth || null,
+          hair: selectedOffender.hair,
+          peculiarities: selectedOffender.peculiarities,
+          tags: selectedOffender.tags,
           images:
             selectedOffender.images.map(({ id, optimised }) => ({
               id,
