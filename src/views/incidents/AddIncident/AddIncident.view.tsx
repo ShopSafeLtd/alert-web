@@ -12,6 +12,7 @@ import {
 import {
   Button,
   Card,
+  Checkbox,
   Col,
   DatePicker,
   Descriptions,
@@ -78,6 +79,9 @@ interface FormData {
   date: Date;
   value?: number;
   recoveredValue?: number;
+  policeReported?: boolean;
+  policeInvolved?: boolean;
+  policeRef?: string;
   fullAddress: string;
   groups: string[];
   tags: string[];
@@ -347,6 +351,35 @@ const EditIncident = ({
               ]}
             >
               <Input.TextArea disabled={saving} />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={50}>
+          <Col>
+            <Form.Item
+              name="policeReported"
+              valuePropName="checked"
+              tooltip="The incident has been reported to the police"
+              label="Police Involvement"
+              style={{ marginBottom: 0 }}
+            >
+              <Checkbox disabled={saving}>Reported to the police</Checkbox>
+            </Form.Item>
+            <Form.Item
+              name="policeInvolved"
+              valuePropName="checked"
+              tooltip="The police have been involved in the incident."
+            >
+              <Checkbox disabled={saving}>Police Involved</Checkbox>
+            </Form.Item>
+          </Col>
+          <Col>
+            <Form.Item
+              name="policeRef"
+              label="Crime Ref No."
+              tooltip="The crime reference number provided by the police."
+            >
+              <Input disabled={saving} />
             </Form.Item>
           </Col>
         </Row>

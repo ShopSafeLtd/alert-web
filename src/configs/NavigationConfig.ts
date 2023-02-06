@@ -4,7 +4,6 @@ import {
   faExclamationCircle,
   faUsers,
   faComments,
-  faCity,
   faUser,
   faCommentLines,
   faClipboardList,
@@ -12,6 +11,9 @@ import {
   faSirenOn,
   faTrash,
   faListCheck,
+  faLineChart,
+  faCog,
+  faPieChart,
 } from '@fortawesome/pro-light-svg-icons';
 
 export interface MenuItem {
@@ -62,10 +64,10 @@ const userOnlyItems: NavItem[] = [
 
 const adminOnlyItems: NavItem[] = [
   {
-    key: 'scheme',
+    key: 'settings',
     path: `${APP_PREFIX_PATH}/scheme-settings`,
-    title: 'sidenav.scheme',
-    icon: faCity,
+    title: 'sidenav.settings',
+    icon: faCog,
     breadcrumb: true,
     submenu: [
       {
@@ -129,6 +131,31 @@ const adminOnlyItems: NavItem[] = [
         path: `${APP_PREFIX_PATH}/scheme-settings/recycle-bin`,
         title: 'Recycle Bin',
         icon: faTrash,
+        breadcrumb: true,
+        submenu: [],
+      },
+    ],
+  },
+  {
+    key: 'reports',
+    path: `${APP_PREFIX_PATH}/reports`,
+    title: 'sidenav.reports',
+    icon: faLineChart,
+    breadcrumb: true,
+    submenu: [
+      {
+        key: 'performance',
+        path: `${APP_PREFIX_PATH}/reports/performance`,
+        title: 'Performance',
+        icon: faPieChart,
+        breadcrumb: true,
+        submenu: [],
+      },
+      {
+        key: 'offender',
+        path: `${APP_PREFIX_PATH}/reports/offender-profile`,
+        title: 'Offender',
+        icon: faUser,
         breadcrumb: true,
         submenu: [],
       },

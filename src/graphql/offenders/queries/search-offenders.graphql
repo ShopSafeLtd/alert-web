@@ -1,4 +1,4 @@
-query listOffenders(
+query searchOffenders(
   $scheme: SchemeWhereUniqueInput!
   $where: OffenderWhereInput
   $order: OffenderOrderByWithRelationInput
@@ -14,7 +14,6 @@ query listOffenders(
   ) {
     offenders {
       id
-      createdAt
       updatedAt
       age
       build
@@ -25,16 +24,6 @@ query listOffenders(
       name
       race
       peculiarities
-      approved
-      active
-      lastActive {
-        id
-        dayTime
-      }
-      tags {
-        id
-        name
-      }
       images {
         id
         optimised
@@ -51,31 +40,6 @@ query listOffenders(
         id
         fullName
         organisation
-      }
-      incidents {
-        id
-        subject
-        description
-        dayTime
-        date
-        crimeTypes {
-          id
-          name
-        }
-        approved
-        location {
-          id
-          full
-        }
-        createdBy {
-          id
-          fullName
-          organisation
-        }
-        images {
-          id
-          optimised
-        }
       }
     }
     total

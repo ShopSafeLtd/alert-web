@@ -17,6 +17,8 @@ query listIncidents(
       subject
       description
       dayTime
+      reference
+      policeRef
       crimeTypes {
         id
         name

@@ -3280,8 +3280,11 @@ export type ArticleColumnWhereUniqueInput = {
 
 export type ArticleCreateManyCreatedByInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  documents?: InputMaybe<ArticleCreatedocumentsInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
+  previewImage?: InputMaybe<Scalars['String']>;
+  previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
   start?: InputMaybe<Scalars['DateTime']>;
@@ -3402,11 +3405,14 @@ export type ArticleCreateOrConnectWithoutUsersInput = {
 export type ArticleCreateWithoutActionsInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy: UserCreateNestedOneWithoutCreatedArticlesInput;
+  documents?: InputMaybe<ArticleCreatedocumentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutArticleInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutArticleInput>;
+  previewImage?: InputMaybe<Scalars['String']>;
+  previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
@@ -3422,11 +3428,14 @@ export type ArticleCreateWithoutActionsInput = {
 export type ArticleCreateWithoutCreatedByInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutArticleInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  documents?: InputMaybe<ArticleCreatedocumentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutArticleInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutArticleInput>;
+  previewImage?: InputMaybe<Scalars['String']>;
+  previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
@@ -3443,10 +3452,13 @@ export type ArticleCreateWithoutFeedItemsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutArticleInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy: UserCreateNestedOneWithoutCreatedArticlesInput;
+  documents?: InputMaybe<ArticleCreatedocumentsInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutArticleInput>;
+  previewImage?: InputMaybe<Scalars['String']>;
+  previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
@@ -3463,10 +3475,13 @@ export type ArticleCreateWithoutGroupsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutArticleInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy: UserCreateNestedOneWithoutCreatedArticlesInput;
+  documents?: InputMaybe<ArticleCreatedocumentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutArticleInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutArticleInput>;
+  previewImage?: InputMaybe<Scalars['String']>;
+  previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
@@ -3483,10 +3498,13 @@ export type ArticleCreateWithoutImpressionsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutArticleInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy: UserCreateNestedOneWithoutCreatedArticlesInput;
+  documents?: InputMaybe<ArticleCreatedocumentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutArticleInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
+  previewImage?: InputMaybe<Scalars['String']>;
+  previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
@@ -3503,11 +3521,14 @@ export type ArticleCreateWithoutRowsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutArticleInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy: UserCreateNestedOneWithoutCreatedArticlesInput;
+  documents?: InputMaybe<ArticleCreatedocumentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutArticleInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutArticleInput>;
+  previewImage?: InputMaybe<Scalars['String']>;
+  previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
@@ -3523,11 +3544,14 @@ export type ArticleCreateWithoutSchemesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutArticleInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy: UserCreateNestedOneWithoutCreatedArticlesInput;
+  documents?: InputMaybe<ArticleCreatedocumentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutArticleInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutArticleInput>;
+  previewImage?: InputMaybe<Scalars['String']>;
+  previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
@@ -3543,11 +3567,14 @@ export type ArticleCreateWithoutTagsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutArticleInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy: UserCreateNestedOneWithoutCreatedArticlesInput;
+  documents?: InputMaybe<ArticleCreatedocumentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutArticleInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutArticleInput>;
+  previewImage?: InputMaybe<Scalars['String']>;
+  previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
@@ -3563,11 +3590,14 @@ export type ArticleCreateWithoutUsersInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutArticleInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy: UserCreateNestedOneWithoutCreatedArticlesInput;
+  documents?: InputMaybe<ArticleCreatedocumentsInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutArticleInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutArticleInput>;
+  previewImage?: InputMaybe<Scalars['String']>;
+  previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
@@ -3577,6 +3607,10 @@ export type ArticleCreateWithoutUsersInput = {
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   when?: InputMaybe<When>;
+};
+
+export type ArticleCreatedocumentsInput = {
+  set?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type ArticleListRelationFilter = {
@@ -3594,11 +3628,14 @@ export type ArticleOrderByWithRelationInput = {
   createdAt?: InputMaybe<SortOrder>;
   createdBy?: InputMaybe<UserOrderByWithRelationInput>;
   createdById?: InputMaybe<SortOrder>;
+  documents?: InputMaybe<SortOrder>;
   feedItems?: InputMaybe<FeedItemOrderByRelationAggregateInput>;
   frequency?: InputMaybe<SortOrder>;
   groups?: InputMaybe<GroupOrderByRelationAggregateInput>;
   id?: InputMaybe<SortOrder>;
   impressions?: InputMaybe<ImpressionOrderByRelationAggregateInput>;
+  previewImage?: InputMaybe<SortOrder>;
+  previewText?: InputMaybe<SortOrder>;
   priority?: InputMaybe<SortOrder>;
   recurring?: InputMaybe<SortOrder>;
   rows?: InputMaybe<ArticleRowOrderByRelationAggregateInput>;
@@ -3816,8 +3853,11 @@ export type ArticleScalarWhereInput = {
   OR?: InputMaybe<Array<ArticleScalarWhereInput>>;
   createdAt?: InputMaybe<DateTimeFilter>;
   createdById?: InputMaybe<StringFilter>;
+  documents?: InputMaybe<StringNullableListFilter>;
   frequency?: InputMaybe<IntNullableFilter>;
   id?: InputMaybe<StringFilter>;
+  previewImage?: InputMaybe<StringNullableFilter>;
+  previewText?: InputMaybe<StringNullableFilter>;
   priority?: InputMaybe<EnumArticlePriorityFilter>;
   recurring?: InputMaybe<BoolFilter>;
   start?: InputMaybe<DateTimeNullableFilter>;
@@ -3839,8 +3879,11 @@ export enum ArticleSectionType {
 
 export type ArticleUpdateManyMutationInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
   start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -4012,11 +4055,14 @@ export type ArticleUpdateWithWhereUniqueWithoutUsersInput = {
 export type ArticleUpdateWithoutActionsInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedArticlesInput>;
+  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutArticleInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutArticleInput>;
+  previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleInput>;
@@ -4032,11 +4078,14 @@ export type ArticleUpdateWithoutActionsInput = {
 export type ArticleUpdateWithoutCreatedByInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutArticleInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutArticleInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutArticleInput>;
+  previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleInput>;
@@ -4053,10 +4102,13 @@ export type ArticleUpdateWithoutFeedItemsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutArticleInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedArticlesInput>;
+  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutArticleInput>;
+  previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleInput>;
@@ -4073,10 +4125,13 @@ export type ArticleUpdateWithoutGroupsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutArticleInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedArticlesInput>;
+  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutArticleInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutArticleInput>;
+  previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleInput>;
@@ -4093,10 +4148,13 @@ export type ArticleUpdateWithoutImpressionsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutArticleInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedArticlesInput>;
+  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutArticleInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleInput>;
@@ -4113,11 +4171,14 @@ export type ArticleUpdateWithoutRowsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutArticleInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedArticlesInput>;
+  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutArticleInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutArticleInput>;
+  previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesInput>;
@@ -4133,11 +4194,14 @@ export type ArticleUpdateWithoutSchemesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutArticleInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedArticlesInput>;
+  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutArticleInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutArticleInput>;
+  previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleInput>;
@@ -4153,11 +4217,14 @@ export type ArticleUpdateWithoutTagsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutArticleInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedArticlesInput>;
+  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutArticleInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutArticleInput>;
+  previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleInput>;
@@ -4173,11 +4240,14 @@ export type ArticleUpdateWithoutUsersInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutArticleInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedArticlesInput>;
+  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutArticleInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutArticleInput>;
+  previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleInput>;
@@ -4187,6 +4257,11 @@ export type ArticleUpdateWithoutUsersInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
+};
+
+export type ArticleUpdatedocumentsInput = {
+  push?: InputMaybe<Scalars['String']>;
+  set?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type ArticleUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -4247,11 +4322,14 @@ export type ArticleWhereInput = {
   createdAt?: InputMaybe<DateTimeFilter>;
   createdBy?: InputMaybe<UserWhereInput>;
   createdById?: InputMaybe<StringFilter>;
+  documents?: InputMaybe<StringNullableListFilter>;
   feedItems?: InputMaybe<FeedItemListRelationFilter>;
   frequency?: InputMaybe<IntNullableFilter>;
   groups?: InputMaybe<GroupListRelationFilter>;
   id?: InputMaybe<StringFilter>;
   impressions?: InputMaybe<ImpressionListRelationFilter>;
+  previewImage?: InputMaybe<StringNullableFilter>;
+  previewText?: InputMaybe<StringNullableFilter>;
   priority?: InputMaybe<EnumArticlePriorityFilter>;
   recurring?: InputMaybe<BoolFilter>;
   rows?: InputMaybe<ArticleRowListRelationFilter>;
@@ -4817,6 +4895,7 @@ export type BusinessCreateManyParentInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
+  recycled?: InputMaybe<Scalars['Boolean']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -4891,6 +4970,7 @@ export type BusinessCreateWithoutActionsInput = {
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   parent?: InputMaybe<BusinessCreateNestedOneWithoutChildrenInput>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutBusinessesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutBusinessesInput>;
@@ -4902,6 +4982,7 @@ export type BusinessCreateWithoutChildrenInput = {
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   parent?: InputMaybe<BusinessCreateNestedOneWithoutChildrenInput>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutBusinessesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutBusinessesInput>;
@@ -4913,6 +4994,7 @@ export type BusinessCreateWithoutParentInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
+  recycled?: InputMaybe<Scalars['Boolean']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutBusinessesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutBusinessesInput>;
@@ -4925,6 +5007,7 @@ export type BusinessCreateWithoutSchemesInput = {
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   parent?: InputMaybe<BusinessCreateNestedOneWithoutChildrenInput>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   users?: InputMaybe<UserCreateNestedManyWithoutBusinessesInput>;
 };
@@ -4936,6 +5019,7 @@ export type BusinessCreateWithoutUsersInput = {
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   parent?: InputMaybe<BusinessCreateNestedOneWithoutChildrenInput>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutBusinessesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -4958,6 +5042,7 @@ export type BusinessOrderByWithRelationInput = {
   name?: InputMaybe<SortOrder>;
   parent?: InputMaybe<BusinessOrderByWithRelationInput>;
   parentId?: InputMaybe<SortOrder>;
+  recycled?: InputMaybe<SortOrder>;
   schemes?: InputMaybe<SchemeOrderByRelationAggregateInput>;
   updatedAt?: InputMaybe<SortOrder>;
   users?: InputMaybe<UserOrderByRelationAggregateInput>;
@@ -4971,6 +5056,7 @@ export type BusinessScalarWhereInput = {
   id?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
   parentId?: InputMaybe<StringNullableFilter>;
+  recycled?: InputMaybe<BoolFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
@@ -4978,6 +5064,7 @@ export type BusinessUpdateManyMutationInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
@@ -5083,6 +5170,7 @@ export type BusinessUpdateWithoutActionsInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   parent?: InputMaybe<BusinessUpdateOneWithoutChildrenInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutBusinessesInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutBusinessesInput>;
@@ -5094,6 +5182,7 @@ export type BusinessUpdateWithoutChildrenInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   parent?: InputMaybe<BusinessUpdateOneWithoutChildrenInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutBusinessesInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutBusinessesInput>;
@@ -5105,6 +5194,7 @@ export type BusinessUpdateWithoutParentInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutBusinessesInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutBusinessesInput>;
@@ -5117,6 +5207,7 @@ export type BusinessUpdateWithoutSchemesInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   parent?: InputMaybe<BusinessUpdateOneWithoutChildrenInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   users?: InputMaybe<UserUpdateManyWithoutBusinessesInput>;
 };
@@ -5128,6 +5219,7 @@ export type BusinessUpdateWithoutUsersInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   parent?: InputMaybe<BusinessUpdateOneWithoutChildrenInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutBusinessesInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -5171,6 +5263,7 @@ export type BusinessWhereInput = {
   name?: InputMaybe<StringFilter>;
   parent?: InputMaybe<BusinessWhereInput>;
   parentId?: InputMaybe<StringNullableFilter>;
+  recycled?: InputMaybe<BoolFilter>;
   schemes?: InputMaybe<SchemeListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   users?: InputMaybe<UserListRelationFilter>;
@@ -5536,6 +5629,13 @@ export type ConnectImageToIncident = {
   offenders?: InputMaybe<Array<InputMaybe<IncidentOffenderWhereInput>>>;
 };
 
+export type CreateBusinessDataInput = {
+  name: Scalars['String'];
+  patent?: InputMaybe<BusinessCreateNestedManyWithoutParentInput>;
+  schemes: SchemeCreateNestedManyWithoutBusinessesInput;
+  users?: InputMaybe<UserCreateNestedManyWithoutBusinessesInput>;
+};
+
 export type CreateCommentData = {
   incident: IncidentConnectOne;
   offender: OffenderConnectOne;
@@ -5612,7 +5712,7 @@ export type CreateUpdateData = {
   linkedIncidents?: InputMaybe<Array<UniqueId>>;
   linkedOffenders?: InputMaybe<Array<UniqueId>>;
   mentionedUsers?: InputMaybe<Array<UniqueId>>;
-  optimisticImages?: InputMaybe<Array<OptimisticImage>>;
+  optimisticImages?: InputMaybe<Array<CreateImageOptimistic>>;
   replyTo?: InputMaybe<UniqueId>;
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
@@ -6287,6 +6387,17 @@ export type EnumBuildNullableFilter = {
   notIn?: InputMaybe<Array<Build>>;
 };
 
+export type EnumFeedItemTypeFieldUpdateOperationsInput = {
+  set?: InputMaybe<FeedItemType>;
+};
+
+export type EnumFeedItemTypeFilter = {
+  equals?: InputMaybe<FeedItemType>;
+  in?: InputMaybe<Array<FeedItemType>>;
+  not?: InputMaybe<NestedEnumFeedItemTypeFilter>;
+  notIn?: InputMaybe<Array<FeedItemType>>;
+};
+
 export type EnumGenderNullableFilter = {
   equals?: InputMaybe<Gender>;
   in?: InputMaybe<Array<Gender>>;
@@ -6313,6 +6424,13 @@ export type EnumModelFilter = {
   equals?: InputMaybe<Model>;
   in?: InputMaybe<Array<Model>>;
   not?: InputMaybe<NestedEnumModelFilter>;
+  notIn?: InputMaybe<Array<Model>>;
+};
+
+export type EnumModelNullableFilter = {
+  equals?: InputMaybe<Model>;
+  in?: InputMaybe<Array<Model>>;
+  not?: InputMaybe<NestedEnumModelNullableFilter>;
   notIn?: InputMaybe<Array<Model>>;
 };
 
@@ -6517,7 +6635,7 @@ export type FeedItem = {
   incident?: Maybe<Incident>;
   incidentId?: Maybe<Scalars['String']>;
   message: Scalars['String'];
-  model: Model;
+  model?: Maybe<Model>;
   offender?: Maybe<Offender>;
   offenderId?: Maybe<Scalars['String']>;
   updatedAt: Scalars['DateTime'];
@@ -6535,8 +6653,9 @@ export type FeedItemCreateManyArticleInput = {
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   message: Scalars['String'];
-  model: Model;
+  model?: InputMaybe<Model>;
   offenderId?: InputMaybe<Scalars['String']>;
+  type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -6550,8 +6669,9 @@ export type FeedItemCreateManyIncidentInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   id?: InputMaybe<Scalars['String']>;
   message: Scalars['String'];
-  model: Model;
+  model?: InputMaybe<Model>;
   offenderId?: InputMaybe<Scalars['String']>;
+  type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -6566,7 +6686,8 @@ export type FeedItemCreateManyOffenderInput = {
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   message: Scalars['String'];
-  model: Model;
+  model?: InputMaybe<Model>;
+  type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -6636,8 +6757,9 @@ export type FeedItemCreateWithoutArticleInput = {
   id?: InputMaybe<Scalars['String']>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutFeedItemsInput>;
   message: Scalars['String'];
-  model: Model;
+  model?: InputMaybe<Model>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
+  type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -6647,8 +6769,9 @@ export type FeedItemCreateWithoutGroupsInput = {
   id?: InputMaybe<Scalars['String']>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutFeedItemsInput>;
   message: Scalars['String'];
-  model: Model;
+  model?: InputMaybe<Model>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
+  type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -6658,8 +6781,9 @@ export type FeedItemCreateWithoutIncidentInput = {
   groups?: InputMaybe<GroupCreateNestedManyWithoutFeedItemsInput>;
   id?: InputMaybe<Scalars['String']>;
   message: Scalars['String'];
-  model: Model;
+  model?: InputMaybe<Model>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
+  type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -6670,7 +6794,8 @@ export type FeedItemCreateWithoutOffenderInput = {
   id?: InputMaybe<Scalars['String']>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutFeedItemsInput>;
   message: Scalars['String'];
-  model: Model;
+  model?: InputMaybe<Model>;
+  type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -6696,6 +6821,7 @@ export type FeedItemOrderByWithRelationInput = {
   model?: InputMaybe<SortOrder>;
   offender?: InputMaybe<OffenderOrderByWithRelationInput>;
   offenderId?: InputMaybe<SortOrder>;
+  type?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
 };
 
@@ -6708,16 +6834,29 @@ export type FeedItemScalarWhereInput = {
   id?: InputMaybe<StringFilter>;
   incidentId?: InputMaybe<StringNullableFilter>;
   message?: InputMaybe<StringFilter>;
-  model?: InputMaybe<EnumModelFilter>;
+  model?: InputMaybe<EnumModelNullableFilter>;
   offenderId?: InputMaybe<StringNullableFilter>;
+  type?: InputMaybe<EnumFeedItemTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
+
+export enum FeedItemType {
+  Incident = 'INCIDENT',
+  IncidentImage = 'INCIDENT_IMAGE',
+  IncidentIntel = 'INCIDENT_INTEL',
+  NewIncident = 'NEW_INCIDENT',
+  NewOffender = 'NEW_OFFENDER',
+  Offender = 'OFFENDER',
+  OffenderImage = 'OFFENDER_IMAGE',
+  OffenderIntel = 'OFFENDER_INTEL',
+}
 
 export type FeedItemUpdateManyMutationInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
-  model?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
+  model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
+  type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
@@ -6836,8 +6975,9 @@ export type FeedItemUpdateWithoutArticleInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutFeedItemsInput>;
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
-  model?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
+  model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
   offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsInput>;
+  type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
@@ -6847,8 +6987,9 @@ export type FeedItemUpdateWithoutGroupsInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutFeedItemsInput>;
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
-  model?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
+  model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
   offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsInput>;
+  type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
@@ -6858,8 +6999,9 @@ export type FeedItemUpdateWithoutIncidentInput = {
   groups?: InputMaybe<GroupUpdateManyWithoutFeedItemsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
-  model?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
+  model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
   offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsInput>;
+  type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
@@ -6870,7 +7012,8 @@ export type FeedItemUpdateWithoutOffenderInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutFeedItemsInput>;
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
-  model?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
+  model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
+  type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
@@ -6910,9 +7053,10 @@ export type FeedItemWhereInput = {
   incident?: InputMaybe<IncidentWhereInput>;
   incidentId?: InputMaybe<StringNullableFilter>;
   message?: InputMaybe<StringFilter>;
-  model?: InputMaybe<EnumModelFilter>;
+  model?: InputMaybe<EnumModelNullableFilter>;
   offender?: InputMaybe<OffenderWhereInput>;
   offenderId?: InputMaybe<StringNullableFilter>;
+  type?: InputMaybe<EnumFeedItemTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
@@ -7842,6 +7986,7 @@ export type ImageCreateNestedManyWithoutOffendersInput = {
     Array<ImageCreateOrConnectWithoutOffendersInput>
   >;
   create?: InputMaybe<Array<ImageCreateWithoutOffendersInput>>;
+  optimistic?: InputMaybe<Array<InputMaybe<CreateImageOptimistic>>>;
   upload?: InputMaybe<Array<InputMaybe<UploadOffenderImage>>>;
 };
 
@@ -8314,6 +8459,7 @@ export type ImageUpdateManyWithoutIncidentInput = {
   delete?: InputMaybe<Array<ImageWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<ImageScalarWhereInput>>;
   disconnect?: InputMaybe<Array<ImageWhereUniqueInput>>;
+  optimistic?: InputMaybe<Array<InputMaybe<CreateImageOptimistic>>>;
   set?: InputMaybe<Array<ImageWhereUniqueInput>>;
   update?: InputMaybe<Array<ImageUpdateWithWhereUniqueWithoutIncidentInput>>;
   updateMany?: InputMaybe<Array<ImageUpdateManyWithWhereWithoutIncidentInput>>;
@@ -8344,6 +8490,7 @@ export type ImageUpdateManyWithoutOffendersInput = {
   delete?: InputMaybe<Array<ImageWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<ImageScalarWhereInput>>;
   disconnect?: InputMaybe<Array<ImageWhereUniqueInput>>;
+  optimistic?: InputMaybe<Array<InputMaybe<CreateImageOptimistic>>>;
   set?: InputMaybe<Array<ImageWhereUniqueInput>>;
   update?: InputMaybe<Array<ImageUpdateWithWhereUniqueWithoutOffendersInput>>;
   updateMany?: InputMaybe<Array<ImageUpdateManyWithWhereWithoutOffendersInput>>;
@@ -10377,6 +10524,12 @@ export type IncidentScalarWhereInput = {
   updatedAt?: InputMaybe<DateTimeFilter>;
   uploaded?: InputMaybe<BoolNullableFilter>;
   value?: InputMaybe<FloatNullableFilter>;
+};
+
+export type IncidentTotal = {
+  __typename?: 'IncidentTotal';
+  data?: Maybe<Array<TagTotal>>;
+  months?: Maybe<Array<Scalars['String']>>;
 };
 
 export type IncidentUpdateInput = {
@@ -12495,6 +12648,12 @@ export type JsonNullableFilter = {
   not?: InputMaybe<Scalars['Json']>;
 };
 
+export type ListBusinesses = {
+  __typename?: 'ListBusinesses';
+  businesses: Array<Business>;
+  total: Scalars['Int'];
+};
+
 export type ListIncidents = {
   __typename?: 'ListIncidents';
   incidents: Array<Incident>;
@@ -12730,6 +12889,7 @@ export type MessageCreateWithoutActionsInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutMessagesInput>;
   mentions?: InputMaybe<UserCreateNestedManyWithoutMessageMentionsInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutMessagesInput>;
+  optimisticImages?: InputMaybe<Array<InputMaybe<CreateImageOptimistic>>>;
   scheme: SchemeCreateNestedOneWithoutMessagesInput;
   sent?: InputMaybe<Scalars['Boolean']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -13303,6 +13463,7 @@ export type Mutation = {
   createAddress: Address;
   createBan: Ban;
   createBlankImage?: Maybe<Image>;
+  createBusiness: Business;
   createChat: Chat;
   createComment?: Maybe<Intel>;
   createGroup: Group;
@@ -13326,6 +13487,7 @@ export type Mutation = {
   deleteAction?: Maybe<Action>;
   deleteAddress?: Maybe<Address>;
   deleteBan?: Maybe<Ban>;
+  deleteBusiness: Business;
   deleteChat?: Maybe<Chat>;
   deleteChatDefault?: Maybe<Chat>;
   deleteExpired?: Maybe<SystemTask>;
@@ -13372,6 +13534,7 @@ export type Mutation = {
   updateAddress?: Maybe<Address>;
   updateBan?: Maybe<Ban>;
   updateBanDefault?: Maybe<Ban>;
+  updateBusiness: Business;
   updateChat?: Maybe<Chat>;
   updateChatDefault?: Maybe<Chat>;
   updateGroup?: Maybe<Group>;
@@ -13446,6 +13609,10 @@ export type MutationCreateBlankImageArgs = {
   incident?: InputMaybe<IncidentWhereUniqueInput>;
   offenders?: InputMaybe<Array<InputMaybe<OffenderWhereUniqueInput>>>;
   scheme: Scalars['String'];
+};
+
+export type MutationCreateBusinessArgs = {
+  data: CreateBusinessDataInput;
 };
 
 export type MutationCreateChatArgs = {
@@ -13543,6 +13710,10 @@ export type MutationDeleteAddressArgs = {
 
 export type MutationDeleteBanArgs = {
   where: UniqueId;
+};
+
+export type MutationDeleteBusinessArgs = {
+  where: BusinessWhereUniqueInput;
 };
 
 export type MutationDeleteChatArgs = {
@@ -13726,6 +13897,11 @@ export type MutationUpdateBanDefaultArgs = {
   where: BanWhereUniqueInput;
 };
 
+export type MutationUpdateBusinessArgs = {
+  data: UpdateBusinessDataInput;
+  where: BusinessWhereUniqueInput;
+};
+
 export type MutationUpdateChatArgs = {
   data: ChatUpdateInput;
   where: UniqueId;
@@ -13904,6 +14080,13 @@ export type NestedEnumBuildNullableFilter = {
   notIn?: InputMaybe<Array<Build>>;
 };
 
+export type NestedEnumFeedItemTypeFilter = {
+  equals?: InputMaybe<FeedItemType>;
+  in?: InputMaybe<Array<FeedItemType>>;
+  not?: InputMaybe<NestedEnumFeedItemTypeFilter>;
+  notIn?: InputMaybe<Array<FeedItemType>>;
+};
+
 export type NestedEnumGenderNullableFilter = {
   equals?: InputMaybe<Gender>;
   in?: InputMaybe<Array<Gender>>;
@@ -13922,6 +14105,13 @@ export type NestedEnumModelFilter = {
   equals?: InputMaybe<Model>;
   in?: InputMaybe<Array<Model>>;
   not?: InputMaybe<NestedEnumModelFilter>;
+  notIn?: InputMaybe<Array<Model>>;
+};
+
+export type NestedEnumModelNullableFilter = {
+  equals?: InputMaybe<Model>;
+  in?: InputMaybe<Array<Model>>;
+  not?: InputMaybe<NestedEnumModelNullableFilter>;
   notIn?: InputMaybe<Array<Model>>;
 };
 
@@ -14048,6 +14238,10 @@ export type NullableEnumGenderFieldUpdateOperationsInput = {
   set?: InputMaybe<Gender>;
 };
 
+export type NullableEnumModelFieldUpdateOperationsInput = {
+  set?: InputMaybe<Model>;
+};
+
 export type NullableEnumRaceFieldUpdateOperationsInput = {
   set?: InputMaybe<Race>;
 };
@@ -14097,8 +14291,10 @@ export type Offender = {
   id: Scalars['String'];
   images: Array<Image>;
   impressions: Array<Impression>;
+  incidentTotals?: Maybe<IncidentTotal>;
   incidents: Array<Incident>;
   intel: Array<Intel>;
+  lastActive?: Maybe<Incident>;
   name?: Maybe<Scalars['String']>;
   peculiarities?: Maybe<Scalars['String']>;
   race?: Maybe<Race>;
@@ -14106,11 +14302,15 @@ export type Offender = {
   recycled: Scalars['Boolean'];
   reference?: Maybe<Scalars['Int']>;
   scheme: Scheme;
+  schemeId: Scalars['String'];
   subscribed?: Maybe<Scalars['Boolean']>;
   tags: Array<Tag>;
   tempId?: Maybe<Scalars['String']>;
   totalIncidents?: Maybe<Scalars['Int']>;
+  totalRecoveredValue?: Maybe<Scalars['Float']>;
+  totalTheftSuccess?: Maybe<Scalars['Int']>;
   totalUpdates?: Maybe<Scalars['Int']>;
+  totalValue?: Maybe<Scalars['Float']>;
   updatedAt: Scalars['DateTime'];
   updates: Array<Update>;
   uploaded?: Maybe<Scalars['Boolean']>;
@@ -16881,6 +17081,7 @@ export type Query = {
   auth0User?: Maybe<Auth0User>;
   ban?: Maybe<Ban>;
   bans: Array<Ban>;
+  business?: Maybe<Business>;
   chat?: Maybe<Chat>;
   chats: Array<Chat>;
   currentUser?: Maybe<User>;
@@ -16892,6 +17093,7 @@ export type Query = {
   incident?: Maybe<Incident>;
   incidentFeed?: Maybe<Array<Maybe<Incident>>>;
   incidents: Array<Incident>;
+  listBusinesses: ListBusinesses;
   listIncidents?: Maybe<ListIncidents>;
   listOffenders?: Maybe<ListOffenders>;
   message?: Maybe<Message>;
@@ -16957,6 +17159,10 @@ export type QueryBansArgs = {
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<BanOrderByWithRelationInput>>;
   where?: InputMaybe<BanWhereInput>;
+};
+
+export type QueryBusinessArgs = {
+  where: BusinessWhereUniqueInput;
 };
 
 export type QueryChatArgs = {
@@ -17029,6 +17235,11 @@ export type QueryIncidentsArgs = {
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<IncidentOrderByWithRelationInput>>;
   where?: InputMaybe<IncidentWhereInput>;
+};
+
+export type QueryListBusinessesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
 };
 
 export type QueryListIncidentsArgs = {
@@ -19897,6 +20108,12 @@ export type TagScalarWhereInput = {
   uploaded?: InputMaybe<BoolNullableFilter>;
 };
 
+export type TagTotal = {
+  __typename?: 'TagTotal';
+  count?: Maybe<Array<Scalars['Int']>>;
+  name: Scalars['String'];
+};
+
 export type TagUpdateInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutTagInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutTagsInput>;
@@ -20338,6 +20555,13 @@ export type UpdateRepliesArgs = {
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<UpdateOrderByWithRelationInput>>;
+};
+
+export type UpdateBusinessDataInput = {
+  name: StringFieldUpdateOperationsInput;
+  patent?: InputMaybe<BusinessUpdateWithWhereUniqueWithoutParentInput>;
+  schemes?: InputMaybe<SchemeUpdateWithWhereUniqueWithoutBusinessesInput>;
+  users?: InputMaybe<UserUpdateWithWhereUniqueWithoutBusinessesInput>;
 };
 
 export type UpdateCreateManyCreatedByInput = {
@@ -26401,6 +26625,9 @@ export type CreateIncidentMutation = {
     time: any;
     value?: number | null;
     recoveredValue?: number | null;
+    policeReported: boolean;
+    policeRef?: string | null;
+    policeInvolved: boolean;
     approved?: boolean | null;
     crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
     location?: {
@@ -26500,8 +26727,42 @@ export type UpdateIncidentMutation = {
   updateIncident?: {
     __typename?: 'Incident';
     id: string;
+    subject?: string | null;
+    description: string;
+    dayTime?: string | null;
+    date: any;
+    time: any;
     value?: number | null;
     recoveredValue?: number | null;
+    policeReported: boolean;
+    policeRef?: string | null;
+    policeInvolved: boolean;
+    subscribed?: boolean | null;
+    approved?: boolean | null;
+    crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    location?: {
+      __typename?: 'Address';
+      id: string;
+      building?: string | null;
+      street: string;
+      townCity: string;
+      county?: string | null;
+      postcode: string;
+      full?: string | null;
+    } | null;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      organisation: string;
+    };
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      optimised?: string | null;
+      url?: string | null;
+    }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
@@ -26571,6 +26832,8 @@ export type IncidentFeedQuery = {
     subject?: string | null;
     description: string;
     dayTime?: string | null;
+    reference?: number | null;
+    policeRef?: string | null;
     approved?: boolean | null;
     uploaded?: boolean | null;
     crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
@@ -26597,42 +26860,7 @@ export type IncidentFeedQuery = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
-      createdAt: any;
-      updatedAt: any;
-      age?: Age | null;
-      build?: Build | null;
-      dateOfBirth?: any | null;
-      dateSource?: string | null;
-      hair?: string | null;
-      gender?: Gender | null;
       name?: string | null;
-      race?: Race | null;
-      peculiarities?: string | null;
-      approved?: boolean | null;
-      active?: boolean | null;
-      images: Array<{
-        __typename?: 'Image';
-        id: string;
-        url?: string | null;
-        optimised?: string | null;
-      }>;
-      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-      bans: Array<{
-        __typename?: 'Ban';
-        id: string;
-        title?: string | null;
-        location: string;
-        description?: string | null;
-        startDate: any;
-        endDate: any;
-      }>;
-      createdBy: {
-        __typename?: 'User';
-        id: string;
-        fullName: string;
-        organisation: string;
-      };
     }>;
   } | null> | null;
 };
@@ -26656,6 +26884,8 @@ export type ListIncidentsQuery = {
       subject?: string | null;
       description: string;
       dayTime?: string | null;
+      reference?: number | null;
+      policeRef?: string | null;
       approved?: boolean | null;
       crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
       location?: {
@@ -26701,6 +26931,10 @@ export type ViewIncidentQuery = {
     time: any;
     value?: number | null;
     recoveredValue?: number | null;
+    reference?: number | null;
+    policeReported: boolean;
+    policeRef?: string | null;
+    policeInvolved: boolean;
     subscribed?: boolean | null;
     approved?: boolean | null;
     crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
@@ -27258,6 +27492,39 @@ export type UpdateOffenderMutation = {
   } | null;
 };
 
+export type ViewOffenderCompareQueryVariables = Exact<{
+  where: OffenderWhereUniqueInput;
+}>;
+
+export type ViewOffenderCompareQuery = {
+  __typename?: 'Query';
+  offender?: {
+    __typename?: 'Offender';
+    id: string;
+    updatedAt: any;
+    age?: Age | null;
+    build?: Build | null;
+    dateOfBirth?: any | null;
+    dateSource?: string | null;
+    hair?: string | null;
+    gender?: Gender | null;
+    name?: string | null;
+    race?: Race | null;
+    peculiarities?: string | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      optimised?: string | null;
+    }>;
+    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    lastActive?: {
+      __typename?: 'Incident';
+      id: string;
+      dayTime?: string | null;
+    } | null;
+  } | null;
+};
+
 export type ListOffendersQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
   where?: InputMaybe<OffenderWhereInput>;
@@ -27287,13 +27554,18 @@ export type ListOffendersQuery = {
       peculiarities?: string | null;
       approved?: boolean | null;
       active?: boolean | null;
+      lastActive?: {
+        __typename?: 'Incident';
+        id: string;
+        dayTime?: string | null;
+      } | null;
+      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
       images: Array<{
         __typename?: 'Image';
         id: string;
         optimised?: string | null;
       }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
       createdBy: {
         __typename?: 'User';
         id: string;
@@ -27387,6 +27659,141 @@ export type OffenderFeedQuery = {
       organisation: string;
     };
   } | null> | null;
+};
+
+export type OffenderProfileQueryVariables = Exact<{
+  where: OffenderWhereUniqueInput;
+  orderBy?: InputMaybe<
+    Array<BanOrderByWithRelationInput> | BanOrderByWithRelationInput
+  >;
+  first?: InputMaybe<Scalars['Int']>;
+  incidentsOrderBy?: InputMaybe<
+    Array<IncidentOrderByWithRelationInput> | IncidentOrderByWithRelationInput
+  >;
+}>;
+
+export type OffenderProfileQuery = {
+  __typename?: 'Query';
+  offender?: {
+    __typename?: 'Offender';
+    age?: Age | null;
+    dateOfBirth?: any | null;
+    dateSource?: string | null;
+    gender?: Gender | null;
+    hair?: string | null;
+    build?: Build | null;
+    id: string;
+    name?: string | null;
+    peculiarities?: string | null;
+    race?: Race | null;
+    reference?: number | null;
+    totalIncidents?: number | null;
+    totalRecoveredValue?: number | null;
+    totalTheftSuccess?: number | null;
+    totalValue?: number | null;
+    updatedAt: any;
+    bans: Array<{
+      __typename?: 'Ban';
+      id: string;
+      endDate: any;
+      active: boolean;
+      startDate: any;
+      title?: string | null;
+    }>;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      reference: string;
+    }>;
+    incidentTotals?: {
+      __typename?: 'IncidentTotal';
+      months?: Array<string> | null;
+      data?: Array<{
+        __typename?: 'TagTotal';
+        name: string;
+        count?: Array<number> | null;
+      }> | null;
+    } | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      optimised?: string | null;
+    }>;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      dayTime?: string | null;
+      date: any;
+      value?: number | null;
+      recoveredValue?: number | null;
+      reference?: number | null;
+      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      createdBy: { __typename?: 'User'; id: string; organisation: string };
+    }>;
+    lastActive?: {
+      __typename?: 'Incident';
+      id: string;
+      dayTime?: string | null;
+      date: any;
+      value?: number | null;
+      recoveredValue?: number | null;
+      reference?: number | null;
+      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      createdBy: { __typename?: 'User'; id: string; organisation: string };
+    } | null;
+    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      id: string;
+      make?: string | null;
+      model?: string | null;
+      registration?: string | null;
+      colour?: string | null;
+    }>;
+  } | null;
+};
+
+export type SearchOffendersQueryVariables = Exact<{
+  scheme: SchemeWhereUniqueInput;
+  where?: InputMaybe<OffenderWhereInput>;
+  order?: InputMaybe<OffenderOrderByWithRelationInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type SearchOffendersQuery = {
+  __typename?: 'Query';
+  listOffenders?: {
+    __typename?: 'ListOffenders';
+    total: number;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      updatedAt: any;
+      age?: Age | null;
+      build?: Build | null;
+      dateOfBirth?: any | null;
+      dateSource?: string | null;
+      hair?: string | null;
+      gender?: Gender | null;
+      name?: string | null;
+      race?: Race | null;
+      peculiarities?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+      }>;
+      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        organisation: string;
+      };
+    }>;
+  } | null;
 };
 
 export type ViewOffenderQueryVariables = Exact<{
@@ -29532,6 +29939,9 @@ export const CreateIncidentDocument = gql`
       time
       value
       recoveredValue
+      policeReported
+      policeRef
+      policeInvolved
       crimeTypes {
         id
         name
@@ -29789,8 +30199,45 @@ export const UpdateIncidentDocument = gql`
   mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
     updateIncident(where: $where, data: $data) {
       id
+      subject
+      description
+      dayTime
+      date
+      time
       value
       recoveredValue
+      policeReported
+      policeRef
+      policeInvolved
+      subscribed
+      crimeTypes {
+        id
+        name
+      }
+      approved
+      location {
+        id
+        building
+        street
+        townCity
+        county
+        postcode
+        full
+      }
+      createdBy {
+        id
+        fullName
+        organisation
+      }
+      images {
+        id
+        optimised
+        url
+      }
+      groups {
+        id
+        name
+      }
       offenders {
         id
         createdAt
@@ -29950,6 +30397,8 @@ export const IncidentFeedDocument = gql`
       subject
       description
       dayTime
+      reference
+      policeRef
       crimeTypes {
         id
         name
@@ -29980,45 +30429,7 @@ export const IncidentFeedDocument = gql`
       }
       offenders {
         id
-        createdAt
-        updatedAt
-        age
-        build
-        dateOfBirth
-        dateSource
-        hair
-        gender
         name
-        race
-        peculiarities
-        approved
-        active
-        images {
-          id
-          url
-          optimised
-        }
-        groups {
-          id
-          name
-        }
-        tags {
-          id
-          name
-        }
-        bans {
-          id
-          title
-          location
-          description
-          startDate
-          endDate
-        }
-        createdBy {
-          id
-          fullName
-          organisation
-        }
       }
     }
   }
@@ -30101,6 +30512,8 @@ export const ListIncidentsDocument = gql`
         subject
         description
         dayTime
+        reference
+        policeRef
         crimeTypes {
           id
           name
@@ -30199,6 +30612,10 @@ export const ViewIncidentDocument = gql`
       time
       value
       recoveredValue
+      reference
+      policeReported
+      policeRef
+      policeInvolved
       subscribed
       crimeTypes {
         id
@@ -31180,6 +31597,86 @@ export type UpdateOffenderMutationOptions = Apollo.BaseMutationOptions<
   UpdateOffenderMutation,
   UpdateOffenderMutationVariables
 >;
+export const ViewOffenderCompareDocument = gql`
+  query ViewOffenderCompare($where: OffenderWhereUniqueInput!) {
+    offender(where: $where) {
+      id
+      updatedAt
+      age
+      build
+      dateOfBirth
+      dateSource
+      hair
+      gender
+      name
+      race
+      peculiarities
+      images {
+        id
+        optimised
+      }
+      tags {
+        id
+        name
+      }
+      lastActive {
+        id
+        dayTime
+      }
+    }
+  }
+`;
+
+/**
+ * __useViewOffenderCompareQuery__
+ *
+ * To run a query within a React component, call `useViewOffenderCompareQuery` and pass it any options that fit your needs.
+ * When your component renders, `useViewOffenderCompareQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useViewOffenderCompareQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useViewOffenderCompareQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ViewOffenderCompareQuery,
+    ViewOffenderCompareQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ViewOffenderCompareQuery,
+    ViewOffenderCompareQueryVariables
+  >(ViewOffenderCompareDocument, options);
+}
+export function useViewOffenderCompareLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ViewOffenderCompareQuery,
+    ViewOffenderCompareQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ViewOffenderCompareQuery,
+    ViewOffenderCompareQueryVariables
+  >(ViewOffenderCompareDocument, options);
+}
+export type ViewOffenderCompareQueryHookResult = ReturnType<
+  typeof useViewOffenderCompareQuery
+>;
+export type ViewOffenderCompareLazyQueryHookResult = ReturnType<
+  typeof useViewOffenderCompareLazyQuery
+>;
+export type ViewOffenderCompareQueryResult = Apollo.QueryResult<
+  ViewOffenderCompareQuery,
+  ViewOffenderCompareQueryVariables
+>;
 export const ListOffendersDocument = gql`
   query listOffenders(
     $scheme: SchemeWhereUniqueInput!
@@ -31210,6 +31707,14 @@ export const ListOffendersDocument = gql`
         peculiarities
         approved
         active
+        lastActive {
+          id
+          dayTime
+        }
+        tags {
+          id
+          name
+        }
         images {
           id
           optimised
@@ -31442,6 +31947,256 @@ export type OffenderFeedLazyQueryHookResult = ReturnType<
 export type OffenderFeedQueryResult = Apollo.QueryResult<
   OffenderFeedQuery,
   OffenderFeedQueryVariables
+>;
+export const OffenderProfileDocument = gql`
+  query OffenderProfile(
+    $where: OffenderWhereUniqueInput!
+    $orderBy: [BanOrderByWithRelationInput!]
+    $first: Int
+    $incidentsOrderBy: [IncidentOrderByWithRelationInput!]
+  ) {
+    offender(where: $where) {
+      age
+      bans(orderBy: $orderBy) {
+        id
+        endDate
+        active
+        startDate
+        title
+      }
+      crimeGroups {
+        id
+        reference
+      }
+      dateOfBirth
+      dateSource
+      gender
+      hair
+      build
+      id
+      incidentTotals {
+        months
+        data {
+          name
+          count
+        }
+      }
+      images(first: $first) {
+        id
+        optimised
+      }
+      incidents(orderBy: $incidentsOrderBy) {
+        id
+        dayTime
+        date
+        crimeTypes {
+          id
+          name
+        }
+        value
+        recoveredValue
+        reference
+        createdBy {
+          id
+          organisation
+        }
+      }
+      lastActive {
+        id
+        dayTime
+        date
+        crimeTypes {
+          id
+          name
+        }
+        createdBy {
+          id
+          organisation
+        }
+        value
+        recoveredValue
+        reference
+      }
+      name
+      peculiarities
+      race
+      reference
+      tags {
+        id
+        name
+      }
+      totalIncidents
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+      updatedAt
+      vehicles {
+        id
+        make
+        model
+        registration
+        colour
+      }
+    }
+  }
+`;
+
+/**
+ * __useOffenderProfileQuery__
+ *
+ * To run a query within a React component, call `useOffenderProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOffenderProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOffenderProfileQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      first: // value for 'first'
+ *      incidentsOrderBy: // value for 'incidentsOrderBy'
+ *   },
+ * });
+ */
+export function useOffenderProfileQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    OffenderProfileQuery,
+    OffenderProfileQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OffenderProfileQuery, OffenderProfileQueryVariables>(
+    OffenderProfileDocument,
+    options
+  );
+}
+export function useOffenderProfileLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    OffenderProfileQuery,
+    OffenderProfileQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    OffenderProfileQuery,
+    OffenderProfileQueryVariables
+  >(OffenderProfileDocument, options);
+}
+export type OffenderProfileQueryHookResult = ReturnType<
+  typeof useOffenderProfileQuery
+>;
+export type OffenderProfileLazyQueryHookResult = ReturnType<
+  typeof useOffenderProfileLazyQuery
+>;
+export type OffenderProfileQueryResult = Apollo.QueryResult<
+  OffenderProfileQuery,
+  OffenderProfileQueryVariables
+>;
+export const SearchOffendersDocument = gql`
+  query searchOffenders(
+    $scheme: SchemeWhereUniqueInput!
+    $where: OffenderWhereInput
+    $order: OffenderOrderByWithRelationInput
+    $take: Int
+    $skip: Int
+  ) {
+    listOffenders(
+      scheme: $scheme
+      where: $where
+      order: $order
+      take: $take
+      skip: $skip
+    ) {
+      offenders {
+        id
+        updatedAt
+        age
+        build
+        dateOfBirth
+        dateSource
+        hair
+        gender
+        name
+        race
+        peculiarities
+        images {
+          id
+          optimised
+        }
+        groups {
+          id
+          name
+        }
+        tags {
+          id
+          name
+        }
+        createdBy {
+          id
+          fullName
+          organisation
+        }
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useSearchOffendersQuery__
+ *
+ * To run a query within a React component, call `useSearchOffendersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchOffendersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchOffendersQuery({
+ *   variables: {
+ *      scheme: // value for 'scheme'
+ *      where: // value for 'where'
+ *      order: // value for 'order'
+ *      take: // value for 'take'
+ *      skip: // value for 'skip'
+ *   },
+ * });
+ */
+export function useSearchOffendersQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SearchOffendersQuery,
+    SearchOffendersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SearchOffendersQuery, SearchOffendersQueryVariables>(
+    SearchOffendersDocument,
+    options
+  );
+}
+export function useSearchOffendersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SearchOffendersQuery,
+    SearchOffendersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    SearchOffendersQuery,
+    SearchOffendersQueryVariables
+  >(SearchOffendersDocument, options);
+}
+export type SearchOffendersQueryHookResult = ReturnType<
+  typeof useSearchOffendersQuery
+>;
+export type SearchOffendersLazyQueryHookResult = ReturnType<
+  typeof useSearchOffendersLazyQuery
+>;
+export type SearchOffendersQueryResult = Apollo.QueryResult<
+  SearchOffendersQuery,
+  SearchOffendersQueryVariables
 >;
 export const ViewOffenderDocument = gql`
   query ViewOffender($where: OffenderWhereUniqueInput!) {

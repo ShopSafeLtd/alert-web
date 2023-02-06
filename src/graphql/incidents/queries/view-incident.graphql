@@ -8,6 +8,10 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     time
     value
     recoveredValue
+    reference
+    policeReported
+    policeRef
+    policeInvolved
     subscribed
     crimeTypes {
       id

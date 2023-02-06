@@ -21,6 +21,7 @@ import {
   faEllipsisV,
   faLocationDot,
   faMarsAndVenus,
+  faPeople,
   faTrash,
   faUserClock,
   faUserTag,
@@ -99,6 +100,13 @@ const OffenderCard = ({
                 },
                 {
                   key: 1,
+                  label: 'Compare Offender',
+                  onClick: () =>
+                    onNavigate(`/app/offenders/compare/${offender?.id}`),
+                  icon: <FontAwesomeIcon size="lg" icon={faPeople} />,
+                },
+                {
+                  key: 2,
                   label: 'Delete Offender',
                   onClick: () =>
                     confirm({

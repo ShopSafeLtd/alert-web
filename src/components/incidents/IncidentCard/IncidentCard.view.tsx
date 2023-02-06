@@ -173,12 +173,16 @@ const IncidentCard = ({
         />
       )}
       <div className="incident-card-content">
-        <Title level={4} ellipsis>
+        <Title level={4} ellipsis style={{ marginBottom: 2 }}>
           {incident?.subject}
         </Title>
+        <Text type="secondary">
+          Ref: {incident?.reference}
+          {incident?.policeRef ? `/ Crime Ref: ${incident.policeRef}` : ''}
+        </Text>
         <Link to={`/app/incidents/view/${incident?.id}`}>
           <Paragraph
-            style={{ height: incident.offenders.length > 0 ? 43 : 80 }}
+            style={{ height: incident.offenders.length > 0 ? 24 : 66 }}
             className="incident-card-desc"
             type="secondary"
           >

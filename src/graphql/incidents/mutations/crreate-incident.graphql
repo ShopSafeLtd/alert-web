@@ -8,6 +8,9 @@ mutation createIncident($data: CreateIncidentData!) {
     time
     value
     recoveredValue
+    policeReported
+    policeRef
+    policeInvolved
     crimeTypes {
       id
       name

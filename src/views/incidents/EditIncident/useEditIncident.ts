@@ -47,6 +47,9 @@ interface FormData {
   date: Date;
   value?: number;
   recoveredValue?: number;
+  policeReported?: boolean;
+  policeInvolved?: boolean;
+  policeRef?: string;
   building: string;
   street: string;
   townCity: string;
@@ -593,6 +596,9 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             time: { set: data.date },
             value: { set: data.value },
             recoveredValue: { set: data.recoveredValue },
+            policeInvolved: { set: data.policeInvolved },
+            policeRef: { set: data.policeRef },
+            policeReported: { set: data.policeReported },
             location: {
               update: {
                 building: { set: data.building },
