@@ -645,6 +645,13 @@
   border-radius: 13px;
   height: 60px;
 }
+.nav-menu-overflowed {
+  overflow: auto;
+}
+.nav-menu-overflowed::-webkit-scrollbar {
+  display: none;
+  -msoverflowstyle: none;
+}
 .page-container {
   height: calc(100vh - 70px);
 }
