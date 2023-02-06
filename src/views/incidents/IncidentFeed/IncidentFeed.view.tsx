@@ -185,6 +185,7 @@ const IncidentFeed = ({
             current={pagination.page}
             onChange={onPaginationChange}
             showTotal={(total) => `Total Incidents: ${total}`}
+            hideOnSinglePage
           />
         </Col>
       </Row>

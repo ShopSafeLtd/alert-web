@@ -37,9 +37,9 @@ export interface OffenderData {
     name: string;
   }[];
   lastActive: {
-    id: string;
-    dayTime: string;
-  };
+    id: string | undefined | null;
+    dayTime?: string | undefined | null;
+  } | null;
 }
 
 interface Props {
