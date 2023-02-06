@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Image, Spin } from 'antd';
+import { Image, Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import useImageLoaded from '../../utils/use-image-loaded';
 
@@ -37,16 +37,18 @@ const Loading = ({
           flexGrow: 1,
         }}
       >
-        <Card
+        <div
           style={{
-            paddingTop: '2em',
-            paddingBottom: '2em',
+            paddingTop: 20,
+            paddingBottom: 20,
             width: '400px',
             height: '210px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
+            background: 'white',
+            borderRadius: '10px',
           }}
         >
           <Image
@@ -65,10 +67,12 @@ const Loading = ({
               marginTop: 30,
             }}
             ref={ref}
+
+            // ref={ref}
           >
             {loaded && <Spin size={size} indicator={Icon} />}
           </div>
-        </Card>
+        </div>
       </div>
     </div>
   );
