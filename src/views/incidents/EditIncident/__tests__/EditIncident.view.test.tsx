@@ -8,6 +8,10 @@ describe('List Officer View', () => {
   const data: ViewIncidentQuery = {
     incident: {
       value: 0,
+      policeInvolved: false,
+      policeRef: null,
+      reference: null,
+      policeReported: false,
       subscribed: false,
       updates: [],
       recoveredValue: 0,
