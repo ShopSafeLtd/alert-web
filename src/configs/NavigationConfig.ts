@@ -145,7 +145,7 @@ const adminOnlyItems: NavItem[] = [
     submenu: [
       {
         key: 'performance',
-        path: `${APP_PREFIX_PATH}/reports/performance`,
+        path: `${APP_PREFIX_PATH}/reports/performance-report`,
         title: 'Performance',
         icon: faPieChart,
         breadcrumb: true,

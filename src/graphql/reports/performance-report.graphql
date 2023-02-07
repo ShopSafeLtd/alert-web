@@ -1,0 +1,30 @@
+query PerformanceReport($where: SchemeWhereUniqueInput!) {
+  scheme(where: $where) {
+    id
+    name
+    incidentsCreated
+    messagesSent
+    offendersCreated
+    updatesCreated
+    creationBreakdown {
+      data {
+        count
+        name
+      }
+      scale
+    }
+    incidentsByType {
+      data
+      types
+    }
+    topContributors {
+      id
+      fullName
+      organisation
+      incidentsCreated
+      offendersCreated
+      updatesCreated
+      messagesSent
+    }
+  }
+}

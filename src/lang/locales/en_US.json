@@ -3,5 +3,7 @@
 	"sidenav.offenders": "Offenders",
 	"sidenav.chat": "Chat",
 	"sidenav.settings": "Settings",
-	"sidenav.reports": "Reports"
+	"sidenav.reports": "Reports",
+	"Performance": "Performance",
+	"Offender": "Offender"
 }
