@@ -44,6 +44,10 @@ export interface OffenderData {
     new?: boolean;
   }[];
   imageUid?: string[] | undefined;
+  lastActive:
+    | { id: string; dayTime?: string | null | undefined }
+    | null
+    | undefined;
 }
 
 interface Props {
@@ -169,6 +173,7 @@ const useAddExisitingOffenderr = ({
           hair: selectedOffender.hair,
           peculiarities: selectedOffender.peculiarities,
           tags: selectedOffender.tags,
+          lastActive: selectedOffender.lastActive || null,
           images:
             selectedOffender.images.map(({ id, optimised }) => ({
               id,

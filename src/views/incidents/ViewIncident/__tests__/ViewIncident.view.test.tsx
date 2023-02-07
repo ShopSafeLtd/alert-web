@@ -31,6 +31,10 @@ describe('Detail Officer View', () => {
   });
   const data: ViewIncidentQuery = {
     incident: {
+      policeInvolved: false,
+      policeRef: null,
+      reference: null,
+      policeReported: false,
       value: 0,
       recoveredValue: 0,
       updates: [],

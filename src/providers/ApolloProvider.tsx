@@ -27,8 +27,9 @@ const Apollo = ({ children }: Props): JSX.Element => {
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
 
   const wsClient = new SubscriptionClient(
+    import.meta.env.VITE_GRAPHQL_WS_URL,
     // "wss://alert-api-dev.azurewebsites.net/graphql",
-    'wss://alert-dev-api.herokuapp.com/graphql',
+    // 'wss://alert-dev-api.herokuapp.com/graphql',
     // 'ws://localhost:4000/graphql',
     {
       reconnect: true,
@@ -43,8 +44,9 @@ const Apollo = ({ children }: Props): JSX.Element => {
   const httpLink = createUploadLink({
     // uri: "https://alert-api-dev.azurewebsites.net/graphql",
     // uri: "https://alert-api-dev-development.azurewebsites.net/graphql",
-    uri: 'http://localhost:4000/graphql',
+    // uri: 'http://localhost:4000/graphql',
     // uri: 'https://alert-dev-api.herokuapp.com/graphql',
+    uri: import.meta.env.VITE_GRAPHQL_URL,
   });
 
   const middlewareLink = setContext(async (_, { headers, ...context }) => {

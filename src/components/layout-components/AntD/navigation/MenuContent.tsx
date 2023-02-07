@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, Grid } from 'antd';
+import { Grid, Menu } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import IntlMessage from '../../../util-components/AntD/IntlMessage';
 import navConfig, { NavItem } from 'configs/NavigationConfig';
 import utils from 'utils';
-import { useStoreState, useStoreActions, NavType, SideNavTheme } from 'state';
+import { NavType, SideNavTheme, useStoreActions, useStoreState } from 'state';
 import { APP_NAME } from 'configs/AppConfig';
 
 const { SubMenu } = Menu;
@@ -87,7 +87,11 @@ const SideNavContent = (props: SideNavContentProps) => {
         style={{ flex: 1, borderRight: 0 }}
         defaultSelectedKeys={[routeInfo?.key]}
         defaultOpenKeys={setDefaultOpen(routeInfo?.key)}
-        className={hideGroupTitle ? 'hide-group-title' : ''}
+        className={
+          hideGroupTitle
+            ? 'hide-group-title nav-menu-overflowed'
+            : 'nav-menu-overflowed'
+        }
       >
         {navigationConfig.map((menu) =>
           menu.submenu.length > 0 ? (
