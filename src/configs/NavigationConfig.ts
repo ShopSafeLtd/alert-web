@@ -14,6 +14,7 @@ import {
   faLineChart,
   faCog,
   faPieChart,
+  faMapLocationDot,
 } from '@fortawesome/pro-light-svg-icons';
 
 export interface MenuItem {
@@ -156,6 +157,14 @@ const adminOnlyItems: NavItem[] = [
         path: `${APP_PREFIX_PATH}/reports/offender-profile`,
         title: 'Offender',
         icon: faUser,
+        breadcrumb: true,
+        submenu: [],
+      },
+      {
+        key: 'incidentMap',
+        path: `${APP_PREFIX_PATH}/reports/incident-map`,
+        title: 'Incident Map',
+        icon: faMapLocationDot,
         breadcrumb: true,
         submenu: [],
       },
