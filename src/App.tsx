@@ -20,7 +20,7 @@ function App(): JSX.Element {
   return (
     <div className="App">
       <LoadScript
-        googleMapsApiKey="AIzaSyDCtIwIjWDGtK7YSE2K68k-dZ2HF5FtMZ0"
+        googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
         libraries={['visualization']}
       >
         <Store>
