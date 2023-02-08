@@ -1,0 +1,5 @@
+mutation CreateArticle($data: CreateArticleInput!) {
+    createArticle(data: $data) {
+        id
+    }
+}
