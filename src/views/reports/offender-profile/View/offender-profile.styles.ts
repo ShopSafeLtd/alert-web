@@ -49,6 +49,9 @@ const useStyles = createUseStyles({
   actionBar: {
     marginBottom: 10,
   },
+  buttonIcon: {
+    marginRight: 10,
+  },
 });
 
 export default useStyles;
