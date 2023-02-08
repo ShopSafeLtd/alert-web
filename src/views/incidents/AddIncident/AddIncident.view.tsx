@@ -131,60 +131,60 @@ interface LocationData {
 }
 
 interface Props {
-  onSubmit: (value: FormData) => void;
-  form: FormInstance<FormData>;
-  saving: boolean;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  tags: { value: string; label: string }[];
-  tagsLoading: boolean;
-  primaryAddress:
-    | Exclude<AddressesQuery['addresses'], undefined | null>[0]
-    | undefined;
-  addressLoading: boolean;
-  imgChange: UploadProps['onChange'];
-  fileList: Image[];
-  beforeUpload: (value: RcFile) => void;
-  addIncidentTag: boolean;
-  toggleAddIncidentTag: () => void;
-  updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
-  addOffender: boolean;
-  toggleAddOffender: () => void;
   addExistingOffender: boolean;
-  toggleAddExistingOffender: () => void;
-  updateOffendersList: (value: OffenderData) => void;
-  offendersData: OffenderData[];
-  addPreviousLocation: boolean;
-  toggleAddPreviousLocation: () => void;
-  updatePreviousLocation: (value: string | undefined) => void;
+  addIncidentTag: boolean;
   addNewLocation: boolean;
-  toggleAddNewLocation: () => void;
-  updateNewLocation: (value: LocationData | undefined) => void;
-  recentOffenderData: ListOffendersQuery | undefined;
-  recentOffenderLoading: boolean;
+  addOffender: boolean;
+  addPreviousLocation: boolean;
   addRecentOffender: Offender | null;
-  setAddRecentOffender: (value: Offender | null) => void;
-  searchOffenders: string;
-  setSearchOffenders: (value: string) => void;
-  newImage: Image | null;
-  onCancelNewImage: () => void;
+  addressLoading: boolean;
+  adminRights: boolean;
   assignOffendersToImages: (data: {
     image: Image;
     offenders: OffenderData[];
   }) => void;
-  setAssignToImage: (image: Image) => void;
-  removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
-  removeImage: (uid: string) => void;
-  removeOffender: (offenderId: string) => void;
-  adminRights: boolean;
+  beforeUpload: (value: RcFile) => void;
+  fileList: Image[];
+  form: FormInstance<FormData>;
+  groups: { value: string; label: string }[];
+  groupsLoading: boolean;
+  imgChange: UploadProps['onChange'];
   listOffendersData: ListOffendersQuery | undefined;
+  newImage: Image | null;
   offenderImgChange: (
     info: UploadChangeParam<UploadFile>,
     currentId: string
   ) => void;
+  offendersData: OffenderData[];
+  onCancelNewImage: () => void;
+  onSubmit: (value: FormData) => void;
+  primaryAddress:
+    | Exclude<AddressesQuery['addresses'], undefined | null>[0]
+    | undefined;
+  recentOffenderData: ListOffendersQuery | undefined;
+  recentOffenderLoading: boolean;
+  removeImage: (uid: string) => void;
+  removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
+  removeOffender: (offenderId: string) => void;
+  saving: boolean;
+  searchOffenders: string;
   selected: string;
+  setAddRecentOffender: (value: Offender | null) => void;
+  setAssignToImage: (image: Image) => void;
+  setSearchOffenders: (value: string) => void;
   setSelected: (arg0: string) => void;
+  tags: { value: string; label: string }[];
+  tagsLoading: boolean;
+  toggleAddExistingOffender: () => void;
+  toggleAddIncidentTag: () => void;
+  toggleAddNewLocation: () => void;
+  toggleAddOffender: () => void;
+  toggleAddPreviousLocation: () => void;
+  updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
+  updateNewLocation: (value: LocationData | undefined) => void;
   updateOffender: (value: OffenderData) => void;
+  updateOffendersList: (value: OffenderData) => void;
+  updatePreviousLocation: (value: string | undefined) => void;
 }
 
 const EditIncident = ({

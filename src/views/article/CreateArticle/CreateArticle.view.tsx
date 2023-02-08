@@ -1,104 +1,328 @@
-import { Editor } from '@tinymce/tinymce-react';
-import { Button } from 'antd';
 import React from 'react';
-import { Props } from './types/CreateArticle';
+import { Editor } from '@tinymce/tinymce-react';
+import {
+  Button,
+  Card,
+  Col,
+  Drawer,
+  Form,
+  Input,
+  PageHeader,
+  Row,
+  Select,
+  Skeleton,
+  Typography,
+  Upload,
+} from 'antd';
+import { ArticlePriority } from 'graphql/generated';
+import { UploadOutlined } from '@ant-design/icons';
+import type { FormData, ViewProps } from './types/CreateArticle';
+import AddExistingOffender from '../../../components/form-components/incident/offender/AddExisitingOffender/AddExisitingOffender.container';
+import LinkIncident from '../../../components/form-components/offender/LinkIncident';
 
 const CreateArticleView = ({
-  log,
+  // log,
   editorRef,
   exampleImageUploadHandler,
-  preview,
-}: Props) => (
-  <>
-    <div>
-      <div style={{ margin: 25 }}>
-        <Editor
-          onInit={(evt, editor) => {
-            // eslint-disable-next-line no-param-reassign
-            editorRef.current = editor;
-          }}
-          tinymceScriptSrc="/tinymce/tinymce.min.js"
-          initialValue="<p>This is the initial content of the editor.</p>"
-          init={{
-            branding: false,
-            min_height: 500,
-            plugins: [
-              'preview',
-              'importcss',
-              'searchreplace',
-              'save',
-              'directionality',
-              'visualblocks',
-              'visualchars',
-              'fullscreen',
-              'image',
-              'link',
-              'media',
-              'template',
-              'table',
-              'charmap',
-              'pagebreak',
-              'nonbreaking',
-              'anchor',
-              'insertdatetime',
-              'advlist',
-              'lists',
-              'wordcount',
-              'charmap',
-              'quickbars',
-              'emoticons',
-              'autoresize',
-            ],
+  // preview,
+  previewText,
+  // setPreviewImage,
+  setPreviewText,
+  previewImage,
+  // imgSrcs,
+  groups,
+  groupsLoading,
+  onGroupsChange,
+  categories,
+  categoriesLoading,
+  categoriesChange,
+  filePickerCallback,
+  form,
+  onSubmit,
+  data,
+  // loading,
+  selectedCategories,
+  documentUploadProps,
+  fileList,
+  drawer,
+  insertOffender,
+  insertIncident,
+}: ViewProps) => {
+  const forms = {
+    null: <></>,
+    addIncident: (
+      <LinkIncident
+        update={insertIncident}
+        incidentIds={[]}
+        onClose={drawer.close}
+      />
+    ),
+    addOffender: (
+      <AddExistingOffender
+        update={insertOffender}
+        offenderIds={[]}
+        onClose={drawer.close}
+      />
+    ),
+  };
+  // const previewButtons = () => (
+  //   <>
+  //     {' '}
+  //     <Button onClick={() => log()} style={{ marginTop: 20, marginRight: 10 }}>
+  //       Generate preview text and images array
+  //     </Button>
+  //     <Button onClick={() => preview()} style={{ marginTop: 20 }}>
+  //       Preview
+  //     </Button>
+  //   </>
+  // );
 
-            menubar: 'file edit view insert format tools table',
-            toolbar:
-              'undo redo | bold italic underline strikethrough | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
-            toolbar_sticky: true,
-            // toolbar_sticky_offset: 108,
-            images_upload_handler: exampleImageUploadHandler,
-            file_picker_types: 'file, image, media',
-            // skin: 'oxide-dark',
-            // content_css: 'dark',
-            file_picker_callback: (callback, value, meta) => {
-              /* Provide file and text for the link dialog */
-              if (meta.filetype === 'file') {
-                callback('https://www.google.com/logos/google.jpg', {
-                  text: 'My text',
-                });
+  return (
+    <>
+      <div className="page-view">
+        <PageHeader title="Create Article" />
+        <Card style={{ marginLeft: 20, marginRight: 20, minHeight: 600 }}>
+          <Form<FormData>
+            form={form}
+            initialValues={
+              data || {
+                title: '',
+                content: '',
+                groups: [],
+                categories: [],
+                importance: 'Normal',
               }
+            }
+            onFinish={onSubmit}
+          >
+            <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
+              <Col span={8}>
+                <Form.Item
+                  name="title"
+                  label="Title"
+                  rules={[{ required: true, message: 'Please input title!' }]}
+                >
+                  <Input placeholder="Title" />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16} style={{ marginLeft: 10, marginRight: 10 }}>
+              <Col span={8}>
+                <Form.Item
+                  name="groups"
+                  label="Groups"
+                  rules={[{ required: true, message: 'Please select groups!' }]}
+                >
+                  <Select
+                    placeholder="Groups"
+                    mode="multiple"
+                    size="small"
+                    maxTagCount={2}
+                    style={{ minWidth: 200 }}
+                    loading={groupsLoading}
+                    onChange={onGroupsChange}
+                    optionFilterProp="label"
+                  >
+                    {groups.map((group) => (
+                      <Select.Option value={group.value} label={group.label}>
+                        {group.label}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item
+                  name="importance"
+                  label="Importance"
+                  rules={[
+                    { required: true, message: 'Please select importance!' },
+                  ]}
+                >
+                  <Select placeholder="Type" style={{ minWidth: 200 }}>
+                    {Object.keys(ArticlePriority).map((priority) => (
+                      <Select.Option value={priority}>{priority}</Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={8}>
+                <Form.Item name="category" label="Category">
+                  <Select
+                    // select mutliple, category, can create new
+                    placeholder="Category"
+                    mode="tags"
+                    size="small"
+                    maxTagCount={2}
+                    style={{ minWidth: 200 }}
+                    loading={categoriesLoading}
+                    onChange={categoriesChange}
+                    options={categories}
+                    optionFilterProp="value"
+                    labelInValue
+                    value={selectedCategories}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+            <div style={{ margin: 25 }}>
+              <Editor
+                onInit={(evt, editor) => {
+                  // eslint-disable-next-line no-param-reassign
+                  editorRef.current = editor;
+                }}
+                tinymceScriptSrc="/tinymce/tinymce.min.js"
+                initialValue="<p>Create a new document here...</p>"
+                init={{
+                  setup: (editor) => {
+                    editor.ui.registry.addMenuButton('menuDateButton', {
+                      text: 'Insert',
+                      fetch(callback) {
+                        const items = [
+                          {
+                            type: 'menuitem',
+                            text: 'Add Incident',
+                            onAction() {
+                              drawer.open({
+                                defaultTitle: 'Add Incident',
+                                id: 'addIncident',
+                              });
+                            },
+                          },
+                          {
+                            type: 'menuitem',
+                            text: 'Add Offender',
+                            onAction() {
+                              drawer.open({
+                                defaultTitle: 'Add Offender',
+                                id: 'addOffender',
+                              });
+                            },
+                          },
+                          {
+                            type: 'menuitem',
+                            text: 'Add Document link',
+                            onAction() {
+                              filePickerCallback(
+                                (file, { title }) => {
+                                  editor.insertContent(
+                                    `<a href="${file}">${title}</a>`
+                                  );
+                                },
+                                'document',
+                                { filetype: 'file' }
+                              );
+                            },
+                          },
+                        ];
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore ts error from tinymce, nested menus !== string
+                        callback(items);
+                      },
+                    });
+                  },
+                  branding: false,
+                  min_height: 500,
+                  plugins: [
+                    'preview',
+                    'importcss',
+                    'searchreplace',
+                    'save',
+                    'directionality',
+                    'visualblocks',
+                    'visualchars',
+                    'fullscreen',
+                    'image',
+                    'link',
+                    'media',
+                    'template',
+                    'table',
+                    'charmap',
+                    'pagebreak',
+                    'nonbreaking',
+                    'anchor',
+                    'insertdatetime',
+                    'advlist',
+                    'lists',
+                    'wordcount',
+                    'charmap',
+                    'quickbars',
+                    'emoticons',
+                    'autoresize',
+                  ],
+                  elementpath: false,
 
-              /* Provide image and alt text for the image dialog */
-              if (meta.filetype === 'image') {
-                callback('https://www.google.com/logos/google.jpg', {
-                  alt: 'My alt text',
-                });
+                  menubar: 'file edit view insert format tools table',
+                  toolbar:
+                    ' menuDateButton | undo redo | bold italic underline strikethrough | fontfamily fontsize blocks forecolor backcolor removeformat | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist |  | pagebreak | charmap emoticons | preview print | image media template link anchor codesample | ltr rtl',
+                  toolbar_sticky: true,
+                  toolbar_sticky_offset: 28,
+                  images_upload_handler: exampleImageUploadHandler,
+                  file_picker_types: 'file, image, media',
+                  file_picker_callback: filePickerCallback,
+                  promotion: false,
+                  content_style:
+                    'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                }}
+              />
+            </div>
+            <Row style={{ marginLeft: 20 }}>
+              <Upload
+                // eslint-disable-next-line react/jsx-props-no-spreading
+                {...documentUploadProps}
+                listType="picture"
+                style={{ display: 'flex' }}
+                fileList={fileList}
+              >
+                <Button icon={<UploadOutlined />}>Upload Documents</Button>
+              </Upload>
+            </Row>
+            <Form.Item>
+              <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+                <Col>
+                  <Button onClick={() => window.history.back()}>Cancel</Button>
+                </Col>
+                <Col>
+                  <Button type="primary" htmlType="submit">
+                    Create Article
+                  </Button>
+                </Col>
+              </Row>
+            </Form.Item>
+          </Form>
+          {(previewText || previewImage) && (
+            <Card
+              cover={
+                previewImage ? (
+                  <img
+                    alt="example"
+                    src={previewImage}
+                    style={{ margin: 10 }}
+                  />
+                ) : (
+                  <Skeleton.Image />
+                )
               }
-
-              /* Provide alternative source and posted for the media dialog */
-              if (meta.filetype === 'media') {
-                callback('movie.mp4', {
-                  source2: 'alt.ogg',
-                  poster: 'https://www.google.com/logos/google.jpg',
-                });
-              }
-            },
-            promotion: false,
-            content_style:
-              'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-          }}
-        />
-        <Button
-          onClick={() => log()}
-          style={{ marginTop: 10, marginRight: 10 }}
-        >
-          Generate preview text and images array
-        </Button>
-        <Button onClick={() => preview()} style={{ marginTop: 10 }}>
-          Preview
-        </Button>
+              title={form.getFieldValue('title') || 'Preview'}
+              style={{ width: 500, margin: 25 }}
+            >
+              <Typography.Paragraph editable={{ onChange: setPreviewText }}>
+                {previewText}
+              </Typography.Paragraph>
+            </Card>
+          )}
+        </Card>
       </div>
-    </div>
-  </>
-);
+      <Drawer
+        title={drawer.defaultTitle}
+        width={1000}
+        visible={drawer.visible}
+        onClose={drawer.close}
+      >
+        {forms[drawer.id]}
+      </Drawer>
+    </>
+  );
+};
 
 export default CreateArticleView;
