@@ -247,11 +247,23 @@ const ViewOffender = ({
           </div>
         </Col>
         <Col span={17}>
-          <ViewMessage
-            chatId={chatId}
-            updateUserChatList={updateDeletedUserChat}
-            userChatRefetch={refetch}
-          />
+          {chatId ? (
+            <ViewMessage
+              chatId={chatId}
+              updateUserChatList={updateDeletedUserChat}
+              userChatRefetch={refetch}
+            />
+          ) : (
+            <Empty
+              style={{
+                height: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column',
+              }}
+              description="Select or create a chat to view messages"
+            />
+          )}
         </Col>
       </Row>
       <Drawer

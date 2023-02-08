@@ -117,7 +117,7 @@ const useIncidentFeed = (): Return => {
       variables: {
         ...variables,
         groups:
-          role === Role.SchemeAdmin
+          role === Role.SchemeAdmin || role === Role.ShopsafeAdmin
             ? groupsData?.groups.map((group) => group.id) || []
             : groups.map((group) => group.id),
       },

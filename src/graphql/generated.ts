@@ -26378,6 +26378,15 @@ export enum When {
   Year = 'YEAR',
 }
 
+export type CreateArticleMutationVariables = Exact<{
+  data: CreateArticleInput;
+}>;
+
+export type CreateArticleMutation = {
+  __typename?: 'Mutation';
+  createArticle?: { __typename?: 'Article'; id: string } | null;
+};
+
 export type CreateUserinAuth0MutationVariables = Exact<{
   id: Scalars['String'];
   password: Scalars['String'];
@@ -29040,6 +29049,56 @@ export type SearchUserQuery = {
   } | null;
 };
 
+export const CreateArticleDocument = gql`
+  mutation CreateArticle($data: CreateArticleInput!) {
+    createArticle(data: $data) {
+      id
+    }
+  }
+`;
+export type CreateArticleMutationFn = Apollo.MutationFunction<
+  CreateArticleMutation,
+  CreateArticleMutationVariables
+>;
+
+/**
+ * __useCreateArticleMutation__
+ *
+ * To run a mutation, you first call `useCreateArticleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateArticleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createArticleMutation, { data, loading, error }] = useCreateArticleMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateArticleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateArticleMutation,
+    CreateArticleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateArticleMutation,
+    CreateArticleMutationVariables
+  >(CreateArticleDocument, options);
+}
+export type CreateArticleMutationHookResult = ReturnType<
+  typeof useCreateArticleMutation
+>;
+export type CreateArticleMutationResult =
+  Apollo.MutationResult<CreateArticleMutation>;
+export type CreateArticleMutationOptions = Apollo.BaseMutationOptions<
+  CreateArticleMutation,
+  CreateArticleMutationVariables
+>;
 export const CreateUserinAuth0Document = gql`
   mutation createUserinAuth0($id: String!, $password: String!) {
     createUserInAuth0(id: $id, password: $password) {
