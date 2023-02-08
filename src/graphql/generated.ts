@@ -2424,6 +2424,8 @@ export type Address = {
   county?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   full?: Maybe<Scalars['String']>;
+  geoLat?: Maybe<Scalars['Float']>;
+  geoLng?: Maybe<Scalars['Float']>;
   id: Scalars['String'];
   incident?: Maybe<Incident>;
   postcode: Scalars['String'];
@@ -2449,6 +2451,8 @@ export type AddressCreateInput = {
   building?: InputMaybe<Scalars['String']>;
   county?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  geoLat?: InputMaybe<Scalars['Float']>;
+  geoLng?: InputMaybe<Scalars['Float']>;
   id?: InputMaybe<Scalars['String']>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutLocationInput>;
   postcode: Scalars['String'];
@@ -2464,6 +2468,8 @@ export type AddressCreateManyUserInput = {
   building?: InputMaybe<Scalars['String']>;
   county?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  geoLat?: InputMaybe<Scalars['Float']>;
+  geoLng?: InputMaybe<Scalars['Float']>;
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   postcode: Scalars['String'];
@@ -2517,6 +2523,8 @@ export type AddressCreateWithoutActionsInput = {
   building?: InputMaybe<Scalars['String']>;
   county?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  geoLat?: InputMaybe<Scalars['Float']>;
+  geoLng?: InputMaybe<Scalars['Float']>;
   id?: InputMaybe<Scalars['String']>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutLocationInput>;
   postcode: Scalars['String'];
@@ -2533,6 +2541,8 @@ export type AddressCreateWithoutIncidentInput = {
   building?: InputMaybe<Scalars['String']>;
   county?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  geoLat?: InputMaybe<Scalars['Float']>;
+  geoLng?: InputMaybe<Scalars['Float']>;
   id?: InputMaybe<Scalars['String']>;
   postcode: Scalars['String'];
   premises?: InputMaybe<Scalars['String']>;
@@ -2548,6 +2558,8 @@ export type AddressCreateWithoutUserInput = {
   building?: InputMaybe<Scalars['String']>;
   county?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  geoLat?: InputMaybe<Scalars['Float']>;
+  geoLng?: InputMaybe<Scalars['Float']>;
   id?: InputMaybe<Scalars['String']>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutLocationInput>;
   postcode: Scalars['String'];
@@ -2573,6 +2585,8 @@ export type AddressOrderByWithRelationInput = {
   building?: InputMaybe<SortOrder>;
   county?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
+  geoLat?: InputMaybe<SortOrder>;
+  geoLng?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
   incident?: InputMaybe<IncidentOrderByWithRelationInput>;
   incidentId?: InputMaybe<SortOrder>;
@@ -2593,6 +2607,8 @@ export type AddressScalarWhereInput = {
   building?: InputMaybe<StringNullableFilter>;
   county?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  geoLat?: InputMaybe<FloatNullableFilter>;
+  geoLng?: InputMaybe<FloatNullableFilter>;
   id?: InputMaybe<StringFilter>;
   incidentId?: InputMaybe<StringNullableFilter>;
   postcode?: InputMaybe<StringFilter>;
@@ -2609,6 +2625,8 @@ export type AddressUpdateInput = {
   building?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   county?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  geoLat?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
+  geoLng?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutLocationNestedInput>;
   postcode?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -2624,6 +2642,8 @@ export type AddressUpdateManyMutationInput = {
   building?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   county?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  geoLat?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
+  geoLng?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   postcode?: InputMaybe<StringFieldUpdateOperationsInput>;
   premises?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -2681,6 +2701,8 @@ export type AddressUpdateWithoutActionsInput = {
   building?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   county?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  geoLat?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
+  geoLng?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutLocationNestedInput>;
   postcode?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -2697,6 +2719,8 @@ export type AddressUpdateWithoutIncidentInput = {
   building?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   county?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  geoLat?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
+  geoLng?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   postcode?: InputMaybe<StringFieldUpdateOperationsInput>;
   premises?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -2712,6 +2736,8 @@ export type AddressUpdateWithoutUserInput = {
   building?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   county?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  geoLat?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
+  geoLng?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutLocationNestedInput>;
   postcode?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -2746,6 +2772,8 @@ export type AddressWhereInput = {
   building?: InputMaybe<StringNullableFilter>;
   county?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  geoLat?: InputMaybe<FloatNullableFilter>;
+  geoLng?: InputMaybe<FloatNullableFilter>;
   id?: InputMaybe<StringFilter>;
   incident?: InputMaybe<IncidentWhereInput>;
   incidentId?: InputMaybe<StringNullableFilter>;
@@ -2791,11 +2819,14 @@ export type Article = {
   createdAt: Scalars['DateTime'];
   createdBy: User;
   createdById: Scalars['String'];
+  documents: Array<Scalars['String']>;
   feedItems: Array<FeedItem>;
   frequency?: Maybe<Scalars['Int']>;
   groups: Array<Group>;
   id: Scalars['String'];
   impressions: Array<Impression>;
+  previewImage?: Maybe<Scalars['String']>;
+  previewText?: Maybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring: Scalars['Boolean'];
   rows: Array<ArticleRow>;
@@ -8472,11 +8503,6 @@ export type ImageUpdateManyWithoutArticleColumnNestedInput = {
   >;
 };
 
-export type ImageUpdateManyWithoutIncidentInput = {
-  optimistic?: InputMaybe<Array<InputMaybe<CreateImageOptimistic>>>;
-  upload?: InputMaybe<Array<InputMaybe<UploadIncidentImage>>>;
-};
-
 export type ImageUpdateManyWithoutIncidentNestedInput = {
   connect?: InputMaybe<Array<ImageWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<Array<ImageCreateOrConnectWithoutIncidentInput>>;
@@ -8485,9 +8511,11 @@ export type ImageUpdateManyWithoutIncidentNestedInput = {
   delete?: InputMaybe<Array<ImageWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<ImageScalarWhereInput>>;
   disconnect?: InputMaybe<Array<ImageWhereUniqueInput>>;
+  optimistic?: InputMaybe<Array<InputMaybe<CreateImageOptimistic>>>;
   set?: InputMaybe<Array<ImageWhereUniqueInput>>;
   update?: InputMaybe<Array<ImageUpdateWithWhereUniqueWithoutIncidentInput>>;
   updateMany?: InputMaybe<Array<ImageUpdateManyWithWhereWithoutIncidentInput>>;
+  upload?: InputMaybe<Array<InputMaybe<UploadIncidentImage>>>;
   upsert?: InputMaybe<Array<ImageUpsertWithWhereUniqueWithoutIncidentInput>>;
 };
 
@@ -8505,11 +8533,6 @@ export type ImageUpdateManyWithoutMessageNestedInput = {
   upsert?: InputMaybe<Array<ImageUpsertWithWhereUniqueWithoutMessageInput>>;
 };
 
-export type ImageUpdateManyWithoutOffendersInput = {
-  optimistic?: InputMaybe<Array<InputMaybe<CreateImageOptimistic>>>;
-  upload?: InputMaybe<Array<InputMaybe<UploadOffenderImage>>>;
-};
-
 export type ImageUpdateManyWithoutOffendersNestedInput = {
   connect?: InputMaybe<Array<ImageWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<
@@ -8519,9 +8542,11 @@ export type ImageUpdateManyWithoutOffendersNestedInput = {
   delete?: InputMaybe<Array<ImageWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<ImageScalarWhereInput>>;
   disconnect?: InputMaybe<Array<ImageWhereUniqueInput>>;
+  optimistic?: InputMaybe<Array<InputMaybe<CreateImageOptimistic>>>;
   set?: InputMaybe<Array<ImageWhereUniqueInput>>;
   update?: InputMaybe<Array<ImageUpdateWithWhereUniqueWithoutOffendersInput>>;
   updateMany?: InputMaybe<Array<ImageUpdateManyWithWhereWithoutOffendersInput>>;
+  upload?: InputMaybe<Array<InputMaybe<UploadOffenderImage>>>;
   upsert?: InputMaybe<Array<ImageUpsertWithWhereUniqueWithoutOffendersInput>>;
 };
 
@@ -8591,10 +8616,6 @@ export type ImageUpdateOneWithoutIntelNestedInput = {
   upsert?: InputMaybe<ImageUpsertWithoutIntelInput>;
 };
 
-export type ImageUpdateOneWithoutSchemeInput = {
-  upload?: InputMaybe<UploadSchemeImage>;
-};
-
 export type ImageUpdateOneWithoutSchemeNestedInput = {
   connect?: InputMaybe<ImageWhereUniqueInput>;
   connectOrCreate?: InputMaybe<ImageCreateOrConnectWithoutSchemeInput>;
@@ -8602,6 +8623,7 @@ export type ImageUpdateOneWithoutSchemeNestedInput = {
   delete?: InputMaybe<Scalars['Boolean']>;
   disconnect?: InputMaybe<Scalars['Boolean']>;
   update?: InputMaybe<ImageUpdateWithoutSchemeInput>;
+  upload?: InputMaybe<UploadSchemeImage>;
   upsert?: InputMaybe<ImageUpsertWithoutSchemeInput>;
 };
 
@@ -13576,6 +13598,7 @@ export type Mutation = {
   signIn?: Maybe<SignIn>;
   subscribeToIncident?: Maybe<Incident>;
   subscribeToOffender?: Maybe<Offender>;
+  syncGeoCodes?: Maybe<Array<Address>>;
   toggleUser?: Maybe<User>;
   unsubscribeFromIncident?: Maybe<Incident>;
   unsubscribeFromOffender?: Maybe<Offender>;
@@ -28117,6 +28140,24 @@ export type RecycledItemsQuery = {
   } | null> | null;
 };
 
+export type IncidentMapQueryVariables = Exact<{
+  where: IncidentWhereInput;
+}>;
+
+export type IncidentMapQuery = {
+  __typename?: 'Query';
+  incidents: Array<{
+    __typename?: 'Incident';
+    id: string;
+    location?: {
+      __typename?: 'Address';
+      id: string;
+      geoLat?: number | null;
+      geoLng?: number | null;
+    } | null;
+  }>;
+};
+
 export type OffenderProfileQueryVariables = Exact<{
   where: OffenderWhereUniqueInput;
   orderBy?: InputMaybe<
@@ -32800,6 +32841,67 @@ export type RecycledItemsLazyQueryHookResult = ReturnType<
 export type RecycledItemsQueryResult = Apollo.QueryResult<
   RecycledItemsQuery,
   RecycledItemsQueryVariables
+>;
+export const IncidentMapDocument = gql`
+  query IncidentMap($where: IncidentWhereInput!) {
+    incidents(where: $where) {
+      id
+      location {
+        id
+        geoLat
+        geoLng
+      }
+    }
+  }
+`;
+
+/**
+ * __useIncidentMapQuery__
+ *
+ * To run a query within a React component, call `useIncidentMapQuery` and pass it any options that fit your needs.
+ * When your component renders, `useIncidentMapQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useIncidentMapQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useIncidentMapQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    IncidentMapQuery,
+    IncidentMapQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<IncidentMapQuery, IncidentMapQueryVariables>(
+    IncidentMapDocument,
+    options
+  );
+}
+export function useIncidentMapLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    IncidentMapQuery,
+    IncidentMapQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<IncidentMapQuery, IncidentMapQueryVariables>(
+    IncidentMapDocument,
+    options
+  );
+}
+export type IncidentMapQueryHookResult = ReturnType<typeof useIncidentMapQuery>;
+export type IncidentMapLazyQueryHookResult = ReturnType<
+  typeof useIncidentMapLazyQuery
+>;
+export type IncidentMapQueryResult = Apollo.QueryResult<
+  IncidentMapQuery,
+  IncidentMapQueryVariables
 >;
 export const OffenderProfileDocument = gql`
   query OffenderProfile(
