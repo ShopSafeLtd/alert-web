@@ -1,6 +1,7 @@
 import React from 'react';
 import { GoogleMap, HeatmapLayer } from '@react-google-maps/api';
-import { IncidentMapQuery } from 'graphql/generated';
+import { IncidentMapQuery, SchemeGroupsQuery } from 'graphql/generated';
+import { Col, DatePicker, Row, Select, Spin, Typography } from 'antd';
 import useStyles from './IncidentMap.styles';
 
 const containerStyle = {
@@ -8,15 +9,42 @@ const containerStyle = {
   height: '600px',
 };
 
+const { Title } = Typography;
+const { RangePicker } = DatePicker;
 interface Props {
   data: IncidentMapQuery | undefined;
   loading: boolean;
+  groupsData: SchemeGroupsQuery | undefined;
+  groupsLoading: boolean;
 }
 
-const IncidentMap = ({ data, loading }: Props) => {
+const IncidentMap = ({ data, loading, groupsData, groupsLoading }: Props) => {
   const classes = useStyles();
   return (
     <div className={classes.page}>
+      <Row gutter={16} align="middle" className={classes.headerRow}>
+        <Col flex={1}>
+          <Title className={classes.title} level={3}>
+            Incident Map
+          </Title>
+        </Col>
+        <Col>
+          <Select placeholder="Select Groups" className={classes.groupSelect}>
+            {groupsData?.groups.map((group) => (
+              <Select.Option
+                loading={groupsLoading}
+                key={group.id}
+                value={group.id}
+              >
+                {group.name}
+              </Select.Option>
+            ))}
+          </Select>
+        </Col>
+        <Col>
+          <RangePicker />
+        </Col>
+      </Row>
       {!loading ? (
         <GoogleMap
           mapContainerStyle={containerStyle}
@@ -140,7 +168,9 @@ const IncidentMap = ({ data, loading }: Props) => {
           />
         </GoogleMap>
       ) : (
-        <div />
+        <div className={classes.loadingPage}>
+          <Spin />
+        </div>
       )}
     </div>
   );
