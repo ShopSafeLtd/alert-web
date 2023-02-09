@@ -20,6 +20,7 @@ import {
   Gender,
   Race,
   Build,
+  MessagesQueryVariables,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import moment, { Moment } from 'moment';
@@ -166,6 +167,9 @@ interface Return {
   removeImage: (uid: string) => void;
   mentionedUser: { id: string; value: string }[];
   setMentionedUser: (value: { id: string; value: string }[]) => void;
+  deleteImageConfirm: (messageId: string, imageId: string) => void;
+  deleteOffenderConfirm: (messageId: string, offenderId: string) => void;
+  deleteIncidentConfirm: (messageId: string, incidentId: string) => void;
 }
 
 const useViewMessages = ({
@@ -387,11 +391,11 @@ const useViewMessages = ({
   const scrolledToTop = async () => {
     if (loadMore && !fetching) {
       setFetching(true);
-      const test = await fetchMore({
+      const test = await fetchMore<MessagesQuery, MessagesQueryVariables>({
         query: MessagesDocument,
         variables: {
           chat: chatId,
-          after: {
+          before: {
             id: after,
           },
         },
@@ -758,6 +762,9 @@ const useViewMessages = ({
     removeImage,
     mentionedUser,
     setMentionedUser,
+    deleteImageConfirm: () => {},
+    deleteIncidentConfirm: () => {},
+    deleteOffenderConfirm: () => {},
   };
 };
 

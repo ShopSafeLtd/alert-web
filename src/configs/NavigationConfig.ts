@@ -16,6 +16,7 @@ import {
   faPieChart,
   faMapLocationDot,
   faPeopleGroup,
+  faNewspaper,
 } from '@fortawesome/pro-light-svg-icons';
 
 export interface MenuItem {
