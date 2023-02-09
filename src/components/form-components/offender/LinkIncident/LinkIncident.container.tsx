@@ -1,13 +1,27 @@
 import React from 'react';
 import View from './LinkIncident.view';
 import useLinkIncident from './useLinkIncident';
+import { ListIncidentsQuery } from '../../../../graphql/generated';
+
+export interface Incident {
+  incident: Exclude<
+    ListIncidentsQuery['listIncidents'],
+    null | undefined
+  >['incidents'][0];
+}
 
 interface Props {
   onClose: () => void;
-  update: (value: string) => void;
   incidentIds: string[] | undefined;
+  update?: (value: string) => void;
+  getIncident?: (value: Incident) => void;
 }
-const LinkIncident = ({ onClose, update, incidentIds }: Props): JSX.Element => {
+const LinkIncident = ({
+  onClose,
+  update,
+  incidentIds,
+  getIncident,
+}: Props): JSX.Element => {
   const {
     onSubmit,
     saving,
@@ -17,7 +31,7 @@ const LinkIncident = ({ onClose, update, incidentIds }: Props): JSX.Element => {
     setSearch,
     onPaginationChange,
     onSelect,
-  } = useLinkIncident({ onClose, update, incidentIds });
+  } = useLinkIncident({ onClose, update, incidentIds, getIncident });
 
   return (
     <View

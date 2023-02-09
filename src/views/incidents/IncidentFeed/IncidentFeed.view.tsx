@@ -17,6 +17,10 @@ interface Props {
     src: string;
   }[];
   openLightbox: (elements: { src: string }[], index: number) => void;
+  lightBoxOpen: {
+    open: boolean;
+    index: number;
+  };
   onPaginationChange: (page: number, pageSize: number) => void;
   pagination: { page: number; pageSize: number; sizeOptions: string[] };
   order: IncidentSort;
@@ -36,10 +40,6 @@ interface Props {
   tagsLoading: boolean;
   updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
   onNavigate: () => void;
-  lightBoxOpen: {
-    open: boolean;
-    index: number;
-  };
 }
 
 const IncidentFeed = ({

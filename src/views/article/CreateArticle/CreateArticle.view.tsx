@@ -1,16 +1,17 @@
 import React from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import {
+  Avatar,
   Button,
   Card,
   Col,
   Drawer,
   Form,
   Input,
+  List,
   PageHeader,
   Row,
   Select,
-  Skeleton,
   Typography,
   Upload,
 } from 'antd';
@@ -25,10 +26,10 @@ const CreateArticleView = ({
   editorRef,
   exampleImageUploadHandler,
   // preview,
-  previewText,
+  // previewText,
   // setPreviewImage,
-  setPreviewText,
-  previewImage,
+  // setPreviewText,
+  // previewImage,
   // imgSrcs,
   groups,
   groupsLoading,
@@ -47,20 +48,26 @@ const CreateArticleView = ({
   drawer,
   insertOffender,
   insertIncident,
+  incidents,
+  offenders,
+  removeOffender,
+  removeIncident,
 }: ViewProps) => {
   const forms = {
     null: <></>,
     addIncident: (
       <LinkIncident
-        update={insertIncident}
-        incidentIds={[]}
+        getIncident={insertIncident}
+        incidentIds={
+          incidents ? incidents.map((incident) => incident.incident.id) : []
+        }
         onClose={drawer.close}
       />
     ),
     addOffender: (
       <AddExistingOffender
         update={insertOffender}
-        offenderIds={[]}
+        offenderIds={offenders ? offenders.map((offender) => offender.id) : []}
         onClose={drawer.close}
       />
     ),
@@ -175,7 +182,7 @@ const CreateArticleView = ({
                 initialValue="<p>Create a new document here...</p>"
                 init={{
                   setup: (editor) => {
-                    editor.ui.registry.addMenuButton('menuDateButton', {
+                    editor.ui.registry.addMenuButton('insertMenuButton', {
                       text: 'Insert',
                       fetch(callback) {
                         const items = [
@@ -206,7 +213,7 @@ const CreateArticleView = ({
                               filePickerCallback(
                                 (file, { title }) => {
                                   editor.insertContent(
-                                    `<a href="${file}">${title}</a>`
+                                    `<a href="${file}" target="_blank" rel="noopener noreferrer">${title}</a>`
                                   );
                                 },
                                 'document',
@@ -254,7 +261,7 @@ const CreateArticleView = ({
 
                   menubar: 'file edit view insert format tools table',
                   toolbar:
-                    ' menuDateButton | undo redo | bold italic underline strikethrough | fontfamily fontsize blocks forecolor backcolor removeformat | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist |  | pagebreak | charmap emoticons | preview print | image media template link anchor codesample | ltr rtl',
+                    ' insertMenuButton | undo redo | bold italic underline strikethrough | fontfamily fontsize blocks forecolor removeformat | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist |  pagebreak | charmap emoticons | preview print | image media link | ltr rtl',
                   toolbar_sticky: true,
                   toolbar_sticky_offset: 28,
                   images_upload_handler: exampleImageUploadHandler,
@@ -266,7 +273,85 @@ const CreateArticleView = ({
                 }}
               />
             </div>
-            <Row style={{ marginLeft: 20 }}>
+
+            {incidents && incidents.length > 0 && (
+              <>
+                <Typography.Title
+                  style={{ marginLeft: 20, marginTop: 20 }}
+                  level={4}
+                >
+                  Incidents:
+                </Typography.Title>
+                <Row>
+                  <List
+                    itemLayout="horizontal"
+                    dataSource={incidents}
+                    style={{ width: '30%', marginLeft: 20 }}
+                    split
+                    renderItem={(item) => (
+                      <List.Item
+                        actions={[
+                          <Button
+                            onClick={() => removeIncident(item.incident.id)}
+                            type="ghost"
+                            danger
+                          >
+                            remove
+                          </Button>,
+                        ]}
+                      >
+                        <List.Item.Meta
+                          title={`Incident: ${item.incident.reference}`}
+                          description={item.incident.description}
+                        />
+                      </List.Item>
+                    )}
+                  />
+                </Row>
+              </>
+            )}
+            {offenders && offenders.length > 0 && (
+              <>
+                <Typography.Title
+                  style={{ marginLeft: 20, marginTop: 20 }}
+                  level={4}
+                >
+                  Offenders:
+                </Typography.Title>
+                <Row>
+                  <List
+                    itemLayout="horizontal"
+                    dataSource={offenders}
+                    style={{ width: '30%', marginLeft: 20 }}
+                    renderItem={(item) => (
+                      <List.Item
+                        actions={[
+                          <Button
+                            type="ghost"
+                            danger
+                            onClick={() => removeOffender(item.id)}
+                          >
+                            remove
+                          </Button>,
+                        ]}
+                      >
+                        <List.Item.Meta
+                          avatar={
+                            <Avatar
+                              src={
+                                (item.images && item.images[0].optimised) || ''
+                              }
+                            />
+                          }
+                          title={item.name}
+                        />
+                      </List.Item>
+                    )}
+                  />
+                </Row>
+              </>
+            )}
+            <Row style={{ marginLeft: 20, marginTop: 20 }}>
               <Upload
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...documentUploadProps}
@@ -290,27 +375,6 @@ const CreateArticleView = ({
               </Row>
             </Form.Item>
           </Form>
-          {(previewText || previewImage) && (
-            <Card
-              cover={
-                previewImage ? (
-                  <img
-                    alt="example"
-                    src={previewImage}
-                    style={{ margin: 10 }}
-                  />
-                ) : (
-                  <Skeleton.Image />
-                )
-              }
-              title={form.getFieldValue('title') || 'Preview'}
-              style={{ width: 500, margin: 25 }}
-            >
-              <Typography.Paragraph editable={{ onChange: setPreviewText }}>
-                {previewText}
-              </Typography.Paragraph>
-            </Card>
-          )}
         </Card>
       </div>
       <Drawer

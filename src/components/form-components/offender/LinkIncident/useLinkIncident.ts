@@ -1,18 +1,25 @@
 import { useState } from 'react';
 
 import {
+  ListIncidentsQuery,
   QueryMode,
   SortOrder,
   useListIncidentsQuery,
-  ListIncidentsQuery,
 } from 'graphql/generated';
 
-import { useStoreState, useStoreActions } from 'state';
+import { useStoreActions, useStoreState } from 'state';
 
+interface Incident {
+  incident: Exclude<
+    ListIncidentsQuery['listIncidents'],
+    null | undefined
+  >['incidents'][0];
+}
 interface Props {
   onClose: () => void;
-  update: (value: string) => void;
+  update?: (value: string) => void;
   incidentIds: string[] | undefined;
+  getIncident?: (value: Incident) => void;
 }
 
 interface Return {
@@ -26,7 +33,12 @@ interface Return {
   onSelect: (item: { key: string }) => void;
 }
 
-const useLinkIncident = ({ onClose, update, incidentIds }: Props): Return => {
+const useLinkIncident = ({
+  onClose,
+  update,
+  incidentIds,
+  getIncident,
+}: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [selected, setSelected] = useState<string | undefined>();
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -105,7 +117,17 @@ const useLinkIncident = ({ onClose, update, incidentIds }: Props): Return => {
   const onSubmit = () => {
     setSaving(true);
     if (selected) {
-      update(selected);
+      if (update) {
+        update(selected);
+      }
+      if (getIncident) {
+        const incident = data?.listIncidents?.incidents?.find(
+          (item) => item.id === selected
+        );
+        if (incident) {
+          getIncident({ incident });
+        }
+      }
     }
     setSaving(false);
     onClose();

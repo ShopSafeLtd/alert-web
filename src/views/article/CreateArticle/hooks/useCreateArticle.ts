@@ -14,10 +14,12 @@ import {
 } from '../../../../graphql/generated';
 import { useStoreState } from '../../../../state';
 import { OffenderData } from '../../../../components/form-components/incident/offender/AddExisitingOffender/AddExisitingOffender.container';
+import { Incident } from '../../../../components/form-components/offender/LinkIncident/LinkIncident.container';
 
 const { useForm } = Form;
 
 const useCreateArticle = (): Props => {
+  const siteUrl = `${window.location.href.split('/app/')[0]}/app/`;
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
   const [form] = useForm<FormData>();
@@ -36,6 +38,8 @@ const useCreateArticle = (): Props => {
   const [groups, setGroups] = useState<{ value: string; label: string }[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
   const [categories, setCategories] = useState<SelectProps['options']>([]);
+  const [offenders, setOffenders] = useState<OffenderData[]>([]);
+  const [incidents, setIncidents] = useState<Incident[]>([]);
   const [categoryIds, setCategoryIds] = useState<
     { value: string; id: string }[]
   >([]);
@@ -315,6 +319,7 @@ const useCreateArticle = (): Props => {
         upload({ blob: blobInfo.blob(), fileName: blobInfo.filename() }).then(
           (url) => {
             blobCache.add(blobInfo);
+            console.log(meta);
             if (meta.filetype === 'file') {
               fileList.push({ url, name: file.name, uid: id } as UploadFile);
             }
@@ -373,16 +378,25 @@ const useCreateArticle = (): Props => {
           title: form.getFieldValue('title'),
           categories: selectedCategoryIds,
           groups: selectedGroups,
-          documents: fileList.map((file) => file.url || '') || [],
+          documents:
+            fileList.map((file) => ({
+              url: file.url || '',
+              name: file.name || '',
+            })) || [],
           htmlBody: editorRef.current?.getContent() || '',
           previewImage: img,
           previewText: text,
           schemeId,
           priority,
+          incidents: incidents.map((incident) => incident.incident.id),
+          offenders: offenders.map((offender) => offender.id),
         },
       },
+    }).then((res) => {
+      if (res && res.data && res.data.createArticle) {
+        navigate(`/app/article/view/${res?.data?.createArticle.id}`);
+      }
     });
-    navigate('/app/incidents');
   };
 
   const handleChange: UploadProps['onChange'] = (info) => {
@@ -404,27 +418,38 @@ const useCreateArticle = (): Props => {
     multiple: true,
   };
 
-  const insertIncident = (incident: string) => {
+  const insertIncident = (incident: Incident) => {
+    setIncidents((prev) => [...prev, incident]);
     editorRef.current?.insertContent(
       `
-        <a href="/app/offenders/view/${incident}">
-        <b>${incident}</b>
+        <a target="_blank" rel="noopener noreferrer" href="${siteUrl}offenders/view/${incident.incident.id}">
+        <b>${incident.incident.description}</b>
 </a>`,
       { format: 'raw' }
     );
   };
 
   const insertOffender = (offender: OffenderData) => {
+    setOffenders((prev) => [...prev, offender]);
     editorRef.current?.insertContent(
-      `<img src="${
-        offender.images && offender.images[0].optimised
-      }" alt="Avatar" style="height:200px">
-        <a href="/app/offenders/view/${offender.id}">
+      `
+        <a target="_blank" rel="noopener noreferrer" href="${siteUrl}offenders/view/${offender.id}">
         <b>${offender.name}</b>
 </a>`,
       { format: 'raw' }
     );
   };
+
+  const removeOffender = (id: string) => {
+    setOffenders((prev) => prev.filter((offender) => offender.id !== id));
+  };
+
+  const removeIncident = (id: string) => {
+    setIncidents((prev) =>
+      prev.filter((incident) => incident.incident.id !== id)
+    );
+  };
+
   return {
     editorRef,
     log,
@@ -452,6 +477,10 @@ const useCreateArticle = (): Props => {
     documentUploadProps,
     insertOffender,
     insertIncident,
+    offenders,
+    incidents,
+    removeOffender,
+    removeIncident,
   };
 };
 

@@ -10,7 +10,7 @@ import { MutationUpdaterFn } from '@apollo/client';
 
 interface Props {
   createdById: string | undefined;
-  update: MutationUpdaterFn<RecycleIncidentMutation>;
+  update?: MutationUpdaterFn<RecycleIncidentMutation>;
 }
 interface Return {
   approvalRights: boolean;
@@ -25,8 +25,10 @@ const useIncidentCard = ({ createdById, update }: Props): Return => {
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
 
-  const approvalRights = role !== Role.User;
-  const menuRights = role !== Role.User || userId === createdById;
+  const approvalRights = update ? role !== Role.User : false;
+  const menuRights = update
+    ? role !== Role.User || userId === createdById
+    : false;
   const deleteRights = role !== Role.User;
 
   const onNavigate = (id: string) => navigate(`/app/incidents/edit/${id}`);
