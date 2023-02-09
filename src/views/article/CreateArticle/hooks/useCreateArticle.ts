@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { Form, SelectProps, UploadProps } from 'antd';
 import type { Editor } from 'tinymce';
 import { UploadFile } from 'antd/es/upload/interface';
+import { useNavigate } from 'react-router';
 import type { FormData, Props } from '../types/CreateArticle';
 import {
   ArticlePriority,
@@ -41,7 +42,7 @@ const useCreateArticle = (): Props => {
   const [selectedCategories, setSelectedCategories] = useState<
     { value: string }[]
   >([]);
-
+  const navigate = useNavigate();
   const { loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
       where: {
@@ -371,8 +372,7 @@ const useCreateArticle = (): Props => {
         },
       },
     });
-    // TODO: change to redirect to wherever
-    window.history.back();
+    navigate('/app/incidents');
   };
 
   const handleChange: UploadProps['onChange'] = (info) => {
