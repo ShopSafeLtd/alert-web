@@ -16,7 +16,7 @@ import {
   faPieChart,
   faMapLocationDot,
   faPeopleGroup,
-  faNewspaper,
+  faHome,
 } from '@fortawesome/pro-light-svg-icons';
 
 export interface MenuItem {
@@ -50,8 +50,8 @@ const userOnlyItems: NavItem[] = [
   {
     key: 'feedItems',
     path: `${APP_PREFIX_PATH}/feedItems`,
-    title: 'FeedItems',
-    icon: faNewspaper,
+    title: 'Dashboard',
+    icon: faHome,
     breadcrumb: false,
     submenu: [],
   },

@@ -26847,7 +26847,7 @@ export type ArticleQuery = {
   } | null;
 };
 
-export type FeedItemsQueryVariables = Exact<{
+export type ArticleFeedItemsQueryVariables = Exact<{
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
   order?: InputMaybe<FeedItemOrderByWithRelationInput>;
@@ -26857,7 +26857,7 @@ export type FeedItemsQueryVariables = Exact<{
   groups?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
 }>;
 
-export type FeedItemsQuery = {
+export type ArticleFeedItemsQuery = {
   __typename?: 'Query';
   listFeedItems?: {
     __typename?: 'ListFeedItems';
@@ -27011,6 +27011,11 @@ export type FeedItemsQuery = {
           startDate: any;
           endDate: any;
         }>;
+        lastActive?: {
+          __typename?: 'Incident';
+          id: string;
+          dayTime?: string | null;
+        } | null;
         updates: Array<{
           __typename?: 'Update';
           id: string;
@@ -27425,6 +27430,257 @@ export type CrimeGroupQuery = {
         id: string;
         optimised?: string | null;
       }>;
+    }>;
+  } | null;
+};
+
+export type FeedItemsQueryVariables = Exact<{
+  schemeId: Scalars['String'];
+  search?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<FeedItemOrderByWithRelationInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+  groups?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+}>;
+
+export type FeedItemsQuery = {
+  __typename?: 'Query';
+  listFeedItems?: {
+    __typename?: 'ListFeedItems';
+    total: number;
+    feedItems: Array<{
+      __typename?: 'FeedItem';
+      articleId?: string | null;
+      createdAt: any;
+      updatedAt: any;
+      message: string;
+      model?: Model | null;
+      type: FeedItemType;
+      id: string;
+      incidentId?: string | null;
+      offenderId?: string | null;
+      article?: {
+        __typename?: 'Article';
+        id: string;
+        title: string;
+        updatedAt: any;
+        previewImage?: string | null;
+        previewText?: string | null;
+        priority: ArticlePriority;
+        tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+        createdBy: {
+          __typename?: 'User';
+          id: string;
+          fullName: string;
+          organisation: string;
+        };
+      } | null;
+      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+      incident?: {
+        __typename?: 'Incident';
+        id: string;
+        subject?: string | null;
+        policeRef?: string | null;
+        reference?: number | null;
+        description: string;
+        dayTime?: string | null;
+        date: any;
+        totalOffenders?: number | null;
+        totalUpdates?: number | null;
+        approved?: boolean | null;
+        updates: Array<{
+          __typename?: 'Update';
+          id: string;
+          text?: string | null;
+          type: UpdateType;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            optimised?: string | null;
+            url?: string | null;
+          }>;
+          linkedIncidents: Array<{
+            __typename?: 'Incident';
+            id: string;
+            subject?: string | null;
+            description: string;
+            dayTime?: string | null;
+            images: Array<{
+              __typename?: 'Image';
+              id: string;
+              url?: string | null;
+              optimised?: string | null;
+            }>;
+          }>;
+          linkedOffenders: Array<{
+            __typename?: 'Offender';
+            id: string;
+            updatedAt: any;
+            name?: string | null;
+            images: Array<{
+              __typename?: 'Image';
+              id: string;
+              url?: string | null;
+              optimised?: string | null;
+            }>;
+          }>;
+        }>;
+        crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+        location?: {
+          __typename?: 'Address';
+          id: string;
+          full?: string | null;
+        } | null;
+        createdBy: {
+          __typename?: 'User';
+          id: string;
+          fullName: string;
+          organisation: string;
+        };
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          optimised?: string | null;
+          url?: string | null;
+        }>;
+        groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+        offenders: Array<{
+          __typename?: 'Offender';
+          id: string;
+          name?: string | null;
+          age?: Age | null;
+          gender?: Gender | null;
+          race?: Race | null;
+          dateOfBirth?: any | null;
+          build?: Build | null;
+          recycled: boolean;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+            card?: string | null;
+            offenders: Array<{
+              __typename?: 'Offender';
+              id: string;
+              name?: string | null;
+            }>;
+          }>;
+        }>;
+      } | null;
+      offender?: {
+        __typename?: 'Offender';
+        id: string;
+        createdAt: any;
+        updatedAt: any;
+        age?: Age | null;
+        build?: Build | null;
+        dateOfBirth?: any | null;
+        dateSource?: string | null;
+        gender?: Gender | null;
+        hair?: string | null;
+        name?: string | null;
+        totalIncidents?: number | null;
+        totalUpdates?: number | null;
+        peculiarities?: string | null;
+        race?: Race | null;
+        approved?: boolean | null;
+        subscribed?: boolean | null;
+        uploaded?: boolean | null;
+        active?: boolean | null;
+        bans: Array<{
+          __typename?: 'Ban';
+          id: string;
+          title?: string | null;
+          location: string;
+          description?: string | null;
+          startDate: any;
+          endDate: any;
+        }>;
+        lastActive?: {
+          __typename?: 'Incident';
+          id: string;
+          dayTime?: string | null;
+        } | null;
+        updates: Array<{
+          __typename?: 'Update';
+          id: string;
+          text?: string | null;
+          type: UpdateType;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            optimised?: string | null;
+            url?: string | null;
+          }>;
+          linkedIncidents: Array<{
+            __typename?: 'Incident';
+            id: string;
+            subject?: string | null;
+            description: string;
+            dayTime?: string | null;
+            images: Array<{
+              __typename?: 'Image';
+              id: string;
+              url?: string | null;
+              optimised?: string | null;
+            }>;
+          }>;
+          linkedOffenders: Array<{
+            __typename?: 'Offender';
+            id: string;
+            updatedAt: any;
+            name?: string | null;
+            images: Array<{
+              __typename?: 'Image';
+              id: string;
+              url?: string | null;
+              optimised?: string | null;
+            }>;
+          }>;
+        }>;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          card?: string | null;
+        }>;
+        tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+        groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+        createdBy: {
+          __typename?: 'User';
+          id: string;
+          fullName: string;
+          organisation: string;
+        };
+        incidents: Array<{
+          __typename?: 'Incident';
+          id: string;
+          subject?: string | null;
+          description: string;
+          dayTime?: string | null;
+          approved?: boolean | null;
+          crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+          location?: {
+            __typename?: 'Address';
+            id: string;
+            full?: string | null;
+          } | null;
+          createdBy: {
+            __typename?: 'User';
+            id: string;
+            fullName: string;
+            organisation: string;
+          };
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            optimised?: string | null;
+          }>;
+        }>;
+      } | null;
     }>;
   } | null;
 };
@@ -30208,8 +30464,8 @@ export type ArticleQueryResult = Apollo.QueryResult<
   ArticleQuery,
   ArticleQueryVariables
 >;
-export const FeedItemsDocument = gql`
-  query FeedItems(
+export const ArticleFeedItemsDocument = gql`
+  query ArticleFeedItems(
     $schemeId: String!
     $search: String
     $order: FeedItemOrderByWithRelationInput
@@ -30369,7 +30625,11 @@ export const FeedItemsDocument = gql`
           subscribed
           uploaded
           active
-          updates {
+          lastActive {
+            id
+            dayTime
+          }
+          updates(orderBy: { createdAt: desc }) {
             id
             images {
               id
@@ -30464,16 +30724,16 @@ export const FeedItemsDocument = gql`
 `;
 
 /**
- * __useFeedItemsQuery__
+ * __useArticleFeedItemsQuery__
  *
- * To run a query within a React component, call `useFeedItemsQuery` and pass it any options that fit your needs.
- * When your component renders, `useFeedItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useArticleFeedItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useArticleFeedItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useFeedItemsQuery({
+ * const { data, loading, error } = useArticleFeedItemsQuery({
  *   variables: {
  *      schemeId: // value for 'schemeId'
  *      search: // value for 'search'
@@ -30485,34 +30745,39 @@ export const FeedItemsDocument = gql`
  *   },
  * });
  */
-export function useFeedItemsQuery(
-  baseOptions: Apollo.QueryHookOptions<FeedItemsQuery, FeedItemsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<FeedItemsQuery, FeedItemsQueryVariables>(
-    FeedItemsDocument,
-    options
-  );
-}
-export function useFeedItemsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    FeedItemsQuery,
-    FeedItemsQueryVariables
+export function useArticleFeedItemsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ArticleFeedItemsQuery,
+    ArticleFeedItemsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<FeedItemsQuery, FeedItemsQueryVariables>(
-    FeedItemsDocument,
+  return Apollo.useQuery<ArticleFeedItemsQuery, ArticleFeedItemsQueryVariables>(
+    ArticleFeedItemsDocument,
     options
   );
 }
-export type FeedItemsQueryHookResult = ReturnType<typeof useFeedItemsQuery>;
-export type FeedItemsLazyQueryHookResult = ReturnType<
-  typeof useFeedItemsLazyQuery
+export function useArticleFeedItemsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ArticleFeedItemsQuery,
+    ArticleFeedItemsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ArticleFeedItemsQuery,
+    ArticleFeedItemsQueryVariables
+  >(ArticleFeedItemsDocument, options);
+}
+export type ArticleFeedItemsQueryHookResult = ReturnType<
+  typeof useArticleFeedItemsQuery
 >;
-export type FeedItemsQueryResult = Apollo.QueryResult<
-  FeedItemsQuery,
-  FeedItemsQueryVariables
+export type ArticleFeedItemsLazyQueryHookResult = ReturnType<
+  typeof useArticleFeedItemsLazyQuery
+>;
+export type ArticleFeedItemsQueryResult = Apollo.QueryResult<
+  ArticleFeedItemsQuery,
+  ArticleFeedItemsQueryVariables
 >;
 export const CreateUserinAuth0Document = gql`
   mutation createUserinAuth0($id: String!, $password: String!) {
@@ -31448,6 +31713,316 @@ export type CrimeGroupLazyQueryHookResult = ReturnType<
 export type CrimeGroupQueryResult = Apollo.QueryResult<
   CrimeGroupQuery,
   CrimeGroupQueryVariables
+>;
+export const FeedItemsDocument = gql`
+  query FeedItems(
+    $schemeId: String!
+    $search: String
+    $order: FeedItemOrderByWithRelationInput
+    $take: Int
+    $skip: Int
+    $after: String
+    $groups: [String!]
+  ) {
+    listFeedItems(
+      schemeId: $schemeId
+      search: $search
+      order: $order
+      take: $take
+      skip: $skip
+      after: $after
+      groups: $groups
+    ) {
+      feedItems {
+        article {
+          id
+          title
+          updatedAt
+          tags {
+            id
+            name
+          }
+          createdBy {
+            id
+            fullName
+            organisation
+          }
+          previewImage
+          previewText
+          priority
+        }
+        articleId
+        createdAt
+        updatedAt
+        message
+        model
+        type
+        groups {
+          id
+          name
+        }
+        id
+        incident {
+          id
+          subject
+          policeRef
+          reference
+          description
+          dayTime
+          date
+          totalOffenders
+          totalUpdates
+          updates(orderBy: { createdAt: desc }) {
+            id
+            images {
+              id
+              optimised
+              url
+            }
+            linkedIncidents {
+              id
+              subject
+              description
+              dayTime
+              images {
+                id
+                url
+                optimised
+              }
+            }
+            linkedOffenders {
+              id
+              updatedAt
+              name
+              images {
+                id
+                url
+                optimised
+              }
+            }
+            text
+            type
+          }
+          crimeTypes {
+            id
+            name
+          }
+          approved
+          location {
+            id
+            full
+          }
+          createdBy {
+            id
+            fullName
+            organisation
+          }
+          images(orderBy: { createdAt: desc }) {
+            id
+            optimised
+            url
+          }
+          groups {
+            id
+            name
+          }
+          offenders {
+            id
+            name
+            age
+            gender
+            race
+            dateOfBirth
+            build
+            images(first: 1) {
+              id
+              url
+              optimised
+              card
+              offenders {
+                id
+                name
+              }
+            }
+            recycled
+          }
+        }
+        incidentId
+        offender {
+          id
+          createdAt
+          updatedAt
+          age
+          bans {
+            id
+            title
+            location
+            description
+            startDate
+            endDate
+          }
+          build
+          dateOfBirth
+          dateSource
+          gender
+          hair
+          name
+          totalIncidents
+          totalUpdates
+          peculiarities
+          race
+          approved
+          subscribed
+          uploaded
+          active
+          lastActive {
+            id
+            dayTime
+          }
+          updates(orderBy: { createdAt: desc }) {
+            id
+            images {
+              id
+              optimised
+              url
+            }
+            linkedIncidents {
+              id
+              subject
+              description
+              dayTime
+              images {
+                id
+                url
+                optimised
+              }
+            }
+            linkedOffenders {
+              id
+              updatedAt
+              name
+              images {
+                id
+                url
+                optimised
+              }
+            }
+            text
+            type
+          }
+          images {
+            id
+            url
+            optimised
+            card
+          }
+          tags {
+            id
+            name
+          }
+          groups {
+            id
+            name
+          }
+          tags {
+            id
+            name
+          }
+          createdBy {
+            id
+            fullName
+            organisation
+          }
+          bans {
+            id
+            title
+            location
+            description
+            startDate
+            endDate
+          }
+          incidents {
+            id
+            subject
+            description
+            dayTime
+            crimeTypes {
+              id
+              name
+            }
+            approved
+            location {
+              id
+              full
+            }
+            createdBy {
+              id
+              fullName
+              organisation
+            }
+            images {
+              id
+              optimised
+            }
+          }
+        }
+        offenderId
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useFeedItemsQuery__
+ *
+ * To run a query within a React component, call `useFeedItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFeedItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFeedItemsQuery({
+ *   variables: {
+ *      schemeId: // value for 'schemeId'
+ *      search: // value for 'search'
+ *      order: // value for 'order'
+ *      take: // value for 'take'
+ *      skip: // value for 'skip'
+ *      after: // value for 'after'
+ *      groups: // value for 'groups'
+ *   },
+ * });
+ */
+export function useFeedItemsQuery(
+  baseOptions: Apollo.QueryHookOptions<FeedItemsQuery, FeedItemsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<FeedItemsQuery, FeedItemsQueryVariables>(
+    FeedItemsDocument,
+    options
+  );
+}
+export function useFeedItemsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    FeedItemsQuery,
+    FeedItemsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<FeedItemsQuery, FeedItemsQueryVariables>(
+    FeedItemsDocument,
+    options
+  );
+}
+export type FeedItemsQueryHookResult = ReturnType<typeof useFeedItemsQuery>;
+export type FeedItemsLazyQueryHookResult = ReturnType<
+  typeof useFeedItemsLazyQuery
+>;
+export type FeedItemsQueryResult = Apollo.QueryResult<
+  FeedItemsQuery,
+  FeedItemsQueryVariables
 >;
 export const DeleteGroupDocument = gql`
   mutation deleteGroup($id: String!) {

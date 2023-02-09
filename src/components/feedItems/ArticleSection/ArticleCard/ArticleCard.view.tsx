@@ -1,9 +1,6 @@
 import React from 'react';
-import { Card, Col, Image, Row, Space, Tag, Typography } from 'antd';
-import { ArticlePriority, FeedItemsQuery } from 'graphql/generated';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faStar, faUser } from '@fortawesome/pro-light-svg-icons';
-
+import { Col, Divider, Image, Row, Space, Tag, Typography } from 'antd';
+import { FeedItemsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import { formatDate } from 'utils';
 
@@ -18,19 +15,11 @@ interface Props {
 
 const ArticleFeed = ({ articleData }: Props): JSX.Element => {
   // const imagesRef = useRef<CarouselRef>(null);
-  const {
-    id,
-    title,
-    updatedAt,
-    tags,
-    previewImage,
-    previewText,
-    priority,
-    createdBy,
-  } = articleData?.article || {};
+  const { id, title, updatedAt, tags, previewImage, previewText, createdBy } =
+    articleData?.article || {};
 
   return (
-    <Card key={id}>
+    <Link to={`/app/article/view/${id}`}>
       <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
         {previewImage && (
           <Row>
@@ -44,21 +33,32 @@ const ArticleFeed = ({ articleData }: Props): JSX.Element => {
             </Col>
           </Row>
         )}
-        <Title>{title}</Title>
-        <Row style={{ marginTop: 10 }}>
-          <Col flex={1}>{formatDate(updatedAt)}</Col>{' '}
-          <Col>{createdBy?.fullName}</Col>
-        </Row>
-        <Paragraph>{previewText}</Paragraph>
-        {tags && tags.length ? (
-          <Row wrap={false} style={{ overflowX: 'auto', marginTop: 15 }}>
-            {tags.map((tag) => (
-              <Tag key={tag.id}>{tag.name}</Tag>
-            ))}
+        <div style={{ paddingLeft: 20, paddingRight: 20 }}>
+          <Title level={4}>{title}</Title>
+          <Paragraph style={{ marginBottom: 5 }}>{previewText}</Paragraph>
+          <Row wrap={false} style={{ marginTop: 10 }}>
+            <Col flex={1}>
+              <Text type="secondary" style={{ fontSize: 12 }}>
+                {formatDate(updatedAt)}
+              </Text>
+            </Col>
+            <Col>
+              <Text type="secondary" style={{ fontSize: 12 }}>
+                {createdBy?.fullName}
+              </Text>
+            </Col>
           </Row>
-        ) : null}
+          {tags && tags.length ? (
+            <Row wrap={false} style={{ overflowX: 'auto', marginTop: 15 }}>
+              {tags.map((tag) => (
+                <Tag key={tag.id}>{tag.name}</Tag>
+              ))}
+            </Row>
+          ) : null}
+        </div>
       </Space>
-    </Card>
+      <Divider style={{ marginTop: 10, marginBottom: 10 }} />
+    </Link>
   );
 };
 

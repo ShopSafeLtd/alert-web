@@ -30,7 +30,17 @@ interface Props {
   isNewOffender?: boolean;
 }
 const ImageContainer = ({ src }: { src: string }) => (
-  <Image width={200} height={200} style={{ borderRadius: 5 }} src={src} />
+  <div
+    style={{
+      width: 180,
+      height: 200,
+      backgroundImage: `url(${src})`,
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      borderRadius: 5,
+    }}
+  />
 );
 const OffenderFeed = ({
   feedItem,
@@ -63,43 +73,44 @@ const OffenderFeed = ({
     id,
     updates,
     images,
+    lastActive,
     // incidents,
   } = feedItem?.offender || {};
+
+  console.log(updates);
+
   return (
     <Row gutter={20} wrap={false}>
-      <Col>
-        {(isNewOffender || isNewImage) && images && images.length ? (
+      {(isNewOffender || isNewImage) && images && images.length ? (
+        <Col>
           <ImageContainer src={images[0].optimised || images[0].url || ''} />
-        ) : null}
-        {!isNewImage && updates && updates[0]?.images[0] ? (
+        </Col>
+      ) : null}
+      {!isNewImage && updates && updates[0]?.images[0] ? (
+        <Col>
           <ImageContainer
             src={
               updates[0].images[0].optimised || updates[0].images[0].url || ''
             }
           />
-        ) : null}
-      </Col>
+        </Col>
+      ) : null}
 
-      <Link to={`/app/incidents/view/${id}`}>
-        <Col
-          flex={1}
-          style={{
-            marginTop: 5,
-          }}
-        >
+      <Link to={`/app/offenders/view/${id}`}>
+        <Col flex={1}>
           {isNewOffender ? (
             <>
-              <Title level={4} ellipsis>
+              <Title style={{ marginBottom: 0 }} level={4} ellipsis>
                 {name}
               </Title>
-              <Row style={{ marginTop: -5, marginBottom: 10 }}>
+              <Row style={{ marginTop: -3, marginBottom: 10 }}>
                 <Col>
                   {/* <FontAwesomeIcon
                       size="sm"
                       className="feedItem-card-icon"
                       icon={faClock}
                     /> */}
-                  <Text type="secondary">
+                  <Text style={{ fontSize: 12 }} type="secondary">
                     Last updated:
                     {moment(updatedAt || moment()).format(
                       `ddd MMM DD YYYY - HH:mm`
@@ -124,7 +135,7 @@ const OffenderFeed = ({
                     className="feedItem-card-icon"
                     icon={faUserClock}
                   />
-                  <Text type="secondary">
+                  <Text style={{ fontSize: 12 }} type="secondary">
                     Age:
                     {dateOfBirth ? calcAge(dateOfBirth) : getOffenderAge(age)}
                   </Text>
@@ -137,7 +148,9 @@ const OffenderFeed = ({
                     className="feedItem-card-icon"
                     icon={faUserTag}
                   />
-                  <Text type="secondary">Build:{getOffenderBuild(build)}</Text>
+                  <Text style={{ fontSize: 12 }} type="secondary">
+                    Build:{getOffenderBuild(build)}
+                  </Text>
                 </Col>
               </Row>
               <Row>
@@ -147,7 +160,9 @@ const OffenderFeed = ({
                     className="feedItem-card-icon"
                     icon={faMarsAndVenus}
                   />
-                  <Text type="secondary">Sex: {getOffenderGender(gender)}</Text>
+                  <Text style={{ fontSize: 12 }} type="secondary">
+                    Sex: {getOffenderGender(gender)}
+                  </Text>
                 </Col>
               </Row>
               <Row>
@@ -157,7 +172,7 @@ const OffenderFeed = ({
                     className="feedItem-card-icon"
                     icon={faEarth}
                   />
-                  <Text type="secondary">
+                  <Text style={{ fontSize: 12 }} type="secondary">
                     Ethnicity: {getOffenderRace(race, false)}
                   </Text>
                 </Col>
@@ -165,16 +180,46 @@ const OffenderFeed = ({
             </>
           ) : (
             <>
-              <Title level={4}> {name}</Title>
-              <Descriptions size="small">
-                <Descriptions.Item label="Last Active">
-                  {moment(updatedAt || moment()).format(
-                    `ddd MMM DD YYYY - HH:mm`
-                  )}
-                </Descriptions.Item>
-              </Descriptions>
+              {/* <Title style={{ fontSize: 16 }}> {name}</Title> */}
               {updates && updates[0]?.text && (
-                <Text>{getContent(updates[0]?.text)}</Text>
+                <>
+                  <Text style={{ fontSize: 13 }}>
+                    {getContent(updates[0]?.text)}
+                  </Text>
+                  <Row wrap={false} style={{ marginTop: 10 }}>
+                    {images && (
+                      <Col style={{ marginRight: 10 }}>
+                        <div
+                          style={{
+                            width: 80,
+                            height: 80,
+                            backgroundImage: `url(${images[0]?.optimised})`,
+                            backgroundPosition: 'center',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundSize: 'cover',
+                            borderRadius: 5,
+                          }}
+                        />
+                      </Col>
+                    )}
+                    <Col>
+                      <div>
+                        <Title
+                          level={4}
+                          style={{ fontSize: 16, marginBottom: 2 }}
+                          ellipsis
+                        >
+                          {name}
+                        </Title>
+                        <div>
+                          <Text style={{ fontSize: 12 }}>
+                            Last Active: {lastActive?.dayTime || 'Unknown'}
+                          </Text>
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
+                </>
               )}
               {!(updates && updates[0]?.text) && (
                 <>
