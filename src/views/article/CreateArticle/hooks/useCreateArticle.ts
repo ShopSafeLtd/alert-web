@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { Form, SelectProps, UploadProps } from 'antd';
 import type { Editor } from 'tinymce';
 import { UploadFile } from 'antd/es/upload/interface';
+import { useNavigate } from 'react-router';
 import type { FormData, Props } from '../types/CreateArticle';
 import {
   ArticlePriority,
@@ -41,7 +42,7 @@ const useCreateArticle = (): Props => {
   const [selectedCategories, setSelectedCategories] = useState<
     { value: string }[]
   >([]);
-
+  const navigate = useNavigate();
   const { loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
       where: {
@@ -178,7 +179,16 @@ const useCreateArticle = (): Props => {
           : doc.body.innerText;
 
       setPreviewText(innerText);
+
+      return {
+        text: innerText,
+        img: imageSrcs[0] || '',
+      };
     }
+    return {
+      text: '',
+      img: '',
+    };
   };
 
   const exampleImageUploadHandler = (
@@ -356,6 +366,7 @@ const useCreateArticle = (): Props => {
       .getFieldValue('importance')
       .toString()
       .toUpperCase() as ArticlePriority;
+    const { img, text } = log();
     await submitArticle({
       variables: {
         data: {
@@ -364,15 +375,14 @@ const useCreateArticle = (): Props => {
           groups: selectedGroups,
           documents: fileList.map((file) => file.url || '') || [],
           htmlBody: editorRef.current?.getContent() || '',
-          previewImage,
-          previewText,
+          previewImage: img,
+          previewText: text,
           schemeId,
           priority,
         },
       },
     });
-    // TODO: change to redirect to wherever
-    window.history.back();
+    navigate('/app/incidents');
   };
 
   const handleChange: UploadProps['onChange'] = (info) => {
