@@ -19,6 +19,7 @@
   margin-right: 20px;
 }
 .incident-form-images .image-card {
+  position: relative;
   height: 200px;
   width: 500px;
   display: flex;
@@ -1851,6 +1852,10 @@
 }
 .chat-collage-image:hover .chat-collage-image-overlay {
   opacity: 1;
+}
+.feedItem-card-icon {
+  margin-right: 5px;
+  color: #de4436;
 }
 .ant-switch-handle {
   top: 6px !important;
