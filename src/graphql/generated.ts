@@ -2819,7 +2819,7 @@ export type Article = {
   createdAt: Scalars['DateTime'];
   createdBy: User;
   createdById: Scalars['String'];
-  documents: Array<Scalars['String']>;
+  documents: Array<Document>;
   feedItems: Array<FeedItem>;
   frequency?: Maybe<Scalars['Int']>;
   groups: Array<Group>;
@@ -2842,6 +2842,13 @@ export type Article = {
 export type ArticleActionsArgs = {
   after?: InputMaybe<ActionWhereUniqueInput>;
   before?: InputMaybe<ActionWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type ArticleDocumentsArgs = {
+  after?: InputMaybe<DocumentWhereUniqueInput>;
+  before?: InputMaybe<DocumentWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
 };
@@ -3312,7 +3319,6 @@ export type ArticleColumnWhereUniqueInput = {
 
 export type ArticleCreateManyCreatedByInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  documents?: InputMaybe<ArticleCreatedocumentsInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   previewImage?: InputMaybe<Scalars['String']>;
@@ -3437,7 +3443,7 @@ export type ArticleCreateOrConnectWithoutUsersInput = {
 export type ArticleCreateWithoutActionsInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy: UserCreateNestedOneWithoutCreatedArticlesInput;
-  documents?: InputMaybe<ArticleCreatedocumentsInput>;
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutArticlesInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutArticleInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
@@ -3460,7 +3466,7 @@ export type ArticleCreateWithoutActionsInput = {
 export type ArticleCreateWithoutCreatedByInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutArticleInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
-  documents?: InputMaybe<ArticleCreatedocumentsInput>;
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutArticlesInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutArticleInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
@@ -3484,7 +3490,7 @@ export type ArticleCreateWithoutFeedItemsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutArticleInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy: UserCreateNestedOneWithoutCreatedArticlesInput;
-  documents?: InputMaybe<ArticleCreatedocumentsInput>;
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutArticlesInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
@@ -3507,7 +3513,7 @@ export type ArticleCreateWithoutGroupsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutArticleInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy: UserCreateNestedOneWithoutCreatedArticlesInput;
-  documents?: InputMaybe<ArticleCreatedocumentsInput>;
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutArticlesInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutArticleInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
@@ -3530,7 +3536,7 @@ export type ArticleCreateWithoutImpressionsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutArticleInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy: UserCreateNestedOneWithoutCreatedArticlesInput;
-  documents?: InputMaybe<ArticleCreatedocumentsInput>;
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutArticlesInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutArticleInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
@@ -3553,7 +3559,7 @@ export type ArticleCreateWithoutRowsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutArticleInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy: UserCreateNestedOneWithoutCreatedArticlesInput;
-  documents?: InputMaybe<ArticleCreatedocumentsInput>;
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutArticlesInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutArticleInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
@@ -3576,7 +3582,7 @@ export type ArticleCreateWithoutSchemesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutArticleInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy: UserCreateNestedOneWithoutCreatedArticlesInput;
-  documents?: InputMaybe<ArticleCreatedocumentsInput>;
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutArticlesInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutArticleInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
@@ -3599,7 +3605,7 @@ export type ArticleCreateWithoutTagsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutArticleInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy: UserCreateNestedOneWithoutCreatedArticlesInput;
-  documents?: InputMaybe<ArticleCreatedocumentsInput>;
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutArticlesInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutArticleInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
@@ -3622,7 +3628,7 @@ export type ArticleCreateWithoutUsersInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutArticleInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy: UserCreateNestedOneWithoutCreatedArticlesInput;
-  documents?: InputMaybe<ArticleCreatedocumentsInput>;
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutArticlesInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutArticleInput>;
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
@@ -3641,10 +3647,6 @@ export type ArticleCreateWithoutUsersInput = {
   when?: InputMaybe<When>;
 };
 
-export type ArticleCreatedocumentsInput = {
-  set?: InputMaybe<Array<Scalars['String']>>;
-};
-
 export type ArticleListRelationFilter = {
   every?: InputMaybe<ArticleWhereInput>;
   none?: InputMaybe<ArticleWhereInput>;
@@ -3660,7 +3662,7 @@ export type ArticleOrderByWithRelationInput = {
   createdAt?: InputMaybe<SortOrder>;
   createdBy?: InputMaybe<UserOrderByWithRelationInput>;
   createdById?: InputMaybe<SortOrder>;
-  documents?: InputMaybe<SortOrder>;
+  documents?: InputMaybe<DocumentOrderByRelationAggregateInput>;
   feedItems?: InputMaybe<FeedItemOrderByRelationAggregateInput>;
   frequency?: InputMaybe<SortOrder>;
   groups?: InputMaybe<GroupOrderByRelationAggregateInput>;
@@ -3885,7 +3887,6 @@ export type ArticleScalarWhereInput = {
   OR?: InputMaybe<Array<ArticleScalarWhereInput>>;
   createdAt?: InputMaybe<DateTimeFilter>;
   createdById?: InputMaybe<StringFilter>;
-  documents?: InputMaybe<StringNullableListFilter>;
   frequency?: InputMaybe<IntNullableFilter>;
   id?: InputMaybe<StringFilter>;
   previewImage?: InputMaybe<StringNullableFilter>;
@@ -3911,7 +3912,6 @@ export enum ArticleSectionType {
 
 export type ArticleUpdateManyMutationInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -4087,7 +4087,7 @@ export type ArticleUpdateWithWhereUniqueWithoutUsersInput = {
 export type ArticleUpdateWithoutActionsInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedArticlesNestedInput>;
-  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutArticlesNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutArticleNestedInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesNestedInput>;
@@ -4110,7 +4110,7 @@ export type ArticleUpdateWithoutActionsInput = {
 export type ArticleUpdateWithoutCreatedByInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutArticleNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutArticlesNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutArticleNestedInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesNestedInput>;
@@ -4134,7 +4134,7 @@ export type ArticleUpdateWithoutFeedItemsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutArticleNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedArticlesNestedInput>;
-  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutArticlesNestedInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -4157,7 +4157,7 @@ export type ArticleUpdateWithoutGroupsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutArticleNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedArticlesNestedInput>;
-  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutArticlesNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutArticleNestedInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -4180,7 +4180,7 @@ export type ArticleUpdateWithoutImpressionsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutArticleNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedArticlesNestedInput>;
-  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutArticlesNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutArticleNestedInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesNestedInput>;
@@ -4203,7 +4203,7 @@ export type ArticleUpdateWithoutRowsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutArticleNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedArticlesNestedInput>;
-  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutArticlesNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutArticleNestedInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesNestedInput>;
@@ -4226,7 +4226,7 @@ export type ArticleUpdateWithoutSchemesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutArticleNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedArticlesNestedInput>;
-  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutArticlesNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutArticleNestedInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesNestedInput>;
@@ -4249,7 +4249,7 @@ export type ArticleUpdateWithoutTagsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutArticleNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedArticlesNestedInput>;
-  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutArticlesNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutArticleNestedInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesNestedInput>;
@@ -4272,7 +4272,7 @@ export type ArticleUpdateWithoutUsersInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutArticleNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedArticlesNestedInput>;
-  documents?: InputMaybe<ArticleUpdatedocumentsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutArticlesNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutArticleNestedInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesNestedInput>;
@@ -4289,11 +4289,6 @@ export type ArticleUpdateWithoutUsersInput = {
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
-};
-
-export type ArticleUpdatedocumentsInput = {
-  push?: InputMaybe<Scalars['String']>;
-  set?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type ArticleUpsertWithWhereUniqueWithoutCreatedByInput = {
@@ -4354,7 +4349,7 @@ export type ArticleWhereInput = {
   createdAt?: InputMaybe<DateTimeFilter>;
   createdBy?: InputMaybe<UserWhereInput>;
   createdById?: InputMaybe<StringFilter>;
-  documents?: InputMaybe<StringNullableListFilter>;
+  documents?: InputMaybe<DocumentListRelationFilter>;
   feedItems?: InputMaybe<FeedItemListRelationFilter>;
   frequency?: InputMaybe<IntNullableFilter>;
   groups?: InputMaybe<GroupListRelationFilter>;
@@ -5663,9 +5658,11 @@ export type ConnectImageToIncident = {
 
 export type CreateArticleInput = {
   categories?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  documents?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  documents?: InputMaybe<Array<InputMaybe<CreateDocument>>>;
   groups: Array<Scalars['String']>;
   htmlBody: Scalars['String'];
+  incidents?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  offenders?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   previewImage?: InputMaybe<Scalars['String']>;
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
@@ -5689,6 +5686,11 @@ export type CreateCommentData = {
 export type CreateCrimeGroupDataInput = {
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutCrimeGroupsInput>;
   schemes: SchemeCreateNestedManyWithoutCrimeGroupsInput;
+};
+
+export type CreateDocument = {
+  name: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export type CreateImageOptimistic = {
@@ -6398,6 +6400,130 @@ export type DeviceInfo = {
   osName?: InputMaybe<Scalars['String']>;
   osVersion?: InputMaybe<Scalars['String']>;
   year?: InputMaybe<Scalars['Int']>;
+};
+
+export type Document = {
+  __typename?: 'Document';
+  articles: Array<Article>;
+  createdAt: Scalars['DateTime'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+  url: Scalars['String'];
+};
+
+export type DocumentArticlesArgs = {
+  after?: InputMaybe<ArticleWhereUniqueInput>;
+  before?: InputMaybe<ArticleWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type DocumentCreateNestedManyWithoutArticlesInput = {
+  connect?: InputMaybe<Array<DocumentWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<DocumentCreateOrConnectWithoutArticlesInput>
+  >;
+  create?: InputMaybe<Array<DocumentCreateWithoutArticlesInput>>;
+};
+
+export type DocumentCreateOrConnectWithoutArticlesInput = {
+  create: DocumentCreateWithoutArticlesInput;
+  where: DocumentWhereUniqueInput;
+};
+
+export type DocumentCreateWithoutArticlesInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  url: Scalars['String'];
+};
+
+export type DocumentListRelationFilter = {
+  every?: InputMaybe<DocumentWhereInput>;
+  none?: InputMaybe<DocumentWhereInput>;
+  some?: InputMaybe<DocumentWhereInput>;
+};
+
+export type DocumentOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
+export type DocumentScalarWhereInput = {
+  AND?: InputMaybe<Array<DocumentScalarWhereInput>>;
+  NOT?: InputMaybe<Array<DocumentScalarWhereInput>>;
+  OR?: InputMaybe<Array<DocumentScalarWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+  url?: InputMaybe<StringFilter>;
+};
+
+export type DocumentUpdateManyMutationInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  url?: InputMaybe<StringFieldUpdateOperationsInput>;
+};
+
+export type DocumentUpdateManyWithWhereWithoutArticlesInput = {
+  data: DocumentUpdateManyMutationInput;
+  where: DocumentScalarWhereInput;
+};
+
+export type DocumentUpdateManyWithoutArticlesNestedInput = {
+  connect?: InputMaybe<Array<DocumentWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<DocumentCreateOrConnectWithoutArticlesInput>
+  >;
+  create?: InputMaybe<Array<DocumentCreateWithoutArticlesInput>>;
+  delete?: InputMaybe<Array<DocumentWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<DocumentScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<DocumentWhereUniqueInput>>;
+  set?: InputMaybe<Array<DocumentWhereUniqueInput>>;
+  update?: InputMaybe<Array<DocumentUpdateWithWhereUniqueWithoutArticlesInput>>;
+  updateMany?: InputMaybe<
+    Array<DocumentUpdateManyWithWhereWithoutArticlesInput>
+  >;
+  upsert?: InputMaybe<Array<DocumentUpsertWithWhereUniqueWithoutArticlesInput>>;
+};
+
+export type DocumentUpdateWithWhereUniqueWithoutArticlesInput = {
+  data: DocumentUpdateWithoutArticlesInput;
+  where: DocumentWhereUniqueInput;
+};
+
+export type DocumentUpdateWithoutArticlesInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  url?: InputMaybe<StringFieldUpdateOperationsInput>;
+};
+
+export type DocumentUpsertWithWhereUniqueWithoutArticlesInput = {
+  create: DocumentCreateWithoutArticlesInput;
+  update: DocumentUpdateWithoutArticlesInput;
+  where: DocumentWhereUniqueInput;
+};
+
+export type DocumentWhereInput = {
+  AND?: InputMaybe<Array<DocumentWhereInput>>;
+  NOT?: InputMaybe<Array<DocumentWhereInput>>;
+  OR?: InputMaybe<Array<DocumentWhereInput>>;
+  articles?: InputMaybe<ArticleListRelationFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+  url?: InputMaybe<StringFilter>;
+};
+
+export type DocumentWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']>;
 };
 
 export type EnumActionTypeFieldUpdateOperationsInput = {
@@ -12728,6 +12854,12 @@ export type JsonNullableFilter = {
   string_starts_with?: InputMaybe<Scalars['String']>;
 };
 
+export type ListArticles = {
+  __typename?: 'ListArticles';
+  articles: Array<Article>;
+  total: Scalars['Int'];
+};
+
 export type ListBusinesses = {
   __typename?: 'ListBusinesses';
   businesses: Array<Business>;
@@ -17188,6 +17320,7 @@ export type Query = {
   address?: Maybe<Address>;
   addresses: Array<Address>;
   article?: Maybe<Article>;
+  articles: Array<Article>;
   auth0User?: Maybe<Auth0User>;
   ban?: Maybe<Ban>;
   bans: Array<Ban>;
@@ -17204,6 +17337,7 @@ export type Query = {
   incident?: Maybe<Incident>;
   incidentFeed?: Maybe<Array<Maybe<Incident>>>;
   incidents: Array<Incident>;
+  listArticles: ListArticles;
   listBusinesses: ListBusinesses;
   listCrimeGroups: ListCrimeGroups;
   listFeedItems?: Maybe<ListFeedItems>;
@@ -17259,6 +17393,15 @@ export type QueryAddressesArgs = {
 
 export type QueryArticleArgs = {
   where: ArticleWhereUniqueInput;
+};
+
+export type QueryArticlesArgs = {
+  after?: InputMaybe<ArticleWhereUniqueInput>;
+  before?: InputMaybe<ArticleWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ArticleOrderByWithRelationInput>>;
+  where?: InputMaybe<ArticleWhereInput>;
 };
 
 export type QueryAuth0UserArgs = {
@@ -17356,6 +17499,14 @@ export type QueryIncidentsArgs = {
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<IncidentOrderByWithRelationInput>>;
   where?: InputMaybe<IncidentWhereInput>;
+};
+
+export type QueryListArticlesArgs = {
+  order?: InputMaybe<ArticleOrderByWithRelationInput>;
+  scheme: SchemeWhereUniqueInput;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ArticleWhereInput>;
 };
 
 export type QueryListBusinessesArgs = {
@@ -26444,7 +26595,256 @@ export type CreateArticleMutationVariables = Exact<{
 
 export type CreateArticleMutation = {
   __typename?: 'Mutation';
-  createArticle?: { __typename?: 'Article'; id: string } | null;
+  createArticle?: {
+    __typename?: 'Article';
+    id: string;
+    createdAt: any;
+    priority: ArticlePriority;
+    title: string;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    documents: Array<{
+      __typename?: 'Document';
+      id: string;
+      name: string;
+      url: string;
+    }>;
+    createdBy: { __typename?: 'User'; fullName: string };
+    tags: Array<{ __typename?: 'Tag'; name: string }>;
+    rows: Array<{
+      __typename?: 'ArticleRow';
+      columns: Array<{
+        __typename?: 'ArticleColumn';
+        text?: string | null;
+        incidents: Array<{
+          __typename?: 'Incident';
+          id: string;
+          subject?: string | null;
+          description: string;
+          dayTime?: string | null;
+          reference?: number | null;
+          policeRef?: string | null;
+          approved?: boolean | null;
+          uploaded?: boolean | null;
+          crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+          location?: {
+            __typename?: 'Address';
+            id: string;
+            full?: string | null;
+          } | null;
+          createdBy: {
+            __typename?: 'User';
+            id: string;
+            fullName: string;
+            organisation: string;
+          };
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+            card?: string | null;
+            offenders: Array<{ __typename?: 'Offender'; id: string }>;
+          }>;
+          groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+          offenders: Array<{
+            __typename?: 'Offender';
+            id: string;
+            name?: string | null;
+          }>;
+        }>;
+        offenders: Array<{
+          __typename?: 'Offender';
+          id: string;
+          createdAt: any;
+          updatedAt: any;
+          age?: Age | null;
+          build?: Build | null;
+          dateOfBirth?: any | null;
+          dateSource?: string | null;
+          hair?: string | null;
+          gender?: Gender | null;
+          name?: string | null;
+          race?: Race | null;
+          peculiarities?: string | null;
+          approved?: boolean | null;
+          active?: boolean | null;
+          lastActive?: {
+            __typename?: 'Incident';
+            id: string;
+            dayTime?: string | null;
+          } | null;
+          tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            optimised?: string | null;
+          }>;
+          groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+          createdBy: {
+            __typename?: 'User';
+            id: string;
+            fullName: string;
+            organisation: string;
+          };
+          incidents: Array<{
+            __typename?: 'Incident';
+            id: string;
+            subject?: string | null;
+            description: string;
+            dayTime?: string | null;
+            date: any;
+            approved?: boolean | null;
+            crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+            location?: {
+              __typename?: 'Address';
+              id: string;
+              full?: string | null;
+            } | null;
+            createdBy: {
+              __typename?: 'User';
+              id: string;
+              fullName: string;
+              organisation: string;
+            };
+            images: Array<{
+              __typename?: 'Image';
+              id: string;
+              optimised?: string | null;
+            }>;
+          }>;
+        }>;
+      }>;
+    }>;
+  } | null;
+};
+
+export type ArticleQueryVariables = Exact<{
+  where: ArticleWhereUniqueInput;
+}>;
+
+export type ArticleQuery = {
+  __typename?: 'Query';
+  article?: {
+    __typename?: 'Article';
+    id: string;
+    createdAt: any;
+    priority: ArticlePriority;
+    title: string;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    documents: Array<{
+      __typename?: 'Document';
+      id: string;
+      name: string;
+      url: string;
+    }>;
+    createdBy: { __typename?: 'User'; fullName: string };
+    tags: Array<{ __typename?: 'Tag'; name: string }>;
+    rows: Array<{
+      __typename?: 'ArticleRow';
+      columns: Array<{
+        __typename?: 'ArticleColumn';
+        text?: string | null;
+        incidents: Array<{
+          __typename?: 'Incident';
+          id: string;
+          subject?: string | null;
+          description: string;
+          dayTime?: string | null;
+          reference?: number | null;
+          policeRef?: string | null;
+          approved?: boolean | null;
+          uploaded?: boolean | null;
+          crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+          location?: {
+            __typename?: 'Address';
+            id: string;
+            full?: string | null;
+          } | null;
+          createdBy: {
+            __typename?: 'User';
+            id: string;
+            fullName: string;
+            organisation: string;
+          };
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+            card?: string | null;
+            offenders: Array<{ __typename?: 'Offender'; id: string }>;
+          }>;
+          groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+          offenders: Array<{
+            __typename?: 'Offender';
+            id: string;
+            name?: string | null;
+          }>;
+        }>;
+        offenders: Array<{
+          __typename?: 'Offender';
+          id: string;
+          createdAt: any;
+          updatedAt: any;
+          age?: Age | null;
+          build?: Build | null;
+          dateOfBirth?: any | null;
+          dateSource?: string | null;
+          hair?: string | null;
+          gender?: Gender | null;
+          name?: string | null;
+          race?: Race | null;
+          peculiarities?: string | null;
+          approved?: boolean | null;
+          active?: boolean | null;
+          lastActive?: {
+            __typename?: 'Incident';
+            id: string;
+            dayTime?: string | null;
+          } | null;
+          tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            optimised?: string | null;
+          }>;
+          groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+          createdBy: {
+            __typename?: 'User';
+            id: string;
+            fullName: string;
+            organisation: string;
+          };
+          incidents: Array<{
+            __typename?: 'Incident';
+            id: string;
+            subject?: string | null;
+            description: string;
+            dayTime?: string | null;
+            date: any;
+            approved?: boolean | null;
+            crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+            location?: {
+              __typename?: 'Address';
+              id: string;
+              full?: string | null;
+            } | null;
+            createdBy: {
+              __typename?: 'User';
+              id: string;
+              fullName: string;
+              organisation: string;
+            };
+            images: Array<{
+              __typename?: 'Image';
+              id: string;
+              optimised?: string | null;
+            }>;
+          }>;
+        }>;
+      }>;
+    }>;
+  } | null;
 };
 
 export type FeedItemsQueryVariables = Exact<{
@@ -29456,6 +29856,135 @@ export const CreateArticleDocument = gql`
   mutation CreateArticle($data: CreateArticleInput!) {
     createArticle(data: $data) {
       id
+      groups {
+        id
+        name
+      }
+      documents {
+        id
+        name
+        url
+      }
+      createdBy {
+        fullName
+      }
+      createdAt
+      priority
+      tags {
+        name
+      }
+      title
+      rows {
+        columns {
+          text
+          incidents {
+            id
+            subject
+            description
+            dayTime
+            reference
+            policeRef
+            crimeTypes {
+              id
+              name
+            }
+            approved
+            uploaded
+            location {
+              id
+              full
+            }
+            createdBy {
+              id
+              fullName
+              organisation
+            }
+            images {
+              id
+              url
+              optimised
+              card
+              offenders {
+                id
+              }
+            }
+            groups {
+              id
+              name
+            }
+            offenders {
+              id
+              name
+            }
+          }
+          offenders {
+            id
+            createdAt
+            updatedAt
+            age
+            build
+            dateOfBirth
+            dateSource
+            hair
+            gender
+            name
+            race
+            peculiarities
+            approved
+            active
+            lastActive {
+              id
+              dayTime
+            }
+            tags {
+              id
+              name
+            }
+            images {
+              id
+              optimised
+            }
+            groups {
+              id
+              name
+            }
+            tags {
+              id
+              name
+            }
+            createdBy {
+              id
+              fullName
+              organisation
+            }
+            incidents {
+              id
+              subject
+              description
+              dayTime
+              date
+              crimeTypes {
+                id
+                name
+              }
+              approved
+              location {
+                id
+                full
+              }
+              createdBy {
+                id
+                fullName
+                organisation
+              }
+              images {
+                id
+                optimised
+              }
+            }
+          }
+        }
+      }
     }
   }
 `;
@@ -29501,6 +30030,183 @@ export type CreateArticleMutationResult =
 export type CreateArticleMutationOptions = Apollo.BaseMutationOptions<
   CreateArticleMutation,
   CreateArticleMutationVariables
+>;
+export const ArticleDocument = gql`
+  query Article($where: ArticleWhereUniqueInput!) {
+    article(where: $where) {
+      id
+      groups {
+        id
+        name
+      }
+      documents {
+        id
+        name
+        url
+      }
+      createdBy {
+        fullName
+      }
+      createdAt
+      priority
+      tags {
+        name
+      }
+      title
+      rows {
+        columns {
+          text
+          incidents {
+            id
+            subject
+            description
+            dayTime
+            reference
+            policeRef
+            crimeTypes {
+              id
+              name
+            }
+            approved
+            uploaded
+            location {
+              id
+              full
+            }
+            createdBy {
+              id
+              fullName
+              organisation
+            }
+            images {
+              id
+              url
+              optimised
+              card
+              offenders {
+                id
+              }
+            }
+            groups {
+              id
+              name
+            }
+            offenders {
+              id
+              name
+            }
+          }
+          offenders {
+            id
+            createdAt
+            updatedAt
+            age
+            build
+            dateOfBirth
+            dateSource
+            hair
+            gender
+            name
+            race
+            peculiarities
+            approved
+            active
+            lastActive {
+              id
+              dayTime
+            }
+            tags {
+              id
+              name
+            }
+            images {
+              id
+              optimised
+            }
+            groups {
+              id
+              name
+            }
+            tags {
+              id
+              name
+            }
+            createdBy {
+              id
+              fullName
+              organisation
+            }
+            incidents {
+              id
+              subject
+              description
+              dayTime
+              date
+              crimeTypes {
+                id
+                name
+              }
+              approved
+              location {
+                id
+                full
+              }
+              createdBy {
+                id
+                fullName
+                organisation
+              }
+              images {
+                id
+                optimised
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useArticleQuery__
+ *
+ * To run a query within a React component, call `useArticleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useArticleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useArticleQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useArticleQuery(
+  baseOptions: Apollo.QueryHookOptions<ArticleQuery, ArticleQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ArticleQuery, ArticleQueryVariables>(
+    ArticleDocument,
+    options
+  );
+}
+export function useArticleLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ArticleQuery, ArticleQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ArticleQuery, ArticleQueryVariables>(
+    ArticleDocument,
+    options
+  );
+}
+export type ArticleQueryHookResult = ReturnType<typeof useArticleQuery>;
+export type ArticleLazyQueryHookResult = ReturnType<typeof useArticleLazyQuery>;
+export type ArticleQueryResult = Apollo.QueryResult<
+  ArticleQuery,
+  ArticleQueryVariables
 >;
 export const FeedItemsDocument = gql`
   query FeedItems(

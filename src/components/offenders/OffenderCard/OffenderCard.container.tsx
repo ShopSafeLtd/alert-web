@@ -10,7 +10,7 @@ interface Props {
     undefined | null
   >['offenders'][0];
   openLightbox: (elements: { src: string }[], index: number) => void;
-  update: MutationUpdaterFn<RecycleOffenderMutation>;
+  update?: MutationUpdaterFn<RecycleOffenderMutation>;
 }
 
 const OffenderCard = ({

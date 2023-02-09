@@ -425,7 +425,6 @@ const useIncidentFeed = (): Return => {
   return {
     data,
     loading,
-    lightboxElements,
     onPaginationChange,
     pagination,
     order,
@@ -448,6 +447,7 @@ const useIncidentFeed = (): Return => {
     tagsLoading,
     updateIncidentList,
     onNavigate,
+    lightboxElements,
     lightBoxOpen,
     openLightbox: triggerLightbox,
   };

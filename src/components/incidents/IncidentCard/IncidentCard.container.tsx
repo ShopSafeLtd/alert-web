@@ -10,7 +10,7 @@ interface Props {
     undefined | null
   >['incidents'][0];
   openLightbox: (elements: { src: string }[], index: number) => void;
-  update: MutationUpdaterFn<RecycleIncidentMutation>;
+  update?: MutationUpdaterFn<RecycleIncidentMutation>;
 }
 
 const IncidentCard = ({
