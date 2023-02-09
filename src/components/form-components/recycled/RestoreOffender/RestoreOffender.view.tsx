@@ -46,6 +46,7 @@ const RestoreOffender = ({
             onConfirm={onDelete}
             okText="Yes"
             cancelText="No"
+            overlayInnerStyle={{ padding: 10 }}
           >
             <Button disabled={saving} loading={saving}>
               Delete Now
@@ -58,6 +59,7 @@ const RestoreOffender = ({
             onConfirm={onSubmit}
             okText="Yes"
             cancelText="No"
+            overlayInnerStyle={{ padding: 10 }}
           >
             <Button
               disabled={saving}
