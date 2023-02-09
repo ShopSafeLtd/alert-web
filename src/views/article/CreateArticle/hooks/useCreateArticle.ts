@@ -179,7 +179,16 @@ const useCreateArticle = (): Props => {
           : doc.body.innerText;
 
       setPreviewText(innerText);
+
+      return {
+        text: innerText,
+        img: imageSrcs[0] || '',
+      };
     }
+    return {
+      text: '',
+      img: '',
+    };
   };
 
   const exampleImageUploadHandler = (
@@ -357,6 +366,7 @@ const useCreateArticle = (): Props => {
       .getFieldValue('importance')
       .toString()
       .toUpperCase() as ArticlePriority;
+    const { img, text } = log();
     await submitArticle({
       variables: {
         data: {
@@ -365,8 +375,8 @@ const useCreateArticle = (): Props => {
           groups: selectedGroups,
           documents: fileList.map((file) => file.url || '') || [],
           htmlBody: editorRef.current?.getContent() || '',
-          previewImage,
-          previewText,
+          previewImage: img,
+          previewText: text,
           schemeId,
           priority,
         },
