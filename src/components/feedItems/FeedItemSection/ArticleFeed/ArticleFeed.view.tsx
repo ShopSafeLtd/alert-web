@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Col, Image, Row, Tag, Typography } from 'antd';
 import { ArticlePriority, FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faUser } from '@fortawesome/pro-light-svg-icons';
-
-import { Link } from 'react-router-dom';
 import { faStar } from '@fortawesome/pro-solid-svg-icons';
 import moment from 'moment';
 
@@ -65,7 +63,7 @@ const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
               className="feedItem-card-icon"
               icon={faClock}
             />
-            <Text type="secondary">{moment(updatedAt)}</Text>
+            <Text type="secondary">{moment(updatedAt).calendar()}</Text>
           </Col>
         </Row>
 
@@ -85,7 +83,7 @@ const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
         <Paragraph type="secondary" style={{ marginTop: 10 }}>
           {previewText}
         </Paragraph>
-        {tags && tags.length ? (
+        {tags && tags.length > 0 ? (
           <Row wrap={false} style={{ overflowX: 'auto', marginTop: 15 }}>
             {tags.map((tag) => (
               <Tag key={tag.id}>{tag.name}</Tag>
