@@ -16,6 +16,7 @@ import {
   faPieChart,
   faMapLocationDot,
   faPeopleGroup,
+  faNewspaper,
 } from '@fortawesome/pro-light-svg-icons';
 
 export interface MenuItem {
@@ -38,12 +39,28 @@ export interface NavItem extends MenuItem {
 export type NavTree = NavItem[];
 
 const userOnlyItems: NavItem[] = [
+  // {
+  //   key: 'feedItems',
+  //   path: `${APP_PREFIX_PATH}/feedItems`,
+  //   title: 'sidenav.feedItems',
+  //   icon: faExclamationCircle,
+  //   breadcrumb: false,
+  //   submenu: [],
+  // },
+  {
+    key: 'feedItems',
+    path: `${APP_PREFIX_PATH}/feedItems`,
+    title: 'FeedItems',
+    icon: faNewspaper,
+    breadcrumb: false,
+    submenu: [],
+  },
   {
     key: 'incidents',
     path: `${APP_PREFIX_PATH}/incidents`,
     title: 'sidenav.incidents',
     icon: faExclamationCircle,
-    breadcrumb: false,
+    breadcrumb: true,
     submenu: [],
   },
   {

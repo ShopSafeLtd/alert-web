@@ -20,7 +20,6 @@ import {
   Gender,
   Race,
   Build,
-  useUpdateMessageMutation,
   MessagesQueryVariables,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
@@ -226,12 +225,7 @@ const useViewMessages = ({
     });
 
   const getDay = (date: Moment) => {
-    if (
-      `${date?.year()}${date?.weekYear()}` ===
-      `${date?.year()}${moment().weekYear()}`
-    ) {
-      if (date.format('DD/MM/YY') === moment().format('DD/MM/YY'))
-        return `Today`;
+    if (date?.weekYear() === moment().weekYear()) {
       if (
         date.format('DD/MM/YY') === moment().add(-1, 'days').format('DD/MM/YY')
       )
@@ -245,15 +239,13 @@ const useViewMessages = ({
     messages: Exclude<MessagesQuery['messages'], undefined | null> | undefined
   ) => {
     if (!messages) {
-      setDatedMessages([]);
+      setDatedMessages(null);
     } else if (messages.length > 0) {
-      const momentMessages = messages
-        ?.map((item) => ({
-          ...item,
-          createdAt: moment(item.createdAt),
-          day: getDay(moment(item.createdAt)),
-        }))
-        .sort((a, b) => a.createdAt.valueOf() - b.createdAt.valueOf());
+      const momentMessages = messages?.map((item) => ({
+        ...item,
+        createdAt: moment(item.createdAt),
+        day: getDay(moment(item.createdAt)),
+      }));
       const messageDays = [
         ...new Set(momentMessages.map((item) => item.day)),
       ].map((day) => ({ day, messages: [] }));
@@ -296,30 +288,26 @@ const useViewMessages = ({
         })),
       }));
 
-      // setDatedMessages([]);
-      if (momentMessages.length > 0) {
-        setAfter(momentMessages[0]?.id);
-      }
-      setDatedMessages(groupedUsers.reverse());
+      setDatedMessages(groupedUsers);
     } else setDatedMessages([]);
   };
 
   const { subscribeToMore, data, fetchMore } = useMessagesQuery({
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-and-network',
     variables: {
       chat: chatId,
     },
     skip: !chatId,
-    onCompleted: () => {
+    onCompleted: (res) => {
       setLoading(false);
+      if (res.messages.length > 0) {
+        setAfter(res.messages.slice(-1)[0].id);
+        handleMessagesData(res.messages);
+      } else {
+        handleMessagesData([]);
+      }
     },
   });
-
-  useEffect(() => {
-    if (data && data.messages.length) {
-      handleMessagesData(data.messages);
-    }
-  }, [data]);
 
   // useEffect(() => {
   //   if (data && data.messages.length > 0)
@@ -401,10 +389,9 @@ const useViewMessages = ({
   useEffect(() => subscribeToNewMessage(), [chatId]);
 
   const scrolledToTop = async () => {
-    setLoadMore(true);
-    setFetching(true);
-    if (data && data?.messages?.length > 0 && !loadMore && !fetching) {
-      await fetchMore<MessagesQuery, MessagesQueryVariables>({
+    if (loadMore && !fetching) {
+      setFetching(true);
+      const test = await fetchMore<MessagesQuery, MessagesQueryVariables>({
         query: MessagesDocument,
         variables: {
           chat: chatId,
@@ -413,8 +400,10 @@ const useViewMessages = ({
           },
         },
       });
-      setLoadMore(false);
-      setFetching(false);
+      if (!test.data.messages) {
+        setLoadMore(false);
+      }
+      handleMessagesData(test.data.messages);
     }
   };
 
@@ -473,92 +462,6 @@ const useViewMessages = ({
       },
       variables: {
         chat: chatId,
-      },
-    });
-  };
-  const [updateMessage] = useUpdateMessageMutation({
-    onCompleted: () => {
-      setSaving(false);
-    },
-    onError: () => {
-      setSaving(false);
-      errorNotification();
-    },
-  });
-  const deleteImageConfirm = (messageId: string, imageId: string) => {
-    confirm({
-      title: 'Do you want to remove the image from the message?',
-      content: 'This action cannot be undone.',
-      onOk() {
-        setSaving(true);
-        updateMessage({
-          variables: {
-            where: {
-              id: messageId,
-            },
-            data: {
-              images: {
-                delete: [
-                  {
-                    id: imageId,
-                  },
-                ],
-              },
-            },
-          },
-        });
-      },
-    });
-  };
-
-  const deleteOffenderConfirm = (messageId: string, offenderId: string) => {
-    confirm({
-      title: 'Do you want to remove the offender from the message?',
-      content: 'This action cannot be undone.',
-      onOk() {
-        setSaving(true);
-        updateMessage({
-          variables: {
-            where: {
-              id: messageId,
-            },
-            data: {
-              offenders: {
-                delete: [
-                  {
-                    id: offenderId,
-                  },
-                ],
-              },
-            },
-          },
-        });
-      },
-    });
-  };
-
-  const deleteIncidentConfirm = (messageId: string, incidentId: string) => {
-    confirm({
-      title: 'Do you want to remove the incident from the message?',
-      content: 'This action cannot be undone.',
-      onOk() {
-        setSaving(true);
-        updateMessage({
-          variables: {
-            where: {
-              id: messageId,
-            },
-            data: {
-              incidents: {
-                delete: [
-                  {
-                    id: incidentId,
-                  },
-                ],
-              },
-            },
-          },
-        });
       },
     });
   };
@@ -693,6 +596,7 @@ const useViewMessages = ({
     }
     return !isFileDuplicate || Upload.LIST_IGNORE;
   };
+
   const imgChange: UploadProps['onChange'] = (info) => {
     if (info.file.response) {
       setFileList([
@@ -858,9 +762,9 @@ const useViewMessages = ({
     removeImage,
     mentionedUser,
     setMentionedUser,
-    deleteImageConfirm,
-    deleteOffenderConfirm,
-    deleteIncidentConfirm,
+    deleteImageConfirm: () => {},
+    deleteIncidentConfirm: () => {},
+    deleteOffenderConfirm: () => {},
   };
 };
 

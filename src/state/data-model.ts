@@ -9,6 +9,10 @@ export enum OffenderSort {
   updatedAtDesc = 'UPDATED_AT_DESC',
   updatedAtAsc = 'UPDATED_AT_ASC',
 }
+export enum FeedItemSort {
+  updatedAtDesc = 'UPDATED_AT_DESC',
+  updatedAtAsc = 'UPDATED_AT_ASC',
+}
 interface Incidents {
   pagination: {
     page: number;
@@ -35,12 +39,26 @@ interface Offenders {
   };
   order: OffenderSort;
 }
+interface FeedItems {
+  pagination: {
+    page: number;
+    pageSize: number;
+    sizeOptions: string[];
+  };
+  variables: {
+    search: string;
+    groups: string[];
+  };
+  order: FeedItemSort;
+}
 export interface DataModel {
   incidents: Incidents;
   offenders: Offenders;
+  feedItems: FeedItems;
 
   setIncidents: Action<DataModel, Incidents>;
   setOffenders: Action<DataModel, Offenders>;
+  setFeedItems: Action<DataModel, FeedItems>;
 }
 
 const dataModel: DataModel = {
@@ -78,6 +96,23 @@ const dataModel: DataModel = {
 
   setOffenders: action((state, payload) => {
     state.offenders = payload;
+  }),
+
+  feedItems: {
+    pagination: {
+      page: 1,
+      pageSize: 8,
+      sizeOptions: ['8'],
+    },
+    variables: {
+      search: '',
+      groups: [],
+    },
+    order: FeedItemSort.updatedAtDesc,
+  },
+
+  setFeedItems: action((state, payload) => {
+    state.feedItems = payload;
   }),
 };
 

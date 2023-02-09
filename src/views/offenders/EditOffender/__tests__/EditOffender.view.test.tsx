@@ -8,6 +8,7 @@ describe('List Officer View', () => {
   const data: ViewOffenderQuery = {
     offender: {
       updates: [],
+      crimeGroups: [],
       subscribed: false,
       id: 'offenderId',
       createdAt: '2022-08-10T10:40:06.191Z',

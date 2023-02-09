@@ -34,6 +34,7 @@ describe('Detail Officer View', () => {
   const data: ViewOffenderQuery = {
     offender: {
       updates: [],
+      crimeGroups: [],
       subscribed: false,
       name: 'offender name',
       race: null,
