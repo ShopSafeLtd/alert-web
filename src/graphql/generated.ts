@@ -5727,7 +5727,7 @@ export type CrimeGroup = {
   id: Scalars['String'];
   intel: Array<Intel>;
   offenders: Array<Offender>;
-  reference: Scalars['String'];
+  reference?: Maybe<Scalars['Int']>;
   schemes: Array<Scheme>;
   totalIncidents?: Maybe<Scalars['Int']>;
   totalOffenders?: Maybe<Scalars['Int']>;
@@ -5870,7 +5870,7 @@ export type CrimeGroupCreateWithoutActionsInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutCrimeGroupInput>;
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedCrimeGroupsInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutCrimeGroupsInput>;
-  reference: Scalars['String'];
+  reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutCrimeGroupsInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   updates?: InputMaybe<UpdateCreateNestedManyWithoutCrimeGroupInput>;
@@ -5883,7 +5883,7 @@ export type CrimeGroupCreateWithoutIntelInput = {
   id?: InputMaybe<Scalars['String']>;
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedCrimeGroupsInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutCrimeGroupsInput>;
-  reference: Scalars['String'];
+  reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutCrimeGroupsInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   updates?: InputMaybe<UpdateCreateNestedManyWithoutCrimeGroupInput>;
@@ -5896,7 +5896,7 @@ export type CrimeGroupCreateWithoutLinkedUpdatesInput = {
   id?: InputMaybe<Scalars['String']>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCrimeGroupInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutCrimeGroupsInput>;
-  reference: Scalars['String'];
+  reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutCrimeGroupsInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   updates?: InputMaybe<UpdateCreateNestedManyWithoutCrimeGroupInput>;
@@ -5909,7 +5909,7 @@ export type CrimeGroupCreateWithoutOffendersInput = {
   id?: InputMaybe<Scalars['String']>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCrimeGroupInput>;
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedCrimeGroupsInput>;
-  reference: Scalars['String'];
+  reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutCrimeGroupsInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   updates?: InputMaybe<UpdateCreateNestedManyWithoutCrimeGroupInput>;
@@ -5923,7 +5923,7 @@ export type CrimeGroupCreateWithoutSchemesInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutCrimeGroupInput>;
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedCrimeGroupsInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutCrimeGroupsInput>;
-  reference: Scalars['String'];
+  reference?: InputMaybe<Scalars['Int']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   updates?: InputMaybe<UpdateCreateNestedManyWithoutCrimeGroupInput>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCrimeGroupInput>;
@@ -5936,7 +5936,7 @@ export type CrimeGroupCreateWithoutUpdatesInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutCrimeGroupInput>;
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedCrimeGroupsInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutCrimeGroupsInput>;
-  reference: Scalars['String'];
+  reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutCrimeGroupsInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCrimeGroupInput>;
@@ -5949,7 +5949,7 @@ export type CrimeGroupCreateWithoutVehiclesInput = {
   intel?: InputMaybe<IntelCreateNestedManyWithoutCrimeGroupInput>;
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedCrimeGroupsInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutCrimeGroupsInput>;
-  reference: Scalars['String'];
+  reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutCrimeGroupsInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   updates?: InputMaybe<UpdateCreateNestedManyWithoutCrimeGroupInput>;
@@ -5985,14 +5985,14 @@ export type CrimeGroupScalarWhereInput = {
   OR?: InputMaybe<Array<CrimeGroupScalarWhereInput>>;
   createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<StringFilter>;
-  reference?: InputMaybe<StringFilter>;
+  reference?: InputMaybe<IntNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export type CrimeGroupUpdateManyMutationInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
-  reference?: InputMaybe<StringFieldUpdateOperationsInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
@@ -6124,7 +6124,7 @@ export type CrimeGroupUpdateWithoutActionsInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutCrimeGroupNestedInput>;
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedCrimeGroupsNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutCrimeGroupsNestedInput>;
-  reference?: InputMaybe<StringFieldUpdateOperationsInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutCrimeGroupsNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updates?: InputMaybe<UpdateUpdateManyWithoutCrimeGroupNestedInput>;
@@ -6137,7 +6137,7 @@ export type CrimeGroupUpdateWithoutIntelInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedCrimeGroupsNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutCrimeGroupsNestedInput>;
-  reference?: InputMaybe<StringFieldUpdateOperationsInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutCrimeGroupsNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updates?: InputMaybe<UpdateUpdateManyWithoutCrimeGroupNestedInput>;
@@ -6150,7 +6150,7 @@ export type CrimeGroupUpdateWithoutLinkedUpdatesInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCrimeGroupNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutCrimeGroupsNestedInput>;
-  reference?: InputMaybe<StringFieldUpdateOperationsInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutCrimeGroupsNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updates?: InputMaybe<UpdateUpdateManyWithoutCrimeGroupNestedInput>;
@@ -6163,7 +6163,7 @@ export type CrimeGroupUpdateWithoutOffendersInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCrimeGroupNestedInput>;
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedCrimeGroupsNestedInput>;
-  reference?: InputMaybe<StringFieldUpdateOperationsInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutCrimeGroupsNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updates?: InputMaybe<UpdateUpdateManyWithoutCrimeGroupNestedInput>;
@@ -6177,7 +6177,7 @@ export type CrimeGroupUpdateWithoutSchemesInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutCrimeGroupNestedInput>;
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedCrimeGroupsNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutCrimeGroupsNestedInput>;
-  reference?: InputMaybe<StringFieldUpdateOperationsInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updates?: InputMaybe<UpdateUpdateManyWithoutCrimeGroupNestedInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutCrimeGroupNestedInput>;
@@ -6190,7 +6190,7 @@ export type CrimeGroupUpdateWithoutUpdatesInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutCrimeGroupNestedInput>;
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedCrimeGroupsNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutCrimeGroupsNestedInput>;
-  reference?: InputMaybe<StringFieldUpdateOperationsInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutCrimeGroupsNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutCrimeGroupNestedInput>;
@@ -6203,7 +6203,7 @@ export type CrimeGroupUpdateWithoutVehiclesInput = {
   intel?: InputMaybe<IntelUpdateManyWithoutCrimeGroupNestedInput>;
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedCrimeGroupsNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutCrimeGroupsNestedInput>;
-  reference?: InputMaybe<StringFieldUpdateOperationsInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutCrimeGroupsNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updates?: InputMaybe<UpdateUpdateManyWithoutCrimeGroupNestedInput>;
@@ -6258,7 +6258,7 @@ export type CrimeGroupWhereInput = {
   intel?: InputMaybe<IntelListRelationFilter>;
   linkedUpdates?: InputMaybe<UpdateListRelationFilter>;
   offenders?: InputMaybe<OffenderListRelationFilter>;
-  reference?: InputMaybe<StringFilter>;
+  reference?: InputMaybe<IntNullableFilter>;
   schemes?: InputMaybe<SchemeListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   updates?: InputMaybe<UpdateListRelationFilter>;
@@ -12468,6 +12468,18 @@ export type ListBusinesses = {
   total: Scalars['Int'];
 };
 
+export type ListCrimeGroups = {
+  __typename?: 'ListCrimeGroups';
+  crimeGroups: Array<CrimeGroup>;
+  total: Scalars['Int'];
+};
+
+export type ListFeedItems = {
+  __typename?: 'ListFeedItems';
+  feedItems: Array<FeedItem>;
+  total: Scalars['Int'];
+};
+
 export type ListIncidents = {
   __typename?: 'ListIncidents';
   incidents: Array<Incident>;
@@ -13444,11 +13456,9 @@ export type MutationCreateCommentArgs = {
   data: CreateCommentData;
 };
 
-
 export type MutationCreateCrimeGroupArgs = {
   data: CreateCrimeGroupDataInput;
 };
-
 
 export type MutationCreateGroupArgs = {
   data: GroupCreateInput;
@@ -13572,11 +13582,9 @@ export type MutationDeleteChatDefaultArgs = {
   where: ChatWhereUniqueInput;
 };
 
-
 export type MutationDeleteFeedItemArgs = {
   where: UniqueId;
 };
-
 
 export type MutationDeleteGroupArgs = {
   where: UniqueId;
@@ -16917,7 +16925,6 @@ export type Query = {
   address?: Maybe<Address>;
   addresses: Array<Address>;
   article?: Maybe<Article>;
-  articles: Array<Article>;
   auth0User?: Maybe<Auth0User>;
   ban?: Maybe<Ban>;
   bans: Array<Ban>;
@@ -16935,6 +16942,8 @@ export type Query = {
   incidentFeed?: Maybe<Array<Maybe<Incident>>>;
   incidents: Array<Incident>;
   listBusinesses: ListBusinesses;
+  listCrimeGroups: ListCrimeGroups;
+  listFeedItems?: Maybe<ListFeedItems>;
   listIncidents?: Maybe<ListIncidents>;
   listOffenders?: Maybe<ListOffenders>;
   message?: Maybe<Message>;
@@ -16989,21 +16998,9 @@ export type QueryAddressesArgs = {
   where?: InputMaybe<AddressWhereInput>;
 };
 
-
 export type QueryArticleArgs = {
   where: ArticleWhereUniqueInput;
 };
-
-
-export type QueryArticlesArgs = {
-  after?: InputMaybe<ArticleWhereUniqueInput>;
-  before?: InputMaybe<ArticleWhereUniqueInput>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Array<ArticleOrderByWithRelationInput>>;
-  where?: InputMaybe<ArticleWhereInput>;
-};
-
 
 export type QueryAuth0UserArgs = {
   id: Scalars['String'];
@@ -17042,20 +17039,17 @@ export type QueryChatsArgs = {
   where?: InputMaybe<ChatWhereInput>;
 };
 
-
 export type QueryCrimeGroupArgs = {
   where: CrimeGroupWhereUniqueInput;
 };
 
-
 export type QueryFeedItemsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  groups?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  order?: InputMaybe<FeedItemOrderByWithRelationInput>;
-  schemeId: Scalars['String'];
-  search?: InputMaybe<Scalars['String']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  take?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<FeedItemWhereUniqueInput>;
+  before?: InputMaybe<FeedItemWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<FeedItemOrderByWithRelationInput>>;
+  where?: InputMaybe<FeedItemWhereInput>;
 };
 
 
@@ -17116,6 +17110,22 @@ export type QueryIncidentsArgs = {
 };
 
 export type QueryListBusinessesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
+export type QueryListCrimeGroupsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<CrimeGroupWhereInput>;
+};
+
+export type QueryListFeedItemsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  groups?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  order?: InputMaybe<FeedItemOrderByWithRelationInput>;
+  schemeId: Scalars['String'];
+  search?: InputMaybe<Scalars['String']>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
 };
@@ -26166,7 +26176,92 @@ export type SchemeChatsQueryVariables = Exact<{
 }>;
 
 
-export type SchemeChatsQuery = { __typename?: 'Query', chats: Array<{ __typename?: 'Chat', id: string, name: string, description?: string | null }> };
+export type CreateCrimeGroupMutationVariables = Exact<{
+  data: CreateCrimeGroupDataInput;
+}>;
+
+export type CreateCrimeGroupMutation = {
+  __typename?: 'Mutation';
+  createCrimeGroup: {
+    __typename?: 'CrimeGroup';
+    id: string;
+    reference?: number | null;
+    totalIncidents?: number | null;
+    totalOffenders?: number | null;
+    totalRecoveredValue?: number | null;
+    totalTheftSuccess?: number | null;
+    totalValue?: number | null;
+  };
+};
+
+export type ListCrimeGroupsQueryVariables = Exact<{
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<CrimeGroupWhereInput>;
+}>;
+
+export type ListCrimeGroupsQuery = {
+  __typename?: 'Query';
+  listCrimeGroups: {
+    __typename?: 'ListCrimeGroups';
+    total: number;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      reference?: number | null;
+      totalIncidents?: number | null;
+      totalOffenders?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+    }>;
+  };
+};
+
+export type CrimeGroupQueryVariables = Exact<{
+  where: CrimeGroupWhereUniqueInput;
+}>;
+
+export type CrimeGroupQuery = {
+  __typename?: 'Query';
+  crimeGroup?: {
+    __typename?: 'CrimeGroup';
+    id: string;
+    reference?: number | null;
+    totalIncidents?: number | null;
+    totalOffenders?: number | null;
+    totalRecoveredValue?: number | null;
+    totalTheftSuccess?: number | null;
+    totalValue?: number | null;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      name?: string | null;
+      hair?: string | null;
+      peculiarities?: string | null;
+      race?: Race | null;
+      dateOfBirth?: any | null;
+      dateSource?: string | null;
+      build?: Build | null;
+      age?: Age | null;
+      gender?: Gender | null;
+      totalTheftSuccess?: number | null;
+      totalRecoveredValue?: number | null;
+      totalIncidents?: number | null;
+      totalValue?: number | null;
+      lastActive?: {
+        __typename?: 'Incident';
+        id: string;
+        dayTime?: string | null;
+      } | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+      }>;
+    }>;
+  } | null;
+};
 
 export type DeleteGroupMutationVariables = Exact<{
   id: Scalars['String'];
@@ -26916,6 +27011,11 @@ export type SearchOffendersQuery = {
         fullName: string;
         organisation: string;
       };
+      lastActive?: {
+        __typename?: 'Incident';
+        id: string;
+        dayTime?: string | null;
+      } | null;
     }>;
   } | null;
 };
@@ -26924,6 +27024,163 @@ export type ViewOffenderQueryVariables = Exact<{
   where: OffenderWhereUniqueInput;
 }>;
 
+export type ViewOffenderQuery = {
+  __typename?: 'Query';
+  offender?: {
+    __typename?: 'Offender';
+    id: string;
+    createdAt: any;
+    updatedAt: any;
+    age?: Age | null;
+    build?: Build | null;
+    dateOfBirth?: any | null;
+    dateSource?: string | null;
+    hair?: string | null;
+    gender?: Gender | null;
+    name?: string | null;
+    race?: Race | null;
+    peculiarities?: string | null;
+    subscribed?: boolean | null;
+    approved?: boolean | null;
+    active?: boolean | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+    }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    bans: Array<{
+      __typename?: 'Ban';
+      id: string;
+      title?: string | null;
+      location: string;
+      description?: string | null;
+      startDate: any;
+      endDate: any;
+    }>;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      organisation: string;
+    };
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      dayTime?: string | null;
+      date: any;
+      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      createdBy: { __typename?: 'User'; id: string; organisation: string };
+    }>;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      reference?: number | null;
+    }>;
+    updates: Array<{
+      __typename?: 'Update';
+      id: string;
+      text?: string | null;
+      type: UpdateType;
+      createdAt: any;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+      }>;
+      linkedIncidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      linkedOffenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        updatedAt: any;
+        age?: Age | null;
+        build?: Build | null;
+        dateOfBirth?: any | null;
+        name?: string | null;
+        race?: Race | null;
+        gender?: Gender | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        organisation: string;
+      };
+      replies: Array<{
+        __typename?: 'Update';
+        id: string;
+        text?: string | null;
+        type: UpdateType;
+        createdAt: any;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          card?: string | null;
+        }>;
+        linkedIncidents: Array<{
+          __typename?: 'Incident';
+          id: string;
+          subject?: string | null;
+          description: string;
+          dayTime?: string | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+        }>;
+        linkedOffenders: Array<{
+          __typename?: 'Offender';
+          id: string;
+          updatedAt: any;
+          age?: Age | null;
+          build?: Build | null;
+          dateOfBirth?: any | null;
+          name?: string | null;
+          race?: Race | null;
+          gender?: Gender | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+        }>;
+        createdBy: {
+          __typename?: 'User';
+          id: string;
+          fullName: string;
+          organisation: string;
+        };
+      }>;
+    }>;
+  } | null;
+};
 
 export type ViewOffenderQuery = { __typename?: 'Query', offender?: { __typename?: 'Offender', id: string, createdAt: any, updatedAt: any, age?: Age | null, build?: Build | null, dateOfBirth?: any | null, dateSource?: string | null, hair?: string | null, gender?: Gender | null, name?: string | null, race?: Race | null, peculiarities?: string | null, subscribed?: boolean | null, approved?: boolean | null, active?: boolean | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null }>, groups: Array<{ __typename?: 'Group', id: string, name: string }>, tags: Array<{ __typename?: 'Tag', id: string, name: string }>, bans: Array<{ __typename?: 'Ban', id: string, title?: string | null, location: string, description?: string | null, startDate: any, endDate: any }>, createdBy: { __typename?: 'User', id: string, fullName: string, organisation: string }, incidents: Array<{ __typename?: 'Incident', id: string, dayTime?: string | null, date: any, crimeTypes: Array<{ __typename?: 'Tag', id: string, name: string }>, createdBy: { __typename?: 'User', id: string, organisation: string } }>, updates: Array<{ __typename?: 'Update', id: string, text?: string | null, type: UpdateType, createdAt: any, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null }>, linkedIncidents: Array<{ __typename?: 'Incident', id: string, subject?: string | null, description: string, dayTime?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null }> }>, linkedOffenders: Array<{ __typename?: 'Offender', id: string, updatedAt: any, age?: Age | null, build?: Build | null, dateOfBirth?: any | null, name?: string | null, race?: Race | null, gender?: Gender | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null }> }>, createdBy: { __typename?: 'User', id: string, fullName: string, organisation: string }, replies: Array<{ __typename?: 'Update', id: string, text?: string | null, type: UpdateType, createdAt: any, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null, card?: string | null }>, linkedIncidents: Array<{ __typename?: 'Incident', id: string, subject?: string | null, description: string, dayTime?: string | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null }> }>, linkedOffenders: Array<{ __typename?: 'Offender', id: string, updatedAt: any, age?: Age | null, build?: Build | null, dateOfBirth?: any | null, name?: string | null, race?: Race | null, gender?: Gender | null, images: Array<{ __typename?: 'Image', id: string, url?: string | null, optimised?: string | null }> }>, createdBy: { __typename?: 'User', id: string, fullName: string, organisation: string } }> }> } | null };
 
@@ -27034,7 +27291,7 @@ export type OffenderProfileQuery = {
     crimeGroups: Array<{
       __typename?: 'CrimeGroup';
       id: string;
-      reference: string;
+      reference?: number | null;
     }>;
     incidentTotals?: {
       __typename?: 'IncidentTotal';
@@ -28153,8 +28410,224 @@ export function useSchemeChatsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
           return Apollo.useLazyQuery<SchemeChatsQuery, SchemeChatsQueryVariables>(SchemeChatsDocument, options);
         }
 export type SchemeChatsQueryHookResult = ReturnType<typeof useSchemeChatsQuery>;
-export type SchemeChatsLazyQueryHookResult = ReturnType<typeof useSchemeChatsLazyQuery>;
-export type SchemeChatsQueryResult = Apollo.QueryResult<SchemeChatsQuery, SchemeChatsQueryVariables>;
+export type SchemeChatsLazyQueryHookResult = ReturnType<
+  typeof useSchemeChatsLazyQuery
+>;
+export type SchemeChatsQueryResult = Apollo.QueryResult<
+  SchemeChatsQuery,
+  SchemeChatsQueryVariables
+>;
+export const CreateCrimeGroupDocument = gql`
+  mutation CreateCrimeGroup($data: CreateCrimeGroupDataInput!) {
+    createCrimeGroup(data: $data) {
+      id
+      reference
+      totalIncidents
+      totalOffenders
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+    }
+  }
+`;
+export type CreateCrimeGroupMutationFn = Apollo.MutationFunction<
+  CreateCrimeGroupMutation,
+  CreateCrimeGroupMutationVariables
+>;
+
+/**
+ * __useCreateCrimeGroupMutation__
+ *
+ * To run a mutation, you first call `useCreateCrimeGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCrimeGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCrimeGroupMutation, { data, loading, error }] = useCreateCrimeGroupMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateCrimeGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateCrimeGroupMutation,
+    CreateCrimeGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateCrimeGroupMutation,
+    CreateCrimeGroupMutationVariables
+  >(CreateCrimeGroupDocument, options);
+}
+export type CreateCrimeGroupMutationHookResult = ReturnType<
+  typeof useCreateCrimeGroupMutation
+>;
+export type CreateCrimeGroupMutationResult =
+  Apollo.MutationResult<CreateCrimeGroupMutation>;
+export type CreateCrimeGroupMutationOptions = Apollo.BaseMutationOptions<
+  CreateCrimeGroupMutation,
+  CreateCrimeGroupMutationVariables
+>;
+export const ListCrimeGroupsDocument = gql`
+  query ListCrimeGroups($take: Int, $skip: Int, $where: CrimeGroupWhereInput) {
+    listCrimeGroups(take: $take, skip: $skip, where: $where) {
+      crimeGroups {
+        id
+        reference
+        totalIncidents
+        totalOffenders
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useListCrimeGroupsQuery__
+ *
+ * To run a query within a React component, call `useListCrimeGroupsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListCrimeGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListCrimeGroupsQuery({
+ *   variables: {
+ *      take: // value for 'take'
+ *      skip: // value for 'skip'
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useListCrimeGroupsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ListCrimeGroupsQuery,
+    ListCrimeGroupsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ListCrimeGroupsQuery, ListCrimeGroupsQueryVariables>(
+    ListCrimeGroupsDocument,
+    options
+  );
+}
+export function useListCrimeGroupsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListCrimeGroupsQuery,
+    ListCrimeGroupsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListCrimeGroupsQuery,
+    ListCrimeGroupsQueryVariables
+  >(ListCrimeGroupsDocument, options);
+}
+export type ListCrimeGroupsQueryHookResult = ReturnType<
+  typeof useListCrimeGroupsQuery
+>;
+export type ListCrimeGroupsLazyQueryHookResult = ReturnType<
+  typeof useListCrimeGroupsLazyQuery
+>;
+export type ListCrimeGroupsQueryResult = Apollo.QueryResult<
+  ListCrimeGroupsQuery,
+  ListCrimeGroupsQueryVariables
+>;
+export const CrimeGroupDocument = gql`
+  query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
+    crimeGroup(where: $where) {
+      id
+      reference
+      totalIncidents
+      totalOffenders
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+      offenders {
+        id
+        name
+        lastActive {
+          id
+          dayTime
+        }
+        hair
+        peculiarities
+        race
+        dateOfBirth
+        dateSource
+        build
+        age
+        gender
+        images {
+          id
+          optimised
+        }
+        totalTheftSuccess
+        totalRecoveredValue
+        totalIncidents
+        totalValue
+      }
+    }
+  }
+`;
+
+/**
+ * __useCrimeGroupQuery__
+ *
+ * To run a query within a React component, call `useCrimeGroupQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCrimeGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCrimeGroupQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useCrimeGroupQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    CrimeGroupQuery,
+    CrimeGroupQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<CrimeGroupQuery, CrimeGroupQueryVariables>(
+    CrimeGroupDocument,
+    options
+  );
+}
+export function useCrimeGroupLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    CrimeGroupQuery,
+    CrimeGroupQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<CrimeGroupQuery, CrimeGroupQueryVariables>(
+    CrimeGroupDocument,
+    options
+  );
+}
+export type CrimeGroupQueryHookResult = ReturnType<typeof useCrimeGroupQuery>;
+export type CrimeGroupLazyQueryHookResult = ReturnType<
+  typeof useCrimeGroupLazyQuery
+>;
+export type CrimeGroupQueryResult = Apollo.QueryResult<
+  CrimeGroupQuery,
+  CrimeGroupQueryVariables
+>;
 export const DeleteGroupDocument = gql`
     mutation deleteGroup($id: String!) {
   deleteGroup(where: {id: $id}) {
@@ -30107,6 +30580,10 @@ export const SearchOffendersDocument = gql`
           fullName
           organisation
         }
+        lastActive {
+          id
+          dayTime
+        }
       }
       total
     }
@@ -30267,6 +30744,23 @@ export const ViewOffenderDocument = gql`
         organisation
       }
       replies {
+        id
+        dayTime
+        date
+        crimeTypes {
+          id
+          name
+        }
+        createdBy {
+          id
+          organisation
+        }
+      }
+      crimeGroups {
+        id
+        reference
+      }
+      updates(orderBy: { createdAt: desc }) {
         id
         text
         type

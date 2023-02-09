@@ -54,6 +54,10 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
         organisation
       }
     }
+    crimeGroups {
+      id
+      reference
+    }
     updates(orderBy: { createdAt: desc }) {
       id
       text

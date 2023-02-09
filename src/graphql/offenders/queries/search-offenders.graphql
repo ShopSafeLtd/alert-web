@@ -41,6 +41,10 @@ query searchOffenders(
         fullName
         organisation
       }
+      lastActive {
+        id
+        dayTime
+      }
     }
     total
   }
