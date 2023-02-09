@@ -20,10 +20,13 @@ const Loading = ({
 
   return (
     <div
-      className="h-100 w-100"
+      // className="h-100 w-100"
       style={{
         position: 'absolute',
         background: 'linear-gradient(to right, #cb2d3e, #ef473a)',
+        height: '100vh',
+        width: '100vw',
+        zIndex: 1000,
       }}
     >
       <div

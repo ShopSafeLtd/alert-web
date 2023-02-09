@@ -23,6 +23,8 @@ import {
 } from 'graphql/generated';
 import { getAge, getBuild, getEthnicity, getSex } from 'utils';
 import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDownload } from '@fortawesome/pro-light-svg-icons';
 import Chart from 'react-apexcharts';
 import useStyles from './offender-profile.styles';
 
@@ -57,7 +59,13 @@ const OffenderProfile = ({
           <div className={classes.page}>
             <Row justify="end" className={classes.actionBar}>
               <Col>
-                <Button type="primary">Export</Button>
+                <Button type="primary">
+                  <FontAwesomeIcon
+                    icon={faDownload}
+                    className={classes.buttonIcon}
+                  />
+                  Download Report
+                </Button>
               </Col>
             </Row>
             <Card bodyStyle={{ padding: 0, overflow: 'hidden' }}>

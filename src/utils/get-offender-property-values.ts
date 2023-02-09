@@ -12,6 +12,15 @@ const ethnicities = [
   { value: 'IC5', text: 'IC5 - Southeast Asian' },
   { value: 'IC6', text: 'IC6 - North African or Arab' },
 ];
+const ethnicitiesShort = [
+  { value: 'UNKNOWN', text: 'Unknown' },
+  { value: 'IC1', text: 'IC1' },
+  { value: 'IC2', text: 'IC2' },
+  { value: 'IC3', text: 'IC3' },
+  { value: 'IC4', text: 'IC4' },
+  { value: 'IC5', text: 'IC5' },
+  { value: 'IC6', text: 'IC6' },
+];
 const ages = [
   { value: 'UNKNOWN', text: 'Unknown' },
   { value: 'UNDER_EIGHTEEN', text: 'Under 18' },
@@ -41,6 +50,8 @@ export const getSex = (gender: string): string =>
   genders.find(({ value }) => value === gender)?.text || 'Unknown';
 export const getEthnicity = (ethnicity: string): string =>
   ethnicities.find(({ value }) => value === ethnicity)?.text || 'Unknown';
+export const getEthnicityShort = (ethnicity: string): string =>
+  ethnicitiesShort.find(({ value }) => value === ethnicity)?.text || 'Unknown';
 export const getAge = (age: string | number): string =>
   ages.find(({ value }) => value === age)?.text || 'Unknown';
 export const getBuild = (build: string): string =>

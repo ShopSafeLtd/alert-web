@@ -24,19 +24,11 @@ export default defineConfig({
     svgrPlugin(),
     // removeConsole(), // will remove console from prod builds, remove if testing is needed on live
     // checker({
-    //   // checks for ts and eslint errors on dev, remove if not needed/any issues
+    //   // checks for ts and eslint errors on dev, remove if not needed/any issues such as high memory usage
     //   typescript: true,
     //   eslint: {
     //     lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
     //   },
-    // }),
-    // vitePluginImp({
-    //   libList: [
-    //     {
-    //       libName: 'antd',
-    //       style: (name) => `antd/es/${name}/style`,
-    //     },
-    //   ],
     // }),
   ],
   build: {
