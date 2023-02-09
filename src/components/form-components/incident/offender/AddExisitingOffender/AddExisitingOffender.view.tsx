@@ -173,6 +173,7 @@ const AddExisitingOffender = ({
                           onClick={() => openLightbox(i)}
                           style={{
                             backgroundImage: `url(${image.optimised})`,
+                            backgroundPosition: 'center',
                           }}
                         />
                       </div>
