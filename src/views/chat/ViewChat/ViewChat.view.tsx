@@ -21,17 +21,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faUser } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
 import ViewMessage from 'components/viewChat/ViewMessage';
-import moment from 'moment';
+
 import AddChat from 'components/form-components/chat/AddChat';
 import { MutationUpdaterFn } from '@apollo/client';
+import { formatDate } from 'utils';
 
 const { Title, Paragraph, Text } = Typography;
-
-const formatChatDate = (date: Date) => {
-  if (moment(date).format('DD/MM/YY') === moment().format('DD/MM/YY'))
-    return moment(date).format('hh:mm');
-  return moment(date).format('hh:mm DD/MM');
-};
 
 interface Props {
   data: UserChatsQuery | undefined;
@@ -162,8 +157,8 @@ const ViewOffender = ({
                             }}
                           >
                             {messages && messages.length > 0
-                              ? formatChatDate(messages?.slice(-1)[0].createdAt)
-                              : formatChatDate(createdAt)}
+                              ? formatDate(messages?.slice(-1)[0].createdAt)
+                              : formatDate(createdAt)}
                           </Paragraph>
                         </Col>
                       </Row>

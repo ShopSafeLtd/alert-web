@@ -1,0 +1,252 @@
+query FeedItems(
+  $schemeId: String!
+  $search: String
+  $order: FeedItemOrderByWithRelationInput
+  $take: Int
+  $skip: Int
+  $after: String
+  $groups: [String!]
+) {
+  listFeedItems(
+    schemeId: $schemeId
+    search: $search
+    order: $order
+    take: $take
+    skip: $skip
+    after: $after
+    groups: $groups
+  ) {
+    feedItems {
+      article {
+        id
+        title
+        updatedAt
+        tags {
+          id
+          name
+        }
+        createdBy {
+          id
+          fullName
+          organisation
+        }
+        previewImage
+        previewText
+        priority
+      }
+      articleId
+      createdAt
+      updatedAt
+      message
+      model
+      type
+      groups {
+        id
+        name
+      }
+      id
+      incident {
+        id
+        subject
+        policeRef
+        reference
+        description
+        dayTime
+        date
+        totalOffenders
+        totalUpdates
+        updates(orderBy: { createdAt: desc }) {
+          id
+          images {
+            id
+            optimised
+            url
+          }
+          linkedIncidents {
+            id
+            subject
+            description
+            dayTime
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          linkedOffenders {
+            id
+            updatedAt
+            name
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          text
+          type
+        }
+        crimeTypes {
+          id
+          name
+        }
+        approved
+        location {
+          id
+          full
+        }
+        createdBy {
+          id
+          fullName
+          organisation
+        }
+        images(orderBy: { createdAt: desc }) {
+          id
+          optimised
+          url
+        }
+        groups {
+          id
+          name
+        }
+        offenders {
+          id
+          name
+          age
+          gender
+          race
+          dateOfBirth
+          build
+          images(first: 1) {
+            id
+            url
+            optimised
+            card
+            offenders {
+              id
+              name
+            }
+          }
+          recycled
+        }
+      }
+      incidentId
+      offender {
+        id
+        createdAt
+        updatedAt
+        age
+        bans {
+          id
+          title
+          location
+          description
+          startDate
+          endDate
+        }
+        build
+        dateOfBirth
+        dateSource
+        gender
+        hair
+        name
+        totalIncidents
+        totalUpdates
+        peculiarities
+        race
+        approved
+        subscribed
+        uploaded
+        active
+        updates {
+          id
+          images {
+            id
+            optimised
+            url
+          }
+          linkedIncidents {
+            id
+            subject
+            description
+            dayTime
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          linkedOffenders {
+            id
+            updatedAt
+            name
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          text
+          type
+        }
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        tags {
+          id
+          name
+        }
+        groups {
+          id
+          name
+        }
+        tags {
+          id
+          name
+        }
+        createdBy {
+          id
+          fullName
+          organisation
+        }
+        bans {
+          id
+          title
+          location
+          description
+          startDate
+          endDate
+        }
+        incidents {
+          id
+          subject
+          description
+          dayTime
+          crimeTypes {
+            id
+            name
+          }
+          approved
+          location {
+            id
+            full
+          }
+          createdBy {
+            id
+            fullName
+            organisation
+          }
+          images {
+            id
+            optimised
+          }
+        }
+      }
+      offenderId
+    }
+    total
+  }
+}

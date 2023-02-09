@@ -4,6 +4,7 @@ import Loading from 'components/shared-components/AntD/Loading';
 import { useAuth } from 'hooks';
 import { useStoreState } from 'state';
 import { useAuth0 } from '@auth0/auth0-react';
+import FeedItems from './feedItems/router';
 import Incidents from './incidents/router';
 import Offenders from './offenders/router';
 
@@ -48,6 +49,7 @@ export const AppViews = (): JSX.Element => {
             element={<Onboarding />}
           />
         )}
+        <Route key="feedItems" path="feedItems/*" element={<FeedItems />} />,
         <Route key="incidents" path="incidents/*" element={<Incidents />} />,
         <Route key="offenders" path="offenders/*" element={<Offenders />} />,
         <Route key="chat" path="chat/*" element={<Chat />} />,

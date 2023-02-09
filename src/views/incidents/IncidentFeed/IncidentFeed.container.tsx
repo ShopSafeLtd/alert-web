@@ -5,7 +5,6 @@ import useIncidentFeed from './useIncidentFeed';
 const IncidentFeed = (): JSX.Element => {
   const {
     data,
-    // loading,
     lightboxElements,
     openLightbox,
     onPaginationChange,
@@ -26,6 +25,7 @@ const IncidentFeed = (): JSX.Element => {
     loading,
     lightBoxOpen,
   } = useIncidentFeed();
+  console.log('data2', data);
 
   return (
     <View
