@@ -37,6 +37,7 @@ import {
   faTrash,
   faUserClock,
   faUserHair,
+  faUsers,
   faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
 import {
@@ -392,6 +393,21 @@ const ViewOffender = ({
                           {moment(data?.offender?.updatedAt || moment()).format(
                             `ddd MMM DD YYYY - HH:mm`
                           )}
+                        </Descriptions.Item>
+                        <Descriptions.Item
+                          label={
+                            <span>
+                              <FontAwesomeIcon
+                                className={classes.descIcon}
+                                icon={faUsers}
+                              />
+                              Crime Groups
+                            </span>
+                          }
+                        >
+                          {data?.offender?.crimeGroups.map((group) => (
+                            <Tag key={group.id}>CG-{group.reference}</Tag>
+                          ))}
                         </Descriptions.Item>
                       </Descriptions>
                       <Title level={4}>Exclusions</Title>
