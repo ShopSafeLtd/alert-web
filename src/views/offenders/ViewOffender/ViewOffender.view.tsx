@@ -514,7 +514,7 @@ const ViewOffender = ({
                                   icon={faArrowUpRightFromSquare}
                                   onClick={() =>
                                     navigate(
-                                      `/app/offenders/view/${record.key}`
+                                      `/app/incidents/view/${record.key}`
                                     )
                                   }
                                 />
