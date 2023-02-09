@@ -120,6 +120,7 @@ const useViewOffender = (offenderId: string): Return => {
   const [editUpdateInput, setEditUpdateInput] = useState('');
 
   const { data, loading } = useViewOffenderQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       where: {
         id: offenderId,

@@ -34,12 +34,12 @@ interface Return {
 
 const getSizeOptions = () => {
   if (window.innerWidth > 1239 && window.innerWidth < 1800) {
-    return ['8', '16', '24'];
+    return ['20', '16', '24'];
   }
   if (window.innerWidth > 1799) {
-    return ['8', '16', '24'];
+    return ['20', '16', '24'];
   }
-  return ['8'];
+  return ['20'];
 };
 
 const useFeedItems = (): Return => {
@@ -127,7 +127,7 @@ const useFeedItems = (): Return => {
           id: schemeId,
         },
         order: {
-          updatedAt: SortOrder.Asc,
+          updatedAt: SortOrder.Desc,
         },
         take: 10,
         // where: searchOffenders.length

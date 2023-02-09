@@ -32,12 +32,20 @@ const CreateArticleContainer = () => {
     documentUploadProps,
     insertOffender,
     insertIncident,
+    removeOffender,
+    removeIncident,
+    offenders,
+    incidents,
   } = useCreateArticle();
 
   const { drawer } = useDrawerState<AddOffender | AddIncident>();
 
   return (
     <View
+      incidents={incidents}
+      removeIncident={removeIncident}
+      offenders={offenders}
+      removeOffender={removeOffender}
       insertOffender={insertOffender}
       documentUploadProps={documentUploadProps}
       fileList={fileList}

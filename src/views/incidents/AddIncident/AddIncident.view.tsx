@@ -690,6 +690,7 @@ const EditIncident = ({
                         onConfirm={() => removeOffender(record.key)}
                         okText="Yes"
                         cancelText="No"
+                        overlayInnerStyle={{ padding: 10 }}
                       >
                         <Button
                           disabled={saving}
@@ -894,6 +895,7 @@ const EditIncident = ({
                           onConfirm={() => removeImage(file.uid)}
                           okText="Yes"
                           cancelText="No"
+                          overlayInnerStyle={{ padding: 10 }}
                         >
                           <Button
                             size="small"
@@ -925,6 +927,7 @@ const EditIncident = ({
                             }}
                             okText="Yes"
                             cancelText="No"
+                            overlayInnerStyle={{ padding: 10 }}
                           >
                             <Button
                               size="small"

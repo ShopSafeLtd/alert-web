@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Card, Row, Col, Statistic, Table } from 'antd';
+import { Card, Col, Row, Statistic, Table, Typography } from 'antd';
 import { PerformanceReportQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -15,14 +15,15 @@ const { Title } = Typography;
 
 interface Props {
   data: PerformanceReportQuery | undefined;
+  loading: boolean;
 }
 
-const PerformanceReport = ({ data }: Props) => {
+const PerformanceReport = ({ data, loading }: Props) => {
   const classes = useStyles();
   return (
     <div className={classes.page}>
       <Title level={2}>Performance Report - {data?.scheme?.name}</Title>
-      <Card>
+      <Card loading={loading}>
         <Row gutter={64}>
           <Col>
             <Statistic
@@ -74,7 +75,7 @@ const PerformanceReport = ({ data }: Props) => {
           </Col>
         </Row>
       </Card>
-      <Card>
+      <Card loading={loading}>
         <Title level={4}>Breakdown of Created Data</Title>
         <Chart
           options={{
@@ -100,7 +101,7 @@ const PerformanceReport = ({ data }: Props) => {
       </Card>
       <Row gutter={16}>
         <Col span={12}>
-          <Card>
+          <Card loading={loading}>
             <Title level={4}>Created Incidents by Type</Title>
             <Chart
               options={{
@@ -121,7 +122,7 @@ const PerformanceReport = ({ data }: Props) => {
           </Card>
         </Col>
         <Col span={12}>
-          <Card>
+          <Card loading={loading}>
             <Title level={4}>Top Contributors</Title>
             <Table
               size="small"

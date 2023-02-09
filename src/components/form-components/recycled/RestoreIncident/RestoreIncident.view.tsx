@@ -52,6 +52,7 @@ const RestoreIncident = ({
             onConfirm={onDelete}
             okText="Yes"
             cancelText="No"
+            overlayInnerStyle={{ padding: 10 }}
           >
             <Button disabled={saving} loading={saving}>
               Delete Now
@@ -64,6 +65,7 @@ const RestoreIncident = ({
             onConfirm={onSubmit}
             okText="Yes"
             cancelText="No"
+            overlayInnerStyle={{ padding: 10 }}
           >
             <Button
               disabled={saving}

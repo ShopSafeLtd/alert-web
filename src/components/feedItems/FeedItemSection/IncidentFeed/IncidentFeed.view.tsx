@@ -22,7 +22,17 @@ interface Props {
   isNewIncident?: boolean;
 }
 const ImageContainer = ({ src }: { src: string }) => (
-  <Image width={200} height={200} style={{ borderRadius: 5 }} src={src} />
+  <div
+    style={{
+      width: 180,
+      height: 200,
+      backgroundImage: `url(${src})`,
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      borderRadius: 5,
+    }}
+  />
 );
 const IncidentFeed = ({
   feedItem,
@@ -57,54 +67,33 @@ const IncidentFeed = ({
       return <Text key={item}>{item}</Text>;
     });
   return (
-    <Row gutter={15} wrap={false} key={id || ''} style={{ marginRight: 10 }}>
-      <Col>
-        {!isNewImage && updates && updates[0]?.images[0] ? (
+    <Row gutter={15} wrap={false} key={id || ''} style={{ width: '100%' }}>
+      {!isNewImage && updates && updates[0]?.images[0] ? (
+        <Col>
           <ImageContainer
             src={
               updates[0].images[0].optimised || updates[0].images[0].url || ''
             }
           />
-        ) : null}
-        {(isNewIncident || isNewImage) && images && images.length ? (
+        </Col>
+      ) : null}
+      {(isNewIncident || isNewImage) && images && images.length ? (
+        <Col>
           <ImageContainer src={images[0].optimised || images[0].url || ''} />
-        ) : null}
-      </Col>
+        </Col>
+      ) : null}
 
-      <Link to={`/app/incidents/view/${id}`}>
-        <Col
-          flex={1}
-          style={{
-            marginTop: 5,
-          }}
-        >
+      <Col flex={1}>
+        <Link to={`/app/incidents/view/${id}`}>
           {isNewIncident ? (
             <>
-              <Title level={4} ellipsis>
+              <Title style={{ marginBottom: 2 }} level={4} ellipsis>
                 {subject}
               </Title>
 
-              <Paragraph type="secondary" ellipsis>
+              <Paragraph style={{ fontSize: 12 }} type="secondary" ellipsis>
                 {description}
               </Paragraph>
-              {offenders && offenders.length ? (
-                <Row
-                  wrap={false}
-                  style={{ overflowX: 'auto', marginBottom: 15 }}
-                >
-                  {offenders.map((offender) => (
-                    <Link
-                      to={
-                        offender.id ? `/app/offenders/view/${offender.id}` : ``
-                      }
-                    >
-                      <Tag key={offender.id}>
-                        {offender.name || 'Unknown Offender'}
-                      </Tag>
-                    </Link>
-                  ))}
-                </Row>
-              ) : null}
               <Row>
                 <Col>
                   <FontAwesomeIcon
@@ -112,7 +101,9 @@ const IncidentFeed = ({
                     className="feedItem-card-icon"
                     icon={faClock}
                   />
-                  <Text type="secondary">{dayTime}</Text>
+                  <Text style={{ fontSize: 12 }} type="secondary">
+                    {dayTime}
+                  </Text>
                 </Col>
               </Row>
               <Row>
@@ -122,7 +113,7 @@ const IncidentFeed = ({
                     className="feedItem-card-icon"
                     icon={faUser}
                   />
-                  <Text type="secondary">
+                  <Text style={{ fontSize: 12 }} type="secondary">
                     {createdBy?.fullName} - {createdBy?.organisation}
                   </Text>
                 </Col>
@@ -136,27 +127,73 @@ const IncidentFeed = ({
                   />
                 </Col>
                 <Col>
-                  <Text ellipsis type="secondary">
+                  <Text style={{ fontSize: 12 }} ellipsis type="secondary">
                     {location?.full}
                   </Text>
                 </Col>
               </Row>
+              {offenders && offenders.length ? (
+                <Row wrap={false} style={{ overflowX: 'auto', marginTop: 10 }}>
+                  {offenders.map((offender) => (
+                    <Link
+                      to={
+                        offender.id ? `/app/offenders/view/${offender.id}` : ``
+                      }
+                    >
+                      <Tag key={offender.id}>
+                        {offender.name || 'Unknown Offender'}
+                      </Tag>
+                    </Link>
+                  ))}
+                </Row>
+              ) : null}
             </>
           ) : (
             <>
-              <Title level={4} ellipsis>
-                {subject}
-              </Title>
-              <Descriptions size="small">
-                <Descriptions.Item label="Created At">
-                  {dayTime}
-                </Descriptions.Item>
-              </Descriptions>
-              <Paragraph type="secondary" ellipsis>
-                {description}
-              </Paragraph>
               {updates && updates[0]?.text && (
-                <Text>{getContent(updates[0]?.text)}</Text>
+                <>
+                  <Text style={{ fontSize: 13 }}>
+                    {getContent(updates[0]?.text)}
+                  </Text>
+                  <Row wrap={false} style={{ marginTop: 10 }}>
+                    {images && (
+                      <Col style={{ marginRight: 10 }}>
+                        <div
+                          style={{
+                            width: 80,
+                            height: 80,
+                            backgroundImage: `url(${images[0]?.optimised})`,
+                            backgroundPosition: 'center',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundSize: 'cover',
+                            borderRadius: 5,
+                          }}
+                        />
+                      </Col>
+                    )}
+                    <Col>
+                      <div>
+                        <Title
+                          level={4}
+                          style={{ fontSize: 16, marginBottom: 2 }}
+                          ellipsis
+                        >
+                          {subject}
+                        </Title>
+                        <div>
+                          <Text style={{ fontSize: 12 }}>
+                            Created At: {dayTime}
+                          </Text>
+                        </div>
+                        <div>
+                          <Text style={{ fontSize: 12 }}>
+                            Created By: {createdBy?.organisation}
+                          </Text>
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
+                </>
               )}
               {!(updates && updates[0]?.text) && (
                 <>
@@ -264,8 +301,8 @@ const IncidentFeed = ({
               )}
             </>
           )}
-        </Col>
-      </Link>
+        </Link>
+      </Col>
     </Row>
   );
 };

@@ -158,7 +158,11 @@ query FeedItems(
         subscribed
         uploaded
         active
-        updates {
+        lastActive {
+          id
+          dayTime
+        }
+        updates(orderBy: { createdAt: desc }) {
           id
           images {
             id

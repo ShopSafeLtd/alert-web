@@ -7,6 +7,7 @@ import { UploadFile } from 'antd/es/upload/interface';
 import { AddIncident, AddOffender } from '../hooks/Forms';
 import { DrawerType } from '../../../../hooks';
 import { OffenderData } from '../../../../components/form-components/incident/offender/AddExisitingOffender/AddExisitingOffender.container';
+import { Incident } from '../../../../components/form-components/offender/LinkIncident/LinkIncident.container';
 
 export interface Props {
   editorRef: React.MutableRefObject<Editor | null>;
@@ -38,8 +39,11 @@ export interface Props {
   fileList: UploadFile[];
   documentUploadProps: UploadProps;
   insertOffender: (offender: OffenderData) => void;
-  insertIncident: (value: string) => void;
-
+  insertIncident: (value: Incident) => void;
+  incidents: Incident[];
+  offenders: OffenderData[];
+  removeIncident: (id: string) => void;
+  removeOffender: (id: string) => void;
   exampleImageUploadHandler(
     blobInfo: { blob: () => string | Blob; filename: () => string | undefined },
     progress: (arg0: number) => void

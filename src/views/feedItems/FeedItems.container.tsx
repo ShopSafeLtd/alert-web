@@ -5,7 +5,6 @@ import useFeedItems from './useFeedItems';
 const FeedItems = (): JSX.Element => {
   const {
     data,
-    loading,
     recentOffenderData,
     recentOffenderLoading,
     onPaginationChange,
@@ -25,7 +24,6 @@ const FeedItems = (): JSX.Element => {
   return (
     <View
       data={data}
-      loading={loading}
       recentOffenderData={recentOffenderData}
       recentOffenderLoading={recentOffenderLoading}
       onPaginationChange={onPaginationChange}

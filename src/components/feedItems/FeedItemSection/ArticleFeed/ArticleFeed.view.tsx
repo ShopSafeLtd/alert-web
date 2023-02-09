@@ -1,14 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Col, Image, Row, Tag, Typography } from 'antd';
 import { ArticlePriority, FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faUser } from '@fortawesome/pro-light-svg-icons';
-
-import { Link } from 'react-router-dom';
 import { faStar } from '@fortawesome/pro-solid-svg-icons';
-import moment from 'moment';
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Paragraph } = Typography;
 
 interface Props {
   feedItem:
@@ -22,30 +18,19 @@ const ImageContainer = ({ src }: { src: string }) => (
 const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
   // const imagesRef = useRef<CarouselRef>(null);
 
-  const {
-    id,
-    title,
-    updatedAt,
-    tags,
-    previewImage,
-    previewText,
-    priority,
-    createdBy,
-  } = feedItem?.article || {};
+  const { id, title, tags, previewImage, previewText, priority } =
+    feedItem?.article || {};
 
   return (
     <Row gutter={15} wrap={false} key={id || ''}>
-      <Col style={{ marginLeft: 10 }}>
-        {previewImage ? <ImageContainer src={previewImage} /> : null}
-      </Col>
+      {previewImage ? (
+        <Col style={{ marginLeft: 10 }}>
+          <ImageContainer src={previewImage} />
+        </Col>
+      ) : null}
 
       {/* <Link to={`/app/incidents/view/${id}`}> */}
-      <Col
-        flex={1}
-        style={{
-          marginTop: 5,
-        }}
-      >
+      <Col flex={1}>
         <Title level={4} ellipsis>
           {title}
 
@@ -58,14 +43,14 @@ const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
             />
           )}
         </Title>
-        <Row>
+        {/* <Row>
           <Col>
             <FontAwesomeIcon
               size="sm"
               className="feedItem-card-icon"
               icon={faClock}
             />
-            <Text type="secondary">{moment(updatedAt)}</Text>
+            <Text type="secondary">{moment(updatedAt).calendar()}</Text>
           </Col>
         </Row>
 
@@ -80,12 +65,12 @@ const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
               {createdBy?.fullName} - {createdBy?.organisation}
             </Text>
           </Col>
-        </Row>
+        </Row> */}
 
-        <Paragraph type="secondary" style={{ marginTop: 10 }}>
+        <Paragraph type="secondary" style={{ fontSize: 12 }}>
           {previewText}
         </Paragraph>
-        {tags && tags.length ? (
+        {tags && tags.length > 0 ? (
           <Row wrap={false} style={{ overflowX: 'auto', marginTop: 15 }}>
             {tags.map((tag) => (
               <Tag key={tag.id}>{tag.name}</Tag>

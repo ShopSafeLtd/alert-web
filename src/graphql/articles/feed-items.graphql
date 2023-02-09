@@ -1,4 +1,4 @@
-query FeedItems(
+query ArticleFeedItems(
   $schemeId: String!
   $search: String
   $order: FeedItemOrderByWithRelationInput
@@ -158,7 +158,11 @@ query FeedItems(
         subscribed
         uploaded
         active
-        updates {
+        lastActive {
+          id
+          dayTime
+        }
+        updates(orderBy: { createdAt: desc }) {
           id
           images {
             id

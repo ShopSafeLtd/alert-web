@@ -288,7 +288,7 @@ const useViewMessages = ({
         })),
       }));
 
-      setDatedMessages(groupedUsers);
+      setDatedMessages(groupedUsers.reverse());
     } else setDatedMessages([]);
   };
 

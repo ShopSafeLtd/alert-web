@@ -216,6 +216,7 @@ const UpdateBar = ({
                     onConfirm={() => removeUpdateImage(file.uid)}
                     okText="Yes"
                     cancelText="No"
+                    overlayInnerStyle={{ padding: 10 }}
                   >
                     <Button
                       size="small"
@@ -246,6 +247,7 @@ const UpdateBar = ({
                   onConfirm={() => removeUpdateOffender(offender.id)}
                   okText="Yes"
                   cancelText="No"
+                  overlayInnerStyle={{ padding: 10 }}
                 >
                   <Button
                     size="small"
@@ -291,6 +293,7 @@ const UpdateBar = ({
                   onConfirm={() => removeUpdateIncident(incident.id)}
                   okText="Yes"
                   cancelText="No"
+                  overlayInnerStyle={{ padding: 10 }}
                 >
                   <Button
                     size="small"

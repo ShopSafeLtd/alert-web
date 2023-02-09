@@ -8,6 +8,7 @@ import {
   Affix,
   Card,
   Col,
+  Divider,
   Input,
   Pagination,
   Row,
@@ -25,13 +26,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/pro-light-svg-icons';
 import ArticleCard from 'components/feedItems/ArticleSection/ArticleCard';
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Paragraph, Text } = Typography;
 // import Lightbox from 'yet-another-react-lightbox';
 // import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 
 interface Props {
   data: FeedItemsQuery | undefined;
-  loading: boolean;
   recentOffenderData: ListOffendersQuery | undefined;
   recentOffenderLoading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
@@ -52,7 +52,6 @@ interface Props {
 
 const FeedItem = ({
   data,
-  loading,
   recentOffenderData,
   recentOffenderLoading,
   onPaginationChange,
@@ -69,7 +68,6 @@ const FeedItem = ({
 // onNavigate,
 Props): JSX.Element => {
   const [affix, setAffix] = React.useState(false);
-  console.log('pagination', pagination);
 
   return (
     <div className="feed-container">
@@ -78,6 +76,7 @@ Props): JSX.Element => {
           <Affix offsetTop={40} onChange={(affixed) => setAffix(!!affixed)}>
             <Row
               wrap={false}
+              gutter={8}
               style={{
                 paddingBottom: 10,
                 backgroundColor: !affix ? 'rgb(250, 250, 251)' : 'white',
@@ -94,7 +93,7 @@ Props): JSX.Element => {
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </Col>
-              <Col flex={1}>
+              <Col>
                 <Select
                   placeholder="Groups"
                   mode="multiple"
@@ -130,67 +129,91 @@ Props): JSX.Element => {
             </Row>
           </Affix>
 
-          {data?.listFeedItems?.feedItems &&
-            data.listFeedItems?.feedItems.length &&
-            data.listFeedItems?.feedItems.map((item) => (
-              <Card
-                title={item?.message}
-                headStyle={{ borderBottom: '1px black' }}
-                extra={formatDate(item?.updatedAt)}
-                style={{ width: '100%', borderBottom: '1px black' }}
-                key={item?.incidentId || item?.offenderId || ''}
-              >
-                <div
-                  style={{ borderTop: '1px', marginLeft: -10, marginRight: 10 }}
+          <div
+            style={{
+              height: 'calc(100vh - 126px)',
+              overflow: 'auto',
+              paddingBottom: 20,
+            }}
+          >
+            {data?.listFeedItems?.feedItems &&
+              data.listFeedItems?.feedItems.length &&
+              data.listFeedItems?.feedItems.map((item) => (
+                <Card
+                  headStyle={{ borderBottom: '1px black' }}
+                  style={{
+                    width: '100%',
+                    borderBottom: '1px black',
+                    marginBottom: 10,
+                  }}
+                  key={item?.incidentId || item?.offenderId || ''}
+                  bodyStyle={{ padding: 0 }}
                 >
-                  {/* create new incident/offender */}
-                  {item?.type === FeedItemType.NewIncident && (
-                    <IncidentFeed feedItem={item} isNewIncident />
-                  )}
-                  {item?.type === FeedItemType.NewOffender && (
-                    <OffenderFeed feedItem={item} isNewOffender />
-                  )}
-                  {/* update details  */}
-                  {item?.type === FeedItemType.Incident && (
-                    <IncidentFeed feedItem={item} />
-                  )}
-                  {item?.type === FeedItemType.Offender && (
-                    <OffenderFeed feedItem={item} />
-                  )}
-                  {/* add new images */}
-                  {item?.type === FeedItemType.IncidentImage && (
-                    <IncidentFeed feedItem={item} isNewImage />
-                  )}
-                  {item?.type === FeedItemType.OffenderImage && (
-                    <OffenderFeed feedItem={item} isNewImage />
-                  )}
-                  {/* add new intel */}
-                  {item?.type === FeedItemType.IncidentIntel && (
-                    <IncidentFeed feedItem={item} />
-                  )}
-                  {item?.type === FeedItemType.OffenderIntel && (
-                    <OffenderFeed feedItem={item} />
-                  )}
+                  <>
+                    <Row style={{ margin: '10px 15px 5px' }}>
+                      <Col flex={1}>
+                        <Title style={{ margin: 0 }} level={5}>
+                          {item?.message}
+                        </Title>
+                      </Col>
+                      <Col>
+                        <Text type="secondary" style={{ fontSize: 12 }}>
+                          {formatDate(item?.updatedAt)}
+                        </Text>
+                      </Col>
+                    </Row>
+                    <Divider style={{ margin: 0 }} />
+                    <div style={{ borderTop: '1px', padding: 10 }}>
+                      {/* create new incident/offender */}
+                      {item?.type === FeedItemType.NewIncident && (
+                        <IncidentFeed feedItem={item} isNewIncident />
+                      )}
+                      {item?.type === FeedItemType.NewOffender && (
+                        <OffenderFeed feedItem={item} isNewOffender />
+                      )}
+                      {/* update details  */}
+                      {item?.type === FeedItemType.Incident && (
+                        <IncidentFeed feedItem={item} />
+                      )}
+                      {item?.type === FeedItemType.Offender && (
+                        <OffenderFeed feedItem={item} />
+                      )}
+                      {/* add new images */}
+                      {item?.type === FeedItemType.IncidentImage && (
+                        <IncidentFeed feedItem={item} isNewImage />
+                      )}
+                      {item?.type === FeedItemType.OffenderImage && (
+                        <OffenderFeed feedItem={item} isNewImage />
+                      )}
+                      {/* add new intel */}
+                      {item?.type === FeedItemType.IncidentIntel && (
+                        <IncidentFeed feedItem={item} />
+                      )}
+                      {item?.type === FeedItemType.OffenderIntel && (
+                        <OffenderFeed feedItem={item} />
+                      )}
 
-                  {/* article */}
-                  {item?.type === FeedItemType.NewArticle && (
-                    <ArticleFeed feedItem={item} />
-                  )}
-                </div>
-              </Card>
-            ))}
-          <Row justify="center">
-            <Col>
-              <Pagination
-                total={data?.listFeedItems?.total}
-                pageSizeOptions={pagination.sizeOptions}
-                pageSize={pagination.pageSize}
-                current={pagination.page}
-                onChange={onPaginationChange}
-                showTotal={(total) => `Total FeedItems: ${total}`}
-              />
-            </Col>
-          </Row>
+                      {/* article */}
+                      {item?.type === FeedItemType.NewArticle && (
+                        <ArticleFeed feedItem={item} />
+                      )}
+                    </div>
+                  </>
+                </Card>
+              ))}
+            <Row justify="center">
+              <Col>
+                <Pagination
+                  total={data?.listFeedItems?.total}
+                  pageSizeOptions={pagination.sizeOptions}
+                  pageSize={pagination.pageSize}
+                  current={pagination.page}
+                  onChange={onPaginationChange}
+                  showTotal={(total) => `Total FeedItems: ${total}`}
+                />
+              </Col>
+            </Row>
+          </div>
         </Col>
         <Col span={13} xxl={15} xl={14} lg={12}>
           {/* <IncidentSkeletonCard /> */}
@@ -237,6 +260,7 @@ Props): JSX.Element => {
                           position: 'relative',
                           backgroundImage: `url(${offender.images[0]?.optimised})`,
                           backgroundSize: 'cover',
+                          backgroundPosition: 'center',
                           padding: 0,
                           borderRadius: '0.625rem',
                           overflow: 'hidden',
@@ -278,19 +302,40 @@ Props): JSX.Element => {
               </Row>
             )}
           </Card>
-          <Card>
-            <Row>
-              {data?.listFeedItems?.feedItems &&
-                data.listFeedItems?.feedItems.length &&
-                data.listFeedItems?.feedItems.map((item) => (
-                  <Col span={4}>
-                    {item?.type === FeedItemType.NewArticle && (
-                      <ArticleCard articleData={item} />
-                    )}
-                  </Col>
-                ))}
-            </Row>
-          </Card>
+          <Row gutter={12}>
+            <Col span={12}>
+              <Card bodyStyle={{ paddingRight: 0, paddingLeft: 0 }}>
+                <Title
+                  style={{ marginRight: 20, marginLeft: 20, marginBottom: 10 }}
+                  level={4}
+                >
+                  Recent Articles
+                </Title>
+                <Divider style={{ marginTop: 0, marginBottom: 10 }} />
+                <div>
+                  {data?.listFeedItems?.feedItems &&
+                    data.listFeedItems?.feedItems.length &&
+                    data.listFeedItems?.feedItems.map((item) => (
+                      <div>
+                        {item?.type === FeedItemType.NewArticle && (
+                          <ArticleCard articleData={item} />
+                        )}
+                      </div>
+                    ))}
+                </div>
+              </Card>
+            </Col>
+            <Col span={12}>
+              <Card bodyStyle={{ paddingRight: 0, paddingLeft: 0 }}>
+                <Title
+                  style={{ marginRight: 20, marginLeft: 20, marginBottom: 10 }}
+                  level={4}
+                >
+                  Awaiting Approval
+                </Title>
+              </Card>
+            </Col>
+          </Row>
         </Col>
       </Row>
     </div>

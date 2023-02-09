@@ -554,6 +554,7 @@ const ViewMessges = ({
                       onConfirm={() => removeImage(file.uid)}
                       okText="Yes"
                       cancelText="No"
+                      overlayInnerStyle={{ padding: 10 }}
                     >
                       <Button
                         size="small"
@@ -593,6 +594,7 @@ const ViewMessges = ({
                     onConfirm={() => removeOffender(offender.id)}
                     okText="Yes"
                     cancelText="No"
+                    overlayInnerStyle={{ padding: 10 }}
                   >
                     <Button
                       size="small"
@@ -639,6 +641,7 @@ const ViewMessges = ({
                     onConfirm={() => removeIncident(incident.id)}
                     okText="Yes"
                     cancelText="No"
+                    overlayInnerStyle={{ padding: 10 }}
                   >
                     <Button
                       size="small"
