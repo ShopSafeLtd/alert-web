@@ -403,6 +403,7 @@ const EditIncident = ({
                     disabled={saving}
                     mode="multiple"
                     maxTagCount={3}
+                    placeholder="Search for a crime type..."
                   >
                     {tags.map((tag) => (
                       <Select.Option value={tag.value}>
