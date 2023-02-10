@@ -5791,6 +5791,7 @@ export type CrimeGroup = {
   actions: Array<Action>;
   createdAt: Scalars['DateTime'];
   id: Scalars['String'];
+  incidents?: Maybe<Array<Maybe<Incident>>>;
   intel: Array<Intel>;
   offenders: Array<Offender>;
   reference?: Maybe<Scalars['Int']>;
@@ -5798,7 +5799,7 @@ export type CrimeGroup = {
   totalIncidents?: Maybe<Scalars['Int']>;
   totalOffenders?: Maybe<Scalars['Int']>;
   totalRecoveredValue?: Maybe<Scalars['Int']>;
-  totalTheftSuccess?: Maybe<Scalars['Int']>;
+  totalTheftSuccess?: Maybe<Scalars['Float']>;
   totalValue?: Maybe<Scalars['Int']>;
   updatedAt: Scalars['DateTime'];
   updates: Array<Update>;
@@ -14549,7 +14550,7 @@ export type Offender = {
   tempId?: Maybe<Scalars['String']>;
   totalIncidents?: Maybe<Scalars['Int']>;
   totalRecoveredValue?: Maybe<Scalars['Float']>;
-  totalTheftSuccess?: Maybe<Scalars['Int']>;
+  totalTheftSuccess?: Maybe<Scalars['Float']>;
   totalUpdates?: Maybe<Scalars['Int']>;
   totalValue?: Maybe<Scalars['Float']>;
   updatedAt: Scalars['DateTime'];
@@ -27408,6 +27409,7 @@ export type CrimeGroupQuery = {
       __typename?: 'Offender';
       id: string;
       name?: string | null;
+      reference?: number | null;
       hair?: string | null;
       peculiarities?: string | null;
       race?: Race | null;
@@ -27431,6 +27433,17 @@ export type CrimeGroupQuery = {
         optimised?: string | null;
       }>;
     }>;
+    incidents?: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+      dayTime?: string | null;
+      value?: number | null;
+      recoveredValue?: number | null;
+      reference?: number | null;
+      policeRef?: string | null;
+      createdBy: { __typename?: 'User'; id: string; organisation: string };
+    } | null> | null;
   } | null;
 };
 
@@ -31684,6 +31697,7 @@ export const CrimeGroupDocument = gql`
       offenders {
         id
         name
+        reference
         lastActive {
           id
           dayTime
@@ -31704,6 +31718,19 @@ export const CrimeGroupDocument = gql`
         totalRecoveredValue
         totalIncidents
         totalValue
+      }
+      incidents {
+        id
+        subject
+        dayTime
+        createdBy {
+          id
+          organisation
+        }
+        value
+        recoveredValue
+        reference
+        policeRef
       }
     }
   }
