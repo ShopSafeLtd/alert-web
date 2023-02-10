@@ -34,7 +34,7 @@ const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
   return (
     <Row gutter={15} wrap={false} key={id || ''}>
       {previewImage ? (
-        <Col style={{ marginLeft: 10 }}>
+        <Col>
           <ImageContainer src={previewImage} />
         </Col>
       ) : null}
