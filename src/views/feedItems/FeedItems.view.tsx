@@ -3,28 +3,35 @@ import {
   FeedItemsQuery,
   FeedItemType,
   ListOffendersQuery,
+  ListUnapprovedIncidentsQuery,
 } from 'graphql/generated';
 import {
   Affix,
+  Button,
   Card,
   Col,
   Divider,
   Input,
   Pagination,
   Row,
-  Select,
   Skeleton,
   Typography,
 } from 'antd';
 // import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
-import { FeedItemSort } from 'state';
+import moment from 'moment';
 import IncidentFeed from 'components/feedItems/FeedItemSection/IncidentFeed';
 import OffenderFeed from 'components/feedItems/FeedItemSection/OffenderFeed';
 import { formatDate } from 'utils';
 import ArticleFeed from 'components/feedItems/FeedItemSection/ArticleFeed';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/pro-light-svg-icons';
+import {
+  faExclamationCircle,
+  faNewspaper,
+  faUser,
+  faUsers,
+} from '@fortawesome/pro-light-svg-icons';
 import ArticleCard from 'components/feedItems/ArticleSection/ArticleCard';
+import { Link } from 'react-router-dom';
 
 const { Title, Paragraph, Text } = Typography;
 // import Lightbox from 'yet-another-react-lightbox';
@@ -36,18 +43,12 @@ interface Props {
   recentOffenderLoading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
   pagination: { page: number; pageSize: number; sizeOptions: string[] };
-  order: FeedItemSort;
-  setOrder: (value: FeedItemSort) => void;
   search: string;
   setSearch: (value: string) => void;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  onGroupsChange: (groups: string[]) => void;
-  variables: {
-    groups: string[];
-  };
   // updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
   // onNavigate: () => void;
+  unapprovedIncidents: ListUnapprovedIncidentsQuery | undefined;
+  unapprovedIncidentsLoading: boolean;
 }
 
 const FeedItem = ({
@@ -56,14 +57,10 @@ const FeedItem = ({
   recentOffenderLoading,
   onPaginationChange,
   pagination,
-  order,
-  setOrder,
   search,
   setSearch,
-  groups,
-  groupsLoading,
-  onGroupsChange,
-  variables,
+  unapprovedIncidents,
+  unapprovedIncidentsLoading,
 }: // updateIncidentList,
 // onNavigate,
 Props): JSX.Element => {
@@ -71,29 +68,29 @@ Props): JSX.Element => {
 
   return (
     <div className="feed-container">
-      <Row gutter={15}>
-        <Col span={11} xxl={9} xl={10} lg={12}>
-          <Affix offsetTop={40} onChange={(affixed) => setAffix(!!affixed)}>
-            <Row
-              wrap={false}
-              gutter={8}
-              style={{
-                paddingBottom: 10,
-                backgroundColor: !affix ? 'rgb(250, 250, 251)' : 'white',
-                paddingTop: affix ? 10 : 0,
-                borderBottom: affix ? '1px solid #e8e8e8' : 'none',
-              }}
-            >
-              <Col span={6} xxl={8} xl={7}>
+      <Affix offsetTop={40} onChange={(affixed) => setAffix(!!affixed)}>
+        <Row
+          wrap={false}
+          gutter={8}
+          style={{
+            paddingBottom: 10,
+            backgroundColor: !affix ? 'rgb(250, 250, 251)' : 'white',
+            paddingTop: affix ? 10 : 0,
+            borderBottom: affix ? '1px solid #e8e8e8' : 'none',
+          }}
+        >
+          <Col span={10}>
+            <Row>
+              <Col span={24} xxl={24} xl={24}>
                 <Input
                   size="small"
                   style={{ width: '100%' }}
-                  placeholder="Search feedItems..."
+                  placeholder="Search for anything in alert..."
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </Col>
-              <Col>
+              {/* <Col>
                 <Select
                   placeholder="Groups"
                   mode="multiple"
@@ -105,30 +102,47 @@ Props): JSX.Element => {
                   value={variables.groups}
                 >
                   {groups.map((group) => (
-                    <Select.Option value={group.value}>
-                      {group.label}
-                    </Select.Option>
+                    <Select.Option value={group.value}>{group.label}</Select.Option>
                   ))}
                 </Select>
-              </Col>
-              <Col>
-                <Select
-                  value={order}
-                  onChange={setOrder}
-                  size="small"
-                  // style={{ minWidth: 80 }}
-                >
-                  <Select.Option value={FeedItemSort.updatedAtDesc}>
-                    Newest First
-                  </Select.Option>
-                  <Select.Option value={FeedItemSort.updatedAtAsc}>
-                    Oldest First
-                  </Select.Option>
-                </Select>
-              </Col>
+              </Col> */}
             </Row>
-          </Affix>
-
+          </Col>
+          <Col flex={1} />
+          <Col>
+            <Link to="/app/incidents/add">
+              <Button size="small" type="primary">
+                <FontAwesomeIcon
+                  icon={faExclamationCircle}
+                  style={{ marginRight: 10 }}
+                />{' '}
+                Add Incident
+              </Button>
+            </Link>
+          </Col>
+          <Col>
+            <Link to="/app/offenders/add">
+              <Button size="small" type="primary">
+                <FontAwesomeIcon icon={faUsers} style={{ marginRight: 10 }} />{' '}
+                Add Offender
+              </Button>
+            </Link>
+          </Col>
+          <Col>
+            <Link to="/app/article ">
+              <Button size="small" type="primary">
+                <FontAwesomeIcon
+                  icon={faNewspaper}
+                  style={{ marginRight: 10 }}
+                />{' '}
+                Add Bulletin
+              </Button>
+            </Link>
+          </Col>
+        </Row>
+      </Affix>
+      <Row gutter={15}>
+        <Col span={11} xxl={9} xl={9} lg={12}>
           <div
             style={{
               height: 'calc(100vh - 126px)',
@@ -215,10 +229,12 @@ Props): JSX.Element => {
             </Row>
           </div>
         </Col>
-        <Col span={13} xxl={15} xl={14} lg={12}>
+        <Col span={13} xxl={15} xl={15} lg={12}>
           {/* <IncidentSkeletonCard /> */}
-          <Card>
-            <Title level={3}>Recently Active Offenders</Title>
+          <Card bodyStyle={{ padding: 20 }}>
+            <Title level={4} style={{ fontSize: 16 }}>
+              Recently Active Offenders
+            </Title>
             {recentOffenderLoading ? (
               <Row gutter={8}>
                 {[1, 2, 3, 4, 5].map((key) => (
@@ -304,12 +320,19 @@ Props): JSX.Element => {
           </Card>
           <Row gutter={12}>
             <Col span={12}>
-              <Card bodyStyle={{ paddingRight: 0, paddingLeft: 0 }}>
+              <Card
+                bodyStyle={{ paddingRight: 0, paddingLeft: 0, paddingTop: 15 }}
+              >
                 <Title
-                  style={{ marginRight: 20, marginLeft: 20, marginBottom: 10 }}
+                  style={{
+                    marginRight: 20,
+                    marginLeft: 20,
+                    marginBottom: 10,
+                    fontSize: 16,
+                  }}
                   level={4}
                 >
-                  Recent Articles
+                  Recent Bulletins
                 </Title>
                 <Divider style={{ marginTop: 0, marginBottom: 10 }} />
                 <div>
@@ -326,13 +349,85 @@ Props): JSX.Element => {
               </Card>
             </Col>
             <Col span={12}>
-              <Card bodyStyle={{ paddingRight: 0, paddingLeft: 0 }}>
+              <Card
+                bodyStyle={{ paddingRight: 0, paddingLeft: 0, paddingTop: 15 }}
+              >
                 <Title
-                  style={{ marginRight: 20, marginLeft: 20, marginBottom: 10 }}
+                  style={{
+                    marginRight: 20,
+                    marginLeft: 20,
+                    marginBottom: 10,
+                    fontSize: 16,
+                  }}
                   level={4}
                 >
                   Awaiting Approval
                 </Title>
+                {unapprovedIncidentsLoading ? (
+                  <div />
+                ) : (
+                  <div>
+                    <Divider style={{ marginTop: 0, marginBottom: 0 }} />
+                    {unapprovedIncidents?.listIncidents?.incidents.map(
+                      (incident) => (
+                        <Link
+                          to={`/app/incidents/review/${incident.id}`}
+                          key={incident.id}
+                        >
+                          <div style={{ padding: '10px 20px' }}>
+                            <div style={{ marginBottom: 10 }}>
+                              <Text style={{ fontSize: 12 }} strong>
+                                Incident submitted{' '}
+                                {moment(incident.date).fromNow()} by{' '}
+                                {incident.createdBy.fullName}.
+                              </Text>
+                            </div>
+                            <Row wrap={false} style={{ marginTop: 10 }}>
+                              {incident.images && (
+                                <Col style={{ marginRight: 10 }}>
+                                  <div
+                                    style={{
+                                      width: 80,
+                                      height: 80,
+                                      backgroundImage: `url(${incident.images[0]?.optimised})`,
+                                      backgroundPosition: 'center',
+                                      backgroundRepeat: 'no-repeat',
+                                      backgroundSize: 'cover',
+                                      borderRadius: 5,
+                                    }}
+                                  />
+                                </Col>
+                              )}
+                              <Col>
+                                <div>
+                                  <Title
+                                    level={4}
+                                    style={{ fontSize: 16, marginBottom: 2 }}
+                                    ellipsis
+                                  >
+                                    {incident.subject}
+                                  </Title>
+                                  <div>
+                                    <Text style={{ fontSize: 12 }}>
+                                      Created At: {incident.dayTime}
+                                    </Text>
+                                  </div>
+                                  <div>
+                                    <Text style={{ fontSize: 12 }}>
+                                      Created By:{' '}
+                                      {incident.createdBy?.organisation}
+                                    </Text>
+                                  </div>
+                                </div>
+                              </Col>
+                            </Row>
+                          </div>
+                          <Divider style={{ marginTop: 0, marginBottom: 0 }} />
+                        </Link>
+                      )
+                    )}
+                  </div>
+                )}
               </Card>
             </Col>
           </Row>

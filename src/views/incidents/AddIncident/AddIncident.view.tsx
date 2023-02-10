@@ -384,36 +384,6 @@ const EditIncident = ({
           </Col>
         </Row>
         <Row wrap={false} gutter={50}>
-          {groups.length > 1 && (
-            <Col span={8}>
-              <Form.Item
-                name="groups"
-                label="Groups"
-                tooltip="Please select the relevant groups to report this incident to, for GDPR it is important that the data is relevant to the groups."
-                rules={[
-                  {
-                    required: true,
-                    message:
-                      'Please add at least one group that you would like this incident to be visible to.',
-                  },
-                ]}
-              >
-                <Select
-                  loading={groupsLoading}
-                  disabled={saving}
-                  mode="multiple"
-                  maxTagCount={3}
-                  placeholder="Select the groups that you would like this incident to be visible to."
-                >
-                  {groups.map((group) => (
-                    <Select.Option key={group.value} value={group.value}>
-                      {group.label}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Col>
-          )}
           <Col span={12}>
             <Row gutter={5} align="middle">
               <Col flex={1}>
@@ -960,6 +930,60 @@ const EditIncident = ({
             </Form.Item>
           </Col>
         </Row>
+        <Row align="bottom" style={{ marginBottom: 20 }}>
+          <Col>
+            <Title style={{ marginBottom: 0 }} level={4}>
+              4.
+            </Title>
+          </Col>
+          <Col>
+            <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+              Who is it visible to?
+            </Title>
+          </Col>
+          <Col>
+            <Paragraph
+              style={{ marginBottom: 1, marginLeft: 5 }}
+              type="secondary"
+              italic
+            >
+              - Please select the groups that this incident is for.
+            </Paragraph>
+          </Col>
+        </Row>
+        {groups.length > 1 && (
+          <Row>
+            <Col span={8}>
+              <Form.Item
+                name="groups"
+                label="Groups"
+                tooltip="Please select the relevant groups to report this incident to, for GDPR it is important that the data is relevant to the groups."
+                rules={[
+                  {
+                    required: true,
+                    message:
+                      'Please add at least one group that you would like this incident to be visible to.',
+                  },
+                ]}
+              >
+                <Select
+                  loading={groupsLoading}
+                  disabled={saving}
+                  mode="multiple"
+                  maxTagCount={3}
+                  placeholder="Select the groups that you would like this incident to be visible to."
+                >
+                  {groups.map((group) => (
+                    <Select.Option key={group.value} value={group.value}>
+                      {group.label}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+        )}
+
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={10} justify="end">
             <Col>

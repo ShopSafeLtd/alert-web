@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Image, Row, Tag, Typography } from 'antd';
+import { Col, Row, Tag, Typography } from 'antd';
 import { ArticlePriority, FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/pro-solid-svg-icons';
@@ -13,7 +13,17 @@ interface Props {
     | undefined;
 }
 const ImageContainer = ({ src }: { src: string }) => (
-  <Image width={200} height={200} style={{ borderRadius: 5 }} src={src} />
+  <div
+    style={{
+      width: 140,
+      height: 150,
+      backgroundImage: `url(${src})`,
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
+      borderRadius: 5,
+    }}
+  />
 );
 const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
   // const imagesRef = useRef<CarouselRef>(null);

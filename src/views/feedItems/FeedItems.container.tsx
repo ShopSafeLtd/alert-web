@@ -9,14 +9,10 @@ const FeedItems = (): JSX.Element => {
     recentOffenderLoading,
     onPaginationChange,
     pagination,
-    order,
-    setOrder,
     search,
     setSearch,
-    groups,
-    groupsLoading,
-    onGroupsChange,
-    variables,
+    unapprovedIncidents,
+    unapprovedIncidentsLoading,
     // updateIncidentList,
     // onNavigate,
   } = useFeedItems();
@@ -28,14 +24,10 @@ const FeedItems = (): JSX.Element => {
       recentOffenderLoading={recentOffenderLoading}
       onPaginationChange={onPaginationChange}
       pagination={pagination}
-      order={order}
-      setOrder={setOrder}
       search={search}
       setSearch={setSearch}
-      groups={groups}
-      groupsLoading={groupsLoading}
-      onGroupsChange={onGroupsChange}
-      variables={variables}
+      unapprovedIncidents={unapprovedIncidents}
+      unapprovedIncidentsLoading={unapprovedIncidentsLoading}
       // updateIncidentList={updateIncidentList}
       // onNavigate={onNavigate}
     />

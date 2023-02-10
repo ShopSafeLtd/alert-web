@@ -5,7 +5,9 @@ import {
   SortOrder,
   useFeedItemsQuery,
   useListOffendersQuery,
+  useListUnapprovedIncidentsQuery,
   useSchemeGroupsQuery,
+  ListUnapprovedIncidentsQuery,
 } from 'graphql/generated';
 import { useEffect } from 'react';
 import { FeedItemSort, useStoreActions, useStoreState } from 'state';
@@ -30,6 +32,8 @@ interface Return {
   };
   // updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
   onNavigate: () => void;
+  unapprovedIncidents: ListUnapprovedIncidentsQuery | undefined;
+  unapprovedIncidentsLoading: boolean;
 }
 
 const getSizeOptions = () => {
@@ -120,8 +124,30 @@ const useFeedItems = (): Return => {
     },
     fetchPolicy: 'cache-and-network',
   });
+
+  const { data: unapprovedIncidents, loading: unapprovedIncidentsLoading } =
+    useListUnapprovedIncidentsQuery({
+      fetchPolicy: 'cache-and-network',
+      variables: {
+        scheme: {
+          id: schemeId,
+        },
+        order: {
+          createdAt: SortOrder.Desc,
+        },
+        skip: 0,
+        take: 10,
+        where: {
+          approved: {
+            equals: false,
+          },
+        },
+      },
+    });
+
   const { data: recentOffenderData, loading: recentOffenderLoading } =
     useListOffendersQuery({
+      fetchPolicy: 'cache-and-network',
       variables: {
         scheme: {
           id: schemeId,
@@ -207,6 +233,8 @@ const useFeedItems = (): Return => {
     variables,
     // updateIncidentList,
     onNavigate,
+    unapprovedIncidents,
+    unapprovedIncidentsLoading,
   };
 };
 

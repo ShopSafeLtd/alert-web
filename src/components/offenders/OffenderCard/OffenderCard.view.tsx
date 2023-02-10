@@ -19,6 +19,7 @@ import {
   faEarth,
   faEdit,
   faEllipsisV,
+  faExclamationCircle,
   faLocationDot,
   faMarsAndVenus,
   faPeople,
@@ -199,10 +200,24 @@ const OffenderCard = ({
       <div className="offender-card-content">
         <Link to={`view/${offender?.id}`}>
           <div className="offender-card-desc">
-            <Title level={4} ellipsis>
-              {offender?.name}
-            </Title>
-            <Row style={{ marginTop: -5, marginBottom: 10 }}>
+            <Row gutter={8}>
+              <Col flex={1}>
+                <Title level={4} ellipsis style={{ marginBottom: 0 }}>
+                  {offender?.name}
+                </Title>
+              </Col>
+              <Col>
+                <FontAwesomeIcon
+                  style={{ marginRight: 5, width: 20, fontSize: 18 }}
+                  icon={faExclamationCircle}
+                />
+                <Text style={{ fontSize: 16 }} type="secondary">
+                  {offender?.totalIncidents}
+                </Text>
+              </Col>
+            </Row>
+            <Text type="secondary">Ref: {offender?.reference}</Text>
+            <Row style={{ marginTop: 5, marginBottom: 10 }}>
               <Col>
                 <FontAwesomeIcon
                   size="sm"
@@ -228,8 +243,8 @@ const OffenderCard = ({
             </Row>
           </div>
 
-          <Row>
-            <Col flex={1}>
+          <Row gutter={16}>
+            <Col>
               <FontAwesomeIcon
                 size="sm"
                 className="offender-card-icon"
@@ -252,8 +267,6 @@ const OffenderCard = ({
                 Build:{getOffenderBuild(offender.build)}
               </Text>
             </Col>
-          </Row>
-          <Row>
             <Col flex={1}>
               <FontAwesomeIcon
                 size="sm"

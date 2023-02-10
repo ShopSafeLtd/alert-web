@@ -17,6 +17,8 @@ import {
   faMapLocationDot,
   faPeopleGroup,
   faHome,
+  faAddressCard,
+  faCar,
 } from '@fortawesome/pro-light-svg-icons';
 
 export interface MenuItem {
@@ -64,12 +66,37 @@ const userOnlyItems: NavItem[] = [
     submenu: [],
   },
   {
-    key: 'offenders',
-    path: `${APP_PREFIX_PATH}/offenders`,
-    title: 'sidenav.offenders',
-    icon: faUsers,
+    key: 'profiles',
+    path: `${APP_PREFIX_PATH}/profiles`,
+    title: 'sidenav.profiles',
+    icon: faAddressCard,
     breadcrumb: true,
-    submenu: [],
+    submenu: [
+      {
+        key: 'offenders',
+        path: `${APP_PREFIX_PATH}/offenders`,
+        title: 'sidenav.offenders',
+        icon: faUsers,
+        breadcrumb: true,
+        submenu: [],
+      },
+      {
+        key: 'crime-groups',
+        path: `${APP_PREFIX_PATH}/scheme-settings/crime-groups`,
+        title: 'Crime Groups',
+        icon: faPeopleGroup,
+        breadcrumb: true,
+        submenu: [],
+      },
+      {
+        key: 'vehicles',
+        path: `${APP_PREFIX_PATH}/scheme-settings/crime-groups`,
+        title: 'Vehicles',
+        icon: faCar,
+        breadcrumb: true,
+        submenu: [],
+      },
+    ],
   },
   {
     key: 'chat',
@@ -110,14 +137,6 @@ const adminOnlyItems: NavItem[] = [
         path: `${APP_PREFIX_PATH}/scheme-settings/chat-groups`,
         title: 'Chat Groups',
         icon: faCommentLines,
-        breadcrumb: true,
-        submenu: [],
-      },
-      {
-        key: 'crime-groups',
-        path: `${APP_PREFIX_PATH}/scheme-settings/crime-groups`,
-        title: 'Crime Groups',
-        icon: faPeopleGroup,
         breadcrumb: true,
         submenu: [],
       },

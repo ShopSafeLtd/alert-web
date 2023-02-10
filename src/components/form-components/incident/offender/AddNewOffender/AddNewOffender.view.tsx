@@ -120,7 +120,7 @@ const AddNewOffender = ({
           Do you know the offender&apos;s date of birth?
         </Typography.Text>
         <Switch
-          style={{ height: 30, marginLeft: 10 }}
+          style={{ height: 30, marginLeft: 10, marginTop: 10 }}
           checked={ageCheck}
           checkedChildren="Yes"
           unCheckedChildren="No"
