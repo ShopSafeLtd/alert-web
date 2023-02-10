@@ -73,7 +73,7 @@ const ListCrimeGroups = ({ data, loading }: Props) => {
             key: 'totalTheftSuccess',
             dataIndex: 'totalTheftSuccess',
             title: 'Success Rate',
-            render: (value) => `${value || 0}%`,
+            render: (value) => `${value?.toFixed(0) || 0}%`,
           },
         ]}
       />
