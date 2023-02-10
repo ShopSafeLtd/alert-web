@@ -16,6 +16,8 @@ query listOffenders(
       id
       createdAt
       updatedAt
+      totalIncidents
+      reference
       age
       build
       dateOfBirth

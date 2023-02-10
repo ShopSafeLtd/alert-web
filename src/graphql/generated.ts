@@ -28093,6 +28093,45 @@ export type ListIncidentsQuery = {
   } | null;
 };
 
+export type ListUnapprovedIncidentsQueryVariables = Exact<{
+  scheme: SchemeWhereUniqueInput;
+  where?: InputMaybe<IncidentWhereInput>;
+  order?: InputMaybe<IncidentOrderByWithRelationInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type ListUnapprovedIncidentsQuery = {
+  __typename?: 'Query';
+  listIncidents?: {
+    __typename?: 'ListIncidents';
+    total: number;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+      dayTime?: string | null;
+      date: any;
+      reference?: number | null;
+      approved?: boolean | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        url?: string | null;
+      }>;
+      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        organisation: string;
+      };
+      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    }>;
+  } | null;
+};
+
 export type ViewIncidentQueryVariables = Exact<{
   where: IncidentWhereUniqueInput;
 }>;
@@ -28721,6 +28760,8 @@ export type ListOffendersQuery = {
       id: string;
       createdAt: any;
       updatedAt: any;
+      totalIncidents?: number | null;
+      reference?: number | null;
       age?: Age | null;
       build?: Build | null;
       dateOfBirth?: any | null;
@@ -28809,6 +28850,8 @@ export type OffenderFeedQuery = {
     id: string;
     createdAt: any;
     updatedAt: any;
+    totalIncidents?: number | null;
+    reference?: number | null;
     age?: Age | null;
     build?: Build | null;
     dateOfBirth?: any | null;
@@ -33040,6 +33083,106 @@ export type ListIncidentsQueryResult = Apollo.QueryResult<
   ListIncidentsQuery,
   ListIncidentsQueryVariables
 >;
+export const ListUnapprovedIncidentsDocument = gql`
+  query listUnapprovedIncidents(
+    $scheme: SchemeWhereUniqueInput!
+    $where: IncidentWhereInput
+    $order: IncidentOrderByWithRelationInput
+    $take: Int
+    $skip: Int
+  ) {
+    listIncidents(
+      scheme: $scheme
+      where: $where
+      order: $order
+      take: $take
+      skip: $skip
+    ) {
+      incidents {
+        id
+        subject
+        dayTime
+        date
+        reference
+        images {
+          id
+          optimised
+          url
+        }
+        crimeTypes {
+          id
+          name
+        }
+        approved
+        createdBy {
+          id
+          fullName
+          organisation
+        }
+        groups {
+          id
+          name
+        }
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useListUnapprovedIncidentsQuery__
+ *
+ * To run a query within a React component, call `useListUnapprovedIncidentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListUnapprovedIncidentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListUnapprovedIncidentsQuery({
+ *   variables: {
+ *      scheme: // value for 'scheme'
+ *      where: // value for 'where'
+ *      order: // value for 'order'
+ *      take: // value for 'take'
+ *      skip: // value for 'skip'
+ *   },
+ * });
+ */
+export function useListUnapprovedIncidentsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListUnapprovedIncidentsQuery,
+    ListUnapprovedIncidentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListUnapprovedIncidentsQuery,
+    ListUnapprovedIncidentsQueryVariables
+  >(ListUnapprovedIncidentsDocument, options);
+}
+export function useListUnapprovedIncidentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListUnapprovedIncidentsQuery,
+    ListUnapprovedIncidentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListUnapprovedIncidentsQuery,
+    ListUnapprovedIncidentsQueryVariables
+  >(ListUnapprovedIncidentsDocument, options);
+}
+export type ListUnapprovedIncidentsQueryHookResult = ReturnType<
+  typeof useListUnapprovedIncidentsQuery
+>;
+export type ListUnapprovedIncidentsLazyQueryHookResult = ReturnType<
+  typeof useListUnapprovedIncidentsLazyQuery
+>;
+export type ListUnapprovedIncidentsQueryResult = Apollo.QueryResult<
+  ListUnapprovedIncidentsQuery,
+  ListUnapprovedIncidentsQueryVariables
+>;
 export const ViewIncidentDocument = gql`
   query ViewIncident($where: IncidentWhereUniqueInput!) {
     incident(where: $where) {
@@ -34135,6 +34278,8 @@ export const ListOffendersDocument = gql`
         id
         createdAt
         updatedAt
+        totalIncidents
+        reference
         age
         build
         dateOfBirth
@@ -34290,6 +34435,8 @@ export const OffenderFeedDocument = gql`
       id
       createdAt
       updatedAt
+      totalIncidents
+      reference
       age
       build
       dateOfBirth

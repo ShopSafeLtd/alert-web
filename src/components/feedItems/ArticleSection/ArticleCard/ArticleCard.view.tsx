@@ -1,10 +1,9 @@
 import React from 'react';
-import { Col, Divider, Image, Row, Space, Tag, Typography } from 'antd';
+import { Col, Divider, Image, Row, Tag, Typography } from 'antd';
 import { FeedItemsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
-import { formatDate } from 'utils';
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Paragraph } = Typography;
 
 interface Props {
   articleData:
@@ -15,48 +14,51 @@ interface Props {
 
 const ArticleFeed = ({ articleData }: Props): JSX.Element => {
   // const imagesRef = useRef<CarouselRef>(null);
-  const { id, title, updatedAt, tags, previewImage, previewText, createdBy } =
+  const { id, title, tags, previewImage, previewText } =
     articleData?.article || {};
 
   return (
     <Link to={`/app/article/view/${id}`}>
-      <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
-        {previewImage && (
-          <Row>
-            <Col>
-              <Image
-                width={100}
-                height={100}
-                style={{ borderRadius: 5 }}
-                src={previewImage}
-              />
-            </Col>
-          </Row>
-        )}
-        <div style={{ paddingLeft: 20, paddingRight: 20 }}>
-          <Title level={4}>{title}</Title>
-          <Paragraph style={{ marginBottom: 5 }}>{previewText}</Paragraph>
-          <Row wrap={false} style={{ marginTop: 10 }}>
-            <Col flex={1}>
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                {formatDate(updatedAt)}
-              </Text>
-            </Col>
-            <Col>
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                {createdBy?.fullName}
-              </Text>
-            </Col>
-          </Row>
-          {tags && tags.length ? (
-            <Row wrap={false} style={{ overflowX: 'auto', marginTop: 15 }}>
-              {tags.map((tag) => (
-                <Tag key={tag.id}>{tag.name}</Tag>
-              ))}
-            </Row>
-          ) : null}
-        </div>
-      </Space>
+      <Row wrap={false}>
+        <Col>
+          {previewImage && (
+            <Image
+              width={100}
+              height={100}
+              style={{ borderRadius: 5, marginLeft: 10 }}
+              src={previewImage}
+            />
+          )}
+        </Col>
+        <Col>
+          <div style={{ paddingLeft: 20, paddingRight: 20, display: 'block' }}>
+            <Title level={4} style={{ fontSize: 15, marginBottom: 5 }}>
+              {title}
+            </Title>
+            <Paragraph
+              style={{
+                marginBottom: 0,
+                height: 40,
+                width: '100%',
+                fontSize: 12,
+                whiteSpace: 'normal',
+                textOverflow: 'ellipsis',
+              }}
+              type="secondary"
+              ellipsis
+            >
+              {previewText}
+            </Paragraph>
+            {tags && tags.length ? (
+              <Row wrap={false} style={{ overflowX: 'auto', marginTop: 5 }}>
+                {tags.map((tag) => (
+                  <Tag key={tag.id}>{tag.name}</Tag>
+                ))}
+              </Row>
+            ) : null}
+          </div>
+        </Col>
+      </Row>
       <Divider style={{ marginTop: 10, marginBottom: 10 }} />
     </Link>
   );

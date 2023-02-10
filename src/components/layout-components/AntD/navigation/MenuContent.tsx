@@ -37,7 +37,8 @@ const Icon = ({ icon }: { icon: any }) => (
 const SubIcon = ({ icon }: { icon: any }) => (
   <FontAwesomeIcon
     icon={icon}
-    style={{ fontSize: 14, marginRight: 5, width: 18 }}
+    style={{ fontSize: 18, marginRight: 10, width: 22, marginLeft: 10 }}
+    size="lg"
   />
 );
 
