@@ -5798,7 +5798,7 @@ export type CrimeGroup = {
   totalIncidents?: Maybe<Scalars['Int']>;
   totalOffenders?: Maybe<Scalars['Int']>;
   totalRecoveredValue?: Maybe<Scalars['Int']>;
-  totalTheftSuccess?: Maybe<Scalars['Int']>;
+  totalTheftSuccess?: Maybe<Scalars['Float']>;
   totalValue?: Maybe<Scalars['Int']>;
   updatedAt: Scalars['DateTime'];
   updates: Array<Update>;
@@ -14549,7 +14549,7 @@ export type Offender = {
   tempId?: Maybe<Scalars['String']>;
   totalIncidents?: Maybe<Scalars['Int']>;
   totalRecoveredValue?: Maybe<Scalars['Float']>;
-  totalTheftSuccess?: Maybe<Scalars['Int']>;
+  totalTheftSuccess?: Maybe<Scalars['Float']>;
   totalUpdates?: Maybe<Scalars['Int']>;
   totalValue?: Maybe<Scalars['Float']>;
   updatedAt: Scalars['DateTime'];
@@ -27408,6 +27408,7 @@ export type CrimeGroupQuery = {
       __typename?: 'Offender';
       id: string;
       name?: string | null;
+      reference?: number | null;
       hair?: string | null;
       peculiarities?: string | null;
       race?: Race | null;
@@ -31684,6 +31685,7 @@ export const CrimeGroupDocument = gql`
       offenders {
         id
         name
+        reference
         lastActive {
           id
           dayTime

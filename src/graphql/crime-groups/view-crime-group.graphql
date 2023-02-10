@@ -10,6 +10,7 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
     offenders {
       id
       name
+      reference
       lastActive {
         id
         dayTime
@@ -31,5 +32,6 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
       totalIncidents
       totalValue
     }
+    
   }
 }
