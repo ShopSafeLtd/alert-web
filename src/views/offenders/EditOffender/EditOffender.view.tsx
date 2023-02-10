@@ -360,37 +360,7 @@ const EditOffender = ({
               </Form.Item>
             </Col>
           </Row>
-          {groups.length > 1 && (
-            <Row>
-              <Col span={8}>
-                <Form.Item
-                  name="groups"
-                  label="Groups"
-                  tooltip="Select the groups that you would like this offender to be visible to."
-                  rules={[
-                    {
-                      required: true,
-                      message:
-                        'Please select at least one group for the offender.',
-                    },
-                  ]}
-                >
-                  <Select
-                    loading={groupsLoading}
-                    disabled={saving}
-                    mode="multiple"
-                    maxTagCount={3}
-                  >
-                    {groups.map((group) => (
-                      <Select.Option key={group.value} value={group.value}>
-                        {group.label}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </Col>
-            </Row>
-          )}
+
           <Row align="middle" style={{ marginTop: 70, marginBottom: 20 }}>
             <Col>
               <Title style={{ marginBottom: 0 }} level={4}>
@@ -603,6 +573,61 @@ const EditOffender = ({
               </Form.Item>
             </Col>
           </Row>
+
+          {groups.length > 1 && (
+            <>
+              <Row>
+                <Col span={8}>
+                  <Form.Item
+                    name="groups"
+                    label="Groups"
+                    tooltip="Select the groups that you would like this offender to be visible to."
+                    rules={[
+                      {
+                        required: true,
+                        message:
+                          'Please select at least one group for the offender.',
+                      },
+                    ]}
+                  >
+                    <Select
+                      loading={groupsLoading}
+                      disabled={saving}
+                      mode="multiple"
+                      maxTagCount={3}
+                    >
+                      {groups.map((group) => (
+                        <Select.Option key={group.value} value={group.value}>
+                          {group.label}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row align="bottom" style={{ marginBottom: 30 }}>
+                <Col>
+                  <Title style={{ marginBottom: 0 }} level={4}>
+                    4.{' '}
+                  </Title>
+                </Col>
+                <Col>
+                  <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
+                    Who is it visible to?
+                  </Title>
+                </Col>
+                <Col>
+                  <Paragraph
+                    style={{ marginBottom: 1, marginLeft: 5 }}
+                    type="secondary"
+                    italic
+                  >
+                    - Please select the groups that this incident is for
+                  </Paragraph>
+                </Col>
+              </Row>
+            </>
+          )}
 
           <Form.Item>
             <Row style={{ marginTop: 30 }} gutter={10} justify="end">
