@@ -42,9 +42,14 @@ const LinkIncident = ({
     <Table
       columns={[
         {
-          key: 'type',
-          dataIndex: 'type',
-          title: 'Types',
+          key: 'reference',
+          dataIndex: 'reference',
+          title: 'Reference',
+        },
+        {
+          key: 'subject',
+          dataIndex: 'subject',
+          title: 'Subject',
         },
         {
           key: 'date',
@@ -63,6 +68,8 @@ const LinkIncident = ({
         },
       ]}
       dataSource={data?.listIncidents?.incidents.map((incident) => ({
+        subject: incident.subject,
+        reference: incident.reference,
         type: incident.crimeTypes
           .map((type, index) => `${index > 0 ? ' ' : ''}${type.name}`)
           .toString(),
