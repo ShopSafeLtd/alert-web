@@ -123,6 +123,18 @@ const ViewCrimeGroup = ({ data }: Props) => {
             },
           ]}
           size="small"
+          dataSource={
+            data?.crimeGroup?.incidents?.map((incident) => ({
+              key: incident?.id,
+              reference: incident?.reference,
+              policeRef: incident?.policeRef,
+              subject: incident?.subject,
+              date: incident?.dayTime,
+              location: incident?.createdBy.organisation,
+              value: incident?.value,
+              recoveredValue: incident?.recoveredValue,
+            })) || []
+          }
         />
       </Card>
     </div>

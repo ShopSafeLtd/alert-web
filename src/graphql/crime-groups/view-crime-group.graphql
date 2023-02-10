@@ -32,6 +32,18 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
       totalIncidents
       totalValue
     }
-    
+    incidents {
+      id
+      subject
+      dayTime
+      createdBy {
+        id
+        organisation
+      }
+      value
+      recoveredValue
+      reference
+      policeRef
+    }
   }
 }
