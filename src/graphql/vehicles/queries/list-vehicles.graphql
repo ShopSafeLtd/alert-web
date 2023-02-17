@@ -1,0 +1,27 @@
+query ListVehicles($take: Int, $skip: Int, $where: VehicleWhereInput) {
+  listVehicles(take: $take, skip: $skip, where: $where) {
+    vehicles {
+      id
+      make
+      model
+      registration
+      totalOffenders
+      totalIncidents
+      incidents {
+        id
+        subject
+      }
+      offenders {
+        id
+        name
+      }
+      updatedAt
+      colour
+      crimeGroup {
+        id
+        reference
+      }
+    }
+    total
+  }
+}

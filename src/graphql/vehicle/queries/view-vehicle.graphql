@@ -1,12 +1,25 @@
-query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
-  crimeGroup(where: $where) {
+query Vehicle($where: VehicleWhereUniqueInput!) {
+  vehicle(where: $where) {
     id
-    reference
-    totalIncidents
+    make
+    model
+    registration
     totalOffenders
-    totalRecoveredValue
-    totalTheftSuccess
-    totalValue
+    totalIncidents
+    totalCrimeGroups
+    incidents {
+      id
+      subject
+      dayTime
+      createdBy {
+        id
+        organisation
+      }
+      value
+      recoveredValue
+      reference
+      policeRef
+    }
     offenders {
       id
       name
@@ -32,18 +45,11 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
       totalIncidents
       totalValue
     }
-    incidents {
+    updatedAt
+    colour
+    crimeGroup {
       id
-      subject
-      dayTime
-      createdBy {
-        id
-        organisation
-      }
-      value
-      recoveredValue
       reference
-      policeRef
     }
   }
 }

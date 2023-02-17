@@ -15,7 +15,6 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
       where: { id },
     },
   });
-  console.log(data);
 
   const triggerLightbox = (elements: { src: string }[], index: number) => {
     setLightboxElements(elements);
