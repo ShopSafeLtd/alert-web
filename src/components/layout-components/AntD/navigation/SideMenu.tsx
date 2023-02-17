@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Menu } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { Menu } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
 
 const { SubMenu } = Menu;
 
@@ -11,8 +11,9 @@ export interface SideMenuItem<T = void> {
   to?: string;
   icon?: any;
   subMenu?: SideMenuItem[];
-  onTitleClick?(): void;
   data?: T;
+
+  onTitleClick?(): void;
 }
 
 interface Props<T> {
@@ -47,7 +48,7 @@ export const SideMenu: <T>(props: Props<T>) => JSX.Element = ({
       mode="inline"
       style={{
         width: width ? width : 250,
-        borderRight: "1px solid #edf2f9",
+        borderRight: '1px solid #edf2f9',
         flex: 1,
       }}
       openKeys={open}
@@ -61,11 +62,15 @@ export const SideMenu: <T>(props: Props<T>) => JSX.Element = ({
                 <span
                   style={{
                     width: 10,
-                    justifyContent: "center",
+                    justifyContent: 'center',
                     marginRight: 10,
                   }}
                 >
-                  <FontAwesomeIcon icon={icon} style={{ fontSize: 18 }} />
+                  <FontAwesomeIcon
+                    fixedWidth
+                    icon={icon}
+                    style={{ fontSize: 18 }}
+                  />
                 </span>
               )
             }
@@ -79,12 +84,16 @@ export const SideMenu: <T>(props: Props<T>) => JSX.Element = ({
                   <span
                     style={{
                       width: 15,
-                      display: "flex",
-                      justifyContent: "center",
+                      display: 'flex',
+                      justifyContent: 'center',
                       marginRight: 10,
                     }}
                   >
-                    <FontAwesomeIcon icon={icon} style={{ fontSize: 18 }} />
+                    <FontAwesomeIcon
+                      fixedWidth
+                      icon={icon}
+                      style={{ fontSize: 18 }}
+                    />
                   </span>
                 )}
                 <span>{name}</span>
@@ -103,12 +112,16 @@ export const SideMenu: <T>(props: Props<T>) => JSX.Element = ({
               <span
                 style={{
                   width: 20,
-                  display: "flex",
-                  justifyContent: "center",
+                  display: 'flex',
+                  justifyContent: 'center',
                   marginRight: 10,
                 }}
               >
-                <FontAwesomeIcon icon={icon} style={{ fontSize: 18 }} />
+                <FontAwesomeIcon
+                  fixedWidth
+                  icon={icon}
+                  style={{ fontSize: 18 }}
+                />
               </span>
             )}
             <span>{name}</span>
