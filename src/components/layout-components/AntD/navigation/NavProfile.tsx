@@ -1,10 +1,11 @@
 import React from 'react';
-import { Menu, Dropdown, Avatar, Row } from 'antd';
+import { Avatar, Dropdown, Menu, Row } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
 import { useStoreState } from 'state';
 import { useAuth } from 'hooks';
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
 import { useAuth0 } from '@auth0/auth0-react';
+import { Link } from 'react-router-dom';
 
 interface MenuItem {
   title: string;
@@ -68,12 +69,12 @@ export const NavProfile = () => {
           {menuItem.map((el, i) => {
             return (
               <Menu.Item key={i}>
-                <a href={el.path}>
+                <Link to={el.path}>
                   <Row>
                     {/* <Icon className="mr-3" type={el.icon} /> */}
                     <span className="font-weight-normal">{el.title}</span>
                   </Row>
-                </a>
+                </Link>
               </Menu.Item>
             );
           })}

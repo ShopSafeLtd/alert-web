@@ -13,6 +13,9 @@ import ListCrimeGroups from 'views/settings/crime-groups/list-crime-groups';
 import CreateCrimeGroup from 'views/settings/crime-groups/create-crime-group';
 import ViewCrimeGroup from 'views/settings/crime-groups/view-crime-group';
 
+import ListVehicles from 'views/Profiles/Vehicles/ListVehicles';
+import ViewVehicle from 'views/Profiles/Vehicles/ViewVehicle';
+
 import SchemeDetails from 'views/settings/schemes/SchemeDetail';
 
 import OffenderWarnings from 'views/settings/tags/OffenderWarning';
@@ -40,10 +43,6 @@ const SchemeSettings = (): JSX.Element => (
     <Route path="chat-groups/*" element={<ChatGroupsList />} />
     <Route path="chat-groups/view/:id" element={<ViewChatGroup />} />
 
-    <Route path="crime-groups/*" element={<ListCrimeGroups />} />
-    <Route path="crime-groups/create" element={<CreateCrimeGroup />} />
-    <Route path="crime-groups/view/:id" element={<ViewCrimeGroup />} />
-
     {/* scheme-details */}
     <Route path="scheme-details" element={<SchemeDetails />} />
 
@@ -60,6 +59,15 @@ const SchemeSettings = (): JSX.Element => (
 
     {/* recycle bin */}
     <Route path="recycle-bin/*" element={<RecycleBin />} />
+
+    {/* crime-groups */}
+    <Route path="crime-groups/*" element={<ListCrimeGroups />} />
+    <Route path="crime-groups/create" element={<CreateCrimeGroup />} />
+    <Route path="crime-groups/view/:id" element={<ViewCrimeGroup />} />
+
+    {/* vehicles */}
+    <Route path="vehicles/*" element={<ListVehicles />} />
+    <Route path="vehicles/view/:id" element={<ViewVehicle />} />
   </Routes>
 );
 

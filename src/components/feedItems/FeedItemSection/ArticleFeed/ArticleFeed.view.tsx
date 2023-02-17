@@ -3,6 +3,7 @@ import { Col, Row, Tag, Typography } from 'antd';
 import { ArticlePriority, FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/pro-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 const { Title, Paragraph } = Typography;
 
@@ -39,21 +40,21 @@ const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
         </Col>
       ) : null}
 
-      {/* <Link to={`/app/incidents/view/${id}`}> */}
-      <Col flex={1}>
-        <Title level={4} ellipsis>
-          {title}
+      <Link to={`/app/article/view/${id}`}>
+        <Col flex={1}>
+          <Title level={4} ellipsis>
+            {title}
 
-          {priority === ArticlePriority.High && (
-            <FontAwesomeIcon
-              size="sm"
-              className="feedItem-card-icon"
-              icon={faStar}
-              style={{ marginLeft: 5 }}
-            />
-          )}
-        </Title>
-        {/* <Row>
+            {priority === ArticlePriority.High && (
+              <FontAwesomeIcon
+                size="sm"
+                className="feedItem-card-icon"
+                icon={faStar}
+                style={{ marginLeft: 5 }}
+              />
+            )}
+          </Title>
+          {/* <Row>
           <Col>
             <FontAwesomeIcon
               size="sm"
@@ -77,18 +78,18 @@ const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
           </Col>
         </Row> */}
 
-        <Paragraph type="secondary" style={{ fontSize: 12 }}>
-          {previewText}
-        </Paragraph>
-        {tags && tags.length > 0 ? (
-          <Row wrap={false} style={{ overflowX: 'auto', marginTop: 15 }}>
-            {tags.map((tag) => (
-              <Tag key={tag.id}>{tag.name}</Tag>
-            ))}
-          </Row>
-        ) : null}
-      </Col>
-      {/* </Link> */}
+          <Paragraph type="secondary" style={{ fontSize: 12 }}>
+            {previewText}
+          </Paragraph>
+          {tags && tags.length > 0 ? (
+            <Row wrap={false} style={{ overflowX: 'auto', marginTop: 15 }}>
+              {tags.map((tag) => (
+                <Tag key={tag.id}>{tag.name}</Tag>
+              ))}
+            </Row>
+          ) : null}
+        </Col>
+      </Link>
     </Row>
   );
 };
