@@ -5458,6 +5458,10 @@ export type ChatListRelationFilter = {
   some?: InputMaybe<ChatWhereInput>;
 };
 
+export type ChatMessagesWhereInput = {
+  chat: UniqueId;
+};
+
 export type ChatOrderByRelationAggregateInput = {
   _count?: InputMaybe<SortOrder>;
 };
@@ -5778,6 +5782,17 @@ export type CreateUserData = {
   organisation: Scalars['String'];
   role: Role;
   scheme: UniqueId;
+};
+
+export type CreateVehicleDataInput = {
+  colour?: InputMaybe<Scalars['String']>;
+  crimeGroup?: InputMaybe<Array<InputMaybe<UniqueId>>>;
+  incidents?: InputMaybe<Array<InputMaybe<UniqueId>>>;
+  make?: InputMaybe<Scalars['String']>;
+  model?: InputMaybe<Scalars['String']>;
+  offenders?: InputMaybe<Array<InputMaybe<UniqueId>>>;
+  registration?: InputMaybe<Scalars['String']>;
+  schemes: Scalars['String'];
 };
 
 export type CreationBreakdown = {
@@ -12891,6 +12906,12 @@ export type ListOffenders = {
   total: Scalars['Int'];
 };
 
+export type ListVehicles = {
+  __typename?: 'ListVehicles';
+  total: Scalars['Int'];
+  vehicles: Array<Vehicle>;
+};
+
 export type Message = {
   __typename?: 'Message';
   actions: Array<Action>;
@@ -13224,6 +13245,31 @@ export type MessageCreateWithoutSchemeInput = {
   sent?: InputMaybe<Scalars['Boolean']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
+
+export type MessageItem = {
+  __typename?: 'MessageItem';
+  chat: Chat;
+  content: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  currentUser?: Maybe<Scalars['Boolean']>;
+  formattedDateTime?: Maybe<Scalars['String']>;
+  from?: Maybe<User>;
+  id: Scalars['String'];
+  images: Array<Image>;
+  incidents: Array<Incident>;
+  mentions: Array<User>;
+  offenders: Array<Offender>;
+  paddingTop?: Maybe<Scalars['Boolean']>;
+  scheme: Scheme;
+  sent: Scalars['Boolean'];
+  showUser?: Maybe<Scalars['Boolean']>;
+  type: MessageItemType;
+};
+
+export enum MessageItemType {
+  Date = 'DATE',
+  Message = 'MESSAGE',
+}
 
 export type MessageListRelationFilter = {
   every?: InputMaybe<MessageWhereInput>;
@@ -13697,7 +13743,7 @@ export type Mutation = {
   createGroup: Group;
   createImage: Image;
   createIncident?: Maybe<Incident>;
-  createMessage?: Maybe<Message>;
+  createMessage?: Maybe<MessageItem>;
   createMessageDefault: Message;
   createOffender?: Maybe<Offender>;
   createOffenderDefault: Offender;
@@ -13712,6 +13758,7 @@ export type Mutation = {
   createUserInAuth0?: Maybe<UserNewAuth0>;
   createUserInDatabase?: Maybe<User>;
   createUserScheme: UserScheme;
+  createVehicle: Vehicle;
   deleteAction?: Maybe<Action>;
   deleteAddress?: Maybe<Address>;
   deleteBan?: Maybe<Ban>;
@@ -13738,6 +13785,7 @@ export type Mutation = {
   deleteUserDefault?: Maybe<User>;
   deleteUserFromScheme?: Maybe<User>;
   deleteUserScheme?: Maybe<UserScheme>;
+  deleteVehicle?: Maybe<Vehicle>;
   inviteExistingUser?: Maybe<User>;
   newIncident: Incident;
   recycleExpiredData?: Maybe<SystemTask>;
@@ -13785,6 +13833,7 @@ export type Mutation = {
   updateUserChat?: Maybe<UserChat>;
   updateUserDefault?: Maybe<User>;
   updateUserScheme?: Maybe<UserScheme>;
+  updateVehicle?: Maybe<Vehicle>;
   uploadImage?: Maybe<Image>;
   uploadToImage?: Maybe<Image>;
 };
@@ -13938,6 +13987,10 @@ export type MutationCreateUserSchemeArgs = {
   data: UserSchemeCreateInput;
 };
 
+export type MutationCreateVehicleArgs = {
+  data: CreateVehicleDataInput;
+};
+
 export type MutationDeleteActionArgs = {
   where: ActionWhereUniqueInput;
 };
@@ -14038,6 +14091,10 @@ export type MutationDeleteUserFromSchemeArgs = {
 
 export type MutationDeleteUserSchemeArgs = {
   where: UserSchemeWhereUniqueInput;
+};
+
+export type MutationDeleteVehicleArgs = {
+  where: UniqueId;
 };
 
 export type MutationInviteExistingUserArgs = {
@@ -14241,6 +14298,11 @@ export type MutationUpdateUserDefaultArgs = {
 export type MutationUpdateUserSchemeArgs = {
   data: UserSchemeUpdateInput;
   where: UserSchemeWhereUniqueInput;
+};
+
+export type MutationUpdateVehicleArgs = {
+  data: CreateVehicleDataInput;
+  where: UniqueId;
 };
 
 export type MutationUploadImageArgs = {
@@ -17327,6 +17389,7 @@ export type Query = {
   bans: Array<Ban>;
   business?: Maybe<Business>;
   chat?: Maybe<Chat>;
+  chatMessages: Array<MessageItem>;
   chats: Array<Chat>;
   crimeGroup?: Maybe<CrimeGroup>;
   currentUser?: Maybe<User>;
@@ -17344,6 +17407,7 @@ export type Query = {
   listFeedItems?: Maybe<ListFeedItems>;
   listIncidents?: Maybe<ListIncidents>;
   listOffenders?: Maybe<ListOffenders>;
+  listVehicles: ListVehicles;
   message?: Maybe<Message>;
   messages: Array<Message>;
   offender?: Maybe<Offender>;
@@ -17364,6 +17428,7 @@ export type Query = {
   userScheme?: Maybe<UserScheme>;
   userSchemes: Array<UserScheme>;
   users: Array<User>;
+  vehicle?: Maybe<Vehicle>;
 };
 
 export type QueryActionArgs = {
@@ -17428,6 +17493,12 @@ export type QueryBusinessArgs = {
 
 export type QueryChatArgs = {
   where: ChatWhereUniqueInput;
+};
+
+export type QueryChatMessagesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: ChatMessagesWhereInput;
 };
 
 export type QueryChatsArgs = {
@@ -17547,6 +17618,12 @@ export type QueryListOffendersArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<OffenderWhereInput>;
+};
+
+export type QueryListVehiclesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<VehicleWhereInput>;
 };
 
 export type QueryMessageArgs = {
@@ -17680,6 +17757,10 @@ export type QueryUsersArgs = {
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<UserOrderByWithRelationInput>>;
   where?: InputMaybe<UserWhereInput>;
+};
+
+export type QueryVehicleArgs = {
+  where: VehicleWhereUniqueInput;
 };
 
 export enum QueryMode {
@@ -20061,11 +20142,11 @@ export type StringNullableListFilter = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  messages?: Maybe<Array<Maybe<Message>>>;
+  chatMessages?: Maybe<Array<Maybe<Message>>>;
   newMessage?: Maybe<Message>;
 };
 
-export type SubscriptionMessagesArgs = {
+export type SubscriptionChatMessagesArgs = {
   chatId: Scalars['ID'];
 };
 
@@ -26124,6 +26205,9 @@ export type Vehicle = {
   offenders: Array<Offender>;
   registration?: Maybe<Scalars['String']>;
   schemes: Array<Scheme>;
+  totalCrimeGroups?: Maybe<Scalars['Int']>;
+  totalIncidents?: Maybe<Scalars['Int']>;
+  totalOffenders?: Maybe<Scalars['Int']>;
   updatedAt: Scalars['DateTime'];
 };
 
@@ -28327,18 +28411,22 @@ export type CreateMessageMutationVariables = Exact<{
 export type CreateMessageMutation = {
   __typename?: 'Mutation';
   createMessage?: {
-    __typename?: 'Message';
+    __typename?: 'MessageItem';
     id: string;
-    sent?: boolean | null;
     content: string;
     createdAt: any;
-    from: {
+    currentUser?: boolean | null;
+    formattedDateTime?: string | null;
+    sent: boolean;
+    showUser?: boolean | null;
+    paddingTop?: boolean | null;
+    type: MessageItemType;
+    from?: {
       __typename?: 'User';
       id: string;
       fullName: string;
-      organisation: string;
-    };
-    chat: { __typename?: 'Chat'; id: string; name: string };
+      firstLetter?: string | null;
+    } | null;
     images: Array<{
       __typename?: 'Image';
       id: string;
@@ -28446,6 +28534,70 @@ export type UpdateMessageMutation = {
   } | null;
 };
 
+export type ChatMessagesQueryVariables = Exact<{
+  where: ChatMessagesWhereInput;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type ChatMessagesQuery = {
+  __typename?: 'Query';
+  chatMessages: Array<{
+    __typename?: 'MessageItem';
+    id: string;
+    content: string;
+    createdAt: any;
+    currentUser?: boolean | null;
+    formattedDateTime?: string | null;
+    sent: boolean;
+    showUser?: boolean | null;
+    paddingTop?: boolean | null;
+    type: MessageItemType;
+    from?: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      firstLetter?: string | null;
+    } | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+    }>;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+      description: string;
+      dayTime?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      updatedAt: any;
+      age?: Age | null;
+      build?: Build | null;
+      dateOfBirth?: any | null;
+      name?: string | null;
+      race?: Race | null;
+      gender?: Gender | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
+  }>;
+};
+
 export type MessagesQueryVariables = Exact<{
   chat?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<MessageWhereUniqueInput>;
@@ -28511,7 +28663,7 @@ export type MessagesSubscriptionSubscriptionVariables = Exact<{
 
 export type MessagesSubscriptionSubscription = {
   __typename?: 'Subscription';
-  messages?: Array<{
+  chatMessages?: Array<{
     __typename?: 'Message';
     id: string;
     sent?: boolean | null;
@@ -33425,18 +33577,19 @@ export const CreateMessageDocument = gql`
   mutation createMessage($data: MessageCreateWithoutActionsInput!) {
     createMessage(data: $data) {
       id
-      sent
+      content
+      createdAt
+      currentUser
+      formattedDateTime
       from {
         id
         fullName
-        organisation
+        firstLetter
       }
-      chat {
-        id
-        name
-      }
-      content
-      createdAt
+      sent
+      showUser
+      paddingTop
+      type
       images {
         id
         url
@@ -33661,6 +33814,110 @@ export type UpdateMessageMutationOptions = Apollo.BaseMutationOptions<
   UpdateMessageMutation,
   UpdateMessageMutationVariables
 >;
+export const ChatMessagesDocument = gql`
+  query ChatMessages($where: ChatMessagesWhereInput!, $take: Int, $skip: Int) {
+    chatMessages(where: $where, take: $take, skip: $skip) {
+      id
+      content
+      createdAt
+      currentUser
+      formattedDateTime
+      from {
+        id
+        fullName
+        firstLetter
+      }
+      sent
+      showUser
+      paddingTop
+      type
+      images {
+        id
+        url
+        optimised
+      }
+      incidents {
+        id
+        subject
+        description
+        dayTime
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      offenders {
+        id
+        updatedAt
+        age
+        build
+        dateOfBirth
+        name
+        race
+        gender
+        images {
+          id
+          url
+          optimised
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useChatMessagesQuery__
+ *
+ * To run a query within a React component, call `useChatMessagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useChatMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useChatMessagesQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      take: // value for 'take'
+ *      skip: // value for 'skip'
+ *   },
+ * });
+ */
+export function useChatMessagesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ChatMessagesQuery,
+    ChatMessagesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ChatMessagesQuery, ChatMessagesQueryVariables>(
+    ChatMessagesDocument,
+    options
+  );
+}
+export function useChatMessagesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ChatMessagesQuery,
+    ChatMessagesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ChatMessagesQuery, ChatMessagesQueryVariables>(
+    ChatMessagesDocument,
+    options
+  );
+}
+export type ChatMessagesQueryHookResult = ReturnType<
+  typeof useChatMessagesQuery
+>;
+export type ChatMessagesLazyQueryHookResult = ReturnType<
+  typeof useChatMessagesLazyQuery
+>;
+export type ChatMessagesQueryResult = Apollo.QueryResult<
+  ChatMessagesQuery,
+  ChatMessagesQueryVariables
+>;
 export const MessagesDocument = gql`
   query messages($chat: String, $before: MessageWhereUniqueInput) {
     messages(
@@ -33765,7 +34022,7 @@ export type MessagesQueryResult = Apollo.QueryResult<
 >;
 export const MessagesSubscriptionDocument = gql`
   subscription MessagesSubscription($chat: ID!) {
-    messages(chatId: $chat) {
+    chatMessages(chatId: $chat) {
       id
       sent
       from {

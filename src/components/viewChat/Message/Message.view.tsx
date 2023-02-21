@@ -2,41 +2,9 @@
 import React, { useState } from 'react';
 import { Row, Col, Card, Descriptions, Typography, Image, Avatar } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 
 const { Title, Paragraph, Text } = Typography;
-
-interface DatedMessages {
-  id?: string;
-  content?: string;
-  from?: { id: string; fullName: string; organisation: string };
-  images?: { id: string; optimised?: string | null; url?: string | null }[];
-  incidents?: {
-    id: string;
-    subject?: string | null;
-    description: string;
-    dayTime?: string | null;
-    images?: { id: string; optimised?: string | null; url?: string | null }[];
-  }[];
-  offenders?: {
-    id: string;
-    updatedAt?: Date;
-    dateOfBirth?: Date | null;
-    name?: string | null;
-    images?: { id: string; optimised?: string | null; url?: string | null }[];
-  }[];
-  createdAt?: Moment;
-}
-
-const getMessageDate = (date?: Moment) => {
-  if (date?.week() === moment().week()) {
-    if (date.format('DD/MM/YY') === moment().add(-1, 'days').format('DD/MM/YY'))
-      return `Yesterday ${date?.format('HH:mm')}`;
-    if (date?.dayOfYear() === moment().dayOfYear()) return date.format('HH:mm');
-    return date.format('dddd HH:mm');
-  }
-  return date?.format('DD/MM HH:mm');
-};
 
 const getImageSpan = (length: number, index: number) => {
   if (length === 3) {
@@ -130,10 +98,41 @@ const CollageImage = ({ index, length, src }: CollageImageProps) => {
   );
 };
 
-interface Props extends DatedMessages {
-  userId: string | undefined;
-  showUser?: boolean;
-  showDate?: boolean;
+interface Props {
+  from?: {
+    id: string;
+    fullName?: string|null|undefined;
+    firstLetter?: string|null|undefined;
+  }|undefined|null,
+  images: {
+    id: string;
+    optimised?: string|null|undefined;
+  }[],
+  offenders: {
+    id: string;
+    name?: string|null|undefined;
+    updatedAt: Date;
+    images: {
+      id: string;
+      optimised?: string|null|undefined;
+    }[],
+  }[],
+  incidents: {
+    id: string;
+    subject?: string|null|undefined;
+    description?: string|null|undefined;
+    dayTime?: string|null|undefined;
+    images: {
+      id: string;
+      optimised?: string|null|undefined;
+    }[],
+  }[],
+  content: string,
+  id: string,
+  currentUser?: boolean|undefined|null,
+  showUser?: boolean|undefined|null,
+  paddingTop?: boolean|undefined|null,
+  date: string|undefined|null,
 }
 
 const getContent = (content: string) =>
@@ -155,61 +154,57 @@ const Content = ({
   incidents,
   content,
   id,
-  userId,
+  currentUser,
   showUser,
-  showDate,
-  createdAt,
+  date,
+  paddingTop
 }: Props): JSX.Element => (
   <Row
     gutter={8}
-    style={{
-      flexDirection: showUser ? 'row-reverse' : 'row',
-      marginTop: showDate ? 10 : 0,
-    }}
+    justify={currentUser ? 'end' : 'start'}
+    style={{ marginTop: paddingTop ? 15 : 0 }}
   >
-    {!showUser && showDate && (
+    {showUser && (
       <Col>
-        <Avatar className={showUser ? 'currentUser' : 'message-avatar'}>
-          {from?.fullName[0]}
+        <Avatar className="message-avatar">
+          {from?.firstLetter}
         </Avatar>
       </Col>
     )}
-    <Col style={{ marginLeft: !showUser && showDate ? 0 : 48 }}>
+    <Col>
       <div
         className={
-          showUser
+          currentUser
             ? 'message-content-card currentUser-card'
             : 'message-content-card'
         }
+        style={{ marginLeft: !currentUser && !showUser ? 48 : 0  }}
       >
-        {showDate && (
-          <Row
-            style={{
-              marginTop: 8,
-              marginLeft: 15,
-              marginRight: 10,
-              marginBottom: 0,
-            }}
-            justify={userId === from?.id ? 'end' : 'start'}
-          >
-            {userId !== from?.id && (
-              <Col
-                style={{
-                  marginRight: 20,
-                }}
-              >
-                <Text style={{ fontSize: 13 }} strong>
-                  {from?.fullName}
-                </Text>
-              </Col>
-            )}
-            <Col>
-              <Text style={{ fontSize: 13 }} type="secondary">
-                {getMessageDate(createdAt)}
+        <Row
+          style={{
+            marginTop: 8,
+            marginLeft: 15,
+            marginRight: 10,
+            marginBottom: 0,
+          }}
+        >
+          {showUser && (
+            <Col
+              style={{
+                marginRight: 20,
+              }}
+            >
+              <Text style={{ fontSize: 13 }} strong>
+                {from?.fullName}
               </Text>
             </Col>
-          </Row>
-        )}
+          )}
+          <Col>
+            <Text style={{ fontSize: 13 }} type="secondary">
+              {date}
+            </Text>
+          </Col>
+        </Row>
         {images && images.length > 0 && (
           <Row style={{ margin: 5 }}>
             {images.length === 1 ? (

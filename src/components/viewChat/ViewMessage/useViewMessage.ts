@@ -4,15 +4,12 @@ import {
   CreateMessageMutation,
   DeleteMessageMutation,
   DeleteChatMutation,
-  MessagesDocument,
-  MessagesQuery,
   MessagesSubscriptionDocument,
   Role,
   useChatQuery,
   useCreateMessageMutation,
   useDeleteChatMutation,
   useDeleteMessageMutation,
-  useMessagesQuery,
   ListIncidentsQuery,
   SortOrder,
   useListIncidentsQuery,
@@ -20,10 +17,13 @@ import {
   Gender,
   Race,
   Build,
-  MessagesQueryVariables,
+  useChatMessagesQuery,
+  ChatMessagesQuery,
+  ChatMessagesDocument,
+  ChatMessagesQueryVariables,
+  MessageItemType,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
-import moment, { Moment } from 'moment';
 import {
   notification,
   Form,
@@ -36,6 +36,7 @@ import {
 import { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import moment from 'moment';
 
 const { confirm } = Modal;
 const { getMentions } = Mentions;
@@ -75,49 +76,6 @@ interface OffenderData {
   }[];
   imageUid?: string[] | undefined;
 }
-interface DatedMessages {
-  day: string;
-  messages: {
-    id: string;
-    from?: { id: string; fullName: string; organisation: string };
-    messages: {
-      id?: string;
-      sameUser?: boolean | null;
-      sent?: boolean | null;
-      content?: string;
-      createdAt?: Moment;
-      from?: { id: string; fullName: string; organisation: string };
-      chat?: { id: string; name: string };
-      images?: { id: string; optimised?: string | null; url?: string | null }[];
-      incidents?: {
-        id: string;
-        subject?: string | null;
-        description: string;
-        dayTime?: string | null;
-        images?: {
-          id: string;
-          optimised?: string | null;
-          url?: string | null;
-        }[];
-      }[];
-      offenders?: {
-        id: string;
-        updatedAt?: Date;
-        age?: Age | null;
-        build?: Build | null;
-        dateOfBirth?: Date | null;
-        name?: string | null;
-        race?: Race | null;
-        gender?: Gender | null;
-        images?: {
-          id: string;
-          optimised?: string | null;
-          url?: string | null;
-        }[];
-      }[];
-    }[];
-  }[];
-}
 interface MemberData {
   id: string;
   fullName: string;
@@ -126,15 +84,14 @@ interface MemberData {
 }
 interface Return {
   onSubmit: () => void;
-  data: MessagesQuery | undefined;
+  data: ChatMessagesQuery | undefined;
   loading: boolean;
   chatData: ChatQuery | undefined;
   form: FormInstance<FormData>;
   saving: boolean;
   scrolledToTop: () => void;
-  datedMessages: DatedMessages[] | null;
   userId: string | undefined;
-  loadMore: boolean;
+  messageSent: boolean;
   deleteMessageConfirm: (value: string) => void;
   adminRights: boolean;
   deleteChatConfirm: () => void;
@@ -170,6 +127,7 @@ interface Return {
   deleteImageConfirm: (messageId: string, imageId: string) => void;
   deleteOffenderConfirm: (messageId: string, offenderId: string) => void;
   deleteIncidentConfirm: (messageId: string, incidentId: string) => void;
+  setMessageSent: (value: boolean) => void;
 }
 
 const useViewMessages = ({
@@ -179,18 +137,17 @@ const useViewMessages = ({
 }: Props): Return => {
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
+  const userFullName = useStoreState((state) => state.user.fullName);
   const schemeId = useStoreState((state) => state.scheme.id);
   const navigate = useNavigate();
 
   const [saving, setSaving] = useState(false);
   const [form] = useForm<FormData>();
-  const [after, setAfter] = useState('');
-  const [datedMessages, setDatedMessages] = useState<DatedMessages[] | null>(
-    null
-  );
+  const [after, setAfter] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [loadMore, setLoadMore] = useState(false);
-  const [fetching, setFetching] = useState(false);
+  const [loadMore, setLoadMore] = useState(true);
+  const [messageSent, setMessageSent] = useState(true);
+  const [fetching, setFetching] = useState(true);
   const [manageChat, setManageChat] = useState(false);
   const [membersData, setMembersData] = useState<MemberData[] | undefined>([]);
   const [inputStr, setInputStr] = useState('');
@@ -224,95 +181,25 @@ const useViewMessages = ({
       placement: 'bottomRight',
     });
 
-  const getDay = (date: Moment) => {
-    if (date?.weekYear() === moment().weekYear()) {
-      if (
-        date.format('DD/MM/YY') === moment().add(-1, 'days').format('DD/MM/YY')
-      )
-        return `Yesterday`;
-      return date.format('dddd');
-    }
-    return date?.format('DD/MM/YY');
-  };
-
-  const handleMessagesData = (
-    messages: Exclude<MessagesQuery['messages'], undefined | null> | undefined
-  ) => {
-    if (!messages) {
-      setDatedMessages(null);
-    } else if (messages.length > 0) {
-      const momentMessages = messages?.map((item) => ({
-        ...item,
-        createdAt: moment(item.createdAt),
-        day: getDay(moment(item.createdAt)),
-      }));
-      const messageDays = [
-        ...new Set(momentMessages.map((item) => item.day)),
-      ].map((day) => ({ day, messages: [] }));
-      const groupedMessages = messageDays.map((item) => ({
-        ...item,
-        messages: momentMessages
-          .filter((m) => m.day === item.day)
-          .map((i) => ({
-            id: i.id,
-            sent: i.sent,
-            content: i.content,
-            createdAt: i.createdAt,
-            from: {
-              id: i.from.id,
-              fullName: i.from.fullName,
-              organisation: i.from.organisation,
-            },
-            chat: i.chat,
-            images: i.images,
-            incidents: i.incidents,
-            offenders: i.offenders,
-          })),
-      }));
-      const groupedUsers = groupedMessages.map((item) => ({
-        ...item,
-        messages: [
-          ...new Set(
-            item.messages.map(
-              (m) => `${m.from.id}-${m.createdAt.format('hh:mm')}`
-            )
-          ),
-        ].map((user) => ({
-          id: user,
-          from: item.messages.find(
-            (m) => `${m.from.id}-${m.createdAt.format('hh:mm')}` === user
-          )?.from,
-          messages: item.messages.filter(
-            (m) => `${m.from.id}-${m.createdAt.format('hh:mm')}` === user
-          ),
-        })),
-      }));
-
-      setDatedMessages(groupedUsers.reverse());
-    } else setDatedMessages([]);
-  };
-
-  const { subscribeToMore, data, fetchMore } = useMessagesQuery({
+  const { subscribeToMore, data, fetchMore } = useChatMessagesQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
-      chat: chatId,
+      where: {
+        chat: {
+          id: chatId,
+        },
+      },
+      skip: 0,
+      take: 10,
     },
     skip: !chatId,
-    onCompleted: (res) => {
+    onCompleted: () => {
+      setLoadMore(false);
       setLoading(false);
-      if (res.messages.length > 0) {
-        setAfter(res.messages.slice(-1)[0].id);
-        handleMessagesData(res.messages);
-      } else {
-        handleMessagesData([]);
-      }
+      setFetching(false);
+      setAfter(after + 10);
     },
   });
-
-  // useEffect(() => {
-  //   if (data && data.messages.length > 0)
-  //     setLoading(false);
-  // }, [data])
 
   const { data: chatData } = useChatQuery({
     fetchPolicy: 'cache-and-network',
@@ -367,15 +254,18 @@ const useViewMessages = ({
         chat: chatId,
       },
       updateQuery: (prev, { subscriptionData }) => {
-        if (prev && prev.messages) {
-          const test = prev.messages.find(
-            ({ id }) => id === subscriptionData.data.messages[0].id
+        if (prev && prev.chatMessages) {
+          const test = prev.chatMessages.find(
+            ({ id }) => id === subscriptionData.data.chatMessages[0]?.id
           );
 
           if (test === undefined) {
             return {
               ...prev,
-              messages: [...prev.messages, ...subscriptionData.data.messages],
+              chatMessages: [
+                ...prev.chatMessages,
+                ...subscriptionData.data.chatMessages,
+              ],
             };
           }
         }
@@ -389,21 +279,16 @@ const useViewMessages = ({
   useEffect(() => subscribeToNewMessage(), [chatId]);
 
   const scrolledToTop = async () => {
-    if (loadMore && !fetching) {
+    if (!loadMore && !fetching) {
+      setLoadMore(true);
       setFetching(true);
-      const test = await fetchMore<MessagesQuery, MessagesQueryVariables>({
-        query: MessagesDocument,
+      await fetchMore({
         variables: {
-          chat: chatId,
-          before: {
-            id: after,
-          },
+          skip: data?.chatMessages.length || 0,
         },
       });
-      if (!test.data.messages) {
-        setLoadMore(false);
-      }
-      handleMessagesData(test.data.messages);
+      setLoadMore(false);
+      setFetching(false);
     }
   };
 
@@ -414,23 +299,36 @@ const useViewMessages = ({
   ) => {
     if (res?.createMessage === null || res?.createMessage === undefined) return;
 
-    const existingData = store.readQuery<MessagesQuery>({
-      query: MessagesDocument,
+    const existingData = store.readQuery<
+      ChatMessagesQuery,
+      ChatMessagesQueryVariables
+    >({
+      query: ChatMessagesDocument,
       variables: {
-        chat: chatId,
+        where: {
+          chat: {
+            id: chatId,
+          },
+        },
+        skip: 0,
+        take: 10,
       },
     });
 
     if (existingData === null || existingData === undefined) return;
 
-    store.writeQuery<MessagesQuery>({
-      query: MessagesDocument,
+    store.writeQuery<ChatMessagesQuery, ChatMessagesQueryVariables>({
+      query: ChatMessagesDocument,
       data: {
-        messages: [...existingData.messages, res.createMessage],
+        chatMessages: [res.createMessage, ...existingData.chatMessages],
         __typename: 'Query',
       },
       variables: {
-        chat: chatId,
+        where: {
+          chat: {
+            id: chatId,
+          },
+        },
       },
     });
   };
@@ -443,25 +341,36 @@ const useViewMessages = ({
   ) => {
     if (res === null || res === undefined) return;
 
-    const existingData = store.readQuery<MessagesQuery>({
-      query: MessagesDocument,
+    const existingData = store.readQuery<
+      ChatMessagesQuery,
+      ChatMessagesQueryVariables
+    >({
+      query: ChatMessagesDocument,
       variables: {
-        chat: chatId,
+        where: {
+          chat: {
+            id: chatId,
+          },
+        },
       },
     });
 
     if (existingData === null) return;
 
-    store.writeQuery<MessagesQuery>({
-      query: MessagesDocument,
+    store.writeQuery<ChatMessagesQuery, ChatMessagesQueryVariables>({
+      query: ChatMessagesDocument,
       data: {
-        messages: existingData.messages.filter(
+        chatMessages: existingData.chatMessages.filter(
           (el) => el.id !== res?.deleteMessage?.id
         ),
         __typename: 'Query',
       },
       variables: {
-        chat: chatId,
+        where: {
+          chat: {
+            id: chatId,
+          },
+        },
       },
     });
   };
@@ -630,23 +539,14 @@ const useViewMessages = ({
   };
 
   const [sendMessage] = useCreateMessageMutation({
-    onCompleted: () => {
-      setSaving(false);
-      userChatRefetch();
-      form.resetFields();
-      setInputStr('');
-      setFileList([]);
-      setIncidentsData([]);
-      setOffendersData([]);
-      setMentionedUser([]);
-    },
+    onCompleted: () => {},
     onError: () => {
       errorNotification();
       setSaving(false);
     },
     update: updateData,
   });
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const getText = (text: string) => {
       const mentions = getMentions(text);
       let newText = text;
@@ -720,7 +620,59 @@ const useViewMessages = ({
             },
           },
         },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          createMessage: {
+            content: getText(inputStr),
+            createdAt: new Date(),
+            id: `${Math.random()}`,
+            images:
+              imageChange && fileList.length > 0
+                ? fileList
+                    .map((item) => ({
+                      id: item.fileName || '',
+                      optimised: item.url || '',
+                      url: item.url || '',
+                    }))
+                    .filter((obj) => obj.url !== undefined)
+                : [],
+            incidents:
+              incidentsData && incidentsData.length > 0 ? incidentsData : [],
+            offenders:
+              offendersData && offendersData.length > 0 ? offendersData.map((offender) => ({
+                id: offender.id,
+                images: offender.images || [],
+                updatedAt: offender.updatedAt,
+                age: offender.age,
+                build: offender.build,
+                dateOfBirth: offender.dateOfBirth,
+                gender: offender.gender,
+                name: offender.name,
+                race: offender.race
+              })) : [],
+            sent: false,
+            type: MessageItemType.Message,
+            currentUser: true,
+            formattedDateTime: moment().format('HH:mm'),
+            from: {
+              fullName: userFullName,
+              id: userId,
+              firstLetter: userFullName.slice(1)[0],
+            },
+            paddingTop: true,
+            showUser: false,
+          },
+        },
       });
+      setMessageSent(true);
+      setSaving(false);
+      userChatRefetch();
+      form.resetFields();
+      setInputStr('');
+      setFileList([]);
+      setIncidentsData([]);
+      setOffendersData([]);
+      setMentionedUser([]);
     }
   };
 
@@ -732,9 +684,7 @@ const useViewMessages = ({
     form,
     saving,
     scrolledToTop,
-    datedMessages,
     userId,
-    loadMore,
     deleteMessageConfirm,
     adminRights: role !== Role.User,
     deleteChatConfirm,
@@ -765,6 +715,8 @@ const useViewMessages = ({
     deleteImageConfirm: () => {},
     deleteIncidentConfirm: () => {},
     deleteOffenderConfirm: () => {},
+    messageSent,
+    setMessageSent,
   };
 };
 

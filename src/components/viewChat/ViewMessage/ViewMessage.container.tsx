@@ -20,7 +20,6 @@ const ViewMessages = ({
     form,
     saving,
     scrolledToTop,
-    datedMessages,
     userId,
     deleteMessageConfirm,
     adminRights,
@@ -51,16 +50,19 @@ const ViewMessages = ({
     deleteImageConfirm,
     deleteOffenderConfirm,
     deleteIncidentConfirm,
+    data,
+    messageSent,
+    setMessageSent
   } = useViewMessages({ chatId, updateUserChatList, userChatRefetch });
 
   return (
     <View
+      data={data}
       onSubmit={onSubmit}
       chatData={chatData}
       form={form}
       saving={saving}
       scrolledToTop={scrolledToTop}
-      datedMessages={datedMessages}
       userId={userId}
       deleteMessageConfirm={deleteMessageConfirm}
       adminRights={adminRights}
@@ -92,6 +94,8 @@ const ViewMessages = ({
       deleteImageConfirm={deleteImageConfirm}
       deleteOffenderConfirm={deleteOffenderConfirm}
       deleteIncidentConfirm={deleteIncidentConfirm}
+      messageSent={messageSent}
+      setMessageSent={setMessageSent}
     />
   );
 };

@@ -1,5 +1,5 @@
-mutation createMessage($data: MessageCreateWithoutActionsInput!) {
-  createMessage(data: $data) {
+query ChatMessages($where: ChatMessagesWhereInput!, $take: Int, $skip: Int) {
+  chatMessages(where: $where, take: $take, skip: $skip) {
     id
     content
     createdAt

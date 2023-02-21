@@ -23,7 +23,7 @@ import {
   Typography,
   Upload,
 } from 'antd';
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 import { faImage, faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -33,6 +33,8 @@ import {
   Gender,
   ListIncidentsQuery,
   Race,
+  ChatMessagesQuery,
+  MessageItemType,
 } from 'graphql/generated';
 import { faCircleXmark, faUser } from '@fortawesome/pro-solid-svg-icons';
 import AddUserChat from 'components/form-components/userChat/ManageChatMember';
@@ -74,50 +76,6 @@ interface OffenderData {
   imageUid?: string[] | undefined;
 }
 
-interface DatedMessages {
-  day: string;
-  messages: {
-    id: string;
-    from?: { id: string; fullName: string; organisation: string };
-    messages: {
-      id?: string;
-      sameUser?: boolean | null;
-      sent?: boolean | null;
-      content?: string;
-      createdAt?: Moment;
-      from?: { id: string; fullName: string; organisation: string };
-      chat?: { id: string; name: string };
-      images?: { id: string; optimised?: string | null; url?: string | null }[];
-      incidents?: {
-        id: string;
-        subject?: string | null;
-        description: string;
-        dayTime?: string | null;
-        images?: {
-          id: string;
-          optimised?: string | null;
-          url?: string | null;
-        }[];
-      }[];
-      offenders?: {
-        id: string;
-        updatedAt?: Date;
-        age?: Age | null;
-        build?: Build | null;
-        dateOfBirth?: Date | null;
-        name?: string | null;
-        race?: Race | null;
-        gender?: Gender | null;
-        images?: {
-          id: string;
-          optimised?: string | null;
-          url?: string | null;
-        }[];
-      }[];
-    }[];
-  }[];
-}
-
 // interface FormData {
 //   newMessage: string;
 // }
@@ -134,7 +92,7 @@ interface Props {
   form: FormInstance<FormData>;
   saving: boolean;
   scrolledToTop: () => void;
-  datedMessages: DatedMessages[] | null;
+  data: ChatMessagesQuery | undefined;
   userId: string | undefined;
   deleteMessageConfirm: (value: string) => void;
   adminRights: boolean;
@@ -171,6 +129,8 @@ interface Props {
   deleteImageConfirm: (messageId: string, imageId: string) => void;
   deleteOffenderConfirm: (messageId: string, offenderId: string) => void;
   deleteIncidentConfirm: (messageId: string, incidentId: string) => void;
+  messageSent: boolean;
+  setMessageSent: (value: boolean) => void;
 }
 
 const ViewMessges = ({
@@ -179,7 +139,6 @@ const ViewMessges = ({
   form,
   saving,
   scrolledToTop,
-  datedMessages,
   userId,
   deleteMessageConfirm,
   adminRights,
@@ -211,17 +170,21 @@ const ViewMessges = ({
   deleteImageConfirm,
   deleteOffenderConfirm,
   deleteIncidentConfirm,
+  data,
+  messageSent,
+  setMessageSent
 }: Props): JSX.Element => {
   const ref = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    if (ref.current && ref.current.scrollIntoView) {
+    if (ref.current && ref.current.scrollIntoView && messageSent) {
       ref.current.scrollIntoView({
         // behavior: 'smooth',
         block: 'end',
         inline: 'nearest',
       });
+      setMessageSent(false)
     }
-  }, [datedMessages]);
+  }, [data]);
   if (chatId === '1') {
     deleteImageConfirm('1', '1');
     deleteOffenderConfirm('1', '1');
@@ -286,127 +249,8 @@ const ViewMessges = ({
         }
       />
       <Divider style={{ margin: 0 }} />
-
-      {/* <InfiniteScroll
-        height={
-          (fileList && fileList.length > 0) ||
-          (offendersData && offendersData.length > 0) ||
-          (incidentsData && incidentsData.length > 0)
-            ? 'calc(100vh - 349px)'
-            : 'calc(100vh - 239px)'
-        }
-        height={200}
-        className="message-container"
-        initialScrollY={0}
-        dataLength={100}
-        next={() => console.log('next')}
-        hasMore
-        inverse
-        style={{
-          justifyContent: 'end',
-          // display: 'flex',
-          flexDirection: 'column',
-        }}
-        loader={
-          <div className="message-date">
-            <div className="date-line" />
-            <div className="date">Loading...</div>
-            <div className="date-line" />
-          </div>
-        }
-        loader="Loading"
-      >
-        {!datedMessages && <ViewMessageSkeleton />}
-        {!datedMessages || (loading && <ViewMessageSkeleton />)}
-        {!loading && datedMessages?.length === 0 && (
-          <Empty description="This is an empty chat group, type the first message below." />
-        )}
-        {[{ day: 3}, { day: 2 }, { day: 1 }, { day: 0 }].map((message) => (
-            <div key={message.day} style={{ height: 200 }}>
-              <div className="message-date">
-                <div className="date-line" />
-                <Text className="date" type="secondary">
-                  {message.day}
-                </Text>
-                <div className="date-line" />
-              </div>
-              {message.messages.map((user) => (
-                <div className="message-content" key={user.id}>
-                  {user.messages.map((m, index) => (
-                    <Row
-                      justify={m.from?.id === userId ? 'end' : 'start'}
-                      style={{ marginBottom: 5 }}
-                      key={m.id}
-                    >
-                      <Col>
-                        {adminRights ? (
-                          <Popover
-                            trigger="click"
-                            placement={m.from?.id === userId ? 'left' : 'right'}
-                            overlayClassName="message-popover"
-                            content={
-                              adminRights && (
-                                <Button
-                                  type="text"
-                                  disabled={saving}
-                                  icon={
-                                    <FontAwesomeIcon
-                                      style={{ marginRight: 5 }}
-                                      icon={faTrash}
-                                      size="lg"
-                                    />
-                                  }
-                                  onClick={() => {
-                                    deleteMessageConfirm(m.id || '');
-                                  }}
-                                  size="small"
-                                >
-                                  Delete Message
-                                </Button>
-                              )
-                            }
-                          >
-                            <div>
-                              <Content
-                                id={m.id}
-                                content={m.content}
-                                from={m.from}
-                                images={m.images}
-                                incidents={m.incidents}
-                                offenders={m.offenders}
-                                userId={userId}
-                                showUser={m.from?.id === userId}
-                                showDate={index === 0}
-                                createdAt={m.createdAt}
-                              />
-                            </div>
-                          </Popover>
-                        ) : (
-                          <Content
-                            id={m.id}
-                            content={m.content}
-                            from={m.from}
-                            images={m.images}
-                            incidents={m.incidents}
-                            offenders={m.offenders}
-                            showUser={m.from?.id === userId}
-                            showDate={index === 0}
-                            userId={userId}
-                            createdAt={m.createdAt}
-                          />
-                        )}
-                      </Col>
-                    </Row>
-                  ))}
-                </div>
-              ))}
-            </div>
-          ))}
-
-      </InfiniteScroll> */}
-
       <InfiniteScroll
-        dataLength={datedMessages?.length || 0}
+        dataLength={data?.chatMessages.length || 0}
         next={scrolledToTop}
         style={{ display: 'flex', flexDirection: 'column-reverse' }}
         inverse
@@ -427,87 +271,86 @@ const ViewMessges = ({
         className="message-container"
       >
         <div ref={ref} />
-        {datedMessages?.map((group) => (
-          <div key={group.day}>
-            <div className="message-date">
-              <div className="date-line" />
-              <Text className="date" type="secondary">
-                {group.day}
-              </Text>
-              <div className="date-line" />
-            </div>
-            {group.messages.map((user) => (
-              <div className="message-content" key={user.id}>
-                {user.messages.map((m, index) => (
-                  <Row
-                    justify={m.from?.id === userId ? 'end' : 'start'}
-                    style={{ marginBottom: 5 }}
-                    key={m.id}
-                  >
-                    <Col>
-                      {adminRights ? (
-                        <Popover
-                          trigger="click"
-                          placement={m.from?.id === userId ? 'left' : 'right'}
-                          overlayClassName="message-popover"
-                          content={
-                            adminRights && (
-                              <Button
-                                type="text"
-                                disabled={saving}
-                                icon={
-                                  <FontAwesomeIcon
-                                    style={{ marginRight: 5 }}
-                                    icon={faTrash}
-                                    size="lg"
-                                  />
-                                }
-                                onClick={() => {
-                                  deleteMessageConfirm(m.id || '');
-                                }}
-                                size="small"
-                              >
-                                Delete Message
-                              </Button>
-                            )
-                          }
-                        >
-                          <div>
-                            <Content
-                              id={m.id}
-                              content={m.content}
-                              from={m.from}
-                              images={m.images}
-                              incidents={m.incidents}
-                              offenders={m.offenders}
-                              userId={userId}
-                              showUser={m.from?.id === userId}
-                              showDate={index === 0}
-                              createdAt={m.createdAt}
-                            />
-                          </div>
-                        </Popover>
-                      ) : (
-                        <Content
-                          id={m.id}
-                          content={m.content}
-                          from={m.from}
-                          images={m.images}
-                          incidents={m.incidents}
-                          offenders={m.offenders}
-                          showUser={m.from?.id === userId}
-                          showDate={index === 0}
-                          userId={userId}
-                          createdAt={m.createdAt}
-                        />
-                      )}
-                    </Col>
-                  </Row>
-                ))}
+        {data?.chatMessages?.map((item) =>
+          item.type === MessageItemType.Date ? (
+            <div key={item.id}>
+              <div className="message-date" style={{ marginBottom: 15 }}>
+                <div className="date-line" />
+                <Text className="date" type="secondary">
+                  {item.content}
+                </Text>
+                <div className="date-line" />
               </div>
-            ))}
-          </div>
-        ))}
+            </div>
+          ) : (
+            <div className="message-content" key={item.id}>
+              <Row
+                justify={item.from?.id === userId ? 'end' : 'start'}
+                style={{ marginBottom: 5 }}
+                key={item.id}
+              >
+                <Col>
+                  {adminRights ? (
+                    <Popover
+                      trigger="click"
+                      placement={item.from?.id === userId ? 'left' : 'right'}
+                      overlayClassName="message-popover"
+                      content={
+                        adminRights && (
+                          <Button
+                            type="text"
+                            disabled={saving}
+                            icon={
+                              <FontAwesomeIcon
+                                style={{ marginRight: 5 }}
+                                icon={faTrash}
+                                size="lg"
+                              />
+                            }
+                            onClick={() => {
+                              deleteMessageConfirm(item.id || '');
+                            }}
+                            size="small"
+                          >
+                            Delete Message
+                          </Button>
+                        )
+                      }
+                    >
+                      <div>
+                        <Content
+                          id={item.id}
+                          content={item.content}
+                          from={item.from}
+                          images={item.images}
+                          incidents={item.incidents}
+                          offenders={item.offenders}
+                          showUser={item.showUser}
+                          currentUser={item.currentUser}
+                          date={item.formattedDateTime}
+                          paddingTop={item.paddingTop}
+                        />
+                      </div>
+                    </Popover>
+                  ) : (
+                    <Content
+                      id={item.id}
+                      content={item.content}
+                      from={item.from}
+                      images={item.images}
+                      incidents={item.incidents}
+                      offenders={item.offenders}
+                      showUser={item.showUser}
+                      currentUser={item.currentUser}
+                      date={item.formattedDateTime}
+                      paddingTop={item.paddingTop}
+                    />
+                  )}
+                </Col>
+              </Row>
+            </div>
+          )
+        )}
       </InfiniteScroll>
 
       <Form

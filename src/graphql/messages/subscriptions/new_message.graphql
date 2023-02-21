@@ -1,5 +1,5 @@
 subscription MessagesSubscription($chat: ID!) {
-  messages(chatId: $chat) {
+  chatMessages(chatId: $chat) {
     id
     sent
     from {
