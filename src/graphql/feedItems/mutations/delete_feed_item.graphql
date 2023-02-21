@@ -1,0 +1,5 @@
+mutation deleteFeedItem($id: String!) {
+  deleteFeedItem(where: { id: $id }) {
+    id
+  }
+}

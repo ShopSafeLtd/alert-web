@@ -1,0 +1,22 @@
+query Articles(
+  $where: ArticleWhereInput
+  $orderBy: [ArticleOrderByWithRelationInput!]
+) {
+  articles(where: $where, orderBy: $orderBy) {
+    previewImage
+    previewText
+    priority
+    tags {
+      id
+      name
+    }
+    createdBy {
+      fullName
+      organisation
+      id
+    }
+    title
+    updatedAt
+    id
+  }
+}

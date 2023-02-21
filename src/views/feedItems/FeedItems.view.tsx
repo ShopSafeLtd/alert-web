@@ -1,7 +1,7 @@
 import React from 'react';
 import {
+  ArticlesQuery,
   FeedItemsQuery,
-  FeedItemType,
   ListOffendersQuery,
   ListUnapprovedIncidentsQuery,
 } from 'graphql/generated';
@@ -12,33 +12,36 @@ import {
   Col,
   Divider,
   Input,
+  List,
+  Modal,
   Pagination,
+  Popover,
   Row,
   Skeleton,
+  Tooltip,
   Typography,
 } from 'antd';
 // import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
 import moment from 'moment';
-import IncidentFeed from 'components/feedItems/FeedItemSection/IncidentFeed';
-import OffenderFeed from 'components/feedItems/FeedItemSection/OffenderFeed';
-import { formatDate } from 'utils';
-import ArticleFeed from 'components/feedItems/FeedItemSection/ArticleFeed';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faExclamationCircle,
   faNewspaper,
+  faTrash,
   faUser,
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
 import ArticleCard from 'components/feedItems/ArticleSection/ArticleCard';
 import { Link } from 'react-router-dom';
+import FeedItemCard from 'components/feedItems/FeedItemCard';
 
 const { Title, Paragraph, Text } = Typography;
-// import Lightbox from 'yet-another-react-lightbox';
-// import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+const { confirm } = Modal;
 
 interface Props {
   data: FeedItemsQuery | undefined;
+  articleData: ArticlesQuery | undefined;
   recentOffenderData: ListOffendersQuery | undefined;
   recentOffenderLoading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
@@ -49,10 +52,14 @@ interface Props {
   // onNavigate: () => void;
   unapprovedIncidents: ListUnapprovedIncidentsQuery | undefined;
   unapprovedIncidentsLoading: boolean;
+  onDeleteFeedItem: (value: string) => void;
+  saving: boolean;
+  adminRights: boolean;
 }
 
 const FeedItem = ({
   data,
+  articleData,
   recentOffenderData,
   recentOffenderLoading,
   onPaginationChange,
@@ -61,6 +68,9 @@ const FeedItem = ({
   setSearch,
   unapprovedIncidents,
   unapprovedIncidentsLoading,
+  onDeleteFeedItem,
+  saving,
+  adminRights,
 }: // updateIncidentList,
 // onNavigate,
 Props): JSX.Element => {
@@ -115,7 +125,7 @@ Props): JSX.Element => {
                 <FontAwesomeIcon
                   icon={faExclamationCircle}
                   style={{ marginRight: 10 }}
-                />{' '}
+                />
                 Add Incident
               </Button>
             </Link>
@@ -123,7 +133,7 @@ Props): JSX.Element => {
           <Col>
             <Link to="/app/offenders/add">
               <Button size="small" type="primary">
-                <FontAwesomeIcon icon={faUsers} style={{ marginRight: 10 }} />{' '}
+                <FontAwesomeIcon icon={faUsers} style={{ marginRight: 10 }} />
                 Add Offender
               </Button>
             </Link>
@@ -134,7 +144,7 @@ Props): JSX.Element => {
                 <FontAwesomeIcon
                   icon={faNewspaper}
                   style={{ marginRight: 10 }}
-                />{' '}
+                />
                 Add Bulletin
               </Button>
             </Link>
@@ -153,73 +163,81 @@ Props): JSX.Element => {
             {data?.listFeedItems?.feedItems &&
               data.listFeedItems?.feedItems.length &&
               data.listFeedItems?.feedItems.map((item) => (
-                <Card
-                  headStyle={{ borderBottom: '1px black' }}
-                  style={{
-                    width: '100%',
-                    borderBottom: '1px black',
-                    marginBottom: 10,
-                  }}
-                  key={item?.incidentId || item?.offenderId || ''}
-                  bodyStyle={{ padding: 0 }}
-                >
-                  <>
-                    <Row style={{ margin: '10px 15px 5px' }}>
-                      <Col flex={1}>
-                        <Title style={{ margin: 0 }} level={5}>
-                          {item?.message}
-                        </Title>
-                      </Col>
-                      <Col>
-                        <Text type="secondary" style={{ fontSize: 12 }}>
-                          {formatDate(item?.updatedAt)}
-                        </Text>
-                      </Col>
-                    </Row>
-                    <Divider style={{ margin: 0 }} />
-                    <div style={{ borderTop: '1px', padding: 10 }}>
-                      {/* create new incident/offender */}
-                      {item?.type === FeedItemType.NewIncident && (
-                        <IncidentFeed feedItem={item} isNewIncident />
-                      )}
-                      {item?.type === FeedItemType.NewOffender && (
-                        <OffenderFeed feedItem={item} isNewOffender />
-                      )}
-                      {/* update details  */}
-                      {item?.type === FeedItemType.Incident && (
-                        <IncidentFeed feedItem={item} />
-                      )}
-                      {item?.type === FeedItemType.Offender && (
-                        <OffenderFeed feedItem={item} />
-                      )}
-                      {/* add new images */}
-                      {item?.type === FeedItemType.IncidentImage && (
-                        <IncidentFeed feedItem={item} isNewImage />
-                      )}
-                      {item?.type === FeedItemType.OffenderImage && (
-                        <OffenderFeed feedItem={item} isNewImage />
-                      )}
-                      {/* add new intel */}
-                      {item?.type === FeedItemType.IncidentIntel && (
-                        <IncidentFeed feedItem={item} />
-                      )}
-                      {item?.type === FeedItemType.OffenderIntel && (
-                        <OffenderFeed feedItem={item} />
-                      )}
-
-                      {/* article */}
-                      {item?.type === FeedItemType.NewArticle && (
-                        <ArticleFeed feedItem={item} />
-                      )}
-                    </div>
-                  </>
-                </Card>
+                <>
+                  <Button
+                    type="text"
+                    disabled={saving}
+                    icon={
+                      <FontAwesomeIcon
+                        style={{ marginRight: 5 }}
+                        icon={faTrash}
+                        size="lg"
+                      />
+                    }
+                    onClick={() => {
+                      confirm({
+                        title: 'Do you want to delete the feedItem?',
+                        content: 'This action cannot be undone.',
+                        onOk() {
+                          onDeleteFeedItem(item.id);
+                        },
+                      });
+                    }}
+                    size="small"
+                  >
+                    Delete FeedItem
+                  </Button>
+                  {adminRights ? (
+                    <Popover
+                      trigger="click"
+                      placement="top"
+                      overlayClassName="message-popover"
+                      content={
+                        <Button
+                          type="text"
+                          disabled={saving}
+                          icon={
+                            <FontAwesomeIcon
+                              style={{ marginRight: 5 }}
+                              icon={faTrash}
+                              size="lg"
+                            />
+                          }
+                          onClick={() => {
+                            confirm({
+                              title: 'Do you want to delete the feedItem?',
+                              content: 'This action cannot be undone.',
+                              onOk() {
+                                onDeleteFeedItem(item.id);
+                              },
+                            });
+                          }}
+                          size="small"
+                        >
+                          Delete FeedItem
+                        </Button>
+                      }
+                    >
+                      <FeedItemCard
+                        feedItem={item}
+                        // onDeleteFeedItem={onDeleteFeedItem}
+                        // adminRights={adminRights}
+                      />
+                    </Popover>
+                  ) : (
+                    <FeedItemCard
+                      feedItem={item}
+                      // onDeleteFeedItem={onDeleteFeedItem}
+                      // adminRights={adminRights}
+                    />
+                  )}
+                </>
               ))}
             <Row justify="center">
               <Col>
                 <Pagination
                   total={data?.listFeedItems?.total}
-                  pageSizeOptions={pagination.sizeOptions}
+                  pageSizeOptions={['20']}
                   pageSize={pagination.pageSize}
                   current={pagination.page}
                   onChange={onPaginationChange}
@@ -231,7 +249,7 @@ Props): JSX.Element => {
         </Col>
         <Col span={13} xxl={15} xl={15} lg={12}>
           {/* <IncidentSkeletonCard /> */}
-          <Card bodyStyle={{ padding: 20 }}>
+          <Card style={{ height: 190 }}>
             <Title level={4} style={{ fontSize: 16 }}>
               Recently Active Offenders
             </Title>
@@ -257,98 +275,128 @@ Props): JSX.Element => {
                 style={{
                   overflow: 'auto',
                   flexWrap: 'nowrap',
-                  // marginBottom: 20,
                 }}
               >
                 {recentOffenderData?.listOffenders?.offenders.map(
                   (offender) => (
                     <Col key={offender.id}>
-                      {/* <Tooltip
-                placement="bottom"
-                title={`Add ${offender.name} to incident`}
-              > */}
-                      <Card
-                        // onClick={() => setAddRecentOffender(offender)}
-                        className="offender-card"
-                        bodyStyle={{
-                          width: 120,
-                          height: 120,
-                          position: 'relative',
-                          backgroundImage: `url(${offender.images[0]?.optimised})`,
-                          backgroundSize: 'cover',
-                          backgroundPosition: 'center',
-                          padding: 0,
-                          borderRadius: '0.625rem',
-                          overflow: 'hidden',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          cursor: 'pointer',
-                        }}
+                      <Tooltip
+                        placement="bottom"
+                        title={`View ${offender.name} `}
                       >
-                        {offender.images.length === 0 && (
-                          <FontAwesomeIcon
-                            style={{ color: 'rgb(114, 132, 154)' }}
-                            icon={faUser}
-                            size="3x"
-                          />
-                        )}
-                        <Paragraph
-                          style={{
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            background: 'rgba(0,0,0,.5)',
-                            color: '#FFF',
-                            position: 'absolute',
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            margin: 0,
-                            padding: '3px 10px 3px',
-                          }}
-                        >
-                          {offender.name}
-                        </Paragraph>
-                      </Card>
-                      {/* </Tooltip> */}
+                        <Link to={`/app/offenders/view/${offender.id}`}>
+                          <Card
+                            // onClick={() => setAddRecentOffender(offender)}
+                            className="offender-card"
+                            bodyStyle={{
+                              width: 120,
+                              height: 120,
+                              position: 'relative',
+                              backgroundImage: `url(${offender.images[0]?.optimised})`,
+                              backgroundSize: 'cover',
+                              backgroundPosition: 'center',
+                              padding: 0,
+                              borderRadius: '0.625rem',
+                              overflow: 'hidden',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              cursor: 'pointer',
+                            }}
+                          >
+                            {offender.images.length === 0 && (
+                              <FontAwesomeIcon
+                                style={{ color: 'rgb(114, 132, 154)' }}
+                                icon={faUser}
+                                size="3x"
+                              />
+                            )}
+                            <Paragraph
+                              style={{
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                background: 'rgba(0,0,0,.5)',
+                                color: '#FFF',
+                                position: 'absolute',
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                margin: 0,
+                                padding: '3px 10px 3px',
+                              }}
+                            >
+                              {offender.name}
+                            </Paragraph>
+                          </Card>
+                        </Link>
+                      </Tooltip>
                     </Col>
                   )
                 )}
               </Row>
             )}
           </Card>
-          <Row gutter={12}>
-            <Col span={12}>
+          <Row gutter={12} style={{ height: 'calc(100vh - 500px)' }}>
+            <Col span={16}>
               <Card
-                bodyStyle={{ paddingRight: 0, paddingLeft: 0, paddingTop: 15 }}
+                bodyStyle={{
+                  paddingRight: 0,
+                  paddingLeft: 0,
+                  paddingTop: 15,
+                }}
               >
                 <Title
                   style={{
                     marginRight: 20,
                     marginLeft: 20,
-                    marginBottom: 10,
+                    marginBottom: 5,
                     fontSize: 16,
                   }}
                   level={4}
                 >
                   Recent Bulletins
                 </Title>
-                <Divider style={{ marginTop: 0, marginBottom: 10 }} />
-                <div>
-                  {data?.listFeedItems?.feedItems &&
-                    data.listFeedItems?.feedItems.length &&
-                    data.listFeedItems?.feedItems.map((item) => (
-                      <div>
-                        {item?.type === FeedItemType.NewArticle && (
-                          <ArticleCard articleData={item} />
-                        )}
-                      </div>
-                    ))}
-                </div>
+                {/* <Divider style={{ marginTop: 0, marginBottom: 10 }} /> */}
+                <List
+                  style={{ marginLeft: 5, marginRight: 5 }}
+                  grid={{ gutter: 8, column: 3 }}
+                  dataSource={articleData?.articles}
+                  pagination={{
+                    pageSize: 9,
+                  }}
+                  renderItem={(article) => <ArticleCard article={article} />}
+                />
+                {/* <Row gutter={8} style={{ marginLeft: 5, marginRight: 5 }}>
+                  {articleLoading
+                    ? Array.from({ length: 24 }).map((_, index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <Col key={index} sm={24} md={12} lg={12} xl={8}>
+                          <IncidentSkeletonCard />
+                        </Col>
+                      ))
+                    : articleData?.articles.map((article) => (
+                        <Col sm={24} md={12} lg={12} xl={8} key={article?.id}>
+                          <ArticleCard article={article} />
+                        </Col>
+                      ))}
+                </Row> */}
+                {/* <Row justify="center">
+                  <Col>
+                    <Pagination
+                      total={articleData?.articles}
+                      pageSizeOptions={pagination.sizeOptions}
+                      pageSize={pagination.pageSize}
+                      current={pagination.page}
+                      onChange={onPaginationChange}
+                      showTotal={(total) => `Total Incidents: ${total}`}
+                      hideOnSinglePage
+                    />
+                  </Col>
+                </Row> */}
               </Card>
             </Col>
-            <Col span={12}>
+            <Col span={8}>
               <Card
                 bodyStyle={{ paddingRight: 0, paddingLeft: 0, paddingTop: 15 }}
               >

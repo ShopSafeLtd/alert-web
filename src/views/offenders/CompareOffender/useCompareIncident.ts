@@ -209,7 +209,6 @@ const compareIncident = (): Return => {
   };
 
   const onMerge = () => {
-    console.log('runs');
     navigate('/app/offenders');
   };
 

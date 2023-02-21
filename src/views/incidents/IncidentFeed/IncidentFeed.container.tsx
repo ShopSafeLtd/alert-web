@@ -25,7 +25,6 @@ const IncidentFeed = (): JSX.Element => {
     loading,
     lightBoxOpen,
   } = useIncidentFeed();
-  console.log('data2', data);
 
   return (
     <View

@@ -5,6 +5,7 @@ import useFeedItems from './useFeedItems';
 const FeedItems = (): JSX.Element => {
   const {
     data,
+    articleData,
     recentOffenderData,
     recentOffenderLoading,
     onPaginationChange,
@@ -15,11 +16,15 @@ const FeedItems = (): JSX.Element => {
     unapprovedIncidentsLoading,
     // updateIncidentList,
     // onNavigate,
+    onDeleteFeedItem,
+    saving,
+    adminRights,
   } = useFeedItems();
 
   return (
     <View
       data={data}
+      articleData={articleData}
       recentOffenderData={recentOffenderData}
       recentOffenderLoading={recentOffenderLoading}
       onPaginationChange={onPaginationChange}
@@ -28,6 +33,9 @@ const FeedItems = (): JSX.Element => {
       setSearch={setSearch}
       unapprovedIncidents={unapprovedIncidents}
       unapprovedIncidentsLoading={unapprovedIncidentsLoading}
+      onDeleteFeedItem={onDeleteFeedItem}
+      saving={saving}
+      adminRights={adminRights}
       // updateIncidentList={updateIncidentList}
       // onNavigate={onNavigate}
     />

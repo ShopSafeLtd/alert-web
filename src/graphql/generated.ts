@@ -26932,255 +26932,31 @@ export type ArticleQuery = {
   } | null;
 };
 
-export type ArticleFeedItemsQueryVariables = Exact<{
-  schemeId: Scalars['String'];
-  search?: InputMaybe<Scalars['String']>;
-  order?: InputMaybe<FeedItemOrderByWithRelationInput>;
-  take?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  after?: InputMaybe<Scalars['String']>;
-  groups?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+export type ArticlesQueryVariables = Exact<{
+  where?: InputMaybe<ArticleWhereInput>;
+  orderBy?: InputMaybe<
+    Array<ArticleOrderByWithRelationInput> | ArticleOrderByWithRelationInput
+  >;
 }>;
 
-export type ArticleFeedItemsQuery = {
+export type ArticlesQuery = {
   __typename?: 'Query';
-  listFeedItems?: {
-    __typename?: 'ListFeedItems';
-    total: number;
-    feedItems: Array<{
-      __typename?: 'FeedItem';
-      articleId?: string | null;
-      createdAt: any;
-      updatedAt: any;
-      message: string;
-      model?: Model | null;
-      type: FeedItemType;
+  articles: Array<{
+    __typename?: 'Article';
+    previewImage?: string | null;
+    previewText?: string | null;
+    priority: ArticlePriority;
+    title: string;
+    updatedAt: any;
+    id: string;
+    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    createdBy: {
+      __typename?: 'User';
+      fullName: string;
+      organisation: string;
       id: string;
-      incidentId?: string | null;
-      offenderId?: string | null;
-      article?: {
-        __typename?: 'Article';
-        id: string;
-        title: string;
-        updatedAt: any;
-        previewImage?: string | null;
-        previewText?: string | null;
-        priority: ArticlePriority;
-        tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-        createdBy: {
-          __typename?: 'User';
-          id: string;
-          fullName: string;
-          organisation: string;
-        };
-      } | null;
-      groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-      incident?: {
-        __typename?: 'Incident';
-        id: string;
-        subject?: string | null;
-        policeRef?: string | null;
-        reference?: number | null;
-        description: string;
-        dayTime?: string | null;
-        date: any;
-        totalOffenders?: number | null;
-        totalUpdates?: number | null;
-        approved?: boolean | null;
-        updates: Array<{
-          __typename?: 'Update';
-          id: string;
-          text?: string | null;
-          type: UpdateType;
-          images: Array<{
-            __typename?: 'Image';
-            id: string;
-            optimised?: string | null;
-            url?: string | null;
-          }>;
-          linkedIncidents: Array<{
-            __typename?: 'Incident';
-            id: string;
-            subject?: string | null;
-            description: string;
-            dayTime?: string | null;
-            images: Array<{
-              __typename?: 'Image';
-              id: string;
-              url?: string | null;
-              optimised?: string | null;
-            }>;
-          }>;
-          linkedOffenders: Array<{
-            __typename?: 'Offender';
-            id: string;
-            updatedAt: any;
-            name?: string | null;
-            images: Array<{
-              __typename?: 'Image';
-              id: string;
-              url?: string | null;
-              optimised?: string | null;
-            }>;
-          }>;
-        }>;
-        crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-        location?: {
-          __typename?: 'Address';
-          id: string;
-          full?: string | null;
-        } | null;
-        createdBy: {
-          __typename?: 'User';
-          id: string;
-          fullName: string;
-          organisation: string;
-        };
-        images: Array<{
-          __typename?: 'Image';
-          id: string;
-          optimised?: string | null;
-          url?: string | null;
-        }>;
-        groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-        offenders: Array<{
-          __typename?: 'Offender';
-          id: string;
-          name?: string | null;
-          age?: Age | null;
-          gender?: Gender | null;
-          race?: Race | null;
-          dateOfBirth?: any | null;
-          build?: Build | null;
-          recycled: boolean;
-          images: Array<{
-            __typename?: 'Image';
-            id: string;
-            url?: string | null;
-            optimised?: string | null;
-            card?: string | null;
-            offenders: Array<{
-              __typename?: 'Offender';
-              id: string;
-              name?: string | null;
-            }>;
-          }>;
-        }>;
-      } | null;
-      offender?: {
-        __typename?: 'Offender';
-        id: string;
-        createdAt: any;
-        updatedAt: any;
-        age?: Age | null;
-        build?: Build | null;
-        dateOfBirth?: any | null;
-        dateSource?: string | null;
-        gender?: Gender | null;
-        hair?: string | null;
-        name?: string | null;
-        totalIncidents?: number | null;
-        totalUpdates?: number | null;
-        peculiarities?: string | null;
-        race?: Race | null;
-        approved?: boolean | null;
-        subscribed?: boolean | null;
-        uploaded?: boolean | null;
-        active?: boolean | null;
-        bans: Array<{
-          __typename?: 'Ban';
-          id: string;
-          title?: string | null;
-          location: string;
-          description?: string | null;
-          startDate: any;
-          endDate: any;
-        }>;
-        lastActive?: {
-          __typename?: 'Incident';
-          id: string;
-          dayTime?: string | null;
-        } | null;
-        updates: Array<{
-          __typename?: 'Update';
-          id: string;
-          text?: string | null;
-          type: UpdateType;
-          images: Array<{
-            __typename?: 'Image';
-            id: string;
-            optimised?: string | null;
-            url?: string | null;
-          }>;
-          linkedIncidents: Array<{
-            __typename?: 'Incident';
-            id: string;
-            subject?: string | null;
-            description: string;
-            dayTime?: string | null;
-            images: Array<{
-              __typename?: 'Image';
-              id: string;
-              url?: string | null;
-              optimised?: string | null;
-            }>;
-          }>;
-          linkedOffenders: Array<{
-            __typename?: 'Offender';
-            id: string;
-            updatedAt: any;
-            name?: string | null;
-            images: Array<{
-              __typename?: 'Image';
-              id: string;
-              url?: string | null;
-              optimised?: string | null;
-            }>;
-          }>;
-        }>;
-        images: Array<{
-          __typename?: 'Image';
-          id: string;
-          url?: string | null;
-          optimised?: string | null;
-          card?: string | null;
-        }>;
-        tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-        groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-        createdBy: {
-          __typename?: 'User';
-          id: string;
-          fullName: string;
-          organisation: string;
-        };
-        incidents: Array<{
-          __typename?: 'Incident';
-          id: string;
-          subject?: string | null;
-          description: string;
-          dayTime?: string | null;
-          approved?: boolean | null;
-          crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-          location?: {
-            __typename?: 'Address';
-            id: string;
-            full?: string | null;
-          } | null;
-          createdBy: {
-            __typename?: 'User';
-            id: string;
-            fullName: string;
-            organisation: string;
-          };
-          images: Array<{
-            __typename?: 'Image';
-            id: string;
-            optimised?: string | null;
-          }>;
-        }>;
-      } | null;
-    }>;
-  } | null;
+    };
+  }>;
 };
 
 export type CreateUserinAuth0MutationVariables = Exact<{
@@ -27529,6 +27305,15 @@ export type CrimeGroupQuery = {
       createdBy: { __typename?: 'User'; id: string; organisation: string };
     } | null> | null;
   } | null;
+};
+
+export type DeleteFeedItemMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type DeleteFeedItemMutation = {
+  __typename?: 'Mutation';
+  deleteFeedItem?: { __typename?: 'FeedItem'; id: string } | null;
 };
 
 export type FeedItemsQueryVariables = Exact<{
@@ -30316,6 +30101,188 @@ export type SearchUserQuery = {
   } | null;
 };
 
+export type DeleteVehicleMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type DeleteVehicleMutation = {
+  __typename?: 'Mutation';
+  deleteVehicle?: { __typename?: 'Vehicle'; id: string } | null;
+};
+
+export type UpdateVehicleMutationVariables = Exact<{
+  where: UniqueId;
+  data: CreateVehicleDataInput;
+}>;
+
+export type UpdateVehicleMutation = {
+  __typename?: 'Mutation';
+  updateVehicle?: {
+    __typename?: 'Vehicle';
+    id: string;
+    make?: string | null;
+    model?: string | null;
+    registration?: string | null;
+    totalOffenders?: number | null;
+    totalIncidents?: number | null;
+    updatedAt: any;
+    colour?: string | null;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+    }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      name?: string | null;
+    }>;
+    crimeGroup: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      reference?: number | null;
+    }>;
+  } | null;
+};
+
+export type VehicleQueryVariables = Exact<{
+  where: VehicleWhereUniqueInput;
+}>;
+
+export type VehicleQuery = {
+  __typename?: 'Query';
+  vehicle?: {
+    __typename?: 'Vehicle';
+    id: string;
+    make?: string | null;
+    model?: string | null;
+    registration?: string | null;
+    totalOffenders?: number | null;
+    totalIncidents?: number | null;
+    totalCrimeGroups?: number | null;
+    updatedAt: any;
+    colour?: string | null;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+      dayTime?: string | null;
+      value?: number | null;
+      recoveredValue?: number | null;
+      reference?: number | null;
+      policeRef?: string | null;
+      createdBy: { __typename?: 'User'; id: string; organisation: string };
+    }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      name?: string | null;
+      reference?: number | null;
+      hair?: string | null;
+      peculiarities?: string | null;
+      race?: Race | null;
+      dateOfBirth?: any | null;
+      dateSource?: string | null;
+      build?: Build | null;
+      age?: Age | null;
+      gender?: Gender | null;
+      totalTheftSuccess?: number | null;
+      totalRecoveredValue?: number | null;
+      totalIncidents?: number | null;
+      totalValue?: number | null;
+      lastActive?: {
+        __typename?: 'Incident';
+        id: string;
+        dayTime?: string | null;
+      } | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+      }>;
+    }>;
+    crimeGroup: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      reference?: number | null;
+    }>;
+  } | null;
+};
+
+export type CreateVehicleMutationVariables = Exact<{
+  data: CreateVehicleDataInput;
+}>;
+
+export type CreateVehicleMutation = {
+  __typename?: 'Mutation';
+  createVehicle: {
+    __typename?: 'Vehicle';
+    id: string;
+    make?: string | null;
+    model?: string | null;
+    registration?: string | null;
+    totalOffenders?: number | null;
+    totalIncidents?: number | null;
+    updatedAt: any;
+    colour?: string | null;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+    }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      name?: string | null;
+    }>;
+    crimeGroup: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      reference?: number | null;
+    }>;
+  };
+};
+
+export type ListVehiclesQueryVariables = Exact<{
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<VehicleWhereInput>;
+}>;
+
+export type ListVehiclesQuery = {
+  __typename?: 'Query';
+  listVehicles: {
+    __typename?: 'ListVehicles';
+    total: number;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      id: string;
+      make?: string | null;
+      model?: string | null;
+      registration?: string | null;
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      updatedAt: any;
+      colour?: string | null;
+      incidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        subject?: string | null;
+      }>;
+      offenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        name?: string | null;
+      }>;
+      crimeGroup: Array<{
+        __typename?: 'CrimeGroup';
+        id: string;
+        reference?: number | null;
+      }>;
+    }>;
+  };
+};
+
 export const CreateArticleDocument = gql`
   mutation CreateArticle($data: CreateArticleInput!) {
     createArticle(data: $data) {
@@ -30672,320 +30639,76 @@ export type ArticleQueryResult = Apollo.QueryResult<
   ArticleQuery,
   ArticleQueryVariables
 >;
-export const ArticleFeedItemsDocument = gql`
-  query ArticleFeedItems(
-    $schemeId: String!
-    $search: String
-    $order: FeedItemOrderByWithRelationInput
-    $take: Int
-    $skip: Int
-    $after: String
-    $groups: [String!]
+export const ArticlesDocument = gql`
+  query Articles(
+    $where: ArticleWhereInput
+    $orderBy: [ArticleOrderByWithRelationInput!]
   ) {
-    listFeedItems(
-      schemeId: $schemeId
-      search: $search
-      order: $order
-      take: $take
-      skip: $skip
-      after: $after
-      groups: $groups
-    ) {
-      feedItems {
-        article {
-          id
-          title
-          updatedAt
-          tags {
-            id
-            name
-          }
-          createdBy {
-            id
-            fullName
-            organisation
-          }
-          previewImage
-          previewText
-          priority
-        }
-        articleId
-        createdAt
-        updatedAt
-        message
-        model
-        type
-        groups {
-          id
-          name
-        }
+    articles(where: $where, orderBy: $orderBy) {
+      previewImage
+      previewText
+      priority
+      tags {
         id
-        incident {
-          id
-          subject
-          policeRef
-          reference
-          description
-          dayTime
-          date
-          totalOffenders
-          totalUpdates
-          updates(orderBy: { createdAt: desc }) {
-            id
-            images {
-              id
-              optimised
-              url
-            }
-            linkedIncidents {
-              id
-              subject
-              description
-              dayTime
-              images {
-                id
-                url
-                optimised
-              }
-            }
-            linkedOffenders {
-              id
-              updatedAt
-              name
-              images {
-                id
-                url
-                optimised
-              }
-            }
-            text
-            type
-          }
-          crimeTypes {
-            id
-            name
-          }
-          approved
-          location {
-            id
-            full
-          }
-          createdBy {
-            id
-            fullName
-            organisation
-          }
-          images(orderBy: { createdAt: desc }) {
-            id
-            optimised
-            url
-          }
-          groups {
-            id
-            name
-          }
-          offenders {
-            id
-            name
-            age
-            gender
-            race
-            dateOfBirth
-            build
-            images(first: 1) {
-              id
-              url
-              optimised
-              card
-              offenders {
-                id
-                name
-              }
-            }
-            recycled
-          }
-        }
-        incidentId
-        offender {
-          id
-          createdAt
-          updatedAt
-          age
-          bans {
-            id
-            title
-            location
-            description
-            startDate
-            endDate
-          }
-          build
-          dateOfBirth
-          dateSource
-          gender
-          hair
-          name
-          totalIncidents
-          totalUpdates
-          peculiarities
-          race
-          approved
-          subscribed
-          uploaded
-          active
-          lastActive {
-            id
-            dayTime
-          }
-          updates(orderBy: { createdAt: desc }) {
-            id
-            images {
-              id
-              optimised
-              url
-            }
-            linkedIncidents {
-              id
-              subject
-              description
-              dayTime
-              images {
-                id
-                url
-                optimised
-              }
-            }
-            linkedOffenders {
-              id
-              updatedAt
-              name
-              images {
-                id
-                url
-                optimised
-              }
-            }
-            text
-            type
-          }
-          images {
-            id
-            url
-            optimised
-            card
-          }
-          tags {
-            id
-            name
-          }
-          groups {
-            id
-            name
-          }
-          tags {
-            id
-            name
-          }
-          createdBy {
-            id
-            fullName
-            organisation
-          }
-          bans {
-            id
-            title
-            location
-            description
-            startDate
-            endDate
-          }
-          incidents {
-            id
-            subject
-            description
-            dayTime
-            crimeTypes {
-              id
-              name
-            }
-            approved
-            location {
-              id
-              full
-            }
-            createdBy {
-              id
-              fullName
-              organisation
-            }
-            images {
-              id
-              optimised
-            }
-          }
-        }
-        offenderId
+        name
       }
-      total
+      createdBy {
+        fullName
+        organisation
+        id
+      }
+      title
+      updatedAt
+      id
     }
   }
 `;
 
 /**
- * __useArticleFeedItemsQuery__
+ * __useArticlesQuery__
  *
- * To run a query within a React component, call `useArticleFeedItemsQuery` and pass it any options that fit your needs.
- * When your component renders, `useArticleFeedItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useArticlesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useArticlesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useArticleFeedItemsQuery({
+ * const { data, loading, error } = useArticlesQuery({
  *   variables: {
- *      schemeId: // value for 'schemeId'
- *      search: // value for 'search'
- *      order: // value for 'order'
- *      take: // value for 'take'
- *      skip: // value for 'skip'
- *      after: // value for 'after'
- *      groups: // value for 'groups'
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
  *   },
  * });
  */
-export function useArticleFeedItemsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    ArticleFeedItemsQuery,
-    ArticleFeedItemsQueryVariables
-  >
+export function useArticlesQuery(
+  baseOptions?: Apollo.QueryHookOptions<ArticlesQuery, ArticlesQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ArticleFeedItemsQuery, ArticleFeedItemsQueryVariables>(
-    ArticleFeedItemsDocument,
+  return Apollo.useQuery<ArticlesQuery, ArticlesQueryVariables>(
+    ArticlesDocument,
     options
   );
 }
-export function useArticleFeedItemsLazyQuery(
+export function useArticlesLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    ArticleFeedItemsQuery,
-    ArticleFeedItemsQueryVariables
+    ArticlesQuery,
+    ArticlesQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    ArticleFeedItemsQuery,
-    ArticleFeedItemsQueryVariables
-  >(ArticleFeedItemsDocument, options);
+  return Apollo.useLazyQuery<ArticlesQuery, ArticlesQueryVariables>(
+    ArticlesDocument,
+    options
+  );
 }
-export type ArticleFeedItemsQueryHookResult = ReturnType<
-  typeof useArticleFeedItemsQuery
+export type ArticlesQueryHookResult = ReturnType<typeof useArticlesQuery>;
+export type ArticlesLazyQueryHookResult = ReturnType<
+  typeof useArticlesLazyQuery
 >;
-export type ArticleFeedItemsLazyQueryHookResult = ReturnType<
-  typeof useArticleFeedItemsLazyQuery
->;
-export type ArticleFeedItemsQueryResult = Apollo.QueryResult<
-  ArticleFeedItemsQuery,
-  ArticleFeedItemsQueryVariables
+export type ArticlesQueryResult = Apollo.QueryResult<
+  ArticlesQuery,
+  ArticlesQueryVariables
 >;
 export const CreateUserinAuth0Document = gql`
   mutation createUserinAuth0($id: String!, $password: String!) {
@@ -31935,6 +31658,56 @@ export type CrimeGroupLazyQueryHookResult = ReturnType<
 export type CrimeGroupQueryResult = Apollo.QueryResult<
   CrimeGroupQuery,
   CrimeGroupQueryVariables
+>;
+export const DeleteFeedItemDocument = gql`
+  mutation deleteFeedItem($id: String!) {
+    deleteFeedItem(where: { id: $id }) {
+      id
+    }
+  }
+`;
+export type DeleteFeedItemMutationFn = Apollo.MutationFunction<
+  DeleteFeedItemMutation,
+  DeleteFeedItemMutationVariables
+>;
+
+/**
+ * __useDeleteFeedItemMutation__
+ *
+ * To run a mutation, you first call `useDeleteFeedItemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteFeedItemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteFeedItemMutation, { data, loading, error }] = useDeleteFeedItemMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteFeedItemMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteFeedItemMutation,
+    DeleteFeedItemMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteFeedItemMutation,
+    DeleteFeedItemMutationVariables
+  >(DeleteFeedItemDocument, options);
+}
+export type DeleteFeedItemMutationHookResult = ReturnType<
+  typeof useDeleteFeedItemMutation
+>;
+export type DeleteFeedItemMutationResult =
+  Apollo.MutationResult<DeleteFeedItemMutation>;
+export type DeleteFeedItemMutationOptions = Apollo.BaseMutationOptions<
+  DeleteFeedItemMutation,
+  DeleteFeedItemMutationVariables
 >;
 export const FeedItemsDocument = gql`
   query FeedItems(
@@ -37558,4 +37331,373 @@ export type SearchUserLazyQueryHookResult = ReturnType<
 export type SearchUserQueryResult = Apollo.QueryResult<
   SearchUserQuery,
   SearchUserQueryVariables
+>;
+export const DeleteVehicleDocument = gql`
+  mutation deleteVehicle($id: String!) {
+    deleteVehicle(where: { id: $id }) {
+      id
+    }
+  }
+`;
+export type DeleteVehicleMutationFn = Apollo.MutationFunction<
+  DeleteVehicleMutation,
+  DeleteVehicleMutationVariables
+>;
+
+/**
+ * __useDeleteVehicleMutation__
+ *
+ * To run a mutation, you first call `useDeleteVehicleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteVehicleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteVehicleMutation, { data, loading, error }] = useDeleteVehicleMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteVehicleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteVehicleMutation,
+    DeleteVehicleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteVehicleMutation,
+    DeleteVehicleMutationVariables
+  >(DeleteVehicleDocument, options);
+}
+export type DeleteVehicleMutationHookResult = ReturnType<
+  typeof useDeleteVehicleMutation
+>;
+export type DeleteVehicleMutationResult =
+  Apollo.MutationResult<DeleteVehicleMutation>;
+export type DeleteVehicleMutationOptions = Apollo.BaseMutationOptions<
+  DeleteVehicleMutation,
+  DeleteVehicleMutationVariables
+>;
+export const UpdateVehicleDocument = gql`
+  mutation updateVehicle($where: UniqueId!, $data: CreateVehicleDataInput!) {
+    updateVehicle(where: $where, data: $data) {
+      id
+      make
+      model
+      registration
+      totalOffenders
+      totalIncidents
+      incidents {
+        id
+        subject
+      }
+      offenders {
+        id
+        name
+      }
+      updatedAt
+      colour
+      crimeGroup {
+        id
+        reference
+      }
+    }
+  }
+`;
+export type UpdateVehicleMutationFn = Apollo.MutationFunction<
+  UpdateVehicleMutation,
+  UpdateVehicleMutationVariables
+>;
+
+/**
+ * __useUpdateVehicleMutation__
+ *
+ * To run a mutation, you first call `useUpdateVehicleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateVehicleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateVehicleMutation, { data, loading, error }] = useUpdateVehicleMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateVehicleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateVehicleMutation,
+    UpdateVehicleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateVehicleMutation,
+    UpdateVehicleMutationVariables
+  >(UpdateVehicleDocument, options);
+}
+export type UpdateVehicleMutationHookResult = ReturnType<
+  typeof useUpdateVehicleMutation
+>;
+export type UpdateVehicleMutationResult =
+  Apollo.MutationResult<UpdateVehicleMutation>;
+export type UpdateVehicleMutationOptions = Apollo.BaseMutationOptions<
+  UpdateVehicleMutation,
+  UpdateVehicleMutationVariables
+>;
+export const VehicleDocument = gql`
+  query Vehicle($where: VehicleWhereUniqueInput!) {
+    vehicle(where: $where) {
+      id
+      make
+      model
+      registration
+      totalOffenders
+      totalIncidents
+      totalCrimeGroups
+      incidents {
+        id
+        subject
+        dayTime
+        createdBy {
+          id
+          organisation
+        }
+        value
+        recoveredValue
+        reference
+        policeRef
+      }
+      offenders {
+        id
+        name
+        reference
+        lastActive {
+          id
+          dayTime
+        }
+        hair
+        peculiarities
+        race
+        dateOfBirth
+        dateSource
+        build
+        age
+        gender
+        images {
+          id
+          optimised
+        }
+        totalTheftSuccess
+        totalRecoveredValue
+        totalIncidents
+        totalValue
+      }
+      updatedAt
+      colour
+      crimeGroup {
+        id
+        reference
+      }
+    }
+  }
+`;
+
+/**
+ * __useVehicleQuery__
+ *
+ * To run a query within a React component, call `useVehicleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useVehicleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useVehicleQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useVehicleQuery(
+  baseOptions: Apollo.QueryHookOptions<VehicleQuery, VehicleQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<VehicleQuery, VehicleQueryVariables>(
+    VehicleDocument,
+    options
+  );
+}
+export function useVehicleLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<VehicleQuery, VehicleQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<VehicleQuery, VehicleQueryVariables>(
+    VehicleDocument,
+    options
+  );
+}
+export type VehicleQueryHookResult = ReturnType<typeof useVehicleQuery>;
+export type VehicleLazyQueryHookResult = ReturnType<typeof useVehicleLazyQuery>;
+export type VehicleQueryResult = Apollo.QueryResult<
+  VehicleQuery,
+  VehicleQueryVariables
+>;
+export const CreateVehicleDocument = gql`
+  mutation CreateVehicle($data: CreateVehicleDataInput!) {
+    createVehicle(data: $data) {
+      id
+      make
+      model
+      registration
+      totalOffenders
+      totalIncidents
+      incidents {
+        id
+        subject
+      }
+      offenders {
+        id
+        name
+      }
+      updatedAt
+      colour
+      crimeGroup {
+        id
+        reference
+      }
+    }
+  }
+`;
+export type CreateVehicleMutationFn = Apollo.MutationFunction<
+  CreateVehicleMutation,
+  CreateVehicleMutationVariables
+>;
+
+/**
+ * __useCreateVehicleMutation__
+ *
+ * To run a mutation, you first call `useCreateVehicleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateVehicleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createVehicleMutation, { data, loading, error }] = useCreateVehicleMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateVehicleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateVehicleMutation,
+    CreateVehicleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateVehicleMutation,
+    CreateVehicleMutationVariables
+  >(CreateVehicleDocument, options);
+}
+export type CreateVehicleMutationHookResult = ReturnType<
+  typeof useCreateVehicleMutation
+>;
+export type CreateVehicleMutationResult =
+  Apollo.MutationResult<CreateVehicleMutation>;
+export type CreateVehicleMutationOptions = Apollo.BaseMutationOptions<
+  CreateVehicleMutation,
+  CreateVehicleMutationVariables
+>;
+export const ListVehiclesDocument = gql`
+  query ListVehicles($take: Int, $skip: Int, $where: VehicleWhereInput) {
+    listVehicles(take: $take, skip: $skip, where: $where) {
+      vehicles {
+        id
+        make
+        model
+        registration
+        totalOffenders
+        totalIncidents
+        incidents {
+          id
+          subject
+        }
+        offenders {
+          id
+          name
+        }
+        updatedAt
+        colour
+        crimeGroup {
+          id
+          reference
+        }
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useListVehiclesQuery__
+ *
+ * To run a query within a React component, call `useListVehiclesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListVehiclesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListVehiclesQuery({
+ *   variables: {
+ *      take: // value for 'take'
+ *      skip: // value for 'skip'
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useListVehiclesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ListVehiclesQuery,
+    ListVehiclesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ListVehiclesQuery, ListVehiclesQueryVariables>(
+    ListVehiclesDocument,
+    options
+  );
+}
+export function useListVehiclesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListVehiclesQuery,
+    ListVehiclesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ListVehiclesQuery, ListVehiclesQueryVariables>(
+    ListVehiclesDocument,
+    options
+  );
+}
+export type ListVehiclesQueryHookResult = ReturnType<
+  typeof useListVehiclesQuery
+>;
+export type ListVehiclesLazyQueryHookResult = ReturnType<
+  typeof useListVehiclesLazyQuery
+>;
+export type ListVehiclesQueryResult = Apollo.QueryResult<
+  ListVehiclesQuery,
+  ListVehiclesQueryVariables
 >;

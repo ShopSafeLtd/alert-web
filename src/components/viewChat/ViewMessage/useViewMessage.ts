@@ -47,7 +47,7 @@ interface Props {
   updateUserChatList: MutationUpdaterFn<DeleteChatMutation>;
   userChatRefetch: () => void;
 }
-interface OffenderData {
+export interface OffenderData {
   id: string;
   updatedAt?: Date;
   name?: string | null;
@@ -160,14 +160,16 @@ const useViewMessages = ({
   const [mentionedUser, setMentionedUser] = useState<
     { id: string; value: string }[]
   >([]);
-
+  // const [offendersData, setOffendersData] = useState<
+  //   | Exclude<
+  //       ListOffendersQuery['listOffenders'],
+  //       undefined | null
+  //     >['offenders']
+  //   | undefined
+  // >([]);
   const [incidentsData, setIncidentsData] = useState<
-    | Exclude<
-        ListIncidentsQuery['listIncidents'],
-        undefined | null
-      >['incidents']
-    | undefined
-  >();
+    Exclude<ListIncidentsQuery['listIncidents'], undefined | null>['incidents']
+  >([]);
 
   useEffect(() => {
     setLoading(true);
@@ -241,7 +243,7 @@ const useViewMessages = ({
         id: schemeId,
       },
       order: {
-        createdAt: SortOrder.Asc,
+        createdAt: SortOrder.Desc,
       },
     },
     fetchPolicy: 'cache-and-network',
@@ -452,26 +454,21 @@ const useViewMessages = ({
   const toggleLinkOffender = () => {
     setLinkOffender(!linkOffender);
   };
+  const updateOffendersList = (selectedOffender: OffenderData) => {
+    if (!offendersData?.find(({ id }) => id === selectedOffender.id)) {
+      setOffendersData([...offendersData, selectedOffender]);
+    }
+  };
   const updateIncidentList = (selectedIncidentId: string) => {
     if (
       listIncidentsData?.listIncidents?.incidents &&
-      listIncidentsData?.listIncidents?.total > 0
+      listIncidentsData.listIncidents.total > 0
     ) {
-      if (incidentsData && incidentsData.length > 0) {
-        setIncidentsData(
-          incidentsData.concat(
-            listIncidentsData?.listIncidents?.incidents.filter(
-              (incident) => selectedIncidentId === incident.id
-            )
-          )
+      const selectedIncident =
+        listIncidentsData?.listIncidents?.incidents.filter(
+          ({ id }) => id === selectedIncidentId
         );
-      } else {
-        setIncidentsData(
-          listIncidentsData?.listIncidents?.incidents.filter(
-            (incident) => selectedIncidentId === incident.id
-          )
-        );
-      }
+      setIncidentsData([...incidentsData, ...selectedIncident]);
     }
   };
   const removeOffender = (offenderId: string | undefined) => {
@@ -491,11 +488,7 @@ const useViewMessages = ({
   const removeImage = (uid: string) => {
     setFileList(fileList.filter((image) => image.uid !== uid));
   };
-  const updateOffendersList = (selectedOffender: OffenderData) => {
-    if (!offendersData?.find(({ id }) => id === selectedOffender.id)) {
-      setOffendersData([...offendersData, selectedOffender]);
-    }
-  };
+
   const beforeUpload = (file: RcFile) => {
     const isFileDuplicate = fileList.find((item) => item.name === file.name);
     if (isFileDuplicate) {

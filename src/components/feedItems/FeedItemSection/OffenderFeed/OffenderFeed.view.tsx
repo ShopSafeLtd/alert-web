@@ -77,8 +77,6 @@ const OffenderFeed = ({
     // incidents,
   } = feedItem?.offender || {};
 
-  console.log(updates);
-
   return (
     <Row gutter={20} wrap={false}>
       {(isNewOffender || isNewImage) && images && images.length ? (

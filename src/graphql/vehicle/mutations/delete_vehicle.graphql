@@ -1,0 +1,5 @@
+mutation deleteVehicle($id: String!) {
+  deleteVehicle(where: { id: $id }) {
+    id
+  }
+}

@@ -8,14 +8,24 @@ import {
   useListUnapprovedIncidentsQuery,
   useSchemeGroupsQuery,
   ListUnapprovedIncidentsQuery,
+  useArticlesQuery,
+  QueryMode,
+  ArticlesQuery,
+  FeedItemsDocument,
+  DeleteFeedItemMutation,
+  useDeleteFeedItemMutation,
 } from 'graphql/generated';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { FeedItemSort, useStoreActions, useStoreState } from 'state';
 import { useNavigate } from 'react-router-dom';
+import { MutationUpdaterFn } from '@apollo/client';
+import { notification } from 'antd';
 
 interface Return {
   data: FeedItemsQuery | undefined;
   loading: boolean;
+  articleData: ArticlesQuery | undefined;
+  articleLoading: boolean;
   recentOffenderData: ListOffendersQuery | undefined;
   recentOffenderLoading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
@@ -34,6 +44,9 @@ interface Return {
   onNavigate: () => void;
   unapprovedIncidents: ListUnapprovedIncidentsQuery | undefined;
   unapprovedIncidentsLoading: boolean;
+  onDeleteFeedItem: (value: string) => void;
+  saving: boolean;
+  adminRights: boolean;
 }
 
 const getSizeOptions = () => {
@@ -57,9 +70,11 @@ const useFeedItems = (): Return => {
   const pagination = useStoreState((state) => state.data.feedItems.pagination);
   const variables = useStoreState((state) => state.data.feedItems.variables);
   const order = useStoreState((state) => state.data.feedItems.order);
+  const [saving, setSaving] = useState(false);
   const setFeedItemsState = useStoreActions(
     (actions) => actions.data.setFeedItems
   );
+  // const [search, setSearch] = useState('');
 
   // Queries
   // Fetch scheme groups if scheme admin
@@ -75,17 +90,18 @@ const useFeedItems = (): Return => {
     },
     fetchPolicy: 'cache-and-network',
     skip: role !== Role.SchemeAdmin,
-    onCompleted: (result) => {
-      setFeedItemsState({
-        pagination,
-        variables: {
-          ...variables,
-          groups: result.groups.map((group) => group.id),
-        },
-        order,
-      });
-    },
+    // onCompleted: (result) => {
+    //   setFeedItemsState({
+    //     pagination,
+    //     variables: {
+    //       ...variables,
+    //       groups: result.groups.map((group) => group.id),
+    //     },
+    //     order,
+    //   });
+    // },
   });
+
   // On mount
   useEffect(() => {
     const sizeOptions = getSizeOptions();
@@ -106,13 +122,11 @@ const useFeedItems = (): Return => {
     });
   }, []);
 
-  // Fetch incidents
   const { data, loading } = useFeedItemsQuery({
     variables: {
       schemeId,
       order: {
-        updatedAt:
-          order === FeedItemSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
+        updatedAt: SortOrder.Desc,
       },
       groups:
         variables.groups && variables.groups.length > 0
@@ -121,6 +135,25 @@ const useFeedItems = (): Return => {
       search: variables.search,
       take: pagination.pageSize,
       skip: (pagination.page - 1) * pagination.pageSize,
+    },
+    fetchPolicy: 'cache-and-network',
+  });
+
+  const { data: articleData, loading: articleLoading } = useArticlesQuery({
+    variables: {
+      where: {
+        schemes: { some: { id: { equals: schemeId } } },
+
+        OR: [
+          {
+            title: {
+              contains: variables.search,
+              mode: QueryMode.Insensitive,
+            },
+          },
+        ],
+      },
+      orderBy: { updatedAt: SortOrder.Desc },
     },
     fetchPolicy: 'cache-and-network',
   });
@@ -156,18 +189,91 @@ const useFeedItems = (): Return => {
           updatedAt: SortOrder.Desc,
         },
         take: 10,
-        // where: searchOffenders.length
-        //   ? {
-        //       name: {
-        //         contains: searchOffenders,
-        //         mode: QueryMode.Insensitive,
-        //       },
-        //     }
-        //   : undefined,
       },
     });
-  // Functions
+  // delete feedItem
+  const updateFeedItemList: MutationUpdaterFn<DeleteFeedItemMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res === null || res === undefined) return;
 
+    const existingData = store.readQuery<FeedItemsQuery>({
+      query: FeedItemsDocument,
+      variables: {
+        schemeId,
+        order: {
+          updatedAt: SortOrder.Desc,
+        },
+        groups:
+          variables.groups && variables.groups.length > 0
+            ? variables.groups.map((id) => id)
+            : undefined,
+        search: variables.search,
+        take: pagination.pageSize,
+        skip: (pagination.page - 1) * pagination.pageSize,
+      },
+    });
+
+    if (existingData === null) return;
+    if (existingData?.listFeedItems?.feedItems === undefined) return;
+
+    store.writeQuery<FeedItemsQuery>({
+      query: FeedItemsDocument,
+      data: {
+        listFeedItems: {
+          ...existingData.listFeedItems,
+          feedItems: existingData.listFeedItems?.feedItems.filter(
+            ({ id }) => id !== res?.deleteFeedItem?.id
+          ),
+        },
+        __typename: 'Query',
+      },
+      variables: {
+        schemeId,
+        order: {
+          updatedAt: SortOrder.Desc,
+        },
+        groups:
+          variables.groups && variables.groups.length > 0
+            ? variables.groups.map((id) => id)
+            : undefined,
+        search: variables.search,
+        take: pagination.pageSize,
+        skip: (pagination.page - 1) * pagination.pageSize,
+      },
+    });
+  };
+  const [deleteFeedItem] = useDeleteFeedItemMutation({
+    onCompleted: () => {
+      setSaving(false);
+      notification.success({
+        message: 'Successfully Deleted!',
+        description: 'The message has been deleted!',
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      setSaving(false);
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
+    },
+    update: updateFeedItemList,
+  });
+  const onDeleteFeedItem = (currentId: string) => {
+    setSaving(true);
+    if (currentId) {
+      deleteFeedItem({
+        variables: {
+          id: currentId,
+        },
+      });
+    }
+  };
+  // Functions
   const onPaginationChange = (page: number, pageSize: number) => {
     setFeedItemsState({
       pagination: {
@@ -213,6 +319,8 @@ const useFeedItems = (): Return => {
   return {
     data,
     loading,
+    articleData,
+    articleLoading,
     recentOffenderData,
     recentOffenderLoading,
     onPaginationChange,
@@ -235,6 +343,9 @@ const useFeedItems = (): Return => {
     onNavigate,
     unapprovedIncidents,
     unapprovedIncidentsLoading,
+    onDeleteFeedItem,
+    saving,
+    adminRights: role !== Role.User,
   };
 };
 

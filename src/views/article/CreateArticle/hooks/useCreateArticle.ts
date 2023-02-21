@@ -319,7 +319,6 @@ const useCreateArticle = (): Props => {
         upload({ blob: blobInfo.blob(), fileName: blobInfo.filename() }).then(
           (url) => {
             blobCache.add(blobInfo);
-            console.log(meta);
             if (meta.filetype === 'file') {
               fileList.push({ url, name: file.name, uid: id } as UploadFile);
             }

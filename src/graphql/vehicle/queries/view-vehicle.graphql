@@ -1,0 +1,55 @@
+query Vehicle($where: VehicleWhereUniqueInput!) {
+  vehicle(where: $where) {
+    id
+    make
+    model
+    registration
+    totalOffenders
+    totalIncidents
+    totalCrimeGroups
+    incidents {
+      id
+      subject
+      dayTime
+      createdBy {
+        id
+        organisation
+      }
+      value
+      recoveredValue
+      reference
+      policeRef
+    }
+    offenders {
+      id
+      name
+      reference
+      lastActive {
+        id
+        dayTime
+      }
+      hair
+      peculiarities
+      race
+      dateOfBirth
+      dateSource
+      build
+      age
+      gender
+      images {
+        id
+        optimised
+      }
+      totalTheftSuccess
+      totalRecoveredValue
+      totalIncidents
+      totalValue
+    }
+    updatedAt
+    colour
+    crimeGroup {
+      id
+      reference
+    }
+  }
+}
