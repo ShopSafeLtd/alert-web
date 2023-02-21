@@ -99,40 +99,43 @@ const CollageImage = ({ index, length, src }: CollageImageProps) => {
 };
 
 interface Props {
-  from?: {
-    id: string;
-    fullName?: string|null|undefined;
-    firstLetter?: string|null|undefined;
-  }|undefined|null,
+  from?:
+    | {
+        id: string;
+        fullName?: string | null | undefined;
+        firstLetter?: string | null | undefined;
+      }
+    | undefined
+    | null;
   images: {
     id: string;
-    optimised?: string|null|undefined;
-  }[],
+    optimised?: string | null | undefined;
+  }[];
   offenders: {
     id: string;
-    name?: string|null|undefined;
+    name?: string | null | undefined;
     updatedAt: Date;
     images: {
       id: string;
-      optimised?: string|null|undefined;
-    }[],
-  }[],
+      optimised?: string | null | undefined;
+    }[];
+  }[];
   incidents: {
     id: string;
-    subject?: string|null|undefined;
-    description?: string|null|undefined;
-    dayTime?: string|null|undefined;
+    subject?: string | null | undefined;
+    description?: string | null | undefined;
+    dayTime?: string | null | undefined;
     images: {
       id: string;
-      optimised?: string|null|undefined;
-    }[],
-  }[],
-  content: string,
-  id: string,
-  currentUser?: boolean|undefined|null,
-  showUser?: boolean|undefined|null,
-  paddingTop?: boolean|undefined|null,
-  date: string|undefined|null,
+      optimised?: string | null | undefined;
+    }[];
+  }[];
+  content: string;
+  id: string;
+  currentUser?: boolean | undefined | null;
+  showUser?: boolean | undefined | null;
+  paddingTop?: boolean | undefined | null;
+  date: string | undefined | null;
 }
 
 const getContent = (content: string) =>
@@ -157,7 +160,7 @@ const Content = ({
   currentUser,
   showUser,
   date,
-  paddingTop
+  paddingTop,
 }: Props): JSX.Element => (
   <Row
     gutter={8}
@@ -166,9 +169,7 @@ const Content = ({
   >
     {showUser && (
       <Col>
-        <Avatar className="message-avatar">
-          {from?.firstLetter}
-        </Avatar>
+        <Avatar className="message-avatar">{from?.firstLetter}</Avatar>
       </Col>
     )}
     <Col>
@@ -178,7 +179,7 @@ const Content = ({
             ? 'message-content-card currentUser-card'
             : 'message-content-card'
         }
-        style={{ marginLeft: !currentUser && !showUser ? 48 : 0  }}
+        style={{ marginLeft: !currentUser && !showUser ? 48 : 0 }}
       >
         <Row
           style={{

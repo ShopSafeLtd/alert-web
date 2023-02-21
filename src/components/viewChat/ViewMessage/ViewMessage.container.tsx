@@ -52,7 +52,7 @@ const ViewMessages = ({
     deleteIncidentConfirm,
     data,
     messageSent,
-    setMessageSent
+    setMessageSent,
   } = useViewMessages({ chatId, updateUserChatList, userChatRefetch });
 
   return (

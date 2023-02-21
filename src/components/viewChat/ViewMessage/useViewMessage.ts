@@ -639,17 +639,19 @@ const useViewMessages = ({
             incidents:
               incidentsData && incidentsData.length > 0 ? incidentsData : [],
             offenders:
-              offendersData && offendersData.length > 0 ? offendersData.map((offender) => ({
-                id: offender.id,
-                images: offender.images || [],
-                updatedAt: offender.updatedAt,
-                age: offender.age,
-                build: offender.build,
-                dateOfBirth: offender.dateOfBirth,
-                gender: offender.gender,
-                name: offender.name,
-                race: offender.race
-              })) : [],
+              offendersData && offendersData.length > 0
+                ? offendersData.map((offender) => ({
+                    id: offender.id,
+                    images: offender.images || [],
+                    updatedAt: offender.updatedAt,
+                    age: offender.age,
+                    build: offender.build,
+                    dateOfBirth: offender.dateOfBirth,
+                    gender: offender.gender,
+                    name: offender.name,
+                    race: offender.race,
+                  }))
+                : [],
             sent: false,
             type: MessageItemType.Message,
             currentUser: true,

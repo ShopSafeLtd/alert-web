@@ -49,7 +49,7 @@ describe('List Officer View', () => {
         deleteOffenderConfirm={jest.fn()}
         deleteIncidentConfirm={jest.fn()}
         data={{
-          chatMessages: []
+          chatMessages: [],
         }}
         messageSent
         setMessageSent={() => {}}

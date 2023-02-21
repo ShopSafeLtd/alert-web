@@ -172,7 +172,7 @@ const ViewMessges = ({
   deleteIncidentConfirm,
   data,
   messageSent,
-  setMessageSent
+  setMessageSent,
 }: Props): JSX.Element => {
   const ref = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -182,7 +182,7 @@ const ViewMessges = ({
         block: 'end',
         inline: 'nearest',
       });
-      setMessageSent(false)
+      setMessageSent(false);
     }
   }, [data]);
   if (chatId === '1') {
