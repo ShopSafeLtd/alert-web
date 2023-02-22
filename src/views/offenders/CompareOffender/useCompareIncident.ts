@@ -7,8 +7,8 @@ import {
   ViewOffenderCompareQuery,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { OffenderData } from 'components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
+import { useNavigate, useParams } from 'react-router-dom';
+import { OffenderData } from 'components/form-components/incident/offender/AddExisitingOffender/AddExisitingOffender.container';
 
 type Offender = Exclude<ViewOffenderCompareQuery['offender'], undefined | null>;
 export type OffenderField =
@@ -209,7 +209,15 @@ const compareIncident = (): Return => {
   };
 
   const onMerge = () => {
-    navigate('/app/offenders');
+    const mainOffender = {
+      ...preview,
+      images: preview.images.map(({ id }) => ({ id })),
+      tags: preview.tags.map(({ id }) => ({ id })),
+    };
+    const otherOffenders = offenders.filter(({ id }) => id !== preview.id);
+
+    console.log('runs', mainOffender, otherOffenders);
+    navigate('/offenders');
   };
 
   return {
