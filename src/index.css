@@ -620,9 +620,6 @@
   margin: 0;
   padding: 3px 10px 3px;
 }
-.feed-container {
-  padding: 10px;
-}
 .feed-container .add-button {
   position: fixed;
   bottom: 10px;
@@ -1946,7 +1943,8 @@
 }
 .feedItem-card {
   margin: 5px 5px 10px 5px;
-  height: 350px;
+  height: 360px;
+  display: flex;
 }
 .feedItem-card .ant-card-body {
   position: relative;
@@ -1981,7 +1979,6 @@
   overflow: auto;
 }
 .feedItem-card .feedItem-card-desc {
-  height: 80px;
   overflow: hidden;
 }
 .feedItem-card .feedItem-card-location-row {

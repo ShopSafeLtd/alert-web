@@ -4,8 +4,10 @@ import { ArticlePriority, FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/pro-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import { faUser } from '@fortawesome/pro-light-svg-icons';
+import moment from 'moment';
 
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph, Text } = Typography;
 
 interface Props {
   feedItem:
@@ -29,8 +31,16 @@ const ImageContainer = ({ src }: { src: string }) => (
 const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
   // const imagesRef = useRef<CarouselRef>(null);
 
-  const { id, title, tags, previewImage, previewText, priority } =
-    feedItem?.article || {};
+  const {
+    id,
+    title,
+    tags,
+    previewImage,
+    previewText,
+    priority,
+    createdBy,
+    updatedAt,
+  } = feedItem?.article || {};
 
   return (
     <Row gutter={15} wrap={false} key={id || ''}>
@@ -42,8 +52,8 @@ const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
 
       <Link to={`/app/article/view/${id}`}>
         <Col flex={1}>
-          <Title level={4} ellipsis>
-            {title}
+          <Title style={{ marginBottom: 2 }} level={4} ellipsis>
+            {title?.replace(/^\S/, (s) => s.toUpperCase())}
 
             {priority === ArticlePriority.High && (
               <FontAwesomeIcon
@@ -54,35 +64,29 @@ const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
               />
             )}
           </Title>
-          {/* <Row>
-          <Col>
-            <FontAwesomeIcon
-              size="sm"
-              className="feedItem-card-icon"
-              icon={faClock}
-            />
-            <Text type="secondary">{moment(updatedAt).calendar()}</Text>
-          </Col>
-        </Row>
 
-        <Row>
-          <Col>
-            <FontAwesomeIcon
-              size="sm"
-              className="feedItem-card-icon"
-              icon={faUser}
-            />
-            <Text type="secondary">
-              {createdBy?.fullName} - {createdBy?.organisation}
-            </Text>
-          </Col>
-        </Row> */}
-
-          <Paragraph type="secondary" style={{ fontSize: 12 }}>
+          <Row style={{ marginTop: 10 }}>
+            <Col>
+              <FontAwesomeIcon
+                size="sm"
+                className="feedItem-card-icon"
+                icon={faUser}
+              />
+              <Text type="secondary">
+                {createdBy?.fullName} - - {moment(updatedAt).calendar()}
+              </Text>
+            </Col>
+          </Row>
+          <Paragraph
+            type="secondary"
+            style={{ fontSize: 14, marginTop: 10, height: 80 }}
+            className="feedItem-card-desc"
+            ellipsis={{ rows: 3 }}
+          >
             {previewText}
           </Paragraph>
-          {tags && tags.length > 0 ? (
-            <Row wrap={false} style={{ overflowX: 'auto', marginTop: 15 }}>
+          {tags && tags.length ? (
+            <Row wrap={false} style={{ overflowX: 'auto', marginTop: 10 }}>
               {tags.map((tag) => (
                 <Tag key={tag.id}>{tag.name}</Tag>
               ))}

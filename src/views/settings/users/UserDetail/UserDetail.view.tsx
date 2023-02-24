@@ -53,6 +53,7 @@ const userDetail = ({
       extra={[
         <Button
           key="4"
+          type="primary"
           disabled={saving}
           onClick={inviteConfirm}
           icon={
@@ -68,6 +69,7 @@ const userDetail = ({
         data?.user?.disabled ? (
           <Button
             key="3"
+            type="primary"
             disabled={saving}
             onClick={enableConfirm}
             icon={
@@ -83,6 +85,7 @@ const userDetail = ({
         ) : (
           <Button
             key="2"
+            type="primary"
             disabled={saving}
             onClick={disableConfirm}
             icon={
@@ -98,6 +101,7 @@ const userDetail = ({
         ),
         <Button
           key="1"
+          type="primary"
           disabled={saving}
           onClick={deleteConfirm}
           icon={

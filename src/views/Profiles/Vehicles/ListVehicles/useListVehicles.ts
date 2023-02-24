@@ -3,6 +3,8 @@ import {
   CreateVehicleMutation,
   ListVehiclesDocument,
   ListVehiclesQuery,
+  QueryMode,
+  SortOrder,
   useListVehiclesQuery,
 } from 'graphql/generated';
 import { useState } from 'react';
@@ -19,32 +21,36 @@ interface Return {
 }
 
 const useListVehicles = (): Return => {
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const schemeId = useStoreState((state) => state.scheme.id);
   const [addVehicle, setAddVehicle] = useState(false);
   const [search, setSearch] = useState('');
   const variables = {
+    order: {
+      updatedAt: SortOrder.Desc,
+    }, // ???
     where: {
       schemes: {
         some: {
           id: {
-            equals: currentScheme,
+            equals: schemeId,
           },
         },
       },
-      // OR: [
-      //   {
-      //     make: {
-      //       contains: search,
-      //       mode: QueryMode.Insensitive,
-      //     },
-      //   },
-      //   {
-      //     model: {
-      //       contains: search,
-      //       mode: QueryMode.Insensitive,
-      //     },
-      //   },
-      // ],
+
+      OR: [
+        {
+          make: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+        {
+          model: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+      ],
     },
   };
   const { data, loading } = useListVehiclesQuery({

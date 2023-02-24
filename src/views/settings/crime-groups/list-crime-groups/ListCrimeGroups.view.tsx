@@ -13,7 +13,7 @@ const ListCrimeGroups = ({ data, loading }: Props) => {
   const classes = useStyles();
   return (
     <div className={classes.page}>
-      <Row className={classes.headerRow}>
+      <Row gutter={16} className={classes.headerRow}>
         <Col flex={1}>
           <Input
             className={classes.searchInput}

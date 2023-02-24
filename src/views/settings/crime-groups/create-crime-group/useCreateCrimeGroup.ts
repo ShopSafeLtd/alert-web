@@ -69,6 +69,10 @@ const useCreateCrimeGroup = (): Return => {
   };
 
   const [createCrimeGroup] = useCreateCrimeGroupMutation({
+    onCompleted: () => {
+      setSubmitting(false);
+      navigate('/app/scheme-settings/crime-groups');
+    },
     update: (store, result) => {
       if (result.data?.createCrimeGroup) {
         const oldData = store.readQuery<
@@ -151,8 +155,6 @@ const useCreateCrimeGroup = (): Return => {
           },
         },
       });
-      setSubmitting(false);
-      navigate('/app/scheme-settings/crime-groups');
     }
   };
 

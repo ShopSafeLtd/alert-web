@@ -86,6 +86,9 @@ const useStyles = createUseStyles({
   exclusions: {
     marginBottom: 30,
   },
+  offenderRow: {
+    cursor: 'pointer',
+  },
 });
 
 export default useStyles;

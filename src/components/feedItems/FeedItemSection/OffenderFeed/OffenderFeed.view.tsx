@@ -1,8 +1,9 @@
 import React from 'react';
-import { Card, Col, Descriptions, Image, Row, Typography } from 'antd';
+import { Card, Col, Descriptions, Row, Typography } from 'antd';
 import { FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faClock,
   faEarth,
   faMarsAndVenus,
   faUserClock,
@@ -73,7 +74,7 @@ const OffenderFeed = ({
     id,
     updates,
     images,
-    lastActive,
+    // lastActive,
     // incidents,
   } = feedItem?.offender || {};
 
@@ -98,17 +99,18 @@ const OffenderFeed = ({
         <Col flex={1}>
           {isNewOffender ? (
             <>
-              <Title style={{ marginBottom: 0 }} level={4} ellipsis>
+              <Title style={{ marginBottom: 10 }} level={4} ellipsis>
                 {name}
               </Title>
-              <Row style={{ marginTop: -3, marginBottom: 10 }}>
+              <Row style={{ marginBottom: 10 }}>
                 <Col>
-                  {/* <FontAwesomeIcon
-                      size="sm"
-                      className="feedItem-card-icon"
-                      icon={faClock}
-                    /> */}
-                  <Text style={{ fontSize: 12 }} type="secondary">
+                  <FontAwesomeIcon
+                    size="sm"
+                    className="feedItem-card-icon"
+                    icon={faClock}
+                    style={{ marginBottom: -1 }}
+                  />
+                  <Text style={{ fontSize: 14 }} type="secondary">
                     Last updated:
                     {moment(updatedAt || moment()).format(
                       `ddd MMM DD YYYY - HH:mm`
@@ -116,16 +118,6 @@ const OffenderFeed = ({
                   </Text>
                 </Col>
               </Row>
-              {/* <Row gutter={8}>
-                  {groups?.map((group) => (
-                    <Col key={group.id}>
-                      <Text type="danger" ellipsis>
-                        {group.name}
-                      </Text>
-                    </Col>
-                  ))}
-                </Row> */}
-
               <Row>
                 <Col>
                   <FontAwesomeIcon
@@ -133,7 +125,7 @@ const OffenderFeed = ({
                     className="feedItem-card-icon"
                     icon={faUserClock}
                   />
-                  <Text style={{ fontSize: 12 }} type="secondary">
+                  <Text style={{ fontSize: 14 }} type="secondary">
                     Age:
                     {dateOfBirth ? calcAge(dateOfBirth) : getOffenderAge(age)}
                   </Text>
@@ -146,7 +138,7 @@ const OffenderFeed = ({
                     className="feedItem-card-icon"
                     icon={faUserTag}
                   />
-                  <Text style={{ fontSize: 12 }} type="secondary">
+                  <Text style={{ fontSize: 14 }} type="secondary">
                     Build:{getOffenderBuild(build)}
                   </Text>
                 </Col>
@@ -158,7 +150,7 @@ const OffenderFeed = ({
                     className="feedItem-card-icon"
                     icon={faMarsAndVenus}
                   />
-                  <Text style={{ fontSize: 12 }} type="secondary">
+                  <Text style={{ fontSize: 14 }} type="secondary">
                     Sex: {getOffenderGender(gender)}
                   </Text>
                 </Col>
@@ -170,7 +162,7 @@ const OffenderFeed = ({
                     className="feedItem-card-icon"
                     icon={faEarth}
                   />
-                  <Text style={{ fontSize: 12 }} type="secondary">
+                  <Text style={{ fontSize: 14 }} type="secondary">
                     Ethnicity: {getOffenderRace(race, false)}
                   </Text>
                 </Col>
@@ -178,50 +170,23 @@ const OffenderFeed = ({
             </>
           ) : (
             <>
-              {/* <Title style={{ fontSize: 16 }}> {name}</Title> */}
-              {updates && updates[0]?.text && (
+              {updates && updates[0]?.text ? (
                 <>
-                  <Text style={{ fontSize: 13 }}>
+                  <Title level={4} style={{ marginBottom: 2 }} ellipsis>
+                    {name}
+                  </Title>
+                  <Paragraph
+                    style={{ fontSize: 14 }}
+                    type="secondary"
+                    ellipsis={{ rows: 3 }}
+                  >
                     {getContent(updates[0]?.text)}
-                  </Text>
-                  <Row wrap={false} style={{ marginTop: 10 }}>
-                    {images && (
-                      <Col style={{ marginRight: 10 }}>
-                        <div
-                          style={{
-                            width: 80,
-                            height: 80,
-                            backgroundImage: `url(${images[0]?.optimised})`,
-                            backgroundPosition: 'center',
-                            backgroundRepeat: 'no-repeat',
-                            backgroundSize: 'cover',
-                            borderRadius: 5,
-                          }}
-                        />
-                      </Col>
-                    )}
-                    <Col>
-                      <div>
-                        <Title
-                          level={4}
-                          style={{ fontSize: 16, marginBottom: 2 }}
-                          ellipsis
-                        >
-                          {name}
-                        </Title>
-                        <div>
-                          <Text style={{ fontSize: 12 }}>
-                            Last Active: {lastActive?.dayTime || 'Unknown'}
-                          </Text>
-                        </div>
-                      </div>
-                    </Col>
-                  </Row>
+                  </Paragraph>
                 </>
-              )}
-              {!(updates && updates[0]?.text) && (
+              ) : null}
+              {!(updates && updates[0]?.text) ? (
                 <>
-                  {updates && updates[0]?.linkedIncidents[0] && (
+                  {updates && updates[0]?.linkedIncidents[0] ? (
                     <Card
                       style={{ borderRadius: 5 }}
                       size="small"
@@ -230,17 +195,22 @@ const OffenderFeed = ({
                       <Row gutter={5} wrap={false}>
                         <Col>
                           {updates[0]?.linkedIncidents[0].images &&
-                            updates[0]?.linkedIncidents[0].images.length >
-                              0 && (
-                              <Image
-                                width={100}
-                                height={100}
-                                src={
-                                  updates[0]?.linkedIncidents[0].images[0]
-                                    .optimised || ''
-                                }
-                              />
-                            )}
+                          updates[0]?.linkedIncidents[0].images.length > 0 ? (
+                            <ImageContainer
+                              src={
+                                updates[0]?.linkedIncidents[0].images[0]
+                                  .optimised || ''
+                              }
+                            />
+                          ) : // <Image
+                          //   width={100}
+                          //   height={100}
+                          //   src={
+                          //     updates[0]?.linkedIncidents[0].images[0]
+                          //       .optimised || ''
+                          //   }
+                          // />
+                          null}
                         </Col>
                         <Col
                           flex={1}
@@ -276,8 +246,8 @@ const OffenderFeed = ({
                         </Col>
                       </Row>
                     </Card>
-                  )}
-                  {updates && updates[0]?.linkedOffenders[0] && (
+                  ) : null}
+                  {updates && updates[0]?.linkedOffenders[0] ? (
                     <Card
                       style={{ borderRadius: 5 }}
                       size="small"
@@ -286,17 +256,22 @@ const OffenderFeed = ({
                       <Row gutter={5} wrap={false}>
                         <Col>
                           {updates[0]?.linkedOffenders[0].images &&
-                            updates[0]?.linkedOffenders[0].images.length >
-                              0 && (
-                              <Image
-                                width={100}
-                                height={100}
-                                src={
-                                  updates[0]?.linkedOffenders[0].images[0]
-                                    .optimised || ''
-                                }
-                              />
-                            )}
+                          updates[0]?.linkedOffenders[0].images.length > 0 ? (
+                            <ImageContainer
+                              src={
+                                updates[0]?.linkedOffenders[0].images[0]
+                                  .optimised || ''
+                              }
+                            />
+                          ) : // <Image
+                          //   width={100}
+                          //   height={100}
+                          //   src={
+                          //     updates[0]?.linkedOffenders[0].images[0]
+                          //       .optimised || ''
+                          //   }
+                          // />
+                          null}
                         </Col>
 
                         <Col
@@ -320,9 +295,9 @@ const OffenderFeed = ({
                         </Col>
                       </Row>
                     </Card>
-                  )}
+                  ) : null}
                 </>
-              )}
+              ) : null}
             </>
           )}
         </Col>

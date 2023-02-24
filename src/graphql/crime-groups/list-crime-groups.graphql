@@ -1,5 +1,10 @@
-query ListCrimeGroups($take: Int, $skip: Int $where: CrimeGroupWhereInput) {
-  listCrimeGroups(take: $take, skip: $skip, where: $where) {
+query ListCrimeGroups(
+  $take: Int
+  $skip: Int
+  $where: CrimeGroupWhereInput
+  $order: CrimeGroupOrderByWithRelationInput
+) {
+  listCrimeGroups(take: $take, skip: $skip, where: $where, order: $order) {
     crimeGroups {
       id
       reference
@@ -8,6 +13,7 @@ query ListCrimeGroups($take: Int, $skip: Int $where: CrimeGroupWhereInput) {
       totalRecoveredValue
       totalTheftSuccess
       totalValue
+      alias
     }
     total
   }

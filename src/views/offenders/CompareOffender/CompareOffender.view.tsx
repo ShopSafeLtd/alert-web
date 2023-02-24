@@ -21,8 +21,8 @@ import {
 import { getAge, getBuild, getEthnicity, getSex } from 'utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave, faTrash } from '@fortawesome/pro-light-svg-icons';
-import AddExisitingOffender from 'components/form-components/incident/offender/AddExisitingOffender';
-import { OffenderData } from 'components/form-components/incident/offender/AddExisitingOffender/AddExisitingOffender.container';
+import AddExisitingOffender from 'components/form-components/incident/offender/AddExistingOffender';
+import { OffenderData } from 'components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
 import useStyles from './CompareOffender.styles';
 import { Selected, OffenderField } from './useCompareIncident';
 

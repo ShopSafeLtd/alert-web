@@ -2,6 +2,7 @@ import React from 'react';
 import {
   ArticlesQuery,
   FeedItemsQuery,
+  FeedItemType,
   ListOffendersQuery,
   ListUnapprovedIncidentsQuery,
 } from 'graphql/generated';
@@ -15,7 +16,6 @@ import {
   List,
   Modal,
   Pagination,
-  Popover,
   Row,
   Skeleton,
   Tooltip,
@@ -34,7 +34,12 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import ArticleCard from 'components/feedItems/ArticleSection/ArticleCard';
 import { Link } from 'react-router-dom';
-import FeedItemCard from 'components/feedItems/FeedItemCard';
+
+import { formatDate } from 'utils';
+import IncidentFeed from 'components/feedItems/FeedItemSection/IncidentFeed';
+import OffenderFeed from 'components/feedItems/FeedItemSection/OffenderFeed';
+import ArticleFeed from 'components/feedItems/FeedItemSection/ArticleFeed';
+import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
 
 const { Title, Paragraph, Text } = Typography;
 const { confirm } = Modal;
@@ -42,6 +47,7 @@ const { confirm } = Modal;
 interface Props {
   data: FeedItemsQuery | undefined;
   articleData: ArticlesQuery | undefined;
+  articleLoading: boolean;
   recentOffenderData: ListOffendersQuery | undefined;
   recentOffenderLoading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
@@ -60,6 +66,7 @@ interface Props {
 const FeedItem = ({
   data,
   articleData,
+  articleLoading,
   recentOffenderData,
   recentOffenderLoading,
   onPaginationChange,
@@ -77,7 +84,7 @@ Props): JSX.Element => {
   const [affix, setAffix] = React.useState(false);
 
   return (
-    <div className="feed-container">
+    <div className="feed-container" style={{ height: '100vh' }}>
       <Affix offsetTop={40} onChange={(affixed) => setAffix(!!affixed)}>
         <Row
           wrap={false}
@@ -100,22 +107,6 @@ Props): JSX.Element => {
                   onChange={(e) => setSearch(e.target.value)}
                 />
               </Col>
-              {/* <Col>
-                <Select
-                  placeholder="Groups"
-                  mode="multiple"
-                  size="small"
-                  maxTagCount={2}
-                  style={{ width: 250 }}
-                  loading={groupsLoading}
-                  onChange={onGroupsChange}
-                  value={variables.groups}
-                >
-                  {groups.map((group) => (
-                    <Select.Option value={group.value}>{group.label}</Select.Option>
-                  ))}
-                </Select>
-              </Col> */}
             </Row>
           </Col>
           <Col flex={1} />
@@ -152,86 +143,110 @@ Props): JSX.Element => {
         </Row>
       </Affix>
       <Row gutter={15}>
-        <Col span={11} xxl={9} xl={9} lg={12}>
+        <Col span={10} xxl={8} xl={10}>
           <div
             style={{
-              height: 'calc(100vh - 126px)',
+              height: 'calc(100vh - 130px)',
               overflow: 'auto',
               paddingBottom: 20,
             }}
           >
             {data?.listFeedItems?.feedItems &&
               data.listFeedItems?.feedItems.length &&
-              data.listFeedItems?.feedItems.map((item) => (
-                <>
-                  <Button
-                    type="text"
-                    disabled={saving}
-                    icon={
-                      <FontAwesomeIcon
-                        style={{ marginRight: 5 }}
-                        icon={faTrash}
-                        size="lg"
-                      />
-                    }
-                    onClick={() => {
-                      confirm({
-                        title: 'Do you want to delete the feedItem?',
-                        content: 'This action cannot be undone.',
-                        onOk() {
-                          onDeleteFeedItem(item.id);
-                        },
-                      });
-                    }}
-                    size="small"
-                  >
-                    Delete FeedItem
-                  </Button>
-                  {adminRights ? (
-                    <Popover
-                      trigger="click"
-                      placement="top"
-                      overlayClassName="message-popover"
-                      content={
-                        <Button
-                          type="text"
-                          disabled={saving}
-                          icon={
-                            <FontAwesomeIcon
-                              style={{ marginRight: 5 }}
-                              icon={faTrash}
-                              size="lg"
+              data.listFeedItems?.feedItems.map((feedItem) => (
+                <Card
+                  style={{
+                    width: '100%',
+                    marginBottom: 10,
+                  }}
+                  key={feedItem?.id}
+                  bodyStyle={{ padding: 0, marginLeft: 5 }}
+                >
+                  <>
+                    <Row style={{ margin: 8 }}>
+                      <Col flex={1}>
+                        <Title style={{ margin: 0, fontSize: 16 }} level={4}>
+                          {feedItem?.message}
+                        </Title>
+                      </Col>
+                      <Col>
+                        <Text type="secondary" style={{ fontSize: 14 }}>
+                          {formatDate(feedItem?.updatedAt)}
+                        </Text>
+                      </Col>
+                      {adminRights ? (
+                        <Col>
+                          {adminRights ? (
+                            <Button
+                              type="text"
+                              // type="primary"
+                              style={{
+                                height: 25,
+                                width: 30,
+                                marginTop: -15,
+                                marginLeft: 5,
+                              }}
+                              disabled={saving}
+                              icon={
+                                <FontAwesomeIcon
+                                  style={{ marginBottom: 2 }}
+                                  icon={faTrash}
+                                  size="sm"
+                                />
+                              }
+                              onClick={() => {
+                                confirm({
+                                  title: 'Do you want to delete the feedItem?',
+                                  content: 'This action cannot be undone.',
+                                  onOk() {
+                                    onDeleteFeedItem(feedItem.id);
+                                  },
+                                });
+                              }}
+                              size="small"
                             />
-                          }
-                          onClick={() => {
-                            confirm({
-                              title: 'Do you want to delete the feedItem?',
-                              content: 'This action cannot be undone.',
-                              onOk() {
-                                onDeleteFeedItem(item.id);
-                              },
-                            });
-                          }}
-                          size="small"
-                        >
-                          Delete FeedItem
-                        </Button>
-                      }
-                    >
-                      <FeedItemCard
-                        feedItem={item}
-                        // onDeleteFeedItem={onDeleteFeedItem}
-                        // adminRights={adminRights}
-                      />
-                    </Popover>
-                  ) : (
-                    <FeedItemCard
-                      feedItem={item}
-                      // onDeleteFeedItem={onDeleteFeedItem}
-                      // adminRights={adminRights}
-                    />
-                  )}
-                </>
+                          ) : null}
+                        </Col>
+                      ) : null}
+                    </Row>
+                    <Divider style={{ margin: 0 }} />
+                    <div style={{ borderTop: '1px', padding: 10 }}>
+                      {/* create new incident/offender */}
+                      {feedItem?.type === FeedItemType.NewIncident && (
+                        <IncidentFeed feedItem={feedItem} isNewIncident />
+                      )}
+                      {feedItem?.type === FeedItemType.NewOffender && (
+                        <OffenderFeed feedItem={feedItem} isNewOffender />
+                      )}
+                      {/* update details  */}
+                      {feedItem?.type === FeedItemType.Incident && (
+                        <IncidentFeed feedItem={feedItem} />
+                      )}
+                      {feedItem?.type === FeedItemType.Offender && (
+                        <OffenderFeed feedItem={feedItem} />
+                      )}
+                      {/* add new images */}
+                      {feedItem?.type === FeedItemType.IncidentImage && (
+                        <IncidentFeed feedItem={feedItem} isNewImage />
+                      )}
+                      {feedItem?.type === FeedItemType.OffenderImage && (
+                        <OffenderFeed feedItem={feedItem} isNewImage />
+                      )}
+                      {/* add new intel */}
+                      {feedItem?.type === FeedItemType.IncidentIntel && (
+                        <IncidentFeed feedItem={feedItem} />
+                      )}
+                      {feedItem?.type === FeedItemType.OffenderIntel && (
+                        <OffenderFeed feedItem={feedItem} />
+                      )}
+
+                      {/* article */}
+                      {feedItem?.type === FeedItemType.NewArticle && (
+                        <ArticleFeed feedItem={feedItem} />
+                      )}
+                    </div>
+                  </>
+                </Card>
               ))}
             <Row justify="center">
               <Col>
@@ -247,14 +262,15 @@ Props): JSX.Element => {
             </Row>
           </div>
         </Col>
-        <Col span={13} xxl={15} xl={15} lg={12}>
+        <Col span={14} xxl={16} xl={14}>
           {/* <IncidentSkeletonCard /> */}
-          <Card style={{ height: 190 }}>
-            <Title level={4} style={{ fontSize: 16 }}>
+          <Card style={{ height: 190, marginBottom: 15 }}>
+            <Title level={4} style={{ fontSize: 16, marginTop: -10 }}>
               Recently Active Offenders
             </Title>
+
             {recentOffenderLoading ? (
-              <Row gutter={8}>
+              <Row gutter={8} style={{ height: 145 }}>
                 {[1, 2, 3, 4, 5].map((key) => (
                   <Col key={key}>
                     <Skeleton.Avatar
@@ -275,6 +291,7 @@ Props): JSX.Element => {
                 style={{
                   overflow: 'auto',
                   flexWrap: 'nowrap',
+                  height: 145,
                 }}
               >
                 {recentOffenderData?.listOffenders?.offenders.map(
@@ -337,8 +354,14 @@ Props): JSX.Element => {
               </Row>
             )}
           </Card>
-          <Row gutter={12} style={{ height: 'calc(100vh - 500px)' }}>
-            <Col span={16}>
+
+          <Row gutter={12}>
+            <Col
+              span={12}
+              xxl={16}
+              xl={12}
+              style={{ overflow: 'auto', height: 'calc(100vh - 330px)' }}
+            >
               <Card
                 bodyStyle={{
                   paddingRight: 0,
@@ -348,9 +371,7 @@ Props): JSX.Element => {
               >
                 <Title
                   style={{
-                    marginRight: 20,
-                    marginLeft: 20,
-                    marginBottom: 5,
+                    margin: '-5px 20px 5px',
                     fontSize: 16,
                   }}
                   level={4}
@@ -358,45 +379,40 @@ Props): JSX.Element => {
                   Recent Bulletins
                 </Title>
                 {/* <Divider style={{ marginTop: 0, marginBottom: 10 }} /> */}
-                <List
-                  style={{ marginLeft: 5, marginRight: 5 }}
-                  grid={{ gutter: 8, column: 3 }}
-                  dataSource={articleData?.articles}
-                  pagination={{
-                    pageSize: 9,
-                  }}
-                  renderItem={(article) => <ArticleCard article={article} />}
-                />
-                {/* <Row gutter={8} style={{ marginLeft: 5, marginRight: 5 }}>
-                  {articleLoading
-                    ? Array.from({ length: 24 }).map((_, index) => (
-                        // eslint-disable-next-line react/no-array-index-key
-                        <Col key={index} sm={24} md={12} lg={12} xl={8}>
-                          <IncidentSkeletonCard />
-                        </Col>
-                      ))
-                    : articleData?.articles.map((article) => (
-                        <Col sm={24} md={12} lg={12} xl={8} key={article?.id}>
-                          <ArticleCard article={article} />
-                        </Col>
-                      ))}
-                </Row> */}
-                {/* <Row justify="center">
-                  <Col>
-                    <Pagination
-                      total={articleData?.articles}
-                      pageSizeOptions={pagination.sizeOptions}
-                      pageSize={pagination.pageSize}
-                      current={pagination.page}
-                      onChange={onPaginationChange}
-                      showTotal={(total) => `Total Incidents: ${total}`}
-                      hideOnSinglePage
-                    />
-                  </Col>
-                </Row> */}
+                {articleLoading ? (
+                  <Row>
+                    <Col sm={24} md={12} lg={12} xl={8}>
+                      <IncidentSkeletonCard />
+                    </Col>
+                    <Col sm={24} md={12} lg={12} xl={8}>
+                      <IncidentSkeletonCard />
+                    </Col>
+                    <Col sm={24} md={12} lg={12} xl={8}>
+                      <IncidentSkeletonCard />
+                    </Col>
+                    <Col sm={24} md={12} lg={12} xl={8}>
+                      <IncidentSkeletonCard />
+                    </Col>
+                  </Row>
+                ) : (
+                  <List
+                    style={{ marginLeft: 5, marginRight: 5 }}
+                    grid={{ gutter: 8, xxl: 3, xl: 1 }}
+                    dataSource={articleData?.articles}
+                    pagination={{
+                      pageSize: 9,
+                    }}
+                    renderItem={(article) => <ArticleCard article={article} />}
+                  />
+                )}
               </Card>
             </Col>
-            <Col span={8}>
+            <Col
+              span={12}
+              xxl={8}
+              xl={12}
+              style={{ overflow: 'auto', height: 'calc(100vh - 330px)' }}
+            >
               <Card
                 bodyStyle={{ paddingRight: 0, paddingLeft: 0, paddingTop: 15 }}
               >
@@ -424,7 +440,7 @@ Props): JSX.Element => {
                         >
                           <div style={{ padding: '10px 20px' }}>
                             <div style={{ marginBottom: 10 }}>
-                              <Text style={{ fontSize: 12 }} strong>
+                              <Text style={{ fontSize: 14 }} strong>
                                 Incident submitted{' '}
                                 {moment(incident.date).fromNow()} by{' '}
                                 {incident.createdBy.fullName}.
@@ -456,12 +472,12 @@ Props): JSX.Element => {
                                     {incident.subject}
                                   </Title>
                                   <div>
-                                    <Text style={{ fontSize: 12 }}>
+                                    <Text style={{ fontSize: 14 }}>
                                       Created At: {incident.dayTime}
                                     </Text>
                                   </div>
                                   <div>
-                                    <Text style={{ fontSize: 12 }}>
+                                    <Text style={{ fontSize: 14 }}>
                                       Created By:{' '}
                                       {incident.createdBy?.organisation}
                                     </Text>

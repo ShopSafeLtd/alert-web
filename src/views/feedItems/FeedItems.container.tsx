@@ -6,6 +6,7 @@ const FeedItems = (): JSX.Element => {
   const {
     data,
     articleData,
+    articleLoading,
     recentOffenderData,
     recentOffenderLoading,
     onPaginationChange,
@@ -25,6 +26,7 @@ const FeedItems = (): JSX.Element => {
     <View
       data={data}
       articleData={articleData}
+      articleLoading={articleLoading}
       recentOffenderData={recentOffenderData}
       recentOffenderLoading={recentOffenderLoading}
       onPaginationChange={onPaginationChange}

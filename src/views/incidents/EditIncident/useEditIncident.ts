@@ -5,7 +5,9 @@ import {
   CreateTagMutation,
   Gender,
   IncidentUpdateInput,
+  ListCrimeGroupsQuery,
   ListOffendersQuery,
+  ListVehiclesQuery,
   Model,
   QueryMode,
   Race,
@@ -13,7 +15,9 @@ import {
   SortOrder,
   TagsDocument,
   TagsQuery,
+  useListCrimeGroupsQuery,
   useListOffendersQuery,
+  useListVehiclesQuery,
   useRecycleIncidentMutation,
   useSchemeGroupsQuery,
   useTagsQuery,
@@ -28,6 +32,7 @@ import { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import update from 'immutability-helper';
 import { UploadChangeParam } from 'antd/lib/upload';
+import { CrimeGroupData, VehicleData } from 'types/DataType';
 
 const { confirm } = Modal;
 
@@ -117,7 +122,7 @@ interface Return {
   toggleAddOffender: () => void;
   addExistingOffender: boolean;
   toggleAddExistingOffender: () => void;
-  updateOffendersList: (value: OffenderData) => void;
+  updateOffendersData: (value: OffenderData) => void;
   offendersData: OffenderData[];
   onReject: () => void;
   recentOffenderData: ListOffendersQuery | undefined;
@@ -142,9 +147,29 @@ interface Return {
     info: UploadChangeParam<UploadFile>,
     currentId: string
   ) => void;
-  selected: string;
-  setSelected: (value: string) => void;
+  editOffenderId: string;
+  setEditOffenderId: (value: string) => void;
   updateOffender: (value: OffenderData) => void;
+  addNewVehicle: boolean;
+  addExistingVehicle: boolean;
+  toggleAddNewVehicle: () => void;
+  toggleAddExistingVehicle: () => void;
+  editVehicleId: string;
+  setEditVehicleId: (value: string) => void;
+  vehiclesData: VehicleData[];
+  updateVehiclesData: (value: VehicleData) => void;
+  removeVehicle: (vehicleId: string) => void;
+  removeCrimeGroup: (crimeGroupId: string) => void;
+  addNewCrimeGroup: boolean;
+  addExistingCrimeGroup: boolean;
+  toggleAddNewCrimeGroup: () => void;
+  toggleAddExistingCrimeGroup: () => void;
+  editCrimeGroupId: string;
+  setEditCrimeGroupId: (value: string) => void;
+  crimeGroupsData: CrimeGroupData[];
+  updateCrimeGroupsData: (value: CrimeGroupData) => void;
+  listVehiclesData: ListVehiclesQuery | undefined;
+  listCrimeGroupsData: ListCrimeGroupsQuery | undefined;
 }
 
 const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
@@ -175,11 +200,17 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const [editedOffender, setEditedOffender] = useState<
     OffenderData | undefined
   >();
-  const [selected, setSelected] = useState<string>('');
+  const [editOffenderId, setEditOffenderId] = useState<string>('');
 
-  const updateOffender = (offender: OffenderData) => {
-    setEditedOffender(offender);
-  };
+  const [addNewCrimeGroup, setAddNewCrimeGroup] = useState(false);
+  const [addExistingCrimeGroup, setAddExistingCrimeGroup] = useState(false);
+  const [editCrimeGroupId, setEditCrimeGroupId] = useState<string>('');
+  const [crimeGroupsData, setCrimeGroupsData] = useState<CrimeGroupData[]>([]);
+
+  const [addNewVehicle, setAddNewVehicle] = useState(false);
+  const [addExistingVehicle, setAddExistingVehicle] = useState(false);
+  const [editVehicleId, setEditVehicleId] = useState<string>('');
+  const [vehiclesData, setVehiclesData] = useState<VehicleData[]>([]);
 
   useEffect(() => {
     if (editedOffender) {
@@ -204,6 +235,12 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     onCompleted: ({ incident }) => {
       if (incident?.offenders && incident.offenders.length) {
         setOffendersData(incident.offenders);
+      }
+      if (incident?.vehicles && incident.vehicles.length) {
+        setVehiclesData(incident.vehicles);
+      }
+      if (incident?.crimeGroups && incident.crimeGroups.length) {
+        setCrimeGroupsData(incident.crimeGroups);
       }
       // imageList
       if (incident?.images && incident.images.length) {
@@ -259,7 +296,35 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
       },
     },
   });
+  const { data: listVehiclesData } = useListVehiclesQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      where: {
+        schemes: {
+          some: {
+            id: {
+              equals: schemeId,
+            },
+          },
+        },
+      },
+    },
+  });
 
+  const { data: listCrimeGroupsData } = useListCrimeGroupsQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      where: {
+        schemes: {
+          some: {
+            id: {
+              equals: schemeId,
+            },
+          },
+        },
+      },
+    },
+  });
   const { data: listOffendersData } = useListOffendersQuery({
     variables: {
       scheme: {
@@ -288,7 +353,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
       },
     });
   // mutation
-  // update tag list after adding a new item
   const updateIncidentTag: MutationUpdaterFn<CreateTagMutation> = (
     store,
     { data: res }
@@ -336,7 +400,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           : 'The Incident has been updated!',
         placement: 'bottomRight',
       });
-      navigate(`/app/incidents`);
+      navigate(`/app/incidents/view/${incidentId}`);
     },
     onError: () => {
       setSaving(false);
@@ -441,8 +505,207 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const toggleAddExistingOffender = () => {
     setAddExistingOffender(!addExistingOffender);
   };
-  const updateOffendersList = (selectedOffender: OffenderData) => {
-    setOffendersData([...offendersData, selectedOffender]);
+  const toggleAddNewVehicle = () => {
+    setAddNewVehicle(!addNewVehicle);
+  };
+  const toggleAddExistingVehicle = () => {
+    setAddExistingVehicle(!addExistingVehicle);
+  };
+  const toggleAddNewCrimeGroup = () => {
+    setAddNewCrimeGroup(!addNewCrimeGroup);
+  };
+  const toggleAddExistingCrimeGroup = () => {
+    setAddExistingCrimeGroup(!addExistingCrimeGroup);
+  };
+
+  const updateOffendersData = (offender: OffenderData) => {
+    setOffendersData([...offendersData, offender]);
+  };
+  const updateOffender = (offender: OffenderData) => {
+    setEditedOffender(offender);
+  };
+
+  const updateVehiclesData = (vehicle: VehicleData) => {
+    const editedData = vehiclesData.find(({ id }) => id === vehicle.id);
+    if (editedData) {
+      setVehiclesData([
+        ...(vehiclesData?.filter(({ id }) => id !== vehicle.id) || []),
+        {
+          ...vehicle,
+        },
+      ]);
+    } else {
+      setVehiclesData([...vehiclesData, vehicle]);
+    }
+  };
+  const updateCrimeGroupsData = (crimeGroup: CrimeGroupData) => {
+    const editedData = crimeGroupsData.find(({ id }) => id === crimeGroup.id);
+    if (editedData) {
+      setCrimeGroupsData([
+        ...(crimeGroupsData?.filter(({ id }) => id !== crimeGroup.id) || []),
+        {
+          ...crimeGroup,
+        },
+      ]);
+    } else {
+      setCrimeGroupsData([...crimeGroupsData, crimeGroup]);
+    }
+  };
+  const removeOffender = (offenderId: string) => {
+    setOffendersData(
+      offendersData?.filter((offender) => offender.id !== offenderId)
+    );
+  };
+  const removeVehicle = (vehicleId: string) => {
+    setVehiclesData(
+      vehiclesData?.filter((vehicle) => vehicle.id !== vehicleId)
+    );
+  };
+  const removeCrimeGroup = (crimeGroupId: string) => {
+    setCrimeGroupsData(
+      crimeGroupsData?.filter((crimeGroup) => crimeGroup.id !== crimeGroupId)
+    );
+  };
+  const removeImage = (uid: string) => {
+    setFileList(fileList.filter((image) => image.uid !== uid));
+  };
+  const removeImageFromOffender = (data: {
+    image: Image;
+    offenderId: string;
+  }) => {
+    // find index of file in fileList array
+    const fileIndex = fileList.map(({ uid }) => uid).indexOf(data.image.uid);
+    // update the file object in the array with the new value, update will replace value in same place in array
+    setFileList(
+      update(fileList, {
+        [fileIndex]: {
+          $set: {
+            ...data.image,
+            offenders: data.image.offenders?.filter(
+              ({ id }) => id !== data.offenderId
+            ),
+          },
+        },
+      })
+    );
+
+    if (offendersData) {
+      // find index of file in fileList array
+      const offenderIndex = offendersData
+        .map(({ id }) => id)
+        .indexOf(data.offenderId);
+      const offender = offendersData.find(({ id }) => data.offenderId === id);
+      if (offender && offender.images)
+        setOffendersData(
+          update(offendersData, {
+            [offenderIndex]: {
+              $set: {
+                ...offender,
+                images: offender.images.filter(
+                  ({ id }) => id !== data.image.uid
+                ),
+              },
+            },
+          })
+        );
+    }
+  };
+  const isOffenderData = (
+    item: OffenderData | undefined
+  ): item is OffenderData => !!item;
+
+  const assignOffendersToImages = (data: {
+    image: Image;
+    offenders: OffenderData[];
+  }) => {
+    if (offendersData) {
+      const changedOffendersIds = data.offenders.map(({ id }) => id);
+      const originalOffendersIds = offendersData.map(({ id }) => id);
+      const originalImageOffendersIds =
+        fileList
+          .find(({ uid }) => uid === data.image.uid)
+          ?.offenders?.map(({ id }) => id) || [];
+      const updatedOffenders = offendersData
+        .map((offender) => {
+          if (changedOffendersIds.includes(offender.id))
+            return data.offenders.find(({ id }) => id === offender.id);
+          if (originalImageOffendersIds.includes(offender.id))
+            return {
+              ...offender,
+              images: offender.images?.filter(
+                ({ id }) => id !== data.image.uid
+              ),
+            };
+          return offender;
+        })
+        .filter(isOffenderData);
+      const newOffenders = data.offenders.filter(
+        (offender) => !originalOffendersIds.includes(offender.id)
+      );
+
+      setOffendersData([...updatedOffenders, ...newOffenders]);
+    }
+
+    // find index of file in fileList array
+    const fileIndex = fileList.map(({ uid }) => uid).indexOf(data.image.uid);
+    // update the file object in the array with the new value, update will replace value in same place in array
+    setFileList(
+      update(fileList, {
+        [fileIndex]: {
+          $set: data.image,
+        },
+      })
+    );
+
+    setNewImage(null);
+  };
+  const offenderImgChange = (
+    info: UploadChangeParam<UploadFile>,
+    currentId: string
+  ) => {
+    if (info.file.response) {
+      const currentOffender = offendersData.find(({ id }) => id === currentId);
+      if (currentOffender) {
+        assignOffendersToImages({
+          image: {
+            ...info.file,
+            url: info.file.response[0].url,
+            fileName: info.file.response[0].blobName,
+            type: info.file.response[0].mimetype,
+            uid: info.file.uid,
+            offenders: [currentOffender],
+          },
+          offenders: [currentOffender].map((offender) => {
+            let images: OffenderData['images'] = [];
+            if (offender.images) images = offender.images;
+            return {
+              ...offender,
+              images: [
+                ...images,
+                {
+                  id: info.file.uid,
+                  new: true,
+                  optimised: info.file.response[0].url,
+                  url: info.file.response[0].url,
+                  fileName: info.file.response[0].blobName,
+                  type: info.file.response[0].mimetype,
+                },
+              ],
+            };
+          }),
+        });
+      }
+    } else {
+      setFileList([
+        ...fileList.filter((item) => item.uid !== info.file.uid),
+        {
+          ...info.file,
+          url: info.fileList[0].url,
+          fileName: info.fileList[0].fileName,
+          type: info.fileList[0].type,
+        },
+      ]);
+    }
   };
 
   const onSubmit = (data: FormData) => {
@@ -583,6 +846,113 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
         };
       };
 
+      const getVehicles = (): IncidentUpdateInput['vehicles'] => {
+        if (
+          vehiclesData &&
+          listVehiclesData?.listVehicles &&
+          incidentData?.incident
+        ) {
+          const vehiclesIds = listVehiclesData.listVehicles.vehicles.map(
+            (vehicle) => vehicle.id
+          );
+
+          const newVehicles = vehiclesData.filter(
+            (item) => !vehiclesIds.includes(item.id)
+          );
+
+          const existingVehicles = vehiclesData.filter((item) =>
+            vehiclesIds.includes(item.id)
+          );
+          const editedVehicles = existingVehicles.filter(
+            ({ edited }) => edited === true
+          );
+          return {
+            connect: existingVehicles.length
+              ? existingVehicles.map(({ id }) => ({ id }))
+              : undefined,
+            update: editedVehicles.map((vehicle) => ({
+              where: { id: vehicle.id },
+              data: {
+                make: { set: vehicle.make },
+                model: { set: vehicle.model },
+                colour: { set: vehicle.colour },
+                registration: { set: vehicle.registration },
+                crimeGroup:
+                  vehicle.crimeGroup && vehicle.crimeGroup.length
+                    ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
+                    : undefined,
+                incidents:
+                  vehicle.incidents && vehicle.incidents
+                    ? { connect: vehicle.incidents.map((id) => ({ id })) }
+                    : undefined,
+                offenders:
+                  vehicle.offenders && vehicle.offenders.length
+                    ? { connect: vehicle.offenders.map((id) => ({ id })) }
+                    : undefined,
+              },
+            })),
+
+            create: newVehicles.length
+              ? newVehicles.map((vehicle) => ({
+                  make: vehicle.make,
+                  model: vehicle.model,
+                  colour: vehicle.colour,
+                  registration: vehicle.registration,
+                  crimeGroup:
+                    vehicle.crimeGroup && vehicle.crimeGroup.length
+                      ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
+                      : undefined,
+                  offenders:
+                    vehicle.offenders && vehicle.offenders.length
+                      ? { connect: vehicle.offenders.map((id) => ({ id })) }
+                      : undefined,
+                }))
+              : undefined,
+          };
+        }
+        return {
+          connect: undefined,
+          create: undefined,
+        };
+      };
+      const getCrimeGroups = (): IncidentUpdateInput['crimeGroups'] => {
+        if (
+          crimeGroupsData &&
+          listCrimeGroupsData?.listCrimeGroups &&
+          incidentData?.incident
+        ) {
+          const crimeGroupsIds =
+            listCrimeGroupsData.listCrimeGroups.crimeGroups.map(
+              (crimeGroup) => crimeGroup.id
+            );
+
+          const newCrimeGroups = crimeGroupsData.filter(
+            (item) => !crimeGroupsIds.includes(item.id)
+          );
+
+          const existingCrimeGroups = crimeGroupsData.filter((item) =>
+            crimeGroupsIds.includes(item.id)
+          );
+
+          return {
+            connect: existingCrimeGroups.length
+              ? existingCrimeGroups.map(({ id }) => ({ id }))
+              : undefined,
+
+            create: newCrimeGroups.length
+              ? newCrimeGroups.map((crimeGroup) => ({
+                  offenders: {
+                    connect: crimeGroup.offenders?.map((id) => ({ id })),
+                  },
+                }))
+              : undefined,
+          };
+        }
+        return {
+          connect: undefined,
+          create: undefined,
+        };
+      };
       updateIncident({
         variables: {
           where: {
@@ -618,6 +988,8 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
               set: data.tags.map((id) => ({ id })),
             },
             offenders: getOffenders(),
+            vehicles: getVehicles(),
+            crimeGroups: getCrimeGroups(),
             images: {
               upload:
                 imageChange && fileList.length
@@ -656,156 +1028,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     setNewImage(image);
   };
 
-  const isOffenderData = (
-    item: OffenderData | undefined
-  ): item is OffenderData => !!item;
-
-  const assignOffendersToImages = (data: {
-    image: Image;
-    offenders: OffenderData[];
-  }) => {
-    if (offendersData) {
-      const changedOffendersIds = data.offenders.map(({ id }) => id);
-      const originalOffendersIds = offendersData.map(({ id }) => id);
-      const originalImageOffendersIds =
-        fileList
-          .find(({ uid }) => uid === data.image.uid)
-          ?.offenders?.map(({ id }) => id) || [];
-      const updatedOffenders = offendersData
-        .map((offender) => {
-          if (changedOffendersIds.includes(offender.id))
-            return data.offenders.find(({ id }) => id === offender.id);
-          if (originalImageOffendersIds.includes(offender.id))
-            return {
-              ...offender,
-              images: offender.images?.filter(
-                ({ id }) => id !== data.image.uid
-              ),
-            };
-          return offender;
-        })
-        .filter(isOffenderData);
-      const newOffenders = data.offenders.filter(
-        (offender) => !originalOffendersIds.includes(offender.id)
-      );
-
-      setOffendersData([...updatedOffenders, ...newOffenders]);
-    }
-
-    // find index of file in fileList array
-    const fileIndex = fileList.map(({ uid }) => uid).indexOf(data.image.uid);
-    // update the file object in the array with the new value, update will replace value in same place in array
-    setFileList(
-      update(fileList, {
-        [fileIndex]: {
-          $set: data.image,
-        },
-      })
-    );
-
-    setNewImage(null);
-  };
-
-  const removeImageFromOffender = (data: {
-    image: Image;
-    offenderId: string;
-  }) => {
-    // find index of file in fileList array
-    const fileIndex = fileList.map(({ uid }) => uid).indexOf(data.image.uid);
-    // update the file object in the array with the new value, update will replace value in same place in array
-    setFileList(
-      update(fileList, {
-        [fileIndex]: {
-          $set: {
-            ...data.image,
-            offenders: data.image.offenders?.filter(
-              ({ id }) => id !== data.offenderId
-            ),
-          },
-        },
-      })
-    );
-
-    if (offendersData) {
-      // find index of file in fileList array
-      const offenderIndex = offendersData
-        .map(({ id }) => id)
-        .indexOf(data.offenderId);
-      const offender = offendersData.find(({ id }) => data.offenderId === id);
-      if (offender && offender.images)
-        setOffendersData(
-          update(offendersData, {
-            [offenderIndex]: {
-              $set: {
-                ...offender,
-                images: offender.images.filter(
-                  ({ id }) => id !== data.image.uid
-                ),
-              },
-            },
-          })
-        );
-    }
-  };
-
-  const removeImage = (uid: string) => {
-    setFileList(fileList.filter((image) => image.uid !== uid));
-  };
-
-  const removeOffender = (offenderId: string) => {
-    setOffendersData(
-      offendersData?.filter((offender) => offender.id !== offenderId)
-    );
-  };
-
-  const offenderImgChange = (
-    info: UploadChangeParam<UploadFile>,
-    currentId: string
-  ) => {
-    if (info.file.response) {
-      const currentOffender = offendersData.find(({ id }) => id === currentId);
-      if (currentOffender) {
-        assignOffendersToImages({
-          image: {
-            ...info.file,
-            url: info.file.response[0].url,
-            fileName: info.file.response[0].blobName,
-            type: info.file.response[0].mimetype,
-            uid: info.file.uid,
-            offenders: [currentOffender],
-          },
-          offenders: [currentOffender].map((offender) => {
-            let images: OffenderData['images'] = [];
-            if (offender.images) images = offender.images;
-            return {
-              ...offender,
-              images: [
-                ...images,
-                {
-                  id: info.file.uid,
-                  new: true,
-                  optimised: info.file.response[0].url,
-                  url: info.file.response[0].url,
-                  fileName: info.file.response[0].blobName,
-                  type: info.file.response[0].mimetype,
-                },
-              ],
-            };
-          }),
-        });
-      }
-    } else {
-      setFileList([
-        ...fileList.filter((item) => item.uid !== info.file.uid),
-        {
-          ...info.file,
-          url: info.fileList[0].url,
-          fileName: info.fileList[0].fileName,
-          type: info.fileList[0].type,
-        },
-      ]);
-    }
-  };
   return {
     onSubmit,
     data: incidentData,
@@ -833,7 +1055,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     toggleAddOffender,
     addExistingOffender,
     toggleAddExistingOffender,
-    updateOffendersList,
+    updateOffendersData,
     offendersData,
     // deleteConfirm,
     onReject,
@@ -853,9 +1075,29 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     listOffendersData,
     adminRights: role !== Role.User,
     offenderImgChange,
-    selected,
-    setSelected,
+    editOffenderId,
+    setEditOffenderId,
     updateOffender,
+    addNewVehicle,
+    addExistingVehicle,
+    editVehicleId,
+    setEditVehicleId,
+    toggleAddNewVehicle,
+    toggleAddExistingVehicle,
+    vehiclesData,
+    updateVehiclesData,
+    removeVehicle,
+    addNewCrimeGroup,
+    addExistingCrimeGroup,
+    editCrimeGroupId,
+    setEditCrimeGroupId,
+    toggleAddNewCrimeGroup,
+    toggleAddExistingCrimeGroup,
+    crimeGroupsData,
+    updateCrimeGroupsData,
+    removeCrimeGroup,
+    listVehiclesData,
+    listCrimeGroupsData,
   };
 };
 

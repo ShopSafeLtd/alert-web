@@ -19,11 +19,11 @@ const ViewArticleView = ({
       <Card style={{ marginLeft: 20, marginRight: 20 }} loading={loading}>
         <Typography.Title level={2}>{data?.article?.title}</Typography.Title>
         {/* eslint-disable-next-line react/no-danger */}
-        <div
+        {/* <div
           dangerouslySetInnerHTML={{
             __html: data?.article?.rows[0].columns[0].text || '',
           }}
-        />
+        /> */}
       </Card>
       {data?.article?.rows[0].columns[0].incidents &&
         data?.article?.rows[0].columns[0].incidents.length > 0 && (

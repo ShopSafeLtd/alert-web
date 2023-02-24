@@ -4,60 +4,80 @@ import useEditIncident from './useAddIncident';
 
 function EditIncident(): JSX.Element {
   const {
-    addExistingOffender,
-    addIncidentTag,
-    addNewLocation,
-    addOffender,
-    addPreviousLocation,
-    addressLoading,
-    beforeUpload,
-    fileList,
-    form,
+    onSubmit,
+    saving,
     groups,
     groupsLoading,
-    imgChange,
-    offendersData,
-    onSubmit,
+    tags,
+    tagsLoading,
     primaryAddress,
-    saving,
+    addressLoading,
+    imgChange,
+    fileList,
+    beforeUpload,
+    addIncidentTag,
+    toggleAddIncidentTag,
+    updateIncidentTag,
+    addOffender,
+    toggleAddOffender,
+    addExistingOffender,
+    toggleAddExistingOffender,
+    updateOffendersData,
+    offendersData,
+    addPreviousLocation,
+    toggleAddPreviousLocation,
+    updatePreviousLocation,
+    addNewLocation,
+    toggleAddNewLocation,
+    updateNewLocation,
+    form,
     recentOffenderData,
     recentOffenderLoading,
     addRecentOffender,
     setAddRecentOffender,
-    tags,
-    tagsLoading,
-    toggleAddExistingOffender,
-    toggleAddIncidentTag,
-    toggleAddNewLocation,
-    toggleAddOffender,
-    toggleAddPreviousLocation,
-    updateIncidentTag,
-    updateNewLocation,
-    updateOffendersList,
-    updatePreviousLocation,
     searchOffenders,
     setSearchOffenders,
     newImage,
-    assignOffendersToImages,
     onCancelNewImage,
+    assignOffendersToImages,
     setAssignToImage,
     removeImageFromOffender,
     removeImage,
     removeOffender,
-    adminRights,
     listOffendersData,
+    adminRights,
     offenderImgChange,
-    selected,
-    setSelected,
+    editOffenderId,
+    setEditOffenderId,
     updateOffender,
+    addNewVehicle,
+    addExistingVehicle,
+    editVehicleId,
+    setEditVehicleId,
+    toggleAddNewVehicle,
+    toggleAddExistingVehicle,
+    vehiclesData,
+    updateVehiclesData,
+    removeVehicle,
+    addNewCrimeGroup,
+    addExistingCrimeGroup,
+    editCrimeGroupId,
+    setEditCrimeGroupId,
+    toggleAddNewCrimeGroup,
+    toggleAddExistingCrimeGroup,
+    crimeGroupsData,
+    updateCrimeGroupsData,
+    removeCrimeGroup,
+    listVehiclesData,
+    listCrimeGroupsData,
   } = useEditIncident();
 
   return (
     <div>
       <View
         updateOffender={updateOffender}
-        selected={selected}
-        setSelected={setSelected}
+        editOffenderId={editOffenderId}
+        setEditOffenderId={setEditOffenderId}
         addExistingOffender={addExistingOffender}
         addIncidentTag={addIncidentTag}
         addNewLocation={addNewLocation}
@@ -87,7 +107,7 @@ function EditIncident(): JSX.Element {
         toggleAddPreviousLocation={toggleAddPreviousLocation}
         updateIncidentTag={updateIncidentTag}
         updateNewLocation={updateNewLocation}
-        updateOffendersList={updateOffendersList}
+        updateOffendersData={updateOffendersData}
         updatePreviousLocation={updatePreviousLocation}
         searchOffenders={searchOffenders}
         setSearchOffenders={setSearchOffenders}
@@ -101,6 +121,26 @@ function EditIncident(): JSX.Element {
         adminRights={adminRights}
         listOffendersData={listOffendersData}
         offenderImgChange={offenderImgChange}
+        addNewVehicle={addNewVehicle}
+        addExistingVehicle={addExistingVehicle}
+        editVehicleId={editVehicleId}
+        setEditVehicleId={setEditVehicleId}
+        toggleAddNewVehicle={toggleAddNewVehicle}
+        toggleAddExistingVehicle={toggleAddExistingVehicle}
+        vehiclesData={vehiclesData}
+        updateVehiclesData={updateVehiclesData}
+        removeVehicle={removeVehicle}
+        removeCrimeGroup={removeCrimeGroup}
+        addNewCrimeGroup={addNewCrimeGroup}
+        addExistingCrimeGroup={addExistingCrimeGroup}
+        editCrimeGroupId={editCrimeGroupId}
+        setEditCrimeGroupId={setEditCrimeGroupId}
+        toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
+        toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
+        crimeGroupsData={crimeGroupsData}
+        updateCrimeGroupsData={updateCrimeGroupsData}
+        listVehiclesData={listVehiclesData}
+        listCrimeGroupsData={listCrimeGroupsData}
       />
     </div>
   );

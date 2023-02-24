@@ -1,11 +1,12 @@
 import React from 'react';
-import { Card, Col, Row, Skeleton, Tag, Typography } from 'antd';
+import { Card, Col, Row, Tag, Typography } from 'antd';
 import { ArticlePriority, ArticlesQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
-import { formatDate } from 'utils';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/pro-solid-svg-icons';
 import { faClock, faUser } from '@fortawesome/pro-light-svg-icons';
+import moment from 'moment';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -36,28 +37,6 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
       className="feedItem-card"
     >
       <Link to={`/app/article/view/${id}`}>
-        {/* <Space direction="vertical" size="middle" style={{ display: 'flex' }}> */}
-        {/* {previewImage && (
-          <Image
-            width="100%"
-            height={100}
-            style={{ borderRadius: 5 }}
-            src={previewImage}
-          />
-        )} */}
-
-        <div className="feedItem-card-tags">
-          <Row gutter={8}>
-            {tags?.map((tag, i) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <Col key={i}>
-                <Tag className="feedItem-card-tag" color="red">
-                  {tag.name}
-                </Tag>
-              </Col>
-            ))}
-          </Row>
-        </div>
         {previewImage ? (
           <div
             className="feedItem-card-image"
@@ -67,11 +46,7 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
             key={id}
           />
         ) : (
-          <Skeleton.Image
-            // style={{ height: 150, width: '100%' }}
-            className="feedItem-card-image"
-          />
-          // <div style={{ marginTop: 10 }} />
+          <div style={{ marginTop: 10 }} />
         )}
         <div className="feedItem-card-content">
           <Title level={4}>
@@ -102,7 +77,7 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
                 icon={faClock}
                 style={{ marginRight: 5 }}
               />
-              <Text>{formatDate(updatedAt)}</Text>
+              <Text>{moment(updatedAt).calendar()}</Text>
             </Col>
           </Row>
           <Paragraph className="feedItem-card-desc" ellipsis={{ rows: 3 }}>
@@ -121,13 +96,19 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
               style={{
                 overflowX: 'auto',
                 marginBottom: 10,
+                alignItems: 'flex-end',
+                alignContent: 'flex-end',
               }}
               gutter={5}
             >
               {tags.map((tag, i) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <Col key={i}>
-                  <Tag key={tag.id} className="feedItem-card-tag" color="red">
+                  <Tag
+                    key={tag.id}
+                    className="feedItem-card-tag"
+                    style={{ alignItems: 'flex-end', alignContent: 'flex-end' }}
+                  >
                     {tag.name}
                   </Tag>
                 </Col>
@@ -137,49 +118,6 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
         </div>
       </Link>
     </Card>
-    // <Link to={`/app/article/view/${id}`}>
-    //   <Row wrap={false}>
-    //     <Col>
-    //       {previewImage && (
-    //         <Image
-    //           width={100}
-    //           height={100}
-    //           style={{ borderRadius: 5, marginLeft: 10 }}
-    //           src={previewImage}
-    //         />
-    //       )}
-    //     </Col>
-    //     <Col>
-    //       <div style={{ paddingLeft: 20, paddingRight: 20, display: 'block' }}>
-    //         <Title level={4} style={{ fontSize: 15, marginBottom: 5 }}>
-    //           {title}
-    //         </Title>
-    //         <Paragraph
-    //           style={{
-    //             marginBottom: 0,
-    //             height: 40,
-    //             width: '100%',
-    //             fontSize: 12,
-    //             whiteSpace: 'normal',
-    //             textOverflow: 'ellipsis',
-    //           }}
-    //           type="secondary"
-    //           ellipsis
-    //         >
-    //           {previewText}
-    //         </Paragraph>
-    //         {tags && tags.length ? (
-    //           <Row wrap={false} style={{ overflowX: 'auto', marginTop: 5 }}>
-    //             {tags.map((tag) => (
-    //               <Tag key={tag.id}>{tag.name}</Tag>
-    //             ))}
-    //           </Row>
-    //         ) : null}
-    //       </div>
-    //     </Col>
-    //   </Row>
-    //   <Divider style={{ marginTop: 10, marginBottom: 10 }} />
-    // </Link>
   );
 };
 

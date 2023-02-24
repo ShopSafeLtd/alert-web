@@ -39,7 +39,7 @@ import {
 import { faCircleXmark, faUser } from '@fortawesome/pro-solid-svg-icons';
 import AddUserChat from 'components/form-components/userChat/ManageChatMember';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import LinkOffender from 'components/form-components/incident/offender/AddExisitingOffender';
+import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
 import LinkIncident from 'components/form-components/offender/LinkIncident';
 import Content from '../Message/Message.view';
 

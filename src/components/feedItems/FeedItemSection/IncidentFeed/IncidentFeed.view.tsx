@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Col, Descriptions, Image, Row, Tag, Typography } from 'antd';
+import { Card, Col, Descriptions, Row, Tag, Typography } from 'antd';
 import { FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -91,7 +91,7 @@ const IncidentFeed = ({
                 {subject}
               </Title>
 
-              <Paragraph style={{ fontSize: 12 }} type="secondary" ellipsis>
+              <Paragraph style={{ fontSize: 14 }} type="secondary" ellipsis>
                 {description}
               </Paragraph>
               <Row>
@@ -101,7 +101,7 @@ const IncidentFeed = ({
                     className="feedItem-card-icon"
                     icon={faClock}
                   />
-                  <Text style={{ fontSize: 12 }} type="secondary">
+                  <Text style={{ fontSize: 14 }} type="secondary">
                     {dayTime}
                   </Text>
                 </Col>
@@ -113,7 +113,7 @@ const IncidentFeed = ({
                     className="feedItem-card-icon"
                     icon={faUser}
                   />
-                  <Text style={{ fontSize: 12 }} type="secondary">
+                  <Text style={{ fontSize: 14 }} type="secondary">
                     {createdBy?.fullName} - {createdBy?.organisation}
                   </Text>
                 </Col>
@@ -127,7 +127,7 @@ const IncidentFeed = ({
                   />
                 </Col>
                 <Col>
-                  <Text style={{ fontSize: 12 }} ellipsis type="secondary">
+                  <Text style={{ fontSize: 14 }} ellipsis type="secondary">
                     {location?.full}
                   </Text>
                 </Col>
@@ -150,54 +150,23 @@ const IncidentFeed = ({
             </>
           ) : (
             <>
-              {updates && updates[0]?.text && (
+              {updates && updates[0]?.text ? (
                 <>
-                  <Text style={{ fontSize: 13 }}>
+                  <Title level={4} style={{ marginBottom: 2 }} ellipsis>
+                    {subject}
+                  </Title>
+                  <Paragraph
+                    style={{ fontSize: 14 }}
+                    type="secondary"
+                    ellipsis={{ rows: 3 }}
+                  >
                     {getContent(updates[0]?.text)}
-                  </Text>
-                  <Row wrap={false} style={{ marginTop: 10 }}>
-                    {images && (
-                      <Col style={{ marginRight: 10 }}>
-                        <div
-                          style={{
-                            width: 80,
-                            height: 80,
-                            backgroundImage: `url(${images[0]?.optimised})`,
-                            backgroundPosition: 'center',
-                            backgroundRepeat: 'no-repeat',
-                            backgroundSize: 'cover',
-                            borderRadius: 5,
-                          }}
-                        />
-                      </Col>
-                    )}
-                    <Col>
-                      <div>
-                        <Title
-                          level={4}
-                          style={{ fontSize: 16, marginBottom: 2 }}
-                          ellipsis
-                        >
-                          {subject}
-                        </Title>
-                        <div>
-                          <Text style={{ fontSize: 12 }}>
-                            Created At: {dayTime}
-                          </Text>
-                        </div>
-                        <div>
-                          <Text style={{ fontSize: 12 }}>
-                            Created By: {createdBy?.organisation}
-                          </Text>
-                        </div>
-                      </div>
-                    </Col>
-                  </Row>
+                  </Paragraph>
                 </>
-              )}
-              {!(updates && updates[0]?.text) && (
+              ) : null}
+              {!(updates && updates[0]?.text) ? (
                 <>
-                  {updates && updates[0]?.linkedIncidents[0] && (
+                  {updates && updates[0]?.linkedIncidents[0] ? (
                     <Card
                       style={{ borderRadius: 5 }}
                       size="small"
@@ -206,17 +175,22 @@ const IncidentFeed = ({
                       <Row gutter={5} wrap={false}>
                         <Col>
                           {updates[0]?.linkedIncidents[0].images &&
-                            updates[0]?.linkedIncidents[0].images.length >
-                              0 && (
-                              <Image
-                                width={100}
-                                height={100}
-                                src={
-                                  updates[0]?.linkedIncidents[0].images[0]
-                                    .optimised || ''
-                                }
-                              />
-                            )}
+                          updates[0]?.linkedIncidents[0].images.length > 0 ? (
+                            <ImageContainer
+                              src={
+                                updates[0]?.linkedIncidents[0].images[0]
+                                  .optimised || ''
+                              }
+                            />
+                          ) : // <Image
+                          //   width={100}
+                          //   height={100}
+                          //   src={
+                          //     updates[0]?.linkedIncidents[0].images[0]
+                          //       .optimised || ''
+                          //   }
+                          // />
+                          null}
                         </Col>
                         <Col
                           flex={1}
@@ -252,8 +226,8 @@ const IncidentFeed = ({
                         </Col>
                       </Row>
                     </Card>
-                  )}
-                  {updates && updates[0]?.linkedOffenders[0] && (
+                  ) : null}
+                  {updates && updates[0]?.linkedOffenders[0] ? (
                     <Card
                       style={{ borderRadius: 5 }}
                       size="small"
@@ -262,17 +236,22 @@ const IncidentFeed = ({
                       <Row gutter={5} wrap={false}>
                         <Col>
                           {updates[0]?.linkedOffenders[0].images &&
-                            updates[0]?.linkedOffenders[0].images.length >
-                              0 && (
-                              <Image
-                                width={100}
-                                height={100}
-                                src={
-                                  updates[0]?.linkedOffenders[0].images[0]
-                                    .optimised || ''
-                                }
-                              />
-                            )}
+                          updates[0]?.linkedOffenders[0].images.length > 0 ? (
+                            <ImageContainer
+                              src={
+                                updates[0]?.linkedOffenders[0].images[0]
+                                  .optimised || ''
+                              }
+                            />
+                          ) : // <Image
+                          //   width={100}
+                          //   height={100}
+                          //   src={
+                          //     updates[0]?.linkedOffenders[0].images[0]
+                          //       .optimised || ''
+                          //   }
+                          // />
+                          null}
                         </Col>
 
                         <Col
@@ -296,9 +275,9 @@ const IncidentFeed = ({
                         </Col>
                       </Row>
                     </Card>
-                  )}
+                  ) : null}
                 </>
-              )}
+              ) : null}
             </>
           )}
         </Link>

@@ -17,7 +17,7 @@ import {
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
 import { UploadFile } from 'antd/lib/upload/interface';
-import AddExistingOffender from '../../offender/AddExisitingOffender';
+import AddExistingOffender from '../../offender/AddExistingOffender';
 import AddOffender from '../../offender/AddNewOffender';
 
 const { Title, Paragraph, Text } = Typography;

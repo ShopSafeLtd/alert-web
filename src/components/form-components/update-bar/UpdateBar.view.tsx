@@ -32,7 +32,7 @@ import {
 } from 'graphql/generated';
 import moment from 'moment';
 import Picker from 'emoji-picker-react';
-import LinkOffender from 'components/form-components/incident/offender/AddExisitingOffender';
+import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
 import LinkIncident from 'components/form-components/offender/LinkIncident';
 
 const { Option, getMentions } = Mentions;

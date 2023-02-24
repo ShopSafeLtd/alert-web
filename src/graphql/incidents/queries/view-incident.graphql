@@ -41,6 +41,26 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       id
       name
     }
+    crimeGroups {
+      id
+      reference
+      totalIncidents
+      totalOffenders
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+    }
+    vehicles {
+      id
+      colour
+      model
+      make
+      registration
+      totalCrimeGroups
+      totalIncidents
+      totalOffenders
+      updatedAt
+    }
     offenders {
       id
       createdAt

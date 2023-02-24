@@ -34,6 +34,26 @@ function AddOffender(): JSX.Element {
     setSelectedItems,
     form,
     adminRights,
+    addNewVehicle,
+    addExistingVehicle,
+    editVehicleId,
+    setEditVehicleId,
+    toggleAddNewVehicle,
+    toggleAddExistingVehicle,
+    vehiclesData,
+    updateVehiclesData,
+    removeVehicle,
+    addNewCrimeGroup,
+    addExistingCrimeGroup,
+    editCrimeGroupId,
+    setEditCrimeGroupId,
+    toggleAddNewCrimeGroup,
+    toggleAddExistingCrimeGroup,
+    crimeGroupsData,
+    updateCrimeGroupsData,
+    removeCrimeGroup,
+    listVehiclesData,
+    listCrimeGroupsData,
   } = useAddOffender();
 
   return (
@@ -68,6 +88,26 @@ function AddOffender(): JSX.Element {
         ageCheck={ageCheck}
         setAgeCheck={setAgeCheck}
         adminRights={adminRights}
+        addNewVehicle={addNewVehicle}
+        addExistingVehicle={addExistingVehicle}
+        editVehicleId={editVehicleId}
+        setEditVehicleId={setEditVehicleId}
+        toggleAddNewVehicle={toggleAddNewVehicle}
+        toggleAddExistingVehicle={toggleAddExistingVehicle}
+        vehiclesData={vehiclesData}
+        updateVehiclesData={updateVehiclesData}
+        removeVehicle={removeVehicle}
+        removeCrimeGroup={removeCrimeGroup}
+        addNewCrimeGroup={addNewCrimeGroup}
+        addExistingCrimeGroup={addExistingCrimeGroup}
+        editCrimeGroupId={editCrimeGroupId}
+        setEditCrimeGroupId={setEditCrimeGroupId}
+        toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
+        toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
+        crimeGroupsData={crimeGroupsData}
+        updateCrimeGroupsData={updateCrimeGroupsData}
+        listVehiclesData={listVehiclesData}
+        listCrimeGroupsData={listCrimeGroupsData}
       />
     </div>
   );

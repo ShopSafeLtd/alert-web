@@ -30,7 +30,7 @@ function EditIncident({ reviewed }: Props): JSX.Element {
     toggleAddOffender,
     addExistingOffender,
     toggleAddExistingOffender,
-    updateOffendersList,
+    updateOffendersData,
     offendersData,
     onReject,
     recentOffenderData,
@@ -49,16 +49,36 @@ function EditIncident({ reviewed }: Props): JSX.Element {
     adminRights,
     listOffendersData,
     offenderImgChange,
-    selected,
-    setSelected,
+    editOffenderId,
+    setEditOffenderId,
     updateOffender,
+    addNewVehicle,
+    addExistingVehicle,
+    editVehicleId,
+    setEditVehicleId,
+    toggleAddNewVehicle,
+    toggleAddExistingVehicle,
+    vehiclesData,
+    updateVehiclesData,
+    removeVehicle,
+    addNewCrimeGroup,
+    addExistingCrimeGroup,
+    editCrimeGroupId,
+    setEditCrimeGroupId,
+    toggleAddNewCrimeGroup,
+    toggleAddExistingCrimeGroup,
+    crimeGroupsData,
+    updateCrimeGroupsData,
+    removeCrimeGroup,
+    listVehiclesData,
+    listCrimeGroupsData,
   } = useEditIncident({ incidentId, reviewed });
   return (
     <div>
       <View
         updateOffender={updateOffender}
-        selected={selected}
-        setSelected={setSelected}
+        editOffenderId={editOffenderId}
+        setEditOffenderId={setEditOffenderId}
         onSubmit={onSubmit}
         data={data}
         loading={loading}
@@ -78,7 +98,7 @@ function EditIncident({ reviewed }: Props): JSX.Element {
         toggleAddOffender={toggleAddOffender}
         addExistingOffender={addExistingOffender}
         toggleAddExistingOffender={toggleAddExistingOffender}
-        updateOffendersList={updateOffendersList}
+        updateOffendersData={updateOffendersData}
         offendersData={offendersData}
         // deleteConfirm={deleteConfirm}
         reviewed={reviewed}
@@ -99,6 +119,26 @@ function EditIncident({ reviewed }: Props): JSX.Element {
         adminRights={adminRights}
         listOffendersData={listOffendersData}
         offenderImgChange={offenderImgChange}
+        addNewVehicle={addNewVehicle}
+        addExistingVehicle={addExistingVehicle}
+        editVehicleId={editVehicleId}
+        setEditVehicleId={setEditVehicleId}
+        toggleAddNewVehicle={toggleAddNewVehicle}
+        toggleAddExistingVehicle={toggleAddExistingVehicle}
+        vehiclesData={vehiclesData}
+        updateVehiclesData={updateVehiclesData}
+        removeVehicle={removeVehicle}
+        removeCrimeGroup={removeCrimeGroup}
+        addNewCrimeGroup={addNewCrimeGroup}
+        addExistingCrimeGroup={addExistingCrimeGroup}
+        editCrimeGroupId={editCrimeGroupId}
+        setEditCrimeGroupId={setEditCrimeGroupId}
+        toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
+        toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
+        crimeGroupsData={crimeGroupsData}
+        updateCrimeGroupsData={updateCrimeGroupsData}
+        listVehiclesData={listVehiclesData}
+        listCrimeGroupsData={listCrimeGroupsData}
       />
     </div>
   );

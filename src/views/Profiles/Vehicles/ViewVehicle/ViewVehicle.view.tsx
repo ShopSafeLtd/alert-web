@@ -16,7 +16,7 @@ import { VehicleQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash } from '@fortawesome/pro-light-svg-icons';
 import EditVehicle from 'components/form-components/Vehicle/EditVehicle';
-import { formatDate } from 'utils';
+import moment from 'moment';
 import useStyles from './ViewVehicle.styles';
 
 const { Title } = Typography;
@@ -45,7 +45,7 @@ const ViewVehicle = ({
       <PageHeader
         onBack={() => window.history.back()}
         title={data?.vehicle?.make}
-        subTitle={`--${formatDate(data?.vehicle?.updatedAt)}`}
+        subTitle={`--${data?.vehicle?.registration}`}
         extra={[
           <Button
             key="2"
@@ -86,16 +86,16 @@ const ViewVehicle = ({
         ]}
       />
       <Row gutter={20}>
-        {(data?.vehicle?.colour || data?.vehicle?.model) && (
+        {(data?.vehicle?.colour ||
+          data?.vehicle?.model ||
+          data?.vehicle?.updatedAt) && (
           <Col span={12}>
             <Card loading={loading}>
-              <Descriptions>
+              <Descriptions contentStyle={{ fontSize: 16 }} column={2}>
                 {/* <Descriptions.Item label="Make">
                 {data?.vehicle?.make}
               </Descriptions.Item> */}
-                {/* <Descriptions.Item label="UpdatedAt">
-                {data?.vehicle?.updatedAt}
-              </Descriptions.Item> */}
+
                 {data?.vehicle?.colour && (
                   <Descriptions.Item label="Colour">
                     {data?.vehicle?.colour}
@@ -104,6 +104,14 @@ const ViewVehicle = ({
                 {data?.vehicle?.model && (
                   <Descriptions.Item label="Model">
                     {data?.vehicle?.model}
+                  </Descriptions.Item>
+                )}
+
+                {data?.vehicle?.updatedAt && (
+                  <Descriptions.Item label="UpdatedAt">
+                    {moment(data.vehicle.updatedAt || moment()).format(
+                      `ddd MMM DD YYYY - HH:mm`
+                    )}
                   </Descriptions.Item>
                 )}
               </Descriptions>

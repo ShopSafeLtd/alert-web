@@ -2,18 +2,25 @@ import React from 'react';
 import { faUser } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Tooltip, Typography } from 'antd';
+import { faCheckCircle } from '@fortawesome/pro-solid-svg-icons';
 
 const { Paragraph } = Typography;
 
 interface Props {
   offender: {
+    id: string;
     name?: string | null | undefined;
     images: { optimised?: string | null | undefined }[];
   };
   onClick: () => void;
+  selectedOffenderIds?: string[];
 }
 
-const OffenderTile = ({ offender, onClick }: Props): JSX.Element => (
+const OffenderTile = ({
+  offender,
+  onClick,
+  selectedOffenderIds,
+}: Props): JSX.Element => (
   <Tooltip placement="bottom" title={`Add ${offender.name} to incident`}>
     <Card
       onClick={onClick}
@@ -59,6 +66,35 @@ const OffenderTile = ({ offender, onClick }: Props): JSX.Element => (
         {offender.name}
       </Paragraph>
     </Card>
+    {selectedOffenderIds?.find((id) => id === offender.id) && (
+      // <div
+      //   style={{
+      //     position: 'absolute',
+      //     width: 20,
+      //     height: 20,
+      //     top: 0,
+      //     right: 10,
+      //     borderRadius: 50,
+      //     // backgroundColor: 'rgb(222, 68, 54)',
+      //     alignItems: 'center',
+      //     display: 'flex',
+      //     justifyContent: 'center',
+      //     // borderWidth: 3,
+      //     // borderColor: 'rgb(222, 68, 54)',
+      //   }}
+      // >
+      <FontAwesomeIcon
+        icon={faCheckCircle}
+        size="lg"
+        style={{
+          color: 'rgb(222, 68, 54)',
+          position: 'absolute',
+          top: 0,
+          right: 10,
+        }}
+      />
+      // </div>
+    )}
   </Tooltip>
 );
 

@@ -10,7 +10,7 @@ interface Return {
 }
 
 const useListCrimeGroups = (): Return => {
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const schemeId = useStoreState((state) => state.scheme.id);
 
   const { data, loading } = useListCrimeGroupsQuery({
     fetchPolicy: 'cache-and-network',
@@ -19,7 +19,7 @@ const useListCrimeGroups = (): Return => {
         schemes: {
           some: {
             id: {
-              equals: currentScheme,
+              equals: schemeId,
             },
           },
         },

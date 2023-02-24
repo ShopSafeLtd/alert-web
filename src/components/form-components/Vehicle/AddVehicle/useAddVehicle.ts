@@ -15,6 +15,7 @@ import { MutationUpdaterFn } from '@apollo/client';
 import { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
 
 export interface VehicleData {
+  id?: string;
   make?: string;
   model?: string;
   colour?: string;
