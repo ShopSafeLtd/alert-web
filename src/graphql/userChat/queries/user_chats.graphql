@@ -24,7 +24,7 @@ query userChats(
         name
         firstLetter
         totalMembers
-        messages {
+        messages(first: 1, orderBy: [{ createdAt: desc }]) {
           id
           content
           createdAt

@@ -15,7 +15,6 @@ const ViewChat = (): JSX.Element => {
     updateAddUserChat,
     updateDeletedUserChat,
     adminRights,
-    refetch,
     loading,
   } = useViewChat();
 
@@ -31,7 +30,6 @@ const ViewChat = (): JSX.Element => {
       updateAddUserChat={updateAddUserChat}
       updateDeletedUserChat={updateDeletedUserChat}
       adminRights={adminRights}
-      refetch={refetch}
     />
   );
 };

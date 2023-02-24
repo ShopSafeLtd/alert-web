@@ -20509,7 +20509,7 @@ export type StringNullableListFilter = {
 
 export type Subscription = {
   __typename?: 'Subscription';
-  chatMessages?: Maybe<Array<Maybe<Message>>>;
+  chatMessages?: Maybe<Array<Maybe<MessageItem>>>;
   newMessage?: Maybe<Message>;
 };
 
@@ -28917,18 +28917,22 @@ export type MessagesSubscriptionSubscriptionVariables = Exact<{
 export type MessagesSubscriptionSubscription = {
   __typename?: 'Subscription';
   chatMessages?: Array<{
-    __typename?: 'Message';
+    __typename?: 'MessageItem';
     id: string;
-    sent?: boolean | null;
     content: string;
     createdAt: any;
-    from: {
+    currentUser?: boolean | null;
+    formattedDateTime?: string | null;
+    sent: boolean;
+    showUser?: boolean | null;
+    paddingTop?: boolean | null;
+    type: MessageItemType;
+    from?: {
       __typename?: 'User';
       id: string;
       fullName: string;
-      organisation: string;
-    };
-    chat: { __typename?: 'Chat'; id: string; name: string };
+      firstLetter?: string | null;
+    } | null;
     images: Array<{
       __typename?: 'Image';
       id: string;
@@ -28952,7 +28956,12 @@ export type MessagesSubscriptionSubscription = {
       __typename?: 'Offender';
       id: string;
       updatedAt: any;
+      age?: Age | null;
+      build?: Build | null;
+      dateOfBirth?: any | null;
       name?: string | null;
+      race?: Race | null;
+      gender?: Gender | null;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -34467,18 +34476,19 @@ export const MessagesSubscriptionDocument = gql`
   subscription MessagesSubscription($chat: ID!) {
     chatMessages(chatId: $chat) {
       id
-      sent
+      content
+      createdAt
+      currentUser
+      formattedDateTime
       from {
         id
         fullName
-        organisation
+        firstLetter
       }
-      chat {
-        id
-        name
-      }
-      content
-      createdAt
+      sent
+      showUser
+      paddingTop
+      type
       images {
         id
         url
@@ -34498,7 +34508,12 @@ export const MessagesSubscriptionDocument = gql`
       offenders {
         id
         updatedAt
+        age
+        build
+        dateOfBirth
         name
+        race
+        gender
         images {
           id
           url
@@ -37679,7 +37694,7 @@ export const UserChatsDocument = gql`
           name
           firstLetter
           totalMembers
-          messages {
+          messages(first: 1, orderBy: [{ createdAt: desc }]) {
             id
             content
             createdAt

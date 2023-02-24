@@ -7,13 +7,8 @@ import useViewMessages from './useViewMessage';
 interface Props {
   chatId: string;
   updateUserChatList: MutationUpdaterFn<DeleteChatMutation>;
-  userChatRefetch: () => void;
 }
-const ViewMessages = ({
-  chatId,
-  updateUserChatList,
-  userChatRefetch,
-}: Props): JSX.Element => {
+const ViewMessages = ({ chatId, updateUserChatList }: Props): JSX.Element => {
   const {
     onSubmit,
     chatData,
@@ -53,7 +48,7 @@ const ViewMessages = ({
     data,
     messageSent,
     setMessageSent,
-  } = useViewMessages({ chatId, updateUserChatList, userChatRefetch });
+  } = useViewMessages({ chatId, updateUserChatList });
 
   return (
     <View

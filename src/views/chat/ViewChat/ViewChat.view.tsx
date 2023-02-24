@@ -38,7 +38,6 @@ interface Props {
   updateAddUserChat: MutationUpdaterFn<CreateChatMutation>;
   updateDeletedUserChat: MutationUpdaterFn<DeleteChatMutation>;
   adminRights: boolean;
-  refetch: () => void;
   loading: boolean;
 }
 
@@ -62,7 +61,6 @@ const ViewOffender = ({
   toggleAddChat,
   updateAddUserChat,
   updateDeletedUserChat,
-  refetch,
   loading,
   adminRights,
 }: Props): JSX.Element => {
@@ -246,7 +244,6 @@ const ViewOffender = ({
             <ViewMessage
               chatId={chatId}
               updateUserChatList={updateDeletedUserChat}
-              userChatRefetch={refetch}
             />
           ) : (
             <Empty

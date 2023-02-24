@@ -22,6 +22,9 @@ import {
   ChatMessagesDocument,
   ChatMessagesQueryVariables,
   MessageItemType,
+  UserChatsQuery,
+  UserChatsQueryVariables,
+  UserChatsDocument,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import {
@@ -33,10 +36,11 @@ import {
   Upload,
   Mentions,
 } from 'antd';
-import { MutationUpdaterFn } from '@apollo/client';
+import { MutationUpdaterFn, useApolloClient } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import moment from 'moment';
+import update from 'immutability-helper';
 
 const { confirm } = Modal;
 const { getMentions } = Mentions;
@@ -45,7 +49,6 @@ const { useForm } = Form;
 interface Props {
   chatId: string;
   updateUserChatList: MutationUpdaterFn<DeleteChatMutation>;
-  userChatRefetch: () => void;
 }
 export interface OffenderData {
   id: string;
@@ -130,11 +133,9 @@ interface Return {
   setMessageSent: (value: boolean) => void;
 }
 
-const useViewMessages = ({
-  chatId,
-  updateUserChatList,
-  userChatRefetch,
-}: Props): Return => {
+const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
+  const apolloStore = useApolloClient();
+
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
   const userFullName = useStoreState((state) => state.user.fullName);
@@ -256,6 +257,74 @@ const useViewMessages = ({
         chat: chatId,
       },
       updateQuery: (prev, { subscriptionData }) => {
+        // update chat list
+        const existingChatListData = apolloStore.readQuery<
+          UserChatsQuery,
+          UserChatsQueryVariables
+        >({
+          query: UserChatsDocument,
+          variables: {
+            where: {
+              id: userId,
+            },
+            scheme: schemeId,
+            orderBy: {
+              chat: {
+                name: SortOrder.Asc,
+              },
+            },
+          },
+        });
+        const newMessage = subscriptionData.data.chatMessages[0];
+        if (newMessage && existingChatListData?.user) {
+          const chatIndex = existingChatListData.user.chats
+            .map(({ chat }) => chat.id)
+            .indexOf(chatId);
+
+          apolloStore.writeQuery<UserChatsQuery, UserChatsQueryVariables>({
+            query: UserChatsDocument,
+            data: {
+              user: {
+                id: existingChatListData.user.id,
+                chats: update(existingChatListData.user.chats, {
+                  [chatIndex]: {
+                    chat: {
+                      messages: {
+                        $set: [
+                          {
+                            content: newMessage.content,
+                            createdAt: newMessage.createdAt,
+                            from: {
+                              fullName: newMessage.from?.fullName || '',
+                              id: newMessage.id || '',
+                            },
+                            id: newMessage.id,
+                            images: newMessage.images,
+                            incidents: newMessage.incidents,
+                            offenders: newMessage.offenders,
+                          },
+                        ],
+                      },
+                    },
+                  },
+                }),
+              },
+              __typename: 'Query',
+            },
+            variables: {
+              where: {
+                id: userId,
+              },
+              scheme: schemeId,
+              orderBy: {
+                chat: {
+                  name: SortOrder.Asc,
+                },
+              },
+            },
+          });
+        }
+
         if (prev && prev.chatMessages) {
           const test = prev.chatMessages.find(
             ({ id }) => id === subscriptionData.data.chatMessages[0]?.id
@@ -329,6 +398,77 @@ const useViewMessages = ({
         where: {
           chat: {
             id: chatId,
+          },
+        },
+      },
+    });
+
+    // update chat list
+    const existingChatListData = store.readQuery<
+      UserChatsQuery,
+      UserChatsQueryVariables
+    >({
+      query: UserChatsDocument,
+      variables: {
+        where: {
+          id: userId,
+        },
+        scheme: schemeId,
+        orderBy: {
+          chat: {
+            name: SortOrder.Asc,
+          },
+        },
+      },
+    });
+
+    if (
+      existingChatListData?.user === null ||
+      existingChatListData?.user === undefined
+    )
+      return;
+    const chatIndex = existingChatListData.user.chats
+      .map(({ chat }) => chat.id)
+      .indexOf(chatId);
+
+    store.writeQuery<UserChatsQuery, UserChatsQueryVariables>({
+      query: UserChatsDocument,
+      data: {
+        user: {
+          id: existingChatListData.user.id,
+          chats: update(existingChatListData.user.chats, {
+            [chatIndex]: {
+              chat: {
+                messages: {
+                  $set: [
+                    {
+                      content: res.createMessage.content,
+                      createdAt: res.createMessage.createdAt,
+                      from: {
+                        fullName: res.createMessage.from?.fullName || '',
+                        id: res.createMessage.id || '',
+                      },
+                      id: res.createMessage.id,
+                      images: res.createMessage.images,
+                      incidents: res.createMessage.incidents,
+                      offenders: res.createMessage.offenders,
+                    },
+                  ],
+                },
+              },
+            },
+          }),
+        },
+        __typename: 'Query',
+      },
+      variables: {
+        where: {
+          id: userId,
+        },
+        scheme: schemeId,
+        orderBy: {
+          chat: {
+            name: SortOrder.Asc,
           },
         },
       },
@@ -661,7 +801,6 @@ const useViewMessages = ({
       });
       setMessageSent(true);
       setSaving(false);
-      userChatRefetch();
       form.resetFields();
       setInputStr('');
       setFileList([]);
