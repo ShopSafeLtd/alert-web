@@ -74,7 +74,7 @@ const ViewCrimeGroup = ({
         title={`Reference: ${
           data?.crimeGroup?.reference ? data?.crimeGroup?.reference : ''
         }`}
-        // subTitle={`--${data?.crimeGroup?.id}`}
+        subTitle={`-- ${data?.crimeGroup?.alias}`}
         extra={[
           <Dropdown
             overlay={

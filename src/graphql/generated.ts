@@ -5688,7 +5688,6 @@ export type CreateCommentData = {
 };
 
 export type CreateCrimeGroupDataInput = {
-  alias?: InputMaybe<Scalars['String']>;
   offenders: OffenderCreateNestedManyWithoutCrimeGroupsInput;
   schemes: SchemeCreateNestedManyWithoutCrimeGroupsInput;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCrimeGroupInput>;
@@ -27601,6 +27600,7 @@ export type UpdateCrimeGroupMutation = {
   updateCrimeGroup?: {
     __typename?: 'CrimeGroup';
     id: string;
+    alias?: string | null;
     reference?: number | null;
     totalIncidents?: number | null;
     totalOffenders?: number | null;
@@ -31978,6 +31978,7 @@ export const UpdateCrimeGroupDocument = gql`
   ) {
     updateCrimeGroup(where: $where, data: $data) {
       id
+      alias
       reference
       totalIncidents
       totalOffenders

@@ -56,6 +56,7 @@ const useViewCrimeGroup = (): Return => {
       }
     },
   });
+
   // function
   const toggleAddOffender = () => {
     setAddOffender(!addOffender);

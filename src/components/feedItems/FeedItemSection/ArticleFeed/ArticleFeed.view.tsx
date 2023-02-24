@@ -19,7 +19,7 @@ const ImageContainer = ({ src }: { src: string }) => (
   <div
     style={{
       width: 140,
-      height: 150,
+      height: 160,
       backgroundImage: `url(${src})`,
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',

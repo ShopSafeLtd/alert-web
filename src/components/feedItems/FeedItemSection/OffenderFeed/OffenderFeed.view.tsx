@@ -33,8 +33,8 @@ interface Props {
 const ImageContainer = ({ src }: { src: string }) => (
   <div
     style={{
-      width: 180,
-      height: 200,
+      width: 140,
+      height: 160,
       backgroundImage: `url(${src})`,
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',

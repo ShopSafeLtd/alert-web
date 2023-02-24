@@ -103,6 +103,7 @@ const useAddExistingVehicle = ({
           data: {
             vehicles: {
               connect: [{ id: selected }],
+              create: undefined,
             },
             // schemes: schemeId,
           },

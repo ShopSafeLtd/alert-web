@@ -4,6 +4,7 @@ mutation updateCrimeGroup(
 ) {
   updateCrimeGroup(where: $where, data: $data) {
     id
+    alias
     reference
     totalIncidents
     totalOffenders
