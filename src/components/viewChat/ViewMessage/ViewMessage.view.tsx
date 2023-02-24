@@ -542,6 +542,9 @@ const ViewMessges = ({
               autoFocus
               style={{ height: 40 }}
               value={inputStr}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') e.preventDefault();
+              }}
               onChange={(value) => {
                 setInputStr(value);
                 const mentions = getMentions(value);
