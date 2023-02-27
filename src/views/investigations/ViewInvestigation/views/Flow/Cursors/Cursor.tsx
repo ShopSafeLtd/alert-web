@@ -11,7 +11,6 @@ interface CursorProps {
 
 const Cursor = React.memo(({ cursor, color, name }: CursorProps) => {
   const { x, y } = cursor;
-  console.log(cursor);
   return (
     <div
       style={{
