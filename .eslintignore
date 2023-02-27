@@ -22,15 +22,27 @@ src/graphql/*
 src/graphql-src/*
 src/configs/*
 src/constants/*
-src/components/shared-components/*
-src/components/util-components/*
-src/components/layout-components/*
 vite.config.ts
 jest.config.js
 src/vite-env.d.ts
 dist
 src/images/*
 src/setupTests.ts
+public
+
+
+src/components/shared-components/AntD/*
+src/components/util-components/AntD/*
+src/components/layout-components/AntD/*
+
+src/components/shared-components/*
+src/components/util-components/*
+src/components/layout-components/*
+
+// TODO: remove this
+src/components/react-flow/*
+src/components/TabbedView/*
+
 *.css
 
 src/graphql/generated/*

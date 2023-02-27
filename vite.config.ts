@@ -3,8 +3,8 @@ import react from '@vitejs/plugin-react';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 import envCompatible from 'vite-plugin-env-compatible';
-// import checker from 'vite-plugin-checker';
-import { EsLinter, linterPlugin, TypeScriptLinter } from 'vite-plugin-linter';
+import checker from 'vite-plugin-checker';
+// import { EsLinter, linterPlugin, TypeScriptLinter } from 'vite-plugin-linter';
 import removeConsole from 'vite-plugin-remove-console';
 
 // local host launch fix
@@ -25,33 +25,31 @@ export default defineConfig((configEnv) => ({
     viteTsconfigPaths(),
     svgrPlugin(),
     removeConsole(), // will remove console from prod builds, remove if testing is needed on live
-    linterPlugin({
-      include: ['./src/**/*.ts', './src/**/*.tsx'],
-      linters: [
-        new EsLinter({
-          configEnv: configEnv,
-          serveOptions: { clearCacheOnStart: true, useEslintrc: true },
-        }),
-        new TypeScriptLinter(),
-      ],
-
-      build: {
-        includeMode: 'filesInFolder',
-        disable: true,
-      },
-    }),
-    // checker({
-    //   // checks for ts and eslint errors on dev, remove if not needed/any issues such as high memory usage
-    //   typescript: true,
-    //   eslint: {
-    //     lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
+    // linterPlugin({
+    //   include: ['./src/**/*.ts', './src/**/*.tsx'],
+    //   linters: [
+    //     new EsLinter({
+    //       configEnv: configEnv,
+    //       serveOptions: { clearCacheOnStart: true, useEslintrc: true },
+    //     }),
+    //     new TypeScriptLinter(),
+    //   ],
+    //
+    //   build: {
+    //     includeMode: 'filesInFolder',
+    //     disable: true,
     //   },
     // }),
+    checker({
+      // checks for ts and eslint errors on dev, remove if not needed/any issues such as high memory usage
+      typescript: true,
+      eslint: {
+        lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
+      },
+    }),
   ],
   build: {
     outDir: 'build',
-    sourcemap: 'inline',
-    minify: 'esbuild',
   },
   resolve: {
     alias: [

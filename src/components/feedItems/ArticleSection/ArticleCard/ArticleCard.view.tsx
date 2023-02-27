@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/pro-solid-svg-icons';
+
 import { faClock, faUser } from '@fortawesome/pro-light-svg-icons';
 import moment from 'moment';
 

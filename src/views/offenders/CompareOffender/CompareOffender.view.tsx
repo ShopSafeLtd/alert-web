@@ -24,7 +24,7 @@ import { faSave, faTrash } from '@fortawesome/pro-light-svg-icons';
 import AddExisitingOffender from 'components/form-components/incident/offender/AddExistingOffender';
 import { OffenderData } from 'components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
 import useStyles from './CompareOffender.styles';
-import { Selected, OffenderField } from './useCompareIncident';
+import { OffenderField, Selected } from './useCompareIncident';
 
 const { Text, Title } = Typography;
 
@@ -98,7 +98,7 @@ const CompareIncident = ({
           </Card>
         </Col>
         <Col flex={1}>
-          <Row wrap={false} gutter={8} style={{ overflow: 'scroll' }}>
+          <Row wrap={false} gutter={8} style={{ overflow: 'auto' }}>
             {offenders.map((offender, index) => (
               <Col key={offender.id}>
                 <Row align="middle" className={classes.headerRow}>
@@ -124,18 +124,22 @@ const CompareIncident = ({
                   )}
                 </Row>
                 <Card className={classes.card} bodyStyle={{ padding: 0 }}>
-                  <Carousel>
-                    {offender.images.map((image) => (
-                      <div key={image.id} className={classes.imageContainer}>
-                        <div
-                          className={classes.image}
-                          style={{
-                            backgroundImage: `url(${image.optimised || ''})`,
-                          }}
-                        />
-                      </div>
-                    ))}
-                  </Carousel>
+                  {offender.images.length ? (
+                    <Carousel>
+                      {offender.images.map((image) => (
+                        <div key={image.id} className={classes.imageContainer}>
+                          <div
+                            className={classes.image}
+                            style={{
+                              backgroundImage: `url(${image.optimised || ''})`,
+                            }}
+                          />
+                        </div>
+                      ))}
+                    </Carousel>
+                  ) : (
+                    <div className={classes.imagePlaceholder} />
+                  )}
                   <div className={classes.field}>
                     <div className={classes.text}>
                       <Text>{offender.name}</Text>
