@@ -8,7 +8,7 @@ import {
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { OffenderData } from 'components/form-components/incident/offender/AddExisitingOffender/AddExisitingOffender.container';
+import { OffenderData } from 'components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
 
 type Offender = Exclude<ViewOffenderCompareQuery['offender'], undefined | null>;
 export type OffenderField =
