@@ -16,6 +16,7 @@ function useYjsAwareness(user: User, doc: Doc): awarenessProtocol.Awareness {
       name: user.fullName,
       color: getRandomColor(user.fullName),
     });
+
     return awareness;
   }, [user.fullName, doc]);
 }

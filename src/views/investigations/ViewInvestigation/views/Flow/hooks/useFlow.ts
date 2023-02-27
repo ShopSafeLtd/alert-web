@@ -18,6 +18,8 @@ import moment from 'moment/moment';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { YMap } from 'yjs/dist/src/internals';
+import { useUsers } from 'y-presence';
+import { WebrtcProvider } from 'y-webrtc';
 import useWebRtcProvider from './useWebRtcProvidor';
 import useNodesStateSynced from './useNodesStateSynced';
 import useEdgesStateSynced from './useEdgesStateSynced';
@@ -57,6 +59,11 @@ interface Return {
   }[];
   setSelected: (id: string) => void;
   saving: boolean;
+
+  // eslint-disable-next-line
+  users: Map<number, { [p: string]: any }>;
+  handlePointMove: (e: React.PointerEvent) => void;
+  provider: WebrtcProvider;
 }
 
 const TIMEOUT = 3000 + Math.floor(Math.random() * 7000);
@@ -131,6 +138,7 @@ const useFlow = ({ investigationId }: Props): Return => {
       );
     }
   }, [importData]);
+
   const onSave = useCallback(() => {
     if (reactFlowInstance) {
       const flow = reactFlowInstance.toObject();
@@ -328,6 +336,16 @@ const useFlow = ({ investigationId }: Props): Return => {
   //
   //   restoreFlow();
   // }, [setNodes, setViewport]);
+
+  const users = useUsers(provider.awareness);
+
+  const handlePointMove = React.useCallback((e: React.PointerEvent) => {
+    provider.awareness.setLocalStateField('cursor', {
+      x: e.clientX,
+      y: e.clientY,
+    });
+  }, []);
+
   return {
     nodes,
     onNodesChange,
@@ -348,6 +366,9 @@ const useFlow = ({ investigationId }: Props): Return => {
     offenders,
     setSelected,
     saving,
+    users,
+    handlePointMove,
+    provider,
   };
 };
 

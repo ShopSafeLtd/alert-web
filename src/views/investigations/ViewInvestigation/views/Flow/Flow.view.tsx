@@ -1,4 +1,4 @@
-import React, { DragEvent } from 'react';
+import React, { ComponentProps, DragEvent } from 'react';
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -18,10 +18,12 @@ import TextInputNode from 'components/react-flow/nodes/text-input-node';
 
 import FloatingEdge from 'components/react-flow/edges/floating-edge';
 import { LoadingOutlined } from '@ant-design/icons';
+import { WebrtcProvider } from 'y-webrtc';
 import Sidebar from './sidebar/Sidebar';
 import 'reactflow/dist/style.css';
 import './styles.css';
 import styles from './style.module.css';
+import Cursor from './Cursors/Cursor';
 
 const Status = ({ success = false }: { success: boolean }) => (
   <span className={`status ${success ? 'success' : ''}`}>&nbsp;</span>
@@ -58,6 +60,10 @@ interface FlowProps {
   }[];
   setSelected: (selected: string) => void;
   saving: boolean;
+  // eslint-disable-next-line
+  users: Map<number, { [p: string]: any }>;
+  handlePointMove: (e: React.PointerEvent) => void;
+  provider: WebrtcProvider;
 }
 
 const nodeTypes = {
@@ -87,6 +93,9 @@ const ReactFlowView = ({
   offenders,
   setSelected,
   saving,
+  users,
+  handlePointMove,
+  provider,
 }: FlowProps) => (
   <div className="page-view">
     <div className="info-box">
@@ -103,6 +112,7 @@ const ReactFlowView = ({
         Save
       </Button>
     </div>
+
     <Card
       style={{ width: '100%', height: '80vh' }}
       bodyStyle={{
@@ -121,7 +131,32 @@ const ReactFlowView = ({
           />
           {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
           {/* @ts-ignore */}
-          <div className={styles.rfWrapper} ref={wrapperRef}>
+          <div
+            className={styles.rfWrapper}
+            ref={wrapperRef}
+            onPointerMove={handlePointMove}
+          >
+            {Array.from(users.entries()).map(([key, value]) => {
+              if (key === provider.awareness.clientID) return null;
+              console.log(key, value);
+              console.log(value.cursor, value.user.color, value.user.name);
+              if (!value.cursor || !value.user.color || !value.user.name)
+                return null;
+              return (
+                <Cursor
+                  key={key}
+                  cursor={
+                    value.cursor as ComponentProps<typeof Cursor>['cursor']
+                  }
+                  color={
+                    value.user.color as ComponentProps<typeof Cursor>['color']
+                  }
+                  name={
+                    value.user.name as ComponentProps<typeof Cursor>['name']
+                  }
+                />
+              );
+            })}
             <ReactFlow
               style={{
                 width: '100%',
