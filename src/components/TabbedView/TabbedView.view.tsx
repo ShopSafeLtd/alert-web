@@ -34,6 +34,5 @@ const TabbedView = ({ children, style }: Props): JSX.Element => {
 };
 TabbedView.defaultProps = {
   style: undefined,
-  className: undefined,
 };
 export default TabbedView;

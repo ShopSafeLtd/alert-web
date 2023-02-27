@@ -33,7 +33,6 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
     priority,
     createdBy,
   } = article || {};
-  console.log('previewImage', previewImage);
 
   return (
     <Link to={`/app/article/view/${id}`}>
