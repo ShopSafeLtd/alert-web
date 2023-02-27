@@ -25,11 +25,17 @@ const ReactFlowPro = () => {
     loading,
     setSelected,
     saving,
+    users,
+    handlePointMove,
+    provider,
   } = useFlow({
     investigationId: investigationId || '',
   });
   return (
     <ReactFlowView
+      provider={provider}
+      users={users}
+      handlePointMove={handlePointMove}
       saving={saving}
       setSelected={setSelected}
       loading={loading}
