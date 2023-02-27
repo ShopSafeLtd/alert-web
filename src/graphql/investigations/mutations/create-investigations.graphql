@@ -1,0 +1,7 @@
+mutation CreateInvestigation($data: CreateInvestigationInput!) {
+    createInvestigation(data: $data) {
+        id
+        name
+        description
+    }
+}

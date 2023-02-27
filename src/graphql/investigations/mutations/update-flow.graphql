@@ -1,0 +1,31 @@
+mutation UpdateFlow($data: UpdateFlowData!, $where: UniqueId!) {
+    updateFlow(data: $data, where: $where) {
+        id
+        name
+        description
+        edges{
+            id
+            type
+            markerEnd
+            source
+            sourceHandle
+            target
+            targetHandle
+        }
+        nodes{
+            id
+            type
+            data
+            height
+            width
+            position {
+                x
+                y
+            }
+            positionAbsolute {
+                x
+                y
+            }
+        }
+    }
+}
