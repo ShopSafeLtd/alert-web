@@ -138,8 +138,6 @@ const ReactFlowView = ({
           >
             {Array.from(users.entries()).map(([key, value]) => {
               if (key === provider.awareness.clientID) return null;
-              console.log(key, value);
-              console.log(value.cursor, value.user.color, value.user.name);
               if (!value.cursor || !value.user.color || !value.user.name)
                 return null;
               return (
