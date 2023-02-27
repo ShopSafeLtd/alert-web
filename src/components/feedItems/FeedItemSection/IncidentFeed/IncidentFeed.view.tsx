@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Col, Descriptions, Row, Tag, Typography } from 'antd';
+import { Col, Row, Tag, Typography } from 'antd';
 import { FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -9,7 +9,8 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 
 import { Link } from 'react-router-dom';
-import moment from 'moment';
+
+import UpdateContent from '../UpdateContent';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -55,17 +56,6 @@ const IncidentFeed = ({
     offenders,
   } = feedItem?.incident || {};
 
-  const getContent = (content: string) =>
-    content.split(/(@\[.*?\]\(.*?\))/).map((item) => {
-      if (item.includes('@[')) {
-        return (
-          <Text strong key={item}>
-            {item.replace('@[', '').replace(/(]\(.*?\))/, '')}{' '}
-          </Text>
-        );
-      }
-      return <Text key={item}>{item}</Text>;
-    });
   return (
     <Row gutter={15} wrap={false} key={id || ''} style={{ width: '100%' }}>
       {!isNewImage && updates && updates[0]?.images[0] ? (
@@ -150,133 +140,8 @@ const IncidentFeed = ({
             </>
           ) : (
             <>
-              {updates && updates[0]?.text ? (
-                <>
-                  <Title level={4} style={{ marginBottom: 2 }} ellipsis>
-                    {subject}
-                  </Title>
-                  <Paragraph
-                    style={{ fontSize: 14 }}
-                    type="secondary"
-                    ellipsis={{ rows: 3 }}
-                  >
-                    {getContent(updates[0]?.text)}
-                  </Paragraph>
-                </>
-              ) : null}
-              {!(updates && updates[0]?.text) ? (
-                <>
-                  {updates && updates[0]?.linkedIncidents[0] ? (
-                    <Card
-                      style={{ borderRadius: 5 }}
-                      size="small"
-                      className="message-card"
-                    >
-                      <Row gutter={5} wrap={false}>
-                        <Col>
-                          {updates[0]?.linkedIncidents[0].images &&
-                          updates[0]?.linkedIncidents[0].images.length > 0 ? (
-                            <ImageContainer
-                              src={
-                                updates[0]?.linkedIncidents[0].images[0]
-                                  .optimised || ''
-                              }
-                            />
-                          ) : // <Image
-                          //   width={100}
-                          //   height={100}
-                          //   src={
-                          //     updates[0]?.linkedIncidents[0].images[0]
-                          //       .optimised || ''
-                          //   }
-                          // />
-                          null}
-                        </Col>
-                        <Col
-                          flex={1}
-                          style={{
-                            marginTop: 10,
-                            marginLeft: 5,
-                          }}
-                        >
-                          <Paragraph
-                            strong
-                            ellipsis
-                            style={{
-                              marginBottom: '0.5rem',
-                              fontSize: 15,
-                            }}
-                          >
-                            {updates[0]?.linkedIncidents[0].subject}
-                          </Paragraph>
-                          <Descriptions size="small">
-                            <Descriptions.Item label="Created At">
-                              {updates[0]?.linkedIncidents[0].dayTime}
-                            </Descriptions.Item>
-                          </Descriptions>
-                          <Paragraph
-                            type="secondary"
-                            ellipsis
-                            style={{
-                              marginBottom: '0.5rem',
-                            }}
-                          >
-                            {updates[0]?.linkedIncidents[0].description}
-                          </Paragraph>
-                        </Col>
-                      </Row>
-                    </Card>
-                  ) : null}
-                  {updates && updates[0]?.linkedOffenders[0] ? (
-                    <Card
-                      style={{ borderRadius: 5 }}
-                      size="small"
-                      className="message-card"
-                    >
-                      <Row gutter={5} wrap={false}>
-                        <Col>
-                          {updates[0]?.linkedOffenders[0].images &&
-                          updates[0]?.linkedOffenders[0].images.length > 0 ? (
-                            <ImageContainer
-                              src={
-                                updates[0]?.linkedOffenders[0].images[0]
-                                  .optimised || ''
-                              }
-                            />
-                          ) : // <Image
-                          //   width={100}
-                          //   height={100}
-                          //   src={
-                          //     updates[0]?.linkedOffenders[0].images[0]
-                          //       .optimised || ''
-                          //   }
-                          // />
-                          null}
-                        </Col>
-
-                        <Col
-                          flex={1}
-                          style={{
-                            marginTop: 10,
-                            marginLeft: 5,
-                          }}
-                        >
-                          <Title level={4}>
-                            {updates[0]?.linkedOffenders[0].name}
-                          </Title>
-                          <Descriptions size="small">
-                            <Descriptions.Item label="Last Active">
-                              {moment(
-                                updates[0]?.linkedOffenders[0].updatedAt ||
-                                  moment()
-                              ).format(`ddd MMM DD YYYY - HH:mm`)}
-                            </Descriptions.Item>
-                          </Descriptions>
-                        </Col>
-                      </Row>
-                    </Card>
-                  ) : null}
-                </>
+              {updates && updates.length ? (
+                <UpdateContent title={subject || ''} update={updates[0]} />
               ) : null}
             </>
           )}

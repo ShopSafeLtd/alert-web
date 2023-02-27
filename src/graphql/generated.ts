@@ -27305,31 +27305,36 @@ export type ArticleQuery = {
   } | null;
 };
 
-export type ArticlesQueryVariables = Exact<{
+export type ListArticlesQueryVariables = Exact<{
+  scheme: SchemeWhereUniqueInput;
   where?: InputMaybe<ArticleWhereInput>;
-  orderBy?: InputMaybe<
-    Array<ArticleOrderByWithRelationInput> | ArticleOrderByWithRelationInput
-  >;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<ArticleOrderByWithRelationInput>;
 }>;
 
-export type ArticlesQuery = {
+export type ListArticlesQuery = {
   __typename?: 'Query';
-  articles: Array<{
-    __typename?: 'Article';
-    previewImage?: string | null;
-    previewText?: string | null;
-    priority: ArticlePriority;
-    title: string;
-    updatedAt: any;
-    id: string;
-    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-    createdBy: {
-      __typename?: 'User';
-      fullName: string;
-      organisation: string;
+  listArticles: {
+    __typename?: 'ListArticles';
+    total: number;
+    articles: Array<{
+      __typename?: 'Article';
+      previewImage?: string | null;
+      previewText?: string | null;
+      priority: ArticlePriority;
+      title: string;
+      updatedAt: any;
       id: string;
-    };
-  }>;
+      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      createdBy: {
+        __typename?: 'User';
+        fullName: string;
+        organisation: string;
+        id: string;
+      };
+    }>;
+  };
 };
 
 export type CreateUserinAuth0MutationVariables = Exact<{
@@ -31135,76 +31140,96 @@ export type ArticleQueryResult = Apollo.QueryResult<
   ArticleQuery,
   ArticleQueryVariables
 >;
-export const ArticlesDocument = gql`
-  query Articles(
+export const ListArticlesDocument = gql`
+  query listArticles(
+    $scheme: SchemeWhereUniqueInput!
     $where: ArticleWhereInput
-    $orderBy: [ArticleOrderByWithRelationInput!]
+    $take: Int
+    $skip: Int
+    $order: ArticleOrderByWithRelationInput
   ) {
-    articles(where: $where, orderBy: $orderBy) {
-      previewImage
-      previewText
-      priority
-      tags {
+    listArticles(
+      where: $where
+      order: $order
+      take: $take
+      skip: $skip
+      scheme: $scheme
+    ) {
+      articles {
+        previewImage
+        previewText
+        priority
+        tags {
+          id
+          name
+        }
+        createdBy {
+          fullName
+          organisation
+          id
+        }
+        title
+        updatedAt
         id
-        name
       }
-      createdBy {
-        fullName
-        organisation
-        id
-      }
-      title
-      updatedAt
-      id
+      total
     }
   }
 `;
 
 /**
- * __useArticlesQuery__
+ * __useListArticlesQuery__
  *
- * To run a query within a React component, call `useArticlesQuery` and pass it any options that fit your needs.
- * When your component renders, `useArticlesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useListArticlesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListArticlesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useArticlesQuery({
+ * const { data, loading, error } = useListArticlesQuery({
  *   variables: {
+ *      scheme: // value for 'scheme'
  *      where: // value for 'where'
- *      orderBy: // value for 'orderBy'
+ *      take: // value for 'take'
+ *      skip: // value for 'skip'
+ *      order: // value for 'order'
  *   },
  * });
  */
-export function useArticlesQuery(
-  baseOptions?: Apollo.QueryHookOptions<ArticlesQuery, ArticlesQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ArticlesQuery, ArticlesQueryVariables>(
-    ArticlesDocument,
-    options
-  );
-}
-export function useArticlesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ArticlesQuery,
-    ArticlesQueryVariables
+export function useListArticlesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListArticlesQuery,
+    ListArticlesQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ArticlesQuery, ArticlesQueryVariables>(
-    ArticlesDocument,
+  return Apollo.useQuery<ListArticlesQuery, ListArticlesQueryVariables>(
+    ListArticlesDocument,
     options
   );
 }
-export type ArticlesQueryHookResult = ReturnType<typeof useArticlesQuery>;
-export type ArticlesLazyQueryHookResult = ReturnType<
-  typeof useArticlesLazyQuery
+export function useListArticlesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListArticlesQuery,
+    ListArticlesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ListArticlesQuery, ListArticlesQueryVariables>(
+    ListArticlesDocument,
+    options
+  );
+}
+export type ListArticlesQueryHookResult = ReturnType<
+  typeof useListArticlesQuery
 >;
-export type ArticlesQueryResult = Apollo.QueryResult<
-  ArticlesQuery,
-  ArticlesQueryVariables
+export type ListArticlesLazyQueryHookResult = ReturnType<
+  typeof useListArticlesLazyQuery
+>;
+export type ListArticlesQueryResult = Apollo.QueryResult<
+  ListArticlesQuery,
+  ListArticlesQueryVariables
 >;
 export const CreateUserinAuth0Document = gql`
   mutation createUserinAuth0($id: String!, $password: String!) {

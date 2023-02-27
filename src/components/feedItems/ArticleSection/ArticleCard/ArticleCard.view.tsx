@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Col, Row, Tag, Typography } from 'antd';
-import { ArticlePriority, ArticlesQuery } from 'graphql/generated';
+import { ArticlePriority, ListArticlesQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -12,7 +12,10 @@ const { Title, Paragraph, Text } = Typography;
 
 interface Props {
   article:
-    | Exclude<ArticlesQuery['articles'], undefined | null>[0]
+    | Exclude<
+        ListArticlesQuery['listArticles'],
+        undefined | null
+      >['articles'][0]
     | null
     | undefined;
 }
@@ -29,14 +32,11 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
     priority,
     createdBy,
   } = article || {};
+  console.log('previewImage', previewImage);
 
   return (
-    <Card
-      key={id}
-      // style={{ height: 250 }}
-      className="feedItem-card"
-    >
-      <Link to={`/app/article/view/${id}`}>
+    <Link to={`/app/article/view/${id}`}>
+      <Card key={id} className="feedItem-card">
         {previewImage ? (
           <div
             className="feedItem-card-image"
@@ -83,27 +83,25 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
           <Paragraph className="feedItem-card-desc" ellipsis={{ rows: 3 }}>
             {previewText}
           </Paragraph>
-          {/* {tags && tags.length ? (
-            <Row wrap={false} style={{ overflowX: 'auto', marginTop: 5 }}>
-              {tags.map((tag) => (
-                <Tag key={tag.id}>{tag.name}</Tag>
-              ))}
-            </Row>
-          ) : null} */}
+
           {tags && tags.length ? (
             <Row
-              wrap={false}
+              // wrap={false}
               style={{
                 overflowX: 'auto',
-                marginBottom: 10,
                 alignItems: 'flex-end',
                 alignContent: 'flex-end',
               }}
+              className="feedItem-card-tags-row"
               gutter={5}
             >
-              {tags.map((tag, i) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <Col key={i}>
+              {tags.map((tag) => (
+                <Col
+                  key={tag.id}
+                  style={{
+                    marginBottom: 5,
+                  }}
+                >
                   <Tag
                     key={tag.id}
                     className="feedItem-card-tag"
@@ -116,8 +114,8 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
             </Row>
           ) : null}
         </div>
-      </Link>
-    </Card>
+      </Card>
+    </Link>
   );
 };
 

@@ -288,13 +288,19 @@ const useUpdateBar = ({
     return !isFileDuplicate || Upload.LIST_IGNORE;
   };
   const onSubmitUpdate = () => {
-    if (updateInput) {
+    if (
+      !updateInput.length &&
+      !updateFileList.length &&
+      !updateOffenders.length &&
+      !updateIncidents?.length
+    ) {
+      message.info('The message cannot be empty!');
+    } else {
       setUpdateInput('');
       setReplyTo(null);
       setUpdateFileList([]);
       setUpdateIncidents([]);
       setUpdateOffenders([]);
-
       if (!subscribed) {
         if (incidentId) {
           subscribeToIncident({

@@ -1943,8 +1943,8 @@
 }
 .feedItem-card {
   margin: 5px 5px 10px 5px;
-  height: 360px;
-  display: flex;
+  padding: 5px;
+  height: 100%;
 }
 .feedItem-card .ant-card-body {
   position: relative;
@@ -1959,6 +1959,9 @@
   background-position: center center;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+}
+.feedItem-card .feedItem-card-tags-row {
+  align-items: flex-end;
 }
 .feedItem-card .feedItem-card-tags {
   position: absolute;

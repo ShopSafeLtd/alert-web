@@ -1,22 +1,35 @@
-query Articles(
+query listArticles(
+  $scheme: SchemeWhereUniqueInput!
   $where: ArticleWhereInput
-  $orderBy: [ArticleOrderByWithRelationInput!]
+  $take: Int
+  $skip: Int
+  $order: ArticleOrderByWithRelationInput
 ) {
-  articles(where: $where, orderBy: $orderBy) {
-    previewImage
-    previewText
-    priority
-    tags {
+  listArticles(
+    where: $where
+    order: $order
+    take: $take
+    skip: $skip
+
+    scheme: $scheme
+  ) {
+    articles {
+      previewImage
+      previewText
+      priority
+      tags {
+        id
+        name
+      }
+      createdBy {
+        fullName
+        organisation
+        id
+      }
+      title
+      updatedAt
       id
-      name
     }
-    createdBy {
-      fullName
-      organisation
-      id
-    }
-    title
-    updatedAt
-    id
+    total
   }
 }
