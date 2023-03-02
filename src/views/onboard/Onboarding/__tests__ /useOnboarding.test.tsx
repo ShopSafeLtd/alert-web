@@ -180,12 +180,6 @@ const UseOnboardingTest = () => {
     updateTermsSigned();
     updateAccountDetail({
       fullName: 'fullName',
-      businesses: [{ name: 'test', id: 'test' }],
-      building: 'building',
-      county: 'county',
-      postcode: 'postcode',
-      street: 'street',
-      townCity: 'townCity',
     });
   };
   return (

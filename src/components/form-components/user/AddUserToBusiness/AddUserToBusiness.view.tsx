@@ -55,7 +55,7 @@ const AddUserToBusiness = ({
         key: user.id,
         fullName: user.fullName,
         status: user.status,
-        business: user.businesses.length > 0 ? user.businesses[0].name : null,
+        business: user.businesses.length > 0 ? user.businesses[0] : null,
       }))}
       rowSelection={{
         type: 'checkbox',

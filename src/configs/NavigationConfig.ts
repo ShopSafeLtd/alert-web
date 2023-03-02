@@ -1,8 +1,6 @@
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
 import { Roles } from 'types';
 import {
-  faAddressCard,
-  faCar,
   faCircleExclamation,
   faClipboard,
   faClipboardList,
@@ -10,7 +8,6 @@ import {
   faCommentLines,
   faComments,
   faExclamationCircle,
-  faHome,
   faLineChart,
   faListCheck,
   faMapLocationDot,
