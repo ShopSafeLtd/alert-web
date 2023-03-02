@@ -18,6 +18,7 @@ const EditUser = ({ onClose }: Props): JSX.Element => {
     chatsData,
     chatsLoading,
     saving,
+    onSearchBusiness,
   } = useEditUser({
     onClose,
     userId,
@@ -33,6 +34,7 @@ const EditUser = ({ onClose }: Props): JSX.Element => {
       chatsData={chatsData}
       chatsLoading={chatsLoading}
       saving={saving}
+      onSearchBusiness={onSearchBusiness}
     />
   );
 };

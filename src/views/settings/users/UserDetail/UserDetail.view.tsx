@@ -8,8 +8,11 @@ import {
   Tag,
   Card,
   Descriptions,
-  Empty,
   Drawer,
+  Typography,
+  Row,
+  Col,
+  Empty,
 } from 'antd';
 import EditUser from 'components/form-components/user/EditUser';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,6 +23,7 @@ import {
   faTrash,
   faUnlockKeyhole,
 } from '@fortawesome/pro-light-svg-icons';
+import { Link } from 'react-router-dom';
 
 interface Props {
   data: UserQuery | undefined;
@@ -49,11 +53,9 @@ const userDetail = ({
       onBack={() => window.history.back()}
       title={data?.user?.fullName}
       subTitle={data?.user?.disabled && 'User Disabled'}
-      tags={<Tag color="red">{data?.user?.organisation}</Tag>}
       extra={[
         <Button
           key="4"
-          type="primary"
           disabled={saving}
           onClick={inviteConfirm}
           icon={
@@ -69,7 +71,6 @@ const userDetail = ({
         data?.user?.disabled ? (
           <Button
             key="3"
-            type="primary"
             disabled={saving}
             onClick={enableConfirm}
             icon={
@@ -85,7 +86,6 @@ const userDetail = ({
         ) : (
           <Button
             key="2"
-            type="primary"
             disabled={saving}
             onClick={disableConfirm}
             icon={
@@ -101,7 +101,6 @@ const userDetail = ({
         ),
         <Button
           key="1"
-          type="primary"
           disabled={saving}
           onClick={deleteConfirm}
           icon={
@@ -117,104 +116,94 @@ const userDetail = ({
       ]}
     />
 
-    <Card loading={loading}>
-      <div>
-        <Descriptions
-          title="Details"
-          extra={
-            <Button
-              icon={
-                <FontAwesomeIcon
-                  style={{ marginRight: 5 }}
-                  size="lg"
-                  icon={faPenToSquare}
-                />
-              }
-              onClick={toggleEditUser}
+    <Row gutter={16}>
+      <Col span={16} xxl={12}>
+        <Card loading={loading}>
+          <Descriptions
+            title="Details"
+            column={1}
+            extra={
+              <Button
+                icon={
+                  <FontAwesomeIcon
+                    style={{ marginRight: 5 }}
+                    size="lg"
+                    icon={faPenToSquare}
+                  />
+                }
+                onClick={toggleEditUser}
+              >
+                Edit Details
+              </Button>
+            }
+          >
+            <Descriptions.Item label="Full Name" style={{ paddingBottom: 8 }}>
+              {data?.user?.fullName}
+            </Descriptions.Item>
+            <Descriptions.Item label="Status" style={{ paddingBottom: 8 }}>
+              <Typography.Text
+                type={data?.user?.status === 'Enabled' ? 'success' : 'warning'}
+              >
+                {data?.user?.status}
+              </Typography.Text>
+            </Descriptions.Item>
+            <Descriptions.Item label="Business" style={{ paddingBottom: 8 }}>
+              <Link
+                to={`/app/scheme-settings/businesses/view/${data?.user?.businesses[0]?.id}`}
+              >
+                {data?.user?.businesses[0]?.name}
+              </Link>
+            </Descriptions.Item>
+            <Descriptions.Item
+              label="Email Address"
+              style={{ paddingBottom: 8 }}
             >
-              Edit Details
-            </Button>
-          }
-        >
-          <Descriptions.Item label="Full Name">
-            {data?.user?.fullName}
-          </Descriptions.Item>
-          <Descriptions.Item label="Organisation">
-            {data?.user?.organisation}
-          </Descriptions.Item>
-          <Descriptions.Item label="Email Address">
-            {data?.user?.email}
-          </Descriptions.Item>
-
-          <Descriptions.Item label="Role">
-            {data?.user?.schemes && RoleValues[data?.user?.schemes[0].role]}
-          </Descriptions.Item>
-          {data?.user?.addresses && data.user.addresses.length > 0 && (
-            <Descriptions.Item label="Address">
-              {data?.user?.addresses[0].building &&
-                `${data?.user?.addresses[0].building}, `}
-              {data?.user?.addresses[0].street &&
-                `${data?.user?.addresses[0].street}, `}
-              {data?.user?.addresses[0].townCity &&
-                `${data?.user?.addresses[0].townCity}, `}
-              {data?.user?.addresses[0].county &&
-                `${data?.user?.addresses[0].county}, `}
-              {data?.user?.addresses[0].postcode &&
-                `${data?.user?.addresses[0].postcode}`}
+              {data?.user?.email}
             </Descriptions.Item>
-          )}
-        </Descriptions>
-        <Descriptions title="Groups">
-          {data?.user?.groups && data?.user?.groups.length > 0 ? (
-            <Descriptions.Item>
-              {data?.user?.groups.map(({ name, id }) => (
-                <Tag color="blue" key={id}>
-                  {name}
-                </Tag>
-              ))}
+            <Descriptions.Item label="Role" style={{ paddingBottom: 8 }}>
+              {data?.user?.schemes && RoleValues[data?.user?.schemes[0].role]}
             </Descriptions.Item>
-          ) : (
-            <Descriptions.Item>
-              <Empty
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                style={{ marginTop: -2, marginLeft: 5 }}
-                description="No Data"
-              />
+            <Descriptions.Item label="Groups">
+              <Row gutter={[0, 8]}>
+                {data?.user?.groups.map(({ name, id }) => (
+                  <Col key={id}>
+                    <Tag color="blue">{name}</Tag>
+                  </Col>
+                )) || 'No Groups'}
+              </Row>
             </Descriptions.Item>
-          )}
-        </Descriptions>
-        <Descriptions title="Chat Groups">
-          {data?.user?.chats && data?.user?.chats.length > 0 ? (
-            <Descriptions.Item>
-              {data?.user?.chats
-                .map(({ chat }) => chat)
-                .map(({ name, id }) => (
-                  <Tag color="blue" key={id}>
-                    {name}
-                  </Tag>
-                ))}
+            <Descriptions.Item label="Chat Groups">
+              <Row gutter={[0, 8]}>
+                {data?.user?.chats
+                  .map(({ chat }) => chat)
+                  .map(({ name, id }) => (
+                    <Col key={id}>
+                      <Tag color="blue">{name}</Tag>
+                    </Col>
+                  )) || 'No Chat Groups'}
+              </Row>
             </Descriptions.Item>
-          ) : (
-            <Descriptions.Item>
-              <Empty
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                style={{ marginTop: -5, marginLeft: 10 }}
-                description="No Data"
-              />
-            </Descriptions.Item>
-          )}
-        </Descriptions>
-      </div>
-
-      <Drawer
-        title="Edit User Details"
-        visible={editUser}
-        width="800"
-        onClose={toggleEditUser}
-      >
-        {editUser ? <EditUser onClose={toggleEditUser} /> : <div />}
-      </Drawer>
-    </Card>
+          </Descriptions>
+        </Card>
+      </Col>
+      <Col span={8} xxl={12}>
+        <Card>
+          <Typography.Title level={4}>Recent Activity</Typography.Title>
+          <Empty
+            description="No Activity"
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+          />
+        </Card>
+      </Col>
+    </Row>
+    <Drawer
+      title="Edit User Details"
+      visible={editUser}
+      width="800"
+      onClose={toggleEditUser}
+    >
+      {editUser ? <EditUser onClose={toggleEditUser} /> : <div />}
+    </Drawer>
   </div>
 );
 

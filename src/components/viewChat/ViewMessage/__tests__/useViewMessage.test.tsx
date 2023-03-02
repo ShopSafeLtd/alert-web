@@ -49,7 +49,7 @@ const mocks = [
           from: {
             id: 'userId',
             fullName: 'fullName',
-            organisation: 'organisation',
+            businesses: [{ name: 'user business', id: '' }],
           },
           chat: { id: 'chatId', name: 'chatName' },
           images: [],
@@ -78,7 +78,7 @@ const mocks = [
             from: {
               id: 'userId',
               fullName: 'fullName',
-              organisation: 'organisation',
+              businesses: [{ name: 'user business', id: '' }],
             },
             chat: { id: 'chatId', name: 'chatName' },
             images: [],
@@ -112,7 +112,7 @@ const mocks = [
                 id: 'test userId',
                 firstLetter: 't',
                 fullName: 'test user',
-                organisation: 'test organisation',
+                businesses: [{ name: 'user business', id: '' }],
               },
             },
           ],
@@ -139,7 +139,7 @@ const mocks = [
             from: {
               id: 'userId',
               fullName: 'fullName',
-              organisation: 'organisation',
+              businesses: [{ name: 'user business', id: '' }],
             },
             chat: { id: 'chatId', name: 'chatName' },
             images: [],
@@ -168,7 +168,7 @@ const mocks = [
             from: {
               id: 'userId',
               fullName: 'fullName',
-              organisation: 'organisation',
+              businesses: [{ name: 'user business', id: '' }],
             },
             chat: { id: 'chatId', name: 'chatName' },
           },
@@ -182,7 +182,6 @@ const UseViewMessageTest = () => {
   const { loading, chatData, setInputStr, onSubmit } = useViewMessage({
     chatId: 'chatId',
     updateUserChatList: jest.fn(),
-    userChatRefetch: jest.fn(),
   });
   const Chat = chatData && (
     <div key={chatData.chat?.id}>

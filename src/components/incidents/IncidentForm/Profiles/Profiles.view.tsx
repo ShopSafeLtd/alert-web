@@ -107,7 +107,7 @@ const Profiles = ({
   offenderImgChange,
 }: Props): JSX.Element => (
   <>
-    <Row gutter={10} align="middle" style={{ marginTop: 70, marginBottom: 20 }}>
+    <Row gutter={10} align="middle">
       <Col>
         <Title style={{ marginBottom: 0 }} level={4}>
           {`${titleOrder}.`}
@@ -115,7 +115,7 @@ const Profiles = ({
       </Col>
       <Col>
         <Title style={{ marginBottom: 0 }} level={4}>
-          Profiles
+          Which profiles were involved?
         </Title>
       </Col>
       <Col style={{ marginRight: 20 }}>
@@ -576,7 +576,7 @@ const Profiles = ({
                 style={{ fontSize: 14, fontWeight: 500 }}
                 type="secondary"
               >
-                Add Recently Active Offenders
+                Recently Active Offenders
               </Paragraph>
             )}
             {recentOffenderLoading ? (

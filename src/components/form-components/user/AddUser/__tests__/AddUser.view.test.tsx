@@ -27,6 +27,8 @@ describe('Detail Officer View', () => {
         onValuesChange={jest.fn()}
         existingUser={false}
         form={form}
+        onSearchBusiness={jest.fn()}
+        businessProvided={false}
       />
     );
   };

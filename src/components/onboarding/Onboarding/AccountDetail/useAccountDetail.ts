@@ -4,12 +4,6 @@ import { useNavigate } from 'react-router-dom';
 
 interface AccountData {
   fullName: string;
-  organisation: string;
-  postcode: string;
-  street: string;
-  townCity: string;
-  building: string | null;
-  county: string | null;
 }
 interface Props {
   update: (value: AccountData | undefined) => void;

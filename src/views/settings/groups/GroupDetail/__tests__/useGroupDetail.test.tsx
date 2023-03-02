@@ -28,7 +28,7 @@ const mocks = [
             {
               id: 'test userId',
               fullName: 'test user',
-              organisation: 'test organisation',
+              businesses: [{ name: 'test business', id: '' }],
             },
           ],
         },
@@ -45,7 +45,7 @@ const UseGroupDetailTest = () => {
       <div key={el.id}>
         <span>{el.id}</span>
         <span>{el.fullName}</span>
-        <span>{el.organisation}</span>
+        <span>{el.businesses[0]?.name}</span>
       </div>
     ));
 

@@ -23,7 +23,12 @@ describe('List Officer View', () => {
         toggleManageChat={jest.fn()}
         chatId=""
         membersData={[
-          { id: 'id', fullName: '', organisation: '', firstLetter: '' },
+          {
+            id: 'id',
+            fullName: '',
+            businesses: [{ name: '', id: '' }],
+            firstLetter: '',
+          },
         ]}
         inputStr=""
         setInputStr={jest.fn()}

@@ -58,7 +58,6 @@ describe('Detail Officer View', () => {
           <MockedProvider mocks={[]} addTypename={false}>
             <ViewChat
               loading={false}
-              refetch={jest.fn()}
               data={data}
               saving={false}
               handleMarkAsRead={jest.fn()}

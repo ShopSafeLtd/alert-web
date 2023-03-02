@@ -7,11 +7,9 @@ import { IntlProvider } from 'react-intl';
 import { ConfigProvider } from 'antd';
 import { useStoreState } from 'state';
 import { useAuth } from 'hooks';
-import { useQuery } from '@apollo/client';
-import { UserNew, UserNewArgs, UserNewRes } from 'graphql-src/users/queries';
 import { useAuth0 } from '@auth0/auth0-react';
+import { useUserNewQuery } from 'graphql/generated';
 import Loading from '../components/loading';
-
 import PrimaryOnboarding from '../views/onboard/SetPassword';
 
 export const Views = (): JSX.Element => {
@@ -49,7 +47,7 @@ export const Views = (): JSX.Element => {
     }
   }, [isLoading]);
 
-  const { data } = useQuery<UserNewRes, UserNewArgs>(UserNew, {
+  const { data } = useUserNewQuery({
     fetchPolicy: 'network-only',
     variables: {
       id: newUserId,

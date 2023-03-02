@@ -16,7 +16,7 @@ describe('List Officer View', () => {
         deletedBy: {
           id: 'userId',
           fullName: 'Ying Luo',
-          organisation: 'ShopSafe',
+          businesses: [{ name: 'test business', id: 'test' }],
         },
         incident: {
           id: 'incidentId',
@@ -27,7 +27,7 @@ describe('List Officer View', () => {
           createdBy: {
             fullName: 'test createBy',
             id: 'cl4pe3eu91312371op4c4k2lih2',
-            organisation: 'ShopSafe',
+            businesses: [{ name: 'test business', id: 'test' }],
           },
         },
       },

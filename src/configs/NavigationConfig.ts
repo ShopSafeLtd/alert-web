@@ -19,6 +19,7 @@ import {
   faHome,
   faAddressCard,
   faCar,
+  faBuilding,
 } from '@fortawesome/pro-light-svg-icons';
 
 export interface MenuItem {
@@ -121,6 +122,14 @@ const adminOnlyItems: NavItem[] = [
         path: `${APP_PREFIX_PATH}/scheme-settings/users`,
         title: 'Users',
         icon: faUser,
+        breadcrumb: true,
+        submenu: [],
+      },
+      {
+        key: 'businesses',
+        path: `${APP_PREFIX_PATH}/scheme-settings/businesses`,
+        title: 'Businesses',
+        icon: faBuilding,
         breadcrumb: true,
         submenu: [],
       },

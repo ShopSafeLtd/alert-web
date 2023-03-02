@@ -74,7 +74,7 @@ const LinkIncident = ({
           .map((type, index) => `${index > 0 ? ' ' : ''}${type.name}`)
           .toString(),
         date: incident.dayTime,
-        location: incident.createdBy.organisation,
+        location: incident.createdBy.businesses[0]?.name,
         offenders: incident.offenders
           .map((type, index) => `${index > 0 ? ' ' : ''}${type.name}`)
           .toString(),

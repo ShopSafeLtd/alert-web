@@ -82,7 +82,7 @@ export interface OffenderData {
 interface MemberData {
   id: string;
   fullName: string;
-  organisation: string;
+  businesses: { id: string; name: string }[];
   firstLetter?: string | null;
 }
 interface Return {

@@ -31,20 +31,13 @@ const mocks = [
         user: {
           id: 'userId',
           fullName: 'test user',
-          organisation: 'ShopSafe ',
+          business: {
+            label: '',
+            value: '',
+          },
           email: 'email',
           disabled: false,
           newUser: false,
-          addresses: [
-            {
-              building: 'building',
-              county: 'Suffolk',
-              id: 'ckshi0r5f9684229l4ckxvhld8',
-              postcode: 'IP313FA',
-              street: 'Unit 2 Sandy Lane',
-              townCity: 'Badwell Ash',
-            },
-          ],
           groups: [
             {
               id: 'groupId',
@@ -113,18 +106,13 @@ const mocks = [
       query: CreateUserInDatabaseDocument,
       variables: {
         data: {
-          address: {
-            postcode: 'postcode',
-            street: 'street',
-            townCity: 'townCity',
-            building: 'building',
-            county: 'county',
-            primary: true,
-          },
           email: 'email',
           fullName: 'fullName',
           groups: [{ id: 'groupId' }],
-          organisation: 'organisation',
+          business: {
+            label: '',
+            value: '',
+          },
           role: 'USER',
           scheme: { id: 'schemeId' },
           chats: [{ id: 'chatId' }],
@@ -137,21 +125,14 @@ const mocks = [
         createUserInDatabase: {
           id: 'userId',
           fullName: 'test user',
-          organisation: 'ShopSafe ',
+          business: {
+            label: '',
+            value: '',
+          },
           email: '@shopsafe.uk',
           disabled: false,
           newUser: false,
           status: 'active',
-          addresses: [
-            {
-              building: 'building',
-              county: 'Suffolk',
-              id: 'ckshi0r5f9684229l4ckxvhld8',
-              postcode: 'IP313FA',
-              street: 'Unit 2 Sandy Lane',
-              townCity: 'Badwell Ash',
-            },
-          ],
           groups: [
             {
               id: 'groupId',
@@ -203,21 +184,14 @@ const mocks = [
         inviteExistingUser: {
           id: 'userId',
           fullName: 'test user',
-          organisation: 'ShopSafe ',
+          business: {
+            label: '',
+            value: '',
+          },
           email: '@shopsafe.uk',
           disabled: false,
           newUser: false,
           status: 'active',
-          addresses: [
-            {
-              building: 'building',
-              county: 'Suffolk',
-              id: 'ckshi0r5f9684229l4ckxvhld8',
-              postcode: 'IP313FA',
-              street: 'Unit 2 Sandy Lane',
-              townCity: 'Badwell Ash',
-            },
-          ],
           groups: [
             {
               id: 'groupId',
@@ -282,12 +256,10 @@ const UseAddUserTest = () => {
           onSubmit({
             email: 'email',
             fullName: 'fullName',
-            organisation: 'organisation',
-            postcode: 'postcode',
-            street: 'street',
-            townCity: 'townCity',
-            building: 'building',
-            county: 'county',
+            business: {
+              label: '',
+              value: '',
+            },
             role: Role.User,
             groups: ['groupId'],
             chats: ['chatId'],

@@ -59,7 +59,10 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
     createdBy {
       id
       fullName
-      organisation
+      businesses {
+        id
+        name
+      }
     }
     incidents {
       id
@@ -71,7 +74,10 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
       }
       createdBy {
         id
-        organisation
+        businesses {
+          id
+          name
+        }
       }
     }
     crimeGroups {
@@ -118,7 +124,10 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
       createdBy {
         id
         fullName
-        organisation
+        businesses {
+          id
+          name
+        }
       }
       replies {
         id
@@ -160,7 +169,10 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
         createdBy {
           id
           fullName
-          organisation
+          businesses {
+            id
+            name
+          }
         }
       }
     }

@@ -53,7 +53,7 @@ const mocks = [
         user: {
           id: 'userId',
           fullName: 'test user',
-          organisation: 'ShopSafe ',
+          businesses: [{ name: 'user business', id: '' }],
           email: '@shopsafe.uk',
           disabled: false,
           newUser: false,
@@ -156,7 +156,7 @@ const mocks = [
           },
           email: { set: 'email' },
           fullName: { set: 'fullName' },
-          organisation: { set: 'organisation' },
+          business: { connect: [{ id: 'id' }] },
           schemes: {
             update: [
               {
@@ -200,7 +200,7 @@ const mocks = [
         updateUser: {
           id: 'userId',
           fullName: 'test user',
-          organisation: 'ShopSafe ',
+          businesses: [{ name: 'user business', id: '' }],
           email: '@shopsafe.uk',
           disabled: false,
           newUser: false,
@@ -299,12 +299,10 @@ const UseEditUserTest = () => {
             fullName: 'fullName',
             email: 'email',
             role: Role.User,
-            organisation: 'organisation',
-            postcode: 'postcode',
-            street: 'street',
-            townCity: 'townCity',
-            building: 'building',
-            county: 'county',
+            business: {
+              value: '',
+              label: '',
+            },
             groups: ['groupId'],
             chats: ['chatId'],
           })

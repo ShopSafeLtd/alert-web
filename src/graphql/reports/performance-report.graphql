@@ -20,7 +20,10 @@ query PerformanceReport($where: SchemeWhereUniqueInput!) {
     topContributors {
       id
       fullName
-      organisation
+      businesses {
+        id
+        name
+      }
       incidentsCreated
       offendersCreated
       updatesCreated

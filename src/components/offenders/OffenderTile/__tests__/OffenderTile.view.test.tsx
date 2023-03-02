@@ -8,7 +8,7 @@ describe('List Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <OffenderTile
-          offender={{ name: 'offenderName', images: [] }}
+          offender={{ id: '', name: 'offenderName', images: [] }}
           onClick={jest.fn()}
         />
       </MemoryRouter>

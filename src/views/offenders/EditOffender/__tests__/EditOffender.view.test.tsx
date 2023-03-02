@@ -27,7 +27,7 @@ describe('List Officer View', () => {
       createdBy: {
         fullName: 'aaa',
         id: 'cl4pe3eu91312371op4c4k2lih2',
-        organisation: 'ShopSafe',
+        businesses: [{ name: 'test business', id: '' }],
       },
       tags: [{ id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling ' }],
       groups: [{ id: 'ckqtnb4r056540229myw4yk8zvq', name: 'NightSafe' }],
@@ -40,6 +40,7 @@ describe('List Officer View', () => {
       ],
       incidents: [],
       bans: [],
+      vehicles: [],
     },
   };
 
@@ -86,6 +87,28 @@ describe('List Officer View', () => {
           setAgeCheck={jest.fn()}
           reviewed={false}
           onReject={jest.fn()}
+          addExistingCrimeGroup
+          addExistingVehicle
+          addNewCrimeGroup
+          addNewVehicle
+          crimeGroupsData={[]}
+          editCrimeGroupId="test"
+          editVehicleId="test"
+          listCrimeGroupsData={{
+            listCrimeGroups: { crimeGroups: [], total: 0 },
+          }}
+          listVehiclesData={{ listVehicles: { total: 0, vehicles: [] } }}
+          removeCrimeGroup={jest.fn()}
+          removeVehicle={jest.fn()}
+          setEditCrimeGroupId={jest.fn()}
+          setEditVehicleId={jest.fn()}
+          toggleAddExistingCrimeGroup={jest.fn()}
+          toggleAddExistingVehicle={jest.fn()}
+          toggleAddNewCrimeGroup={jest.fn()}
+          toggleAddNewVehicle={jest.fn()}
+          updateCrimeGroupsData={jest.fn()}
+          updateVehiclesData={jest.fn()}
+          vehiclesData={[]}
         />
       </MemoryRouter>
     );

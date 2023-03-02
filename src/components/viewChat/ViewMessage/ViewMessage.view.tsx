@@ -82,7 +82,7 @@ interface OffenderData {
 interface MemberData {
   id: string;
   fullName: string;
-  organisation: string;
+  businesses: { id: string; name: string }[];
   firstLetter?: string | null;
 }
 
@@ -564,9 +564,9 @@ const ViewMessges = ({
               }}
               prefix="@"
             >
-              {membersData?.map(({ id, fullName, organisation }) => (
+              {membersData?.map(({ id, fullName, businesses }) => (
                 <Option key={id} value={fullName.replace(' ', '_')}>
-                  {fullName} ({organisation})
+                  {fullName} ({businesses[0]?.name})
                 </Option>
               ))}
             </Mentions>

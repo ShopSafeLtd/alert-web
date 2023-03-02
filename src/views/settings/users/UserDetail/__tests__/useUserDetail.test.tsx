@@ -38,7 +38,7 @@ const mocks = [
         user: {
           id: 'userId',
           fullName: 'test user',
-          organisation: 'ShopSafe ',
+          businesses: [{ name: 'test business', id: 'test' }],
           email: '@shopsafe.uk',
           disabled: false,
           newUser: false,

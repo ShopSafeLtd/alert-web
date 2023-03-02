@@ -9,7 +9,7 @@ describe('Detail Officer View', () => {
     user: {
       id: 'test UserId',
       fullName: 'test user',
-      organisation: 'ShopSafe ',
+      businesses: [],
       email: '@shopsafe.uk',
       disabled: false,
       newUser: false,

@@ -40,7 +40,7 @@ const mocks = [
               createdBy: {
                 fullName: 'aaa',
                 id: 'cl4pe3eu91312371op4c4k2lih2',
-                organisation: 'ShopSafe',
+                businesses: [{ name: 'user business', id: '' }],
               },
               crimeTypes: [
                 { id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling' },

@@ -12,6 +12,9 @@ import {
   Model,
   QueryMode,
   Role,
+  SearchBusinessesDocument,
+  SearchBusinessesQuery,
+  SearchBusinessesQueryVariables,
   SortOrder,
   TagsDocument,
   TagsQuery,
@@ -23,20 +26,14 @@ import {
   useSchemeGroupsQuery,
   useTagsQuery,
 } from 'graphql/generated';
-import { LocationOptions } from 'types/enums';
 import { Form, FormInstance, message, Modal, notification, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import { MutationUpdaterFn } from '@apollo/client';
+import { MutationUpdaterFn, useApolloClient } from '@apollo/client';
 import update from 'immutability-helper';
 import { UploadChangeParam } from 'antd/lib/upload';
 import { useNavigate } from 'react-router-dom';
-import {
-  CrimeGroupData,
-  LocationData,
-  OffenderData,
-  VehicleData,
-} from 'types/DataType';
+import { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
 
 const { confirm } = Modal;
 const { useForm } = Form;
@@ -54,7 +51,10 @@ interface FormData {
   policeReported?: boolean;
   policeInvolved?: boolean;
   policeRef?: string;
-  fullAddress: string;
+  business: {
+    label: React.ReactNode;
+    value: string;
+  };
   groups: string[];
   tags: string[];
   images?: { id: string; url: string; optimised: string }[];
@@ -91,12 +91,6 @@ interface Return {
   toggleAddExistingOffender: () => void;
   updateOffendersData: (value: OffenderData) => void;
   offendersData: OffenderData[];
-  addPreviousLocation: boolean;
-  toggleAddPreviousLocation: () => void;
-  updatePreviousLocation: (value: string | undefined) => void;
-  addNewLocation: boolean;
-  toggleAddNewLocation: () => void;
-  updateNewLocation: (value: LocationData | undefined) => void;
   recentOffenderData: ListOffendersQuery | undefined;
   recentOffenderLoading: boolean;
   addRecentOffender: Offender | null;
@@ -142,13 +136,19 @@ interface Return {
   setEditCrimeGroupId: (value: string) => void;
   crimeGroupsData: CrimeGroupData[];
   updateCrimeGroupsData: (value: CrimeGroupData) => void;
+  onSearchBusiness: (
+    value: string
+  ) => Promise<{ label: React.ReactNode; value: string }[]>;
 }
 
 const useEditIncident = (): Return => {
   const [form] = useForm<FormData>();
+  const client = useApolloClient();
+
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
   const groups = useStoreState((state) => state.user.groups);
+  const businesses = useStoreState((state) => state.user.businesses);
   const role = useStoreState((state) => state.user.role);
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
@@ -176,14 +176,6 @@ const useEditIncident = (): Return => {
   const [fileList, setFileList] = useState<Image[]>([]);
   const [newImage, setNewImage] = useState<Image | null>(null);
 
-  const [option, setOption] = useState<LocationOptions>(
-    LocationOptions.ACCOUNT
-  );
-  const [newLocation, setNewLocation] = useState<LocationData | undefined>();
-  const [previousId, setPreviousId] = useState<string>('');
-  const [addNewLocation, setAddNewLocation] = useState(false);
-  const [addPreviousLocation, setAddPreviousLocation] = useState(false);
-
   const [addNewCrimeGroup, setAddNewCrimeGroup] = useState(false);
   const [addExistingCrimeGroup, setAddExistingCrimeGroup] = useState(false);
   const [editCrimeGroupId, setEditCrimeGroupId] = useState<string>('');
@@ -205,6 +197,16 @@ const useEditIncident = (): Return => {
       setEditedOffender(undefined);
     }
   }, [editedOffender]);
+
+  useEffect(() => {
+    if (businesses.length > 0)
+      form.setFieldsValue({
+        business: {
+          label: businesses[0].name,
+          value: businesses[0].id,
+        },
+      });
+  }, [businesses]);
 
   const navigate = useNavigate();
 
@@ -430,12 +432,6 @@ const useEditIncident = (): Return => {
     setAddIncidentTag(!addIncidentTag);
   };
 
-  const toggleAddPreviousLocation = () => {
-    setAddPreviousLocation(!addPreviousLocation);
-  };
-  const toggleAddNewLocation = () => {
-    setAddNewLocation(!addNewLocation);
-  };
   const toggleAddOffender = () => {
     setAddOffender(!addOffender);
   };
@@ -453,34 +449,6 @@ const useEditIncident = (): Return => {
   };
   const toggleAddExistingCrimeGroup = () => {
     setAddExistingCrimeGroup(!addExistingCrimeGroup);
-  };
-  const updatePreviousLocation = (value: string | undefined) => {
-    if (value) {
-      setOption(LocationOptions.PREVIOUS);
-      setPreviousId(value);
-      const previousLocation = addressData?.addresses.find(
-        (location) => location.id === value
-      )?.full;
-      if (previousLocation) {
-        form.setFieldsValue({
-          fullAddress: previousLocation,
-        });
-      }
-    }
-  };
-
-  const updateNewLocation = (value: LocationData | undefined) => {
-    if (value) {
-      setOption(LocationOptions.NEW);
-      setNewLocation(value);
-      form.setFieldsValue({
-        fullAddress: `${value.building ? `${value.building}, ` : ''}  ${
-          value?.street
-        }, ${value?.townCity}, ${value.county ? `${value.county}, ` : ''}${
-          value?.postcode
-        }`,
-      });
-    }
   };
   const updateOffendersData = (offender: OffenderData) => {
     setOffendersData([...offendersData, offender]);
@@ -736,42 +704,6 @@ const useEditIncident = (): Return => {
       });
       setSaving(false);
     } else {
-      const getLocation = (): CreateIncidentData['location'] => {
-        if (option === LocationOptions.ACCOUNT) {
-          const location = addressData?.addresses.find(
-            ({ primary }) => primary
-          );
-          return {
-            account: true,
-            create: location
-              ? {
-                  building: location.building || null,
-                  street: location.street,
-                  townCity: location.townCity,
-                  county: location.county || null,
-                  postcode: location.postcode,
-                }
-              : undefined,
-          };
-        }
-        if (option === LocationOptions.NEW && newLocation) {
-          return {
-            account: false,
-            create: {
-              building: newLocation.building || null,
-              street: newLocation.street,
-              townCity: newLocation.townCity,
-              county: newLocation.county || null,
-              postcode: newLocation.postcode,
-            },
-          };
-        }
-
-        return {
-          account: false,
-          previous: { id: previousId },
-        };
-      };
       const getOffenders = (): CreateIncidentData['offenders'] => {
         if (offendersData && listOffendersData?.listOffenders) {
           const offendersIds = listOffendersData.listOffenders.offenders.map(
@@ -963,6 +895,9 @@ const useEditIncident = (): Return => {
             description: data.description,
             date: data.date,
             time: data.date,
+            business: {
+              id: data.business.value,
+            },
             value: data.value || null,
             recoveredValue: data.recoveredValue || null,
             policeInvolved: data.policeInvolved,
@@ -976,7 +911,6 @@ const useEditIncident = (): Return => {
             crimeTypes: data.tags.length
               ? data.tags.map((id) => ({ id }))
               : undefined,
-            location: getLocation(),
             offenders: getOffenders(),
             vehicles: getVehicles(),
             crimeGroups: getCrimeGroups(),
@@ -999,6 +933,46 @@ const useEditIncident = (): Return => {
       });
     }
   };
+
+  const onSearchBusiness = async (value: string) => {
+    if (value.length < 2) {
+      return [];
+    }
+    return client
+      .query<SearchBusinessesQuery, SearchBusinessesQueryVariables>({
+        query: SearchBusinessesDocument,
+        variables: {
+          where: {
+            name: {
+              contains: value,
+              mode: QueryMode.Insensitive,
+            },
+            schemes: {
+              some: {
+                id: {
+                  equals: schemeId,
+                },
+              },
+            },
+          },
+        },
+      })
+      .then((response) =>
+        response.data.listBusinesses.businesses.length
+          ? response.data.listBusinesses.businesses.map((item) => ({
+              label: item?.name || '',
+              value: item?.id || '',
+            }))
+          : [
+              {
+                label: 'No results found',
+                value: '',
+                disabled: true,
+              },
+            ]
+      );
+  };
+
   return {
     onSubmit,
     saving,
@@ -1027,12 +1001,6 @@ const useEditIncident = (): Return => {
     toggleAddExistingOffender,
     updateOffendersData,
     offendersData,
-    addPreviousLocation,
-    toggleAddPreviousLocation,
-    updatePreviousLocation,
-    addNewLocation,
-    toggleAddNewLocation,
-    updateNewLocation,
     form,
     recentOffenderData,
     recentOffenderLoading,
@@ -1073,6 +1041,7 @@ const useEditIncident = (): Return => {
     removeCrimeGroup,
     listVehiclesData,
     listCrimeGroupsData,
+    onSearchBusiness,
   };
 };
 

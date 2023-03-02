@@ -5,7 +5,10 @@ mutation createUserInDatabase($data: CreateUserData!,$groupWhere: GroupWhereInpu
     id
     fullName
     email
-    organisation
+    businesses {
+      id
+      name
+    }
     status
     groups(where: $groupWhere) {
       id

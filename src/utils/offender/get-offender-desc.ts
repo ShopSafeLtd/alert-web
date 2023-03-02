@@ -76,7 +76,7 @@ export const getLastOffence = (
         new Date(b.date) - new Date(a.date)
     );
     const incident = new Date(incidents[0].date).getTime();
-    const location = incidents[0]?.createdBy.organisation;
+    const location = incidents[0]?.createdBy.businesses[0]?.name;
 
     const now = Date.now();
 

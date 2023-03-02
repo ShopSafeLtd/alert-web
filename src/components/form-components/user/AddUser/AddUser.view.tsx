@@ -10,19 +10,18 @@ import {
   Select,
   Typography,
 } from 'antd';
+import DebounceSelect from 'components/form-components/DebounceSelect';
 
 const { Title } = Typography;
 
 interface FormData {
   fullName: string;
   email: string;
-  organisation: string;
+  business: {
+    value: string;
+    label: string;
+  };
   role: Role;
-  postcode: string;
-  street: string;
-  townCity: string;
-  building: string;
-  county: string;
   groups: string[];
   chats: string[];
 }
@@ -39,6 +38,10 @@ interface Props {
   onValuesChange: (changedValues: any, values: FormData) => void;
   form: FormInstance<FormData>;
   existingUser: boolean;
+  onSearchBusiness: (
+    value: string
+  ) => Promise<{ label: React.ReactNode; value: string }[]>;
+  businessProvided: boolean;
 }
 
 const AddUser = ({
@@ -51,15 +54,19 @@ const AddUser = ({
   chatsLoading,
   saving,
   onValuesChange,
-
+  onSearchBusiness,
   existingUser,
+  businessProvided,
 }: Props): JSX.Element => (
   <Form<FormData>
     form={form}
     initialValues={{
       fullName: '',
       email: '',
-      organisation: '',
+      business: {
+        value: '',
+        label: '',
+      },
       role: Role.User,
       postcode: '',
       street: '',
@@ -109,16 +116,23 @@ const AddUser = ({
     <Row gutter={16}>
       <Col span={12}>
         <Form.Item
-          name="organisation"
-          label="Organisation"
+          name="business"
+          label="Business"
           rules={[
             {
               required: true,
-              message: 'Please enter a organisation for the new user.',
+              message: 'Please select a business for the new user.',
             },
           ]}
         >
-          <Input readOnly={existingUser} disabled={saving} />
+          <DebounceSelect
+            showSearch
+            allowClear
+            disabled={saving || existingUser || businessProvided}
+            placeholder="Search for a business..."
+            fetchOptions={onSearchBusiness}
+            style={{ width: '100%' }}
+          />
         </Form.Item>
       </Col>
       <Col span={12}>
@@ -131,50 +145,35 @@ const AddUser = ({
         >
           <Select disabled={saving}>
             <Select.Option key={Role.User} value={Role.User}>
-              User
+              <Typography.Text>User</Typography.Text>
+              <Typography.Paragraph
+                type="secondary"
+                style={{ fontSize: 13, margin: 0 }}
+              >
+                A basic user account that all submitting data but <br /> no
+                admin features.
+              </Typography.Paragraph>
             </Select.Option>
             <Select.Option key={Role.ContentAdmin} value={Role.ContentAdmin}>
-              Content Admin
+              <Typography.Text>Content Admin</Typography.Text>
+              <Typography.Paragraph
+                type="secondary"
+                style={{ fontSize: 13, margin: 0, fontWeight: 400 }}
+              >
+                An account that allows for submitting and administering <br />{' '}
+                data but no access to settings.
+              </Typography.Paragraph>
             </Select.Option>
             <Select.Option key={Role.SchemeAdmin} value={Role.SchemeAdmin}>
-              Scheme Admin
+              <Typography.Text>Scheme Admin</Typography.Text>
+              <Typography.Paragraph
+                type="secondary"
+                style={{ fontSize: 13, margin: 0 }}
+              >
+                Full administrator account with access to all settings.
+              </Typography.Paragraph>
             </Select.Option>
           </Select>
-        </Form.Item>
-      </Col>
-    </Row>
-
-    <Title level={4} style={{ marginBottom: 15 }}>
-      User Address:
-    </Title>
-    <Row gutter={16}>
-      <Col span={8}>
-        <Form.Item name="building" label="Building">
-          <Input disabled={saving} />
-        </Form.Item>
-      </Col>
-      <Col span={8}>
-        <Form.Item name="street" label="Street">
-          <Input disabled={saving} />
-        </Form.Item>
-      </Col>
-    </Row>
-    <Row gutter={16}>
-      <Col span={8}>
-        <Form.Item name="townCity" label="Town/City">
-          <Input disabled={saving} />
-        </Form.Item>
-      </Col>
-      <Col span={8}>
-        <Form.Item name="county" label="County">
-          <Input disabled={saving} />
-        </Form.Item>
-      </Col>
-    </Row>
-    <Row gutter={60}>
-      <Col span={8}>
-        <Form.Item name="postcode" label="Postcode">
-          <Input disabled={saving} />
         </Form.Item>
       </Col>
     </Row>

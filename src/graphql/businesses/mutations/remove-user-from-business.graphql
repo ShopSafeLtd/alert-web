@@ -1,0 +1,24 @@
+mutation RemoveUserFromBusiness(
+  $data: UserWhereUniqueInput!
+  $where: BusinessWhereUniqueInput!
+  $schemeWhere: SchemeWhereUniqueInput!
+  $groupWhere: GroupWhereInput
+) {
+  removeUserFromBusiness(
+    data: $data
+    where: $where
+    schemeWhere: $schemeWhere
+  ) {
+    id
+    name
+    users {
+      id
+      fullName
+      status
+      groups(where: $groupWhere) {
+        id
+        name
+      }
+    }
+  }
+}

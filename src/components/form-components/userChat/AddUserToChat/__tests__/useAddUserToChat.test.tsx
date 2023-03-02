@@ -34,9 +34,13 @@ const mocks = [
               },
             },
             {
-              organisation: {
-                contains: '',
-                mode: QueryMode.Insensitive,
+              businesses: {
+                some: {
+                  name: {
+                    contains: '',
+                    mode: QueryMode.Insensitive,
+                  },
+                },
               },
             },
           ],
@@ -61,7 +65,7 @@ const mocks = [
             fullName: 'testUser',
             firstLetter: 't',
             email: 'user email',
-            organisation: 'user organisation',
+            businesses: [{ name: 'user business', id: '' }],
             status: 'enabled',
             groups: [{ id: 'groupId', name: 'test group' }],
           },
@@ -84,7 +88,7 @@ const UseAddUserToChatTest = () => {
       <div key={el.id}>
         <span>{el.id}</span>
         <span>{el.fullName}</span>
-        <span>{el.organisation}</span>
+        <span>{el.businesses[0]?.name}</span>
       </div>
     ));
   return (

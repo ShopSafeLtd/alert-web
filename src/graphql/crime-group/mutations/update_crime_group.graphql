@@ -45,7 +45,10 @@ mutation updateCrimeGroup(
       dayTime
       createdBy {
         id
-        organisation
+        businesses {
+          id
+          name
+        }
       }
       value
       recoveredValue

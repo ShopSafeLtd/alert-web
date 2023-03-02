@@ -30,14 +30,17 @@ query incidentFeed(
     }
     approved
     uploaded
-    location {
+    business {
       id
-      full
+      name
     }
     createdBy {
       id
       fullName
-      organisation
+      businesses {
+        id
+        name
+      }
     }
     images {
       id

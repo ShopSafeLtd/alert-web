@@ -3,7 +3,10 @@ mutation inviteExistingUser($data: UserUpdateInput!, $where: UniqueId!, $groupWh
     id
     fullName
     email
-    organisation
+    businesses {
+      id
+      name
+    }
     status
     groups(where: $groupWhere) {
       id

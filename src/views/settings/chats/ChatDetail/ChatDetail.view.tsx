@@ -80,17 +80,17 @@ const ChatDetail = ({
             ),
           },
           {
-            key: 'organisation',
-            title: 'Organisation',
-            dataIndex: 'organisation',
+            key: 'business',
+            title: 'Business',
+            dataIndex: 'business',
           },
         ]}
         dataSource={data?.chat?.members
           .map(({ user }) => user)
-          .map(({ id, fullName, organisation }) => ({
+          .map(({ id, fullName, businesses }) => ({
             key: id,
             name: fullName,
-            organisation,
+            business: businesses[0]?.name,
           }))}
       />
 

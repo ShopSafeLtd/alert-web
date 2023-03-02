@@ -31,7 +31,7 @@ const mocks = [
             deletedBy: {
               id: 'userId',
               fullName: 'test user',
-              organisation: 'ShopSafe',
+              businesses: [{ name: 'test business', id: 'test' }],
             },
             incident: {
               id: 'incidentId',
@@ -42,7 +42,7 @@ const mocks = [
               createdBy: {
                 fullName: 'test createBy',
                 id: 'cl4pe3eu91312371op4c4k2lih2',
-                organisation: 'ShopSafe',
+                businesses: [{ name: 'test business', id: 'test' }],
               },
             },
           },

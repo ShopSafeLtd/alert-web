@@ -134,9 +134,9 @@ const PerformanceReport = ({ data, loading }: Props) => {
                   title: 'Name',
                 },
                 {
-                  key: 'organisation',
-                  dataIndex: 'organisation',
-                  title: 'Organisation',
+                  key: 'business',
+                  dataIndex: 'business',
+                  title: 'Business',
                 },
                 {
                   key: 'incidentsCreated',
@@ -167,7 +167,7 @@ const PerformanceReport = ({ data, loading }: Props) => {
               dataSource={data?.scheme?.topContributors?.map((user) => ({
                 key: user.id,
                 fullName: user.fullName,
-                organisation: user.organisation,
+                business: user.businesses[0]?.name,
                 incidentsCreated: user.incidentsCreated,
                 offendersCreated: user.offendersCreated,
                 updatesCreated: user.updatesCreated,

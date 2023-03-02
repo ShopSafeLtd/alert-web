@@ -42,7 +42,10 @@ mutation CreateUpdateOnIncident(
     createdBy {
       id
       fullName
-      organisation
+      businesses {
+        id
+        name
+      }
     }
     replies {
       id
@@ -84,7 +87,10 @@ mutation CreateUpdateOnIncident(
       createdBy {
         id
         fullName
-        organisation
+        businesses {
+          id
+          name
+        }
       }
     }
   }

@@ -84,7 +84,7 @@ Props): JSX.Element => {
   const [affix, setAffix] = React.useState(false);
 
   return (
-    <div className="feed-container" style={{ height: '100vh' }}>
+    <div className="feed-container" style={{ height: '100vh', padding: 15 }}>
       <Affix offsetTop={40} onChange={(affixed) => setAffix(!!affixed)}>
         <Row
           wrap={false}
@@ -447,7 +447,7 @@ Props): JSX.Element => {
                               </Text>
                             </div>
                             <Row wrap={false} style={{ marginTop: 10 }}>
-                              {incident.images && (
+                              {incident.images.length > 0 && (
                                 <Col style={{ marginRight: 10 }}>
                                   <div
                                     style={{
@@ -478,8 +478,7 @@ Props): JSX.Element => {
                                   </div>
                                   <div>
                                     <Text style={{ fontSize: 14 }}>
-                                      Created By:{' '}
-                                      {incident.createdBy?.organisation}
+                                      Business: {incident.business?.name}
                                     </Text>
                                   </div>
                                 </div>

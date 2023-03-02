@@ -3,17 +3,11 @@ import { useState } from 'react';
 import { notification } from 'antd';
 
 import { useStoreState } from 'state';
-import { useCurrentUserQuery, useUpdateUserMutation } from 'graphql/generated';
+import { useUpdateUserMutation } from 'graphql/generated';
 import { useNavigate } from 'react-router-dom';
 
 interface AccountData {
   fullName: string;
-  organisation: string;
-  postcode: string;
-  street: string;
-  townCity: string;
-  building: string | null;
-  county: string | null;
 }
 interface Return {
   onSubmit: () => void;
@@ -33,10 +27,6 @@ const useOnboarding = (): Return => {
   const [termsSigned, setTermsSigned] = useState(false);
   const [saving, setSaving] = useState(false);
   const navigate = useNavigate();
-
-  const { data: userData } = useCurrentUserQuery({
-    fetchPolicy: 'cache-and-network',
-  });
 
   const onNext = () => {
     if (current < 1) {
@@ -95,25 +85,8 @@ const useOnboarding = (): Return => {
           },
           data: {
             fullName: { set: accountDetail.fullName },
-            organisation: { set: accountDetail.organisation },
             termsSigned: { set: true },
             newUser: { set: false },
-            addresses: {
-              update: [
-                {
-                  data: {
-                    postcode: { set: accountDetail.postcode },
-                    street: { set: accountDetail.street },
-                    townCity: { set: accountDetail.townCity },
-                    building: { set: accountDetail.building || '' },
-                    county: { set: accountDetail.county || '' },
-                  },
-                  where: {
-                    id: userData?.currentUser?.addresses[0].id || '',
-                  },
-                },
-              ],
-            },
           },
           groupWhere: {
             scheme: {

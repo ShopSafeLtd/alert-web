@@ -44,13 +44,16 @@ describe('Detail Officer View', () => {
       time: '2022-08-11T10:40:09.985Z',
       dayTime: '11:40 - Wed 10, Aug 22',
       description: 'test description',
-      location: null,
+      business: {
+        id: 'test',
+        name: 'shopsafe',
+      },
       subject: 'test subject ',
       approved: null,
       createdBy: {
         fullName: 'aaa',
         id: 'cl4pe3eu91312371op4c4k2lih2',
-        organisation: 'ShopSafe',
+        businesses: [{ name: 'test business', id: '' }],
       },
       crimeTypes: [
         { id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling ' },
@@ -60,6 +63,8 @@ describe('Detail Officer View', () => {
         { id: 'cl6owsuzo33227f9pe9zk4wone', optimised: null, url: null },
       ],
       offenders: [],
+      crimeGroups: [],
+      vehicles: [],
     },
   };
   it('renders the page', () => {

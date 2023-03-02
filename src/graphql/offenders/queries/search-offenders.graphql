@@ -39,7 +39,10 @@ query searchOffenders(
       createdBy {
         id
         fullName
-        organisation
+        businesses {
+          id
+          name
+        }
       }
       lastActive {
         id

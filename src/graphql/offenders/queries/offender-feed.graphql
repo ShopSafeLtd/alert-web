@@ -62,7 +62,10 @@ query offenderFeed(
     createdBy {
       id
       fullName
-      organisation
+      businesses {
+        id
+        name
+      }
     }
   }
 }

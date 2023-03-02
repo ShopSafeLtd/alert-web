@@ -14,12 +14,6 @@ const { confirm } = Modal;
 interface FormData {
   fullName: string;
   email: string;
-  organisation: string;
-  postcode: string;
-  street: string;
-  townCity: string;
-  building: string;
-  county: string;
   incidentEmail: boolean;
   incidentPush: boolean;
   offenderEmail: boolean;
@@ -76,25 +70,8 @@ const useEditProfile = (): Return => {
             id: userId,
           },
           data: {
-            addresses: {
-              update: [
-                {
-                  data: {
-                    postcode: { set: data.postcode || '' },
-                    street: { set: data.street || '' },
-                    townCity: { set: data.townCity || '' },
-                    building: { set: data.building || '' },
-                    county: { set: data.county || '' },
-                  },
-                  where: {
-                    id: userData?.currentUser?.addresses[0].id,
-                  },
-                },
-              ],
-            },
             email: { set: data.email },
             fullName: { set: data.fullName },
-            organisation: { set: data.organisation },
             incidentEmail: { set: data.incidentEmail },
             incidentPush: { set: data.incidentPush },
             offenderEmail: { set: data.offenderEmail },

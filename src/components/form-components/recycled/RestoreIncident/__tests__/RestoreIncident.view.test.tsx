@@ -16,7 +16,7 @@ describe('List Officer View', () => {
         createdBy: {
           fullName: 'aaa',
           id: 'cl4pe3eu91312371op4c4k2lih2',
-          organisation: 'ShopSafe',
+          businesses: [{ name: 'user business', id: '' }],
         },
         location: null,
         offender: null,

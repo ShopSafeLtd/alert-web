@@ -11,9 +11,18 @@ interface Props {
   onClose: () => void;
   update: MutationUpdaterFn<CreateUserInDatabaseMutation>;
   updateSearch: MutationUpdaterFn<InviteExistingUserMutation>;
+  business?: {
+    value: string;
+    label: string;
+  };
 }
 
-const AddUser = ({ onClose, update, updateSearch }: Props): JSX.Element => {
+const AddUser = ({
+  onClose,
+  update,
+  updateSearch,
+  business,
+}: Props): JSX.Element => {
   const {
     onSubmit,
     groupsData,
@@ -24,7 +33,8 @@ const AddUser = ({ onClose, update, updateSearch }: Props): JSX.Element => {
     onValuesChange,
     form,
     existingUser,
-  } = useAddUser({ onClose, update, updateSearch });
+    onSearchBusiness,
+  } = useAddUser({ onClose, update, updateSearch, business });
 
   return (
     <View
@@ -38,6 +48,8 @@ const AddUser = ({ onClose, update, updateSearch }: Props): JSX.Element => {
       onValuesChange={onValuesChange}
       form={form}
       existingUser={existingUser}
+      onSearchBusiness={onSearchBusiness}
+      businessProvided={!!business}
     />
   );
 };

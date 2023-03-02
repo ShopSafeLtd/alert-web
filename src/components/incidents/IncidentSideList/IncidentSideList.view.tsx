@@ -62,7 +62,7 @@ const IncidentSideList = ({
                       type="secondary"
                       ellipsis
                     >
-                      {incident.createdBy.organisation}
+                      {incident.business?.name}
                     </Typography.Paragraph>
                   </Col>
                   <Col>

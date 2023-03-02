@@ -41,7 +41,7 @@ const ImageSection = ({
   removeImage,
   onPreview,
 }: Props): JSX.Element => (
-  <Row gutter={20} style={{ marginTop: 50 }}>
+  <Row gutter={20}>
     <Col>
       <Row align="middle" style={{ marginBottom: 20 }}>
         <Col>

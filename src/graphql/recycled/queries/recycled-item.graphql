@@ -6,7 +6,10 @@ query recycledItem($where: RecycledItemWhereUniqueInput!) {
       createdBy {
         id
         fullName
-        organisation
+        businesses {
+          id
+          name
+        }
       }
       date
       location {

@@ -6,7 +6,10 @@ mutation updateGroup($where: UniqueId!, $data: GroupUpdateInput!) {
     users {
       id
       fullName
-      organisation
+      businesses {
+        id
+        name
+      }
     }
   }
 }

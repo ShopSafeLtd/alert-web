@@ -46,6 +46,7 @@ import {
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
+import { Link } from 'react-router-dom';
 import IncidentSideList from 'components/incidents/IncidentSideList';
 import UpdateBar from 'components/form-components/update-bar';
 import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
@@ -306,7 +307,7 @@ const ViewIncident = ({
                         </Descriptions.Item>
                         <Descriptions.Item label={<span>Created By</span>}>
                           {`${data?.incident?.createdBy.fullName} -
-                              ${data?.incident?.createdBy.organisation}`}
+                              ${data?.incident?.createdBy.businesses[0]?.name}`}
                         </Descriptions.Item>
                         <Descriptions.Item label={<span>Value</span>}>
                           {data?.incident?.value ? '£' : ''}
@@ -324,8 +325,16 @@ const ViewIncident = ({
                         <Descriptions.Item label={<span>Police Involved</span>}>
                           {data?.incident?.policeInvolved ? 'Yes' : 'No'}
                         </Descriptions.Item>
-                        <Descriptions.Item label={<span>Location</span>}>
-                          {data?.incident?.location?.full}
+                        <Descriptions.Item label={<span>Business</span>}>
+                          {editRights ? (
+                            <Link
+                              to={`/app/scheme-settings/business/view/${data?.incident?.business?.id}`}
+                            >
+                              {data?.incident?.business?.name}
+                            </Link>
+                          ) : (
+                            data?.incident?.business?.name
+                          )}
                         </Descriptions.Item>
                       </Descriptions>
                       <div className="incident-offender-container">
@@ -779,7 +788,7 @@ const ViewIncident = ({
                                     createdBy:
                                       userId === update.createdBy.id
                                         ? 'You'
-                                        : `${update.createdBy.fullName} - ${update.createdBy.organisation}`,
+                                        : `${update.createdBy.fullName} - ${update.createdBy.businesses[0]?.name}`,
                                     id: update.id,
                                     text: update.text || '',
                                   })

@@ -46,7 +46,6 @@ function EditIncident({ reviewed }: Props): JSX.Element {
     removeImageFromOffender,
     removeImage,
     removeOffender,
-    adminRights,
     listOffendersData,
     offenderImgChange,
     editOffenderId,
@@ -72,6 +71,7 @@ function EditIncident({ reviewed }: Props): JSX.Element {
     removeCrimeGroup,
     listVehiclesData,
     listCrimeGroupsData,
+    onSearchBusiness,
   } = useEditIncident({ incidentId, reviewed });
   return (
     <div>
@@ -116,7 +116,6 @@ function EditIncident({ reviewed }: Props): JSX.Element {
         removeImageFromOffender={removeImageFromOffender}
         removeImage={removeImage}
         removeOffender={removeOffender}
-        adminRights={adminRights}
         listOffendersData={listOffendersData}
         offenderImgChange={offenderImgChange}
         addNewVehicle={addNewVehicle}
@@ -139,6 +138,7 @@ function EditIncident({ reviewed }: Props): JSX.Element {
         updateCrimeGroupsData={updateCrimeGroupsData}
         listVehiclesData={listVehiclesData}
         listCrimeGroupsData={listCrimeGroupsData}
+        onSearchBusiness={onSearchBusiness}
       />
     </div>
   );

@@ -18,6 +18,10 @@ query listUnapprovedIncidents(
       dayTime
       date
       reference
+      business {
+        id
+        name
+      }
       images {
         id
         optimised
@@ -31,7 +35,10 @@ query listUnapprovedIncidents(
       createdBy {
         id
         fullName
-        organisation
+        businesses {
+          id
+          name
+        }
       }
       groups {
         id

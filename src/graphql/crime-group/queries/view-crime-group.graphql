@@ -42,7 +42,10 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
       dayTime
       createdBy {
         id
-        organisation
+        businesses {
+          id
+          name
+        }
       }
       value
       recoveredValue

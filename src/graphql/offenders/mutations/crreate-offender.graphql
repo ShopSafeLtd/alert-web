@@ -38,7 +38,10 @@ mutation createOffender($data: CreateOffenderData!) {
     createdBy {
       id
       fullName
-      organisation
+      businesses {
+        id
+        name
+      }
     }
     incidents {
       id
@@ -57,7 +60,10 @@ mutation createOffender($data: CreateOffenderData!) {
       createdBy {
         id
         fullName
-        organisation
+        businesses {
+          id
+          name
+        }
       }
       images {
         id

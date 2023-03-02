@@ -12,7 +12,7 @@ interface FormData {
 interface MemberData {
   id: string;
   fullName: string;
-  organisation: string;
+  businesses: { name: string; id: string }[];
   firstLetter?: string | null;
 }
 interface Props {
@@ -60,9 +60,13 @@ const useAddUserToChat = ({
             },
           },
           {
-            organisation: {
-              contains: search,
-              mode: QueryMode.Insensitive,
+            businesses: {
+              some: {
+                name: {
+                  contains: search,
+                  mode: QueryMode.Insensitive,
+                },
+              },
             },
           },
         ],

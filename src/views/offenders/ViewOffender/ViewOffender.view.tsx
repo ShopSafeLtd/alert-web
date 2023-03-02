@@ -538,7 +538,7 @@ const ViewOffender = ({
                                   `${index > 0 ? ' ' : ''}${type.name}`
                               ),
                               date: incident.dayTime,
-                              location: incident.createdBy.organisation,
+                              location: incident.createdBy.businesses[0]?.name,
                               key: incident.id,
                             })
                           )}
@@ -929,7 +929,7 @@ const ViewOffender = ({
                                     createdBy:
                                       userId === update.createdBy.id
                                         ? 'You'
-                                        : `${update.createdBy.fullName} - ${update.createdBy.organisation}`,
+                                        : `${update.createdBy.fullName} - ${update.createdBy.businesses[0]?.name}`,
                                     id: update.id,
                                     text: update.text || '',
                                   })

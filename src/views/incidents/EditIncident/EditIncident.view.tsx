@@ -10,7 +10,9 @@ import {
 import {
   Button,
   Card,
+  Checkbox,
   Col,
+  DatePicker,
   Descriptions,
   Drawer,
   Form,
@@ -36,11 +38,11 @@ import moment from 'moment';
 
 import AssignImageOffender from 'components/form-components/incident/image/AssignImageOffenders';
 import { UploadChangeParam } from 'antd/lib/upload';
-import IncidentDetails from 'components/incidents/IncidentForm/IncidentDetails';
 import { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
 import Profiles from 'components/incidents/IncidentForm/Profiles';
 import ImageSection from 'components/incidents/IncidentForm/ImageSection';
 import ProfileDrawer from 'components/incidents/IncidentForm/ProfileDrawer';
+import DebounceSelect from 'components/form-components/DebounceSelect';
 
 const { Title, Paragraph } = Typography;
 
@@ -53,11 +55,10 @@ interface FormData {
   policeReported?: boolean;
   policeInvolved?: boolean;
   policeRef?: string;
-  building: string;
-  street: string;
-  townCity: string;
-  county: string;
-  postcode: string;
+  business: {
+    label: React.ReactNode;
+    value: string;
+  };
   groups: string[];
   tags: string[];
   images: [{ id: string; url: string; optimised: string }];
@@ -81,7 +82,6 @@ interface Props {
   addIncidentTag: boolean;
   addOffender: boolean;
   addRecentOffender: Offender | null;
-  adminRights: boolean;
   assignOffendersToImages: (data: {
     image: Image;
     offenders: OffenderData[];
@@ -145,6 +145,9 @@ interface Props {
   setEditCrimeGroupId: (value: string) => void;
   crimeGroupsData: CrimeGroupData[];
   updateCrimeGroupsData: (value: CrimeGroupData) => void;
+  onSearchBusiness: (
+    value: string
+  ) => Promise<{ label: React.ReactNode; value: string }[]>;
 }
 
 const EditIncident = ({
@@ -185,7 +188,6 @@ const EditIncident = ({
   removeImage,
   removeOffender,
   listOffendersData,
-  adminRights,
   offenderImgChange,
   editOffenderId,
   setEditOffenderId,
@@ -210,6 +212,7 @@ const EditIncident = ({
   removeCrimeGroup,
   listVehiclesData,
   listCrimeGroupsData,
+  onSearchBusiness,
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader
@@ -219,135 +222,193 @@ const EditIncident = ({
     {loading ? (
       <Skeleton />
     ) : (
-      <Card>
-        <Form
-          onFinish={onSubmit}
-          layout="vertical"
-          initialValues={{
-            subject: data?.incident?.subject,
-            description: data?.incident?.description,
-            date: moment(data?.incident?.date, 'YYYY-MM-DD,HH:mm:ss'),
-            value: data?.incident?.value || null,
-            recoveredValue: data?.incident?.recoveredValue || null,
-            building: data?.incident?.location?.building || '',
-            street: data?.incident?.location?.street || '',
-            townCity: data?.incident?.location?.townCity,
-            county: data?.incident?.location?.county || '',
-            postcode: data?.incident?.location?.postcode || '',
-            policeInvolved: data?.incident?.policeInvolved,
-            policeRef: data?.incident?.policeRef,
-            policeReported: data?.incident?.policeReported,
-            groups:
-              data?.incident?.groups && data?.incident?.groups.length > 0
-                ? data?.incident?.groups.map(({ id }) => id)
-                : [],
-            tags:
-              data?.incident?.crimeTypes &&
-              data?.incident?.crimeTypes.length > 0
-                ? data?.incident?.crimeTypes.map(({ id }) => id)
-                : [],
-          }}
-        >
-          <IncidentDetails
-            tags={tags}
-            tagsLoading={tagsLoading}
-            adminRights={adminRights}
-            saving={saving}
-            toggleAddIncidentTag={toggleAddIncidentTag}
-          />
-
-          <Row align="bottom" style={{ marginTop: 50, marginBottom: 20 }}>
+      <Form<FormData>
+        onFinish={onSubmit}
+        layout="vertical"
+        initialValues={{
+          subject: data?.incident?.subject,
+          description: data?.incident?.description,
+          date: moment(data?.incident?.date, 'YYYY-MM-DD,HH:mm:ss'),
+          value: data?.incident?.value || null,
+          recoveredValue: data?.incident?.recoveredValue || null,
+          business: {
+            label: data?.incident?.business?.name,
+            value: data?.incident?.business?.id,
+          },
+          policeInvolved: data?.incident?.policeInvolved,
+          policeRef: data?.incident?.policeRef,
+          policeReported: data?.incident?.policeReported,
+          groups:
+            data?.incident?.groups && data?.incident?.groups.length > 0
+              ? data?.incident?.groups.map(({ id }) => id)
+              : [],
+          tags:
+            data?.incident?.crimeTypes && data?.incident?.crimeTypes.length > 0
+              ? data?.incident?.crimeTypes.map(({ id }) => id)
+              : [],
+        }}
+      >
+        <Card style={{ marginBottom: 10 }}>
+          <Row style={{ marginBottom: 20 }}>
             <Col>
               <Title style={{ marginBottom: 0 }} level={4}>
-                2.
+                1.
               </Title>
             </Col>
             <Col>
               <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
-                Location
+                Incident Details
+              </Title>
+            </Col>
+          </Row>
+          <Form.Item
+            name="tags"
+            label="Incident Type"
+            tooltip="Select the relevant crime types for this incident, these help to categorise the incident,"
+            rules={[
+              {
+                required: true,
+                message: 'Please add at least one crime type.',
+              },
+            ]}
+          >
+            <Select
+              loading={tagsLoading}
+              disabled={saving}
+              mode="multiple"
+              maxTagCount={3}
+              placeholder="Search for a crime type..."
+            >
+              {tags.map((tag) => (
+                <Select.Option value={tag.value}>{tag.label}</Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          <Row gutter={16}>
+            <Col>
+              <Form.Item name="subject" label="Subject">
+                <Input style={{ width: 500 }} disabled={saving} />
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item
+                name="date"
+                label="Time &amp; Date"
+                tooltip="The date and time that the incident occurred."
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please select a date for the incident.',
+                  },
+                ]}
+              >
+                <DatePicker
+                  disabled={saving}
+                  disabledDate={(current) =>
+                    current && current.valueOf() > Date.now()
+                  }
+                  format="HH:mm - DD/MM/YY"
+                  showTime={{ showSecond: false, showNow: true }}
+                  placeholder="Set Date &amp; Time"
+                />
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item
+                name="business"
+                label="Business"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please select a business for the incident.',
+                  },
+                ]}
+              >
+                <DebounceSelect
+                  showSearch
+                  allowClear
+                  disabled={saving}
+                  placeholder="Search for a business..."
+                  fetchOptions={onSearchBusiness}
+                  style={{ width: 300 }}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item
+            name="description"
+            label="Description"
+            tooltip="A more detailed description of the incident."
+            rules={[
+              {
+                required: true,
+                message: 'Please enter a description for the incident.',
+              },
+            ]}
+          >
+            <Input.TextArea disabled={saving} />
+          </Form.Item>
+        </Card>
+        <Card style={{ marginBottom: 10 }}>
+          <Row align="bottom" style={{ marginBottom: 20 }}>
+            <Col>
+              <Title style={{ marginBottom: 0 }} level={4}>
+                3.
               </Title>
             </Col>
             <Col>
-              <Paragraph
-                style={{ marginBottom: 1, marginLeft: 5 }}
-                type="secondary"
-                italic
-              >
-                - Please complete the address details for the incident&apos;s
-                the Location.
-              </Paragraph>
+              <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                What goods were involved?
+              </Title>
             </Col>
           </Row>
-
-          <Row gutter={50}>
-            <Col span={8}>
-              <Form.Item
-                name="building"
-                label="Building"
-                tooltip="Please enter a building name for the incident's location."
-              >
-                <Input disabled={saving} />
-              </Form.Item>
+        </Card>
+        <Card style={{ marginBottom: 10 }}>
+          <Row align="bottom" style={{ marginBottom: 20 }}>
+            <Col>
+              <Title style={{ marginBottom: 0 }} level={4}>
+                6.
+              </Title>
             </Col>
-            <Col span={8}>
-              <Form.Item
-                name="street"
-                label="Street"
-                tooltip="Please enter a street name for the incident's location."
-                rules={[
-                  {
-                    required: true,
-                    message:
-                      "Please enter a street name for the incident's location.",
-                  },
-                ]}
-              >
-                <Input disabled={saving} />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
-                name="townCity"
-                label="Town/City"
-                tooltip="Please enter a town/city name for the incident's location."
-                rules={[
-                  {
-                    required: true,
-                    message: `Please enter a town/city for the incident's location.`,
-                  },
-                ]}
-              >
-                <Input disabled={saving} />
-              </Form.Item>
+            <Col>
+              <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                Police involvement
+              </Title>
             </Col>
           </Row>
           <Row gutter={50}>
-            <Col span={8}>
+            <Col>
               <Form.Item
-                name="county"
-                label="County"
-                tooltip="Please enter a county name for the incident's location."
+                name="policeReported"
+                valuePropName="checked"
+                tooltip="The incident has been reported to the police"
+                label="Police Involvement"
+                style={{ marginBottom: 0 }}
               >
-                <Input disabled={saving} />
+                <Checkbox disabled={saving}>Reported to the police</Checkbox>
+              </Form.Item>
+              <Form.Item
+                name="policeInvolved"
+                valuePropName="checked"
+                tooltip="The police have been involved in the incident."
+              >
+                <Checkbox disabled={saving}>Police Involved</Checkbox>
               </Form.Item>
             </Col>
-            <Col span={8}>
+
+            <Col>
               <Form.Item
-                name="postcode"
-                label="Postcode"
-                tooltip="Please enter a postcode for the incident's location."
-                rules={[
-                  {
-                    required: true,
-                    message: `Please enter a postcode for the incident's location.`,
-                  },
-                ]}
+                name="policeRef"
+                label="Crime Ref No."
+                tooltip="The crime reference number provided by the police."
               >
                 <Input disabled={saving} />
               </Form.Item>
             </Col>
           </Row>
-
+        </Card>
+        <Card style={{ marginBottom: 10 }}>
           <Profiles
             titleOrder={3}
             saving={saving}
@@ -377,6 +438,8 @@ const EditIncident = ({
             listVehiclesData={listVehiclesData}
             listCrimeGroupsData={listCrimeGroupsData}
           />
+        </Card>
+        <Card style={{ marginBottom: 10 }}>
           <ImageSection
             titleOrder={4}
             imgChange={imgChange}
@@ -387,6 +450,8 @@ const EditIncident = ({
             removeImage={removeImage}
             onPreview={onPreview}
           />
+        </Card>
+        <Card style={{ marginBottom: 10 }}>
           <Row align="bottom" style={{ marginBottom: 20 }}>
             <Col>
               <Title style={{ marginBottom: 0 }} level={4}>
@@ -440,33 +505,30 @@ const EditIncident = ({
               </Col>
             </Row>
           )}
-
-          <Form.Item>
-            <Row style={{ marginTop: 30 }} gutter={10} justify="end">
-              <Col>
-                <Button
-                  disabled={saving}
-                  onClick={() =>
-                    reviewed ? onReject() : window.history.back()
-                  }
-                >
-                  {reviewed ? 'Reject' : 'Cancel'}
-                </Button>
-              </Col>
-              <Col>
-                <Button
-                  disabled={saving}
-                  loading={saving}
-                  type="primary"
-                  htmlType="submit"
-                >
-                  {reviewed ? 'Approve' : 'Save'}
-                </Button>
-              </Col>
-            </Row>
-          </Form.Item>
-        </Form>
-      </Card>
+        </Card>
+        <Form.Item>
+          <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+            <Col>
+              <Button
+                disabled={saving}
+                onClick={() => (reviewed ? onReject() : window.history.back())}
+              >
+                {reviewed ? 'Reject' : 'Cancel'}
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                disabled={saving}
+                loading={saving}
+                type="primary"
+                htmlType="submit"
+              >
+                {reviewed ? 'Approve' : 'Save'}
+              </Button>
+            </Col>
+          </Row>
+        </Form.Item>
+      </Form>
     )}
     <Drawer
       title="Add Crime Type"

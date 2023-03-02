@@ -45,7 +45,7 @@ const IncidentFeed = ({
     images,
     dayTime,
     description,
-    location,
+    business,
     // totalUpdates,
     subject,
     // reference,
@@ -114,7 +114,7 @@ const IncidentFeed = ({
                     icon={faUser}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    {createdBy?.fullName} - {createdBy?.organisation}
+                    {createdBy?.fullName} - {createdBy?.businesses[0]?.name}
                   </Text>
                 </Col>
               </Row>
@@ -128,7 +128,7 @@ const IncidentFeed = ({
                 </Col>
                 <Col>
                   <Text style={{ fontSize: 14 }} ellipsis type="secondary">
-                    {location?.full}
+                    {business?.name}
                   </Text>
                 </Col>
               </Row>

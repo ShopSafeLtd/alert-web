@@ -234,7 +234,7 @@ const ViewVehicle = ({
               policeRef: incident?.policeRef,
               subject: incident?.subject,
               date: incident?.dayTime,
-              location: incident?.createdBy.organisation,
+              location: incident?.createdBy.businesses[0]?.name,
               value: incident?.value,
               recoveredValue: incident?.recoveredValue,
             })) || []

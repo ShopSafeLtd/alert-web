@@ -9,20 +9,10 @@ describe('Detail Officer View', () => {
     user: {
       id: 'userId',
       fullName: 'test user',
-      organisation: 'ShopSafe ',
+      businesses: [],
       email: '@shopsafe.uk',
       disabled: false,
       newUser: false,
-      addresses: [
-        {
-          building: 'building',
-          county: 'Suffolk',
-          id: 'ckshi0r5f9684229l4ckxvhld8',
-          postcode: 'IP313FA',
-          street: 'Unit 2 Sandy Lane',
-          townCity: 'Badwell Ash',
-        },
-      ],
       groups: [
         {
           id: 'groupId',
@@ -69,6 +59,7 @@ describe('Detail Officer View', () => {
           chatsData={chatsData}
           chatsLoading={false}
           saving={false}
+          onSearchBusiness={jest.fn()}
         />
       </MemoryRouter>
     );

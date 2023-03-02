@@ -1,0 +1,15 @@
+mutation UpdateBusiness($data: UpdateBusinessDataInput!, $where: BusinessWhereUniqueInput!) {
+  updateBusiness(data: $data, where: $where) {
+    id
+    name
+    parent {
+      id
+      name
+    }
+    locations {
+      id
+      full
+    }
+    totalUsers
+  }
+}

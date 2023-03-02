@@ -10,7 +10,6 @@ import useAddNewOffender from '../useAddNewOffender';
 const UseAddNewOffenderTest = () => {
   const { onSubmit } = useAddNewOffender({
     onClose: jest.fn(),
-    update: jest.fn(),
   });
 
   return (

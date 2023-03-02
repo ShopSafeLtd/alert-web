@@ -1,4 +1,9 @@
-query OffenderProfile($where: OffenderWhereUniqueInput!, $orderBy: [BanOrderByWithRelationInput!], $first: Int, $incidentsOrderBy: [IncidentOrderByWithRelationInput!]) {
+query OffenderProfile(
+  $where: OffenderWhereUniqueInput!
+  $orderBy: [BanOrderByWithRelationInput!]
+  $first: Int
+  $incidentsOrderBy: [IncidentOrderByWithRelationInput!]
+) {
   offender(where: $where) {
     age
     bans(orderBy: $orderBy) {
@@ -42,7 +47,10 @@ query OffenderProfile($where: OffenderWhereUniqueInput!, $orderBy: [BanOrderByWi
       reference
       createdBy {
         id
-        organisation
+        businesses {
+          id
+          name
+        }
       }
     }
     lastActive {
@@ -55,7 +63,10 @@ query OffenderProfile($where: OffenderWhereUniqueInput!, $orderBy: [BanOrderByWi
       }
       createdBy {
         id
-        organisation
+        businesses {
+          id
+          name
+        }
       }
       value
       recoveredValue

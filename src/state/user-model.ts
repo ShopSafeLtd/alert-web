@@ -7,7 +7,7 @@ export interface SetUserPayload {
   email: string;
   fullName: string;
   onboarded: boolean;
-  organisation: string;
+  businesses: { name: string; id: string }[];
   schemes: Scheme[];
   groups: {
     id: string;
@@ -36,7 +36,7 @@ export interface UserModel {
   email: string;
   fullName: string;
   picture: string;
-  organisation: string;
+  businesses: { name: string; id: string }[];
   onboarded: boolean;
   schemes: Scheme[];
   groups: {
@@ -55,7 +55,7 @@ const userModel: UserModel = {
   email: '',
   fullName: '',
   picture: '',
-  organisation: '',
+  businesses: [],
   onboarded: false,
   isSet: false,
   role: Role.User,
@@ -67,7 +67,7 @@ const userModel: UserModel = {
     state.email = payload.email;
     state.fullName = payload.fullName;
     state.onboarded = payload.onboarded;
-    state.organisation = payload.organisation;
+    state.businesses = payload.businesses;
     state.schemes = payload.schemes;
     state.groups = payload.groups;
     state.isSet = payload.isSet;
@@ -80,7 +80,7 @@ const userModel: UserModel = {
     state.email = '';
     state.fullName = '';
     state.picture = '';
-    state.organisation = '';
+    state.businesses = [];
     state.onboarded = false;
     state.schemes = [];
     state.role = Role.User;

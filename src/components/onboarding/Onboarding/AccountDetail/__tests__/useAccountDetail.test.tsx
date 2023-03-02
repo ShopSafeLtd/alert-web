@@ -17,7 +17,7 @@ const mocks = [
         currentUser: {
           id: 'userId',
           fullName: 'test user',
-          organisation: 'ShopSafe ',
+          businesses: [{ name: 'user business', id: '' }],
           email: '@shopsafe.uk',
           newUser: false,
           incidentEmail: true,
@@ -74,12 +74,6 @@ const UseAccountDetailTest = () => {
         onClick={() =>
           onSubmit({
             fullName: 'name',
-            organisation: 'organisation',
-            postcode: 'postcode',
-            street: 'street',
-            townCity: 'townCity',
-            building: 'building',
-            county: 'county',
           })
         }
       >

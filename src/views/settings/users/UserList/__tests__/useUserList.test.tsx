@@ -47,9 +47,13 @@ const mocks = [
               },
             },
             {
-              organisation: {
-                contains: '',
-                mode: QueryMode.Insensitive,
+              businesses: {
+                some: {
+                  name: {
+                    contains: '',
+                    mode: QueryMode.Insensitive,
+                  },
+                },
               },
             },
           ],
@@ -71,7 +75,7 @@ const mocks = [
             fullName: 'testUser',
             firstLetter: 't',
             email: 'user email',
-            organisation: 'user organisation',
+            business: [{ name: 'user business', id: 'test' }],
             status: 'enabled',
             groups: [{ id: 'groupId', name: 'test group' }],
           },

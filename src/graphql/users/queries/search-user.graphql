@@ -1,16 +1,19 @@
 query SearchUser($where: UserWhereUniqueInput!) {
-    user(where: $where) {
+  user(where: $where) {
+    id
+    fullName
+    businesses {
       id
-      fullName
-      organisation
-      email
-      addresses(where: { primary: { equals: true } }) {
-        id
-        postcode
-        street
-        townCity
-        building
-        county
-      }
+      name
+    }
+    email
+    addresses(where: { primary: { equals: true } }) {
+      id
+      postcode
+      street
+      townCity
+      building
+      county
     }
   }
+}

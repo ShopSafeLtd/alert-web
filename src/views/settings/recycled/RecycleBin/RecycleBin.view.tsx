@@ -144,7 +144,7 @@ const RecycleBin = ({
         deletedAt: item?.deletedAt,
         expiresAt: item?.expiresAt,
         deletedBy: item?.deletedBy
-          ? `${item?.deletedBy?.fullName}, ${item?.deletedBy?.organisation}.`
+          ? `${item?.deletedBy?.fullName}, ${item?.deletedBy?.businesses[0]?.name}.`
           : 'Automatically Expired',
       }))}
     />

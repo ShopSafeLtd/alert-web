@@ -12,6 +12,9 @@ import {
   QueryMode,
   Race,
   Role,
+  SearchBusinessesDocument,
+  SearchBusinessesQuery,
+  SearchBusinessesQueryVariables,
   SortOrder,
   TagsDocument,
   TagsQuery,
@@ -28,7 +31,7 @@ import {
 import { message, Modal, notification, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import { MutationUpdaterFn } from '@apollo/client';
+import { MutationUpdaterFn, useApolloClient } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import update from 'immutability-helper';
 import { UploadChangeParam } from 'antd/lib/upload';
@@ -55,11 +58,10 @@ interface FormData {
   policeReported?: boolean;
   policeInvolved?: boolean;
   policeRef?: string;
-  building: string;
-  street: string;
-  townCity: string;
-  county: string;
-  postcode: string;
+  business: {
+    label: React.ReactNode;
+    value: string;
+  };
   groups: string[];
   tags: string[];
   images: { id: string; url: string; optimised: string }[];
@@ -170,10 +172,15 @@ interface Return {
   updateCrimeGroupsData: (value: CrimeGroupData) => void;
   listVehiclesData: ListVehiclesQuery | undefined;
   listCrimeGroupsData: ListCrimeGroupsQuery | undefined;
+  onSearchBusiness: (
+    value: string
+  ) => Promise<{ label: React.ReactNode; value: string }[]>;
 }
 
 const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const navigate = useNavigate();
+  const client = useApolloClient();
+
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
   const groups = useStoreState((state) => state.user.groups);
@@ -249,7 +256,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             uid: `${image.id}`,
             name: `${image.id}.png`,
             status: 'done',
-            url: `${image.url}`,
+            url: `${image.optimised}`,
             optimised: `${image.optimised}`,
           }))
         );
@@ -953,6 +960,8 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           create: undefined,
         };
       };
+      console.log(data);
+
       updateIncident({
         variables: {
           where: {
@@ -964,18 +973,14 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             description: { set: data.description },
             date: { set: data.date },
             time: { set: data.date },
-            value: { set: data.value },
-            recoveredValue: { set: data.recoveredValue },
+            value: { set: data.value || 0 },
+            recoveredValue: { set: data.recoveredValue || 0 },
             policeInvolved: { set: data.policeInvolved },
             policeRef: { set: data.policeRef },
             policeReported: { set: data.policeReported },
-            location: {
-              update: {
-                building: { set: data.building },
-                street: { set: data.street },
-                townCity: { set: data.townCity },
-                county: { set: data.county },
-                postcode: { set: data.postcode },
+            business: {
+              connect: {
+                id: data.business.value,
               },
             },
             groups: {
@@ -1026,6 +1031,45 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
 
   const setAssignToImage = (image: Image) => {
     setNewImage(image);
+  };
+
+  const onSearchBusiness = async (value: string) => {
+    if (value.length < 2) {
+      return [];
+    }
+    return client
+      .query<SearchBusinessesQuery, SearchBusinessesQueryVariables>({
+        query: SearchBusinessesDocument,
+        variables: {
+          where: {
+            name: {
+              contains: value,
+              mode: QueryMode.Insensitive,
+            },
+            schemes: {
+              some: {
+                id: {
+                  equals: schemeId,
+                },
+              },
+            },
+          },
+        },
+      })
+      .then((response) =>
+        response.data.listBusinesses.businesses.length
+          ? response.data.listBusinesses.businesses.map((item) => ({
+              label: item?.name || '',
+              value: item?.id || '',
+            }))
+          : [
+              {
+                label: 'No results found',
+                value: '',
+                disabled: true,
+              },
+            ]
+      );
   };
 
   return {
@@ -1098,6 +1142,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     removeCrimeGroup,
     listVehiclesData,
     listCrimeGroupsData,
+    onSearchBusiness,
   };
 };
 

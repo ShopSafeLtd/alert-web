@@ -37,7 +37,10 @@ mutation updateOffender($where: UniqueId!, $data: OffenderUpdateInput!) {
     createdBy {
       id
       fullName
-      organisation
+      businesses {
+        id
+        name
+      }
     }
   }
 }

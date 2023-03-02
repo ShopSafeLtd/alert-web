@@ -80,9 +80,13 @@ const useLinkIncident = ({
                   },
                 },
                 {
-                  organisation: {
-                    contains: variables.search,
-                    mode: QueryMode.Insensitive,
+                  businesses: {
+                    some: {
+                      name: {
+                        contains: variables.search,
+                        mode: QueryMode.Insensitive,
+                      },
+                    },
                   },
                 },
               ],

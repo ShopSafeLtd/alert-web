@@ -71,7 +71,7 @@ interface OffenderData {
 interface SchemeUserData {
   id: string;
   fullName: string;
-  organisation: string;
+  businesses: { name: string; id: string }[];
   firstLetter?: string | null;
 }
 
@@ -369,9 +369,9 @@ const UpdateBar = ({
             }}
             prefix="@"
           >
-            {schemeUsers?.map(({ id, fullName, organisation }) => (
+            {schemeUsers?.map(({ id, fullName, businesses }) => (
               <Option key={id} value={fullName}>
-                {fullName} ({organisation})
+                {fullName} ({businesses[0]?.name})
               </Option>
             ))}
           </Mentions>

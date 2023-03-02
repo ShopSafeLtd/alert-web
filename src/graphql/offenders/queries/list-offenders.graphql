@@ -52,7 +52,10 @@ query listOffenders(
       createdBy {
         id
         fullName
-        organisation
+        businesses {
+          id
+          name
+        }
       }
       incidents {
         id
@@ -72,7 +75,10 @@ query listOffenders(
         createdBy {
           id
           fullName
-          organisation
+          businesses {
+            id
+            name
+          }
         }
         images {
           id

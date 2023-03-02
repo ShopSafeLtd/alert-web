@@ -13,7 +13,10 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
       dayTime
       createdBy {
         id
-        organisation
+        businesses {
+          id
+          name
+        }
       }
       value
       recoveredValue

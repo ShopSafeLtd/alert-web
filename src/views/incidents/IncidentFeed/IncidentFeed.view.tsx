@@ -67,8 +67,12 @@ const IncidentFeed = ({
   const [affix, setAffix] = React.useState(false);
 
   return (
-    <div className="feed-container">
-      <Affix offsetTop={40} onChange={(affixed) => setAffix(!!affixed)}>
+    <div className="feed-container" style={{ padding: 5 }}>
+      <Affix
+        offsetTop={40}
+        style={{ padding: '5px 10px 0' }}
+        onChange={(affixed) => setAffix(!!affixed)}
+      >
         <Row
           gutter={8}
           style={{

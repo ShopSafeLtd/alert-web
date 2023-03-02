@@ -9,12 +9,6 @@ const { Step } = Steps;
 
 interface AccountData {
   fullName: string;
-  organisation: string;
-  postcode: string;
-  street: string;
-  townCity: string;
-  building: string | null;
-  county: string | null;
 }
 interface Props {
   onSubmit: () => void;

@@ -4,143 +4,129 @@ import useEditIncident from './useAddIncident';
 
 function EditIncident(): JSX.Element {
   const {
-    onSubmit,
-    saving,
+    addExistingCrimeGroup,
+    addExistingOffender,
+    addExistingVehicle,
+    addIncidentTag,
+    addNewCrimeGroup,
+    addNewVehicle,
+    addOffender,
+    addRecentOffender,
+    assignOffendersToImages,
+    beforeUpload,
+    crimeGroupsData,
+    editCrimeGroupId,
+    editOffenderId,
+    editVehicleId,
+    fileList,
+    form,
     groups,
     groupsLoading,
-    tags,
-    tagsLoading,
-    primaryAddress,
-    addressLoading,
     imgChange,
-    fileList,
-    beforeUpload,
-    addIncidentTag,
-    toggleAddIncidentTag,
-    updateIncidentTag,
-    addOffender,
-    toggleAddOffender,
-    addExistingOffender,
-    toggleAddExistingOffender,
-    updateOffendersData,
+    listCrimeGroupsData,
+    listOffendersData,
+    listVehiclesData,
+    newImage,
+    offenderImgChange,
     offendersData,
-    addPreviousLocation,
-    toggleAddPreviousLocation,
-    updatePreviousLocation,
-    addNewLocation,
-    toggleAddNewLocation,
-    updateNewLocation,
-    form,
+    onCancelNewImage,
+    onSearchBusiness,
+    onSubmit,
+    primaryAddress,
     recentOffenderData,
     recentOffenderLoading,
-    addRecentOffender,
-    setAddRecentOffender,
-    searchOffenders,
-    setSearchOffenders,
-    newImage,
-    onCancelNewImage,
-    assignOffendersToImages,
-    setAssignToImage,
-    removeImageFromOffender,
-    removeImage,
-    removeOffender,
-    listOffendersData,
-    adminRights,
-    offenderImgChange,
-    editOffenderId,
-    setEditOffenderId,
-    updateOffender,
-    addNewVehicle,
-    addExistingVehicle,
-    editVehicleId,
-    setEditVehicleId,
-    toggleAddNewVehicle,
-    toggleAddExistingVehicle,
-    vehiclesData,
-    updateVehiclesData,
-    removeVehicle,
-    addNewCrimeGroup,
-    addExistingCrimeGroup,
-    editCrimeGroupId,
-    setEditCrimeGroupId,
-    toggleAddNewCrimeGroup,
-    toggleAddExistingCrimeGroup,
-    crimeGroupsData,
-    updateCrimeGroupsData,
     removeCrimeGroup,
-    listVehiclesData,
-    listCrimeGroupsData,
+    removeImage,
+    removeImageFromOffender,
+    removeOffender,
+    removeVehicle,
+    saving,
+    searchOffenders,
+    setAddRecentOffender,
+    setAssignToImage,
+    setEditCrimeGroupId,
+    setEditOffenderId,
+    setEditVehicleId,
+    setSearchOffenders,
+    tags,
+    tagsLoading,
+    toggleAddExistingCrimeGroup,
+    toggleAddExistingOffender,
+    toggleAddExistingVehicle,
+    toggleAddIncidentTag,
+    toggleAddNewCrimeGroup,
+    toggleAddNewVehicle,
+    toggleAddOffender,
+    updateCrimeGroupsData,
+    updateIncidentTag,
+    updateOffender,
+    updateOffendersData,
+    updateVehiclesData,
+    vehiclesData,
   } = useEditIncident();
 
   return (
     <div>
       <View
-        updateOffender={updateOffender}
-        editOffenderId={editOffenderId}
-        setEditOffenderId={setEditOffenderId}
+        addExistingCrimeGroup={addExistingCrimeGroup}
         addExistingOffender={addExistingOffender}
+        addExistingVehicle={addExistingVehicle}
         addIncidentTag={addIncidentTag}
-        addNewLocation={addNewLocation}
+        addNewCrimeGroup={addNewCrimeGroup}
+        addNewVehicle={addNewVehicle}
         addOffender={addOffender}
-        addPreviousLocation={addPreviousLocation}
-        addressLoading={addressLoading}
+        addRecentOffender={addRecentOffender}
+        assignOffendersToImages={assignOffendersToImages}
         beforeUpload={beforeUpload}
+        crimeGroupsData={crimeGroupsData}
+        editCrimeGroupId={editCrimeGroupId}
+        editOffenderId={editOffenderId}
+        editVehicleId={editVehicleId}
         fileList={fileList}
         form={form}
         groups={groups}
         groupsLoading={groupsLoading}
         imgChange={imgChange}
+        listCrimeGroupsData={listCrimeGroupsData}
+        listOffendersData={listOffendersData}
+        listVehiclesData={listVehiclesData}
+        newImage={newImage}
+        offenderImgChange={offenderImgChange}
         offendersData={offendersData}
+        onCancelNewImage={onCancelNewImage}
+        onSearchBusiness={onSearchBusiness}
         onSubmit={onSubmit}
-        saving={saving}
         primaryAddress={primaryAddress}
         recentOffenderData={recentOffenderData}
         recentOffenderLoading={recentOffenderLoading}
-        addRecentOffender={addRecentOffender}
+        removeCrimeGroup={removeCrimeGroup}
+        removeImage={removeImage}
+        removeImageFromOffender={removeImageFromOffender}
+        removeOffender={removeOffender}
+        removeVehicle={removeVehicle}
+        saving={saving}
+        searchOffenders={searchOffenders}
         setAddRecentOffender={setAddRecentOffender}
+        setAssignToImage={setAssignToImage}
+        setEditCrimeGroupId={setEditCrimeGroupId}
+        setEditOffenderId={setEditOffenderId}
+        setEditVehicleId={setEditVehicleId}
+        setSearchOffenders={setSearchOffenders}
         tags={tags}
         tagsLoading={tagsLoading}
-        toggleAddExistingOffender={toggleAddExistingOffender}
-        toggleAddIncidentTag={toggleAddIncidentTag}
-        toggleAddNewLocation={toggleAddNewLocation}
-        toggleAddOffender={toggleAddOffender}
-        toggleAddPreviousLocation={toggleAddPreviousLocation}
-        updateIncidentTag={updateIncidentTag}
-        updateNewLocation={updateNewLocation}
-        updateOffendersData={updateOffendersData}
-        updatePreviousLocation={updatePreviousLocation}
-        searchOffenders={searchOffenders}
-        setSearchOffenders={setSearchOffenders}
-        newImage={newImage}
-        assignOffendersToImages={assignOffendersToImages}
-        onCancelNewImage={onCancelNewImage}
-        setAssignToImage={setAssignToImage}
-        removeImageFromOffender={removeImageFromOffender}
-        removeImage={removeImage}
-        removeOffender={removeOffender}
-        adminRights={adminRights}
-        listOffendersData={listOffendersData}
-        offenderImgChange={offenderImgChange}
-        addNewVehicle={addNewVehicle}
-        addExistingVehicle={addExistingVehicle}
-        editVehicleId={editVehicleId}
-        setEditVehicleId={setEditVehicleId}
-        toggleAddNewVehicle={toggleAddNewVehicle}
-        toggleAddExistingVehicle={toggleAddExistingVehicle}
-        vehiclesData={vehiclesData}
-        updateVehiclesData={updateVehiclesData}
-        removeVehicle={removeVehicle}
-        removeCrimeGroup={removeCrimeGroup}
-        addNewCrimeGroup={addNewCrimeGroup}
-        addExistingCrimeGroup={addExistingCrimeGroup}
-        editCrimeGroupId={editCrimeGroupId}
-        setEditCrimeGroupId={setEditCrimeGroupId}
-        toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
         toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
-        crimeGroupsData={crimeGroupsData}
+        toggleAddExistingOffender={toggleAddExistingOffender}
+        toggleAddExistingVehicle={toggleAddExistingVehicle}
+        toggleAddIncidentTag={toggleAddIncidentTag}
+        toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
+        toggleAddNewVehicle={toggleAddNewVehicle}
+        toggleAddOffender={toggleAddOffender}
         updateCrimeGroupsData={updateCrimeGroupsData}
-        listVehiclesData={listVehiclesData}
-        listCrimeGroupsData={listCrimeGroupsData}
+        updateIncidentTag={updateIncidentTag}
+        updateOffender={updateOffender}
+        updateOffendersData={updateOffendersData}
+        updateVehiclesData={updateVehiclesData}
+        vehiclesData={vehiclesData}
       />
     </div>
   );

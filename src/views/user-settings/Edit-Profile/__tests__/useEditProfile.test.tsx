@@ -21,7 +21,7 @@ const mocks = [
         currentUser: {
           id: 'userId',
           fullName: 'test user',
-          organisation: 'ShopSafe ',
+          businesses: [{ name: 'test business', id: 'test' }],
           email: '@shopsafe.uk',
           newUser: false,
           incidentEmail: true,
@@ -68,23 +68,8 @@ const mocks = [
       variables: {
         where: { id: 'userId' },
         data: {
-          addresses: {
-            update: [
-              {
-                data: {
-                  postcode: { set: 'postcode' },
-                  street: { set: 'street' },
-                  townCity: { set: 'townCity' },
-                  building: { set: 'building' },
-                  county: { set: 'county' },
-                },
-                where: { id: 'ckshi0r5f9684229l4ckxvhld8' },
-              },
-            ],
-          },
           email: { set: 'email' },
           fullName: { set: 'name' },
-          organisation: { set: 'organisation' },
           incidentEmail: { set: false },
           incidentPush: { set: false },
           offenderEmail: { set: false },
@@ -100,7 +85,7 @@ const mocks = [
         updateUser: {
           id: 'userId',
           fullName: 'test user',
-          organisation: 'ShopSafe ',
+          businesses: [],
           email: '@shopsafe.uk',
           disabled: false,
           newUser: false,
@@ -109,16 +94,6 @@ const mocks = [
           offenderEmail: false,
           offenderPush: false,
           messagePush: false,
-          addresses: [
-            {
-              building: 'building',
-              county: 'Suffolk',
-              id: 'ckshi0r5f9684229l4ckxvhld8',
-              postcode: 'IP313FA',
-              street: 'Unit 2 Sandy Lane',
-              townCity: 'Badwell Ash',
-            },
-          ],
           groups: [
             {
               id: 'groupId',
@@ -165,12 +140,6 @@ const UseEditProfileTest = () => {
           onSubmit({
             fullName: 'name',
             email: 'email',
-            organisation: 'organisation',
-            postcode: 'postcode',
-            street: 'street',
-            townCity: 'townCity',
-            building: 'building',
-            county: 'county',
             incidentEmail: false,
             incidentPush: false,
             offenderEmail: false,
