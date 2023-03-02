@@ -620,6 +620,11 @@
   margin: 0;
   padding: 3px 10px;
 }
+.feed-container {
+  margin: 0;
+  padding: 10px;
+  height: 100vh;
+}
 .feed-container .add-button {
   position: fixed;
   bottom: 10px;
@@ -1887,8 +1892,8 @@
 }
 .feedItem-card {
   margin: 5px 5px 10px;
-  height: 360px;
-  display: flex;
+  padding: 5px;
+  height: 100%;
 }
 .feedItem-card .ant-card-body {
   position: relative;
@@ -1903,6 +1908,9 @@
   background-position: center center;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+}
+.feedItem-card .feedItem-card-tags-row {
+  align-items: flex-end;
 }
 .feedItem-card .feedItem-card-tags {
   position: absolute;

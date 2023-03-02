@@ -79,8 +79,8 @@ const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
           </Row>
           <Paragraph
             type="secondary"
-            style={{ fontSize: 14, marginTop: 10, height: 80 }}
-            className="feedItem-card-desc"
+            style={{ fontSize: 14, marginTop: 10 }}
+            // className="feedItem-card-desc"
             ellipsis={{ rows: 3 }}
           >
             {previewText}

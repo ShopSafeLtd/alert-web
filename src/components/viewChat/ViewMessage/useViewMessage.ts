@@ -700,7 +700,12 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       return newText;
     };
 
-    if (!inputStr && !fileList && !incidentsData && !offendersData) {
+    if (
+      !inputStr.length &&
+      !fileList.length &&
+      !incidentsData.length &&
+      !offendersData.length
+    ) {
       message.info('The message cannot be empty!');
     } else {
       setSaving(true);

@@ -30427,6 +30427,38 @@ export type ArticlesQuery = {
   }>;
 };
 
+export type ListArticlesQueryVariables = Exact<{
+  scheme: SchemeWhereUniqueInput;
+  where?: InputMaybe<ArticleWhereInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<ArticleOrderByWithRelationInput>;
+}>;
+
+export type ListArticlesQuery = {
+  __typename?: 'Query';
+  listArticles: {
+    __typename?: 'ListArticles';
+    total: number;
+    articles: Array<{
+      __typename?: 'Article';
+      previewImage?: string | null;
+      previewText?: string | null;
+      priority: ArticlePriority;
+      title: string;
+      updatedAt: any;
+      id: string;
+      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      createdBy: {
+        __typename?: 'User';
+        fullName: string;
+        organisation: string;
+        id: string;
+      };
+    }>;
+  };
+};
+
 export type CreateUserinAuth0MutationVariables = Exact<{
   id: Scalars['String'];
   password: Scalars['String'];
@@ -31966,6 +31998,253 @@ export type ViewIncidentQuery = {
             name: string;
           }>;
         };
+      }>;
+    }>;
+  } | null;
+};
+
+export type CreateFlowMutationVariables = Exact<{
+  data: CreateFlowInput;
+}>;
+
+export type CreateFlowMutation = {
+  __typename?: 'Mutation';
+  createFlow?: {
+    __typename?: 'Flow';
+    id: string;
+    name: string;
+    description?: string | null;
+  } | null;
+};
+
+export type CreateInvestigationMutationVariables = Exact<{
+  data: CreateInvestigationInput;
+}>;
+
+export type CreateInvestigationMutation = {
+  __typename?: 'Mutation';
+  createInvestigation?: {
+    __typename?: 'Investigation';
+    id: string;
+    name: string;
+    description?: string | null;
+  } | null;
+};
+
+export type UpdateFlowMutationVariables = Exact<{
+  data: UpdateFlowData;
+  where: UniqueId;
+}>;
+
+export type UpdateFlowMutation = {
+  __typename?: 'Mutation';
+  updateFlow?: {
+    __typename?: 'Flow';
+    id: string;
+    name: string;
+    description?: string | null;
+    edges: Array<{
+      __typename?: 'FlowEdge';
+      id: string;
+      type: string;
+      markerEnd: any;
+      source: string;
+      sourceHandle?: string | null;
+      target: string;
+      targetHandle?: string | null;
+    }>;
+    nodes: Array<{
+      __typename?: 'FlowNode';
+      id: string;
+      type: string;
+      data: any;
+      height: number;
+      width: number;
+      position?: { __typename?: 'XY'; x: number; y: number } | null;
+      positionAbsolute?: { __typename?: 'XY'; x: number; y: number } | null;
+    }>;
+  } | null;
+};
+
+export type UpdateInvestigationMutationVariables = Exact<{
+  where: UniqueId;
+  data: UpdateInvestigationInput;
+}>;
+
+export type UpdateInvestigationMutation = {
+  __typename?: 'Mutation';
+  updateInvestigation?: {
+    __typename?: 'Investigation';
+    id: string;
+    description?: string | null;
+    name: string;
+    createdBy: { __typename?: 'User'; id: string; fullName: string };
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      id: string;
+      make?: string | null;
+      model?: string | null;
+      colour?: string | null;
+      registration?: string | null;
+      updatedAt: any;
+      totalCrimeGroups?: number | null;
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+    }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      name?: string | null;
+      reference?: number | null;
+      totalIncidents?: number | null;
+    }>;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      policeRef?: string | null;
+      dayTime?: string | null;
+      reference?: number | null;
+      subject?: string | null;
+      date: any;
+      value?: number | null;
+      recoveredValue?: number | null;
+      createdBy: { __typename?: 'User'; organisation: string };
+      location?: { __typename?: 'Address'; id: string } | null;
+    }>;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      alias?: string | null;
+      reference?: number | null;
+    }>;
+    flows: Array<{
+      __typename?: 'Flow';
+      name: string;
+      description?: string | null;
+      edges: Array<{
+        __typename?: 'FlowEdge';
+        id: string;
+        type: string;
+        markerEnd: any;
+        source: string;
+        sourceHandle?: string | null;
+        target: string;
+        targetHandle?: string | null;
+      }>;
+      nodes: Array<{
+        __typename?: 'FlowNode';
+        id: string;
+        type: string;
+        data: any;
+        height: number;
+        width: number;
+        position?: { __typename?: 'XY'; x: number; y: number } | null;
+        positionAbsolute?: { __typename?: 'XY'; x: number; y: number } | null;
+      }>;
+    }>;
+  } | null;
+};
+
+export type ListInvestigationsQueryVariables = Exact<{
+  scheme: SchemeWhereUniqueInput;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type ListInvestigationsQuery = {
+  __typename?: 'Query';
+  listInvestigations?: {
+    __typename?: 'ListInvestigations';
+    total: number;
+    investigations: Array<{
+      __typename?: 'Investigation';
+      id: string;
+      name: string;
+      description?: string | null;
+    }>;
+  } | null;
+};
+
+export type ViewInvestigationQueryVariables = Exact<{
+  where: InvestigationWhereUniqueInput;
+}>;
+
+export type ViewInvestigationQuery = {
+  __typename?: 'Query';
+  investigation?: {
+    __typename?: 'Investigation';
+    id: string;
+    description?: string | null;
+    name: string;
+    createdBy: { __typename?: 'User'; id: string; fullName: string };
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      id: string;
+      make?: string | null;
+      model?: string | null;
+      colour?: string | null;
+      registration?: string | null;
+      updatedAt: any;
+      totalCrimeGroups?: number | null;
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+    }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      name?: string | null;
+      reference?: number | null;
+      totalIncidents?: number | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+      }>;
+    }>;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      policeRef?: string | null;
+      dayTime?: string | null;
+      reference?: number | null;
+      subject?: string | null;
+      date: any;
+      value?: number | null;
+      recoveredValue?: number | null;
+      createdBy: { __typename?: 'User'; organisation: string };
+      location?: { __typename?: 'Address'; id: string } | null;
+    }>;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      alias?: string | null;
+      reference?: number | null;
+    }>;
+    flows: Array<{
+      __typename?: 'Flow';
+      updatedAt: any;
+      name: string;
+      id: string;
+      description?: string | null;
+      edges: Array<{
+        __typename?: 'FlowEdge';
+        id: string;
+        type: string;
+        markerEnd: any;
+        source: string;
+        sourceHandle?: string | null;
+        target: string;
+        targetHandle?: string | null;
+      }>;
+      nodes: Array<{
+        __typename?: 'FlowNode';
+        id: string;
+        type: string;
+        data: any;
+        height: number;
+        width: number;
+        position?: { __typename?: 'XY'; x: number; y: number } | null;
+        positionAbsolute?: { __typename?: 'XY'; x: number; y: number } | null;
       }>;
     }>;
   } | null;
@@ -34712,6 +34991,97 @@ export type ArticlesLazyQueryHookResult = ReturnType<
 export type ArticlesQueryResult = Apollo.QueryResult<
   ArticlesQuery,
   ArticlesQueryVariables
+>;
+export const ListArticlesDocument = gql`
+  query listArticles(
+    $scheme: SchemeWhereUniqueInput!
+    $where: ArticleWhereInput
+    $take: Int
+    $skip: Int
+    $order: ArticleOrderByWithRelationInput
+  ) {
+    listArticles(
+      where: $where
+      order: $order
+      take: $take
+      skip: $skip
+      scheme: $scheme
+    ) {
+      articles {
+        previewImage
+        previewText
+        priority
+        tags {
+          id
+          name
+        }
+        createdBy {
+          fullName
+          organisation
+          id
+        }
+        title
+        updatedAt
+        id
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useListArticlesQuery__
+ *
+ * To run a query within a React component, call `useListArticlesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListArticlesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListArticlesQuery({
+ *   variables: {
+ *      scheme: // value for 'scheme'
+ *      where: // value for 'where'
+ *      take: // value for 'take'
+ *      skip: // value for 'skip'
+ *      order: // value for 'order'
+ *   },
+ * });
+ */
+export function useListArticlesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListArticlesQuery,
+    ListArticlesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ListArticlesQuery, ListArticlesQueryVariables>(
+    ListArticlesDocument,
+    options
+  );
+}
+export function useListArticlesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListArticlesQuery,
+    ListArticlesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ListArticlesQuery, ListArticlesQueryVariables>(
+    ListArticlesDocument,
+    options
+  );
+}
+export type ListArticlesQueryHookResult = ReturnType<
+  typeof useListArticlesQuery
+>;
+export type ListArticlesLazyQueryHookResult = ReturnType<
+  typeof useListArticlesLazyQuery
+>;
+export type ListArticlesQueryResult = Apollo.QueryResult<
+  ListArticlesQuery,
+  ListArticlesQueryVariables
 >;
 export const CreateUserinAuth0Document = gql`
   mutation createUserinAuth0($id: String!, $password: String!) {
@@ -38125,6 +38495,518 @@ export type ViewIncidentLazyQueryHookResult = ReturnType<
 export type ViewIncidentQueryResult = Apollo.QueryResult<
   ViewIncidentQuery,
   ViewIncidentQueryVariables
+>;
+export const CreateFlowDocument = gql`
+  mutation CreateFlow($data: CreateFlowInput!) {
+    createFlow(data: $data) {
+      id
+      name
+      description
+    }
+  }
+`;
+export type CreateFlowMutationFn = Apollo.MutationFunction<
+  CreateFlowMutation,
+  CreateFlowMutationVariables
+>;
+
+/**
+ * __useCreateFlowMutation__
+ *
+ * To run a mutation, you first call `useCreateFlowMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateFlowMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createFlowMutation, { data, loading, error }] = useCreateFlowMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateFlowMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateFlowMutation,
+    CreateFlowMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateFlowMutation, CreateFlowMutationVariables>(
+    CreateFlowDocument,
+    options
+  );
+}
+export type CreateFlowMutationHookResult = ReturnType<
+  typeof useCreateFlowMutation
+>;
+export type CreateFlowMutationResult =
+  Apollo.MutationResult<CreateFlowMutation>;
+export type CreateFlowMutationOptions = Apollo.BaseMutationOptions<
+  CreateFlowMutation,
+  CreateFlowMutationVariables
+>;
+export const CreateInvestigationDocument = gql`
+  mutation CreateInvestigation($data: CreateInvestigationInput!) {
+    createInvestigation(data: $data) {
+      id
+      name
+      description
+    }
+  }
+`;
+export type CreateInvestigationMutationFn = Apollo.MutationFunction<
+  CreateInvestigationMutation,
+  CreateInvestigationMutationVariables
+>;
+
+/**
+ * __useCreateInvestigationMutation__
+ *
+ * To run a mutation, you first call `useCreateInvestigationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateInvestigationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createInvestigationMutation, { data, loading, error }] = useCreateInvestigationMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateInvestigationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateInvestigationMutation,
+    CreateInvestigationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateInvestigationMutation,
+    CreateInvestigationMutationVariables
+  >(CreateInvestigationDocument, options);
+}
+export type CreateInvestigationMutationHookResult = ReturnType<
+  typeof useCreateInvestigationMutation
+>;
+export type CreateInvestigationMutationResult =
+  Apollo.MutationResult<CreateInvestigationMutation>;
+export type CreateInvestigationMutationOptions = Apollo.BaseMutationOptions<
+  CreateInvestigationMutation,
+  CreateInvestigationMutationVariables
+>;
+export const UpdateFlowDocument = gql`
+  mutation UpdateFlow($data: UpdateFlowData!, $where: UniqueId!) {
+    updateFlow(data: $data, where: $where) {
+      id
+      name
+      description
+      edges {
+        id
+        type
+        markerEnd
+        source
+        sourceHandle
+        target
+        targetHandle
+      }
+      nodes {
+        id
+        type
+        data
+        height
+        width
+        position {
+          x
+          y
+        }
+        positionAbsolute {
+          x
+          y
+        }
+      }
+    }
+  }
+`;
+export type UpdateFlowMutationFn = Apollo.MutationFunction<
+  UpdateFlowMutation,
+  UpdateFlowMutationVariables
+>;
+
+/**
+ * __useUpdateFlowMutation__
+ *
+ * To run a mutation, you first call `useUpdateFlowMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateFlowMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateFlowMutation, { data, loading, error }] = useUpdateFlowMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUpdateFlowMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateFlowMutation,
+    UpdateFlowMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateFlowMutation, UpdateFlowMutationVariables>(
+    UpdateFlowDocument,
+    options
+  );
+}
+export type UpdateFlowMutationHookResult = ReturnType<
+  typeof useUpdateFlowMutation
+>;
+export type UpdateFlowMutationResult =
+  Apollo.MutationResult<UpdateFlowMutation>;
+export type UpdateFlowMutationOptions = Apollo.BaseMutationOptions<
+  UpdateFlowMutation,
+  UpdateFlowMutationVariables
+>;
+export const UpdateInvestigationDocument = gql`
+  mutation UpdateInvestigation(
+    $where: UniqueId!
+    $data: UpdateInvestigationInput!
+  ) {
+    updateInvestigation(where: $where, data: $data) {
+      id
+      description
+      name
+      createdBy {
+        id
+        fullName
+      }
+      vehicles {
+        id
+        make
+        model
+        colour
+        registration
+        updatedAt
+        totalCrimeGroups
+        totalOffenders
+        totalIncidents
+      }
+      offenders {
+        id
+        name
+        reference
+        totalIncidents
+      }
+      incidents {
+        id
+        policeRef
+        dayTime
+        createdBy {
+          organisation
+        }
+        reference
+        subject
+        date
+        location {
+          id
+        }
+        value
+        recoveredValue
+      }
+      crimeGroups {
+        id
+        alias
+        reference
+      }
+      flows {
+        name
+        description
+        edges {
+          id
+          type
+          markerEnd
+          source
+          sourceHandle
+          target
+          targetHandle
+        }
+        nodes {
+          id
+          type
+          data
+          height
+          width
+          position {
+            x
+            y
+          }
+          positionAbsolute {
+            x
+            y
+          }
+        }
+      }
+    }
+  }
+`;
+export type UpdateInvestigationMutationFn = Apollo.MutationFunction<
+  UpdateInvestigationMutation,
+  UpdateInvestigationMutationVariables
+>;
+
+/**
+ * __useUpdateInvestigationMutation__
+ *
+ * To run a mutation, you first call `useUpdateInvestigationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateInvestigationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateInvestigationMutation, { data, loading, error }] = useUpdateInvestigationMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useUpdateInvestigationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateInvestigationMutation,
+    UpdateInvestigationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateInvestigationMutation,
+    UpdateInvestigationMutationVariables
+  >(UpdateInvestigationDocument, options);
+}
+export type UpdateInvestigationMutationHookResult = ReturnType<
+  typeof useUpdateInvestigationMutation
+>;
+export type UpdateInvestigationMutationResult =
+  Apollo.MutationResult<UpdateInvestigationMutation>;
+export type UpdateInvestigationMutationOptions = Apollo.BaseMutationOptions<
+  UpdateInvestigationMutation,
+  UpdateInvestigationMutationVariables
+>;
+export const ListInvestigationsDocument = gql`
+  query listInvestigations(
+    $scheme: SchemeWhereUniqueInput!
+    $take: Int
+    $skip: Int
+  ) {
+    listInvestigations(scheme: $scheme, take: $take, skip: $skip) {
+      total
+      investigations {
+        id
+        name
+        description
+      }
+    }
+  }
+`;
+
+/**
+ * __useListInvestigationsQuery__
+ *
+ * To run a query within a React component, call `useListInvestigationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListInvestigationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListInvestigationsQuery({
+ *   variables: {
+ *      scheme: // value for 'scheme'
+ *      take: // value for 'take'
+ *      skip: // value for 'skip'
+ *   },
+ * });
+ */
+export function useListInvestigationsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListInvestigationsQuery,
+    ListInvestigationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListInvestigationsQuery,
+    ListInvestigationsQueryVariables
+  >(ListInvestigationsDocument, options);
+}
+export function useListInvestigationsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListInvestigationsQuery,
+    ListInvestigationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListInvestigationsQuery,
+    ListInvestigationsQueryVariables
+  >(ListInvestigationsDocument, options);
+}
+export type ListInvestigationsQueryHookResult = ReturnType<
+  typeof useListInvestigationsQuery
+>;
+export type ListInvestigationsLazyQueryHookResult = ReturnType<
+  typeof useListInvestigationsLazyQuery
+>;
+export type ListInvestigationsQueryResult = Apollo.QueryResult<
+  ListInvestigationsQuery,
+  ListInvestigationsQueryVariables
+>;
+export const ViewInvestigationDocument = gql`
+  query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
+    investigation(where: $where) {
+      id
+      description
+      name
+      createdBy {
+        id
+        fullName
+      }
+      vehicles {
+        id
+        make
+        model
+        colour
+        registration
+        updatedAt
+        totalCrimeGroups
+        totalOffenders
+        totalIncidents
+      }
+      offenders {
+        id
+        name
+        reference
+        totalIncidents
+        images {
+          id
+          optimised
+        }
+      }
+      incidents {
+        id
+        policeRef
+        dayTime
+        createdBy {
+          organisation
+        }
+        reference
+        subject
+        date
+        location {
+          id
+        }
+        value
+        recoveredValue
+      }
+      crimeGroups {
+        id
+        alias
+        reference
+      }
+      flows {
+        updatedAt
+        name
+        id
+        description
+        edges {
+          id
+          type
+          markerEnd
+          source
+          sourceHandle
+          target
+          targetHandle
+        }
+        nodes {
+          id
+          type
+          data
+          height
+          width
+          position {
+            x
+            y
+          }
+          positionAbsolute {
+            x
+            y
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useViewInvestigationQuery__
+ *
+ * To run a query within a React component, call `useViewInvestigationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useViewInvestigationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useViewInvestigationQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useViewInvestigationQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ViewInvestigationQuery,
+    ViewInvestigationQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ViewInvestigationQuery,
+    ViewInvestigationQueryVariables
+  >(ViewInvestigationDocument, options);
+}
+export function useViewInvestigationLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ViewInvestigationQuery,
+    ViewInvestigationQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ViewInvestigationQuery,
+    ViewInvestigationQueryVariables
+  >(ViewInvestigationDocument, options);
+}
+export type ViewInvestigationQueryHookResult = ReturnType<
+  typeof useViewInvestigationQuery
+>;
+export type ViewInvestigationLazyQueryHookResult = ReturnType<
+  typeof useViewInvestigationLazyQuery
+>;
+export type ViewInvestigationQueryResult = Apollo.QueryResult<
+  ViewInvestigationQuery,
+  ViewInvestigationQueryVariables
 >;
 export const CreateMessageDocument = gql`
   mutation createMessage($data: MessageCreateWithoutActionsInput!) {

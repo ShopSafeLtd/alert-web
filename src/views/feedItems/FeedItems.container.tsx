@@ -5,12 +5,15 @@ import useFeedItems from './useFeedItems';
 const FeedItems = (): JSX.Element => {
   const {
     data,
+    loading,
     articleData,
     articleLoading,
     recentOffenderData,
     recentOffenderLoading,
     onPaginationChange,
     pagination,
+    articlePagination,
+    onArticlePaginationChange,
     search,
     setSearch,
     unapprovedIncidents,
@@ -25,12 +28,15 @@ const FeedItems = (): JSX.Element => {
   return (
     <View
       data={data}
+      loading={loading}
       articleData={articleData}
       articleLoading={articleLoading}
       recentOffenderData={recentOffenderData}
       recentOffenderLoading={recentOffenderLoading}
       onPaginationChange={onPaginationChange}
       pagination={pagination}
+      articlePagination={articlePagination}
+      onArticlePaginationChange={onArticlePaginationChange}
       search={search}
       setSearch={setSearch}
       unapprovedIncidents={unapprovedIncidents}

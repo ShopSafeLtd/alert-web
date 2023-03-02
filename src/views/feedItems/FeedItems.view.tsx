@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  ArticlesQuery,
+  ListArticlesQuery,
   FeedItemsQuery,
   FeedItemType,
   ListOffendersQuery,
@@ -13,7 +13,6 @@ import {
   Col,
   Divider,
   Input,
-  List,
   Modal,
   Pagination,
   Row,
@@ -40,18 +39,22 @@ import IncidentFeed from 'components/feedItems/FeedItemSection/IncidentFeed';
 import OffenderFeed from 'components/feedItems/FeedItemSection/OffenderFeed';
 import ArticleFeed from 'components/feedItems/FeedItemSection/ArticleFeed';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
+import { PaginationModel } from 'types/DataType';
 
 const { Title, Paragraph, Text } = Typography;
 const { confirm } = Modal;
 
 interface Props {
   data: FeedItemsQuery | undefined;
-  articleData: ArticlesQuery | undefined;
+  loading: boolean;
+  articleData: ListArticlesQuery | undefined;
   articleLoading: boolean;
   recentOffenderData: ListOffendersQuery | undefined;
   recentOffenderLoading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
   pagination: { page: number; pageSize: number; sizeOptions: string[] };
+  articlePagination: PaginationModel;
+  onArticlePaginationChange: (page: number, pageSize: number) => void;
   search: string;
   setSearch: (value: string) => void;
   // updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
@@ -65,6 +68,7 @@ interface Props {
 
 const FeedItem = ({
   data,
+  loading,
   articleData,
   articleLoading,
   recentOffenderData,
@@ -78,6 +82,8 @@ const FeedItem = ({
   onDeleteFeedItem,
   saving,
   adminRights,
+  articlePagination,
+  onArticlePaginationChange,
 }: // updateIncidentList,
 // onNavigate,
 Props): JSX.Element => {
@@ -142,8 +148,8 @@ Props): JSX.Element => {
           </Col>
         </Row>
       </Affix>
-      <Row gutter={15}>
-        <Col span={10} xxl={8} xl={10}>
+      <Row gutter={10}>
+        <Col span={9} xxl={8} xl={9}>
           <div
             style={{
               height: 'calc(100vh - 130px)',
@@ -161,6 +167,7 @@ Props): JSX.Element => {
                   }}
                   key={feedItem?.id}
                   bodyStyle={{ padding: 0, marginLeft: 5 }}
+                  loading={loading}
                 >
                   <>
                     <Row style={{ margin: 8 }}>
@@ -179,7 +186,6 @@ Props): JSX.Element => {
                           {adminRights ? (
                             <Button
                               type="text"
-                              // type="primary"
                               style={{
                                 height: 25,
                                 width: 30,
@@ -210,7 +216,7 @@ Props): JSX.Element => {
                       ) : null}
                     </Row>
                     <Divider style={{ margin: 0 }} />
-                    <div style={{ borderTop: '1px', padding: 10 }}>
+                    <div style={{ padding: 10 }}>
                       {/* create new incident/offender */}
                       {feedItem?.type === FeedItemType.NewIncident && (
                         <IncidentFeed feedItem={feedItem} isNewIncident />
@@ -262,7 +268,7 @@ Props): JSX.Element => {
             </Row>
           </div>
         </Col>
-        <Col span={14} xxl={16} xl={14}>
+        <Col span={15} xxl={16} xl={15}>
           {/* <IncidentSkeletonCard /> */}
           <Card style={{ height: 190, marginBottom: 15 }}>
             <Title level={4} style={{ fontSize: 16, marginTop: -10 }}>
@@ -360,51 +366,65 @@ Props): JSX.Element => {
               span={12}
               xxl={16}
               xl={12}
-              style={{ overflow: 'auto', height: 'calc(100vh - 330px)' }}
+              style={{ overflow: 'auto', height: 'calc(100vh - 333px)' }}
             >
               <Card
                 bodyStyle={{
-                  paddingRight: 0,
-                  paddingLeft: 0,
-                  paddingTop: 15,
+                  padding: 5,
                 }}
+                style={{ margin: 0, padding: 0 }}
               >
                 <Title
                   style={{
-                    margin: '-5px 20px 5px',
+                    margin: '5px 20px -5px',
                     fontSize: 16,
                   }}
                   level={4}
                 >
                   Recent Bulletins
                 </Title>
-                {/* <Divider style={{ marginTop: 0, marginBottom: 10 }} /> */}
-                {articleLoading ? (
-                  <Row>
-                    <Col sm={24} md={12} lg={12} xl={8}>
-                      <IncidentSkeletonCard />
-                    </Col>
-                    <Col sm={24} md={12} lg={12} xl={8}>
-                      <IncidentSkeletonCard />
-                    </Col>
-                    <Col sm={24} md={12} lg={12} xl={8}>
-                      <IncidentSkeletonCard />
-                    </Col>
-                    <Col sm={24} md={12} lg={12} xl={8}>
-                      <IncidentSkeletonCard />
-                    </Col>
-                  </Row>
-                ) : (
-                  <List
-                    style={{ marginLeft: 5, marginRight: 5 }}
-                    grid={{ gutter: 8, xxl: 3, xl: 1 }}
-                    dataSource={articleData?.articles}
-                    pagination={{
-                      pageSize: 9,
-                    }}
-                    renderItem={(article) => <ArticleCard article={article} />}
-                  />
-                )}
+                <Row
+                  gutter={8}
+                  style={{
+                    marginLeft: 5,
+                    marginRight: 5,
+                    display: 'flex',
+                    minHeight: 300,
+                  }}
+                >
+                  {articleLoading
+                    ? Array.from({ length: 24 }).map((_, index) => (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <Col key={index} xxl={8} span={24}>
+                          <IncidentSkeletonCard />
+                        </Col>
+                      ))
+                    : articleData?.listArticles?.articles.map((article) => (
+                        <Col
+                          span={24}
+                          xxl={8}
+                          style={{
+                            alignItems: 'stretch',
+                            marginTop: 10,
+                            minHeight: 300,
+                          }}
+                        >
+                          <ArticleCard article={article} />
+                        </Col>
+                      ))}
+                </Row>
+                <Row justify="center" style={{ marginTop: 15 }}>
+                  <Col>
+                    <Pagination
+                      total={articleData?.listArticles.total}
+                      pageSizeOptions={['12']}
+                      pageSize={articlePagination.pageSize}
+                      current={articlePagination.page}
+                      onChange={onArticlePaginationChange}
+                      showTotal={(total) => `Total Bulletins: ${total}`}
+                    />
+                  </Col>
+                </Row>
               </Card>
             </Col>
             <Col
