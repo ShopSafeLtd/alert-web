@@ -27,7 +27,6 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
   });
   const onChange = useCallback((value, id) => {
     const currentNode = nodesMap.get(id);
-    console.log('test');
     if (!currentNode) {
       return;
     }

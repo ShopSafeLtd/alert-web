@@ -209,14 +209,13 @@ const compareIncident = (): Return => {
   };
 
   const onMerge = () => {
-    const mainOffender = {
-      ...preview,
-      images: preview.images.map(({ id }) => ({ id })),
-      tags: preview.tags.map(({ id }) => ({ id })),
-    };
-    const otherOffenders = offenders.filter(({ id }) => id !== preview.id);
+    // const mainOffender = {
+    //   ...preview,
+    //   images: preview.images.map(({ id }) => ({ id })),
+    //   tags: preview.tags.map(({ id }) => ({ id })),
+    // };
+    // const otherOffenders = offenders.filter(({ id }) => id !== preview.id);
 
-    console.log('runs', mainOffender, otherOffenders);
     navigate('/offenders');
   };
 
