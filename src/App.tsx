@@ -7,6 +7,9 @@ import { LoadScript } from '@react-google-maps/api';
 import LogRocket from 'logrocket';
 import ApolloProvider from './providers/ApolloProvider';
 
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
+
 import { Store, ThemeConfig } from './state';
 
 LogRocket.init('ub3rsv/gotalk-portal');
