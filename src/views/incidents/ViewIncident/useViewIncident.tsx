@@ -480,7 +480,7 @@ const useViewIncident = (incidentId: string): Return => {
         },
       ]);
     }
-  }, [role]);
+  }, [role, incidentId]);
 
   return {
     addImages,

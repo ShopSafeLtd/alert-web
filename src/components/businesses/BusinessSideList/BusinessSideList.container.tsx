@@ -9,7 +9,8 @@ interface Props {
 }
 
 const BusinessSideList = ({ current, to }: Props): JSX.Element => {
-  const { data, loading, onPaginationChange } = useBusinessSideList();
+  const { data, loading, onPaginationChange, pagination } =
+    useBusinessSideList();
 
   return (
     <View
@@ -18,6 +19,7 @@ const BusinessSideList = ({ current, to }: Props): JSX.Element => {
       current={current}
       onPaginationChange={onPaginationChange}
       to={to}
+      pagination={pagination}
     />
   );
 };

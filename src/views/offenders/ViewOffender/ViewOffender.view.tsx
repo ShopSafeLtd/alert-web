@@ -406,9 +406,12 @@ const ViewOffender = ({
                             </span>
                           }
                         >
-                          {data?.offender?.crimeGroups.map((group) => (
-                            <Tag key={group.id}>CG-{group.reference}</Tag>
-                          ))}
+                          {data?.offender?.crimeGroups &&
+                          data?.offender?.crimeGroups.length > 0
+                            ? data?.offender?.crimeGroups.map((group) => (
+                                <Tag key={group.id}>CG-{group.reference}</Tag>
+                              ))
+                            : 'None'}
                         </Descriptions.Item>
                       </Descriptions>
                       <Title level={4}>Exclusions</Title>

@@ -105,6 +105,7 @@ const ImageSection = ({
                 className="image-card-image"
                 style={{
                   backgroundImage: `url(${file.url || file.thumbUrl})`,
+                  backgroundPosition: 'center',
                 }}
               >
                 <div className="image-remove-button">

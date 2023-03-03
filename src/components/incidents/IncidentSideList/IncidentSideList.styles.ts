@@ -5,6 +5,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
   sideList: {
     display: 'flex',
     flexDirection: 'column',
+    height: '100vh',
     maxHeight: '100vh',
     width: 250,
     maxWidth: 250,

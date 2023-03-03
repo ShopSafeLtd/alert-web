@@ -74,6 +74,9 @@ const useViewBusiness = (): Return => {
           },
         },
       },
+      orderBy: {
+        fullName: SortOrder.Asc,
+      },
     },
   });
 
@@ -369,6 +372,9 @@ const useViewBusiness = (): Return => {
               },
             },
           },
+          orderBy: {
+            fullName: SortOrder.Asc,
+          },
         },
       });
 
@@ -398,6 +404,9 @@ const useViewBusiness = (): Return => {
                   },
                 },
               },
+            },
+            orderBy: {
+              fullName: SortOrder.Asc,
             },
           },
         }

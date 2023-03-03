@@ -1,6 +1,14 @@
 import React from 'react';
 import { ListOffendersQuery } from 'graphql/generated';
-import { Col, Divider, Pagination, Row, Skeleton, Typography } from 'antd';
+import {
+  Col,
+  Divider,
+  Pagination,
+  Row,
+  Skeleton,
+  Spin,
+  Typography,
+} from 'antd';
 import { Link } from 'react-router-dom';
 import { getLastOffence } from 'utils/offender/get-offender-desc';
 import useStyles from './OffenderSideList.styles';
@@ -14,6 +22,10 @@ interface Props {
   current?: string;
   onPaginationChange: (page: number, pageSize: number) => void;
   to?: string;
+  pagination: {
+    page: number;
+    pageSize: number;
+  };
 }
 
 const OffenderSideList = ({
@@ -22,12 +34,24 @@ const OffenderSideList = ({
   current,
   onPaginationChange,
   to,
+  pagination,
 }: Props): JSX.Element => {
   const classes = useStyles();
-  return !data && loading ? (
-    <Skeleton />
-  ) : (
+  return (
     <div className={classes.offenderSideList}>
+      {loading && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flex: 1,
+            height: '100vh',
+          }}
+        >
+          <Spin />
+        </div>
+      )}
       {data?.listOffenders?.offenders.map((offender) => (
         <Link
           to={`${to || '/app/offenders/view/'}${offender.id}`}
@@ -70,12 +94,16 @@ const OffenderSideList = ({
           </div>
         </Link>
       ))}
-      <Pagination
-        total={data?.listOffenders?.total}
-        size="small"
-        showSizeChanger={false}
-        onChange={onPaginationChange}
-      />
+      {!loading && (
+        <Pagination
+          total={data?.listOffenders?.total}
+          size="small"
+          showSizeChanger={false}
+          onChange={onPaginationChange}
+          pageSize={pagination.pageSize}
+          current={pagination.page}
+        />
+      )}
     </div>
   );
 };

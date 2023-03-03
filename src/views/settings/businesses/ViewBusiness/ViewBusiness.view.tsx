@@ -319,7 +319,9 @@ const ViewBusiness = ({
         onClose={toggleEdit}
         width={500}
       >
-        <EditBusiness businessId={businessId} onClose={toggleEdit} />
+        {editVisible && (
+          <EditBusiness businessId={businessId} onClose={toggleEdit} />
+        )}
       </Drawer>
 
       <Drawer
@@ -328,15 +330,17 @@ const ViewBusiness = ({
         width={700}
         title="Invite New User"
       >
-        <AddUser
-          business={{
-            label: data?.business?.name || '',
-            value: businessId || '',
-          }}
-          onClose={toggleInviteUser}
-          update={updateUsersList}
-          updateSearch={updateUsersListExisting}
-        />
+        {inviteUserVisible && (
+          <AddUser
+            business={{
+              label: data?.business?.name || '',
+              value: businessId || '',
+            }}
+            onClose={toggleInviteUser}
+            update={updateUsersList}
+            updateSearch={updateUsersListExisting}
+          />
+        )}
       </Drawer>
 
       <Drawer
@@ -345,11 +349,13 @@ const ViewBusiness = ({
         width={700}
         title="Add Existing Users"
       >
-        <AddUserToBusiness
-          businessId={businessId || ''}
-          onClose={toggleAddUser}
-          update={updateAddUsersToBusiness}
-        />
+        {addUserVisible && (
+          <AddUserToBusiness
+            businessId={businessId || ''}
+            onClose={toggleAddUser}
+            update={updateAddUsersToBusiness}
+          />
+        )}
       </Drawer>
     </div>
   );

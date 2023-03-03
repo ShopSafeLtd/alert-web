@@ -13,6 +13,7 @@ interface Props {
   current?: string;
   onPaginationChange: (page: number, pageSize: number) => void;
   to?: string;
+  pagination: { page: number; pageSize: number };
 }
 
 const BusinessSideList = ({
@@ -21,6 +22,7 @@ const BusinessSideList = ({
   current,
   onPaginationChange,
   to,
+  pagination,
 }: Props): JSX.Element => {
   const classes = useStyles();
   return !data && loading ? (
@@ -60,6 +62,8 @@ const BusinessSideList = ({
         total={data?.listBusinesses?.total}
         size="small"
         showSizeChanger={false}
+        pageSize={pagination.pageSize}
+        current={pagination.page}
         onChange={onPaginationChange}
       />
     </div>

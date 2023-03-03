@@ -22,6 +22,9 @@ describe('Detail Officer View', () => {
           id: 'test',
           name: 'test group',
           description: null,
+          scheme: {
+            id: 'id',
+          },
         },
       ],
       schemes: [

@@ -1,20 +1,24 @@
-import { ListBusinessesQuery, useListBusinessesQuery } from 'graphql/generated';
-import { useStoreState, useStoreActions } from 'state';
+import {
+  ListBusinessesQuery,
+  SortOrder,
+  useListBusinessesQuery,
+} from 'graphql/generated';
+import { useState } from 'react';
+import { useStoreState } from 'state';
 
 interface Return {
   data: ListBusinessesQuery | undefined;
   loading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
+  pagination: { page: number; pageSize: number };
 }
 
 const useBusinessSideList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
-  const order = useStoreState((state) => state.data.offenders.order);
-  const pagination = useStoreState((state) => state.data.offenders.pagination);
-  const variables = useStoreState((state) => state.data.offenders.variables);
-  const setOffendersState = useStoreActions(
-    (actions) => actions.data.setOffenders
-  );
+  const [pagination, setPagination] = useState({
+    page: 1,
+    pageSize: 20,
+  });
 
   const { data, loading } = useListBusinessesQuery({
     variables: {
@@ -27,6 +31,7 @@ const useBusinessSideList = (): Return => {
           },
         },
       },
+      orderBy: { name: SortOrder.Asc },
       take: pagination.pageSize,
       skip: (pagination.page - 1) * pagination.pageSize,
     },
@@ -34,14 +39,10 @@ const useBusinessSideList = (): Return => {
   });
 
   const onPaginationChange = (page: number, pageSize: number) => {
-    setOffendersState({
-      pagination: {
-        ...pagination,
-        page,
-        pageSize,
-      },
-      variables,
-      order,
+    setPagination({
+      ...pagination,
+      page,
+      pageSize,
     });
   };
 
@@ -49,6 +50,7 @@ const useBusinessSideList = (): Return => {
     data,
     loading: data?.listBusinesses ? false : loading,
     onPaginationChange,
+    pagination,
   };
 };
 

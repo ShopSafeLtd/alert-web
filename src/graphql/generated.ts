@@ -5348,6 +5348,10 @@ export type BusinessListRelationFilter = {
   some?: InputMaybe<BusinessWhereInput>;
 };
 
+export type BusinessOrderBy = {
+  name?: InputMaybe<SortOrder>;
+};
+
 export type BusinessOrderByRelationAggregateInput = {
   _count?: InputMaybe<SortOrder>;
 };
@@ -7079,6 +7083,7 @@ export type Document = {
   articles: Array<Article>;
   createdAt: Scalars['DateTime'];
   id: Scalars['String'];
+  investigation: Array<Investigation>;
   name: Scalars['String'];
   updatedAt: Scalars['DateTime'];
   url: Scalars['String'];
@@ -7087,6 +7092,13 @@ export type Document = {
 export type DocumentArticlesArgs = {
   after?: InputMaybe<ArticleWhereUniqueInput>;
   before?: InputMaybe<ArticleWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type DocumentInvestigationArgs = {
+  after?: InputMaybe<InvestigationWhereUniqueInput>;
+  before?: InputMaybe<InvestigationWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
 };
@@ -8247,6 +8259,7 @@ export type FlowNode = {
   positionAbsolute?: Maybe<Xy>;
   positionX: Scalars['Int'];
   positionY: Scalars['Int'];
+  style?: Maybe<Style>;
   type: Scalars['String'];
   updatedAt: Scalars['DateTime'];
   width: Scalars['Int'];
@@ -20540,6 +20553,7 @@ export type QueryListArticlesArgs = {
 };
 
 export type QueryListBusinessesArgs = {
+  orderBy?: InputMaybe<Array<BusinessOrderBy>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<BusinessWhereInput>;
@@ -23227,6 +23241,12 @@ export type StringNullableListFilter = {
   hasEvery?: InputMaybe<Array<Scalars['String']>>;
   hasSome?: InputMaybe<Array<Scalars['String']>>;
   isEmpty?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type Style = {
+  __typename?: 'Style';
+  height: Scalars['Int'];
+  width: Scalars['Int'];
 };
 
 export type Subscription = {
@@ -30708,6 +30728,7 @@ export type ListBusinessesQueryVariables = Exact<{
   where?: InputMaybe<BusinessWhereInput>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<BusinessOrderBy> | BusinessOrderBy>;
 }>;
 
 export type ListBusinessesQuery = {
@@ -33952,7 +33973,12 @@ export type CurrentUserQuery = {
     offenderPush: boolean;
     messagePush: boolean;
     businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
-    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    groups: Array<{
+      __typename?: 'Group';
+      id: string;
+      name: string;
+      scheme: { __typename?: 'Scheme'; id: string };
+    }>;
     schemes: Array<{
       __typename?: 'UserScheme';
       id: string;
@@ -35888,8 +35914,13 @@ export type EditBusinessQueryResult = Apollo.QueryResult<
   EditBusinessQueryVariables
 >;
 export const ListBusinessesDocument = gql`
-  query ListBusinesses($where: BusinessWhereInput, $skip: Int, $take: Int) {
-    listBusinesses(where: $where, skip: $skip, take: $take) {
+  query ListBusinesses(
+    $where: BusinessWhereInput
+    $skip: Int
+    $take: Int
+    $orderBy: [BusinessOrderBy!]
+  ) {
+    listBusinesses(where: $where, skip: $skip, take: $take, orderBy: $orderBy) {
       total
       businesses {
         id
@@ -35923,6 +35954,7 @@ export const ListBusinessesDocument = gql`
  *      where: // value for 'where'
  *      skip: // value for 'skip'
  *      take: // value for 'take'
+ *      orderBy: // value for 'orderBy'
  *   },
  * });
  */
@@ -42360,6 +42392,9 @@ export const CurrentUserDocument = gql`
       groups {
         id
         name
+        scheme {
+          id
+        }
       }
       schemes {
         id

@@ -9,6 +9,10 @@ interface Return {
   data: ListOffendersQuery | undefined;
   loading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
+  pagination: {
+    page: number;
+    pageSize: number;
+  };
 }
 
 const useOffenderSideList = (): Return => {
@@ -51,6 +55,10 @@ const useOffenderSideList = (): Return => {
     data,
     loading: data?.listOffenders ? false : loading,
     onPaginationChange,
+    pagination: {
+      page: pagination.page,
+      pageSize: pagination.pageSize,
+    },
   };
 };
 

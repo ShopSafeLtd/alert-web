@@ -11,6 +11,9 @@ query currentUser {
     groups {
       id
       name
+      scheme {
+        id
+      }
     }
     schemes {
       id
