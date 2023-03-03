@@ -1,10 +1,14 @@
 import { Card, Input } from 'antd';
 import React, { memo, useCallback } from 'react';
-import { Handle, Position, useStore } from 'reactflow';
+import {
+  Handle,
+  Position,
+  useReactFlow,
+  useStore,
+  useStoreApi,
+} from 'reactflow';
 import { NodeResizer } from '@reactflow/node-resizer';
 import '@reactflow/node-resizer/dist/style.css';
-import { useParams } from 'react-router-dom';
-import useFlow from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useFlow';
 
 interface Props {
   data: {
@@ -19,23 +23,25 @@ interface Props {
 const connectionNodeIdSelector = (state) => state.connectionNodeId;
 
 export default memo(({ data, isConnectable, selected, id }: Props) => {
-  const { id: investigationId } = useParams();
   const connectionNodeId = useStore(connectionNodeIdSelector);
   const isTarget = connectionNodeId && connectionNodeId !== id;
-  const { nodesMap } = useFlow({
-    investigationId: investigationId || '',
-  });
-  const onChange = useCallback((value, id) => {
-    const currentNode = nodesMap.get(id);
-    if (!currentNode) {
-      return;
-    }
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    nodesMap.set(id, {
-      ...currentNode,
-      data: { ...currentNode.data, text: value },
-    });
+  const { setNodes } = useReactFlow();
+  const store = useStoreApi();
+
+  const onChange = useCallback((v, id) => {
+    const { nodeInternals } = store.getState();
+    setNodes(
+      Array.from(nodeInternals.values()).map((node) => {
+        if (node.id === id) {
+          node.data = {
+            ...node.data,
+            text: v,
+          };
+        }
+
+        return node;
+      })
+    );
   }, []);
 
   const { TextArea } = Input;

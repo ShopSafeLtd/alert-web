@@ -18,6 +18,10 @@ mutation UpdateFlow($data: UpdateFlowData!, $where: UniqueId!) {
             data
             height
             width
+            style {
+                height
+                width
+            }
             position {
                 x
                 y

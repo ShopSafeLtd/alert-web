@@ -70,6 +70,12 @@ const useAuth = (): Return => {
     groups,
   }: HandleSuccessArgs) => {
     window.localStorage.setItem('access_token', accessToken);
+    const color = `hsl(${Math.random() * 360}, 70%, 30%)`;
+
+    localStorage.setItem(
+      'current-user',
+      JSON.stringify({ id, name: fullName, color })
+    );
 
     const handleNoValidScheme = () => {
       const schemeDetails = schemes[0]?.scheme;
