@@ -208,7 +208,7 @@ const ViewOffender = ({
   return (
     <div className="page-container">
       <Row>
-        <Col span={7} style={{ backgroundColor: '#FFF' }}>
+        <Col span={7}>
           <div className="chats-side-list">
             <Row style={{ margin: '12px 5px 5px 10px' }}>
               <Col flex={1}>

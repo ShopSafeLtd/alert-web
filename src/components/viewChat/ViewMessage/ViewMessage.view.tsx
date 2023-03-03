@@ -265,8 +265,8 @@ const ViewMessges = ({
           (fileList && fileList.length > 0) ||
           (offendersData && offendersData.length > 0) ||
           (incidentsData && incidentsData.length > 0)
-            ? 'calc(100vh - 349px)'
-            : 'calc(100vh - 239px)'
+            ? 'calc(100vh - 279px)'
+            : 'calc(100vh - 169px)'
         }
         className="message-container"
       >

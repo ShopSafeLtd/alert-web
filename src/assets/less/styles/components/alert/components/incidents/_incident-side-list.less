@@ -1,7 +1,7 @@
 .incidents-side-list {
   display: flex;
   flex-direction: column;
-  max-height: calc(100vh - 70px);
+  max-height: 100vh;
   width: 100%;
   max-width: 300px;
   border-right: 1px solid rgb(237, 242, 249);
@@ -9,10 +9,9 @@
 
   .incident-item {
     width: 100%;
-    background-color: #fff;
-
+    background-color: #283142;
     &:hover {
-      background-color: #fafafa;
+      background-color: @item-hover-bg;
     }
 
     .incident-item-image {
@@ -53,5 +52,5 @@
 }
 
 .incident-item.current {
-  background-color: #fafafa;
+  background-color: @item-hover-bg;
 }

@@ -3,7 +3,6 @@ import SideNav from 'components/layout-components/AntD/navigation/SideNav';
 import TopNav from 'components/layout-components/AntD/navigation/TopNav';
 import Loading from 'components/shared-components/AntD/Loading';
 import MobileNav from 'components/layout-components/AntD/navigation/MobileNav';
-import HeaderNav from 'components/layout-components/AntD/navigation/HeaderNav';
 // import PageHeader from 'components/layout-components/AntD/PageHeader';
 import AppViews from 'navigation/app-views/router';
 import { Grid, Layout } from 'antd';
@@ -61,7 +60,7 @@ export const AppLayout = ({ location }: Props): JSX.Element => {
   ) : (
     <ScreenSizeUnsupported>
       <Layout>
-        <HeaderNav isMobile={isMobile} />
+        {/* <HeaderNav isMobile={isMobile} /> */}
         {isNavTop && !isMobile ? <TopNav routeInfo={currentRouteInfo} /> : null}
         <Layout className="app-container">
           {isNavSide && !isMobile && onboarded ? (

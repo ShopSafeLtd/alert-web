@@ -296,36 +296,58 @@ const ViewIncident = ({
                         {data?.incident?.description}
                       </Paragraph>
                       <Descriptions column={1} className={classes.desc}>
-                        <Descriptions.Item label="Reference">
+                        <Descriptions.Item
+                          className={classes.detail}
+                          label="Alert ID"
+                        >
                           {data?.incident?.reference}
                           {data?.incident?.policeRef
                             ? ` / Crime Ref: ${data?.incident?.policeRef}`
                             : ''}
                         </Descriptions.Item>
-                        <Descriptions.Item label={<span>Created At</span>}>
+                        <Descriptions.Item
+                          className={classes.detail}
+                          label={<span>Created At</span>}
+                        >
                           {data?.incident?.dayTime}
                         </Descriptions.Item>
-                        <Descriptions.Item label={<span>Created By</span>}>
+                        <Descriptions.Item
+                          className={classes.detail}
+                          label={<span>Created By</span>}
+                        >
                           {`${data?.incident?.createdBy.fullName} -
                               ${data?.incident?.createdBy.businesses[0]?.name}`}
                         </Descriptions.Item>
-                        <Descriptions.Item label={<span>Value</span>}>
+                        <Descriptions.Item
+                          className={classes.detail}
+                          label={<span>Value</span>}
+                        >
                           {data?.incident?.value ? '£' : ''}
                           {data?.incident?.value || 'Unknown'}
                         </Descriptions.Item>
-                        <Descriptions.Item label={<span>Recovered Value</span>}>
+                        <Descriptions.Item
+                          className={classes.detail}
+                          label={<span>Recovered Value</span>}
+                        >
                           {data?.incident?.value ? '£' : ''}
                           {data?.incident?.recoveredValue || 'Unknown'}
                         </Descriptions.Item>
                         <Descriptions.Item
+                          className={classes.detail}
                           label={<span>Report To Police</span>}
                         >
                           {data?.incident?.policeReported ? 'Yes' : 'No'}
                         </Descriptions.Item>
-                        <Descriptions.Item label={<span>Police Involved</span>}>
+                        <Descriptions.Item
+                          className={classes.detail}
+                          label={<span>Police Involved</span>}
+                        >
                           {data?.incident?.policeInvolved ? 'Yes' : 'No'}
                         </Descriptions.Item>
-                        <Descriptions.Item label={<span>Business</span>}>
+                        <Descriptions.Item
+                          className={classes.detail}
+                          label={<span>Business</span>}
+                        >
                           {editRights ? (
                             <Link
                               to={`/app/scheme-settings/business/view/${data?.incident?.business?.id}`}

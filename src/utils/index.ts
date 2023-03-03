@@ -238,6 +238,30 @@ class Utils {
   }
 }
 
+export enum LocalStorageKeys {
+  HYTALK_SYNC_TIMESTAMP = 'HYTALK_SYNC_TIMESTAMP',
+  access_token = 'access_token',
+  lang = 'language',
+  theme = 'theme',
+}
+
+const set = (key: LocalStorageKeys, value: string): void => {
+  window.localStorage.setItem(key, value);
+};
+
+const get = (key: LocalStorageKeys): string | null =>
+  window.localStorage.getItem(key);
+
+const remove = (key: LocalStorageKeys): void => {
+  window.localStorage.removeItem(key);
+};
+
+export const typedLocalStorage = {
+  set,
+  get,
+  remove,
+};
+
 export default Utils;
 export { default as calcAge } from './calc-age';
 export { default as calcDuration } from './calc-duration';

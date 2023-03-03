@@ -1,17 +1,15 @@
+import { Theme } from 'configs/ThemeConfig';
 import { createUseStyles } from 'react-jss';
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: Theme) => ({
   offenderSideList: {
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
     overflowY: 'scroll',
-    maxHeight: 'calc(100vh - 70px)',
+    maxHeight: '100vh',
     width: 290,
-    borderRight: '1px solid rgb(237, 242, 249)',
-    '&.current': {
-      backgroundColor: '#fafafa',
-    },
+    borderRight: `1px solid ${theme.borderColor}`,
     '& .ant-pagination': {
       margin: '15px 0',
       textAlign: 'center',
@@ -19,9 +17,12 @@ const useStyles = createUseStyles({
   },
   offenderItem: {
     width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: theme.componentBackground,
     '&:hover': {
-      backgroundColor: '#fafafa',
+      backgroundColor: theme.itemHoverBackground,
+    },
+    '&.current': {
+      backgroundColor: theme.itemSelectedBackground,
     },
   },
   content: {
@@ -36,6 +37,6 @@ const useStyles = createUseStyles({
   text: {
     fontSize: 13,
   },
-});
+}));
 
 export default useStyles;

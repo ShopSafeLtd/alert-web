@@ -1,24 +1,24 @@
 .chats-side-list {
   margin: 0;
   padding: 0;
-  height: calc(100vh - 70px);
+  height: 100vh;
   max-width: 100%;
-  border-right: 1px solid #e0e0e0;
+  border-right: 1px solid @border-color-base;
   overflow-y: scroll;
   // overflow: hidden;
   .chat-list {
     width: 100%;
     overflow: hidden;
-    background: pink;
+    background: @component-background;
   }
   .chat-item {
     width: 100%;
-    background-color: #fff;
-    border-bottom: 1px solid #f5f5f5 !important;
+    background-color: @menu-bg;
+    border-bottom: 1px solid @border-color-base !important;
     align-items: center;
     cursor: pointer;
     &:hover {
-      background-color: rgba(0, 0, 0, 0.02);
+      background-color: @background-color-light;
     }
     // .current {
     //   background-color: rgba(0, 0, 0, 0.05);
@@ -27,15 +27,16 @@
       margin: 0 5px;
       padding: 0 2px;
       font-size: 10px;
-      color: rgb(222, 68, 54);
+      color: @primary-color;
     }
     .chat-item-avatar {
-      background: #fde3cf;
-      color: #f56a00;
+      background: @avatar-bg;
+      border: @border-color-base;
+      color: @primary-color;
       // margin-left: 15px;
     }
     &.current {
-      background-color: rgba(0, 0, 0, 0.05);
+      background-color: @background-color-light;
     }
   }
 }

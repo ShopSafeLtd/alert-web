@@ -4,6 +4,7 @@ import {
   faClose,
   faImage,
   faPlus,
+  faSmile,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -405,15 +406,10 @@ const UpdateBar = ({
           >
             <Button
               onClick={toggleShowUpdatePicker}
-              style={{ width: '40px' }}
+              style={{ width: '40px', padding: 0 }}
               // icon={<FontAwesomeIcon icon={faFaceSmile} size="lg" />}
             >
-              <img
-                style={{ marginLeft: -8 }}
-                className="emoji-icon"
-                alt="emoji picker"
-                src="https://icons.getbootstrap.com/assets/icons/emoji-smile.svg"
-              />
+              <FontAwesomeIcon size="lg" icon={faSmile} />
             </Button>
           </Popover>
         </Col>

@@ -1,10 +1,11 @@
 import { createUseStyles } from 'react-jss';
+import { Theme } from 'configs/ThemeConfig';
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: Theme) => ({
   sideList: {
     display: 'flex',
     flexDirection: 'column',
-    maxHeight: 'calc(100vh - 70px)',
+    maxHeight: '100vh',
     width: 250,
     maxWidth: 250,
     borderRight: '1px solid rgb(237, 242, 249)',
@@ -17,13 +18,13 @@ const useStyles = createUseStyles({
   },
   item: {
     width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: theme.componentBackground,
 
     '&:hover': {
-      backgroundColor: '#fafafa',
+      backgroundColor: theme.itemHoverBackground,
     },
     '&.current': {
-      backgroundColor: '#fafafa',
+      backgroundColor: theme.itemSelectedBackground,
     },
   },
   itemImage: {},
@@ -46,6 +47,6 @@ const useStyles = createUseStyles({
     marginRight: 8,
     color: 'rgb(222, 68, 54)',
   },
-});
+}));
 
 export default useStyles;

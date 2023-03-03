@@ -7,7 +7,7 @@
 
   .view-offender {
     flex: 1;
-    border-left: 1px solid rgb(237, 242, 249);
+    border-left: 1px solid @border-color-base;
     height: auto;
 
     .offender-images {
@@ -60,18 +60,18 @@
   height: 100%;
   overflow-y: scroll;
   overflow-x: clip;
-  max-height: calc(100vh - 70px);
+  max-height: 100vh;
   width: 100%;
-  border-right: 1px solid rgb(237, 242, 249);
+  border-right: 1px solid @border-color-base;
   // padding-right: 30px;
 
   .offender-item {
     width: 100%;
-    background-color: #fff;
+    background-color: @component-background;
     padding-right: 8px;
 
     &:hover {
-      background-color: #fafafa;
+      background-color: @component-background;
     }
 
     .offender-item-image {
@@ -118,5 +118,5 @@
 }
 
 .offender-item.current {
-  background-color: #fafafa;
+  background-color: @component-background;
 }

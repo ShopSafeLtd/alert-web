@@ -2,6 +2,7 @@
 /* eslint-disable no-param-reassign */
 
 import { action, Action } from 'easy-peasy';
+import { LocalStorageKeys, typedLocalStorage } from 'utils';
 
 export enum NavType {
   SIDE = 'SIDE',
@@ -44,7 +45,9 @@ export const ThemeConfig = {
   topNavColor: '#3e82f7',
   headerNavColor: '',
   mobileNav: false,
-  currentTheme: 'light',
+  currentTheme:
+    (typedLocalStorage.get(LocalStorageKeys.theme) as 'light' | 'dark') ||
+    ('light' as 'light' | 'dark'),
 };
 
 export interface ThemeModel {
@@ -112,7 +115,7 @@ export interface ThemeModel {
   topNavColor: string;
   headerNavColor: string;
   mobileNav: boolean;
-  currentTheme: string;
+  currentTheme: 'light' | 'dark';
 
   toggleCollapsedNav: Action<ThemeModel, boolean>;
   sideNavStyleChange: Action<ThemeModel, SideNavTheme>;
@@ -121,7 +124,7 @@ export interface ThemeModel {
   topNavColorChange: Action<ThemeModel, string>;
   headerNavColorChange: Action<ThemeModel, string>;
   toggleMobileNav: Action<ThemeModel, boolean>;
-  switchTheme: Action<ThemeModel, string>;
+  switchTheme: Action<ThemeModel, 'light' | 'dark'>;
 }
 
 const themeModel: ThemeModel = {

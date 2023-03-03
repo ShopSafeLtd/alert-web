@@ -193,14 +193,14 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
         },
       },
       skip: 0,
-      take: 10,
+      take: 20,
     },
     skip: !chatId,
     onCompleted: () => {
       setLoadMore(false);
       setLoading(false);
       setFetching(false);
-      setAfter(after + 10);
+      setAfter(after + 20);
     },
   });
 
@@ -382,7 +382,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
           },
         },
         skip: 0,
-        take: 10,
+        take: 20,
       },
     });
 
