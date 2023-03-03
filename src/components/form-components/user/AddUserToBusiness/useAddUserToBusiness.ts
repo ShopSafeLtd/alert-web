@@ -3,6 +3,7 @@ import { notification } from 'antd';
 import {
   AddUsersToBusinessMutation,
   ListSchemeUsersQuery,
+  SortOrder,
   useAddUsersToBusinessMutation,
   useListSchemeUsersQuery,
 } from 'graphql/generated';
@@ -42,9 +43,10 @@ const useAddUserToBusiness = ({
   const [selected, setSelected] = useState<Row[]>([]);
   const [saving, setSaving] = useState(false);
 
-  const { data } = useListSchemeUsersQuery({
+  const { data, loading } = useListSchemeUsersQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
+      orderBy: [{ fullName: SortOrder.Asc }],
       where: {
         schemes: {
           some: {
@@ -55,6 +57,7 @@ const useAddUserToBusiness = ({
             },
           },
         },
+        recycled: { equals: false },
         OR: [
           {
             businesses: {
@@ -132,7 +135,7 @@ const useAddUserToBusiness = ({
 
   return {
     data,
-    loading: !data,
+    loading,
     onSelectChange,
     onSubmit,
     saving,

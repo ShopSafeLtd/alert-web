@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
   ListBusinessesQuery,
   QueryMode,
+  SortOrder,
   useListBusinessesQuery,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
@@ -36,6 +37,9 @@ const useListBusinesses = (): Return => {
             },
           },
         },
+      },
+      orderBy: {
+        name: SortOrder.Asc,
       },
     },
   });

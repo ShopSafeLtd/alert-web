@@ -8,6 +8,7 @@ import {
   SearchBusinessesDocument,
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
+  SortOrder,
   useCreateBusinessMutation,
 } from 'graphql/generated';
 import { useState } from 'react';
@@ -83,6 +84,9 @@ const useAddBusiness = ({ onClose }: Props): Return => {
               },
             },
           },
+          orderBy: {
+            name: SortOrder.Asc,
+          },
         },
       });
 
@@ -102,6 +106,9 @@ const useAddBusiness = ({ onClose }: Props): Return => {
                   },
                 },
               },
+            },
+            orderBy: {
+              name: SortOrder.Asc,
             },
           },
           data: {

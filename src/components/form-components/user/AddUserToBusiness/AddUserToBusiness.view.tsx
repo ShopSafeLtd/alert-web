@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Col, Row, Table } from 'antd';
+import { Button, Col, Row, Table, Typography } from 'antd';
 import { ListSchemeUsersQuery } from 'graphql/generated';
 
 interface Props {
@@ -44,19 +44,32 @@ const AddUserToBusiness = ({
           key: 'status',
           dataIndex: 'status',
           title: 'Status',
+          render: (value) => (
+            <Typography.Text type={value === 'Enabled' ? 'success' : 'warning'}>
+              {value}
+            </Typography.Text>
+          ),
         },
         {
           key: 'business',
           dataIndex: 'business',
           title: 'Business',
+          render: (value) => (
+            <Typography.Text>
+              {/* eslint-disable-next-line */}
+              {value?.name}
+            </Typography.Text>
+          ),
         },
       ]}
-      dataSource={data?.users.map((user) => ({
-        key: user.id,
-        fullName: user.fullName,
-        status: user.status,
-        business: user.businesses.length > 0 ? user.businesses[0] : null,
-      }))}
+      dataSource={
+        data?.users.map((user) => ({
+          key: user.id,
+          fullName: user.fullName,
+          status: user.status,
+          business: user.businesses.length > 0 ? user.businesses[0] : null,
+        })) || []
+      }
       rowSelection={{
         type: 'checkbox',
         onChange: onSelectChange,

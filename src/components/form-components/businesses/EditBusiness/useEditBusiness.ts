@@ -100,11 +100,13 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         },
         data: {
           name: { set: values.name },
-          parent: {
-            connect: {
-              id: values.parent.value,
-            },
-          },
+          parent: values.parent.value
+            ? {
+                connect: {
+                  id: values.parent.value,
+                },
+              }
+            : undefined,
           location: {
             where: {
               id: data?.business?.locations[0]?.id,

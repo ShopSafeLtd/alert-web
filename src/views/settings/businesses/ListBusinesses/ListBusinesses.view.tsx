@@ -100,6 +100,9 @@ const ListBusinesses = ({
         }))}
         loading={loading}
         size="small"
+        pagination={{
+          pageSize: 30,
+        }}
       />
 
       <Drawer
@@ -108,7 +111,7 @@ const ListBusinesses = ({
         title="Add New Business"
         width={600}
       >
-        <AddBusiness onClose={toggleAddVisible} />
+        {addVisible && <AddBusiness onClose={toggleAddVisible} />}
       </Drawer>
     </div>
   );

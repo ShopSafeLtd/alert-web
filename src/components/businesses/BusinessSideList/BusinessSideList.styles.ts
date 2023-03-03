@@ -5,7 +5,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
   offenderSideList: {
     display: 'flex',
     flexDirection: 'column',
-    height: '100%',
+    height: '100vh',
     overflowY: 'scroll',
     maxHeight: '100vh',
     width: 290,
