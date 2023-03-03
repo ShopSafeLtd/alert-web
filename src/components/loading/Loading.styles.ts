@@ -1,9 +1,10 @@
+import { Theme } from 'configs/ThemeConfig';
 import { createUseStyles } from 'react-jss';
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: Theme) => ({
   cover: {
     position: 'absolute',
-    background: 'linear-gradient(to right, #cb2d3e, #ef473a)',
+    background: theme.gradientBackground,
     height: '100vh',
     width: '100vw',
     zIndex: 1000,
@@ -26,13 +27,13 @@ const useStyles = createUseStyles({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    background: 'white',
+    background: theme.componentBackground,
     borderRadius: '10px',
   },
   loadingLogo: {
     width: '250px',
     paddingRight: '20px',
-    backgroundImage: 'url(/img/logo.svg)',
+    backgroundImage: theme.logo,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'contain',
     height: '48px',
@@ -44,6 +45,6 @@ const useStyles = createUseStyles({
     justifyContent: 'center',
     marginTop: 30,
   },
-});
+}));
 
 export default useStyles;

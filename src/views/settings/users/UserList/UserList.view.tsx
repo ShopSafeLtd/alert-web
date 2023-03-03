@@ -128,9 +128,16 @@ const UserList = ({
           dataIndex: 'emailAddress',
         },
         {
-          key: 'organisation',
-          title: 'Organisation',
-          dataIndex: 'organisation',
+          key: 'business',
+          title: 'Business',
+          dataIndex: 'business',
+          render: (value, record) => (
+            <Link
+              to={`/app/scheme-settings/businesses/view/${record.businessId}`}
+            >
+              {value}
+            </Link>
+          ),
         },
         {
           key: 'groups',
@@ -142,7 +149,8 @@ const UserList = ({
         key: user.id,
         name: user.fullName,
         emailAddress: user.email,
-        organisation: user.organisation,
+        business: user.businesses.length > 0 ? user.businesses[0].name : '',
+        businessId: user.businesses.length > 0 ? user.businesses[0].id : '',
         groups: user.groups
           .map((group, index) => (index === 0 ? group.name : ` ${group.name}`))
           .toString(),

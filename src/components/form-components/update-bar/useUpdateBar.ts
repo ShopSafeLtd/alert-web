@@ -63,7 +63,7 @@ interface OffenderData {
 interface SchemeUserData {
   id: string;
   fullName: string;
-  organisation: string;
+  businesses: { id: string; name: string }[];
   firstLetter?: string | null;
   oldFullName: string;
 }
@@ -161,7 +161,7 @@ const useUpdateBar = ({
   const userRole = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
   const fullName = useStoreState((state) => state.user.fullName);
-  const organisation = useStoreState((state) => state.user.organisation);
+  const businesses = useStoreState((state) => state.user.businesses);
   const userGroups = useStoreState((state) => state.user.groups);
 
   const [showUpdatePicker, setShowUpdatePicker] = useState(false);
@@ -234,7 +234,7 @@ const useUpdateBar = ({
               fullName: user.fullName,
               oldFullName: user.fullName,
               id: user.id,
-              organisation: user.organisation,
+              businesses: user.businesses,
               firstLetter: user.firstLetter,
             }))
           )
@@ -288,13 +288,19 @@ const useUpdateBar = ({
     return !isFileDuplicate || Upload.LIST_IGNORE;
   };
   const onSubmitUpdate = () => {
-    if (updateInput) {
+    if (
+      !updateInput.length &&
+      !updateFileList.length &&
+      !updateOffenders.length &&
+      !updateIncidents?.length
+    ) {
+      message.info('The message cannot be empty!');
+    } else {
       setUpdateInput('');
       setReplyTo(null);
       setUpdateFileList([]);
       setUpdateIncidents([]);
       setUpdateOffenders([]);
-
       if (!subscribed) {
         if (incidentId) {
           subscribeToIncident({
@@ -404,7 +410,7 @@ const useUpdateBar = ({
               createdBy: {
                 fullName,
                 id: userId,
-                organisation,
+                businesses,
                 __typename: 'User',
               },
               id: `optimistic-${new Date().toISOString()}`,
@@ -518,7 +524,7 @@ const useUpdateBar = ({
               createdBy: {
                 fullName,
                 id: userId,
-                organisation,
+                businesses,
                 __typename: 'User',
               },
               id: `optimistic-${new Date().toISOString()}`,

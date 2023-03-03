@@ -15,19 +15,18 @@ import {
   Typography,
   Skeleton,
 } from 'antd';
+import DebounceSelect from 'components/form-components/DebounceSelect';
 
 const { Title } = Typography;
 
 interface FormData {
   fullName: string;
   email: string;
-  organisation: string;
+  business: {
+    value: string;
+    label: string;
+  };
   role: Role;
-  postcode: string;
-  street: string;
-  townCity: string;
-  building: string;
-  county: string;
   groups: string[];
   chats: string[];
 }
@@ -42,6 +41,9 @@ interface Props {
   chatsData: SchemeChatsQuery | undefined;
   chatsLoading: boolean;
   saving: boolean;
+  onSearchBusiness: (
+    value: string
+  ) => Promise<{ label: React.ReactNode; value: string }[]>;
 }
 
 const EditUser = ({
@@ -54,21 +56,20 @@ const EditUser = ({
   chatsData,
   chatsLoading,
   saving,
+  onSearchBusiness,
 }: Props): JSX.Element =>
   !data && loading ? (
     <Skeleton />
   ) : (
-    <Form
+    <Form<FormData>
       initialValues={{
         fullName: data?.user?.fullName,
         email: data?.user?.email,
-        organisation: data?.user?.organisation,
+        business: {
+          label: data?.user?.businesses[0]?.name,
+          value: data?.user?.businesses[0]?.id,
+        },
         role: data?.user?.schemes && data?.user?.schemes[0].role,
-        postcode: data?.user?.addresses[0].postcode || '',
-        street: data?.user?.addresses[0].street || '',
-        townCity: data?.user?.addresses[0].townCity || '',
-        building: data?.user?.addresses[0].building || '',
-        county: data?.user?.addresses[0].county || '',
         groups:
           data?.user?.groups && data.user.groups.length > 0
             ? data.user.groups.map(({ id }) => id)
@@ -117,16 +118,23 @@ const EditUser = ({
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            name="organisation"
-            label="Organisation"
+            name="business"
+            label="Business"
             rules={[
               {
                 required: true,
-                message: 'Please enter an organisation for the user.',
+                message: 'Please select a business for the new user.',
               },
             ]}
           >
-            <Input disabled={saving} />
+            <DebounceSelect
+              showSearch
+              allowClear
+              disabled={saving}
+              placeholder="Search for a business..."
+              fetchOptions={onSearchBusiness}
+              style={{ width: '100%' }}
+            />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -148,68 +156,6 @@ const EditUser = ({
                 Scheme Admin
               </Select.Option>
             </Select>
-          </Form.Item>
-        </Col>
-      </Row>
-
-      <Title level={4} style={{ marginBottom: 15 }}>
-        User Address:
-      </Title>
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item name="building" label="Building">
-            <Input disabled={saving} />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item
-            name="street"
-            label="Street"
-            rules={[
-              {
-                required: true,
-                message: 'Please enter a street for the address.',
-              },
-            ]}
-          >
-            <Input disabled={saving} />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item
-            name="townCity"
-            label="Town/City"
-            rules={[
-              {
-                required: true,
-                message: 'Please enter a town/city for the address.',
-              },
-            ]}
-          >
-            <Input disabled={saving} />
-          </Form.Item>
-        </Col>
-        <Col span={12}>
-          <Form.Item name="county" label="County">
-            <Input disabled={saving} />
-          </Form.Item>
-        </Col>
-      </Row>
-      <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item
-            name="postcode"
-            label="Postcode"
-            rules={[
-              {
-                required: true,
-                message: 'Please enter postcode for the address.',
-              },
-            ]}
-          >
-            <Input disabled={saving} />
           </Form.Item>
         </Col>
       </Row>

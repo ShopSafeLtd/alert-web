@@ -9,6 +9,7 @@ import {
   Descriptions,
   Drawer,
   Dropdown,
+  Empty,
   Image,
   Input,
   Menu,
@@ -411,137 +412,305 @@ const ViewOffender = ({
                         </Descriptions.Item>
                       </Descriptions>
                       <Title level={4}>Exclusions</Title>
-                      <Table
-                        size="small"
-                        loading={loading}
-                        pagination={
-                          data?.offender?.incidents &&
-                          data?.offender?.incidents.length > 10
-                            ? {
-                                pageSize: 10,
-                              }
-                            : false
-                        }
-                        className={classes.exclusions}
-                        columns={[
-                          {
-                            key: 'duration',
-                            title: 'Duration',
-                            dataIndex: 'duration',
-                            render: (value) => (
-                              <>
-                                <Text>{value}</Text>
-                              </>
-                            ),
-                          },
-                          {
-                            key: 'status',
-                            title: 'Status',
-                            dataIndex: 'status',
-                            render: (value, record) => (
-                              <>
-                                {calcExpired(new Date(record.endDate)) ? (
-                                  <Tag
-                                    color="red"
-                                    style={{
-                                      marginLeft: 10,
-                                    }}
-                                  >
-                                    EXPIRED
-                                  </Tag>
-                                ) : (
-                                  <Tag
-                                    color="success"
-                                    style={{
-                                      marginLeft: 10,
-                                    }}
-                                  >
-                                    ACTIVE
-                                  </Tag>
-                                )}
-                              </>
-                            ),
-                          },
-                          {
-                            key: 'location',
-                            title: 'Location',
-                            dataIndex: 'location',
-                            ellipsis: true,
-                          },
-                        ]}
-                        dataSource={data?.offender?.bans.map((ban) => ({
-                          endDate: ban.endDate,
-                          duration: `${new Date(
-                            ban?.startDate
-                          ).toDateString()}  -->  ${new Date(
-                            ban?.endDate
-                          ).toDateString()}`,
-                          status: `${new Date(
-                            ban?.startDate
-                          ).toDateString()}  -->  ${new Date(
-                            ban?.endDate
-                          ).toDateString()}`,
-                          location: ban.location,
-                        }))}
-                      />
+                      {data?.offender?.bans.length && !loading ? (
+                        <Table
+                          size="small"
+                          loading={loading}
+                          pagination={
+                            data.offender.bans &&
+                            data?.offender.bans.length > 10
+                              ? {
+                                  pageSize: 10,
+                                }
+                              : false
+                          }
+                          className={classes.exclusions}
+                          columns={[
+                            {
+                              key: 'duration',
+                              title: 'Duration',
+                              dataIndex: 'duration',
+                              render: (value) => (
+                                <>
+                                  <Text>{value}</Text>
+                                </>
+                              ),
+                            },
+                            {
+                              key: 'status',
+                              title: 'Status',
+                              dataIndex: 'status',
+                              render: (value, record) => (
+                                <>
+                                  {calcExpired(new Date(record.endDate)) ? (
+                                    <Tag
+                                      color="red"
+                                      style={{
+                                        marginLeft: 10,
+                                      }}
+                                    >
+                                      EXPIRED
+                                    </Tag>
+                                  ) : (
+                                    <Tag
+                                      color="success"
+                                      style={{
+                                        marginLeft: 10,
+                                      }}
+                                    >
+                                      ACTIVE
+                                    </Tag>
+                                  )}
+                                </>
+                              ),
+                            },
+                            {
+                              key: 'location',
+                              title: 'Location',
+                              dataIndex: 'location',
+                              ellipsis: true,
+                            },
+                          ]}
+                          dataSource={data?.offender?.bans.map((ban) => ({
+                            endDate: ban.endDate,
+                            duration: `${new Date(
+                              ban?.startDate
+                            ).toDateString()}  -->  ${new Date(
+                              ban?.endDate
+                            ).toDateString()}`,
+                            status: `${new Date(
+                              ban?.startDate
+                            ).toDateString()}  -->  ${new Date(
+                              ban?.endDate
+                            ).toDateString()}`,
+                            location: ban.location,
+                          }))}
+                        />
+                      ) : (
+                        <Empty
+                          description="No exclusions on offender"
+                          image={Empty.PRESENTED_IMAGE_SIMPLE}
+                        />
+                      )}
                       <Title level={4}>Incidents</Title>
-                      <Table
-                        size="small"
-                        loading={loading}
-                        columns={[
-                          {
-                            key: 'types',
-                            title: 'Types',
-                            dataIndex: 'types',
-                          },
-                          {
-                            key: 'date',
-                            title: 'Date',
-                            dataIndex: 'date',
-                          },
-                          {
-                            key: 'location',
-                            title: 'Location',
-                            dataIndex: 'location',
-                          },
-                          {
-                            title: '',
-                            dataIndex: 'actions',
-                            key: 'actions',
-                            render: (_, record) => (
-                              <Button type="text" size="small">
-                                <FontAwesomeIcon
-                                  icon={faArrowUpRightFromSquare}
-                                  onClick={() =>
-                                    navigate(
-                                      `/app/incidents/view/${record.key}`
-                                    )
+                      {data?.offender?.incidents.length && !loading ? (
+                        <Table
+                          size="small"
+                          loading={loading}
+                          columns={[
+                            {
+                              key: 'types',
+                              title: 'Types',
+                              dataIndex: 'types',
+                            },
+                            {
+                              key: 'date',
+                              title: 'Date',
+                              dataIndex: 'date',
+                            },
+                            {
+                              key: 'location',
+                              title: 'Location',
+                              dataIndex: 'location',
+                            },
+                            {
+                              title: '',
+                              dataIndex: 'actions',
+                              key: 'actions',
+                              render: (_, record) => (
+                                <Button type="text" size="small">
+                                  <FontAwesomeIcon
+                                    icon={faArrowUpRightFromSquare}
+                                    onClick={() =>
+                                      navigate(
+                                        `/app/incidents/view/${record.key}`
+                                      )
+                                    }
+                                  />
+                                </Button>
+                              ),
+                            },
+                          ]}
+                          dataSource={data?.offender?.incidents.map(
+                            (incident) => ({
+                              types: incident.crimeTypes.map(
+                                (type, index) =>
+                                  `${index > 0 ? ' ' : ''}${type.name}`
+                              ),
+                              date: incident.dayTime,
+                              location: incident.createdBy.businesses[0]?.name,
+                              key: incident.id,
+                            })
+                          )}
+                          pagination={
+                            data?.offender?.incidents &&
+                            data?.offender?.incidents.length > 10
+                              ? {
+                                  pageSize: 10,
+                                }
+                              : false
+                          }
+                        />
+                      ) : (
+                        <Empty
+                          description="No incidents on offender"
+                          image={Empty.PRESENTED_IMAGE_SIMPLE}
+                        />
+                      )}
+                      {data?.offender?.vehicles.length && !loading ? (
+                        <div className="incident-offender-container">
+                          {/* <Divider>Offender</Divider> */}
+                          <Title level={4} style={{ marginTop: 20 }}>
+                            Vehicles
+                          </Title>
+                          <Table
+                            columns={[
+                              {
+                                key: 'make',
+                                dataIndex: 'make',
+                                title: 'Make',
+                              },
+                              {
+                                key: 'colour',
+                                dataIndex: 'colour',
+                                title: 'Colour',
+                              },
+                              {
+                                key: 'model',
+                                dataIndex: 'model',
+                                title: 'Model',
+                              },
+                              {
+                                key: 'registration',
+                                dataIndex: 'registration',
+                                title: 'Registration',
+                              },
+
+                              {
+                                title: '',
+                                dataIndex: 'actions',
+                                key: 'actions',
+                                render: (_, record) => (
+                                  <Button type="text" size="small">
+                                    <FontAwesomeIcon
+                                      icon={faArrowUpRightFromSquare}
+                                      onClick={() =>
+                                        navigate(
+                                          `/app/vehicles/view/${record.key}`
+                                        )
+                                      }
+                                    />
+                                  </Button>
+                                ),
+                              },
+                            ]}
+                            dataSource={data?.offender?.vehicles.map(
+                              (vehicle) => ({
+                                key: vehicle.id,
+                                make: vehicle.make,
+                                colour: vehicle.colour,
+                                model: vehicle.model,
+                                registration: vehicle.registration,
+                              })
+                            )}
+                            size="small"
+                            pagination={
+                              data?.offender?.vehicles &&
+                              data?.offender?.vehicles.length > 5
+                                ? {
+                                    pageSize: 5,
                                   }
-                                />
-                              </Button>
-                            ),
-                          },
-                        ]}
-                        dataSource={data?.offender?.incidents.map(
-                          (incident) => ({
-                            types: incident.crimeTypes.map(
-                              (type, index) =>
-                                `${index > 0 ? ' ' : ''}${type.name}`
-                            ),
-                            date: incident.dayTime,
-                            location: incident.createdBy.organisation,
-                            key: incident.id,
-                          })
-                        )}
-                        pagination={
-                          data?.offender?.incidents &&
-                          data?.offender?.incidents.length > 10
-                            ? {
-                                pageSize: 10,
-                              }
-                            : false
-                        }
-                      />
+                                : false
+                            }
+                            rowClassName={classes.offenderRow}
+                          />
+                        </div>
+                      ) : null}
+                      {data?.offender?.vehicles.length && !loading ? (
+                        <div className="incident-offender-container">
+                          {/* <Divider>Offender</Divider> */}
+                          <Title level={4} style={{ marginTop: 20 }}>
+                            Crime Groups
+                          </Title>
+                          <Table
+                            columns={[
+                              {
+                                key: 'reference',
+                                dataIndex: 'reference',
+                                title: 'Reference',
+                              },
+                              {
+                                key: 'totalOffenders',
+                                dataIndex: 'totalOffenders',
+                                title: 'Members',
+                              },
+                              {
+                                key: 'totalIncidents',
+                                dataIndex: 'totalIncidents',
+                                title: 'Incidents',
+                              },
+                              {
+                                key: 'totalValue',
+                                dataIndex: 'totalValue',
+                                title: 'Lost Value',
+                                render: (value) => `£${value || 0}`,
+                              },
+                              // {
+                              //   key: 'totalRecoveredValue',
+                              //   dataIndex: 'totalRecoveredValue',
+                              //   title: 'Recovered Value',
+                              //   render: (value) => `£${value || 0}`,
+                              // },
+                              // {
+                              //   key: 'totalTheftSuccess',
+                              //   dataIndex: 'totalTheftSuccess',
+                              //   title: 'Success Rate',
+                              //   render: (value) => `${value?.toFixed(0) || 0}%`,
+                              // },
+
+                              {
+                                title: '',
+                                dataIndex: 'actions',
+                                key: 'actions',
+                                render: (_, record) => (
+                                  <Button type="text" size="small">
+                                    <FontAwesomeIcon
+                                      icon={faArrowUpRightFromSquare}
+                                      onClick={() =>
+                                        navigate(
+                                          `/app/crime-groups/view/${record.key}`
+                                        )
+                                      }
+                                    />
+                                  </Button>
+                                ),
+                              },
+                            ]}
+                            dataSource={data?.offender?.crimeGroups.map(
+                              (crimeGroup) => ({
+                                key: crimeGroup.id,
+                                reference: crimeGroup.reference,
+                                totalOffenders: crimeGroup.totalOffenders,
+                                totalIncidents: crimeGroup.totalIncidents,
+                                totalValue: crimeGroup.totalValue,
+                                // totalRecoveredValue:
+                                //   crimeGroup.totalRecoveredValue,
+                                // totalTheftSuccess: crimeGroup.totalTheftSuccess,
+                              })
+                            )}
+                            size="small"
+                            pagination={
+                              data?.offender?.vehicles &&
+                              data?.offender?.vehicles.length > 5
+                                ? {
+                                    pageSize: 5,
+                                  }
+                                : false
+                            }
+                            rowClassName={classes.offenderRow}
+                          />
+                        </div>
+                      ) : null}
                     </div>
                   )}
                 </div>
@@ -760,7 +929,7 @@ const ViewOffender = ({
                                     createdBy:
                                       userId === update.createdBy.id
                                         ? 'You'
-                                        : `${update.createdBy.fullName} - ${update.createdBy.organisation}`,
+                                        : `${update.createdBy.fullName} - ${update.createdBy.businesses[0]?.name}`,
                                     id: update.id,
                                     text: update.text || '',
                                   })

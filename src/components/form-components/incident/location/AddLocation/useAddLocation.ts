@@ -1,12 +1,6 @@
 import { useState } from 'react';
+import { LocationData } from 'types/DataType';
 
-interface LocationData {
-  building?: string | null;
-  street: string;
-  townCity: string;
-  county?: string | null;
-  postcode: string;
-}
 interface Props {
   onClose: () => void;
   update: (value: LocationData | undefined) => void;

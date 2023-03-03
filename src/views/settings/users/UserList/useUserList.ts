@@ -77,9 +77,13 @@ const useUserList = (): Return => {
             },
           },
           {
-            organisation: {
-              contains: search,
-              mode: QueryMode.Insensitive,
+            businesses: {
+              some: {
+                name: {
+                  contains: search,
+                  mode: QueryMode.Insensitive,
+                },
+              },
             },
           },
         ],
@@ -165,9 +169,13 @@ const useUserList = (): Return => {
               },
             },
             {
-              organisation: {
-                contains: search,
-                mode: QueryMode.Insensitive,
+              businesses: {
+                some: {
+                  name: {
+                    contains: search,
+                    mode: QueryMode.Insensitive,
+                  },
+                },
               },
             },
           ],
@@ -232,9 +240,13 @@ const useUserList = (): Return => {
               },
             },
             {
-              organisation: {
-                contains: search,
-                mode: QueryMode.Insensitive,
+              businesses: {
+                some: {
+                  name: {
+                    contains: search,
+                    mode: QueryMode.Insensitive,
+                  },
+                },
               },
             },
           ],
@@ -303,9 +315,13 @@ const useUserList = (): Return => {
               },
             },
             {
-              organisation: {
-                contains: search,
-                mode: QueryMode.Insensitive,
+              businesses: {
+                some: {
+                  name: {
+                    contains: search,
+                    mode: QueryMode.Insensitive,
+                  },
+                },
               },
             },
           ],
@@ -370,9 +386,13 @@ const useUserList = (): Return => {
               },
             },
             {
-              organisation: {
-                contains: search,
-                mode: QueryMode.Insensitive,
+              businesses: {
+                some: {
+                  name: {
+                    contains: search,
+                    mode: QueryMode.Insensitive,
+                  },
+                },
               },
             },
           ],

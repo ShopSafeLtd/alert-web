@@ -17,7 +17,10 @@ describe('List Officer View', () => {
       recoveredValue: 0,
       id: 'incidentId',
       subject: 'test subject ',
-      location: null,
+      business: {
+        id: 'test',
+        name: 'shopsafe',
+      },
       approved: null,
       date: '2022-08-10T10:40:06.191Z',
       time: '2022-08-11T10:40:09.985Z',
@@ -26,7 +29,7 @@ describe('List Officer View', () => {
       createdBy: {
         fullName: 'aaa',
         id: 'cl4pe3eu91312371op4c4k2lih2',
-        organisation: 'ShopSafe',
+        businesses: [{ name: 'test business', id: '' }],
       },
       crimeTypes: [
         { id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling' },
@@ -36,6 +39,8 @@ describe('List Officer View', () => {
         { id: 'cl6owsuzo33227f9pe9zk4wone', optimised: null, url: null },
       ],
       offenders: [],
+      crimeGroups: [],
+      vehicles: [],
     },
   };
 
@@ -43,8 +48,6 @@ describe('List Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <EditIncident
-          selected=""
-          setSelected={jest.fn()}
           updateOffender={jest.fn()}
           onSubmit={jest.fn()}
           data={data}
@@ -69,7 +72,6 @@ describe('List Officer View', () => {
           reviewed={false}
           onReject={jest.fn()}
           addRecentOffender={null}
-          adminRights
           assignOffendersToImages={jest.fn()}
           listOffendersData={undefined}
           newImage={null}
@@ -84,7 +86,32 @@ describe('List Officer View', () => {
           setAddRecentOffender={jest.fn()}
           setAssignToImage={jest.fn()}
           setSearchOffenders={jest.fn()}
-          updateOffendersList={jest.fn()}
+          addExistingCrimeGroup
+          addExistingVehicle
+          addNewCrimeGroup
+          addNewVehicle
+          crimeGroupsData={[]}
+          editCrimeGroupId="test"
+          editOffenderId="test"
+          editVehicleId="test"
+          listCrimeGroupsData={{
+            listCrimeGroups: { crimeGroups: [], total: 0 },
+          }}
+          listVehiclesData={{ listVehicles: { total: 0, vehicles: [] } }}
+          removeCrimeGroup={jest.fn()}
+          removeVehicle={jest.fn()}
+          setEditCrimeGroupId={jest.fn()}
+          setEditOffenderId={jest.fn()}
+          setEditVehicleId={jest.fn()}
+          toggleAddExistingCrimeGroup={jest.fn()}
+          toggleAddExistingVehicle={jest.fn()}
+          toggleAddNewCrimeGroup={jest.fn()}
+          toggleAddNewVehicle={jest.fn()}
+          updateCrimeGroupsData={jest.fn()}
+          updateOffendersData={jest.fn()}
+          updateVehiclesData={jest.fn()}
+          onSearchBusiness={jest.fn()}
+          vehiclesData={[]}
         />
       </MemoryRouter>
     );

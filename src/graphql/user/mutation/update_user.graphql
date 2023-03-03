@@ -9,7 +9,10 @@ mutation updateUser(
     id
     fullName
     email
-    organisation
+    businesses {
+      id
+      name
+    }
     addresses(where: { primary: { equals: true } }) {
       id
       building

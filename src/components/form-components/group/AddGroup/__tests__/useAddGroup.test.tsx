@@ -48,7 +48,7 @@ const mocks = [
             fullName: 'testUser',
             email: 'user email',
             firstLetter: 't',
-            organisation: 'user organisation',
+            businesses: [{ name: 'user business', id: '' }],
             status: 'enabled',
             groups: [{ id: 'groupId', name: 'test group' }],
           },
@@ -81,7 +81,7 @@ const mocks = [
           users: {
             id: 'userId',
             fullName: 'test user',
-            organisation: 'test organisation',
+            businesses: [{ name: 'user business', id: '' }],
           },
         },
       },
@@ -100,7 +100,7 @@ const UseAddGroupTest = () => {
       <div key={el.id}>
         <span>{el.id}</span>
         <span>{el.fullName}</span>
-        <span>{el.organisation}</span>
+        <span>{el.businesses[0]?.name}</span>
       </div>
     ));
 

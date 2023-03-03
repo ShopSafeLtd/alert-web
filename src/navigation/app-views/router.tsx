@@ -16,6 +16,7 @@ const User = lazy(() => import(`./user-settings/router`));
 const Scheme = lazy(() => import(`./scheme-settings/router`));
 const Article = lazy(() => import(`./article/router`));
 const Reports = lazy(() => import(`./reports/router`));
+const Investigations = lazy(() => import(`./investigations/router`));
 
 export const AppViews = (): JSX.Element => {
   const { isLoading } = useAuth0();
@@ -59,6 +60,11 @@ export const AppViews = (): JSX.Element => {
         )}
         <Route key="article" path="article/*" element={<Article />} />
         <Route key="reports" path="reports/*" element={<Reports />} />
+        <Route
+          key="investigations"
+          path="investigations/*"
+          element={<Investigations />}
+        />
       </Routes>
     </Suspense>
   );

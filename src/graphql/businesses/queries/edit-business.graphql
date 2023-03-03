@@ -1,0 +1,18 @@
+query EditBusiness($where: BusinessWhereUniqueInput!) {
+  business(where: $where) {
+    id
+    name
+    parent {
+      id
+      name
+    }
+    locations {
+      id
+      building
+      street
+      townCity
+      county
+      postcode
+    }
+  }
+}

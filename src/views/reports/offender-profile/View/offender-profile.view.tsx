@@ -300,7 +300,7 @@ const OffenderProfile = ({
                       crimeTypes: incident.crimeTypes,
                       value: incident.value || 0,
                       recoveredValue: incident.recoveredValue || 0,
-                      createdBy: incident.createdBy.organisation,
+                      createdBy: incident.createdBy.businesses[0]?.name,
                     })
                   )}
                 />

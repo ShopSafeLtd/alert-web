@@ -6,7 +6,7 @@ import type { Editor } from 'tinymce';
 import { UploadFile } from 'antd/es/upload/interface';
 import { AddIncident, AddOffender } from '../hooks/Forms';
 import { DrawerType } from '../../../../hooks';
-import { OffenderData } from '../../../../components/form-components/incident/offender/AddExisitingOffender/AddExisitingOffender.container';
+import { OffenderData } from '../../../../components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
 import { Incident } from '../../../../components/form-components/offender/LinkIncident/LinkIncident.container';
 
 export interface Props {

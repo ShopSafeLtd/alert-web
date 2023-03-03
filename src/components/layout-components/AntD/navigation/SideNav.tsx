@@ -19,14 +19,12 @@ export const SideNav = ({
   hideGroupTitle,
   localization = true,
 }: Props) => {
-  const sideNavTheme = useStoreState((state) => state.theme.sideNavTheme);
+  const sideNavTheme = useStoreState((state) => state.theme.currentTheme);
   const navCollapsed = useStoreState((state) => state.theme.navCollapsed);
 
   return (
     <Sider
-      className={`side-nav ${
-        sideNavTheme === SideNavTheme.DARK ? 'side-nav-dark' : ''
-      }`}
+      className={`side-nav ${sideNavTheme === 'dark' ? 'side-nav-dark' : ''}`}
       width={SIDE_NAV_WIDTH}
       collapsed={navCollapsed}
     >

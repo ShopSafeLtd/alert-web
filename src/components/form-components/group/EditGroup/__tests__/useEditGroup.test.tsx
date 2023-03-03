@@ -39,7 +39,7 @@ const mocks = [
             {
               id: '1',
               fullName: 'test',
-              organisation: '1',
+              businesses: [{ name: 'user business', id: '' }],
             },
           ],
         },
@@ -65,7 +65,7 @@ const mocks = [
             {
               id: 'userId',
               fullName: 'test user',
-              organisation: 'test organisation',
+              businesses: [{ id: '', name: 'test business' }],
             },
           ],
         },
@@ -107,7 +107,7 @@ const mocks = [
             fullName: 'testUser',
             firstLetter: 't',
             email: 'user email',
-            organisation: 'user organisation',
+            businesses: [{ name: 'user business', id: '' }],
             status: 'enabled',
             groups: [{ id: 'groupId', name: 'test group' }],
           },
@@ -128,7 +128,7 @@ const UseEditGroupTest = () => {
       <div key={el.id}>
         <span>{el.id}</span>
         <span>{el.fullName}</span>
-        <span>{el.organisation}</span>
+        <span>{el.businesses[0]?.name}</span>
       </div>
     ));
   const Users =
@@ -137,7 +137,7 @@ const UseEditGroupTest = () => {
       <div key={el.id}>
         <span>{el.id}</span>
         <span>{el.fullName}</span>
-        <span>{el.organisation}</span>
+        <span>{el.businesses[0]?.name}</span>
       </div>
     ));
   return (

@@ -28,7 +28,10 @@ query FeedItems(
         createdBy {
           id
           fullName
-          organisation
+          businesses {
+            id
+            name
+          }
         }
         previewImage
         previewText
@@ -91,14 +94,17 @@ query FeedItems(
           name
         }
         approved
-        location {
+        business {
           id
-          full
+          name
         }
         createdBy {
           id
           fullName
-          organisation
+          businesses {
+            id
+            name
+          }
         }
         images(orderBy: { createdAt: desc }) {
           id
@@ -214,7 +220,10 @@ query FeedItems(
         createdBy {
           id
           fullName
-          organisation
+          businesses {
+            id
+            name
+          }
         }
         bans {
           id
@@ -241,7 +250,10 @@ query FeedItems(
           createdBy {
             id
             fullName
-            organisation
+            businesses {
+              id
+              name
+            }
           }
           images {
             id

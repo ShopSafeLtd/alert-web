@@ -43,7 +43,10 @@ query Article($where: ArticleWhereUniqueInput!) {
           createdBy {
             id
             fullName
-            organisation
+            businesses {
+              id
+              name
+            }
           }
           images {
             id
@@ -101,7 +104,10 @@ query Article($where: ArticleWhereUniqueInput!) {
           createdBy {
             id
             fullName
-            organisation
+            businesses {
+              id
+              name
+            }
           }
           incidents {
             id
@@ -121,7 +127,10 @@ query Article($where: ArticleWhereUniqueInput!) {
             createdBy {
               id
               fullName
-              organisation
+              businesses {
+                id
+                name
+              }
             }
             images {
               id

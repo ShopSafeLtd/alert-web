@@ -1,8 +1,9 @@
 import React from 'react';
-import { Card, Col, Descriptions, Image, Row, Typography } from 'antd';
+import { Col, Row, Typography } from 'antd';
 import { FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faClock,
   faEarth,
   faMarsAndVenus,
   faUserClock,
@@ -18,8 +19,9 @@ import {
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
 import { Link } from 'react-router-dom';
+import UpdateContent from '../UpdateContent';
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Text } = Typography;
 
 interface Props {
   feedItem:
@@ -32,8 +34,8 @@ interface Props {
 const ImageContainer = ({ src }: { src: string }) => (
   <div
     style={{
-      width: 180,
-      height: 200,
+      width: 140,
+      height: 160,
       backgroundImage: `url(${src})`,
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
@@ -48,17 +50,7 @@ const OffenderFeed = ({
   isNewOffender,
 }: Props): JSX.Element => {
   // const imagesRef = useRef<CarouselRef>(null);
-  const getContent = (content: string) =>
-    content.split(/(@\[.*?\]\(.*?\))/).map((item) => {
-      if (item.includes('@[')) {
-        return (
-          <Text strong key={item}>
-            {item.replace('@[', '').replace(/(]\(.*?\))/, '')}{' '}
-          </Text>
-        );
-      }
-      return <Text key={item}>{item}</Text>;
-    });
+
   const {
     age,
     build,
@@ -73,14 +65,19 @@ const OffenderFeed = ({
     id,
     updates,
     images,
-    lastActive,
+    // lastActive,
     // incidents,
   } = feedItem?.offender || {};
 
-  console.log(updates);
-
   return (
     <Row gutter={20} wrap={false}>
+      {/* <Button
+        onClick={() => {
+          console.log('images1', images);
+        }}
+      >
+        onclick
+      </Button> */}
       {(isNewOffender || isNewImage) && images && images.length ? (
         <Col>
           <ImageContainer src={images[0].optimised || images[0].url || ''} />
@@ -100,17 +97,18 @@ const OffenderFeed = ({
         <Col flex={1}>
           {isNewOffender ? (
             <>
-              <Title style={{ marginBottom: 0 }} level={4} ellipsis>
+              <Title style={{ marginBottom: 10 }} level={4} ellipsis>
                 {name}
               </Title>
-              <Row style={{ marginTop: -3, marginBottom: 10 }}>
+              <Row style={{ marginBottom: 10 }}>
                 <Col>
-                  {/* <FontAwesomeIcon
-                      size="sm"
-                      className="feedItem-card-icon"
-                      icon={faClock}
-                    /> */}
-                  <Text style={{ fontSize: 12 }} type="secondary">
+                  <FontAwesomeIcon
+                    size="sm"
+                    className="feedItem-card-icon"
+                    icon={faClock}
+                    style={{ marginBottom: -1 }}
+                  />
+                  <Text style={{ fontSize: 14 }} type="secondary">
                     Last updated:
                     {moment(updatedAt || moment()).format(
                       `ddd MMM DD YYYY - HH:mm`
@@ -118,16 +116,6 @@ const OffenderFeed = ({
                   </Text>
                 </Col>
               </Row>
-              {/* <Row gutter={8}>
-                  {groups?.map((group) => (
-                    <Col key={group.id}>
-                      <Text type="danger" ellipsis>
-                        {group.name}
-                      </Text>
-                    </Col>
-                  ))}
-                </Row> */}
-
               <Row>
                 <Col>
                   <FontAwesomeIcon
@@ -135,7 +123,7 @@ const OffenderFeed = ({
                     className="feedItem-card-icon"
                     icon={faUserClock}
                   />
-                  <Text style={{ fontSize: 12 }} type="secondary">
+                  <Text style={{ fontSize: 14 }} type="secondary">
                     Age:
                     {dateOfBirth ? calcAge(dateOfBirth) : getOffenderAge(age)}
                   </Text>
@@ -148,7 +136,7 @@ const OffenderFeed = ({
                     className="feedItem-card-icon"
                     icon={faUserTag}
                   />
-                  <Text style={{ fontSize: 12 }} type="secondary">
+                  <Text style={{ fontSize: 14 }} type="secondary">
                     Build:{getOffenderBuild(build)}
                   </Text>
                 </Col>
@@ -160,7 +148,7 @@ const OffenderFeed = ({
                     className="feedItem-card-icon"
                     icon={faMarsAndVenus}
                   />
-                  <Text style={{ fontSize: 12 }} type="secondary">
+                  <Text style={{ fontSize: 14 }} type="secondary">
                     Sex: {getOffenderGender(gender)}
                   </Text>
                 </Col>
@@ -172,7 +160,7 @@ const OffenderFeed = ({
                     className="feedItem-card-icon"
                     icon={faEarth}
                   />
-                  <Text style={{ fontSize: 12 }} type="secondary">
+                  <Text style={{ fontSize: 14 }} type="secondary">
                     Ethnicity: {getOffenderRace(race, false)}
                   </Text>
                 </Col>
@@ -180,151 +168,12 @@ const OffenderFeed = ({
             </>
           ) : (
             <>
-              {/* <Title style={{ fontSize: 16 }}> {name}</Title> */}
-              {updates && updates[0]?.text && (
-                <>
-                  <Text style={{ fontSize: 13 }}>
-                    {getContent(updates[0]?.text)}
-                  </Text>
-                  <Row wrap={false} style={{ marginTop: 10 }}>
-                    {images && (
-                      <Col style={{ marginRight: 10 }}>
-                        <div
-                          style={{
-                            width: 80,
-                            height: 80,
-                            backgroundImage: `url(${images[0]?.optimised})`,
-                            backgroundPosition: 'center',
-                            backgroundRepeat: 'no-repeat',
-                            backgroundSize: 'cover',
-                            borderRadius: 5,
-                          }}
-                        />
-                      </Col>
-                    )}
-                    <Col>
-                      <div>
-                        <Title
-                          level={4}
-                          style={{ fontSize: 16, marginBottom: 2 }}
-                          ellipsis
-                        >
-                          {name}
-                        </Title>
-                        <div>
-                          <Text style={{ fontSize: 12 }}>
-                            Last Active: {lastActive?.dayTime || 'Unknown'}
-                          </Text>
-                        </div>
-                      </div>
-                    </Col>
-                  </Row>
-                </>
-              )}
-              {!(updates && updates[0]?.text) && (
-                <>
-                  {updates && updates[0]?.linkedIncidents[0] && (
-                    <Card
-                      style={{ borderRadius: 5 }}
-                      size="small"
-                      className="message-card"
-                    >
-                      <Row gutter={5} wrap={false}>
-                        <Col>
-                          {updates[0]?.linkedIncidents[0].images &&
-                            updates[0]?.linkedIncidents[0].images.length >
-                              0 && (
-                              <Image
-                                width={100}
-                                height={100}
-                                src={
-                                  updates[0]?.linkedIncidents[0].images[0]
-                                    .optimised || ''
-                                }
-                              />
-                            )}
-                        </Col>
-                        <Col
-                          flex={1}
-                          style={{
-                            marginTop: 10,
-                            marginLeft: 5,
-                          }}
-                        >
-                          <Paragraph
-                            strong
-                            ellipsis
-                            style={{
-                              marginBottom: '0.5rem',
-                              fontSize: 15,
-                            }}
-                          >
-                            {updates[0]?.linkedIncidents[0].subject}
-                          </Paragraph>
-                          <Descriptions size="small">
-                            <Descriptions.Item label="Created At">
-                              {updates[0]?.linkedIncidents[0].dayTime}
-                            </Descriptions.Item>
-                          </Descriptions>
-                          <Paragraph
-                            type="secondary"
-                            ellipsis
-                            style={{
-                              marginBottom: '0.5rem',
-                            }}
-                          >
-                            {updates[0]?.linkedIncidents[0].description}
-                          </Paragraph>
-                        </Col>
-                      </Row>
-                    </Card>
-                  )}
-                  {updates && updates[0]?.linkedOffenders[0] && (
-                    <Card
-                      style={{ borderRadius: 5 }}
-                      size="small"
-                      className="message-card"
-                    >
-                      <Row gutter={5} wrap={false}>
-                        <Col>
-                          {updates[0]?.linkedOffenders[0].images &&
-                            updates[0]?.linkedOffenders[0].images.length >
-                              0 && (
-                              <Image
-                                width={100}
-                                height={100}
-                                src={
-                                  updates[0]?.linkedOffenders[0].images[0]
-                                    .optimised || ''
-                                }
-                              />
-                            )}
-                        </Col>
-
-                        <Col
-                          flex={1}
-                          style={{
-                            marginTop: 10,
-                            marginLeft: 5,
-                          }}
-                        >
-                          <Title level={4}>
-                            {updates[0]?.linkedOffenders[0].name}
-                          </Title>
-                          <Descriptions size="small">
-                            <Descriptions.Item label="Last Active">
-                              {moment(
-                                updates[0]?.linkedOffenders[0].updatedAt ||
-                                  moment()
-                              ).format(`ddd MMM DD YYYY - HH:mm`)}
-                            </Descriptions.Item>
-                          </Descriptions>
-                        </Col>
-                      </Row>
-                    </Card>
-                  )}
-                </>
-              )}
+              {updates && updates.length ? (
+                <UpdateContent
+                  title={name || 'Unidentified Offender'}
+                  update={updates[0]}
+                />
+              ) : null}
             </>
           )}
         </Col>

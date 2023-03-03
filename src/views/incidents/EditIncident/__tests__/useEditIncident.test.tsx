@@ -50,7 +50,7 @@ const mocks = [
           createdBy: {
             fullName: 'aaa',
             id: 'cl4pe3eu91312371op4c4k2lih2',
-            organisation: 'ShopSafe',
+            businesses: [{ name: 'test business', id: '' }],
           },
           crimeTypes: [{ id: 'tagId', name: 'Theft & Handling ' }],
           groups: [{ id: 'groupId', name: 'NightSafe' }],
@@ -142,7 +142,7 @@ const mocks = [
               createdBy: {
                 fullName: 'aaa',
                 id: 'cl4pe3eu91312371op4c4k2lih2',
-                organisation: 'ShopSafe',
+                businesses: [{ name: 'test business', id: '' }],
               },
               tags: [
                 { id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling ' },
@@ -200,7 +200,7 @@ const mocks = [
               createdBy: {
                 fullName: 'aaa',
                 id: 'cl4pe3eu91312371op4c4k2lih2',
-                organisation: 'ShopSafe',
+                businesses: [{ name: 'test business', id: '' }],
               },
               tags: [
                 { id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling ' },
@@ -280,7 +280,7 @@ const mocks = [
           createdBy: {
             fullName: 'aaa',
             id: 'cl4pe3eu91312371op4c4k2lih2',
-            organisation: 'ShopSafe',
+            businesses: [{ name: 'test business', id: '' }],
           },
           crimeTypes: [{ id: 'tagId', name: 'Theft & Handling ' }],
           groups: [{ id: 'groupId', name: 'NightSafe' }],
@@ -360,11 +360,10 @@ const UseEditIncidentTest = () => {
             date: new Date('2022-08-30T11:25:32.702Z'),
             value: 1,
             recoveredValue: 1,
-            building: 'building',
-            street: 'street',
-            townCity: 'townCity',
-            county: 'county',
-            postcode: 'postcode',
+            business: {
+              label: 'test',
+              value: 'test',
+            },
             groups: ['groupId'],
             tags: ['tagId'],
             images: [

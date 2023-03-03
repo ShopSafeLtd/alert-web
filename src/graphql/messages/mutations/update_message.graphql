@@ -8,7 +8,10 @@ mutation updateMessage(
     from {
       id
       fullName
-      organisation
+      businesses {
+        id
+        name
+      }
     }
     chat {
       id

@@ -19,7 +19,7 @@ interface FormData {
 interface MemberData {
   id: string;
   fullName: string;
-  organisation: string;
+  businesses: { id: string; name: string }[];
   firstLetter?: string | null;
 }
 
@@ -69,7 +69,7 @@ const AddUserToChat = ({
         ]}
       >
         <Checkbox.Group>
-          {usersData?.map(({ id, fullName, organisation }) => (
+          {usersData?.map(({ id, fullName, businesses }) => (
             <div className="offender-item" style={{ padding: 10 }}>
               <Row wrap={false} key={id}>
                 <Col>
@@ -77,7 +77,7 @@ const AddUserToChat = ({
                     <Text style={{}} ellipsis>
                       {fullName}
                       <Tag color="red" style={{ padding: 3, marginLeft: 5 }}>
-                        {organisation}
+                        {businesses[0]?.name}
                       </Tag>
                     </Text>
                   </Checkbox>

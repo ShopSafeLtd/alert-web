@@ -10,7 +10,7 @@ const useStyles = createUseStyles({
   },
   page: {
     width: '100%',
-    height: 'calc(100vh - 70px)',
+    height: '100vh',
     padding: 20,
     overflowY: 'auto',
   },

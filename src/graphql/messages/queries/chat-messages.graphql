@@ -1,0 +1,49 @@
+query ChatMessages($where: ChatMessagesWhereInput!, $take: Int, $skip: Int) {
+  chatMessages(where: $where, take: $take, skip: $skip) {
+    id
+    content
+    createdAt
+    currentUser
+    formattedDateTime
+    from {
+      id
+      fullName
+      firstLetter
+    }
+    sent
+    showUser
+    paddingTop
+    type
+    images {
+      id
+      url
+      optimised
+    }
+    incidents {
+      id
+      subject
+      description
+      dayTime
+      images {
+        id
+        url
+        optimised
+      }
+    }
+    offenders {
+      id
+      updatedAt
+      age
+      build
+      dateOfBirth
+      name
+      race
+      gender
+      images {
+        id
+        url
+        optimised
+      }
+    }
+  }
+}

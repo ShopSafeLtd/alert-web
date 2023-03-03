@@ -78,7 +78,7 @@ const EditChat = ({
               optionFilterProp="label"
               options={usersData?.users.map((user) => ({
                 value: user.id,
-                label: `${user.fullName} (${user.organisation})`,
+                label: `${user.fullName} (${user.businesses[0]?.name})`,
               }))}
             />
           </Form.Item>

@@ -19,24 +19,24 @@ const themes = {
 function App(): JSX.Element {
   return (
     <div className="App">
-      <LoadScript
-        googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
-        libraries={['visualization']}
+      <ThemeSwitcherProvider
+        themeMap={themes}
+        defaultTheme={ThemeConfig.currentTheme}
+        insertionPoint="styles-insertion-point"
       >
-        <Store>
-          <ApolloProvider>
-            <ThemeSwitcherProvider
-              themeMap={themes}
-              defaultTheme={ThemeConfig.currentTheme}
-              insertionPoint="styles-insertion-point"
-            >
+        <LoadScript
+          googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
+          libraries={['visualization']}
+        >
+          <Store>
+            <ApolloProvider>
               <Router>
                 <Views />
               </Router>
-            </ThemeSwitcherProvider>
-          </ApolloProvider>
-        </Store>
-      </LoadScript>
+            </ApolloProvider>
+          </Store>
+        </LoadScript>
+      </ThemeSwitcherProvider>
     </div>
   );
 }

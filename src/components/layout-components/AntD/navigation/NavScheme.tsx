@@ -85,7 +85,7 @@ export const NavScheme = () => {
 
   return (
     <Dropdown
-      placement="bottomRight"
+      placement="topRight"
       overlay={schemeList}
       onVisibleChange={handleVisibleChange}
       visible={visible}
@@ -93,16 +93,17 @@ export const NavScheme = () => {
     >
       <Menu
         mode="horizontal"
+        style={{ width: '100%' }}
         items={[
           {
             key: 0,
+            style: {
+              width: '100%',
+              padding: 0,
+            },
             label: (
-              <>
-                <FontAwesomeIcon
-                  style={{ fontSize: 20, color: '#424242', marginRight: 10 }}
-                  icon={faCity}
-                />
-                <Text>{activeSchemeName}</Text>
+              <div style={{ padding: '0 20px', maxWidth: '100%' }}>
+                <Text ellipsis>{activeSchemeName}</Text>
                 <FontAwesomeIcon
                   style={{
                     fontSize: 20,
@@ -112,7 +113,7 @@ export const NavScheme = () => {
                   }}
                   icon={faCaretDown}
                 />
-              </>
+              </div>
             ),
           },
         ]}

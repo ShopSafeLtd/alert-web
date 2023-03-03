@@ -45,7 +45,7 @@ const mocks = [
                 id: 'userId',
                 fullName: 'test user',
                 firstLetter: 't',
-                organisation: 'test organisation',
+                businesses: [{ name: 'user business', id: '' }],
               },
               chat: {
                 id: 'chatId',
@@ -105,7 +105,7 @@ const mocks = [
             fullName: 'testUser',
             email: 'user email',
             firstLetter: 't',
-            organisation: 'user organisation',
+            businesses: [{ name: 'user business', id: '' }],
             status: 'enabled',
             groups: [{ id: 'groupId', name: 'test group' }],
             members: [
@@ -115,7 +115,7 @@ const mocks = [
                   id: 'userId',
                   fullName: 'test user',
                   firstLetter: 't',
-                  organisation: 'test organisation',
+                  businesses: [{ name: 'user business', id: '' }],
                 },
               },
             ],
@@ -138,7 +138,7 @@ const UseAddChatTest = () => {
       <div key={el.id}>
         <span>{el.id}</span>
         <span>{el.fullName}</span>
-        <span>{el.organisation}</span>
+        <span>{el.businesses[0]?.name}</span>
       </div>
     ));
   return (

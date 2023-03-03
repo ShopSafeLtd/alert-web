@@ -1,0 +1,14 @@
+query Business($where: BusinessWhereUniqueInput!) {
+  business(where: $where) {
+    id
+    name
+    parent {
+      id
+      name
+    }
+    locations {
+      id
+      full
+    }
+  }
+}

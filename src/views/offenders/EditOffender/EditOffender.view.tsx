@@ -1,21 +1,23 @@
 import React from 'react';
-import { CreateTagMutation, ViewOffenderQuery } from 'graphql/generated';
+import {
+  CreateTagMutation,
+  ListCrimeGroupsQuery,
+  ListVehiclesQuery,
+  ViewOffenderQuery,
+} from 'graphql/generated';
 
 import {
   Button,
   Card,
   Col,
-  DatePicker,
   Drawer,
   Empty,
   Form,
   FormInstance,
-  Input,
   PageHeader,
   Row,
   Select,
   Skeleton,
-  Switch,
   Table,
   Tag,
   Typography,
@@ -23,7 +25,7 @@ import {
 } from 'antd';
 
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import { ageValues, buildValues, genderValues, raceValues } from 'types/enums';
+
 import {
   calcDuration,
   calcExpired,
@@ -42,6 +44,10 @@ import {
   faUpload,
 } from '@fortawesome/pro-light-svg-icons';
 import moment from 'moment';
+import OffenderDetails from 'components/offenders/OffenderForm/OffenderDetails';
+import { CrimeGroupData, VehicleData } from 'types/DataType';
+import Profiles from 'components/offenders/OffenderForm/Profiles';
+import ProfileDrawer from 'components/offenders/OffenderForm/ProfileDrawer';
 import { FormData } from './useEditOffender';
 
 const { Title, Text, Paragraph } = Typography;
@@ -103,6 +109,26 @@ interface Props {
   selectedItems: string[];
   setSelectedItems: (value: string[]) => void;
   form: FormInstance<FormData> | undefined;
+  listVehiclesData: ListVehiclesQuery | undefined;
+  listCrimeGroupsData: ListCrimeGroupsQuery | undefined;
+  addNewVehicle: boolean;
+  addExistingVehicle: boolean;
+  toggleAddNewVehicle: () => void;
+  toggleAddExistingVehicle: () => void;
+  editVehicleId: string;
+  setEditVehicleId: (value: string) => void;
+  vehiclesData: VehicleData[];
+  updateVehiclesData: (value: VehicleData) => void;
+  removeVehicle: (vehicleId: string) => void;
+  removeCrimeGroup: (crimeGroupId: string) => void;
+  addNewCrimeGroup: boolean;
+  addExistingCrimeGroup: boolean;
+  toggleAddNewCrimeGroup: () => void;
+  toggleAddExistingCrimeGroup: () => void;
+  editCrimeGroupId: string;
+  setEditCrimeGroupId: (value: string) => void;
+  crimeGroupsData: CrimeGroupData[];
+  updateCrimeGroupsData: (value: CrimeGroupData) => void;
 }
 
 const EditOffender = ({
@@ -138,6 +164,26 @@ const EditOffender = ({
   setSelectedItems,
   form,
   adminRights,
+  addNewVehicle,
+  addExistingVehicle,
+  editVehicleId,
+  setEditVehicleId,
+  toggleAddNewVehicle,
+  toggleAddExistingVehicle,
+  vehiclesData,
+  updateVehiclesData,
+  removeVehicle,
+  addNewCrimeGroup,
+  addExistingCrimeGroup,
+  editCrimeGroupId,
+  setEditCrimeGroupId,
+  toggleAddNewCrimeGroup,
+  toggleAddExistingCrimeGroup,
+  crimeGroupsData,
+  updateCrimeGroupsData,
+  removeCrimeGroup,
+  listVehiclesData,
+  listCrimeGroupsData,
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader
@@ -175,196 +221,37 @@ const EditOffender = ({
                 : [],
           }}
         >
-          <Row align="bottom" style={{ marginBottom: 30 }}>
-            <Col>
-              <Title style={{ marginBottom: 0 }} level={4}>
-                1.{' '}
-              </Title>
-            </Col>
-            <Col>
-              <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
-                Offender Details
-              </Title>
-            </Col>
-            <Col>
-              <Paragraph
-                style={{ marginBottom: 1, marginLeft: 5 }}
-                type="secondary"
-                italic
-              >
-                - Please complete the basic details for the offender.
-              </Paragraph>
-            </Col>
-          </Row>
-          <Row gutter={60}>
-            <Col span={8}>
-              <Form.Item
-                name="name"
-                label="Name"
-                tooltip="Enter the offenders name if you know it, if not leave this field
-                blank."
-              >
-                <Input disabled={saving} />
-              </Form.Item>
-            </Col>
-
-            <Col span={7}>
-              <Form.Item
-                name="build"
-                label="Build"
-                tooltip="Select the build of the offender if known."
-              >
-                <Select options={buildValues} disabled={saving} />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item
-                name="gender"
-                label="Sex"
-                tooltip="Select the gender of the offender if known."
-              >
-                <Select options={genderValues} disabled={saving} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={60}>
-            <Col span={8}>
-              <Form.Item
-                name="race"
-                label="Ethnicity"
-                tooltip="Select the ethnicity of the offender if known."
-              >
-                <Select options={raceValues} disabled={saving} />
-              </Form.Item>
-            </Col>
-            <Col span={7}>
-              <Form.Item
-                name="hair"
-                label="Hair"
-                tooltip="The style and colour of the offenders hair if known."
-              >
-                <Input disabled={saving} />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Row gutter={5} align="middle">
-                <Col flex={1}>
-                  <Form.Item
-                    name="tags"
-                    label="Offender Warnings"
-                    tooltip="select any warning labels that are relevant to this offender or add your own."
-                  >
-                    <Select
-                      loading={tagsLoading}
-                      disabled={saving}
-                      mode="multiple"
-                      maxTagCount={3}
-                      value={selectedItems}
-                      onChange={setSelectedItems}
-                      optionFilterProp="label"
-                    >
-                      {tags.map((tag) => (
-                        <Select.Option value={tag.value} label={tag.label}>
-                          {tag.label}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                </Col>
-                {adminRights && (
-                  <Col>
-                    <Button
-                      disabled={saving}
-                      style={{ color: 'red', padding: 8 }}
-                      onClick={toggleAddOffenderTag}
-                      icon={
-                        <FontAwesomeIcon
-                          icon={faPlus}
-                          style={{ marginRight: 5 }}
-                        />
-                      }
-                    >
-                      Add Label
-                    </Button>
-                  </Col>
-                )}
-              </Row>
-            </Col>
-          </Row>
-
-          <Row gutter={60}>
-            <Col span={8}>
-              <Form.Item
-                name="ageCheck"
-                label="Do you know the offender's date of birth?"
-              >
-                <Switch
-                  style={{ width: 70, height: 30, marginLeft: 10 }}
-                  checked={ageCheck}
-                  checkedChildren="Yes"
-                  unCheckedChildren="No"
-                  onChange={() => {
-                    setAgeCheck(!ageCheck);
-                  }}
-                />
-              </Form.Item>
-            </Col>
-
-            {ageCheck ? (
-              <>
-                <Col span={7}>
-                  <Form.Item
-                    name="dateOfBirth"
-                    label="Date of Birth"
-                    tooltip="Enter the offender's date of birth if known."
-                  >
-                    <DatePicker
-                      disabled={saving}
-                      disabledDate={(current) =>
-                        current && current.valueOf() > Date.now()
-                      }
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={8}>
-                  <Form.Item
-                    name="dateSource"
-                    label="Information Source"
-                    tooltip="Enter the information source of the offender's date of birth range of the offender ."
-                  >
-                    <Input.TextArea disabled={saving} />
-                  </Form.Item>
-                </Col>
-              </>
-            ) : (
-              <Col span={7}>
-                <Form.Item
-                  name="age"
-                  label="Age"
-                  tooltip="Select an estimated age range of the offender if known."
-                >
-                  <Select options={ageValues} disabled={saving} />
-                </Form.Item>
-              </Col>
-            )}
-          </Row>
-
-          <Row gutter={16}>
-            <Col span={23}>
-              <Form.Item
-                name="peculiarities"
-                label="Peculiarities"
-                tooltip="Enter any distinctive features of the offender."
-              >
-                <Input.TextArea disabled={saving} />
-              </Form.Item>
-            </Col>
-          </Row>
-
+          <OffenderDetails
+            selectedItems={selectedItems}
+            setSelectedItems={setSelectedItems}
+            tags={tags}
+            tagsLoading={tagsLoading}
+            saving={saving}
+            ageCheck={ageCheck}
+            setAgeCheck={setAgeCheck}
+            adminRights={adminRights}
+            toggleAddOffenderTag={toggleAddOffenderTag}
+          />
+          <Profiles
+            saving={saving}
+            // adminRights={adminRights}
+            setEditVehicleId={setEditVehicleId}
+            toggleAddNewVehicle={toggleAddNewVehicle}
+            toggleAddExistingVehicle={toggleAddExistingVehicle}
+            vehiclesData={vehiclesData}
+            removeVehicle={removeVehicle}
+            removeCrimeGroup={removeCrimeGroup}
+            // setEditCrimeGroupId={setEditCrimeGroupId}
+            toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
+            toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
+            crimeGroupsData={crimeGroupsData}
+            listVehiclesData={listVehiclesData}
+            listCrimeGroupsData={listCrimeGroupsData}
+          />
           <Row align="middle" style={{ marginTop: 70, marginBottom: 20 }}>
             <Col>
               <Title style={{ marginBottom: 0 }} level={4}>
-                2.{' '}
+                3.
               </Title>
             </Col>
             <Col>
@@ -507,6 +394,7 @@ const EditOffender = ({
                 <Empty
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
                   description="There are no exclusion for this offender."
+                  style={{ marginLeft: 50 }}
                 />
               </Row>
               {/* <Divider /> */}
@@ -518,7 +406,7 @@ const EditOffender = ({
               <Row align="middle" style={{ marginBottom: 20 }}>
                 <Col>
                   <Title style={{ marginBottom: 0 }} level={4}>
-                    3.{' '}
+                    4.{' '}
                   </Title>
                 </Col>
                 <Col>
@@ -701,6 +589,24 @@ const EditOffender = ({
             <div />
           )}
         </Drawer>
+        <ProfileDrawer
+          addNewVehicle={addNewVehicle}
+          addExistingVehicle={addExistingVehicle}
+          editVehicleId={editVehicleId}
+          setEditVehicleId={setEditVehicleId}
+          toggleAddNewVehicle={toggleAddNewVehicle}
+          toggleAddExistingVehicle={toggleAddExistingVehicle}
+          vehiclesData={vehiclesData}
+          updateVehiclesData={updateVehiclesData}
+          addNewCrimeGroup={addNewCrimeGroup}
+          addExistingCrimeGroup={addExistingCrimeGroup}
+          editCrimeGroupId={editCrimeGroupId}
+          setEditCrimeGroupId={setEditCrimeGroupId}
+          toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
+          toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
+          crimeGroupsData={crimeGroupsData}
+          updateCrimeGroupsData={updateCrimeGroupsData}
+        />
       </Card>
     )}
   </div>

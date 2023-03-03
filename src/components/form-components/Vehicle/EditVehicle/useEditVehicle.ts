@@ -126,7 +126,7 @@ const useEditVehicle = ({ onClose }: Props): Return => {
       onClose();
       notification.success({
         message: 'Successfully Updated!',
-        description: 'The vehicle has been added! ',
+        description: 'The vehicle has been updated! ',
         placement: 'bottomRight',
       });
     },

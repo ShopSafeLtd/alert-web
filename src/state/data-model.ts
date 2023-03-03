@@ -51,6 +51,7 @@ interface FeedItems {
   };
   order: FeedItemSort;
 }
+
 export interface DataModel {
   incidents: Incidents;
   offenders: Offenders;

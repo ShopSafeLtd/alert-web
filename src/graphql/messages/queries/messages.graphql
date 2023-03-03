@@ -10,7 +10,10 @@ query messages($chat: String, $before: MessageWhereUniqueInput) {
     from {
       id
       fullName
-      organisation
+      businesses {
+        id
+        name
+      }
     }
     chat {
       id

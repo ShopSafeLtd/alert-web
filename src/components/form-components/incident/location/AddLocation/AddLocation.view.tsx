@@ -1,13 +1,6 @@
 import React from 'react';
 import { Button, Form, Input, Row, Col, Typography } from 'antd';
-
-interface LocationData {
-  building?: string | null;
-  street: string;
-  townCity: string;
-  county?: string | null;
-  postcode: string;
-}
+import { LocationData } from 'types/DataType';
 
 interface Props {
   onClose: () => void;

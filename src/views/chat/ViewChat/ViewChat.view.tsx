@@ -38,7 +38,6 @@ interface Props {
   updateAddUserChat: MutationUpdaterFn<CreateChatMutation>;
   updateDeletedUserChat: MutationUpdaterFn<DeleteChatMutation>;
   adminRights: boolean;
-  refetch: () => void;
   loading: boolean;
 }
 
@@ -62,7 +61,6 @@ const ViewOffender = ({
   toggleAddChat,
   updateAddUserChat,
   updateDeletedUserChat,
-  refetch,
   loading,
   adminRights,
 }: Props): JSX.Element => {
@@ -210,7 +208,7 @@ const ViewOffender = ({
   return (
     <div className="page-container">
       <Row>
-        <Col span={7} style={{ backgroundColor: '#FFF' }}>
+        <Col span={7}>
           <div className="chats-side-list">
             <Row style={{ margin: '12px 5px 5px 10px' }}>
               <Col flex={1}>
@@ -246,7 +244,6 @@ const ViewOffender = ({
             <ViewMessage
               chatId={chatId}
               updateUserChatList={updateDeletedUserChat}
-              userChatRefetch={refetch}
             />
           ) : (
             <Empty

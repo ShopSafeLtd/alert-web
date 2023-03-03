@@ -32,7 +32,7 @@ const mocks = [
                 id: 'test userId',
                 fullName: 'test user',
                 firstLetter: 't',
-                organisation: 'test organisation',
+                businesses: [{ name: 'test business', id: 'test' }],
               },
             },
           ],

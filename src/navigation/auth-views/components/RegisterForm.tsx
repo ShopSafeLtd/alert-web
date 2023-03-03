@@ -62,15 +62,9 @@ export const RegisterForm = (props: Props): JSX.Element => {
   const navigate = useNavigate();
 
   const onSignUp = () => {
-    form
-      .validateFields()
-      .then(() => {
-        showLoading();
-      })
-      .catch((info) => {
-        // eslint-disable-next-line no-console
-        console.log('Validate Failed:', info);
-      });
+    form.validateFields().then(() => {
+      showLoading();
+    });
   };
 
   useEffect(() => {

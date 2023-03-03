@@ -4,6 +4,7 @@ import {
   faClose,
   faImage,
   faPlus,
+  faSmile,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -32,7 +33,7 @@ import {
 } from 'graphql/generated';
 import moment from 'moment';
 import Picker from 'emoji-picker-react';
-import LinkOffender from 'components/form-components/incident/offender/AddExisitingOffender';
+import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
 import LinkIncident from 'components/form-components/offender/LinkIncident';
 
 const { Option, getMentions } = Mentions;
@@ -71,7 +72,7 @@ interface OffenderData {
 interface SchemeUserData {
   id: string;
   fullName: string;
-  organisation: string;
+  businesses: { name: string; id: string }[];
   firstLetter?: string | null;
 }
 
@@ -369,9 +370,9 @@ const UpdateBar = ({
             }}
             prefix="@"
           >
-            {schemeUsers?.map(({ id, fullName, organisation }) => (
+            {schemeUsers?.map(({ id, fullName, businesses }) => (
               <Option key={id} value={fullName}>
-                {fullName} ({organisation})
+                {fullName} ({businesses[0]?.name})
               </Option>
             ))}
           </Mentions>
@@ -405,15 +406,10 @@ const UpdateBar = ({
           >
             <Button
               onClick={toggleShowUpdatePicker}
-              style={{ width: '40px' }}
+              style={{ width: '40px', padding: 0 }}
               // icon={<FontAwesomeIcon icon={faFaceSmile} size="lg" />}
             >
-              <img
-                style={{ marginLeft: -8 }}
-                className="emoji-icon"
-                alt="emoji picker"
-                src="https://icons.getbootstrap.com/assets/icons/emoji-smile.svg"
-              />
+              <FontAwesomeIcon size="lg" icon={faSmile} />
             </Button>
           </Popover>
         </Col>

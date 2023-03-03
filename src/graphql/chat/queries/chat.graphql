@@ -9,7 +9,10 @@ query Chat($where: ChatWhereUniqueInput!) {
       user {
         id
         fullName
-        organisation
+        businesses {
+          id
+          name
+        }
         firstLetter
       }
     }

@@ -28,7 +28,10 @@ mutation createIncident($data: CreateIncidentData!) {
     createdBy {
       id
       fullName
-      organisation
+      businesses {
+        id
+        name
+      }
     }
     images {
       id

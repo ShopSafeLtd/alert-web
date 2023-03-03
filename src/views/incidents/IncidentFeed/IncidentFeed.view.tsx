@@ -1,6 +1,6 @@
 import React from 'react';
 import { ListIncidentsQuery, RecycleIncidentMutation } from 'graphql/generated';
-import { Affix, Button, Col, Input, Pagination, Row, Select } from 'antd';
+import { Affix, Button, Card, Col, Input, Pagination, Row, Select } from 'antd';
 import IncidentCard from 'components/incidents/IncidentCard';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
 import { IncidentSort } from 'state';
@@ -63,23 +63,11 @@ const IncidentFeed = ({
   updateIncidentList,
   lightBoxOpen,
   onNavigate,
-}: Props): JSX.Element => {
-  const [affix, setAffix] = React.useState(false);
-
-  return (
-    <div className="feed-container">
-      <Affix offsetTop={40} onChange={(affixed) => setAffix(!!affixed)}>
-        <Row
-          gutter={8}
-          style={{
-            paddingBottom: 10,
-            backgroundColor: !affix ? 'rgb(250, 250, 251)' : 'white',
-            paddingTop: affix ? 10 : 0,
-            marginRight: -8, // fix for cutoff from container
-            marginLeft: -8, // fix for cutoff from container
-            borderBottom: affix ? '1px solid #e8e8e8' : 'none',
-          }}
-        >
+}: Props): JSX.Element => (
+  <div className="feed-container" style={{ padding: 10 }}>
+    <Affix offsetTop={5}>
+      <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 5 }}>
+        <Row gutter={8}>
           <Col>
             <Select
               placeholder="Groups"
@@ -155,8 +143,10 @@ const IncidentFeed = ({
             </Button>
           </Col>
         </Row>
-      </Affix>
+      </Card>
+    </Affix>
 
+    <div style={{ paddingBottom: 10 }}>
       <Row gutter={8}>
         {loading
           ? Array.from({ length: 24 }).map((_, index) => (
@@ -175,7 +165,6 @@ const IncidentFeed = ({
               </Col>
             ))}
       </Row>
-
       <Row justify="center">
         <Col>
           <Pagination
@@ -189,19 +178,19 @@ const IncidentFeed = ({
           />
         </Col>
       </Row>
-
-      <Lightbox
-        open={lightBoxOpen.open}
-        close={() => openLightbox([], 0)}
-        plugins={[Zoom]}
-        index={lightBoxOpen.index}
-        slides={lightboxElements}
-        controller={{
-          closeOnBackdropClick: true,
-        }}
-      />
     </div>
-  );
-};
+
+    <Lightbox
+      open={lightBoxOpen.open}
+      close={() => openLightbox([], 0)}
+      plugins={[Zoom]}
+      index={lightBoxOpen.index}
+      slides={lightboxElements}
+      controller={{
+        closeOnBackdropClick: true,
+      }}
+    />
+  </div>
+);
 
 export default IncidentFeed;

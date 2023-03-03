@@ -1,18 +1,19 @@
 subscription MessagesSubscription($chat: ID!) {
-  messages(chatId: $chat) {
+  chatMessages(chatId: $chat) {
     id
-    sent
+    content
+    createdAt
+    currentUser
+    formattedDateTime
     from {
       id
       fullName
-      organisation
+      firstLetter
     }
-    chat {
-      id
-      name
-    }
-    content
-    createdAt
+    sent
+    showUser
+    paddingTop
+    type
     images {
       id
       url
@@ -32,7 +33,12 @@ subscription MessagesSubscription($chat: ID!) {
     offenders {
       id
       updatedAt
+      age
+      build
+      dateOfBirth
       name
+      race
+      gender
       images {
         id
         url

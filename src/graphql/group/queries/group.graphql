@@ -6,7 +6,10 @@ query Group($where: GroupWhereUniqueInput!) {
     users {
       id
       fullName
-      organisation
+      businesses {
+        id
+        name
+      }
     }
   }
 }

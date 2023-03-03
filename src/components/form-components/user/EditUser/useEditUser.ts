@@ -10,19 +10,22 @@ import {
   useSchemeChatsQuery,
   useUserQuery,
   useUpdateUserMutation,
+  SearchBusinessesQuery,
+  SearchBusinessesQueryVariables,
+  SearchBusinessesDocument,
+  QueryMode,
 } from 'graphql/generated';
 import { notification } from 'antd';
+import { useApolloClient } from '@apollo/client';
 
 interface FormData {
   fullName: string;
   email: string;
-  organisation: string;
+  business: {
+    value: string;
+    label: string;
+  };
   role: Role;
-  postcode: string;
-  street: string;
-  townCity: string;
-  building: string;
-  county: string;
   groups: string[];
   chats: string[];
 }
@@ -39,9 +42,13 @@ interface Return {
   chatsData: SchemeChatsQuery | undefined;
   chatsLoading: boolean;
   saving: boolean;
+  onSearchBusiness: (
+    value: string
+  ) => Promise<{ label: React.ReactNode; value: string }[]>;
 }
 
 const useEditUser = ({ onClose, userId }: Props): Return => {
+  const client = useApolloClient();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
 
@@ -137,25 +144,15 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
             id: userId,
           },
           data: {
-            addresses: {
-              update: [
+            email: { set: data.email },
+            fullName: { set: data.fullName },
+            businesses: {
+              connect: [
                 {
-                  data: {
-                    postcode: { set: data.postcode || '' },
-                    street: { set: data.street || '' },
-                    townCity: { set: data.townCity || '' },
-                    building: { set: data.building || '' },
-                    county: { set: data.county || '' },
-                  },
-                  where: {
-                    id: userData?.user?.addresses[0].id,
-                  },
+                  id: data.business.value,
                 },
               ],
             },
-            email: { set: data.email },
-            fullName: { set: data.fullName },
-            organisation: { set: data.organisation },
             schemes: {
               update: [
                 {
@@ -214,6 +211,45 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
       });
   };
 
+  const onSearchBusiness = async (value: string) => {
+    if (value.length < 2) {
+      return [];
+    }
+    return client
+      .query<SearchBusinessesQuery, SearchBusinessesQueryVariables>({
+        query: SearchBusinessesDocument,
+        variables: {
+          where: {
+            name: {
+              contains: value,
+              mode: QueryMode.Insensitive,
+            },
+            schemes: {
+              some: {
+                id: {
+                  equals: schemeId,
+                },
+              },
+            },
+          },
+        },
+      })
+      .then((response) =>
+        response.data.listBusinesses.businesses.length
+          ? response.data.listBusinesses.businesses.map((item) => ({
+              label: item?.name || '',
+              value: item?.id || '',
+            }))
+          : [
+              {
+                label: 'No results found',
+                value: '',
+                disabled: true,
+              },
+            ]
+      );
+  };
+
   return {
     onSubmit,
     data: userData,
@@ -223,6 +259,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
     chatsData,
     chatsLoading,
     saving,
+    onSearchBusiness,
   };
 };
 

@@ -27,6 +27,9 @@ import SchemeTerms from 'views/settings/terms/SchemeTerms';
 
 import RecycleBin from 'views/settings/recycled/RecycleBin';
 
+import ListBusinesses from 'views/settings/businesses/ListBusinesses';
+import ViewBusiness from 'views/settings/businesses/ViewBusiness';
+
 const SchemeSettings = (): JSX.Element => (
   <Routes>
     {/* <Route path="*" element={<AdminMenu />} /> */}
@@ -68,6 +71,10 @@ const SchemeSettings = (): JSX.Element => (
     {/* vehicles */}
     <Route path="vehicles/*" element={<ListVehicles />} />
     <Route path="vehicles/view/:id" element={<ViewVehicle />} />
+
+    {/* businesses */}
+    <Route path="businesses/*" element={<ListBusinesses />} />
+    <Route path="businesses/view/:id" element={<ViewBusiness />} />
   </Routes>
 );
 

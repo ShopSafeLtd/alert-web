@@ -29,7 +29,10 @@ mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
     createdBy {
       id
       fullName
-      organisation
+      businesses {
+        id
+        name
+      }
     }
     images {
       id

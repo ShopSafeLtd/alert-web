@@ -15,7 +15,6 @@ describe('List Officer View', () => {
         saving={false}
         form={form}
         scrolledToTop={jest.fn()}
-        datedMessages={[]}
         userId=""
         deleteMessageConfirm={jest.fn()}
         adminRights
@@ -24,7 +23,12 @@ describe('List Officer View', () => {
         toggleManageChat={jest.fn()}
         chatId=""
         membersData={[
-          { id: 'id', fullName: '', organisation: '', firstLetter: '' },
+          {
+            id: 'id',
+            fullName: '',
+            businesses: [{ name: '', id: '' }],
+            firstLetter: '',
+          },
         ]}
         inputStr=""
         setInputStr={jest.fn()}
@@ -49,6 +53,11 @@ describe('List Officer View', () => {
         deleteImageConfirm={jest.fn()}
         deleteOffenderConfirm={jest.fn()}
         deleteIncidentConfirm={jest.fn()}
+        data={{
+          chatMessages: [],
+        }}
+        messageSent
+        setMessageSent={() => {}}
       />
     );
   };

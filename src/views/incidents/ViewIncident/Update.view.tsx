@@ -9,7 +9,11 @@ const { Title, Paragraph, Text } = Typography;
 interface DatedMessages {
   id?: string;
   content?: string | undefined | null;
-  from?: { id: string; fullName: string; organisation: string };
+  from?: {
+    id: string;
+    fullName: string;
+    businesses: { id: string; name: string }[];
+  };
   images?: { id: string; optimised?: string | null; url?: string | null }[];
   incidents?: {
     id: string;

@@ -1,16 +1,17 @@
+import { Theme } from 'configs/ThemeConfig';
 import { createUseStyles } from 'react-jss';
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: Theme) => ({
   viewIncident: {
-    height: 'calc(100vh - 70px)',
+    height: '100vh',
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
   },
   headerBar: {
     width: '100%',
-    borderBottom: '1px solid rgb(237, 242, 249)',
-    backgroundColor: '#FFF',
+    borderBottom: `1px solid ${theme.borderColor}`,
+    backgroundColor: theme.componentBackground,
     padding: '7px 20px',
     display: 'flex',
     alignItems: 'center',
@@ -24,7 +25,7 @@ const useStyles = createUseStyles({
   },
   content: {
     width: '100%',
-    height: 'calc(100vh - 123px)',
+    height: 'calc(100vh - 55px)',
   },
   detailsHeader: {
     paddingRight: 20,
@@ -34,13 +35,16 @@ const useStyles = createUseStyles({
     height: '100%',
   },
   detailsContent: {
-    background: '#FFF',
+    background: theme.bodyBackground,
     height: '100%',
     overflow: 'auto',
-    borderRight: '1px solid rgb(237, 242, 249)',
+    borderRight: `1px solid ${theme.borderColor}`,
   },
   details: {
     padding: '15px 20px',
+  },
+  detail: {
+    paddingBottom: '8px !important',
   },
   images: {
     width: '100%',
@@ -59,7 +63,7 @@ const useStyles = createUseStyles({
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    backgroundColor: '#ECEFF1',
+    backgroundColor: theme.imageBackgroundColor,
     cursor: 'pointer',
     borderRadius: 5,
     transition: 'all 0.3s ease-in-out',
@@ -85,6 +89,6 @@ const useStyles = createUseStyles({
   offenderRow: {
     cursor: 'pointer',
   },
-});
+}));
 
 export default useStyles;

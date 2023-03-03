@@ -177,7 +177,7 @@ const IncidentCard = ({
           {incident?.subject}
         </Title>
         <Text type="secondary">
-          Ref: {incident?.reference}
+          Alert ID: {incident?.reference}
           {incident?.policeRef ? `/ Crime Ref: ${incident.policeRef}` : ''}
         </Text>
         <Link to={`/app/incidents/view/${incident?.id}`}>
@@ -221,7 +221,7 @@ const IncidentCard = ({
               />
               <Text type="secondary">
                 {incident?.createdBy.fullName} -{' '}
-                {incident?.createdBy.organisation}
+                {incident?.createdBy.businesses[0]?.name}
               </Text>
             </Col>
           </Row>
@@ -235,7 +235,7 @@ const IncidentCard = ({
             </Col>
             <Col span={23}>
               <Text style={{ width: '100%' }} ellipsis type="secondary">
-                {incident?.location?.full}
+                {incident?.business?.name}
               </Text>
             </Col>
           </Row>

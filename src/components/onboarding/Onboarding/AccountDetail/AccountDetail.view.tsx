@@ -6,12 +6,6 @@ const { Title, Text } = Typography;
 
 interface AccountData {
   fullName: string;
-  organisation: string;
-  postcode: string;
-  street: string;
-  townCity: string;
-  building: string | null;
-  county: string | null;
 }
 
 interface Props {
@@ -45,12 +39,6 @@ const EditProfile = ({
       <Form
         initialValues={{
           fullName: data?.currentUser?.fullName,
-          organisation: data?.currentUser?.organisation,
-          postcode: data?.currentUser?.addresses[0].postcode || '',
-          street: data?.currentUser?.addresses[0].street || '',
-          townCity: data?.currentUser?.addresses[0].townCity || '',
-          building: data?.currentUser?.addresses[0].building || '',
-          county: data?.currentUser?.addresses[0].county || '',
         }}
         onFinish={onSubmit}
       >
@@ -63,82 +51,6 @@ const EditProfile = ({
                 {
                   required: true,
                   message: 'Please enter a name for the user.',
-                },
-              ]}
-            >
-              <Input disabled={saving} />
-            </Form.Item>
-          </Col>
-          <Col span={11}>
-            <Form.Item
-              name="organisation"
-              label="Organisation"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please enter an organisation for the user.',
-                },
-              ]}
-            >
-              <Input disabled={saving} />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Title level={3} style={{ marginBottom: 25 }}>
-          Address:
-        </Title>
-        <Row gutter={50}>
-          <Col span={11}>
-            <Form.Item name="building" label="Building">
-              <Input disabled={saving} />
-            </Form.Item>
-          </Col>
-          <Col span={11}>
-            <Form.Item
-              name="street"
-              label="Street"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please enter a town/city for the address.',
-                },
-              ]}
-            >
-              <Input disabled={saving} />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={50}>
-          <Col span={11}>
-            <Form.Item
-              name="townCity"
-              label="Town/City"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please enter a town/city for the address.',
-                },
-              ]}
-            >
-              <Input disabled={saving} />
-            </Form.Item>
-          </Col>
-          <Col span={11}>
-            <Form.Item name="county" label="County">
-              <Input disabled={saving} />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={50}>
-          <Col span={11}>
-            <Form.Item
-              name="postcode"
-              label="Postcode"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please enter postcode for the address.',
                 },
               ]}
             >

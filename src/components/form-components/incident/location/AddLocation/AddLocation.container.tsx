@@ -1,14 +1,8 @@
 import React from 'react';
+import { LocationData } from 'types/DataType';
 import useAddOffender from './useAddLocation';
 import View from './AddLocation.view';
 
-interface LocationData {
-  building?: string | null;
-  street: string;
-  townCity: string;
-  county?: string | null;
-  postcode: string;
-}
 interface Props {
   onClose: () => void;
   update: (value: LocationData | undefined) => void;

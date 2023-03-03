@@ -44,13 +44,14 @@ describe('Detail Officer View', () => {
       createdBy: {
         fullName: 'aaa',
         id: 'cl4pe3eu91312371op4c4k2lih2',
-        organisation: 'ShopSafe',
+        businesses: [{ name: 'test business', id: '' }],
       },
       tags: [{ id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling ' }],
       groups: [{ id: 'ckqtnb4r056540229myw4yk8zvq', name: 'NightSafe' }],
       images: [{ id: 'cl6owsuzo33227f9pe9zk4wone' }],
       bans: [],
       incidents: [],
+      vehicles: [],
     },
   };
   it('renders the page', () => {

@@ -9,24 +9,14 @@ describe('Detail Officer View', () => {
     currentUser: {
       id: 'userId',
       fullName: 'test user',
-      organisation: 'ShopSafe ',
       email: '@shopsafe.uk',
+      businesses: [],
       newUser: false,
       incidentEmail: true,
       incidentPush: false,
       messagePush: true,
       offenderEmail: true,
       offenderPush: true,
-      addresses: [
-        {
-          building: 'building',
-          county: 'Suffolk',
-          id: 'ckshi0r5f9684229l4ckxvhld8',
-          postcode: 'IP313FA',
-          street: 'Unit 2 Sandy Lane',
-          townCity: 'Badwell Ash',
-        },
-      ],
       groups: [
         {
           id: 'test',

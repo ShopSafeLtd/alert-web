@@ -38,6 +38,28 @@ describe('List Officer View', () => {
           ageCheck={false}
           setAgeCheck={jest.fn()}
           bansData={[]}
+          addExistingCrimeGroup
+          addExistingVehicle
+          addNewCrimeGroup
+          addNewVehicle
+          crimeGroupsData={[]}
+          editCrimeGroupId="test"
+          editVehicleId="test"
+          listCrimeGroupsData={{
+            listCrimeGroups: { crimeGroups: [], total: 0 },
+          }}
+          listVehiclesData={{ listVehicles: { total: 0, vehicles: [] } }}
+          removeCrimeGroup={jest.fn()}
+          removeVehicle={jest.fn()}
+          setEditCrimeGroupId={jest.fn()}
+          setEditVehicleId={jest.fn()}
+          toggleAddExistingCrimeGroup={jest.fn()}
+          toggleAddExistingVehicle={jest.fn()}
+          toggleAddNewCrimeGroup={jest.fn()}
+          toggleAddNewVehicle={jest.fn()}
+          updateCrimeGroupsData={jest.fn()}
+          updateVehiclesData={jest.fn()}
+          vehiclesData={[]}
         />
       </MemoryRouter>
     );

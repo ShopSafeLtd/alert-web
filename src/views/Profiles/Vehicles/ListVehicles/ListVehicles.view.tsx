@@ -2,9 +2,12 @@ import React from 'react';
 import { Button, Col, Drawer, Input, Row, Table } from 'antd';
 import { CreateVehicleMutation, ListVehiclesQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
-import { formatDate } from 'utils';
 import { MutationUpdaterFn } from '@apollo/client';
 import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
+import moment from 'moment';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUpRightFromSquare } from '@fortawesome/pro-light-svg-icons';
+import { useNavigate } from 'react-router';
 import useStyles from './ListVehicles.styles';
 
 interface Props {
@@ -27,6 +30,8 @@ const ListVehicles = ({
   updateVehicleList,
 }: Props) => {
   const classes = useStyles();
+  const navigate = useNavigate();
+
   return (
     <div className={classes.page}>
       <Row className={classes.headerRow}>
@@ -52,13 +57,16 @@ const ListVehicles = ({
           colour: vehicle.colour,
           model: vehicle.model,
           registration: vehicle.registration,
-          // crimeGroup: vehicle.crimeGroup,
           updatedAt: vehicle.updatedAt,
+          totalCrimeGroup: vehicle.totalCrimeGroups,
           totalOffenders: vehicle.totalOffenders,
           totalIncidents: vehicle.totalIncidents,
         }))}
         loading={loading}
         size="small"
+        onRow={(record) => ({
+          onClick: () => <Link to={`view/${record.key}`} />,
+        })}
         columns={[
           {
             key: 'make',
@@ -71,8 +79,9 @@ const ListVehicles = ({
           {
             key: 'updatedAt',
             dataIndex: 'updatedAt',
-            title: 'updatedAt',
-            render: (value) => formatDate(value),
+            title: 'UpdatedAt',
+            render: (value) =>
+              moment(value || moment()).format(`ddd MMM DD YYYY - HH:mm`),
           },
           {
             key: 'colour',
@@ -97,10 +106,28 @@ const ListVehicles = ({
             title: 'Incidents',
           },
           {
+            key: 'totalCrimeGroups',
+            dataIndex: 'totalCrimeGroups',
+            title: 'Crime Groups',
+          },
+          {
             key: 'registration',
             dataIndex: 'registration',
             title: 'Registration',
             // render: (value) => `${value?.toFixed(0) || 0}%`,
+          },
+          {
+            title: '',
+            dataIndex: 'actions',
+            key: 'actions',
+            render: (_, record) => (
+              // <Link to={`view/${record.key}`}>
+              <FontAwesomeIcon
+                icon={faArrowUpRightFromSquare}
+                onClick={() => navigate(`view/${record.key}`)}
+              />
+              // </Link>
+            ),
           },
           // {
           //   key: 'crimeGroup',

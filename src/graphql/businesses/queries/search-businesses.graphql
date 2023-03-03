@@ -1,0 +1,13 @@
+query SearchBusinesses($where: BusinessWhereInput, $skip: Int, $take: Int) {
+  listBusinesses(where: $where, skip: $skip, take: $take) {
+    total
+    businesses {
+      id
+      name
+      locations {
+        id
+        full
+      }
+    }
+  }
+}

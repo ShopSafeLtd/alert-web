@@ -3,7 +3,10 @@ query currentUser {
     id
     fullName
     email
-    organisation
+    businesses {
+      id
+      name
+    }
     newUser
     groups {
       id
@@ -18,14 +21,6 @@ query currentUser {
         autoApproveIncidents
         autoApproveOffenders
       }
-    }
-    addresses(where: { primary: { equals: true } }) {
-      id
-      building
-      street
-      townCity
-      county
-      postcode
     }
     incidentEmail
     incidentPush

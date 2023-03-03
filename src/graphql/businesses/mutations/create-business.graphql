@@ -1,0 +1,15 @@
+mutation CreateBusiness($data: CreateBusinessDataInput!) {
+  createBusiness(data: $data) {
+    id
+    name
+    parent {
+      id
+      name
+    }
+    locations {
+      id
+      full
+    }
+    totalUsers
+  }
+}

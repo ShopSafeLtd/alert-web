@@ -25,7 +25,7 @@ interface FormData {
 interface MemberData {
   id: string;
   fullName: string;
-  organisation: string;
+  businesses: { id: string; name: string }[];
   firstLetter?: string | null;
 }
 
@@ -65,7 +65,7 @@ const EditChat = ({
             loading={loading}
             split={false}
             dataSource={membersData}
-            renderItem={({ id, fullName, organisation, firstLetter }) => (
+            renderItem={({ id, fullName, businesses, firstLetter }) => (
               <List.Item
                 // className={chatId === id ? 'chat-item current' : 'chat-item'}
                 key={id}
@@ -90,7 +90,7 @@ const EditChat = ({
                       </Col>
                       <Col flex={1}>
                         <Tag color="red" style={{ padding: 3 }}>
-                          --{organisation}
+                          -- {businesses[0]?.name}
                         </Tag>
                       </Col>
                       <Col>

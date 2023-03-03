@@ -1,18 +1,19 @@
 mutation createMessage($data: MessageCreateWithoutActionsInput!) {
   createMessage(data: $data) {
     id
-    sent
+    content
+    createdAt
+    currentUser
+    formattedDateTime
     from {
       id
       fullName
-      organisation
+      firstLetter
     }
-    chat {
-      id
-      name
-    }
-    content
-    createdAt
+    sent
+    showUser
+    paddingTop
+    type
     images {
       id
       url

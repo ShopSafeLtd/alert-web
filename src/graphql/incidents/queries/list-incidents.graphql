@@ -24,14 +24,17 @@ query listIncidents(
         name
       }
       approved
-      location {
+      business {
         id
-        full
+        name
       }
       createdBy {
         id
         fullName
-        organisation
+        businesses {
+          id
+          name
+        }
       }
       images {
         id

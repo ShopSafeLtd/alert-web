@@ -8,9 +8,9 @@ import {
   useListUnapprovedIncidentsQuery,
   useSchemeGroupsQuery,
   ListUnapprovedIncidentsQuery,
-  useArticlesQuery,
+  useListArticlesQuery,
   QueryMode,
-  ArticlesQuery,
+  ListArticlesQuery,
   FeedItemsDocument,
   DeleteFeedItemMutation,
   useDeleteFeedItemMutation,
@@ -20,16 +20,19 @@ import { FeedItemSort, useStoreActions, useStoreState } from 'state';
 import { useNavigate } from 'react-router-dom';
 import { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
+import { PaginationModel } from 'types/DataType';
 
 interface Return {
   data: FeedItemsQuery | undefined;
   loading: boolean;
-  articleData: ArticlesQuery | undefined;
+  articleData: ListArticlesQuery | undefined;
   articleLoading: boolean;
   recentOffenderData: ListOffendersQuery | undefined;
   recentOffenderLoading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
-  pagination: { page: number; pageSize: number; sizeOptions: string[] };
+  pagination: PaginationModel;
+  articlePagination: PaginationModel;
+  onArticlePaginationChange: (page: number, pageSize: number) => void;
   order: FeedItemSort;
   setOrder: (value: FeedItemSort) => void;
   search: string;
@@ -74,7 +77,12 @@ const useFeedItems = (): Return => {
   const setFeedItemsState = useStoreActions(
     (actions) => actions.data.setFeedItems
   );
-  // const [search, setSearch] = useState('');
+  const [search, setSearch] = useState('');
+  const [articlePagination, setArticlePagination] = useState<PaginationModel>({
+    page: 1,
+    pageSize: 12,
+    sizeOptions: ['12'],
+  });
 
   // Queries
   // Fetch scheme groups if scheme admin
@@ -128,32 +136,32 @@ const useFeedItems = (): Return => {
       order: {
         updatedAt: SortOrder.Desc,
       },
-      groups:
-        variables.groups && variables.groups.length > 0
-          ? variables.groups.map((id) => id)
-          : undefined,
-      search: variables.search,
+      search,
       take: pagination.pageSize,
       skip: (pagination.page - 1) * pagination.pageSize,
     },
     fetchPolicy: 'cache-and-network',
   });
 
-  const { data: articleData, loading: articleLoading } = useArticlesQuery({
+  const { data: articleData, loading: articleLoading } = useListArticlesQuery({
     variables: {
+      scheme: {
+        id: schemeId,
+      },
       where: {
-        schemes: { some: { id: { equals: schemeId } } },
-
         OR: [
           {
             title: {
-              contains: variables.search,
+              contains: search,
               mode: QueryMode.Insensitive,
             },
           },
         ],
       },
-      orderBy: { updatedAt: SortOrder.Desc },
+
+      order: { updatedAt: SortOrder.Desc },
+      take: articlePagination.pageSize,
+      skip: articlePagination.pageSize * (articlePagination.page - 1),
     },
     fetchPolicy: 'cache-and-network',
   });
@@ -285,7 +293,12 @@ const useFeedItems = (): Return => {
       order,
     });
   };
-
+  const onArticlePaginationChange = (page: number, pageSize: number) =>
+    setArticlePagination({
+      ...articlePagination,
+      page,
+      pageSize,
+    });
   const onGroupsChange = (values: string[]) => {
     setFeedItemsState({
       pagination,
@@ -305,16 +318,16 @@ const useFeedItems = (): Return => {
     });
   };
 
-  const setSearch = (value: string) => {
-    setFeedItemsState({
-      pagination,
-      variables: {
-        ...variables,
-        search: value,
-      },
-      order,
-    });
-  };
+  // const setSearch = (value: string) => {
+  //   setFeedItemsState({
+  //     pagination,
+  //     variables: {
+  //       ...variables,
+  //       search: value,
+  //     },
+  //     order,
+  //   });
+  // };
 
   return {
     data,
@@ -325,6 +338,8 @@ const useFeedItems = (): Return => {
     recentOffenderLoading,
     onPaginationChange,
     pagination,
+    articlePagination,
+    onArticlePaginationChange,
     order,
     setOrder,
     search: variables.search,

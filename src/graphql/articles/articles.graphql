@@ -12,7 +12,10 @@ query Articles(
     }
     createdBy {
       fullName
-      organisation
+      businesses {
+        id
+        name
+      }
       id
     }
     title

@@ -19,7 +19,7 @@ import {
   Race,
   SearchOffendersQuery,
 } from 'graphql/generated';
-import AddExisitingOffender from 'components/form-components/incident/offender/AddExisitingOffender';
+import AddExisitingOffender from 'components/form-components/incident/offender/AddExistingOffender';
 import {
   getAge,
   getBuild,

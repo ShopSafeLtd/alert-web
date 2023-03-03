@@ -46,9 +46,10 @@ import {
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
+import { Link } from 'react-router-dom';
 import IncidentSideList from 'components/incidents/IncidentSideList';
 import UpdateBar from 'components/form-components/update-bar';
-import LinkOffender from 'components/form-components/incident/offender/AddExisitingOffender';
+import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
 import { ItemType } from 'antd/lib/menu/hooks/useItems';
 import { useNavigate } from 'react-router';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -295,40 +296,71 @@ const ViewIncident = ({
                         {data?.incident?.description}
                       </Paragraph>
                       <Descriptions column={1} className={classes.desc}>
-                        <Descriptions.Item label="Reference">
+                        <Descriptions.Item
+                          className={classes.detail}
+                          label="Alert ID"
+                        >
                           {data?.incident?.reference}
                           {data?.incident?.policeRef
                             ? ` / Crime Ref: ${data?.incident?.policeRef}`
                             : ''}
                         </Descriptions.Item>
-                        <Descriptions.Item label={<span>Created At</span>}>
+                        <Descriptions.Item
+                          className={classes.detail}
+                          label={<span>Created At</span>}
+                        >
                           {data?.incident?.dayTime}
                         </Descriptions.Item>
-                        <Descriptions.Item label={<span>Created By</span>}>
+                        <Descriptions.Item
+                          className={classes.detail}
+                          label={<span>Created By</span>}
+                        >
                           {`${data?.incident?.createdBy.fullName} -
-                              ${data?.incident?.createdBy.organisation}`}
+                              ${data?.incident?.createdBy.businesses[0]?.name}`}
                         </Descriptions.Item>
-                        <Descriptions.Item label={<span>Value</span>}>
+                        <Descriptions.Item
+                          className={classes.detail}
+                          label={<span>Value</span>}
+                        >
                           {data?.incident?.value ? '£' : ''}
                           {data?.incident?.value || 'Unknown'}
                         </Descriptions.Item>
-                        <Descriptions.Item label={<span>Recovered Value</span>}>
+                        <Descriptions.Item
+                          className={classes.detail}
+                          label={<span>Recovered Value</span>}
+                        >
                           {data?.incident?.value ? '£' : ''}
                           {data?.incident?.recoveredValue || 'Unknown'}
                         </Descriptions.Item>
                         <Descriptions.Item
+                          className={classes.detail}
                           label={<span>Report To Police</span>}
                         >
                           {data?.incident?.policeReported ? 'Yes' : 'No'}
                         </Descriptions.Item>
-                        <Descriptions.Item label={<span>Police Involved</span>}>
+                        <Descriptions.Item
+                          className={classes.detail}
+                          label={<span>Police Involved</span>}
+                        >
                           {data?.incident?.policeInvolved ? 'Yes' : 'No'}
                         </Descriptions.Item>
-                        <Descriptions.Item label={<span>Location</span>}>
-                          {data?.incident?.location?.full}
+                        <Descriptions.Item
+                          className={classes.detail}
+                          label={<span>Business</span>}
+                        >
+                          {editRights ? (
+                            <Link
+                              to={`/app/scheme-settings/business/view/${data?.incident?.business?.id}`}
+                            >
+                              {data?.incident?.business?.name}
+                            </Link>
+                          ) : (
+                            data?.incident?.business?.name
+                          )}
                         </Descriptions.Item>
                       </Descriptions>
                       <div className="incident-offender-container">
+                        {/* <Divider>Offender</Divider> */}
                         <Title level={4}>Offenders</Title>
                         {data?.incident?.offenders.length && !loading ? (
                           <Table
@@ -406,6 +438,160 @@ const ViewIncident = ({
                           />
                         )}
                       </div>
+                      {data?.incident?.vehicles.length && !loading ? (
+                        <div className="incident-offender-container">
+                          {/* <Divider>Offender</Divider> */}
+                          <Title level={4} style={{ marginTop: 20 }}>
+                            Vehicles
+                          </Title>
+                          <Table
+                            columns={[
+                              {
+                                key: 'make',
+                                dataIndex: 'make',
+                                title: 'Make',
+                              },
+                              {
+                                key: 'colour',
+                                dataIndex: 'colour',
+                                title: 'Colour',
+                              },
+                              {
+                                key: 'model',
+                                dataIndex: 'model',
+                                title: 'Model',
+                              },
+                              {
+                                key: 'registration',
+                                dataIndex: 'registration',
+                                title: 'Registration',
+                              },
+
+                              {
+                                title: '',
+                                dataIndex: 'actions',
+                                key: 'actions',
+                                render: (_, record) => (
+                                  <Button type="text" size="small">
+                                    <FontAwesomeIcon
+                                      icon={faArrowUpRightFromSquare}
+                                      onClick={() =>
+                                        navigate(
+                                          `/app/vehicles/view/${record.key}`
+                                        )
+                                      }
+                                    />
+                                  </Button>
+                                ),
+                              },
+                            ]}
+                            dataSource={data?.incident?.vehicles.map(
+                              (vehicle) => ({
+                                key: vehicle.id,
+                                make: vehicle.make,
+                                colour: vehicle.colour,
+                                model: vehicle.model,
+                                registration: vehicle.registration,
+                              })
+                            )}
+                            size="small"
+                            pagination={
+                              data?.incident?.vehicles &&
+                              data?.incident?.vehicles.length > 5
+                                ? {
+                                    pageSize: 5,
+                                  }
+                                : false
+                            }
+                            rowClassName={classes.offenderRow}
+                          />
+                        </div>
+                      ) : null}
+                      {data?.incident?.vehicles.length && !loading ? (
+                        <div className="incident-offender-container">
+                          {/* <Divider>Offender</Divider> */}
+                          <Title level={4} style={{ marginTop: 20 }}>
+                            Crime Groups
+                          </Title>
+                          <Table
+                            columns={[
+                              {
+                                key: 'reference',
+                                dataIndex: 'reference',
+                                title: 'Reference',
+                              },
+                              {
+                                key: 'totalOffenders',
+                                dataIndex: 'totalOffenders',
+                                title: 'Members',
+                              },
+                              {
+                                key: 'totalIncidents',
+                                dataIndex: 'totalIncidents',
+                                title: 'Incidents',
+                              },
+                              {
+                                key: 'totalValue',
+                                dataIndex: 'totalValue',
+                                title: 'Lost Value',
+                                render: (value) => `£${value || 0}`,
+                              },
+                              // {
+                              //   key: 'totalRecoveredValue',
+                              //   dataIndex: 'totalRecoveredValue',
+                              //   title: 'Recovered Value',
+                              //   render: (value) => `£${value || 0}`,
+                              // },
+                              // {
+                              //   key: 'totalTheftSuccess',
+                              //   dataIndex: 'totalTheftSuccess',
+                              //   title: 'Success Rate',
+                              //   render: (value) => `${value?.toFixed(0) || 0}%`,
+                              // },
+
+                              {
+                                title: '',
+                                dataIndex: 'actions',
+                                key: 'actions',
+                                render: (_, record) => (
+                                  <Button type="text" size="small">
+                                    <FontAwesomeIcon
+                                      icon={faArrowUpRightFromSquare}
+                                      onClick={() =>
+                                        navigate(
+                                          `/app/crime-groups/view/${record.key}`
+                                        )
+                                      }
+                                    />
+                                  </Button>
+                                ),
+                              },
+                            ]}
+                            dataSource={data?.incident?.crimeGroups.map(
+                              (crimeGroup) => ({
+                                key: crimeGroup.id,
+                                reference: crimeGroup.reference,
+                                totalOffenders: crimeGroup.totalOffenders,
+                                totalIncidents: crimeGroup.totalIncidents,
+                                totalValue: crimeGroup.totalValue,
+                                // totalRecoveredValue:
+                                //   crimeGroup.totalRecoveredValue,
+                                // totalTheftSuccess: crimeGroup.totalTheftSuccess,
+                              })
+                            )}
+                            size="small"
+                            pagination={
+                              data?.incident?.vehicles &&
+                              data?.incident?.vehicles.length > 5
+                                ? {
+                                    pageSize: 5,
+                                  }
+                                : false
+                            }
+                            rowClassName={classes.offenderRow}
+                          />
+                        </div>
+                      ) : null}
                     </div>
                   )}
                 </div>
@@ -624,7 +810,7 @@ const ViewIncident = ({
                                     createdBy:
                                       userId === update.createdBy.id
                                         ? 'You'
-                                        : `${update.createdBy.fullName} - ${update.createdBy.organisation}`,
+                                        : `${update.createdBy.fullName} - ${update.createdBy.businesses[0]?.name}`,
                                     id: update.id,
                                     text: update.text || '',
                                   })

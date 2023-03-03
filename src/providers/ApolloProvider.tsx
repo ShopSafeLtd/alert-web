@@ -236,17 +236,36 @@ const Apollo = ({ children }: Props): JSX.Element => {
               return [...incoming];
             },
           },
+          chatMessages: {
+            keyArgs: ['where'],
+            merge(existing, incoming, { readField, args }) {
+              if (existing && args?.skip) {
+                const existingIds = existing.map((el: any) =>
+                  readField('id', el)
+                );
+
+                return [
+                  ...existing,
+                  ...incoming.filter(
+                    (el: any) => !existingIds.includes(readField('id', el))
+                  ),
+                ];
+                // return [...incoming]
+              }
+              return [...incoming];
+            },
+          },
         },
       },
     },
   });
 
-  (async () => {
-    await persistCache({
-      cache,
-      storage: window.localStorage,
-    });
-  })();
+  // (async () => {
+  //   await persistCache({
+  //     cache,
+  //     storage: window.localStorage,
+  //   });
+  // })();
 
   const client = new ApolloClient({
     link,

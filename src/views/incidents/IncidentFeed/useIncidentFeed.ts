@@ -188,9 +188,13 @@ const useIncidentFeed = (): Return => {
                   },
                 },
                 {
-                  organisation: {
-                    contains: variables.search,
-                    mode: QueryMode.Insensitive,
+                  businesses: {
+                    some: {
+                      name: {
+                        contains: variables.search,
+                        mode: QueryMode.Insensitive,
+                      },
+                    },
                   },
                 },
               ],
@@ -259,9 +263,13 @@ const useIncidentFeed = (): Return => {
                     },
                   },
                   {
-                    organisation: {
-                      contains: variables.search,
-                      mode: QueryMode.Insensitive,
+                    businesses: {
+                      some: {
+                        name: {
+                          contains: variables.search,
+                          mode: QueryMode.Insensitive,
+                        },
+                      },
                     },
                   },
                 ],
@@ -334,9 +342,13 @@ const useIncidentFeed = (): Return => {
                     },
                   },
                   {
-                    organisation: {
-                      contains: variables.search,
-                      mode: QueryMode.Insensitive,
+                    businesses: {
+                      some: {
+                        name: {
+                          contains: variables.search,
+                          mode: QueryMode.Insensitive,
+                        },
+                      },
                     },
                   },
                 ],

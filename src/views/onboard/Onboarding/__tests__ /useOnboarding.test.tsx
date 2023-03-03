@@ -21,7 +21,7 @@ const mocks = [
         currentUser: {
           id: 'userId',
           fullName: 'test user',
-          organisation: 'ShopSafe ',
+          businesses: [{ name: 'test', id: 'test' }],
           email: '@shopsafe.uk',
           disabled: false,
           newUser: false,
@@ -83,7 +83,7 @@ const mocks = [
         },
         data: {
           fullName: { set: 'fullName' },
-          organisation: { set: 'organisation' },
+          businesses: { connect: [{ id: 'test' }] },
           termsSigned: { set: true },
           newUser: { set: false },
           addresses: {
@@ -126,7 +126,7 @@ const mocks = [
         updateUser: {
           id: 'userId',
           fullName: 'test user',
-          organisation: 'ShopSafe ',
+          businesses: [{ name: 'test', id: 'test' }],
           email: '@shopsafe.uk',
           disabled: false,
           newUser: false,
@@ -180,12 +180,6 @@ const UseOnboardingTest = () => {
     updateTermsSigned();
     updateAccountDetail({
       fullName: 'fullName',
-      organisation: 'organisation',
-      building: 'building',
-      county: 'county',
-      postcode: 'postcode',
-      street: 'street',
-      townCity: 'townCity',
     });
   };
   return (

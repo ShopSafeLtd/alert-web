@@ -1,12 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Menu } from 'antd';
+import { Grid, Menu, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import IntlMessage from '../../../util-components/AntD/IntlMessage';
 import navConfig, { NavItem } from 'configs/NavigationConfig';
 import utils from 'utils';
 import { NavType, SideNavTheme, useStoreActions, useStoreState } from 'state';
 import { APP_NAME } from 'configs/AppConfig';
+import NavScheme from './NavScheme';
+import NavProfile from './NavProfile';
+import Logo from './Logo';
 
 const { SubMenu } = Menu;
 const { useBreakpoint } = Grid;
@@ -82,6 +85,7 @@ const SideNavContent = (props: SideNavContentProps) => {
         overflow: 'hidden',
       }}
     >
+      <Logo logoType="default" />
       <Menu
         theme={sideNavTheme === SideNavTheme.LIGHT ? 'light' : 'dark'}
         mode="inline"
@@ -152,11 +156,16 @@ const SideNavContent = (props: SideNavContentProps) => {
           )
         )}
       </Menu>
-      <span style={{ padding: '12px' }}>
-        Copyright &copy; {`${new Date().getFullYear()}`} <br />
-        <span className="font-weight-semibold">{`${APP_NAME}`}</span> <br />
+      <NavScheme />
+      <NavProfile />
+      <Typography.Text
+        type="secondary"
+        style={{ padding: '12px', fontSize: 10 }}
+      >
+        Copyright &copy; {`${new Date().getFullYear()}`}
+        <span className="font-weight-semibold"> {`${APP_NAME}`} </span>
         All rights reserved.
-      </span>
+      </Typography.Text>
     </div>
   );
 };

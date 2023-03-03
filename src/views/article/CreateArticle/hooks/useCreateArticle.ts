@@ -13,7 +13,7 @@ import {
   useTagsQuery,
 } from '../../../../graphql/generated';
 import { useStoreState } from '../../../../state';
-import { OffenderData } from '../../../../components/form-components/incident/offender/AddExisitingOffender/AddExisitingOffender.container';
+import { OffenderData } from '../../../../components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
 import { Incident } from '../../../../components/form-components/offender/LinkIncident/LinkIncident.container';
 
 const { useForm } = Form;
@@ -319,7 +319,7 @@ const useCreateArticle = (): Props => {
         upload({ blob: blobInfo.blob(), fileName: blobInfo.filename() }).then(
           (url) => {
             blobCache.add(blobInfo);
-            console.log(meta);
+
             if (meta.filetype === 'file') {
               fileList.push({ url, name: file.name, uid: id } as UploadFile);
             }

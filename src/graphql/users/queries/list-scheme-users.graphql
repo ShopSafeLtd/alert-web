@@ -9,7 +9,10 @@ query ListSchemeUsers(
     fullName
     firstLetter
     email
-    organisation
+    businesses {
+      id
+      name
+    }
     status
     groups(where: $groupWhere) {
       id

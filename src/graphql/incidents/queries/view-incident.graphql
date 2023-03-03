@@ -18,19 +18,17 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       name
     }
     approved
-    location {
+    business {
       id
-      building
-      street
-      townCity
-      county
-      postcode
-      full
+      name
     }
     createdBy {
       id
       fullName
-      organisation
+      businesses {
+        id
+        name
+      }
     }
     images {
       id
@@ -40,6 +38,26 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     groups {
       id
       name
+    }
+    crimeGroups {
+      id
+      reference
+      totalIncidents
+      totalOffenders
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+    }
+    vehicles {
+      id
+      colour
+      model
+      make
+      registration
+      totalCrimeGroups
+      totalIncidents
+      totalOffenders
+      updatedAt
     }
     offenders {
       id
@@ -108,7 +126,10 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       createdBy {
         id
         fullName
-        organisation
+        businesses {
+          id
+          name
+        }
       }
       replies {
         id
@@ -150,7 +171,10 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
         createdBy {
           id
           fullName
-          organisation
+          businesses {
+            id
+            name
+          }
         }
       }
     }

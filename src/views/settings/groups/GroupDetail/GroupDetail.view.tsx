@@ -80,15 +80,15 @@ const GroupDetail = ({
             ),
           },
           {
-            key: 'organisation',
-            title: 'Organisation',
-            dataIndex: 'organisation',
+            key: 'business',
+            title: 'Business',
+            dataIndex: 'business',
           },
         ]}
         dataSource={data?.group?.users.map((user) => ({
           key: user.id,
           name: user.fullName,
-          organisation: user.organisation,
+          business: user.businesses[0]?.name,
         }))}
       />
 
