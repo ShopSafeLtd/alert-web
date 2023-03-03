@@ -183,7 +183,9 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
 
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
-  const groups = useStoreState((state) => state.user.groups);
+  const groups = useStoreState((state) => state.user.groups).filter(
+    ({ scheme: { id } }) => schemeId === id
+  );
   const role = useStoreState((state) => state.user.role);
   const pagination = useStoreState((state) => state.data.incidents.pagination);
   const variables = useStoreState((state) => state.data.incidents.variables);
@@ -346,7 +348,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           id: schemeId,
         },
         order: {
-          updatedAt: SortOrder.Asc,
+          updatedAt: SortOrder.Desc,
         },
         take: 20,
         where: searchOffenders.length
@@ -774,12 +776,8 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                 images:
                   offender.images && offender.images.length
                     ? {
-                        upload: offender.images?.map((image) => ({
-                          url: {
-                            filename: image.fileName || '',
-                            mimetype: image.type || '',
-                            url: image.url || '',
-                          },
+                        connect: offender.images?.map((image) => ({
+                          id: image.id,
                         })),
                       }
                     : {},
@@ -828,14 +826,10 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                     offender.images.length &&
                     offender.images?.filter((image) => image.new === true)
                       ? {
-                          upload: offender.images
+                          connect: offender.images
                             ?.filter((image) => image.new === true)
                             .map((image) => ({
-                              url: {
-                                filename: image.fileName || '',
-                                mimetype: image.type || '',
-                                url: image.url || '',
-                              },
+                              id: image.id,
                             })),
                         }
                       : {},
@@ -983,10 +977,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
               },
             },
             groups: {
-              set:
-                groups.length > 1
-                  ? data.groups.map((id) => ({ id }))
-                  : groups.map(({ id }) => ({ id })),
+              set: data.groups.map((id) => ({ id })),
             },
             crimeTypes: {
               set: data.tags.map((id) => ({ id })),

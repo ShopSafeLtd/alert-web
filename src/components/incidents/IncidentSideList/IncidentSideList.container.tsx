@@ -8,7 +8,8 @@ interface Props {
 }
 
 const IncidentSideList = ({ current }: Props): JSX.Element => {
-  const { data, loading, onPaginationChange } = useIncidentSideList();
+  const { data, loading, onPaginationChange, pagination } =
+    useIncidentSideList();
 
   return (
     <View
@@ -16,6 +17,7 @@ const IncidentSideList = ({ current }: Props): JSX.Element => {
       loading={loading}
       current={current}
       onPaginationChange={onPaginationChange}
+      pagination={pagination}
     />
   );
 };

@@ -451,6 +451,7 @@ const EditIncident = ({
             onPreview={onPreview}
           />
         </Card>
+        {/* {groups.length > 1 && ( */}
         <Card style={{ marginBottom: 10 }}>
           <Row align="bottom" style={{ marginBottom: 20 }}>
             <Col>
@@ -473,39 +474,38 @@ const EditIncident = ({
               </Paragraph>
             </Col>
           </Row>
-          {groups.length > 1 && (
-            <Row>
-              <Col span={8}>
-                <Form.Item
-                  name="groups"
-                  label="Groups"
-                  tooltip="Please select the relevant groups to report this incident to, for GDPR it is important that the data is relevant to the groups."
-                  rules={[
-                    {
-                      required: true,
-                      message:
-                        'Please add at least one group that you would like this incident to be visible to.',
-                    },
-                  ]}
+          <Row>
+            <Col span={8}>
+              <Form.Item
+                name="groups"
+                label="Groups"
+                tooltip="Please select the relevant groups to report this incident to, for GDPR it is important that the data is relevant to the groups."
+                rules={[
+                  {
+                    required: true,
+                    message:
+                      'Please add at least one group that you would like this incident to be visible to.',
+                  },
+                ]}
+              >
+                <Select
+                  loading={groupsLoading}
+                  disabled={saving}
+                  mode="multiple"
+                  maxTagCount={3}
+                  placeholder="Select the groups that you would like this incident to be visible to."
                 >
-                  <Select
-                    loading={groupsLoading}
-                    disabled={saving}
-                    mode="multiple"
-                    maxTagCount={3}
-                    placeholder="Select the groups that you would like this incident to be visible to."
-                  >
-                    {groups.map((group) => (
-                      <Select.Option key={group.value} value={group.value}>
-                        {group.label}
-                      </Select.Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </Col>
-            </Row>
-          )}
+                  {groups.map((group) => (
+                    <Select.Option key={group.value} value={group.value}>
+                      {group.label}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
         </Card>
+        {/* )} */}
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={10} justify="end">
             <Col>

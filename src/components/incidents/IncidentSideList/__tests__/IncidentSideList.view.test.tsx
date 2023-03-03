@@ -64,6 +64,7 @@ describe('Detail Officer View', () => {
         <MemoryRouter>
           <MockedProvider mocks={[]} addTypename={false}>
             <IncidentSideList
+              pagination={{ page: 1, pageSize: 10 }}
               data={data}
               onPaginationChange={jest.fn()}
               loading={false}

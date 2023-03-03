@@ -9,6 +9,10 @@ interface Return {
   data: ListIncidentsQuery | undefined;
   loading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
+  pagination: {
+    page: number;
+    pageSize: number;
+  };
 }
 
 const useIncidentSideList = (): Return => {
@@ -51,6 +55,10 @@ const useIncidentSideList = (): Return => {
     data,
     loading: data?.listIncidents ? false : loading,
     onPaginationChange,
+    pagination: {
+      page: pagination.page,
+      pageSize: pagination.pageSize,
+    },
   };
 };
 

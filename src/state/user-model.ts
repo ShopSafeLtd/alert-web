@@ -12,6 +12,9 @@ export interface SetUserPayload {
   groups: {
     id: string;
     name: string;
+    scheme: {
+      id: string;
+    };
   }[];
   isSet: boolean;
 }
@@ -42,6 +45,9 @@ export interface UserModel {
   groups: {
     id: string;
     name: string;
+    scheme: {
+      id: string;
+    };
   }[];
   role: Role;
   isSet: boolean;

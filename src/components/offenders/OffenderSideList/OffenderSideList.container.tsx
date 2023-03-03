@@ -9,7 +9,8 @@ interface Props {
 }
 
 const OffenderSideList = ({ current, to }: Props): JSX.Element => {
-  const { data, loading, onPaginationChange } = useOffenderSideList();
+  const { data, loading, onPaginationChange, pagination } =
+    useOffenderSideList();
 
   return (
     <View
@@ -18,6 +19,7 @@ const OffenderSideList = ({ current, to }: Props): JSX.Element => {
       current={current}
       onPaginationChange={onPaginationChange}
       to={to}
+      pagination={pagination}
     />
   );
 };

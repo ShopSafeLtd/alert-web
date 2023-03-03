@@ -358,6 +358,14 @@ const ViewIncident = ({
                             data?.incident?.business?.name
                           )}
                         </Descriptions.Item>
+                        <Descriptions.Item
+                          className={classes.detail}
+                          label={<span>Groups</span>}
+                        >
+                          {data?.incident?.groups.map((group) => (
+                            <Tag key={group.id}>{group.name}</Tag>
+                          ))}
+                        </Descriptions.Item>
                       </Descriptions>
                       <div className="incident-offender-container">
                         {/* <Divider>Offender</Divider> */}

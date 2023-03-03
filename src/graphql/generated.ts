@@ -33973,7 +33973,12 @@ export type CurrentUserQuery = {
     offenderPush: boolean;
     messagePush: boolean;
     businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
-    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    groups: Array<{
+      __typename?: 'Group';
+      id: string;
+      name: string;
+      scheme: { __typename?: 'Scheme'; id: string };
+    }>;
     schemes: Array<{
       __typename?: 'UserScheme';
       id: string;
@@ -42387,6 +42392,9 @@ export const CurrentUserDocument = gql`
       groups {
         id
         name
+        scheme {
+          id
+        }
       }
       schemes {
         id
