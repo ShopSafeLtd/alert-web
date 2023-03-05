@@ -3,8 +3,13 @@ import { ReactFlowProvider } from 'reactflow';
 import React from 'react';
 import useFlow from './hooks/useFlow';
 import ReactFlowView from './Flow.view';
+import { ViewInvestigationQuery } from '../../../../../graphql/generated';
 
-const ReactFlowPro = () => {
+interface Props {
+  importData: ViewInvestigationQuery | undefined;
+}
+
+const ReactFlowPro = ({ importData }: Props) => {
   const { id: investigationId } = useParams();
   const {
     nodes,
@@ -21,23 +26,23 @@ const ReactFlowPro = () => {
     onDrop,
     onDragOver,
     wrapperRef,
-    offenders,
     loading,
-    setSelected,
     saving,
-    users,
     handlePointMove,
-    provider,
+    // users,
+    // provider,
+    // reactFlowInstance,
   } = useFlow({
     investigationId: investigationId || '',
+    importData,
   });
   return (
     <ReactFlowView
-      provider={provider}
-      users={users}
+      // reactFlowInstance={reactFlowInstance}
+      // provider={provider}
+      // users={users}
       handlePointMove={handlePointMove}
       saving={saving}
-      setSelected={setSelected}
       loading={loading}
       nodes={nodes}
       onNodesChange={onNodesChange}
@@ -53,15 +58,14 @@ const ReactFlowPro = () => {
       onDrop={onDrop}
       onDragOver={onDragOver}
       wrapperRef={wrapperRef}
-      offenders={offenders}
     />
   );
 };
 
-export default function Flow() {
+export default function Flow({ importData }: Props) {
   return (
     <ReactFlowProvider>
-      <ReactFlowPro />
+      <ReactFlowPro importData={importData} />
     </ReactFlowProvider>
   );
 }

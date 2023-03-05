@@ -1,12 +1,12 @@
 /* eslint-disable  */
-import { Avatar, Col, Row, Typography } from 'antd';
+import { Skeleton, Typography } from 'antd';
 import React, { DragEvent } from 'react';
 
 export enum NodeTypes {
-  SelectorNode = 'selectorNode',
-  OffenderImageNode = 'offenderImageNode',
+  OffenderDetailsNode = 'offenderDetailsNode',
+  ImageNode = 'imageNode',
   Default = 'default',
-  TextInputNode = 'textInputNode',
+  TextInputNode = 'textNode',
 }
 
 const onDragStart = (event: DragEvent, nodeType: NodeTypes) => {
@@ -14,29 +14,13 @@ const onDragStart = (event: DragEvent, nodeType: NodeTypes) => {
   event.dataTransfer.effectAllowed = 'move';
 };
 
-interface Props {
-  data: {
-    offenders: {
-      name: string;
-      url: string[];
-    }[];
-  };
-  setSelected: (selected: string) => void;
-}
-
-const Sidebar = ({ data, setSelected }: Props) => (
+const Sidebar = () => (
   <aside>
-    <div className="description">
+    <Typography.Text>
       You can drag these nodes to the pane on the right.
-    </div>
-    <Typography.Title
-      style={{
-        color: 'black',
-      }}
-      level={4}
-    >
-      Text Input
-    </Typography.Title>
+    </Typography.Text>
+
+    <Typography.Title level={4}>Text Input</Typography.Title>
 
     <div
       className="react-flow__node-text"
@@ -49,36 +33,29 @@ const Sidebar = ({ data, setSelected }: Props) => (
       Text Input Box
     </div>
 
-    <Typography.Title
-      style={{
-        color: 'black',
-      }}
-      level={4}
-    >
-      Offenders
-    </Typography.Title>
+    <Typography.Title level={4}>Image</Typography.Title>
 
-    {data.offenders.map((offender, index) => (
-      <>
-        <Row>
-          <Col span={24}>
-            <Typography.Title level={4}>{offender.name}</Typography.Title>
-            {offender.url.map((url, index) => (
-              <div
-                className="react-flow__node-input"
-                onDragStart={(event: DragEvent) => {
-                  setSelected(url);
-                  onDragStart(event, NodeTypes.OffenderImageNode);
-                }}
-                draggable
-              >
-                <Avatar src={url} shape="square" size={64} />
-              </div>
-            ))}
-          </Col>
-        </Row>
-      </>
-    ))}
+    <div
+      onDragStart={(event: DragEvent) => {
+        onDragStart(event, NodeTypes.ImageNode);
+      }}
+      draggable
+      style={{ width: 'fit-content' }}
+    >
+      <Skeleton.Image />
+    </div>
+
+    <Typography.Title level={4}>Offender Details</Typography.Title>
+
+    <div
+      onDragStart={(event: DragEvent) => {
+        onDragStart(event, NodeTypes.OffenderDetailsNode);
+      }}
+      draggable
+      style={{ width: 'fit-content' }}
+    >
+      <Skeleton.Image />
+    </div>
   </aside>
 );
 

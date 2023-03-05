@@ -1,4 +1,4 @@
-import React, { ComponentProps, DragEvent } from 'react';
+import React, { DragEvent } from 'react';
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -13,17 +13,16 @@ import ReactFlow, {
 } from 'reactflow';
 import { Button, Card, Spin } from 'antd';
 import OffenderNode from 'components/react-flow/nodes/offender-node';
-import OffenderImageNode from 'components/react-flow/nodes/offender-image-node';
-import TextInputNode from 'components/react-flow/nodes/text-input-node';
-
+import ImageNode from 'components/react-flow/nodes/image-node';
+import TextNode from 'components/react-flow/nodes/text-node';
 import FloatingEdge from 'components/react-flow/edges/floating-edge';
 import { LoadingOutlined } from '@ant-design/icons';
-import { WebrtcProvider } from 'y-webrtc';
 import Sidebar from './sidebar/Sidebar';
 import 'reactflow/dist/style.css';
 import './styles.css';
 import styles from './style.module.css';
-import Cursor from './Cursors/Cursor';
+// import Cursor from './Cursors/Cursor';
+// import { WebsocketProvider } from 'y-websocket';
 
 const Status = ({ success = false }: { success: boolean }) => (
   <span className={`status ${success ? 'success' : ''}`}>&nbsp;</span>
@@ -54,22 +53,18 @@ interface FlowProps {
   onDragOver: (event: DragEvent) => void;
   wrapperRef: React.RefObject<HTMLDivElement>;
   loading: boolean;
-  offenders: {
-    name: string;
-    url: string[];
-  }[];
-  setSelected: (selected: string) => void;
   saving: boolean;
   // eslint-disable-next-line
-  users: Map<number, { [p: string]: any }>;
   handlePointMove: (e: React.PointerEvent) => void;
-  provider: WebrtcProvider;
+  // users: Map<number, { [p: string]: any }>;
+  // provider: WebsocketProvider;
+  // reactFlowInstance: ReactFlowInstance | null;
 }
 
 const nodeTypes = {
-  selectorNode: OffenderNode,
-  offenderImageNode: OffenderImageNode,
-  textInputNode: TextInputNode,
+  offenderDetailsNode: OffenderNode,
+  imageNode: ImageNode,
+  textNode: TextNode,
 };
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -90,98 +85,112 @@ const ReactFlowView = ({
   onDragOver,
   loading,
   wrapperRef,
-  offenders,
-  setSelected,
   saving,
-  users,
   handlePointMove,
-  provider,
-}: FlowProps) => (
-  <div className="page-view">
-    <div className="info-box">
-      <p className="info">
-        Synced: <Status success={isSynced || clientCount === 0} />
-        Last Saved:{' '}
-        {saving ? (
-          <Spin style={{ marginLeft: 5 }} indicator={antIcon} />
-        ) : (
-          savedWhen || 'never'
-        )}
-      </p>
-      <Button onClick={onSave} type="primary">
-        Save
-      </Button>
-    </div>
+}: // users,
+// provider,
+// reactFlowInstance,
+FlowProps) => {
+  const nodeColor = (node: string) => {
+    switch (node) {
+      case 'imageNode':
+        return '#6ede87';
+      case 'textInputNode':
+        return '#6865A5';
+      default:
+        return '#ff0072';
+    }
+  };
 
-    <Card
-      style={{ width: '100%', height: '80vh' }}
-      bodyStyle={{
-        width: '100%',
-        height: '100%',
-      }}
-      loading={loading}
-    >
-      <div className="dndflow">
-        <div className={styles.wrapper}>
-          <Sidebar
-            data={{
-              offenders,
-            }}
-            setSelected={setSelected}
-          />
-          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-          {/* @ts-ignore */}
-          <div
-            className={styles.rfWrapper}
-            ref={wrapperRef}
-            onPointerMove={handlePointMove}
-          >
-            {Array.from(users.entries()).map(([key, value]) => {
-              if (key === provider.awareness.clientID) return null;
-              if (!value.cursor || !value.user.color || !value.user.name)
-                return null;
-              return (
-                <Cursor
-                  key={key}
-                  cursor={
-                    value.cursor as ComponentProps<typeof Cursor>['cursor']
-                  }
-                  color={
-                    value.user.color as ComponentProps<typeof Cursor>['color']
-                  }
-                  name={
-                    value.user.name as ComponentProps<typeof Cursor>['name']
-                  }
+  return (
+    <div className={styles.pageView}>
+      <Card
+        style={{ width: '100%', height: '83vh' }}
+        bodyStyle={{
+          width: '100%',
+          height: '100%',
+        }}
+      >
+        <div className="dndflow">
+          <div className={styles.wrapper}>
+            <Button className="download-btn" onClick={onSave} type="primary">
+              Save
+            </Button>
+            <p className="info">
+              Synced: <Status success={isSynced || clientCount === 0} />
+              Last Saved:{' '}
+              {saving || loading ? (
+                <Spin style={{ marginLeft: 5 }} indicator={antIcon} />
+              ) : (
+                savedWhen || 'never'
+              )}
+            </p>
+            <Sidebar />
+            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+            {/* @ts-ignore */}
+            <div className={styles.rfWrapper} ref={wrapperRef}>
+              <ReactFlow
+                style={{
+                  width: '100%',
+                  height: '100%',
+                }}
+                onInit={setReactFlowInstance}
+                nodes={nodes}
+                edges={edges}
+                onNodesChange={onNodesChange}
+                onEdgesChange={onEdgesChange}
+                onNodeClick={onNodeClick}
+                onConnect={onConnect}
+                onDrop={onDrop}
+                onDragOver={onDragOver}
+                fitView
+                edgeTypes={edgeTypes}
+                nodeTypes={nodeTypes}
+                onPointerMove={handlePointMove}
+                proOptions={{ hideAttribution: true }}
+              >
+                {/* {Array.from(users.entries()).map(([key, value]) => { */}
+                {/*  if (!value) return null; */}
+                {/*  if (key === provider.awareness.clientID) return null; */}
+                {/*  if ( */}
+                {/*    !value.cursor || */}
+                {/*    !value.user || */}
+                {/*    !value.user.color || */}
+                {/*    !value.user.name */}
+                {/*  ) */}
+                {/*    return null; */}
+                {/*  return ( */}
+                {/*    <Cursor */}
+                {/*      key={key} */}
+                {/*      cursor={ */}
+                {/*        value.cursor as ComponentProps<typeof Cursor>['cursor'] */}
+                {/*      } */}
+                {/*      color={ */}
+                {/*        value.user.color as ComponentProps< */}
+                {/*          typeof Cursor */}
+                {/*        >['color'] */}
+                {/*      } */}
+                {/*      name={ */}
+                {/*        value.user.name as ComponentProps<typeof Cursor>['name'] */}
+                {/*      } */}
+                {/*    /> */}
+                {/*  ); */}
+                {/* })} */}
+                <Controls />
+                <MiniMap
+                  nodeColor={(node: Node) => nodeColor(node.type as string)}
+                  nodeStrokeWidth={3}
+                  zoomable
+                  pannable
                 />
-              );
-            })}
-            <ReactFlow
-              style={{
-                width: '100%',
-                height: '100%',
-              }}
-              onInit={setReactFlowInstance}
-              nodes={nodes}
-              edges={edges}
-              onNodesChange={onNodesChange}
-              onEdgesChange={onEdgesChange}
-              onNodeClick={onNodeClick}
-              onConnect={onConnect}
-              onDrop={onDrop}
-              onDragOver={onDragOver}
-              fitView
-              edgeTypes={edgeTypes}
-              nodeTypes={nodeTypes}
-            >
-              <Controls />
-              <MiniMap />
-              <Background color="#99b3ec" variant={BackgroundVariant.Dots} />
-            </ReactFlow>
+                <Background color="#99b3ec" variant={BackgroundVariant.Dots} />
+              </ReactFlow>
+            </div>
           </div>
         </div>
-      </div>
-    </Card>
-  </div>
-);
+      </Card>
+    </div>
+  );
+};
 
 export default ReactFlowView;

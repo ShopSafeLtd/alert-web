@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import {
   applyEdgeChanges,
   Connection,
@@ -8,6 +8,7 @@ import {
   MarkerType,
   OnConnect,
   OnEdgesChange,
+  useEdgesState,
 } from 'reactflow';
 import { YMap } from 'yjs/dist/src/internals';
 // import ydoc from '../../../../../../components/react-flow/yDoc/yDoc';
@@ -19,7 +20,8 @@ export function useNodesStateSynced({
 }: {
   edgesMap: YMap<Edge>;
 }): [Edge[], OnEdgesChange, OnConnect] {
-  const [edges, setEdges] = useState<Edge[]>([]);
+  // const [edges, setEdges] = useState<Edge[]>([]);
+  const [edges, setEdges] = useEdgesState([]);
 
   const onEdgesChange = useCallback((changes) => {
     const nextEdges = applyEdgeChanges(changes, Array.from(edgesMap.values()));

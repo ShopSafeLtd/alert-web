@@ -6068,11 +6068,13 @@ export type CreateCrimeGroupDataInput = {
 export type CreateCrimeGroupOffenders = {
   connect?: InputMaybe<Array<InputMaybe<UniqueId>>>;
   create?: InputMaybe<Array<InputMaybe<OffenderCreateWithoutCrimeGroupsInput>>>;
+  disconnect?: InputMaybe<Array<InputMaybe<UniqueId>>>;
 };
 
 export type CreateCrimeGroupVehicles = {
   connect?: InputMaybe<Array<InputMaybe<UniqueId>>>;
   create?: InputMaybe<Array<InputMaybe<VehicleCreateWithoutCrimeGroupInput>>>;
+  disconnect?: InputMaybe<Array<InputMaybe<UniqueId>>>;
 };
 
 export type CreateDocument = {
@@ -7085,6 +7087,7 @@ export type Document = {
   id: Scalars['String'];
   investigation: Array<Investigation>;
   name: Scalars['String'];
+  tags: Array<Tag>;
   updatedAt: Scalars['DateTime'];
   url: Scalars['String'];
 };
@@ -7099,6 +7102,13 @@ export type DocumentArticlesArgs = {
 export type DocumentInvestigationArgs = {
   after?: InputMaybe<InvestigationWhereUniqueInput>;
   before?: InputMaybe<InvestigationWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type DocumentTagsArgs = {
+  after?: InputMaybe<TagWhereUniqueInput>;
+  before?: InputMaybe<TagWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
 };
@@ -7119,6 +7129,12 @@ export type DocumentCreateNestedManyWithoutInvestigationInput = {
   create?: InputMaybe<Array<DocumentCreateWithoutInvestigationInput>>;
 };
 
+export type DocumentCreateNestedManyWithoutTagsInput = {
+  connect?: InputMaybe<Array<DocumentWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<DocumentCreateOrConnectWithoutTagsInput>>;
+  create?: InputMaybe<Array<DocumentCreateWithoutTagsInput>>;
+};
+
 export type DocumentCreateOrConnectWithoutArticlesInput = {
   create: DocumentCreateWithoutArticlesInput;
   where: DocumentWhereUniqueInput;
@@ -7129,11 +7145,18 @@ export type DocumentCreateOrConnectWithoutInvestigationInput = {
   where: DocumentWhereUniqueInput;
 };
 
+export type DocumentCreateOrConnectWithoutTagsInput = {
+  create: DocumentCreateWithoutTagsInput;
+  where: DocumentWhereUniqueInput;
+};
+
 export type DocumentCreateWithoutArticlesInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   investigation?: InputMaybe<InvestigationCreateNestedManyWithoutDocumentsInput>;
   name: Scalars['String'];
+  tags?: InputMaybe<TagCreateNestedManyWithoutDocumentsInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   url: Scalars['String'];
 };
@@ -7141,7 +7164,20 @@ export type DocumentCreateWithoutArticlesInput = {
 export type DocumentCreateWithoutInvestigationInput = {
   articles?: InputMaybe<ArticleCreateNestedManyWithoutDocumentsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  description?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  tags?: InputMaybe<TagCreateNestedManyWithoutDocumentsInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  url: Scalars['String'];
+};
+
+export type DocumentCreateWithoutTagsInput = {
+  articles?: InputMaybe<ArticleCreateNestedManyWithoutDocumentsInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  description?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  investigation?: InputMaybe<InvestigationCreateNestedManyWithoutDocumentsInput>;
   name: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   url: Scalars['String'];
@@ -7162,6 +7198,7 @@ export type DocumentScalarWhereInput = {
   NOT?: InputMaybe<Array<DocumentScalarWhereInput>>;
   OR?: InputMaybe<Array<DocumentScalarWhereInput>>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -7170,6 +7207,7 @@ export type DocumentScalarWhereInput = {
 
 export type DocumentUpdateManyMutationInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -7182,6 +7220,11 @@ export type DocumentUpdateManyWithWhereWithoutArticlesInput = {
 };
 
 export type DocumentUpdateManyWithWhereWithoutInvestigationInput = {
+  data: DocumentUpdateManyMutationInput;
+  where: DocumentScalarWhereInput;
+};
+
+export type DocumentUpdateManyWithWhereWithoutTagsInput = {
   data: DocumentUpdateManyMutationInput;
   where: DocumentScalarWhereInput;
 };
@@ -7224,6 +7267,19 @@ export type DocumentUpdateManyWithoutInvestigationNestedInput = {
   >;
 };
 
+export type DocumentUpdateManyWithoutTagsNestedInput = {
+  connect?: InputMaybe<Array<DocumentWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<DocumentCreateOrConnectWithoutTagsInput>>;
+  create?: InputMaybe<Array<DocumentCreateWithoutTagsInput>>;
+  delete?: InputMaybe<Array<DocumentWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<DocumentScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<DocumentWhereUniqueInput>>;
+  set?: InputMaybe<Array<DocumentWhereUniqueInput>>;
+  update?: InputMaybe<Array<DocumentUpdateWithWhereUniqueWithoutTagsInput>>;
+  updateMany?: InputMaybe<Array<DocumentUpdateManyWithWhereWithoutTagsInput>>;
+  upsert?: InputMaybe<Array<DocumentUpsertWithWhereUniqueWithoutTagsInput>>;
+};
+
 export type DocumentUpdateWithWhereUniqueWithoutArticlesInput = {
   data: DocumentUpdateWithoutArticlesInput;
   where: DocumentWhereUniqueInput;
@@ -7234,11 +7290,18 @@ export type DocumentUpdateWithWhereUniqueWithoutInvestigationInput = {
   where: DocumentWhereUniqueInput;
 };
 
+export type DocumentUpdateWithWhereUniqueWithoutTagsInput = {
+  data: DocumentUpdateWithoutTagsInput;
+  where: DocumentWhereUniqueInput;
+};
+
 export type DocumentUpdateWithoutArticlesInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   investigation?: InputMaybe<InvestigationUpdateManyWithoutDocumentsNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutDocumentsNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   url?: InputMaybe<StringFieldUpdateOperationsInput>;
 };
@@ -7246,7 +7309,20 @@ export type DocumentUpdateWithoutArticlesInput = {
 export type DocumentUpdateWithoutInvestigationInput = {
   articles?: InputMaybe<ArticleUpdateManyWithoutDocumentsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutDocumentsNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  url?: InputMaybe<StringFieldUpdateOperationsInput>;
+};
+
+export type DocumentUpdateWithoutTagsInput = {
+  articles?: InputMaybe<ArticleUpdateManyWithoutDocumentsNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  investigation?: InputMaybe<InvestigationUpdateManyWithoutDocumentsNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   url?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -7264,15 +7340,23 @@ export type DocumentUpsertWithWhereUniqueWithoutInvestigationInput = {
   where: DocumentWhereUniqueInput;
 };
 
+export type DocumentUpsertWithWhereUniqueWithoutTagsInput = {
+  create: DocumentCreateWithoutTagsInput;
+  update: DocumentUpdateWithoutTagsInput;
+  where: DocumentWhereUniqueInput;
+};
+
 export type DocumentWhereInput = {
   AND?: InputMaybe<Array<DocumentWhereInput>>;
   NOT?: InputMaybe<Array<DocumentWhereInput>>;
   OR?: InputMaybe<Array<DocumentWhereInput>>;
   articles?: InputMaybe<ArticleListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
   investigation?: InputMaybe<InvestigationListRelationFilter>;
   name?: InputMaybe<StringFilter>;
+  tags?: InputMaybe<TagListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   url?: InputMaybe<StringFilter>;
 };
@@ -23282,6 +23366,7 @@ export type Tag = {
   createdBy: User;
   dataType: Model;
   description: Scalars['String'];
+  documents: Array<Document>;
   id: Scalars['String'];
   incidents: Array<Incident>;
   name: Scalars['String'];
@@ -23304,6 +23389,13 @@ export type TagActionsArgs = {
 export type TagArticlesArgs = {
   after?: InputMaybe<ArticleWhereUniqueInput>;
   before?: InputMaybe<ArticleWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type TagDocumentsArgs = {
+  after?: InputMaybe<DocumentWhereUniqueInput>;
+  before?: InputMaybe<DocumentWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
 };
@@ -23342,6 +23434,7 @@ export type TagCreateInput = {
   createdBy: UserCreateNestedOneWithoutCreatedTagsInput;
   dataType: Model;
   description: Scalars['String'];
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutTagsInput>;
   id?: InputMaybe<Scalars['String']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeTypesInput>;
   name: Scalars['String'];
@@ -23397,6 +23490,12 @@ export type TagCreateNestedManyWithoutCreatedByInput = {
   createMany?: InputMaybe<TagCreateManyCreatedByInputEnvelope>;
 };
 
+export type TagCreateNestedManyWithoutDocumentsInput = {
+  connect?: InputMaybe<Array<TagWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<TagCreateOrConnectWithoutDocumentsInput>>;
+  create?: InputMaybe<Array<TagCreateWithoutDocumentsInput>>;
+};
+
 export type TagCreateNestedManyWithoutIncidentsInput = {
   connect?: InputMaybe<Array<TagWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<Array<TagCreateOrConnectWithoutIncidentsInput>>;
@@ -23443,6 +23542,11 @@ export type TagCreateOrConnectWithoutCreatedByInput = {
   where: TagWhereUniqueInput;
 };
 
+export type TagCreateOrConnectWithoutDocumentsInput = {
+  create: TagCreateWithoutDocumentsInput;
+  where: TagWhereUniqueInput;
+};
+
 export type TagCreateOrConnectWithoutIncidentsInput = {
   create: TagCreateWithoutIncidentsInput;
   where: TagWhereUniqueInput;
@@ -23469,6 +23573,7 @@ export type TagCreateWithoutActionsInput = {
   createdBy: UserCreateNestedOneWithoutCreatedTagsInput;
   dataType: Model;
   description: Scalars['String'];
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutTagsInput>;
   id?: InputMaybe<Scalars['String']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeTypesInput>;
   name: Scalars['String'];
@@ -23485,6 +23590,7 @@ export type TagCreateWithoutArticlesInput = {
   createdBy: UserCreateNestedOneWithoutCreatedTagsInput;
   dataType: Model;
   description: Scalars['String'];
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutTagsInput>;
   id?: InputMaybe<Scalars['String']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeTypesInput>;
   name: Scalars['String'];
@@ -23499,6 +23605,24 @@ export type TagCreateWithoutCreatedByInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutTagInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutTagsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  dataType: Model;
+  description: Scalars['String'];
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutTagsInput>;
+  id?: InputMaybe<Scalars['String']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeTypesInput>;
+  name: Scalars['String'];
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutTagsInput>;
+  scheme: SchemeCreateNestedOneWithoutTagsInput;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploaded?: InputMaybe<Scalars['Boolean']>;
+  users?: InputMaybe<UserCreateNestedManyWithoutTagsInput>;
+};
+
+export type TagCreateWithoutDocumentsInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutTagInput>;
+  articles?: InputMaybe<ArticleCreateNestedManyWithoutTagsInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdBy: UserCreateNestedOneWithoutCreatedTagsInput;
   dataType: Model;
   description: Scalars['String'];
   id?: InputMaybe<Scalars['String']>;
@@ -23518,6 +23642,7 @@ export type TagCreateWithoutIncidentsInput = {
   createdBy: UserCreateNestedOneWithoutCreatedTagsInput;
   dataType: Model;
   description: Scalars['String'];
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutTagsInput>;
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutTagsInput>;
@@ -23534,6 +23659,7 @@ export type TagCreateWithoutOffendersInput = {
   createdBy: UserCreateNestedOneWithoutCreatedTagsInput;
   dataType: Model;
   description: Scalars['String'];
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutTagsInput>;
   id?: InputMaybe<Scalars['String']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeTypesInput>;
   name: Scalars['String'];
@@ -23550,6 +23676,7 @@ export type TagCreateWithoutSchemeInput = {
   createdBy: UserCreateNestedOneWithoutCreatedTagsInput;
   dataType: Model;
   description: Scalars['String'];
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutTagsInput>;
   id?: InputMaybe<Scalars['String']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeTypesInput>;
   name: Scalars['String'];
@@ -23566,6 +23693,7 @@ export type TagCreateWithoutUsersInput = {
   createdBy: UserCreateNestedOneWithoutCreatedTagsInput;
   dataType: Model;
   description: Scalars['String'];
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutTagsInput>;
   id?: InputMaybe<Scalars['String']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeTypesInput>;
   name: Scalars['String'];
@@ -23593,6 +23721,7 @@ export type TagOrderByWithRelationInput = {
   createdById?: InputMaybe<SortOrder>;
   dataType?: InputMaybe<SortOrder>;
   description?: InputMaybe<SortOrder>;
+  documents?: InputMaybe<DocumentOrderByRelationAggregateInput>;
   id?: InputMaybe<SortOrder>;
   incidents?: InputMaybe<IncidentOrderByRelationAggregateInput>;
   name?: InputMaybe<SortOrder>;
@@ -23632,6 +23761,7 @@ export type TagUpdateInput = {
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedTagsNestedInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutTagsNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeTypesNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -23658,6 +23788,11 @@ export type TagUpdateManyWithWhereWithoutArticlesInput = {
 };
 
 export type TagUpdateManyWithWhereWithoutCreatedByInput = {
+  data: TagUpdateManyMutationInput;
+  where: TagScalarWhereInput;
+};
+
+export type TagUpdateManyWithWhereWithoutDocumentsInput = {
   data: TagUpdateManyMutationInput;
   where: TagScalarWhereInput;
 };
@@ -23707,6 +23842,19 @@ export type TagUpdateManyWithoutCreatedByNestedInput = {
   update?: InputMaybe<Array<TagUpdateWithWhereUniqueWithoutCreatedByInput>>;
   updateMany?: InputMaybe<Array<TagUpdateManyWithWhereWithoutCreatedByInput>>;
   upsert?: InputMaybe<Array<TagUpsertWithWhereUniqueWithoutCreatedByInput>>;
+};
+
+export type TagUpdateManyWithoutDocumentsNestedInput = {
+  connect?: InputMaybe<Array<TagWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<TagCreateOrConnectWithoutDocumentsInput>>;
+  create?: InputMaybe<Array<TagCreateWithoutDocumentsInput>>;
+  delete?: InputMaybe<Array<TagWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<TagScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<TagWhereUniqueInput>>;
+  set?: InputMaybe<Array<TagWhereUniqueInput>>;
+  update?: InputMaybe<Array<TagUpdateWithWhereUniqueWithoutDocumentsInput>>;
+  updateMany?: InputMaybe<Array<TagUpdateManyWithWhereWithoutDocumentsInput>>;
+  upsert?: InputMaybe<Array<TagUpsertWithWhereUniqueWithoutDocumentsInput>>;
 };
 
 export type TagUpdateManyWithoutIncidentsNestedInput = {
@@ -23782,6 +23930,11 @@ export type TagUpdateWithWhereUniqueWithoutCreatedByInput = {
   where: TagWhereUniqueInput;
 };
 
+export type TagUpdateWithWhereUniqueWithoutDocumentsInput = {
+  data: TagUpdateWithoutDocumentsInput;
+  where: TagWhereUniqueInput;
+};
+
 export type TagUpdateWithWhereUniqueWithoutIncidentsInput = {
   data: TagUpdateWithoutIncidentsInput;
   where: TagWhereUniqueInput;
@@ -23808,6 +23961,7 @@ export type TagUpdateWithoutActionsInput = {
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedTagsNestedInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutTagsNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeTypesNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -23824,6 +23978,7 @@ export type TagUpdateWithoutArticlesInput = {
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedTagsNestedInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutTagsNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeTypesNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -23838,6 +23993,24 @@ export type TagUpdateWithoutCreatedByInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutTagNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutTagsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
+  description?: InputMaybe<StringFieldUpdateOperationsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutTagsNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeTypesNestedInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutTagsNestedInput>;
+  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutTagsNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  users?: InputMaybe<UserUpdateManyWithoutTagsNestedInput>;
+};
+
+export type TagUpdateWithoutDocumentsInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutTagNestedInput>;
+  articles?: InputMaybe<ArticleUpdateManyWithoutTagsNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedTagsNestedInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -23857,6 +24030,7 @@ export type TagUpdateWithoutIncidentsInput = {
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedTagsNestedInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutTagsNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutTagsNestedInput>;
@@ -23873,6 +24047,7 @@ export type TagUpdateWithoutOffendersInput = {
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedTagsNestedInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutTagsNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeTypesNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -23889,6 +24064,7 @@ export type TagUpdateWithoutSchemeInput = {
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedTagsNestedInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutTagsNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeTypesNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -23905,6 +24081,7 @@ export type TagUpdateWithoutUsersInput = {
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedTagsNestedInput>;
   dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutTagsNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeTypesNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -23923,6 +24100,12 @@ export type TagUpsertWithWhereUniqueWithoutArticlesInput = {
 export type TagUpsertWithWhereUniqueWithoutCreatedByInput = {
   create: TagCreateWithoutCreatedByInput;
   update: TagUpdateWithoutCreatedByInput;
+  where: TagWhereUniqueInput;
+};
+
+export type TagUpsertWithWhereUniqueWithoutDocumentsInput = {
+  create: TagCreateWithoutDocumentsInput;
+  update: TagUpdateWithoutDocumentsInput;
   where: TagWhereUniqueInput;
 };
 
@@ -23966,6 +24149,7 @@ export type TagWhereInput = {
   createdById?: InputMaybe<StringFilter>;
   dataType?: InputMaybe<EnumModelFilter>;
   description?: InputMaybe<StringFilter>;
+  documents?: InputMaybe<DocumentListRelationFilter>;
   id?: InputMaybe<StringFilter>;
   incidents?: InputMaybe<IncidentListRelationFilter>;
   name?: InputMaybe<StringFilter>;
@@ -32081,6 +32265,7 @@ export type UpdateFlowMutation = {
       data: any;
       height: number;
       width: number;
+      style?: { __typename?: 'Style'; height: number; width: number } | null;
       position?: { __typename?: 'XY'; x: number; y: number } | null;
       positionAbsolute?: { __typename?: 'XY'; x: number; y: number } | null;
     }>;
@@ -32264,6 +32449,7 @@ export type ViewInvestigationQuery = {
         data: any;
         height: number;
         width: number;
+        style?: { __typename?: 'Style'; height: number; width: number } | null;
         position?: { __typename?: 'XY'; x: number; y: number } | null;
         positionAbsolute?: { __typename?: 'XY'; x: number; y: number } | null;
       }>;
@@ -38653,6 +38839,10 @@ export const UpdateFlowDocument = gql`
         data
         height
         width
+        style {
+          height
+          width
+        }
         position {
           x
           y
@@ -38976,6 +39166,10 @@ export const ViewInvestigationDocument = gql`
           data
           height
           width
+          style {
+            height
+            width
+          }
           position {
             x
             y

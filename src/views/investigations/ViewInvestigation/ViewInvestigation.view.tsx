@@ -13,7 +13,7 @@ const ViewInvestigation = ({ data }: Props) => (
   <TabbedView>
     <div style={{ flex: 1 }}>
       <PageHeader
-        style={{ paddingBottom: 0, paddingTop: 5 }}
+        style={{ paddingBottom: 0, paddingTop: 0 }}
         title={data?.investigation?.name}
       />
       <Tabs>
@@ -24,7 +24,7 @@ const ViewInvestigation = ({ data }: Props) => (
           key="Flow"
           tab={<Typography.Text>Flow Map</Typography.Text>}
         >
-          <Flow />
+          <Flow importData={data} />
         </Tabs.TabPane>
       </Tabs>
     </div>

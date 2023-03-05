@@ -71,6 +71,10 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
                 data
                 height
                 width
+                style {
+                    height
+                    width
+                }
                 position {
                     x
                     y

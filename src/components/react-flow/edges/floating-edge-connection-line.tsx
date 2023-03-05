@@ -52,9 +52,9 @@ function FloatingConnectionLine({
       <circle
         cx={targetX}
         cy={targetY}
-        fill="#fff"
+        fill="black"
         r={3}
-        stroke="#222"
+        stroke="black"
         strokeWidth={1.5}
       />
     </g>
