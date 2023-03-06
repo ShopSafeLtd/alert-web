@@ -1,5 +1,6 @@
 /* eslint-disable  */
-import { Skeleton, Typography } from 'antd';
+import { CarOutlined } from '@ant-design/icons';
+import { Card, Skeleton, Typography } from 'antd';
 import React, { DragEvent } from 'react';
 
 export enum NodeTypes {
@@ -7,6 +8,7 @@ export enum NodeTypes {
   ImageNode = 'imageNode',
   Default = 'default',
   TextInputNode = 'textNode',
+  VehicleNode = 'vehicleNode',
 }
 
 const onDragStart = (event: DragEvent, nodeType: NodeTypes) => {
@@ -23,14 +25,13 @@ const Sidebar = () => (
     <Typography.Title level={4}>Text Input</Typography.Title>
 
     <div
-      className="react-flow__node-text"
       onDragStart={(event: DragEvent) =>
         onDragStart(event, NodeTypes.TextInputNode)
       }
       draggable
-      style={{ height: 40 }}
+      style={{ width: 'fit-content' }}
     >
-      Text Input Box
+      <Card>Text Input Box</Card>
     </div>
 
     <Typography.Title level={4}>Image</Typography.Title>
@@ -42,7 +43,9 @@ const Sidebar = () => (
       draggable
       style={{ width: 'fit-content' }}
     >
-      <Skeleton.Image />
+      <Card>
+        <Skeleton.Image />
+      </Card>
     </div>
 
     <Typography.Title level={4}>Offender Details</Typography.Title>
@@ -54,7 +57,31 @@ const Sidebar = () => (
       draggable
       style={{ width: 'fit-content' }}
     >
-      <Skeleton.Image />
+      <Card style={{ display: 'flex', flexDirection: 'column' }}>
+        <Skeleton.Image />
+        <Skeleton />
+      </Card>
+    </div>
+    <Typography.Title level={4}>Vehicle</Typography.Title>
+
+    <div
+      onDragStart={(event: DragEvent) => {
+        onDragStart(event, NodeTypes.VehicleNode);
+      }}
+      draggable
+      style={{ width: 'fit-content' }}
+    >
+      <Card
+        style={{
+          height: 136,
+          width: 136,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <CarOutlined style={{ fontSize: '64px' }} />
+      </Card>
     </div>
   </aside>
 );
