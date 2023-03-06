@@ -25,9 +25,9 @@ interface Props {
   id: string;
   selected: boolean;
 }
-// @ts-ignore
 
-const connectionNodeIdSelector = (state) => state.connectionNodeId;
+const connectionNodeIdSelector = (state: { connectionNodeId: string | null }) =>
+  state.connectionNodeId;
 
 export default memo(({ data, isConnectable, selected, id }: Props) => {
   const connectionNodeId = useStore(connectionNodeIdSelector);
@@ -104,7 +104,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
         <div className={classes.nodeContainer}>
           {data.vehicle ? (
             <Col>
-              <Card>
+              <Card style={{ zIndex: 4 }}>
                 <Descriptions contentStyle={{ fontSize: 16 }} column={1}>
                   {/* <Descriptions.Item label="Make">
                 {data?.vehicle?.make}
