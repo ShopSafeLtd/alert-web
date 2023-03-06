@@ -1,41 +1,25 @@
-import { Button, Drawer } from 'antd';
+import { Button, Card, Col, Descriptions, Drawer } from 'antd';
 import React, { memo, useCallback } from 'react';
 import { Handle, NodeToolbar, Position, useStore } from 'reactflow';
 import { NodeResizer } from '@reactflow/node-resizer';
 import '@reactflow/node-resizer/dist/style.css';
 import { useParams } from 'react-router-dom';
-import OffenderCard from './components/offender-details-card';
-import { Age, Build, Gender, Race } from '../../../graphql/generated';
 import useStyles from './style.module';
 import useFlow from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useFlow';
 import { useDrawerState } from '../../../hooks';
 import { useStoreState } from '../../../state';
-import SelectOffenderDetails from '../form/selectOffenderDetails';
+import SelectVehicleNode from 'components/form-components/Investigation/AddExistingVehicleNode';
 
-interface Offender {
-  images:
-    | {
-        id: string;
-        optimised: string;
-      }[]
-    | null
-    | undefined;
-  id: string;
-
-  name?: string | null | undefined;
-  totalIncidents?: number;
-  reference?: number | null | undefined;
-  updatedAt?: Date | null | undefined;
-  age?: Age | null | undefined;
-  dateOfBirth?: Date | null | undefined;
-  build?: Build | null | undefined;
-  gender?: Gender | null | undefined;
-  race?: Race | null | undefined;
+export interface Vehicle {
+  colour?: string | null | undefined;
+  make?: string | null | undefined;
+  model?: string | null | undefined;
 }
+
 interface Props {
   data: {
     color: string;
-    offender: Offender | null | undefined;
+    vehicle: Vehicle | null | undefined;
   };
   isConnectable: boolean;
   id: string;
@@ -58,7 +42,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
 
   const { drawer } = useDrawerState();
   const { fullName } = useStoreState((state) => state.user);
-  const onSelect = useCallback((offender: Offender) => {
+  const onSelect = useCallback((vehicle: Vehicle) => {
     const currentNode = nodesMap.get(id);
     if (!currentNode) {
       return;
@@ -69,7 +53,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
       ...currentNode,
       data: {
         ...currentNode.data,
-        offender,
+        vehicle,
         isEditing: { user: '', editing: false },
       },
     });
@@ -102,27 +86,46 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
           onClick={() => {
             setIsEditing(true);
             drawer.open({
-              defaultTitle: 'Select Offender',
-              id: 'offenderSelect',
+              defaultTitle: 'Select Vehicle',
+              id: 'vehicleSelect',
             });
           }}
         >
-          select offender
+          select vehicle
         </Button>
       </NodeToolbar>
       <div className={classes.node}>
         <NodeResizer
           color="#ff0071"
           isVisible={selected}
-          minWidth={290}
-          minHeight={550}
+          minWidth={100}
+          minHeight={30}
         />
         <div className={classes.nodeContainer}>
-          {data.offender && data.offender.name ? (
-            <OffenderCard offender={data.offender!} />
+          {data.vehicle ? (
+            <Col>
+              <Card>
+                <Descriptions contentStyle={{ fontSize: 16 }} column={1}>
+                  {/* <Descriptions.Item label="Make">
+                {data?.vehicle?.make}
+              </Descriptions.Item> */}
+
+                  {data?.vehicle?.colour && (
+                    <Descriptions.Item label="Colour">
+                      {data?.vehicle?.colour}
+                    </Descriptions.Item>
+                  )}
+                  {data?.vehicle?.model && (
+                    <Descriptions.Item label="Model">
+                      {data?.vehicle?.model}
+                    </Descriptions.Item>
+                  )}
+                </Descriptions>
+              </Card>
+            </Col>
           ) : (
             <div style={{ height: '100%', zIndex: 4 }}>
-              Offender: Please choose an offender
+              Vehicle: Please choose a vehicle
             </div>
           )}
         </div>
@@ -150,8 +153,8 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
           drawer.close();
         }}
       >
-        <SelectOffenderDetails
-          onSelect={onSelect}
+        <SelectVehicleNode
+          onSubmit={onSelect}
           onClose={() => {
             setIsEditing(false);
             drawer.close();

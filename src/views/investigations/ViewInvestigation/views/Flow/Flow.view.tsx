@@ -15,6 +15,8 @@ import { Button, Card, Spin } from 'antd';
 import OffenderNode from 'components/react-flow/nodes/offender-node';
 import ImageNode from 'components/react-flow/nodes/image-node';
 import TextNode from 'components/react-flow/nodes/text-node';
+import VehicleNode from 'components/react-flow/nodes/vehicle-node';
+
 import FloatingEdge from 'components/react-flow/edges/floating-edge';
 import { LoadingOutlined } from '@ant-design/icons';
 import Sidebar from './sidebar/Sidebar';
@@ -32,6 +34,12 @@ const edgeTypes = {
   floating: FloatingEdge,
 };
 
+const nodeTypes = {
+  offenderDetailsNode: OffenderNode,
+  imageNode: ImageNode,
+  textNode: TextNode,
+  vehicleNode: VehicleNode,
+};
 interface FlowProps {
   nodes: Node[];
   onNodesChange: OnNodesChange;
@@ -60,12 +68,6 @@ interface FlowProps {
   // provider: WebsocketProvider;
   // reactFlowInstance: ReactFlowInstance | null;
 }
-
-const nodeTypes = {
-  offenderDetailsNode: OffenderNode,
-  imageNode: ImageNode,
-  textNode: TextNode,
-};
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
