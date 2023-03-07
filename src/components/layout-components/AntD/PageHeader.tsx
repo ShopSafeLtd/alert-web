@@ -1,6 +1,7 @@
 import React from 'react';
 import IntlMessage from '../../util-components/AntD/IntlMessage';
-import { Row, Col } from 'antd';
+import { Col, Row } from 'antd';
+import useStyles from './PageHeader.styles';
 
 interface Props {
   title?: string;
@@ -8,6 +9,8 @@ interface Props {
   breadcrumbs?: JSX.Element;
   noTranslate?: boolean;
   actions?: JSX.Element[];
+  style?: React.CSSProperties | undefined;
+  children?: JSX.Element | undefined;
 }
 
 export const PageHeader = ({
@@ -16,10 +19,13 @@ export const PageHeader = ({
   breadcrumbs,
   noTranslate,
   actions,
+  style,
+  children,
 }: Props) => {
+  const classes = useStyles();
   return display ? (
-    <Row>
-      <Col flex={1}>
+    <Row align="middle" className={classes.pageHeader} style={style}>
+      <Col>
         <div className="app-page-header">
           <h3 className="mb-0 mr-3 font-weight-semibold">
             {noTranslate ? title : <IntlMessage id={title ? title : ''} />}
@@ -27,8 +33,10 @@ export const PageHeader = ({
           {!!breadcrumbs ? breadcrumbs : <div />}
         </div>
       </Col>
+      <Col flex={1}>{children}</Col>
+
       <Col>
-        <Row gutter={8}>{actions}</Row>
+        <Row className={classes.pageActions}>{actions}</Row>
       </Col>
     </Row>
   ) : null;

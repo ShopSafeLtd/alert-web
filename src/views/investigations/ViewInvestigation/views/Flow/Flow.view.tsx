@@ -1,4 +1,4 @@
-import React, { DragEvent } from 'react';
+import React, { DragEvent, useMemo } from 'react';
 import ReactFlow, {
   Background,
   BackgroundVariant,
@@ -30,17 +30,6 @@ import visualColours from '../../../../../utils/node-colour';
 const Status = ({ success = false }: { success: boolean }) => (
   <span className={`status ${success ? 'success' : ''}`}>&nbsp;</span>
 );
-
-const edgeTypes = {
-  floating: FloatingEdge,
-};
-
-const nodeTypes = {
-  offenderDetailsNode: OffenderNode,
-  imageNode: ImageNode,
-  textNode: TextNode,
-  vehicleNode: VehicleNode,
-};
 
 interface FlowProps {
   nodes: Node[];
@@ -95,6 +84,23 @@ const ReactFlowView = ({
 // provider,
 // reactFlowInstance,
 FlowProps) => {
+  const edgeTypes = useMemo(
+    () => ({
+      floating: FloatingEdge,
+    }),
+    []
+  );
+
+  const nodeTypes = useMemo(
+    () => ({
+      offenderDetailsNode: OffenderNode,
+      imageNode: ImageNode,
+      textNode: TextNode,
+      vehicleNode: VehicleNode,
+    }),
+    []
+  );
+
   const nodeColor = (node: string) => {
     const nodeIndex =
       Object.keys(nodeTypes).findIndex((key) => key === node) || 0;

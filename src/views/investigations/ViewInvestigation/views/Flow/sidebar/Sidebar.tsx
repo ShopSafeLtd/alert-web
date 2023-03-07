@@ -1,5 +1,5 @@
 /* eslint-disable  */
-import { CarOutlined } from '@ant-design/icons';
+import { CarOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { Card, Skeleton, Typography } from 'antd';
 import React, { DragEvent } from 'react';
 
@@ -81,6 +81,60 @@ const Sidebar = () => (
         }}
       >
         <CarOutlined style={{ fontSize: '64px' }} />
+      </Card>
+    </div>
+    <Typography.Title level={4}>Incidents</Typography.Title>
+    <Typography.Title level={5}>List</Typography.Title>
+    <div
+      onDragStart={(event: DragEvent) => {
+        onDragStart(event, NodeTypes.VehicleNode);
+      }}
+      draggable
+      style={{ width: 'fit-content' }}
+    >
+      <Card
+        style={{
+          height: 136,
+          width: 136,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <UnorderedListOutlined style={{ fontSize: '64px' }} />
+      </Card>
+    </div>
+    <Typography.Title level={5}>Details</Typography.Title>
+
+    <div
+      onDragStart={(event: DragEvent) => {
+        onDragStart(event, NodeTypes.OffenderDetailsNode);
+      }}
+      draggable
+      style={{ width: 'fit-content' }}
+    >
+      <Card
+        bodyStyle={{ width: '100%' }}
+        style={{ display: 'flex', flexDirection: 'column' }}
+      >
+        <Skeleton style={{ width: 90 }} />
+      </Card>
+    </div>
+
+    <Typography.Title level={4}>Crime group</Typography.Title>
+
+    <div
+      onDragStart={(event: DragEvent) => {
+        onDragStart(event, NodeTypes.OffenderDetailsNode);
+      }}
+      draggable
+      style={{ width: 'fit-content' }}
+    >
+      <Card
+        bodyStyle={{ width: '100%' }}
+        style={{ display: 'flex', flexDirection: 'column' }}
+      >
+        <Skeleton style={{ width: 90 }} />
       </Card>
     </div>
   </aside>

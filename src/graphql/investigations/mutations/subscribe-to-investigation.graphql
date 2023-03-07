@@ -1,0 +1,6 @@
+mutation SubscribeToInvestigation($where: UniqueId!) {
+  subscribeToInvestigation(where: $where) {
+    id
+    subscribed
+  }
+}

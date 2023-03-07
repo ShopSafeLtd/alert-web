@@ -4,3 +4,9 @@ build
 .env
 *.idea
 /public/tinymce/
+
+yarn-error.log
+
+.graphqlconfig
+
+schema.graphql
