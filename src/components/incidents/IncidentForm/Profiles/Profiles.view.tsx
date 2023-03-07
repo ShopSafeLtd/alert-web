@@ -3,10 +3,12 @@ import {
   Button,
   Card,
   Col,
+  Descriptions,
   Divider,
   Dropdown,
   Input,
   Menu,
+  Modal,
   Popconfirm,
   Row,
   Skeleton,
@@ -32,13 +34,10 @@ import {
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
-import {
-  ListCrimeGroupsQuery,
-  ListOffendersQuery,
-  ListVehiclesQuery,
-} from 'graphql/generated';
+import { ListOffendersQuery } from 'graphql/generated';
 import { UploadChangeParam } from 'antd/lib/upload';
 import { UploadFile } from 'antd/es/upload/interface';
+import ProfileDrawer from 'components/incidents/IncidentForm/ProfileDrawer';
 
 const { Title, Paragraph } = Typography;
 type Offender = Exclude<
@@ -46,49 +45,56 @@ type Offender = Exclude<
   null | undefined
 >['offenders'][0];
 interface Props {
-  titleOrder: number;
-  // adminRights: boolean;
-  saving: boolean;
-  toggleAddNewVehicle: () => void;
-  toggleAddExistingVehicle: () => void;
-  setEditVehicleId: (value: string) => void;
-  vehiclesData: VehicleData[];
-  removeVehicle: (vehicleId: string) => void;
-  removeCrimeGroup: (crimeGroupId: string) => void;
-  toggleAddNewCrimeGroup: () => void;
-  toggleAddExistingCrimeGroup: () => void;
-  // editCrimeGroupId: string;
-  // setEditCrimeGroupId: (value: string) => void;
+  addExistingCrimeGroup: boolean;
+  addExistingOffender: boolean;
+  addExistingVehicle: boolean;
+  addNewCrimeGroup: boolean;
+  addNewVehicle: boolean;
+  addOffender: boolean;
+  addRecentOffender: Offender | null;
   crimeGroupsData: CrimeGroupData[];
-  listVehiclesData: ListVehiclesQuery | undefined;
-  listCrimeGroupsData: ListCrimeGroupsQuery | undefined;
-  offendersData: OffenderData[];
-  searchOffenders: string;
-  setSearchOffenders: (value: string) => void;
-  setEditOffenderId: (arg0: string) => void;
-  listOffendersData: ListOffendersQuery | undefined;
-  recentOffenderData: ListOffendersQuery | undefined;
-  recentOffenderLoading: boolean;
-  removeOffender: (offenderId: string) => void;
-  setAddRecentOffender: (value: Offender | null) => void;
-  toggleAddExistingOffender: () => void;
-  toggleAddOffender: () => void;
+  editCrimeGroupId: string;
+  editOffenderId: string;
+  editVehicleId: string;
   offenderImgChange: (
     info: UploadChangeParam<UploadFile>,
     currentId: string
   ) => void;
+  offendersData: OffenderData[];
+  recentOffenderData: ListOffendersQuery | undefined;
+  recentOffenderLoading: boolean;
+  removeCrimeGroup: (crimeGroupId: string) => void;
+  removeOffender: (offenderId: string) => void;
+  removeVehicle: (vehicleId: string) => void;
+  saving: boolean;
+  searchOffenders: string;
+  setAddRecentOffender: (value: Offender | null) => void;
+  setEditCrimeGroupId: (value: string) => void;
+  setEditOffenderId: (value: string) => void;
+  setEditVehicleId: (value: string) => void;
+  setSearchOffenders: (value: string) => void;
+  titleOrder: number;
+  toggleAddExistingCrimeGroup: () => void;
+  toggleAddExistingOffender: () => void;
+  toggleAddExistingVehicle: () => void;
+  toggleAddNewCrimeGroup: () => void;
+  toggleAddNewVehicle: () => void;
+  toggleAddOffender: () => void;
+  updateCrimeGroupsData: (value: CrimeGroupData) => void;
+  updateOffender: (value: OffenderData) => void;
+  updateOffendersData: (value: OffenderData) => void;
+  updateVehiclesData: (value: VehicleData) => void;
+  vehiclesData: VehicleData[];
 }
 
 const Profiles = ({
   titleOrder,
   saving,
-  listVehiclesData,
   toggleAddNewVehicle,
   toggleAddExistingVehicle,
   setEditVehicleId,
   vehiclesData,
   removeVehicle,
-  listCrimeGroupsData,
   toggleAddNewCrimeGroup,
   toggleAddExistingCrimeGroup,
   crimeGroupsData,
@@ -98,13 +104,27 @@ const Profiles = ({
   setEditOffenderId,
   toggleAddOffender,
   toggleAddExistingOffender,
-  listOffendersData,
   recentOffenderData,
   recentOffenderLoading,
   setAddRecentOffender,
   searchOffenders,
   setSearchOffenders,
   offenderImgChange,
+  addExistingCrimeGroup,
+  addExistingOffender,
+  addExistingVehicle,
+  addNewCrimeGroup,
+  addNewVehicle,
+  addOffender,
+  addRecentOffender,
+  editCrimeGroupId,
+  editOffenderId,
+  editVehicleId,
+  setEditCrimeGroupId,
+  updateCrimeGroupsData,
+  updateOffender,
+  updateOffendersData,
+  updateVehiclesData,
 }: Props): JSX.Element => (
   <>
     <Row gutter={10} align="middle">
@@ -120,7 +140,7 @@ const Profiles = ({
       </Col>
       <Col style={{ marginRight: 20 }}>
         <Paragraph style={{ marginBottom: 1 }} type="secondary" italic>
-          - Please add the profiles that were involved in the incident.
+          - Please add at least one profile that was involved in the incident.
         </Paragraph>
       </Col>
       <Col>
@@ -137,7 +157,6 @@ const Profiles = ({
                       style={{ marginRight: 5 }}
                     />
                   ),
-                  disabled: !listOffendersData?.listOffenders?.total,
                   onClick: () => toggleAddExistingOffender(),
                 },
                 {
@@ -174,7 +193,6 @@ const Profiles = ({
                       style={{ marginRight: 5 }}
                     />
                   ),
-                  disabled: !listCrimeGroupsData?.listCrimeGroups?.total,
                   onClick: () => toggleAddExistingCrimeGroup(),
                 },
                 {
@@ -211,7 +229,6 @@ const Profiles = ({
                       style={{ marginRight: 5 }}
                     />
                   ),
-                  disabled: !listVehiclesData?.listVehicles.total,
                   onClick: () => toggleAddExistingVehicle(),
                 },
                 {
@@ -664,6 +681,86 @@ const Profiles = ({
         )}
       </Col>
     </Row>
+
+    <ProfileDrawer
+      addExistingCrimeGroup={addExistingCrimeGroup}
+      addExistingOffender={addExistingOffender}
+      addExistingVehicle={addExistingVehicle}
+      addNewCrimeGroup={addNewCrimeGroup}
+      addNewVehicle={addNewVehicle}
+      addOffender={addOffender}
+      crimeGroupsData={crimeGroupsData}
+      editCrimeGroupId={editCrimeGroupId}
+      editOffenderId={editOffenderId}
+      editVehicleId={editVehicleId}
+      isIncident
+      offendersData={offendersData}
+      setEditCrimeGroupId={setEditCrimeGroupId}
+      setEditOffenderId={setEditOffenderId}
+      setEditVehicleId={setEditVehicleId}
+      toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
+      toggleAddExistingOffender={toggleAddExistingOffender}
+      toggleAddExistingVehicle={toggleAddExistingVehicle}
+      toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
+      toggleAddNewVehicle={toggleAddNewVehicle}
+      toggleAddOffender={toggleAddOffender}
+      updateCrimeGroupsData={updateCrimeGroupsData}
+      updateOffender={updateOffender}
+      updateOffendersData={updateOffendersData}
+      updateVehiclesData={updateVehiclesData}
+      vehiclesData={vehiclesData}
+    />
+    <Modal
+      onCancel={() => setAddRecentOffender(null)}
+      visible={addRecentOffender !== null}
+      onOk={() => {
+        if (addRecentOffender) updateOffendersData(addRecentOffender);
+        setAddRecentOffender(null);
+      }}
+      okText="Add to incident"
+      title={`Are you sure you want to add ${addRecentOffender?.name}?`}
+      bodyStyle={{
+        padding: 0,
+      }}
+    >
+      <Row>
+        {addRecentOffender && addRecentOffender.images.length > 0 && (
+          <Col span={8}>
+            <div
+              style={{
+                backgroundImage: `url(${addRecentOffender?.images[0]?.optimised})`,
+                width: 180,
+                height: 200,
+                backgroundSize: 'cover',
+              }}
+            />
+          </Col>
+        )}
+
+        <Col span={16} style={{ padding: '10px 20px' }}>
+          <Descriptions column={1} size="small">
+            <Descriptions.Item label="Age">
+              {getOffenderAge(addRecentOffender?.age)}
+            </Descriptions.Item>
+            <Descriptions.Item label="Build">
+              {getOffenderBuild(addRecentOffender?.build) || 'Unknown'}
+            </Descriptions.Item>
+            <Descriptions.Item label="Ethnicity">
+              {getOffenderRace(addRecentOffender?.race)}
+            </Descriptions.Item>
+            <Descriptions.Item label="Sex">
+              {getOffenderGender(addRecentOffender?.gender) || 'Unknown'}
+            </Descriptions.Item>
+            <Descriptions.Item label="Hair">
+              {addRecentOffender?.hair || 'Unknown'}
+            </Descriptions.Item>
+            <Descriptions.Item label="Peculiarities">
+              {addRecentOffender?.peculiarities || 'Unknown'}
+            </Descriptions.Item>
+          </Descriptions>
+        </Col>
+      </Row>
+    </Modal>
   </>
 );
 export default Profiles;

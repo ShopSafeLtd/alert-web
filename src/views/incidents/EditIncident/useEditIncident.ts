@@ -5,9 +5,8 @@ import {
   CreateTagMutation,
   Gender,
   IncidentUpdateInput,
-  ListCrimeGroupsQuery,
+  ListGoodsTypesQuery,
   ListOffendersQuery,
-  ListVehiclesQuery,
   Model,
   QueryMode,
   Race,
@@ -19,6 +18,7 @@ import {
   TagsDocument,
   TagsQuery,
   useListCrimeGroupsQuery,
+  useListGoodsTypesQuery,
   useListOffendersQuery,
   useListVehiclesQuery,
   useRecycleIncidentMutation,
@@ -105,76 +105,56 @@ interface Image extends UploadFile {
 }
 
 interface Return {
-  onSubmit: (value: FormData) => void;
-  data: ViewIncidentQuery | undefined;
-  loading: boolean;
-  saving: boolean;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  tags: { value: string; label: string }[];
-  tagsLoading: boolean;
-  imgChange: UploadProps['onChange'];
-  onPreview: (value: Image) => void;
-  fileList: Image[];
-  beforeUpload: (value: RcFile) => void;
   addIncidentTag: boolean;
-  toggleAddIncidentTag: () => void;
-  updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
-  addOffender: boolean;
-  toggleAddOffender: () => void;
-  addExistingOffender: boolean;
-  toggleAddExistingOffender: () => void;
-  updateOffendersData: (value: OffenderData) => void;
-  offendersData: OffenderData[];
-  onReject: () => void;
-  recentOffenderData: ListOffendersQuery | undefined;
-  recentOffenderLoading: boolean;
   addRecentOffender: Offender | null;
-  setAddRecentOffender: (value: Offender | null) => void;
-  searchOffenders: string;
-  setSearchOffenders: (value: string) => void;
-  newImage: Image | null;
-  onCancelNewImage: () => void;
+  adminRights: boolean;
   assignOffendersToImages: (data: {
     image: Image;
     offenders: OffenderData[];
   }) => void;
-  setAssignToImage: (image: Image) => void;
-  removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
-  removeImage: (uid: string) => void;
-  removeOffender: (offenderId: string) => void;
-  listOffendersData: ListOffendersQuery | undefined;
-  adminRights: boolean;
+  beforeUpload: (value: RcFile) => void;
+  crimeGroupsData: CrimeGroupData[];
+  data: ViewIncidentQuery | undefined;
+  fileList: Image[];
+  goodsTypesData: ListGoodsTypesQuery | undefined;
+  groups: { value: string; label: string }[];
+  groupsLoading: boolean;
+  imgChange: UploadProps['onChange'];
+  loading: boolean;
+  newImage: Image | null;
   offenderImgChange: (
     info: UploadChangeParam<UploadFile>,
     currentId: string
   ) => void;
-  editOffenderId: string;
-  setEditOffenderId: (value: string) => void;
-  updateOffender: (value: OffenderData) => void;
-  addNewVehicle: boolean;
-  addExistingVehicle: boolean;
-  toggleAddNewVehicle: () => void;
-  toggleAddExistingVehicle: () => void;
-  editVehicleId: string;
-  setEditVehicleId: (value: string) => void;
-  vehiclesData: VehicleData[];
-  updateVehiclesData: (value: VehicleData) => void;
-  removeVehicle: (vehicleId: string) => void;
-  removeCrimeGroup: (crimeGroupId: string) => void;
-  addNewCrimeGroup: boolean;
-  addExistingCrimeGroup: boolean;
-  toggleAddNewCrimeGroup: () => void;
-  toggleAddExistingCrimeGroup: () => void;
-  editCrimeGroupId: string;
-  setEditCrimeGroupId: (value: string) => void;
-  crimeGroupsData: CrimeGroupData[];
-  updateCrimeGroupsData: (value: CrimeGroupData) => void;
-  listVehiclesData: ListVehiclesQuery | undefined;
-  listCrimeGroupsData: ListCrimeGroupsQuery | undefined;
+  offendersData: OffenderData[];
+  onCancelNewImage: () => void;
+  onPreview: (value: Image) => void;
+  onReject: () => void;
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
+  onSubmit: (value: FormData) => void;
+  recentOffenderData: ListOffendersQuery | undefined;
+  recentOffenderLoading: boolean;
+  removeCrimeGroup: (crimeGroupId: string) => void;
+  removeImage: (uid: string) => void;
+  removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
+  removeOffender: (offenderId: string) => void;
+  removeVehicle: (vehicleId: string) => void;
+  saving: boolean;
+  searchOffenders: string;
+  setAddRecentOffender: (value: Offender | null) => void;
+  setAssignToImage: (image: Image) => void;
+  setSearchOffenders: (value: string) => void;
+  tags: { value: string; label: string }[];
+  tagsLoading: boolean;
+  toggleAddIncidentTag: () => void;
+  updateCrimeGroupsData: (value: CrimeGroupData) => void;
+  updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
+  updateOffender: (value: OffenderData) => void;
+  updateOffendersData: (value: OffenderData) => void;
+  updateVehiclesData: (value: VehicleData) => void;
+  vehiclesData: VehicleData[];
 }
 
 const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
@@ -209,16 +189,8 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const [editedOffender, setEditedOffender] = useState<
     OffenderData | undefined
   >();
-  const [editOffenderId, setEditOffenderId] = useState<string>('');
 
-  const [addNewCrimeGroup, setAddNewCrimeGroup] = useState(false);
-  const [addExistingCrimeGroup, setAddExistingCrimeGroup] = useState(false);
-  const [editCrimeGroupId, setEditCrimeGroupId] = useState<string>('');
   const [crimeGroupsData, setCrimeGroupsData] = useState<CrimeGroupData[]>([]);
-
-  const [addNewVehicle, setAddNewVehicle] = useState(false);
-  const [addExistingVehicle, setAddExistingVehicle] = useState(false);
-  const [editVehicleId, setEditVehicleId] = useState<string>('');
   const [vehiclesData, setVehiclesData] = useState<VehicleData[]>([]);
 
   useEffect(() => {
@@ -341,6 +313,11 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
       },
     },
   });
+
+  const { data: goodsTypesData } = useListGoodsTypesQuery({
+    fetchPolicy: 'cache-and-network',
+  });
+
   const { data: recentOffenderData, loading: recentOffenderLoading } =
     useListOffendersQuery({
       variables: {
@@ -514,19 +491,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const toggleAddExistingOffender = () => {
     setAddExistingOffender(!addExistingOffender);
   };
-  const toggleAddNewVehicle = () => {
-    setAddNewVehicle(!addNewVehicle);
-  };
-  const toggleAddExistingVehicle = () => {
-    setAddExistingVehicle(!addExistingVehicle);
-  };
-  const toggleAddNewCrimeGroup = () => {
-    setAddNewCrimeGroup(!addNewCrimeGroup);
-  };
-  const toggleAddExistingCrimeGroup = () => {
-    setAddExistingCrimeGroup(!addExistingCrimeGroup);
-  };
-
   const updateOffendersData = (offender: OffenderData) => {
     setOffendersData([...offendersData, offender]);
   };
@@ -1063,10 +1027,15 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   };
 
   return {
-    onSubmit,
+    addIncidentTag,
+    addRecentOffender,
+    adminRights: role !== Role.User,
+    assignOffendersToImages,
+    beforeUpload,
+    crimeGroupsData,
     data: incidentData,
-    loading,
-    saving,
+    fileList,
+    goodsTypesData,
     groups:
       role === Role.SchemeAdmin
         ? groupData?.groups.map((group) => ({
@@ -1075,64 +1044,38 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           })) || []
         : groups.map((group) => ({ value: group.id, label: group.name })),
     groupsLoading,
+    imgChange,
+    loading,
+    newImage,
+    offenderImgChange,
+    offendersData,
+    onCancelNewImage,
+    onPreview,
+    onReject,
+    onSearchBusiness,
+    onSubmit,
+    recentOffenderData,
+    recentOffenderLoading,
+    removeCrimeGroup,
+    removeImage,
+    removeImageFromOffender,
+    removeOffender,
+    removeVehicle,
+    saving,
+    searchOffenders,
+    setAddRecentOffender,
+    setAssignToImage,
+    setSearchOffenders,
     tags:
       tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
     tagsLoading,
-    imgChange,
-    onPreview,
-    beforeUpload,
-    fileList,
-    addIncidentTag,
     toggleAddIncidentTag,
-    updateIncidentTag,
-    addOffender,
-    toggleAddOffender,
-    addExistingOffender,
-    toggleAddExistingOffender,
-    updateOffendersData,
-    offendersData,
-    // deleteConfirm,
-    onReject,
-    recentOffenderData,
-    recentOffenderLoading,
-    addRecentOffender,
-    setAddRecentOffender,
-    searchOffenders,
-    setSearchOffenders,
-    newImage,
-    onCancelNewImage,
-    assignOffendersToImages,
-    setAssignToImage,
-    removeImageFromOffender,
-    removeImage,
-    removeOffender,
-    listOffendersData,
-    adminRights: role !== Role.User,
-    offenderImgChange,
-    editOffenderId,
-    setEditOffenderId,
-    updateOffender,
-    addNewVehicle,
-    addExistingVehicle,
-    editVehicleId,
-    setEditVehicleId,
-    toggleAddNewVehicle,
-    toggleAddExistingVehicle,
-    vehiclesData,
-    updateVehiclesData,
-    removeVehicle,
-    addNewCrimeGroup,
-    addExistingCrimeGroup,
-    editCrimeGroupId,
-    setEditCrimeGroupId,
-    toggleAddNewCrimeGroup,
-    toggleAddExistingCrimeGroup,
-    crimeGroupsData,
     updateCrimeGroupsData,
-    removeCrimeGroup,
-    listVehiclesData,
-    listCrimeGroupsData,
-    onSearchBusiness,
+    updateIncidentTag,
+    updateOffender,
+    updateOffendersData,
+    updateVehiclesData,
+    vehiclesData,
   };
 };
 

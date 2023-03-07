@@ -1,9 +1,8 @@
 import React from 'react';
 import {
   CreateTagMutation,
-  ListCrimeGroupsQuery,
+  ListGoodsTypesQuery,
   ListOffendersQuery,
-  ListVehiclesQuery,
   ViewIncidentQuery,
 } from 'graphql/generated';
 
@@ -17,6 +16,7 @@ import {
   Drawer,
   Form,
   Input,
+  InputNumber,
   Modal,
   PageHeader,
   Row,
@@ -41,8 +41,9 @@ import { UploadChangeParam } from 'antd/lib/upload';
 import { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
 import Profiles from 'components/incidents/IncidentForm/Profiles';
 import ImageSection from 'components/incidents/IncidentForm/ImageSection';
-import ProfileDrawer from 'components/incidents/IncidentForm/ProfileDrawer';
 import DebounceSelect from 'components/form-components/DebounceSelect';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 
 const { Title, Paragraph } = Typography;
 
@@ -55,6 +56,11 @@ interface FormData {
   policeReported?: boolean;
   policeInvolved?: boolean;
   policeRef?: string;
+  goods: {
+    goodsType?: string;
+    value?: number;
+    recoveredValue: number;
+  }[];
   business: {
     label: React.ReactNode;
     value: string;
@@ -78,9 +84,7 @@ type Offender = Exclude<
 >['offenders'][0];
 
 interface Props {
-  addExistingOffender: boolean;
   addIncidentTag: boolean;
-  addOffender: boolean;
   addRecentOffender: Offender | null;
   assignOffendersToImages: (data: {
     image: Image;
@@ -89,10 +93,10 @@ interface Props {
   beforeUpload: (value: RcFile) => void;
   data: ViewIncidentQuery | undefined;
   fileList: Image[];
+  goodsTypesData: ListGoodsTypesQuery | undefined;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
   imgChange: UploadProps['onChange'];
-  listOffendersData: ListOffendersQuery | undefined;
   loading: boolean;
   newImage: Image | null;
   offenderImgChange: (
@@ -117,32 +121,14 @@ interface Props {
   setSearchOffenders: (value: string) => void;
   tags: { value: string; label: string }[];
   tagsLoading: boolean;
-  toggleAddExistingOffender: () => void;
   toggleAddIncidentTag: () => void;
-  toggleAddOffender: () => void;
   updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
   updateOffendersData: (value: OffenderData) => void;
-  editOffenderId: string;
-  setEditOffenderId: (arg0: string) => void;
   updateOffender: (value: OffenderData) => void;
-  listVehiclesData: ListVehiclesQuery | undefined;
-  listCrimeGroupsData: ListCrimeGroupsQuery | undefined;
-  addNewVehicle: boolean;
-  addExistingVehicle: boolean;
-  toggleAddNewVehicle: () => void;
-  toggleAddExistingVehicle: () => void;
-  editVehicleId: string;
-  setEditVehicleId: (value: string) => void;
   vehiclesData: VehicleData[];
   updateVehiclesData: (value: VehicleData) => void;
   removeVehicle: (vehicleId: string) => void;
   removeCrimeGroup: (crimeGroupId: string) => void;
-  addNewCrimeGroup: boolean;
-  addExistingCrimeGroup: boolean;
-  toggleAddNewCrimeGroup: () => void;
-  toggleAddExistingCrimeGroup: () => void;
-  editCrimeGroupId: string;
-  setEditCrimeGroupId: (value: string) => void;
   crimeGroupsData: CrimeGroupData[];
   updateCrimeGroupsData: (value: CrimeGroupData) => void;
   onSearchBusiness: (
@@ -151,68 +137,48 @@ interface Props {
 }
 
 const EditIncident = ({
-  onSubmit,
+  addIncidentTag,
+  addRecentOffender,
+  assignOffendersToImages,
+  beforeUpload,
+  crimeGroupsData,
   data,
-  loading,
-  saving,
+  fileList,
+  goodsTypesData,
   groups,
   groupsLoading,
-  tags,
-  tagsLoading,
   imgChange,
-  onPreview,
-  fileList,
-  beforeUpload,
-  addIncidentTag,
-  toggleAddIncidentTag,
-  updateIncidentTag,
-  addOffender,
-  toggleAddOffender,
-  addExistingOffender,
-  toggleAddExistingOffender,
-  updateOffendersData,
+  loading,
+  newImage,
+  offenderImgChange,
   offendersData,
-  reviewed,
+  onCancelNewImage,
+  onPreview,
   onReject,
+  onSearchBusiness,
+  onSubmit,
   recentOffenderData,
   recentOffenderLoading,
-  addRecentOffender,
-  setAddRecentOffender,
-  searchOffenders,
-  setSearchOffenders,
-  newImage,
-  onCancelNewImage,
-  assignOffendersToImages,
-  setAssignToImage,
-  removeImageFromOffender,
-  removeImage,
-  removeOffender,
-  listOffendersData,
-  offenderImgChange,
-  editOffenderId,
-  setEditOffenderId,
-  updateOffender,
-  addNewVehicle,
-  addExistingVehicle,
-  editVehicleId,
-  setEditVehicleId,
-  toggleAddNewVehicle,
-  toggleAddExistingVehicle,
-  vehiclesData,
-  updateVehiclesData,
-  removeVehicle,
-  addNewCrimeGroup,
-  addExistingCrimeGroup,
-  editCrimeGroupId,
-  setEditCrimeGroupId,
-  toggleAddNewCrimeGroup,
-  toggleAddExistingCrimeGroup,
-  crimeGroupsData,
-  updateCrimeGroupsData,
   removeCrimeGroup,
-  listVehiclesData,
-  listCrimeGroupsData,
-  onSearchBusiness,
+  removeImage,
+  removeImageFromOffender,
+  removeOffender,
+  removeVehicle,
+  reviewed,
+  saving,
+  searchOffenders,
+  setAddRecentOffender,
+  setAssignToImage,
+  setSearchOffenders,
+  tags,
+  tagsLoading,
+  toggleAddIncidentTag,
+  updateCrimeGroupsData,
+  updateIncidentTag,
+  updateOffender,
+  updateOffendersData,
+  updateVehiclesData,
+  vehiclesData,
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader
@@ -229,12 +195,15 @@ const EditIncident = ({
           subject: data?.incident?.subject,
           description: data?.incident?.description,
           date: moment(data?.incident?.date, 'YYYY-MM-DD,HH:mm:ss'),
-          value: data?.incident?.value || null,
-          recoveredValue: data?.incident?.recoveredValue || null,
           business: {
             label: data?.incident?.business?.name,
             value: data?.incident?.business?.id,
           },
+          goods: data?.incident?.incidentItems.map((item) => ({
+            goodsType: item.goodsType.id,
+            value: item.value,
+            recoveredValue: item.recoveredValue,
+          })),
           policeInvolved: data?.incident?.policeInvolved,
           policeRef: data?.incident?.policeRef,
           policeReported: data?.incident?.policeReported,
@@ -363,6 +332,128 @@ const EditIncident = ({
               </Title>
             </Col>
           </Row>
+          <Form.List
+            name="goods"
+            rules={[
+              {
+                validator: async (rule, value) => {
+                  if (value.length === 0) throw new Error('Something wrong!');
+                },
+              },
+            ]}
+          >
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, ...restField }, index) => (
+                  <Row key={key} gutter={8}>
+                    <Col>
+                      <Form.Item
+                        // eslint-disable-next-line
+                        {...restField}
+                        label={index ? '' : 'Type of Goods'}
+                        name={[name, 'goodsType']}
+                        rules={[
+                          {
+                            required: index === 0,
+                            message: 'Please enter a type',
+                          },
+                        ]}
+                      >
+                        <Select
+                          placeholder="Select goods..."
+                          style={{ width: 300 }}
+                          allowClear
+                          options={goodsTypesData?.listGoodsTypes.goodsTypes.map(
+                            (goodsType) => ({
+                              value: goodsType.id,
+                              label: goodsType.name,
+                            })
+                          )}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col>
+                      <Form.Item
+                        // eslint-disable-next-line
+                        {...restField}
+                        name={[name, 'value']}
+                        label={index ? '' : 'Value'}
+                        rules={[
+                          {
+                            required: index === 0,
+                            message: 'Please enter a value',
+                          },
+                        ]}
+                        tooltip="The value of the goods involved in the incident, both lost and recovered."
+                      >
+                        <InputNumber
+                          style={{ width: 150 }}
+                          prefix="£"
+                          precision={2}
+                          min={0}
+                        />
+                      </Form.Item>
+                    </Col>
+                    <Col>
+                      <Form.Item
+                        // eslint-disable-next-line
+                        {...restField}
+                        name={[name, 'recoveredValue']}
+                        label={index ? '' : 'Value Recovered'}
+                        rules={[
+                          {
+                            required: index === 0,
+                            message: 'Please enter a value',
+                          },
+                        ]}
+                        tooltip="The value of the goods that were recovered."
+                      >
+                        <InputNumber
+                          style={{ width: 150 }}
+                          prefix="£"
+                          precision={2}
+                          min={0}
+                        />
+                      </Form.Item>
+                    </Col>
+                    {fields.length > 1 && (
+                      <Col>
+                        <Button
+                          style={{ marginTop: index === 0 ? 30 : 0 }}
+                          size="small"
+                          onClick={() => remove(name)}
+                        >
+                          <FontAwesomeIcon size="lg" icon={faTrash} />
+                        </Button>
+                      </Col>
+                    )}
+                  </Row>
+                ))}
+                <Form.Item>
+                  <Row justify="center">
+                    <Col>
+                      <Button
+                        onClick={() =>
+                          add({
+                            recoveredValue: 0,
+                          })
+                        }
+                        block
+                        icon={
+                          <FontAwesomeIcon
+                            style={{ marginRight: 8 }}
+                            icon={faPlus}
+                          />
+                        }
+                      >
+                        Add Item
+                      </Button>
+                    </Col>
+                  </Row>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
         </Card>
         <Card style={{ marginBottom: 10 }}>
           <Row align="bottom" style={{ marginBottom: 20 }}>
@@ -410,33 +501,23 @@ const EditIncident = ({
         </Card>
         <Card style={{ marginBottom: 10 }}>
           <Profiles
-            titleOrder={3}
-            saving={saving}
-            setEditOffenderId={setEditOffenderId}
-            toggleAddExistingOffender={toggleAddExistingOffender}
-            toggleAddOffender={toggleAddOffender}
-            searchOffenders={searchOffenders}
-            setSearchOffenders={setSearchOffenders}
+            crimeGroupsData={crimeGroupsData}
+            offenderImgChange={offenderImgChange}
             offendersData={offendersData}
             recentOffenderData={recentOffenderData}
             recentOffenderLoading={recentOffenderLoading}
-            setAddRecentOffender={setAddRecentOffender}
-            offenderImgChange={offenderImgChange}
-            removeOffender={removeOffender}
-            // adminRights={adminRights}
-            listOffendersData={listOffendersData}
-            setEditVehicleId={setEditVehicleId}
-            toggleAddNewVehicle={toggleAddNewVehicle}
-            toggleAddExistingVehicle={toggleAddExistingVehicle}
-            vehiclesData={vehiclesData}
-            removeVehicle={removeVehicle}
             removeCrimeGroup={removeCrimeGroup}
-            // setEditCrimeGroupId={setEditCrimeGroupId}
-            toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
-            toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
-            crimeGroupsData={crimeGroupsData}
-            listVehiclesData={listVehiclesData}
-            listCrimeGroupsData={listCrimeGroupsData}
+            removeOffender={removeOffender}
+            removeVehicle={removeVehicle}
+            saving={saving}
+            searchOffenders={searchOffenders}
+            setSearchOffenders={setSearchOffenders}
+            titleOrder={3}
+            updateCrimeGroupsData={updateCrimeGroupsData}
+            updateOffender={updateOffender}
+            updateOffendersData={updateOffendersData}
+            updateVehiclesData={updateVehiclesData}
+            vehiclesData={vehiclesData}
           />
         </Card>
         <Card style={{ marginBottom: 10 }}>
@@ -545,34 +626,6 @@ const EditIncident = ({
         <div />
       )}
     </Drawer>
-    <ProfileDrawer
-      updateOffender={updateOffender}
-      editOffenderId={editOffenderId}
-      setEditOffenderId={setEditOffenderId}
-      addExistingOffender={addExistingOffender}
-      addOffender={addOffender}
-      offendersData={offendersData}
-      toggleAddExistingOffender={toggleAddExistingOffender}
-      toggleAddOffender={toggleAddOffender}
-      updateOffendersData={updateOffendersData}
-      addNewVehicle={addNewVehicle}
-      addExistingVehicle={addExistingVehicle}
-      editVehicleId={editVehicleId}
-      setEditVehicleId={setEditVehicleId}
-      toggleAddNewVehicle={toggleAddNewVehicle}
-      toggleAddExistingVehicle={toggleAddExistingVehicle}
-      vehiclesData={vehiclesData}
-      updateVehiclesData={updateVehiclesData}
-      addNewCrimeGroup={addNewCrimeGroup}
-      addExistingCrimeGroup={addExistingCrimeGroup}
-      editCrimeGroupId={editCrimeGroupId}
-      setEditCrimeGroupId={setEditCrimeGroupId}
-      toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
-      toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
-      crimeGroupsData={crimeGroupsData}
-      updateCrimeGroupsData={updateCrimeGroupsData}
-      isIncident
-    />
     <Modal
       onCancel={() => setAddRecentOffender(null)}
       visible={addRecentOffender !== null}

@@ -1,1 +1,1 @@
-export { default } from './Profiles.view';
+export { default } from './Profiles.container';

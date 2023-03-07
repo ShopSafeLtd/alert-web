@@ -1,10 +1,16 @@
 import { useState } from 'react';
-import { TagQuery, useUpdateTagMutation, useTagQuery } from 'graphql/generated';
+import {
+  TagQuery,
+  useUpdateTagMutation,
+  useTagQuery,
+  CrimeType,
+} from 'graphql/generated';
 import { notification } from 'antd';
 
 interface FormData {
   name: string;
   description: string;
+  crimeType: CrimeType;
 }
 interface Props {
   onClose: () => void;
@@ -60,6 +66,7 @@ const useEditCrimeType = ({ onClose, incidentId }: Props): Return => {
           data: {
             name: { set: data.name },
             description: { set: data.description },
+            crimeType: { set: data.crimeType },
           },
         },
       });

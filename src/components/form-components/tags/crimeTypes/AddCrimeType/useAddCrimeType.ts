@@ -3,6 +3,7 @@ import {
   useCreateTagMutation,
   CreateTagMutation,
   Model,
+  CrimeType,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import { notification } from 'antd';
@@ -11,6 +12,7 @@ import { MutationUpdaterFn } from '@apollo/client';
 interface FormData {
   name: string;
   description: string;
+  crimeType: CrimeType;
 }
 
 interface Props {
@@ -56,6 +58,7 @@ const useAddCrimeType = ({ onClose, update }: Props): Return => {
         data: {
           name: data.name,
           description: data.description || '',
+          crimeType: data.crimeType,
           scheme: {
             connect: {
               id: schemeId,

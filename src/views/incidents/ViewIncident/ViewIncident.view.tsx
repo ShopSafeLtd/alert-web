@@ -322,15 +322,15 @@ const ViewIncident = ({
                           className={classes.detail}
                           label={<span>Value</span>}
                         >
-                          {data?.incident?.value ? '£' : ''}
-                          {data?.incident?.value || 'Unknown'}
+                          {data?.incident?.totalValue ? '£' : ''}
+                          {data?.incident?.totalValue || 'Unknown'}
                         </Descriptions.Item>
                         <Descriptions.Item
                           className={classes.detail}
                           label={<span>Recovered Value</span>}
                         >
-                          {data?.incident?.value ? '£' : ''}
-                          {data?.incident?.recoveredValue || 'Unknown'}
+                          {data?.incident?.totalRecoveredValue ? '£' : ''}
+                          {data?.incident?.totalRecoveredValue || 'Unknown'}
                         </Descriptions.Item>
                         <Descriptions.Item
                           className={classes.detail}
@@ -367,6 +367,65 @@ const ViewIncident = ({
                           ))}
                         </Descriptions.Item>
                       </Descriptions>
+                      <div style={{ marginBottom: 20 }}>
+                        <Title level={4}>Goods</Title>
+                        <Table
+                          columns={[
+                            {
+                              title: 'Name',
+                              dataIndex: 'name',
+                              key: 'name',
+                            },
+                            {
+                              title: 'Value',
+                              dataIndex: 'value',
+                              key: 'value',
+                              render: (value) => `£${value.toFixed(2)}`,
+                            },
+                            {
+                              title: 'Recovered Value',
+                              dataIndex: 'recoveredValue',
+                              key: 'recoveredValue',
+                              render: (value) => `£${value.toFixed(2)}`,
+                            },
+                          ]}
+                          dataSource={data?.incident?.incidentItems.map(
+                            (item) => ({
+                              key: item.id,
+                              name: item.name,
+                              value: item.value,
+                              recoveredValue: item.recoveredValue,
+                            })
+                          )}
+                          size="small"
+                          rowClassName={classes.offenderRow}
+                          pagination={false}
+                          summary={(tableData) => {
+                            const totalValue = tableData
+                              .map((item) => item.value)
+                              .reduce((a, b) => a + b);
+                            const totalRecovered = tableData
+                              .map((item) => item.recoveredValue)
+                              .reduce((a, b) => a + b);
+
+                            return (
+                              <>
+                                <Table.Summary.Row>
+                                  <Table.Summary.Cell index={0}>
+                                    Total:
+                                  </Table.Summary.Cell>
+                                  <Table.Summary.Cell index={1}>
+                                    £{totalValue.toFixed(2)}
+                                  </Table.Summary.Cell>
+                                  <Table.Summary.Cell index={1}>
+                                    £{totalRecovered.toFixed(2)}
+                                  </Table.Summary.Cell>
+                                </Table.Summary.Row>
+                              </>
+                            );
+                          }}
+                        />
+                      </div>
                       <div className="incident-offender-container">
                         {/* <Divider>Offender</Divider> */}
                         <Title level={4}>Offenders</Title>

@@ -1,0 +1,9 @@
+query ListGoodsTypes {
+  listGoodsTypes {
+    total
+    goodsTypes {
+      id
+      name
+    }
+  }
+}

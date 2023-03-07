@@ -3,5 +3,6 @@ query tag($where: TagWhereUniqueInput!) {
     id
     name
     description
+    crimeType
   }
 }

@@ -35,8 +35,6 @@ describe('Detail Officer View', () => {
       policeRef: null,
       reference: null,
       policeReported: false,
-      value: 0,
-      recoveredValue: 0,
       updates: [],
       subscribed: false,
       id: 'incidentId',
@@ -65,6 +63,9 @@ describe('Detail Officer View', () => {
       offenders: [],
       crimeGroups: [],
       vehicles: [],
+      incidentItems: [],
+      totalRecoveredValue: 0,
+      totalValue: 0,
     },
   };
   it('renders the page', () => {

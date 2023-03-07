@@ -1,0 +1,140 @@
+import React from 'react';
+import { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
+import { ListOffendersQuery } from 'graphql/generated';
+import { UploadChangeParam } from 'antd/lib/upload';
+import { UploadFile } from 'antd/lib/upload/interface';
+import View from './Profiles.view';
+import useProfiles from './useProfiles';
+
+interface Props {
+  crimeGroupsData: CrimeGroupData[];
+  offenderImgChange: (
+    info: UploadChangeParam<UploadFile>,
+    currentId: string
+  ) => void;
+  offendersData: OffenderData[];
+  onChange?: (data: OffenderData[]) => void;
+  recentOffenderData: ListOffendersQuery | undefined;
+  recentOffenderLoading: boolean;
+  removeCrimeGroup: (crimeGroupId: string) => void;
+  removeOffender: (offenderId: string) => void;
+  removeVehicle: (vehicleId: string) => void;
+  saving: boolean;
+  searchOffenders: string;
+  setSearchOffenders: (value: string) => void;
+  titleOrder: number;
+  updateCrimeGroupsData: (value: CrimeGroupData) => void;
+  updateOffender: (value: OffenderData) => void;
+  updateOffendersData: (value: OffenderData) => void;
+  updateVehiclesData: (value: VehicleData) => void;
+  value?: OffenderData[];
+  vehiclesData: VehicleData[];
+}
+
+const Profiles = ({
+  crimeGroupsData,
+  offenderImgChange: offenderImgChangeParent,
+  offendersData,
+  onChange,
+  recentOffenderData,
+  recentOffenderLoading,
+  removeCrimeGroup: removeCrimeGroupParent,
+  removeOffender: removeOffenderParent,
+  removeVehicle: removeVehicleParent,
+  saving,
+  searchOffenders,
+  setSearchOffenders,
+  titleOrder,
+  updateCrimeGroupsData: updateCrimeGroupsDataParent,
+  updateOffender: updateOffenderParent,
+  updateOffendersData: updateOffendersDataParent,
+  updateVehiclesData: updateVehiclesDataParent,
+  value,
+  vehiclesData,
+}: Props) => {
+  const {
+    addExistingCrimeGroup,
+    addExistingOffender,
+    addExistingVehicle,
+    addNewCrimeGroup,
+    addNewVehicle,
+    addOffender,
+    addRecentOffender,
+    editCrimeGroupId,
+    editOffenderId,
+    editVehicleId,
+    offenderImgChange,
+    removeCrimeGroup,
+    removeOffender,
+    removeVehicle,
+    setAddRecentOffender,
+    setEditCrimeGroupId,
+    setEditOffenderId,
+    setEditVehicleId,
+    toggleAddExistingCrimeGroup,
+    toggleAddExistingOffender,
+    toggleAddExistingVehicle,
+    toggleAddNewCrimeGroup,
+    toggleAddNewVehicle,
+    toggleAddOffender,
+    updateCrimeGroupsData,
+    updateOffender,
+    updateOffendersData,
+    updateVehiclesData,
+  } = useProfiles({
+    offenderImgChangeParent,
+    onChange,
+    removeCrimeGroupParent,
+    removeOffenderParent,
+    removeVehicleParent,
+    updateCrimeGroupsDataParent,
+    updateOffenderParent,
+    updateOffendersDataParent,
+    updateVehiclesDataParent,
+    value,
+  });
+
+  return (
+    <View
+      addExistingCrimeGroup={addExistingCrimeGroup}
+      addExistingOffender={addExistingOffender}
+      addExistingVehicle={addExistingVehicle}
+      addNewCrimeGroup={addNewCrimeGroup}
+      addNewVehicle={addNewVehicle}
+      addOffender={addOffender}
+      addRecentOffender={addRecentOffender}
+      crimeGroupsData={crimeGroupsData}
+      editCrimeGroupId={editCrimeGroupId}
+      editOffenderId={editOffenderId}
+      editVehicleId={editVehicleId}
+      offenderImgChange={offenderImgChange}
+      offendersData={offendersData}
+      recentOffenderData={recentOffenderData}
+      recentOffenderLoading={recentOffenderLoading}
+      removeCrimeGroup={removeCrimeGroup}
+      removeOffender={removeOffender}
+      removeVehicle={removeVehicle}
+      saving={saving}
+      searchOffenders={searchOffenders}
+      setAddRecentOffender={setAddRecentOffender}
+      setEditCrimeGroupId={setEditCrimeGroupId}
+      setEditOffenderId={setEditOffenderId}
+      setEditVehicleId={setEditVehicleId}
+      setSearchOffenders={setSearchOffenders}
+      titleOrder={titleOrder}
+      toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
+      toggleAddExistingOffender={toggleAddExistingOffender}
+      toggleAddExistingVehicle={toggleAddExistingVehicle}
+      toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
+      toggleAddNewVehicle={toggleAddNewVehicle}
+      toggleAddOffender={toggleAddOffender}
+      updateCrimeGroupsData={updateCrimeGroupsData}
+      updateOffender={updateOffender}
+      updateOffendersData={updateOffendersData}
+      updateVehiclesData={updateVehiclesData}
+      vehiclesData={vehiclesData}
+    />
+  );
+};
+
+export default Profiles;

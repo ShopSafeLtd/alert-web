@@ -45,6 +45,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
   detail: {
     paddingBottom: '8px !important',
+    overflow: 'auto',
   },
   images: {
     width: '100%',
@@ -85,6 +86,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
   desc: {
     marginBottom: 30,
+    width: '100%',
   },
   offenderRow: {
     cursor: 'pointer',
