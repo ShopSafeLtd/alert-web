@@ -402,11 +402,11 @@ const ViewIncident = ({
                           pagination={false}
                           summary={(tableData) => {
                             const totalValue = tableData
-                              .map((item) => item.value)
-                              .reduce((a, b) => a + b);
+                              .map((item) => item.value || 0)
+                              .reduce((a, b) => a + b, 0);
                             const totalRecovered = tableData
-                              .map((item) => item.recoveredValue)
-                              .reduce((a, b) => a + b);
+                              .map((item) => item.recoveredValue || 0)
+                              .reduce((a, b) => a + b, 0);
 
                             return (
                               <>
