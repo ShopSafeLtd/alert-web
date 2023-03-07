@@ -23,6 +23,7 @@ import Sidebar from './sidebar/Sidebar';
 import 'reactflow/dist/style.css';
 import './styles.css';
 import styles from './style.module.css';
+import visualColours from '../../../../../utils/node-colour';
 // import Cursor from './Cursors/Cursor';
 // import { WebsocketProvider } from 'y-websocket';
 
@@ -40,6 +41,7 @@ const nodeTypes = {
   textNode: TextNode,
   vehicleNode: VehicleNode,
 };
+
 interface FlowProps {
   nodes: Node[];
   onNodesChange: OnNodesChange;
@@ -94,14 +96,9 @@ const ReactFlowView = ({
 // reactFlowInstance,
 FlowProps) => {
   const nodeColor = (node: string) => {
-    switch (node) {
-      case 'imageNode':
-        return '#6ede87';
-      case 'textInputNode':
-        return '#6865A5';
-      default:
-        return '#ff0072';
-    }
+    const nodeIndex =
+      Object.keys(nodeTypes).findIndex((key) => key === node) || 0;
+    return visualColours[nodeIndex];
   };
 
   return (
