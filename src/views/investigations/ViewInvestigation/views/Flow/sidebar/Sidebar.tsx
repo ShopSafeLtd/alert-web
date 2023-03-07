@@ -34,7 +34,8 @@ const Sidebar = () => (
       <Card>Text Input Box</Card>
     </div>
 
-    <Typography.Title level={4}>Image</Typography.Title>
+    <Typography.Title level={4}>Offender</Typography.Title>
+    <Typography.Title level={5}>Offender Image</Typography.Title>
 
     <div
       onDragStart={(event: DragEvent) => {
@@ -48,7 +49,7 @@ const Sidebar = () => (
       </Card>
     </div>
 
-    <Typography.Title level={4}>Offender Details</Typography.Title>
+    <Typography.Title level={5}>Offender Details</Typography.Title>
 
     <div
       onDragStart={(event: DragEvent) => {

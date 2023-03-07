@@ -7,6 +7,16 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
             id
             fullName
         }
+        documents{
+            id
+            name
+            url
+            thumbnailUrl
+            tags{
+                name
+                id
+            }
+        }
         subscribed
         vehicles {
             id

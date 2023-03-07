@@ -1,4 +1,4 @@
-import { Button, Drawer, Dropdown, Menu, Tabs, Typography } from 'antd';
+import { Badge, Button, Drawer, Dropdown, Menu, Tabs, Typography } from 'antd';
 import TabbedView from 'components/TabbedView';
 import React from 'react';
 import { PageHeader } from 'components/layout-components/AntD';
@@ -201,6 +201,21 @@ const ViewInvestigation = ({
             tab={<Typography.Text>Flow Map</Typography.Text>}
           >
             <Flow importData={data} />
+          </Tabs.TabPane>
+          <Tabs.TabPane
+            key="Documents"
+            tab={
+              <Badge
+                offset={[8, 0]}
+                size="small"
+                count={data?.investigation?.documents?.length || 0}
+                showZero
+              >
+                <Typography.Text>Documents</Typography.Text>
+              </Badge>
+            }
+          >
+            <div />
           </Tabs.TabPane>
         </Tabs>
       </div>
