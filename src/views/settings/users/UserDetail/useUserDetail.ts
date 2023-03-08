@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import {
-  useUserQuery,
+  useDeleteUserFromSchemeMutation,
   UserQuery,
   useSendInviteMutation,
   useUpdateUserDisableMutation,
-  useDeleteUserFromSchemeMutation,
+  useUserQuery,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import { useNavigate } from 'react-router-dom';
-import { notification, Modal } from 'antd';
+import { Modal, notification } from 'antd';
 
 const { confirm } = Modal;
 
@@ -17,6 +17,9 @@ interface Return {
   loading: boolean;
   saving: boolean;
   editUser: boolean;
+  demLink: boolean;
+  demId: string | undefined | null;
+  toggleDemLink: () => void;
   toggleEditUser: () => void;
   inviteConfirm: () => void;
   enableConfirm: () => void;
@@ -29,7 +32,13 @@ const useUserDetail = (userId: string): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
   const [editUser, setEditUser] = useState(false);
-
+  const [demLink, setDemLink] = useState(false);
+  const toggleDemLink = () => {
+    setDemLink(!demLink);
+  };
+  // TODO: need to change this to be based on current business
+  const business = useStoreState((state) => state.user.businesses);
+  const demId = business.map((item) => item.demId)[0];
   const errorNotification = () => {
     notification.error({
       message: 'Error!',
@@ -201,6 +210,9 @@ const useUserDetail = (userId: string): Return => {
     enableConfirm,
     disableConfirm,
     deleteConfirm,
+    demLink,
+    toggleDemLink,
+    demId,
   };
 };
 
