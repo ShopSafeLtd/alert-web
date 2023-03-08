@@ -648,7 +648,7 @@ const ViewIncident = ({
                               (crimeGroup) => ({
                                 key: crimeGroup.id,
                                 reference: crimeGroup.reference,
-                                aslias: crimeGroup.aslias,
+                                aslias: crimeGroup.alias,
                                 totalOffenders: crimeGroup.totalOffenders,
                                 totalIncidents: crimeGroup.totalIncidents,
                                 totalValue: crimeGroup.totalValue,

@@ -161,8 +161,8 @@ const AddOffender = ({
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader onBack={() => window.history.back()} title="Add Offender" />
-    <Card>
-      <Form form={form} onFinish={onSubmit} layout="vertical">
+    <Form form={form} onFinish={onSubmit} layout="vertical">
+      <Card>
         <OffenderDetails
           selectedItems={selectedItems}
           setSelectedItems={setSelectedItems}
@@ -174,6 +174,8 @@ const AddOffender = ({
           adminRights={adminRights}
           toggleAddOffenderTag={toggleAddOffenderTag}
         />
+      </Card>
+      <Card>
         {/* <Divider /> */}
         <Profiles
           saving={saving}
@@ -191,9 +193,11 @@ const AddOffender = ({
           listVehiclesData={listVehiclesData}
           listCrimeGroupsData={listCrimeGroupsData}
         />
+      </Card>
+      <Card>
         {/* <Row gutter={5} style={{ marginTop: 50 }}>
           <Col flex={1}> */}
-        <Row align="middle" style={{ marginTop: 70, marginBottom: 20 }}>
+        <Row align="middle" style={{ marginBottom: 20 }}>
           <Col>
             <Title style={{ marginBottom: 0 }} level={4}>
               3.{' '}
@@ -227,7 +231,6 @@ const AddOffender = ({
             </Button>
           </Col>
         </Row>
-
         {bansData && bansData.length > 0 ? (
           <Row gutter={20}>
             <Col>
@@ -335,8 +338,9 @@ const AddOffender = ({
             {/* <Divider /> */}
           </>
         )}
-
-        <Row style={{ marginTop: 70 }}>
+      </Card>
+      <Card>
+        <Row>
           <Col>
             <Row align="middle" style={{ marginBottom: 20 }}>
               <Col>
@@ -398,7 +402,8 @@ const AddOffender = ({
             </Form.Item>
           </Col>
         </Row>
-
+      </Card>
+      <Card>
         {groups.length > 1 && (
           <>
             <Row align="bottom" style={{ marginBottom: 30 }}>
@@ -453,89 +458,89 @@ const AddOffender = ({
             </Row>
           </>
         )}
+      </Card>
 
-        <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={10} justify="end">
-            <Col>
-              <Button disabled={saving} onClick={() => window.history.back()}>
-                Cancel
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                disabled={saving}
-                loading={saving}
-                type="primary"
-                htmlType="submit"
-              >
-                Save
-              </Button>
-            </Col>
-          </Row>
-        </Form.Item>
-      </Form>
-      <Drawer
-        title="Add Offender Warning"
-        visible={addOffenderTag}
-        width="400"
-        onClose={toggleAddOffenderTag}
-      >
-        {addOffenderTag ? (
-          <AddOffenderTag
-            update={updateOffenderTag}
-            onClose={toggleAddOffenderTag}
-          />
-        ) : (
-          <div />
-        )}
-      </Drawer>
-      <Drawer
-        title="Add Exclusion"
-        visible={addExclusion}
-        width="400"
-        onClose={toggleAddExclusion}
-      >
-        {addExclusion ? (
-          <AddExclusion update={updateExclusion} onClose={toggleAddExclusion} />
-        ) : (
-          <div />
-        )}
-      </Drawer>
-      <Drawer
-        title="Edit Exclusion"
-        visible={editExclusion}
-        width="400"
-        onClose={toggleEditExclusion}
-      >
-        {editExclusion ? (
-          <EditExclusion
-            update={updateExclusion}
-            onClose={toggleEditExclusion}
-            banData={banData}
-          />
-        ) : (
-          <div />
-        )}
-      </Drawer>
-      <ProfileDrawer
-        addNewVehicle={addNewVehicle}
-        addExistingVehicle={addExistingVehicle}
-        editVehicleId={editVehicleId}
-        setEditVehicleId={setEditVehicleId}
-        toggleAddNewVehicle={toggleAddNewVehicle}
-        toggleAddExistingVehicle={toggleAddExistingVehicle}
-        vehiclesData={vehiclesData}
-        updateVehiclesData={updateVehiclesData}
-        addNewCrimeGroup={addNewCrimeGroup}
-        addExistingCrimeGroup={addExistingCrimeGroup}
-        editCrimeGroupId={editCrimeGroupId}
-        setEditCrimeGroupId={setEditCrimeGroupId}
-        toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
-        toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
-        crimeGroupsData={crimeGroupsData}
-        updateCrimeGroupsData={updateCrimeGroupsData}
-      />
-    </Card>
+      <Form.Item>
+        <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+          <Col>
+            <Button disabled={saving} onClick={() => window.history.back()}>
+              Cancel
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              disabled={saving}
+              loading={saving}
+              type="primary"
+              htmlType="submit"
+            >
+              Save
+            </Button>
+          </Col>
+        </Row>
+      </Form.Item>
+    </Form>
+    <Drawer
+      title="Add Offender Warning"
+      visible={addOffenderTag}
+      width="400"
+      onClose={toggleAddOffenderTag}
+    >
+      {addOffenderTag ? (
+        <AddOffenderTag
+          update={updateOffenderTag}
+          onClose={toggleAddOffenderTag}
+        />
+      ) : (
+        <div />
+      )}
+    </Drawer>
+    <Drawer
+      title="Add Exclusion"
+      visible={addExclusion}
+      width="400"
+      onClose={toggleAddExclusion}
+    >
+      {addExclusion ? (
+        <AddExclusion update={updateExclusion} onClose={toggleAddExclusion} />
+      ) : (
+        <div />
+      )}
+    </Drawer>
+    <Drawer
+      title="Edit Exclusion"
+      visible={editExclusion}
+      width="400"
+      onClose={toggleEditExclusion}
+    >
+      {editExclusion ? (
+        <EditExclusion
+          update={updateExclusion}
+          onClose={toggleEditExclusion}
+          banData={banData}
+        />
+      ) : (
+        <div />
+      )}
+    </Drawer>
+    <ProfileDrawer
+      addNewVehicle={addNewVehicle}
+      addExistingVehicle={addExistingVehicle}
+      editVehicleId={editVehicleId}
+      setEditVehicleId={setEditVehicleId}
+      toggleAddNewVehicle={toggleAddNewVehicle}
+      toggleAddExistingVehicle={toggleAddExistingVehicle}
+      vehiclesData={vehiclesData}
+      updateVehiclesData={updateVehiclesData}
+      addNewCrimeGroup={addNewCrimeGroup}
+      addExistingCrimeGroup={addExistingCrimeGroup}
+      editCrimeGroupId={editCrimeGroupId}
+      setEditCrimeGroupId={setEditCrimeGroupId}
+      toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
+      toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
+      crimeGroupsData={crimeGroupsData}
+      updateCrimeGroupsData={updateCrimeGroupsData}
+    />
   </div>
 );
 export default AddOffender;

@@ -1,7 +1,7 @@
 export interface CrimeGroupData {
   id: string;
   reference?: number | null;
-  alias?: string | undefined;
+  alias?: string | null;
   totalOffenders?: number | null;
   totalIncidents?: number | null;
   totalValue?: number | null;
