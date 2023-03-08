@@ -65,6 +65,12 @@ interface FormData {
   groups: string[];
   tags: string[];
   images: { id: string; url: string; optimised: string }[];
+  goods: {
+    id: string;
+    goodsType?: string;
+    value?: number;
+    recoveredValue: number;
+  }[];
 }
 
 interface OffenderData {
@@ -918,6 +924,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           create: undefined,
         };
       };
+      console.log(data);
 
       updateIncident({
         variables: {
@@ -940,6 +947,48 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                 id: data.business.value,
               },
             },
+            incidentItems:
+              data.goods?.length > 0
+                ? {
+                    create:
+                      data.goods
+                        .filter((item) => !item.id)
+                        .map((item) => ({
+                          goodsType: {
+                            connect: {
+                              id: item.goodsType,
+                            },
+                          },
+                          name:
+                            goodsTypesData?.listGoodsTypes.goodsTypes.find(
+                              ({ id }) => id === item.goodsType
+                            )?.name || '',
+                          value: item.value || 0,
+                          recoveredValue: item.recoveredValue || 0,
+                        })) || undefined,
+                    update:
+                      data.goods
+                        .filter((item) => item.id)
+                        .map((item) => ({
+                          data: {
+                            goodsType: {
+                              connect: {
+                                id: item.goodsType,
+                              },
+                            },
+                            name: {
+                              set:
+                                goodsTypesData?.listGoodsTypes.goodsTypes.find(
+                                  ({ id }) => id === item.goodsType
+                                )?.name || '',
+                            },
+                            value: { set: item.value || 0 },
+                            recoveredValue: { set: item.recoveredValue || 0 },
+                          },
+                          where: { id: item.id },
+                        })) || undefined,
+                  }
+                : undefined,
             groups: {
               set: data.groups.map((id) => ({ id })),
             },

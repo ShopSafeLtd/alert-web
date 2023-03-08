@@ -4,6 +4,7 @@ import React from 'react';
 import {
   Age,
   Build,
+  CrimeType,
   Gender,
   Race,
   UpdateType,
@@ -367,65 +368,69 @@ const ViewIncident = ({
                           ))}
                         </Descriptions.Item>
                       </Descriptions>
-                      <div style={{ marginBottom: 20 }}>
-                        <Title level={4}>Goods</Title>
-                        <Table
-                          columns={[
-                            {
-                              title: 'Name',
-                              dataIndex: 'name',
-                              key: 'name',
-                            },
-                            {
-                              title: 'Value',
-                              dataIndex: 'value',
-                              key: 'value',
-                              render: (value) => `£${value.toFixed(2)}`,
-                            },
-                            {
-                              title: 'Recovered Value',
-                              dataIndex: 'recoveredValue',
-                              key: 'recoveredValue',
-                              render: (value) => `£${value.toFixed(2)}`,
-                            },
-                          ]}
-                          dataSource={data?.incident?.incidentItems.map(
-                            (item) => ({
-                              key: item.id,
-                              name: item.name,
-                              value: item.value,
-                              recoveredValue: item.recoveredValue,
-                            })
-                          )}
-                          size="small"
-                          rowClassName={classes.offenderRow}
-                          pagination={false}
-                          summary={(tableData) => {
-                            const totalValue = tableData
-                              .map((item) => item.value || 0)
-                              .reduce((a, b) => a + b, 0);
-                            const totalRecovered = tableData
-                              .map((item) => item.recoveredValue || 0)
-                              .reduce((a, b) => a + b, 0);
+                      {data?.incident?.crimeTypes
+                        .map((item) => item.crimeType)
+                        .includes(CrimeType.TheftHandling) && (
+                        <div style={{ marginBottom: 20 }}>
+                          <Title level={4}>Goods</Title>
+                          <Table
+                            columns={[
+                              {
+                                title: 'Name',
+                                dataIndex: 'name',
+                                key: 'name',
+                              },
+                              {
+                                title: 'Value',
+                                dataIndex: 'value',
+                                key: 'value',
+                                render: (value) => `£${value.toFixed(2)}`,
+                              },
+                              {
+                                title: 'Recovered Value',
+                                dataIndex: 'recoveredValue',
+                                key: 'recoveredValue',
+                                render: (value) => `£${value.toFixed(2)}`,
+                              },
+                            ]}
+                            dataSource={data?.incident?.incidentItems.map(
+                              (item) => ({
+                                key: item.id,
+                                name: item.name,
+                                value: item.value,
+                                recoveredValue: item.recoveredValue,
+                              })
+                            )}
+                            size="small"
+                            rowClassName={classes.offenderRow}
+                            pagination={false}
+                            summary={(tableData) => {
+                              const totalValue = tableData
+                                .map((item) => item.value || 0)
+                                .reduce((a, b) => a + b, 0);
+                              const totalRecovered = tableData
+                                .map((item) => item.recoveredValue || 0)
+                                .reduce((a, b) => a + b, 0);
 
-                            return (
-                              <>
-                                <Table.Summary.Row>
-                                  <Table.Summary.Cell index={0}>
-                                    Total:
-                                  </Table.Summary.Cell>
-                                  <Table.Summary.Cell index={1}>
-                                    £{totalValue.toFixed(2)}
-                                  </Table.Summary.Cell>
-                                  <Table.Summary.Cell index={1}>
-                                    £{totalRecovered.toFixed(2)}
-                                  </Table.Summary.Cell>
-                                </Table.Summary.Row>
-                              </>
-                            );
-                          }}
-                        />
-                      </div>
+                              return (
+                                <>
+                                  <Table.Summary.Row>
+                                    <Table.Summary.Cell index={0}>
+                                      Total:
+                                    </Table.Summary.Cell>
+                                    <Table.Summary.Cell index={1}>
+                                      £{totalValue.toFixed(2)}
+                                    </Table.Summary.Cell>
+                                    <Table.Summary.Cell index={1}>
+                                      £{totalRecovered.toFixed(2)}
+                                    </Table.Summary.Cell>
+                                  </Table.Summary.Row>
+                                </>
+                              );
+                            }}
+                          />
+                        </div>
+                      )}
                       <div className="incident-offender-container">
                         {/* <Divider>Offender</Divider> */}
                         <Title level={4}>Offenders</Title>

@@ -964,7 +964,7 @@ const useEditIncident = (): Return => {
       const theft = tags.includes(CrimeType.TheftHandling);
 
       // enable goods if type is theft
-      if (theft && !formStages.where) {
+      if (theft && !values.goods) {
         setIsTheft(true);
         form.setFieldsValue({
           goods: [

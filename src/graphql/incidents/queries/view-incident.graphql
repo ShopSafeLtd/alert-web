@@ -16,6 +16,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     crimeTypes {
       id
       name
+      crimeType
     }
     incidentItems {
       id

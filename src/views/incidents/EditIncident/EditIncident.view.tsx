@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   CreateTagMutation,
+  CrimeType,
   ListGoodsTypesQuery,
   ListOffendersQuery,
   ViewIncidentQuery,
@@ -9,7 +10,6 @@ import {
 import {
   Button,
   Card,
-  Checkbox,
   Col,
   DatePicker,
   Descriptions,
@@ -19,6 +19,7 @@ import {
   InputNumber,
   Modal,
   PageHeader,
+  Radio,
   Row,
   Select,
   Skeleton,
@@ -57,6 +58,7 @@ interface FormData {
   policeInvolved?: boolean;
   policeRef?: string;
   goods: {
+    id: string;
     goodsType?: string;
     value?: number;
     recoveredValue: number;
@@ -200,13 +202,14 @@ const EditIncident = ({
             value: data?.incident?.business?.id,
           },
           goods: data?.incident?.incidentItems.map((item) => ({
+            id: item.id,
             goodsType: item.goodsType.id,
             value: item.value,
             recoveredValue: item.recoveredValue,
           })),
-          policeInvolved: data?.incident?.policeInvolved,
+          policeInvolved: data?.incident?.policeInvolved || false,
           policeRef: data?.incident?.policeRef,
-          policeReported: data?.incident?.policeReported,
+          policeReported: data?.incident?.policeReported || false,
           groups:
             data?.incident?.groups && data?.incident?.groups.length > 0
               ? data?.incident?.groups.map(({ id }) => id)
@@ -319,147 +322,159 @@ const EditIncident = ({
             <Input.TextArea disabled={saving} />
           </Form.Item>
         </Card>
+        {data?.incident?.crimeTypes
+          .map((item) => item.crimeType)
+          .includes(CrimeType.TheftHandling) && (
+          <Card style={{ marginBottom: 10 }}>
+            <Row align="bottom" style={{ marginBottom: 20 }}>
+              <Col>
+                <Title style={{ marginBottom: 0 }} level={4}>
+                  2.
+                </Title>
+              </Col>
+              <Col>
+                <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                  What goods were involved?
+                </Title>
+              </Col>
+            </Row>
+            <Form.List
+              name="goods"
+              rules={[
+                {
+                  validator: async (rule, value) => {
+                    if (value.length === 0) throw new Error('Something wrong!');
+                  },
+                },
+              ]}
+            >
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map(({ key, name, ...restField }, index) => (
+                    <Row key={key} gutter={8}>
+                      {/* <Form.Item
+                          // eslint-disable-next-line
+                          {...restField}
+                          style={{  display: 'none' }}
+                          name={[name, 'id']}
+                        >
+                          <Input />
+                        </Form.Item> */}
+                      <Col>
+                        <Form.Item
+                          // eslint-disable-next-line
+                          {...restField}
+                          label={index ? '' : 'Type of Goods'}
+                          name={[name, 'goodsType']}
+                          rules={[
+                            {
+                              required: index === 0,
+                              message: 'Please enter a type',
+                            },
+                          ]}
+                        >
+                          <Select
+                            placeholder="Select goods..."
+                            style={{ width: 300 }}
+                            allowClear
+                            options={goodsTypesData?.listGoodsTypes.goodsTypes.map(
+                              (goodsType) => ({
+                                value: goodsType.id,
+                                label: goodsType.name,
+                              })
+                            )}
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col>
+                        <Form.Item
+                          // eslint-disable-next-line
+                          {...restField}
+                          name={[name, 'value']}
+                          label={index ? '' : 'Value'}
+                          rules={[
+                            {
+                              required: index === 0,
+                              message: 'Please enter a value',
+                            },
+                          ]}
+                          tooltip="The value of the goods involved in the incident, both lost and recovered."
+                        >
+                          <InputNumber
+                            style={{ width: 150 }}
+                            prefix="£"
+                            precision={2}
+                            min={0}
+                          />
+                        </Form.Item>
+                      </Col>
+                      <Col>
+                        <Form.Item
+                          // eslint-disable-next-line
+                          {...restField}
+                          name={[name, 'recoveredValue']}
+                          label={index ? '' : 'Value Recovered'}
+                          rules={[
+                            {
+                              required: index === 0,
+                              message: 'Please enter a value',
+                            },
+                          ]}
+                          tooltip="The value of the goods that were recovered."
+                        >
+                          <InputNumber
+                            style={{ width: 150 }}
+                            prefix="£"
+                            precision={2}
+                            min={0}
+                          />
+                        </Form.Item>
+                      </Col>
+                      {fields.length > 1 && (
+                        <Col>
+                          <Button
+                            style={{ marginTop: index === 0 ? 30 : 0 }}
+                            size="small"
+                            onClick={() => remove(name)}
+                          >
+                            <FontAwesomeIcon size="lg" icon={faTrash} />
+                          </Button>
+                        </Col>
+                      )}
+                    </Row>
+                  ))}
+                  <Form.Item>
+                    <Row justify="center">
+                      <Col>
+                        <Button
+                          onClick={() =>
+                            add({
+                              recoveredValue: 0,
+                            })
+                          }
+                          block
+                          icon={
+                            <FontAwesomeIcon
+                              style={{ marginRight: 8 }}
+                              icon={faPlus}
+                            />
+                          }
+                        >
+                          Add Item
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Form.Item>
+                </>
+              )}
+            </Form.List>
+          </Card>
+        )}
         <Card style={{ marginBottom: 10 }}>
           <Row align="bottom" style={{ marginBottom: 20 }}>
             <Col>
               <Title style={{ marginBottom: 0 }} level={4}>
                 3.
-              </Title>
-            </Col>
-            <Col>
-              <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
-                What goods were involved?
-              </Title>
-            </Col>
-          </Row>
-          <Form.List
-            name="goods"
-            rules={[
-              {
-                validator: async (rule, value) => {
-                  if (value.length === 0) throw new Error('Something wrong!');
-                },
-              },
-            ]}
-          >
-            {(fields, { add, remove }) => (
-              <>
-                {fields.map(({ key, name, ...restField }, index) => (
-                  <Row key={key} gutter={8}>
-                    <Col>
-                      <Form.Item
-                        // eslint-disable-next-line
-                        {...restField}
-                        label={index ? '' : 'Type of Goods'}
-                        name={[name, 'goodsType']}
-                        rules={[
-                          {
-                            required: index === 0,
-                            message: 'Please enter a type',
-                          },
-                        ]}
-                      >
-                        <Select
-                          placeholder="Select goods..."
-                          style={{ width: 300 }}
-                          allowClear
-                          options={goodsTypesData?.listGoodsTypes.goodsTypes.map(
-                            (goodsType) => ({
-                              value: goodsType.id,
-                              label: goodsType.name,
-                            })
-                          )}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col>
-                      <Form.Item
-                        // eslint-disable-next-line
-                        {...restField}
-                        name={[name, 'value']}
-                        label={index ? '' : 'Value'}
-                        rules={[
-                          {
-                            required: index === 0,
-                            message: 'Please enter a value',
-                          },
-                        ]}
-                        tooltip="The value of the goods involved in the incident, both lost and recovered."
-                      >
-                        <InputNumber
-                          style={{ width: 150 }}
-                          prefix="£"
-                          precision={2}
-                          min={0}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col>
-                      <Form.Item
-                        // eslint-disable-next-line
-                        {...restField}
-                        name={[name, 'recoveredValue']}
-                        label={index ? '' : 'Value Recovered'}
-                        rules={[
-                          {
-                            required: index === 0,
-                            message: 'Please enter a value',
-                          },
-                        ]}
-                        tooltip="The value of the goods that were recovered."
-                      >
-                        <InputNumber
-                          style={{ width: 150 }}
-                          prefix="£"
-                          precision={2}
-                          min={0}
-                        />
-                      </Form.Item>
-                    </Col>
-                    {fields.length > 1 && (
-                      <Col>
-                        <Button
-                          style={{ marginTop: index === 0 ? 30 : 0 }}
-                          size="small"
-                          onClick={() => remove(name)}
-                        >
-                          <FontAwesomeIcon size="lg" icon={faTrash} />
-                        </Button>
-                      </Col>
-                    )}
-                  </Row>
-                ))}
-                <Form.Item>
-                  <Row justify="center">
-                    <Col>
-                      <Button
-                        onClick={() =>
-                          add({
-                            recoveredValue: 0,
-                          })
-                        }
-                        block
-                        icon={
-                          <FontAwesomeIcon
-                            style={{ marginRight: 8 }}
-                            icon={faPlus}
-                          />
-                        }
-                      >
-                        Add Item
-                      </Button>
-                    </Col>
-                  </Row>
-                </Form.Item>
-              </>
-            )}
-          </Form.List>
-        </Card>
-        <Card style={{ marginBottom: 10 }}>
-          <Row align="bottom" style={{ marginBottom: 20 }}>
-            <Col>
-              <Title style={{ marginBottom: 0 }} level={4}>
-                6.
               </Title>
             </Col>
             <Col>
@@ -472,19 +487,31 @@ const EditIncident = ({
             <Col>
               <Form.Item
                 name="policeReported"
-                valuePropName="checked"
                 tooltip="The incident has been reported to the police"
-                label="Police Involvement"
-                style={{ marginBottom: 0 }}
+                label="Was this incident reported to the police?"
               >
-                <Checkbox disabled={saving}>Reported to the police</Checkbox>
+                <Radio.Group
+                  options={[
+                    { label: 'Yes', value: true },
+                    { label: 'No', value: false },
+                  ]}
+                  optionType="button"
+                  disabled={saving}
+                />
               </Form.Item>
               <Form.Item
                 name="policeInvolved"
-                valuePropName="checked"
                 tooltip="The police have been involved in the incident."
+                label="Were the police involved in this incident?"
               >
-                <Checkbox disabled={saving}>Police Involved</Checkbox>
+                <Radio.Group
+                  options={[
+                    { label: 'Yes', value: true },
+                    { label: 'No', value: false },
+                  ]}
+                  optionType="button"
+                  disabled={saving}
+                />
               </Form.Item>
             </Col>
 
@@ -512,7 +539,7 @@ const EditIncident = ({
             saving={saving}
             searchOffenders={searchOffenders}
             setSearchOffenders={setSearchOffenders}
-            titleOrder={3}
+            titleOrder={4}
             updateCrimeGroupsData={updateCrimeGroupsData}
             updateOffender={updateOffender}
             updateOffendersData={updateOffendersData}
@@ -522,7 +549,7 @@ const EditIncident = ({
         </Card>
         <Card style={{ marginBottom: 10 }}>
           <ImageSection
-            titleOrder={4}
+            titleOrder={5}
             imgChange={imgChange}
             fileList={fileList}
             beforeUpload={beforeUpload}
@@ -537,7 +564,7 @@ const EditIncident = ({
           <Row align="bottom" style={{ marginBottom: 20 }}>
             <Col>
               <Title style={{ marginBottom: 0 }} level={4}>
-                5.
+                6.
               </Title>
             </Col>
             <Col>

@@ -5,14 +5,15 @@ const { Title, Paragraph } = Typography;
 
 interface Props {
   saving: boolean;
+  number: number;
 }
 
-const IncidentDetails = ({ saving }: Props): JSX.Element => (
+const IncidentDetails = ({ saving, number }: Props): JSX.Element => (
   <>
     <Row align="bottom" style={{ marginBottom: 20 }}>
       <Col>
         <Title style={{ marginBottom: 0 }} level={4}>
-          6.
+          {number}.
         </Title>
       </Col>
       <Col>

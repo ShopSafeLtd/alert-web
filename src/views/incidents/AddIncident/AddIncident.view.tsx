@@ -175,6 +175,7 @@ const EditIncident = ({
   vehiclesData,
 }: Props): JSX.Element => {
   const classes = useStyles();
+
   return (
     <div className="page-view">
       <PageHeader onBack={() => window.history.back()} title="Add Incident" />
@@ -488,7 +489,7 @@ const EditIncident = ({
               saving={saving}
               searchOffenders={searchOffenders}
               setSearchOffenders={setSearchOffenders}
-              titleOrder={4}
+              titleOrder={isTheft ? 4 : 3}
               updateCrimeGroupsData={updateCrimeGroupsData}
               updateOffender={updateOffender}
               updateOffendersData={updateOffendersData}
@@ -502,7 +503,7 @@ const EditIncident = ({
         <Card className={classes.card} style={{ opacity: 0.7 }}>
           {!formStages.images && <div className={classes.cardOverlay} />}
           <ImageSection
-            titleOrder={5}
+            titleOrder={isTheft ? 5 : 4}
             imgChange={imgChange}
             fileList={fileList}
             beforeUpload={beforeUpload}
@@ -519,7 +520,7 @@ const EditIncident = ({
           <Row align="bottom" style={{ marginBottom: 20 }}>
             <Col>
               <Title style={{ marginBottom: 0 }} level={4}>
-                6.
+                {isTheft ? 6 : 5}.
               </Title>
             </Col>
             <Col>
@@ -549,7 +550,7 @@ const EditIncident = ({
                 name="policeInvolved"
                 valuePropName="checked"
                 tooltip="The police have been involved in the incident."
-                label="Where the police involved in this incident?"
+                label="Were the police involved in this incident?"
               >
                 <Radio.Group
                   options={[
@@ -577,7 +578,7 @@ const EditIncident = ({
         {/* Details */}
         <Card className={classes.card} style={{ opacity: 0.7 }}>
           {!formStages.details && <div className={classes.cardOverlay} />}
-          <IncidentDetails saving={saving} />
+          <IncidentDetails number={isTheft ? 7 : 6} saving={saving} />
         </Card>
 
         {/* Groups */}
@@ -588,7 +589,7 @@ const EditIncident = ({
               <Row align="bottom" style={{ marginBottom: 20 }}>
                 <Col>
                   <Title style={{ marginBottom: 0 }} level={4}>
-                    8.
+                    {isTheft ? 8 : 7}.
                   </Title>
                 </Col>
                 <Col>
