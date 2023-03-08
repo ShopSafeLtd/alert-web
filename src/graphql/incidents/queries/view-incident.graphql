@@ -52,6 +52,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     crimeGroups {
       id
       reference
+      alias
       totalIncidents
       totalOffenders
       totalRecoveredValue

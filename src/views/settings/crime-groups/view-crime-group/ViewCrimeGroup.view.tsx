@@ -72,7 +72,7 @@ const ViewCrimeGroup = ({
     <div className={classes.page}>
       <PageHeader
         onBack={() => window.history.back()}
-        title={`Reference: ${
+        title={`Alert ID: ${
           data?.crimeGroup?.reference ? data?.crimeGroup?.reference : ''
         }`}
         subTitle={`-- ${data?.crimeGroup?.alias}`}
@@ -230,7 +230,7 @@ const ViewCrimeGroup = ({
             {
               key: 'reference',
               dataIndex: 'reference',
-              title: 'Reference',
+              title: 'Alert ID',
             },
             {
               key: 'name',
@@ -262,7 +262,7 @@ const ViewCrimeGroup = ({
             {
               key: 'reference',
               dataIndex: 'reference',
-              title: 'Reference',
+              title: 'Alert ID',
             },
             {
               key: 'policeRef',

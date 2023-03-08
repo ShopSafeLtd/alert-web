@@ -590,7 +590,12 @@ const ViewIncident = ({
                               {
                                 key: 'reference',
                                 dataIndex: 'reference',
-                                title: 'Reference',
+                                title: 'Alert ID',
+                              },
+                              {
+                                key: 'alias',
+                                dataIndex: 'alias',
+                                title: 'Alias',
                               },
                               {
                                 key: 'totalOffenders',
@@ -643,6 +648,7 @@ const ViewIncident = ({
                               (crimeGroup) => ({
                                 key: crimeGroup.id,
                                 reference: crimeGroup.reference,
+                                aslias: crimeGroup.aslias,
                                 totalOffenders: crimeGroup.totalOffenders,
                                 totalIncidents: crimeGroup.totalIncidents,
                                 totalValue: crimeGroup.totalValue,

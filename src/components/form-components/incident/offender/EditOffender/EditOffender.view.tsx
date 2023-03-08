@@ -291,7 +291,7 @@ const EditOffender = ({
                 label="Do you know the offender's date of birth?"
               >
                 <Switch
-                  style={{ width: 70, height: 30, marginLeft: 10 }}
+                  style={{ width: 70, marginLeft: 10 }}
                   checked={ageCheck}
                   checkedChildren="Yes"
                   unCheckedChildren="No"

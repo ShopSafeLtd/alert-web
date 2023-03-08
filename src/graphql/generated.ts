@@ -33970,6 +33970,7 @@ export type ViewIncidentQuery = {
       __typename?: 'CrimeGroup';
       id: string;
       reference?: number | null;
+      alias?: string | null;
       totalIncidents?: number | null;
       totalOffenders?: number | null;
       totalRecoveredValue?: number | null;
@@ -35277,6 +35278,7 @@ export type ViewOffenderQuery = {
       __typename?: 'CrimeGroup';
       id: string;
       reference?: number | null;
+      alias?: string | null;
       totalIncidents?: number | null;
       totalOffenders?: number | null;
       totalRecoveredValue?: number | null;
@@ -41278,6 +41280,7 @@ export const ViewIncidentDocument = gql`
       crimeGroups {
         id
         reference
+        alias
         totalIncidents
         totalOffenders
         totalRecoveredValue
@@ -43623,6 +43626,7 @@ export const ViewOffenderDocument = gql`
       crimeGroups {
         id
         reference
+        alias
         totalIncidents
         totalOffenders
         totalRecoveredValue

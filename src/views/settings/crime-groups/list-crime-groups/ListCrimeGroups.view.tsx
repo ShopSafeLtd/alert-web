@@ -42,7 +42,7 @@ const ListCrimeGroups = ({ data, loading }: Props) => {
           {
             key: 'reference',
             dataIndex: 'reference',
-            title: 'Reference',
+            title: 'Alert ID',
             render: (value, item) => (
               <Link to={`view/${item.key}`}>CG-{value}</Link>
             ),

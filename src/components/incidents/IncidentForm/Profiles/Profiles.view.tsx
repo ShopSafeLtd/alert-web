@@ -352,7 +352,7 @@ const Profiles = ({
                       render: (_, record) => (
                         <Button
                           onClick={() => setEditOffenderId(record.key)}
-                          disabled={saving}
+                          disabled
                           icon={<FontAwesomeIcon icon={faEdit} />}
                         />
                       ),
@@ -404,7 +404,12 @@ const Profiles = ({
                     {
                       key: 'reference',
                       dataIndex: 'reference',
-                      title: 'Reference',
+                      title: 'Alert ID',
+                    },
+                    {
+                      key: 'alias',
+                      dataIndex: 'alias',
+                      title: 'Alias',
                     },
                     {
                       key: 'totalOffenders',
@@ -442,7 +447,7 @@ const Profiles = ({
                       render: (_, record) => (
                         <Button
                           onClick={() => setEditVehicleId(record.key)}
-                          disabled={saving}
+                          disabled
                           icon={<FontAwesomeIcon icon={faEdit} />}
                         />
                       ),
@@ -474,6 +479,7 @@ const Profiles = ({
                   dataSource={crimeGroupsData.map((crimeGroup) => ({
                     key: crimeGroup.id,
                     reference: crimeGroup.reference,
+                    alias: crimeGroup.alias,
                     totalOffenders: crimeGroup.totalOffenders,
                     totalIncidents: crimeGroup.totalIncidents,
                     totalValue: crimeGroup.totalValue,
@@ -490,6 +496,11 @@ const Profiles = ({
                 <Table
                   columns={[
                     {
+                      key: 'registration',
+                      dataIndex: 'registration',
+                      title: 'Registration',
+                    },
+                    {
                       key: 'make',
                       dataIndex: 'make',
                       title: 'Make',
@@ -505,26 +516,6 @@ const Profiles = ({
                       title: 'Model',
                     },
                     {
-                      key: 'registration',
-                      dataIndex: 'registration',
-                      title: 'Registration',
-                    },
-                    {
-                      key: 'totalOffenders',
-                      dataIndex: 'totalOffenders',
-                      title: 'Members',
-                    },
-                    {
-                      key: 'totalIncidents',
-                      dataIndex: 'totalIncidents',
-                      title: 'Incidents',
-                    },
-                    {
-                      key: 'totalCrimeGroups',
-                      dataIndex: 'totalCrimeGroups',
-                      title: 'Crime Groups',
-                    },
-                    {
                       key: 'edit',
                       title: 'Edit',
                       dataIndex: '',
@@ -532,7 +523,7 @@ const Profiles = ({
                       render: (_, record) => (
                         <Button
                           onClick={() => setEditVehicleId(record.key)}
-                          disabled={saving}
+                          disabled
                           icon={<FontAwesomeIcon icon={faEdit} />}
                         />
                       ),

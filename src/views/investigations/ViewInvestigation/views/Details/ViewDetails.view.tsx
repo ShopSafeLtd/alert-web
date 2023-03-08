@@ -146,7 +146,7 @@ const ViewInvestigation = ({
                   {
                     key: 'reference',
                     dataIndex: 'reference',
-                    title: 'Reference',
+                    title: 'Alert ID',
                   },
                   {
                     key: 'name',
@@ -181,7 +181,7 @@ const ViewInvestigation = ({
                   {
                     key: 'reference',
                     dataIndex: 'reference',
-                    title: 'Reference',
+                    title: 'Alert ID',
                   },
                   {
                     key: 'policeRef',

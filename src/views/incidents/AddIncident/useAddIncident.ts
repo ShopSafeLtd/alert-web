@@ -429,6 +429,22 @@ const useEditIncident = (): Return => {
 
   const updateOffendersData = (offender: OffenderData) => {
     setOffendersData([...offendersData, offender]);
+    if (offender.id.length === 3 && offender.images) {
+      setFileList([
+        ...fileList,
+        ...offender.images.map(
+          (image): Image => ({
+            ...image,
+            uid: image.id,
+            name: image.fileName || '',
+            fileName: image.fileName || '',
+            url: image.url || '',
+            type: image.type || '',
+            offenders: [offender],
+          })
+        ),
+      ]);
+    }
   };
 
   const updateOffender = (offender: OffenderData) => {
@@ -436,6 +452,7 @@ const useEditIncident = (): Return => {
   };
 
   const updateVehiclesData = (vehicle: VehicleData) => {
+    console.log(vehicle);
     const editedData = vehiclesData.find(({ id }) => id === vehicle.id);
     if (editedData) {
       setVehiclesData([

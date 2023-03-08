@@ -45,7 +45,12 @@ Props): JSX.Element => (
         {
           key: 'reference',
           dataIndex: 'reference',
-          title: 'Reference',
+          title: 'Alert ID',
+        },
+        {
+          key: 'alias',
+          dataIndex: 'alias',
+          title: 'Alias',
         },
         {
           key: 'totalOffenders',
@@ -79,6 +84,7 @@ Props): JSX.Element => (
       dataSource={data?.listCrimeGroups?.crimeGroups.map((crimeGroup) => ({
         key: crimeGroup.id,
         reference: crimeGroup.reference,
+        alias: crimeGroup.alias,
         totalOffenders: crimeGroup.totalOffenders,
         totalIncidents: crimeGroup.totalIncidents,
         totalValue: crimeGroup.totalValue,

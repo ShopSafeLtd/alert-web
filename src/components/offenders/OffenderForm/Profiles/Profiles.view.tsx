@@ -164,7 +164,12 @@ const Profiles = ({
                     {
                       key: 'reference',
                       dataIndex: 'reference',
-                      title: 'Reference',
+                      title: 'Alert ID',
+                    },
+                    {
+                      key: 'alias',
+                      dataIndex: 'alias',
+                      title: 'Alias',
                     },
                     {
                       key: 'totalOffenders',
@@ -234,6 +239,7 @@ const Profiles = ({
                   dataSource={crimeGroupsData.map((crimeGroup) => ({
                     key: crimeGroup.id,
                     reference: crimeGroup.reference,
+                    alias: crimeGroup.alias,
                     totalOffenders: crimeGroup.totalOffenders,
                     totalIncidents: crimeGroup.totalIncidents,
                     totalValue: crimeGroup.totalValue,

@@ -321,7 +321,7 @@ const EditIncident = ({
         {isTheft && (
           <Card
             className={classes.card}
-            style={{ opacity: formStages.where ? 1 : 0.7 }}
+            style={{ opacity: formStages.goods ? 1 : 0.7 }}
           >
             {!formStages.goods && <div className={classes.cardOverlay} />}
             <Row align="bottom" style={{ marginBottom: 20 }}>
@@ -473,7 +473,7 @@ const EditIncident = ({
         {/* Profiles */}
         <Card
           className={classes.card}
-          style={{ opacity: formStages.where ? 1 : 0.7 }}
+          style={{ opacity: formStages.profiles ? 1 : 0.7 }}
         >
           {!formStages.profiles && <div className={classes.cardOverlay} />}
           <Form.Item name="profiles">
@@ -500,7 +500,10 @@ const EditIncident = ({
         </Card>
 
         {/* Images */}
-        <Card className={classes.card} style={{ opacity: 0.7 }}>
+        <Card
+          className={classes.card}
+          style={{ opacity: formStages.images ? 1 : 0.7 }}
+        >
           {!formStages.images && <div className={classes.cardOverlay} />}
           <ImageSection
             titleOrder={isTheft ? 5 : 4}
@@ -515,7 +518,10 @@ const EditIncident = ({
         </Card>
 
         {/* Police */}
-        <Card className={classes.card} style={{ opacity: 0.7 }}>
+        <Card
+          className={classes.card}
+          style={{ opacity: formStages.police ? 1 : 0.7 }}
+        >
           {!formStages.police && <div className={classes.cardOverlay} />}
           <Row align="bottom" style={{ marginBottom: 20 }}>
             <Col>
@@ -576,14 +582,20 @@ const EditIncident = ({
         </Card>
 
         {/* Details */}
-        <Card className={classes.card} style={{ opacity: 0.7 }}>
+        <Card
+          className={classes.card}
+          style={{ opacity: formStages.details ? 1 : 0.7 }}
+        >
           {!formStages.details && <div className={classes.cardOverlay} />}
           <IncidentDetails number={isTheft ? 7 : 6} saving={saving} />
         </Card>
 
         {/* Groups */}
         {groups.length > 1 && (
-          <Card className={classes.card} style={{ opacity: 0.7 }}>
+          <Card
+            className={classes.card}
+            style={{ opacity: formStages.groups ? 1 : 0.7 }}
+          >
             {!formStages.groups && <div className={classes.cardOverlay} />}
             <>
               <Row align="bottom" style={{ marginBottom: 20 }}>

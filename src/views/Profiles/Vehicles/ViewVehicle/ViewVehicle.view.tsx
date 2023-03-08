@@ -161,7 +161,7 @@ const ViewVehicle = ({
             {
               key: 'reference',
               dataIndex: 'reference',
-              title: 'Reference',
+              title: 'Alert ID',
             },
             {
               key: 'name',
@@ -193,7 +193,7 @@ const ViewVehicle = ({
             {
               key: 'reference',
               dataIndex: 'reference',
-              title: 'Reference',
+              title: 'Alert ID',
             },
             {
               key: 'policeRef',
