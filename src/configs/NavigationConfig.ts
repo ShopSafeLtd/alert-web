@@ -1,5 +1,4 @@
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
-import { Roles } from 'types';
 import {
   faCircleExclamation,
   faClipboard,
@@ -22,6 +21,7 @@ import {
   faCar,
   faBuilding,
 } from '@fortawesome/pro-light-svg-icons';
+import { Role } from 'graphql/generated';
 
 export interface MenuItem {
   key: string;
@@ -29,7 +29,7 @@ export interface MenuItem {
   title: string;
   icon?: any;
   breadcrumb: boolean;
-  roles?: Roles[];
+  roles?: Role[];
 }
 
 export interface SubMenuItem extends MenuItem {
@@ -58,6 +58,7 @@ const userOnlyItems: NavItem[] = [
     icon: faHome,
     breadcrumb: false,
     submenu: [],
+    roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
   },
   {
     key: 'incidents',
@@ -66,6 +67,7 @@ const userOnlyItems: NavItem[] = [
     icon: faExclamationCircle,
     breadcrumb: true,
     submenu: [],
+    roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
   },
   {
     key: 'investigations',
@@ -74,6 +76,7 @@ const userOnlyItems: NavItem[] = [
     icon: faClipboard,
     breadcrumb: true,
     submenu: [],
+    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
   },
   {
     key: 'profiles',
@@ -81,6 +84,7 @@ const userOnlyItems: NavItem[] = [
     title: 'sidenav.profiles',
     icon: faAddressCard,
     breadcrumb: true,
+    roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
     submenu: [
       {
         key: 'offenders',
@@ -89,6 +93,12 @@ const userOnlyItems: NavItem[] = [
         icon: faUsers,
         breadcrumb: true,
         submenu: [],
+        roles: [
+          Role.User,
+          Role.ContentAdmin,
+          Role.SchemeAdmin,
+          Role.ShopsafeAdmin,
+        ],
       },
       {
         key: 'crime-groups',
@@ -97,6 +107,12 @@ const userOnlyItems: NavItem[] = [
         icon: faPeopleGroup,
         breadcrumb: true,
         submenu: [],
+        roles: [
+          Role.User,
+          Role.ContentAdmin,
+          Role.SchemeAdmin,
+          Role.ShopsafeAdmin,
+        ],
       },
       {
         key: 'vehicles',
@@ -105,6 +121,12 @@ const userOnlyItems: NavItem[] = [
         icon: faCar,
         breadcrumb: true,
         submenu: [],
+        roles: [
+          Role.User,
+          Role.ContentAdmin,
+          Role.SchemeAdmin,
+          Role.ShopsafeAdmin,
+        ],
       },
     ],
   },
@@ -115,6 +137,7 @@ const userOnlyItems: NavItem[] = [
     icon: faComments,
     breadcrumb: true,
     submenu: [],
+    roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
   },
 ];
 
@@ -125,6 +148,7 @@ const adminOnlyItems: NavItem[] = [
     title: 'sidenav.settings',
     icon: faCog,
     breadcrumb: true,
+    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
     submenu: [
       {
         key: 'users',
@@ -206,6 +230,7 @@ const adminOnlyItems: NavItem[] = [
     title: 'sidenav.reports',
     icon: faLineChart,
     breadcrumb: true,
+    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
     submenu: [
       {
         key: 'performance',

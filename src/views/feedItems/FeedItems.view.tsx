@@ -123,14 +123,19 @@ Props): JSX.Element => (
             </Button>
           </Link>
         </Col>
-        <Col>
-          <Link to="/app/article ">
-            <Button size="small" type="primary">
-              <FontAwesomeIcon icon={faNewspaper} style={{ marginRight: 10 }} />
-              Add Bulletin
-            </Button>
-          </Link>
-        </Col>
+        {adminRights && (
+          <Col>
+            <Link to="/app/article ">
+              <Button size="small" type="primary">
+                <FontAwesomeIcon
+                  icon={faNewspaper}
+                  style={{ marginRight: 10 }}
+                />
+                Add Bulletin
+              </Button>
+            </Link>
+          </Col>
+        )}
       </Row>
     </Card>
     <Row gutter={10}>
@@ -399,113 +404,115 @@ Props): JSX.Element => (
               </Row>
             </Card>
           </Col>
-          <Col span={12} xxl={8} xl={12}>
-            <Card
-              bodyStyle={{
-                paddingRight: 0,
-                paddingLeft: 0,
-                paddingTop: 15,
-                overflow: 'auto',
-                height: 'calc(100vh - 300px)',
-              }}
-            >
-              <Title
-                style={{
-                  marginRight: 20,
-                  marginLeft: 20,
-                  marginBottom: 10,
-                  fontSize: 16,
+          {adminRights && (
+            <Col span={12} xxl={8} xl={12}>
+              <Card
+                bodyStyle={{
+                  paddingRight: 0,
+                  paddingLeft: 0,
+                  paddingTop: 15,
+                  overflow: 'auto',
+                  height: 'calc(100vh - 300px)',
                 }}
-                level={4}
               >
-                Awaiting Approval
-              </Title>
-              {unapprovedIncidentsLoading ? (
-                <div />
-              ) : (
-                <div
+                <Title
                   style={{
-                    display: 'flex',
-                    width: '100%',
-                    flexDirection: 'column',
-                    height: '100%',
+                    marginRight: 20,
+                    marginLeft: 20,
+                    marginBottom: 10,
+                    fontSize: 16,
                   }}
+                  level={4}
                 >
-                  <Divider style={{ marginTop: 0, marginBottom: 0 }} />
-                  {unapprovedIncidents?.listIncidents?.incidents.map(
-                    (incident) => (
-                      <Link
-                        to={`/app/incidents/review/${incident.id}`}
-                        key={incident.id}
-                      >
-                        <div style={{ padding: '10px 20px' }}>
-                          <div style={{ marginBottom: 10 }}>
-                            <Text style={{ fontSize: 14 }} strong>
-                              Incident submitted{' '}
-                              {moment(incident.date).fromNow()} by{' '}
-                              {incident.createdBy.fullName}.
-                            </Text>
-                          </div>
-                          <Row wrap={false} style={{ marginTop: 10 }}>
-                            {incident.images.length > 0 && (
-                              <Col style={{ marginRight: 10 }}>
-                                <div
-                                  style={{
-                                    width: 80,
-                                    height: 80,
-                                    backgroundImage: `url(${incident.images[0]?.optimised})`,
-                                    backgroundPosition: 'center',
-                                    backgroundRepeat: 'no-repeat',
-                                    backgroundSize: 'cover',
-                                    borderRadius: 5,
-                                  }}
-                                />
+                  Awaiting Approval
+                </Title>
+                {unapprovedIncidentsLoading ? (
+                  <div />
+                ) : (
+                  <div
+                    style={{
+                      display: 'flex',
+                      width: '100%',
+                      flexDirection: 'column',
+                      height: '100%',
+                    }}
+                  >
+                    <Divider style={{ marginTop: 0, marginBottom: 0 }} />
+                    {unapprovedIncidents?.listIncidents?.incidents.map(
+                      (incident) => (
+                        <Link
+                          to={`/app/incidents/review/${incident.id}`}
+                          key={incident.id}
+                        >
+                          <div style={{ padding: '10px 20px' }}>
+                            <div style={{ marginBottom: 10 }}>
+                              <Text style={{ fontSize: 14 }} strong>
+                                Incident submitted{' '}
+                                {moment(incident.date).fromNow()} by{' '}
+                                {incident.createdBy.fullName}.
+                              </Text>
+                            </div>
+                            <Row wrap={false} style={{ marginTop: 10 }}>
+                              {incident.images.length > 0 && (
+                                <Col style={{ marginRight: 10 }}>
+                                  <div
+                                    style={{
+                                      width: 80,
+                                      height: 80,
+                                      backgroundImage: `url(${incident.images[0]?.optimised})`,
+                                      backgroundPosition: 'center',
+                                      backgroundRepeat: 'no-repeat',
+                                      backgroundSize: 'cover',
+                                      borderRadius: 5,
+                                    }}
+                                  />
+                                </Col>
+                              )}
+                              <Col>
+                                <div>
+                                  <Title
+                                    level={4}
+                                    style={{ fontSize: 16, marginBottom: 2 }}
+                                    ellipsis
+                                  >
+                                    {incident.subject}
+                                  </Title>
+                                  <div>
+                                    <Text style={{ fontSize: 14 }}>
+                                      Created At: {incident.dayTime}
+                                    </Text>
+                                  </div>
+                                  <div>
+                                    <Text style={{ fontSize: 14 }}>
+                                      Business: {incident.business?.name}
+                                    </Text>
+                                  </div>
+                                </div>
                               </Col>
-                            )}
-                            <Col>
-                              <div>
-                                <Title
-                                  level={4}
-                                  style={{ fontSize: 16, marginBottom: 2 }}
-                                  ellipsis
-                                >
-                                  {incident.subject}
-                                </Title>
-                                <div>
-                                  <Text style={{ fontSize: 14 }}>
-                                    Created At: {incident.dayTime}
-                                  </Text>
-                                </div>
-                                <div>
-                                  <Text style={{ fontSize: 14 }}>
-                                    Business: {incident.business?.name}
-                                  </Text>
-                                </div>
-                              </div>
-                            </Col>
-                          </Row>
-                        </div>
-                        <Divider style={{ marginTop: 0, marginBottom: 0 }} />
-                      </Link>
-                    )
-                  )}
-                  {unapprovedIncidents?.listIncidents?.incidents.length ===
-                    0 && (
-                    <div
-                      style={{
-                        display: 'flex',
-                        flex: 1,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <Empty description="Nothing to approve" />
-                    </div>
-                  )}
-                </div>
-              )}
-            </Card>
-          </Col>
+                            </Row>
+                          </div>
+                          <Divider style={{ marginTop: 0, marginBottom: 0 }} />
+                        </Link>
+                      )
+                    )}
+                    {unapprovedIncidents?.listIncidents?.incidents.length ===
+                      0 && (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flex: 1,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Empty description="Nothing to approve" />
+                      </div>
+                    )}
+                  </div>
+                )}
+              </Card>
+            </Col>
+          )}
         </Row>
       </Col>
     </Row>

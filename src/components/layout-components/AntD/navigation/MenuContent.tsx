@@ -70,10 +70,9 @@ const SideNavContent = (props: SideNavContentProps) => {
   };
 
   const userRole = useStoreState((state) => state.user.role);
-  const navigationConfig =
-    userRole === 'SCHEME_ADMIN'
-      ? navConfig
-      : navConfig.filter((el) => el.title !== 'sidenav.scheme');
+  const navigationConfig = navConfig.filter((el) =>
+    el.roles?.includes(userRole)
+  );
 
   return (
     <div
