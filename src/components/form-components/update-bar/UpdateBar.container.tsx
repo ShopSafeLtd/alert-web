@@ -11,6 +11,7 @@ interface Props {
   } | null;
   incidentId?: string;
   offenderId?: string;
+  investigationId?: string;
   setReplyTo: (
     value: {
       id: string;
@@ -26,6 +27,7 @@ const UpdateBar = ({
   replyTo,
   offenderId,
   incidentId,
+  investigationId,
   setReplyTo,
   subscribed,
 }: Props) => {
@@ -59,6 +61,7 @@ const UpdateBar = ({
     setReplyTo,
     subscribed,
     offenderId,
+    investigationId,
   });
 
   return (

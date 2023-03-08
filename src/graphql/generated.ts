@@ -32741,7 +32741,18 @@ export type CrimeGroupQuery = {
         optimised?: string | null;
       }>;
     }>;
-    vehicles: Array<{ __typename?: 'Vehicle'; id: string }>;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      id: string;
+      make?: string | null;
+      model?: string | null;
+      updatedAt: any;
+      colour?: string | null;
+      registration?: string | null;
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      totalCrimeGroups?: number | null;
+    }>;
     incidents?: Array<{
       __typename?: 'Incident';
       id: string;
@@ -33776,6 +33787,32 @@ export type CreateInvestigationMutation = {
   } | null;
 };
 
+export type SubscribeToInvestigationMutationVariables = Exact<{
+  where: UniqueId;
+}>;
+
+export type SubscribeToInvestigationMutation = {
+  __typename?: 'Mutation';
+  subscribeToInvestigation?: {
+    __typename?: 'Investigation';
+    id: string;
+    subscribed?: boolean | null;
+  } | null;
+};
+
+export type UnsubscribeToInvestigationMutationVariables = Exact<{
+  where: UniqueId;
+}>;
+
+export type UnsubscribeToInvestigationMutation = {
+  __typename?: 'Mutation';
+  unsubscribeToInvestigation?: {
+    __typename?: 'Investigation';
+    id: string;
+    subscribed?: boolean | null;
+  } | null;
+};
+
 export type UpdateFlowMutationVariables = Exact<{
   data: UpdateFlowData;
   where: UniqueId;
@@ -33922,7 +33959,16 @@ export type ViewInvestigationQuery = {
     id: string;
     description?: string | null;
     name: string;
+    subscribed?: boolean | null;
     createdBy: { __typename?: 'User'; id: string; fullName: string };
+    documents: Array<{
+      __typename?: 'Document';
+      id: string;
+      name: string;
+      url: string;
+      thumbnailUrl?: string | null;
+      tags: Array<{ __typename?: 'Tag'; name: string; id: string }>;
+    }>;
     vehicles: Array<{
       __typename?: 'Vehicle';
       id: string;
@@ -33934,6 +33980,114 @@ export type ViewInvestigationQuery = {
       totalCrimeGroups?: number | null;
       totalOffenders?: number | null;
       totalIncidents?: number | null;
+    }>;
+    updates: Array<{
+      __typename?: 'Update';
+      id: string;
+      text?: string | null;
+      type: UpdateType;
+      createdAt: any;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+      }>;
+      linkedIncidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      linkedOffenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        updatedAt: any;
+        age?: Age | null;
+        build?: Build | null;
+        dateOfBirth?: any | null;
+        name?: string | null;
+        race?: Race | null;
+        gender?: Gender | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
+      replies: Array<{
+        __typename?: 'Update';
+        id: string;
+        text?: string | null;
+        type: UpdateType;
+        createdAt: any;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          card?: string | null;
+        }>;
+        linkedIncidents: Array<{
+          __typename?: 'Incident';
+          id: string;
+          subject?: string | null;
+          description: string;
+          dayTime?: string | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+        }>;
+        linkedOffenders: Array<{
+          __typename?: 'Offender';
+          id: string;
+          updatedAt: any;
+          age?: Age | null;
+          build?: Build | null;
+          dateOfBirth?: any | null;
+          name?: string | null;
+          race?: Race | null;
+          gender?: Gender | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+        }>;
+        createdBy: {
+          __typename?: 'User';
+          id: string;
+          fullName: string;
+          businesses: Array<{
+            __typename?: 'Business';
+            id: string;
+            name: string;
+          }>;
+        };
+      }>;
     }>;
     offenders: Array<{
       __typename?: 'Offender';
@@ -35369,6 +35523,119 @@ export type CreateUpdateOnIncidentMutationVariables = Exact<{
 export type CreateUpdateOnIncidentMutation = {
   __typename?: 'Mutation';
   createUpdateOnIncident?: {
+    __typename?: 'Update';
+    id: string;
+    text?: string | null;
+    type: UpdateType;
+    createdAt: any;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      card?: string | null;
+    }>;
+    linkedIncidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+      description: string;
+      dayTime?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
+    linkedOffenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      updatedAt: any;
+      age?: Age | null;
+      build?: Build | null;
+      dateOfBirth?: any | null;
+      name?: string | null;
+      race?: Race | null;
+      gender?: Gender | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+    };
+    replies: Array<{
+      __typename?: 'Update';
+      id: string;
+      text?: string | null;
+      type: UpdateType;
+      createdAt: any;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+      }>;
+      linkedIncidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      linkedOffenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        updatedAt: any;
+        age?: Age | null;
+        build?: Build | null;
+        dateOfBirth?: any | null;
+        name?: string | null;
+        race?: Race | null;
+        gender?: Gender | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
+    }>;
+  } | null;
+};
+
+export type CreateUpdateOnInvestigationMutationVariables = Exact<{
+  investigation: UniqueId;
+  data: CreateUpdateData;
+}>;
+
+export type CreateUpdateOnInvestigationMutation = {
+  __typename?: 'Mutation';
+  createUpdateOnInvestigation?: {
     __typename?: 'Update';
     id: string;
     text?: string | null;
@@ -38307,6 +38574,14 @@ export const CrimeGroupDocument = gql`
       }
       vehicles {
         id
+        make
+        model
+        updatedAt
+        colour
+        registration
+        totalOffenders
+        totalIncidents
+        totalCrimeGroups
       }
       incidents {
         id
@@ -40431,6 +40706,110 @@ export type CreateInvestigationMutationOptions = Apollo.BaseMutationOptions<
   CreateInvestigationMutation,
   CreateInvestigationMutationVariables
 >;
+export const SubscribeToInvestigationDocument = gql`
+  mutation SubscribeToInvestigation($where: UniqueId!) {
+    subscribeToInvestigation(where: $where) {
+      id
+      subscribed
+    }
+  }
+`;
+export type SubscribeToInvestigationMutationFn = Apollo.MutationFunction<
+  SubscribeToInvestigationMutation,
+  SubscribeToInvestigationMutationVariables
+>;
+
+/**
+ * __useSubscribeToInvestigationMutation__
+ *
+ * To run a mutation, you first call `useSubscribeToInvestigationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSubscribeToInvestigationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [subscribeToInvestigationMutation, { data, loading, error }] = useSubscribeToInvestigationMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useSubscribeToInvestigationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SubscribeToInvestigationMutation,
+    SubscribeToInvestigationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    SubscribeToInvestigationMutation,
+    SubscribeToInvestigationMutationVariables
+  >(SubscribeToInvestigationDocument, options);
+}
+export type SubscribeToInvestigationMutationHookResult = ReturnType<
+  typeof useSubscribeToInvestigationMutation
+>;
+export type SubscribeToInvestigationMutationResult =
+  Apollo.MutationResult<SubscribeToInvestigationMutation>;
+export type SubscribeToInvestigationMutationOptions =
+  Apollo.BaseMutationOptions<
+    SubscribeToInvestigationMutation,
+    SubscribeToInvestigationMutationVariables
+  >;
+export const UnsubscribeToInvestigationDocument = gql`
+  mutation UnsubscribeToInvestigation($where: UniqueId!) {
+    unsubscribeToInvestigation(where: $where) {
+      id
+      subscribed
+    }
+  }
+`;
+export type UnsubscribeToInvestigationMutationFn = Apollo.MutationFunction<
+  UnsubscribeToInvestigationMutation,
+  UnsubscribeToInvestigationMutationVariables
+>;
+
+/**
+ * __useUnsubscribeToInvestigationMutation__
+ *
+ * To run a mutation, you first call `useUnsubscribeToInvestigationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnsubscribeToInvestigationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unsubscribeToInvestigationMutation, { data, loading, error }] = useUnsubscribeToInvestigationMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUnsubscribeToInvestigationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UnsubscribeToInvestigationMutation,
+    UnsubscribeToInvestigationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UnsubscribeToInvestigationMutation,
+    UnsubscribeToInvestigationMutationVariables
+  >(UnsubscribeToInvestigationDocument, options);
+}
+export type UnsubscribeToInvestigationMutationHookResult = ReturnType<
+  typeof useUnsubscribeToInvestigationMutation
+>;
+export type UnsubscribeToInvestigationMutationResult =
+  Apollo.MutationResult<UnsubscribeToInvestigationMutation>;
+export type UnsubscribeToInvestigationMutationOptions =
+  Apollo.BaseMutationOptions<
+    UnsubscribeToInvestigationMutation,
+    UnsubscribeToInvestigationMutationVariables
+  >;
 export const UpdateFlowDocument = gql`
   mutation UpdateFlow($data: UpdateFlowData!, $where: UniqueId!) {
     updateFlow(data: $data, where: $where) {
@@ -40717,6 +41096,17 @@ export const ViewInvestigationDocument = gql`
         id
         fullName
       }
+      documents {
+        id
+        name
+        url
+        thumbnailUrl
+        tags {
+          name
+          id
+        }
+      }
+      subscribed
       vehicles {
         id
         make
@@ -40727,6 +41117,98 @@ export const ViewInvestigationDocument = gql`
         totalCrimeGroups
         totalOffenders
         totalIncidents
+      }
+      updates(orderBy: { createdAt: desc }) {
+        id
+        text
+        type
+        createdAt
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        linkedIncidents {
+          id
+          subject
+          description
+          dayTime
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        linkedOffenders {
+          id
+          updatedAt
+          age
+          build
+          dateOfBirth
+          name
+          race
+          gender
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+        replies {
+          id
+          text
+          type
+          createdAt
+          images {
+            id
+            url
+            optimised
+            card
+          }
+          linkedIncidents {
+            id
+            subject
+            description
+            dayTime
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          linkedOffenders {
+            id
+            updatedAt
+            age
+            build
+            dateOfBirth
+            name
+            race
+            gender
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          createdBy {
+            id
+            fullName
+            businesses {
+              id
+              name
+            }
+          }
+        }
       }
       offenders {
         id
@@ -43689,6 +44171,150 @@ export type CreateUpdateOnIncidentMutationOptions = Apollo.BaseMutationOptions<
   CreateUpdateOnIncidentMutation,
   CreateUpdateOnIncidentMutationVariables
 >;
+export const CreateUpdateOnInvestigationDocument = gql`
+  mutation CreateUpdateOnInvestigation(
+    $investigation: UniqueId!
+    $data: CreateUpdateData!
+  ) {
+    createUpdateOnInvestigation(investigation: $investigation, data: $data) {
+      id
+      text
+      type
+      createdAt
+      images {
+        id
+        url
+        optimised
+        card
+      }
+      linkedIncidents {
+        id
+        subject
+        description
+        dayTime
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      linkedOffenders {
+        id
+        updatedAt
+        age
+        build
+        dateOfBirth
+        name
+        race
+        gender
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      createdBy {
+        id
+        fullName
+        businesses {
+          id
+          name
+        }
+      }
+      replies {
+        id
+        text
+        type
+        createdAt
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        linkedIncidents {
+          id
+          subject
+          description
+          dayTime
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        linkedOffenders {
+          id
+          updatedAt
+          age
+          build
+          dateOfBirth
+          name
+          race
+          gender
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+export type CreateUpdateOnInvestigationMutationFn = Apollo.MutationFunction<
+  CreateUpdateOnInvestigationMutation,
+  CreateUpdateOnInvestigationMutationVariables
+>;
+
+/**
+ * __useCreateUpdateOnInvestigationMutation__
+ *
+ * To run a mutation, you first call `useCreateUpdateOnInvestigationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUpdateOnInvestigationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUpdateOnInvestigationMutation, { data, loading, error }] = useCreateUpdateOnInvestigationMutation({
+ *   variables: {
+ *      investigation: // value for 'investigation'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateUpdateOnInvestigationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateUpdateOnInvestigationMutation,
+    CreateUpdateOnInvestigationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateUpdateOnInvestigationMutation,
+    CreateUpdateOnInvestigationMutationVariables
+  >(CreateUpdateOnInvestigationDocument, options);
+}
+export type CreateUpdateOnInvestigationMutationHookResult = ReturnType<
+  typeof useCreateUpdateOnInvestigationMutation
+>;
+export type CreateUpdateOnInvestigationMutationResult =
+  Apollo.MutationResult<CreateUpdateOnInvestigationMutation>;
+export type CreateUpdateOnInvestigationMutationOptions =
+  Apollo.BaseMutationOptions<
+    CreateUpdateOnInvestigationMutation,
+    CreateUpdateOnInvestigationMutationVariables
+  >;
 export const CreateUpdateOnOffenderDocument = gql`
   mutation createUpdateOnOffender(
     $offender: UniqueId!

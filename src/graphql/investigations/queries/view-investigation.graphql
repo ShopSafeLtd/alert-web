@@ -7,6 +7,17 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
             id
             fullName
         }
+        documents{
+            id
+            name
+            url
+            thumbnailUrl
+            tags{
+                name
+                id
+            }
+        }
+        subscribed
         vehicles {
             id
             make
@@ -18,6 +29,99 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
             totalOffenders
             totalIncidents
         }
+        updates(orderBy: { createdAt: desc }) {
+            id
+            text
+            type
+            createdAt
+            images {
+                id
+                url
+                optimised
+                card
+            }
+            linkedIncidents {
+                id
+                subject
+                description
+                dayTime
+                images {
+                    id
+                    url
+                    optimised
+                }
+            }
+            linkedOffenders {
+                id
+                updatedAt
+                age
+                build
+                dateOfBirth
+                name
+                race
+                gender
+                images {
+                    id
+                    url
+                    optimised
+                }
+            }
+            createdBy {
+                id
+                fullName
+                businesses {
+                    id
+                    name
+                }
+            }
+            replies {
+                id
+                text
+                type
+                createdAt
+                images {
+                    id
+                    url
+                    optimised
+                    card
+                }
+                linkedIncidents {
+                    id
+                    subject
+                    description
+                    dayTime
+                    images {
+                        id
+                        url
+                        optimised
+                    }
+                }
+                linkedOffenders {
+                    id
+                    updatedAt
+                    age
+                    build
+                    dateOfBirth
+                    name
+                    race
+                    gender
+                    images {
+                        id
+                        url
+                        optimised
+                    }
+                }
+                createdBy {
+                    id
+                    fullName
+                    businesses {
+                        id
+                        name
+                    }
+                }
+            }
+        }
+
         offenders {
             id
             name
