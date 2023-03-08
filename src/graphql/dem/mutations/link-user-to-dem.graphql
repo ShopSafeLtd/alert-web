@@ -1,0 +1,6 @@
+mutation LinkUserToDem($data: UniqueId!, $where: UniqueId!) {
+    linkUserToDem(data: $data, where: $where) {
+        id
+        demId
+    }
+}

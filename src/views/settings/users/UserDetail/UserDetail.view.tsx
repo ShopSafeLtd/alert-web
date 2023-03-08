@@ -24,17 +24,21 @@ import {
   faUnlockKeyhole,
 } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
+import LinkDem from '../../../../components/form-components/user/LinkDem';
 
 interface Props {
   data: UserQuery | undefined;
   loading: boolean;
   editUser: boolean;
   saving: boolean;
+  demLink: boolean;
+  demId: string | null | undefined;
   toggleEditUser: () => void;
   inviteConfirm: () => void;
   enableConfirm: () => void;
   disableConfirm: () => void;
   deleteConfirm: () => void;
+  toggleDemLink: () => void;
 }
 
 const userDetail = ({
@@ -47,6 +51,9 @@ const userDetail = ({
   deleteConfirm,
   enableConfirm,
   disableConfirm,
+  demLink,
+  toggleDemLink,
+  demId,
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader
@@ -55,18 +62,11 @@ const userDetail = ({
       subTitle={data?.user?.disabled && 'User Disabled'}
       extra={[
         <Button
-          key="34"
-          disabled={saving || !!data?.user?.demId}
-          onClick={inviteConfirm}
-          icon={
-            <FontAwesomeIcon
-              style={{ marginRight: 5 }}
-              size="lg"
-              icon={faPaperPlaneTop}
-            />
-          }
+          key="3"
+          disabled={saving || !!data?.user?.demId || !demId}
+          onClick={toggleDemLink}
         >
-          Resend Invite
+          Link Dem User
         </Button>,
         <Button
           key="4"
@@ -217,6 +217,22 @@ const userDetail = ({
       onClose={toggleEditUser}
     >
       {editUser ? <EditUser onClose={toggleEditUser} /> : <div />}
+    </Drawer>
+    <Drawer
+      title="Link to dem user"
+      visible={demLink && !!demId}
+      width="800"
+      onClose={toggleDemLink}
+    >
+      {demLink ? (
+        <LinkDem
+          onClose={toggleDemLink}
+          businessId={demId || ''}
+          userId={data?.user?.id || ''}
+        />
+      ) : (
+        <div />
+      )}
     </Drawer>
   </div>
 );

@@ -1,0 +1,10 @@
+query ListDemUsers($where: String!) {
+    listDemUsers(where: $where) {
+        demUsers {
+            name
+            id
+            email
+        }
+        total
+    }
+}

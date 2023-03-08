@@ -33060,6 +33060,20 @@ export type LinkOrgToDemMutation = {
   } | null;
 };
 
+export type LinkUserToDemMutationVariables = Exact<{
+  data: UniqueId;
+  where: UniqueId;
+}>;
+
+export type LinkUserToDemMutation = {
+  __typename?: 'Mutation';
+  linkUserToDem?: {
+    __typename?: 'User';
+    id: string;
+    demId?: string | null;
+  } | null;
+};
+
 export type ListDemCompaniesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type ListDemCompaniesQuery = {
@@ -33091,6 +33105,24 @@ export type ListDemEvidenceQuery = {
       playbackUrl?: string | null;
       importance?: string | null;
       id?: string | null;
+    }>;
+  };
+};
+
+export type ListDemUsersQueryVariables = Exact<{
+  where: Scalars['String'];
+}>;
+
+export type ListDemUsersQuery = {
+  __typename?: 'Query';
+  listDemUsers: {
+    __typename?: 'ListDemUsers';
+    total: number;
+    demUsers: Array<{
+      __typename?: 'DemUser';
+      name?: string | null;
+      id?: string | null;
+      email?: string | null;
     }>;
   };
 };
@@ -39398,6 +39430,58 @@ export type LinkOrgToDemMutationOptions = Apollo.BaseMutationOptions<
   LinkOrgToDemMutation,
   LinkOrgToDemMutationVariables
 >;
+export const LinkUserToDemDocument = gql`
+  mutation LinkUserToDem($data: UniqueId!, $where: UniqueId!) {
+    linkUserToDem(data: $data, where: $where) {
+      id
+      demId
+    }
+  }
+`;
+export type LinkUserToDemMutationFn = Apollo.MutationFunction<
+  LinkUserToDemMutation,
+  LinkUserToDemMutationVariables
+>;
+
+/**
+ * __useLinkUserToDemMutation__
+ *
+ * To run a mutation, you first call `useLinkUserToDemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLinkUserToDemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [linkUserToDemMutation, { data, loading, error }] = useLinkUserToDemMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useLinkUserToDemMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    LinkUserToDemMutation,
+    LinkUserToDemMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    LinkUserToDemMutation,
+    LinkUserToDemMutationVariables
+  >(LinkUserToDemDocument, options);
+}
+export type LinkUserToDemMutationHookResult = ReturnType<
+  typeof useLinkUserToDemMutation
+>;
+export type LinkUserToDemMutationResult =
+  Apollo.MutationResult<LinkUserToDemMutation>;
+export type LinkUserToDemMutationOptions = Apollo.BaseMutationOptions<
+  LinkUserToDemMutation,
+  LinkUserToDemMutationVariables
+>;
 export const ListDemCompaniesDocument = gql`
   query ListDemCompanies {
     listDemCompanies {
@@ -39523,6 +39607,69 @@ export type ListDemEvidenceLazyQueryHookResult = ReturnType<
 export type ListDemEvidenceQueryResult = Apollo.QueryResult<
   ListDemEvidenceQuery,
   ListDemEvidenceQueryVariables
+>;
+export const ListDemUsersDocument = gql`
+  query ListDemUsers($where: String!) {
+    listDemUsers(where: $where) {
+      demUsers {
+        name
+        id
+        email
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useListDemUsersQuery__
+ *
+ * To run a query within a React component, call `useListDemUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListDemUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListDemUsersQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useListDemUsersQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListDemUsersQuery,
+    ListDemUsersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ListDemUsersQuery, ListDemUsersQueryVariables>(
+    ListDemUsersDocument,
+    options
+  );
+}
+export function useListDemUsersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListDemUsersQuery,
+    ListDemUsersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ListDemUsersQuery, ListDemUsersQueryVariables>(
+    ListDemUsersDocument,
+    options
+  );
+}
+export type ListDemUsersQueryHookResult = ReturnType<
+  typeof useListDemUsersQuery
+>;
+export type ListDemUsersLazyQueryHookResult = ReturnType<
+  typeof useListDemUsersLazyQuery
+>;
+export type ListDemUsersQueryResult = Apollo.QueryResult<
+  ListDemUsersQuery,
+  ListDemUsersQueryVariables
 >;
 export const CreateDocumentOnInvestigationDocument = gql`
   mutation CreateDocumentOnInvestigation(
