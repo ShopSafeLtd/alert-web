@@ -47,6 +47,10 @@ query FeedItems(
       investigation {
         id
         name
+        totalOffenders
+        totalIncidents
+        totalCrimeGroups
+        totalUpdates
         description
         updatedAt
         createdBy {
