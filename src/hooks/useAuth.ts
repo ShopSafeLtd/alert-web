@@ -216,6 +216,7 @@ const useAuth = (): Return => {
       schemes: data.schemes,
       groups: data.groups,
       isSet: true,
+      demId: data.demId,
     });
   };
 

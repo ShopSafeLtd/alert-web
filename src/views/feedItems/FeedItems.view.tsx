@@ -1,8 +1,8 @@
 import React from 'react';
 import {
-  ListArticlesQuery,
   FeedItemsQuery,
   FeedItemType,
+  ListArticlesQuery,
   ListOffendersQuery,
   ListUnapprovedIncidentsQuery,
 } from 'graphql/generated';
@@ -40,7 +40,7 @@ import OffenderFeed from 'components/feedItems/FeedItemSection/OffenderFeed';
 import ArticleFeed from 'components/feedItems/FeedItemSection/ArticleFeed';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
 import { PaginationModel } from 'types/DataType';
-import InvestigationFeed from 'components/feedItems/FeedItemSection/InvestigationFeed';
+import InvestigationFeed from 'components/feedItems/FeedItemSection/investigationFeed';
 
 const { Title, Paragraph, Text } = Typography;
 const { confirm } = Modal;
