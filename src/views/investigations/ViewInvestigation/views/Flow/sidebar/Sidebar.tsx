@@ -9,6 +9,8 @@ export enum NodeTypes {
   Default = 'default',
   TextInputNode = 'textNode',
   VehicleNode = 'vehicleNode',
+  IncidentList = 'incidentList',
+  IncidentDetailsNode = 'incidentDetailsNode',
 }
 
 const onDragStart = (event: DragEvent, nodeType: NodeTypes) => {
@@ -88,7 +90,7 @@ const Sidebar = () => (
     <Typography.Title level={5}>List</Typography.Title>
     <div
       onDragStart={(event: DragEvent) => {
-        onDragStart(event, NodeTypes.VehicleNode);
+        onDragStart(event, NodeTypes.IncidentList);
       }}
       draggable
       style={{ width: 'fit-content' }}
@@ -109,7 +111,7 @@ const Sidebar = () => (
 
     <div
       onDragStart={(event: DragEvent) => {
-        onDragStart(event, NodeTypes.OffenderDetailsNode);
+        onDragStart(event, NodeTypes.IncidentDetailsNode);
       }}
       draggable
       style={{ width: 'fit-content' }}
@@ -122,22 +124,22 @@ const Sidebar = () => (
       </Card>
     </div>
 
-    <Typography.Title level={4}>Crime group</Typography.Title>
+    {/*<Typography.Title level={4}>Crime group</Typography.Title>*/}
 
-    <div
-      onDragStart={(event: DragEvent) => {
-        onDragStart(event, NodeTypes.OffenderDetailsNode);
-      }}
-      draggable
-      style={{ width: 'fit-content' }}
-    >
-      <Card
-        bodyStyle={{ width: '100%' }}
-        style={{ display: 'flex', flexDirection: 'column' }}
-      >
-        <Skeleton style={{ width: 90 }} />
-      </Card>
-    </div>
+    {/*<div*/}
+    {/*  onDragStart={(event: DragEvent) => {*/}
+    {/*    onDragStart(event, NodeTypes.OffenderDetailsNode);*/}
+    {/*  }}*/}
+    {/*  draggable*/}
+    {/*  style={{ width: 'fit-content' }}*/}
+    {/*>*/}
+    {/*  <Card*/}
+    {/*    bodyStyle={{ width: '100%' }}*/}
+    {/*    style={{ display: 'flex', flexDirection: 'column' }}*/}
+    {/*  >*/}
+    {/*    <Skeleton style={{ width: 90 }} />*/}
+    {/*  </Card>*/}
+    {/*</div>*/}
   </aside>
 );
 

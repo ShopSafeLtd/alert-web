@@ -1,49 +1,38 @@
 import { Button, Drawer } from 'antd';
 import React, { memo, useCallback } from 'react';
 import { Handle, NodeToolbar, Position, useStore } from 'reactflow';
-import { NodeResizer } from '@reactflow/node-resizer';
 import '@reactflow/node-resizer/dist/style.css';
 import { useParams } from 'react-router-dom';
-import OffenderCard from './components/offender-details-card';
-import { Age, Build, Gender, Race } from '../../../graphql/generated';
 import useStyles from './style.module';
 import useFlow from '../../../views/investigations/ViewInvestigation/views/Flow/hooks/useFlow';
 import { useDrawerState } from '../../../hooks';
 import { useStoreState } from '../../../state';
-import SelectOffenderDetails from '../form/selectOffenderDetails';
+import LinkIncident from '../form/SelectIncident';
+import { NodeResizer } from '@reactflow/node-resizer';
+import IncidentCard from './components/incident-details-card.view';
 
-interface Offender {
-  images:
-    | {
-        id: string;
-        optimised: string;
-      }[]
-    | null
-    | undefined;
-  id: string;
-
-  name?: string | null | undefined;
-  totalIncidents?: number;
+export interface Incident {
+  description?: string | null | undefined;
+  dayTime?: string | null | undefined;
   reference?: number | null | undefined;
-  updatedAt?: Date | null | undefined;
-  age?: Age | null | undefined;
-  dateOfBirth?: Date | null | undefined;
-  build?: Build | null | undefined;
-  gender?: Gender | null | undefined;
-  race?: Race | null | undefined;
+  location?: string | null | undefined;
+  offenders?: string | null | undefined;
+  type?: string | null | undefined;
+  id?: string | null | undefined;
 }
+
 interface Props {
   data: {
     color: string;
-    offender: Offender | null | undefined;
+    incident: Incident | null | undefined;
   };
   isConnectable: boolean;
   id: string;
   selected: boolean;
 }
-// @ts-ignore
 
-const connectionNodeIdSelector = (state) => state.connectionNodeId;
+const connectionNodeIdSelector = (state: { connectionNodeId: string | null }) =>
+  state.connectionNodeId;
 
 export default memo(({ data, isConnectable, selected, id }: Props) => {
   const connectionNodeId = useStore(connectionNodeIdSelector);
@@ -58,7 +47,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
 
   const { drawer } = useDrawerState();
   const { fullName } = useStoreState((state) => state.user);
-  const onSelect = useCallback((offender: Offender) => {
+  const onSelect = useCallback((incident: Incident) => {
     const currentNode = nodesMap.get(id);
     if (!currentNode) {
       return;
@@ -69,7 +58,7 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
       ...currentNode,
       data: {
         ...currentNode.data,
-        offender,
+        incident: incident,
         isEditing: { user: '', editing: false },
       },
     });
@@ -102,12 +91,12 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
           onClick={() => {
             setIsEditing(true);
             drawer.open({
-              defaultTitle: 'Select Offender',
-              id: 'offenderSelect',
+              defaultTitle: 'Select Incident',
+              id: 'incidentSelect',
             });
           }}
         >
-          select offender
+          select incident
         </Button>
       </NodeToolbar>
       <div className={classes.node}>
@@ -115,14 +104,15 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
           color="#ff0071"
           isVisible={selected}
           minWidth={290}
-          minHeight={550}
+          minHeight={200}
+          handleStyle={{ zIndex: 5 }}
         />
         <div className={classes.nodeContainer}>
-          {data.offender && data.offender.name ? (
-            <OffenderCard offender={data.offender!} />
+          {data.incident && data.incident.description ? (
+            <IncidentCard incident={data.incident!} />
           ) : (
             <div style={{ height: '100%', zIndex: 4, position: 'relative' }}>
-              Offender: Please choose an offender
+              Incident: Please choose an incident
             </div>
           )}
         </div>
@@ -150,13 +140,12 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
           drawer.close();
         }}
       >
-        <SelectOffenderDetails
+        <LinkIncident
           onSelect={onSelect}
           onClose={() => {
             setIsEditing(false);
             drawer.close();
           }}
-          investigationId={investigationId || ''}
         />
       </Drawer>
     </>

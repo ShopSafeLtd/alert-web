@@ -19,6 +19,10 @@ interface Return {
   toggleAddExistingCrimeGroup: () => void;
   addExistingIncident: boolean;
   toggleAddExistingIncident: () => void;
+  toggleAddDocument: () => void;
+  addDocument: boolean;
+  toggleAddDemDocument: () => void;
+  addDemDocument: boolean;
 }
 const useViewInvestigation = (investigationId: string): Return => {
   const [offenderIds, setOffenderIds] = useState<string[]>([]);
@@ -29,7 +33,8 @@ const useViewInvestigation = (investigationId: string): Return => {
   const [addExistingCrimeGroup, setAddExistingCrimeGroup] = useState(false);
   const [addExistingIncident, setAddExistingIncident] = useState(false);
   const [addExistingOffender, setAddExistingOffender] = useState(false);
-
+  const [addDocument, setAddDocument] = useState(false);
+  const [addDemDocument, setAddDemDocument] = useState(false);
   const { data, loading } = useViewInvestigationQuery({
     variables: {
       where: {
@@ -68,6 +73,13 @@ const useViewInvestigation = (investigationId: string): Return => {
     setAddExistingIncident(() => !addExistingIncident);
   };
 
+  const toggleAddDocument = () => {
+    setAddDocument(() => !addDocument);
+  };
+  const toggleAddDemDocument = () => {
+    setAddDemDocument(() => !addDemDocument);
+  };
+
   return {
     data,
     loading,
@@ -84,6 +96,10 @@ const useViewInvestigation = (investigationId: string): Return => {
     toggleAddExistingCrimeGroup,
     addExistingIncident,
     toggleAddExistingIncident,
+    addDemDocument,
+    toggleAddDemDocument,
+    addDocument,
+    toggleAddDocument,
   };
 };
 

@@ -12,6 +12,8 @@ import { createUseStyles } from 'react-jss';
 import { ViewInvestigationQuery } from '../../../graphql/generated';
 import Flow from './views/Flow/Flow.container';
 import ViewDetails from './views/Details';
+import DocumentsContainer from './views/Documents/Documents.container';
+import AddDocument from '../../../components/form-components/documents';
 
 interface Props {
   data: ViewInvestigationQuery | undefined;
@@ -25,6 +27,10 @@ interface Props {
   toggleAddExistingCrimeGroup: () => void;
   addExistingIncident: boolean;
   toggleAddExistingIncident: () => void;
+  toggleAddDocument: () => void;
+  addDocument: boolean;
+  toggleAddDemDocument: () => void;
+  addDemDocument: boolean;
   crimeGroupIds: string[];
   incidentIds: string[];
 }
@@ -59,6 +65,10 @@ const ViewInvestigation = ({
   toggleAddExistingCrimeGroup,
   addExistingIncident,
   toggleAddExistingIncident,
+  addDemDocument,
+  toggleAddDocument,
+  addDocument,
+  toggleAddDemDocument,
 }: Props) => {
   const classes = useStyles();
 
@@ -190,6 +200,49 @@ const ViewInvestigation = ({
                 Incidents
               </Button>
             </Dropdown>,
+            <Dropdown
+              overlay={
+                <Menu
+                  items={[
+                    {
+                      label: 'Add Document',
+                      key: '5',
+                      icon: (
+                        <FontAwesomeIcon
+                          icon={faMagnifyingGlass}
+                          style={{ marginRight: 5 }}
+                        />
+                      ),
+                      // disabled: !listVehiclesData?.listVehicles.total,
+                      onClick: () => toggleAddDocument(),
+                    },
+                    {
+                      label: 'Add DEM Document',
+                      key: '6',
+                      disabled: true,
+                      icon: (
+                        <FontAwesomeIcon
+                          icon={faMagnifyingGlass}
+                          style={{ marginRight: 5 }}
+                        />
+                      ),
+                      // disabled: !listVehiclesData?.listVehicles.total,
+                      onClick: () => toggleAddDemDocument(),
+                    },
+                  ]}
+                />
+              }
+            >
+              <Button
+                key="2"
+                type="primary"
+                icon={
+                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
+                }
+              >
+                Documents
+              </Button>
+            </Dropdown>,
           ]}
         />
         <Tabs>
@@ -215,7 +268,7 @@ const ViewInvestigation = ({
               </Badge>
             }
           >
-            <div />
+            <DocumentsContainer data={data?.investigation?.documents} />
           </Tabs.TabPane>
         </Tabs>
       </div>
@@ -282,6 +335,31 @@ const ViewInvestigation = ({
         ) : (
           <div />
         )}
+      </Drawer>
+      <Drawer
+        title="Add Document"
+        visible={addDocument}
+        width="800"
+        onClose={toggleAddDocument}
+        zIndex={1001}
+      >
+        {addDocument ? (
+          <AddDocument
+            investigationId={data?.investigation?.id || ''}
+            onClose={toggleAddDocument}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title="Add DEM Document"
+        visible={addDemDocument}
+        width="800"
+        onClose={toggleAddDemDocument}
+        zIndex={1001}
+      >
+        {addDemDocument ? <div /> : <div />}
       </Drawer>
     </TabbedView>
   );

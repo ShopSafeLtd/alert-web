@@ -13,10 +13,12 @@ import ReactFlow, {
 } from 'reactflow';
 import { Button, Card, Spin } from 'antd';
 import OffenderNode from 'components/react-flow/nodes/offender-node';
+import IncidentNode from 'components/react-flow/nodes/incident-details-node';
+
 import ImageNode from 'components/react-flow/nodes/image-node';
 import TextNode from 'components/react-flow/nodes/text-node';
 import VehicleNode from 'components/react-flow/nodes/vehicle-node';
-
+import IncidentListNode from 'components/react-flow/nodes/list-incidents-node';
 import FloatingEdge from 'components/react-flow/edges/floating-edge';
 import { LoadingOutlined } from '@ant-design/icons';
 import Sidebar from './sidebar/Sidebar';
@@ -97,6 +99,8 @@ FlowProps) => {
       imageNode: ImageNode,
       textNode: TextNode,
       vehicleNode: VehicleNode,
+      incidentList: IncidentListNode,
+      incidentDetailsNode: IncidentNode,
     }),
     []
   );

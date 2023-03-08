@@ -6098,6 +6098,8 @@ export type CreateCrimeGroupVehicles = {
 
 export type CreateDocument = {
   name: Scalars['String'];
+  tags?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  thumbnailUrl?: InputMaybe<Scalars['String']>;
   url: Scalars['String'];
 };
 
@@ -17422,6 +17424,7 @@ export enum Model {
   Article = 'ARTICLE',
   Ban = 'BAN',
   Chat = 'CHAT',
+  Document = 'DOCUMENT',
   Group = 'GROUP',
   Image = 'IMAGE',
   Incident = 'INCIDENT',
@@ -17454,6 +17457,7 @@ export type Mutation = {
   createChat: Chat;
   createComment?: Maybe<Intel>;
   createCrimeGroup: CrimeGroup;
+  createDocumentOnInvestigation?: Maybe<Document>;
   createFlow?: Maybe<Flow>;
   createGroup: Group;
   createImage: Image;
@@ -17639,6 +17643,11 @@ export type MutationCreateCommentArgs = {
 
 export type MutationCreateCrimeGroupArgs = {
   data: CreateCrimeGroupDataInput;
+};
+
+export type MutationCreateDocumentOnInvestigationArgs = {
+  data: CreateDocument;
+  where: UniqueId;
 };
 
 export type MutationCreateFlowArgs = {
@@ -32819,6 +32828,26 @@ export type ListCrimeGroupsQuery = {
   };
 };
 
+export type CreateDocumentOnInvestigationMutationVariables = Exact<{
+  where: UniqueId;
+  data: CreateDocument;
+}>;
+
+export type CreateDocumentOnInvestigationMutation = {
+  __typename?: 'Mutation';
+  createDocumentOnInvestigation?: {
+    __typename?: 'Document';
+    id: string;
+    name: string;
+    thumbnailUrl?: string | null;
+    url: string;
+    createdAt: any;
+    updatedAt: any;
+    investigation: Array<{ __typename?: 'Investigation'; id: string }>;
+    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+  } | null;
+};
+
 export type DeleteFeedItemMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -38783,6 +38812,73 @@ export type ListCrimeGroupsQueryResult = Apollo.QueryResult<
   ListCrimeGroupsQuery,
   ListCrimeGroupsQueryVariables
 >;
+export const CreateDocumentOnInvestigationDocument = gql`
+  mutation CreateDocumentOnInvestigation(
+    $where: UniqueId!
+    $data: CreateDocument!
+  ) {
+    createDocumentOnInvestigation(where: $where, data: $data) {
+      id
+      investigation {
+        id
+      }
+      name
+      tags {
+        id
+        name
+      }
+      thumbnailUrl
+      url
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export type CreateDocumentOnInvestigationMutationFn = Apollo.MutationFunction<
+  CreateDocumentOnInvestigationMutation,
+  CreateDocumentOnInvestigationMutationVariables
+>;
+
+/**
+ * __useCreateDocumentOnInvestigationMutation__
+ *
+ * To run a mutation, you first call `useCreateDocumentOnInvestigationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDocumentOnInvestigationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createDocumentOnInvestigationMutation, { data, loading, error }] = useCreateDocumentOnInvestigationMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateDocumentOnInvestigationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateDocumentOnInvestigationMutation,
+    CreateDocumentOnInvestigationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateDocumentOnInvestigationMutation,
+    CreateDocumentOnInvestigationMutationVariables
+  >(CreateDocumentOnInvestigationDocument, options);
+}
+export type CreateDocumentOnInvestigationMutationHookResult = ReturnType<
+  typeof useCreateDocumentOnInvestigationMutation
+>;
+export type CreateDocumentOnInvestigationMutationResult =
+  Apollo.MutationResult<CreateDocumentOnInvestigationMutation>;
+export type CreateDocumentOnInvestigationMutationOptions =
+  Apollo.BaseMutationOptions<
+    CreateDocumentOnInvestigationMutation,
+    CreateDocumentOnInvestigationMutationVariables
+  >;
 export const DeleteFeedItemDocument = gql`
   mutation deleteFeedItem($id: String!) {
     deleteFeedItem(where: { id: $id }) {

@@ -23,6 +23,7 @@ export interface Props {
   onGroupsChange: (groups: string[]) => void;
   categories: SelectProps['options'];
   categoriesLoading: boolean;
+  selectedCategories: { value: string }[];
   categoriesChange: (categories: { value: string }[]) => void;
   filePickerCallback: (
     callback: (arg0: string, arg1: { title: string }) => void,
@@ -31,7 +32,6 @@ export interface Props {
     meta: Record<string, any>
   ) => void;
   selectedGroups: string[];
-  selectedCategories: { value: string }[];
   form: FormInstance<FormData>;
   onSubmit: () => void;
   data: FormData;
