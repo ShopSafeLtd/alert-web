@@ -11,6 +11,7 @@ import {
   Card,
   Col,
   Divider,
+  Empty,
   Input,
   Modal,
   Pagination,
@@ -341,36 +342,30 @@ Props): JSX.Element => (
         </Card>
 
         <Row gutter={12}>
-          <Col
-            span={12}
-            xxl={16}
-            xl={12}
-            style={{ overflow: 'auto', height: 'calc(100vh - 333px)' }}
-          >
+          <Col span={12} xxl={16} xl={12}>
             <Card
               bodyStyle={{
-                padding: 5,
+                padding: 0,
+                paddingBottom: 20,
               }}
-              style={{ margin: 0, padding: 0 }}
+              style={{
+                margin: 0,
+                padding: 0,
+                overflow: 'auto',
+                height: 'calc(100vh - 300px)',
+              }}
             >
               <Title
                 style={{
-                  margin: '5px 20px -5px',
+                  margin: '15px 20px 10px',
                   fontSize: 16,
                 }}
                 level={4}
               >
                 Recent Bulletins
               </Title>
-              <Row
-                gutter={8}
-                style={{
-                  marginLeft: 5,
-                  marginRight: 5,
-                  display: 'flex',
-                  minHeight: 300,
-                }}
-              >
+              <Divider style={{ margin: 0 }} />
+              <Row gutter={8}>
                 {articleLoading
                   ? Array.from({ length: 24 }).map((_, index) => (
                       // eslint-disable-next-line react/no-array-index-key
@@ -384,8 +379,6 @@ Props): JSX.Element => (
                         xxl={8}
                         style={{
                           alignItems: 'stretch',
-                          marginTop: 10,
-                          minHeight: 300,
                         }}
                       >
                         <ArticleCard article={article} />
@@ -406,14 +399,15 @@ Props): JSX.Element => (
               </Row>
             </Card>
           </Col>
-          <Col
-            span={12}
-            xxl={8}
-            xl={12}
-            style={{ overflow: 'auto', height: 'calc(100vh - 330px)' }}
-          >
+          <Col span={12} xxl={8} xl={12}>
             <Card
-              bodyStyle={{ paddingRight: 0, paddingLeft: 0, paddingTop: 15 }}
+              bodyStyle={{
+                paddingRight: 0,
+                paddingLeft: 0,
+                paddingTop: 15,
+                overflow: 'auto',
+                height: 'calc(100vh - 300px)',
+              }}
             >
               <Title
                 style={{
@@ -429,7 +423,14 @@ Props): JSX.Element => (
               {unapprovedIncidentsLoading ? (
                 <div />
               ) : (
-                <div>
+                <div
+                  style={{
+                    display: 'flex',
+                    width: '100%',
+                    flexDirection: 'column',
+                    height: '100%',
+                  }}
+                >
                   <Divider style={{ marginTop: 0, marginBottom: 0 }} />
                   {unapprovedIncidents?.listIncidents?.incidents.map(
                     (incident) => (
@@ -487,6 +488,19 @@ Props): JSX.Element => (
                         <Divider style={{ marginTop: 0, marginBottom: 0 }} />
                       </Link>
                     )
+                  )}
+                  {unapprovedIncidents?.listIncidents?.incidents.length ===
+                    0 && (
+                    <div
+                      style={{
+                        display: 'flex',
+                        flex: 1,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Empty description="Nothing to approve" />
+                    </div>
                   )}
                 </div>
               )}
