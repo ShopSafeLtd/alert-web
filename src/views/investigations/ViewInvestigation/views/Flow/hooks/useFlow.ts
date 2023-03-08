@@ -320,7 +320,28 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
             label: `${type}`,
             id,
             onChange,
-            color: '#FFCC00',
+            imageUrl: selected,
+            text: '',
+          },
+        };
+        setSelected(null);
+        nodesMap.set(newNode.id, newNode);
+      } else if (type === 'incidentDetailsNode') {
+        const newNode: Node = {
+          id,
+          type,
+          position,
+          height: 350,
+          width: 290,
+          style: {
+            height: 350,
+            width: 290,
+          },
+          zIndex: 1,
+          data: {
+            label: `${type}`,
+            id,
+            onChange,
             imageUrl: selected,
             text: '',
           },
@@ -343,7 +364,6 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
             label: `${type}`,
             id,
             onChange,
-            color: '#FFCC00',
             imageUrl: selected,
             text: '',
           },

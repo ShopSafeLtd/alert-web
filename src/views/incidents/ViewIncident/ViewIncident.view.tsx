@@ -133,8 +133,8 @@ interface Props {
   confirmDeleteUpdate: (updateId: string) => void;
   editUpdate: { id: string; text: string } | null;
   setEditUpdate: (value: { id: string; text: string } | null) => void;
-  handleEditUpdate: () => void;
   editUpdateInput: string;
+  handleEditUpdate: () => void;
   setEditUpdateInput: (value: string) => void;
   optionMenuItems: ItemType[];
   lightboxElements: {

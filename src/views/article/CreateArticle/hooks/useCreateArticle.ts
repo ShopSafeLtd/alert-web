@@ -38,11 +38,11 @@ const useCreateArticle = (): Props => {
   const [groups, setGroups] = useState<{ value: string; label: string }[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
   const [categories, setCategories] = useState<SelectProps['options']>([]);
-  const [offenders, setOffenders] = useState<OffenderData[]>([]);
-  const [incidents, setIncidents] = useState<Incident[]>([]);
   const [categoryIds, setCategoryIds] = useState<
     { value: string; id: string }[]
   >([]);
+  const [offenders, setOffenders] = useState<OffenderData[]>([]);
+  const [incidents, setIncidents] = useState<Incident[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<
     { value: string }[]
   >([]);
