@@ -144,6 +144,7 @@ const useFeedItems = (): Return => {
   });
 
   const { data: articleData, loading: articleLoading } = useListArticlesQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       scheme: {
         id: schemeId,
@@ -163,7 +164,6 @@ const useFeedItems = (): Return => {
       take: articlePagination.pageSize,
       skip: articlePagination.pageSize * (articlePagination.page - 1),
     },
-    fetchPolicy: 'cache-and-network',
   });
 
   const { data: unapprovedIncidents, loading: unapprovedIncidentsLoading } =

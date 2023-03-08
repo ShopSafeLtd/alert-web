@@ -5096,6 +5096,7 @@ export type Business = {
   children: Array<Business>;
   createdAt: Scalars['DateTime'];
   demId?: Maybe<Scalars['String']>;
+  goodsTypesTotals?: Maybe<Array<BusinessGoodsTotals>>;
   id: Scalars['String'];
   incidents: Array<Incident>;
   locations: Array<Address>;
@@ -5106,6 +5107,7 @@ export type Business = {
   totalUsers: Scalars['Int'];
   updatedAt: Scalars['DateTime'];
   users: Array<User>;
+  valueStats?: Maybe<ValueTotals>;
 };
 
 export type BusinessActionsArgs = {
@@ -5120,6 +5122,11 @@ export type BusinessChildrenArgs = {
   before?: InputMaybe<BusinessWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+};
+
+export type BusinessGoodsTypesTotalsArgs = {
+  endDate?: InputMaybe<Scalars['DateTime']>;
+  startDate?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type BusinessIncidentsArgs = {
@@ -5148,6 +5155,11 @@ export type BusinessUsersArgs = {
   before?: InputMaybe<UserWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+};
+
+export type BusinessValueStatsArgs = {
+  endDate?: InputMaybe<Scalars['DateTime']>;
+  startDate?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type BusinessCreateManyParentInput = {
@@ -5349,6 +5361,18 @@ export type BusinessCreateWithoutUsersInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutBusinessesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type BusinessGoodsTotals = {
+  __typename?: 'BusinessGoodsTotals';
+  avgLostValue?: Maybe<Scalars['Float']>;
+  avgRecoveredValue?: Maybe<Scalars['Float']>;
+  businessId?: Maybe<Scalars['String']>;
+  count?: Maybe<Scalars['Int']>;
+  goodsType?: Maybe<GoodsType>;
+  successRate?: Maybe<Scalars['Float']>;
+  totalLostValue?: Maybe<Scalars['Float']>;
+  totalRecoveredValue?: Maybe<Scalars['Float']>;
 };
 
 export type BusinessListRelationFilter = {
@@ -31325,6 +31349,16 @@ export type UserWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
 };
 
+export type ValueTotals = {
+  __typename?: 'ValueTotals';
+  avgLostValue?: Maybe<Scalars['Float']>;
+  avgRecoveredValue?: Maybe<Scalars['Float']>;
+  businessId?: Maybe<Scalars['String']>;
+  successRate?: Maybe<Scalars['Float']>;
+  totalLostValue?: Maybe<Scalars['Float']>;
+  totalRecoveredValue?: Maybe<Scalars['Float']>;
+};
+
 export type Vehicle = {
   __typename?: 'Vehicle';
   actions: Array<Action>;
@@ -32482,6 +32516,67 @@ export type UpdateBusinessMutation = {
       full?: string | null;
     }>;
   };
+};
+
+export type BusinessReportQueryVariables = Exact<{
+  where: BusinessWhereUniqueInput;
+  endDate?: InputMaybe<Scalars['DateTime']>;
+  startDate?: InputMaybe<Scalars['DateTime']>;
+}>;
+
+export type BusinessReportQuery = {
+  __typename?: 'Query';
+  business?: {
+    __typename?: 'Business';
+    id: string;
+    name: string;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+      createdAt: any;
+      reference?: number | null;
+      policeRef?: string | null;
+      totalRecoveredValue?: number | null;
+      totalValue?: number | null;
+      date: any;
+      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
+    }>;
+    locations: Array<{
+      __typename?: 'Address';
+      id: string;
+      full?: string | null;
+    }>;
+    valueStats?: {
+      __typename?: 'ValueTotals';
+      avgLostValue?: number | null;
+      businessId?: string | null;
+      avgRecoveredValue?: number | null;
+      successRate?: number | null;
+      totalLostValue?: number | null;
+      totalRecoveredValue?: number | null;
+    } | null;
+    goodsTypesTotals?: Array<{
+      __typename?: 'BusinessGoodsTotals';
+      avgLostValue?: number | null;
+      businessId?: string | null;
+      avgRecoveredValue?: number | null;
+      count?: number | null;
+      successRate?: number | null;
+      totalRecoveredValue?: number | null;
+      totalLostValue?: number | null;
+      goodsType?: { __typename?: 'GoodsType'; id: string; name: string } | null;
+    }> | null;
+  } | null;
 };
 
 export type BusinessQueryVariables = Exact<{
@@ -38057,6 +38152,117 @@ export type UpdateBusinessMutationResult =
 export type UpdateBusinessMutationOptions = Apollo.BaseMutationOptions<
   UpdateBusinessMutation,
   UpdateBusinessMutationVariables
+>;
+export const BusinessReportDocument = gql`
+  query BusinessReport(
+    $where: BusinessWhereUniqueInput!
+    $endDate: DateTime
+    $startDate: DateTime
+  ) {
+    business(where: $where) {
+      id
+      name
+      incidents {
+        id
+        subject
+        crimeTypes {
+          id
+          name
+        }
+        createdAt
+        reference
+        policeRef
+        totalRecoveredValue
+        totalValue
+        date
+        createdBy {
+          id
+          businesses {
+            id
+            name
+          }
+        }
+      }
+      locations {
+        id
+        full
+      }
+      valueStats(endDate: $endDate, startDate: $startDate) {
+        avgLostValue
+        businessId
+        avgRecoveredValue
+        successRate
+        totalLostValue
+        totalRecoveredValue
+      }
+      goodsTypesTotals(startDate: $startDate, endDate: $endDate) {
+        avgLostValue
+        businessId
+        avgRecoveredValue
+        count
+        successRate
+        totalRecoveredValue
+        totalLostValue
+        goodsType {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useBusinessReportQuery__
+ *
+ * To run a query within a React component, call `useBusinessReportQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBusinessReportQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBusinessReportQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      endDate: // value for 'endDate'
+ *      startDate: // value for 'startDate'
+ *   },
+ * });
+ */
+export function useBusinessReportQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    BusinessReportQuery,
+    BusinessReportQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<BusinessReportQuery, BusinessReportQueryVariables>(
+    BusinessReportDocument,
+    options
+  );
+}
+export function useBusinessReportLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    BusinessReportQuery,
+    BusinessReportQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<BusinessReportQuery, BusinessReportQueryVariables>(
+    BusinessReportDocument,
+    options
+  );
+}
+export type BusinessReportQueryHookResult = ReturnType<
+  typeof useBusinessReportQuery
+>;
+export type BusinessReportLazyQueryHookResult = ReturnType<
+  typeof useBusinessReportLazyQuery
+>;
+export type BusinessReportQueryResult = Apollo.QueryResult<
+  BusinessReportQuery,
+  BusinessReportQueryVariables
 >;
 export const BusinessDocument = gql`
   query Business($where: BusinessWhereUniqueInput!) {
