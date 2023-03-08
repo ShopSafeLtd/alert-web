@@ -40,6 +40,7 @@ import OffenderFeed from 'components/feedItems/FeedItemSection/OffenderFeed';
 import ArticleFeed from 'components/feedItems/FeedItemSection/ArticleFeed';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
 import { PaginationModel } from 'types/DataType';
+import InvestigationFeed from 'components/feedItems/FeedItemSection/InvestigationFeed';
 
 const { Title, Paragraph, Text } = Typography;
 const { confirm } = Modal;
@@ -57,8 +58,6 @@ interface Props {
   onArticlePaginationChange: (page: number, pageSize: number) => void;
   search: string;
   setSearch: (value: string) => void;
-  // updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
-  // onNavigate: () => void;
   unapprovedIncidents: ListUnapprovedIncidentsQuery | undefined;
   unapprovedIncidentsLoading: boolean;
   onDeleteFeedItem: (value: string) => void;
@@ -214,6 +213,12 @@ Props): JSX.Element => (
                     {feedItem?.type === FeedItemType.NewOffender && (
                       <OffenderFeed feedItem={feedItem} isNewOffender />
                     )}
+                    {feedItem?.type === FeedItemType.NewInvestigation && (
+                      <InvestigationFeed
+                        feedItem={feedItem}
+                        isNewInvestigation
+                      />
+                    )}
                     {/* update details  */}
                     {feedItem?.type === FeedItemType.Incident && (
                       <IncidentFeed feedItem={feedItem} />
@@ -221,6 +226,10 @@ Props): JSX.Element => (
                     {feedItem?.type === FeedItemType.Offender && (
                       <OffenderFeed feedItem={feedItem} />
                     )}
+                    {feedItem?.type === FeedItemType.Investigation && (
+                      <InvestigationFeed feedItem={feedItem} />
+                    )}
+
                     {/* add new images */}
                     {feedItem?.type === FeedItemType.IncidentImage && (
                       <IncidentFeed feedItem={feedItem} isNewImage />
@@ -228,12 +237,18 @@ Props): JSX.Element => (
                     {feedItem?.type === FeedItemType.OffenderImage && (
                       <OffenderFeed feedItem={feedItem} isNewImage />
                     )}
+                    {feedItem?.type === FeedItemType.InvestigationImage && (
+                      <InvestigationFeed feedItem={feedItem} isNewImage />
+                    )}
                     {/* add new intel */}
                     {feedItem?.type === FeedItemType.IncidentIntel && (
                       <IncidentFeed feedItem={feedItem} />
                     )}
                     {feedItem?.type === FeedItemType.OffenderIntel && (
                       <OffenderFeed feedItem={feedItem} />
+                    )}
+                    {feedItem?.type === FeedItemType.InvestigationIntel && (
+                      <InvestigationFeed feedItem={feedItem} />
                     )}
 
                     {/* article */}

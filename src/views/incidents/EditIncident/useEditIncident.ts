@@ -689,6 +689,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
+
     if (!offendersData) {
       confirm({
         title: 'No Offenders',
@@ -771,27 +772,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                   createdBy: { connect: { id: userId } },
                   localId: offender.id,
                   images:
-                    // newOffenderImage && newOffenderImage[0]
-                    //   ? {
-                    //       upload: {
-                    //         url: {
-                    //           filename: newOffenderImage[0].fileName || '',
-                    //           mimetype: newOffenderImage.type || '',
-                    //           url: newOffenderImage.url || '',
-                    //         },
-                    //       },
-                    //     }
-                    //   : {},
-                    // upload: offender.images
-                    //     ?.filter((image) => image.new === true)
-                    //        .map((image) => ({
-                    //       url: {
-                    //         filename: image.fileName || '',
-                    //         mimetype: image.type || '',
-                    //         url: image.url || '',
-                    //       },
-                    //     })),
-                    // },
                     offender?.images &&
                     offender.images.length &&
                     offender.images?.filter((image) => image.new === true)

@@ -17,6 +17,7 @@ query FeedItems(
     groups: $groups
   ) {
     feedItems {
+      type
       article {
         id
         title
@@ -42,7 +43,52 @@ query FeedItems(
       updatedAt
       message
       model
-      type
+      investigationId
+      investigation {
+        id
+        name
+        description
+        updatedAt
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+        updates(orderBy: { createdAt: desc }) {
+          id
+          images {
+            id
+            optimised
+            url
+          }
+          linkedIncidents {
+            id
+            subject
+            description
+            dayTime
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          linkedOffenders {
+            id
+            updatedAt
+            name
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          text
+          type
+        }
+      }
       groups {
         id
         name
