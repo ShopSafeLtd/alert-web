@@ -216,7 +216,7 @@ const OffenderCard = ({
                 </Text>
               </Col>
             </Row>
-            <Text type="secondary">Ref: {offender?.reference}</Text>
+            <Text type="secondary">Alert ID: {offender?.reference}</Text>
             <Row style={{ marginTop: 5, marginBottom: 10 }}>
               <Col>
                 <FontAwesomeIcon
