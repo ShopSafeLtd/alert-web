@@ -35,6 +35,14 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
     }
     vehicles {
       id
+      make
+      model
+      updatedAt
+      colour
+      registration
+      totalOffenders
+      totalIncidents
+      totalCrimeGroups
     }
     incidents {
       id

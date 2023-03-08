@@ -145,7 +145,7 @@ const ViewVehicle = ({
               </Col>
               <Col>
                 <Statistic
-                  title="Total Offenders"
+                  title="Total Crime Groups"
                   value={data?.vehicle?.totalCrimeGroups || 0}
                 />
               </Col>

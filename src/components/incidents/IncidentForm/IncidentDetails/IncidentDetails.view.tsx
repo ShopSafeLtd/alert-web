@@ -12,7 +12,7 @@ const IncidentDetails = ({ saving }: Props): JSX.Element => (
     <Row align="bottom" style={{ marginBottom: 20 }}>
       <Col>
         <Title style={{ marginBottom: 0 }} level={4}>
-          6.
+          7.
         </Title>
       </Col>
       <Col>
