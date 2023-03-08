@@ -52,6 +52,9 @@ describe('Detail Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <UserDetail
+          demLink={false}
+          toggleDemLink={jest.fn()}
+          demId=""
           data={data}
           loading={false}
           editUser={false}
