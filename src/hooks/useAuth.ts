@@ -67,6 +67,7 @@ const useAuth = (): Return => {
     businesses,
     onboarded,
     schemes,
+    demId,
     groups,
   }: HandleSuccessArgs) => {
     window.localStorage.setItem('access_token', accessToken);
@@ -125,6 +126,7 @@ const useAuth = (): Return => {
       schemes,
       groups,
       isSet: true,
+      demId,
     });
     authenticated(accessToken);
   };
@@ -142,6 +144,7 @@ const useAuth = (): Return => {
         // currentUser?.newUser === undefined ? false : !currentUser?.newUser,
         schemes: currentUser?.schemes || [],
         groups: currentUser?.groups || [],
+        demId: currentUser?.demId || '',
         isSet: true,
       });
     },

@@ -7,8 +7,9 @@ export interface SetUserPayload {
   email: string;
   fullName: string;
   onboarded: boolean;
-  businesses: { name: string; id: string }[];
+  businesses: { name: string; id: string; demId?: string | null | undefined }[];
   schemes: Scheme[];
+  demId: string | null | undefined;
   groups: {
     id: string;
     name: string;
@@ -39,9 +40,11 @@ export interface UserModel {
   email: string;
   fullName: string;
   picture: string;
-  businesses: { name: string; id: string }[];
+  businesses: { name: string; id: string; demId?: string | null | undefined }[];
   onboarded: boolean;
   schemes: Scheme[];
+  demId: string | null | undefined;
+
   groups: {
     id: string;
     name: string;
@@ -67,6 +70,7 @@ const userModel: UserModel = {
   role: Role.User,
   schemes: [],
   groups: [],
+  demId: '',
 
   setUser: action((state, payload) => {
     state.id = payload.id;
@@ -77,6 +81,7 @@ const userModel: UserModel = {
     state.schemes = payload.schemes;
     state.groups = payload.groups;
     state.isSet = payload.isSet;
+    state.demId = payload.demId;
   }),
   setRole: action((state, payload) => {
     state.role = payload.role;
@@ -91,6 +96,7 @@ const userModel: UserModel = {
     state.schemes = [];
     state.role = Role.User;
     state.isSet = false;
+    state.demId = '';
   }),
 };
 

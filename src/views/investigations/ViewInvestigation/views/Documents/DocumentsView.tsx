@@ -9,6 +9,7 @@ const DocumentsView = ({ data }: ViewProps) => {
   );
   // convert tags to string array
   const tagsArray = Array.from(tags);
+
   return (
     <TabContent>
       <Card style={{ marginLeft: 20, marginRight: 20, marginTop: 20 }}>

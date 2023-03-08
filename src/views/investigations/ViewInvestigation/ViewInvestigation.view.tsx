@@ -13,7 +13,8 @@ import { ViewInvestigationQuery } from '../../../graphql/generated';
 import Flow from './views/Flow/Flow.container';
 import ViewDetails from './views/Details';
 import DocumentsContainer from './views/Documents/Documents.container';
-import AddDocument from '../../../components/form-components/documents';
+import AddDocument from '../../../components/form-components/documents/AddDocument';
+import AddEvidence from '../../../components/form-components/documents/AddEvidence';
 
 interface Props {
   data: ViewInvestigationQuery | undefined;
@@ -33,6 +34,7 @@ interface Props {
   addDemDocument: boolean;
   crimeGroupIds: string[];
   incidentIds: string[];
+  demId: string | undefined | null;
 }
 
 const useStyles = createUseStyles({
@@ -53,6 +55,7 @@ const useStyles = createUseStyles({
 
 const ViewInvestigation = ({
   data,
+  demId,
   offenderIds,
   vehicleIds,
   incidentIds,
@@ -219,7 +222,7 @@ const ViewInvestigation = ({
                     {
                       label: 'Add DEM Document',
                       key: '6',
-                      disabled: true,
+                      disabled: !demId,
                       icon: (
                         <FontAwesomeIcon
                           icon={faMagnifyingGlass}
@@ -359,7 +362,14 @@ const ViewInvestigation = ({
         onClose={toggleAddDemDocument}
         zIndex={1001}
       >
-        {addDemDocument ? <div /> : <div />}
+        {addDemDocument ? (
+          <AddEvidence
+            investigationId={data?.investigation?.id || ''}
+            onClose={toggleAddDemDocument}
+          />
+        ) : (
+          <div />
+        )}
       </Drawer>
     </TabbedView>
   );

@@ -3,6 +3,7 @@ import {
   ViewInvestigationQuery,
 } from 'graphql/generated';
 import { useState } from 'react';
+import { useStoreState } from '../../../state';
 
 interface Return {
   data: ViewInvestigationQuery | undefined;
@@ -23,6 +24,7 @@ interface Return {
   addDocument: boolean;
   toggleAddDemDocument: () => void;
   addDemDocument: boolean;
+  demId: string | null | undefined;
 }
 const useViewInvestigation = (investigationId: string): Return => {
   const [offenderIds, setOffenderIds] = useState<string[]>([]);
@@ -35,6 +37,7 @@ const useViewInvestigation = (investigationId: string): Return => {
   const [addExistingOffender, setAddExistingOffender] = useState(false);
   const [addDocument, setAddDocument] = useState(false);
   const [addDemDocument, setAddDemDocument] = useState(false);
+  const demId = useStoreState((state) => state.user.demId);
   const { data, loading } = useViewInvestigationQuery({
     variables: {
       where: {
@@ -100,6 +103,7 @@ const useViewInvestigation = (investigationId: string): Return => {
     toggleAddDemDocument,
     addDocument,
     toggleAddDocument,
+    demId,
   };
 };
 

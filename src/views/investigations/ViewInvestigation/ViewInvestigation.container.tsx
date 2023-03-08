@@ -25,9 +25,11 @@ const ViewCustomer: React.FC = () => {
     addDocument,
     toggleAddDemDocument,
     addDemDocument,
+    demId,
   } = useViewCustomer(id || '');
   return (
     <View
+      demId={demId}
       toggleAddDocument={toggleAddDocument}
       addDocument={addDocument}
       toggleAddDemDocument={toggleAddDemDocument}

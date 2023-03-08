@@ -3,9 +3,11 @@ query currentUser {
     id
     fullName
     email
+    demId
     businesses {
       id
       name
+      demId
     }
     newUser
     groups {

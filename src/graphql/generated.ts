@@ -5095,6 +5095,7 @@ export type Business = {
   actions: Array<Action>;
   children: Array<Business>;
   createdAt: Scalars['DateTime'];
+  demId?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   incidents: Array<Incident>;
   locations: Array<Address>;
@@ -7112,6 +7113,28 @@ export type DateTimeNullableFilter = {
   lte?: InputMaybe<Scalars['DateTime']>;
   not?: InputMaybe<NestedDateTimeNullableFilter>;
   notIn?: InputMaybe<Array<Scalars['DateTime']>>;
+};
+
+export type DemCompany = {
+  __typename?: 'DemCompany';
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+};
+
+export type DemEvidence = {
+  __typename?: 'DemEvidence';
+  id?: Maybe<Scalars['String']>;
+  importance?: Maybe<Scalars['String']>;
+  playbackUrl?: Maybe<Scalars['String']>;
+  thumbnailUrl?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+};
+
+export type DemUser = {
+  __typename?: 'DemUser';
+  email?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
 };
 
 export type DeviceInfo = {
@@ -10704,6 +10727,12 @@ export type ImageWhereInput = {
 
 export type ImageWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
+};
+
+export type ImportDemEvidence = {
+  id: Scalars['String'];
+  name: Scalars['String'];
+  tags?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type Impression = {
@@ -16598,6 +16627,24 @@ export type ListCrimeGroups = {
   total: Scalars['Int'];
 };
 
+export type ListDemCompanies = {
+  __typename?: 'ListDemCompanies';
+  demCompanies: Array<DemCompany>;
+  total: Scalars['Int'];
+};
+
+export type ListDemEvidence = {
+  __typename?: 'ListDemEvidence';
+  demEvidence: Array<DemEvidence>;
+  total: Scalars['Int'];
+};
+
+export type ListDemUsers = {
+  __typename?: 'ListDemUsers';
+  demUsers: Array<DemUser>;
+  total: Scalars['Int'];
+};
+
 export type ListFeedItems = {
   __typename?: 'ListFeedItems';
   feedItems: Array<FeedItem>;
@@ -17455,6 +17502,7 @@ export type Mutation = {
   approveIncident?: Maybe<Incident>;
   approveOffender?: Maybe<Offender>;
   clearUnusedImages?: Maybe<SystemTask>;
+  copyEvidenceOnInvestigation?: Maybe<Document>;
   createAction: Action;
   createAddress: Address;
   createArticle?: Maybe<Article>;
@@ -17517,6 +17565,8 @@ export type Mutation = {
   deleteUserScheme?: Maybe<UserScheme>;
   deleteVehicle?: Maybe<Vehicle>;
   inviteExistingUser?: Maybe<User>;
+  linkOrgToDem?: Maybe<Business>;
+  linkUserToDem?: Maybe<User>;
   newIncident: Incident;
   recycleExpiredData?: Maybe<SystemTask>;
   recycleIncident?: Maybe<Incident>;
@@ -17611,6 +17661,11 @@ export type MutationApproveIncidentArgs = {
 
 export type MutationApproveOffenderArgs = {
   data: ApproveIncidentData;
+  where: UniqueId;
+};
+
+export type MutationCopyEvidenceOnInvestigationArgs = {
+  data: ImportDemEvidence;
   where: UniqueId;
 };
 
@@ -17867,6 +17922,16 @@ export type MutationDeleteVehicleArgs = {
 
 export type MutationInviteExistingUserArgs = {
   data: UserUpdateInput;
+  where: UniqueId;
+};
+
+export type MutationLinkOrgToDemArgs = {
+  data: UniqueId;
+  where: UniqueId;
+};
+
+export type MutationLinkUserToDemArgs = {
+  data: UniqueId;
   where: UniqueId;
 };
 
@@ -21409,6 +21474,9 @@ export type Query = {
   listArticles: ListArticles;
   listBusinesses: ListBusinesses;
   listCrimeGroups: ListCrimeGroups;
+  listDemCompanies: ListDemCompanies;
+  listDemEvidence: ListDemEvidence;
+  listDemUsers: ListDemUsers;
   listFeedItems?: Maybe<ListFeedItems>;
   listGoodsTypes: ListGoodsTypes;
   listIncidents?: Maybe<ListIncidents>;
@@ -21620,6 +21688,23 @@ export type QueryListCrimeGroupsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<CrimeGroupWhereInput>;
+};
+
+export type QueryListDemCompaniesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+};
+
+export type QueryListDemEvidenceArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: Scalars['String'];
+};
+
+export type QueryListDemUsersArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where: Scalars['String'];
 };
 
 export type QueryListFeedItemsArgs = {
@@ -26743,6 +26828,7 @@ export type User = {
   createdArticles: Array<Article>;
   createdAt: Scalars['DateTime'];
   createdTags: Array<Tag>;
+  demId?: Maybe<Scalars['String']>;
   disabled: Scalars['Boolean'];
   email: Scalars['String'];
   expoPushTokens: Array<ExpoPushToken>;
@@ -32408,6 +32494,7 @@ export type BusinessQuery = {
     __typename?: 'Business';
     id: string;
     name: string;
+    demId?: string | null;
     parent?: { __typename?: 'Business'; id: string; name: string } | null;
     locations: Array<{
       __typename?: 'Address';
@@ -32835,6 +32922,84 @@ export type ListCrimeGroupsQuery = {
   };
 };
 
+export type CopyEvidenceMutationVariables = Exact<{
+  data: ImportDemEvidence;
+  where: UniqueId;
+}>;
+
+export type CopyEvidenceMutation = {
+  __typename?: 'Mutation';
+  copyEvidenceOnInvestigation?: {
+    __typename?: 'Document';
+    id: string;
+    name: string;
+    url: string;
+    thumbnailUrl?: string | null;
+    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    investigation: Array<{
+      __typename?: 'Investigation';
+      id: string;
+      name: string;
+    }>;
+  } | null;
+};
+
+export type LinkOrgToDemMutationVariables = Exact<{
+  data: UniqueId;
+  where: UniqueId;
+}>;
+
+export type LinkOrgToDemMutation = {
+  __typename?: 'Mutation';
+  linkOrgToDem?: {
+    __typename?: 'Business';
+    id: string;
+    name: string;
+    demId?: string | null;
+    parent?: { __typename?: 'Business'; id: string; name: string } | null;
+    locations: Array<{
+      __typename?: 'Address';
+      id: string;
+      full?: string | null;
+    }>;
+  } | null;
+};
+
+export type ListDemCompaniesQueryVariables = Exact<{ [key: string]: never }>;
+
+export type ListDemCompaniesQuery = {
+  __typename?: 'Query';
+  listDemCompanies: {
+    __typename?: 'ListDemCompanies';
+    total: number;
+    demCompanies: Array<{
+      __typename?: 'DemCompany';
+      name?: string | null;
+      id?: string | null;
+    }>;
+  };
+};
+
+export type ListDemEvidenceQueryVariables = Exact<{
+  where: Scalars['String'];
+}>;
+
+export type ListDemEvidenceQuery = {
+  __typename?: 'Query';
+  listDemEvidence: {
+    __typename?: 'ListDemEvidence';
+    total: number;
+    demEvidence: Array<{
+      __typename?: 'DemEvidence';
+      type?: string | null;
+      thumbnailUrl?: string | null;
+      playbackUrl?: string | null;
+      importance?: string | null;
+      id?: string | null;
+    }>;
+  };
+};
+
 export type CreateDocumentOnInvestigationMutationVariables = Exact<{
   where: UniqueId;
   data: CreateDocument;
@@ -32850,7 +33015,18 @@ export type CreateDocumentOnInvestigationMutation = {
     url: string;
     createdAt: any;
     updatedAt: any;
-    investigation: Array<{ __typename?: 'Investigation'; id: string }>;
+    investigation: Array<{
+      __typename?: 'Investigation';
+      id: string;
+      documents: Array<{
+        __typename?: 'Document';
+        id: string;
+        name: string;
+        url: string;
+        thumbnailUrl?: string | null;
+        tags: Array<{ __typename?: 'Tag'; name: string; id: string }>;
+      }>;
+    }>;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
   } | null;
 };
@@ -36056,13 +36232,19 @@ export type CurrentUserQuery = {
     id: string;
     fullName: string;
     email: string;
+    demId?: string | null;
     newUser: boolean;
     incidentEmail: boolean;
     incidentPush: boolean;
     offenderEmail: boolean;
     offenderPush: boolean;
     messagePush: boolean;
-    businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+    businesses: Array<{
+      __typename?: 'Business';
+      id: string;
+      name: string;
+      demId?: string | null;
+    }>;
     groups: Array<{
       __typename?: 'Group';
       id: string;
@@ -36099,9 +36281,15 @@ export type UserQuery = {
     fullName: string;
     email: string;
     status?: string | null;
+    demId?: string | null;
     disabled: boolean;
     newUser: boolean;
-    businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+    businesses: Array<{
+      __typename?: 'Business';
+      id: string;
+      name: string;
+      demId?: string | null;
+    }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     chats: Array<{
       __typename?: 'UserChat';
@@ -37875,6 +38063,7 @@ export const BusinessDocument = gql`
     business(where: $where) {
       id
       name
+      demId
       parent {
         id
         name
@@ -38878,6 +39067,255 @@ export type ListCrimeGroupsQueryResult = Apollo.QueryResult<
   ListCrimeGroupsQuery,
   ListCrimeGroupsQueryVariables
 >;
+export const CopyEvidenceDocument = gql`
+  mutation CopyEvidence($data: ImportDemEvidence!, $where: UniqueId!) {
+    copyEvidenceOnInvestigation(data: $data, where: $where) {
+      id
+      name
+      url
+      thumbnailUrl
+      tags {
+        id
+        name
+      }
+      investigation {
+        id
+        name
+      }
+    }
+  }
+`;
+export type CopyEvidenceMutationFn = Apollo.MutationFunction<
+  CopyEvidenceMutation,
+  CopyEvidenceMutationVariables
+>;
+
+/**
+ * __useCopyEvidenceMutation__
+ *
+ * To run a mutation, you first call `useCopyEvidenceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCopyEvidenceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [copyEvidenceMutation, { data, loading, error }] = useCopyEvidenceMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useCopyEvidenceMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CopyEvidenceMutation,
+    CopyEvidenceMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CopyEvidenceMutation,
+    CopyEvidenceMutationVariables
+  >(CopyEvidenceDocument, options);
+}
+export type CopyEvidenceMutationHookResult = ReturnType<
+  typeof useCopyEvidenceMutation
+>;
+export type CopyEvidenceMutationResult =
+  Apollo.MutationResult<CopyEvidenceMutation>;
+export type CopyEvidenceMutationOptions = Apollo.BaseMutationOptions<
+  CopyEvidenceMutation,
+  CopyEvidenceMutationVariables
+>;
+export const LinkOrgToDemDocument = gql`
+  mutation LinkOrgToDem($data: UniqueId!, $where: UniqueId!) {
+    linkOrgToDem(data: $data, where: $where) {
+      id
+      name
+      demId
+      parent {
+        id
+        name
+      }
+      locations {
+        id
+        full
+      }
+    }
+  }
+`;
+export type LinkOrgToDemMutationFn = Apollo.MutationFunction<
+  LinkOrgToDemMutation,
+  LinkOrgToDemMutationVariables
+>;
+
+/**
+ * __useLinkOrgToDemMutation__
+ *
+ * To run a mutation, you first call `useLinkOrgToDemMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLinkOrgToDemMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [linkOrgToDemMutation, { data, loading, error }] = useLinkOrgToDemMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useLinkOrgToDemMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    LinkOrgToDemMutation,
+    LinkOrgToDemMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    LinkOrgToDemMutation,
+    LinkOrgToDemMutationVariables
+  >(LinkOrgToDemDocument, options);
+}
+export type LinkOrgToDemMutationHookResult = ReturnType<
+  typeof useLinkOrgToDemMutation
+>;
+export type LinkOrgToDemMutationResult =
+  Apollo.MutationResult<LinkOrgToDemMutation>;
+export type LinkOrgToDemMutationOptions = Apollo.BaseMutationOptions<
+  LinkOrgToDemMutation,
+  LinkOrgToDemMutationVariables
+>;
+export const ListDemCompaniesDocument = gql`
+  query ListDemCompanies {
+    listDemCompanies {
+      demCompanies {
+        name
+        id
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useListDemCompaniesQuery__
+ *
+ * To run a query within a React component, call `useListDemCompaniesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListDemCompaniesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListDemCompaniesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useListDemCompaniesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ListDemCompaniesQuery,
+    ListDemCompaniesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ListDemCompaniesQuery, ListDemCompaniesQueryVariables>(
+    ListDemCompaniesDocument,
+    options
+  );
+}
+export function useListDemCompaniesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListDemCompaniesQuery,
+    ListDemCompaniesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListDemCompaniesQuery,
+    ListDemCompaniesQueryVariables
+  >(ListDemCompaniesDocument, options);
+}
+export type ListDemCompaniesQueryHookResult = ReturnType<
+  typeof useListDemCompaniesQuery
+>;
+export type ListDemCompaniesLazyQueryHookResult = ReturnType<
+  typeof useListDemCompaniesLazyQuery
+>;
+export type ListDemCompaniesQueryResult = Apollo.QueryResult<
+  ListDemCompaniesQuery,
+  ListDemCompaniesQueryVariables
+>;
+export const ListDemEvidenceDocument = gql`
+  query ListDemEvidence($where: String!) {
+    listDemEvidence(where: $where) {
+      total
+      demEvidence {
+        type
+        thumbnailUrl
+        playbackUrl
+        importance
+        id
+      }
+    }
+  }
+`;
+
+/**
+ * __useListDemEvidenceQuery__
+ *
+ * To run a query within a React component, call `useListDemEvidenceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListDemEvidenceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListDemEvidenceQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useListDemEvidenceQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListDemEvidenceQuery,
+    ListDemEvidenceQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ListDemEvidenceQuery, ListDemEvidenceQueryVariables>(
+    ListDemEvidenceDocument,
+    options
+  );
+}
+export function useListDemEvidenceLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListDemEvidenceQuery,
+    ListDemEvidenceQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListDemEvidenceQuery,
+    ListDemEvidenceQueryVariables
+  >(ListDemEvidenceDocument, options);
+}
+export type ListDemEvidenceQueryHookResult = ReturnType<
+  typeof useListDemEvidenceQuery
+>;
+export type ListDemEvidenceLazyQueryHookResult = ReturnType<
+  typeof useListDemEvidenceLazyQuery
+>;
+export type ListDemEvidenceQueryResult = Apollo.QueryResult<
+  ListDemEvidenceQuery,
+  ListDemEvidenceQueryVariables
+>;
 export const CreateDocumentOnInvestigationDocument = gql`
   mutation CreateDocumentOnInvestigation(
     $where: UniqueId!
@@ -38887,6 +39325,16 @@ export const CreateDocumentOnInvestigationDocument = gql`
       id
       investigation {
         id
+        documents {
+          id
+          name
+          url
+          thumbnailUrl
+          tags {
+            name
+            id
+          }
+        }
       }
       name
       tags {
@@ -45031,9 +45479,11 @@ export const CurrentUserDocument = gql`
       id
       fullName
       email
+      demId
       businesses {
         id
         name
+        demId
       }
       newUser
       groups {
@@ -45121,9 +45571,11 @@ export const UserDocument = gql`
       fullName
       email
       status
+      demId
       businesses {
         id
         name
+        demId
       }
       disabled
       newUser

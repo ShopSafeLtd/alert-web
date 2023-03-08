@@ -4,15 +4,15 @@ import { RoleValues } from 'types';
 
 import {
   Button,
-  PageHeader,
-  Tag,
   Card,
+  Col,
   Descriptions,
   Drawer,
-  Typography,
-  Row,
-  Col,
   Empty,
+  PageHeader,
+  Row,
+  Tag,
+  Typography,
 } from 'antd';
 import EditUser from 'components/form-components/user/EditUser';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -54,6 +54,20 @@ const userDetail = ({
       title={data?.user?.fullName}
       subTitle={data?.user?.disabled && 'User Disabled'}
       extra={[
+        <Button
+          key="34"
+          disabled={saving || !!data?.user?.demId}
+          onClick={inviteConfirm}
+          icon={
+            <FontAwesomeIcon
+              style={{ marginRight: 5 }}
+              size="lg"
+              icon={faPaperPlaneTop}
+            />
+          }
+        >
+          Resend Invite
+        </Button>,
         <Button
           key="4"
           disabled={saving}

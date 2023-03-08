@@ -126,7 +126,6 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
   const [createDocument] = useCreateDocumentOnInvestigationMutation({
     onCompleted: () => {
       setSaving(false);
-      console.log('Document created');
       onClose();
     },
     update: (store, result) => {
