@@ -29,6 +29,7 @@ interface Props {
   fileList: Image[];
   setAssignToImage: (image: Image) => void;
   onPreview?: (value: Image) => void;
+  disabled?: boolean;
 }
 
 const ImageSection = ({
@@ -40,6 +41,7 @@ const ImageSection = ({
   removeImageFromOffender,
   removeImage,
   onPreview,
+  disabled,
 }: Props): JSX.Element => (
   <Row gutter={20}>
     <Col>
@@ -71,8 +73,10 @@ const ImageSection = ({
             beforeUpload={beforeUpload}
             accept=".png,.jpeg,.webp"
             showUploadList={false}
+            disabled={disabled}
           >
             <Button
+              disabled={disabled}
               icon={
                 <FontAwesomeIcon icon={faUpload} style={{ marginRight: 5 }} />
               }
@@ -93,6 +97,7 @@ const ImageSection = ({
           onChange={imgChange}
           beforeUpload={beforeUpload}
           accept=".png,.jpeg,.webp"
+          disabled={disabled}
           itemRender={(el, file: Image) => (
             <div className="image-card" key={el.key}>
               {file.url === undefined && (
@@ -120,6 +125,7 @@ const ImageSection = ({
                   >
                     <Button
                       size="small"
+                      disabled={disabled}
                       icon={<FontAwesomeIcon icon={faTrash} />}
                     />
                   </Popconfirm>
@@ -152,6 +158,7 @@ const ImageSection = ({
                     >
                       <Button
                         size="small"
+                        disabled={disabled}
                         icon={<FontAwesomeIcon icon={faTrash} />}
                         style={{ color: 'red' }}
                       />
@@ -163,6 +170,7 @@ const ImageSection = ({
                   type="primary"
                   style={{ marginTop: 10 }}
                   onClick={() => setAssignToImage(file)}
+                  disabled={disabled}
                   icon={
                     <FontAwesomeIcon
                       icon={faUsers}

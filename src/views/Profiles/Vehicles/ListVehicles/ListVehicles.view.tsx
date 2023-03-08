@@ -80,20 +80,22 @@ const ListVehicles = ({
             key: 'updatedAt',
             dataIndex: 'updatedAt',
             title: 'UpdatedAt',
-            render: (value) =>
-              moment(value || moment()).format(`ddd MMM DD YYYY - HH:mm`),
+            render: (value) => moment(value || moment()).calendar(),
+          },
+          {
+            key: 'registration',
+            dataIndex: 'registration',
+            title: 'Registration',
           },
           {
             key: 'colour',
             dataIndex: 'colour',
             title: 'Colour',
-            // render: (value) => `£${value || 0}`,
           },
           {
             key: 'model',
             dataIndex: 'model',
             title: 'Model',
-            // render: (value) => `£${value || 0}`,
           },
           {
             key: 'totalOffenders',
@@ -110,31 +112,18 @@ const ListVehicles = ({
             dataIndex: 'totalCrimeGroups',
             title: 'Crime Groups',
           },
-          {
-            key: 'registration',
-            dataIndex: 'registration',
-            title: 'Registration',
-            // render: (value) => `${value?.toFixed(0) || 0}%`,
-          },
+
           {
             title: '',
             dataIndex: 'actions',
             key: 'actions',
             render: (_, record) => (
-              // <Link to={`view/${record.key}`}>
               <FontAwesomeIcon
                 icon={faArrowUpRightFromSquare}
                 onClick={() => navigate(`view/${record.key}`)}
               />
-              // </Link>
             ),
           },
-          // {
-          //   key: 'crimeGroup',
-          //   dataIndex: 'crimeGroup',
-          //   title: 'crimeGroup',
-          //   render: (value,item) => `${item.crimeGroup.}%`,
-          // },
         ]}
       />
       <Drawer

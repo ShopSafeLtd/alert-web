@@ -1,0 +1,9 @@
+query ListDemCompanies {
+    listDemCompanies {
+        demCompanies {
+            name
+            id
+        }
+        total
+    }
+}

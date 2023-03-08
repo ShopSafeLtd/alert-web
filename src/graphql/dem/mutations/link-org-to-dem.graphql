@@ -1,0 +1,15 @@
+mutation LinkOrgToDem($data: UniqueId!, $where: UniqueId!) {
+    linkOrgToDem(data: $data, where: $where) {
+        id
+        name
+        demId
+        parent {
+            id
+            name
+        }
+        locations {
+            id
+            full
+        }
+    }
+}

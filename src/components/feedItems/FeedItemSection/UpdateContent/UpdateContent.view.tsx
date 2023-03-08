@@ -4,7 +4,7 @@ import { UpdateType } from 'graphql/generated';
 
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMessage } from '@fortawesome/pro-light-svg-icons';
+import { faMessageDots } from '@fortawesome/pro-light-svg-icons';
 
 const { Title, Text, Paragraph } = Typography;
 interface UpdateData {
@@ -66,24 +66,24 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
   return (
     <>
       {update?.text ? (
-        <>
+        <div style={{ marginBottom: -10 }}>
           <Title level={4} style={{ marginBottom: 2 }} ellipsis>
             {title}
           </Title>
 
           <Paragraph
-            style={{ fontSize: 14 }}
+            style={{ fontSize: 14, marginTop: 5 }}
             type="secondary"
             ellipsis={{ rows: 3 }}
           >
             <FontAwesomeIcon
               size="sm"
               className="feedItem-card-icon"
-              icon={faMessage}
+              icon={faMessageDots}
             />
             {getContent(update.text)}
           </Paragraph>
-        </>
+        </div>
       ) : null}
       {!update?.text ? (
         <>
@@ -93,7 +93,7 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
                 <FontAwesomeIcon
                   size="sm"
                   className="feedItem-card-icon"
-                  icon={faMessage}
+                  icon={faMessageDots}
                 />
                 Link an incident
               </Title>
@@ -155,7 +155,7 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
                 <FontAwesomeIcon
                   size="sm"
                   className="feedItem-card-icon"
-                  icon={faMessage}
+                  icon={faMessageDots}
                 />
                 Link an offender
               </Title>

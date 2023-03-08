@@ -54,7 +54,7 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
         },
       },
       orderBy: {
-        fullName: SortOrder.Asc,
+        fullName: SortOrder.Desc,
       },
     },
   });

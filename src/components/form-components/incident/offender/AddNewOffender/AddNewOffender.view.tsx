@@ -60,7 +60,7 @@ const AddNewOffender = ({
           tooltip="Enter the offenders name if you know it, if not leave this field
                 blank."
         >
-          <Input disabled={saving} />
+          <Input disabled={saving} placeholder="Unidentified Offender" />
         </Form.Item>
       </Col>
     </Row>

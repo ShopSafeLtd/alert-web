@@ -29641,6 +29641,7 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
   font-size: 12px;
 }
 .offender-card {
+  height: 100%;
   margin: 5px 5px 10px;
 }
 .offender-card .ant-card-body {
@@ -29656,6 +29657,7 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
   background-position: center center;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
+  background-color: #f5f5f5;
 }
 .offender-card .offender-card-tags {
   position: absolute;
@@ -29694,7 +29696,6 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
 }
 .offender-card .offender-card-content {
   padding: 10px 10px 5px;
-  height: 215px;
   overflow: auto;
 }
 .offender-card .offender-card-desc {

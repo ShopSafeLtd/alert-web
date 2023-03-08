@@ -4,43 +4,59 @@ import useViewDetails from './useViewDetails';
 
 interface Props {
   investigationId: string;
+  toggleAddExistingOffender: () => void;
+  toggleAddExistingIncident: () => void;
+  toggleAddExistingVehicle: () => void;
 }
 
-const ViewDetails = ({ investigationId }: Props) => {
+const ViewDetails = ({
+  investigationId,
+  toggleAddExistingOffender,
+  toggleAddExistingIncident,
+  toggleAddExistingVehicle,
+}: Props) => {
   const {
     data,
     loading,
 
-    offenderIds,
-    vehicleIds,
-    incidentIds,
-    crimeGroupIds,
-    addExistingOffender,
-    toggleAddExistingOffender,
-    addExistingVehicle,
-    toggleAddExistingVehicle,
-    addExistingCrimeGroup,
-    toggleAddExistingCrimeGroup,
-    addExistingIncident,
-    toggleAddExistingIncident,
+    scrolledToTop,
+    loadMore,
+    userId,
+    editRights,
+    saving,
+    setEditUpdate,
+    confirmDeleteUpdate,
+    replyTo,
+    setReplyTo,
+    handleEditUpdate,
+    setEditUpdateInput,
+    editUpdateInput,
+    editUpdate,
+    toggleSubscribe,
   } = useViewDetails({ investigationId });
 
   return (
     <View
+      handleEditUpdate={handleEditUpdate}
+      confirmDeleteUpdate={confirmDeleteUpdate}
+      setEditUpdate={setEditUpdate}
+      editRights={editRights}
+      saving={saving}
+      userId={userId}
+      replyTo={replyTo}
+      setReplyTo={setReplyTo}
+      loadMore={loadMore}
+      scrolledToTop={scrolledToTop}
       data={data}
       loading={loading}
-      addExistingOffender={addExistingOffender}
+      investigationId={investigationId}
+      editUpdateInput={editUpdateInput}
+      setEditUpdateInput={setEditUpdateInput}
+      editUpdate={editUpdate}
+      toggleSubscribe={toggleSubscribe}
       toggleAddExistingOffender={toggleAddExistingOffender}
-      addExistingVehicle={addExistingVehicle}
-      toggleAddExistingVehicle={toggleAddExistingVehicle}
-      offenderIds={offenderIds}
-      vehicleIds={vehicleIds}
-      incidentIds={incidentIds}
-      crimeGroupIds={crimeGroupIds}
-      addExistingCrimeGroup={addExistingCrimeGroup}
-      toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
-      addExistingIncident={addExistingIncident}
       toggleAddExistingIncident={toggleAddExistingIncident}
+      toggleAddExistingVehicle={toggleAddExistingVehicle}
     />
   );
 };

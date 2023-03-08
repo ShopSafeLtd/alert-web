@@ -11,134 +11,93 @@ function EditIncident({ reviewed }: Props): JSX.Element {
   const incidentId = useParams().id || '';
 
   const {
-    onSubmit,
+    addIncidentTag,
+    addRecentOffender,
+    assignOffendersToImages,
+    beforeUpload,
+    crimeGroupsData,
     data,
-    loading,
-    saving,
+    fileList,
     groups,
     groupsLoading,
-    tags,
-    tagsLoading,
     imgChange,
-    onPreview,
-    fileList,
-    beforeUpload,
-    addIncidentTag,
-    toggleAddIncidentTag,
-    updateIncidentTag,
-    addOffender,
-    toggleAddOffender,
-    addExistingOffender,
-    toggleAddExistingOffender,
-    updateOffendersData,
+    loading,
+    newImage,
+    offenderImgChange,
     offendersData,
+    onCancelNewImage,
+    onPreview,
     onReject,
+    onSearchBusiness,
+    onSubmit,
     recentOffenderData,
     recentOffenderLoading,
-    addRecentOffender,
-    setAddRecentOffender,
-    searchOffenders,
-    setSearchOffenders,
-    newImage,
-    assignOffendersToImages,
-    onCancelNewImage,
-    setAssignToImage,
-    removeImageFromOffender,
-    removeImage,
-    removeOffender,
-    listOffendersData,
-    offenderImgChange,
-    editOffenderId,
-    setEditOffenderId,
-    updateOffender,
-    addNewVehicle,
-    addExistingVehicle,
-    editVehicleId,
-    setEditVehicleId,
-    toggleAddNewVehicle,
-    toggleAddExistingVehicle,
-    vehiclesData,
-    updateVehiclesData,
-    removeVehicle,
-    addNewCrimeGroup,
-    addExistingCrimeGroup,
-    editCrimeGroupId,
-    setEditCrimeGroupId,
-    toggleAddNewCrimeGroup,
-    toggleAddExistingCrimeGroup,
-    crimeGroupsData,
-    updateCrimeGroupsData,
     removeCrimeGroup,
-    listVehiclesData,
-    listCrimeGroupsData,
-    onSearchBusiness,
+    removeImage,
+    removeImageFromOffender,
+    removeOffender,
+    removeVehicle,
+    saving,
+    searchOffenders,
+    setAddRecentOffender,
+    setAssignToImage,
+    setSearchOffenders,
+    tags,
+    tagsLoading,
+    toggleAddIncidentTag,
+    updateCrimeGroupsData,
+    updateIncidentTag,
+    updateOffender,
+    updateOffendersData,
+    updateVehiclesData,
+    vehiclesData,
+    goodsTypesData,
   } = useEditIncident({ incidentId, reviewed });
   return (
     <div>
       <View
-        updateOffender={updateOffender}
-        editOffenderId={editOffenderId}
-        setEditOffenderId={setEditOffenderId}
-        onSubmit={onSubmit}
+        addIncidentTag={addIncidentTag}
+        addRecentOffender={addRecentOffender}
+        assignOffendersToImages={assignOffendersToImages}
+        beforeUpload={beforeUpload}
+        crimeGroupsData={crimeGroupsData}
         data={data}
-        loading={loading}
-        saving={saving}
+        fileList={fileList}
+        goodsTypesData={goodsTypesData}
         groups={groups}
         groupsLoading={groupsLoading}
-        tags={tags}
-        tagsLoading={tagsLoading}
         imgChange={imgChange}
-        onPreview={onPreview}
-        fileList={fileList}
-        beforeUpload={beforeUpload}
-        addIncidentTag={addIncidentTag}
-        toggleAddIncidentTag={toggleAddIncidentTag}
-        updateIncidentTag={updateIncidentTag}
-        addOffender={addOffender}
-        toggleAddOffender={toggleAddOffender}
-        addExistingOffender={addExistingOffender}
-        toggleAddExistingOffender={toggleAddExistingOffender}
-        updateOffendersData={updateOffendersData}
+        loading={loading}
+        newImage={newImage}
+        offenderImgChange={offenderImgChange}
         offendersData={offendersData}
-        // deleteConfirm={deleteConfirm}
-        reviewed={reviewed}
+        onCancelNewImage={onCancelNewImage}
+        onPreview={onPreview}
         onReject={onReject}
+        onSearchBusiness={onSearchBusiness}
+        onSubmit={onSubmit}
         recentOffenderData={recentOffenderData}
         recentOffenderLoading={recentOffenderLoading}
-        addRecentOffender={addRecentOffender}
-        setAddRecentOffender={setAddRecentOffender}
-        searchOffenders={searchOffenders}
-        setSearchOffenders={setSearchOffenders}
-        newImage={newImage}
-        assignOffendersToImages={assignOffendersToImages}
-        onCancelNewImage={onCancelNewImage}
-        setAssignToImage={setAssignToImage}
-        removeImageFromOffender={removeImageFromOffender}
-        removeImage={removeImage}
-        removeOffender={removeOffender}
-        listOffendersData={listOffendersData}
-        offenderImgChange={offenderImgChange}
-        addNewVehicle={addNewVehicle}
-        addExistingVehicle={addExistingVehicle}
-        editVehicleId={editVehicleId}
-        setEditVehicleId={setEditVehicleId}
-        toggleAddNewVehicle={toggleAddNewVehicle}
-        toggleAddExistingVehicle={toggleAddExistingVehicle}
-        vehiclesData={vehiclesData}
-        updateVehiclesData={updateVehiclesData}
-        removeVehicle={removeVehicle}
         removeCrimeGroup={removeCrimeGroup}
-        addNewCrimeGroup={addNewCrimeGroup}
-        addExistingCrimeGroup={addExistingCrimeGroup}
-        editCrimeGroupId={editCrimeGroupId}
-        setEditCrimeGroupId={setEditCrimeGroupId}
-        toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
-        toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
-        crimeGroupsData={crimeGroupsData}
+        removeImage={removeImage}
+        removeImageFromOffender={removeImageFromOffender}
+        removeOffender={removeOffender}
+        removeVehicle={removeVehicle}
+        reviewed={reviewed}
+        saving={saving}
+        searchOffenders={searchOffenders}
+        setAddRecentOffender={setAddRecentOffender}
+        setAssignToImage={setAssignToImage}
+        setSearchOffenders={setSearchOffenders}
+        tags={tags}
+        tagsLoading={tagsLoading}
+        toggleAddIncidentTag={toggleAddIncidentTag}
         updateCrimeGroupsData={updateCrimeGroupsData}
-        listVehiclesData={listVehiclesData}
-        listCrimeGroupsData={listCrimeGroupsData}
-        onSearchBusiness={onSearchBusiness}
+        updateIncidentTag={updateIncidentTag}
+        updateOffender={updateOffender}
+        updateOffendersData={updateOffendersData}
+        updateVehiclesData={updateVehiclesData}
+        vehiclesData={vehiclesData}
       />
     </div>
   );

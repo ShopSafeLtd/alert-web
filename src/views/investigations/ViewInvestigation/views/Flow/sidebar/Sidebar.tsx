@@ -1,12 +1,16 @@
 /* eslint-disable  */
-import { Avatar, Col, Row, Typography } from 'antd';
+import { CarOutlined, UnorderedListOutlined } from '@ant-design/icons';
+import { Card, Skeleton, Typography } from 'antd';
 import React, { DragEvent } from 'react';
 
 export enum NodeTypes {
-  SelectorNode = 'selectorNode',
-  OffenderImageNode = 'offenderImageNode',
+  OffenderDetailsNode = 'offenderDetailsNode',
+  ImageNode = 'imageNode',
   Default = 'default',
-  TextInputNode = 'textInputNode',
+  TextInputNode = 'textNode',
+  VehicleNode = 'vehicleNode',
+  IncidentList = 'incidentList',
+  IncidentDetailsNode = 'incidentDetailsNode',
 }
 
 const onDragStart = (event: DragEvent, nodeType: NodeTypes) => {
@@ -14,71 +18,128 @@ const onDragStart = (event: DragEvent, nodeType: NodeTypes) => {
   event.dataTransfer.effectAllowed = 'move';
 };
 
-interface Props {
-  data: {
-    offenders: {
-      name: string;
-      url: string[];
-    }[];
-  };
-  setSelected: (selected: string) => void;
-}
-
-const Sidebar = ({ data, setSelected }: Props) => (
+const Sidebar = () => (
   <aside>
-    <div className="description">
+    <Typography.Text>
       You can drag these nodes to the pane on the right.
-    </div>
-    <Typography.Title
-      style={{
-        color: 'black',
-      }}
-      level={4}
-    >
-      Text Input
-    </Typography.Title>
+    </Typography.Text>
+
+    <Typography.Title level={4}>Text Input</Typography.Title>
 
     <div
-      className="react-flow__node-text"
       onDragStart={(event: DragEvent) =>
         onDragStart(event, NodeTypes.TextInputNode)
       }
       draggable
-      style={{ height: 40 }}
+      style={{ width: 'fit-content' }}
     >
-      Text Input Box
+      <Card>Text Input Box</Card>
     </div>
 
-    <Typography.Title
-      style={{
-        color: 'black',
-      }}
-      level={4}
-    >
-      Offenders
-    </Typography.Title>
+    <Typography.Title level={4}>Offender</Typography.Title>
+    <Typography.Title level={5}>Offender Image</Typography.Title>
 
-    {data.offenders.map((offender, index) => (
-      <>
-        <Row>
-          <Col span={24}>
-            <Typography.Title level={4}>{offender.name}</Typography.Title>
-            {offender.url.map((url, index) => (
-              <div
-                className="react-flow__node-input"
-                onDragStart={(event: DragEvent) => {
-                  setSelected(url);
-                  onDragStart(event, NodeTypes.OffenderImageNode);
-                }}
-                draggable
-              >
-                <Avatar src={url} shape="square" size={64} />
-              </div>
-            ))}
-          </Col>
-        </Row>
-      </>
-    ))}
+    <div
+      onDragStart={(event: DragEvent) => {
+        onDragStart(event, NodeTypes.ImageNode);
+      }}
+      draggable
+      style={{ width: 'fit-content' }}
+    >
+      <Card>
+        <Skeleton.Image />
+      </Card>
+    </div>
+
+    <Typography.Title level={5}>Offender Details</Typography.Title>
+
+    <div
+      onDragStart={(event: DragEvent) => {
+        onDragStart(event, NodeTypes.OffenderDetailsNode);
+      }}
+      draggable
+      style={{ width: 'fit-content' }}
+    >
+      <Card style={{ display: 'flex', flexDirection: 'column' }}>
+        <Skeleton.Image />
+        <Skeleton />
+      </Card>
+    </div>
+    <Typography.Title level={4}>Vehicle</Typography.Title>
+
+    <div
+      onDragStart={(event: DragEvent) => {
+        onDragStart(event, NodeTypes.VehicleNode);
+      }}
+      draggable
+      style={{ width: 'fit-content' }}
+    >
+      <Card
+        style={{
+          height: 136,
+          width: 136,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <CarOutlined style={{ fontSize: '64px' }} />
+      </Card>
+    </div>
+    <Typography.Title level={4}>Incidents</Typography.Title>
+    <Typography.Title level={5}>List</Typography.Title>
+    <div
+      onDragStart={(event: DragEvent) => {
+        onDragStart(event, NodeTypes.IncidentList);
+      }}
+      draggable
+      style={{ width: 'fit-content' }}
+    >
+      <Card
+        style={{
+          height: 136,
+          width: 136,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <UnorderedListOutlined style={{ fontSize: '64px' }} />
+      </Card>
+    </div>
+    <Typography.Title level={5}>Details</Typography.Title>
+
+    <div
+      onDragStart={(event: DragEvent) => {
+        onDragStart(event, NodeTypes.IncidentDetailsNode);
+      }}
+      draggable
+      style={{ width: 'fit-content' }}
+    >
+      <Card
+        bodyStyle={{ width: '100%' }}
+        style={{ display: 'flex', flexDirection: 'column' }}
+      >
+        <Skeleton style={{ width: 90 }} />
+      </Card>
+    </div>
+
+    {/*<Typography.Title level={4}>Crime group</Typography.Title>*/}
+
+    {/*<div*/}
+    {/*  onDragStart={(event: DragEvent) => {*/}
+    {/*    onDragStart(event, NodeTypes.OffenderDetailsNode);*/}
+    {/*  }}*/}
+    {/*  draggable*/}
+    {/*  style={{ width: 'fit-content' }}*/}
+    {/*>*/}
+    {/*  <Card*/}
+    {/*    bodyStyle={{ width: '100%' }}*/}
+    {/*    style={{ display: 'flex', flexDirection: 'column' }}*/}
+    {/*  >*/}
+    {/*    <Skeleton style={{ width: 90 }} />*/}
+    {/*  </Card>*/}
+    {/*</div>*/}
   </aside>
 );
 

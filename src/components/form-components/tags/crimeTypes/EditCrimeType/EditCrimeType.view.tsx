@@ -1,12 +1,22 @@
 import React from 'react';
-import { TagQuery } from 'graphql/generated';
-import { Button, Col, Form, Input, Row, Skeleton, Typography } from 'antd';
+import { CrimeType, TagQuery } from 'graphql/generated';
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Row,
+  Select,
+  Skeleton,
+  Typography,
+} from 'antd';
 
 const { Text } = Typography;
 
 interface FormData {
   name: string;
   description: string;
+  crimeType: CrimeType;
 }
 
 interface Props {
@@ -31,6 +41,7 @@ const EditCrimeType = ({
       initialValues={{
         name: data?.tag?.name,
         description: data?.tag?.description,
+        crimeType: data?.tag?.crimeType,
       }}
       layout="vertical"
       onFinish={onSubmit}
@@ -60,9 +71,43 @@ const EditCrimeType = ({
         </Col>
       </Row>
       <Row gutter={16}>
-        <Col span={23}>
+        <Col span={24}>
           <Form.Item name="description" label="Description">
             <Input.TextArea rows={10} disabled={saving} />
+          </Form.Item>
+        </Col>
+        <Col span={24}>
+          <Form.Item
+            name="crimeType"
+            label="Crime Type Category"
+            rules={[
+              {
+                required: true,
+                message: 'Please select a category for the new crime type.',
+              },
+            ]}
+          >
+            <Select disabled={saving}>
+              <Select.Option value={CrimeType.Burglary}>Burglary</Select.Option>
+              <Select.Option value={CrimeType.CriminalDamage}>
+                Criminal Damage
+              </Select.Option>
+              <Select.Option value={CrimeType.Drugs}>Drugs</Select.Option>
+              <Select.Option value={CrimeType.FraudForgery}>
+                Fraud & Forgery
+              </Select.Option>
+              <Select.Option value={CrimeType.Robbery}>Robbery</Select.Option>
+              <Select.Option value={CrimeType.SexualOffences}>
+                Sexual Offences
+              </Select.Option>
+              <Select.Option value={CrimeType.TheftHandling}>
+                Theft & Handling
+              </Select.Option>
+              <Select.Option value={CrimeType.Violence}>
+                Violence Against The Person
+              </Select.Option>
+              <Select.Option value={CrimeType.Other}>Other</Select.Option>
+            </Select>
           </Form.Item>
         </Col>
       </Row>

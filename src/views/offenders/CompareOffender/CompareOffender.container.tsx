@@ -13,6 +13,11 @@ const CompareIncident = () => {
     toggleSelected,
     removeOffender,
     onMerge,
+    mode,
+    setMode,
+    selectedImages,
+    toggleSelectedImages,
+    onSubmitImages,
   } = useCompareIncident();
 
   return (
@@ -26,6 +31,11 @@ const CompareIncident = () => {
       toggleSelected={toggleSelected}
       removeOffender={removeOffender}
       onMerge={onMerge}
+      mode={mode}
+      setMode={setMode}
+      selectedImages={selectedImages}
+      toggleSelectedImages={toggleSelectedImages}
+      onSubmitImages={onSubmitImages}
     />
   );
 };

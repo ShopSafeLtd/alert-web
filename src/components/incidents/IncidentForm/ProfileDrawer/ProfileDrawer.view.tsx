@@ -11,32 +11,32 @@ import AddCrimeGroup from 'components/form-components/profiles/crimeGroup/AddCri
 import { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
 
 interface Props {
-  offendersData: OffenderData[];
-  addOffender: boolean;
+  addExistingCrimeGroup: boolean;
   addExistingOffender: boolean;
-  toggleAddExistingOffender: () => void;
-  toggleAddOffender: () => void;
+  addExistingVehicle: boolean;
+  addNewCrimeGroup: boolean;
+  addNewVehicle: boolean;
+  addOffender: boolean;
+  crimeGroupsData: CrimeGroupData[];
+  editCrimeGroupId: string;
   editOffenderId: string;
+  editVehicleId: string;
+  isIncident?: boolean;
+  offendersData: OffenderData[];
+  setEditCrimeGroupId: (value: string) => void;
   setEditOffenderId: (arg0: string) => void;
+  setEditVehicleId: (value: string) => void;
+  toggleAddExistingCrimeGroup: () => void;
+  toggleAddExistingOffender: () => void;
+  toggleAddExistingVehicle: () => void;
+  toggleAddNewCrimeGroup: () => void;
+  toggleAddNewVehicle: () => void;
+  toggleAddOffender: () => void;
+  updateCrimeGroupsData: (value: CrimeGroupData) => void;
   updateOffender: (value: OffenderData) => void;
   updateOffendersData: (value: OffenderData) => void;
-  vehiclesData: VehicleData[];
-  addNewVehicle: boolean;
-  addExistingVehicle: boolean;
-  toggleAddNewVehicle: () => void;
-  toggleAddExistingVehicle: () => void;
-  editVehicleId: string;
-  setEditVehicleId: (value: string) => void;
   updateVehiclesData: (value: VehicleData) => void;
-  crimeGroupsData: CrimeGroupData[];
-  addNewCrimeGroup: boolean;
-  addExistingCrimeGroup: boolean;
-  toggleAddNewCrimeGroup: () => void;
-  toggleAddExistingCrimeGroup: () => void;
-  editCrimeGroupId: string;
-  setEditCrimeGroupId: (value: string) => void;
-  updateCrimeGroupsData: (value: CrimeGroupData) => void;
-  isIncident?: boolean;
+  vehiclesData: VehicleData[];
 }
 
 const ProfileDrawer = ({

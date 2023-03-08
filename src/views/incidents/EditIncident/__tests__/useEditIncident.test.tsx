@@ -373,6 +373,7 @@ const UseEditIncidentTest = () => {
                 url: 'url',
               },
             ],
+            goods: [],
           })
         }
       >

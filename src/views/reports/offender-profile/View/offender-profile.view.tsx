@@ -89,7 +89,7 @@ const OffenderProfile = ({
                     {offenderProfileData?.offender?.name}
                   </Title>
                   <Text type="secondary">
-                    Reference: {offenderProfileData?.offender?.reference}
+                    Alert ID: {offenderProfileData?.offender?.reference}
                   </Text>
                   <Title level={4} type="secondary">
                     Details
@@ -254,7 +254,7 @@ const OffenderProfile = ({
                     {
                       key: 'reference',
                       dataIndex: 'reference',
-                      title: 'Reference',
+                      title: 'Alert ID',
                     },
                     {
                       key: 'date',
@@ -312,7 +312,12 @@ const OffenderProfile = ({
                     {
                       key: 'reference',
                       dataIndex: 'reference',
-                      title: 'Reference',
+                      title: 'Alert ID',
+                    },
+                    {
+                      key: 'alias',
+                      dataIndex: 'alias',
+                      title: 'Alias',
                     },
                     {
                       key: 'members',

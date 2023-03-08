@@ -171,7 +171,9 @@ const CrimeTypeList = ({
       width="400"
       onClose={toggleEditIncident}
     >
-      <EditIncident incidentId={incidentId} onClose={toggleEditIncident} />
+      {editIncident && (
+        <EditIncident incidentId={incidentId} onClose={toggleEditIncident} />
+      )}
     </Drawer>
   </div>
 );

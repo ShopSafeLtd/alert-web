@@ -1,0 +1,14 @@
+import { ViewInvestigationQuery } from '../../../../../../graphql/generated';
+
+export interface ViewProps {
+  data:
+    | Exclude<
+        ViewInvestigationQuery['investigation'],
+        undefined | null
+      >['documents']
+    | null
+    | undefined;
+  toggleAddDemDocument: () => void;
+  toggleAddDocument: () => void;
+  demId: string | undefined | null;
+}

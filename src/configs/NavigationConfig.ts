@@ -1,5 +1,4 @@
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
-import { Roles } from 'types';
 import {
   faCircleExclamation,
   faClipboard,
@@ -22,6 +21,7 @@ import {
   faCar,
   faBuilding,
 } from '@fortawesome/pro-light-svg-icons';
+import { Role } from 'graphql/generated';
 
 export interface MenuItem {
   key: string;
@@ -29,7 +29,7 @@ export interface MenuItem {
   title: string;
   icon?: any;
   breadcrumb: boolean;
-  roles?: Roles[];
+  roles?: Role[];
 }
 
 export interface SubMenuItem extends MenuItem {
@@ -58,6 +58,7 @@ const userOnlyItems: NavItem[] = [
     icon: faHome,
     breadcrumb: false,
     submenu: [],
+    roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
   },
   {
     key: 'incidents',
@@ -66,14 +67,7 @@ const userOnlyItems: NavItem[] = [
     icon: faExclamationCircle,
     breadcrumb: true,
     submenu: [],
-  },
-  {
-    key: 'investigations',
-    path: `${APP_PREFIX_PATH}/investigations`,
-    title: 'sidenav.investigations',
-    icon: faClipboard,
-    breadcrumb: true,
-    submenu: [],
+    roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
   },
   {
     key: 'profiles',
@@ -81,6 +75,7 @@ const userOnlyItems: NavItem[] = [
     title: 'sidenav.profiles',
     icon: faAddressCard,
     breadcrumb: true,
+    roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
     submenu: [
       {
         key: 'offenders',
@@ -89,6 +84,12 @@ const userOnlyItems: NavItem[] = [
         icon: faUsers,
         breadcrumb: true,
         submenu: [],
+        roles: [
+          Role.User,
+          Role.ContentAdmin,
+          Role.SchemeAdmin,
+          Role.ShopsafeAdmin,
+        ],
       },
       {
         key: 'crime-groups',
@@ -97,6 +98,12 @@ const userOnlyItems: NavItem[] = [
         icon: faPeopleGroup,
         breadcrumb: true,
         submenu: [],
+        roles: [
+          Role.User,
+          Role.ContentAdmin,
+          Role.SchemeAdmin,
+          Role.ShopsafeAdmin,
+        ],
       },
       {
         key: 'vehicles',
@@ -105,6 +112,12 @@ const userOnlyItems: NavItem[] = [
         icon: faCar,
         breadcrumb: true,
         submenu: [],
+        roles: [
+          Role.User,
+          Role.ContentAdmin,
+          Role.SchemeAdmin,
+          Role.ShopsafeAdmin,
+        ],
       },
     ],
   },
@@ -115,16 +128,69 @@ const userOnlyItems: NavItem[] = [
     icon: faComments,
     breadcrumb: true,
     submenu: [],
+    roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
+  },
+  {
+    key: 'investigations',
+    path: `${APP_PREFIX_PATH}/investigations`,
+    title: 'sidenav.investigations',
+    icon: faClipboard,
+    breadcrumb: true,
+    submenu: [],
+    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
   },
 ];
 
 const adminOnlyItems: NavItem[] = [
+  {
+    key: 'reports',
+    path: `${APP_PREFIX_PATH}/reports`,
+    title: 'sidenav.reports',
+    icon: faLineChart,
+    breadcrumb: true,
+    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
+    submenu: [
+      {
+        key: 'performance',
+        path: `${APP_PREFIX_PATH}/reports/performance-report`,
+        title: 'Performance',
+        icon: faPieChart,
+        breadcrumb: true,
+        submenu: [],
+      },
+      {
+        key: 'offender',
+        path: `${APP_PREFIX_PATH}/reports/offender-profile`,
+        title: 'Offender',
+        icon: faUser,
+        breadcrumb: true,
+        submenu: [],
+      },
+      {
+        key: 'business',
+        path: `${APP_PREFIX_PATH}/reports/business`,
+        title: 'Business',
+        icon: faBuilding,
+        breadcrumb: true,
+        submenu: [],
+      },
+      {
+        key: 'incidentMap',
+        path: `${APP_PREFIX_PATH}/reports/incident-map`,
+        title: 'Incident Map',
+        icon: faMapLocationDot,
+        breadcrumb: true,
+        submenu: [],
+      },
+    ],
+  },
   {
     key: 'settings',
     path: `${APP_PREFIX_PATH}/scheme-settings`,
     title: 'sidenav.settings',
     icon: faCog,
     breadcrumb: true,
+    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
     submenu: [
       {
         key: 'users',
@@ -195,39 +261,6 @@ const adminOnlyItems: NavItem[] = [
         path: `${APP_PREFIX_PATH}/scheme-settings/recycle-bin`,
         title: 'Recycle Bin',
         icon: faTrash,
-        breadcrumb: true,
-        submenu: [],
-      },
-    ],
-  },
-  {
-    key: 'reports',
-    path: `${APP_PREFIX_PATH}/reports`,
-    title: 'sidenav.reports',
-    icon: faLineChart,
-    breadcrumb: true,
-    submenu: [
-      {
-        key: 'performance',
-        path: `${APP_PREFIX_PATH}/reports/performance-report`,
-        title: 'Performance',
-        icon: faPieChart,
-        breadcrumb: true,
-        submenu: [],
-      },
-      {
-        key: 'offender',
-        path: `${APP_PREFIX_PATH}/reports/offender-profile`,
-        title: 'Offender',
-        icon: faUser,
-        breadcrumb: true,
-        submenu: [],
-      },
-      {
-        key: 'incidentMap',
-        path: `${APP_PREFIX_PATH}/reports/incident-map`,
-        title: 'Incident Map',
-        icon: faMapLocationDot,
         breadcrumb: true,
         submenu: [],
       },

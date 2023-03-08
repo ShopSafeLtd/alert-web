@@ -1062,7 +1062,7 @@
 
 "@date-io/core@1.x", "@date-io/core@^1.3.13", "@date-io/core@^1.3.6":
   version "1.3.13"
-  resolved "https://registry.npmjs.org/@date-io/core/-/core-1.3.13.tgz"
+  resolved "https://registry.yarnpkg.com/@date-io/core/-/core-1.3.13.tgz#90c71da493f20204b7a972929cc5c482d078b3fa"
   integrity sha512-AlEKV7TxjeK+jxWVKcCFrfYAk8spX9aCyiToFIiLPtfQbsjmRGLIhb5VZgptQcJdHtLXo7+m0DuurwFgUToQuA==
 
 "@date-io/moment@1.3.13":
@@ -12308,6 +12308,11 @@ react-window@^1.8.6:
     "@babel/runtime" "^7.0.0"
     memoize-one ">=3.1.1 <6"
 
+react-zoom-pan-pinch@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-zoom-pan-pinch/-/react-zoom-pan-pinch-3.0.1.tgz#d1ffef7c2fdf371c1fffa09970630626ef19aecf"
+  integrity sha512-FVYDdgSRYFuVUB1kkGzKx00zYZGgXttqnxEyqkh1/xQ/vLIpXg6pnj9Ud3OyBi+e9zRPFlofn5ODQF3duOHUIg==
+
 react@^17.0.2:
   version "17.0.2"
   resolved "https://registry.npmjs.org/react/-/react-17.0.2.tgz"
@@ -14521,9 +14526,9 @@ valtio-yjs@^0.5.0:
     fast-deep-equal "^3.1.3"
 
 valtio@^1.10.2:
-  version "1.10.3"
-  resolved "https://registry.yarnpkg.com/valtio/-/valtio-1.10.3.tgz#273eda9ba6459869798b4f58c84514e18fb80ed8"
-  integrity sha512-t3Ez/+baJ+Z5tIyeaI6nCAbW/hrmcq2jditwg/X++o5IvCdiGirQKTOv1kJq0glgUo13v5oABCVGcinggBfiKw==
+  version "1.10.2"
+  resolved "https://registry.yarnpkg.com/valtio/-/valtio-1.10.2.tgz#df9d7c983c4cef4819adeca1e27c061483268bf9"
+  integrity sha512-NG9FUB44VQKzEqs6qGke6XEuAYWoEeCADiS6/Hkgy2bYALOdztoCwJUNl79lEae2wGhqZ6Lv+K9wPUIiS8VLxw==
   dependencies:
     proxy-compare "2.5.0"
     use-sync-external-store "1.2.0"
@@ -14974,9 +14979,9 @@ y-webrtc@^10.2.4:
     ws "^7.2.0"
 
 y-websocket@^1.4.5:
-  version "1.4.6"
-  resolved "https://registry.yarnpkg.com/y-websocket/-/y-websocket-1.4.6.tgz#61499fe7df63179ed2ba5a525a1514dfb406264c"
-  integrity sha512-QAmFPlcjUWbdtueMjP/z7CpIJ3pyQbBiPsXyjeeXfSF5VJwV7aqlbU16a0YOsiSQwHCeLO8N2mYs8WsrKfmE7A==
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/y-websocket/-/y-websocket-1.4.5.tgz#8da81b466997bcc4660059f542d0a6ce62581478"
+  integrity sha512-5d9LTSy0GQKqSd/FKRo5DMBlsiTlCipbKcIgPLlno+5xHtfT8bm3uQdcbY9JvLfckojilLZWauXJu0vzDZX05w==
   dependencies:
     lib0 "^0.2.52"
     lodash.debounce "^4.0.8"
@@ -15187,9 +15192,16 @@ zen-observable@0.8.15:
   resolved "https://registry.npmjs.org/zen-observable/-/zen-observable-0.8.15.tgz"
   integrity sha512-PQ2PC7R9rslx84ndNBZB/Dkv8V8fZEpk83RLgXtYd0fwUgEjseMn1Dgajh2x6S8QbZAFa9p2qVCEuYZNgve0dQ==
 
-zustand@^4.3.1, zustand@^4.3.4:
-  version "4.3.5"
-  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.3.5.tgz#011d2997534f8a187ea7b1d75db56df31f58453d"
-  integrity sha512-2iPUzfwx+g3f0PagOMz2vDO9mZzEp2puFpNe7vrAymVPOEIEUjCPkC4/zy84eAscxIWmTU4j9g6upXYkJdzEFQ==
+zustand@^4.3.1:
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.3.3.tgz#c9113499074dde2d6d99c1b5f591e9329572c224"
+  integrity sha512-x2jXq8S0kfLGNwGh87nhRfEc2eZy37tSatpSoSIN+O6HIaBhgQHSONV/F9VNrNcBcKQu/E80K1DeHDYQC/zCrQ==
+  dependencies:
+    use-sync-external-store "1.2.0"
+
+zustand@^4.3.4:
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.3.4.tgz#55a1345656348218a690e437ee894dd042ac2440"
+  integrity sha512-QSV8MF80I4yM9UCcBhIBr5OcQkiTbZdxDofg5R5vyX49QsEia7sK1iwOhFyH/0hyNVg+h+OzARM76G8MgMno0g==
   dependencies:
     use-sync-external-store "1.2.0"

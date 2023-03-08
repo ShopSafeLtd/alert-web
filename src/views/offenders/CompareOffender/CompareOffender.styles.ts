@@ -1,6 +1,7 @@
+import { Theme } from 'configs/ThemeConfig';
 import { createUseStyles } from 'react-jss';
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: Theme) => ({
   page: {
     padding: 20,
   },
@@ -16,9 +17,10 @@ const useStyles = createUseStyles({
   },
   image: {
     height: 250,
-    width: '100%',
+    width: 298,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
+    backgroundPosition: 'center',
   },
   firstCard: {
     marginTop: 41,
@@ -60,6 +62,30 @@ const useStyles = createUseStyles({
     alignItems: 'center',
     padding: 20,
   },
-});
+  gridImage: {
+    backgroundPosition: 'center',
+    backgroundSize: 'cover',
+  },
+  gridCheck: {
+    marginLeft: 10,
+  },
+  gridName: {
+    padding: '10px 20px',
+  },
+  gridCard: {
+    cursor: 'pointer',
+    '& > .react-resizable-handle::after': {
+      borderRight: `3px solid ${theme.borderColor}`,
+      borderBottom: `3px solid ${theme.borderColor}`,
+      width: 10,
+      height: 10,
+      right: 5,
+      bottom: 5,
+    },
+    '& > .react-resizable-handle': {
+      background: 'transparent',
+    },
+  },
+}));
 
 export default useStyles;

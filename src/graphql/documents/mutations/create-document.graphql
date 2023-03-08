@@ -1,0 +1,27 @@
+mutation CreateDocumentOnInvestigation($where: UniqueId!, $data: CreateDocument!) {
+    createDocumentOnInvestigation(where: $where, data: $data) {
+        id
+        investigation {
+            id
+            documents{
+                id
+                name
+                url
+                thumbnailUrl
+                tags{
+                    name
+                    id
+                }
+            }
+        }
+        name
+        tags {
+            id
+            name
+        }
+        thumbnailUrl
+        url
+        createdAt
+        updatedAt
+    }
+}

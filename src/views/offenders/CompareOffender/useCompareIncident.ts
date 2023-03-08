@@ -43,12 +43,18 @@ interface Return {
   selected: Selected;
   removeOffender: (offender: Offender) => void;
   onMerge: () => void;
+  mode: 'column' | 'grid';
+  setMode: (value: 'column' | 'grid') => void;
+  toggleSelectedImages: (value: string) => void;
+  selectedImages: string[];
+  onSubmitImages: () => void;
 }
 
 const compareIncident = (): Return => {
   const { id: offenderId } = useParams();
   const navigate = useNavigate();
 
+  const [mode, setMode] = useState<'grid' | 'column'>('column');
   const [addOffender, setAddOffender] = useState(false);
   const [offenders, setOffenders] = useState<Offender[]>([]);
   const [preview, setPreview] = useState<Offender>({
@@ -74,6 +80,7 @@ const compareIncident = (): Return => {
     dateOfBirth: null,
     dateSource: null,
   });
+  const [selectedImages, setSelectedImages] = useState<string[]>([]);
 
   const [queryOffender, { data }] = useViewOffenderCompareLazyQuery();
 
@@ -164,6 +171,14 @@ const compareIncident = (): Return => {
     });
   };
 
+  const toggleSelectedImages = (offender: string) => {
+    if (selectedImages.includes(offender)) {
+      setSelectedImages(selectedImages.filter((item) => item !== offender));
+    } else {
+      setSelectedImages([...selectedImages, offender]);
+    }
+  };
+
   const removeOffender = (offender: Offender) => {
     setOffenders(offenders.filter((item) => item.id !== offender.id));
     const first = offenders.filter((item) => item.id !== offender.id)[0];
@@ -208,6 +223,22 @@ const compareIncident = (): Return => {
     });
   };
 
+  const onSubmitImages = () => {
+    const newOffenders = offenders.filter(({ id }) =>
+      selectedImages.includes(id)
+    );
+    setOffenders(newOffenders);
+
+    if (newOffenders.length > 0)
+      setPreview({
+        ...newOffenders[0],
+        images: newOffenders.map((offender) => offender.images).flat(),
+      });
+
+    setMode('column');
+    setSelectedImages([]);
+  };
+
   const onMerge = () => {
     // const mainOffender = {
     //   ...preview,
@@ -229,6 +260,11 @@ const compareIncident = (): Return => {
     selected,
     removeOffender,
     onMerge,
+    mode,
+    setMode,
+    toggleSelectedImages,
+    selectedImages,
+    onSubmitImages,
   };
 };
 

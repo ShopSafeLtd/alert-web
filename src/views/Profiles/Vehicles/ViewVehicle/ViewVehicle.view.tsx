@@ -145,7 +145,7 @@ const ViewVehicle = ({
               </Col>
               <Col>
                 <Statistic
-                  title="Total Offenders"
+                  title="Total Crime Groups"
                   value={data?.vehicle?.totalCrimeGroups || 0}
                 />
               </Col>
@@ -161,7 +161,7 @@ const ViewVehicle = ({
             {
               key: 'reference',
               dataIndex: 'reference',
-              title: 'Reference',
+              title: 'Alert ID',
             },
             {
               key: 'name',
@@ -193,7 +193,7 @@ const ViewVehicle = ({
             {
               key: 'reference',
               dataIndex: 'reference',
-              title: 'Reference',
+              title: 'Alert ID',
             },
             {
               key: 'policeRef',

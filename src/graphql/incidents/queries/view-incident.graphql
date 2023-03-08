@@ -6,16 +6,26 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     dayTime
     date
     time
-    value
-    recoveredValue
     reference
     policeReported
     policeRef
     policeInvolved
     subscribed
+    totalValue
+    totalRecoveredValue
     crimeTypes {
       id
       name
+      crimeType
+    }
+    incidentItems {
+      id
+      name
+      value
+      recoveredValue
+      goodsType {
+        id
+      }
     }
     approved
     business {
@@ -42,6 +52,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     crimeGroups {
       id
       reference
+      alias
       totalIncidents
       totalOffenders
       totalRecoveredValue

@@ -1,6 +1,6 @@
 import React from 'react';
 import { ListOffendersQuery, RecycleOffenderMutation } from 'graphql/generated';
-import { Affix, Button, Col, Input, Pagination, Row, Select, Card } from 'antd';
+import { Affix, Button, Card, Col, Input, Pagination, Row, Select } from 'antd';
 import OffenderCard from 'components/offenders/OffenderCard';
 import OffenderSkeletonCard from 'components/offenders/OffenderSkeletonCard/OffenderSkeletonCard.view';
 import { OffenderSort } from 'state';
@@ -146,13 +146,29 @@ const OffenderFeed = ({
       <Row gutter={8}>
         {loading
           ? Array.from({ length: 24 }).map((_, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <Col key={index} sm={24} md={12} lg={12} xl={8} xxl={6}>
+              <Col
+                style={{ marginBottom: 10 }}
+                // eslint-disable-next-line react/no-array-index-key
+                key={index}
+                sm={24}
+                md={12}
+                lg={12}
+                xl={8}
+                xxl={6}
+              >
                 <OffenderSkeletonCard />
               </Col>
             ))
           : data?.listOffenders?.offenders?.map((item) => (
-              <Col sm={24} md={12} lg={12} xl={8} xxl={6} key={item?.id}>
+              <Col
+                style={{ marginBottom: 10 }}
+                sm={24}
+                md={12}
+                lg={12}
+                xl={8}
+                xxl={6}
+                key={item?.id}
+              >
                 <OffenderCard
                   offender={item}
                   openLightbox={openLightbox}

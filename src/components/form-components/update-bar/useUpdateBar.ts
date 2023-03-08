@@ -12,14 +12,19 @@ import {
   UpdateIcon,
   UpdateType,
   useCreateUpdateOnIncidentMutation,
+  useCreateUpdateOnInvestigationMutation,
   useCreateUpdateOnOffenderMutation,
   useListIncidentsQuery,
   useListSchemeUsersQuery,
   useSubscribeToIncidentMutation,
+  useSubscribeToInvestigationMutation,
   useSubscribeToOffenderMutation,
   ViewIncidentDocument,
   ViewIncidentQuery,
   ViewIncidentQueryVariables,
+  ViewInvestigationDocument,
+  ViewInvestigationQuery,
+  ViewInvestigationQueryVariables,
   ViewOffenderDocument,
   ViewOffenderQuery,
   ViewOffenderQueryVariables,
@@ -108,6 +113,7 @@ interface Props {
   } | null;
   incidentId?: string;
   offenderId?: string;
+  investigationId?: string;
   setReplyTo: (
     value: {
       id: string;
@@ -153,6 +159,7 @@ const useUpdateBar = ({
   incidentId,
   setReplyTo,
   subscribed,
+  investigationId,
   offenderId,
 }: Props): Return => {
   const [updateForm] = Form.useForm<FormData>();
@@ -257,6 +264,7 @@ const useUpdateBar = ({
 
   const [subscribeToIncident] = useSubscribeToIncidentMutation();
   const [subscribeToOffender] = useSubscribeToOffenderMutation();
+  const [subscribeToInvestigation] = useSubscribeToInvestigationMutation();
   const [createIncidentUpdate] = useCreateUpdateOnIncidentMutation({
     onError: () => {
       notification.error({
@@ -275,7 +283,15 @@ const useUpdateBar = ({
       });
     },
   });
-
+  const [createInvestigationUpdate] = useCreateUpdateOnInvestigationMutation({
+    onError: () => {
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
+    },
+  });
   const beforeUpdateImageUpload = (value: RcFile) => {
     const isFileDuplicate = updateFileList.find(
       (item) => item.name === value.name
@@ -302,6 +318,23 @@ const useUpdateBar = ({
       setUpdateIncidents([]);
       setUpdateOffenders([]);
       if (!subscribed) {
+        if (investigationId) {
+          subscribeToInvestigation({
+            variables: {
+              where: {
+                id: investigationId,
+              },
+            },
+            optimisticResponse: {
+              __typename: 'Mutation',
+              subscribeToInvestigation: {
+                id: investigationId,
+                __typename: 'Investigation',
+                subscribed: true,
+              },
+            },
+          });
+        }
         if (incidentId) {
           subscribeToIncident({
             variables: {
@@ -590,6 +623,123 @@ const useUpdateBar = ({
                     },
                   }
                 );
+            }
+          },
+        });
+      }
+      if (investigationId) {
+        createInvestigationUpdate({
+          variables: {
+            data: {
+              icon: UpdateIcon.Comment,
+              type: getUpdateType(),
+              text: getText(updateInput),
+              replyTo: replyTo
+                ? {
+                    id: replyTo.id,
+                  }
+                : undefined,
+              images:
+                updateFileList.length > 0
+                  ? updateFileList.map((image) => ({
+                      filename: image.fileName || '',
+                      mimetype: image.type || '',
+                      url: image.url || '',
+                    }))
+                  : undefined,
+              linkedOffenders:
+                updateOffenders.length > 0
+                  ? updateOffenders.map(({ id }) => ({ id }))
+                  : undefined,
+              linkedIncidents:
+                updateIncidents && updateIncidents.length > 0
+                  ? updateIncidents.map(({ id }) => ({ id }))
+                  : undefined,
+              mentionedUsers:
+                mentionedUser.length > 0
+                  ? mentionedUser.map(({ id }) => ({ id }))
+                  : undefined,
+            },
+            investigation: {
+              id: investigationId,
+            },
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            createUpdateOnInvestigation: {
+              createdAt: new Date(),
+              createdBy: {
+                fullName,
+                id: userId,
+                businesses,
+                __typename: 'User',
+              },
+              id: `optimistic-${new Date().toISOString()}`,
+              images:
+                updateFileList.length > 0
+                  ? updateFileList.map((image) => ({
+                      id: image.uid,
+                      __typename: 'Image',
+                      card: image.url,
+                      optimised: image.url,
+                      url: image.url,
+                    }))
+                  : [],
+              replies: [],
+              type: getUpdateType(),
+              __typename: 'Update',
+              text: getText(updateInput),
+              linkedIncidents: [],
+              linkedOffenders: [],
+            },
+          },
+          update: (store, result) => {
+            if (result.data?.createUpdateOnInvestigation) {
+              const oldData = store.readQuery<
+                ViewInvestigationQuery,
+                ViewInvestigationQueryVariables
+              >({
+                query: ViewInvestigationDocument,
+                variables: {
+                  where: {
+                    id: incidentId,
+                  },
+                },
+              });
+
+              if (oldData?.investigation)
+                store.writeQuery<
+                  ViewInvestigationQuery,
+                  ViewInvestigationQueryVariables
+                >({
+                  query: ViewInvestigationDocument,
+                  variables: {
+                    where: {
+                      id: investigationId,
+                    },
+                  },
+                  data: {
+                    investigation: {
+                      ...oldData.investigation,
+                      updates: replyTo
+                        ? update(oldData.investigation.updates, {
+                            [oldData.investigation.updates
+                              .map((item) => item.id)
+                              .indexOf(replyTo.id)]: {
+                              replies: {
+                                $push: [
+                                  result.data.createUpdateOnInvestigation,
+                                ],
+                              },
+                            },
+                          })
+                        : [
+                            result.data.createUpdateOnInvestigation,
+                            ...oldData.investigation.updates,
+                          ],
+                    },
+                  },
+                });
             }
           },
         });

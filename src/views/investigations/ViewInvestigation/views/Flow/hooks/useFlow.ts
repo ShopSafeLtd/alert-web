@@ -19,7 +19,7 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import { YMap } from 'yjs/dist/src/internals';
 import { useUsers } from 'y-presence';
-import { WebrtcProvider } from 'y-webrtc';
+import { WebsocketProvider } from 'y-websocket';
 import useWebRtcProvider from './useWebRtcProvidor';
 import useNodesStateSynced from './useNodesStateSynced';
 import useEdgesStateSynced from './useEdgesStateSynced';
@@ -28,7 +28,7 @@ import useObservableListener from './useObservableListener';
 import styles from '../style.module.css';
 import {
   useUpdateFlowMutation,
-  useViewInvestigationQuery,
+  ViewInvestigationQuery,
 } from '../../../../../../graphql/generated';
 
 interface Return {
@@ -63,37 +63,53 @@ interface Return {
   // eslint-disable-next-line
   users: Map<number, { [p: string]: any }>;
   handlePointMove: (e: React.PointerEvent) => void;
-  provider: WebrtcProvider;
+  provider: WebsocketProvider;
+  reactFlowInstance: ReactFlowInstance | null;
 }
 
 const TIMEOUT = 3000 + Math.floor(Math.random() * 7000);
 
 interface Props {
   investigationId: string;
+  importData: ViewInvestigationQuery | undefined;
 }
 
-interface InitData {
-  nodes: Node[];
-  edges: Edge[];
-}
+const useFlow = ({ investigationId, importData }: Props): Return => {
+  const currentUser = useStoreState((state) => state.user);
 
-const useFlow = ({ investigationId }: Props): Return => {
-  const [initData, setInitData] = useState<InitData | null>(null);
-  const [offenders, setOffenders] = useState<{ name: string; url: string[] }[]>(
-    []
+  const provider: WebsocketProvider = useWebRtcProvider(
+    currentUser,
+    investigationId
   );
   const [selected, setSelected] = useState<string | null>(null);
-  const { data: importData, loading } = useViewInvestigationQuery({
-    skip: !investigationId,
-    variables: {
-      where: {
-        id: investigationId,
-      },
-    },
-  });
+  const [savedWhen, setSavedWhen] = useState<string | null>(
+    importData?.investigation?.flows[0].updatedAt
+      ? moment(importData?.investigation?.flows[0].updatedAt).fromNow()
+      : null
+  );
 
-  const currentUser = useStoreState((state) => state.user);
-  const provider = useWebRtcProvider(currentUser, investigationId);
+  // const { data: importData, loading } = useViewInvestigationQuery({
+  //   skip: !investigationId,
+  //   variables: {
+  //     where: {
+  //       id: investigationId,
+  //     },
+  //   },
+  //   onCompleted: (TData) => {
+  //     const meta = provider.doc.getMap('meta');
+  //     const lastSaved = meta.get('lastSaved') as number;
+  //     if (
+  //       lastSaved &&
+  //       lastSaved <
+  //         new Date(TData?.investigation?.flows[0].updatedAt || '').getTime()
+  //     ) {
+  //       setSavedWhen(
+  //         moment(TData?.investigation?.flows[0].updatedAt).fromNow()
+  //       );
+  //     }
+  //   },
+  // });
+
   const [updateFlow, { loading: saving }] = useUpdateFlowMutation();
 
   const nodesMap = provider.doc.getMap<Node>('nodes');
@@ -105,47 +121,29 @@ const useFlow = ({ investigationId }: Props): Return => {
   const usedFallbackRef = useRef<boolean>(false);
   const [reactFlowInstance, setReactFlowInstance] =
     useState<ReactFlowInstance | null>(null);
-  const [savedWhen, setSavedWhen] = useState<string | null>(null);
-  useEffect(() => {
-    if (
-      importData &&
-      importData.investigation &&
-      importData.investigation.flows &&
-      importData.investigation.flows[0]
-    ) {
-      const { nodes: nodes2, edges: edges2 } =
-        importData.investigation.flows[0];
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      setInitData({ nodes: nodes2, edges: edges2 });
-    }
 
-    setSavedWhen(
-      moment(
-        new Date(importData?.investigation?.flows[0].updatedAt || '')
-      ).fromNow()
-    );
-    if (
-      importData &&
-      importData.investigation &&
-      importData.investigation.offenders
-    ) {
-      setOffenders(
-        importData.investigation.offenders.map((offender) => ({
-          name: offender.name || '',
-          url: offender.images?.map((image) => image?.optimised || ''),
-        }))
-      );
-    }
-  }, [importData]);
-
+  const offenders =
+    importData?.investigation?.offenders.map((offender) => ({
+      name: offender.name || '',
+      url: offender.images?.map((image) => image?.optimised || ''),
+    })) || [];
   const onSave = useCallback(() => {
-    if (reactFlowInstance) {
+    if (reactFlowInstance && usedFallbackRef?.current && !isSynced) {
       const flow = reactFlowInstance.toObject();
+      if (
+        flow.nodes.length <= 0 &&
+        importData?.investigation?.flows &&
+        importData?.investigation?.flows[0].nodes.length > 0
+      ) {
+        return;
+      }
+
       const meta = provider.doc.getMap('meta');
       const date = new Date();
+
       meta.set('lastSaved', date.getTime());
       setSavedWhen(moment(date).fromNow());
+
       updateFlow({
         variables: {
           where: {
@@ -183,10 +181,9 @@ const useFlow = ({ investigationId }: Props): Return => {
     }
   }, [onSave, investigationId, provider.doc, isSynced, clientCount]);
   const handleSaveDebounced = useDebouncedCallback(handleSave, TIMEOUT);
-
   const handlePeersChange = useCallback(
-    ({ webrtcPeers }) => {
-      setClientCount(webrtcPeers.length);
+    ({ bcconnected }) => {
+      setClientCount(bcconnected ? 1 : 0);
     },
     [setClientCount]
   );
@@ -208,14 +205,14 @@ const useFlow = ({ investigationId }: Props): Return => {
 
   useEffect(() => {
     if (usedFallbackRef.current) return;
-
     const fetchFallback = async () => {
-      if (provider.connected && clientCount === 0) {
-        initData?.nodes?.forEach((node: Node) => {
-          nodesMap.set(node.id, node);
+      if (provider.wsconnected && clientCount === 0) {
+        const initData = importData?.investigation?.flows[0];
+        initData?.nodes?.forEach((node) => {
+          nodesMap.set(node.id, node as Node);
         });
         initData?.edges?.forEach((edge: Edge) => {
-          edgesMap.set(edge.id, edge);
+          edgesMap.set(edge.id, edge as Edge);
         });
       }
 
@@ -227,9 +224,50 @@ const useFlow = ({ investigationId }: Props): Return => {
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [initData, investigationId, provider.connected, clientCount]);
+  }, [
+    importData,
+    investigationId,
+    provider.wsconnected,
+    clientCount,
+    reactFlowInstance,
+  ]);
+
+  // useEffect(() => {
+  //
+  //   const timeoutId = window.setTimeout(updateSavedWhen, 1000);
+  //
+  //   // eslint-disable-next-line consistent-return
+  //   return () => {
+  //     // clear prescence
+  //     provider.awareness.setLocalStateField('user', null);
+  //     window.clearTimeout(timeoutId);
+  //   };
+  // }, []);
 
   const getId = () => `dndnode_${Math.random() * 10000}_${investigationId}`;
+
+  useEffect(() => {
+    const updateSavedWhen = () => {
+      const meta = provider.doc.getMap('meta');
+      const lastSaved = meta.get('lastSaved') as number;
+
+      if (
+        lastSaved &&
+        lastSaved >
+          new Date(importData?.investigation?.flows[0].updatedAt).getTime()
+      ) {
+        setSavedWhen(moment(new Date(lastSaved)).fromNow());
+      } else {
+        setSavedWhen(
+          moment(importData?.investigation?.flows[0].updatedAt).fromNow()
+        );
+      }
+    };
+
+    const interval = setInterval(() => updateSavedWhen(), 10000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const { project } = useReactFlow();
@@ -242,7 +280,6 @@ const useFlow = ({ investigationId }: Props): Return => {
 
   const onChange = useCallback((value, id) => {
     const currentNode = nodesMap.get(id);
-
     if (!currentNode) {
       return;
     }
@@ -267,23 +304,73 @@ const useFlow = ({ investigationId }: Props): Return => {
         y: event.clientY - wrapperBounds.top - 20,
       });
       const id = getId();
-      const newNode: Node = {
-        id,
-        type,
-        position,
-        height: 100,
-        width: 100,
-        data: {
-          label: `${type}`,
+      if (type === 'offenderDetailsNode') {
+        const newNode: Node = {
           id,
-          onChange,
-          color: '#FFCC00',
-          imageUrl: selected,
-          text: '',
-        },
-      };
-      setSelected(null);
-      nodesMap.set(newNode.id, newNode);
+          type,
+          position,
+          height: 550,
+          width: 290,
+          style: {
+            height: 550,
+            width: 290,
+          },
+          zIndex: 1,
+          data: {
+            label: `${type}`,
+            id,
+            onChange,
+            imageUrl: selected,
+            text: '',
+          },
+        };
+        setSelected(null);
+        nodesMap.set(newNode.id, newNode);
+      } else if (type === 'incidentDetailsNode') {
+        const newNode: Node = {
+          id,
+          type,
+          position,
+          height: 350,
+          width: 290,
+          style: {
+            height: 350,
+            width: 290,
+          },
+          zIndex: 1,
+          data: {
+            label: `${type}`,
+            id,
+            onChange,
+            imageUrl: selected,
+            text: '',
+          },
+        };
+        setSelected(null);
+        nodesMap.set(newNode.id, newNode);
+      } else {
+        const newNode: Node = {
+          id,
+          type,
+          position,
+          height: 200,
+          width: 200,
+          style: {
+            height: 200,
+            width: 200,
+          },
+          zIndex: 1,
+          data: {
+            label: `${type}`,
+            id,
+            onChange,
+            imageUrl: selected,
+            text: '',
+          },
+        };
+        setSelected(null);
+        nodesMap.set(newNode.id, newNode);
+      }
     }
   };
 
@@ -308,43 +395,36 @@ const useFlow = ({ investigationId }: Props): Return => {
     }, 3000);
   }, []);
 
+  useEffect(
+    () => () => {
+      provider.awareness.setLocalStateField('user', null);
+    },
+    []
+  );
+
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     // eslint-disable-next-line no-param-reassign
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
-  // const data = {};
-  // const onSave = useCallback(() => {
-  //   if (rfInstance) {
-  //     const flow = rfInstance.toObject();
-  //     localStorage.setItem(flowKey, JSON.stringify(flow));
-  //   }
-  // }, [rfInstance]);
-  //
-  // const onRestore = useCallback(() => {
-  //   const restoreFlow = async () => {
-  //     const flow = JSON.parse(localStorage.getItem(flowKey));
-  //
-  //     if (flow) {
-  //       const { x = 0, y = 0, zoom = 1 } = flow.viewport;
-  //       setNodes(flow.nodes || []);
-  //       setEdges(flow.edges || []);
-  //       setViewport({ x, y, zoom });
-  //     }
-  //   };
-  //
-  //   restoreFlow();
-  // }, [setNodes, setViewport]);
-
   const users = useUsers(provider.awareness);
-
-  const handlePointMove = React.useCallback((e: React.PointerEvent) => {
-    provider.awareness.setLocalStateField('cursor', {
-      x: e.clientX,
-      y: e.clientY,
-    });
-  }, []);
+  const handlePointMove = useCallback(
+    (e: React.PointerEvent) => e, // TODO: fix this
+    // const bounds = wrapperRef.current?.getBoundingClientRect();
+    // if (wrapperRef?.current) {
+    //   const wrapperBounds = wrapperRef.current.getBoundingClientRect();
+    //   const position = project({
+    //     x: e.clientX - wrapperBounds.left,
+    //     y: e.clientY - wrapperBounds.top,
+    //   });
+    //   provider.awareness.setLocalStateField('cursor', {
+    //     x: position?.x || 0,
+    //     y: position?.y || 0,
+    //   });
+    // }
+    []
+  );
 
   return {
     nodes,
@@ -354,6 +434,7 @@ const useFlow = ({ investigationId }: Props): Return => {
     onConnect,
     clientCount,
     isSynced,
+    reactFlowInstance,
     setReactFlowInstance,
     savedWhen,
     onSave,
@@ -362,7 +443,10 @@ const useFlow = ({ investigationId }: Props): Return => {
     onDragOver,
     wrapperRef,
     nodesMap,
-    loading: initData ? false : loading,
+    loading:
+      importData?.investigation?.flows[0] && provider.wsconnected
+        ? false
+        : provider.wsconnecting,
     offenders,
     setSelected,
     saving,

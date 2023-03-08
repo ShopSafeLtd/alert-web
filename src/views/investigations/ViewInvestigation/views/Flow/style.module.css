@@ -6,17 +6,15 @@
 }
 
 .wrapper aside {
-  border-right: 1px solid #eee;
-  padding: 15px 10px;
+  padding: 20px 10px;
   font-size: 12px;
-  overflow: scroll;
-  overflow-x: auto;
+  overflow: auto;
+  margin-top: 12px;
 }
 
 .wrapper aside > * {
   margin-bottom: 10px;
   cursor: grab;
-  color: white;
   font-weight: 700;
 }
 
@@ -31,7 +29,6 @@
 }
 
 .wrapper :global .react-flow__node {
-  color: white;
   font-weight: 700;
 }
 
@@ -39,29 +36,15 @@
   border-width: 0px;
 }
 
-/*.wrapper :global .react-flow__node-default {*/
-/*    background: rgb(153, 26, 152);*/
-/*}*/
-
 .wrapper :global .react-flow__node-text {
   background: rgb(204, 13, 133);
   border-width: 1px;
+  width: 96px;
+  color: white;
 }
 
-.wrapper .blink {
-  animation: blink 1000ms infinite ease-in-out;
-}
-
-@keyframes blink {
-  0% {
-    opacity: 0.2;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.2;
-  }
+.pageView {
+  padding: 0px 15px 0 15px;
 }
 
 @media screen and (min-width: 768px) {
@@ -71,6 +54,6 @@
 
   .wrapper aside {
     width: 35%;
-    max-width: 250px;
+    max-width: 200px;
   }
 }

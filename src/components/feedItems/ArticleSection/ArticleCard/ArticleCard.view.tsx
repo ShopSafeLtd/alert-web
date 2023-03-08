@@ -1,10 +1,10 @@
 import React from 'react';
-import { Card, Col, Row, Tag, Typography } from 'antd';
+import { Col, Divider, Row, Tag, Typography } from 'antd';
 import { ArticlePriority, ListArticlesQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/pro-solid-svg-icons';
+import { faExclamationCircle } from '@fortawesome/pro-solid-svg-icons';
 
 import { faClock, faUser } from '@fortawesome/pro-light-svg-icons';
 import moment from 'moment';
@@ -36,30 +36,41 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
 
   return (
     <Link to={`/app/article/view/${id}`}>
-      <Card key={id} className="feedItem-card">
+      <div>
         {previewImage ? (
           <div
-            className="feedItem-card-image"
             style={{
               backgroundImage: `url(${previewImage})`,
+              width: '100%',
+              height: 150,
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center center',
+              marginBottom: 10,
             }}
             key={id}
           />
         ) : (
           <div style={{ marginTop: 10 }} />
         )}
-        <div className="feedItem-card-content">
+        <div
+          className="feedItem-card-content"
+          style={{ padding: '0 20px 20px' }}
+        >
           <Title level={4}>
-            {title?.replace(/^\S/, (s) => s.toUpperCase())}
             {priority === ArticlePriority.High && (
               <FontAwesomeIcon
                 size="sm"
                 className="feedItem-card-icon"
-                icon={faStar}
-                style={{ marginLeft: 5 }}
+                icon={faExclamationCircle}
+                style={{ marginRight: 8 }}
               />
             )}
+            {title?.replace(/^\S/, (s) => s.toUpperCase())}
           </Title>
+          <Paragraph className="feedItem-card-desc" ellipsis={{ rows: 3 }}>
+            {previewText}
+          </Paragraph>
           <Row style={{ marginBottom: 10 }}>
             <Col flex={1}>
               <FontAwesomeIcon
@@ -80,9 +91,6 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
               <Text>{moment(updatedAt).calendar()}</Text>
             </Col>
           </Row>
-          <Paragraph className="feedItem-card-desc" ellipsis={{ rows: 3 }}>
-            {previewText}
-          </Paragraph>
 
           {tags && tags.length ? (
             <Row
@@ -114,7 +122,8 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
             </Row>
           ) : null}
         </div>
-      </Card>
+        <Divider style={{ margin: 0 }} />
+      </div>
     </Link>
   );
 };

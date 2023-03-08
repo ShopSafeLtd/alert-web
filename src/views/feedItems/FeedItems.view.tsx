@@ -1,8 +1,8 @@
 import React from 'react';
 import {
-  ListArticlesQuery,
   FeedItemsQuery,
   FeedItemType,
+  ListArticlesQuery,
   ListOffendersQuery,
   ListUnapprovedIncidentsQuery,
 } from 'graphql/generated';
@@ -11,6 +11,7 @@ import {
   Card,
   Col,
   Divider,
+  Empty,
   Input,
   Modal,
   Pagination,
@@ -39,6 +40,7 @@ import OffenderFeed from 'components/feedItems/FeedItemSection/OffenderFeed';
 import ArticleFeed from 'components/feedItems/FeedItemSection/ArticleFeed';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
 import { PaginationModel } from 'types/DataType';
+import InvestigationFeed from 'components/feedItems/FeedItemSection/investigationFeed';
 
 const { Title, Paragraph, Text } = Typography;
 const { confirm } = Modal;
@@ -56,8 +58,6 @@ interface Props {
   onArticlePaginationChange: (page: number, pageSize: number) => void;
   search: string;
   setSearch: (value: string) => void;
-  // updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
-  // onNavigate: () => void;
   unapprovedIncidents: ListUnapprovedIncidentsQuery | undefined;
   unapprovedIncidentsLoading: boolean;
   onDeleteFeedItem: (value: string) => void;
@@ -122,14 +122,19 @@ Props): JSX.Element => (
             </Button>
           </Link>
         </Col>
-        <Col>
-          <Link to="/app/article ">
-            <Button size="small" type="primary">
-              <FontAwesomeIcon icon={faNewspaper} style={{ marginRight: 10 }} />
-              Add Bulletin
-            </Button>
-          </Link>
-        </Col>
+        {adminRights && (
+          <Col>
+            <Link to="/app/article ">
+              <Button size="small" type="primary">
+                <FontAwesomeIcon
+                  icon={faNewspaper}
+                  style={{ marginRight: 10 }}
+                />
+                Add Bulletin
+              </Button>
+            </Link>
+          </Col>
+        )}
       </Row>
     </Card>
     <Row gutter={10}>
@@ -208,6 +213,12 @@ Props): JSX.Element => (
                     {feedItem?.type === FeedItemType.NewOffender && (
                       <OffenderFeed feedItem={feedItem} isNewOffender />
                     )}
+                    {feedItem?.type === FeedItemType.NewInvestigation && (
+                      <InvestigationFeed
+                        feedItem={feedItem}
+                        isNewInvestigation
+                      />
+                    )}
                     {/* update details  */}
                     {feedItem?.type === FeedItemType.Incident && (
                       <IncidentFeed feedItem={feedItem} />
@@ -215,6 +226,10 @@ Props): JSX.Element => (
                     {feedItem?.type === FeedItemType.Offender && (
                       <OffenderFeed feedItem={feedItem} />
                     )}
+                    {feedItem?.type === FeedItemType.Investigation && (
+                      <InvestigationFeed feedItem={feedItem} />
+                    )}
+
                     {/* add new images */}
                     {feedItem?.type === FeedItemType.IncidentImage && (
                       <IncidentFeed feedItem={feedItem} isNewImage />
@@ -222,12 +237,18 @@ Props): JSX.Element => (
                     {feedItem?.type === FeedItemType.OffenderImage && (
                       <OffenderFeed feedItem={feedItem} isNewImage />
                     )}
+                    {feedItem?.type === FeedItemType.InvestigationImage && (
+                      <InvestigationFeed feedItem={feedItem} isNewImage />
+                    )}
                     {/* add new intel */}
                     {feedItem?.type === FeedItemType.IncidentIntel && (
                       <IncidentFeed feedItem={feedItem} />
                     )}
                     {feedItem?.type === FeedItemType.OffenderIntel && (
                       <OffenderFeed feedItem={feedItem} />
+                    )}
+                    {feedItem?.type === FeedItemType.InvestigationIntel && (
+                      <InvestigationFeed feedItem={feedItem} />
                     )}
 
                     {/* article */}
@@ -341,36 +362,30 @@ Props): JSX.Element => (
         </Card>
 
         <Row gutter={12}>
-          <Col
-            span={12}
-            xxl={16}
-            xl={12}
-            style={{ overflow: 'auto', height: 'calc(100vh - 333px)' }}
-          >
+          <Col span={12} xxl={16} xl={12}>
             <Card
               bodyStyle={{
-                padding: 5,
+                padding: 0,
+                paddingBottom: 20,
               }}
-              style={{ margin: 0, padding: 0 }}
+              style={{
+                margin: 0,
+                padding: 0,
+                overflow: 'auto',
+                height: 'calc(100vh - 300px)',
+              }}
             >
               <Title
                 style={{
-                  margin: '5px 20px -5px',
+                  margin: '15px 20px 10px',
                   fontSize: 16,
                 }}
                 level={4}
               >
                 Recent Bulletins
               </Title>
-              <Row
-                gutter={8}
-                style={{
-                  marginLeft: 5,
-                  marginRight: 5,
-                  display: 'flex',
-                  minHeight: 300,
-                }}
-              >
+              <Divider style={{ margin: 0 }} />
+              <Row gutter={8}>
                 {articleLoading
                   ? Array.from({ length: 24 }).map((_, index) => (
                       // eslint-disable-next-line react/no-array-index-key
@@ -384,8 +399,6 @@ Props): JSX.Element => (
                         xxl={8}
                         style={{
                           alignItems: 'stretch',
-                          marginTop: 10,
-                          minHeight: 300,
                         }}
                       >
                         <ArticleCard article={article} />
@@ -406,92 +419,115 @@ Props): JSX.Element => (
               </Row>
             </Card>
           </Col>
-          <Col
-            span={12}
-            xxl={8}
-            xl={12}
-            style={{ overflow: 'auto', height: 'calc(100vh - 330px)' }}
-          >
-            <Card
-              bodyStyle={{ paddingRight: 0, paddingLeft: 0, paddingTop: 15 }}
-            >
-              <Title
-                style={{
-                  marginRight: 20,
-                  marginLeft: 20,
-                  marginBottom: 10,
-                  fontSize: 16,
+          {adminRights && (
+            <Col span={12} xxl={8} xl={12}>
+              <Card
+                bodyStyle={{
+                  paddingRight: 0,
+                  paddingLeft: 0,
+                  paddingTop: 15,
+                  overflow: 'auto',
+                  height: 'calc(100vh - 300px)',
                 }}
-                level={4}
               >
-                Awaiting Approval
-              </Title>
-              {unapprovedIncidentsLoading ? (
-                <div />
-              ) : (
-                <div>
-                  <Divider style={{ marginTop: 0, marginBottom: 0 }} />
-                  {unapprovedIncidents?.listIncidents?.incidents.map(
-                    (incident) => (
-                      <Link
-                        to={`/app/incidents/review/${incident.id}`}
-                        key={incident.id}
-                      >
-                        <div style={{ padding: '10px 20px' }}>
-                          <div style={{ marginBottom: 10 }}>
-                            <Text style={{ fontSize: 14 }} strong>
-                              Incident submitted{' '}
-                              {moment(incident.date).fromNow()} by{' '}
-                              {incident.createdBy.fullName}.
-                            </Text>
-                          </div>
-                          <Row wrap={false} style={{ marginTop: 10 }}>
-                            {incident.images.length > 0 && (
-                              <Col style={{ marginRight: 10 }}>
-                                <div
-                                  style={{
-                                    width: 80,
-                                    height: 80,
-                                    backgroundImage: `url(${incident.images[0]?.optimised})`,
-                                    backgroundPosition: 'center',
-                                    backgroundRepeat: 'no-repeat',
-                                    backgroundSize: 'cover',
-                                    borderRadius: 5,
-                                  }}
-                                />
+                <Title
+                  style={{
+                    marginRight: 20,
+                    marginLeft: 20,
+                    marginBottom: 10,
+                    fontSize: 16,
+                  }}
+                  level={4}
+                >
+                  Awaiting Approval
+                </Title>
+                {unapprovedIncidentsLoading ? (
+                  <div />
+                ) : (
+                  <div
+                    style={{
+                      display: 'flex',
+                      width: '100%',
+                      flexDirection: 'column',
+                      height: '100%',
+                    }}
+                  >
+                    <Divider style={{ marginTop: 0, marginBottom: 0 }} />
+                    {unapprovedIncidents?.listIncidents?.incidents.map(
+                      (incident) => (
+                        <Link
+                          to={`/app/incidents/review/${incident.id}`}
+                          key={incident.id}
+                        >
+                          <div style={{ padding: '10px 20px' }}>
+                            <div style={{ marginBottom: 10 }}>
+                              <Text style={{ fontSize: 14 }} strong>
+                                Incident submitted{' '}
+                                {moment(incident.date).fromNow()} by{' '}
+                                {incident.createdBy.fullName}.
+                              </Text>
+                            </div>
+                            <Row wrap={false} style={{ marginTop: 10 }}>
+                              {incident.images.length > 0 && (
+                                <Col style={{ marginRight: 10 }}>
+                                  <div
+                                    style={{
+                                      width: 80,
+                                      height: 80,
+                                      backgroundImage: `url(${incident.images[0]?.optimised})`,
+                                      backgroundPosition: 'center',
+                                      backgroundRepeat: 'no-repeat',
+                                      backgroundSize: 'cover',
+                                      borderRadius: 5,
+                                    }}
+                                  />
+                                </Col>
+                              )}
+                              <Col>
+                                <div>
+                                  <Title
+                                    level={4}
+                                    style={{ fontSize: 16, marginBottom: 2 }}
+                                    ellipsis
+                                  >
+                                    {incident.subject}
+                                  </Title>
+                                  <div>
+                                    <Text style={{ fontSize: 14 }}>
+                                      Created At: {incident.dayTime}
+                                    </Text>
+                                  </div>
+                                  <div>
+                                    <Text style={{ fontSize: 14 }}>
+                                      Business: {incident.business?.name}
+                                    </Text>
+                                  </div>
+                                </div>
                               </Col>
-                            )}
-                            <Col>
-                              <div>
-                                <Title
-                                  level={4}
-                                  style={{ fontSize: 16, marginBottom: 2 }}
-                                  ellipsis
-                                >
-                                  {incident.subject}
-                                </Title>
-                                <div>
-                                  <Text style={{ fontSize: 14 }}>
-                                    Created At: {incident.dayTime}
-                                  </Text>
-                                </div>
-                                <div>
-                                  <Text style={{ fontSize: 14 }}>
-                                    Business: {incident.business?.name}
-                                  </Text>
-                                </div>
-                              </div>
-                            </Col>
-                          </Row>
-                        </div>
-                        <Divider style={{ marginTop: 0, marginBottom: 0 }} />
-                      </Link>
-                    )
-                  )}
-                </div>
-              )}
-            </Card>
-          </Col>
+                            </Row>
+                          </div>
+                          <Divider style={{ marginTop: 0, marginBottom: 0 }} />
+                        </Link>
+                      )
+                    )}
+                    {unapprovedIncidents?.listIncidents?.incidents.length ===
+                      0 && (
+                      <div
+                        style={{
+                          display: 'flex',
+                          flex: 1,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Empty description="Nothing to approve" />
+                      </div>
+                    )}
+                  </div>
+                )}
+              </Card>
+            </Col>
+          )}
         </Row>
       </Col>
     </Row>

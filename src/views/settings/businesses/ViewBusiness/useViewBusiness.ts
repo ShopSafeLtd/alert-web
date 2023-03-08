@@ -37,6 +37,8 @@ interface Return {
   actionsData: ListActionsQuery | undefined;
   actionsLoading: boolean;
   onRemoveBusiness: (value: string) => void;
+  toggleLinkDem: () => void;
+  linkDemVisible: boolean;
 }
 
 const useViewBusiness = (): Return => {
@@ -45,7 +47,7 @@ const useViewBusiness = (): Return => {
   const [editVisible, setEditVisible] = useState(false);
   const [inviteUserVisible, setInviteUserVisible] = useState(false);
   const [addUserVisible, setAddUserVisible] = useState(false);
-
+  const [linkDemVisible, setLinkDemVisible] = useState(false);
   const { data } = useBusinessQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -201,6 +203,9 @@ const useViewBusiness = (): Return => {
     setEditVisible(!editVisible);
   };
 
+  const toggleLinkDem = () => {
+    setLinkDemVisible(!linkDemVisible);
+  };
   const toggleInviteUser = () => {
     setInviteUserVisible(!inviteUserVisible);
   };
@@ -431,6 +436,8 @@ const useViewBusiness = (): Return => {
     actionsData,
     actionsLoading: !actionsData,
     onRemoveBusiness,
+    toggleLinkDem,
+    linkDemVisible,
   };
 };
 

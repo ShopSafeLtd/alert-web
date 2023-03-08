@@ -67,9 +67,16 @@ const useAuth = (): Return => {
     businesses,
     onboarded,
     schemes,
+    demId,
     groups,
   }: HandleSuccessArgs) => {
     window.localStorage.setItem('access_token', accessToken);
+    const color = `hsl(${Math.random() * 360}, 70%, 30%)`;
+
+    localStorage.setItem(
+      'current-user',
+      JSON.stringify({ id, name: fullName, color })
+    );
 
     const handleNoValidScheme = () => {
       const schemeDetails = schemes[0]?.scheme;
@@ -119,6 +126,7 @@ const useAuth = (): Return => {
       schemes,
       groups,
       isSet: true,
+      demId,
     });
     authenticated(accessToken);
   };
@@ -136,6 +144,7 @@ const useAuth = (): Return => {
         // currentUser?.newUser === undefined ? false : !currentUser?.newUser,
         schemes: currentUser?.schemes || [],
         groups: currentUser?.groups || [],
+        demId: currentUser?.demId || '',
         isSet: true,
       });
     },
@@ -207,6 +216,7 @@ const useAuth = (): Return => {
       schemes: data.schemes,
       groups: data.groups,
       isSet: true,
+      demId: data.demId,
     });
   };
 

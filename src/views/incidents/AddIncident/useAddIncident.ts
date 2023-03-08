@@ -4,11 +4,11 @@ import {
   CreateIncidentData,
   CreateIncidentMutation,
   CreateTagMutation,
-  ListCrimeGroupsQuery,
+  CrimeType,
+  ListGoodsTypesQuery,
   ListIncidentsDocument,
   ListIncidentsQuery,
   ListOffendersQuery,
-  ListVehiclesQuery,
   Model,
   QueryMode,
   Role,
@@ -21,6 +21,7 @@ import {
   useAddressesQuery,
   useCreateIncidentMutation,
   useListCrimeGroupsQuery,
+  useListGoodsTypesQuery,
   useListOffendersQuery,
   useListVehiclesQuery,
   useSchemeGroupsQuery,
@@ -34,14 +35,11 @@ import update from 'immutability-helper';
 import { UploadChangeParam } from 'antd/lib/upload';
 import { useNavigate } from 'react-router-dom';
 import { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
+import moment from 'moment';
 
 const { confirm } = Modal;
 const { useForm } = Form;
 
-type Offender = Exclude<
-  ListOffendersQuery['listOffenders'],
-  null | undefined
->['offenders'][0];
 interface FormData {
   subject: string;
   description: string;
@@ -58,6 +56,12 @@ interface FormData {
   groups: string[];
   tags: string[];
   images?: { id: string; url: string; optimised: string }[];
+  goods: {
+    goodsType?: string;
+    value?: number;
+    recoveredValue: number;
+  }[];
+  profiles: OffenderData[];
 }
 
 interface Image extends UploadFile {
@@ -68,77 +72,67 @@ interface Image extends UploadFile {
 }
 
 interface Return {
-  onSubmit: (value: FormData) => void;
-  form: FormInstance<FormData>;
-  saving: boolean;
-  groups: { value: string; label: string }[];
-  groupsLoading: boolean;
-  tags: { value: string; label: string }[];
-  tagsLoading: boolean;
-  primaryAddress:
-    | Exclude<AddressesQuery['addresses'], undefined | null>[0]
-    | undefined;
-  addressLoading: boolean;
-  imgChange: UploadProps['onChange'];
-  fileList: Image[];
-  beforeUpload: (value: RcFile) => void;
   addIncidentTag: boolean;
-  toggleAddIncidentTag: () => void;
-  updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
-  addOffender: boolean;
-  toggleAddOffender: () => void;
-  addExistingOffender: boolean;
-  toggleAddExistingOffender: () => void;
-  updateOffendersData: (value: OffenderData) => void;
-  offendersData: OffenderData[];
-  recentOffenderData: ListOffendersQuery | undefined;
-  recentOffenderLoading: boolean;
-  addRecentOffender: Offender | null;
-  setAddRecentOffender: (value: Offender | null) => void;
-  searchOffenders: string;
-  setSearchOffenders: (value: string) => void;
-  newImage: Image | null;
-  onCancelNewImage: () => void;
+  addressLoading: boolean;
+  adminRights: boolean;
   assignOffendersToImages: (data: {
     image: Image;
     offenders: OffenderData[];
   }) => void;
-  setAssignToImage: (image: Image) => void;
-  removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
-  removeImage: (uid: string) => void;
-  removeOffender: (offenderId: string) => void;
-  listOffendersData: ListOffendersQuery | undefined;
-  adminRights: boolean;
+  beforeUpload: (value: RcFile) => void;
+  crimeGroupsData: CrimeGroupData[];
+  fileList: Image[];
+  form: FormInstance<FormData>;
+  goodsTypesData: ListGoodsTypesQuery | undefined;
+  groups: { value: string; label: string }[];
+  groupsLoading: boolean;
+  imgChange: UploadProps['onChange'];
+  isTheft: boolean;
+  newImage: Image | null;
   offenderImgChange: (
     info: UploadChangeParam<UploadFile>,
     currentId: string
   ) => void;
-  editOffenderId: string;
-  setEditOffenderId: (value: string) => void;
-  updateOffender: (value: OffenderData) => void;
-  listVehiclesData: ListVehiclesQuery | undefined;
-  listCrimeGroupsData: ListCrimeGroupsQuery | undefined;
-  addNewVehicle: boolean;
-  addExistingVehicle: boolean;
-  toggleAddNewVehicle: () => void;
-  toggleAddExistingVehicle: () => void;
-  editVehicleId: string;
-  setEditVehicleId: (value: string) => void;
-  vehiclesData: VehicleData[];
-  updateVehiclesData: (value: VehicleData) => void;
-  removeVehicle: (vehicleId: string) => void;
-  removeCrimeGroup: (crimeGroupId: string) => void;
-  addNewCrimeGroup: boolean;
-  addExistingCrimeGroup: boolean;
-  toggleAddNewCrimeGroup: () => void;
-  toggleAddExistingCrimeGroup: () => void;
-  editCrimeGroupId: string;
-  setEditCrimeGroupId: (value: string) => void;
-  crimeGroupsData: CrimeGroupData[];
-  updateCrimeGroupsData: (value: CrimeGroupData) => void;
+  offendersData: OffenderData[];
+  onCancelNewImage: () => void;
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
+  onSubmit: (value: FormData) => void;
+  onValuesChange: (changedValues: FormData, values: FormData) => void;
+  primaryAddress:
+    | Exclude<AddressesQuery['addresses'], undefined | null>[0]
+    | undefined;
+  recentOffenderData: ListOffendersQuery | undefined;
+  recentOffenderLoading: boolean;
+  removeCrimeGroup: (crimeGroupId: string) => void;
+  removeImage: (uid: string) => void;
+  removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
+  removeOffender: (offenderId: string) => void;
+  removeVehicle: (vehicleId: string) => void;
+  saving: boolean;
+  searchOffenders: string;
+  setAssignToImage: (image: Image) => void;
+  setSearchOffenders: (value: string) => void;
+  tags: { value: string; label: string }[];
+  tagsLoading: boolean;
+  toggleAddIncidentTag: () => void;
+  updateCrimeGroupsData: (value: CrimeGroupData) => void;
+  updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
+  updateOffender: (value: OffenderData) => void;
+  updateOffendersData: (value: OffenderData) => void;
+  updateVehiclesData: (value: VehicleData) => void;
+  vehiclesData: VehicleData[];
+  formStages: {
+    crimeTypes: boolean;
+    where: boolean;
+    goods: boolean;
+    profiles: boolean;
+    images: boolean;
+    police: boolean;
+    details: boolean;
+    groups: boolean;
+  };
 }
 
 const useEditIncident = (): Return => {
@@ -156,34 +150,31 @@ const useEditIncident = (): Return => {
   const setIncidentsState = useStoreActions(
     (actions) => actions.data.setIncidents
   );
-  const [saving, setSaving] = useState(false);
 
   const [addIncidentTag, setAddIncidentTag] = useState(false);
-  const [addRecentOffender, setAddRecentOffender] = useState<Offender | null>(
-    null
-  );
-  const [searchOffenders, setSearchOffenders] = useState<string>('');
 
-  const [addOffender, setAddOffender] = useState(false);
-  const [addExistingOffender, setAddExistingOffender] = useState(false);
-  const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
-  const [editOffenderId, setEditOffenderId] = useState<string>('');
+  const [crimeGroupsData, setCrimeGroupsData] = useState<CrimeGroupData[]>([]);
+
   const [editedOffender, setEditedOffender] = useState<
     OffenderData | undefined
   >();
-
-  const [imageChange, setImageChange] = useState(false);
+  const [formStages, setFormStages] = useState({
+    crimeTypes: true,
+    where: false,
+    goods: false,
+    profiles: false,
+    images: false,
+    police: false,
+    details: false,
+    groups: false,
+  });
   const [fileList, setFileList] = useState<Image[]>([]);
+  const [imageChange, setImageChange] = useState(false);
+  const [isTheft, setIsTheft] = useState(false);
   const [newImage, setNewImage] = useState<Image | null>(null);
-
-  const [addNewCrimeGroup, setAddNewCrimeGroup] = useState(false);
-  const [addExistingCrimeGroup, setAddExistingCrimeGroup] = useState(false);
-  const [editCrimeGroupId, setEditCrimeGroupId] = useState<string>('');
-  const [crimeGroupsData, setCrimeGroupsData] = useState<CrimeGroupData[]>([]);
-
-  const [addNewVehicle, setAddNewVehicle] = useState(false);
-  const [addExistingVehicle, setAddExistingVehicle] = useState(false);
-  const [editVehicleId, setEditVehicleId] = useState<string>('');
+  const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
+  const [saving, setSaving] = useState(false);
+  const [searchOffenders, setSearchOffenders] = useState<string>('');
   const [vehiclesData, setVehiclesData] = useState<VehicleData[]>([]);
 
   useEffect(() => {
@@ -300,6 +291,10 @@ const useEditIncident = (): Return => {
         },
       },
     },
+  });
+
+  const { data: goodsTypesData } = useListGoodsTypesQuery({
+    fetchPolicy: 'cache-and-network',
   });
 
   const { data: recentOffenderData, loading: recentOffenderLoading } =
@@ -432,26 +427,24 @@ const useEditIncident = (): Return => {
     setAddIncidentTag(!addIncidentTag);
   };
 
-  const toggleAddOffender = () => {
-    setAddOffender(!addOffender);
-  };
-  const toggleAddExistingOffender = () => {
-    setAddExistingOffender(!addExistingOffender);
-  };
-  const toggleAddNewVehicle = () => {
-    setAddNewVehicle(!addNewVehicle);
-  };
-  const toggleAddExistingVehicle = () => {
-    setAddExistingVehicle(!addExistingVehicle);
-  };
-  const toggleAddNewCrimeGroup = () => {
-    setAddNewCrimeGroup(!addNewCrimeGroup);
-  };
-  const toggleAddExistingCrimeGroup = () => {
-    setAddExistingCrimeGroup(!addExistingCrimeGroup);
-  };
   const updateOffendersData = (offender: OffenderData) => {
     setOffendersData([...offendersData, offender]);
+    if (offender.id.length === 3 && offender.images) {
+      setFileList([
+        ...fileList,
+        ...offender.images.map(
+          (image): Image => ({
+            ...image,
+            uid: image.id,
+            name: image.fileName || '',
+            fileName: image.fileName || '',
+            url: image.url || '',
+            type: image.type || '',
+            offenders: [offender],
+          })
+        ),
+      ]);
+    }
   };
 
   const updateOffender = (offender: OffenderData) => {
@@ -459,6 +452,7 @@ const useEditIncident = (): Return => {
   };
 
   const updateVehiclesData = (vehicle: VehicleData) => {
+    console.log(vehicle);
     const editedData = vehiclesData.find(({ id }) => id === vehicle.id);
     if (editedData) {
       setVehiclesData([
@@ -694,13 +688,7 @@ const useEditIncident = (): Return => {
         title: 'No Offenders',
         content: 'Please select or add at least one offender for the incident.',
         cancelText: 'Find Offenders',
-        onCancel() {
-          toggleAddExistingOffender();
-        },
         okText: 'Add New Offender',
-        onOk() {
-          toggleAddOffender();
-        },
       });
       setSaving(false);
     } else {
@@ -898,8 +886,19 @@ const useEditIncident = (): Return => {
             business: {
               id: data.business.value,
             },
-            value: data.value || null,
-            recoveredValue: data.recoveredValue || null,
+            items: data.goods
+              .filter((item) => item.goodsType !== undefined)
+              .map((item) => ({
+                goodsType: {
+                  id: item.goodsType,
+                },
+                name:
+                  goodsTypesData?.listGoodsTypes.goodsTypes.find(
+                    ({ id }) => id === item.goodsType
+                  )?.name || '',
+                value: item.value || 0,
+                recoveredValue: item.recoveredValue || 0,
+              })),
             policeInvolved: data.policeInvolved,
             policeRef: data.policeRef,
             policeReported: data.policeReported,
@@ -973,6 +972,176 @@ const useEditIncident = (): Return => {
       );
   };
 
+  const onValuesChange = (changedValues: FormData, values: FormData) => {
+    // when tags are set enable the next form steps
+    if (changedValues.tags) {
+      const tags = changedValues.tags
+        .map((id) => tagsData?.tags.find((tag) => tag.id === id))
+        .map((tag) => tag?.crimeType || CrimeType.Other);
+      const theft = tags.includes(CrimeType.TheftHandling);
+
+      // enable goods if type is theft
+      if (theft && !values.goods) {
+        setIsTheft(true);
+        form.setFieldsValue({
+          goods: [
+            {
+              goodsType: undefined,
+              recoveredValue: 0,
+              value: undefined,
+            },
+            {
+              goodsType: undefined,
+              recoveredValue: 0,
+              value: undefined,
+            },
+          ],
+        });
+      }
+
+      setFormStages({
+        ...formStages,
+        where: true,
+        goods: true,
+        profiles: formStages.profiles ? true : !theft,
+      });
+    }
+
+    // add new line to goods table if all have a goodsType
+    if (changedValues.goods) {
+      if (
+        changedValues.goods
+          .map((item) => item?.goodsType !== undefined)
+          .includes(true) &&
+        !values.goods
+          .map((item) => item?.goodsType !== undefined)
+          .includes(false)
+      ) {
+        form.setFieldsValue({
+          goods: [
+            ...form.getFieldValue('goods'),
+            {
+              goodsType: undefined,
+              recoveredValue: 0,
+              value: undefined,
+            },
+          ],
+        });
+      }
+    }
+
+    // enable profiles when goods is completed
+    if (changedValues.goods)
+      if (
+        values.goods
+          .map((item) => {
+            if (
+              item.goodsType !== undefined &&
+              item.recoveredValue !== undefined &&
+              item.value !== undefined
+            )
+              return true;
+            return false;
+          })
+          .includes(true) &&
+        !formStages.profiles
+      ) {
+        setFormStages({
+          ...formStages,
+          profiles: true,
+        });
+      }
+
+    // enable fields when profile is added
+    if (changedValues.profiles && !formStages.images) {
+      setFormStages({
+        ...formStages,
+        images: true,
+        police: true,
+        details: true,
+        groups: true,
+      });
+    }
+
+    // build description as data is completed
+    const tags = values.tags
+      .map((id) => tagsData?.tags.find((tag) => tag.id === id))
+      .map((tag) => tag?.name || '');
+    const offenders = values.profiles || [];
+    const unknownOffenders =
+      (values.profiles &&
+        values.profiles.filter(
+          (item) => item.name === 'Unidentified Offender'
+        )) ||
+      [];
+    const knownOffenders =
+      (values.profiles &&
+        values.profiles.filter(
+          (item) => item.name !== 'Unidentified Offender'
+        )) ||
+      [];
+
+    form.setFieldsValue({
+      description: `An incident of ${tags
+        .map((tag, index) => `${index > 0 ? ' ' : ''}${tag}`)
+        .toString()} occurred at ${values.business.label} at ${moment(
+        values.date
+      ).format('HH:mm')} on ${moment(values.date).format(
+        'dddd Do MMMM YYYY'
+      )}. ${
+        tags.includes('Theft & Handling')
+          ? `The goods lost in this incident total £${
+              values.goods
+                .filter((item) => {
+                  if (
+                    item.goodsType !== undefined &&
+                    item.recoveredValue !== undefined &&
+                    item.value !== undefined
+                  )
+                    return true;
+                  return false;
+                })
+                .map((item) => item.value)
+                .reduce((a, b) => (a || 0) + (b || 0))
+                ?.toFixed(2) || 0
+            } of which a value of £${values.goods
+              .filter((item) => {
+                if (
+                  item.goodsType !== undefined &&
+                  item.recoveredValue !== undefined &&
+                  item.value !== undefined
+                )
+                  return true;
+                return false;
+              })
+              .map((item) => item.recoveredValue)
+              .reduce((a, b) => (a || 0) + (b || 0))
+              .toFixed(2)} was recovered.`
+          : ''
+      } ${
+        offenders.length > 0
+          ? `The incident involved ${
+              offenders.length > 1
+                ? `${offenders.length} offenders`
+                : `${offenders.length} offender`
+            }, ${
+              knownOffenders.length > 0
+                ? ` ${knownOffenders.map(
+                    (item, index) => `${index > 1 ? ' ' : ''}${item.name}`
+                  )}${unknownOffenders.length > 0 ? ' and' : '.'}`
+                : ''
+            } ${
+              unknownOffenders.length > 0
+                ? `${unknownOffenders.length} unidentified offender${
+                    unknownOffenders.length > 1 ? 's.' : '.'
+                  }`
+                : ''
+            }`
+          : ''
+      }`,
+    });
+  };
+
   return {
     onSubmit,
     saving,
@@ -995,17 +1164,11 @@ const useEditIncident = (): Return => {
     addIncidentTag,
     toggleAddIncidentTag,
     updateIncidentTag,
-    addOffender,
-    toggleAddOffender,
-    addExistingOffender,
-    toggleAddExistingOffender,
     updateOffendersData,
     offendersData,
     form,
     recentOffenderData,
     recentOffenderLoading,
-    addRecentOffender,
-    setAddRecentOffender,
     searchOffenders,
     setSearchOffenders,
     newImage,
@@ -1015,33 +1178,20 @@ const useEditIncident = (): Return => {
     removeImageFromOffender,
     removeImage,
     removeOffender,
-    listOffendersData,
     adminRights: role !== Role.User,
     offenderImgChange,
-    editOffenderId,
-    setEditOffenderId,
     updateOffender,
-    addNewVehicle,
-    addExistingVehicle,
-    editVehicleId,
-    setEditVehicleId,
-    toggleAddNewVehicle,
-    toggleAddExistingVehicle,
     vehiclesData,
     updateVehiclesData,
     removeVehicle,
-    addNewCrimeGroup,
-    addExistingCrimeGroup,
-    editCrimeGroupId,
-    setEditCrimeGroupId,
-    toggleAddNewCrimeGroup,
-    toggleAddExistingCrimeGroup,
     crimeGroupsData,
     updateCrimeGroupsData,
     removeCrimeGroup,
-    listVehiclesData,
-    listCrimeGroupsData,
     onSearchBusiness,
+    formStages,
+    onValuesChange,
+    isTheft,
+    goodsTypesData,
   };
 };
 

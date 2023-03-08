@@ -1,0 +1,52 @@
+query BusinessReport($where: BusinessWhereUniqueInput!, $endDate: DateTime, $startDate: DateTime) {
+  business(where: $where) {
+    id
+    name
+    incidents {
+      id
+      subject
+      crimeTypes {
+        id
+        name
+      }
+      createdAt
+      reference
+      policeRef
+      totalRecoveredValue
+      totalValue
+      date
+      createdBy {
+        id
+        businesses {
+          id
+          name
+        }
+      }
+    }
+    locations {
+      id
+      full
+    }
+    valueStats(endDate: $endDate, startDate: $startDate) {
+      avgLostValue
+      businessId
+      avgRecoveredValue
+      successRate
+      totalLostValue
+      totalRecoveredValue
+    }
+    goodsTypesTotals(startDate: $startDate, endDate: $endDate) {
+      avgLostValue
+      businessId
+      avgRecoveredValue
+      count
+      successRate
+      totalRecoveredValue
+      totalLostValue
+      goodsType {
+        id
+        name
+      }
+    }
+  }
+}

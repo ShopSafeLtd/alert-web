@@ -43,14 +43,15 @@ Props): JSX.Element => (
     <Table
       columns={[
         {
+          key: 'registration',
+          dataIndex: 'registration',
+          title: 'Registration',
+          // render: (value) => `${value?.toFixed(0) || 0}%`,
+        },
+        {
           key: 'make',
           dataIndex: 'make',
           title: 'Make',
-        },
-        {
-          key: 'colour',
-          dataIndex: 'colour',
-          title: 'Colour',
         },
         {
           key: 'model',
@@ -58,25 +59,9 @@ Props): JSX.Element => (
           title: 'Model',
         },
         {
-          key: 'totalOffenders',
-          dataIndex: 'totalOffenders',
-          title: 'Members',
-        },
-        {
-          key: 'totalIncidents',
-          dataIndex: 'totalIncidents',
-          title: 'Incidents',
-        },
-        {
-          key: 'totalCrimeGroups',
-          dataIndex: 'totalCrimeGroups',
-          title: 'Crime Groups',
-        },
-        {
-          key: 'registration',
-          dataIndex: 'registration',
-          title: 'Registration',
-          // render: (value) => `${value?.toFixed(0) || 0}%`,
+          key: 'colour',
+          dataIndex: 'colour',
+          title: 'Colour',
         },
       ]}
       dataSource={data?.listVehicles?.vehicles.map((vehicle) => ({

@@ -7,14 +7,12 @@ import { ViewIncidentQuery } from '../../../../graphql/generated';
 describe('List Officer View', () => {
   const data: ViewIncidentQuery = {
     incident: {
-      value: 0,
       policeInvolved: false,
       policeRef: null,
       reference: null,
       policeReported: false,
       subscribed: false,
       updates: [],
-      recoveredValue: 0,
       id: 'incidentId',
       subject: 'test subject ',
       business: {
@@ -41,6 +39,9 @@ describe('List Officer View', () => {
       offenders: [],
       crimeGroups: [],
       vehicles: [],
+      totalRecoveredValue: 0,
+      totalValue: 0,
+      incidentItems: [],
     },
   };
 
@@ -64,16 +65,11 @@ describe('List Officer View', () => {
           addIncidentTag={false}
           toggleAddIncidentTag={jest.fn()}
           updateIncidentTag={jest.fn()}
-          addOffender={false}
-          toggleAddOffender={jest.fn()}
-          addExistingOffender={false}
-          toggleAddExistingOffender={jest.fn()}
           offendersData={[]}
           reviewed={false}
           onReject={jest.fn()}
           addRecentOffender={null}
           assignOffendersToImages={jest.fn()}
-          listOffendersData={undefined}
           newImage={null}
           offenderImgChange={jest.fn()}
           onCancelNewImage={jest.fn()}
@@ -86,32 +82,15 @@ describe('List Officer View', () => {
           setAddRecentOffender={jest.fn()}
           setAssignToImage={jest.fn()}
           setSearchOffenders={jest.fn()}
-          addExistingCrimeGroup
-          addExistingVehicle
-          addNewCrimeGroup
-          addNewVehicle
           crimeGroupsData={[]}
-          editCrimeGroupId="test"
-          editOffenderId="test"
-          editVehicleId="test"
-          listCrimeGroupsData={{
-            listCrimeGroups: { crimeGroups: [], total: 0 },
-          }}
-          listVehiclesData={{ listVehicles: { total: 0, vehicles: [] } }}
           removeCrimeGroup={jest.fn()}
           removeVehicle={jest.fn()}
-          setEditCrimeGroupId={jest.fn()}
-          setEditOffenderId={jest.fn()}
-          setEditVehicleId={jest.fn()}
-          toggleAddExistingCrimeGroup={jest.fn()}
-          toggleAddExistingVehicle={jest.fn()}
-          toggleAddNewCrimeGroup={jest.fn()}
-          toggleAddNewVehicle={jest.fn()}
           updateCrimeGroupsData={jest.fn()}
           updateOffendersData={jest.fn()}
           updateVehiclesData={jest.fn()}
           onSearchBusiness={jest.fn()}
           vehiclesData={[]}
+          goodsTypesData={{ listGoodsTypes: { goodsTypes: [], total: 0 } }}
         />
       </MemoryRouter>
     );

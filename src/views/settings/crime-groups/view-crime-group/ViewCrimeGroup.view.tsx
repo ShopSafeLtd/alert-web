@@ -25,6 +25,7 @@ import AddNewOffender from 'components/form-components/crimeGroup/offender/AddNe
 import AddVehicle from 'components/form-components/crimeGroup/vehicle/AddVehicle';
 import AddExistingVehicle from 'components/form-components/crimeGroup/vehicle/AddExistingVehicle';
 import AddAlias from 'components/form-components/crimeGroup/Alias';
+import moment from 'moment';
 import useStyles from './ViewCrimeGroup.styles';
 
 const { Title } = Typography;
@@ -71,7 +72,7 @@ const ViewCrimeGroup = ({
     <div className={classes.page}>
       <PageHeader
         onBack={() => window.history.back()}
-        title={`Reference: ${
+        title={`Alert ID: ${
           data?.crimeGroup?.reference ? data?.crimeGroup?.reference : ''
         }`}
         subTitle={`-- ${data?.crimeGroup?.alias}`}
@@ -229,7 +230,7 @@ const ViewCrimeGroup = ({
             {
               key: 'reference',
               dataIndex: 'reference',
-              title: 'Reference',
+              title: 'Alert ID',
             },
             {
               key: 'name',
@@ -261,7 +262,7 @@ const ViewCrimeGroup = ({
             {
               key: 'reference',
               dataIndex: 'reference',
-              title: 'Reference',
+              title: 'Alert ID',
             },
             {
               key: 'policeRef',
@@ -309,6 +310,64 @@ const ViewCrimeGroup = ({
           }
         />
       </Card>
+      <Card loading={loading}>
+        <Title level={4}>Vehicles</Title>
+        <Table
+          columns={[
+            {
+              key: 'make',
+              dataIndex: 'make',
+              title: 'Make',
+            },
+            {
+              key: 'updatedAt',
+              dataIndex: 'updatedAt',
+              title: 'UpdatedAt',
+              render: (value) => moment(value || moment()).calendar(),
+            },
+            {
+              key: 'registration',
+              dataIndex: 'registration',
+              title: 'Registration',
+            },
+            {
+              key: 'colour',
+              dataIndex: 'colour',
+              title: 'Colour',
+            },
+            {
+              key: 'model',
+              dataIndex: 'model',
+              title: 'Model',
+            },
+            {
+              key: 'totalOffenders',
+              dataIndex: 'totalOffenders',
+              title: 'Members',
+            },
+            {
+              key: 'totalIncidents',
+              dataIndex: 'totalIncidents',
+              title: 'Incidents',
+            },
+          ]}
+          size="small"
+          dataSource={
+            data?.crimeGroup?.vehicles.map((vehicle) => ({
+              key: vehicle.id,
+              make: vehicle.make,
+              colour: vehicle.colour,
+              model: vehicle.model,
+              registration: vehicle.registration,
+              updatedAt: vehicle.updatedAt,
+              totalCrimeGroup: vehicle.totalCrimeGroups,
+              totalOffenders: vehicle.totalOffenders,
+              totalIncidents: vehicle.totalIncidents,
+            })) || []
+          }
+        />
+      </Card>
+
       {/* offeder */}
       <Drawer
         title="Add New Offender"

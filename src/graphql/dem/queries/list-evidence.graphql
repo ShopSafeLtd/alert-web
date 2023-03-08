@@ -1,0 +1,13 @@
+query ListDemEvidence($where: String!) {
+  listDemEvidence(where: $where) {
+    total
+    demEvidence {
+      type
+      thumbnailUrl
+      playbackUrl
+      importance
+      id
+      createdAt
+    }
+  }
+}

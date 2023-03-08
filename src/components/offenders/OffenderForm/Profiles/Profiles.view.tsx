@@ -57,8 +57,8 @@ const Profiles = ({
   crimeGroupsData,
   removeCrimeGroup,
 }: Props): JSX.Element => (
-  <>
-    <Row gutter={10} align="middle" style={{ marginTop: 70, marginBottom: 20 }}>
+  <div style={{ width: '100%' }}>
+    <Row gutter={10} align="middle" style={{ marginBottom: 20, width: '100%' }}>
       <Col>
         <Title style={{ marginBottom: 0 }} level={4}>
           2.
@@ -77,6 +77,7 @@ const Profiles = ({
 
       <Col>
         <Dropdown
+          disabled
           overlay={
             <Menu
               items={[
@@ -164,7 +165,12 @@ const Profiles = ({
                     {
                       key: 'reference',
                       dataIndex: 'reference',
-                      title: 'Reference',
+                      title: 'Alert ID',
+                    },
+                    {
+                      key: 'alias',
+                      dataIndex: 'alias',
+                      title: 'Alias',
                     },
                     {
                       key: 'totalOffenders',
@@ -202,7 +208,7 @@ const Profiles = ({
                       render: (_, record) => (
                         <Button
                           onClick={() => setEditVehicleId(record.key)}
-                          disabled={saving}
+                          disabled
                           icon={<FontAwesomeIcon icon={faEdit} />}
                         />
                       ),
@@ -234,6 +240,7 @@ const Profiles = ({
                   dataSource={crimeGroupsData.map((crimeGroup) => ({
                     key: crimeGroup.id,
                     reference: crimeGroup.reference,
+                    alias: crimeGroup.alias,
                     totalOffenders: crimeGroup.totalOffenders,
                     totalIncidents: crimeGroup.totalIncidents,
                     totalValue: crimeGroup.totalValue,
@@ -250,14 +257,14 @@ const Profiles = ({
                 <Table
                   columns={[
                     {
+                      key: 'registration',
+                      dataIndex: 'registration',
+                      title: 'Registration',
+                    },
+                    {
                       key: 'make',
                       dataIndex: 'make',
                       title: 'Make',
-                    },
-                    {
-                      key: 'colour',
-                      dataIndex: 'colour',
-                      title: 'Colour',
                     },
                     {
                       key: 'model',
@@ -265,24 +272,9 @@ const Profiles = ({
                       title: 'Model',
                     },
                     {
-                      key: 'registration',
-                      dataIndex: 'registration',
-                      title: 'Registration',
-                    },
-                    {
-                      key: 'totalOffenders',
-                      dataIndex: 'totalOffenders',
-                      title: 'Members',
-                    },
-                    {
-                      key: 'totalIncidents',
-                      dataIndex: 'totalIncidents',
-                      title: 'Incidents',
-                    },
-                    {
-                      key: 'totalCrimeGroups',
-                      dataIndex: 'totalCrimeGroups',
-                      title: 'Crime Groups',
+                      key: 'colour',
+                      dataIndex: 'colour',
+                      title: 'Colour',
                     },
                     {
                       key: 'edit',
@@ -292,7 +284,7 @@ const Profiles = ({
                       render: (_, record) => (
                         <Button
                           onClick={() => setEditVehicleId(record.key)}
-                          disabled={saving}
+                          disabled
                           icon={<FontAwesomeIcon icon={faEdit} />}
                         />
                       ),
@@ -347,6 +339,6 @@ const Profiles = ({
         )}
       </Col>
     </Row>
-  </>
+  </div>
 );
 export default Profiles;

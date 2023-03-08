@@ -20,10 +20,14 @@ const ViewBusiness = () => {
     updateAddUsersToBusiness,
     actionsData,
     onRemoveBusiness,
+    toggleLinkDem,
+    linkDemVisible,
   } = useViewBusiness();
 
   return (
     <View
+      linkDemVisible={linkDemVisible}
+      toggleLinkDem={toggleLinkDem}
       data={data}
       loading={loading}
       businessId={businessId}

@@ -45,7 +45,12 @@ Props): JSX.Element => (
         {
           key: 'reference',
           dataIndex: 'reference',
-          title: 'Reference',
+          title: 'Alert ID',
+        },
+        {
+          key: 'alias',
+          dataIndex: 'alias',
+          title: 'Alias',
         },
         {
           key: 'totalOffenders',
@@ -57,24 +62,6 @@ Props): JSX.Element => (
           dataIndex: 'totalIncidents',
           title: 'Incidents',
         },
-        {
-          key: 'totalValue',
-          dataIndex: 'totalValue',
-          title: 'Lost Value',
-          render: (value) => `£${value || 0}`,
-        },
-        {
-          key: 'totalRecoveredValue',
-          dataIndex: 'totalRecoveredValue',
-          title: 'Recovered Value',
-          render: (value) => `£${value || 0}`,
-        },
-        {
-          key: 'totalTheftSuccess',
-          dataIndex: 'totalTheftSuccess',
-          title: 'Success Rate',
-          render: (value) => `${value?.toFixed(0) || 0}%`,
-        },
       ]}
       dataSource={data?.listCrimeGroups?.crimeGroups.map((crimeGroup) => ({
         key: crimeGroup.id,
@@ -84,6 +71,7 @@ Props): JSX.Element => (
         totalValue: crimeGroup.totalValue,
         totalRecoveredValue: crimeGroup.totalRecoveredValue,
         totalTheftSuccess: crimeGroup.totalTheftSuccess,
+        alias: crimeGroup.alias,
       }))}
       rowSelection={{
         type: 'radio',

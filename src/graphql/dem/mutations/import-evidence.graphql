@@ -1,0 +1,16 @@
+mutation CopyEvidence($data: ImportDemEvidence!, $where: UniqueId!) {
+    copyEvidenceOnInvestigation(data: $data, where: $where) {
+        id
+        name
+        url
+        thumbnailUrl
+        tags {
+            id
+            name
+        }
+        investigation {
+            id
+            name
+        }
+    }
+}

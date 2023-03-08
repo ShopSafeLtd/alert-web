@@ -1,31 +1,18 @@
 import React from 'react';
 import View from './AddIncident.view';
-import useEditIncident from './useAddIncident';
+import useAddIncident from './useAddIncident';
 
 function EditIncident(): JSX.Element {
   const {
-    addExistingCrimeGroup,
-    addExistingOffender,
-    addExistingVehicle,
     addIncidentTag,
-    addNewCrimeGroup,
-    addNewVehicle,
-    addOffender,
-    addRecentOffender,
     assignOffendersToImages,
     beforeUpload,
     crimeGroupsData,
-    editCrimeGroupId,
-    editOffenderId,
-    editVehicleId,
     fileList,
     form,
     groups,
     groupsLoading,
     imgChange,
-    listCrimeGroupsData,
-    listOffendersData,
-    listVehiclesData,
     newImage,
     offenderImgChange,
     offendersData,
@@ -42,54 +29,35 @@ function EditIncident(): JSX.Element {
     removeVehicle,
     saving,
     searchOffenders,
-    setAddRecentOffender,
     setAssignToImage,
-    setEditCrimeGroupId,
-    setEditOffenderId,
-    setEditVehicleId,
     setSearchOffenders,
     tags,
     tagsLoading,
-    toggleAddExistingCrimeGroup,
-    toggleAddExistingOffender,
-    toggleAddExistingVehicle,
     toggleAddIncidentTag,
-    toggleAddNewCrimeGroup,
-    toggleAddNewVehicle,
-    toggleAddOffender,
     updateCrimeGroupsData,
     updateIncidentTag,
     updateOffender,
     updateOffendersData,
     updateVehiclesData,
     vehiclesData,
-  } = useEditIncident();
+    formStages,
+    onValuesChange,
+    isTheft,
+    goodsTypesData,
+  } = useAddIncident();
 
   return (
     <div>
       <View
-        addExistingCrimeGroup={addExistingCrimeGroup}
-        addExistingOffender={addExistingOffender}
-        addExistingVehicle={addExistingVehicle}
         addIncidentTag={addIncidentTag}
-        addNewCrimeGroup={addNewCrimeGroup}
-        addNewVehicle={addNewVehicle}
-        addOffender={addOffender}
-        addRecentOffender={addRecentOffender}
         assignOffendersToImages={assignOffendersToImages}
         beforeUpload={beforeUpload}
         crimeGroupsData={crimeGroupsData}
-        editCrimeGroupId={editCrimeGroupId}
-        editOffenderId={editOffenderId}
-        editVehicleId={editVehicleId}
         fileList={fileList}
         form={form}
         groups={groups}
         groupsLoading={groupsLoading}
         imgChange={imgChange}
-        listCrimeGroupsData={listCrimeGroupsData}
-        listOffendersData={listOffendersData}
-        listVehiclesData={listVehiclesData}
         newImage={newImage}
         offenderImgChange={offenderImgChange}
         offendersData={offendersData}
@@ -106,27 +74,21 @@ function EditIncident(): JSX.Element {
         removeVehicle={removeVehicle}
         saving={saving}
         searchOffenders={searchOffenders}
-        setAddRecentOffender={setAddRecentOffender}
         setAssignToImage={setAssignToImage}
-        setEditCrimeGroupId={setEditCrimeGroupId}
-        setEditOffenderId={setEditOffenderId}
-        setEditVehicleId={setEditVehicleId}
         setSearchOffenders={setSearchOffenders}
         tags={tags}
         tagsLoading={tagsLoading}
-        toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
-        toggleAddExistingOffender={toggleAddExistingOffender}
-        toggleAddExistingVehicle={toggleAddExistingVehicle}
         toggleAddIncidentTag={toggleAddIncidentTag}
-        toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
-        toggleAddNewVehicle={toggleAddNewVehicle}
-        toggleAddOffender={toggleAddOffender}
         updateCrimeGroupsData={updateCrimeGroupsData}
         updateIncidentTag={updateIncidentTag}
         updateOffender={updateOffender}
         updateOffendersData={updateOffendersData}
         updateVehiclesData={updateVehiclesData}
         vehiclesData={vehiclesData}
+        formStages={formStages}
+        onValuesChange={onValuesChange}
+        isTheft={isTheft}
+        goodsTypesData={goodsTypesData}
       />
     </div>
   );

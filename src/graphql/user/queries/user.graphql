@@ -9,9 +9,11 @@ query User(
     fullName
     email
     status
+    demId
     businesses {
       id
       name
+      demId
     }
     disabled
     newUser

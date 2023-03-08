@@ -17,9 +17,15 @@ const UserDetail = (): JSX.Element => {
     deleteConfirm,
     enableConfirm,
     disableConfirm,
+    demLink,
+    toggleDemLink,
+    demId,
   } = useUserDetail(userId);
   return (
     <View
+      demId={demId}
+      demLink={demLink}
+      toggleDemLink={toggleDemLink}
       data={data}
       loading={loading}
       editUser={editUser}

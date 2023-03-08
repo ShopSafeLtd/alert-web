@@ -5,7 +5,7 @@ import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
 
 import { MemoryRouter } from 'react-router-dom';
-import { CreateTagDocument, Model } from 'graphql/generated';
+import { CreateTagDocument, CrimeType, Model } from 'graphql/generated';
 import useAddCrimeType from '../useAddCrimeType';
 
 const mocks = [
@@ -52,6 +52,7 @@ const UseAddCrimeTypeTest = () => {
           onSubmit({
             name: 'data.name',
             description: 'data.description',
+            crimeType: CrimeType.TheftHandling,
           })
         }
       >

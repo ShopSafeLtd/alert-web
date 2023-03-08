@@ -9,14 +9,14 @@ import {
   Empty,
   Menu,
   PageHeader,
-  Tooltip,
+  Popconfirm,
   Row,
   Skeleton,
   Table,
   Tag,
-  Typography,
-  Popconfirm,
   Timeline,
+  Tooltip,
+  Typography,
 } from 'antd';
 import {
   AddUsersToBusinessMutation,
@@ -42,6 +42,7 @@ import AddUser from 'components/form-components/user/AddUser';
 import AddUserToBusiness from 'components/form-components/user/AddUserToBusiness';
 import { MutationUpdaterFn } from '@apollo/client';
 import useStyles from './ViewBusiness.styles';
+import LinkDem from '../../../../components/form-components/businesses/LinkDem';
 
 interface UserTable {
   key: string;
@@ -68,6 +69,8 @@ interface Props {
   updateAddUsersToBusiness: MutationUpdaterFn<AddUsersToBusinessMutation>;
   actionsData: ListActionsQuery | undefined;
   onRemoveBusiness: (value: string) => void;
+  toggleLinkDem: () => void;
+  linkDemVisible: boolean;
 }
 
 const ViewBusiness = ({
@@ -76,6 +79,7 @@ const ViewBusiness = ({
   businessId,
   editVisible,
   toggleEdit,
+  toggleLinkDem,
   inviteUserVisible,
   toggleInviteUser,
   usersLoading,
@@ -87,6 +91,7 @@ const ViewBusiness = ({
   updateAddUsersToBusiness,
   actionsData,
   onRemoveBusiness,
+  linkDemVisible,
 }: Props) => {
   const classNames = useStyles();
   return (
@@ -97,6 +102,13 @@ const ViewBusiness = ({
           onBack={() => window.history.back()}
           title={data?.business?.name}
           extra={[
+            <Button
+              key="5"
+              disabled={!!data?.business?.demId}
+              onClick={toggleLinkDem}
+            >
+              Link to DEM{' '}
+            </Button>,
             <Button
               key="4"
               icon={
@@ -324,6 +336,16 @@ const ViewBusiness = ({
         )}
       </Drawer>
 
+      <Drawer
+        title="Link to DEM"
+        visible={linkDemVisible}
+        onClose={toggleLinkDem}
+        width={500}
+      >
+        {linkDemVisible && (
+          <LinkDem businessId={businessId || ''} onClose={toggleLinkDem} />
+        )}
+      </Drawer>
       <Drawer
         visible={inviteUserVisible}
         onClose={toggleInviteUser}
