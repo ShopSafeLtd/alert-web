@@ -114,7 +114,7 @@ FlowProps) => {
   return (
     <div className={styles.pageView}>
       <Card
-        style={{ width: '100%', height: '83vh' }}
+        style={{ width: '100%', height: '90vh' }}
         bodyStyle={{
           width: '100%',
           height: '100%',

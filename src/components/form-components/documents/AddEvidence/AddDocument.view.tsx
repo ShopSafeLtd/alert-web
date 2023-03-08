@@ -113,14 +113,14 @@ const AddBusiness = ({
               type="primary"
               htmlType="submit"
             >
-              Create Document
+              Create Evidence
             </Button>
           </Col>
         </Row>
       </Form.Item>
     </Form>
     <Drawer
-      title="Add DEM Document"
+      title="Add DEM Evidence"
       visible={searchEvidence}
       width="800"
       onClose={toggleSearchEvidence}

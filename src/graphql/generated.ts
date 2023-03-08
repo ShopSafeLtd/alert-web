@@ -7147,6 +7147,7 @@ export type DemCompany = {
 
 export type DemEvidence = {
   __typename?: 'DemEvidence';
+  createdAt?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['String']>;
   importance?: Maybe<Scalars['String']>;
   playbackUrl?: Maybe<Scalars['String']>;
@@ -33105,6 +33106,7 @@ export type ListDemEvidenceQuery = {
       playbackUrl?: string | null;
       importance?: string | null;
       id?: string | null;
+      createdAt?: any | null;
     }>;
   };
 };
@@ -39553,6 +39555,7 @@ export const ListDemEvidenceDocument = gql`
         playbackUrl
         importance
         id
+        createdAt
       }
     }
   }

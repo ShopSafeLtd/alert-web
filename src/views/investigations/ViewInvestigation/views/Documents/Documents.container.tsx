@@ -10,7 +10,22 @@ interface Props {
       >['documents']
     | null
     | undefined;
+  toggleAddDemDocument: () => void;
+  toggleAddDocument: () => void;
+  demId: string | undefined | null;
 }
-const DocumentsContainer = ({ data }: Props) => <View data={data} />;
+const DocumentsContainer = ({
+  data,
+  demId,
+  toggleAddDemDocument,
+  toggleAddDocument,
+}: Props) => (
+  <View
+    data={data}
+    demId={demId}
+    toggleAddDemDocument={toggleAddDemDocument}
+    toggleAddDocument={toggleAddDocument}
+  />
+);
 
 export default DocumentsContainer;

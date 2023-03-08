@@ -8,4 +8,7 @@ export interface ViewProps {
       >['documents']
     | null
     | undefined;
+  toggleAddDemDocument: () => void;
+  toggleAddDocument: () => void;
+  demId: string | undefined | null;
 }

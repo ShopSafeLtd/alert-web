@@ -4,9 +4,17 @@ import useViewDetails from './useViewDetails';
 
 interface Props {
   investigationId: string;
+  toggleAddExistingOffender: () => void;
+  toggleAddExistingIncident: () => void;
+  toggleAddExistingVehicle: () => void;
 }
 
-const ViewDetails = ({ investigationId }: Props) => {
+const ViewDetails = ({
+  investigationId,
+  toggleAddExistingOffender,
+  toggleAddExistingIncident,
+  toggleAddExistingVehicle,
+}: Props) => {
   const {
     data,
     loading,
@@ -46,6 +54,9 @@ const ViewDetails = ({ investigationId }: Props) => {
       setEditUpdateInput={setEditUpdateInput}
       editUpdate={editUpdate}
       toggleSubscribe={toggleSubscribe}
+      toggleAddExistingOffender={toggleAddExistingOffender}
+      toggleAddExistingIncident={toggleAddExistingIncident}
+      toggleAddExistingVehicle={toggleAddExistingVehicle}
     />
   );
 };

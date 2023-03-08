@@ -17,6 +17,7 @@ import {
   faBell,
   faBellSlash,
   faEdit,
+  faPlus,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 
@@ -28,7 +29,7 @@ import UpdateContent from '../../../../incidents/ViewIncident/Update.view';
 import UpdateBar from '../../../../../components/form-components/update-bar';
 import TabContent from '../../../../../components/TabContent';
 
-const { Title } = Typography;
+const { Title, Paragraph } = Typography;
 interface Props {
   data: ViewInvestigationQuery | undefined;
   loading: boolean;
@@ -60,6 +61,9 @@ interface Props {
   editUpdateInput: string;
   setEditUpdateInput: (value: string) => void;
   toggleSubscribe: () => void;
+  toggleAddExistingOffender: () => void;
+  toggleAddExistingIncident: () => void;
+  toggleAddExistingVehicle: () => void;
 }
 
 const ViewInvestigation = ({
@@ -80,6 +84,9 @@ const ViewInvestigation = ({
   setEditUpdateInput,
   editUpdateInput,
   editUpdate,
+  toggleAddExistingOffender,
+  toggleAddExistingIncident,
+  toggleAddExistingVehicle,
 }: Props) => {
   const classes = useStyles();
 
@@ -89,10 +96,13 @@ const ViewInvestigation = ({
         <Row className={classes.headerBar}>
           <Col className={classes.detailsHeader} span={12}>
             <Row>
-              <Col className={classes.centerCell} flex={1}>
+              <Col flex={1}>
                 <Title className={classes.headerTitle} level={4}>
-                  {data?.investigation?.description}
+                  {data?.investigation?.name}
                 </Title>
+                <Paragraph style={{ margin: 0 }}>
+                  {data?.investigation?.description}
+                </Paragraph>
               </Col>
             </Row>
           </Col>
@@ -138,10 +148,31 @@ const ViewInvestigation = ({
         </Row>
 
         <Row className={classes.content}>
-          <Col span={12}>
+          <Col span={12} className={classes.detailsContainer}>
             <Card loading={loading}>
-              <Title level={4}>Offenders</Title>
+              <Row align="middle">
+                <Col flex={1}>
+                  <Title level={4}>Offenders</Title>
+                </Col>
+                <Col>
+                  <Button
+                    key="3"
+                    danger
+                    size="small"
+                    onClick={toggleAddExistingOffender}
+                    icon={
+                      <FontAwesomeIcon
+                        icon={faPlus}
+                        style={{ marginRight: 5 }}
+                      />
+                    }
+                  >
+                    Add Offenders
+                  </Button>
+                </Col>
+              </Row>
               <Table
+                className={classes.table}
                 columns={[
                   {
                     key: 'reference',
@@ -175,8 +206,29 @@ const ViewInvestigation = ({
             </Card>
 
             <Card loading={loading}>
-              <Title level={4}>Incidents</Title>
+              <Row align="middle">
+                <Col flex={1}>
+                  <Title level={4}>Incidents</Title>
+                </Col>
+                <Col>
+                  <Button
+                    key="3"
+                    danger
+                    size="small"
+                    onClick={toggleAddExistingIncident}
+                    icon={
+                      <FontAwesomeIcon
+                        icon={faPlus}
+                        style={{ marginRight: 5 }}
+                      />
+                    }
+                  >
+                    Add Incidents
+                  </Button>
+                </Col>
+              </Row>
               <Table
+                className={classes.table}
                 columns={[
                   {
                     key: 'reference',
@@ -230,7 +282,29 @@ const ViewInvestigation = ({
               />
             </Card>
             <Card loading={loading}>
+              <Row align="middle">
+                <Col flex={1}>
+                  <Title level={4}>Vehicles</Title>
+                </Col>
+                <Col>
+                  <Button
+                    key="3"
+                    danger
+                    size="small"
+                    onClick={toggleAddExistingVehicle}
+                    icon={
+                      <FontAwesomeIcon
+                        icon={faPlus}
+                        style={{ marginRight: 5 }}
+                      />
+                    }
+                  >
+                    Add Vehicles
+                  </Button>
+                </Col>
+              </Row>
               <Table
+                className={classes.table}
                 dataSource={data?.investigation?.vehicles.map((vehicle) => ({
                   key: vehicle.id,
                   make: vehicle.make,

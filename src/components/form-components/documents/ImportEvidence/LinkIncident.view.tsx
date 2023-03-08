@@ -3,6 +3,7 @@
 import React from 'react';
 import { ListDemEvidenceQuery } from 'graphql/generated';
 import { Button, Col, Image, Row, Skeleton, Table } from 'antd';
+import moment from 'moment';
 
 interface Props {
   onClose: () => void;
@@ -36,20 +37,6 @@ const LinkDemCompany = ({
             ),
         },
         {
-          title: 'Url',
-          dataIndex: 'url',
-          key: 'url',
-          render: (url: string) =>
-            url ? (
-              <a href={url} target="_blank" rel="noreferrer">
-                {/* eslint-disable-next-line react/destructuring-assignment */}
-                {url.length > 50 ? `${url.substring(0, 50)}...` : url}
-              </a>
-            ) : (
-              <> </>
-            ),
-        },
-        {
           title: 'Type',
           dataIndex: 'type',
           key: 'type',
@@ -59,6 +46,12 @@ const LinkDemCompany = ({
           dataIndex: 'importance',
           key: 'importance',
         },
+        {
+          title: 'Recorded On',
+          dataIndex: 'createdAt',
+          key: 'createdAt',
+          render: (value) => moment(value).format('DD/MM/YYYY'),
+        },
       ]}
       dataSource={data?.listDemEvidence.demEvidence.map((evidence) => ({
         key: evidence.id || '',
@@ -66,6 +59,7 @@ const LinkDemCompany = ({
         url: evidence.playbackUrl || '',
         type: evidence.type || '',
         importance: evidence.importance || '',
+        createdAt: evidence.createdAt,
       }))}
       rowSelection={{
         type: 'radio',
@@ -93,7 +87,7 @@ const LinkDemCompany = ({
           onClick={onSubmit}
           type="primary"
         >
-          Import evidence
+          Import Evidence
         </Button>
       </Col>
     </Row>

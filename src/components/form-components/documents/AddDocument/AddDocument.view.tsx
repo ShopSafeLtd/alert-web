@@ -105,7 +105,7 @@ const AddBusiness = ({
               type="primary"
               htmlType="submit"
             >
-              Create Document
+              Create Evidence
             </Button>
           </Col>
         </Row>

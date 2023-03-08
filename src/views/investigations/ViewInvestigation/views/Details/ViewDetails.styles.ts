@@ -8,11 +8,11 @@ const useStyles = createUseStyles((theme: Theme) => ({
   updatesContainer: {
     position: 'relative',
     height: '100%',
+    borderLeft: `1px solid ${theme.borderColor}`,
   },
   headerBar: {
     width: '100%',
     borderBottom: `1px solid ${theme.borderColor}`,
-    // backgroundColor: theme.componentBackground,
     padding: '7px 20px',
     display: 'flex',
     alignItems: 'center',
@@ -30,6 +30,13 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
   detailsHeader: {
     paddingRight: 20,
+  },
+  detailsContainer: {
+    padding: 15,
+    paddingTop: 20,
+  },
+  table: {
+    marginTop: 10,
   },
   detailsContent: {
     background: theme.bodyBackground,

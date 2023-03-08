@@ -1,9 +1,26 @@
 import React from 'react';
-import { Button, Card, Image, Skeleton, Table } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Dropdown,
+  Image,
+  Menu,
+  Row,
+  Skeleton,
+  Table,
+} from 'antd';
 import TabContent from 'components/TabContent';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass, faPlus } from '@fortawesome/pro-light-svg-icons';
 import type { ViewProps } from './types/Documents';
 
-const DocumentsView = ({ data }: ViewProps) => {
+const DocumentsView = ({
+  data,
+  toggleAddDemDocument,
+  toggleAddDocument,
+  demId,
+}: ViewProps) => {
   const tags = new Set(
     data?.flatMap((document) => document.tags.map((tag) => tag.name)) || []
   );
@@ -13,6 +30,53 @@ const DocumentsView = ({ data }: ViewProps) => {
   return (
     <TabContent>
       <Card style={{ marginLeft: 20, marginRight: 20, marginTop: 20 }}>
+        <Row>
+          <Col>
+            <Dropdown
+              overlay={
+                <Menu
+                  items={[
+                    {
+                      label: 'Add Evidence',
+                      key: '5',
+                      icon: (
+                        <FontAwesomeIcon
+                          icon={faMagnifyingGlass}
+                          style={{ marginRight: 5 }}
+                        />
+                      ),
+                      // disabled: !listVehiclesData?.listVehicles.total,
+                      onClick: () => toggleAddDocument(),
+                    },
+                    {
+                      label: 'Import DEM Evidence',
+                      key: '6',
+                      disabled: !demId,
+                      icon: (
+                        <FontAwesomeIcon
+                          icon={faMagnifyingGlass}
+                          style={{ marginRight: 5 }}
+                        />
+                      ),
+                      // disabled: !listVehiclesData?.listVehicles.total,
+                      onClick: () => toggleAddDemDocument(),
+                    },
+                  ]}
+                />
+              }
+            >
+              <Button
+                key="2"
+                type="primary"
+                icon={
+                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
+                }
+              >
+                Documents
+              </Button>
+            </Dropdown>
+          </Col>
+        </Row>
         <Table
           columns={[
             {

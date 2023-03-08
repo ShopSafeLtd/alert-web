@@ -1,9 +1,5 @@
-import { Badge, Button, Drawer, Dropdown, Menu, Tabs, Typography } from 'antd';
-import TabbedView from 'components/TabbedView';
 import React from 'react';
-import { PageHeader } from 'components/layout-components/AntD';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faPlus } from '@fortawesome/pro-light-svg-icons';
+import { Badge, Drawer, Tabs, Typography } from 'antd';
 import AddExistingOffender from 'components/form-components/Investigation/AddExistingOffender';
 import AddExistingVehicle from 'components/form-components/Investigation/AddExistingVehicle';
 import LinkIncident from 'components/form-components/Investigation/AddIncident/LinkIncident.container';
@@ -39,8 +35,8 @@ interface Props {
 
 const useStyles = createUseStyles({
   sideListContent: {
-    padding: 15,
     height: '100vh',
+    paddingTop: 10,
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
@@ -76,181 +72,16 @@ const ViewInvestigation = ({
   const classes = useStyles();
 
   return (
-    <TabbedView style={{ height: 'calc((100vh - 98px)' }}>
+    <div style={{ height: 'calc((100vh - 98px)' }}>
       <div style={{ overflow: 'hidden' }} className={classes.sideListContent}>
-        <PageHeader
-          title={data?.investigation?.name}
-          display
-          noTranslate
-          actions={[
-            <Dropdown
-              overlay={
-                <Menu
-                  items={[
-                    {
-                      label: 'Add Offenders',
-                      key: '1',
-                      icon: (
-                        <FontAwesomeIcon
-                          icon={faMagnifyingGlass}
-                          style={{ marginRight: 5 }}
-                        />
-                      ),
-                      // disabled: !listOffendersData?.listOffenders?.total,
-                      onClick: () => toggleAddExistingOffender(),
-                    },
-                  ]}
-                />
-              }
-            >
-              <Button
-                key="3"
-                type="primary"
-                icon={
-                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
-                }
-              >
-                Offenders
-              </Button>
-            </Dropdown>,
-            <Dropdown
-              overlay={
-                <Menu
-                  items={[
-                    {
-                      label: 'Add Vehicles',
-                      key: '1',
-                      icon: (
-                        <FontAwesomeIcon
-                          icon={faMagnifyingGlass}
-                          style={{ marginRight: 5 }}
-                        />
-                      ),
-                      // disabled: !listVehiclesData?.listVehicles.total,
-                      onClick: () => toggleAddExistingVehicle(),
-                    },
-                  ]}
-                />
-              }
-            >
-              <Button
-                key="2"
-                type="primary"
-                icon={
-                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
-                }
-              >
-                Vehicles
-              </Button>
-            </Dropdown>,
-            <Dropdown
-              overlay={
-                <Menu
-                  items={[
-                    {
-                      label: 'Add Crime Group',
-                      key: '1',
-                      icon: (
-                        <FontAwesomeIcon
-                          icon={faMagnifyingGlass}
-                          style={{ marginRight: 5 }}
-                        />
-                      ),
-                      // disabled: !listVehiclesData?.listVehicles.total,
-                      onClick: () => toggleAddExistingCrimeGroup(),
-                    },
-                  ]}
-                />
-              }
-            >
-              <Button
-                key="2"
-                type="primary"
-                icon={
-                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
-                }
-              >
-                Crime groups
-              </Button>
-            </Dropdown>,
-            <Dropdown
-              overlay={
-                <Menu
-                  items={[
-                    {
-                      label: 'Add Incident',
-                      key: '1',
-                      icon: (
-                        <FontAwesomeIcon
-                          icon={faMagnifyingGlass}
-                          style={{ marginRight: 5 }}
-                        />
-                      ),
-                      // disabled: !listVehiclesData?.listVehicles.total,
-                      onClick: () => toggleAddExistingIncident(),
-                    },
-                  ]}
-                />
-              }
-            >
-              <Button
-                key="2"
-                type="primary"
-                icon={
-                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
-                }
-              >
-                Incidents
-              </Button>
-            </Dropdown>,
-            <Dropdown
-              overlay={
-                <Menu
-                  items={[
-                    {
-                      label: 'Add Document',
-                      key: '5',
-                      icon: (
-                        <FontAwesomeIcon
-                          icon={faMagnifyingGlass}
-                          style={{ marginRight: 5 }}
-                        />
-                      ),
-                      // disabled: !listVehiclesData?.listVehicles.total,
-                      onClick: () => toggleAddDocument(),
-                    },
-                    {
-                      label: 'Add DEM Document',
-                      key: '6',
-                      disabled: !demId,
-                      icon: (
-                        <FontAwesomeIcon
-                          icon={faMagnifyingGlass}
-                          style={{ marginRight: 5 }}
-                        />
-                      ),
-                      // disabled: !listVehiclesData?.listVehicles.total,
-                      onClick: () => toggleAddDemDocument(),
-                    },
-                  ]}
-                />
-              }
-            >
-              <Button
-                key="2"
-                type="primary"
-                icon={
-                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
-                }
-              >
-                Documents
-              </Button>
-            </Dropdown>,
-          ]}
-        />
         <Tabs>
           <Tabs.TabPane key="Dashboard" tab="Details">
-            <ViewDetails investigationId={data?.investigation?.id || ''} />
+            <ViewDetails
+              toggleAddExistingOffender={toggleAddExistingOffender}
+              toggleAddExistingIncident={toggleAddExistingIncident}
+              toggleAddExistingVehicle={toggleAddExistingVehicle}
+              investigationId={data?.investigation?.id || ''}
+            />
           </Tabs.TabPane>
           <Tabs.TabPane
             key="Flow"
@@ -267,11 +98,16 @@ const ViewInvestigation = ({
                 count={data?.investigation?.documents?.length || 0}
                 showZero
               >
-                <Typography.Text>Documents</Typography.Text>
+                <Typography.Text>Evidence</Typography.Text>
               </Badge>
             }
           >
-            <DocumentsContainer data={data?.investigation?.documents} />
+            <DocumentsContainer
+              demId={demId}
+              data={data?.investigation?.documents}
+              toggleAddDemDocument={toggleAddDemDocument}
+              toggleAddDocument={toggleAddDocument}
+            />
           </Tabs.TabPane>
         </Tabs>
       </div>
@@ -340,7 +176,7 @@ const ViewInvestigation = ({
         )}
       </Drawer>
       <Drawer
-        title="Add Document"
+        title="Add Evidence"
         visible={addDocument}
         width="800"
         onClose={toggleAddDocument}
@@ -356,7 +192,7 @@ const ViewInvestigation = ({
         )}
       </Drawer>
       <Drawer
-        title="Add DEM Document"
+        title="Import DEM Evidence"
         visible={addDemDocument}
         width="800"
         onClose={toggleAddDemDocument}
@@ -371,7 +207,7 @@ const ViewInvestigation = ({
           <div />
         )}
       </Drawer>
-    </TabbedView>
+    </div>
   );
 };
 
