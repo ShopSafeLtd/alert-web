@@ -99,7 +99,12 @@ const AddBusiness = ({
             </Button>
           </Col>
           <Col>
-            <Button disabled={saving} type="primary" htmlType="submit">
+            <Button
+              loading={saving}
+              disabled={saving}
+              type="primary"
+              htmlType="submit"
+            >
               Create Document
             </Button>
           </Col>

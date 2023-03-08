@@ -3,6 +3,16 @@ mutation CreateDocumentOnInvestigation($where: UniqueId!, $data: CreateDocument!
         id
         investigation {
             id
+            documents{
+                id
+                name
+                url
+                thumbnailUrl
+                tags{
+                    name
+                    id
+                }
+            }
         }
         name
         tags {

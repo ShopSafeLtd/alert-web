@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Card, Image, Skeleton, Table } from 'antd';
+import TabContent from 'components/TabContent';
 import type { ViewProps } from './types/Documents';
 
 const DocumentsView = ({ data }: ViewProps) => {
@@ -9,7 +10,7 @@ const DocumentsView = ({ data }: ViewProps) => {
   // convert tags to string array
   const tagsArray = Array.from(tags);
   return (
-    <>
+    <TabContent>
       <Card style={{ marginLeft: 20, marginRight: 20, marginTop: 20 }}>
         <Table
           columns={[
@@ -77,7 +78,7 @@ const DocumentsView = ({ data }: ViewProps) => {
           }
         />
       </Card>
-    </>
+    </TabContent>
   );
 };
 

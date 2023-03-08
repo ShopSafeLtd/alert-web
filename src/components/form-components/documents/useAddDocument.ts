@@ -4,6 +4,9 @@ import {
   useCreateDocumentOnInvestigationMutation,
   useCreateTagMutation,
   useTagsQuery,
+  ViewInvestigationDocument,
+  ViewInvestigationQuery,
+  ViewInvestigationQueryVariables,
 } from 'graphql/generated';
 import { useState } from 'react';
 import { useStoreState } from 'state';
@@ -120,7 +123,51 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
     setSelectedCategories(formattedValues.map((value) => ({ value })));
   };
 
-  const [createDocument] = useCreateDocumentOnInvestigationMutation();
+  const [createDocument] = useCreateDocumentOnInvestigationMutation({
+    onCompleted: () => {
+      setSaving(false);
+      console.log('Document created');
+      onClose();
+    },
+    update: (store, result) => {
+      const existingData = store.readQuery<
+        ViewInvestigationQuery,
+        ViewInvestigationQueryVariables
+      >({
+        query: ViewInvestigationDocument,
+        variables: {
+          where: {
+            id: investigationId,
+          },
+        },
+      });
+      if (existingData && result.data) {
+        const oldDocuments = existingData?.investigation?.documents || [];
+        const newDocuments = [result.data.createDocumentOnInvestigation];
+        store.writeQuery<
+          ViewInvestigationQuery,
+          ViewInvestigationQueryVariables
+        >({
+          query: ViewInvestigationDocument,
+          variables: {
+            where: {
+              id: investigationId,
+            },
+          },
+          data: {
+            investigation: {
+              ...existingData.investigation,
+
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+
+              documents: [...oldDocuments, ...newDocuments],
+            },
+          },
+        });
+      }
+    },
+  });
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const onSubmit = (values: OnSubmitValues) => {
@@ -147,11 +194,8 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
             tags: selectedCategoryIds,
           },
         },
-        onCompleted: () => {
-          setSaving(false);
-          onClose();
-        },
       });
+      onClose();
     }
     setSaving(false);
   };
