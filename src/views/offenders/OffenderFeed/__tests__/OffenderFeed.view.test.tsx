@@ -119,6 +119,9 @@ describe('Detail Officer View', () => {
               setWarnings={jest.fn()}
               sex={[]}
               warnings={[]}
+              businessData={{ listBusinesses: { businesses: [], total: 0 } }}
+              businesses={[]}
+              setBusinesses={jest.fn()}
             />
           </MockedProvider>
         </MemoryRouter>
