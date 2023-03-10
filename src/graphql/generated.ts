@@ -32654,6 +32654,7 @@ export type SearchBusinessesQueryVariables = Exact<{
   where?: InputMaybe<BusinessWhereInput>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<BusinessOrderBy> | BusinessOrderBy>;
 }>;
 
 export type SearchBusinessesQuery = {
@@ -38514,8 +38515,13 @@ export type ListBusinessesQueryResult = Apollo.QueryResult<
   ListBusinessesQueryVariables
 >;
 export const SearchBusinessesDocument = gql`
-  query SearchBusinesses($where: BusinessWhereInput, $skip: Int, $take: Int) {
-    listBusinesses(where: $where, skip: $skip, take: $take) {
+  query SearchBusinesses(
+    $where: BusinessWhereInput
+    $skip: Int
+    $take: Int
+    $orderBy: [BusinessOrderBy!]
+  ) {
+    listBusinesses(where: $where, skip: $skip, take: $take, orderBy: $orderBy) {
       total
       businesses {
         id
@@ -38544,6 +38550,7 @@ export const SearchBusinessesDocument = gql`
  *      where: // value for 'where'
  *      skip: // value for 'skip'
  *      take: // value for 'take'
+ *      orderBy: // value for 'orderBy'
  *   },
  * });
  */

@@ -123,22 +123,99 @@ const IncidentCard = ({
           ))}
         </Row>
       </div>
-      {incident && incident.images.length > 0 ? (
-        <Carousel ref={imagesRef}>
-          {incident?.images.map((image) => (
-            <div key={image.id}>
-              <div
-                className="incident-card-image"
-                style={{
-                  backgroundImage: `url(${image.optimised})`,
-                }}
-              />
-            </div>
-          ))}
-        </Carousel>
-      ) : (
-        <Skeleton.Image style={{ height: 280 }} />
-      )}
+      <div style={{ position: 'relative' }}>
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            right: 0,
+            left: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1,
+            opacity: 0.2,
+            textShadow:
+              '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
+            fontSize: 10,
+            fontWeight: 100,
+            color: '#fff',
+            transform: 'rotate(-45deg)',
+          }}
+        >
+          <span style={{ marginRight: 30 }}>1234567</span>
+          <span style={{ marginRight: 30 }}>1234567</span>
+          <span style={{ marginRight: 30 }}>1234567</span>
+          <span style={{ marginRight: 30 }}>1234567</span>
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            right: 300,
+            left: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1,
+            opacity: 0.2,
+            textShadow:
+              '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
+            fontSize: 10,
+            fontWeight: 100,
+            color: '#fff',
+            transform: 'rotate(-45deg)',
+          }}
+        >
+          <span style={{ marginRight: 30 }}>1234567</span>
+          <span style={{ marginRight: 30 }}>1234567</span>
+          <span style={{ marginRight: 30 }}>1234567</span>
+          <span style={{ marginRight: 30 }}>1234567</span>
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            right: -300,
+            left: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 1,
+            opacity: 0.2,
+            textShadow:
+              '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
+            fontSize: 10,
+            fontWeight: 100,
+            color: '#fff',
+            transform: 'rotate(-45deg)',
+          }}
+        >
+          <span style={{ marginRight: 30 }}>1234567</span>
+          <span style={{ marginRight: 30 }}>1234567</span>
+          <span style={{ marginRight: 30 }}>1234567</span>
+          <span style={{ marginRight: 30 }}>1234567</span>
+        </div>
+        {incident && incident.images.length > 0 ? (
+          <Carousel ref={imagesRef}>
+            {incident?.images.map((image) => (
+              <div key={image.id}>
+                <div
+                  className="incident-card-image"
+                  style={{
+                    backgroundImage: `url(${image.optimised})`,
+                  }}
+                />
+              </div>
+            ))}
+          </Carousel>
+        ) : (
+          <Skeleton.Image style={{ height: 280 }} />
+        )}
+      </div>
       {incident && incident.images.length > 1 && (
         <Row className="incident-card-controls">
           <Col>

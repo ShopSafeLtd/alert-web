@@ -81,10 +81,8 @@ describe('Detail Officer View', () => {
       <MemoryRouter>
         <AddExistingOffender
           onSubmit={jest.fn()}
-          onClose={jest.fn()}
           data={data}
           loading={false}
-          saving={false}
           search=""
           setSearch={jest.fn()}
           openLightbox={jest.fn()}
@@ -95,6 +93,20 @@ describe('Detail Officer View', () => {
             open: false,
             index: 0,
           }}
+          age={[]}
+          build={[]}
+          clearFilters={jest.fn()}
+          ethnicity={[]}
+          hair=""
+          pagination={{ page: 0, pageSize: 0 }}
+          peculiarities=""
+          setAge={jest.fn()}
+          setBuild={jest.fn()}
+          setEthnicity={jest.fn()}
+          setHair={jest.fn()}
+          setPeculiarities={jest.fn()}
+          setSex={jest.fn()}
+          sex={[]}
         />
       </MemoryRouter>
     );

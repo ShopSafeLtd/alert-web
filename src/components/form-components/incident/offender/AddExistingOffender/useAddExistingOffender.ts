@@ -10,7 +10,7 @@ import {
   SortOrder,
   useListOffendersQuery,
 } from 'graphql/generated';
-import { useStoreActions, useStoreState } from 'state';
+import { useStoreState } from 'state';
 
 export interface OffenderData {
   id: string;
@@ -63,6 +63,7 @@ interface Return {
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
+  pagination: { page: number; pageSize: number };
   onPaginationChange: (page: number, pageSize: number) => void;
   setCurrentId: (value: string | undefined) => void;
   selectedOffender:
@@ -77,6 +78,19 @@ interface Return {
     open: boolean;
     index: number;
   };
+  ethnicity: Race[];
+  setEthnicity: (value: Race[]) => void;
+  age: Age[];
+  setAge: (value: Age[]) => void;
+  build: Build[];
+  setBuild: (value: Build[]) => void;
+  sex: Gender[];
+  setSex: (value: Gender[]) => void;
+  setHair: (value: string) => void;
+  setPeculiarities: (value: string) => void;
+  hair: string;
+  peculiarities: string;
+  clearFilters: () => void;
 }
 
 const useAddExistingOffender = ({
@@ -86,6 +100,17 @@ const useAddExistingOffender = ({
 }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [currentId, setCurrentId] = useState<string | undefined>(undefined);
+  const [ethnicity, setEthnicity] = useState<Race[]>([]);
+  const [age, setAge] = useState<Age[]>([]);
+  const [build, setBuild] = useState<Build[]>([]);
+  const [sex, setSex] = useState<Gender[]>([]);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    pageSize: 24,
+  });
+  const [search, setSearch] = useState('');
+  const [hair, setHair] = useState('');
+  const [peculiarities, setPeculiarities] = useState('');
 
   const [selectedOffender, setSelectedOffender] = useState<
     | Exclude<
@@ -96,12 +121,7 @@ const useAddExistingOffender = ({
     | undefined
   >(undefined);
   const schemeId = useStoreState((state) => state.scheme.id);
-  const order = useStoreState((state) => state.data.offenders.order);
-  const pagination = useStoreState((state) => state.data.offenders.pagination);
-  const variables = useStoreState((state) => state.data.offenders.variables);
-  const setOffendersState = useStoreActions(
-    (actions) => actions.data.setOffenders
-  );
+
   const [lightBoxOpen, setLightBoxOpen] = useState({
     open: false,
     index: 0,
@@ -117,42 +137,77 @@ const useAddExistingOffender = ({
       take: pagination.pageSize,
       skip: (pagination.page - 1) * pagination.pageSize,
       where: {
-        id: {
-          notIn: offenderIds,
-        },
+        id:
+          offenderIds && offenderIds?.length > 0
+            ? {
+                notIn: offenderIds,
+              }
+            : undefined,
         OR: [
           {
             name: {
-              contains: variables.search,
+              contains: search,
               mode: QueryMode.Insensitive,
             },
           },
         ],
+        gender:
+          sex.length > 0
+            ? {
+                in: sex,
+              }
+            : undefined,
+        age:
+          age.length > 0
+            ? {
+                in: age,
+              }
+            : undefined,
+        build:
+          build.length > 0
+            ? {
+                in: build,
+              }
+            : undefined,
+        race:
+          ethnicity.length > 0
+            ? {
+                in: ethnicity,
+              }
+            : undefined,
+        hair: hair
+          ? {
+              contains: hair,
+              mode: QueryMode.Insensitive,
+            }
+          : undefined,
+        peculiarities: peculiarities
+          ? {
+              mode: QueryMode.Insensitive,
+              contains: peculiarities,
+            }
+          : undefined,
       },
     },
     fetchPolicy: 'cache-and-network',
   });
 
+  const clearFilters = () => {
+    setAge([]);
+    setBuild([]);
+    setEthnicity([]);
+    setSex([]);
+    setHair('');
+    setPeculiarities('');
+  };
+
   const onPaginationChange = (page: number) => {
-    setOffendersState({
-      pagination: {
-        ...pagination,
-        page,
-      },
-      variables,
-      order,
+    setPagination({
+      ...pagination,
+      page,
     });
   };
-  const setSearch = (value: string) => {
-    setOffendersState({
-      pagination,
-      variables: {
-        ...variables,
-        search: value,
-      },
-      order,
-    });
-  };
+
   const onSubmit = () => {
     setSaving(true);
     if (
@@ -196,6 +251,8 @@ const useAddExistingOffender = ({
           (offender) => offender.id === currentId
         )
       );
+    } else {
+      setSelectedOffender(null);
     }
   }, [currentId]);
   return {
@@ -203,13 +260,27 @@ const useAddExistingOffender = ({
     saving,
     data,
     loading: data?.listOffenders ? false : loading,
-    search: variables.search,
+    search,
     setSearch,
     onPaginationChange,
     setCurrentId,
     openLightbox,
     lightBoxOpen,
     selectedOffender,
+    age,
+    build,
+    ethnicity,
+    setAge,
+    setBuild,
+    setEthnicity,
+    setSex,
+    sex,
+    pagination,
+    hair,
+    peculiarities,
+    setHair,
+    setPeculiarities,
+    clearFilters,
   };
 };
 

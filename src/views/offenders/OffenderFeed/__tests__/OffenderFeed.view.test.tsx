@@ -89,18 +89,36 @@ describe('Detail Officer View', () => {
               onPaginationChange={jest.fn()}
               pagination={{ page: 1, pageSize: 1, sizeOptions: [] }}
               order={OffenderSort.updatedAtAsc}
-              variables={{ groups: [], tags: [] }}
               setOrder={jest.fn()}
               search=""
               setSearch={jest.fn()}
               groups={[]}
               groupsLoading={false}
-              onGroupsChange={jest.fn()}
               tags={[]}
-              onTagsChange={jest.fn()}
               tagsLoading={false}
               updateOffenderList={jest.fn()}
               onNavigate={jest.fn()}
+              sortFilter
+              toggleSortFilter={jest.fn()}
+              age={[]}
+              build={[]}
+              clearFilters={jest.fn()}
+              ethnicity={[]}
+              gallery={[]}
+              groupsFilter={[]}
+              hair=""
+              peculiarities=""
+              setAge={jest.fn()}
+              setBuild={jest.fn()}
+              setEthnicity={jest.fn()}
+              setGallery={jest.fn()}
+              setGroupsFilter={jest.fn()}
+              setHair={jest.fn()}
+              setPeculiarities={jest.fn()}
+              setSex={jest.fn()}
+              setWarnings={jest.fn()}
+              sex={[]}
+              warnings={[]}
             />
           </MockedProvider>
         </MemoryRouter>

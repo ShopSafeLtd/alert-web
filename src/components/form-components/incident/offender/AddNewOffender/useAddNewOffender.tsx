@@ -1,7 +1,20 @@
-import { useState } from 'react';
-import { Age, Gender, Race, Build } from 'graphql/generated';
+import React, { useState } from 'react';
+import {
+  Age,
+  Gender,
+  Race,
+  Build,
+  SearchOffendersQuery,
+  SearchOffendersQueryVariables,
+  SearchOffendersDocument,
+  QueryMode,
+  SortOrder,
+} from 'graphql/generated';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { message, Upload } from 'antd';
+import { useApolloClient } from '@apollo/client';
+import { useStoreState } from 'state';
+import OffenderItem from './OffenderItem';
 
 interface FormData {
   name: string;
@@ -54,13 +67,18 @@ interface Return {
   imgChange: UploadProps['onChange'];
   beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
+  onSearchOffender: (
+    value: string
+  ) => Promise<{ label: React.ReactNode; value: string }[]>;
 }
 
 const useAddNewOffender = ({ onClose, update }: Props): Return => {
+  const client = useApolloClient();
   const [saving, setSaving] = useState(false);
   const [ageCheck, setAgeCheck] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [imageChange, setImageChange] = useState(false);
+  const schemeId = useStoreState((state) => state.scheme.id);
 
   const beforeUpload = (file: RcFile) => {
     const isFileDuplicate = fileList.find((item) => item.name === file.name);
@@ -88,6 +106,45 @@ const useAddNewOffender = ({ onClose, update }: Props): Return => {
       setImageChange(true);
     }
   };
+
+  const onSearchOffender = async (value: string) => {
+    if (value.length < 2) {
+      return [];
+    }
+    return client
+      .query<SearchOffendersQuery, SearchOffendersQueryVariables>({
+        query: SearchOffendersDocument,
+        variables: {
+          where: {
+            name: {
+              contains: value,
+              mode: QueryMode.Insensitive,
+            },
+          },
+          scheme: {
+            id: schemeId,
+          },
+          order: {
+            updatedAt: SortOrder.Desc,
+          },
+        },
+      })
+      .then((response) =>
+        response.data.listOffenders?.offenders.length
+          ? response.data.listOffenders.offenders.map((item) => ({
+              label: <OffenderItem item={item} />,
+              value: item?.id || '',
+            }))
+          : [
+              {
+                label: 'No results found',
+                value: '',
+                disabled: true,
+              },
+            ]
+      );
+  };
+
   const onSubmit = (data: FormData) => {
     setSaving(true);
     update({
@@ -125,6 +182,7 @@ const useAddNewOffender = ({ onClose, update }: Props): Return => {
     imgChange,
     beforeUpload,
     fileList,
+    onSearchOffender,
   };
 };
 

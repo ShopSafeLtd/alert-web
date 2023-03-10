@@ -35,6 +35,7 @@ import ImageSection from 'components/incidents/IncidentForm/ImageSection';
 import DebounceSelect from 'components/form-components/DebounceSelect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
+import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import useStyles from './AddIncident.styles';
 
 const { Title, Paragraph } = Typography;
@@ -61,6 +62,8 @@ interface FormData {
     recoveredValue: number;
   }[];
   profiles: OffenderData[];
+  involvedTags: [];
+  fellingTags: [];
 }
 
 interface Image extends UploadFile {
@@ -184,6 +187,7 @@ const EditIncident = ({
         initialValues={{
           fullAddress: primaryAddress?.full,
           date: moment(),
+          involvedTags: [],
         }}
         onFinish={onSubmit}
         layout="vertical"
@@ -221,6 +225,7 @@ const EditIncident = ({
                 message: 'Please add at least one crime type.',
               },
             ]}
+            label="Incident Type"
           >
             <Select
               autoFocus
@@ -235,6 +240,62 @@ const EditIncident = ({
                 <Select.Option value={tag.value}>{tag.label}</Select.Option>
               ))}
             </Select>
+          </Form.Item>
+          <Form.Item
+            name="involvedTags"
+            tooltip="Select the relevant crime types for this incident, these help to categorise the incident,"
+            label="Did this incident involve..."
+          >
+            <CheckTags
+              options={[
+                {
+                  label: 'Violence',
+                  value: 'Violence',
+                },
+                {
+                  label: 'Hate Crime',
+                  value: 'Hate Crime',
+                },
+                {
+                  label: 'Weapons',
+                  value: 'Weapons',
+                },
+              ]}
+            />
+          </Form.Item>
+          <Form.Item
+            name="fellingTags"
+            tooltip="Select the relevant crime types for this incident, these help to categorise the incident,"
+            label="How did this make you feel?"
+          >
+            <CheckTags
+              options={[
+                {
+                  label: 'Threatened',
+                  value: 'Threatened',
+                },
+                {
+                  label: 'At Risk',
+                  value: 'At Risk',
+                },
+                {
+                  label: 'Unsafe',
+                  value: 'Unsafe',
+                },
+                {
+                  label: 'Upset',
+                  value: 'Upset',
+                },
+                {
+                  label: 'Angry',
+                  value: 'Angry',
+                },
+                {
+                  label: 'Persecuted',
+                  value: 'Persecuted',
+                },
+              ]}
+            />
           </Form.Item>
         </Card>
 
@@ -555,8 +616,8 @@ const EditIncident = ({
               <Form.Item
                 name="policeInvolved"
                 valuePropName="checked"
-                tooltip="The police have been involved in the incident."
-                label="Were the police involved in this incident?"
+                tooltip="Did the police attend this incident."
+                label="Did the police attend this incident?"
               >
                 <Radio.Group
                   options={[
@@ -574,6 +635,13 @@ const EditIncident = ({
                 name="policeRef"
                 label="Crime Ref No."
                 tooltip="The crime reference number provided by the police."
+              >
+                <Input disabled={saving} />
+              </Form.Item>
+              <Form.Item
+                name="policeRef"
+                label="Officer Collar No."
+                tooltip="The collar number of the officers involved in this incident."
               >
                 <Input disabled={saving} />
               </Form.Item>
@@ -637,7 +705,7 @@ const EditIncident = ({
                       disabled={saving}
                       mode="multiple"
                       maxTagCount={3}
-                      placeholder="Select the groups that you would like this incident to be visible to."
+                      placeholder="Select groups..."
                     >
                       {groups.map((group) => (
                         <Select.Option key={group.value} value={group.value}>

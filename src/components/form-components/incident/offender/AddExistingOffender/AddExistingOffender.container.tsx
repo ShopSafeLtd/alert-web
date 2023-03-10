@@ -55,7 +55,6 @@ const AddExistingOffender = ({
 }: Props): JSX.Element => {
   const {
     onSubmit,
-    saving,
     data,
     loading,
     search,
@@ -65,6 +64,20 @@ const AddExistingOffender = ({
     selectedOffender,
     openLightbox,
     lightBoxOpen,
+    age,
+    build,
+    ethnicity,
+    setAge,
+    setBuild,
+    setEthnicity,
+    setSex,
+    sex,
+    pagination,
+    hair,
+    peculiarities,
+    setHair,
+    setPeculiarities,
+    clearFilters,
   } = useAddExistingOffender({ onClose, update, offenderIds });
 
   return (
@@ -72,15 +85,27 @@ const AddExistingOffender = ({
       lightBoxOpen={lightBoxOpen}
       openLightbox={openLightbox}
       onSubmit={onSubmit}
-      saving={saving}
       data={data}
       search={search}
       setSearch={setSearch}
       loading={loading}
-      onClose={onClose}
       onPaginationChange={onPaginationChange}
       setCurrentId={setCurrentId}
       selectedOffender={selectedOffender}
+      age={age}
+      build={build}
+      ethnicity={ethnicity}
+      setAge={setAge}
+      setBuild={setBuild}
+      setEthnicity={setEthnicity}
+      setSex={setSex}
+      sex={sex}
+      pagination={pagination}
+      hair={hair}
+      peculiarities={peculiarities}
+      setHair={setHair}
+      setPeculiarities={setPeculiarities}
+      clearFilters={clearFilters}
     />
   );
 };

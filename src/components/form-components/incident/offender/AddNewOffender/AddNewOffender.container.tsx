@@ -35,6 +35,7 @@ function AddNewOffender({ onClose, update }: Props): JSX.Element {
     imgChange,
     beforeUpload,
     fileList,
+    onSearchOffender,
   } = useAddNewOffender({
     onClose,
     update,
@@ -50,6 +51,7 @@ function AddNewOffender({ onClose, update }: Props): JSX.Element {
         imgChange={imgChange}
         beforeUpload={beforeUpload}
         fileList={fileList}
+        onSearchOffender={onSearchOffender}
       />
     </div>
   );

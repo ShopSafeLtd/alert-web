@@ -62,6 +62,8 @@ interface FormData {
     recoveredValue: number;
   }[];
   profiles: OffenderData[];
+  involvedTags: [];
+  fellingTags: [];
 }
 
 interface Image extends UploadFile {

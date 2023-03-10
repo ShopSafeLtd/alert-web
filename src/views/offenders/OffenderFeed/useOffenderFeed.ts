@@ -1,13 +1,19 @@
 import {
+  Age,
+  Build,
+  Gender,
   ListOffendersDocument,
   ListOffendersQuery,
   Model,
   QueryMode,
+  Race,
   RecycleOffenderMutation,
   Role,
+  SearchBusinessesQuery,
   SortOrder,
   useListOffendersQuery,
   useSchemeGroupsQuery,
+  useSearchBusinessesQuery,
   useTagsQuery,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
@@ -44,6 +50,30 @@ interface Return {
   tagsLoading: boolean;
   updateOffenderList: MutationUpdaterFn<RecycleOffenderMutation>;
   onNavigate: () => void;
+  sortFilter: boolean;
+  toggleSortFilter: () => void;
+  ethnicity: Race[];
+  setEthnicity: (value: Race[]) => void;
+  age: Age[];
+  setAge: (value: Age[]) => void;
+  build: Build[];
+  setBuild: (value: Build[]) => void;
+  sex: Gender[];
+  setSex: (value: Gender[]) => void;
+  setHair: (value: string) => void;
+  setPeculiarities: (value: string) => void;
+  hair: string;
+  peculiarities: string;
+  clearFilters: () => void;
+  gallery: string[];
+  setGallery: (values: string[]) => void;
+  groupsFilter: string[];
+  setGroupsFilter: (value: string[]) => void;
+  warnings: string[];
+  setWarnings: (value: string[]) => void;
+  businesses: string[];
+  setBusinesses: (value: string[]) => void;
+  businessData: SearchBusinessesQuery | undefined;
 }
 
 const getSizeOptions = () => {
@@ -72,6 +102,7 @@ const useOffenderFeed = (): Return => {
   );
 
   // local State
+  const [sortFilter, setSortFilter] = useState(false);
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
   );
@@ -79,6 +110,16 @@ const useOffenderFeed = (): Return => {
     open: false,
     index: 0,
   });
+  const [groupsFilter, setGroupsFilter] = useState<string[]>([]);
+  const [warnings, setWarnings] = useState<string[]>([]);
+  const [ethnicity, setEthnicity] = useState<Race[]>([]);
+  const [age, setAge] = useState<Age[]>([]);
+  const [build, setBuild] = useState<Build[]>([]);
+  const [sex, setSex] = useState<Gender[]>([]);
+  const [hair, setHair] = useState('');
+  const [peculiarities, setPeculiarities] = useState('');
+  const [gallery, setGallery] = useState<string[]>([]);
+  const [businesses, setBusinesses] = useState<string[]>([]);
 
   // Queries
   // Fetch scheme groups if scheme admin
@@ -155,20 +196,11 @@ const useOffenderFeed = (): Return => {
           order === OffenderSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
       },
       where: {
-        tags: variables.tags.length
+        groups: groupsFilter.length
           ? {
               some: {
                 id: {
-                  in: variables.tags,
-                },
-              },
-            }
-          : undefined,
-        groups: variables.groups.length
-          ? {
-              some: {
-                id: {
-                  in: variables.groups,
+                  in: groupsFilter,
                 },
               },
             }
@@ -181,11 +213,98 @@ const useOffenderFeed = (): Return => {
             },
           },
         ],
+        name: gallery.includes('ID')
+          ? {
+              equals: 'Unidentified Offender',
+            }
+          : undefined,
+        active: gallery.includes('ACTIVE')
+          ? {
+              equals: true,
+            }
+          : undefined,
+        gender:
+          sex.length > 0
+            ? {
+                in: sex,
+              }
+            : undefined,
+        age:
+          age.length > 0
+            ? {
+                in: age,
+              }
+            : undefined,
+        build:
+          build.length > 0
+            ? {
+                in: build,
+              }
+            : undefined,
+        race:
+          ethnicity.length > 0
+            ? {
+                in: ethnicity,
+              }
+            : undefined,
+        hair: hair
+          ? {
+              contains: hair,
+              mode: QueryMode.Insensitive,
+            }
+          : undefined,
+        peculiarities: peculiarities
+          ? {
+              mode: QueryMode.Insensitive,
+              contains: peculiarities,
+            }
+          : undefined,
+        incidents:
+          businesses.length > 0
+            ? {
+                some: {
+                  business:
+                    businesses.length > 0
+                      ? {
+                          id: {
+                            in: businesses,
+                          },
+                        }
+                      : undefined,
+                },
+              }
+            : undefined,
+        bans: gallery.includes('BANNED')
+          ? {
+              some: {
+                id: {
+                  contains: '',
+                },
+              },
+            }
+          : undefined,
       },
       take: pagination.pageSize,
       skip: pagination.pageSize * (pagination.page - 1),
     },
     fetchPolicy: 'cache-and-network',
+  });
+
+  const { data: businessData } = useSearchBusinessesQuery({
+    variables: {
+      where: {
+        schemes: {
+          some: {
+            id: {
+              equals: schemeId,
+            },
+          },
+        },
+      },
+      orderBy: {
+        name: SortOrder.Asc,
+      },
+    },
   });
 
   // update Offender list after deleting an item
@@ -265,20 +384,20 @@ const useOffenderFeed = (): Return => {
               : SortOrder.Asc,
         },
         where: {
-          tags: variables.tags.length
+          tags: warnings.length
             ? {
                 some: {
                   id: {
-                    in: variables.tags,
+                    in: warnings,
                   },
                 },
               }
             : undefined,
-          groups: variables.groups.length
+          groups: groupsFilter.length
             ? {
                 some: {
                   id: {
-                    in: variables.groups,
+                    in: groupsFilter,
                   },
                 },
               }
@@ -370,6 +489,20 @@ const useOffenderFeed = (): Return => {
     });
   };
 
+  const toggleSortFilter = () => {
+    setSortFilter(!sortFilter);
+  };
+
+  const clearFilters = () => {
+    setAge([]);
+    setBuild([]);
+    setEthnicity([]);
+    setHair('');
+    setPeculiarities('');
+    setSex([]);
+    setBusinesses([]);
+  };
+
   return {
     data,
     loading,
@@ -398,6 +531,30 @@ const useOffenderFeed = (): Return => {
     tagsLoading,
     updateOffenderList,
     onNavigate,
+    sortFilter,
+    toggleSortFilter,
+    age,
+    build,
+    clearFilters,
+    ethnicity,
+    gallery,
+    hair,
+    peculiarities,
+    setAge,
+    setBuild,
+    setEthnicity,
+    setGallery,
+    setHair,
+    setPeculiarities,
+    setSex,
+    sex,
+    groupsFilter,
+    setGroupsFilter,
+    setWarnings,
+    warnings,
+    businessData,
+    businesses,
+    setBusinesses,
   };
 };
 
