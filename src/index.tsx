@@ -1,10 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Auth0Provider } from '@auth0/auth0-react';
+// import { BrowserTracing } from '@sentry/tracing';
+// import * as Sentry from '@sentry/react';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
 import '~/yet-another-react-lightbox/dist/styles.css';
+
+// TODO: Change to correct values etc
+// Sentry.init({
+//   dsn: '',
+//   integrations: [new BrowserTracing()],
+//   release: `alert-web@${process.env.npm_package_version}`,
+//
+//   // Set tracesSampleRate to 1.0 to capture 100%
+//   // of transactions for performance monitoring.
+//   // Adjust for production
+//   tracesSampleRate: 1.0,
+// });
 
 ReactDOM.render(
   <Auth0Provider
