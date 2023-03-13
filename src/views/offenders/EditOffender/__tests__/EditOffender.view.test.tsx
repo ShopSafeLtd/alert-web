@@ -41,6 +41,8 @@ describe('List Officer View', () => {
       incidents: [],
       bans: [],
       vehicles: [],
+      idVerified: false,
+      addresses: [],
     },
   };
 
@@ -109,6 +111,16 @@ describe('List Officer View', () => {
           updateCrimeGroupsData={jest.fn()}
           updateVehiclesData={jest.fn()}
           vehiclesData={[]}
+          idVerified
+          onValuesChange={jest.fn()}
+          addAddress
+          addressesData={[]}
+          editAddress=""
+          onDeleteAddress={jest.fn()}
+          onEditAddress={jest.fn()}
+          onSubmitAddress={jest.fn()}
+          toggleAddAddress={jest.fn()}
+          toggleEditAddress={jest.fn()}
         />
       </MemoryRouter>
     );

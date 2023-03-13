@@ -1,4 +1,11 @@
-import { Age, Build, Gender, Incident, Race } from 'graphql/generated';
+import {
+  Age,
+  Build,
+  Gender,
+  IdSource,
+  Incident,
+  Race,
+} from 'graphql/generated';
 
 export const getOffenderGender = (
   gender: Gender | undefined | null
@@ -19,6 +26,15 @@ export const getOffenderRace = (
   if (race === Race.Ic5) return short ? 'IC5' : 'IC5 - Southeast Asian';
   if (race === Race.Ic6) return short ? 'IC6' : 'IC6 - North African or Arab';
   return 'Unknown';
+};
+
+export const getIdSource = (idSource: IdSource | undefined | null): string => {
+  if (idSource === IdSource.DrivingLicence) return 'Driving Licence';
+  if (idSource === IdSource.IdCard) return 'IdCard';
+  if (idSource === IdSource.Known) return 'Known';
+  if (idSource === IdSource.Other) return 'Other';
+  if (idSource === IdSource.Passport) return 'Passport';
+  return 'Not Verified';
 };
 
 export const getOffenderBuild = (build: Build | undefined | null): string => {

@@ -35,6 +35,7 @@ import {
   faEdit,
   faLocationDot,
   faMarsAndVenus,
+  faPassport,
   faTrash,
   faUserClock,
   faUserHair,
@@ -43,6 +44,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import {
   calcAge,
+  getIdSource,
   getLastOffence,
   getOffenderAge,
   getOffenderBuild,
@@ -261,9 +263,9 @@ const ViewOffender = ({
                     <div>
                       <Title level={4}>{data?.offender?.name}</Title>
                       {data?.offender?.groups?.map((group) => (
-                        <Text key={group.id} type="danger" ellipsis>
+                        <Tag key={group.id} color="red">
                           {group.name}
-                        </Text>
+                        </Tag>
                       ))}
                       <Row className="offender-tags">
                         {data?.offender?.tags.map((tag) => (
@@ -346,6 +348,28 @@ const ViewOffender = ({
                         )}
                       </Descriptions>
                       <Descriptions column={1} className={classes.desc}>
+                        <Descriptions.Item
+                          label={
+                            <span>
+                              <FontAwesomeIcon
+                                className={classes.descIcon}
+                                icon={faPassport}
+                              />
+                              Verified
+                            </span>
+                          }
+                        >
+                          {data?.offender?.idVerified ? (
+                            <Typography.Text type="success">
+                              Verified{' '}
+                              {`(${getIdSource(data?.offender.idSource)})`}
+                            </Typography.Text>
+                          ) : (
+                            <Typography.Text type="warning">
+                              Not Verified
+                            </Typography.Text>
+                          )}
+                        </Descriptions.Item>
                         {data?.offender?.peculiarities && (
                           <Descriptions.Item
                             label={
@@ -492,6 +516,46 @@ const ViewOffender = ({
                       ) : (
                         <Empty
                           description="No exclusions on offender"
+                          image={Empty.PRESENTED_IMAGE_SIMPLE}
+                        />
+                      )}
+                      <Title level={4}>Addresses</Title>
+                      {data?.offender?.addresses.length && !loading ? (
+                        <Table
+                          size="small"
+                          loading={loading}
+                          pagination={
+                            data.offender.addresses &&
+                            data?.offender.addresses.length > 10
+                              ? {
+                                  pageSize: 10,
+                                }
+                              : false
+                          }
+                          className={classes.exclusions}
+                          columns={[
+                            {
+                              key: 'alias',
+                              title: 'Alias',
+                              dataIndex: 'alias',
+                            },
+                            {
+                              key: 'full',
+                              title: 'Full Address',
+                              dataIndex: 'full',
+                            },
+                          ]}
+                          dataSource={data?.offender?.addresses.map(
+                            (address) => ({
+                              key: address.id,
+                              alias: address.alias,
+                              full: address.full,
+                            })
+                          )}
+                        />
+                      ) : (
+                        <Empty
+                          description="No addresses for this offender"
                           image={Empty.PRESENTED_IMAGE_SIMPLE}
                         />
                       )}

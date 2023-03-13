@@ -14,6 +14,8 @@ mutation updateOffender($where: UniqueId!, $data: OffenderUpdateInput!) {
     peculiarities
     approved
     active
+    idVerified
+    idSource
     images {
       id
       url

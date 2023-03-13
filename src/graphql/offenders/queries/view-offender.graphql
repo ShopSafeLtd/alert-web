@@ -15,10 +15,22 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
     subscribed
     approved
     active
+    idVerified
+    idSource
     images {
       id
       url
       optimised
+    }
+    addresses {
+      id
+      full
+      building
+      street
+      townCity
+      county
+      postcode
+      alias
     }
     groups {
       id

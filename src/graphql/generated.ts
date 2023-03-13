@@ -2422,6 +2422,7 @@ export type AddImageIntelData = {
 export type Address = {
   __typename?: 'Address';
   actions: Array<Action>;
+  alias?: Maybe<Scalars['String']>;
   building?: Maybe<Scalars['String']>;
   county?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
@@ -2452,6 +2453,7 @@ export type AddressActionsArgs = {
 
 export type AddressCreateInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutAddressInput>;
+  alias?: InputMaybe<Scalars['String']>;
   building?: InputMaybe<Scalars['String']>;
   business?: InputMaybe<BusinessCreateNestedOneWithoutLocationsInput>;
   county?: InputMaybe<Scalars['String']>;
@@ -2471,6 +2473,7 @@ export type AddressCreateInput = {
 };
 
 export type AddressCreateManyBusinessInput = {
+  alias?: InputMaybe<Scalars['String']>;
   building?: InputMaybe<Scalars['String']>;
   county?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -2494,6 +2497,7 @@ export type AddressCreateManyBusinessInputEnvelope = {
 };
 
 export type AddressCreateManyOffenderInput = {
+  alias?: InputMaybe<Scalars['String']>;
   building?: InputMaybe<Scalars['String']>;
   businessId?: InputMaybe<Scalars['String']>;
   county?: InputMaybe<Scalars['String']>;
@@ -2517,6 +2521,7 @@ export type AddressCreateManyOffenderInputEnvelope = {
 };
 
 export type AddressCreateManyUserInput = {
+  alias?: InputMaybe<Scalars['String']>;
   building?: InputMaybe<Scalars['String']>;
   businessId?: InputMaybe<Scalars['String']>;
   county?: InputMaybe<Scalars['String']>;
@@ -2602,6 +2607,7 @@ export type AddressCreateOrConnectWithoutUserInput = {
 };
 
 export type AddressCreateWithoutActionsInput = {
+  alias?: InputMaybe<Scalars['String']>;
   building?: InputMaybe<Scalars['String']>;
   business?: InputMaybe<BusinessCreateNestedOneWithoutLocationsInput>;
   county?: InputMaybe<Scalars['String']>;
@@ -2622,6 +2628,7 @@ export type AddressCreateWithoutActionsInput = {
 
 export type AddressCreateWithoutBusinessInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutAddressInput>;
+  alias?: InputMaybe<Scalars['String']>;
   building?: InputMaybe<Scalars['String']>;
   county?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -2641,6 +2648,7 @@ export type AddressCreateWithoutBusinessInput = {
 
 export type AddressCreateWithoutIncidentInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutAddressInput>;
+  alias?: InputMaybe<Scalars['String']>;
   building?: InputMaybe<Scalars['String']>;
   business?: InputMaybe<BusinessCreateNestedOneWithoutLocationsInput>;
   county?: InputMaybe<Scalars['String']>;
@@ -2660,6 +2668,7 @@ export type AddressCreateWithoutIncidentInput = {
 
 export type AddressCreateWithoutOffenderInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutAddressInput>;
+  alias?: InputMaybe<Scalars['String']>;
   building?: InputMaybe<Scalars['String']>;
   business?: InputMaybe<BusinessCreateNestedOneWithoutLocationsInput>;
   county?: InputMaybe<Scalars['String']>;
@@ -2679,6 +2688,7 @@ export type AddressCreateWithoutOffenderInput = {
 
 export type AddressCreateWithoutUserInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutAddressInput>;
+  alias?: InputMaybe<Scalars['String']>;
   building?: InputMaybe<Scalars['String']>;
   business?: InputMaybe<BusinessCreateNestedOneWithoutLocationsInput>;
   county?: InputMaybe<Scalars['String']>;
@@ -2708,6 +2718,7 @@ export type AddressOrderByRelationAggregateInput = {
 
 export type AddressOrderByWithRelationInput = {
   actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
+  alias?: InputMaybe<SortOrder>;
   building?: InputMaybe<SortOrder>;
   business?: InputMaybe<BusinessOrderByWithRelationInput>;
   businessId?: InputMaybe<SortOrder>;
@@ -2734,6 +2745,7 @@ export type AddressScalarWhereInput = {
   AND?: InputMaybe<Array<AddressScalarWhereInput>>;
   NOT?: InputMaybe<Array<AddressScalarWhereInput>>;
   OR?: InputMaybe<Array<AddressScalarWhereInput>>;
+  alias?: InputMaybe<StringNullableFilter>;
   building?: InputMaybe<StringNullableFilter>;
   businessId?: InputMaybe<StringNullableFilter>;
   county?: InputMaybe<StringNullableFilter>;
@@ -2754,6 +2766,7 @@ export type AddressScalarWhereInput = {
 
 export type AddressUpdateInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutAddressNestedInput>;
+  alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   building?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   business?: InputMaybe<BusinessUpdateOneWithoutLocationsNestedInput>;
   county?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -2773,6 +2786,7 @@ export type AddressUpdateInput = {
 };
 
 export type AddressUpdateManyMutationInput = {
+  alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   building?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   county?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -2888,6 +2902,7 @@ export type AddressUpdateWithWhereUniqueWithoutUserInput = {
 };
 
 export type AddressUpdateWithoutActionsInput = {
+  alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   building?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   business?: InputMaybe<BusinessUpdateOneWithoutLocationsNestedInput>;
   county?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -2908,6 +2923,7 @@ export type AddressUpdateWithoutActionsInput = {
 
 export type AddressUpdateWithoutBusinessInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutAddressNestedInput>;
+  alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   building?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   county?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -2927,6 +2943,7 @@ export type AddressUpdateWithoutBusinessInput = {
 
 export type AddressUpdateWithoutIncidentInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutAddressNestedInput>;
+  alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   building?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   business?: InputMaybe<BusinessUpdateOneWithoutLocationsNestedInput>;
   county?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -2946,6 +2963,7 @@ export type AddressUpdateWithoutIncidentInput = {
 
 export type AddressUpdateWithoutOffenderInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutAddressNestedInput>;
+  alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   building?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   business?: InputMaybe<BusinessUpdateOneWithoutLocationsNestedInput>;
   county?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -2965,6 +2983,7 @@ export type AddressUpdateWithoutOffenderInput = {
 
 export type AddressUpdateWithoutUserInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutAddressNestedInput>;
+  alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   building?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   business?: InputMaybe<BusinessUpdateOneWithoutLocationsNestedInput>;
   county?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -3015,6 +3034,7 @@ export type AddressWhereInput = {
   NOT?: InputMaybe<Array<AddressWhereInput>>;
   OR?: InputMaybe<Array<AddressWhereInput>>;
   actions?: InputMaybe<ActionListRelationFilter>;
+  alias?: InputMaybe<StringNullableFilter>;
   building?: InputMaybe<StringNullableFilter>;
   business?: InputMaybe<BusinessWhereInput>;
   businessId?: InputMaybe<StringNullableFilter>;
@@ -6533,6 +6553,7 @@ export type CreateOffenderCrimeGroups = {
 };
 
 export type CreateOffenderData = {
+  address?: InputMaybe<AddressCreateWithoutOffenderInput>;
   age?: InputMaybe<Age>;
   bans?: InputMaybe<Array<InputMaybe<BanCreateWithoutOffenderInput>>>;
   build?: InputMaybe<Build>;
@@ -6542,6 +6563,8 @@ export type CreateOffenderData = {
   gender?: InputMaybe<Gender>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutOffendersInput>;
   hair?: InputMaybe<Scalars['String']>;
+  idSource?: InputMaybe<IdSource>;
+  idVerified?: InputMaybe<Scalars['Boolean']>;
   image?: InputMaybe<ImageCreateNestedManyWithoutOffendersInput>;
   images?: InputMaybe<Array<InputMaybe<UploadOffenderImage>>>;
   name?: InputMaybe<Scalars['String']>;
@@ -36385,6 +36408,8 @@ export type CreateOffenderMutation = {
     peculiarities?: string | null;
     approved?: boolean | null;
     active?: boolean | null;
+    idVerified: boolean;
+    idSource?: IdSource | null;
     images: Array<{
       __typename?: 'Image';
       id: string;
@@ -36486,6 +36511,8 @@ export type UpdateOffenderMutation = {
     peculiarities?: string | null;
     approved?: boolean | null;
     active?: boolean | null;
+    idVerified: boolean;
+    idSource?: IdSource | null;
     images: Array<{
       __typename?: 'Image';
       id: string;
@@ -36767,11 +36794,24 @@ export type ViewOffenderQuery = {
     subscribed?: boolean | null;
     approved?: boolean | null;
     active?: boolean | null;
+    idVerified: boolean;
+    idSource?: IdSource | null;
     images: Array<{
       __typename?: 'Image';
       id: string;
       url?: string | null;
       optimised?: string | null;
+    }>;
+    addresses: Array<{
+      __typename?: 'Address';
+      id: string;
+      full?: string | null;
+      building?: string | null;
+      street: string;
+      townCity: string;
+      county?: string | null;
+      postcode: string;
+      alias?: string | null;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
@@ -44460,6 +44500,8 @@ export const CreateOffenderDocument = gql`
       peculiarities
       approved
       active
+      idVerified
+      idSource
       images {
         id
         url
@@ -44681,6 +44723,8 @@ export const UpdateOffenderDocument = gql`
       peculiarities
       approved
       active
+      idVerified
+      idSource
       images {
         id
         url
@@ -45249,10 +45293,22 @@ export const ViewOffenderDocument = gql`
       subscribed
       approved
       active
+      idVerified
+      idSource
       images {
         id
         url
         optimised
+      }
+      addresses {
+        id
+        full
+        building
+        street
+        townCity
+        county
+        postcode
+        alias
       }
       groups {
         id

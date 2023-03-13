@@ -61,6 +61,16 @@ function EditOffender({ reviewed }: Props): JSX.Element {
     removeCrimeGroup,
     listVehiclesData,
     listCrimeGroupsData,
+    idVerified,
+    onValuesChange,
+    addAddress,
+    editAddress,
+    toggleAddAddress,
+    toggleEditAddress,
+    addressesData,
+    onDeleteAddress,
+    onEditAddress,
+    onSubmitAddress,
   } = useEditOffender({ offenderId, reviewed });
   return (
     <div>
@@ -117,6 +127,16 @@ function EditOffender({ reviewed }: Props): JSX.Element {
         updateCrimeGroupsData={updateCrimeGroupsData}
         listVehiclesData={listVehiclesData}
         listCrimeGroupsData={listCrimeGroupsData}
+        idVerified={idVerified}
+        onValuesChange={onValuesChange}
+        addAddress={addAddress}
+        editAddress={editAddress}
+        toggleAddAddress={toggleAddAddress}
+        toggleEditAddress={toggleEditAddress}
+        addressesData={addressesData}
+        onSubmitAddress={onSubmitAddress}
+        onDeleteAddress={onDeleteAddress}
+        onEditAddress={onEditAddress}
       />
     </div>
   );

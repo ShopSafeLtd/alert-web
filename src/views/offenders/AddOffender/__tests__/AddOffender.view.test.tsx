@@ -60,6 +60,8 @@ describe('List Officer View', () => {
           updateCrimeGroupsData={jest.fn()}
           updateVehiclesData={jest.fn()}
           vehiclesData={[]}
+          idVerified
+          onValuesChange={jest.fn()}
         />
       </MemoryRouter>
     );
