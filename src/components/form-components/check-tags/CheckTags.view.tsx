@@ -1,4 +1,4 @@
-import { Col, Row } from 'antd';
+import { Col, Row, Skeleton } from 'antd';
 import React from 'react';
 import CheckTag from '../check-tag/CheckTag.view';
 
@@ -8,8 +8,10 @@ interface Props {
   options: {
     label: string;
     value: string;
+    tooltip?: string;
   }[];
   mode?: 'check' | 'radio';
+  loading?: boolean;
 }
 
 const CheckTags = ({
@@ -17,6 +19,7 @@ const CheckTags = ({
   options = [],
   value = [],
   mode = 'check',
+  loading = false,
 }: Props) => {
   const toggleOption = (e: string) => {
     if (mode === 'check') {
@@ -35,13 +38,35 @@ const CheckTags = ({
     }
   };
 
-  return (
-    <Row gutter={10}>
+  return loading ? (
+    <Row gutter={[10, 10]}>
+      <Col>
+        <Skeleton.Input
+          active
+          style={{ borderRadius: 100, height: 31, width: 80 }}
+        />
+      </Col>
+      <Col>
+        <Skeleton.Input
+          active
+          style={{ borderRadius: 100, height: 31, width: 80 }}
+        />
+      </Col>
+      <Col>
+        <Skeleton.Input
+          active
+          style={{ borderRadius: 100, height: 31, width: 80 }}
+        />
+      </Col>
+    </Row>
+  ) : (
+    <Row gutter={[10, 10]}>
       {options.map((option) => (
         <Col>
           <CheckTag
             value={option.value}
             label={option.label}
+            tooltip={option.tooltip}
             active={value.includes(option.value)}
             onClick={toggleOption}
           />

@@ -18,6 +18,7 @@ import {
   SortOrder,
   TagsDocument,
   TagsQuery,
+  TagType,
   useAddressesQuery,
   useCreateIncidentMutation,
   useListCrimeGroupsQuery,
@@ -49,6 +50,7 @@ interface FormData {
   policeReported?: boolean;
   policeInvolved?: boolean;
   policeRef?: string;
+  policeNo?: string;
   business: {
     label: React.ReactNode;
     value: string;
@@ -116,7 +118,7 @@ interface Return {
   searchOffenders: string;
   setAssignToImage: (image: Image) => void;
   setSearchOffenders: (value: string) => void;
-  tags: { value: string; label: string }[];
+  tags: { value: string; label: string; tooltip: string; type: TagType }[];
   tagsLoading: boolean;
   toggleAddIncidentTag: () => void;
   updateCrimeGroupsData: (value: CrimeGroupData) => void;
@@ -454,7 +456,6 @@ const useEditIncident = (): Return => {
   };
 
   const updateVehiclesData = (vehicle: VehicleData) => {
-    console.log(vehicle);
     const editedData = vehiclesData.find(({ id }) => id === vehicle.id);
     if (editedData) {
       setVehiclesData([
@@ -889,7 +890,7 @@ const useEditIncident = (): Return => {
               id: data.business.value,
             },
             items: data.goods
-              .filter((item) => item.goodsType !== undefined)
+              ?.filter((item) => item.goodsType !== undefined)
               .map((item) => ({
                 goodsType: {
                   id: item.goodsType,
@@ -903,15 +904,18 @@ const useEditIncident = (): Return => {
               })),
             policeInvolved: data.policeInvolved,
             policeRef: data.policeRef,
+            policeNo: data.policeNo,
             policeReported: data.policeReported,
             groups:
               groups.length > 1
                 ? data.groups.map((id) => ({ id }))
                 : groups.map(({ id }) => ({ id })),
             scheme: schemeId,
-            crimeTypes: data.tags.length
-              ? data.tags.map((id) => ({ id }))
-              : undefined,
+            crimeTypes: [
+              ...data.tags.map((id) => ({ id })),
+              ...data.involvedTags.map((id) => ({ id })),
+              ...data.fellingTags.map((id) => ({ id })),
+            ],
             offenders: getOffenders(),
             vehicles: getVehicles(),
             crimeGroups: getCrimeGroups(),
@@ -1156,7 +1160,12 @@ const useEditIncident = (): Return => {
         : groups.map((group) => ({ value: group.id, label: group.name })),
     groupsLoading,
     tags:
-      tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
+      tagsData?.tags.map((tag) => ({
+        value: tag.id,
+        label: tag.name,
+        tooltip: tag.description,
+        type: tag.type,
+      })) || [],
     tagsLoading,
     primaryAddress: addressData?.addresses.find(({ primary }) => primary),
     addressLoading,

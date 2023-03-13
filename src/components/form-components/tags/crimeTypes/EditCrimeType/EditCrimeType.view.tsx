@@ -1,5 +1,5 @@
 import React from 'react';
-import { CrimeType, TagQuery } from 'graphql/generated';
+import { CrimeType, TagQuery, TagType } from 'graphql/generated';
 import {
   Button,
   Col,
@@ -76,40 +76,44 @@ const EditCrimeType = ({
             <Input.TextArea rows={10} disabled={saving} />
           </Form.Item>
         </Col>
-        <Col span={24}>
-          <Form.Item
-            name="crimeType"
-            label="Crime Type Category"
-            rules={[
-              {
-                required: true,
-                message: 'Please select a category for the new crime type.',
-              },
-            ]}
-          >
-            <Select disabled={saving}>
-              <Select.Option value={CrimeType.Burglary}>Burglary</Select.Option>
-              <Select.Option value={CrimeType.CriminalDamage}>
-                Criminal Damage
-              </Select.Option>
-              <Select.Option value={CrimeType.Drugs}>Drugs</Select.Option>
-              <Select.Option value={CrimeType.FraudForgery}>
-                Fraud & Forgery
-              </Select.Option>
-              <Select.Option value={CrimeType.Robbery}>Robbery</Select.Option>
-              <Select.Option value={CrimeType.SexualOffences}>
-                Sexual Offences
-              </Select.Option>
-              <Select.Option value={CrimeType.TheftHandling}>
-                Theft & Handling
-              </Select.Option>
-              <Select.Option value={CrimeType.Violence}>
-                Violence Against The Person
-              </Select.Option>
-              <Select.Option value={CrimeType.Other}>Other</Select.Option>
-            </Select>
-          </Form.Item>
-        </Col>
+        {data?.tag?.type === TagType.IncidentCrimeType && (
+          <Col span={24}>
+            <Form.Item
+              name="crimeType"
+              label="Crime Type Category"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please select a category for the new crime type.',
+                },
+              ]}
+            >
+              <Select disabled={saving}>
+                <Select.Option value={CrimeType.Burglary}>
+                  Burglary
+                </Select.Option>
+                <Select.Option value={CrimeType.CriminalDamage}>
+                  Criminal Damage
+                </Select.Option>
+                <Select.Option value={CrimeType.Drugs}>Drugs</Select.Option>
+                <Select.Option value={CrimeType.FraudForgery}>
+                  Fraud & Forgery
+                </Select.Option>
+                <Select.Option value={CrimeType.Robbery}>Robbery</Select.Option>
+                <Select.Option value={CrimeType.SexualOffences}>
+                  Sexual Offences
+                </Select.Option>
+                <Select.Option value={CrimeType.TheftHandling}>
+                  Theft & Handling
+                </Select.Option>
+                <Select.Option value={CrimeType.Violence}>
+                  Violence Against The Person
+                </Select.Option>
+                <Select.Option value={CrimeType.Other}>Other</Select.Option>
+              </Select>
+            </Form.Item>
+          </Col>
+        )}
       </Row>
 
       <Form.Item>

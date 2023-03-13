@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
-import { CrimeType } from 'graphql/generated';
+import { CrimeType, TagType } from 'graphql/generated';
 
 const { Text } = Typography;
 
@@ -14,9 +14,15 @@ interface Props {
   onSubmit: (value: FormData) => void;
   onClose: () => void;
   saving: boolean;
+  type?: TagType;
 }
 
-const AddCrimeType = ({ onSubmit, onClose, saving }: Props): JSX.Element => (
+const AddCrimeType = ({
+  onSubmit,
+  onClose,
+  saving,
+  type = TagType.IncidentCrimeType,
+}: Props): JSX.Element => (
   <Form layout="vertical" onFinish={onSubmit}>
     <Row style={{ marginBottom: 30 }}>
       <Col>
@@ -48,40 +54,42 @@ const AddCrimeType = ({ onSubmit, onClose, saving }: Props): JSX.Element => (
         </Form.Item>
       </Col>
 
-      <Col span={24}>
-        <Form.Item
-          name="crimeType"
-          label="Crime Type Category"
-          rules={[
-            {
-              required: true,
-              message: 'Please select a category for the new crime type.',
-            },
-          ]}
-        >
-          <Select disabled={saving}>
-            <Select.Option value={CrimeType.Burglary}>Burglary</Select.Option>
-            <Select.Option value={CrimeType.CriminalDamage}>
-              Criminal Damage
-            </Select.Option>
-            <Select.Option value={CrimeType.Drugs}>Drugs</Select.Option>
-            <Select.Option value={CrimeType.FraudForgery}>
-              Fraud & Forgery
-            </Select.Option>
-            <Select.Option value={CrimeType.Robbery}>Robbery</Select.Option>
-            <Select.Option value={CrimeType.SexualOffences}>
-              Sexual Offences
-            </Select.Option>
-            <Select.Option value={CrimeType.TheftHandling}>
-              Theft & Handling
-            </Select.Option>
-            <Select.Option value={CrimeType.Violence}>
-              Violence Against The Person
-            </Select.Option>
-            <Select.Option value={CrimeType.Other}>Other</Select.Option>
-          </Select>
-        </Form.Item>
-      </Col>
+      {type === TagType.IncidentCrimeType && (
+        <Col span={24}>
+          <Form.Item
+            name="crimeType"
+            label="Crime Type Category"
+            rules={[
+              {
+                required: true,
+                message: 'Please select a category for the new crime type.',
+              },
+            ]}
+          >
+            <Select disabled={saving}>
+              <Select.Option value={CrimeType.Burglary}>Burglary</Select.Option>
+              <Select.Option value={CrimeType.CriminalDamage}>
+                Criminal Damage
+              </Select.Option>
+              <Select.Option value={CrimeType.Drugs}>Drugs</Select.Option>
+              <Select.Option value={CrimeType.FraudForgery}>
+                Fraud & Forgery
+              </Select.Option>
+              <Select.Option value={CrimeType.Robbery}>Robbery</Select.Option>
+              <Select.Option value={CrimeType.SexualOffences}>
+                Sexual Offences
+              </Select.Option>
+              <Select.Option value={CrimeType.TheftHandling}>
+                Theft & Handling
+              </Select.Option>
+              <Select.Option value={CrimeType.Violence}>
+                Violence Against The Person
+              </Select.Option>
+              <Select.Option value={CrimeType.Other}>Other</Select.Option>
+            </Select>
+          </Form.Item>
+        </Col>
+      )}
     </Row>
 
     <Form.Item>

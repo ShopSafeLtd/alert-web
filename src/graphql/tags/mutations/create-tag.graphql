@@ -3,5 +3,7 @@ mutation createTag($data: TagCreateInput!) {
     id
     name
     description
+    type
+    crimeType
   }
 }

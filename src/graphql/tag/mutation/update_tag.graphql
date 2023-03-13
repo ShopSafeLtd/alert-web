@@ -3,5 +3,7 @@ mutation updateTag($where: UniqueId!, $data: TagUpdateInput!) {
     id
     name
     description
+    type
+    crimeType
   }
 }

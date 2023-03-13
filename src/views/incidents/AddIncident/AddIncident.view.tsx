@@ -4,6 +4,7 @@ import {
   CreateTagMutation,
   ListGoodsTypesQuery,
   ListOffendersQuery,
+  TagType,
 } from 'graphql/generated';
 import { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
 
@@ -48,6 +49,7 @@ interface FormData {
   recoveredValue?: number;
   policeReported?: boolean;
   policeInvolved?: boolean;
+  policeNo?: string;
   policeRef?: string;
   business: {
     label: React.ReactNode;
@@ -114,7 +116,7 @@ interface Props {
   searchOffenders: string;
   setAssignToImage: (image: Image) => void;
   setSearchOffenders: (value: string) => void;
-  tags: { value: string; label: string }[];
+  tags: { value: string; label: string; tooltip: string; type: TagType }[];
   tagsLoading: boolean;
   toggleAddIncidentTag: () => void;
   updateCrimeGroupsData: (value: CrimeGroupData) => void;
@@ -227,74 +229,49 @@ const EditIncident = ({
             ]}
             label="Incident Type"
           >
-            <Select
-              autoFocus
+            <CheckTags
               loading={tagsLoading}
-              disabled={saving}
-              mode="multiple"
-              maxTagCount={3}
-              placeholder="Search for a crime type..."
-              defaultOpen
-            >
-              {tags.map((tag) => (
-                <Select.Option value={tag.value}>{tag.label}</Select.Option>
-              ))}
-            </Select>
+              // mode="multiple"
+              options={tags.filter(
+                (item) => item.type === TagType.IncidentCrimeType
+              )}
+            />
           </Form.Item>
           <Form.Item
             name="involvedTags"
             tooltip="Select the relevant crime types for this incident, these help to categorise the incident,"
-            label="Did this incident involve..."
+            label="Did this incident involve any of the following?"
+            rules={[
+              {
+                required: true,
+                message: 'Please select an option for this field',
+              },
+            ]}
           >
             <CheckTags
-              options={[
-                {
-                  label: 'Violence',
-                  value: 'Violence',
-                },
-                {
-                  label: 'Hate Crime',
-                  value: 'Hate Crime',
-                },
-                {
-                  label: 'Weapons',
-                  value: 'Weapons',
-                },
-              ]}
+              loading={tagsLoading}
+              options={tags.filter(
+                (item) => item.type === TagType.IncidentInvolved
+              )}
             />
           </Form.Item>
+
           <Form.Item
             name="fellingTags"
             tooltip="Select the relevant crime types for this incident, these help to categorise the incident,"
             label="How did this make you feel?"
+            rules={[
+              {
+                required: true,
+                message: 'Please select an option for this field',
+              },
+            ]}
           >
             <CheckTags
-              options={[
-                {
-                  label: 'Threatened',
-                  value: 'Threatened',
-                },
-                {
-                  label: 'At Risk',
-                  value: 'At Risk',
-                },
-                {
-                  label: 'Unsafe',
-                  value: 'Unsafe',
-                },
-                {
-                  label: 'Upset',
-                  value: 'Upset',
-                },
-                {
-                  label: 'Angry',
-                  value: 'Angry',
-                },
-                {
-                  label: 'Persecuted',
-                  value: 'Persecuted',
-                },
-              ]}
+              loading={tagsLoading}
+              options={tags.filter(
+                (item) => item.type === TagType.IncidentImpact
+              )}
             />
           </Form.Item>
         </Card>
@@ -639,7 +616,7 @@ const EditIncident = ({
                 <Input disabled={saving} />
               </Form.Item>
               <Form.Item
-                name="policeRef"
+                name="policeNo"
                 label="Officer Collar No."
                 tooltip="The collar number of the officers involved in this incident."
               >

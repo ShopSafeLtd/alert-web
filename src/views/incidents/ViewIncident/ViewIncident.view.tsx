@@ -286,13 +286,6 @@ const ViewIncident = ({
                     <Skeleton />
                   ) : (
                     <div className="incident-tab-content">
-                      <Row className="incident-tags">
-                        {data?.incident?.crimeTypes.map((crimeType) => (
-                          <Col key={crimeType.id}>
-                            <Tag color="red">{crimeType.name}</Tag>
-                          </Col>
-                        ))}
-                      </Row>{' '}
                       <Paragraph type="secondary" style={{ marginTop: 10 }}>
                         {data?.incident?.description}
                       </Paragraph>
@@ -366,6 +359,36 @@ const ViewIncident = ({
                           {data?.incident?.groups.map((group) => (
                             <Tag key={group.id}>{group.name}</Tag>
                           ))}
+                        </Descriptions.Item>
+                        <Descriptions.Item
+                          className={classes.detail}
+                          label={<span>Crime Types</span>}
+                        >
+                          {data?.incident?.crimeTypes.map((tag) => (
+                            <Tag color="red" key={tag.id}>
+                              {tag.name}
+                            </Tag>
+                          ))}
+                        </Descriptions.Item>
+                        <Descriptions.Item
+                          className={classes.detail}
+                          label={<span>Involved Tags</span>}
+                        >
+                          {data?.incident?.involvedTags.map((tag) => (
+                            <Tag color="red" key={tag.id}>
+                              {tag.name}
+                            </Tag>
+                          )) || 'None'}
+                        </Descriptions.Item>
+                        <Descriptions.Item
+                          className={classes.detail}
+                          label={<span>Impact Tags</span>}
+                        >
+                          {data?.incident?.impactTags.map((tag) => (
+                            <Tag color="red" key={tag.id}>
+                              {tag.name}
+                            </Tag>
+                          )) || 'None'}
                         </Descriptions.Item>
                       </Descriptions>
                       {data?.incident?.crimeTypes

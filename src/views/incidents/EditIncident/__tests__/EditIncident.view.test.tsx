@@ -9,6 +9,9 @@ describe('List Officer View', () => {
     incident: {
       policeInvolved: false,
       policeRef: null,
+      impactTags: [],
+      involvedTags: [],
+      policeNo: null,
       reference: null,
       policeReported: false,
       subscribed: false,

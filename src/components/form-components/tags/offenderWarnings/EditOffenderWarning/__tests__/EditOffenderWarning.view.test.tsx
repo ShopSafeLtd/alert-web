@@ -1,6 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
+import { TagType } from 'graphql/generated';
 import EditOffenderWarning from '../EditOffenderWarning.view';
 
 describe('List Officer View', () => {
@@ -9,6 +10,7 @@ describe('List Officer View', () => {
       id: 'offenderId',
       name: 'offender name',
       description: 'description',
+      type: TagType.IncidentCrimeType,
     },
   };
   it('renders the page', () => {

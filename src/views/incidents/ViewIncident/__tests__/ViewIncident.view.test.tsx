@@ -35,7 +35,10 @@ describe('Detail Officer View', () => {
       policeRef: null,
       reference: null,
       policeReported: false,
+
+      impactTags: [],
       updates: [],
+      involvedTags: [],
       subscribed: false,
       id: 'incidentId',
       date: '2022-08-10T10:40:06.191Z',

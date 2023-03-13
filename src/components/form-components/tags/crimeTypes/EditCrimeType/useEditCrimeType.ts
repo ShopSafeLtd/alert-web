@@ -66,7 +66,7 @@ const useEditCrimeType = ({ onClose, incidentId }: Props): Return => {
           data: {
             name: { set: data.name },
             description: { set: data.description },
-            crimeType: { set: data.crimeType },
+            crimeType: data.crimeType ? { set: data.crimeType } : undefined,
           },
         },
       });

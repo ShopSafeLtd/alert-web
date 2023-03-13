@@ -17,6 +17,16 @@ const CrimeTypeList = (): JSX.Element => {
     updateCrimeTypeList,
     saving,
     deleteConfirm,
+    impactData,
+    impactLoading,
+    involvedData,
+    involvedLoading,
+    addImpact,
+    addInvolved,
+    toggleAddImpact,
+    toggleAddInvolved,
+    updateImpactList,
+    updateInvolvedList,
   } = useCrimeTypeList();
   return (
     <View
@@ -33,6 +43,16 @@ const CrimeTypeList = (): JSX.Element => {
       updateCrimeTypeList={updateCrimeTypeList}
       saving={saving}
       deleteConfirm={deleteConfirm}
+      impactData={impactData}
+      impactLoading={impactLoading}
+      involvedData={involvedData}
+      involvedLoading={involvedLoading}
+      addImpact={addImpact}
+      addInvolved={addInvolved}
+      toggleAddImpact={toggleAddImpact}
+      toggleAddInvolved={toggleAddInvolved}
+      updateImpactList={updateImpactList}
+      updateInvolvedList={updateInvolvedList}
     />
   );
 };
