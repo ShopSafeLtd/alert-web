@@ -7,7 +7,6 @@ import {
   InMemoryCache,
   split,
 } from '@apollo/client';
-import { persistCache } from 'apollo3-cache-persist';
 
 import { setContext } from '@apollo/client/link/context';
 import { WebSocketLink } from '@apollo/client/link/ws';
@@ -17,6 +16,9 @@ import { createUploadLink } from 'apollo-upload-client';
 
 import { ReadFieldFunction } from '@apollo/client/cache/core/types/common';
 import { useAuth0 } from '@auth0/auth0-react';
+import { onError } from '@apollo/client/link/error';
+
+// import * as Sentry from '@sentry/react';
 
 interface Props {
   children: React.ReactNode;
@@ -47,6 +49,28 @@ const Apollo = ({ children }: Props): JSX.Element => {
     // uri: 'http://localhost:4000/graphql',
     // uri: 'https://alert-dev-api.herokuapp.com/graphql',
     uri: import.meta.env.VITE_GRAPHQL_URL,
+  });
+
+  // TODO: Add error handling
+  const errorLink = onError(({ graphQLErrors, networkError }) => {
+    if (graphQLErrors)
+      graphQLErrors.forEach(({ message, locations, path }) => {
+        // Sentry.captureMessage(
+        //   `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
+        //     locations
+        //   )}, Path: ${path}`
+        // );
+        console.log(
+          `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
+            locations
+          )}, Path: ${path}`
+        );
+      });
+
+    if (networkError) {
+      console.log(`[Network error]: ${networkError}`);
+      // Sentry.captureException(networkError);
+    }
   });
 
   const middlewareLink = setContext(async (_, { headers, ...context }) => {
@@ -80,7 +104,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
   //   ...context,
   // }));
 
-  const authHttp = middlewareLink.concat(httpLink);
+  const authHttp = errorLink.concat(middlewareLink).concat(httpLink);
 
   const link = split(
     ({ query }) => {
