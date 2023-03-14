@@ -5,6 +5,7 @@ import {
   DatePicker,
   Form,
   Input,
+  Radio,
   Row,
   Select,
   Switch,
@@ -13,6 +14,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { ageValues, buildValues, genderValues, raceValues } from 'types/enums';
+import { IdSource } from 'graphql/generated';
 
 const { Title, Paragraph } = Typography;
 
@@ -26,6 +28,7 @@ interface Props {
   setAgeCheck: (value: boolean) => void;
   selectedItems: string[];
   setSelectedItems: (value: string[]) => void;
+  idVerified?: boolean;
 }
 
 const OffenderDetails = ({
@@ -38,6 +41,7 @@ const OffenderDetails = ({
   selectedItems,
   setSelectedItems,
   toggleAddOffenderTag,
+  idVerified,
 }: Props): JSX.Element => (
   <>
     <Row align="bottom" style={{ marginBottom: 30 }}>
@@ -155,7 +159,7 @@ const OffenderDetails = ({
     </Row>
 
     <Row gutter={60}>
-      <Col span={8}>
+      <Col>
         <Form.Item
           name="ageCheck"
           label="Do you know the offender's date of birth?"
@@ -174,13 +178,14 @@ const OffenderDetails = ({
 
       {ageCheck ? (
         <>
-          <Col span={7}>
+          <Col>
             <Form.Item
               name="dateOfBirth"
               label="Date of Birth"
               tooltip="Enter the offender's date of birth if known."
             >
               <DatePicker
+                style={{ width: 200 }}
                 disabled={saving}
                 disabledDate={(current) =>
                   current && current.valueOf() > Date.now()
@@ -188,24 +193,28 @@ const OffenderDetails = ({
               />
             </Form.Item>
           </Col>
-          <Col span={8}>
+          <Col>
             <Form.Item
               name="dateSource"
               label="Information Source"
               tooltip="Enter the information source of the offender's date of birth range of the offender ."
             >
-              <Input.TextArea disabled={saving} />
+              <Input.TextArea style={{ width: 300 }} disabled={saving} />
             </Form.Item>
           </Col>
         </>
       ) : (
-        <Col span={7}>
+        <Col>
           <Form.Item
             name="age"
             label="Age"
             tooltip="Select an estimated age range of the offender if known."
           >
-            <Select options={ageValues} disabled={saving} />
+            <Select
+              style={{ width: 200 }}
+              options={ageValues}
+              disabled={saving}
+            />
           </Form.Item>
         </Col>
       )}
@@ -222,6 +231,65 @@ const OffenderDetails = ({
         </Form.Item>
       </Col>
     </Row>
+
+    {adminRights && (
+      <Row gutter={60}>
+        <Col>
+          <Form.Item
+            name="idVerified"
+            label="Has the offenders ID been verified?"
+            tooltip="Have you confirmed the offenders ID using an accepted method?"
+          >
+            <Radio.Group disabled={saving}>
+              <Radio.Button value>Yes</Radio.Button>
+              <Radio.Button value={false}>No</Radio.Button>
+            </Radio.Group>
+          </Form.Item>
+        </Col>
+        {idVerified && (
+          <Col>
+            <Form.Item
+              name="idSource"
+              label="ID Source"
+              tooltip="How did you confirm the ID?"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter the source of the ID.',
+                },
+              ]}
+            >
+              <Select
+                style={{ width: 200 }}
+                disabled={saving}
+                options={[
+                  {
+                    label: 'Driving Licence',
+                    value: IdSource.DrivingLicence,
+                  },
+                  {
+                    label: 'ID Card',
+                    value: IdSource.IdCard,
+                  },
+                  {
+                    label: 'Known Offender',
+                    value: IdSource.Known,
+                  },
+                  {
+                    label: 'Other',
+                    value: IdSource.Other,
+                  },
+                  {
+                    label: 'Passport',
+                    value: IdSource.Passport,
+                  },
+                ]}
+              />
+            </Form.Item>
+          </Col>
+        )}
+      </Row>
+    )}
   </>
 );
 export default OffenderDetails;

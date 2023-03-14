@@ -7,6 +7,7 @@ import {
   CreateOffenderMutation,
   CreateTagMutation,
   Gender,
+  IdSource,
   ListCrimeGroupsQuery,
   ListOffendersDocument,
   ListOffendersQuery,
@@ -45,12 +46,20 @@ export interface FormData {
   groups: string[];
   tags: string[];
   images?: { id: string; url: string; optimised: string }[];
+  idVerified?: boolean;
+  idSource?: IdSource;
   bans?: {
     endDate: Date;
     startDate: Date;
     location: string;
     description: string;
   }[];
+  alias?: string;
+  building?: string;
+  street?: string;
+  townCity?: string;
+  county?: string;
+  postcode?: string;
 }
 
 interface BanData {
@@ -112,6 +121,8 @@ interface Return {
   setEditCrimeGroupId: (value: string) => void;
   crimeGroupsData: CrimeGroupData[];
   updateCrimeGroupsData: (value: CrimeGroupData) => void;
+  onValuesChange?: (changedValues: FormData, values: FormData) => void;
+  idVerified: boolean;
 }
 
 const useAddOffender = (): Return => {
@@ -129,6 +140,7 @@ const useAddOffender = (): Return => {
     (actions) => actions.data.setOffenders
   );
   const [saving, setSaving] = useState(false);
+  const [idVerified, setIDVerified] = useState(false);
   const [ageCheck, setAgeCheck] = useState(false);
   const [addOffenderTag, setAddOffenderTag] = useState(false);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
@@ -151,6 +163,12 @@ const useAddOffender = (): Return => {
   const [editVehicleId, setEditVehicleId] = useState<string>('');
   const [vehiclesData, setVehiclesData] = useState<VehicleData[]>([]);
   const navigate = useNavigate();
+
+  const onValuesChange = (changedValues: FormData) => {
+    if (changedValues.idVerified !== undefined) {
+      setIDVerified(changedValues.idVerified);
+    }
+  };
 
   const { data: listVehiclesData } = useListVehiclesQuery({
     fetchPolicy: 'cache-and-network',
@@ -465,28 +483,6 @@ const useAddOffender = (): Return => {
           scheme: schemeId,
           vehicles: getVehicles(),
           crimeGroups: getCrimeGroups(),
-          // images:
-          //   imageChange && fileList.length > 0
-          //     ? fileList
-          //         .map((item) => ({
-          //           file: item.originFileObj,
-          //         }))
-          //         .filter((obj) => obj.file !== undefined)
-          //     : undefined,
-          // images: {
-          //   create:
-          //     imageChange && fileList.length > 0
-          //       ? fileList
-          //           .map((item) => ({
-          //             url: {
-          //               filename: item.fileName || '',
-          //               mimetype: item.type || '',
-          //               url: item.url || '',
-          //             },
-          //           }))
-          //           .filter((obj) => obj.url !== undefined)
-          //       : undefined,
-          // },
           image: {
             upload:
               imageChange && fileList.length > 0
@@ -514,6 +510,19 @@ const useAddOffender = (): Return => {
                   },
                   createdBy: { connect: { id: userId } },
                 }))
+              : undefined,
+          idVerified: data.idVerified,
+          idSource: data.idSource,
+          address:
+            data.street && data.townCity && data.postcode
+              ? {
+                  alias: data.alias,
+                  building: data.building,
+                  street: data.street,
+                  townCity: data.townCity,
+                  county: data.county,
+                  postcode: data.postcode,
+                }
               : undefined,
         },
       },
@@ -716,6 +725,8 @@ const useAddOffender = (): Return => {
     removeCrimeGroup,
     listVehiclesData,
     listCrimeGroupsData,
+    onValuesChange,
+    idVerified,
   };
 };
 

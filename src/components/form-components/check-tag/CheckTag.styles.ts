@@ -2,25 +2,20 @@ import { Theme } from 'configs/ThemeConfig';
 import { createUseStyles } from 'react-jss';
 
 const styles = createUseStyles((theme: Theme) => ({
-  cardOverlay: {
+  selectBox: {
+    border: `1px solid ${theme.borderColor}`,
+    padding: '5px 10px 5px 5px',
+    borderRadius: 100,
+    cursor: 'pointer',
+    position: 'relative',
+  },
+  overlay: {
     position: 'absolute',
     top: 0,
     right: 0,
     bottom: 0,
     left: 0,
     zIndex: 1,
-    backgroundColor: 'rgba(0,0,0,0.8)',
-    borderRadius: 10,
-  },
-  card: {
-    marginBottom: 10,
-    position: 'relative',
-  },
-  selectBox: {
-    border: `1px solid ${theme.borderColor}`,
-    padding: '5px 10px 5px 5px',
-    borderRadius: 100,
-    cursor: 'pointer',
   },
   selectIcon: {
     color: '#4d5b75',

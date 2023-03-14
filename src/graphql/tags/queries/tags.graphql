@@ -4,5 +4,6 @@ query tags($where: TagWhereInput!) {
     name
     description
     crimeType
+    type
   }
 }

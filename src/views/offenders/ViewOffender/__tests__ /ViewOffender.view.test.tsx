@@ -52,6 +52,8 @@ describe('Detail Officer View', () => {
       bans: [],
       incidents: [],
       vehicles: [],
+      idVerified: false,
+      addresses: [],
     },
   };
   it('renders the page', () => {

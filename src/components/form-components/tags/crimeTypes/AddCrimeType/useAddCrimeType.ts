@@ -4,6 +4,7 @@ import {
   CreateTagMutation,
   Model,
   CrimeType,
+  TagType,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import { notification } from 'antd';
@@ -18,6 +19,7 @@ interface FormData {
 interface Props {
   onClose: () => void;
   update: MutationUpdaterFn<CreateTagMutation>;
+  type?: TagType;
 }
 
 interface Return {
@@ -25,7 +27,11 @@ interface Return {
   saving: boolean;
 }
 
-const useAddCrimeType = ({ onClose, update }: Props): Return => {
+const useAddCrimeType = ({
+  onClose,
+  update,
+  type = TagType.IncidentCrimeType,
+}: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
   const [saving, setSaving] = useState(false);
@@ -66,6 +72,7 @@ const useAddCrimeType = ({ onClose, update }: Props): Return => {
           },
           createdBy: { connect: { id: userId } },
           dataType: Model.Incident,
+          type,
         },
       },
     });

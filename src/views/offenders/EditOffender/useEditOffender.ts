@@ -5,6 +5,7 @@ import {
   CreateCrimeGroupDataInput,
   CreateTagMutation,
   Gender,
+  IdSource,
   ListCrimeGroupsQuery,
   ListVehiclesQuery,
   Model,
@@ -29,8 +30,40 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import { CrimeGroupData, VehicleData } from 'types/DataType';
+import update from 'immutability-helper';
 
 const { confirm } = Modal;
+
+interface AddAddressForm {
+  alias: string;
+  building: string;
+  street: string;
+  townCity: string;
+  county: string;
+  postcode: string;
+}
+interface EditAddressForm {
+  id: string;
+  alias: string;
+  building: string;
+  street: string;
+  townCity: string;
+  county: string;
+  postcode: string;
+}
+
+interface AddressesData {
+  id: string;
+  alias: string;
+  building: string;
+  street: string;
+  townCity: string;
+  county: string;
+  postcode: string;
+  new: boolean;
+  updated: boolean;
+  deleted: boolean;
+}
 
 interface Props {
   offenderId: string;
@@ -59,6 +92,8 @@ export interface FormData {
   groups: string[];
   tags: string[];
   images?: { id: string; url: string; optimised: string }[];
+  idVerified?: boolean;
+  idSource?: IdSource;
   bans?: {
     endDate: Date;
     startDate: Date;
@@ -128,6 +163,16 @@ interface Return {
   setEditCrimeGroupId: (value: string) => void;
   crimeGroupsData: CrimeGroupData[];
   updateCrimeGroupsData: (value: CrimeGroupData) => void;
+  onValuesChange?: (changedValues: FormData, values: FormData) => void;
+  idVerified: boolean;
+  addAddress: boolean;
+  toggleAddAddress: () => void;
+  editAddress: string | null;
+  toggleEditAddress: (value: string | null) => void;
+  onSubmitAddress: (data: AddAddressForm) => void;
+  addressesData: AddressesData[] | null;
+  onEditAddress: (data: EditAddressForm) => void;
+  onDeleteAddress: (addressId: string) => void;
 }
 
 const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
@@ -144,12 +189,16 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     (actions) => actions.data.setOffenders
   );
   const [saving, setSaving] = useState(false);
+  const [idVerified, setIDVerified] = useState(false);
   const [ageCheck, setAgeCheck] = useState(false);
   const [addOffenderTag, setAddOffenderTag] = useState(false);
   const [imageChange, setImageChange] = useState(false);
   const [fileList, setFileList] = useState<Image[]>([]);
   const [addExclusion, setAddExclusion] = useState(false);
+  const [addAddress, setAddAddress] = useState(false);
+  const [editAddress, toggleEditAddress] = useState<null | string>(null);
   const [editExclusion, setEditExclusion] = useState(false);
+  const [addressesData, setAddressesData] = useState<AddressesData[]>([]);
   const [bansData, setBansData] = useState<BanData[]>([]);
   const [banData, setBanData] = useState<BanData | null>(null);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
@@ -171,13 +220,76 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     });
   };
 
+  const onValuesChange = (changedValues: FormData) => {
+    if (changedValues.idVerified !== undefined) {
+      setIDVerified(changedValues.idVerified);
+    }
+  };
+
+  const toggleAddAddress = () => {
+    setAddAddress(!addAddress);
+  };
+
+  const onSubmitAddress = (data: AddAddressForm) => {
+    setAddressesData([
+      ...addressesData,
+      {
+        ...data,
+        id: `${Math.random()}`,
+        deleted: false,
+        new: true,
+        updated: false,
+      },
+    ]);
+    setAddAddress(false);
+  };
+
+  const onEditAddress = (data: EditAddressForm) => {
+    const index = addressesData.map(({ id }) => id).indexOf(data.id);
+    const existingData = addressesData.find(({ id }) => id === data.id);
+
+    if (existingData)
+      setAddressesData(
+        update(addressesData, {
+          [index]: {
+            $set: {
+              ...existingData,
+              ...data,
+              updated: !existingData.new,
+            },
+          },
+        })
+      );
+    toggleEditAddress(null);
+  };
+
+  const onDeleteAddress = (addressId: string) => {
+    const index = addressesData.map(({ id }) => id).indexOf(addressId);
+    const existingData = addressesData.find(({ id }) => id === addressId);
+
+    if (existingData?.new) {
+      setAddressesData(addressesData.filter((item) => item.id !== addressId));
+    } else if (existingData) {
+      setAddressesData(
+        update(addressesData, {
+          [index]: {
+            $set: {
+              ...existingData,
+              updated: false,
+              deleted: true,
+            },
+          },
+        })
+      );
+    }
+  };
+
   const { data: offenderData, loading } = useViewOffenderQuery({
     variables: {
       where: {
         id: offenderId,
       },
     },
-
     onCompleted: ({ offender }) => {
       setAgeCheck(!!offender?.dateOfBirth);
       if (offender?.images && offender.images.length > 0) {
@@ -194,12 +306,29 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
       if (offender?.bans && offender.bans.length > 0) {
         setBansData(offender.bans);
       }
+      if (offender?.addresses && offender.addresses.length > 0) {
+        setAddressesData(
+          offender?.addresses.map((item) => ({
+            alias: item.alias || '',
+            building: item.building || '',
+            county: item.county || '',
+            deleted: false,
+            id: item.id || '',
+            new: false,
+            postcode: item.postcode || '',
+            street: item.street || '',
+            townCity: item.townCity || '',
+            updated: false,
+          }))
+        );
+      }
       if (offender?.vehicles && offender.vehicles.length) {
         setVehiclesData(offender.vehicles);
       }
       if (offender?.crimeGroups && offender.crimeGroups.length) {
         setCrimeGroupsData(offender.crimeGroups);
       }
+      if (offender?.idVerified) setIDVerified(true);
     },
   });
   const { data: listVehiclesData } = useListVehiclesQuery({
@@ -507,9 +636,43 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
             set: data.tags.map((id) => ({ id })) || undefined,
           },
           scheme: { connect: { id: schemeId } },
+          idSource: data.idSource ? { set: data.idSource } : undefined,
+          idVerified: data.idVerified ? { set: data.idVerified } : undefined,
           bans: getBans(),
           vehicles: getVehicles(),
           crimeGroups: getCrimeGroups(),
+          addresses: {
+            create: addressesData
+              .filter((item) => item.new)
+              .map((item) => ({
+                postcode: item.postcode,
+                street: item.street,
+                townCity: item.townCity,
+                alias: item.alias,
+                building: item.building,
+                county: item.county,
+              })),
+            update: addressesData
+              .filter((item) => item.updated)
+              .map((item) => ({
+                data: {
+                  postcode: { set: item.postcode },
+                  street: { set: item.street },
+                  townCity: { set: item.townCity },
+                  alias: { set: item.alias },
+                  building: { set: item.building },
+                  county: { set: item.county },
+                },
+                where: {
+                  id: item.id,
+                },
+              })),
+            delete: addressesData
+              .filter((item) => item.deleted)
+              .map((item) => ({
+                id: item.id,
+              })),
+          },
           images: {
             upload:
               imageChange && fileList.length > 0
@@ -809,6 +972,16 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     removeCrimeGroup,
     listVehiclesData,
     listCrimeGroupsData,
+    onValuesChange,
+    idVerified,
+    addAddress,
+    editAddress,
+    toggleAddAddress,
+    toggleEditAddress,
+    addressesData: addressesData.filter((item) => !item.deleted),
+    onSubmitAddress,
+    onDeleteAddress,
+    onEditAddress,
   };
 };
 

@@ -16,14 +16,35 @@ const IncidentFeed = (): JSX.Element => {
     setSearch,
     groups,
     groupsLoading,
-    onGroupsChange,
-    variables,
     tags,
-    onTagsChange,
     tagsLoading,
     updateOffenderList,
     onNavigate,
     lightBoxOpen,
+    sortFilter,
+    toggleSortFilter,
+    age,
+    build,
+    clearFilters,
+    ethnicity,
+    gallery,
+    groupsFilter,
+    hair,
+    peculiarities,
+    setAge,
+    setBuild,
+    setEthnicity,
+    setGallery,
+    setGroupsFilter,
+    setHair,
+    setPeculiarities,
+    setSex,
+    setWarnings,
+    sex,
+    warnings,
+    businessData,
+    businesses,
+    setBusinesses,
   } = useIncidentFeed();
   return (
     <View
@@ -40,13 +61,34 @@ const IncidentFeed = (): JSX.Element => {
       setSearch={setSearch}
       groups={groups}
       groupsLoading={groupsLoading}
-      onGroupsChange={onGroupsChange}
-      variables={variables}
       tags={tags}
-      onTagsChange={onTagsChange}
       tagsLoading={tagsLoading}
       updateOffenderList={updateOffenderList}
       onNavigate={onNavigate}
+      sortFilter={sortFilter}
+      toggleSortFilter={toggleSortFilter}
+      age={age}
+      build={build}
+      clearFilters={clearFilters}
+      ethnicity={ethnicity}
+      gallery={gallery}
+      groupsFilter={groupsFilter}
+      hair={hair}
+      peculiarities={peculiarities}
+      setAge={setAge}
+      setBuild={setBuild}
+      setEthnicity={setEthnicity}
+      setGallery={setGallery}
+      setGroupsFilter={setGroupsFilter}
+      setHair={setHair}
+      setPeculiarities={setPeculiarities}
+      setSex={setSex}
+      setWarnings={setWarnings}
+      sex={sex}
+      warnings={warnings}
+      businessData={businessData}
+      businesses={businesses}
+      setBusinesses={setBusinesses}
     />
   );
 };

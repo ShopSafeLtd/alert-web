@@ -9,6 +9,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     reference
     policeReported
     policeRef
+    policeNo
     policeInvolved
     subscribed
     totalValue
@@ -17,6 +18,14 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       id
       name
       crimeType
+    }
+    involvedTags {
+      id
+      name
+    }
+    impactTags {
+      id
+      name
     }
     incidentItems {
       id

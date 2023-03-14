@@ -41,6 +41,7 @@ interface Props {
   crimeGroupsData: CrimeGroupData[];
   listVehiclesData: ListVehiclesQuery | undefined;
   listCrimeGroupsData: ListCrimeGroupsQuery | undefined;
+  titleNumber?: number;
 }
 
 const Profiles = ({
@@ -56,12 +57,13 @@ const Profiles = ({
   toggleAddExistingCrimeGroup,
   crimeGroupsData,
   removeCrimeGroup,
+  titleNumber = 3,
 }: Props): JSX.Element => (
   <div style={{ width: '100%' }}>
     <Row gutter={10} align="middle" style={{ marginBottom: 20, width: '100%' }}>
       <Col>
         <Title style={{ marginBottom: 0 }} level={4}>
-          2.
+          {titleNumber}.
         </Title>
       </Col>
       <Col>

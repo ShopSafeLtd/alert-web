@@ -54,6 +54,8 @@ function AddOffender(): JSX.Element {
     removeCrimeGroup,
     listVehiclesData,
     listCrimeGroupsData,
+    idVerified,
+    onValuesChange,
   } = useAddOffender();
 
   return (
@@ -108,6 +110,8 @@ function AddOffender(): JSX.Element {
         updateCrimeGroupsData={updateCrimeGroupsData}
         listVehiclesData={listVehiclesData}
         listCrimeGroupsData={listCrimeGroupsData}
+        idVerified={idVerified}
+        onValuesChange={onValuesChange}
       />
     </div>
   );
