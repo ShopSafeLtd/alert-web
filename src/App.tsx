@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Views from 'navigation/router';
 import { ThemeSwitcherProvider } from 'react-css-theme-switcher/src';
 import { LoadScript } from '@react-google-maps/api';
-// import * as Sentry from '@sentry/react';
+import * as Sentry from '@sentry/react';
 import LogRocket from 'logrocket';
 import ApolloProvider from './providers/ApolloProvider';
 
@@ -12,15 +12,15 @@ import 'react-resizable/css/styles.css';
 
 import { Store, ThemeConfig } from './state';
 
-LogRocket.init('ub3rsv/gotalk-portal');
+if (import.meta.env.PROD) {
+  LogRocket.init('ub3rsv/gotalk-portal');
 
-// TODO: Make sure domains etc is correct for sentry
-// LogRocket.getSessionURL((sessionURL) => {
-//   Sentry.configureScope((scope) => {
-//     scope.setExtra('sessionURL', sessionURL);
-//   });
-// });
-
+  LogRocket.getSessionURL((sessionURL) => {
+    Sentry.configureScope((scope) => {
+      scope.setExtra('sessionURL', sessionURL);
+    });
+  });
+}
 const themes = {
   dark: `/css/dark-theme.css`,
   light: `/css/light-theme.css`,
