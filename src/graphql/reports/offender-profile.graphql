@@ -23,16 +23,42 @@ query OffenderProfile(
     hair
     build
     id
+    incidentsByHour {
+      name
+      count
+    }
+    incidentsByDayOfWeek {
+      name
+      count
+    }
+    incidentsByMonth {
+      name
+      count
+    }
     incidentTotals {
-      months
+      month
       data {
         name
         count
       }
     }
+    goodsTypesTotals {
+      avgLostValue
+      businessId
+      avgRecoveredValue
+      count
+      successRate
+      totalRecoveredValue
+      totalLostValue
+      goodsType {
+        id
+        name
+      }
+    }
     images(first: $first) {
       id
       optimised
+      url
     }
     incidents(orderBy: $incidentsOrderBy) {
       id

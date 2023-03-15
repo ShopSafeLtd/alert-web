@@ -6,9 +6,6 @@ import MobileNav from 'components/layout-components/AntD/navigation/MobileNav';
 // import PageHeader from 'components/layout-components/AntD/PageHeader';
 import AppViews from 'navigation/app-views/router';
 import { Grid, Layout } from 'antd';
-
-import { ScreenSizeUnsupported } from 'components/layout-components';
-
 import navigationConfig from 'configs/NavigationConfig';
 import {
   SIDE_NAV_COLLAPSED_WIDTH,
@@ -58,32 +55,30 @@ export const AppLayout = ({ location }: Props): JSX.Element => {
   return !loggedIn ? (
     <Navigate to="/auth" />
   ) : (
-    <ScreenSizeUnsupported>
-      <Layout>
-        {/* <HeaderNav isMobile={isMobile} /> */}
-        {isNavTop && !isMobile ? <TopNav routeInfo={currentRouteInfo} /> : null}
-        <Layout className="app-container">
-          {isNavSide && !isMobile && onboarded ? (
-            <SideNav routeInfo={currentRouteInfo} />
-          ) : null}
-          <Layout className="" style={{ paddingLeft: getLayoutGutter() }}>
-            <div
-              className={`app-content ${isNavTop ? 'layout-top-nav' : ''}`}
-              style={{
-                padding: location.pathname.includes('settings') ? 0 : undefined,
-              }}
-            >
-              {/* <PageHeader display={currentRouteInfo?.breadcrumb} title={currentRouteInfo?.title} /> */}
-              <Content>
-                <AppViews />
-              </Content>
-            </div>
-            {/* <Footer /> */}
-          </Layout>
+    <Layout>
+      {/* <HeaderNav isMobile={isMobile} /> */}
+      {isNavTop && !isMobile ? <TopNav routeInfo={currentRouteInfo} /> : null}
+      <Layout className="app-container">
+        {isNavSide && !isMobile && onboarded ? (
+          <SideNav routeInfo={currentRouteInfo} />
+        ) : null}
+        <Layout className="" style={{ paddingLeft: getLayoutGutter() }}>
+          <div
+            className={`app-content ${isNavTop ? 'layout-top-nav' : ''}`}
+            style={{
+              padding: location.pathname.includes('settings') ? 0 : undefined,
+            }}
+          >
+            {/* <PageHeader display={currentRouteInfo?.breadcrumb} title={currentRouteInfo?.title} /> */}
+            <Content>
+              <AppViews />
+            </Content>
+          </div>
+          {/* <Footer /> */}
         </Layout>
-        {isMobile && <MobileNav routeInfo={currentRouteInfo} />}
       </Layout>
-    </ScreenSizeUnsupported>
+      {isMobile && <MobileNav routeInfo={currentRouteInfo} />}
+    </Layout>
   );
 };
 

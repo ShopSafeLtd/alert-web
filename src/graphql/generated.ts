@@ -11620,12 +11620,15 @@ export type Incident = {
   crimeGroups: Array<CrimeGroup>;
   crimeTypes: Array<Tag>;
   date: Scalars['DateTime'];
+  dayOfMonth?: Maybe<Scalars['Int']>;
+  dayOfWeek?: Maybe<Scalars['Int']>;
   dayTime?: Maybe<Scalars['String']>;
   description: Scalars['String'];
   feedItems: Array<FeedItem>;
   geoLat?: Maybe<Scalars['String']>;
   geoLng?: Maybe<Scalars['String']>;
   groups: Array<Group>;
+  hourOfDay?: Maybe<Scalars['Int']>;
   id: Scalars['String'];
   images: Array<Image>;
   impactTags: Array<Tag>;
@@ -11634,6 +11637,7 @@ export type Incident = {
   intel: Array<Intel>;
   involvedTags: Array<Tag>;
   location?: Maybe<Address>;
+  monthOfYear?: Maybe<Scalars['Int']>;
   motiveTags: Array<Tag>;
   offenders: Array<Offender>;
   policeInvolved: Scalars['Boolean'];
@@ -11658,6 +11662,8 @@ export type Incident = {
   uploaded?: Maybe<Scalars['Boolean']>;
   value?: Maybe<Scalars['Float']>;
   vehicles: Array<Vehicle>;
+  weekOfMonth?: Maybe<Scalars['Int']>;
+  weekOfYear?: Maybe<Scalars['Int']>;
 };
 
 export type IncidentActionsArgs = {
@@ -11794,11 +11800,14 @@ export type IncidentCreateInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -11808,6 +11817,7 @@ export type IncidentCreateInput = {
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -11826,6 +11836,8 @@ export type IncidentCreateInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateManyBusinessInput = {
@@ -11833,10 +11845,14 @@ export type IncidentCreateManyBusinessInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdById: Scalars['String'];
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
   policeRef?: InputMaybe<Scalars['String']>;
@@ -11850,6 +11866,8 @@ export type IncidentCreateManyBusinessInput = {
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateManyBusinessInputEnvelope = {
@@ -11862,10 +11880,14 @@ export type IncidentCreateManyCreatedByInput = {
   businessId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
   policeRef?: InputMaybe<Scalars['String']>;
@@ -11879,6 +11901,8 @@ export type IncidentCreateManyCreatedByInput = {
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateManyCreatedByInputEnvelope = {
@@ -11892,10 +11916,14 @@ export type IncidentCreateManySchemeInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdById: Scalars['String'];
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
   policeRef?: InputMaybe<Scalars['String']>;
@@ -11908,6 +11936,8 @@ export type IncidentCreateManySchemeInput = {
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateManySchemeInputEnvelope = {
@@ -12184,11 +12214,14 @@ export type IncidentCreateWithoutActionsInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -12198,6 +12231,7 @@ export type IncidentCreateWithoutActionsInput = {
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -12216,6 +12250,8 @@ export type IncidentCreateWithoutActionsInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutArticleColumnsInput = {
@@ -12227,11 +12263,14 @@ export type IncidentCreateWithoutArticleColumnsInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -12241,6 +12280,7 @@ export type IncidentCreateWithoutArticleColumnsInput = {
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -12259,6 +12299,8 @@ export type IncidentCreateWithoutArticleColumnsInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutBusinessInput = {
@@ -12270,11 +12312,14 @@ export type IncidentCreateWithoutBusinessInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -12284,6 +12329,7 @@ export type IncidentCreateWithoutBusinessInput = {
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -12302,6 +12348,8 @@ export type IncidentCreateWithoutBusinessInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutCreatedByInput = {
@@ -12313,11 +12361,14 @@ export type IncidentCreateWithoutCreatedByInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -12327,6 +12378,7 @@ export type IncidentCreateWithoutCreatedByInput = {
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -12345,6 +12397,8 @@ export type IncidentCreateWithoutCreatedByInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutCrimeGroupsInput = {
@@ -12356,11 +12410,14 @@ export type IncidentCreateWithoutCrimeGroupsInput = {
   createdBy: UserCreateNestedOneWithoutIncidentsInput;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -12370,6 +12427,7 @@ export type IncidentCreateWithoutCrimeGroupsInput = {
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -12388,6 +12446,8 @@ export type IncidentCreateWithoutCrimeGroupsInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutCrimeTypesInput = {
@@ -12399,11 +12459,14 @@ export type IncidentCreateWithoutCrimeTypesInput = {
   createdBy: UserCreateNestedOneWithoutIncidentsInput;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -12413,6 +12476,7 @@ export type IncidentCreateWithoutCrimeTypesInput = {
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -12431,6 +12495,8 @@ export type IncidentCreateWithoutCrimeTypesInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutFeedItemsInput = {
@@ -12443,10 +12509,13 @@ export type IncidentCreateWithoutFeedItemsInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -12456,6 +12525,7 @@ export type IncidentCreateWithoutFeedItemsInput = {
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -12474,6 +12544,8 @@ export type IncidentCreateWithoutFeedItemsInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutGroupsInput = {
@@ -12486,10 +12558,13 @@ export type IncidentCreateWithoutGroupsInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -12499,6 +12574,7 @@ export type IncidentCreateWithoutGroupsInput = {
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -12517,6 +12593,8 @@ export type IncidentCreateWithoutGroupsInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutImagesInput = {
@@ -12529,11 +12607,14 @@ export type IncidentCreateWithoutImagesInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
   incidentItems?: InputMaybe<IncidentItemCreateNestedManyWithoutIncidentInput>;
@@ -12542,6 +12623,7 @@ export type IncidentCreateWithoutImagesInput = {
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -12560,6 +12642,8 @@ export type IncidentCreateWithoutImagesInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutImpressionsInput = {
@@ -12572,11 +12656,14 @@ export type IncidentCreateWithoutImpressionsInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   incidentItems?: InputMaybe<IncidentItemCreateNestedManyWithoutIncidentInput>;
@@ -12585,6 +12672,7 @@ export type IncidentCreateWithoutImpressionsInput = {
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -12603,6 +12691,8 @@ export type IncidentCreateWithoutImpressionsInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutIntelInput = {
@@ -12615,11 +12705,14 @@ export type IncidentCreateWithoutIntelInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -12628,6 +12721,7 @@ export type IncidentCreateWithoutIntelInput = {
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -12646,6 +12740,8 @@ export type IncidentCreateWithoutIntelInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutInvestigationsInput = {
@@ -12658,11 +12754,14 @@ export type IncidentCreateWithoutInvestigationsInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -12671,6 +12770,7 @@ export type IncidentCreateWithoutInvestigationsInput = {
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -12689,6 +12789,8 @@ export type IncidentCreateWithoutInvestigationsInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutLinkedUpdatesInput = {
@@ -12701,11 +12803,14 @@ export type IncidentCreateWithoutLinkedUpdatesInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -12714,6 +12819,7 @@ export type IncidentCreateWithoutLinkedUpdatesInput = {
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -12732,6 +12838,8 @@ export type IncidentCreateWithoutLinkedUpdatesInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutLocationInput = {
@@ -12744,11 +12852,14 @@ export type IncidentCreateWithoutLocationInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -12757,6 +12868,7 @@ export type IncidentCreateWithoutLocationInput = {
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutIncidentsInput>;
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -12775,6 +12887,8 @@ export type IncidentCreateWithoutLocationInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutMessagesInput = {
@@ -12787,11 +12901,14 @@ export type IncidentCreateWithoutMessagesInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -12800,6 +12917,7 @@ export type IncidentCreateWithoutMessagesInput = {
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutIncidentsInput>;
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -12818,6 +12936,8 @@ export type IncidentCreateWithoutMessagesInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutOffendersInput = {
@@ -12830,11 +12950,14 @@ export type IncidentCreateWithoutOffendersInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -12844,6 +12967,7 @@ export type IncidentCreateWithoutOffendersInput = {
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
   policeRef?: InputMaybe<Scalars['String']>;
@@ -12861,6 +12985,8 @@ export type IncidentCreateWithoutOffendersInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutRecycleBinInput = {
@@ -12873,11 +12999,14 @@ export type IncidentCreateWithoutRecycleBinInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -12887,6 +13016,7 @@ export type IncidentCreateWithoutRecycleBinInput = {
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -12904,6 +13034,8 @@ export type IncidentCreateWithoutRecycleBinInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutSchemeInput = {
@@ -12916,11 +13048,14 @@ export type IncidentCreateWithoutSchemeInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -12930,6 +13065,7 @@ export type IncidentCreateWithoutSchemeInput = {
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -12947,6 +13083,8 @@ export type IncidentCreateWithoutSchemeInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutSubscribedUsersInput = {
@@ -12959,11 +13097,14 @@ export type IncidentCreateWithoutSubscribedUsersInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -12973,6 +13114,7 @@ export type IncidentCreateWithoutSubscribedUsersInput = {
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -12990,6 +13132,8 @@ export type IncidentCreateWithoutSubscribedUsersInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutUpdatesInput = {
@@ -13002,11 +13146,14 @@ export type IncidentCreateWithoutUpdatesInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -13016,6 +13163,7 @@ export type IncidentCreateWithoutUpdatesInput = {
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -13033,6 +13181,8 @@ export type IncidentCreateWithoutUpdatesInput = {
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutIncidentsInput>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentCreateWithoutVehiclesInput = {
@@ -13045,11 +13195,14 @@ export type IncidentCreateWithoutVehiclesInput = {
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutIncidentsInput>;
   crimeTypes?: InputMaybe<TagCreateNestedManyWithoutIncidentsInput>;
   date: Scalars['DateTime'];
+  dayOfMonth?: InputMaybe<Scalars['Int']>;
+  dayOfWeek?: InputMaybe<Scalars['Int']>;
   description: Scalars['String'];
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutIncidentInput>;
   geoLat?: InputMaybe<Scalars['String']>;
   geoLng?: InputMaybe<Scalars['String']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutIncidentsInput>;
+  hourOfDay?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutIncidentInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutIncidentInput>;
@@ -13059,6 +13212,7 @@ export type IncidentCreateWithoutVehiclesInput = {
   linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedIncidentsInput>;
   location?: InputMaybe<AddressCreateNestedOneWithoutIncidentInput>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutIncidentsInput>;
+  monthOfYear?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutIncidentsInput>;
   policeInvolved?: InputMaybe<Scalars['Boolean']>;
   policeNo?: InputMaybe<Scalars['String']>;
@@ -13076,6 +13230,8 @@ export type IncidentCreateWithoutVehiclesInput = {
   updates?: InputMaybe<UpdateCreateNestedManyWithoutIncidentInput>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
   value?: InputMaybe<Scalars['Float']>;
+  weekOfMonth?: InputMaybe<Scalars['Int']>;
+  weekOfYear?: InputMaybe<Scalars['Int']>;
 };
 
 export type IncidentItem = {
@@ -13259,11 +13415,14 @@ export type IncidentOrderByWithRelationInput = {
   crimeGroups?: InputMaybe<CrimeGroupOrderByRelationAggregateInput>;
   crimeTypes?: InputMaybe<TagOrderByRelationAggregateInput>;
   date?: InputMaybe<SortOrder>;
+  dayOfMonth?: InputMaybe<SortOrder>;
+  dayOfWeek?: InputMaybe<SortOrder>;
   description?: InputMaybe<SortOrder>;
   feedItems?: InputMaybe<FeedItemOrderByRelationAggregateInput>;
   geoLat?: InputMaybe<SortOrder>;
   geoLng?: InputMaybe<SortOrder>;
   groups?: InputMaybe<GroupOrderByRelationAggregateInput>;
+  hourOfDay?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
   images?: InputMaybe<ImageOrderByRelationAggregateInput>;
   impressions?: InputMaybe<ImpressionOrderByRelationAggregateInput>;
@@ -13273,6 +13432,7 @@ export type IncidentOrderByWithRelationInput = {
   linkedUpdates?: InputMaybe<UpdateOrderByRelationAggregateInput>;
   location?: InputMaybe<AddressOrderByWithRelationInput>;
   messages?: InputMaybe<MessageOrderByRelationAggregateInput>;
+  monthOfYear?: InputMaybe<SortOrder>;
   offenders?: InputMaybe<OffenderOrderByRelationAggregateInput>;
   policeInvolved?: InputMaybe<SortOrder>;
   policeNo?: InputMaybe<SortOrder>;
@@ -13292,6 +13452,8 @@ export type IncidentOrderByWithRelationInput = {
   uploaded?: InputMaybe<SortOrder>;
   value?: InputMaybe<SortOrder>;
   vehicles?: InputMaybe<VehicleOrderByRelationAggregateInput>;
+  weekOfMonth?: InputMaybe<SortOrder>;
+  weekOfYear?: InputMaybe<SortOrder>;
 };
 
 export type IncidentScalarWhereInput = {
@@ -13303,10 +13465,14 @@ export type IncidentScalarWhereInput = {
   createdAt?: InputMaybe<DateTimeFilter>;
   createdById?: InputMaybe<StringFilter>;
   date?: InputMaybe<DateTimeFilter>;
+  dayOfMonth?: InputMaybe<IntNullableFilter>;
+  dayOfWeek?: InputMaybe<IntNullableFilter>;
   description?: InputMaybe<StringFilter>;
   geoLat?: InputMaybe<StringNullableFilter>;
   geoLng?: InputMaybe<StringNullableFilter>;
+  hourOfDay?: InputMaybe<IntNullableFilter>;
   id?: InputMaybe<StringFilter>;
+  monthOfYear?: InputMaybe<IntNullableFilter>;
   policeInvolved?: InputMaybe<BoolFilter>;
   policeNo?: InputMaybe<StringNullableFilter>;
   policeRef?: InputMaybe<StringNullableFilter>;
@@ -13320,12 +13486,14 @@ export type IncidentScalarWhereInput = {
   updatedAt?: InputMaybe<DateTimeFilter>;
   uploaded?: InputMaybe<BoolNullableFilter>;
   value?: InputMaybe<FloatNullableFilter>;
+  weekOfMonth?: InputMaybe<IntNullableFilter>;
+  weekOfYear?: InputMaybe<IntNullableFilter>;
 };
 
 export type IncidentTotal = {
   __typename?: 'IncidentTotal';
   data?: Maybe<Array<TagTotal>>;
-  months?: Maybe<Array<Scalars['String']>>;
+  month: Scalars['String'];
 };
 
 export type IncidentUpdateInput = {
@@ -13338,11 +13506,14 @@ export type IncidentUpdateInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -13352,6 +13523,7 @@ export type IncidentUpdateInput = {
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -13370,16 +13542,22 @@ export type IncidentUpdateInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateManyMutationInput = {
   approved?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   policeRef?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -13392,6 +13570,8 @@ export type IncidentUpdateManyMutationInput = {
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateManyWithWhereWithoutArticleColumnsInput = {
@@ -13865,11 +14045,14 @@ export type IncidentUpdateWithoutActionsInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -13879,6 +14062,7 @@ export type IncidentUpdateWithoutActionsInput = {
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -13897,6 +14081,8 @@ export type IncidentUpdateWithoutActionsInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutArticleColumnsInput = {
@@ -13908,11 +14094,14 @@ export type IncidentUpdateWithoutArticleColumnsInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -13922,6 +14111,7 @@ export type IncidentUpdateWithoutArticleColumnsInput = {
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -13940,6 +14130,8 @@ export type IncidentUpdateWithoutArticleColumnsInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutBusinessInput = {
@@ -13951,11 +14143,14 @@ export type IncidentUpdateWithoutBusinessInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -13965,6 +14160,7 @@ export type IncidentUpdateWithoutBusinessInput = {
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -13983,6 +14179,8 @@ export type IncidentUpdateWithoutBusinessInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutCreatedByInput = {
@@ -13994,11 +14192,14 @@ export type IncidentUpdateWithoutCreatedByInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -14008,6 +14209,7 @@ export type IncidentUpdateWithoutCreatedByInput = {
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14026,6 +14228,8 @@ export type IncidentUpdateWithoutCreatedByInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutCrimeGroupsInput = {
@@ -14037,11 +14241,14 @@ export type IncidentUpdateWithoutCrimeGroupsInput = {
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -14051,6 +14258,7 @@ export type IncidentUpdateWithoutCrimeGroupsInput = {
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14069,6 +14277,8 @@ export type IncidentUpdateWithoutCrimeGroupsInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutCrimeTypesInput = {
@@ -14080,11 +14290,14 @@ export type IncidentUpdateWithoutCrimeTypesInput = {
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutIncidentsNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -14094,6 +14307,7 @@ export type IncidentUpdateWithoutCrimeTypesInput = {
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14112,6 +14326,8 @@ export type IncidentUpdateWithoutCrimeTypesInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutFeedItemsInput = {
@@ -14124,10 +14340,13 @@ export type IncidentUpdateWithoutFeedItemsInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -14137,6 +14356,7 @@ export type IncidentUpdateWithoutFeedItemsInput = {
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14155,6 +14375,8 @@ export type IncidentUpdateWithoutFeedItemsInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutGroupsInput = {
@@ -14167,10 +14389,13 @@ export type IncidentUpdateWithoutGroupsInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -14180,6 +14405,7 @@ export type IncidentUpdateWithoutGroupsInput = {
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14198,6 +14424,8 @@ export type IncidentUpdateWithoutGroupsInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutImagesInput = {
@@ -14210,11 +14438,14 @@ export type IncidentUpdateWithoutImagesInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
   incidentItems?: InputMaybe<IncidentItemUpdateManyWithoutIncidentNestedInput>;
@@ -14223,6 +14454,7 @@ export type IncidentUpdateWithoutImagesInput = {
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14241,6 +14473,8 @@ export type IncidentUpdateWithoutImagesInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutImpressionsInput = {
@@ -14253,11 +14487,14 @@ export type IncidentUpdateWithoutImpressionsInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   incidentItems?: InputMaybe<IncidentItemUpdateManyWithoutIncidentNestedInput>;
@@ -14266,6 +14503,7 @@ export type IncidentUpdateWithoutImpressionsInput = {
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14284,6 +14522,8 @@ export type IncidentUpdateWithoutImpressionsInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutIntelInput = {
@@ -14296,11 +14536,14 @@ export type IncidentUpdateWithoutIntelInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -14309,6 +14552,7 @@ export type IncidentUpdateWithoutIntelInput = {
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14327,6 +14571,8 @@ export type IncidentUpdateWithoutIntelInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutInvestigationsInput = {
@@ -14339,11 +14585,14 @@ export type IncidentUpdateWithoutInvestigationsInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -14352,6 +14601,7 @@ export type IncidentUpdateWithoutInvestigationsInput = {
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14370,6 +14620,8 @@ export type IncidentUpdateWithoutInvestigationsInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutLinkedUpdatesInput = {
@@ -14382,11 +14634,14 @@ export type IncidentUpdateWithoutLinkedUpdatesInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -14395,6 +14650,7 @@ export type IncidentUpdateWithoutLinkedUpdatesInput = {
   investigations?: InputMaybe<InvestigationUpdateManyWithoutIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14413,6 +14669,8 @@ export type IncidentUpdateWithoutLinkedUpdatesInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutLocationInput = {
@@ -14425,11 +14683,14 @@ export type IncidentUpdateWithoutLocationInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -14438,6 +14699,7 @@ export type IncidentUpdateWithoutLocationInput = {
   investigations?: InputMaybe<InvestigationUpdateManyWithoutIncidentsNestedInput>;
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14456,6 +14718,8 @@ export type IncidentUpdateWithoutLocationInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutMessagesInput = {
@@ -14468,11 +14732,14 @@ export type IncidentUpdateWithoutMessagesInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -14481,6 +14748,7 @@ export type IncidentUpdateWithoutMessagesInput = {
   investigations?: InputMaybe<InvestigationUpdateManyWithoutIncidentsNestedInput>;
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14499,6 +14767,8 @@ export type IncidentUpdateWithoutMessagesInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutOffendersInput = {
@@ -14511,11 +14781,14 @@ export type IncidentUpdateWithoutOffendersInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -14525,6 +14798,7 @@ export type IncidentUpdateWithoutOffendersInput = {
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   policeRef?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14542,6 +14816,8 @@ export type IncidentUpdateWithoutOffendersInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutRecycleBinInput = {
@@ -14554,11 +14830,14 @@ export type IncidentUpdateWithoutRecycleBinInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -14568,6 +14847,7 @@ export type IncidentUpdateWithoutRecycleBinInput = {
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14585,6 +14865,8 @@ export type IncidentUpdateWithoutRecycleBinInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutSchemeInput = {
@@ -14597,11 +14879,14 @@ export type IncidentUpdateWithoutSchemeInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -14611,6 +14896,7 @@ export type IncidentUpdateWithoutSchemeInput = {
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14628,6 +14914,8 @@ export type IncidentUpdateWithoutSchemeInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutSubscribedUsersInput = {
@@ -14640,11 +14928,14 @@ export type IncidentUpdateWithoutSubscribedUsersInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -14654,6 +14945,7 @@ export type IncidentUpdateWithoutSubscribedUsersInput = {
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14671,6 +14963,8 @@ export type IncidentUpdateWithoutSubscribedUsersInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutUpdatesInput = {
@@ -14683,11 +14977,14 @@ export type IncidentUpdateWithoutUpdatesInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -14697,6 +14994,7 @@ export type IncidentUpdateWithoutUpdatesInput = {
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14714,6 +15012,8 @@ export type IncidentUpdateWithoutUpdatesInput = {
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutIncidentsNestedInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpdateWithoutVehiclesInput = {
@@ -14726,11 +15026,14 @@ export type IncidentUpdateWithoutVehiclesInput = {
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutIncidentsNestedInput>;
   crimeTypes?: InputMaybe<TagUpdateManyWithoutIncidentsNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  dayOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  dayOfWeek?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   description?: InputMaybe<StringFieldUpdateOperationsInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutIncidentNestedInput>;
   geoLat?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   geoLng?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutIncidentsNestedInput>;
+  hourOfDay?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutIncidentNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutIncidentNestedInput>;
@@ -14740,6 +15043,7 @@ export type IncidentUpdateWithoutVehiclesInput = {
   linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedIncidentsNestedInput>;
   location?: InputMaybe<AddressUpdateOneWithoutIncidentNestedInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutIncidentsNestedInput>;
+  monthOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutIncidentsNestedInput>;
   policeInvolved?: InputMaybe<BoolFieldUpdateOperationsInput>;
   policeNo?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -14757,6 +15061,8 @@ export type IncidentUpdateWithoutVehiclesInput = {
   updates?: InputMaybe<UpdateUpdateManyWithoutIncidentNestedInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   value?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
+  weekOfMonth?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  weekOfYear?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
 };
 
 export type IncidentUpsertWithWhereUniqueWithoutArticleColumnsInput = {
@@ -14892,11 +15198,14 @@ export type IncidentWhereInput = {
   crimeGroups?: InputMaybe<CrimeGroupListRelationFilter>;
   crimeTypes?: InputMaybe<TagListRelationFilter>;
   date?: InputMaybe<DateTimeFilter>;
+  dayOfMonth?: InputMaybe<IntNullableFilter>;
+  dayOfWeek?: InputMaybe<IntNullableFilter>;
   description?: InputMaybe<StringFilter>;
   feedItems?: InputMaybe<FeedItemListRelationFilter>;
   geoLat?: InputMaybe<StringNullableFilter>;
   geoLng?: InputMaybe<StringNullableFilter>;
   groups?: InputMaybe<GroupListRelationFilter>;
+  hourOfDay?: InputMaybe<IntNullableFilter>;
   id?: InputMaybe<StringFilter>;
   images?: InputMaybe<ImageListRelationFilter>;
   impressions?: InputMaybe<ImpressionListRelationFilter>;
@@ -14906,6 +15215,7 @@ export type IncidentWhereInput = {
   linkedUpdates?: InputMaybe<UpdateListRelationFilter>;
   location?: InputMaybe<AddressWhereInput>;
   messages?: InputMaybe<MessageListRelationFilter>;
+  monthOfYear?: InputMaybe<IntNullableFilter>;
   offenders?: InputMaybe<OffenderListRelationFilter>;
   policeInvolved?: InputMaybe<BoolFilter>;
   policeNo?: InputMaybe<StringNullableFilter>;
@@ -14925,6 +15235,8 @@ export type IncidentWhereInput = {
   uploaded?: InputMaybe<BoolNullableFilter>;
   value?: InputMaybe<FloatNullableFilter>;
   vehicles?: InputMaybe<VehicleListRelationFilter>;
+  weekOfMonth?: InputMaybe<IntNullableFilter>;
+  weekOfYear?: InputMaybe<IntNullableFilter>;
 };
 
 export type IncidentWhereUniqueInput = {
@@ -18100,6 +18412,7 @@ export type Mutation = {
   createOffenderDefault: Offender;
   createScheme: Scheme;
   createTag: Tag;
+  createTimes?: Maybe<Array<Incident>>;
   createUnlinkedImage?: Maybe<UnlinkedImage>;
   createUpdateOnIncident?: Maybe<Update>;
   createUpdateOnInvestigation?: Maybe<Update>;
@@ -19091,6 +19404,7 @@ export type Offender = {
   dateSource?: Maybe<Scalars['String']>;
   feedItems: Array<FeedItem>;
   gender?: Maybe<Gender>;
+  goodsTypesTotals?: Maybe<Array<BusinessGoodsTotals>>;
   groups: Array<Group>;
   hair?: Maybe<Scalars['String']>;
   id: Scalars['String'];
@@ -19098,8 +19412,11 @@ export type Offender = {
   idVerified: Scalars['Boolean'];
   images: Array<Image>;
   impressions: Array<Impression>;
-  incidentTotals?: Maybe<IncidentTotal>;
+  incidentTotals?: Maybe<Array<IncidentTotal>>;
   incidents: Array<Incident>;
+  incidentsByDayOfWeek: Array<TagTotal>;
+  incidentsByHour: Array<TagTotal>;
+  incidentsByMonth: Array<TagTotal>;
   intel: Array<Intel>;
   lastActive?: Maybe<Incident>;
   name?: Maybe<Scalars['String']>;
@@ -19168,6 +19485,11 @@ export type OffenderFeedItemsArgs = {
   before?: InputMaybe<FeedItemWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+};
+
+export type OffenderGoodsTypesTotalsArgs = {
+  endDate?: InputMaybe<Scalars['DateTime']>;
+  startDate?: InputMaybe<Scalars['DateTime']>;
 };
 
 export type OffenderGroupsArgs = {
@@ -26070,7 +26392,7 @@ export type TagScalarWhereInput = {
 
 export type TagTotal = {
   __typename?: 'TagTotal';
-  count?: Maybe<Array<Scalars['Int']>>;
+  count: Scalars['Int'];
   name: Scalars['String'];
 };
 
@@ -37209,19 +37531,46 @@ export type OffenderProfileQuery = {
       id: string;
       reference?: number | null;
     }>;
-    incidentTotals?: {
+    incidentsByHour: Array<{
+      __typename?: 'TagTotal';
+      name: string;
+      count: number;
+    }>;
+    incidentsByDayOfWeek: Array<{
+      __typename?: 'TagTotal';
+      name: string;
+      count: number;
+    }>;
+    incidentsByMonth: Array<{
+      __typename?: 'TagTotal';
+      name: string;
+      count: number;
+    }>;
+    incidentTotals?: Array<{
       __typename?: 'IncidentTotal';
-      months?: Array<string> | null;
+      month: string;
       data?: Array<{
         __typename?: 'TagTotal';
         name: string;
-        count?: Array<number> | null;
+        count: number;
       }> | null;
-    } | null;
+    }> | null;
+    goodsTypesTotals?: Array<{
+      __typename?: 'BusinessGoodsTotals';
+      avgLostValue?: number | null;
+      businessId?: string | null;
+      avgRecoveredValue?: number | null;
+      count?: number | null;
+      successRate?: number | null;
+      totalRecoveredValue?: number | null;
+      totalLostValue?: number | null;
+      goodsType?: { __typename?: 'GoodsType'; id: string; name: string } | null;
+    }> | null;
     images: Array<{
       __typename?: 'Image';
       id: string;
       optimised?: string | null;
+      url?: string | null;
     }>;
     incidents: Array<{
       __typename?: 'Incident';
@@ -37292,7 +37641,7 @@ export type PerformanceReportQuery = {
       scale?: Array<string> | null;
       data?: Array<{
         __typename?: 'TagTotal';
-        count?: Array<number> | null;
+        count: number;
         name: string;
       }> | null;
     } | null;
@@ -37885,6 +38234,7 @@ export type CurrentUserQuery = {
     id: string;
     fullName: string;
     email: string;
+    reference?: number | null;
     demId?: string | null;
     newUser: boolean;
     incidentEmail: boolean;
@@ -46031,16 +46381,42 @@ export const OffenderProfileDocument = gql`
       hair
       build
       id
+      incidentsByHour {
+        name
+        count
+      }
+      incidentsByDayOfWeek {
+        name
+        count
+      }
+      incidentsByMonth {
+        name
+        count
+      }
       incidentTotals {
-        months
+        month
         data {
           name
           count
         }
       }
+      goodsTypesTotals {
+        avgLostValue
+        businessId
+        avgRecoveredValue
+        count
+        successRate
+        totalRecoveredValue
+        totalLostValue
+        goodsType {
+          id
+          name
+        }
+      }
       images(first: $first) {
         id
         optimised
+        url
       }
       incidents(orderBy: $incidentsOrderBy) {
         id
@@ -47398,6 +47774,7 @@ export const CurrentUserDocument = gql`
       id
       fullName
       email
+      reference
       demId
       businesses {
         id

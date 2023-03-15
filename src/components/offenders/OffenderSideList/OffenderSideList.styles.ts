@@ -2,6 +2,9 @@ import { Theme } from 'configs/ThemeConfig';
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles((theme: Theme) => ({
+  '@media print': {
+    offenderSideList: `display: none !important;`,
+  },
   offenderSideList: {
     display: 'flex',
     flexDirection: 'column',
@@ -51,7 +54,10 @@ const useStyles = createUseStyles((theme: Theme) => ({
     margin: 0,
   },
   name: {
-    fontSize: 16,
+    fontSize: 14,
+  },
+  lastOffence: {
+    fontSize: 10,
   },
 }));
 

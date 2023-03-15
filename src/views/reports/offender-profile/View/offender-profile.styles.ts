@@ -8,6 +8,11 @@ const useStyles = createUseStyles({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  '@media print': {
+    page: `overflowY: unset !important; height: unset !important;`,
+    actionBar: `display: none !important;`,
+    dateRow: `clear: both; page-break-after: always;`,
+  },
   page: {
     width: '100%',
     height: '100vh',
@@ -18,18 +23,20 @@ const useStyles = createUseStyles({
     marginRight: 20,
     backgroundColor: 'rgba(190, 190, 190, 0.2)',
     width: '100%',
-    height: 250,
+    height: 270,
     display: 'flex',
     justifyContent: 'center',
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
   },
+  dateRow: {},
   image: {
-    height: 250,
+    height: 270,
+    width: '100%',
   },
   imageSkeleton: {
-    height: 250,
-    width: 250,
+    height: '270px !important',
+    width: '100% !important',
   },
   descItem: {
     paddingBottom: '5px !important',

@@ -84,7 +84,7 @@ const OffenderSideList = ({
                 >
                   {offender.name}
                 </Text>
-                <Paragraph>
+                <Paragraph className={classes.lastOffence}>
                   Last Offense:{' '}
                   {getLastOffence(offender.incidents, true).message}
                 </Paragraph>

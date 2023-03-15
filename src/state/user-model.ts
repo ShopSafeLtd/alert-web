@@ -6,6 +6,7 @@ export interface SetUserPayload {
   id: string;
   email: string;
   fullName: string;
+  reference: string;
   onboarded: boolean;
   businesses: { name: string; id: string; demId?: string | null | undefined }[];
   schemes: Scheme[];
@@ -39,6 +40,7 @@ export interface UserModel {
   id: string;
   email: string;
   fullName: string;
+  reference: string;
   picture: string;
   businesses: { name: string; id: string; demId?: string | null | undefined }[];
   onboarded: boolean;
@@ -63,6 +65,7 @@ const userModel: UserModel = {
   id: '',
   email: '',
   fullName: '',
+  reference: '',
   picture: '',
   businesses: [],
   onboarded: false,
@@ -82,6 +85,7 @@ const userModel: UserModel = {
     state.groups = payload.groups;
     state.isSet = payload.isSet;
     state.demId = payload.demId;
+    state.reference = payload.reference;
   }),
   setRole: action((state, payload) => {
     state.role = payload.role;

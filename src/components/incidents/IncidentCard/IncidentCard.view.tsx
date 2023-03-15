@@ -29,6 +29,7 @@ import {
 } from '@fortawesome/pro-solid-svg-icons';
 import { CarouselRef } from 'antd/lib/carousel';
 import { Link } from 'react-router-dom';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 
 const { Title, Text, Paragraph } = Typography;
 const { confirm } = Modal;
@@ -123,92 +124,14 @@ const IncidentCard = ({
           ))}
         </Row>
       </div>
-      <div style={{ position: 'relative' }}>
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            right: 0,
-            left: 0,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 1,
-            opacity: 0.2,
-            textShadow:
-              '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
-            fontSize: 10,
-            fontWeight: 100,
-            color: '#fff',
-            transform: 'rotate(-45deg)',
-          }}
-        >
-          <span style={{ marginRight: 30 }}>1234567</span>
-          <span style={{ marginRight: 30 }}>1234567</span>
-          <span style={{ marginRight: 30 }}>1234567</span>
-          <span style={{ marginRight: 30 }}>1234567</span>
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            right: 300,
-            left: 0,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 1,
-            opacity: 0.2,
-            textShadow:
-              '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
-            fontSize: 10,
-            fontWeight: 100,
-            color: '#fff',
-            transform: 'rotate(-45deg)',
-          }}
-        >
-          <span style={{ marginRight: 30 }}>1234567</span>
-          <span style={{ marginRight: 30 }}>1234567</span>
-          <span style={{ marginRight: 30 }}>1234567</span>
-          <span style={{ marginRight: 30 }}>1234567</span>
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            bottom: 0,
-            right: -300,
-            left: 0,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 1,
-            opacity: 0.2,
-            textShadow:
-              '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
-            fontSize: 10,
-            fontWeight: 100,
-            color: '#fff',
-            transform: 'rotate(-45deg)',
-          }}
-        >
-          <span style={{ marginRight: 30 }}>1234567</span>
-          <span style={{ marginRight: 30 }}>1234567</span>
-          <span style={{ marginRight: 30 }}>1234567</span>
-          <span style={{ marginRight: 30 }}>1234567</span>
-        </div>
+      <div>
         {incident && incident.images.length > 0 ? (
           <Carousel ref={imagesRef}>
             {incident?.images.map((image) => (
               <div key={image.id}>
-                <div
-                  className="incident-card-image"
-                  style={{
-                    backgroundImage: `url(${image.optimised})`,
-                  }}
-                />
+                <div className="incident-card-image">
+                  <WatermarkImage url={image.optimised} />
+                </div>
               </div>
             ))}
           </Carousel>
