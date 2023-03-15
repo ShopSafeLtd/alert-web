@@ -18,7 +18,6 @@ import {
   Drawer,
   Dropdown,
   Empty,
-  Image,
   Input,
   Menu,
   Modal,
@@ -56,6 +55,10 @@ import { useNavigate } from 'react-router';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import WatermarkSlide, {
+  WatermarkSlideType,
+} from 'components/images/WatermartkSlide.view';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 import UpdateContent from './Update.view';
 import useStyles from './ViewIncident.styles';
 
@@ -275,8 +278,9 @@ const ViewIncident = ({
                         <div
                           onClick={() => openLightbox(i)}
                           className={classes.image}
-                          style={{ backgroundImage: `url(${image.optimised})` }}
-                        />
+                        >
+                          <WatermarkImage url={image.optimised} />
+                        </div>
                       </Col>
                     ))}
                   </Row>
@@ -987,10 +991,9 @@ const ViewIncident = ({
                   zIndex: 100,
                 }}
               />
-              <Image
-                src={image.url}
-                style={{ maxWidth: 200, marginBottom: 10 }}
-              />
+              <div style={{ width: 200, height: 200, marginBottom: 10 }}>
+                <WatermarkImage url={image.url} />
+              </div>
             </Col>
           ))}
         </Row>
@@ -1033,6 +1036,11 @@ const ViewIncident = ({
         slides={lightboxElements}
         controller={{
           closeOnBackdropClick: true,
+        }}
+        render={{
+          slide: (slide: WatermarkSlideType) => (
+            <WatermarkSlide slide={slide} />
+          ),
         }}
       />
     </div>

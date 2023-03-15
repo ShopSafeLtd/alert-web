@@ -114,7 +114,6 @@ const useAuth = (): Return => {
 
   const [getCurrentUser, { loading }] = useCurrentUserLazyQuery({
     onCompleted: ({ currentUser }) => {
-      console.log();
       handleSuccess({
         id: currentUser?.id || '',
         email: currentUser?.email || '',

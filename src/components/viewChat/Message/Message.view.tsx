@@ -1,8 +1,9 @@
 /* eslint-disable react/require-default-props */
-import React, { useState } from 'react';
-import { Row, Col, Card, Descriptions, Typography, Image, Avatar } from 'antd';
+import React from 'react';
+import { Row, Col, Card, Descriptions, Typography, Avatar } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import moment from 'moment';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -65,38 +66,24 @@ interface CollageImageProps {
   index: number;
 }
 
-const CollageImage = ({ index, length, src }: CollageImageProps) => {
-  const [visible, setVisible] = useState(false);
-
-  return (
-    <div
-      onClick={() => setVisible(true)}
-      onKeyPress={() => setVisible(true)}
-      role="button"
-      tabIndex={index}
-      className="chat-collage-image"
-      style={{
-        backgroundColor: 'grey',
-        height: getImageHeight(length, index),
-        margin: getImageMargin(length, index),
-        backgroundImage: `url(${src})`,
-      }}
-    >
-      <div className="chat-collage-image-overlay">
-        <EyeOutlined style={{ marginRight: 5 }} /> Preview
-      </div>
-      <Image
-        preview={{
-          visible,
-          src: src || undefined,
-          onVisibleChange: (value) => {
-            setVisible(value);
-          },
-        }}
-      />
+const CollageImage = ({ index, length, src }: CollageImageProps) => (
+  <div
+    role="button"
+    tabIndex={index}
+    className="chat-collage-image"
+    style={{
+      backgroundColor: 'grey',
+      height: getImageHeight(length, index),
+      margin: getImageMargin(length, index),
+    }}
+  >
+    <WatermarkImage url={src} />
+    <div className="chat-collage-image-overlay">
+      <EyeOutlined style={{ marginRight: 5 }} /> Preview
     </div>
-  );
-};
+    <WatermarkImage url={src} />
+  </div>
+);
 
 interface Props {
   from?:
@@ -211,12 +198,8 @@ const Content = ({
             {images.length === 1 ? (
               images.map((image) => (
                 <Col key={image.id}>
-                  <div>
-                    <Image
-                      style={{ maxWidth: 300 }}
-                      src={image.optimised || ''}
-                      alt={image.id}
-                    />
+                  <div style={{ height: 300, width: 300 }}>
+                    <WatermarkImage url={image.optimised} />
                   </div>
                 </Col>
               ))
@@ -248,11 +231,9 @@ const Content = ({
                   <Row gutter={5} wrap={false}>
                     <Col>
                       {offender.images && offender.images.length > 0 && (
-                        <Image
-                          width={100}
-                          height={100}
-                          src={offender.images[0].optimised || ''}
-                        />
+                        <div style={{ width: 100, height: 100 }}>
+                          <WatermarkImage url={offender.images[0].optimised} />
+                        </div>
                       )}
                     </Col>
 
@@ -294,11 +275,9 @@ const Content = ({
                   <Row gutter={5} wrap={false}>
                     <Col>
                       {incident?.images && incident.images.length > 0 && (
-                        <Image
-                          width={100}
-                          height={100}
-                          src={incident.images[0].optimised || ''}
-                        />
+                        <div style={{ width: 100, height: 100 }}>
+                          <WatermarkImage url={incident.images[0].optimised} />
+                        </div>
                       )}
                     </Col>
                     <Col

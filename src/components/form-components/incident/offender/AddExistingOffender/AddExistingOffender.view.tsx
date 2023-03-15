@@ -31,6 +31,10 @@ import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import OffenderTile from 'components/offenders/OffenderTile';
 import OffenderTileSkeleton from 'components/offenders/OffenderTileSkeleton';
 import Lightbox from 'yet-another-react-lightbox';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import WatermarkSlide, {
+  WatermarkSlideType,
+} from 'components/images/WatermartkSlide.view';
 import useStyles from './AddExistingOffender.styles';
 
 const { Paragraph, Text } = Typography;
@@ -280,12 +284,12 @@ const AddExistingOffender = ({
             <Col>
               <div
                 style={{
-                  backgroundImage: `url(${selectedOffender?.images[0]?.optimised})`,
                   width: 200,
                   height: 250,
-                  backgroundSize: 'cover',
                 }}
-              />
+              >
+                <WatermarkImage url={selectedOffender?.images[0]?.optimised} />
+              </div>
             </Col>
           )}
           <Col style={{ padding: '10px 20px' }}>
@@ -325,6 +329,11 @@ const AddExistingOffender = ({
             src: image.optimised || '',
           })) || []
         }
+        render={{
+          slide: (slide: WatermarkSlideType) => (
+            <WatermarkSlide slide={slide} />
+          ),
+        }}
       />
     </div>
   );

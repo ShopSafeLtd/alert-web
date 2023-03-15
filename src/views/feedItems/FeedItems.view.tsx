@@ -41,6 +41,7 @@ import ArticleFeed from 'components/feedItems/FeedItemSection/ArticleFeed';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
 import { PaginationModel } from 'types/DataType';
 import InvestigationFeed from 'components/feedItems/FeedItemSection/investigationFeed';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 
 const { Title, Paragraph, Text } = Typography;
 const { confirm } = Modal;
@@ -316,9 +317,6 @@ Props): JSX.Element => (
                           width: 120,
                           height: 120,
                           position: 'relative',
-                          backgroundImage: `url(${offender.images[0]?.optimised})`,
-                          backgroundSize: 'cover',
-                          backgroundPosition: 'center',
                           padding: 0,
                           borderRadius: '0.625rem',
                           overflow: 'hidden',
@@ -328,6 +326,9 @@ Props): JSX.Element => (
                           cursor: 'pointer',
                         }}
                       >
+                        {offender.images.length > 0 && (
+                          <WatermarkImage url={offender.images[0]?.optimised} />
+                        )}
                         {offender.images.length === 0 && (
                           <FontAwesomeIcon
                             style={{ color: 'rgb(114, 132, 154)' }}
@@ -384,8 +385,8 @@ Props): JSX.Element => (
               >
                 Recent Bulletins
               </Title>
-              <Divider style={{ margin: 0 }} />
-              <Row gutter={8}>
+              <Divider style={{ margin: '0 0 10px' }} />
+              <Row gutter={[8, 8]}>
                 {articleLoading
                   ? Array.from({ length: 24 }).map((_, index) => (
                       // eslint-disable-next-line react/no-array-index-key
@@ -474,13 +475,13 @@ Props): JSX.Element => (
                                     style={{
                                       width: 80,
                                       height: 80,
-                                      backgroundImage: `url(${incident.images[0]?.optimised})`,
-                                      backgroundPosition: 'center',
-                                      backgroundRepeat: 'no-repeat',
-                                      backgroundSize: 'cover',
                                       borderRadius: 5,
                                     }}
-                                  />
+                                  >
+                                    <WatermarkImage
+                                      url={incident.images[0]?.optimised}
+                                    />
+                                  </div>
                                 </Col>
                               )}
                               <Col>

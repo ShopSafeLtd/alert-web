@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Divider, Row, Tag, Typography } from 'antd';
+import { Col, Row, Skeleton, Tag, Typography } from 'antd';
 import { ArticlePriority, ListArticlesQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 
@@ -8,6 +8,8 @@ import { faExclamationCircle } from '@fortawesome/pro-solid-svg-icons';
 
 import { faClock, faUser } from '@fortawesome/pro-light-svg-icons';
 import moment from 'moment';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import useStyles from './ArticleCard.styles';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -33,25 +35,24 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
     priority,
     createdBy,
   } = article || {};
+  const classes = useStyles();
 
   return (
     <Link to={`/app/article/view/${id}`}>
-      <div>
+      <div className={classes.card}>
         {previewImage ? (
           <div
             style={{
-              backgroundImage: `url(${previewImage})`,
               width: '100%',
               height: 150,
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center center',
               marginBottom: 10,
             }}
             key={id}
-          />
+          >
+            <WatermarkImage url={previewImage} />
+          </div>
         ) : (
-          <div style={{ marginTop: 10 }} />
+          <Skeleton.Image className={classes.skeletonImage} />
         )}
         <div
           className="feedItem-card-content"
@@ -122,7 +123,6 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
             </Row>
           ) : null}
         </div>
-        <Divider style={{ margin: 0 }} />
       </div>
     </Link>
   );

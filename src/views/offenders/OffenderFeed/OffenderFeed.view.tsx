@@ -29,6 +29,9 @@ import { MutationUpdaterFn } from '@apollo/client';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
+import WatermarkSlide, {
+  WatermarkSlideType,
+} from 'components/images/WatermartkSlide.view';
 import useStyles from './OffenderFeed.styles';
 
 interface Props {
@@ -475,6 +478,11 @@ const OffenderFeed = ({
         slides={lightboxElements}
         controller={{
           closeOnBackdropClick: true,
+        }}
+        render={{
+          slide: (slide: WatermarkSlideType) => (
+            <WatermarkSlide slide={slide} />
+          ),
         }}
       />
     </div>

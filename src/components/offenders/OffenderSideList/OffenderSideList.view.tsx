@@ -11,6 +11,7 @@ import {
 } from 'antd';
 import { Link } from 'react-router-dom';
 import { getLastOffence } from 'utils/offender/get-offender-desc';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 import useStyles from './OffenderSideList.styles';
 
 const { Text, Paragraph } = Typography;
@@ -66,12 +67,9 @@ const OffenderSideList = ({
             <Row wrap={false}>
               <Col>
                 {offender.images.length > 0 ? (
-                  <div
-                    className={classes.image}
-                    style={{
-                      backgroundImage: `url(${offender.images[0].optimised})`,
-                    }}
-                  />
+                  <div className={classes.image}>
+                    <WatermarkImage url={offender.images[0].optimised} />
+                  </div>
                 ) : (
                   <Skeleton.Image className={classes.imageSkeleton} />
                 )}

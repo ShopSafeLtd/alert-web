@@ -2,8 +2,9 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import { ListDemEvidenceQuery } from 'graphql/generated';
-import { Button, Col, Image, Row, Skeleton, Table } from 'antd';
+import { Button, Col, Row, Skeleton, Table } from 'antd';
 import moment from 'moment';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 
 interface Props {
   onClose: () => void;
@@ -31,7 +32,9 @@ const LinkDemCompany = ({
           key: 'thumbnail',
           render: (thumbnail: string | null | undefined) =>
             thumbnail ? (
-              <Image src={thumbnail} width={180} alt="thumbnail" />
+              <div style={{ width: 180, height: 180 }}>
+                <WatermarkImage url={thumbnail} />
+              </div>
             ) : (
               <Skeleton.Image style={{ width: 180 }} />
             ),

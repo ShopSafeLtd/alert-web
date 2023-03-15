@@ -61,12 +61,10 @@ const useStyles = createUseStyles((theme: Theme) => ({
   image: {
     height: 160,
     width: 160,
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
     backgroundColor: theme.imageBackgroundColor,
     cursor: 'pointer',
     borderRadius: 5,
+    overflow: 'hidden',
     transition: 'all 0.3s ease-in-out',
     '&:hover': {
       height: 170,

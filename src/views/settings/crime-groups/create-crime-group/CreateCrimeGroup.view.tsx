@@ -30,6 +30,7 @@ import {
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 import useStyles from './CreateCrimeGroup.styles';
 
 const { Title, Text } = Typography;
@@ -97,12 +98,9 @@ const CreateCrimeGroup = ({
                     <Carousel>
                       {offender.images.map((image) => (
                         <div key={image.id} className={classes.imageContainer}>
-                          <div
-                            className={classes.image}
-                            style={{
-                              backgroundImage: `url(${image.optimised || ''})`,
-                            }}
-                          />
+                          <div className={classes.image}>
+                            <WatermarkImage url={image.optimised} />
+                          </div>
                         </div>
                       ))}
                     </Carousel>
@@ -205,12 +203,9 @@ const CreateCrimeGroup = ({
                     bodyStyle={{ padding: 0, display: 'flex' }}
                     key={offender.id}
                   >
-                    <div
-                      className={classes.offenderImage}
-                      style={{
-                        backgroundImage: `url(${offender.images[0]?.optimised})`,
-                      }}
-                    />
+                    <div className={classes.offenderImage}>
+                      <WatermarkImage url={offender.images[0]?.optimised} />
+                    </div>
                     <div className={classes.offenderContent}>
                       <Text className={classes.offenderName}>
                         {offender.name}

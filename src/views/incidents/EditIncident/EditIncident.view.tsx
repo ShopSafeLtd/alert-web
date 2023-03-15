@@ -45,6 +45,7 @@ import ImageSection from 'components/incidents/IncidentForm/ImageSection';
 import DebounceSelect from 'components/form-components/DebounceSelect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 
 const { Title, Paragraph } = Typography;
 
@@ -671,12 +672,12 @@ const EditIncident = ({
           <Col span={8}>
             <div
               style={{
-                backgroundImage: `url(${addRecentOffender?.images[0]?.optimised})`,
                 width: 180,
                 height: 200,
-                backgroundSize: 'cover',
               }}
-            />
+            >
+              <WatermarkImage url={addRecentOffender?.images[0]?.optimised} />
+            </div>
           </Col>
         )}
         <Col span={16} style={{ padding: '10px 20px' }}>

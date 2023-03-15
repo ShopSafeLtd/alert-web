@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Col, Row } from 'antd';
 import { ImagesData } from './useSelectImage';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 
 interface Props {
   data: ImagesData | undefined;
@@ -26,12 +27,11 @@ const LinkIncident = ({
                 <div
                   onClick={() => onSubmit({ key: url })}
                   style={{
-                    backgroundImage: `url(${url})`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
                     height: 200,
                   }}
-                />
+                >
+                  <WatermarkImage url={url} />
+                </div>
               </Col>
             ))}
           </Row>

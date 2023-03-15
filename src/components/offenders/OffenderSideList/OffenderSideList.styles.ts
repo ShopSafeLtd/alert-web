@@ -12,6 +12,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     overflowY: 'scroll',
     maxHeight: '100vh',
     width: 290,
+    borderLeft: `1px solid ${theme.borderColor}`,
     borderRight: `1px solid ${theme.borderColor}`,
     '& .ant-pagination': {
       margin: '15px 0',

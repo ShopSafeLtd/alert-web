@@ -3,6 +3,7 @@ import { faUser } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Tooltip, Typography } from 'antd';
 import { faCheckCircle } from '@fortawesome/pro-solid-svg-icons';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 
 const { Paragraph } = Typography;
 
@@ -28,10 +29,6 @@ const OffenderTile = ({
         width: '100%',
         height: 120,
         position: 'relative',
-        backgroundImage: `url(${offender.images[0]?.optimised})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
         padding: 0,
         borderRadius: '0.625rem',
         overflow: 'hidden',
@@ -41,6 +38,7 @@ const OffenderTile = ({
         cursor: 'pointer',
       }}
     >
+      <WatermarkImage url={offender.images[0]?.optimised} />
       {offender.images.length === 0 && (
         <FontAwesomeIcon
           style={{ color: 'rgb(114, 132, 154)' }}

@@ -5,7 +5,6 @@ import {
   Divider,
   Drawer,
   Form,
-  Image,
   Input,
   Modal,
   Row,
@@ -21,6 +20,7 @@ import LinkIncident from 'components/form-components/offender/LinkIncident';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { VehicleData } from 'types/DataType';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 import useStyles from './EditVehicle.styles';
 
 const { confirm } = Modal;
@@ -291,11 +291,9 @@ const EditVehicle = ({
                     // eslint-disable-next-line
                     images.length > 0 ? (
                       <div className={classes.searchImageContainer}>
-                        <Image
-                          className={classes.searchImage}
-                          // eslint-disable-next-line
-                          src={images[0]?.optimised}
-                        />
+                        <div className={classes.searchImage}>
+                          <WatermarkImage url={images[0]?.optimised} />
+                        </div>
                       </div>
                     ) : (
                       <Skeleton.Image className={classes.imageSkeleton} />

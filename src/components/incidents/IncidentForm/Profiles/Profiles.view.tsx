@@ -38,6 +38,7 @@ import { ListOffendersQuery } from 'graphql/generated';
 import { UploadChangeParam } from 'antd/lib/upload';
 import { UploadFile } from 'antd/es/upload/interface';
 import ProfileDrawer from 'components/incidents/IncidentForm/ProfileDrawer';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 
 const { Title, Paragraph } = Typography;
 type Offender = Exclude<
@@ -626,8 +627,6 @@ const Profiles = ({
                             width: 120,
                             height: 120,
                             position: 'relative',
-                            backgroundImage: `url(${offender.images[0]?.optimised})`,
-                            backgroundSize: 'cover',
                             padding: 0,
                             borderRadius: '0.625rem',
                             overflow: 'hidden',
@@ -637,6 +636,7 @@ const Profiles = ({
                             cursor: 'pointer',
                           }}
                         >
+                          <WatermarkImage url={offender.images[0]?.optimised} />
                           {offender.images.length === 0 && (
                             <FontAwesomeIcon
                               style={{ color: 'rgb(114, 132, 154)' }}
@@ -719,12 +719,12 @@ const Profiles = ({
           <Col span={8}>
             <div
               style={{
-                backgroundImage: `url(${addRecentOffender?.images[0]?.optimised})`,
                 width: 180,
                 height: 200,
-                backgroundSize: 'cover',
               }}
-            />
+            >
+              <WatermarkImage url={addRecentOffender?.images[0]?.optimised} />
+            </div>
           </Col>
         )}
 

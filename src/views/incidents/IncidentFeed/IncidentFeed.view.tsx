@@ -9,6 +9,9 @@ import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { MutationUpdaterFn } from '@apollo/client';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import WatermarkSlide, {
+  WatermarkSlideType,
+} from 'components/images/WatermartkSlide.view';
 
 interface Props {
   data: ListIncidentsQuery | undefined;
@@ -188,6 +191,9 @@ const IncidentFeed = ({
       slides={lightboxElements}
       controller={{
         closeOnBackdropClick: true,
+      }}
+      render={{
+        slide: (slide: WatermarkSlideType) => <WatermarkSlide slide={slide} />,
       }}
     />
   </div>

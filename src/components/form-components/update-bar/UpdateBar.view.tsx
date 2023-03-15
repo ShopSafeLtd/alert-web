@@ -15,7 +15,6 @@ import {
   Drawer,
   Form,
   FormInstance,
-  Image,
   Mentions,
   Popconfirm,
   Popover,
@@ -35,6 +34,7 @@ import moment from 'moment';
 import Picker from 'emoji-picker-react';
 import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
 import LinkIncident from 'components/form-components/offender/LinkIncident';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 
 const { Option, getMentions } = Mentions;
 const { Title, Paragraph, Text } = Typography;
@@ -228,11 +228,9 @@ const UpdateBar = ({
                     />
                   </Popconfirm>
                 </div>
-                <Image
-                  width={100}
-                  height={100}
-                  src={file.url || file.thumbUrl}
-                />
+                <div style={{ height: 100, width: 100 }}>
+                  <WatermarkImage url={file.url || file.thumbUrl} />
+                </div>
               </div>
             )}
           />
@@ -261,11 +259,9 @@ const UpdateBar = ({
 
                 <Col>
                   {offender.images && offender.images.length > 0 && (
-                    <Image
-                      width={100}
-                      height={100}
-                      src={offender.images[0].optimised || ''}
-                    />
+                    <div style={{ height: 100, width: 100 }}>
+                      <WatermarkImage url={offender.images[0].optimised} />
+                    </div>
                   )}
                 </Col>
 
@@ -307,11 +303,9 @@ const UpdateBar = ({
 
                 <Col>
                   {incident?.images && incident.images.length > 0 && (
-                    <Image
-                      width={100}
-                      height={100}
-                      src={incident.images[0].optimised || ''}
-                    />
+                    <div style={{ height: 100, width: 100 }}>
+                      <WatermarkImage url={incident.images[0].optimised} />
+                    </div>
                   )}
                 </Col>
                 <Col flex={1} style={{ marginTop: 10, marginLeft: 5 }}>

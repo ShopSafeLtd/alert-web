@@ -20,6 +20,7 @@ import {
 import { useStoreState, useStoreActions } from 'state';
 import { CarouselRef } from 'antd/lib/carousel';
 import CardMenu from './Menu';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 
 const { TabPane } = Tabs;
 
@@ -138,17 +139,16 @@ const Layout: React.FC<Props> = ({
             dots={false}
           >
             {images.map((image) => (
-              <div key={image.id}>
-                <img
-                  alt=""
-                  onClick={() =>
-                    toggleLightBox({
-                      images: lightBoxImages,
-                      index: imageIndex,
-                    })
-                  }
-                  style={{ backgroundImage: `url(${image.url})` }}
-                />
+              <div
+                key={image.id}
+                onClick={() =>
+                  toggleLightBox({
+                    images: lightBoxImages,
+                    index: imageIndex,
+                  })
+                }
+              >
+                <WatermarkImage url={image.url} />
               </div>
             ))}
           </Carousel>
