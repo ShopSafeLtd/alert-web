@@ -85,7 +85,7 @@ const userOnlyItems: NavItem[] = [
       },
       {
         key: 'crime-groups',
-        path: `${APP_PREFIX_PATH}/scheme-settings/crime-groups`,
+        path: `${APP_PREFIX_PATH}/crime-groups`,
         title: 'Crime Groups',
         icon: faPeopleGroup,
         breadcrumb: true,
@@ -99,7 +99,7 @@ const userOnlyItems: NavItem[] = [
       },
       {
         key: 'vehicles',
-        path: `${APP_PREFIX_PATH}/scheme-settings/vehicles`,
+        path: `${APP_PREFIX_PATH}/vehicles`,
         title: 'Vehicles',
         icon: faCar,
         breadcrumb: true,

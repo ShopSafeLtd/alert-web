@@ -35,6 +35,7 @@ const ListCrimeGroups = ({ data, loading }: Props) => {
           totalValue: crimeGroup.totalValue,
           totalRecoveredValue: crimeGroup.totalRecoveredValue,
           totalTheftSuccess: crimeGroup.totalTheftSuccess,
+          alias: crimeGroup.alias,
         }))}
         loading={loading}
         size="small"
@@ -46,6 +47,16 @@ const ListCrimeGroups = ({ data, loading }: Props) => {
             render: (value, item) => (
               <Link to={`view/${item.key}`}>CG-{value}</Link>
             ),
+          },
+          {
+            key: 'alias',
+            dataIndex: 'alias',
+            title: 'Alias',
+          },
+          {
+            key: 'totalOffenders',
+            dataIndex: 'totalOffenders',
+            title: 'Members',
           },
           {
             key: 'totalOffenders',

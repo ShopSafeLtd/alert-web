@@ -71,7 +71,7 @@ const useCreateCrimeGroup = (): Return => {
   const [createCrimeGroup] = useCreateCrimeGroupMutation({
     onCompleted: () => {
       setSubmitting(false);
-      navigate('/app/scheme-settings/crime-groups');
+      navigate('/app/crime-groups');
     },
     update: (store, result) => {
       if (result.data?.createCrimeGroup) {
