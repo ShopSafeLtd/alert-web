@@ -16,7 +16,14 @@ const LoginOne = (props: Props): JSX.Element => {
   };
   useEffect(() => {
     if (!isAuthenticated) {
-      if (!isLoading) loginWithRedirect();
+      if (!isLoading) {
+        if (localStorage.getItem('logo'))
+          loginWithRedirect({
+            'ext-logo': localStorage.getItem('logo'),
+          });
+      } else {
+        loginWithRedirect();
+      }
     }
   }, []);
   if (isLoading) return <Loading />;

@@ -30,6 +30,7 @@ const useCreateArticle = (): Props => {
     categories: [],
     importance: 'Normal',
   });
+
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const editorRef = useRef<Editor | null>(null);
   const [imgSrcs, setImgSrcs] = useState<string[]>([]);
@@ -46,6 +47,7 @@ const useCreateArticle = (): Props => {
   const [selectedCategories, setSelectedCategories] = useState<
     { value: string }[]
   >([]);
+
   const navigate = useNavigate();
   const { loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
@@ -321,7 +323,12 @@ const useCreateArticle = (): Props => {
             blobCache.add(blobInfo);
 
             if (meta.filetype === 'file') {
-              fileList.push({ url, name: file.name, uid: id } as UploadFile);
+              fileList.push({
+                ...file,
+                url,
+                name: file.name,
+                uid: id,
+              } as UploadFile);
             }
             callback(url, { title: file.name });
           }
@@ -382,6 +389,8 @@ const useCreateArticle = (): Props => {
             fileList.map((file) => ({
               url: file.url || '',
               name: file.name || '',
+              fileType: file.type || '',
+              origFileName: file.fileName || '',
             })) || [],
           htmlBody: editorRef.current?.getContent() || '',
           previewImage: img,
@@ -406,6 +415,8 @@ const useCreateArticle = (): Props => {
       if (file.response) {
         // eslint-disable-next-line no-param-reassign
         file.url = file.response[0].url;
+        // eslint-disable-next-line no-param-reassign
+        file.fileName = file.response[0].blobName;
       }
       return file;
     });

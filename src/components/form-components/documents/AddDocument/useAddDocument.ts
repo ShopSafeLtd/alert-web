@@ -180,7 +180,6 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
         return selectedCategory?.id;
       })
       .map((id) => id || '');
-
     if (fileList[0].url) {
       createDocument({
         variables: {
@@ -191,6 +190,8 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
             name: values.name,
             url: fileList[0].url || '',
             tags: selectedCategoryIds,
+            fileType: fileList[0].type || '',
+            origFileName: fileList[0].fileName || '',
           },
         },
       });
@@ -206,6 +207,9 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
       if (file.response) {
         // eslint-disable-next-line no-param-reassign
         file.url = file.response[0].url;
+
+        // eslint-disable-next-line no-param-reassign
+        file.fileName = file.response[0].blobName;
       }
       return file;
     });
@@ -217,6 +221,9 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
     action: import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT,
     onChange: handleChange,
     multiple: false,
+    headers: {
+      type: 'pdf',
+    },
   };
 
   return {
