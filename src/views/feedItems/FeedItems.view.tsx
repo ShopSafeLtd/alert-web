@@ -20,7 +20,6 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-// import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
 import moment from 'moment';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

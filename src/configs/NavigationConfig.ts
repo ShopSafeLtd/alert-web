@@ -43,17 +43,9 @@ export interface NavItem extends MenuItem {
 export type NavTree = NavItem[];
 
 const userOnlyItems: NavItem[] = [
-  // {
-  //   key: 'feedItems',
-  //   path: `${APP_PREFIX_PATH}/feedItems`,
-  //   title: 'sidenav.feedItems',
-  //   icon: faExclamationCircle,
-  //   breadcrumb: false,
-  //   submenu: [],
-  // },
   {
-    key: 'feedItems',
-    path: `${APP_PREFIX_PATH}/feedItems`,
+    key: 'dashboard',
+    path: `${APP_PREFIX_PATH}/dashboard`,
     title: 'Dashboard',
     icon: faHome,
     breadcrumb: false,

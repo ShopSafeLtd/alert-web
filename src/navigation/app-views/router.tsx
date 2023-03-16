@@ -41,7 +41,7 @@ export const AppViews = (): JSX.Element => {
       <Routes>
         <Route
           index
-          element={<Navigate to={onboarded ? 'incidents' : 'onboarding'} />}
+          element={<Navigate to={onboarded ? 'dashboard' : 'onboarding'} />}
         />
         {!onboarded && (
           <Route
@@ -50,7 +50,7 @@ export const AppViews = (): JSX.Element => {
             element={<Onboarding />}
           />
         )}
-        <Route key="feedItems" path="feedItems/*" element={<FeedItems />} />,
+        <Route key="dashboard" path="dashboard/*" element={<FeedItems />} />,
         <Route key="incidents" path="incidents/*" element={<Incidents />} />,
         <Route key="offenders" path="offenders/*" element={<Offenders />} />,
         <Route key="chat" path="chat/*" element={<Chat />} />,

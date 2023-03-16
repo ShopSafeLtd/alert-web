@@ -59,7 +59,7 @@ const useOnboarding = (): Return => {
         description: 'Your account has been updated! ',
         placement: 'bottomRight',
       });
-      navigate('/app/incidents');
+      navigate('/app/dashboard');
     },
     onError: () => {
       setSaving(false);
