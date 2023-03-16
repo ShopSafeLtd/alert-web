@@ -83,7 +83,7 @@ export const NavScheme = () => {
     </div>
   );
 
-  return (
+  return schemes.length > 1 ? (
     <Dropdown
       placement="topRight"
       overlay={schemeList}
@@ -119,6 +119,8 @@ export const NavScheme = () => {
         ]}
       />
     </Dropdown>
+  ) : (
+    <div />
   );
 };
 
