@@ -28,6 +28,7 @@ interface Props {
   categoriesChange: (categories: { value: string }[]) => void;
   onClose: () => void;
   documentUploadProps: UploadProps;
+  investigationId?: string | null;
 }
 
 const AddBusiness = ({
@@ -39,6 +40,7 @@ const AddBusiness = ({
   categoriesLoading,
   onClose,
   documentUploadProps,
+  investigationId,
 }: Props) => (
   <Card style={{ marginLeft: 20, marginRight: 20 }}>
     <Form<OnSubmitValues>
@@ -105,7 +107,7 @@ const AddBusiness = ({
               type="primary"
               htmlType="submit"
             >
-              Create Evidence
+              {investigationId ? 'Create Evidence' : 'Create Document'}
             </Button>
           </Col>
         </Row>

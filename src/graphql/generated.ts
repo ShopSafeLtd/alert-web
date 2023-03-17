@@ -6576,8 +6576,10 @@ export type CreateCrimeGroupVehicles = {
 
 export type CreateDocument = {
   fileType: Scalars['String'];
+  investigationId?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   origFileName: Scalars['String'];
+  schemeId?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   thumbnailUrl?: InputMaybe<Scalars['String']>;
   url: Scalars['String'];
@@ -19659,7 +19661,6 @@ export type Mutation = {
   createComment?: Maybe<Intel>;
   createCrimeGroup: CrimeGroup;
   createDocument?: Maybe<Document>;
-  createDocumentOnInvestigation?: Maybe<Document>;
   createFlow?: Maybe<Flow>;
   createGroup: Group;
   createImage: Image;
@@ -19859,12 +19860,6 @@ export type MutationCreateCrimeGroupArgs = {
 
 export type MutationCreateDocumentArgs = {
   data: CreateDocument;
-  where: UniqueId;
-};
-
-export type MutationCreateDocumentOnInvestigationArgs = {
-  data: CreateDocument;
-  where: UniqueId;
 };
 
 export type MutationCreateFlowArgs = {
@@ -37575,14 +37570,13 @@ export type ListDemUsersQuery = {
   };
 };
 
-export type CreateDocumentOnInvestigationMutationVariables = Exact<{
-  where: UniqueId;
+export type CreateDocumentMutationVariables = Exact<{
   data: CreateDocument;
 }>;
 
-export type CreateDocumentOnInvestigationMutation = {
+export type CreateDocumentMutation = {
   __typename?: 'Mutation';
-  createDocumentOnInvestigation?: {
+  createDocument?: {
     __typename?: 'Document';
     id: string;
     name: string;
@@ -37590,19 +37584,27 @@ export type CreateDocumentOnInvestigationMutation = {
     url: string;
     createdAt: any;
     updatedAt: any;
-    investigation: Array<{
-      __typename?: 'Investigation';
-      id: string;
-      documents: Array<{
-        __typename?: 'Document';
-        id: string;
-        name: string;
-        url: string;
-        thumbnailUrl?: string | null;
-        tags: Array<{ __typename?: 'Tag'; name: string; id: string }>;
-      }>;
-    }>;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+  } | null;
+};
+
+export type ListDocumentsOnSchemeQueryVariables = Exact<{
+  where: SchemeWhereUniqueInput;
+}>;
+
+export type ListDocumentsOnSchemeQuery = {
+  __typename?: 'Query';
+  scheme?: {
+    __typename?: 'Scheme';
+    documents: Array<{
+      __typename?: 'Document';
+      id: string;
+      name: string;
+      url: string;
+      thumbnailUrl?: string | null;
+      createdAt: any;
+      tags: Array<{ __typename?: 'Tag'; name: string; id: string }>;
+    }>;
   } | null;
 };
 
@@ -44218,26 +44220,10 @@ export type ListDemUsersQueryResult = Apollo.QueryResult<
   ListDemUsersQuery,
   ListDemUsersQueryVariables
 >;
-export const CreateDocumentOnInvestigationDocument = gql`
-  mutation CreateDocumentOnInvestigation(
-    $where: UniqueId!
-    $data: CreateDocument!
-  ) {
-    createDocumentOnInvestigation(where: $where, data: $data) {
+export const CreateDocumentDocument = gql`
+  mutation CreateDocument($data: CreateDocument!) {
+    createDocument(data: $data) {
       id
-      investigation {
-        id
-        documents {
-          id
-          name
-          url
-          thumbnailUrl
-          tags {
-            name
-            id
-          }
-        }
-      }
       name
       tags {
         id
@@ -44250,51 +44236,117 @@ export const CreateDocumentOnInvestigationDocument = gql`
     }
   }
 `;
-export type CreateDocumentOnInvestigationMutationFn = Apollo.MutationFunction<
-  CreateDocumentOnInvestigationMutation,
-  CreateDocumentOnInvestigationMutationVariables
+export type CreateDocumentMutationFn = Apollo.MutationFunction<
+  CreateDocumentMutation,
+  CreateDocumentMutationVariables
 >;
 
 /**
- * __useCreateDocumentOnInvestigationMutation__
+ * __useCreateDocumentMutation__
  *
- * To run a mutation, you first call `useCreateDocumentOnInvestigationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateDocumentOnInvestigationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateDocumentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDocumentMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createDocumentOnInvestigationMutation, { data, loading, error }] = useCreateDocumentOnInvestigationMutation({
+ * const [createDocumentMutation, { data, loading, error }] = useCreateDocumentMutation({
  *   variables: {
- *      where: // value for 'where'
  *      data: // value for 'data'
  *   },
  * });
  */
-export function useCreateDocumentOnInvestigationMutation(
+export function useCreateDocumentMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    CreateDocumentOnInvestigationMutation,
-    CreateDocumentOnInvestigationMutationVariables
+    CreateDocumentMutation,
+    CreateDocumentMutationVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<
-    CreateDocumentOnInvestigationMutation,
-    CreateDocumentOnInvestigationMutationVariables
-  >(CreateDocumentOnInvestigationDocument, options);
+    CreateDocumentMutation,
+    CreateDocumentMutationVariables
+  >(CreateDocumentDocument, options);
 }
-export type CreateDocumentOnInvestigationMutationHookResult = ReturnType<
-  typeof useCreateDocumentOnInvestigationMutation
+export type CreateDocumentMutationHookResult = ReturnType<
+  typeof useCreateDocumentMutation
 >;
-export type CreateDocumentOnInvestigationMutationResult =
-  Apollo.MutationResult<CreateDocumentOnInvestigationMutation>;
-export type CreateDocumentOnInvestigationMutationOptions =
-  Apollo.BaseMutationOptions<
-    CreateDocumentOnInvestigationMutation,
-    CreateDocumentOnInvestigationMutationVariables
-  >;
+export type CreateDocumentMutationResult =
+  Apollo.MutationResult<CreateDocumentMutation>;
+export type CreateDocumentMutationOptions = Apollo.BaseMutationOptions<
+  CreateDocumentMutation,
+  CreateDocumentMutationVariables
+>;
+export const ListDocumentsOnSchemeDocument = gql`
+  query listDocumentsOnScheme($where: SchemeWhereUniqueInput!) {
+    scheme(where: $where) {
+      documents {
+        id
+        name
+        tags {
+          name
+          id
+        }
+        url
+        thumbnailUrl
+        createdAt
+      }
+    }
+  }
+`;
+
+/**
+ * __useListDocumentsOnSchemeQuery__
+ *
+ * To run a query within a React component, call `useListDocumentsOnSchemeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListDocumentsOnSchemeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListDocumentsOnSchemeQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useListDocumentsOnSchemeQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListDocumentsOnSchemeQuery,
+    ListDocumentsOnSchemeQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListDocumentsOnSchemeQuery,
+    ListDocumentsOnSchemeQueryVariables
+  >(ListDocumentsOnSchemeDocument, options);
+}
+export function useListDocumentsOnSchemeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListDocumentsOnSchemeQuery,
+    ListDocumentsOnSchemeQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListDocumentsOnSchemeQuery,
+    ListDocumentsOnSchemeQueryVariables
+  >(ListDocumentsOnSchemeDocument, options);
+}
+export type ListDocumentsOnSchemeQueryHookResult = ReturnType<
+  typeof useListDocumentsOnSchemeQuery
+>;
+export type ListDocumentsOnSchemeLazyQueryHookResult = ReturnType<
+  typeof useListDocumentsOnSchemeLazyQuery
+>;
+export type ListDocumentsOnSchemeQueryResult = Apollo.QueryResult<
+  ListDocumentsOnSchemeQuery,
+  ListDocumentsOnSchemeQueryVariables
+>;
 export const DeleteFeedItemDocument = gql`
   mutation deleteFeedItem($id: String!) {
     deleteFeedItem(where: { id: $id }) {

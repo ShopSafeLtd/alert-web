@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { memo } from 'react';
 import View from './AddDocument.view';
 import useAddDocument from './useAddDocument';
 
 interface Props {
   onClose: () => void;
-  investigationId: string;
+  investigationId?: string | null;
 }
 
-const AddDocument = ({ onClose, investigationId }: Props) => {
+const AddDocument = memo(({ onClose, investigationId }: Props) => {
   const {
     onSubmit,
     selectedCategories,
@@ -28,8 +28,9 @@ const AddDocument = ({ onClose, investigationId }: Props) => {
       selectedCategories={selectedCategories}
       categoriesChange={categoriesChange}
       categoriesLoading={categoriesLoading}
+      investigationId={investigationId}
     />
   );
-};
+});
 
 export default AddDocument;
