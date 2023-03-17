@@ -2,6 +2,9 @@ import { Theme } from 'configs/ThemeConfig';
 import { createUseStyles } from 'react-jss';
 
 const useStyles = createUseStyles((theme: Theme) => ({
+  '@media print': {
+    offenderSideList: `display: none !important;`,
+  },
   offenderSideList: {
     display: 'flex',
     flexDirection: 'column',
@@ -9,6 +12,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     overflowY: 'scroll',
     maxHeight: '100vh',
     width: 290,
+    borderLeft: `1px solid ${theme.borderColor}`,
     borderRight: `1px solid ${theme.borderColor}`,
     '& .ant-pagination': {
       margin: '15px 0',
@@ -51,7 +55,10 @@ const useStyles = createUseStyles((theme: Theme) => ({
     margin: 0,
   },
   name: {
-    fontSize: 16,
+    fontSize: 14,
+  },
+  lastOffence: {
+    fontSize: 10,
   },
 }));
 

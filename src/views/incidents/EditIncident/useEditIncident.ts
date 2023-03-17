@@ -904,8 +904,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           create: undefined,
         };
       };
-      console.log(data);
-
       updateIncident({
         variables: {
           where: {

@@ -25,7 +25,7 @@ import Sidebar from './sidebar/Sidebar';
 import 'reactflow/dist/style.css';
 import './styles.css';
 import styles from './style.module.css';
-import visualColours from '../../../../../utils/node-colour';
+import { visualColours } from '../../../../../utils/node-colour';
 // import Cursor from './Cursors/Cursor';
 // import { WebsocketProvider } from 'y-websocket';
 
@@ -125,6 +125,7 @@ FlowProps) => {
             <Button className="download-btn" onClick={onSave} type="primary">
               Save
             </Button>
+
             <p className="info">
               Synced: <Status success={isSynced || clientCount === 0} />
               Last Saved:{' '}

@@ -2,6 +2,7 @@ import React from 'react';
 import { faUser } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Tooltip, Typography } from 'antd';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 
 const { Paragraph } = Typography;
 
@@ -21,9 +22,6 @@ const IncidentTile = ({ incident, onClick }: Props): JSX.Element => (
         width: '100%',
         height: 120,
         position: 'relative',
-        backgroundImage: `url(${incident.images[0]?.optimised})`,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
         padding: 0,
         borderRadius: '0.625rem',
         overflow: 'hidden',
@@ -33,6 +31,7 @@ const IncidentTile = ({ incident, onClick }: Props): JSX.Element => (
         cursor: 'pointer',
       }}
     >
+      <WatermarkImage url={incident.images[0]?.optimised} />
       {incident.images.length === 0 && (
         <FontAwesomeIcon
           style={{ color: 'rgb(114, 132, 154)' }}

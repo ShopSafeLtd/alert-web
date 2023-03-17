@@ -17,6 +17,7 @@ import {
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
 import { UploadFile } from 'antd/lib/upload/interface';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 import AddExistingOffender from '../../offender/AddExistingOffender';
 import AddOffender from '../../offender/AddNewOffender';
 
@@ -95,10 +96,9 @@ const AssignImageOffender = ({
     onOk={onSubmit}
   >
     <div className="incident-form-assign">
-      <div
-        className="incident-form-assign-image"
-        style={{ backgroundImage: `url(${image?.url})` }}
-      />
+      <div className="incident-form-assign-image">
+        <WatermarkImage url={image?.url} />
+      </div>
       <div className="incident-form-assign-offenders">
         <Title level={4} className="offender-title">
           {offendersData && offendersData.length > 0 ? 'Select' : 'Add'}{' '}
@@ -120,12 +120,9 @@ const AssignImageOffender = ({
             >
               {offender.images && offender.images.length > 0 ? (
                 <Col>
-                  <div
-                    className="incident-form-assign-offender-image"
-                    style={{
-                      backgroundImage: `url(${offender.images[0]?.optimised})`,
-                    }}
-                  />
+                  <div className="incident-form-assign-offender-image">
+                    <WatermarkImage url={offender.images[0]?.optimised} />
+                  </div>
                 </Col>
               ) : (
                 <Col>

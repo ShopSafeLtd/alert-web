@@ -5,7 +5,6 @@ import {
   Divider,
   Drawer,
   Form,
-  Image,
   Input,
   Modal,
   Row,
@@ -20,6 +19,7 @@ import LinkOffender from 'components/form-components/incident/offender/AddExisti
 import LinkIncident from 'components/form-components/offender/LinkIncident';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 import useStyles from './AddVehicle.styles';
 
 interface FormData {
@@ -249,11 +249,9 @@ const AddVehicle = ({
                     // eslint-disable-next-line
                     images.length > 0 ? (
                       <div className={classes.searchImageContainer}>
-                        <Image
-                          className={classes.searchImage}
-                          // eslint-disable-next-line
-                          src={images[0]?.optimised}
-                        />
+                        <div className={classes.searchImage}>
+                          <WatermarkImage url={images[0]?.optimised} />
+                        </div>
                       </div>
                     ) : (
                       <Skeleton.Image className={classes.imageSkeleton} />

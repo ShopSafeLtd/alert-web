@@ -26,6 +26,7 @@ import {
 
 import moment from 'moment';
 import { CarouselRef } from 'antd/lib/carousel';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 
 const { Title, Text } = Typography;
 
@@ -64,12 +65,9 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
         <Carousel ref={imagesRef}>
           {offender?.images?.map((image) => (
             <div key={image.id}>
-              <div
-                className="offender-card-image"
-                style={{
-                  backgroundImage: `url(${image.optimised})`,
-                }}
-              />
+              <div className="offender-card-image">
+                <WatermarkImage url={image.optimised} />
+              </div>
             </div>
           ))}
         </Carousel>

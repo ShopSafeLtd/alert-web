@@ -9,6 +9,8 @@ const useStyles = createUseStyles({
   },
   searchImage: {
     height: 96,
+    // height: 69, // TODO: choose one
+    width: 69,
   },
   searchImageContainer: {
     height: 96,

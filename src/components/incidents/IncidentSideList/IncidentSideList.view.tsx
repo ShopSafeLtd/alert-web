@@ -49,18 +49,6 @@ const IncidentSideList = ({
               }`}
             >
               <Row wrap={false}>
-                {/* <Col>
-                {incident.images.length > 0 ? (
-                  <div
-                    className="incident-item-image"
-                    style={{
-                      backgroundImage: `url(${incident.images[0].optimised})`,
-                    }}
-                  />
-                ) : (
-                  <Skeleton.Image className="incident-item-image-skeleton" />
-                )}
-              </Col> */}
                 <Col className={classes.itemContent} flex={1}>
                   <Typography.Text strong={current === incident.id} ellipsis>
                     {incident.subject}

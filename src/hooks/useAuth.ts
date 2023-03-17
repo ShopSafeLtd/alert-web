@@ -1,31 +1,10 @@
-// import { useApolloClient } from "@apollo/client";
 import { SetUserPayload, useStoreActions, useStoreState } from 'state';
 import LogRocket from 'logrocket';
 import { useCurrentUserLazyQuery } from 'graphql/generated';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect } from 'react';
 
-// interface LoginArgs {
-//   email: string;
-//   password: string;
-// }
-
-// interface DecodedToken {
-//   aud: string;
-//   email: string;
-//   email_verified: boolean;
-//   exp: number;
-//   iat: number;
-//   iss: string;
-//   name: string;
-//   nickname: string;
-//   picture: string;
-//   sub: string;
-//   updated_at: string;
-// }
-
 interface Return {
-  // login: ({ email, password }: LoginArgs) => void;
   rehydrateAuth: () => void;
   signOut: () => void;
   onLoginSuccess: (data: OnLoginSuccessArgs) => void;
@@ -69,6 +48,7 @@ const useAuth = (): Return => {
     schemes,
     demId,
     groups,
+    reference,
   }: HandleSuccessArgs) => {
     window.localStorage.setItem('access_token', accessToken);
     const color = `hsl(${Math.random() * 360}, 70%, 30%)`;
@@ -127,6 +107,7 @@ const useAuth = (): Return => {
       groups,
       isSet: true,
       demId,
+      reference,
     });
     authenticated(accessToken);
   };
@@ -140,12 +121,11 @@ const useAuth = (): Return => {
         accessToken: window.localStorage.getItem('access_token') || '',
         businesses: currentUser?.businesses || [],
         onboarded: !currentUser?.newUser,
-        // currentUser?.newUser !== undefined ? !currentUser?.newUser : true,
-        // currentUser?.newUser === undefined ? false : !currentUser?.newUser,
         schemes: currentUser?.schemes || [],
         groups: currentUser?.groups || [],
         demId: currentUser?.demId || '',
         isSet: true,
+        reference: `${currentUser?.reference}` || '',
       });
     },
     onError: () => expired(),
@@ -217,6 +197,7 @@ const useAuth = (): Return => {
       groups: data.groups,
       isSet: true,
       demId: data.demId,
+      reference: data.reference,
     });
   };
 

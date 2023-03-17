@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faUser } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 import UpdateContent from '../UpdateContent';
 
 const { Title, Text, Paragraph } = Typography;
@@ -22,13 +23,11 @@ const ImageContainer = ({ src }: { src: string }) => (
     style={{
       width: 140,
       height: 160,
-      backgroundImage: `url(${src})`,
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-      backgroundSize: 'cover',
       borderRadius: 5,
     }}
-  />
+  >
+    <WatermarkImage url={src} />
+  </div>
 );
 const InvestigationFeed = ({
   feedItem,

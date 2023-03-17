@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 import envCompatible from 'vite-plugin-env-compatible';
-// import checker from 'vite-plugin-checker';
+import checker from 'vite-plugin-checker';
 // import { EsLinter, linterPlugin, TypeScriptLinter } from 'vite-plugin-linter';
 import removeConsole from 'vite-plugin-remove-console';
 
@@ -40,14 +40,17 @@ export default defineConfig((configEnv) => ({
     //     disable: true,
     //   },
     // }),
-    // checker({
-    //   // checks for ts and eslint errors on dev, remove if not needed/any issues such as high memory usage
-    //   typescript: true,
-    //   eslint: {
-    //     lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
-    //   },
-    // }),
+    checker({
+      // checks for ts and eslint errors on dev, remove if not needed/any issues such as high memory usage
+      typescript: true,
+      eslint: {
+        lintCommand: 'eslint "./src/**/*.{ts,tsx}"',
+      },
+    }),
   ],
+  define: {
+    APP_VERSION: JSON.stringify(process.env.npm_package_version),
+  },
   build: {
     outDir: 'build',
   },

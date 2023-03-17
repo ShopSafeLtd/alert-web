@@ -45,6 +45,7 @@ import { CarouselRef } from 'antd/lib/carousel';
 
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 
 const { Title, Text } = Typography;
 const { confirm } = Modal;
@@ -149,12 +150,9 @@ const OffenderCard = ({
         <Carousel ref={imagesRef}>
           {offender?.images.map((image) => (
             <div key={image.id}>
-              <div
-                className="offender-card-image"
-                style={{
-                  backgroundImage: `url(${image.optimised})`,
-                }}
-              />
+              <div className="offender-card-image">
+                <WatermarkImage url={image.optimised} />
+              </div>
             </div>
           ))}
         </Carousel>

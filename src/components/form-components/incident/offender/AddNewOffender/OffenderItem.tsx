@@ -4,6 +4,7 @@ import { createUseStyles } from 'react-jss';
 import { Theme } from 'configs/ThemeConfig';
 import { Col, Row, Typography } from 'antd';
 import { getAge, getBuild, getEthnicity, getSex } from 'utils';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 
 interface Props {
   item: Exclude<
@@ -36,10 +37,9 @@ const OffenderItem = ({ item }: Props) => {
   return (
     <Row gutter={16}>
       <Col>
-        <div
-          className={classes.image}
-          style={{ backgroundImage: `url(${item.images[0]?.optimised})` }}
-        />
+        <div className={classes.image}>
+          <WatermarkImage url={item.images[0]?.optimised} />
+        </div>
       </Col>
       <Col>
         <Typography.Text className={classes.nameText}>

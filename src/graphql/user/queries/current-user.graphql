@@ -3,6 +3,7 @@ query currentUser {
     id
     fullName
     email
+    reference
     demId
     businesses {
       id

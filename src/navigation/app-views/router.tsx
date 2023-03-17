@@ -7,6 +7,8 @@ import { useAuth0 } from '@auth0/auth0-react';
 import FeedItems from './feedItems/router';
 import Incidents from './incidents/router';
 import Offenders from './offenders/router';
+import CrimeGroups from './crime-groups/router';
+import Vehicles from './vehicles/router';
 
 const Onboarding = lazy(() => import(`./onboarding/router`));
 // const Incidents = lazy(() => import(`./incidents/router`));
@@ -41,7 +43,7 @@ export const AppViews = (): JSX.Element => {
       <Routes>
         <Route
           index
-          element={<Navigate to={onboarded ? 'incidents' : 'onboarding'} />}
+          element={<Navigate to={onboarded ? 'dashboard' : 'onboarding'} />}
         />
         {!onboarded && (
           <Route
@@ -50,8 +52,15 @@ export const AppViews = (): JSX.Element => {
             element={<Onboarding />}
           />
         )}
-        <Route key="feedItems" path="feedItems/*" element={<FeedItems />} />,
+        <Route key="dashboard" path="dashboard/*" element={<FeedItems />} />,
         <Route key="incidents" path="incidents/*" element={<Incidents />} />,
+        <Route
+          key="crime-groups"
+          path="crime-groups/*"
+          element={<CrimeGroups />}
+        />
+        ,
+        <Route key="vehicles" path="vehicles/*" element={<Vehicles />} />,
         <Route key="offenders" path="offenders/*" element={<Offenders />} />,
         <Route key="chat" path="chat/*" element={<Chat />} />,
         <Route key="user" path="user-settings/*" element={<User />} />

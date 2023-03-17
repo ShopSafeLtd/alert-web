@@ -33,6 +33,6 @@
       }
     ],
     "react/require-default-props": "off",
-
+    "react/destructuring-assignment": "off"
   }
 }

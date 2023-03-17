@@ -10,7 +10,6 @@ import {
   Drawer,
   Dropdown,
   Empty,
-  Image,
   Input,
   Menu,
   Modal,
@@ -36,6 +35,7 @@ import {
   faLocationDot,
   faMarsAndVenus,
   faPassport,
+  faPeopleGroup,
   faTrash,
   faUserClock,
   faUserHair,
@@ -62,6 +62,10 @@ import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import UpdateContent from 'views/incidents/ViewIncident/Update.view';
 import UpdateBar from 'components/form-components/update-bar';
+import WatermarkSlide, {
+  WatermarkSlideType,
+} from 'components/images/WatermartkSlide.view';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 import useStyles from './ViewOffender.styles';
 
 const { Title, Text } = Typography;
@@ -250,8 +254,9 @@ const ViewOffender = ({
                         <div
                           onClick={() => openLightbox(i)}
                           className={classes.image}
-                          style={{ backgroundImage: `url(${image.optimised})` }}
-                        />
+                        >
+                          <WatermarkImage url={image.optimised} />
+                        </div>
                       </Col>
                     ))}
                   </Row>
@@ -262,12 +267,10 @@ const ViewOffender = ({
                   ) : (
                     <div>
                       <Title level={4}>{data?.offender?.name}</Title>
-                      {data?.offender?.groups?.map((group) => (
-                        <Tag key={group.id} color="red">
-                          {group.name}
-                        </Tag>
-                      ))}
-                      <Row className="offender-tags">
+                      <Row
+                        style={{ marginTop: 10, marginBottom: 10 }}
+                        className="offender-tags"
+                      >
                         {data?.offender?.tags.map((tag) => (
                           <Col key={tag.id}>
                             <Tag color="red">{tag.name}</Tag>
@@ -424,7 +427,7 @@ const ViewOffender = ({
                             <span>
                               <FontAwesomeIcon
                                 className={classes.descIcon}
-                                icon={faUsers}
+                                icon={faPeopleGroup}
                               />
                               Crime Groups
                             </span>
@@ -436,6 +439,21 @@ const ViewOffender = ({
                                 <Tag key={group.id}>CG-{group.reference}</Tag>
                               ))
                             : 'None'}
+                        </Descriptions.Item>
+                        <Descriptions.Item
+                          label={
+                            <span>
+                              <FontAwesomeIcon
+                                className={classes.descIcon}
+                                icon={faUsers}
+                              />
+                              Groups
+                            </span>
+                          }
+                        >
+                          {data?.offender?.groups?.map((group) => (
+                            <Tag key={group.id}>{group.name}</Tag>
+                          ))}
                         </Descriptions.Item>
                       </Descriptions>
                       <Title level={4}>Exclusions</Title>
@@ -1095,10 +1113,9 @@ const ViewOffender = ({
                   zIndex: 100,
                 }}
               />
-              <Image
-                src={image.url}
-                style={{ maxWidth: 200, marginBottom: 10 }}
-              />
+              <div style={{ width: 200, height: 200, marginBottom: 10 }}>
+                <WatermarkImage url={image.url} />
+              </div>
             </Col>
           ))}
         </Row>
@@ -1124,6 +1141,11 @@ const ViewOffender = ({
         slides={lightboxElements}
         controller={{
           closeOnBackdropClick: true,
+        }}
+        render={{
+          slide: (slide: WatermarkSlideType) => (
+            <WatermarkSlide slide={slide} />
+          ),
         }}
       />
     </div>

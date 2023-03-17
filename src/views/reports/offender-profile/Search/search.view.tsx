@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Button,
   Col,
-  Image,
   Input,
   Row,
   Skeleton,
@@ -12,6 +11,7 @@ import {
 } from 'antd';
 import { SearchOffendersQuery } from 'graphql/generated';
 import { getAge, getBuild, getEthnicity, getSex } from 'utils';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 import useStyles from './search.styles';
 
 const { Title } = Typography;
@@ -58,11 +58,9 @@ const OffenderProfile = ({
               // eslint-disable-next-line
               images.length > 0 ? (
                 <div className={classes.searchImageContainer}>
-                  <Image
-                    className={classes.searchImage}
-                    // eslint-disable-next-line
-                    src={images[0]?.optimised}
-                  />
+                  <div className={classes.searchImage}>
+                    <WatermarkImage url={images[0]?.optimised} />
+                  </div>
                 </div>
               ) : (
                 <Skeleton.Image className={classes.imageSkeleton} />

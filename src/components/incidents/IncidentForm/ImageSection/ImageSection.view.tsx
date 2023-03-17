@@ -12,6 +12,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faUpload, faUsers } from '@fortawesome/pro-light-svg-icons';
 import { UploadProps, RcFile, UploadFile } from 'antd/es/upload/interface';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 
 const { Title, Paragraph, Text } = Typography;
 interface Image extends UploadFile {
@@ -106,13 +107,8 @@ const ImageSection = ({
                 </div>
               )}
 
-              <div
-                className="image-card-image"
-                style={{
-                  backgroundImage: `url(${file.url || file.thumbUrl})`,
-                  backgroundPosition: 'center',
-                }}
-              >
+              <div className="image-card-image">
+                <WatermarkImage url={file.url || file.thumbUrl} />
                 <div className="image-remove-button">
                   <Popconfirm
                     placement="topLeft"

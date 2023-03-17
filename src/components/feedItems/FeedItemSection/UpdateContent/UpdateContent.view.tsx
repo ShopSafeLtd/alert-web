@@ -5,6 +5,7 @@ import { UpdateType } from 'graphql/generated';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessageDots } from '@fortawesome/pro-light-svg-icons';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 
 const { Title, Text, Paragraph } = Typography;
 interface UpdateData {
@@ -43,13 +44,11 @@ const ImageContainer = ({ src }: { src: string }) => (
     style={{
       width: 100,
       height: 100,
-      backgroundImage: `url(${src})`,
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-      backgroundSize: 'cover',
       borderRadius: 5,
     }}
-  />
+  >
+    <WatermarkImage url={src} />
+  </div>
 );
 const UpdateContent = ({ update, title }: Props): JSX.Element => {
   const getContent = (content: string) =>

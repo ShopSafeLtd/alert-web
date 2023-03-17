@@ -168,25 +168,25 @@ const Business = ({
                       key: 'lost',
                       dataIndex: 'lost',
                       title: 'Total Lost',
-                      render: (value) => `£${value}`,
+                      render: (value) => `£${value.toFixed(2)}`,
                     },
                     {
                       key: 'recovered',
                       dataIndex: 'recovered',
                       title: 'Total Recovered',
-                      render: (value) => `£${value}`,
+                      render: (value) => `£${value.toFixed(2)}`,
                     },
                     {
                       key: 'successRate',
                       dataIndex: 'successRate',
                       title: 'Success Rate',
-                      render: (value) => `${value}%`,
+                      render: (value) => `${value.toFixed(0)}%`,
                     },
                     {
                       key: 'avgLost',
                       dataIndex: 'avgLost',
                       title: 'Avg Loss',
-                      render: (value) => `£${value}`,
+                      render: (value) => `£${value.toFixed(2)}`,
                     },
                   ]}
                   dataSource={data?.business?.goodsTypesTotals

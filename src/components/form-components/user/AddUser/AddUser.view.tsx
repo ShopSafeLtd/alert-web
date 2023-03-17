@@ -120,7 +120,7 @@ const AddUser = ({
           label="Business"
           rules={[
             {
-              required: true,
+              required: !existingUser,
               message: 'Please select a business for the new user.',
             },
           ]}

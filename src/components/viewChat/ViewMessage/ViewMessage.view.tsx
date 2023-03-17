@@ -11,7 +11,6 @@ import {
   Drawer,
   Form,
   FormInstance,
-  Image,
   Mentions,
   PageHeader,
   Popconfirm,
@@ -41,6 +40,7 @@ import AddUserChat from 'components/form-components/userChat/ManageChatMember';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
 import LinkIncident from 'components/form-components/offender/LinkIncident';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 import Content from '../Message/Message.view';
 
 const { Option, getMentions } = Mentions;
@@ -411,17 +411,9 @@ const ViewMessges = ({
                       />
                     </Popconfirm>
                   </div>
-                  {/* <div
-                    className="message-image"
-                    style={{
-                      backgroundImage: `url(${file.url || file.thumbUrl})`,
-                    }}
-                  /> */}
-                  <Image
-                    width={100}
-                    height={100}
-                    src={file.url || file.thumbUrl}
-                  />
+                  <div style={{ height: 100, width: 100 }}>
+                    <WatermarkImage url={file.url || file.thumbUrl} />
+                  </div>
                 </div>
               )}
             />
@@ -451,11 +443,9 @@ const ViewMessges = ({
 
                   <Col>
                     {offender.images && offender.images.length > 0 && (
-                      <Image
-                        width={100}
-                        height={100}
-                        src={offender.images[0].optimised || ''}
-                      />
+                      <div style={{ width: 100, height: 100 }}>
+                        <WatermarkImage url={offender.images[0].optimised} />
+                      </div>
                     )}
                   </Col>
 
@@ -498,11 +488,9 @@ const ViewMessges = ({
 
                   <Col>
                     {incident?.images && incident.images.length > 0 && (
-                      <Image
-                        width={100}
-                        height={100}
-                        src={incident.images[0].optimised || ''}
-                      />
+                      <div style={{ width: 100, height: 100 }}>
+                        <WatermarkImage url={incident.images[0].optimised} />
+                      </div>
                     )}
                   </Col>
                   <Col flex={1} style={{ marginTop: 10, marginLeft: 5 }}>

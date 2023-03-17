@@ -30,6 +30,7 @@ import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import GridLayout, { Layout } from 'react-grid-layout';
 import AddExisitingOffender from 'components/form-components/incident/offender/AddExistingOffender';
 import { OffenderData } from 'components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 import useStyles from './CompareOffender.styles';
 import { OffenderField, Selected } from './useCompareIncident';
 
@@ -94,11 +95,12 @@ const GridImage = ({
             <div
               className={classes.gridImage}
               style={{
-                backgroundImage: `url(${image.optimised})`,
                 height: (cardRef.current?.offsetHeight || 0) - 46,
                 width: cardRef.current?.offsetWidth || 0,
               }}
-            />
+            >
+              <WatermarkImage url={image.optimised} />
+            </div>
           </TransformComponent>
         </TransformWrapper>
         <Row align="middle" className={classes.gridName}>
@@ -271,12 +273,9 @@ const CompareIncident = ({
                           >
                             <TransformWrapper>
                               <TransformComponent>
-                                <div
-                                  className={classes.image}
-                                  style={{
-                                    backgroundImage: `url(${image.optimised})`,
-                                  }}
-                                />
+                                <div className={classes.image}>
+                                  <WatermarkImage url={image.optimised} />
+                                </div>
                               </TransformComponent>
                             </TransformWrapper>
                           </div>
@@ -396,12 +395,9 @@ const CompareIncident = ({
                   <div key={image.id} className={classes.imageContainer}>
                     <TransformWrapper>
                       <TransformComponent>
-                        <div
-                          className={classes.image}
-                          style={{
-                            backgroundImage: `url(${image.optimised})`,
-                          }}
-                        />
+                        <div className={classes.image}>
+                          <WatermarkImage url={image.optimised} />
+                        </div>
                       </TransformComponent>
                     </TransformWrapper>
                   </div>

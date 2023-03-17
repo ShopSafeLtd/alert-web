@@ -7,9 +7,13 @@ export interface Theme {
   imageBackgroundColor: string;
   gradientBackground: string;
   logo: string;
+  colorScheme: string;
 }
 
-const theme = {
+const theme: {
+  dark: Theme;
+  light: Theme;
+} = {
   dark: {
     componentBackground: '#283142',
     itemHoverBackground: 'rgb(60, 67, 84)',
@@ -19,6 +23,7 @@ const theme = {
     imageBackgroundColor: 'rgb(59, 73, 98)',
     gradientBackground: 'linear-gradient(90deg, #4c5c78 0%, #2b3a57 60%)',
     logo: 'url(/img/light-logo.svg)',
+    colorScheme: 'dark',
   },
   light: {
     componentBackground: '#FFF',
@@ -29,6 +34,7 @@ const theme = {
     imageBackgroundColor: '#ECEFF1',
     gradientBackground: 'linear-gradient(to right, #cb2d3e, #ef473a)',
     logo: 'url(/img/dark-logo.svg)',
+    colorScheme: 'light',
   },
 };
 

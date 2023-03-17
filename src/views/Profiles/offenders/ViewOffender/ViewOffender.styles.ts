@@ -58,10 +58,8 @@ const useStyles = createUseStyles((theme: Theme) => ({
   image: {
     height: 160,
     width: 160,
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
     backgroundColor: theme.imageBackgroundColor,
+    overflow: 'hidden',
     cursor: 'pointer',
     borderRadius: 5,
     transition: 'all 0.3s ease-in-out',

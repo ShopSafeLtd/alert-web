@@ -39,6 +39,10 @@ import OffenderTileSkeleton from 'components/offenders/OffenderTileSkeleton';
 import Lightbox from 'yet-another-react-lightbox';
 import { CarouselRef } from 'antd/lib/carousel';
 import { faAngleLeft, faAngleRight } from '@fortawesome/pro-solid-svg-icons';
+import WatermarkSlide, {
+  WatermarkSlideType,
+} from 'components/images/WatermartkSlide.view';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 
 const { Title } = Typography;
 
@@ -171,11 +175,9 @@ const AddExistingOffender = ({
                         <div
                           className="offender-image"
                           onClick={() => openLightbox(i)}
-                          style={{
-                            backgroundImage: `url(${image.optimised})`,
-                            backgroundPosition: 'center',
-                          }}
-                        />
+                        >
+                          <WatermarkImage url={image.optimised} />
+                        </div>
                       </div>
                     ))}
                   </Carousel>
@@ -201,15 +203,6 @@ const AddExistingOffender = ({
                     </Row>
                   )}
                 </Col>
-                {/* {selectedOffender?.images.map((image, i) => ( */}
-                {/*  <Col key={image.id}> */}
-                {/*    <div */}
-                {/*      onClick={() => openLightbox(i)} */}
-                {/*      className="offender-image" */}
-                {/*      style={{ backgroundImage: `url(${image.optimised})` }} */}
-                {/*    /> */}
-                {/*  </Col> */}
-                {/* ))} */}
               </Row>
             )}
 
@@ -365,11 +358,18 @@ const AddExistingOffender = ({
         controller={{
           closeOnBackdropClick: true,
         }}
+        // @ts-expect-error watermark
         slides={
           selectedOffender?.images.map((image) => ({
             src: image.optimised || '',
+            type: 'watermark',
           })) || []
         }
+        render={{
+          slide: (slide: WatermarkSlideType) => (
+            <WatermarkSlide slide={slide} />
+          ),
+        }}
       />
     </div>
   );
