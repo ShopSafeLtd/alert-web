@@ -18,7 +18,6 @@ interface Props {
   onSubmit: () => void;
   update: (value: unknown) => void;
   saving: boolean;
-  onBack: () => void;
   setCurrent: (value: number) => void;
   content: string;
   updateBox: () => void;
@@ -28,7 +27,6 @@ const SchemeTerms = ({
   onSubmit,
   update,
   saving,
-  onBack,
   setCurrent,
   content,
   updateBox,
@@ -105,13 +103,13 @@ const SchemeTerms = ({
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={10} justify="end">
             <Col>
-              <Link to="/app/onboarding">
+              <Link to="/app/onboarding/terms-conditions">
                 <Button
                   disabled={saving}
                   type="primary"
                   onClick={() => {
                     // window.history.back();
-                    onBack();
+                    setCurrent(1);
                   }}
                 >
                   Back

@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 interface AccountData {
   fullName: string;
 }
+
 interface Return {
   onSubmit: () => void;
   saving: boolean;
@@ -100,8 +101,13 @@ const useOnboarding = (): Return => {
     }
 
     if (SchemeTerms?.scheme?.currentTerms?.id && current === 1) {
-      onNext();
-      navigate('/app/onboarding/scheme-terms-conditions');
+      if (termsSigned) {
+        onNext();
+        setSaving(false);
+
+        navigate('/app/onboarding/scheme-terms-conditions');
+        setTermsSigned(false);
+      }
     } else if (termsSigned && accountDetail) {
       updateUser({
         variables: {

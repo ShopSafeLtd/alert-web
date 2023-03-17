@@ -12,6 +12,7 @@ const { Step } = Steps;
 interface AccountData {
   fullName: string;
 }
+
 interface Props {
   onSubmit: () => void;
   saving: boolean;
@@ -38,7 +39,7 @@ const Onboarding = ({
   updateSchemeTermsSigned,
 }: Props): JSX.Element => (
   <div className="page-container">
-    <Card loading={loading}>
+    <Card loading={loading} style={{ height: '100%' }}>
       <Steps
         type="navigation"
         current={current}
@@ -90,7 +91,6 @@ const Onboarding = ({
               update={updateSchemeTermsSigned}
               updateBox={updateTermsSigned}
               saving={saving}
-              onBack={onBack}
               setCurrent={setCurrent}
               content={schemeTerms?.scheme?.currentTerms?.content || ''}
             />
