@@ -40932,6 +40932,7 @@ export type CurrentUserQuery = {
         name: string;
         autoApproveIncidents: boolean;
         autoApproveOffenders: boolean;
+        logo?: { __typename?: 'Image'; optimised?: string | null } | null;
       };
     }>;
   } | null;
@@ -50673,6 +50674,9 @@ export const CurrentUserDocument = gql`
         id
         role
         scheme {
+          logo {
+            optimised
+          }
           id
           name
           autoApproveIncidents
