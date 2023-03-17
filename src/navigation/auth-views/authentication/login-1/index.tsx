@@ -17,12 +17,13 @@ const LoginOne = (props: Props): JSX.Element => {
   useEffect(() => {
     if (!isAuthenticated) {
       if (!isLoading) {
-        if (localStorage.getItem('logo'))
+        if (localStorage.getItem('logo')) {
           loginWithRedirect({
             'ext-logo': localStorage.getItem('logo'),
           });
-      } else {
-        loginWithRedirect();
+        } else {
+          loginWithRedirect();
+        }
       }
     }
   }, []);
