@@ -1,0 +1,8 @@
+query currentSchemeTerms($where: SchemeWhereUniqueInput!) {
+    scheme(where: $where) {
+        currentTerms {
+            id
+            content
+        }
+    }
+}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import AppLayout from 'layouts/app-layout';
 import AuthLayout from 'layouts/auth-layout';
@@ -15,14 +15,13 @@ import Loading from '../components/loading';
 import PrimaryOnboarding from '../views/onboard/SetPassword';
 
 export const Views = (): JSX.Element => {
-  const [newUserId, setNewUserId] = useState<string>('');
   const { isLoading } = useAuth0();
 
   const locale = useStoreState((state) => state.theme.locale) as 'en' | 'fr';
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
 
   const isSet = useStoreState((state) => state.auth.isSet);
-
+  const userId = useStoreState((state) => state.user.id);
   const location = useLocation();
 
   const currentAppLocale = AppLocale[locale];
@@ -34,26 +33,26 @@ export const Views = (): JSX.Element => {
     // eslint-disable-next-line
   }, []);
 
+  // // useEffect(() => {
+  // //   const newUserIdCheck = location?.pathname?.split('/onboarding/')[1] || '';
+  // //   if (newUserIdCheck !== 'password') {
+  // //     setNewUserId(newUserIdCheck);
+  // //   }
+  // // }, []);
   // useEffect(() => {
-  //   const newUserIdCheck = location?.pathname?.split('/onboarding/')[1] || '';
-  //   if (newUserIdCheck !== 'password') {
-  //     setNewUserId(newUserIdCheck);
+  //   if (!isLoading) {
+  //     const newUserIdCheck = location?.pathname?.split('/onboarding/')[1] || '';
+  //
+  //     if (newUserIdCheck !== 'password') {
+  //       setNewUserId(newUserIdCheck);
+  //     }
   //   }
-  // }, []);
-  useEffect(() => {
-    if (!isLoading) {
-      const newUserIdCheck = location?.pathname?.split('/onboarding/')[1] || '';
-
-      if (newUserIdCheck !== 'password') {
-        setNewUserId(newUserIdCheck);
-      }
-    }
-  }, [isLoading]);
+  // }, [isLoading]);
 
   const { data } = useUserNewQuery({
     fetchPolicy: 'network-only',
     variables: {
-      id: newUserId,
+      id: userId,
     },
   });
   if (loading || isLoading || !isSet) return <Loading />;
@@ -77,7 +76,7 @@ export const Views = (): JSX.Element => {
                   />
                   <Route
                     path="onboarding/password"
-                    element={<PrimaryOnboarding userId={newUserId} />}
+                    element={<PrimaryOnboarding userId={userId} />}
                   />
                 </Route>
               </Routes>
