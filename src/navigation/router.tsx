@@ -11,6 +11,7 @@ import { useAuth } from 'hooks';
 import { useAuth0 } from '@auth0/auth0-react';
 import theme from 'configs/ThemeConfig';
 import { useUserNewQuery } from 'graphql/generated';
+import { useNavigate } from 'react-router';
 import Loading from '../components/loading';
 import PrimaryOnboarding from '../views/onboard/SetPassword';
 
@@ -23,7 +24,7 @@ export const Views = (): JSX.Element => {
   const isSet = useStoreState((state) => state.auth.isSet);
   const userId = useStoreState((state) => state.user.id);
   const location = useLocation();
-
+  const navigate = useNavigate();
   const currentAppLocale = AppLocale[locale];
 
   const { rehydrateAuth, loading } = useAuth();
@@ -53,6 +54,11 @@ export const Views = (): JSX.Element => {
     fetchPolicy: 'network-only',
     variables: {
       id: userId,
+    },
+    onCompleted: (res) => {
+      if (res.userNew?.newUser) {
+        navigate('/app/onboarding');
+      }
     },
   });
   if (loading || isLoading || !isSet) return <Loading />;
