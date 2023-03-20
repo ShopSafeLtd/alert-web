@@ -14,6 +14,13 @@ interface FormData {
   logo?: { id: string; url: string; optimised: string };
   autoApproveOffenders: boolean;
   autoApproveIncidents: boolean;
+  defaultIncidentEmail: boolean;
+  defaultIncidentPush: boolean;
+  defaultSubscribedIncidentOnly: boolean;
+  defaultSubscribedOffenderOnly: boolean;
+  defaultMessagePush: boolean;
+  defaultOffenderEmail: boolean;
+  defaultOffenderPush: boolean;
   incidentRetention: number | null;
   offenderRetention: number | null;
 }
@@ -88,6 +95,17 @@ const useSchemeDetail = (): Return => {
           autoApproveOffenders: { set: data.autoApproveIncidents },
           incidentRetention: { set: data.incidentRetention },
           offenderRetention: { set: data.offenderRetention },
+          defaultIncidentEmail: { set: data.defaultIncidentEmail },
+          defaultIncidentPush: { set: data.defaultIncidentPush },
+          defaultSubscribedIncidentOnly: {
+            set: data.defaultSubscribedIncidentOnly,
+          },
+          defaultSubscribedOffenderOnly: {
+            set: data.defaultSubscribedOffenderOnly,
+          },
+          defaultMessagePush: { set: data.defaultMessagePush },
+          defaultOffenderEmail: { set: data.defaultOffenderEmail },
+          defaultOffenderPush: { set: data.defaultOffenderPush },
           logo: {
             ...(imageChange && fileList.length > 0
               ? {

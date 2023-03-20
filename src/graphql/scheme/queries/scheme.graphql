@@ -4,6 +4,13 @@ query scheme($where: SchemeWhereUniqueInput!) {
     name
     autoApproveIncidents
     autoApproveOffenders
+    defaultIncidentEmail
+    defaultIncidentPush
+    defaultSubscribedIncidentOnly
+    defaultSubscribedOffenderOnly
+    defaultMessagePush
+    defaultOffenderEmail
+    defaultOffenderPush
     incidentRetention
     offenderRetention
     logo {

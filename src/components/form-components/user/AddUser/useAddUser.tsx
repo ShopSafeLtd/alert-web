@@ -15,6 +15,7 @@ import {
   SearchBusinessesQueryVariables,
   SearchBusinessesDocument,
   QueryMode,
+  useSchemeQuery,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import { MutationUpdaterFn, useApolloClient } from '@apollo/client';
@@ -33,6 +34,13 @@ interface FormData {
   role: Role;
   groups: string[];
   chats: string[];
+  incidentEmail: boolean;
+  incidentPush: boolean;
+  subscribedIncidentOnly: boolean;
+  subscribedOffenderOnly: boolean;
+  messagePush: boolean;
+  offenderEmail: boolean;
+  offenderPush: boolean;
 }
 interface Props {
   onClose: () => void;
@@ -49,6 +57,7 @@ interface Return {
   groupsLoading: boolean;
   chatsData: SchemeChatsQuery | undefined;
   chatsLoading: boolean;
+  schemeLoading: boolean;
   saving: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onValuesChange: (changedValues: any, values: FormData) => void;
@@ -112,6 +121,21 @@ const useAddUser = ({
           },
         });
       }
+    },
+  });
+
+  const { loading: schemeLoading } = useSchemeQuery({
+    variables: { where: { id: schemeId } },
+    onCompleted: (data) => {
+      form.setFieldsValue({
+        incidentEmail: data.scheme?.defaultIncidentEmail,
+        incidentPush: data.scheme?.defaultIncidentPush,
+        messagePush: data.scheme?.defaultMessagePush,
+        offenderEmail: data.scheme?.defaultOffenderEmail,
+        offenderPush: data.scheme?.defaultOffenderPush,
+        subscribedIncidentOnly: data.scheme?.defaultSubscribedIncidentOnly,
+        subscribedOffenderOnly: data.scheme?.defaultSubscribedOffenderOnly,
+      });
     },
   });
 
@@ -312,6 +336,7 @@ const useAddUser = ({
     form,
     existingUser,
     onSearchBusiness,
+    schemeLoading,
   };
 };
 

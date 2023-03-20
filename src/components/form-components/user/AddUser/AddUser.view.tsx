@@ -8,6 +8,7 @@ import {
   Input,
   Row,
   Select,
+  Switch,
   Typography,
 } from 'antd';
 import DebounceSelect from 'components/form-components/DebounceSelect';
@@ -24,6 +25,13 @@ interface FormData {
   role: Role;
   groups: string[];
   chats: string[];
+  incidentEmail: boolean;
+  incidentPush: boolean;
+  subscribedIncidentOnly: boolean;
+  subscribedOffenderOnly: boolean;
+  messagePush: boolean;
+  offenderEmail: boolean;
+  offenderPush: boolean;
 }
 
 interface Props {
@@ -42,6 +50,7 @@ interface Props {
     value: string
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
   businessProvided: boolean;
+  schemeLoading: boolean;
 }
 
 const AddUser = ({
@@ -57,6 +66,7 @@ const AddUser = ({
   onSearchBusiness,
   existingUser,
   businessProvided,
+  schemeLoading,
 }: Props): JSX.Element => (
   <Form<FormData>
     form={form}
@@ -230,6 +240,129 @@ const AddUser = ({
         </Form.Item>
       </Col>
     </Row>
+
+    <Title level={4} style={{ marginBottom: 15 }}>
+      Notification Settings:
+    </Title>
+    <Form.Item
+      label="Only notify users for their own and subscribed incidents:"
+      name="subscribedIncidentOnly"
+      valuePropName="checked"
+      style={{
+        marginBottom: 0,
+        flexDirection: 'row',
+        justifyItems: 'center',
+      }}
+    >
+      <Switch
+        disabled={saving}
+        style={{ marginLeft: 10, marginTop: -22 }}
+        className="scheme-detail-switch"
+        loading={schemeLoading}
+      />
+    </Form.Item>
+    <Form.Item
+      label="Send app notifications for incidents:"
+      name="incidentPush"
+      valuePropName="checked"
+      style={{
+        marginBottom: 0,
+        flexDirection: 'row',
+        justifyItems: 'center',
+      }}
+    >
+      <Switch
+        disabled={saving}
+        style={{ marginLeft: 10, marginTop: -22 }}
+        className="scheme-detail-switch"
+        loading={schemeLoading}
+      />
+    </Form.Item>
+    <Form.Item
+      label="Send emails for incidents:"
+      name="incidentEmail"
+      valuePropName="checked"
+      style={{
+        marginBottom: 0,
+        flexDirection: 'row',
+        justifyItems: 'center',
+      }}
+    >
+      <Switch
+        disabled={saving}
+        style={{ marginLeft: 10, marginTop: -22 }}
+        className="scheme-detail-switch"
+        loading={schemeLoading}
+      />
+    </Form.Item>
+    <Form.Item
+      name="subscribedOffenderOnly"
+      label="Only notify users for their own and subscribed offenders:"
+      valuePropName="checked"
+      style={{
+        marginBottom: 0,
+        flexDirection: 'row',
+        justifyItems: 'center',
+      }}
+    >
+      <Switch
+        disabled={saving}
+        style={{ marginLeft: 10, marginTop: -22 }}
+        className="scheme-detail-switch"
+        loading={schemeLoading}
+      />
+    </Form.Item>
+    <Form.Item
+      name="offenderPush"
+      label="Send app notifications for offenders:"
+      valuePropName="checked"
+      style={{
+        marginBottom: 0,
+        flexDirection: 'row',
+        justifyItems: 'center',
+      }}
+    >
+      <Switch
+        disabled={saving}
+        style={{ marginLeft: 10, marginTop: -22 }}
+        className="scheme-detail-switch"
+        loading={schemeLoading}
+      />
+    </Form.Item>
+    <Form.Item
+      name="offenderEmail"
+      label="Send emails for offenders:"
+      valuePropName="checked"
+      style={{
+        marginBottom: 0,
+        flexDirection: 'row',
+        justifyItems: 'center',
+      }}
+    >
+      <Switch
+        disabled={saving}
+        style={{ marginLeft: 10, marginTop: -22 }}
+        className="scheme-detail-switch"
+        loading={schemeLoading}
+      />
+    </Form.Item>
+    <Form.Item
+      name="messagePush"
+      label="Send app notifications for new chat messages:"
+      valuePropName="checked"
+      style={{
+        marginBottom: 0,
+        flexDirection: 'row',
+        justifyItems: 'center',
+      }}
+    >
+      <Switch
+        disabled={saving}
+        style={{ marginLeft: 10, marginTop: -22 }}
+        className="scheme-detail-switch"
+        loading={schemeLoading}
+      />
+    </Form.Item>
 
     <Form.Item>
       <Row style={{ marginTop: 30 }} gutter={16} justify="end">

@@ -305,6 +305,13 @@ const UseEditUserTest = () => {
             },
             groups: ['groupId'],
             chats: ['chatId'],
+            incidentEmail: false,
+            incidentPush: false,
+            messagePush: false,
+            offenderEmail: false,
+            offenderPush: false,
+            subscribedIncidentOnly: false,
+            subscribedOffenderOnly: false,
           })
         }
       >

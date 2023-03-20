@@ -36,6 +36,13 @@ describe('Detail Officer View', () => {
           role: Role.ContentAdmin,
         },
       ],
+      incidentEmail: true,
+      incidentPush: true,
+      subscribedIncidentOnly: true,
+      subscribedOffenderOnly: true,
+      messagePush: true,
+      offenderEmail: true,
+      offenderPush: true,
     },
   };
 

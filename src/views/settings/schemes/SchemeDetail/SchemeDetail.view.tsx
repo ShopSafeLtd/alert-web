@@ -35,6 +35,13 @@ interface FormData {
   name: string;
   autoApproveIncidents: boolean;
   autoApproveOffenders: boolean;
+  defaultIncidentEmail: boolean;
+  defaultIncidentPush: boolean;
+  defaultSubscribedIncidentOnly: boolean;
+  defaultSubscribedOffenderOnly: boolean;
+  defaultMessagePush: boolean;
+  defaultOffenderEmail: boolean;
+  defaultOffenderPush: boolean;
   incidentRetention: number | null;
   offenderRetention: number | null;
   logo?: { id: string; url: string; optimised: string };
@@ -70,20 +77,29 @@ const SchemeDetail = ({
     {loading ? (
       <Skeleton />
     ) : (
-      <Card>
-        <Form
-          onFinish={onSubmit}
-          initialValues={{
-            name: data?.scheme?.name,
-            autoApproveOffenders: data?.scheme?.autoApproveOffenders,
-            autoApproveIncidents: data?.scheme?.autoApproveIncidents,
-            incidentRetention: data?.scheme?.incidentRetention,
-            offenderRetention: data?.scheme?.offenderRetention,
-          }}
-        >
+      <Form
+        onFinish={onSubmit}
+        initialValues={{
+          name: data?.scheme?.name,
+          autoApproveOffenders: data?.scheme?.autoApproveOffenders,
+          autoApproveIncidents: data?.scheme?.autoApproveIncidents,
+          incidentRetention: data?.scheme?.incidentRetention,
+          offenderRetention: data?.scheme?.offenderRetention,
+          defaultIncidentEmail: data?.scheme?.defaultIncidentEmail,
+          defaultIncidentPush: data?.scheme?.defaultIncidentPush,
+          defaultSubscribedIncidentOnly:
+            data?.scheme?.defaultSubscribedIncidentOnly,
+          defaultSubscribedOffenderOnly:
+            data?.scheme?.defaultSubscribedOffenderOnly,
+          defaultMessagePush: data?.scheme?.defaultMessagePush,
+          defaultOffenderEmail: data?.scheme?.defaultOffenderEmail,
+          defaultOffenderPush: data?.scheme?.defaultOffenderPush,
+        }}
+      >
+        <Card>
           <Row gutter={20} style={{ marginBottom: 30 }}>
             <Col>
-              <Title level={4}>Scheme Details:</Title>
+              <Title level={4}>Scheme Branding:</Title>
               <Text type="secondary">
                 Changed the scheme name and upload a logo.
               </Text>
@@ -123,15 +139,13 @@ const SchemeDetail = ({
               </Form.Item>
             </Col>
           </Row>
-          <Row gutter={20} style={{ marginTop: 40, marginBottom: 30 }}>
-            <Col>
-              <Title level={4}>Auto Approve Options:</Title>
-              <Text type="secondary">
-                Enabling auto approve will automatically approve any new
-                incidents and offenders without manual approval.
-              </Text>
-            </Col>
-          </Row>
+        </Card>
+        <Card>
+          <Title level={4}>Auto Approve Options:</Title>
+          <Text type="secondary">
+            Enabling auto approve will automatically approve any new incidents
+            and offenders without manual approval.
+          </Text>
 
           <Row>
             <Col span={15}>
@@ -139,6 +153,7 @@ const SchemeDetail = ({
                 label="Auto Approve Incident"
                 name="autoApproveIncidents"
                 valuePropName="checked"
+                style={{ marginBottom: 0 }}
               >
                 <Switch
                   disabled={saving}
@@ -159,19 +174,16 @@ const SchemeDetail = ({
               </Form.Item>
             </Col>
           </Row>
-
-          <Row gutter={20} style={{ marginTop: 40, marginBottom: 30 }}>
-            <Col>
-              <Title level={4} style={{ marginBottom: 15 }}>
-                Date Retention:
-              </Title>
-              <Text type="secondary">
-                Select a period of time to retain data before it is
-                automatically deleted. You can also disable this feature and
-                manually audit your data.
-              </Text>
-            </Col>
-          </Row>
+        </Card>
+        <Card>
+          <Title level={4} style={{ marginBottom: 15 }}>
+            Date Retention:
+          </Title>
+          <Text type="secondary">
+            Select a period of time to retain data before it is automatically
+            deleted. You can also disable this feature and manually audit your
+            data.
+          </Text>
 
           <Row>
             <Col span={6}>
@@ -243,32 +255,124 @@ const SchemeDetail = ({
               </Text>
             </Col>
           </Row>
+        </Card>
+
+        <Card>
+          <Title level={4}>Default New User Settings:</Title>
+          <Text type="secondary">
+            The settings that will be selected by default for all new users
+            created in the scheme.
+          </Text>
 
           <Row>
-            <Col />
-          </Row>
-
-          <Form.Item>
-            <Row style={{ marginTop: 30 }} gutter={16} justify="end">
-              <Col>
-                <Button disabled={saving} onClick={() => window.history.back()}>
-                  Cancel
-                </Button>
-              </Col>
-              <Col>
-                <Button
+            <Col span={15}>
+              <Form.Item
+                label="Only notify users for their own and subscribed incidents"
+                name="defaultSubscribedIncidentOnly"
+                valuePropName="checked"
+                style={{ marginBottom: 0 }}
+              >
+                <Switch
                   disabled={saving}
-                  loading={saving}
-                  type="primary"
-                  htmlType="submit"
-                >
-                  Save
-                </Button>
-              </Col>
-            </Row>
-          </Form.Item>
-        </Form>
-      </Card>
+                  style={{ marginLeft: 5 }}
+                  className="scheme-detail-switch"
+                />
+              </Form.Item>
+              <Form.Item
+                label="Send app notifications for incidents"
+                name="defaultIncidentPush"
+                valuePropName="checked"
+                style={{ marginBottom: 0 }}
+              >
+                <Switch
+                  disabled={saving}
+                  style={{ marginLeft: 5 }}
+                  className="scheme-detail-switch"
+                />
+              </Form.Item>
+              <Form.Item
+                label="Send emails for incidents"
+                name="defaultIncidentEmail"
+                valuePropName="checked"
+                style={{ marginBottom: 0 }}
+              >
+                <Switch
+                  disabled={saving}
+                  style={{ marginLeft: 5 }}
+                  className="scheme-detail-switch"
+                />
+              </Form.Item>
+              <Form.Item
+                name="defaultSubscribedOffenderOnly"
+                label="Only notify users for their own and subscribed offenders"
+                valuePropName="checked"
+                style={{ marginBottom: 0 }}
+              >
+                <Switch
+                  disabled={saving}
+                  style={{ marginLeft: 5 }}
+                  className="scheme-detail-switch"
+                />
+              </Form.Item>
+              <Form.Item
+                name="defaultOffenderPush"
+                label="Send app notifications for offenders"
+                valuePropName="checked"
+                style={{ marginBottom: 0 }}
+              >
+                <Switch
+                  disabled={saving}
+                  style={{ marginLeft: 5 }}
+                  className="scheme-detail-switch"
+                />
+              </Form.Item>
+              <Form.Item
+                name="defaultOffenderEmail"
+                label="Send emails for offenders"
+                valuePropName="checked"
+                style={{ marginBottom: 0 }}
+              >
+                <Switch
+                  disabled={saving}
+                  style={{ marginLeft: 5 }}
+                  className="scheme-detail-switch"
+                />
+              </Form.Item>
+              <Form.Item
+                name="defaultMessagePush"
+                label="Send app notifications for new chat messages"
+                valuePropName="checked"
+              >
+                <Switch
+                  disabled={saving}
+                  style={{ marginLeft: 5 }}
+                  className="scheme-detail-switch"
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Card>
+
+        <Form.Item>
+          <Row style={{ marginTop: 30 }} gutter={16} justify="end">
+            <Col>
+              <Button disabled={saving} onClick={() => window.history.back()}>
+                Cancel
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                disabled={saving}
+                loading={saving}
+                type="primary"
+                htmlType="submit"
+              >
+                Save
+              </Button>
+            </Col>
+          </Row>
+        </Form.Item>
+      </Form>
     )}
   </div>
 );

@@ -6528,11 +6528,18 @@ export type Count = {
   name: Scalars['String'];
 };
 
+export type CreateArticleImages = {
+  disconnect?: InputMaybe<Array<InputMaybe<UniqueId>>>;
+  optimistic?: InputMaybe<Array<InputMaybe<CreateImageOptimistic>>>;
+  upload?: InputMaybe<Array<InputMaybe<UploadArticleImage>>>;
+};
+
 export type CreateArticleInput = {
   categories?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   documents?: InputMaybe<Array<InputMaybe<CreateDocument>>>;
   groups: Array<Scalars['String']>;
   htmlBody: Scalars['String'];
+  images?: InputMaybe<CreateArticleImages>;
   incidents?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   offenders?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   previewImage?: InputMaybe<Scalars['String']>;
@@ -11487,7 +11494,8 @@ export type ImageUpdateManyWithoutVehiclesNestedInput = {
   create?: InputMaybe<Array<ImageCreateWithoutVehiclesInput>>;
   delete?: InputMaybe<Array<ImageWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<ImageScalarWhereInput>>;
-  disconnect?: InputMaybe<Array<ImageWhereUniqueInput>>;
+  disconnect?: InputMaybe<Array<InputMaybe<UniqueId>>>;
+  optimistic?: InputMaybe<Array<InputMaybe<CreateImageOptimistic>>>;
   set?: InputMaybe<Array<ImageWhereUniqueInput>>;
   update?: InputMaybe<Array<ImageUpdateWithWhereUniqueWithoutVehiclesInput>>;
   updateMany?: InputMaybe<Array<ImageUpdateManyWithWhereWithoutVehiclesInput>>;
@@ -19675,9 +19683,11 @@ export type Mutation = {
   createTermsAndConditions?: Maybe<TermsAndCondition>;
   createTimes?: Maybe<Array<Incident>>;
   createUnlinkedImage?: Maybe<UnlinkedImage>;
+  createUpdateOnCrimeGroup?: Maybe<Update>;
   createUpdateOnIncident?: Maybe<Update>;
   createUpdateOnInvestigation?: Maybe<Update>;
   createUpdateOnOffender?: Maybe<Update>;
+  createUpdateOnVehicle?: Maybe<Update>;
   createUser?: Maybe<User>;
   createUserChat: UserChat;
   createUserDefault: User;
@@ -19734,14 +19744,18 @@ export type Mutation = {
   setPassword?: Maybe<User>;
   signIn?: Maybe<SignIn>;
   signTerms?: Maybe<UserTerm>;
+  subscribeToCrimeGroup?: Maybe<CrimeGroup>;
   subscribeToIncident?: Maybe<Incident>;
   subscribeToInvestigation?: Maybe<Investigation>;
   subscribeToOffender?: Maybe<Offender>;
+  subscribeToVehicle?: Maybe<Vehicle>;
   syncGeoCodes?: Maybe<Array<Address>>;
   toggleUser?: Maybe<User>;
   unsubscribeFromIncident?: Maybe<Incident>;
   unsubscribeFromOffender?: Maybe<Offender>;
+  unsubscribeToCrimeGroup?: Maybe<CrimeGroup>;
   unsubscribeToInvestigation?: Maybe<Investigation>;
+  unsubscribeToVehicle?: Maybe<Vehicle>;
   updateAction?: Maybe<Action>;
   updateAddress?: Maybe<Address>;
   updateBan?: Maybe<Ban>;
@@ -19916,6 +19930,11 @@ export type MutationCreateUnlinkedImageArgs = {
   scheme: Scalars['String'];
 };
 
+export type MutationCreateUpdateOnCrimeGroupArgs = {
+  crimeGroup: UniqueId;
+  data: CreateUpdateData;
+};
+
 export type MutationCreateUpdateOnIncidentArgs = {
   data: CreateUpdateData;
   incident: UniqueId;
@@ -19929,6 +19948,11 @@ export type MutationCreateUpdateOnInvestigationArgs = {
 export type MutationCreateUpdateOnOffenderArgs = {
   data: CreateUpdateData;
   offender: UniqueId;
+};
+
+export type MutationCreateUpdateOnVehicleArgs = {
+  data: CreateUpdateData;
+  vehicle: UniqueId;
 };
 
 export type MutationCreateUserArgs = {
@@ -20153,6 +20177,10 @@ export type MutationSignTermsArgs = {
   data: SignTermsInput;
 };
 
+export type MutationSubscribeToCrimeGroupArgs = {
+  where: UniqueId;
+};
+
 export type MutationSubscribeToIncidentArgs = {
   where: IncidentWhereUniqueInput;
 };
@@ -20163,6 +20191,10 @@ export type MutationSubscribeToInvestigationArgs = {
 
 export type MutationSubscribeToOffenderArgs = {
   where: OffenderWhereUniqueInput;
+};
+
+export type MutationSubscribeToVehicleArgs = {
+  where: UniqueId;
 };
 
 export type MutationToggleUserArgs = {
@@ -20177,7 +20209,15 @@ export type MutationUnsubscribeFromOffenderArgs = {
   where: OffenderWhereUniqueInput;
 };
 
+export type MutationUnsubscribeToCrimeGroupArgs = {
+  where: UniqueId;
+};
+
 export type MutationUnsubscribeToInvestigationArgs = {
+  where: UniqueId;
+};
+
+export type MutationUnsubscribeToVehicleArgs = {
   where: UniqueId;
 };
 
@@ -30280,6 +30320,11 @@ export type UpdateWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
 };
 
+export type UploadArticleImage = {
+  file?: InputMaybe<Scalars['Upload']>;
+  url?: InputMaybe<UrlImage>;
+};
+
 export type UploadImage = {
   file: Scalars['Upload'];
   offenders: Array<InputMaybe<ImageOffender>>;
@@ -40323,6 +40368,13 @@ export type UpdateSchemeMutation = {
     name: string;
     autoApproveIncidents: boolean;
     autoApproveOffenders: boolean;
+    defaultIncidentEmail: boolean;
+    defaultIncidentPush: boolean;
+    defaultSubscribedIncidentOnly: boolean;
+    defaultSubscribedOffenderOnly: boolean;
+    defaultMessagePush: boolean;
+    defaultOffenderEmail: boolean;
+    defaultOffenderPush: boolean;
     incidentRetention?: number | null;
     offenderRetention?: number | null;
     logo?: {
@@ -40362,6 +40414,13 @@ export type SchemeQuery = {
     name: string;
     autoApproveIncidents: boolean;
     autoApproveOffenders: boolean;
+    defaultIncidentEmail: boolean;
+    defaultIncidentPush: boolean;
+    defaultSubscribedIncidentOnly: boolean;
+    defaultSubscribedOffenderOnly: boolean;
+    defaultMessagePush: boolean;
+    defaultOffenderEmail: boolean;
+    defaultOffenderPush: boolean;
     incidentRetention?: number | null;
     offenderRetention?: number | null;
     logo?: {
@@ -40956,6 +41015,13 @@ export type UserQuery = {
     demId?: string | null;
     disabled: boolean;
     newUser: boolean;
+    incidentEmail: boolean;
+    incidentPush: boolean;
+    subscribedIncidentOnly: boolean;
+    subscribedOffenderOnly: boolean;
+    messagePush: boolean;
+    offenderEmail: boolean;
+    offenderPush: boolean;
     businesses: Array<{
       __typename?: 'Business';
       id: string;
@@ -49397,6 +49463,13 @@ export const UpdateSchemeDocument = gql`
       name
       autoApproveIncidents
       autoApproveOffenders
+      defaultIncidentEmail
+      defaultIncidentPush
+      defaultSubscribedIncidentOnly
+      defaultSubscribedOffenderOnly
+      defaultMessagePush
+      defaultOffenderEmail
+      defaultOffenderPush
       incidentRetention
       offenderRetention
       logo {
@@ -49519,6 +49592,13 @@ export const SchemeDocument = gql`
       name
       autoApproveIncidents
       autoApproveOffenders
+      defaultIncidentEmail
+      defaultIncidentPush
+      defaultSubscribedIncidentOnly
+      defaultSubscribedOffenderOnly
+      defaultMessagePush
+      defaultOffenderEmail
+      defaultOffenderPush
       incidentRetention
       offenderRetention
       logo {
@@ -50759,6 +50839,13 @@ export const UserDocument = gql`
       }
       disabled
       newUser
+      incidentEmail
+      incidentPush
+      subscribedIncidentOnly
+      subscribedOffenderOnly
+      messagePush
+      offenderEmail
+      offenderPush
       groups(where: $groupWhere) {
         id
         name

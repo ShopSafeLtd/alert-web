@@ -79,6 +79,13 @@ const UseRecycledItemListTest = () => {
             autoApproveOffenders: false,
             incidentRetention: 1,
             offenderRetention: 1,
+            defaultIncidentEmail: true,
+            defaultIncidentPush: true,
+            defaultMessagePush: true,
+            defaultOffenderEmail: true,
+            defaultOffenderPush: true,
+            defaultSubscribedIncidentOnly: true,
+            defaultSubscribedOffenderOnly: true,
           })
         }
       >
