@@ -66,13 +66,17 @@ const useSchemeDetail = (): Return => {
   });
 
   const [updateScheme] = useUpdateSchemeMutation({
-    onCompleted: () => {
+    onCompleted: (res) => {
       setSaving(false);
       notification.success({
         message: 'Successfully Updated!',
         description: 'The Scheme has been updated!',
         placement: 'bottomRight',
       });
+      window.localStorage.setItem(
+        'logo',
+        res.updateScheme?.logo?.optimised || ''
+      );
     },
     onError: () => {
       setSaving(false);
