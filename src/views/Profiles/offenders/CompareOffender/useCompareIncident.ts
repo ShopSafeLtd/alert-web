@@ -3,6 +3,7 @@ import {
   Build,
   Gender,
   Race,
+  useMergeOffendersMutation,
   useViewOffenderCompareLazyQuery,
   ViewOffenderCompareQuery,
 } from 'graphql/generated';
@@ -22,6 +23,7 @@ export type OffenderField =
   | 'peculiarities'
   | 'dateOfBirth'
   | 'dateSource';
+
 export interface Selected {
   age: null | string;
   build: null | string;
@@ -239,6 +241,8 @@ const compareIncident = (): Return => {
     setSelectedImages([]);
   };
 
+  const [mergeOffenders] = useMergeOffendersMutation();
+
   const onMerge = () => {
     // const mainOffender = {
     //   ...preview,
@@ -246,8 +250,29 @@ const compareIncident = (): Return => {
     //   tags: preview.tags.map(({ id }) => ({ id })),
     // };
     // const otherOffenders = offenders.filter(({ id }) => id !== preview.id);
-
-    navigate('/offenders');
+    mergeOffenders({
+      variables: {
+        data: {
+          name: preview.name,
+          peculiarities: preview.peculiarities,
+          race: preview.race,
+          tags: preview.tags.map(({ id }) => id),
+          age: preview.age,
+          build: preview.build,
+          dateOfBirth: preview.dateOfBirth,
+          gender: preview.gender,
+          hair: preview.hair,
+          mainOffenderId: preview.id,
+          offenderIds: offenders
+            .map(({ id }) => id)
+            .filter((id) => id !== preview.id),
+          imageIds: preview.images.map(({ id }) => id),
+        },
+      },
+      onCompleted: () => {
+        navigate('/offenders');
+      },
+    });
   };
 
   return {
