@@ -1,15 +1,18 @@
 import React from 'react';
 
-import { Steps, Card } from 'antd';
+import { Card, Steps } from 'antd';
 import AccountDetail from 'components/onboarding/Onboarding/AccountDetail';
 import Terms from 'components/onboarding/Onboarding/Terms';
 import { Route, Routes } from 'react-router';
+import { CurrentSchemeTermsQuery } from '../../../graphql/generated';
+import SchemeTerms from '../../../components/onboarding/Onboarding/SchemeTerms';
 
 const { Step } = Steps;
 
 interface AccountData {
   fullName: string;
 }
+
 interface Props {
   onSubmit: () => void;
   saving: boolean;
@@ -18,6 +21,9 @@ interface Props {
   onBack: () => void;
   updateAccountDetail: (value: AccountData | undefined) => void;
   updateTermsSigned: () => void;
+  updateSchemeTermsSigned: (value: unknown) => void;
+  loading: boolean;
+  schemeTerms: CurrentSchemeTermsQuery | undefined;
 }
 
 const Onboarding = ({
@@ -28,9 +34,12 @@ const Onboarding = ({
   onBack,
   updateAccountDetail,
   updateTermsSigned,
+  loading,
+  schemeTerms,
+  updateSchemeTermsSigned,
 }: Props): JSX.Element => (
   <div className="page-container">
-    <Card>
+    <Card loading={loading} style={{ height: '100%' }}>
       <Steps
         type="navigation"
         current={current}
@@ -38,6 +47,9 @@ const Onboarding = ({
       >
         <Step title="Account Details" />
         <Step title="Terms &amp; Conditions" />
+        {schemeTerms?.scheme?.currentTerms?.id && (
+          <Step title="Scheme Terms &amp; Conditions" />
+        )}
       </Steps>
       <Routes>
         <Route
@@ -68,6 +80,19 @@ const Onboarding = ({
               saving={saving}
               onBack={onBack}
               setCurrent={setCurrent}
+            />
+          }
+        />
+        <Route
+          path="scheme-terms-conditions"
+          element={
+            <SchemeTerms
+              onSubmit={onSubmit}
+              update={updateSchemeTermsSigned}
+              updateBox={updateTermsSigned}
+              saving={saving}
+              setCurrent={setCurrent}
+              content={schemeTerms?.scheme?.currentTerms?.content || ''}
             />
           }
         />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router';
+import { Route, Routes } from 'react-router';
 import UserList from 'views/settings/users/UserList';
 import ViewUser from 'views/settings/users/UserDetail';
 
@@ -17,11 +17,12 @@ import CrimeTypes from 'views/settings/tags/CrimeTypes';
 import Terms from 'views/settings/terms/TermList';
 import UserTerms from 'views/settings/terms/UserTerms';
 import SchemeTerms from 'views/settings/terms/SchemeTerms';
-
+import CreateTermsContainer from 'views/settings/terms/CreateTerms/CreateTerms.container';
 import RecycleBin from 'views/settings/recycled/RecycleBin';
 
 import ListBusinesses from 'views/settings/businesses/ListBusinesses';
 import ViewBusiness from 'views/settings/businesses/ViewBusiness';
+import CustomSchemeTerms from '../../../views/settings/terms/ViewCustomTerms/ViewTermsContainer';
 
 const SchemeSettings = (): JSX.Element => (
   <Routes>
@@ -46,7 +47,8 @@ const SchemeSettings = (): JSX.Element => (
     <Route path="terms/*" element={<Terms />} />
     <Route path="terms/user-terms/*" element={<UserTerms />} />
     <Route path="terms/scheme-terms/*" element={<SchemeTerms />} />
-
+    <Route path="terms/scheme/:id" element={<CustomSchemeTerms />} />
+    <Route path="terms/scheme/create" element={<CreateTermsContainer />} />
     {/* offender tags */}
     <Route path="offender-warnings/*" element={<OffenderWarnings />} />
 

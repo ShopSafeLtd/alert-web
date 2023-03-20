@@ -1,13 +1,13 @@
 import React from 'react';
 import {
-  Card,
-  Typography,
-  Row,
-  Col,
-  Space,
-  Checkbox,
   Button,
+  Card,
+  Checkbox,
+  Col,
   Form,
+  Row,
+  Space,
+  Typography,
 } from 'antd';
 import { Link } from 'react-router-dom';
 
@@ -728,7 +728,7 @@ const SchemeTerms = ({
                 type="primary"
                 htmlType="submit"
               >
-                Save
+                Next
               </Button>
             </Col>
           </Row>

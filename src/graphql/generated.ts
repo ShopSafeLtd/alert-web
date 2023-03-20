@@ -3094,6 +3094,7 @@ export type Article = {
   frequency?: Maybe<Scalars['Int']>;
   groups: Array<Group>;
   id: Scalars['String'];
+  images: Array<Image>;
   impressions: Array<Impression>;
   previewImage?: Maybe<Scalars['String']>;
   previewText?: Maybe<Scalars['String']>;
@@ -3135,6 +3136,15 @@ export type ArticleGroupsArgs = {
   before?: InputMaybe<GroupWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+};
+
+export type ArticleImagesArgs = {
+  after?: InputMaybe<ImageWhereUniqueInput>;
+  before?: InputMaybe<ImageWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ImageOrderByWithRelationInput>>;
+  where?: InputMaybe<ImageWhereInput>;
 };
 
 export type ArticleImpressionsArgs = {
@@ -6566,8 +6576,10 @@ export type CreateCrimeGroupVehicles = {
 
 export type CreateDocument = {
   fileType: Scalars['String'];
+  investigationId?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   origFileName: Scalars['String'];
+  schemeId?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   thumbnailUrl?: InputMaybe<Scalars['String']>;
   url: Scalars['String'];
@@ -6743,13 +6755,20 @@ export type CreateUserData = {
 export type CreateVehicleDataInput = {
   colour?: InputMaybe<Scalars['String']>;
   crimeGroup?: InputMaybe<Array<InputMaybe<UniqueId>>>;
-  image?: InputMaybe<ImageCreateNestedManyWithoutOffendersInput>;
+  image?: InputMaybe<CreateVehicleImages>;
+  images?: InputMaybe<Array<InputMaybe<UploadVehicleImage>>>;
   incidents?: InputMaybe<Array<InputMaybe<UniqueId>>>;
   make?: InputMaybe<Scalars['String']>;
   model?: InputMaybe<Scalars['String']>;
   offenders?: InputMaybe<Array<InputMaybe<UniqueId>>>;
   registration?: InputMaybe<Scalars['String']>;
   schemes: Scalars['String'];
+};
+
+export type CreateVehicleImages = {
+  disconnect?: InputMaybe<Array<InputMaybe<UniqueId>>>;
+  optimistic?: InputMaybe<Array<InputMaybe<CreateImageOptimistic>>>;
+  upload?: InputMaybe<Array<InputMaybe<UploadVehicleImage>>>;
 };
 
 export type CreationBreakdown = {
@@ -8475,6 +8494,7 @@ export type FeedItem = {
   createdAt: Scalars['DateTime'];
   groups: Array<Group>;
   id: Scalars['String'];
+  images: Array<Image>;
   incident?: Maybe<Incident>;
   incidentId?: Maybe<Scalars['String']>;
   investigation?: Maybe<Investigation>;
@@ -8492,6 +8512,15 @@ export type FeedItemGroupsArgs = {
   before?: InputMaybe<GroupWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+};
+
+export type FeedItemImagesArgs = {
+  after?: InputMaybe<ImageWhereUniqueInput>;
+  before?: InputMaybe<ImageWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ImageOrderByWithRelationInput>>;
+  where?: InputMaybe<ImageWhereInput>;
 };
 
 export type FeedItemCreateManyArticleInput = {
@@ -11462,6 +11491,7 @@ export type ImageUpdateManyWithoutVehiclesNestedInput = {
   set?: InputMaybe<Array<ImageWhereUniqueInput>>;
   update?: InputMaybe<Array<ImageUpdateWithWhereUniqueWithoutVehiclesInput>>;
   updateMany?: InputMaybe<Array<ImageUpdateManyWithWhereWithoutVehiclesInput>>;
+  upload?: InputMaybe<Array<InputMaybe<UploadVehicleImage>>>;
   upsert?: InputMaybe<Array<ImageUpsertWithWhereUniqueWithoutVehiclesInput>>;
 };
 
@@ -19631,7 +19661,6 @@ export type Mutation = {
   createComment?: Maybe<Intel>;
   createCrimeGroup: CrimeGroup;
   createDocument?: Maybe<Document>;
-  createDocumentOnInvestigation?: Maybe<Document>;
   createFlow?: Maybe<Flow>;
   createGroup: Group;
   createImage: Image;
@@ -19831,12 +19860,6 @@ export type MutationCreateCrimeGroupArgs = {
 
 export type MutationCreateDocumentArgs = {
   data: CreateDocument;
-  where: UniqueId;
-};
-
-export type MutationCreateDocumentOnInvestigationArgs = {
-  data: CreateDocument;
-  where: UniqueId;
 };
 
 export type MutationCreateFlowArgs = {
@@ -30333,6 +30356,7 @@ export type User = {
   tags: Array<Tag>;
   termsSigned: Scalars['Boolean'];
   timeSigned?: Maybe<Scalars['DateTime']>;
+  totalChats?: Maybe<Scalars['Int']>;
   updatedAt: Scalars['DateTime'];
   uploaded: Scalars['Boolean'];
 };
@@ -37546,14 +37570,13 @@ export type ListDemUsersQuery = {
   };
 };
 
-export type CreateDocumentOnInvestigationMutationVariables = Exact<{
-  where: UniqueId;
+export type CreateDocumentMutationVariables = Exact<{
   data: CreateDocument;
 }>;
 
-export type CreateDocumentOnInvestigationMutation = {
+export type CreateDocumentMutation = {
   __typename?: 'Mutation';
-  createDocumentOnInvestigation?: {
+  createDocument?: {
     __typename?: 'Document';
     id: string;
     name: string;
@@ -37561,19 +37584,27 @@ export type CreateDocumentOnInvestigationMutation = {
     url: string;
     createdAt: any;
     updatedAt: any;
-    investigation: Array<{
-      __typename?: 'Investigation';
-      id: string;
-      documents: Array<{
-        __typename?: 'Document';
-        id: string;
-        name: string;
-        url: string;
-        thumbnailUrl?: string | null;
-        tags: Array<{ __typename?: 'Tag'; name: string; id: string }>;
-      }>;
-    }>;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+  } | null;
+};
+
+export type ListDocumentsOnSchemeQueryVariables = Exact<{
+  where: SchemeWhereUniqueInput;
+}>;
+
+export type ListDocumentsOnSchemeQuery = {
+  __typename?: 'Query';
+  scheme?: {
+    __typename?: 'Scheme';
+    documents: Array<{
+      __typename?: 'Document';
+      id: string;
+      name: string;
+      url: string;
+      thumbnailUrl?: string | null;
+      createdAt: any;
+      tags: Array<{ __typename?: 'Tag'; name: string; id: string }>;
+    }>;
   } | null;
 };
 
@@ -40266,6 +40297,19 @@ export type PerformanceReportQuery = {
   } | null;
 };
 
+export type CreateTermsAndConditionsMutationVariables = Exact<{
+  data: CreateTermsInput;
+}>;
+
+export type CreateTermsAndConditionsMutation = {
+  __typename?: 'Mutation';
+  createTermsAndConditions?: {
+    __typename?: 'TermsAndCondition';
+    id: string;
+    content: string;
+  } | null;
+};
+
 export type UpdateSchemeMutationVariables = Exact<{
   where: UniqueId;
   data: SchemeUpdateInput;
@@ -40286,6 +40330,22 @@ export type UpdateSchemeMutation = {
       id: string;
       url?: string | null;
       optimised?: string | null;
+    } | null;
+  } | null;
+};
+
+export type CurrentSchemeTermsQueryVariables = Exact<{
+  where: SchemeWhereUniqueInput;
+}>;
+
+export type CurrentSchemeTermsQuery = {
+  __typename?: 'Query';
+  scheme?: {
+    __typename?: 'Scheme';
+    currentTerms?: {
+      __typename?: 'TermsAndCondition';
+      id: string;
+      content: string;
     } | null;
   } | null;
 };
@@ -40772,6 +40832,15 @@ export type SendInviteMutation = {
   sendInvite?: { __typename?: 'User'; id: string; newUser: boolean } | null;
 };
 
+export type SignTermsMutationVariables = Exact<{
+  data: SignTermsInput;
+}>;
+
+export type SignTermsMutation = {
+  __typename?: 'Mutation';
+  signTerms?: { __typename?: 'UserTerm'; id: string } | null;
+};
+
 export type UpdateUserMutationVariables = Exact<{
   where: UniqueId;
   data: UserUpdateInput;
@@ -40863,6 +40932,7 @@ export type CurrentUserQuery = {
         name: string;
         autoApproveIncidents: boolean;
         autoApproveOffenders: boolean;
+        logo?: { __typename?: 'Image'; optimised?: string | null } | null;
       };
     }>;
   } | null;
@@ -44151,26 +44221,10 @@ export type ListDemUsersQueryResult = Apollo.QueryResult<
   ListDemUsersQuery,
   ListDemUsersQueryVariables
 >;
-export const CreateDocumentOnInvestigationDocument = gql`
-  mutation CreateDocumentOnInvestigation(
-    $where: UniqueId!
-    $data: CreateDocument!
-  ) {
-    createDocumentOnInvestigation(where: $where, data: $data) {
+export const CreateDocumentDocument = gql`
+  mutation CreateDocument($data: CreateDocument!) {
+    createDocument(data: $data) {
       id
-      investigation {
-        id
-        documents {
-          id
-          name
-          url
-          thumbnailUrl
-          tags {
-            name
-            id
-          }
-        }
-      }
       name
       tags {
         id
@@ -44183,51 +44237,117 @@ export const CreateDocumentOnInvestigationDocument = gql`
     }
   }
 `;
-export type CreateDocumentOnInvestigationMutationFn = Apollo.MutationFunction<
-  CreateDocumentOnInvestigationMutation,
-  CreateDocumentOnInvestigationMutationVariables
+export type CreateDocumentMutationFn = Apollo.MutationFunction<
+  CreateDocumentMutation,
+  CreateDocumentMutationVariables
 >;
 
 /**
- * __useCreateDocumentOnInvestigationMutation__
+ * __useCreateDocumentMutation__
  *
- * To run a mutation, you first call `useCreateDocumentOnInvestigationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateDocumentOnInvestigationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateDocumentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDocumentMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createDocumentOnInvestigationMutation, { data, loading, error }] = useCreateDocumentOnInvestigationMutation({
+ * const [createDocumentMutation, { data, loading, error }] = useCreateDocumentMutation({
  *   variables: {
- *      where: // value for 'where'
  *      data: // value for 'data'
  *   },
  * });
  */
-export function useCreateDocumentOnInvestigationMutation(
+export function useCreateDocumentMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    CreateDocumentOnInvestigationMutation,
-    CreateDocumentOnInvestigationMutationVariables
+    CreateDocumentMutation,
+    CreateDocumentMutationVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<
-    CreateDocumentOnInvestigationMutation,
-    CreateDocumentOnInvestigationMutationVariables
-  >(CreateDocumentOnInvestigationDocument, options);
+    CreateDocumentMutation,
+    CreateDocumentMutationVariables
+  >(CreateDocumentDocument, options);
 }
-export type CreateDocumentOnInvestigationMutationHookResult = ReturnType<
-  typeof useCreateDocumentOnInvestigationMutation
+export type CreateDocumentMutationHookResult = ReturnType<
+  typeof useCreateDocumentMutation
 >;
-export type CreateDocumentOnInvestigationMutationResult =
-  Apollo.MutationResult<CreateDocumentOnInvestigationMutation>;
-export type CreateDocumentOnInvestigationMutationOptions =
-  Apollo.BaseMutationOptions<
-    CreateDocumentOnInvestigationMutation,
-    CreateDocumentOnInvestigationMutationVariables
-  >;
+export type CreateDocumentMutationResult =
+  Apollo.MutationResult<CreateDocumentMutation>;
+export type CreateDocumentMutationOptions = Apollo.BaseMutationOptions<
+  CreateDocumentMutation,
+  CreateDocumentMutationVariables
+>;
+export const ListDocumentsOnSchemeDocument = gql`
+  query listDocumentsOnScheme($where: SchemeWhereUniqueInput!) {
+    scheme(where: $where) {
+      documents {
+        id
+        name
+        tags {
+          name
+          id
+        }
+        url
+        thumbnailUrl
+        createdAt
+      }
+    }
+  }
+`;
+
+/**
+ * __useListDocumentsOnSchemeQuery__
+ *
+ * To run a query within a React component, call `useListDocumentsOnSchemeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListDocumentsOnSchemeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListDocumentsOnSchemeQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useListDocumentsOnSchemeQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListDocumentsOnSchemeQuery,
+    ListDocumentsOnSchemeQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListDocumentsOnSchemeQuery,
+    ListDocumentsOnSchemeQueryVariables
+  >(ListDocumentsOnSchemeDocument, options);
+}
+export function useListDocumentsOnSchemeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListDocumentsOnSchemeQuery,
+    ListDocumentsOnSchemeQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListDocumentsOnSchemeQuery,
+    ListDocumentsOnSchemeQueryVariables
+  >(ListDocumentsOnSchemeDocument, options);
+}
+export type ListDocumentsOnSchemeQueryHookResult = ReturnType<
+  typeof useListDocumentsOnSchemeQuery
+>;
+export type ListDocumentsOnSchemeLazyQueryHookResult = ReturnType<
+  typeof useListDocumentsOnSchemeLazyQuery
+>;
+export type ListDocumentsOnSchemeQueryResult = Apollo.QueryResult<
+  ListDocumentsOnSchemeQuery,
+  ListDocumentsOnSchemeQueryVariables
+>;
 export const DeleteFeedItemDocument = gql`
   mutation deleteFeedItem($id: String!) {
     deleteFeedItem(where: { id: $id }) {
@@ -49218,6 +49338,58 @@ export type PerformanceReportQueryResult = Apollo.QueryResult<
   PerformanceReportQuery,
   PerformanceReportQueryVariables
 >;
+export const CreateTermsAndConditionsDocument = gql`
+  mutation createTermsAndConditions($data: CreateTermsInput!) {
+    createTermsAndConditions(data: $data) {
+      id
+      content
+    }
+  }
+`;
+export type CreateTermsAndConditionsMutationFn = Apollo.MutationFunction<
+  CreateTermsAndConditionsMutation,
+  CreateTermsAndConditionsMutationVariables
+>;
+
+/**
+ * __useCreateTermsAndConditionsMutation__
+ *
+ * To run a mutation, you first call `useCreateTermsAndConditionsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTermsAndConditionsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTermsAndConditionsMutation, { data, loading, error }] = useCreateTermsAndConditionsMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateTermsAndConditionsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateTermsAndConditionsMutation,
+    CreateTermsAndConditionsMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateTermsAndConditionsMutation,
+    CreateTermsAndConditionsMutationVariables
+  >(CreateTermsAndConditionsDocument, options);
+}
+export type CreateTermsAndConditionsMutationHookResult = ReturnType<
+  typeof useCreateTermsAndConditionsMutation
+>;
+export type CreateTermsAndConditionsMutationResult =
+  Apollo.MutationResult<CreateTermsAndConditionsMutation>;
+export type CreateTermsAndConditionsMutationOptions =
+  Apollo.BaseMutationOptions<
+    CreateTermsAndConditionsMutation,
+    CreateTermsAndConditionsMutationVariables
+  >;
 export const UpdateSchemeDocument = gql`
   mutation updateScheme($where: UniqueId!, $data: SchemeUpdateInput!) {
     updateScheme(where: $where, data: $data) {
@@ -49278,6 +49450,67 @@ export type UpdateSchemeMutationResult =
 export type UpdateSchemeMutationOptions = Apollo.BaseMutationOptions<
   UpdateSchemeMutation,
   UpdateSchemeMutationVariables
+>;
+export const CurrentSchemeTermsDocument = gql`
+  query currentSchemeTerms($where: SchemeWhereUniqueInput!) {
+    scheme(where: $where) {
+      currentTerms {
+        id
+        content
+      }
+    }
+  }
+`;
+
+/**
+ * __useCurrentSchemeTermsQuery__
+ *
+ * To run a query within a React component, call `useCurrentSchemeTermsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCurrentSchemeTermsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCurrentSchemeTermsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useCurrentSchemeTermsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    CurrentSchemeTermsQuery,
+    CurrentSchemeTermsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    CurrentSchemeTermsQuery,
+    CurrentSchemeTermsQueryVariables
+  >(CurrentSchemeTermsDocument, options);
+}
+export function useCurrentSchemeTermsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    CurrentSchemeTermsQuery,
+    CurrentSchemeTermsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    CurrentSchemeTermsQuery,
+    CurrentSchemeTermsQueryVariables
+  >(CurrentSchemeTermsDocument, options);
+}
+export type CurrentSchemeTermsQueryHookResult = ReturnType<
+  typeof useCurrentSchemeTermsQuery
+>;
+export type CurrentSchemeTermsLazyQueryHookResult = ReturnType<
+  typeof useCurrentSchemeTermsLazyQuery
+>;
+export type CurrentSchemeTermsQueryResult = Apollo.QueryResult<
+  CurrentSchemeTermsQuery,
+  CurrentSchemeTermsQueryVariables
 >;
 export const SchemeDocument = gql`
   query scheme($where: SchemeWhereUniqueInput!) {
@@ -50220,6 +50453,55 @@ export type SendInviteMutationOptions = Apollo.BaseMutationOptions<
   SendInviteMutation,
   SendInviteMutationVariables
 >;
+export const SignTermsDocument = gql`
+  mutation signTerms($data: SignTermsInput!) {
+    signTerms(data: $data) {
+      id
+    }
+  }
+`;
+export type SignTermsMutationFn = Apollo.MutationFunction<
+  SignTermsMutation,
+  SignTermsMutationVariables
+>;
+
+/**
+ * __useSignTermsMutation__
+ *
+ * To run a mutation, you first call `useSignTermsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignTermsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [signTermsMutation, { data, loading, error }] = useSignTermsMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useSignTermsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SignTermsMutation,
+    SignTermsMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<SignTermsMutation, SignTermsMutationVariables>(
+    SignTermsDocument,
+    options
+  );
+}
+export type SignTermsMutationHookResult = ReturnType<
+  typeof useSignTermsMutation
+>;
+export type SignTermsMutationResult = Apollo.MutationResult<SignTermsMutation>;
+export type SignTermsMutationOptions = Apollo.BaseMutationOptions<
+  SignTermsMutation,
+  SignTermsMutationVariables
+>;
 export const UpdateUserDocument = gql`
   mutation updateUser(
     $where: UniqueId!
@@ -50392,6 +50674,9 @@ export const CurrentUserDocument = gql`
         id
         role
         scheme {
+          logo {
+            optimised
+          }
           id
           name
           autoApproveIncidents

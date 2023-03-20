@@ -50,7 +50,6 @@ const useAuth = (): Return => {
     groups,
     reference,
   }: HandleSuccessArgs) => {
-    window.localStorage.setItem('access_token', accessToken);
     const color = `hsl(${Math.random() * 360}, 70%, 30%)`;
 
     localStorage.setItem(
@@ -77,6 +76,7 @@ const useAuth = (): Return => {
         // eslint-disable-next-line @typescript-eslint/no-shadow
         ({ scheme: { id } }) => id === scheme
       );
+
       if (schemeDetails) {
         setRole({ role: schemeDetails.role });
         setScheme({
@@ -114,6 +114,14 @@ const useAuth = (): Return => {
 
   const [getCurrentUser, { loading }] = useCurrentUserLazyQuery({
     onCompleted: ({ currentUser }) => {
+      const scheme =
+        currentScheme || window.localStorage.getItem('currentScheme');
+      if (scheme) {
+        const currentS = currentUser?.schemes.find((s) => s.id === scheme);
+        if (currentS) {
+          localStorage.setItem('logo', currentS?.scheme?.logo?.optimised || '');
+        }
+      }
       handleSuccess({
         id: currentUser?.id || '',
         email: currentUser?.email || '',

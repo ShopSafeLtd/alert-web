@@ -1,0 +1,5 @@
+mutation signTerms($data: SignTermsInput!) {
+    signTerms(data: $data) {
+        id
+    }
+}
