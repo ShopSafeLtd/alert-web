@@ -241,7 +241,11 @@ const compareIncident = (): Return => {
     setSelectedImages([]);
   };
 
-  const [mergeOffenders] = useMergeOffendersMutation();
+  const [mergeOffenders] = useMergeOffendersMutation({
+    onCompleted: () => {
+      navigate('/app/offenders');
+    },
+  });
 
   const onMerge = () => {
     // const mainOffender = {
@@ -268,9 +272,6 @@ const compareIncident = (): Return => {
             .filter((id) => id !== preview.id),
           imageIds: preview.images.map(({ id }) => id),
         },
-      },
-      onCompleted: () => {
-        navigate('/offenders');
       },
     });
   };
