@@ -266,7 +266,6 @@ const ViewOffender = ({
                     <Skeleton />
                   ) : (
                     <div>
-                      <Title level={4}>{data?.offender?.name}</Title>
                       <Row
                         style={{ marginTop: 10, marginBottom: 10 }}
                         className="offender-tags"
@@ -351,6 +350,21 @@ const ViewOffender = ({
                         )}
                       </Descriptions>
                       <Descriptions column={1} className={classes.desc}>
+                        {data?.offender?.peculiarities && (
+                          <Descriptions.Item
+                            label={
+                              <span>
+                                <FontAwesomeIcon
+                                  className={classes.descIcon}
+                                  icon={faCircleInfo}
+                                />
+                                Additional Info
+                              </span>
+                            }
+                          >
+                            {data?.offender?.peculiarities}
+                          </Descriptions.Item>
+                        )}
                         <Descriptions.Item
                           label={
                             <span>
@@ -373,21 +387,6 @@ const ViewOffender = ({
                             </Typography.Text>
                           )}
                         </Descriptions.Item>
-                        {data?.offender?.peculiarities && (
-                          <Descriptions.Item
-                            label={
-                              <span>
-                                <FontAwesomeIcon
-                                  className={classes.descIcon}
-                                  icon={faCircleInfo}
-                                />
-                                Additional Info
-                              </span>
-                            }
-                          >
-                            {data?.offender?.peculiarities}
-                          </Descriptions.Item>
-                        )}
                         {data?.offender?.incidents &&
                           data?.offender?.incidents.length > 0 && (
                             <Descriptions.Item

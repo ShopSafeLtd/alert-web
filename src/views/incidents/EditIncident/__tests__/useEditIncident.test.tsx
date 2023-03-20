@@ -365,7 +365,9 @@ const UseEditIncidentTest = () => {
               value: 'test',
             },
             groups: ['groupId'],
-            tags: ['tagId'],
+            tagsCrimeTypes: ['tagId'],
+            tagsImpact: ['tagId'],
+            tagsInvolved: ['tagId'],
             images: [
               {
                 id: 'cl6owsuzo33227f9pe9zk4wone',

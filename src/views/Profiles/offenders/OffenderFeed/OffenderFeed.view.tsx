@@ -458,7 +458,7 @@ const OffenderFeed = ({
                     <Typography.Text>{item.name}</Typography.Text>
                     <div>
                       <Typography.Text>
-                        {item.locations[0].full}
+                        {item.locations[0]?.full}
                       </Typography.Text>
                     </div>
                   </div>

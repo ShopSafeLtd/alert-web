@@ -58,6 +58,7 @@ interface FormData {
   policeReported?: boolean;
   policeInvolved?: boolean;
   policeRef?: string;
+  policeNo?: string;
   goods: {
     id: string;
     goodsType?: string;
@@ -69,7 +70,9 @@ interface FormData {
     value: string;
   };
   groups: string[];
-  tags: string[];
+  tagsCrimeTypes: string[];
+  tagsInvolved: string[];
+  tagsImpact: string[];
   images: [{ id: string; url: string; optimised: string }];
 }
 
@@ -210,14 +213,24 @@ const EditIncident = ({
           })),
           policeInvolved: data?.incident?.policeInvolved || false,
           policeRef: data?.incident?.policeRef,
+          policeNo: data?.incident?.policeNo,
           policeReported: data?.incident?.policeReported || false,
           groups:
             data?.incident?.groups && data?.incident?.groups.length > 0
               ? data?.incident?.groups.map(({ id }) => id)
               : [],
-          tags:
+          tagsCrimeTypes:
             data?.incident?.crimeTypes && data?.incident?.crimeTypes.length > 0
               ? data?.incident?.crimeTypes.map(({ id }) => id)
+              : [],
+          tagsInvolved:
+            data?.incident?.involvedTags &&
+            data?.incident?.involvedTags.length > 0
+              ? data?.incident?.involvedTags.map(({ id }) => id)
+              : [],
+          tagsImpact:
+            data?.incident?.impactTags && data?.incident?.impactTags.length > 0
+              ? data?.incident?.impactTags.map(({ id }) => id)
               : [],
         }}
       >
@@ -234,29 +247,81 @@ const EditIncident = ({
               </Title>
             </Col>
           </Row>
-          <Form.Item
-            name="tags"
-            label="Incident Type"
-            tooltip="Select the relevant crime types for this incident, these help to categorise the incident,"
-            rules={[
-              {
-                required: true,
-                message: 'Please add at least one crime type.',
-              },
-            ]}
-          >
-            <Select
-              loading={tagsLoading}
-              disabled={saving}
-              mode="multiple"
-              maxTagCount={3}
-              placeholder="Search for a crime type..."
-            >
-              {tags.map((tag) => (
-                <Select.Option value={tag.value}>{tag.label}</Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
+          <Row gutter={16}>
+            <Col flex={1}>
+              <Form.Item
+                name="tagsCrimeTypes"
+                label="Incident Type"
+                tooltip="Select the relevant crime types for this incident, these help to categorise the incident,"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please add at least one crime type.',
+                  },
+                ]}
+              >
+                <Select
+                  loading={tagsLoading}
+                  disabled={saving}
+                  mode="multiple"
+                  maxTagCount={3}
+                  placeholder="Search for a crime type..."
+                >
+                  {tags.map((tag) => (
+                    <Select.Option value={tag.value}>{tag.label}</Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col flex={1}>
+              <Form.Item
+                name="tagsInvolved"
+                label="Aggravating Factors"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please add at least one crime type.',
+                  },
+                ]}
+              >
+                <Select
+                  loading={tagsLoading}
+                  disabled={saving}
+                  mode="multiple"
+                  maxTagCount={3}
+                  placeholder="Search for a crime type..."
+                >
+                  {tags.map((tag) => (
+                    <Select.Option value={tag.value}>{tag.label}</Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col flex={1}>
+              <Form.Item
+                name="tagsImpact"
+                label="Incident Impact"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please add at least one crime type.',
+                  },
+                ]}
+              >
+                <Select
+                  loading={tagsLoading}
+                  disabled={saving}
+                  mode="multiple"
+                  maxTagCount={3}
+                  placeholder="Search for a crime type..."
+                >
+                  {tags.map((tag) => (
+                    <Select.Option value={tag.value}>{tag.label}</Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
 
           <Row gutter={16}>
             <Col>
@@ -521,6 +586,13 @@ const EditIncident = ({
                 name="policeRef"
                 label="Crime Ref No."
                 tooltip="The crime reference number provided by the police."
+              >
+                <Input disabled={saving} />
+              </Form.Item>
+              <Form.Item
+                name="policeNo"
+                label="Officer Collar No."
+                tooltip="The collar number of the officer(s) involved."
               >
                 <Input disabled={saving} />
               </Form.Item>

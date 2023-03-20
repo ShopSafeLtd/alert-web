@@ -63,7 +63,9 @@ interface FormData {
     value: string;
   };
   groups: string[];
-  tags: string[];
+  tagsCrimeTypes: string[];
+  tagsInvolved: string[];
+  tagsImpact: string[];
   images: { id: string; url: string; optimised: string }[];
   goods: {
     id: string;
@@ -971,7 +973,11 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
               set: data.groups.map((id) => ({ id })),
             },
             crimeTypes: {
-              set: data.tags.map((id) => ({ id })),
+              set: [
+                ...data.tagsCrimeTypes.map((id) => ({ id })),
+                ...data.tagsImpact.map((id) => ({ id })),
+                ...data.tagsInvolved.map((id) => ({ id })),
+              ],
             },
             offenders: getOffenders(),
             vehicles: getVehicles(),

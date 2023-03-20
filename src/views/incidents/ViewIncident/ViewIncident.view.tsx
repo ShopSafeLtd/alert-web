@@ -338,9 +338,15 @@ const ViewIncident = ({
                         </Descriptions.Item>
                         <Descriptions.Item
                           className={classes.detail}
-                          label={<span>Police Involved</span>}
+                          label={<span>Police Attended</span>}
                         >
                           {data?.incident?.policeInvolved ? 'Yes' : 'No'}
+                        </Descriptions.Item>
+                        <Descriptions.Item
+                          className={classes.detail}
+                          label={<span>Officer Collar Number</span>}
+                        >
+                          {data?.incident?.policeNo || 'None Provided'}
                         </Descriptions.Item>
                         <Descriptions.Item
                           className={classes.detail}

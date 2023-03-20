@@ -243,7 +243,7 @@ const adminOnlyItems: NavItem[] = [
       {
         key: 'crime-types',
         path: `${APP_PREFIX_PATH}/scheme-settings/crime-types`,
-        title: 'Crime Types',
+        title: 'Incident Settings',
         icon: faSirenOn,
         breadcrumb: true,
         submenu: [],
