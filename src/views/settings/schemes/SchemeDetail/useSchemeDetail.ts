@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import {
-  useSchemeQuery,
   SchemeQuery,
+  useSchemeQuery,
   useUpdateSchemeMutation,
 } from 'graphql/generated';
-import { notification, message, Upload } from 'antd';
+import { message, notification, Upload } from 'antd';
 import { useStoreState } from 'state';
 
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
@@ -24,6 +24,7 @@ interface FormData {
   incidentRetention: number | null;
   offenderRetention: number | null;
 }
+
 interface Return {
   data: SchemeQuery | undefined;
   loading: boolean;
@@ -58,6 +59,8 @@ const useSchemeDetail = (): Return => {
             url: `${scheme?.logo?.optimised || scheme?.logo?.url}`,
           },
         ]);
+      } else {
+        setFileList([]);
       }
     },
   });

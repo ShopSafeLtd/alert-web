@@ -50,12 +50,12 @@ const useAuth = (): Return => {
     groups,
     reference,
   }: HandleSuccessArgs) => {
-    const color = `hsl(${Math.random() * 360}, 70%, 30%)`;
+    // const color = `hsl(${Math.random() * 360}, 70%, 30%)`;
 
-    localStorage.setItem(
-      'current-user',
-      JSON.stringify({ id, name: fullName, color })
-    );
+    // localStorage.setItem(
+    //   'current-user',
+    //   JSON.stringify({ id, name: fullName, color })
+    // );
 
     const handleNoValidScheme = () => {
       const schemeDetails = schemes[0]?.scheme;
@@ -66,6 +66,7 @@ const useAuth = (): Return => {
         autoApproveOffenders: schemeDetails?.autoApproveOffenders,
         id: schemeDetails?.id,
         name: schemeDetails?.name,
+        logo: schemeDetails?.logo?.optimised,
       });
     };
 
@@ -297,7 +298,9 @@ const useAuth = (): Return => {
   const signOut = () => {
     clearUser();
     handleSignOut();
+    const logo = window.localStorage.getItem('logo');
     window.localStorage.clear();
+    window.localStorage.setItem('logo', logo || '');
     window.sessionStorage.clear();
   };
 

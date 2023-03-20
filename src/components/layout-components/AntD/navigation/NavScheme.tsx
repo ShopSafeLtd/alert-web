@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
-import { Menu, Dropdown, Typography, List, Row, Col } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Col, Dropdown, List, Menu, Row, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCity,
-  faCaretDown,
-  faArrowRight,
-} from '@fortawesome/pro-light-svg-icons';
+import { faArrowRight, faCaretDown } from '@fortawesome/pro-light-svg-icons';
 import { LocalStorageKeys } from 'types';
 
-import { useStoreState, Scheme, useStoreActions } from 'state';
+import { Scheme, useStoreActions, useStoreState } from 'state';
+import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router-dom';
 
 const { Text } = Typography;
 
@@ -24,15 +22,23 @@ export const NavScheme = () => {
     setVisible(flag);
   };
 
+  const navigate = useNavigate();
+  const location = useLocation();
+  useEffect(() => {
+    navigate(location.pathname);
+  }, [activeScheme]);
+
   const handleSchemeChange = (scheme: Scheme) => {
     window.localStorage.removeItem(LocalStorageKeys.INCIDENT_FILTER);
     window.localStorage.removeItem(LocalStorageKeys.OFFENDER_FILTER);
     window.localStorage.setItem('currentScheme', scheme.scheme.id);
+    window.localStorage.setItem('logo', scheme.scheme.logo?.optimised || '');
     setScheme({
       autoApproveIncidents: scheme.scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.scheme.autoApproveOffenders,
       id: scheme.scheme.id,
       name: scheme.scheme.name,
+      logo: scheme.scheme.logo?.optimised,
     });
     handleVisibleChange(false);
   };

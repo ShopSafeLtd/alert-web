@@ -28,17 +28,18 @@ export interface SetUserRole {
 export interface Scheme {
   id: string;
   role: Role;
-  logo?:
-    | {
-        optimised?: string | null | undefined;
-      }
-    | null
-    | undefined;
+
   scheme: {
     id: string;
     name: string;
     autoApproveIncidents: boolean;
     autoApproveOffenders: boolean;
+    logo?:
+      | {
+          optimised?: string | null | undefined;
+        }
+      | null
+      | undefined;
   };
 }
 
