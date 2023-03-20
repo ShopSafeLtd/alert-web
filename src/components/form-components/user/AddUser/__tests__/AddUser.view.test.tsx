@@ -29,6 +29,7 @@ describe('Detail Officer View', () => {
         form={form}
         onSearchBusiness={jest.fn()}
         businessProvided={false}
+        schemeLoading={false}
       />
     );
   };

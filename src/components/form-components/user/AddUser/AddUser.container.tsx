@@ -34,10 +34,12 @@ const AddUser = ({
     form,
     existingUser,
     onSearchBusiness,
+    schemeLoading,
   } = useAddUser({ onClose, update, updateSearch, business });
 
   return (
     <View
+      schemeLoading={schemeLoading}
       onSubmit={onSubmit}
       onClose={onClose}
       groupsData={groupsData}

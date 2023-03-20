@@ -13,6 +13,13 @@ describe('Detail Officer View', () => {
       email: '@shopsafe.uk',
       disabled: false,
       newUser: false,
+      incidentEmail: false,
+      incidentPush: false,
+      subscribedIncidentOnly: false,
+      subscribedOffenderOnly: false,
+      messagePush: false,
+      offenderEmail: false,
+      offenderPush: false,
       addresses: [
         {
           building: 'building',

@@ -13,6 +13,13 @@ describe('List Officer View', () => {
       logo: null,
       offenderRetention: null,
       incidentRetention: null,
+      defaultIncidentEmail: false,
+      defaultIncidentPush: false,
+      defaultSubscribedIncidentOnly: false,
+      defaultSubscribedOffenderOnly: false,
+      defaultMessagePush: false,
+      defaultOffenderEmail: false,
+      defaultOffenderPush: false,
     },
   };
   it('renders the page', () => {
