@@ -175,6 +175,7 @@ const useEditIncident = (): Return => {
   const [fileList, setFileList] = useState<Image[]>([]);
   const [imageChange, setImageChange] = useState(false);
   const [isTheft, setIsTheft] = useState(false);
+  const [descriptionPristine, setDescriptionPristine] = useState(true);
   const [newImage, setNewImage] = useState<Image | null>(null);
   const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
   const [saving, setSaving] = useState(false);
@@ -1004,7 +1005,15 @@ const useEditIncident = (): Return => {
           ],
         });
       }
+    }
 
+    console.log(changedValues);
+
+    if (changedValues.fellingTags) {
+      const tags = values.tags
+        .map((id) => tagsData?.tags.find((tag) => tag.id === id))
+        .map((tag) => tag?.crimeType || CrimeType.Other);
+      const theft = tags.includes(CrimeType.TheftHandling);
       setFormStages({
         ...formStages,
         where: true,
@@ -1069,35 +1078,53 @@ const useEditIncident = (): Return => {
       });
     }
 
-    // build description as data is completed
-    const tags = values.tags
-      .map((id) => tagsData?.tags.find((tag) => tag.id === id))
-      .map((tag) => tag?.name || '');
-    const offenders = values.profiles || [];
-    const unknownOffenders =
-      (values.profiles &&
-        values.profiles.filter(
-          (item) => item.name === 'Unidentified Offender'
-        )) ||
-      [];
-    const knownOffenders =
-      (values.profiles &&
-        values.profiles.filter(
-          (item) => item.name !== 'Unidentified Offender'
-        )) ||
-      [];
+    if (changedValues.description) {
+      setDescriptionPristine(false);
+    }
 
-    form.setFieldsValue({
-      description: `An incident of ${tags
-        .map((tag, index) => `${index > 0 ? ' ' : ''}${tag}`)
-        .toString()} occurred at ${values.business.label} at ${moment(
-        values.date
-      ).format('HH:mm')} on ${moment(values.date).format(
-        'dddd Do MMMM YYYY'
-      )}. ${
-        tags.includes('Theft & Handling')
-          ? `The goods lost in this incident total £${
-              values.goods
+    if (descriptionPristine) {
+      // build description as data is completed
+      const tags = values.tags
+        .map((id) => tagsData?.tags.find((tag) => tag.id === id))
+        .map((tag) => tag?.name || '');
+      const offenders = values.profiles || [];
+      const unknownOffenders =
+        (values.profiles &&
+          values.profiles.filter(
+            (item) => item.name === 'Unidentified Offender'
+          )) ||
+        [];
+      const knownOffenders =
+        (values.profiles &&
+          values.profiles.filter(
+            (item) => item.name !== 'Unidentified Offender'
+          )) ||
+        [];
+
+      form.setFieldsValue({
+        description: `An incident of ${tags
+          .map((tag, index) => `${index > 0 ? ' ' : ''}${tag}`)
+          .toString()} occurred at ${values.business.label} at ${moment(
+          values.date
+        ).format('HH:mm')} on ${moment(values.date).format(
+          'dddd Do MMMM YYYY'
+        )}. ${
+          tags.includes('Theft & Handling')
+            ? `The goods lost in this incident total £${
+                values.goods
+                  .filter((item) => {
+                    if (
+                      item.goodsType !== undefined &&
+                      item.recoveredValue !== undefined &&
+                      item.value !== undefined
+                    )
+                      return true;
+                    return false;
+                  })
+                  .map((item) => item.value)
+                  .reduce((a, b) => (a || 0) + (b || 0))
+                  ?.toFixed(2) || 0
+              } of which a value of £${values.goods
                 .filter((item) => {
                   if (
                     item.goodsType !== undefined &&
@@ -1107,45 +1134,33 @@ const useEditIncident = (): Return => {
                     return true;
                   return false;
                 })
-                .map((item) => item.value)
+                .map((item) => item.recoveredValue)
                 .reduce((a, b) => (a || 0) + (b || 0))
-                ?.toFixed(2) || 0
-            } of which a value of £${values.goods
-              .filter((item) => {
-                if (
-                  item.goodsType !== undefined &&
-                  item.recoveredValue !== undefined &&
-                  item.value !== undefined
-                )
-                  return true;
-                return false;
-              })
-              .map((item) => item.recoveredValue)
-              .reduce((a, b) => (a || 0) + (b || 0))
-              .toFixed(2)} was recovered.`
-          : ''
-      } ${
-        offenders.length > 0
-          ? `The incident involved ${
-              offenders.length > 1
-                ? `${offenders.length} offenders`
-                : `${offenders.length} offender`
-            }, ${
-              knownOffenders.length > 0
-                ? ` ${knownOffenders.map(
-                    (item, index) => `${index > 1 ? ' ' : ''}${item.name}`
-                  )}${unknownOffenders.length > 0 ? ' and' : '.'}`
-                : ''
-            } ${
-              unknownOffenders.length > 0
-                ? `${unknownOffenders.length} unidentified offender${
-                    unknownOffenders.length > 1 ? 's.' : '.'
-                  }`
-                : ''
-            }`
-          : ''
-      }`,
-    });
+                .toFixed(2)} was recovered.`
+            : ''
+        } ${
+          offenders.length > 0
+            ? `The incident involved ${
+                offenders.length > 1
+                  ? `${offenders.length} offenders`
+                  : `${offenders.length} offender`
+              }, ${
+                knownOffenders.length > 0
+                  ? ` ${knownOffenders.map(
+                      (item, index) => `${index > 1 ? ' ' : ''}${item.name}`
+                    )}${unknownOffenders.length > 0 ? ' and' : '.'}`
+                  : ''
+              } ${
+                unknownOffenders.length > 0
+                  ? `${unknownOffenders.length} unidentified offender${
+                      unknownOffenders.length > 1 ? 's.' : '.'
+                    }`
+                  : ''
+              }`
+            : ''
+        }`,
+      });
+    }
   };
 
   return {
