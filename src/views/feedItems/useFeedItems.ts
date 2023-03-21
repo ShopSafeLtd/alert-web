@@ -1,19 +1,19 @@
 import {
+  DeleteFeedItemMutation,
+  FeedItemsDocument,
   FeedItemsQuery,
+  ListArticlesQuery,
   ListOffendersQuery,
+  ListUnapprovedIncidentsQuery,
+  QueryMode,
   Role,
   SortOrder,
+  useDeleteFeedItemMutation,
   useFeedItemsQuery,
+  useListArticlesQuery,
   useListOffendersQuery,
   useListUnapprovedIncidentsQuery,
   useSchemeGroupsQuery,
-  ListUnapprovedIncidentsQuery,
-  useListArticlesQuery,
-  QueryMode,
-  ListArticlesQuery,
-  FeedItemsDocument,
-  DeleteFeedItemMutation,
-  useDeleteFeedItemMutation,
 } from 'graphql/generated';
 import { useState } from 'react';
 import { FeedItemSort, useStoreActions, useStoreState } from 'state';

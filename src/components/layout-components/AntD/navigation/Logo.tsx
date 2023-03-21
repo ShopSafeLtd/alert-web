@@ -47,8 +47,11 @@ interface Props {
 export const Logo = (props: Props) => {
   const navCollapsed = useStoreState((state) => state.theme.navCollapsed);
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
-  const customLogo = window.localStorage.getItem('logo');
-
+  const customLogoLight = window.localStorage.getItem('logo');
+  const customLogoDark =
+    window.localStorage.getItem('logo-dark') || customLogoLight;
+  const customLogo =
+    currentTheme === 'light' ? customLogoLight : customLogoDark;
   return (
     <div
       style={{

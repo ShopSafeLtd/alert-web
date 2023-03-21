@@ -31,17 +31,22 @@ interface Return {
   saving: boolean;
   onSubmit: (value: FormData) => void;
 
-  beforeUpload: (value: RcFile) => void;
   onPreview: (value: UploadFile) => void;
   fileList: UploadFile[];
   imgChange: UploadProps['onChange'];
+  beforeUpload: (value: RcFile, dark?: string) => void;
+  darkFileList: UploadFile[];
+  darkImgChange: UploadProps['onChange'];
 }
 
 const useSchemeDetail = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
   const [imageChange, setImageChange] = useState(false);
+  const [darkImageChange, setDarkImageChange] = useState(false);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [darkFileList, setDarkFileList] = useState<UploadFile[]>([]);
+
   const { data: schemeData, loading } = useSchemeQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -62,6 +67,18 @@ const useSchemeDetail = (): Return => {
       } else {
         setFileList([]);
       }
+      if (scheme?.darkLogo?.url) {
+        setDarkFileList([
+          {
+            uid: `${scheme?.darkLogo?.id}`,
+            name: 'darkImage.png',
+            status: 'done',
+            url: `${scheme?.darkLogo?.optimised || scheme?.darkLogo?.url}`,
+          },
+        ]);
+      } else {
+        setDarkFileList([]);
+      }
     },
   });
 
@@ -76,6 +93,10 @@ const useSchemeDetail = (): Return => {
       window.localStorage.setItem(
         'logo',
         res.updateScheme?.logo?.optimised || ''
+      );
+      window.localStorage.setItem(
+        'logo-dark',
+        res.updateScheme?.darkLogo?.optimised || ''
       );
     },
     onError: () => {
@@ -130,6 +151,25 @@ const useSchemeDetail = (): Return => {
             //   : {}),
             ...(imageChange && fileList.length === 0 ? { delete: true } : {}),
           },
+          darkLogo: {
+            ...(darkImageChange && darkFileList.length > 0
+              ? {
+                  upload: {
+                    url: {
+                      filename: darkFileList[0].fileName || '',
+                      mimetype: darkFileList[0].type || '',
+                      url: darkFileList[0].url || '',
+                    },
+                  },
+                }
+              : undefined),
+            // ...(imageChange && fileList.length > 0
+            //   ? { upload: { file: fileList[0]?.originFileObj } }
+            //   : {}),
+            ...(darkImageChange && darkFileList.length === 0
+              ? { delete: true }
+              : {}),
+          },
         },
       },
     });
@@ -137,8 +177,10 @@ const useSchemeDetail = (): Return => {
 
   // image
   // check the size / type if image before uploading
-  const beforeUpload = (file: RcFile) => {
-    const isFileDuplicate = fileList.find((item) => item.name === file.name);
+  const beforeUpload = (file: RcFile, dark?: string) => {
+    const isFileDuplicate = dark
+      ? darkFileList.find((item) => item.name === file.name)
+      : fileList.find((item) => item.name === file.name);
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (isFileDuplicate) {
       message.error(
@@ -168,6 +210,24 @@ const useSchemeDetail = (): Return => {
       setImageChange(true);
     }
   };
+
+  const darkImgChange: UploadProps['onChange'] = (info) => {
+    if (info.file.response && info.file.status === 'done') {
+      setDarkFileList([
+        ...darkFileList.filter((item) => item.uid !== info.file.uid),
+        {
+          ...info.file,
+          url: info.file.response[0].url,
+          fileName: info.file.response[0].blobName,
+          type: info.file.response[0].mimetype,
+        },
+      ]);
+      setDarkImageChange(true);
+    } else {
+      setDarkFileList(info.fileList);
+      setDarkImageChange(true);
+    }
+  };
   const onPreview = async (file: UploadFile) => {
     let src = file.url as string;
     if (!src) {
@@ -192,6 +252,8 @@ const useSchemeDetail = (): Return => {
     onPreview,
     imgChange,
     fileList,
+    darkFileList,
+    darkImgChange,
   };
 };
 

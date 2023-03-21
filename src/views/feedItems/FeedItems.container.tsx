@@ -14,7 +14,7 @@ const FeedItems = (): JSX.Element => {
     pagination,
     articlePagination,
     onArticlePaginationChange,
-    search,
+    // search,
     setSearch,
     unapprovedIncidents,
     unapprovedIncidentsLoading,
@@ -37,7 +37,7 @@ const FeedItems = (): JSX.Element => {
       pagination={pagination}
       articlePagination={articlePagination}
       onArticlePaginationChange={onArticlePaginationChange}
-      search={search}
+      // search={search}
       setSearch={setSearch}
       unapprovedIncidents={unapprovedIncidents}
       unapprovedIncidentsLoading={unapprovedIncidentsLoading}

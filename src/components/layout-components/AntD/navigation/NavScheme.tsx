@@ -33,6 +33,11 @@ export const NavScheme = () => {
     window.localStorage.removeItem(LocalStorageKeys.OFFENDER_FILTER);
     window.localStorage.setItem('currentScheme', scheme.scheme.id);
     window.localStorage.setItem('logo', scheme.scheme.logo?.optimised || '');
+    window.localStorage.setItem(
+      'logo-dark',
+      scheme.scheme.darkLogo?.optimised || ''
+    );
+
     setScheme({
       autoApproveIncidents: scheme.scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.scheme.autoApproveOffenders,

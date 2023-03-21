@@ -12,9 +12,13 @@ function SchemeDetail(): JSX.Element {
     onPreview,
     imgChange,
     fileList,
+    darkImgChange,
+    darkFileList,
   } = useSchemeDetail();
   return (
     <View
+      darkFileList={darkFileList}
+      darkImgChange={darkImgChange}
       data={data}
       loading={loading}
       saving={saving}
