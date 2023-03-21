@@ -180,7 +180,17 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
               ],
             },
             groups: {
-              set: data.groups.map((id) => ({ id })),
+              connect: data.groups
+                .filter(
+                  (id) =>
+                    !userData?.user?.groups.map((item) => item.id).includes(id)
+                )
+                .map((id) => ({ id })),
+              disconnect: userData?.user?.groups
+                .filter(
+                  ({ id }) => !data.groups.map((item) => item).includes(id)
+                )
+                .map(({ id }) => ({ id })),
             },
             chats: {
               create: data.chats
