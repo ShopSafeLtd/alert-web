@@ -82,7 +82,7 @@ const SideNavContent = (props: SideNavContentProps) => {
     localization,
     onMobileNavToggle,
   } = props;
-
+  const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const isMobile = !utils.getBreakPoint(useBreakpoint()).includes('lg');
   const closeMobileNav = () => {
     if (isMobile) {
@@ -182,7 +182,7 @@ const SideNavContent = (props: SideNavContentProps) => {
       {customLogo && (
         <img
           src={getLogo({
-            logoType: SideNavTheme.LIGHT ? 'light' : 'dark',
+            logoType: currentTheme,
             navCollapsed: false,
           })}
           alt={`${APP_NAME} logo`}
