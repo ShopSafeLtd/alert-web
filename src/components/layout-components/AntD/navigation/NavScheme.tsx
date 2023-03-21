@@ -35,7 +35,7 @@ export const NavScheme = () => {
     window.localStorage.setItem('logo', scheme.scheme.logo?.optimised || '');
     window.localStorage.setItem(
       'logo-dark',
-      scheme.scheme.logo?.optimised || ''
+      scheme.scheme.darkLogo?.optimised || ''
     );
 
     setScheme({

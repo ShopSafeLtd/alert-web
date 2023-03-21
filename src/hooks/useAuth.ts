@@ -120,8 +120,14 @@ const useAuth = (): Return => {
       if (scheme) {
         const currentS = currentUser?.schemes.find((s) => s.id === scheme);
         if (currentS) {
-          localStorage.setItem('logo', currentS?.scheme?.logo?.optimised || '');
-          localStorage.setItem(
+          window.localStorage.setItem(
+            'logo',
+            currentS?.scheme?.logo?.optimised || ''
+          );
+          if (!currentS?.scheme?.logo?.optimised) {
+            window.localStorage.clear();
+          }
+          window.localStorage.setItem(
             'logo-dark',
             currentS?.scheme?.darkLogo?.optimised || ''
           );
