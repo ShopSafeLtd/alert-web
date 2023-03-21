@@ -121,6 +121,10 @@ const useAuth = (): Return => {
         const currentS = currentUser?.schemes.find((s) => s.id === scheme);
         if (currentS) {
           localStorage.setItem('logo', currentS?.scheme?.logo?.optimised || '');
+          localStorage.setItem(
+            'logo-dark',
+            currentS?.scheme?.darkLogo?.optimised || ''
+          );
         }
       }
       handleSuccess({
@@ -299,8 +303,12 @@ const useAuth = (): Return => {
     clearUser();
     handleSignOut();
     const logo = window.localStorage.getItem('logo');
+    const dLogo = window.localStorage.getItem('logo-dark');
+
     window.localStorage.clear();
     window.localStorage.setItem('logo', logo || '');
+    window.localStorage.setItem('logo-dark', dLogo || '');
+
     window.sessionStorage.clear();
   };
 

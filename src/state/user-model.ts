@@ -40,6 +40,12 @@ export interface Scheme {
         }
       | null
       | undefined;
+    darkLogo?:
+      | {
+          optimised?: string | null | undefined;
+        }
+      | null
+      | undefined;
   };
 }
 

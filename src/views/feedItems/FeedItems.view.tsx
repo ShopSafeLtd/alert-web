@@ -159,9 +159,9 @@ Props): JSX.Element => (
                   loading={loading}
                 >
                   <>
-                    <Row style={{ margin: 8 }}>
+                    <Row style={{ margin: '8px 8px 4px' }}>
                       <Col flex={1}>
-                        <Title style={{ margin: 0, fontSize: 16 }} level={4}>
+                        <Title style={{ margin: 0, fontSize: 14 }} level={4}>
                           {feedItem?.message}
                         </Title>
                       </Col>

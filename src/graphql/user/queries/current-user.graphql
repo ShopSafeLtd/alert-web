@@ -25,6 +25,9 @@ query currentUser {
                 logo {
                     optimised
                 }
+                darkLogo {
+                    optimised
+                }
                 id
                 name
                 autoApproveIncidents

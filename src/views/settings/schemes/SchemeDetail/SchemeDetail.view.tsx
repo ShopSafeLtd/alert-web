@@ -25,7 +25,9 @@ interface Props {
   loading: boolean;
   saving: boolean;
   onSubmit: (value: FormData) => void;
-  beforeUpload: (value: RcFile) => void;
+  beforeUpload: (value: RcFile, dark?: string) => void;
+  darkFileList: UploadFile[];
+  darkImgChange: UploadProps['onChange'];
   onPreview: (value: UploadFile) => void;
   fileList: UploadFile[];
   imgChange: UploadProps['onChange'];
@@ -45,6 +47,7 @@ interface FormData {
   incidentRetention: number | null;
   offenderRetention: number | null;
   logo?: { id: string; url: string; optimised: string };
+  darkLogo?: { id: string; url: string; optimised: string };
 }
 
 const options = [
@@ -66,6 +69,8 @@ const SchemeDetail = ({
   imgChange,
   onPreview,
   fileList,
+  darkImgChange,
+  darkFileList,
 }: Props): JSX.Element => (
   <div className="list-view">
     <Row style={{ margin: 15 }}>
@@ -123,18 +128,44 @@ const SchemeDetail = ({
           </Row>
           <Row gutter={20}>
             <Col span={20}>
-              <Form.Item name="logo" label="Scheme Logo">
+              <Form.Item
+                name="logo"
+                label="Scheme Logo:"
+                labelCol={{ span: 24 }}
+              >
                 <Upload
                   action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
                   listType="picture-card"
                   fileList={fileList}
-                  beforeUpload={beforeUpload}
+                  beforeUpload={(file) => beforeUpload(file)}
                   onChange={imgChange}
                   onPreview={onPreview}
                   maxCount={1}
                   accept=".png,.jpeg,.webp"
                 >
                   {fileList.length === 0 && '+ Upload'}
+                </Upload>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={20}>
+            <Col span={20}>
+              <Form.Item
+                name="darkLogo"
+                label="Scheme Logo (optional dark mode version):"
+                labelCol={{ span: 24 }}
+              >
+                <Upload
+                  action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+                  listType="picture-card"
+                  fileList={darkFileList}
+                  beforeUpload={(file) => beforeUpload(file, 'dark')}
+                  onChange={darkImgChange}
+                  onPreview={onPreview}
+                  maxCount={1}
+                  accept=".png,.jpeg,.webp"
+                >
+                  {darkFileList.length === 0 && '+ Upload'}
                 </Upload>
               </Form.Item>
             </Col>

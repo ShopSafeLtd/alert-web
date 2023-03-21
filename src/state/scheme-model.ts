@@ -7,6 +7,7 @@ export interface SetSchemePayload {
   autoApproveOffenders: boolean;
   id: string;
   logo?: string | null | undefined;
+  darkLogo?: string | null | undefined;
 }
 
 export interface SchemeModel {
@@ -17,6 +18,7 @@ export interface SchemeModel {
   setScheme: Action<SchemeModel, SetSchemePayload>;
   clearScheme: Action<SchemeModel>;
   logo?: string | null | undefined;
+  darkLogo?: string | null | undefined;
 }
 
 const userModel: SchemeModel = {
@@ -25,6 +27,7 @@ const userModel: SchemeModel = {
   autoApproveOffenders: false,
   name: 'Loading...',
   logo: '',
+  darkLogo: '',
 
   setScheme: action((state, payload) => {
     state.id = payload.id;
@@ -32,6 +35,7 @@ const userModel: SchemeModel = {
     state.autoApproveOffenders = payload.autoApproveOffenders;
     state.name = payload.name;
     state.logo = payload.logo;
+    state.darkLogo = payload.darkLogo;
   }),
   clearScheme: action((state) => {
     state.id = '';
@@ -39,6 +43,7 @@ const userModel: SchemeModel = {
     state.autoApproveOffenders = false;
     state.name = '';
     state.logo = '';
+    state.darkLogo = '';
   }),
 };
 
