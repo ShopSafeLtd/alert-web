@@ -205,7 +205,7 @@ const OffenderFeed = ({
                   key={index}
                   sm={24}
                   md={12}
-                  lg={12}
+                  lg={8}
                   xl={8}
                   xxl={6}
                 >
@@ -217,7 +217,7 @@ const OffenderFeed = ({
                   style={{ marginBottom: 10 }}
                   sm={24}
                   md={12}
-                  lg={12}
+                  lg={8}
                   xl={8}
                   xxl={6}
                   key={item?.id}
