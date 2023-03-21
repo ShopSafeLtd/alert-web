@@ -5,6 +5,7 @@ query userChats(
 ) {
   user(where: $where) {
     id
+    totalChats
     chats(
       where: { chat: { scheme: { id: { equals: $scheme } } } }
       orderBy: $orderBy
@@ -44,6 +45,14 @@ query userChats(
           offenders {
             id
             name
+          }
+          vehicles {
+            id
+            reference
+          }
+          crimeGroups {
+            id
+            reference
           }
         }
       }

@@ -77,6 +77,8 @@ interface Return {
     index: number;
   };
   closeAddImages: () => void;
+  optionRowShow: boolean;
+  setOptionRowShow: (value: boolean) => void;
 }
 
 const useViewOffender = (offenderId: string): Return => {
@@ -85,6 +87,8 @@ const useViewOffender = (offenderId: string): Return => {
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
   const [saving, setSaving] = useState(false);
+  const [optionRowShow, setOptionRowShow] = useState(false);
+
   const [linkIncident, setLinkIncident] = useState(false);
   const [optionMenuItems, setOptionsMenuItems] = useState<ItemType[]>([]);
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
@@ -462,6 +466,8 @@ const useViewOffender = (offenderId: string): Return => {
     toggleSelectImages,
     openLightbox,
     lightBoxOpen,
+    optionRowShow,
+    setOptionRowShow,
   };
 };
 

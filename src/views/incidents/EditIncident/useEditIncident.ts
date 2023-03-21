@@ -1002,8 +1002,8 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                   (image) =>
                     !fileList.map((item) => item.uid).includes(image.id)
                 )
-                .map((image) => ({
-                  id: image.id,
+                .map(({ id }) => ({
+                  id,
                 })),
             },
           },

@@ -13,6 +13,32 @@ mutation CreateUpdateOnIncident(
       optimised
       card
     }
+    linkedCrimeGroups {
+      totalOffenders
+      totalIncidents
+      alias
+      id
+      reference
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+      updatedAt
+    }
+    linkedVehicles {
+      updatedAt
+      totalOffenders
+      registration
+      reference
+      model
+      make
+      id
+      colour
+      images {
+        id
+        optimised
+        url
+      }
+    }
     linkedIncidents {
       id
       subject
@@ -57,6 +83,27 @@ mutation CreateUpdateOnIncident(
         url
         optimised
         card
+      }
+      linkedCrimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      linkedVehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
       }
       linkedIncidents {
         id

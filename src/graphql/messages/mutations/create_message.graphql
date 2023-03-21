@@ -19,6 +19,32 @@ mutation createMessage($data: MessageCreateWithoutActionsInput!) {
       url
       optimised
     }
+    crimeGroups {
+      totalOffenders
+      totalIncidents
+      alias
+      id
+      reference
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+      updatedAt
+    }
+    vehicles {
+      updatedAt
+      totalOffenders
+      registration
+      reference
+      model
+      make
+      id
+      colour
+      images {
+        id
+        optimised
+        url
+      }
+    }
     incidents {
       id
       subject

@@ -25,6 +25,9 @@ const EditVehicle = ({ onClose }: Props): JSX.Element => {
     removeOffender,
     removeIncident,
     adminRights,
+    imgChange,
+    beforeUpload,
+    fileList,
   } = useEditVehicle({
     onClose,
   });
@@ -49,6 +52,9 @@ const EditVehicle = ({ onClose }: Props): JSX.Element => {
       removeOffender={removeOffender}
       removeIncident={removeIncident}
       adminRights={adminRights}
+      imgChange={imgChange}
+      beforeUpload={beforeUpload}
+      fileList={fileList}
     />
   );
 };

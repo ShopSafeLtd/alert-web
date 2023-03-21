@@ -52,14 +52,36 @@ interface FeedItems {
   order: FeedItemSort;
 }
 
+interface Vehicles {
+  pagination: {
+    page: number;
+    pageSize: number;
+    sizeOptions: string[];
+  };
+
+  search: string;
+}
+interface CrimeGroups {
+  pagination: {
+    page: number;
+    pageSize: number;
+    sizeOptions: string[];
+  };
+
+  search: string;
+}
 export interface DataModel {
   incidents: Incidents;
   offenders: Offenders;
   feedItems: FeedItems;
+  vehicles: Vehicles;
+  crimeGroups: CrimeGroups;
 
   setIncidents: Action<DataModel, Incidents>;
   setOffenders: Action<DataModel, Offenders>;
   setFeedItems: Action<DataModel, FeedItems>;
+  setVehicles: Action<DataModel, Vehicles>;
+  setCrimeGroups: Action<DataModel, CrimeGroups>;
 }
 
 const dataModel: DataModel = {
@@ -114,6 +136,33 @@ const dataModel: DataModel = {
 
   setFeedItems: action((state, payload) => {
     state.feedItems = payload;
+  }),
+
+  vehicles: {
+    pagination: {
+      page: 1,
+      pageSize: 20,
+      sizeOptions: ['20'],
+    },
+
+    search: '',
+  },
+
+  setVehicles: action((state, payload) => {
+    state.vehicles = payload;
+  }),
+
+  crimeGroups: {
+    pagination: {
+      page: 1,
+      pageSize: 20,
+      sizeOptions: ['20'],
+    },
+    search: '',
+  },
+
+  setCrimeGroups: action((state, payload) => {
+    state.crimeGroups = payload;
   }),
 };
 

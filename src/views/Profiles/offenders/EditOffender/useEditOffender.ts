@@ -686,13 +686,6 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
                       },
                     }))
                 : undefined,
-            // imageChange && fileList.length > 0
-            //   ? fileList
-            //       .map((item) => ({
-            //         file: item.originFileObj,
-            //       }))
-            //       .filter((obj) => obj.file !== undefined)
-            //   : [],
             delete: imageChange
               ? offenderData?.offender?.images
                   .filter(

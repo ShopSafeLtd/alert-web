@@ -12,13 +12,15 @@ import {
   Skeleton,
   Table,
   Tooltip,
+  Upload,
 } from 'antd';
 import { ListCrimeGroupsQuery, ListIncidentsQuery } from 'graphql/generated';
 import { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
 import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
-import LinkIncident from 'components/form-components/offender/LinkIncident';
+import LinkIncident from 'components/form-components/LinkOptions/LinkIncident';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { VehicleData } from './useAddVehicle';
 import useStyles from './AddVehicle.styles';
@@ -45,6 +47,9 @@ interface Props {
   removeOffender: (value: string | undefined) => void;
   removeIncident: (value: string | undefined) => void;
   adminRights: boolean;
+  imgChange: UploadProps['onChange'];
+  beforeUpload: (value: RcFile) => void;
+  fileList: UploadFile[];
 }
 
 const AddVehicle = ({
@@ -64,6 +69,9 @@ const AddVehicle = ({
   removeOffender,
   removeIncident,
   adminRights,
+  imgChange,
+  beforeUpload,
+  fileList,
 }: Props): JSX.Element => {
   const classes = useStyles();
   return (
@@ -125,6 +133,28 @@ const AddVehicle = ({
             </Col>
           </Row>
         )}
+        <Row>
+          <Col>
+            <Form.Item
+              name="images"
+              label="Images"
+              tooltip="Please add any images that you have of the vehicle."
+            >
+              <Upload
+                action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+                className="upload-images"
+                style={{ width: '50%', height: '50%' }}
+                listType="picture-card"
+                fileList={fileList}
+                onChange={imgChange}
+                beforeUpload={beforeUpload}
+                accept=".png,.jpeg,.webp"
+              >
+                {fileList.length < 10 && '+ Upload'}
+              </Upload>
+            </Form.Item>
+          </Col>
+        </Row>
         {adminRights && (
           <Row gutter={16}>
             {!(incidentsData && incidentsData.length) && (

@@ -1,0 +1,144 @@
+import { useState } from 'react';
+
+import {
+  ListCrimeGroupsQuery,
+  QueryMode,
+  SortOrder,
+  useListCrimeGroupsQuery,
+} from 'graphql/generated';
+
+import { useStoreActions, useStoreState } from 'state';
+import { CrimeGroupCardData } from 'types/DataType';
+
+// interface CrimeGroup {
+//   crimeGroup: CrimeGroupCardData;
+// }
+interface Props {
+  onClose: () => void;
+  update?: (value: string) => void;
+  crimeGroupIds: string[] | undefined;
+  getCrimeGroup?: (value: { crimeGroup: CrimeGroupCardData }) => void;
+}
+
+interface Return {
+  onSubmit: () => void;
+  saving: boolean;
+  data: ListCrimeGroupsQuery | undefined;
+  loading: boolean;
+  search: string;
+  setSearch: (value: string) => void;
+  onPaginationChange: (page: number, pageSize: number) => void;
+  onSelect: (item: { key: string }) => void;
+}
+
+const useLinkCrimeGroup = ({
+  onClose,
+  update,
+  crimeGroupIds,
+  getCrimeGroup,
+}: Props): Return => {
+  const [saving, setSaving] = useState(false);
+  const [selected, setSelected] = useState<string | undefined>();
+  const schemeId = useStoreState((state) => state.scheme.id);
+  const pagination = useStoreState(
+    (state) => state.data.crimeGroups.pagination
+  );
+  const search = useStoreState((state) => state.data.crimeGroups.search);
+  const setCrimeGroupsState = useStoreActions(
+    (actions) => actions.data.setCrimeGroups
+  );
+  const { data, loading } = useListCrimeGroupsQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      order: {
+        updatedAt: SortOrder.Desc,
+      },
+      take: pagination.pageSize,
+      skip: (pagination.page - 1) * pagination.pageSize,
+      where: {
+        id: { notIn: crimeGroupIds },
+        schemes: {
+          some: {
+            id: {
+              equals: schemeId,
+            },
+          },
+        },
+
+        OR: [
+          {
+            alias: {
+              contains: search,
+              mode: QueryMode.Insensitive,
+            },
+          },
+          {
+            offenders: {
+              some: {
+                OR: [
+                  {
+                    name: {
+                      contains: search,
+                      mode: QueryMode.Insensitive,
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+    },
+  });
+
+  const onPaginationChange = (page: number) => {
+    setCrimeGroupsState({
+      pagination: {
+        ...pagination,
+        page,
+      },
+      search,
+    });
+  };
+  const setSearch = (value: string) => {
+    setCrimeGroupsState({
+      pagination,
+      search: value,
+    });
+  };
+  const onSubmit = () => {
+    setSaving(true);
+    if (selected) {
+      if (update) {
+        update(selected);
+      }
+      if (getCrimeGroup) {
+        const crimeGroup = data?.listCrimeGroups?.crimeGroups?.find(
+          (item) => item.id === selected
+        );
+        if (crimeGroup) {
+          getCrimeGroup({ crimeGroup });
+        }
+      }
+    }
+    setSaving(false);
+    onClose();
+  };
+
+  const onSelect = (item: { key: string }) => {
+    setSelected(item.key);
+  };
+
+  return {
+    onSubmit,
+    saving,
+    data,
+    loading: data?.listCrimeGroups ? false : loading,
+    search,
+    setSearch,
+    onPaginationChange,
+    onSelect,
+  };
+};
+
+export default useLinkCrimeGroup;

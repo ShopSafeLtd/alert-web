@@ -1,12 +1,21 @@
-import { notification } from 'antd';
+import { Modal, notification } from 'antd';
 import {
+  CrimeGroupDocument,
   CrimeGroupQuery,
+  CrimeGroupQueryVariables,
+  Role,
   useCrimeGroupQuery,
   useDeleteCrimeGroupMutation,
+  useDeleteUpdateMutation,
+  useSubscribeToCrimeGroupMutation,
+  useUnsubscribeToCrimeGroupMutation,
+  useUpdateUpdateMutation,
 } from 'graphql/generated';
-import { useState } from 'react';
-import { useParams } from 'react-router';
+import { useEffect, useState } from 'react';
+import update from 'immutability-helper';
+import { useStoreState } from 'state';
 
+const { confirm } = Modal;
 interface Return {
   data: CrimeGroupQuery | undefined;
   loading: boolean;
@@ -24,27 +33,69 @@ interface Return {
   toggleAddAlias: () => void;
   toggleAddExistingVehicle: () => void;
   onDeleteCrimeGroup: () => void;
+  loadMore: boolean;
+  scrolledToTop: () => void;
+  userId: string;
+  replyTo: {
+    id: string;
+    text: string;
+    createdAt: string;
+    createdBy: string;
+  } | null;
+  setReplyTo: (
+    value: {
+      id: string;
+      text: string;
+      createdAt: string;
+      createdBy: string;
+    } | null
+  ) => void;
+  confirmDeleteUpdate: (updateId: string) => void;
+  editUpdate: { id: string; text: string } | null;
+  setEditUpdate: (value: { id: string; text: string } | null) => void;
+  handleEditUpdate: () => void;
+  editUpdateInput: string;
+  setEditUpdateInput: (value: string) => void;
+  optionRowShow: boolean;
+  setOptionRowShow: (value: boolean) => void;
+  editRights: boolean;
+  toggleSubscribe: () => void;
 }
 
-const useViewCrimeGroup = (): Return => {
-  const params = useParams();
+const useViewCrimeGroup = (crimeGroupId: string): Return => {
+  const userId = useStoreState((state) => state.user.id);
+  const role = useStoreState((state) => state.user.role);
   const [saving, setSaving] = useState(false);
   const [addOffender, setAddOffender] = useState(false);
   const [addExistingOffender, setAddExistingOffender] = useState(false);
-  // const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
   const [offenderIds, setOffenderIds] = useState<string[]>([]);
-
   const [addNewVehicle, setAddNewVehicle] = useState(false);
   const [addExistingVehicle, setAddExistingVehicle] = useState(false);
-  // const [vehiclesData, setVehiclesData] = useState<VehicleData[]>([]);
   const [vehicleIds, setVehicleIds] = useState<string[]>([]);
   const [addAlias, setAddAlias] = useState(false);
+  const [loadMore, setLoadMore] = useState(false);
+  const [optionRowShow, setOptionRowShow] = useState(false);
+  const [editUpdateInput, setEditUpdateInput] = useState('');
+  const [editUpdate, setEditUpdate] = useState<{
+    id: string;
+    text: string;
+  } | null>(null);
+  const [replyTo, setReplyTo] = useState<{
+    id: string;
+    text: string;
+    createdAt: string;
+    createdBy: string;
+  } | null>(null);
+
+  useEffect(() => {
+    if (editUpdate) setEditUpdateInput(editUpdate.text);
+  }, [editUpdate]);
 
   const { data, loading } = useCrimeGroupQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
-        id: params.id,
+        id: crimeGroupId,
       },
     },
     onCompleted: ({ crimeGroup }) => {
@@ -98,14 +149,173 @@ const useViewCrimeGroup = (): Return => {
     setSaving(true);
     deleteCrimeGroup({
       variables: {
-        id: params.id || '',
+        id: crimeGroupId,
       },
     });
   };
+  const [deleteUpdate] = useDeleteUpdateMutation();
 
+  const handleDeleteUpdate = (updateId: string) => {
+    deleteUpdate({
+      variables: {
+        where: {
+          id: updateId,
+        },
+      },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        deleteUpdate: {
+          id: updateId,
+          __typename: 'Update',
+          replyToId: '',
+        },
+      },
+      update: (store, result) => {
+        if (result.data?.deleteUpdate) {
+          const oldData = store.readQuery<
+            CrimeGroupQuery,
+            CrimeGroupQueryVariables
+          >({
+            query: CrimeGroupDocument,
+            variables: {
+              where: {
+                id: crimeGroupId,
+              },
+            },
+          });
+
+          if (oldData?.crimeGroup)
+            if (result.data.deleteUpdate.replyToId) {
+              const updateItem = oldData.crimeGroup.updates.find(
+                (item) => item.id === result.data?.deleteUpdate?.replyToId
+              );
+              if (updateItem) {
+                store.writeQuery<CrimeGroupQuery, CrimeGroupQueryVariables>({
+                  query: CrimeGroupDocument,
+                  variables: {
+                    where: {
+                      id: crimeGroupId,
+                    },
+                  },
+                  data: {
+                    crimeGroup: {
+                      ...oldData.crimeGroup,
+                      updates: update(oldData.crimeGroup.updates, {
+                        [oldData.crimeGroup.updates
+                          .map((item) => item.id)
+                          .indexOf(result.data.deleteUpdate.replyToId)]: {
+                          replies: {
+                            $set: updateItem.replies.filter(
+                              (item) =>
+                                item.id !== result.data?.deleteUpdate?.id
+                            ),
+                          },
+                        },
+                      }),
+                    },
+                  },
+                });
+              }
+            } else {
+              store.writeQuery<CrimeGroupQuery, CrimeGroupQueryVariables>({
+                query: CrimeGroupDocument,
+                variables: {
+                  where: {
+                    id: crimeGroupId,
+                  },
+                },
+                data: {
+                  crimeGroup: {
+                    ...oldData.crimeGroup,
+                    updates: [
+                      ...oldData.crimeGroup.updates.filter(
+                        (item) => item.id !== result.data?.deleteUpdate?.id
+                      ),
+                    ],
+                  },
+                },
+              });
+            }
+        }
+      },
+    });
+  };
+  const confirmDeleteUpdate = (updateId: string) => {
+    confirm({
+      title: 'Are you sure?',
+      content: 'The update will be permanently deleted.',
+      onOk() {
+        handleDeleteUpdate(updateId);
+      },
+      okText: 'Delete',
+    });
+  };
+
+  const [updateUpdate] = useUpdateUpdateMutation();
+
+  const handleEditUpdate = () => {
+    if (editUpdate !== null)
+      updateUpdate({
+        variables: {
+          data: {
+            text: editUpdateInput,
+          },
+          where: {
+            id: editUpdate.id,
+          },
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateUpdate: {
+            id: editUpdate.id || '',
+            __typename: 'Update',
+            text: editUpdateInput,
+          },
+        },
+      });
+    setEditUpdate(null);
+    setEditUpdateInput('');
+  };
+  const [subscribeToCrimeGroup] = useSubscribeToCrimeGroupMutation();
+  const [unsubscribeFromCrimeGroup] = useUnsubscribeToCrimeGroupMutation();
+
+  const toggleSubscribe = () => {
+    if (data?.crimeGroup?.subscribed) {
+      unsubscribeFromCrimeGroup({
+        variables: {
+          where: { id: crimeGroupId },
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          unsubscribeToCrimeGroup: {
+            id: crimeGroupId,
+            __typename: 'CrimeGroup',
+            subscribed: false,
+          },
+        },
+      });
+    } else {
+      subscribeToCrimeGroup({
+        variables: {
+          where: { id: crimeGroupId },
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          subscribeToCrimeGroup: {
+            id: crimeGroupId,
+            __typename: 'CrimeGroup',
+            subscribed: true,
+          },
+        },
+      });
+    }
+  };
+  const scrolledToTop = () => {
+    setLoadMore(true);
+  };
   return {
     data,
-    loading,
+    loading: (data === null || data === undefined) && loading,
     saving,
     offenderIds,
     vehicleIds,
@@ -120,6 +330,21 @@ const useViewCrimeGroup = (): Return => {
     addAlias,
     toggleAddAlias,
     onDeleteCrimeGroup,
+    editRights: role !== Role.User,
+    optionRowShow,
+    setOptionRowShow,
+    userId,
+    editUpdate,
+    editUpdateInput,
+    handleEditUpdate,
+    replyTo,
+    scrolledToTop,
+    setEditUpdate,
+    setEditUpdateInput,
+    setReplyTo,
+    loadMore,
+    confirmDeleteUpdate,
+    toggleSubscribe,
   };
 };
 

@@ -37562,6 +37562,65 @@ export type CreateArticleMutation = {
   } | null;
 };
 
+export type ArticlesQueryVariables = Exact<{
+  where?: InputMaybe<ArticleWhereInput>;
+  orderBy?: InputMaybe<
+    Array<ArticleOrderByWithRelationInput> | ArticleOrderByWithRelationInput
+  >;
+}>;
+
+export type ArticlesQuery = {
+  __typename?: 'Query';
+  articles: Array<{
+    __typename?: 'Article';
+    previewImage?: string | null;
+    previewText?: string | null;
+    priority: ArticlePriority;
+    title: string;
+    updatedAt: any;
+    id: string;
+    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    createdBy: {
+      __typename?: 'User';
+      fullName: string;
+      id: string;
+      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+    };
+  }>;
+};
+
+export type ListArticlesQueryVariables = Exact<{
+  scheme: SchemeWhereUniqueInput;
+  where?: InputMaybe<ArticleWhereInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<ArticleOrderByWithRelationInput>;
+}>;
+
+export type ListArticlesQuery = {
+  __typename?: 'Query';
+  listArticles: {
+    __typename?: 'ListArticles';
+    total: number;
+    articles: Array<{
+      __typename?: 'Article';
+      previewImage?: string | null;
+      previewText?: string | null;
+      priority: ArticlePriority;
+      title: string;
+      updatedAt: any;
+      id: string;
+      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      createdBy: {
+        __typename?: 'User';
+        fullName: string;
+        organisation: string;
+        id: string;
+      };
+    }>;
+  };
+};
+
 export type ArticleQueryVariables = Exact<{
   where: ArticleWhereUniqueInput;
 }>;
@@ -37701,65 +37760,6 @@ export type ArticleQuery = {
       }>;
     }>;
   } | null;
-};
-
-export type ArticlesQueryVariables = Exact<{
-  where?: InputMaybe<ArticleWhereInput>;
-  orderBy?: InputMaybe<
-    Array<ArticleOrderByWithRelationInput> | ArticleOrderByWithRelationInput
-  >;
-}>;
-
-export type ArticlesQuery = {
-  __typename?: 'Query';
-  articles: Array<{
-    __typename?: 'Article';
-    previewImage?: string | null;
-    previewText?: string | null;
-    priority: ArticlePriority;
-    title: string;
-    updatedAt: any;
-    id: string;
-    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-    createdBy: {
-      __typename?: 'User';
-      fullName: string;
-      id: string;
-      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
-    };
-  }>;
-};
-
-export type ListArticlesQueryVariables = Exact<{
-  scheme: SchemeWhereUniqueInput;
-  where?: InputMaybe<ArticleWhereInput>;
-  take?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<ArticleOrderByWithRelationInput>;
-}>;
-
-export type ListArticlesQuery = {
-  __typename?: 'Query';
-  listArticles: {
-    __typename?: 'ListArticles';
-    total: number;
-    articles: Array<{
-      __typename?: 'Article';
-      previewImage?: string | null;
-      previewText?: string | null;
-      priority: ArticlePriority;
-      title: string;
-      updatedAt: any;
-      id: string;
-      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-      createdBy: {
-        __typename?: 'User';
-        fullName: string;
-        organisation: string;
-        id: string;
-      };
-    }>;
-  };
 };
 
 export type CreateUserinAuth0MutationVariables = Exact<{
@@ -38243,6 +38243,16 @@ export type CreateChatMutation = {
             id: string;
             name?: string | null;
           }>;
+          vehicles: Array<{
+            __typename?: 'Vehicle';
+            id: string;
+            reference?: number | null;
+          }>;
+          crimeGroups: Array<{
+            __typename?: 'CrimeGroup';
+            id: string;
+            reference?: number | null;
+          }>;
         }>;
       };
     }>;
@@ -38266,6 +38276,24 @@ export type SchemeChatsQuery = {
   }>;
 };
 
+export type CreateCrimeGroupMutationVariables = Exact<{
+  data: CreateCrimeGroupDataInput;
+}>;
+
+export type CreateCrimeGroupMutation = {
+  __typename?: 'Mutation';
+  createCrimeGroup: {
+    __typename?: 'CrimeGroup';
+    id: string;
+    reference?: number | null;
+    totalIncidents?: number | null;
+    totalOffenders?: number | null;
+    totalRecoveredValue?: number | null;
+    totalTheftSuccess?: number | null;
+    totalValue?: number | null;
+  };
+};
+
 export type DeleteCrimeGroupMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -38273,6 +38301,32 @@ export type DeleteCrimeGroupMutationVariables = Exact<{
 export type DeleteCrimeGroupMutation = {
   __typename?: 'Mutation';
   deleteCrimeGroup?: { __typename?: 'CrimeGroup'; id: string } | null;
+};
+
+export type SubscribeToCrimeGroupMutationVariables = Exact<{
+  where: UniqueId;
+}>;
+
+export type SubscribeToCrimeGroupMutation = {
+  __typename?: 'Mutation';
+  subscribeToCrimeGroup?: {
+    __typename?: 'CrimeGroup';
+    id: string;
+    subscribed?: boolean | null;
+  } | null;
+};
+
+export type UnsubscribeToCrimeGroupMutationVariables = Exact<{
+  where: UniqueId;
+}>;
+
+export type UnsubscribeToCrimeGroupMutation = {
+  __typename?: 'Mutation';
+  unsubscribeToCrimeGroup?: {
+    __typename?: 'CrimeGroup';
+    id: string;
+    subscribed?: boolean | null;
+  } | null;
 };
 
 export type UpdateCrimeGroupMutationVariables = Exact<{
@@ -38343,6 +38397,32 @@ export type UpdateCrimeGroupMutation = {
   } | null;
 };
 
+export type ListCrimeGroupsQueryVariables = Exact<{
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<CrimeGroupWhereInput>;
+  order?: InputMaybe<CrimeGroupOrderByWithRelationInput>;
+}>;
+
+export type ListCrimeGroupsQuery = {
+  __typename?: 'Query';
+  listCrimeGroups: {
+    __typename?: 'ListCrimeGroups';
+    total: number;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      reference?: number | null;
+      totalIncidents?: number | null;
+      totalOffenders?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      alias?: string | null;
+    }>;
+  };
+};
+
 export type CrimeGroupQueryVariables = Exact<{
   where: CrimeGroupWhereUniqueInput;
 }>;
@@ -38358,6 +38438,7 @@ export type CrimeGroupQuery = {
     totalRecoveredValue?: number | null;
     totalTheftSuccess?: number | null;
     totalValue?: number | null;
+    subscribed?: boolean | null;
     alias?: string | null;
     offenders: Array<{
       __typename?: 'Offender';
@@ -38390,6 +38471,7 @@ export type CrimeGroupQuery = {
     vehicles: Array<{
       __typename?: 'Vehicle';
       id: string;
+      reference?: number | null;
       make?: string | null;
       model?: string | null;
       updatedAt: any;
@@ -38418,51 +38500,161 @@ export type CrimeGroupQuery = {
         }>;
       };
     } | null> | null;
-  } | null;
-};
-
-export type CreateCrimeGroupMutationVariables = Exact<{
-  data: CreateCrimeGroupDataInput;
-}>;
-
-export type CreateCrimeGroupMutation = {
-  __typename?: 'Mutation';
-  createCrimeGroup: {
-    __typename?: 'CrimeGroup';
-    id: string;
-    reference?: number | null;
-    totalIncidents?: number | null;
-    totalOffenders?: number | null;
-    totalRecoveredValue?: number | null;
-    totalTheftSuccess?: number | null;
-    totalValue?: number | null;
-  };
-};
-
-export type ListCrimeGroupsQueryVariables = Exact<{
-  take?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<CrimeGroupWhereInput>;
-  order?: InputMaybe<CrimeGroupOrderByWithRelationInput>;
-}>;
-
-export type ListCrimeGroupsQuery = {
-  __typename?: 'Query';
-  listCrimeGroups: {
-    __typename?: 'ListCrimeGroups';
-    total: number;
-    crimeGroups: Array<{
-      __typename?: 'CrimeGroup';
+    updates: Array<{
+      __typename?: 'Update';
       id: string;
-      reference?: number | null;
-      totalIncidents?: number | null;
-      totalOffenders?: number | null;
-      totalRecoveredValue?: number | null;
-      totalTheftSuccess?: number | null;
-      totalValue?: number | null;
-      alias?: string | null;
+      text?: string | null;
+      type: UpdateType;
+      createdAt: any;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+      }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
+      }>;
+      linkedIncidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      linkedOffenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        updatedAt: any;
+        age?: Age | null;
+        build?: Build | null;
+        dateOfBirth?: any | null;
+        name?: string | null;
+        race?: Race | null;
+        gender?: Gender | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
+      replies: Array<{
+        __typename?: 'Update';
+        id: string;
+        text?: string | null;
+        type: UpdateType;
+        createdAt: any;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          card?: string | null;
+        }>;
+        linkedCrimeGroups: Array<{
+          __typename?: 'CrimeGroup';
+          totalOffenders?: number | null;
+          totalIncidents?: number | null;
+          alias?: string | null;
+          id: string;
+          reference?: number | null;
+          totalRecoveredValue?: number | null;
+          totalTheftSuccess?: number | null;
+          totalValue?: number | null;
+          updatedAt: any;
+        }>;
+        linkedVehicles: Array<{
+          __typename?: 'Vehicle';
+          updatedAt: any;
+          totalOffenders?: number | null;
+          registration?: string | null;
+          reference?: number | null;
+          model?: string | null;
+          make?: string | null;
+          id: string;
+          colour?: string | null;
+        }>;
+        linkedIncidents: Array<{
+          __typename?: 'Incident';
+          id: string;
+          subject?: string | null;
+          description: string;
+          dayTime?: string | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+        }>;
+        linkedOffenders: Array<{
+          __typename?: 'Offender';
+          id: string;
+          updatedAt: any;
+          age?: Age | null;
+          build?: Build | null;
+          dateOfBirth?: any | null;
+          name?: string | null;
+          race?: Race | null;
+          gender?: Gender | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+        }>;
+        createdBy: {
+          __typename?: 'User';
+          id: string;
+          fullName: string;
+          businesses: Array<{
+            __typename?: 'Business';
+            id: string;
+            name: string;
+          }>;
+        };
+      }>;
     }>;
-  };
+  } | null;
 };
 
 export type CopyEvidenceMutationVariables = Exact<{
@@ -39519,6 +39711,29 @@ export type ViewIncidentQuery = {
         optimised?: string | null;
         card?: string | null;
       }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
+      }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
         id: string;
@@ -39571,6 +39786,29 @@ export type ViewIncidentQuery = {
           url?: string | null;
           optimised?: string | null;
           card?: string | null;
+        }>;
+        linkedCrimeGroups: Array<{
+          __typename?: 'CrimeGroup';
+          totalOffenders?: number | null;
+          totalIncidents?: number | null;
+          alias?: string | null;
+          id: string;
+          reference?: number | null;
+          totalRecoveredValue?: number | null;
+          totalTheftSuccess?: number | null;
+          totalValue?: number | null;
+          updatedAt: any;
+        }>;
+        linkedVehicles: Array<{
+          __typename?: 'Vehicle';
+          updatedAt: any;
+          totalOffenders?: number | null;
+          registration?: string | null;
+          reference?: number | null;
+          model?: string | null;
+          make?: string | null;
+          id: string;
+          colour?: string | null;
         }>;
         linkedIncidents: Array<{
           __typename?: 'Incident';
@@ -39852,6 +40090,29 @@ export type ViewInvestigationQuery = {
         optimised?: string | null;
         card?: string | null;
       }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
+      }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
         id: string;
@@ -39904,6 +40165,29 @@ export type ViewInvestigationQuery = {
           url?: string | null;
           optimised?: string | null;
           card?: string | null;
+        }>;
+        linkedCrimeGroups: Array<{
+          __typename?: 'CrimeGroup';
+          totalOffenders?: number | null;
+          totalIncidents?: number | null;
+          alias?: string | null;
+          id: string;
+          reference?: number | null;
+          totalRecoveredValue?: number | null;
+          totalTheftSuccess?: number | null;
+          totalValue?: number | null;
+          updatedAt: any;
+        }>;
+        linkedVehicles: Array<{
+          __typename?: 'Vehicle';
+          updatedAt: any;
+          totalOffenders?: number | null;
+          registration?: string | null;
+          reference?: number | null;
+          model?: string | null;
+          make?: string | null;
+          id: string;
+          colour?: string | null;
         }>;
         linkedIncidents: Array<{
           __typename?: 'Incident';
@@ -40038,6 +40322,35 @@ export type CreateMessageMutation = {
       url?: string | null;
       optimised?: string | null;
     }>;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        url?: string | null;
+      }>;
+    }>;
     incidents: Array<{
       __typename?: 'Incident';
       id: string;
@@ -40106,6 +40419,35 @@ export type UpdateMessageMutation = {
       url?: string | null;
       optimised?: string | null;
     }>;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        url?: string | null;
+      }>;
+    }>;
     incidents: Array<{
       __typename?: 'Incident';
       id: string;
@@ -40170,6 +40512,35 @@ export type ChatMessagesQuery = {
       url?: string | null;
       optimised?: string | null;
     }>;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        url?: string | null;
+      }>;
+    }>;
     incidents: Array<{
       __typename?: 'Incident';
       id: string;
@@ -40228,6 +40599,35 @@ export type MessagesQuery = {
       id: string;
       url?: string | null;
       optimised?: string | null;
+    }>;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        url?: string | null;
+      }>;
     }>;
     incidents: Array<{
       __typename?: 'Incident';
@@ -40290,6 +40690,35 @@ export type MessagesSubscriptionSubscription = {
       id: string;
       url?: string | null;
       optimised?: string | null;
+    }>;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        url?: string | null;
+      }>;
     }>;
     incidents: Array<{
       __typename?: 'Incident';
@@ -40849,6 +41278,29 @@ export type ViewOffenderQuery = {
         optimised?: string | null;
         card?: string | null;
       }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
+      }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
         id: string;
@@ -40901,6 +41353,29 @@ export type ViewOffenderQuery = {
           url?: string | null;
           optimised?: string | null;
           card?: string | null;
+        }>;
+        linkedCrimeGroups: Array<{
+          __typename?: 'CrimeGroup';
+          totalOffenders?: number | null;
+          totalIncidents?: number | null;
+          alias?: string | null;
+          id: string;
+          reference?: number | null;
+          totalRecoveredValue?: number | null;
+          totalTheftSuccess?: number | null;
+          totalValue?: number | null;
+          updatedAt: any;
+        }>;
+        linkedVehicles: Array<{
+          __typename?: 'Vehicle';
+          updatedAt: any;
+          totalOffenders?: number | null;
+          registration?: string | null;
+          reference?: number | null;
+          model?: string | null;
+          make?: string | null;
+          id: string;
+          colour?: string | null;
         }>;
         linkedIncidents: Array<{
           __typename?: 'Incident';
@@ -41476,14 +41951,14 @@ export type TagsQuery = {
   }>;
 };
 
-export type CreateUpdateOnIncidentMutationVariables = Exact<{
-  incident: UniqueId;
+export type CreateUpdateOnCrimeGroupMutationVariables = Exact<{
+  crimeGroup: UniqueId;
   data: CreateUpdateData;
 }>;
 
-export type CreateUpdateOnIncidentMutation = {
+export type CreateUpdateOnCrimeGroupMutation = {
   __typename?: 'Mutation';
-  createUpdateOnIncident?: {
+  createUpdateOnCrimeGroup?: {
     __typename?: 'Update';
     id: string;
     text?: string | null;
@@ -41495,6 +41970,29 @@ export type CreateUpdateOnIncidentMutation = {
       url?: string | null;
       optimised?: string | null;
       card?: string | null;
+    }>;
+    linkedCrimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    linkedVehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
     }>;
     linkedIncidents: Array<{
       __typename?: 'Incident';
@@ -41544,6 +42042,194 @@ export type CreateUpdateOnIncidentMutation = {
         url?: string | null;
         optimised?: string | null;
         card?: string | null;
+      }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
+      }>;
+      linkedIncidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      linkedOffenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        updatedAt: any;
+        age?: Age | null;
+        build?: Build | null;
+        dateOfBirth?: any | null;
+        name?: string | null;
+        race?: Race | null;
+        gender?: Gender | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
+    }>;
+  } | null;
+};
+
+export type CreateUpdateOnIncidentMutationVariables = Exact<{
+  incident: UniqueId;
+  data: CreateUpdateData;
+}>;
+
+export type CreateUpdateOnIncidentMutation = {
+  __typename?: 'Mutation';
+  createUpdateOnIncident?: {
+    __typename?: 'Update';
+    id: string;
+    text?: string | null;
+    type: UpdateType;
+    createdAt: any;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      card?: string | null;
+    }>;
+    linkedCrimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    linkedVehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        url?: string | null;
+      }>;
+    }>;
+    linkedIncidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+      description: string;
+      dayTime?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
+    linkedOffenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      updatedAt: any;
+      age?: Age | null;
+      build?: Build | null;
+      dateOfBirth?: any | null;
+      name?: string | null;
+      race?: Race | null;
+      gender?: Gender | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+    };
+    replies: Array<{
+      __typename?: 'Update';
+      id: string;
+      text?: string | null;
+      type: UpdateType;
+      createdAt: any;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+      }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
@@ -41639,6 +42325,29 @@ export type CreateUpdateOnInvestigationMutation = {
         optimised?: string | null;
       }>;
     }>;
+    linkedCrimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    linkedVehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+    }>;
     createdBy: {
       __typename?: 'User';
       id: string;
@@ -41657,6 +42366,29 @@ export type CreateUpdateOnInvestigationMutation = {
         url?: string | null;
         optimised?: string | null;
         card?: string | null;
+      }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
@@ -41722,6 +42454,35 @@ export type CreateUpdateOnOffenderMutation = {
       optimised?: string | null;
       card?: string | null;
     }>;
+    linkedCrimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    linkedVehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        url?: string | null;
+      }>;
+    }>;
     linkedIncidents: Array<{
       __typename?: 'Incident';
       id: string;
@@ -41770,6 +42531,188 @@ export type CreateUpdateOnOffenderMutation = {
         url?: string | null;
         optimised?: string | null;
         card?: string | null;
+      }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
+      }>;
+      linkedIncidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      linkedOffenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        updatedAt: any;
+        age?: Age | null;
+        build?: Build | null;
+        dateOfBirth?: any | null;
+        name?: string | null;
+        race?: Race | null;
+        gender?: Gender | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
+    }>;
+  } | null;
+};
+
+export type CreateUpdateOnVehicleMutationVariables = Exact<{
+  vehicle: UniqueId;
+  data: CreateUpdateData;
+}>;
+
+export type CreateUpdateOnVehicleMutation = {
+  __typename?: 'Mutation';
+  createUpdateOnVehicle?: {
+    __typename?: 'Update';
+    id: string;
+    text?: string | null;
+    type: UpdateType;
+    createdAt: any;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      card?: string | null;
+    }>;
+    linkedCrimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    linkedVehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+    }>;
+    linkedIncidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+      description: string;
+      dayTime?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
+    linkedOffenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      updatedAt: any;
+      age?: Age | null;
+      build?: Build | null;
+      dateOfBirth?: any | null;
+      name?: string | null;
+      race?: Race | null;
+      gender?: Gender | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+    };
+    replies: Array<{
+      __typename?: 'Update';
+      id: string;
+      text?: string | null;
+      type: UpdateType;
+      createdAt: any;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+      }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
@@ -42091,6 +43034,16 @@ export type UpdateUserChatMutation = {
             url?: string | null;
             optimised?: string | null;
           }>;
+          vehicles: Array<{
+            __typename?: 'Vehicle';
+            id: string;
+            reference?: number | null;
+          }>;
+          crimeGroups: Array<{
+            __typename?: 'CrimeGroup';
+            id: string;
+            reference?: number | null;
+          }>;
           incidents: Array<{
             __typename?: 'Incident';
             id: string;
@@ -42120,6 +43073,7 @@ export type UserChatsQuery = {
   user?: {
     __typename?: 'User';
     id: string;
+    totalChats?: number | null;
     chats: Array<{
       __typename?: 'UserChat';
       id: string;
@@ -42160,6 +43114,16 @@ export type UserChatsQuery = {
             __typename?: 'Offender';
             id: string;
             name?: string | null;
+          }>;
+          vehicles: Array<{
+            __typename?: 'Vehicle';
+            id: string;
+            reference?: number | null;
+          }>;
+          crimeGroups: Array<{
+            __typename?: 'CrimeGroup';
+            id: string;
+            reference?: number | null;
           }>;
         }>;
       };
@@ -42285,6 +43249,48 @@ export type UserNewQuery = {
   } | null;
 };
 
+export type CreateVehicleMutationVariables = Exact<{
+  data: CreateVehicleDataInput;
+}>;
+
+export type CreateVehicleMutation = {
+  __typename?: 'Mutation';
+  createVehicle: {
+    __typename?: 'Vehicle';
+    id: string;
+    make?: string | null;
+    model?: string | null;
+    registration?: string | null;
+    totalOffenders?: number | null;
+    totalIncidents?: number | null;
+    totalCrimeGroups?: number | null;
+    reference?: number | null;
+    updatedAt: any;
+    colour?: string | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      optimised?: string | null;
+      url?: string | null;
+    }>;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+    }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      name?: string | null;
+    }>;
+    crimeGroup: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      reference?: number | null;
+    }>;
+  };
+};
+
 export type DeleteVehicleMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -42292,6 +43298,32 @@ export type DeleteVehicleMutationVariables = Exact<{
 export type DeleteVehicleMutation = {
   __typename?: 'Mutation';
   deleteVehicle?: { __typename?: 'Vehicle'; id: string } | null;
+};
+
+export type SubscribeToVehicleMutationVariables = Exact<{
+  where: UniqueId;
+}>;
+
+export type SubscribeToVehicleMutation = {
+  __typename?: 'Mutation';
+  subscribeToVehicle?: {
+    __typename?: 'Vehicle';
+    id: string;
+    subscribed?: boolean | null;
+  } | null;
+};
+
+export type UnsubscribeToVehicleMutationVariables = Exact<{
+  where: UniqueId;
+}>;
+
+export type UnsubscribeToVehicleMutation = {
+  __typename?: 'Mutation';
+  unsubscribeToVehicle?: {
+    __typename?: 'Vehicle';
+    id: string;
+    subscribed?: boolean | null;
+  } | null;
 };
 
 export type UpdateVehicleMutationVariables = Exact<{
@@ -42307,10 +43339,17 @@ export type UpdateVehicleMutation = {
     make?: string | null;
     model?: string | null;
     registration?: string | null;
+    reference?: number | null;
     totalOffenders?: number | null;
     totalIncidents?: number | null;
     updatedAt: any;
     colour?: string | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      optimised?: string | null;
+      url?: string | null;
+    }>;
     incidents: Array<{
       __typename?: 'Incident';
       id: string;
@@ -42329,6 +43368,55 @@ export type UpdateVehicleMutation = {
   } | null;
 };
 
+export type ListVehiclesQueryVariables = Exact<{
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<VehicleWhereInput>;
+  order?: InputMaybe<VehicleOrderByWithRelationInput>;
+}>;
+
+export type ListVehiclesQuery = {
+  __typename?: 'Query';
+  listVehicles: {
+    __typename?: 'ListVehicles';
+    total: number;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      id: string;
+      make?: string | null;
+      model?: string | null;
+      registration?: string | null;
+      totalCrimeGroups?: number | null;
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      reference?: number | null;
+      updatedAt: any;
+      colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        url?: string | null;
+      }>;
+      incidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        subject?: string | null;
+      }>;
+      offenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        name?: string | null;
+      }>;
+      crimeGroup: Array<{
+        __typename?: 'CrimeGroup';
+        id: string;
+        reference?: number | null;
+      }>;
+    }>;
+  };
+};
+
 export type VehicleQueryVariables = Exact<{
   where: VehicleWhereUniqueInput;
 }>;
@@ -42344,8 +43432,16 @@ export type VehicleQuery = {
     totalOffenders?: number | null;
     totalIncidents?: number | null;
     totalCrimeGroups?: number | null;
+    reference?: number | null;
+    subscribed?: boolean | null;
     updatedAt: any;
     colour?: string | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      optimised?: string | null;
+      url?: string | null;
+    }>;
     incidents: Array<{
       __typename?: 'Incident';
       id: string;
@@ -42355,15 +43451,7 @@ export type VehicleQuery = {
       recoveredValue?: number | null;
       reference?: number | null;
       policeRef?: string | null;
-      createdBy: {
-        __typename?: 'User';
-        id: string;
-        businesses: Array<{
-          __typename?: 'Business';
-          id: string;
-          name: string;
-        }>;
-      };
+      createdBy: { __typename?: 'User'; id: string; organisation: string };
     }>;
     offenders: Array<{
       __typename?: 'Offender';
@@ -42397,84 +43485,168 @@ export type VehicleQuery = {
       __typename?: 'CrimeGroup';
       id: string;
       reference?: number | null;
-    }>;
-  } | null;
-};
-
-export type CreateVehicleMutationVariables = Exact<{
-  data: CreateVehicleDataInput;
-}>;
-
-export type CreateVehicleMutation = {
-  __typename?: 'Mutation';
-  createVehicle: {
-    __typename?: 'Vehicle';
-    id: string;
-    make?: string | null;
-    model?: string | null;
-    registration?: string | null;
-    totalOffenders?: number | null;
-    totalIncidents?: number | null;
-    updatedAt: any;
-    colour?: string | null;
-    incidents: Array<{
-      __typename?: 'Incident';
-      id: string;
-      subject?: string | null;
-    }>;
-    offenders: Array<{
-      __typename?: 'Offender';
-      id: string;
-      name?: string | null;
-    }>;
-    crimeGroup: Array<{
-      __typename?: 'CrimeGroup';
-      id: string;
-      reference?: number | null;
-    }>;
-  };
-};
-
-export type ListVehiclesQueryVariables = Exact<{
-  take?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<VehicleWhereInput>;
-  order?: InputMaybe<VehicleOrderByWithRelationInput>;
-}>;
-
-export type ListVehiclesQuery = {
-  __typename?: 'Query';
-  listVehicles: {
-    __typename?: 'ListVehicles';
-    total: number;
-    vehicles: Array<{
-      __typename?: 'Vehicle';
-      id: string;
-      make?: string | null;
-      model?: string | null;
-      registration?: string | null;
-      totalCrimeGroups?: number | null;
-      totalOffenders?: number | null;
       totalIncidents?: number | null;
-      updatedAt: any;
-      colour?: string | null;
-      incidents: Array<{
+      totalOffenders?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      alias?: string | null;
+    }>;
+    updates: Array<{
+      __typename?: 'Update';
+      id: string;
+      text?: string | null;
+      type: UpdateType;
+      createdAt: any;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+      }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
+      }>;
+      linkedIncidents: Array<{
         __typename?: 'Incident';
         id: string;
         subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
       }>;
-      offenders: Array<{
+      linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
+        updatedAt: any;
+        age?: Age | null;
+        build?: Build | null;
+        dateOfBirth?: any | null;
         name?: string | null;
+        race?: Race | null;
+        gender?: Gender | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
       }>;
-      crimeGroup: Array<{
-        __typename?: 'CrimeGroup';
+      createdBy: {
+        __typename?: 'User';
         id: string;
-        reference?: number | null;
+        fullName: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
+      replies: Array<{
+        __typename?: 'Update';
+        id: string;
+        text?: string | null;
+        type: UpdateType;
+        createdAt: any;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          card?: string | null;
+        }>;
+        linkedCrimeGroups: Array<{
+          __typename?: 'CrimeGroup';
+          totalOffenders?: number | null;
+          totalIncidents?: number | null;
+          alias?: string | null;
+          id: string;
+          reference?: number | null;
+          totalRecoveredValue?: number | null;
+          totalTheftSuccess?: number | null;
+          totalValue?: number | null;
+          updatedAt: any;
+        }>;
+        linkedVehicles: Array<{
+          __typename?: 'Vehicle';
+          updatedAt: any;
+          totalOffenders?: number | null;
+          registration?: string | null;
+          reference?: number | null;
+          model?: string | null;
+          make?: string | null;
+          id: string;
+          colour?: string | null;
+        }>;
+        linkedIncidents: Array<{
+          __typename?: 'Incident';
+          id: string;
+          subject?: string | null;
+          description: string;
+          dayTime?: string | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+        }>;
+        linkedOffenders: Array<{
+          __typename?: 'Offender';
+          id: string;
+          updatedAt: any;
+          age?: Age | null;
+          build?: Build | null;
+          dateOfBirth?: any | null;
+          name?: string | null;
+          race?: Race | null;
+          gender?: Gender | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+        }>;
+        createdBy: {
+          __typename?: 'User';
+          id: string;
+          fullName: string;
+          businesses: Array<{
+            __typename?: 'Business';
+            id: string;
+            name: string;
+          }>;
+        };
       }>;
     }>;
-  };
+  } | null;
 };
 
 export const ListActionsDocument = gql`
@@ -42744,6 +43916,171 @@ export type CreateArticleMutationOptions = Apollo.BaseMutationOptions<
   CreateArticleMutation,
   CreateArticleMutationVariables
 >;
+export const ArticlesDocument = gql`
+  query Articles(
+    $where: ArticleWhereInput
+    $orderBy: [ArticleOrderByWithRelationInput!]
+  ) {
+    articles(where: $where, orderBy: $orderBy) {
+      previewImage
+      previewText
+      priority
+      tags {
+        id
+        name
+      }
+      createdBy {
+        fullName
+        businesses {
+          id
+          name
+        }
+        id
+      }
+      title
+      updatedAt
+      id
+    }
+  }
+`;
+
+/**
+ * __useArticlesQuery__
+ *
+ * To run a query within a React component, call `useArticlesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useArticlesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useArticlesQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *   },
+ * });
+ */
+export function useArticlesQuery(
+  baseOptions?: Apollo.QueryHookOptions<ArticlesQuery, ArticlesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ArticlesQuery, ArticlesQueryVariables>(
+    ArticlesDocument,
+    options
+  );
+}
+export function useArticlesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ArticlesQuery,
+    ArticlesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ArticlesQuery, ArticlesQueryVariables>(
+    ArticlesDocument,
+    options
+  );
+}
+export type ArticlesQueryHookResult = ReturnType<typeof useArticlesQuery>;
+export type ArticlesLazyQueryHookResult = ReturnType<
+  typeof useArticlesLazyQuery
+>;
+export type ArticlesQueryResult = Apollo.QueryResult<
+  ArticlesQuery,
+  ArticlesQueryVariables
+>;
+export const ListArticlesDocument = gql`
+  query listArticles(
+    $scheme: SchemeWhereUniqueInput!
+    $where: ArticleWhereInput
+    $take: Int
+    $skip: Int
+    $order: ArticleOrderByWithRelationInput
+  ) {
+    listArticles(
+      where: $where
+      order: $order
+      take: $take
+      skip: $skip
+      scheme: $scheme
+    ) {
+      articles {
+        previewImage
+        previewText
+        priority
+        tags {
+          id
+          name
+        }
+        createdBy {
+          fullName
+          organisation
+          id
+        }
+        title
+        updatedAt
+        id
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useListArticlesQuery__
+ *
+ * To run a query within a React component, call `useListArticlesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListArticlesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListArticlesQuery({
+ *   variables: {
+ *      scheme: // value for 'scheme'
+ *      where: // value for 'where'
+ *      take: // value for 'take'
+ *      skip: // value for 'skip'
+ *      order: // value for 'order'
+ *   },
+ * });
+ */
+export function useListArticlesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListArticlesQuery,
+    ListArticlesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ListArticlesQuery, ListArticlesQueryVariables>(
+    ListArticlesDocument,
+    options
+  );
+}
+export function useListArticlesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListArticlesQuery,
+    ListArticlesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ListArticlesQuery, ListArticlesQueryVariables>(
+    ListArticlesDocument,
+    options
+  );
+}
+export type ListArticlesQueryHookResult = ReturnType<
+  typeof useListArticlesQuery
+>;
+export type ListArticlesLazyQueryHookResult = ReturnType<
+  typeof useListArticlesLazyQuery
+>;
+export type ListArticlesQueryResult = Apollo.QueryResult<
+  ListArticlesQuery,
+  ListArticlesQueryVariables
+>;
 export const ArticleDocument = gql`
   query Article($where: ArticleWhereUniqueInput!) {
     article(where: $where) {
@@ -42929,171 +44266,6 @@ export type ArticleLazyQueryHookResult = ReturnType<typeof useArticleLazyQuery>;
 export type ArticleQueryResult = Apollo.QueryResult<
   ArticleQuery,
   ArticleQueryVariables
->;
-export const ArticlesDocument = gql`
-  query Articles(
-    $where: ArticleWhereInput
-    $orderBy: [ArticleOrderByWithRelationInput!]
-  ) {
-    articles(where: $where, orderBy: $orderBy) {
-      previewImage
-      previewText
-      priority
-      tags {
-        id
-        name
-      }
-      createdBy {
-        fullName
-        businesses {
-          id
-          name
-        }
-        id
-      }
-      title
-      updatedAt
-      id
-    }
-  }
-`;
-
-/**
- * __useArticlesQuery__
- *
- * To run a query within a React component, call `useArticlesQuery` and pass it any options that fit your needs.
- * When your component renders, `useArticlesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useArticlesQuery({
- *   variables: {
- *      where: // value for 'where'
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
-export function useArticlesQuery(
-  baseOptions?: Apollo.QueryHookOptions<ArticlesQuery, ArticlesQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ArticlesQuery, ArticlesQueryVariables>(
-    ArticlesDocument,
-    options
-  );
-}
-export function useArticlesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ArticlesQuery,
-    ArticlesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ArticlesQuery, ArticlesQueryVariables>(
-    ArticlesDocument,
-    options
-  );
-}
-export type ArticlesQueryHookResult = ReturnType<typeof useArticlesQuery>;
-export type ArticlesLazyQueryHookResult = ReturnType<
-  typeof useArticlesLazyQuery
->;
-export type ArticlesQueryResult = Apollo.QueryResult<
-  ArticlesQuery,
-  ArticlesQueryVariables
->;
-export const ListArticlesDocument = gql`
-  query listArticles(
-    $scheme: SchemeWhereUniqueInput!
-    $where: ArticleWhereInput
-    $take: Int
-    $skip: Int
-    $order: ArticleOrderByWithRelationInput
-  ) {
-    listArticles(
-      where: $where
-      order: $order
-      take: $take
-      skip: $skip
-      scheme: $scheme
-    ) {
-      articles {
-        previewImage
-        previewText
-        priority
-        tags {
-          id
-          name
-        }
-        createdBy {
-          fullName
-          organisation
-          id
-        }
-        title
-        updatedAt
-        id
-      }
-      total
-    }
-  }
-`;
-
-/**
- * __useListArticlesQuery__
- *
- * To run a query within a React component, call `useListArticlesQuery` and pass it any options that fit your needs.
- * When your component renders, `useListArticlesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListArticlesQuery({
- *   variables: {
- *      scheme: // value for 'scheme'
- *      where: // value for 'where'
- *      take: // value for 'take'
- *      skip: // value for 'skip'
- *      order: // value for 'order'
- *   },
- * });
- */
-export function useListArticlesQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    ListArticlesQuery,
-    ListArticlesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ListArticlesQuery, ListArticlesQueryVariables>(
-    ListArticlesDocument,
-    options
-  );
-}
-export function useListArticlesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ListArticlesQuery,
-    ListArticlesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ListArticlesQuery, ListArticlesQueryVariables>(
-    ListArticlesDocument,
-    options
-  );
-}
-export type ListArticlesQueryHookResult = ReturnType<
-  typeof useListArticlesQuery
->;
-export type ListArticlesLazyQueryHookResult = ReturnType<
-  typeof useListArticlesLazyQuery
->;
-export type ListArticlesQueryResult = Apollo.QueryResult<
-  ListArticlesQuery,
-  ListArticlesQueryVariables
 >;
 export const CreateUserinAuth0Document = gql`
   mutation createUserinAuth0($id: String!, $password: String!) {
@@ -44379,6 +45551,14 @@ export const CreateChatDocument = gql`
               id
               name
             }
+            vehicles {
+              id
+              reference
+            }
+            crimeGroups {
+              id
+              reference
+            }
           }
         }
       }
@@ -44490,6 +45670,62 @@ export type SchemeChatsQueryResult = Apollo.QueryResult<
   SchemeChatsQuery,
   SchemeChatsQueryVariables
 >;
+export const CreateCrimeGroupDocument = gql`
+  mutation CreateCrimeGroup($data: CreateCrimeGroupDataInput!) {
+    createCrimeGroup(data: $data) {
+      id
+      reference
+      totalIncidents
+      totalOffenders
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+    }
+  }
+`;
+export type CreateCrimeGroupMutationFn = Apollo.MutationFunction<
+  CreateCrimeGroupMutation,
+  CreateCrimeGroupMutationVariables
+>;
+
+/**
+ * __useCreateCrimeGroupMutation__
+ *
+ * To run a mutation, you first call `useCreateCrimeGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCrimeGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCrimeGroupMutation, { data, loading, error }] = useCreateCrimeGroupMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateCrimeGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateCrimeGroupMutation,
+    CreateCrimeGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateCrimeGroupMutation,
+    CreateCrimeGroupMutationVariables
+  >(CreateCrimeGroupDocument, options);
+}
+export type CreateCrimeGroupMutationHookResult = ReturnType<
+  typeof useCreateCrimeGroupMutation
+>;
+export type CreateCrimeGroupMutationResult =
+  Apollo.MutationResult<CreateCrimeGroupMutation>;
+export type CreateCrimeGroupMutationOptions = Apollo.BaseMutationOptions<
+  CreateCrimeGroupMutation,
+  CreateCrimeGroupMutationVariables
+>;
 export const DeleteCrimeGroupDocument = gql`
   mutation deleteCrimeGroup($id: String!) {
     deleteCrimeGroup(where: { id: $id }) {
@@ -44539,6 +45775,108 @@ export type DeleteCrimeGroupMutationResult =
 export type DeleteCrimeGroupMutationOptions = Apollo.BaseMutationOptions<
   DeleteCrimeGroupMutation,
   DeleteCrimeGroupMutationVariables
+>;
+export const SubscribeToCrimeGroupDocument = gql`
+  mutation SubscribeToCrimeGroup($where: UniqueId!) {
+    subscribeToCrimeGroup(where: $where) {
+      id
+      subscribed
+    }
+  }
+`;
+export type SubscribeToCrimeGroupMutationFn = Apollo.MutationFunction<
+  SubscribeToCrimeGroupMutation,
+  SubscribeToCrimeGroupMutationVariables
+>;
+
+/**
+ * __useSubscribeToCrimeGroupMutation__
+ *
+ * To run a mutation, you first call `useSubscribeToCrimeGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSubscribeToCrimeGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [subscribeToCrimeGroupMutation, { data, loading, error }] = useSubscribeToCrimeGroupMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useSubscribeToCrimeGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SubscribeToCrimeGroupMutation,
+    SubscribeToCrimeGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    SubscribeToCrimeGroupMutation,
+    SubscribeToCrimeGroupMutationVariables
+  >(SubscribeToCrimeGroupDocument, options);
+}
+export type SubscribeToCrimeGroupMutationHookResult = ReturnType<
+  typeof useSubscribeToCrimeGroupMutation
+>;
+export type SubscribeToCrimeGroupMutationResult =
+  Apollo.MutationResult<SubscribeToCrimeGroupMutation>;
+export type SubscribeToCrimeGroupMutationOptions = Apollo.BaseMutationOptions<
+  SubscribeToCrimeGroupMutation,
+  SubscribeToCrimeGroupMutationVariables
+>;
+export const UnsubscribeToCrimeGroupDocument = gql`
+  mutation UnsubscribeToCrimeGroup($where: UniqueId!) {
+    unsubscribeToCrimeGroup(where: $where) {
+      id
+      subscribed
+    }
+  }
+`;
+export type UnsubscribeToCrimeGroupMutationFn = Apollo.MutationFunction<
+  UnsubscribeToCrimeGroupMutation,
+  UnsubscribeToCrimeGroupMutationVariables
+>;
+
+/**
+ * __useUnsubscribeToCrimeGroupMutation__
+ *
+ * To run a mutation, you first call `useUnsubscribeToCrimeGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnsubscribeToCrimeGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unsubscribeToCrimeGroupMutation, { data, loading, error }] = useUnsubscribeToCrimeGroupMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUnsubscribeToCrimeGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UnsubscribeToCrimeGroupMutation,
+    UnsubscribeToCrimeGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UnsubscribeToCrimeGroupMutation,
+    UnsubscribeToCrimeGroupMutationVariables
+  >(UnsubscribeToCrimeGroupDocument, options);
+}
+export type UnsubscribeToCrimeGroupMutationHookResult = ReturnType<
+  typeof useUnsubscribeToCrimeGroupMutation
+>;
+export type UnsubscribeToCrimeGroupMutationResult =
+  Apollo.MutationResult<UnsubscribeToCrimeGroupMutation>;
+export type UnsubscribeToCrimeGroupMutationOptions = Apollo.BaseMutationOptions<
+  UnsubscribeToCrimeGroupMutation,
+  UnsubscribeToCrimeGroupMutationVariables
 >;
 export const UpdateCrimeGroupDocument = gql`
   mutation updateCrimeGroup(
@@ -44645,177 +45983,6 @@ export type UpdateCrimeGroupMutationOptions = Apollo.BaseMutationOptions<
   UpdateCrimeGroupMutation,
   UpdateCrimeGroupMutationVariables
 >;
-export const CrimeGroupDocument = gql`
-  query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
-    crimeGroup(where: $where) {
-      id
-      reference
-      totalIncidents
-      totalOffenders
-      totalRecoveredValue
-      totalTheftSuccess
-      totalValue
-      alias
-      offenders {
-        id
-        name
-        reference
-        lastActive {
-          id
-          dayTime
-        }
-        hair
-        peculiarities
-        race
-        dateOfBirth
-        dateSource
-        build
-        age
-        gender
-        images {
-          id
-          optimised
-        }
-        totalTheftSuccess
-        totalRecoveredValue
-        totalIncidents
-        totalValue
-      }
-      vehicles {
-        id
-        make
-        model
-        updatedAt
-        colour
-        registration
-        totalOffenders
-        totalIncidents
-        totalCrimeGroups
-      }
-      incidents {
-        id
-        subject
-        dayTime
-        createdBy {
-          id
-          businesses {
-            id
-            name
-          }
-        }
-        value
-        recoveredValue
-        reference
-        policeRef
-      }
-    }
-  }
-`;
-
-/**
- * __useCrimeGroupQuery__
- *
- * To run a query within a React component, call `useCrimeGroupQuery` and pass it any options that fit your needs.
- * When your component renders, `useCrimeGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCrimeGroupQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
-export function useCrimeGroupQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    CrimeGroupQuery,
-    CrimeGroupQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<CrimeGroupQuery, CrimeGroupQueryVariables>(
-    CrimeGroupDocument,
-    options
-  );
-}
-export function useCrimeGroupLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    CrimeGroupQuery,
-    CrimeGroupQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<CrimeGroupQuery, CrimeGroupQueryVariables>(
-    CrimeGroupDocument,
-    options
-  );
-}
-export type CrimeGroupQueryHookResult = ReturnType<typeof useCrimeGroupQuery>;
-export type CrimeGroupLazyQueryHookResult = ReturnType<
-  typeof useCrimeGroupLazyQuery
->;
-export type CrimeGroupQueryResult = Apollo.QueryResult<
-  CrimeGroupQuery,
-  CrimeGroupQueryVariables
->;
-export const CreateCrimeGroupDocument = gql`
-  mutation CreateCrimeGroup($data: CreateCrimeGroupDataInput!) {
-    createCrimeGroup(data: $data) {
-      id
-      reference
-      totalIncidents
-      totalOffenders
-      totalRecoveredValue
-      totalTheftSuccess
-      totalValue
-    }
-  }
-`;
-export type CreateCrimeGroupMutationFn = Apollo.MutationFunction<
-  CreateCrimeGroupMutation,
-  CreateCrimeGroupMutationVariables
->;
-
-/**
- * __useCreateCrimeGroupMutation__
- *
- * To run a mutation, you first call `useCreateCrimeGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateCrimeGroupMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createCrimeGroupMutation, { data, loading, error }] = useCreateCrimeGroupMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
-export function useCreateCrimeGroupMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateCrimeGroupMutation,
-    CreateCrimeGroupMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateCrimeGroupMutation,
-    CreateCrimeGroupMutationVariables
-  >(CreateCrimeGroupDocument, options);
-}
-export type CreateCrimeGroupMutationHookResult = ReturnType<
-  typeof useCreateCrimeGroupMutation
->;
-export type CreateCrimeGroupMutationResult =
-  Apollo.MutationResult<CreateCrimeGroupMutation>;
-export type CreateCrimeGroupMutationOptions = Apollo.BaseMutationOptions<
-  CreateCrimeGroupMutation,
-  CreateCrimeGroupMutationVariables
->;
 export const ListCrimeGroupsDocument = gql`
   query ListCrimeGroups(
     $take: Int
@@ -44891,6 +46058,257 @@ export type ListCrimeGroupsLazyQueryHookResult = ReturnType<
 export type ListCrimeGroupsQueryResult = Apollo.QueryResult<
   ListCrimeGroupsQuery,
   ListCrimeGroupsQueryVariables
+>;
+export const CrimeGroupDocument = gql`
+  query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
+    crimeGroup(where: $where) {
+      id
+      reference
+      totalIncidents
+      totalOffenders
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+      subscribed
+      alias
+      offenders {
+        id
+        name
+        reference
+        lastActive {
+          id
+          dayTime
+        }
+        hair
+        peculiarities
+        race
+        dateOfBirth
+        dateSource
+        build
+        age
+        gender
+        images {
+          id
+          optimised
+        }
+        totalTheftSuccess
+        totalRecoveredValue
+        totalIncidents
+        totalValue
+      }
+      vehicles {
+        id
+        reference
+        make
+        model
+        updatedAt
+        colour
+        registration
+        totalOffenders
+        totalIncidents
+        totalCrimeGroups
+      }
+      incidents {
+        id
+        subject
+        dayTime
+        createdBy {
+          id
+          businesses {
+            id
+            name
+          }
+        }
+        value
+        recoveredValue
+        reference
+        policeRef
+      }
+      updates(orderBy: { createdAt: desc }) {
+        id
+        text
+        type
+        createdAt
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
+        }
+        linkedIncidents {
+          id
+          subject
+          description
+          dayTime
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        linkedOffenders {
+          id
+          updatedAt
+          age
+          build
+          dateOfBirth
+          name
+          race
+          gender
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+        replies {
+          id
+          text
+          type
+          createdAt
+          images {
+            id
+            url
+            optimised
+            card
+          }
+          linkedCrimeGroups {
+            totalOffenders
+            totalIncidents
+            alias
+            id
+            reference
+            totalRecoveredValue
+            totalTheftSuccess
+            totalValue
+            updatedAt
+          }
+          linkedVehicles {
+            updatedAt
+            totalOffenders
+            registration
+            reference
+            model
+            make
+            id
+            colour
+          }
+          linkedIncidents {
+            id
+            subject
+            description
+            dayTime
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          linkedOffenders {
+            id
+            updatedAt
+            age
+            build
+            dateOfBirth
+            name
+            race
+            gender
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          createdBy {
+            id
+            fullName
+            businesses {
+              id
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useCrimeGroupQuery__
+ *
+ * To run a query within a React component, call `useCrimeGroupQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCrimeGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCrimeGroupQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useCrimeGroupQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    CrimeGroupQuery,
+    CrimeGroupQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<CrimeGroupQuery, CrimeGroupQueryVariables>(
+    CrimeGroupDocument,
+    options
+  );
+}
+export function useCrimeGroupLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    CrimeGroupQuery,
+    CrimeGroupQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<CrimeGroupQuery, CrimeGroupQueryVariables>(
+    CrimeGroupDocument,
+    options
+  );
+}
+export type CrimeGroupQueryHookResult = ReturnType<typeof useCrimeGroupQuery>;
+export type CrimeGroupLazyQueryHookResult = ReturnType<
+  typeof useCrimeGroupLazyQuery
+>;
+export type CrimeGroupQueryResult = Apollo.QueryResult<
+  CrimeGroupQuery,
+  CrimeGroupQueryVariables
 >;
 export const CopyEvidenceDocument = gql`
   mutation CopyEvidence($data: ImportDemEvidence!, $where: UniqueId!) {
@@ -47128,6 +48546,27 @@ export const ViewIncidentDocument = gql`
           optimised
           card
         }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
+        }
         linkedIncidents {
           id
           subject
@@ -47172,6 +48611,27 @@ export const ViewIncidentDocument = gql`
             url
             optimised
             card
+          }
+          linkedCrimeGroups {
+            totalOffenders
+            totalIncidents
+            alias
+            id
+            reference
+            totalRecoveredValue
+            totalTheftSuccess
+            totalValue
+            updatedAt
+          }
+          linkedVehicles {
+            updatedAt
+            totalOffenders
+            registration
+            reference
+            model
+            make
+            id
+            colour
           }
           linkedIncidents {
             id
@@ -47790,6 +49250,27 @@ export const ViewInvestigationDocument = gql`
           optimised
           card
         }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
+        }
         linkedIncidents {
           id
           subject
@@ -47834,6 +49315,27 @@ export const ViewInvestigationDocument = gql`
             url
             optimised
             card
+          }
+          linkedCrimeGroups {
+            totalOffenders
+            totalIncidents
+            alias
+            id
+            reference
+            totalRecoveredValue
+            totalTheftSuccess
+            totalValue
+            updatedAt
+          }
+          linkedVehicles {
+            updatedAt
+            totalOffenders
+            registration
+            reference
+            model
+            make
+            id
+            colour
           }
           linkedIncidents {
             id
@@ -48012,6 +49514,32 @@ export const CreateMessageDocument = gql`
         url
         optimised
       }
+      crimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      vehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
+        images {
+          id
+          optimised
+          url
+        }
+      }
       incidents {
         id
         subject
@@ -48161,6 +49689,32 @@ export const UpdateMessageDocument = gql`
         url
         optimised
       }
+      crimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      vehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
+        images {
+          id
+          optimised
+          url
+        }
+      }
       incidents {
         id
         subject
@@ -48255,6 +49809,32 @@ export const ChatMessagesDocument = gql`
         id
         url
         optimised
+      }
+      crimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      vehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
+        images {
+          id
+          optimised
+          url
+        }
       }
       incidents {
         id
@@ -48367,6 +49947,32 @@ export const MessagesDocument = gql`
         url
         optimised
       }
+      crimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      vehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
+        images {
+          id
+          optimised
+          url
+        }
+      }
       incidents {
         id
         subject
@@ -48464,6 +50070,32 @@ export const MessagesSubscriptionDocument = gql`
         id
         url
         optimised
+      }
+      crimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      vehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
+        images {
+          id
+          optimised
+          url
+        }
       }
       incidents {
         id
@@ -49541,6 +51173,27 @@ export const ViewOffenderDocument = gql`
           optimised
           card
         }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
+        }
         linkedIncidents {
           id
           subject
@@ -49585,6 +51238,27 @@ export const ViewOffenderDocument = gql`
             url
             optimised
             card
+          }
+          linkedCrimeGroups {
+            totalOffenders
+            totalIncidents
+            alias
+            id
+            reference
+            totalRecoveredValue
+            totalTheftSuccess
+            totalValue
+            updatedAt
+          }
+          linkedVehicles {
+            updatedAt
+            totalOffenders
+            registration
+            reference
+            model
+            make
+            id
+            colour
           }
           linkedIncidents {
             id
@@ -50915,12 +52589,12 @@ export function useTagsLazyQuery(
 export type TagsQueryHookResult = ReturnType<typeof useTagsQuery>;
 export type TagsLazyQueryHookResult = ReturnType<typeof useTagsLazyQuery>;
 export type TagsQueryResult = Apollo.QueryResult<TagsQuery, TagsQueryVariables>;
-export const CreateUpdateOnIncidentDocument = gql`
-  mutation CreateUpdateOnIncident(
-    $incident: UniqueId!
+export const CreateUpdateOnCrimeGroupDocument = gql`
+  mutation CreateUpdateOnCrimeGroup(
+    $crimeGroup: UniqueId!
     $data: CreateUpdateData!
   ) {
-    createUpdateOnIncident(incident: $incident, data: $data) {
+    createUpdateOnCrimeGroup(crimeGroup: $crimeGroup, data: $data) {
       id
       text
       type
@@ -50930,6 +52604,27 @@ export const CreateUpdateOnIncidentDocument = gql`
         url
         optimised
         card
+      }
+      linkedCrimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      linkedVehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
       }
       linkedIncidents {
         id
@@ -50975,6 +52670,218 @@ export const CreateUpdateOnIncidentDocument = gql`
           url
           optimised
           card
+        }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
+        }
+        linkedIncidents {
+          id
+          subject
+          description
+          dayTime
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        linkedOffenders {
+          id
+          updatedAt
+          age
+          build
+          dateOfBirth
+          name
+          race
+          gender
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+export type CreateUpdateOnCrimeGroupMutationFn = Apollo.MutationFunction<
+  CreateUpdateOnCrimeGroupMutation,
+  CreateUpdateOnCrimeGroupMutationVariables
+>;
+
+/**
+ * __useCreateUpdateOnCrimeGroupMutation__
+ *
+ * To run a mutation, you first call `useCreateUpdateOnCrimeGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUpdateOnCrimeGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUpdateOnCrimeGroupMutation, { data, loading, error }] = useCreateUpdateOnCrimeGroupMutation({
+ *   variables: {
+ *      crimeGroup: // value for 'crimeGroup'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateUpdateOnCrimeGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateUpdateOnCrimeGroupMutation,
+    CreateUpdateOnCrimeGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateUpdateOnCrimeGroupMutation,
+    CreateUpdateOnCrimeGroupMutationVariables
+  >(CreateUpdateOnCrimeGroupDocument, options);
+}
+export type CreateUpdateOnCrimeGroupMutationHookResult = ReturnType<
+  typeof useCreateUpdateOnCrimeGroupMutation
+>;
+export type CreateUpdateOnCrimeGroupMutationResult =
+  Apollo.MutationResult<CreateUpdateOnCrimeGroupMutation>;
+export type CreateUpdateOnCrimeGroupMutationOptions =
+  Apollo.BaseMutationOptions<
+    CreateUpdateOnCrimeGroupMutation,
+    CreateUpdateOnCrimeGroupMutationVariables
+  >;
+export const CreateUpdateOnIncidentDocument = gql`
+  mutation CreateUpdateOnIncident(
+    $incident: UniqueId!
+    $data: CreateUpdateData!
+  ) {
+    createUpdateOnIncident(incident: $incident, data: $data) {
+      id
+      text
+      type
+      createdAt
+      images {
+        id
+        url
+        optimised
+        card
+      }
+      linkedCrimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      linkedVehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
+        images {
+          id
+          optimised
+          url
+        }
+      }
+      linkedIncidents {
+        id
+        subject
+        description
+        dayTime
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      linkedOffenders {
+        id
+        updatedAt
+        age
+        build
+        dateOfBirth
+        name
+        race
+        gender
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      createdBy {
+        id
+        fullName
+        businesses {
+          id
+          name
+        }
+      }
+      replies {
+        id
+        text
+        type
+        createdAt
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
         }
         linkedIncidents {
           id
@@ -51100,6 +53007,27 @@ export const CreateUpdateOnInvestigationDocument = gql`
           optimised
         }
       }
+      linkedCrimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      linkedVehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
+      }
       createdBy {
         id
         fullName
@@ -51118,6 +53046,27 @@ export const CreateUpdateOnInvestigationDocument = gql`
           url
           optimised
           card
+        }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
         }
         linkedIncidents {
           id
@@ -51218,6 +53167,32 @@ export const CreateUpdateOnOffenderDocument = gql`
         optimised
         card
       }
+      linkedCrimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      linkedVehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
+        images {
+          id
+          optimised
+          url
+        }
+      }
       linkedIncidents {
         id
         subject
@@ -51262,6 +53237,27 @@ export const CreateUpdateOnOffenderDocument = gql`
           url
           optimised
           card
+        }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
         }
         linkedIncidents {
           id
@@ -51344,6 +53340,191 @@ export type CreateUpdateOnOffenderMutationResult =
 export type CreateUpdateOnOffenderMutationOptions = Apollo.BaseMutationOptions<
   CreateUpdateOnOffenderMutation,
   CreateUpdateOnOffenderMutationVariables
+>;
+export const CreateUpdateOnVehicleDocument = gql`
+  mutation CreateUpdateOnVehicle(
+    $vehicle: UniqueId!
+    $data: CreateUpdateData!
+  ) {
+    createUpdateOnVehicle(vehicle: $vehicle, data: $data) {
+      id
+      text
+      type
+      createdAt
+      images {
+        id
+        url
+        optimised
+        card
+      }
+      linkedCrimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      linkedVehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
+      }
+      linkedIncidents {
+        id
+        subject
+        description
+        dayTime
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      linkedOffenders {
+        id
+        updatedAt
+        age
+        build
+        dateOfBirth
+        name
+        race
+        gender
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      createdBy {
+        id
+        fullName
+        businesses {
+          id
+          name
+        }
+      }
+      replies {
+        id
+        text
+        type
+        createdAt
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
+        }
+        linkedIncidents {
+          id
+          subject
+          description
+          dayTime
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        linkedOffenders {
+          id
+          updatedAt
+          age
+          build
+          dateOfBirth
+          name
+          race
+          gender
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+export type CreateUpdateOnVehicleMutationFn = Apollo.MutationFunction<
+  CreateUpdateOnVehicleMutation,
+  CreateUpdateOnVehicleMutationVariables
+>;
+
+/**
+ * __useCreateUpdateOnVehicleMutation__
+ *
+ * To run a mutation, you first call `useCreateUpdateOnVehicleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUpdateOnVehicleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUpdateOnVehicleMutation, { data, loading, error }] = useCreateUpdateOnVehicleMutation({
+ *   variables: {
+ *      vehicle: // value for 'vehicle'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateUpdateOnVehicleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateUpdateOnVehicleMutation,
+    CreateUpdateOnVehicleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateUpdateOnVehicleMutation,
+    CreateUpdateOnVehicleMutationVariables
+  >(CreateUpdateOnVehicleDocument, options);
+}
+export type CreateUpdateOnVehicleMutationHookResult = ReturnType<
+  typeof useCreateUpdateOnVehicleMutation
+>;
+export type CreateUpdateOnVehicleMutationResult =
+  Apollo.MutationResult<CreateUpdateOnVehicleMutation>;
+export type CreateUpdateOnVehicleMutationOptions = Apollo.BaseMutationOptions<
+  CreateUpdateOnVehicleMutation,
+  CreateUpdateOnVehicleMutationVariables
 >;
 export const DeleteUpdateDocument = gql`
   mutation DeleteUpdate($where: UpdateWhereUnique!) {
@@ -52076,6 +54257,14 @@ export const UpdateUserChatDocument = gql`
               url
               optimised
             }
+            vehicles {
+              id
+              reference
+            }
+            crimeGroups {
+              id
+              reference
+            }
             incidents {
               id
               subject
@@ -52142,6 +54331,7 @@ export const UserChatsDocument = gql`
   ) {
     user(where: $where) {
       id
+      totalChats
       chats(
         where: { chat: { scheme: { id: { equals: $scheme } } } }
         orderBy: $orderBy
@@ -52181,6 +54371,14 @@ export const UserChatsDocument = gql`
             offenders {
               id
               name
+            }
+            vehicles {
+              id
+              reference
+            }
+            crimeGroups {
+              id
+              reference
             }
           }
         }
@@ -52637,6 +54835,82 @@ export type UserNewQueryResult = Apollo.QueryResult<
   UserNewQuery,
   UserNewQueryVariables
 >;
+export const CreateVehicleDocument = gql`
+  mutation CreateVehicle($data: CreateVehicleDataInput!) {
+    createVehicle(data: $data) {
+      id
+      make
+      model
+      registration
+      totalOffenders
+      totalIncidents
+      totalCrimeGroups
+      reference
+      images {
+        id
+        optimised
+        url
+      }
+      incidents {
+        id
+        subject
+      }
+      offenders {
+        id
+        name
+      }
+      updatedAt
+      colour
+      crimeGroup {
+        id
+        reference
+      }
+    }
+  }
+`;
+export type CreateVehicleMutationFn = Apollo.MutationFunction<
+  CreateVehicleMutation,
+  CreateVehicleMutationVariables
+>;
+
+/**
+ * __useCreateVehicleMutation__
+ *
+ * To run a mutation, you first call `useCreateVehicleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateVehicleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createVehicleMutation, { data, loading, error }] = useCreateVehicleMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateVehicleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateVehicleMutation,
+    CreateVehicleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateVehicleMutation,
+    CreateVehicleMutationVariables
+  >(CreateVehicleDocument, options);
+}
+export type CreateVehicleMutationHookResult = ReturnType<
+  typeof useCreateVehicleMutation
+>;
+export type CreateVehicleMutationResult =
+  Apollo.MutationResult<CreateVehicleMutation>;
+export type CreateVehicleMutationOptions = Apollo.BaseMutationOptions<
+  CreateVehicleMutation,
+  CreateVehicleMutationVariables
+>;
 export const DeleteVehicleDocument = gql`
   mutation deleteVehicle($id: String!) {
     deleteVehicle(where: { id: $id }) {
@@ -52687,6 +54961,108 @@ export type DeleteVehicleMutationOptions = Apollo.BaseMutationOptions<
   DeleteVehicleMutation,
   DeleteVehicleMutationVariables
 >;
+export const SubscribeToVehicleDocument = gql`
+  mutation SubscribeToVehicle($where: UniqueId!) {
+    subscribeToVehicle(where: $where) {
+      id
+      subscribed
+    }
+  }
+`;
+export type SubscribeToVehicleMutationFn = Apollo.MutationFunction<
+  SubscribeToVehicleMutation,
+  SubscribeToVehicleMutationVariables
+>;
+
+/**
+ * __useSubscribeToVehicleMutation__
+ *
+ * To run a mutation, you first call `useSubscribeToVehicleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSubscribeToVehicleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [subscribeToVehicleMutation, { data, loading, error }] = useSubscribeToVehicleMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useSubscribeToVehicleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SubscribeToVehicleMutation,
+    SubscribeToVehicleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    SubscribeToVehicleMutation,
+    SubscribeToVehicleMutationVariables
+  >(SubscribeToVehicleDocument, options);
+}
+export type SubscribeToVehicleMutationHookResult = ReturnType<
+  typeof useSubscribeToVehicleMutation
+>;
+export type SubscribeToVehicleMutationResult =
+  Apollo.MutationResult<SubscribeToVehicleMutation>;
+export type SubscribeToVehicleMutationOptions = Apollo.BaseMutationOptions<
+  SubscribeToVehicleMutation,
+  SubscribeToVehicleMutationVariables
+>;
+export const UnsubscribeToVehicleDocument = gql`
+  mutation UnsubscribeToVehicle($where: UniqueId!) {
+    unsubscribeToVehicle(where: $where) {
+      id
+      subscribed
+    }
+  }
+`;
+export type UnsubscribeToVehicleMutationFn = Apollo.MutationFunction<
+  UnsubscribeToVehicleMutation,
+  UnsubscribeToVehicleMutationVariables
+>;
+
+/**
+ * __useUnsubscribeToVehicleMutation__
+ *
+ * To run a mutation, you first call `useUnsubscribeToVehicleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnsubscribeToVehicleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unsubscribeToVehicleMutation, { data, loading, error }] = useUnsubscribeToVehicleMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUnsubscribeToVehicleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UnsubscribeToVehicleMutation,
+    UnsubscribeToVehicleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UnsubscribeToVehicleMutation,
+    UnsubscribeToVehicleMutationVariables
+  >(UnsubscribeToVehicleDocument, options);
+}
+export type UnsubscribeToVehicleMutationHookResult = ReturnType<
+  typeof useUnsubscribeToVehicleMutation
+>;
+export type UnsubscribeToVehicleMutationResult =
+  Apollo.MutationResult<UnsubscribeToVehicleMutation>;
+export type UnsubscribeToVehicleMutationOptions = Apollo.BaseMutationOptions<
+  UnsubscribeToVehicleMutation,
+  UnsubscribeToVehicleMutationVariables
+>;
 export const UpdateVehicleDocument = gql`
   mutation updateVehicle($where: UniqueId!, $data: CreateVehicleDataInput!) {
     updateVehicle(where: $where, data: $data) {
@@ -52694,8 +55070,14 @@ export const UpdateVehicleDocument = gql`
       make
       model
       registration
+      reference
       totalOffenders
       totalIncidents
+      images {
+        id
+        optimised
+        url
+      }
       incidents {
         id
         subject
@@ -52757,176 +55139,6 @@ export type UpdateVehicleMutationOptions = Apollo.BaseMutationOptions<
   UpdateVehicleMutation,
   UpdateVehicleMutationVariables
 >;
-export const VehicleDocument = gql`
-  query Vehicle($where: VehicleWhereUniqueInput!) {
-    vehicle(where: $where) {
-      id
-      make
-      model
-      registration
-      totalOffenders
-      totalIncidents
-      totalCrimeGroups
-      incidents {
-        id
-        subject
-        dayTime
-        createdBy {
-          id
-          businesses {
-            id
-            name
-          }
-        }
-        value
-        recoveredValue
-        reference
-        policeRef
-      }
-      offenders {
-        id
-        name
-        reference
-        lastActive {
-          id
-          dayTime
-        }
-        hair
-        peculiarities
-        race
-        dateOfBirth
-        dateSource
-        build
-        age
-        gender
-        images {
-          id
-          optimised
-        }
-        totalTheftSuccess
-        totalRecoveredValue
-        totalIncidents
-        totalValue
-      }
-      updatedAt
-      colour
-      crimeGroup {
-        id
-        reference
-      }
-    }
-  }
-`;
-
-/**
- * __useVehicleQuery__
- *
- * To run a query within a React component, call `useVehicleQuery` and pass it any options that fit your needs.
- * When your component renders, `useVehicleQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useVehicleQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
-export function useVehicleQuery(
-  baseOptions: Apollo.QueryHookOptions<VehicleQuery, VehicleQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<VehicleQuery, VehicleQueryVariables>(
-    VehicleDocument,
-    options
-  );
-}
-export function useVehicleLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<VehicleQuery, VehicleQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<VehicleQuery, VehicleQueryVariables>(
-    VehicleDocument,
-    options
-  );
-}
-export type VehicleQueryHookResult = ReturnType<typeof useVehicleQuery>;
-export type VehicleLazyQueryHookResult = ReturnType<typeof useVehicleLazyQuery>;
-export type VehicleQueryResult = Apollo.QueryResult<
-  VehicleQuery,
-  VehicleQueryVariables
->;
-export const CreateVehicleDocument = gql`
-  mutation CreateVehicle($data: CreateVehicleDataInput!) {
-    createVehicle(data: $data) {
-      id
-      make
-      model
-      registration
-      totalOffenders
-      totalIncidents
-      incidents {
-        id
-        subject
-      }
-      offenders {
-        id
-        name
-      }
-      updatedAt
-      colour
-      crimeGroup {
-        id
-        reference
-      }
-    }
-  }
-`;
-export type CreateVehicleMutationFn = Apollo.MutationFunction<
-  CreateVehicleMutation,
-  CreateVehicleMutationVariables
->;
-
-/**
- * __useCreateVehicleMutation__
- *
- * To run a mutation, you first call `useCreateVehicleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateVehicleMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createVehicleMutation, { data, loading, error }] = useCreateVehicleMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
-export function useCreateVehicleMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateVehicleMutation,
-    CreateVehicleMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateVehicleMutation,
-    CreateVehicleMutationVariables
-  >(CreateVehicleDocument, options);
-}
-export type CreateVehicleMutationHookResult = ReturnType<
-  typeof useCreateVehicleMutation
->;
-export type CreateVehicleMutationResult =
-  Apollo.MutationResult<CreateVehicleMutation>;
-export type CreateVehicleMutationOptions = Apollo.BaseMutationOptions<
-  CreateVehicleMutation,
-  CreateVehicleMutationVariables
->;
 export const ListVehiclesDocument = gql`
   query ListVehicles(
     $take: Int
@@ -52943,6 +55155,12 @@ export const ListVehiclesDocument = gql`
         totalCrimeGroups
         totalOffenders
         totalIncidents
+        reference
+        images {
+          id
+          optimised
+          url
+        }
         incidents {
           id
           subject
@@ -53015,4 +55233,249 @@ export type ListVehiclesLazyQueryHookResult = ReturnType<
 export type ListVehiclesQueryResult = Apollo.QueryResult<
   ListVehiclesQuery,
   ListVehiclesQueryVariables
+>;
+export const VehicleDocument = gql`
+  query Vehicle($where: VehicleWhereUniqueInput!) {
+    vehicle(where: $where) {
+      id
+      make
+      model
+      registration
+      totalOffenders
+      totalIncidents
+      totalCrimeGroups
+      reference
+      subscribed
+      images {
+        id
+        optimised
+        url
+      }
+      incidents {
+        id
+        subject
+        dayTime
+        createdBy {
+          id
+          organisation
+        }
+        value
+        recoveredValue
+        reference
+        policeRef
+      }
+      offenders {
+        id
+        name
+        reference
+        lastActive {
+          id
+          dayTime
+        }
+        hair
+        peculiarities
+        race
+        dateOfBirth
+        dateSource
+        build
+        age
+        gender
+        images {
+          id
+          optimised
+        }
+        totalTheftSuccess
+        totalRecoveredValue
+        totalIncidents
+        totalValue
+      }
+      updatedAt
+      colour
+      crimeGroup {
+        id
+        reference
+        totalIncidents
+        totalOffenders
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        alias
+      }
+      updates(orderBy: { createdAt: desc }) {
+        id
+        text
+        type
+        createdAt
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
+        }
+        linkedIncidents {
+          id
+          subject
+          description
+          dayTime
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        linkedOffenders {
+          id
+          updatedAt
+          age
+          build
+          dateOfBirth
+          name
+          race
+          gender
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+        replies {
+          id
+          text
+          type
+          createdAt
+          images {
+            id
+            url
+            optimised
+            card
+          }
+          linkedCrimeGroups {
+            totalOffenders
+            totalIncidents
+            alias
+            id
+            reference
+            totalRecoveredValue
+            totalTheftSuccess
+            totalValue
+            updatedAt
+          }
+          linkedVehicles {
+            updatedAt
+            totalOffenders
+            registration
+            reference
+            model
+            make
+            id
+            colour
+          }
+          linkedIncidents {
+            id
+            subject
+            description
+            dayTime
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          linkedOffenders {
+            id
+            updatedAt
+            age
+            build
+            dateOfBirth
+            name
+            race
+            gender
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          createdBy {
+            id
+            fullName
+            businesses {
+              id
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useVehicleQuery__
+ *
+ * To run a query within a React component, call `useVehicleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useVehicleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useVehicleQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useVehicleQuery(
+  baseOptions: Apollo.QueryHookOptions<VehicleQuery, VehicleQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<VehicleQuery, VehicleQueryVariables>(
+    VehicleDocument,
+    options
+  );
+}
+export function useVehicleLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<VehicleQuery, VehicleQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<VehicleQuery, VehicleQueryVariables>(
+    VehicleDocument,
+    options
+  );
+}
+export type VehicleQueryHookResult = ReturnType<typeof useVehicleQuery>;
+export type VehicleLazyQueryHookResult = ReturnType<typeof useVehicleLazyQuery>;
+export type VehicleQueryResult = Apollo.QueryResult<
+  VehicleQuery,
+  VehicleQueryVariables
 >;

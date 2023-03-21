@@ -4,9 +4,7 @@ import Picker from 'emoji-picker-react';
 
 import {
   Button,
-  Card,
   Col,
-  Descriptions,
   Divider,
   Drawer,
   Form,
@@ -22,15 +20,20 @@ import {
   Typography,
   Upload,
 } from 'antd';
-import moment from 'moment';
-import { faImage, faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
+import {
+  faCar,
+  faExclamationCircle,
+  faImage,
+  faPeopleGroup,
+  faTrash,
+  faUsers,
+} from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Age,
   Build,
   ChatQuery,
   Gender,
-  ListIncidentsQuery,
   Race,
   ChatMessagesQuery,
   MessageItemType,
@@ -39,12 +42,22 @@ import { faCircleXmark, faUser } from '@fortawesome/pro-solid-svg-icons';
 import AddUserChat from 'components/form-components/userChat/ManageChatMember';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
-import LinkIncident from 'components/form-components/offender/LinkIncident';
+import LinkIncident from 'components/form-components/LinkOptions/LinkIncident';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import { CrimeGroupData, IncidentsData, VehicleData } from 'types/DataType';
+import LinkCrimeGroup from 'components/form-components/LinkOptions/LinkCrimeGroup';
+import LinkVehicle from 'components/form-components/LinkOptions/LinkVehicle';
+
+import {
+  CrimeGroupMessageCard,
+  IncidentMessageCard,
+  OffenderMessageCard,
+  VehicleMessageCard,
+} from 'components/MessageInput/MessageCard';
 import Content from '../Message/Message.view';
 
 const { Option, getMentions } = Mentions;
-const { Title, Paragraph, Text } = Typography;
+const { Text } = Typography;
 
 interface OffenderData {
   id: string;
@@ -109,21 +122,26 @@ interface Props {
   onPreview: (value: UploadFile) => void;
   beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
-  updateOffendersList: (value: OffenderData) => void;
   offendersData: OffenderData[];
-  incidentsData:
-    | Exclude<
-        ListIncidentsQuery['listIncidents'],
-        undefined | null
-      >['incidents']
-    | undefined;
+  incidentsData: IncidentsData;
+  crimeGroupsData: CrimeGroupData[];
+  vehiclesData: VehicleData[];
   linkIncident: boolean;
   linkOffender: boolean;
+  linkVehicle: boolean;
+  linkCrimeGroup: boolean;
   toggleLinkIncident: () => void;
   toggleLinkOffender: () => void;
+  toggleLinkVehicle: () => void;
+  toggleLinkCrimeGroup: () => void;
+  updateOffendersList: (value: OffenderData) => void;
   updateIncidentList: (value: string) => void;
+  updateVehicleList: (value: VehicleData) => void;
+  updateCrimeGroupList: (value: string) => void;
   removeOffender: (value: string | undefined) => void;
   removeIncident: (value: string | undefined) => void;
+  removeCrimeGroup: (value: string | undefined) => void;
+  removeVehicle: (value: string | undefined) => void;
   removeImage: (uid: string) => void;
   setMentionedUser: (value: { id: string; value: string }[]) => void;
   deleteImageConfirm: (messageId: string, imageId: string) => void;
@@ -133,7 +151,7 @@ interface Props {
   setMessageSent: (value: boolean) => void;
 }
 
-const ViewMessges = ({
+const ViewMessages = ({
   onSubmit,
   chatData,
   form,
@@ -157,15 +175,25 @@ const ViewMessges = ({
   fileList,
   offendersData,
   incidentsData,
+  crimeGroupsData,
+  vehiclesData,
   linkIncident,
   linkOffender,
+  linkVehicle,
+  linkCrimeGroup,
   toggleLinkIncident,
   toggleLinkOffender,
+  toggleLinkVehicle,
+  toggleLinkCrimeGroup,
   updateIncidentList,
   updateOffendersList,
+  updateVehicleList,
+  updateCrimeGroupList,
   removeOffender,
   removeIncident,
   removeImage,
+  removeCrimeGroup,
+  removeVehicle,
   setMentionedUser,
   deleteImageConfirm,
   deleteOffenderConfirm,
@@ -264,7 +292,9 @@ const ViewMessges = ({
         height={
           (fileList && fileList.length > 0) ||
           (offendersData && offendersData.length > 0) ||
-          (incidentsData && incidentsData.length > 0)
+          (incidentsData && incidentsData.length > 0) ||
+          (vehiclesData && vehiclesData.length > 0) ||
+          (crimeGroupsData && crimeGroupsData.length > 0)
             ? 'calc(100vh - 279px)'
             : 'calc(100vh - 169px)'
         }
@@ -325,6 +355,8 @@ const ViewMessges = ({
                           images={item.images}
                           incidents={item.incidents}
                           offenders={item.offenders}
+                          vehicles={item.vehicles}
+                          crimeGroups={item.crimeGroups}
                           showUser={item.showUser}
                           currentUser={item.currentUser}
                           date={item.formattedDateTime}
@@ -340,6 +372,8 @@ const ViewMessges = ({
                       images={item.images}
                       incidents={item.incidents}
                       offenders={item.offenders}
+                      vehicles={item.vehicles}
+                      crimeGroups={item.crimeGroups}
                       showUser={item.showUser}
                       currentUser={item.currentUser}
                       date={item.formattedDateTime}
@@ -370,7 +404,9 @@ const ViewMessges = ({
             height:
               (fileList && fileList.length > 0) ||
               (offendersData && offendersData.length > 0) ||
-              (incidentsData && incidentsData.length > 0)
+              (incidentsData && incidentsData.length > 0) ||
+              (vehiclesData && vehiclesData.length > 0) ||
+              (crimeGroupsData && crimeGroupsData.length > 0)
                 ? '110px'
                 : '0',
             margin: 0,
@@ -420,107 +456,39 @@ const ViewMessges = ({
           </Col>
           {offendersData?.map((offender) => (
             <Col key={offender.id}>
-              <Card size="small" className="message-card">
-                <Row gutter={5} wrap={false}>
-                  <Popconfirm
-                    placement="topLeft"
-                    trigger="click"
-                    title="Remove the offender?"
-                    onConfirm={() => removeOffender(offender.id)}
-                    okText="Yes"
-                    cancelText="No"
-                    overlayInnerStyle={{ padding: 10 }}
-                  >
-                    <Button
-                      size="small"
-                      disabled={saving}
-                      className="info-remove-button"
-                      shape="circle"
-                      type="text"
-                      icon={<FontAwesomeIcon icon={faCircleXmark} size="lg" />}
-                    />
-                  </Popconfirm>
-
-                  <Col>
-                    {offender.images && offender.images.length > 0 && (
-                      <div style={{ width: 100, height: 100 }}>
-                        <WatermarkImage url={offender.images[0].optimised} />
-                      </div>
-                    )}
-                  </Col>
-
-                  <Col flex={1} style={{ marginTop: 10, marginLeft: 5 }}>
-                    <Title level={4}> {offender.name}</Title>
-                    <Descriptions size="small">
-                      <Descriptions.Item label="Last Active">
-                        {moment(offender.updatedAt || moment()).format(
-                          `ddd MMM DD YYYY - HH:mm`
-                        )}
-                      </Descriptions.Item>
-                    </Descriptions>
-                  </Col>
-                </Row>
-              </Card>
+              <OffenderMessageCard
+                offender={offender}
+                removeOffender={removeOffender}
+                saving={saving}
+              />
             </Col>
           ))}
           {incidentsData?.map((incident) => (
             <Col key={incident.id}>
-              <Card size="small" className="message-card">
-                <Row gutter={5} wrap={false}>
-                  <Popconfirm
-                    placement="topLeft"
-                    trigger="click"
-                    title="Remove the incident?"
-                    onConfirm={() => removeIncident(incident.id)}
-                    okText="Yes"
-                    cancelText="No"
-                    overlayInnerStyle={{ padding: 10 }}
-                  >
-                    <Button
-                      size="small"
-                      disabled={saving}
-                      className="info-remove-button"
-                      shape="circle"
-                      type="text"
-                      icon={<FontAwesomeIcon icon={faCircleXmark} size="lg" />}
-                    />
-                  </Popconfirm>
+              <IncidentMessageCard
+                incident={incident}
+                removeIncident={removeIncident}
+                saving={saving}
+              />
+            </Col>
+          ))}
+          {vehiclesData?.map((vehicle) => (
+            <Col key={vehicle.id}>
+              <VehicleMessageCard
+                vehicle={vehicle}
+                removeVehicle={removeVehicle}
+                saving={saving}
+              />
+            </Col>
+          ))}
 
-                  <Col>
-                    {incident?.images && incident.images.length > 0 && (
-                      <div style={{ width: 100, height: 100 }}>
-                        <WatermarkImage url={incident.images[0].optimised} />
-                      </div>
-                    )}
-                  </Col>
-                  <Col flex={1} style={{ marginTop: 10, marginLeft: 5 }}>
-                    <Paragraph
-                      strong
-                      ellipsis
-                      style={{
-                        marginBottom: '0.5rem',
-                        fontSize: 15,
-                      }}
-                    >
-                      {incident.subject}
-                    </Paragraph>
-                    <Descriptions size="small">
-                      <Descriptions.Item label="Created At">
-                        {incident.dayTime}
-                      </Descriptions.Item>
-                    </Descriptions>
-                    <Paragraph
-                      type="secondary"
-                      ellipsis
-                      style={{
-                        marginBottom: '0.5rem',
-                      }}
-                    >
-                      {incident.description}
-                    </Paragraph>
-                  </Col>
-                </Row>
-              </Card>
+          {crimeGroupsData?.map((crimeGroup) => (
+            <Col key={crimeGroup.id}>
+              <CrimeGroupMessageCard
+                crimeGroup={crimeGroup}
+                removeCrimeGroup={removeCrimeGroup}
+                saving={saving}
+              />
             </Col>
           ))}
         </Row>
@@ -621,6 +589,8 @@ const ViewMessges = ({
                   saving ||
                   (incidentsData && incidentsData.length > 0) ||
                   (offendersData && offendersData.length > 0) ||
+                  (vehiclesData && vehiclesData.length > 0) ||
+                  (crimeGroupsData && crimeGroupsData.length > 0) ||
                   (fileList && fileList.length > 3)
                 }
                 icon={<FontAwesomeIcon icon={faImage} size="lg" />}
@@ -636,17 +606,15 @@ const ViewMessges = ({
                   disabled={
                     saving ||
                     (incidentsData && incidentsData.length > 0) ||
-                    (fileList && fileList.length > 0)
+                    (fileList && fileList.length > 0) ||
+                    (vehiclesData && vehiclesData.length > 0) ||
+                    (crimeGroupsData && crimeGroupsData.length > 0)
                   }
                   icon={
-                    <FontAwesomeIcon
-                      className="button-icon"
-                      icon={faPlus}
-                      size="lg"
-                    />
+                    <FontAwesomeIcon className="button-icon" icon={faUsers} />
                   }
                 >
-                  Link Offender
+                  Offender
                 </Button>
               </div>
             </Col>
@@ -658,17 +626,57 @@ const ViewMessges = ({
                 disabled={
                   saving ||
                   (fileList && fileList.length > 0) ||
-                  (offendersData && offendersData.length > 0)
+                  (offendersData && offendersData.length > 0) ||
+                  (vehiclesData && vehiclesData.length > 0) ||
+                  (crimeGroupsData && crimeGroupsData.length > 0)
                 }
                 icon={
                   <FontAwesomeIcon
                     className="button-icon"
-                    icon={faPlus}
-                    size="lg"
+                    icon={faExclamationCircle}
                   />
                 }
               >
-                Link Incident
+                Incident
+              </Button>
+            </Col>
+          )}
+          {adminRights && (
+            <Col>
+              <Button
+                onClick={toggleLinkCrimeGroup}
+                disabled={
+                  saving ||
+                  (fileList && fileList.length > 0) ||
+                  (offendersData && offendersData.length > 0) ||
+                  (vehiclesData && vehiclesData.length > 0) ||
+                  (incidentsData && incidentsData.length > 0)
+                }
+                icon={
+                  <FontAwesomeIcon
+                    className="button-icon"
+                    icon={faPeopleGroup}
+                  />
+                }
+              >
+                Crime Group
+              </Button>
+            </Col>
+          )}
+          {adminRights && (
+            <Col>
+              <Button
+                onClick={toggleLinkVehicle}
+                disabled={
+                  saving ||
+                  (fileList && fileList.length > 0) ||
+                  (offendersData && offendersData.length > 0) ||
+                  (incidentsData && incidentsData.length > 0) ||
+                  (crimeGroupsData && crimeGroupsData.length > 0)
+                }
+                icon={<FontAwesomeIcon className="button-icon" icon={faCar} />}
+              >
+                Vehicle
               </Button>
             </Col>
           )}
@@ -707,7 +715,7 @@ const ViewMessges = ({
       <Drawer
         title="Link Incidents"
         visible={linkIncident}
-        width="800"
+        width="1000"
         onClose={toggleLinkIncident}
       >
         {linkIncident ? (
@@ -720,8 +728,40 @@ const ViewMessges = ({
           <div />
         )}
       </Drawer>
+      <Drawer
+        title="Link CrimeGroups"
+        visible={linkCrimeGroup}
+        width="800"
+        onClose={toggleLinkCrimeGroup}
+      >
+        {linkCrimeGroup ? (
+          <LinkCrimeGroup
+            update={updateCrimeGroupList}
+            onClose={toggleLinkCrimeGroup}
+            crimeGroupIds={crimeGroupsData?.map(({ id }) => id)}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
+      <Drawer
+        title="Link Vehicles"
+        visible={linkVehicle}
+        width="800"
+        onClose={toggleLinkVehicle}
+      >
+        {linkVehicle ? (
+          <LinkVehicle
+            update={updateVehicleList}
+            onClose={toggleLinkVehicle}
+            vehicleIds={vehiclesData?.map(({ id }) => id)}
+          />
+        ) : (
+          <div />
+        )}
+      </Drawer>
     </div>
   );
 };
 
-export default ViewMessges;
+export default ViewMessages;

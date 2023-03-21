@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   QueryMode,
   useSchemeGroupsQuery,
   SchemeGroupsQuery,
   SchemeGroupsDocument,
   CreateGroupMutation,
-} from "graphql/generated";
-import { useStoreState } from "state";
-import { MutationUpdaterFn } from "@apollo/client";
+} from 'graphql/generated';
+import { useStoreState } from 'state';
+import { MutationUpdaterFn } from '@apollo/client';
 
 interface Return {
   data: SchemeGroupsQuery | undefined;
@@ -22,10 +22,10 @@ interface Return {
 const useGroupList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const [addGroup, setAddGroup] = useState(false);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   const { data, loading } = useSchemeGroupsQuery({
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: 'cache-and-network',
     variables: {
       where: {
         scheme: { id: { equals: schemeId } },
@@ -88,7 +88,7 @@ const useGroupList = (): Return => {
       query: SchemeGroupsDocument,
       data: {
         groups: [...existingData.groups, res.createGroup],
-        __typename: "Query",
+        __typename: 'Query',
       },
       variables: {
         where: {
@@ -119,7 +119,7 @@ const useGroupList = (): Return => {
     setSearch,
     addGroup,
     toggleAddGroup,
-    updateGroupList
+    updateGroupList,
   };
 };
 

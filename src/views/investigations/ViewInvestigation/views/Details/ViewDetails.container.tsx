@@ -33,6 +33,8 @@ const ViewDetails = ({
     editUpdateInput,
     editUpdate,
     toggleSubscribe,
+    optionRowShow,
+    setOptionRowShow,
   } = useViewDetails({ investigationId });
 
   return (
@@ -57,6 +59,8 @@ const ViewDetails = ({
       toggleAddExistingOffender={toggleAddExistingOffender}
       toggleAddExistingIncident={toggleAddExistingIncident}
       toggleAddExistingVehicle={toggleAddExistingVehicle}
+      optionRowShow={optionRowShow}
+      setOptionRowShow={setOptionRowShow}
     />
   );
 };

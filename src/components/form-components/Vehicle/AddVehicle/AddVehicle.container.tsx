@@ -26,6 +26,9 @@ const AddVehicle = ({ onClose, update }: Props): JSX.Element => {
     removeOffender,
     removeIncident,
     adminRights,
+    imgChange,
+    beforeUpload,
+    fileList,
   } = useAddVehicle({
     onClose,
     update,
@@ -49,6 +52,9 @@ const AddVehicle = ({ onClose, update }: Props): JSX.Element => {
       removeOffender={removeOffender}
       removeIncident={removeIncident}
       adminRights={adminRights}
+      imgChange={imgChange}
+      beforeUpload={beforeUpload}
+      fileList={fileList}
     />
   );
 };

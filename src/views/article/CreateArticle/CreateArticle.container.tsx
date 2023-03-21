@@ -14,7 +14,7 @@ const CreateArticleContainer = () => {
     setPreviewText,
     previewImage,
     setPreviewImage,
-    imgSrcs,
+
     groups,
     groupsLoading,
     onGroupsChange,
@@ -70,7 +70,6 @@ const CreateArticleContainer = () => {
       setPreviewText={setPreviewText}
       previewImage={previewImage}
       setPreviewImage={setPreviewImage}
-      imgSrcs={imgSrcs}
       drawer={drawer}
       insertIncident={insertIncident}
     />

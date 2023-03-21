@@ -48,7 +48,7 @@ import {
 } from 'utils/offender/get-offender-desc';
 import { Link } from 'react-router-dom';
 import IncidentSideList from 'components/incidents/IncidentSideList';
-import UpdateBar from 'components/form-components/update-bar';
+import UpdateBar from 'components/MessageInput/update-bar';
 import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
 import { ItemType } from 'antd/lib/menu/hooks/useItems';
 import { useNavigate } from 'react-router';
@@ -147,6 +147,8 @@ interface Props {
     open: boolean;
     index: number;
   };
+  optionRowShow: boolean;
+  setOptionRowShow: (value: boolean) => void;
 }
 
 const ViewIncident = ({
@@ -181,6 +183,8 @@ const ViewIncident = ({
   optionMenuItems,
   lightboxElements,
   lightBoxOpen,
+  optionRowShow,
+  setOptionRowShow,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -710,7 +714,12 @@ const ViewIncident = ({
               <Col span={12}>
                 <div className={classes.updatesContainer}>
                   <InfiniteScroll
-                    height="calc(100vh - 225px)"
+                    // height="calc(100vh - 225px)"
+                    height={
+                      optionRowShow
+                        ? 'calc(100vh - 279px)'
+                        : 'calc(100vh - 169px)'
+                    }
                     className="update-scroll"
                     initialScrollY={0}
                     dataLength={data?.incident?.updates?.length || 0}
@@ -796,6 +805,8 @@ const ViewIncident = ({
                                 images={update.images}
                                 incidents={update.linkedIncidents}
                                 offenders={update.linkedOffenders}
+                                vehicles={update.linkedVehicles}
+                                crimeGroups={update.linkedCrimeGroups}
                                 showDate
                                 showUser
                               />
@@ -811,6 +822,8 @@ const ViewIncident = ({
                             images={update.images}
                             incidents={update.linkedIncidents}
                             offenders={update.linkedOffenders}
+                            vehicles={update.linkedVehicles}
+                            crimeGroups={update.linkedCrimeGroups}
                             showDate
                             showUser
                           />
@@ -963,6 +976,7 @@ const ViewIncident = ({
                     incidentId={incidentId}
                     setReplyTo={setReplyTo}
                     subscribed={data?.incident?.subscribed || false}
+                    setOptionRowShow={setOptionRowShow}
                   />
                 </div>
               </Col>

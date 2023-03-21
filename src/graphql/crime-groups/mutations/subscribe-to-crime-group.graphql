@@ -1,0 +1,6 @@
+mutation SubscribeToCrimeGroup($where: UniqueId!) {
+  subscribeToCrimeGroup(where: $where) {
+    id
+    subscribed
+  }
+}

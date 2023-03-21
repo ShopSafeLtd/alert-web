@@ -36,6 +36,8 @@ const ViewIncident = (): JSX.Element => {
     optionMenuItems,
     lightboxElements,
     lightBoxOpen,
+    optionRowShow,
+    setOptionRowShow,
   } = useViewIncident(incidentId);
 
   return (
@@ -71,6 +73,8 @@ const ViewIncident = (): JSX.Element => {
       optionMenuItems={optionMenuItems}
       lightboxElements={lightboxElements}
       lightBoxOpen={lightBoxOpen}
+      optionRowShow={optionRowShow}
+      setOptionRowShow={setOptionRowShow}
     />
   );
 };

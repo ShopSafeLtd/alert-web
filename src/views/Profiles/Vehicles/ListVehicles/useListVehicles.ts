@@ -27,7 +27,7 @@ const useListVehicles = (): Return => {
   const variables = {
     order: {
       updatedAt: SortOrder.Desc,
-    }, // ???
+    },
     where: {
       schemes: {
         some: {

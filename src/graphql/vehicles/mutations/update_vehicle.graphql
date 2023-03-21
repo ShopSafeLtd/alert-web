@@ -1,0 +1,30 @@
+mutation updateVehicle($where: UniqueId!, $data: CreateVehicleDataInput!) {
+  updateVehicle(where: $where, data: $data) {
+    id
+    make
+    model
+    registration
+    reference
+    totalOffenders
+    totalIncidents
+    images {
+      id
+      optimised
+      url
+    }
+    incidents {
+      id
+      subject
+    }
+    offenders {
+      id
+      name
+    }
+    updatedAt
+    colour
+    crimeGroup {
+      id
+      reference
+    }
+  }
+}

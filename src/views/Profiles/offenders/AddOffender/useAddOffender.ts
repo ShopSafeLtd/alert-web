@@ -483,6 +483,7 @@ const useAddOffender = (): Return => {
           scheme: schemeId,
           vehicles: getVehicles(),
           crimeGroups: getCrimeGroups(),
+
           image: {
             upload:
               imageChange && fileList.length > 0

@@ -32,15 +32,25 @@ const ViewMessages = ({ chatId, updateUserChatList }: Props): JSX.Element => {
     fileList,
     offendersData,
     incidentsData,
+    crimeGroupsData,
+    vehiclesData,
     linkIncident,
     linkOffender,
+    linkVehicle,
+    linkCrimeGroup,
     toggleLinkIncident,
     toggleLinkOffender,
+    toggleLinkVehicle,
+    toggleLinkCrimeGroup,
     updateIncidentList,
     updateOffendersList,
+    updateVehicleList,
+    updateCrimeGroupList,
     removeOffender,
     removeIncident,
     removeImage,
+    removeCrimeGroup,
+    removeVehicle,
     setMentionedUser,
     deleteImageConfirm,
     deleteOffenderConfirm,
@@ -82,8 +92,18 @@ const ViewMessages = ({ chatId, updateUserChatList }: Props): JSX.Element => {
       toggleLinkOffender={toggleLinkOffender}
       updateIncidentList={updateIncidentList}
       updateOffendersList={updateOffendersList}
+      crimeGroupsData={crimeGroupsData}
+      vehiclesData={vehiclesData}
+      linkVehicle={linkVehicle}
+      linkCrimeGroup={linkCrimeGroup}
+      toggleLinkVehicle={toggleLinkVehicle}
+      toggleLinkCrimeGroup={toggleLinkCrimeGroup}
+      updateVehicleList={updateVehicleList}
+      updateCrimeGroupList={updateCrimeGroupList}
       removeOffender={removeOffender}
       removeIncident={removeIncident}
+      removeCrimeGroup={removeCrimeGroup}
+      removeVehicle={removeVehicle}
       removeImage={removeImage}
       setMentionedUser={setMentionedUser}
       deleteImageConfirm={deleteImageConfirm}

@@ -132,20 +132,15 @@ const useViewChat = (): Return => {
 
     store.writeQuery<UserChatsQuery>({
       query: UserChatsDocument,
-
       data: {
         user: {
           id: userId,
-          chats:
-            existingData?.user?.chats && existingData.user.chats.length > 0
-              ? existingData.user.chats.concat(
-                  res.createChat.members.filter(
-                    (userChat) => userChat.chat.id === res.createChat.id
-                  )
-                )
-              : res.createChat.members.filter(
-                  (userChat) => userChat.chat.id === res.createChat.id
-                ),
+          chats: [
+            ...existingData.user.chats,
+            ...res.createChat.members.filter(
+              (userChat) => userChat.chat.id === res.createChat.id
+            ),
+          ],
         },
         __typename: 'Query',
       },

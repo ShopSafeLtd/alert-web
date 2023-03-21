@@ -7,13 +7,13 @@ import { UploadFile } from 'antd/es/upload/interface';
 import { AddIncident, AddOffender } from '../hooks/Forms';
 import { DrawerType } from '../../../../hooks';
 import { OffenderData } from '../../../../components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
-import { Incident } from '../../../../components/form-components/offender/LinkIncident/LinkIncident.container';
+import { Incident } from '../../../../components/form-components/LinkOptions/LinkIncident/LinkIncident.container';
 
 export interface Props {
   editorRef: React.MutableRefObject<Editor | null>;
   log: () => void;
   preview: () => void;
-  imgSrcs: string[];
+
   previewText: string;
   previewImage: string;
   setPreviewImage: (arg0: string) => void;
