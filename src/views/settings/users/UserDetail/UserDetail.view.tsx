@@ -63,7 +63,8 @@ const userDetail = ({
       extra={[
         <Button
           key="3"
-          disabled={saving || !!data?.user?.demId || !demId}
+          // disabled={saving || !!data?.user?.demId || !demId}
+          disabled
           onClick={toggleDemLink}
         >
           Link Dem User

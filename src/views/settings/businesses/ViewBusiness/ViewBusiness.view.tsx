@@ -104,7 +104,8 @@ const ViewBusiness = ({
           extra={[
             <Button
               key="5"
-              disabled={!!data?.business?.demId}
+              // disabled={!!data?.business?.demId}
+              disabled
               onClick={toggleLinkDem}
             >
               Link to DEM{' '}
