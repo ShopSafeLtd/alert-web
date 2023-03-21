@@ -115,11 +115,18 @@ const useAuth = (): Return => {
 
   const [getCurrentUser, { loading }] = useCurrentUserLazyQuery({
     onCompleted: ({ currentUser }) => {
+      console.log(currentUser);
       const scheme =
         currentScheme || window.localStorage.getItem('currentScheme');
+      console.log(currentScheme);
+
       if (scheme) {
-        const currentS = currentUser?.schemes.find((s) => s.id === scheme);
+        const currentS = currentUser?.schemes.find(
+          (s) => s.scheme.id === scheme
+        );
+        console.log(currentS);
         if (currentS) {
+          console.log(currentS?.scheme?.logo);
           window.localStorage.setItem(
             'logo',
             currentS?.scheme?.logo?.optimised || ''
