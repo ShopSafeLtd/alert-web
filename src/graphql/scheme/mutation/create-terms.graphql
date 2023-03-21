@@ -1,0 +1,6 @@
+mutation createTermsAndConditions($data: CreateTermsInput!) {
+    createTermsAndConditions(data: $data) {
+        id
+        content
+    }
+}

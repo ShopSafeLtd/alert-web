@@ -96,6 +96,8 @@ describe('Detail Officer View', () => {
               editUpdateInput=""
               setEditUpdateInput={jest.fn()}
               toggleSelectImages={jest.fn()}
+              optionRowShow={false}
+              setOptionRowShow={jest.fn()}
             />
           </MockedProvider>
         </MemoryRouter>

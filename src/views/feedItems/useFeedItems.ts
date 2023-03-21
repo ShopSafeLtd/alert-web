@@ -15,7 +15,7 @@ import {
   DeleteFeedItemMutation,
   useDeleteFeedItemMutation,
 } from 'graphql/generated';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FeedItemSort, useStoreActions, useStoreState } from 'state';
 import { useNavigate } from 'react-router-dom';
 import { MutationUpdaterFn } from '@apollo/client';
@@ -51,16 +51,6 @@ interface Return {
   saving: boolean;
   adminRights: boolean;
 }
-
-const getSizeOptions = () => {
-  if (window.innerWidth > 1239 && window.innerWidth < 1800) {
-    return ['20', '16', '24'];
-  }
-  if (window.innerWidth > 1799) {
-    return ['20', '16', '24'];
-  }
-  return ['20'];
-};
 
 const useFeedItems = (): Return => {
   const navigate = useNavigate();
@@ -111,24 +101,24 @@ const useFeedItems = (): Return => {
   });
 
   // On mount
-  useEffect(() => {
-    const sizeOptions = getSizeOptions();
-    setFeedItemsState({
-      pagination: {
-        ...pagination,
-        sizeOptions,
-        pageSize: Number(sizeOptions[0]),
-      },
-      variables: {
-        ...variables,
-        groups:
-          role === Role.SchemeAdmin
-            ? groupsData?.groups.map((group) => group.id) || []
-            : groups.map((group) => group.id),
-      },
-      order,
-    });
-  }, []);
+  // useEffect(() => {
+  //   const sizeOptions = getSizeOptions();
+  //   setFeedItemsState({
+  //     pagination: {
+  //       ...pagination,
+  //       sizeOptions,
+  //       pageSize: Number(sizeOptions[0]),
+  //     },
+  //     variables: {
+  //       ...variables,
+  //       groups:
+  //         role === Role.SchemeAdmin
+  //           ? groupsData?.groups.map((group) => group.id) || []
+  //           : groups.map((group) => group.id),
+  //     },
+  //     order,
+  //   });
+  // }, []);
 
   const { data, loading } = useFeedItemsQuery({
     variables: {
@@ -185,6 +175,7 @@ const useFeedItems = (): Return => {
         },
       },
     });
+  console.log('search', search);
 
   const { data: recentOffenderData, loading: recentOffenderLoading } =
     useListOffendersQuery({

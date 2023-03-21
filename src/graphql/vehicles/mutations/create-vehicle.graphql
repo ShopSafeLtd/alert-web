@@ -6,6 +6,13 @@ mutation CreateVehicle($data: CreateVehicleDataInput!) {
     registration
     totalOffenders
     totalIncidents
+    totalCrimeGroups
+    reference
+    images {
+      id
+      optimised
+      url
+    }
     incidents {
       id
       subject

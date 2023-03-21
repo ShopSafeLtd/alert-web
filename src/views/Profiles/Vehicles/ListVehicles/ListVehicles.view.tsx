@@ -54,6 +54,7 @@ const ListVehicles = ({
         dataSource={data?.listVehicles.vehicles.map((vehicle) => ({
           key: vehicle.id,
           make: vehicle.make,
+          reference: vehicle?.reference,
           colour: vehicle.colour,
           model: vehicle.model,
           registration: vehicle.registration,
@@ -69,24 +70,28 @@ const ListVehicles = ({
         })}
         columns={[
           {
-            key: 'make',
-            dataIndex: 'make',
-            title: 'Make',
+            key: 'reference',
+            dataIndex: 'reference',
+            title: 'Alert ID',
             render: (value, item) => (
               <Link to={`view/${item.key}`}>{value}</Link>
             ),
           },
           {
-            key: 'updatedAt',
-            dataIndex: 'updatedAt',
-            title: 'UpdatedAt',
-            render: (value) => moment(value || moment()).calendar(),
-          },
-          {
             key: 'registration',
             dataIndex: 'registration',
             title: 'Registration',
+            render: (value, item) => (
+              <Link to={`view/${item.key}`}>{value}</Link>
+            ),
           },
+
+          {
+            key: 'make',
+            dataIndex: 'make',
+            title: 'Make',
+          },
+
           {
             key: 'colour',
             dataIndex: 'colour',
@@ -96,6 +101,12 @@ const ListVehicles = ({
             key: 'model',
             dataIndex: 'model',
             title: 'Model',
+          },
+          {
+            key: 'updatedAt',
+            dataIndex: 'updatedAt',
+            title: 'UpdatedAt',
+            render: (value) => moment(value || moment()).calendar(),
           },
           {
             key: 'totalOffenders',

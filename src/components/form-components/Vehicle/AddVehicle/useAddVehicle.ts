@@ -9,10 +9,11 @@ import {
   ListIncidentsQuery,
   Role,
 } from 'graphql/generated';
-import { notification } from 'antd';
+import { message, notification, Upload } from 'antd';
 import { useStoreState } from 'state';
 import { MutationUpdaterFn } from '@apollo/client';
 import { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 export interface VehicleData {
   id?: string;
@@ -50,6 +51,9 @@ interface Return {
   removeOffender: (value: string | undefined) => void;
   removeIncident: (value: string | undefined) => void;
   adminRights: boolean;
+  imgChange: UploadProps['onChange'];
+  beforeUpload: (value: RcFile) => void;
+  fileList: UploadFile[];
 }
 
 const useAddVehicle = ({ onClose, update }: Props): Return => {
@@ -58,16 +62,12 @@ const useAddVehicle = ({ onClose, update }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [linkIncident, setLinkIncident] = useState(false);
   const [linkOffender, setLinkOffender] = useState(false);
-  // const [offendersData, setOffendersData] = useState<| Exclude<
-  //      ListOffendersQuery['listOffenders'],
-  //       undefined | null
-  //     >['offenders']
-  //   | undefined>([]);
   const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
-
   const [incidentsData, setIncidentsData] = useState<
     Exclude<ListIncidentsQuery['listIncidents'], undefined | null>['incidents']
   >([]);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [imageChange, setImageChange] = useState(false);
   const { data: CrimeGroupsData, loading: CrimeGroupsLoading } =
     useListCrimeGroupsQuery({
       fetchPolicy: 'cache-and-network',
@@ -95,17 +95,6 @@ const useAddVehicle = ({ onClose, update }: Props): Return => {
     fetchPolicy: 'cache-and-network',
   });
 
-  // const { data: listOffendersData } = useListOffendersQuery({
-  //   variables: {
-  //     scheme: {
-  //       id: schemeId,
-  //     },
-  //     order: {
-  //       updatedAt: SortOrder.Desc,
-  //     },
-  //   },
-  //   fetchPolicy: 'cache-and-network',
-  // });
   const [createVehicle] = useCreateVehicleMutation({
     onCompleted: () => {
       setSaving(false);
@@ -149,11 +138,18 @@ const useAddVehicle = ({ onClose, update }: Props): Return => {
               ? offendersData.map(({ id }) => ({ id }))
               : [],
           schemes: schemeId,
-          // scheme: {
-          //   connect: {
-          //     id: schemeId,
-          //   },
-          // },
+          image: {
+            upload:
+              imageChange && fileList.length > 0
+                ? fileList.map((item) => ({
+                    url: {
+                      filename: item.fileName || '',
+                      mimetype: item.type || '',
+                      url: item.url || '',
+                    },
+                  }))
+                : undefined,
+          },
         },
       },
     });
@@ -197,6 +193,33 @@ const useAddVehicle = ({ onClose, update }: Props): Return => {
       );
     }
   };
+  // image
+  const beforeUpload = (file: RcFile) => {
+    const isFileDuplicate = fileList.find((item) => item.name === file.name);
+    if (isFileDuplicate) {
+      message.error(
+        'This image has already existed, please choose another one.'
+      );
+    }
+    return !isFileDuplicate || Upload.LIST_IGNORE;
+  };
+  const imgChange: UploadProps['onChange'] = (info) => {
+    if (info.file.response && info.file.status === 'done') {
+      setFileList([
+        ...fileList.filter((item) => item.uid !== info.file.uid),
+        {
+          ...info.file,
+          url: info.file.response[0].url,
+          fileName: info.file.response[0].blobName,
+          type: info.file.response[0].mimetype,
+        },
+      ]);
+      setImageChange(true);
+    } else {
+      setFileList(info.fileList);
+      setImageChange(true);
+    }
+  };
 
   return {
     onSubmit,
@@ -214,6 +237,9 @@ const useAddVehicle = ({ onClose, update }: Props): Return => {
     removeOffender,
     removeIncident,
     adminRights: role !== Role.User,
+    imgChange,
+    beforeUpload,
+    fileList,
   };
 };
 export default useAddVehicle;

@@ -1,0 +1,6 @@
+mutation SubscribeToVehicle($where: UniqueId!) {
+  subscribeToVehicle(where: $where) {
+    id
+    subscribed
+  }
+}

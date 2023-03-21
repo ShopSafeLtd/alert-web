@@ -210,7 +210,9 @@ const ViewBusiness = ({
                       dataIndex: 'name',
                       title: 'Name',
                       render: (value, item) => (
-                        <Link to={`/app/scheme-settings/user/view/${item.key}`}>
+                        <Link
+                          to={`/app/scheme-settings/users/view/${item.key}`}
+                        >
                           {value}
                         </Link>
                       ),

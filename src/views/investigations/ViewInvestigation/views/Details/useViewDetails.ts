@@ -47,6 +47,8 @@ interface Return {
   setEditUpdateInput: (value: string) => void;
   editUpdateInput: string;
   toggleSubscribe: () => void;
+  optionRowShow: boolean;
+  setOptionRowShow: (value: boolean) => void;
 }
 
 interface Props {
@@ -59,6 +61,7 @@ const useViewDetails = ({ investigationId }: Props): Return => {
     text: string;
   } | null>(null);
 
+  const [optionRowShow, setOptionRowShow] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
@@ -271,6 +274,8 @@ const useViewDetails = ({ investigationId }: Props): Return => {
     setEditUpdateInput,
     editUpdateInput,
     toggleSubscribe,
+    optionRowShow,
+    setOptionRowShow,
   };
 };
 

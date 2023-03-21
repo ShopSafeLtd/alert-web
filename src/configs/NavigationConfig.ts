@@ -1,5 +1,8 @@
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
 import {
+  faAddressCard,
+  faBuilding,
+  faCar,
   faCircleExclamation,
   faClipboard,
   faClipboardList,
@@ -7,6 +10,8 @@ import {
   faCommentLines,
   faComments,
   faExclamationCircle,
+  faFile,
+  faHome,
   faLineChart,
   faListCheck,
   faMapLocationDot,
@@ -16,10 +21,6 @@ import {
   faTrash,
   faUser,
   faUsers,
-  faHome,
-  faAddressCard,
-  faCar,
-  faBuilding,
 } from '@fortawesome/pro-light-svg-icons';
 import { Role } from 'graphql/generated';
 
@@ -127,6 +128,15 @@ const userOnlyItems: NavItem[] = [
     path: `${APP_PREFIX_PATH}/investigations`,
     title: 'sidenav.investigations',
     icon: faClipboard,
+    breadcrumb: true,
+    submenu: [],
+    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
+  },
+  {
+    key: 'documents',
+    path: `${APP_PREFIX_PATH}/documents`,
+    title: 'sidenav.documents',
+    icon: faFile,
     breadcrumb: true,
     submenu: [],
     roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
@@ -243,7 +253,7 @@ const adminOnlyItems: NavItem[] = [
       {
         key: 'crime-types',
         path: `${APP_PREFIX_PATH}/scheme-settings/crime-types`,
-        title: 'Crime Types',
+        title: 'Incident Settings',
         icon: faSirenOn,
         breadcrumb: true,
         submenu: [],

@@ -1,11 +1,24 @@
 /* eslint-disable react/require-default-props */
 import React from 'react';
-import { Row, Col, Card, Descriptions, Typography } from 'antd';
+import { Row, Col, Typography } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import moment, { Moment } from 'moment';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import {
+  CrimeGroupMessageList,
+  IncidentMessageCard,
+  OffenderMessageCard,
+  VehicleMessageCard,
+} from 'components/MessageInput/MessageCard';
+import {
+  CrimeGroupData,
+  ImageCardData,
+  IncidentCardData,
+  OffenderCardData,
+  VehicleData,
+} from 'types/DataType';
 
-const { Title, Paragraph, Text } = Typography;
+const { Text } = Typography;
 
 interface DatedMessages {
   id?: string;
@@ -15,21 +28,11 @@ interface DatedMessages {
     fullName: string;
     businesses: { id: string; name: string }[];
   };
-  images?: { id: string; optimised?: string | null; url?: string | null }[];
-  incidents?: {
-    id: string;
-    subject?: string | null;
-    description: string;
-    dayTime?: string | null;
-    images?: { id: string; optimised?: string | null; url?: string | null }[];
-  }[];
-  offenders?: {
-    id: string;
-    updatedAt?: Date;
-    dateOfBirth?: Date | null;
-    name?: string | null;
-    images?: { id: string; optimised?: string | null; url?: string | null }[];
-  }[];
+  images?: ImageCardData[];
+  offenders?: OffenderCardData[];
+  incidents?: IncidentCardData[];
+  vehicles?: VehicleData[];
+  crimeGroups?: CrimeGroupData[];
   createdAt?: Moment;
 }
 
@@ -146,6 +149,8 @@ const UpdateContent = ({
   images,
   offenders,
   incidents,
+  vehicles,
+  crimeGroups,
   content,
   id,
   userId,
@@ -194,150 +199,64 @@ const UpdateContent = ({
             </Col>
           </Row>
         )}
-        {images && images.length > 0 && (
-          <Row style={{ margin: 5 }}>
-            {images.length === 1 ? (
-              images.map((image) => (
-                <Col key={image.id}>
-                  <div style={{ width: 240, height: 240 }}>
-                    <WatermarkImage url={image.optimised} />
-                  </div>
-                </Col>
-              ))
-            ) : (
-              <Row style={{ backgroundColor: '#FFF', width: 500 }}>
-                {images.map((image, index) => (
-                  <Col key={image.id} span={getImageSpan(images.length, index)}>
-                    <CollageImage
-                      index={index}
-                      length={images.length}
-                      src={image.optimised}
-                    />
+        <>
+          {images && images.length > 0 && (
+            <Row style={{ margin: 5 }}>
+              {images.length === 1 ? (
+                images.map((image) => (
+                  <Col key={image.id}>
+                    <div style={{ width: 240, height: 240 }}>
+                      <WatermarkImage url={image.optimised} />
+                    </div>
                   </Col>
-                ))}
-              </Row>
-            )}
-          </Row>
-        )}
-        {offenders &&
-          offenders.map((offender) => (
-            <Row key={offender.id} style={{ margin: 5 }}>
-              <Col key={offender.id}>
-                <Card
-                  style={{ borderRadius: 5 }}
-                  size="small"
-                  className="update-card"
-                  bodyStyle={{
-                    padding: 0,
-                  }}
-                >
-                  <Row gutter={5} wrap={false}>
-                    <Col>
-                      {offender.images && offender.images.length > 0 && (
-                        <div style={{ height: 80, width: 80 }}>
-                          <WatermarkImage url={offender.images[0].optimised} />
-                        </div>
-                      )}
-                    </Col>
-
+                ))
+              ) : (
+                <Row style={{ backgroundColor: '#FFF', width: 500 }}>
+                  {images.map((image, index) => (
                     <Col
-                      flex={1}
-                      style={{
-                        marginTop: 10,
-                        marginLeft: 5,
-                      }}
+                      key={image.id}
+                      span={getImageSpan(images.length, index)}
                     >
-                      <Title level={4}> {offender.name}</Title>
-                      <Descriptions size="small">
-                        <Descriptions.Item label="Last Active">
-                          {moment(offender.updatedAt || moment()).format(
-                            `ddd MMM DD YYYY - HH:mm`
-                          )}
-                        </Descriptions.Item>
-                      </Descriptions>
+                      <CollageImage
+                        index={index}
+                        length={images.length}
+                        src={image.optimised}
+                      />
                     </Col>
-                  </Row>
-                </Card>
-              </Col>
+                  ))}
+                </Row>
+              )}
             </Row>
-          ))}
-        {incidents &&
-          incidents.map((incident) => (
-            <Row
-              key={incident.id}
-              justify={showUser ? 'end' : 'start'}
-              style={{ margin: 5 }}
-            >
-              <Col key={incident.id}>
-                <Card
-                  style={{ borderRadius: 5 }}
-                  size="small"
-                  className="update-card"
-                  bodyStyle={{
-                    padding: 0,
-                  }}
-                >
-                  <Row gutter={5} wrap={false}>
-                    <Col>
-                      {incident?.images && incident.images.length > 0 && (
-                        <div style={{ height: 100, width: 100 }}>
-                          <WatermarkImage
-                            url={incident.images[0].optimised || ''}
-                          />
-                        </div>
-                      )}
-                    </Col>
-                    <Col
-                      flex={1}
-                      style={{
-                        marginTop: 10,
-                        marginLeft: 5,
-                      }}
-                    >
-                      <Paragraph
-                        strong
-                        ellipsis
-                        style={{
-                          marginBottom: '0.5rem',
-                          fontSize: 15,
-                        }}
-                      >
-                        {incident.subject}
-                      </Paragraph>
+          )}
+          {offenders &&
+            offenders.length > 0 &&
+            offenders.map((offender) => (
+              <OffenderMessageCard key={offender.id} offender={offender} />
+            ))}
+          {incidents &&
+            incidents.length > 0 &&
+            incidents.map((incident) => (
+              <IncidentMessageCard key={incident.id} incident={incident} />
+            ))}
+          {vehicles &&
+            vehicles.length > 0 &&
+            vehicles.map((vehicle) => (
+              <VehicleMessageCard key={vehicle.id} vehicle={vehicle} />
+            ))}
 
-                      <Paragraph
-                        type="secondary"
-                        ellipsis
-                        style={{
-                          marginBottom: '10px',
-                        }}
-                      >
-                        {incident.description}
-                      </Paragraph>
-                      <Paragraph
-                        type="secondary"
-                        ellipsis
-                        style={{
-                          marginBottom: '0',
-                        }}
-                      >
-                        {incident.dayTime}
-                      </Paragraph>
-                    </Col>
-                  </Row>
-                </Card>
-              </Col>
+          {crimeGroups && crimeGroups.length > 0 && (
+            <CrimeGroupMessageList crimeGroups={crimeGroups} isIntel />
+          )}
+          {content && (
+            <Row key={id}>
+              <div className="update-content-bubble">
+                <Col>
+                  <Text>{getContent(content)}</Text>
+                </Col>
+              </div>
             </Row>
-          ))}
-        {content && (
-          <Row key={id}>
-            <div className="update-content-bubble">
-              <Col>
-                <Text>{getContent(content)}</Text>
-              </Col>
-            </div>
-          </Row>
-        )}
+          )}
+        </>
       </div>
     </Col>
   </Row>

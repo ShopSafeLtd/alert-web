@@ -1,11 +1,25 @@
 /* eslint-disable react/require-default-props */
 import React from 'react';
-import { Row, Col, Card, Descriptions, Typography, Avatar } from 'antd';
+import { Row, Col, Typography, Avatar } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
-import moment from 'moment';
-import WatermarkImage from 'components/images/WatermarkImage.view';
 
-const { Title, Paragraph, Text } = Typography;
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import {
+  CrimeGroupData,
+  ImageCardData,
+  IncidentCardData,
+  OffenderCardData,
+  VehicleData,
+} from 'types/DataType';
+
+import {
+  CrimeGroupMessageList,
+  IncidentMessageCard,
+  OffenderMessageCard,
+  VehicleMessageCard,
+} from 'components/MessageInput/MessageCard';
+
+const { Text } = Typography;
 
 const getImageSpan = (length: number, index: number) => {
   if (length === 3) {
@@ -94,29 +108,11 @@ interface Props {
       }
     | undefined
     | null;
-  images: {
-    id: string;
-    optimised?: string | null | undefined;
-  }[];
-  offenders: {
-    id: string;
-    name?: string | null | undefined;
-    updatedAt: Date;
-    images: {
-      id: string;
-      optimised?: string | null | undefined;
-    }[];
-  }[];
-  incidents: {
-    id: string;
-    subject?: string | null | undefined;
-    description?: string | null | undefined;
-    dayTime?: string | null | undefined;
-    images: {
-      id: string;
-      optimised?: string | null | undefined;
-    }[];
-  }[];
+  images?: ImageCardData[];
+  offenders?: OffenderCardData[];
+  incidents?: IncidentCardData[];
+  vehicles?: VehicleData[];
+  crimeGroups?: CrimeGroupData[];
   content: string;
   id: string;
   currentUser?: boolean | undefined | null;
@@ -142,6 +138,8 @@ const Content = ({
   images,
   offenders,
   incidents,
+  vehicles,
+  crimeGroups,
   content,
   id,
   currentUser,
@@ -193,139 +191,64 @@ const Content = ({
             </Text>
           </Col>
         </Row>
-        {images && images.length > 0 && (
-          <Row style={{ margin: 5 }}>
-            {images.length === 1 ? (
-              images.map((image) => (
-                <Col key={image.id}>
-                  <div style={{ height: 300, width: 300 }}>
-                    <WatermarkImage url={image.optimised} />
-                  </div>
-                </Col>
-              ))
-            ) : (
-              <Row style={{ backgroundColor: '#FFF', width: 500 }}>
-                {images.map((image, index) => (
-                  <Col key={image.id} span={getImageSpan(images.length, index)}>
-                    <CollageImage
-                      index={index}
-                      length={images.length}
-                      src={image.optimised}
-                    />
+        <>
+          {images && images.length > 0 && (
+            <Row style={{ margin: 5 }}>
+              {images.length === 1 ? (
+                images.map((image) => (
+                  <Col key={image.id}>
+                    <div style={{ height: 300, width: 300 }}>
+                      <WatermarkImage url={image.optimised} />
+                    </div>
                   </Col>
-                ))}
-              </Row>
-            )}
-          </Row>
-        )}
-        {offenders &&
-          offenders.length > 0 &&
-          offenders.map((offender) => (
-            <Row key={offender.id} style={{ margin: 5 }}>
-              <Col key={offender.id}>
-                <Card
-                  style={{ borderRadius: 5 }}
-                  size="small"
-                  className="message-card"
-                >
-                  <Row gutter={5} wrap={false}>
-                    <Col>
-                      {offender.images && offender.images.length > 0 && (
-                        <div style={{ width: 100, height: 100 }}>
-                          <WatermarkImage url={offender.images[0].optimised} />
-                        </div>
-                      )}
+                ))
+              ) : (
+                <Row style={{ backgroundColor: '#FFF', width: 500 }}>
+                  {images.map((image, index) => (
+                    <Col
+                      key={image.id}
+                      span={getImageSpan(images.length, index)}
+                    >
+                      <CollageImage
+                        index={index}
+                        length={images.length}
+                        src={image.optimised}
+                      />
                     </Col>
+                  ))}
+                </Row>
+              )}
+            </Row>
+          )}
+          {offenders &&
+            offenders.length > 0 &&
+            offenders.map((offender) => (
+              <OffenderMessageCard key={offender.id} offender={offender} />
+            ))}
+          {incidents &&
+            incidents.length > 0 &&
+            incidents.map((incident) => (
+              <IncidentMessageCard key={incident.id} incident={incident} />
+            ))}
+          {vehicles &&
+            vehicles.length > 0 &&
+            vehicles.map((vehicle) => (
+              <VehicleMessageCard key={vehicle.id} vehicle={vehicle} />
+            ))}
 
-                    <Col
-                      flex={1}
-                      style={{
-                        marginTop: 10,
-                        marginLeft: 5,
-                      }}
-                    >
-                      <Title level={4}> {offender.name}</Title>
-                      <Descriptions size="small">
-                        <Descriptions.Item label="Last Active">
-                          {moment(offender.updatedAt || moment()).format(
-                            `ddd MMM DD YYYY - HH:mm`
-                          )}
-                        </Descriptions.Item>
-                      </Descriptions>
-                    </Col>
-                  </Row>
-                </Card>
-              </Col>
+          {crimeGroups && crimeGroups.length > 0 && (
+            <CrimeGroupMessageList crimeGroups={crimeGroups} />
+          )}
+          {content && (
+            <Row key={id}>
+              <div className="message-content-bubble">
+                <Col>
+                  <Text>{getContent(content)}</Text>
+                </Col>
+              </div>
             </Row>
-          ))}
-        {incidents &&
-          incidents.length > 0 &&
-          incidents.map((incident) => (
-            <Row
-              key={incident.id}
-              justify={showUser ? 'end' : 'start'}
-              style={{ margin: 5 }}
-            >
-              <Col key={incident.id}>
-                <Card
-                  style={{ borderRadius: 5 }}
-                  size="small"
-                  className="message-card"
-                >
-                  <Row gutter={5} wrap={false}>
-                    <Col>
-                      {incident?.images && incident.images.length > 0 && (
-                        <div style={{ width: 100, height: 100 }}>
-                          <WatermarkImage url={incident.images[0].optimised} />
-                        </div>
-                      )}
-                    </Col>
-                    <Col
-                      flex={1}
-                      style={{
-                        marginTop: 10,
-                        marginLeft: 5,
-                      }}
-                    >
-                      <Paragraph
-                        strong
-                        ellipsis
-                        style={{
-                          marginBottom: '0.5rem',
-                          fontSize: 15,
-                        }}
-                      >
-                        {incident.subject}
-                      </Paragraph>
-                      <Descriptions size="small">
-                        <Descriptions.Item label="Created At">
-                          {incident.dayTime}
-                        </Descriptions.Item>
-                      </Descriptions>
-                      <Paragraph
-                        type="secondary"
-                        ellipsis
-                        style={{
-                          marginBottom: '0.5rem',
-                        }}
-                      >
-                        {incident.description}
-                      </Paragraph>
-                    </Col>
-                  </Row>
-                </Card>
-              </Col>
-            </Row>
-          ))}
-        {content && (
-          <Row key={id}>
-            <div className="message-content-bubble">
-              <Col>
-                <Text>{getContent(content)}</Text>
-              </Col>
-            </div>
-          </Row>
-        )}
+          )}
+        </>
       </div>
     </Col>
   </Row>

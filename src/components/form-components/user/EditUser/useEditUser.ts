@@ -28,6 +28,13 @@ interface FormData {
   role: Role;
   groups: string[];
   chats: string[];
+  incidentEmail: boolean;
+  incidentPush: boolean;
+  subscribedIncidentOnly: boolean;
+  subscribedOffenderOnly: boolean;
+  messagePush: boolean;
+  offenderEmail: boolean;
+  offenderPush: boolean;
 }
 interface Props {
   onClose: () => void;
@@ -146,6 +153,13 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
           data: {
             email: { set: data.email },
             fullName: { set: data.fullName },
+            incidentEmail: { set: data.incidentEmail },
+            incidentPush: { set: data.incidentPush },
+            subscribedIncidentOnly: { set: data.subscribedIncidentOnly },
+            subscribedOffenderOnly: { set: data.subscribedOffenderOnly },
+            messagePush: { set: data.messagePush },
+            offenderEmail: { set: data.offenderEmail },
+            offenderPush: { set: data.offenderPush },
             businesses: {
               connect: [
                 {
@@ -166,7 +180,17 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
               ],
             },
             groups: {
-              set: data.groups.map((id) => ({ id })),
+              connect: data.groups
+                .filter(
+                  (id) =>
+                    !userData?.user?.groups.map((item) => item.id).includes(id)
+                )
+                .map((id) => ({ id })),
+              disconnect: userData?.user?.groups
+                .filter(
+                  ({ id }) => !data.groups.map((item) => item).includes(id)
+                )
+                .map(({ id }) => ({ id })),
             },
             chats: {
               create: data.chats

@@ -1,15 +1,18 @@
 import React from 'react';
 import { APP_NAME } from 'configs/AppConfig';
-import { Grid } from 'antd';
 import { useStoreState } from 'state';
 
 interface GetLogoArgs {
   navCollapsed: boolean;
   logoType?: string;
+  logo?: string | null;
 }
 
 const getLogo = (props: GetLogoArgs) => {
-  const { navCollapsed, logoType } = props;
+  const { navCollapsed, logoType, logo } = props;
+  if (logo) {
+    return logo;
+  }
   if (logoType === 'light') {
     if (navCollapsed) {
       return '/img/logo-sm.svg';
@@ -44,6 +47,7 @@ interface Props {
 export const Logo = (props: Props) => {
   const navCollapsed = useStoreState((state) => state.theme.navCollapsed);
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
+  const customLogo = window.localStorage.getItem('logo');
 
   return (
     <div
@@ -54,7 +58,11 @@ export const Logo = (props: Props) => {
       }}
     >
       <img
-        src={getLogo({ logoType: currentTheme, navCollapsed })}
+        src={getLogo({
+          logoType: currentTheme,
+          navCollapsed,
+          logo: customLogo,
+        })}
         alt={`${APP_NAME} logo`}
         style={{ width: 130 }}
       />

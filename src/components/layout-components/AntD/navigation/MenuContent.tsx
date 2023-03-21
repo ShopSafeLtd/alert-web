@@ -50,8 +50,29 @@ interface SideNavContentProps {
   routeInfo: NavItem;
   hideGroupTitle?: boolean;
   localization: boolean;
+
   onMobileNavToggle(value: boolean): void;
 }
+
+interface GetLogoArgs {
+  navCollapsed: boolean;
+  logoType?: string;
+}
+
+const getLogo = (props: GetLogoArgs) => {
+  const { navCollapsed, logoType } = props;
+  if (logoType === 'light') {
+    if (navCollapsed) {
+      return '/img/logo-sm.svg';
+    }
+    return '/img/dark-logo.svg';
+  }
+
+  if (navCollapsed) {
+    return '/img/logo.png';
+  }
+  return '/img/light-logo.svg';
+};
 
 const SideNavContent = (props: SideNavContentProps) => {
   const {
@@ -73,6 +94,7 @@ const SideNavContent = (props: SideNavContentProps) => {
   const navigationConfig = navConfig.filter((el) =>
     el.roles?.includes(userRole)
   );
+  const customLogo = !!window.localStorage.getItem('logo');
 
   return (
     <div
@@ -157,9 +179,25 @@ const SideNavContent = (props: SideNavContentProps) => {
       </Menu>
       <NavScheme />
       <NavProfile />
+      {customLogo && (
+        <img
+          src={getLogo({
+            logoType: SideNavTheme.LIGHT ? 'light' : 'dark',
+            navCollapsed: false,
+          })}
+          alt={`${APP_NAME} logo`}
+          style={{ width: 80, marginLeft: 10, marginTop: 10 }}
+        />
+      )}
       <Typography.Text
         type="secondary"
-        style={{ padding: '12px', fontSize: 10 }}
+        style={{
+          paddingLeft: 12,
+          paddingRight: 12,
+          paddingBottom: 12,
+          paddingTop: 5,
+          fontSize: 10,
+        }}
       >
         Copyright &copy; {`${new Date().getFullYear()}`}
         <span className="font-weight-semibold"> {`${APP_NAME}`} </span>

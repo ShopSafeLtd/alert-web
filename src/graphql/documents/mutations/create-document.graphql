@@ -1,19 +1,6 @@
-mutation CreateDocumentOnInvestigation($where: UniqueId!, $data: CreateDocument!) {
-    createDocumentOnInvestigation(where: $where, data: $data) {
+mutation CreateDocument($data: CreateDocument!) {
+    createDocument(data: $data) {
         id
-        investigation {
-            id
-            documents{
-                id
-                name
-                url
-                thumbnailUrl
-                tags{
-                    name
-                    id
-                }
-            }
-        }
         name
         tags {
             id

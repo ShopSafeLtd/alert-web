@@ -7,15 +7,20 @@ import useStyles from './ListCrimeGroups.styles';
 interface Props {
   data: ListCrimeGroupsQuery | undefined;
   loading: boolean;
+  search: string;
+  setSearch: (value: string) => void;
 }
 
-const ListCrimeGroups = ({ data, loading }: Props) => {
+const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
   const classes = useStyles();
   return (
     <div className={classes.page}>
       <Row gutter={16} className={classes.headerRow}>
         <Col flex={1}>
           <Input
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            allowClear
             className={classes.searchInput}
             placeholder="Search crime groups..."
           />
@@ -53,11 +58,7 @@ const ListCrimeGroups = ({ data, loading }: Props) => {
             dataIndex: 'alias',
             title: 'Alias',
           },
-          {
-            key: 'totalOffenders',
-            dataIndex: 'totalOffenders',
-            title: 'Members',
-          },
+
           {
             key: 'totalOffenders',
             dataIndex: 'totalOffenders',

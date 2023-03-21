@@ -1,12 +1,12 @@
 import { SelectProps, UploadProps } from 'antd';
 import {
+  ListDocumentsOnSchemeDocument,
+  ListDocumentsOnSchemeQuery,
+  ListDocumentsOnSchemeQueryVariables,
   Model,
-  useCreateDocumentOnInvestigationMutation,
+  useCreateDocumentMutation,
   useCreateTagMutation,
   useTagsQuery,
-  ViewInvestigationDocument,
-  ViewInvestigationQuery,
-  ViewInvestigationQueryVariables,
 } from 'graphql/generated';
 import { useState } from 'react';
 import { useStoreState } from 'state';
@@ -19,7 +19,7 @@ interface OnSubmitValues {
 
 interface Props {
   onClose: () => void;
-  investigationId: string;
+  investigationId?: string | null;
 }
 
 interface Return {
@@ -73,6 +73,7 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
       },
     },
     fetchPolicy: 'cache-and-network',
+
     onCompleted: (result) => {
       const categoriesFormatted = result.tags.map((tag) => ({
         value: tag.name,
@@ -123,47 +124,49 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
     setSelectedCategories(formattedValues.map((value) => ({ value })));
   };
 
-  const [createDocument] = useCreateDocumentOnInvestigationMutation({
+  const [createDocument] = useCreateDocumentMutation({
     onCompleted: () => {
       setSaving(false);
       onClose();
     },
     update: (store, result) => {
-      const existingData = store.readQuery<
-        ViewInvestigationQuery,
-        ViewInvestigationQueryVariables
-      >({
-        query: ViewInvestigationDocument,
-        variables: {
-          where: {
-            id: investigationId,
-          },
-        },
-      });
-      if (existingData && result.data) {
-        const oldDocuments = existingData?.investigation?.documents || [];
-        const newDocuments = [result.data.createDocumentOnInvestigation];
-        store.writeQuery<
-          ViewInvestigationQuery,
-          ViewInvestigationQueryVariables
+      if (!investigationId) {
+        const existingData = store.readQuery<
+          ListDocumentsOnSchemeQuery,
+          ListDocumentsOnSchemeQueryVariables
         >({
-          query: ViewInvestigationDocument,
+          query: ListDocumentsOnSchemeDocument,
           variables: {
             where: {
-              id: investigationId,
-            },
-          },
-          data: {
-            investigation: {
-              ...existingData.investigation,
-
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
-
-              documents: [...oldDocuments, ...newDocuments],
+              id: currentScheme,
             },
           },
         });
+        if (existingData && result.data) {
+          const oldDocuments = existingData?.scheme?.documents || [];
+          const newDocuments = [result.data.createDocument];
+          store.writeQuery<
+            ListDocumentsOnSchemeQuery,
+            ListDocumentsOnSchemeQueryVariables
+          >({
+            query: ListDocumentsOnSchemeDocument,
+            variables: {
+              where: {
+                id: currentScheme,
+              },
+            },
+            data: {
+              scheme: {
+                ...existingData.scheme,
+
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+
+                documents: [...oldDocuments, ...newDocuments],
+              },
+            },
+          });
+        }
       }
     },
   });
@@ -183,10 +186,9 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
     if (fileList[0].url) {
       createDocument({
         variables: {
-          where: {
-            id: investigationId,
-          },
           data: {
+            investigationId: investigationId || null,
+            schemeId: !investigationId ? currentScheme : undefined,
             name: values.name,
             url: fileList[0].url || '',
             tags: selectedCategoryIds,

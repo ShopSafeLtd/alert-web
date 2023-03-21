@@ -1,38 +1,91 @@
 import React from 'react';
-import { Card, Table } from 'antd';
+import { Button, Card, Table } from 'antd';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router';
+import {
+  Role,
+  useCurrentSchemeTermsQuery,
+} from '../../../../graphql/generated';
+import { useStoreState } from '../../../../state';
 
-const Terms = (): JSX.Element => (
-  <div className="list-view">
-    <Card>
-      <Table
-        size="small"
-        pagination={false}
-        columns={[
-          {
-            key: 'term',
-            title: 'Terms',
-            dataIndex: 'term',
-            render: (value, record) => (
-              <Link to={`/app/scheme-settings/terms/${record.key}`}>
-                {value}
-              </Link>
-            ),
-          },
-        ]}
-        dataSource={[
-          {
-            key: 'user-terms',
-            term: 'User Terms',
-          },
-          {
-            key: 'scheme-terms',
-            term: 'Scheme Terms',
-          },
-        ]}
-      />
-    </Card>
-  </div>
-);
+const Terms = (): JSX.Element => {
+  const schemeId = useStoreState((state) => state.scheme.id);
+  const isAdmin = useStoreState((state) => state.user.role !== Role.User);
+  const { data: SchemeTerms, loading: SchemeTermsLoading } =
+    useCurrentSchemeTermsQuery({
+      variables: {
+        where: {
+          id: schemeId,
+        },
+      },
+    });
+
+  const navigate = useNavigate();
+
+  return (
+    <div className="list-view">
+      {isAdmin &&
+        SchemeTerms &&
+        SchemeTerms.scheme &&
+        !SchemeTerms.scheme.currentTerms?.id && (
+          <Button
+            style={{ marginBottom: 10 }}
+            type="primary"
+            onClick={() => navigate(`/app/scheme-settings/terms/scheme/create`)}
+          >
+            Create Terms and Conditions
+          </Button>
+        )}
+      <Card>
+        <Table
+          loading={SchemeTermsLoading}
+          size="small"
+          pagination={false}
+          columns={[
+            {
+              key: 'term',
+              title: 'Terms',
+              dataIndex: 'term',
+              render: (value, record) => (
+                <Link to={`/app/scheme-settings/terms/${record.key}`}>
+                  {value}
+                </Link>
+              ),
+            },
+          ]}
+          dataSource={
+            SchemeTerms &&
+            SchemeTerms.scheme &&
+            SchemeTerms.scheme.currentTerms?.id
+              ? [
+                  {
+                    key: `scheme/${SchemeTerms.scheme.currentTerms?.id}`,
+                    term: 'Custom Scheme Terms',
+                  },
+                  {
+                    key: 'user-terms',
+                    term: 'User Terms',
+                  },
+                  {
+                    key: 'scheme-terms',
+                    term: 'Scheme Terms',
+                  },
+                ]
+              : [
+                  {
+                    key: 'user-terms',
+                    term: 'User Terms',
+                  },
+                  {
+                    key: 'scheme-terms',
+                    term: 'Scheme Terms',
+                  },
+                ]
+          }
+        />
+      </Card>
+    </div>
+  );
+};
 
 export default Terms;

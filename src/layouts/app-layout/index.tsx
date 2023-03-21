@@ -62,11 +62,22 @@ export const AppLayout = ({ location }: Props): JSX.Element => {
         {isNavSide && !isMobile && onboarded ? (
           <SideNav routeInfo={currentRouteInfo} />
         ) : null}
-        <Layout className="" style={{ paddingLeft: getLayoutGutter() }}>
+        <Layout
+          className=""
+          style={{
+            paddingLeft: location.pathname.includes('onboarding')
+              ? 0
+              : getLayoutGutter(),
+          }}
+        >
           <div
             className={`app-content ${isNavTop ? 'layout-top-nav' : ''}`}
             style={{
-              padding: location.pathname.includes('settings') ? 0 : undefined,
+              padding:
+                location.pathname.includes('settings') ||
+                location.pathname.includes('onboarding')
+                  ? 0
+                  : undefined,
             }}
           >
             {/* <PageHeader display={currentRouteInfo?.breadcrumb} title={currentRouteInfo?.title} /> */}

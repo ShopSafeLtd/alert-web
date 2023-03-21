@@ -37,6 +37,8 @@ const ViewOffender = (): JSX.Element => {
     setEditUpdateInput,
     toggleSelectImages,
     lightBoxOpen,
+    optionRowShow,
+    setOptionRowShow,
   } = useViewOffender(offenderId);
 
   return (
@@ -72,6 +74,8 @@ const ViewOffender = (): JSX.Element => {
       handleEditUpdate={handleEditUpdate}
       setEditUpdateInput={setEditUpdateInput}
       toggleSelectImages={toggleSelectImages}
+      optionRowShow={optionRowShow}
+      setOptionRowShow={setOptionRowShow}
     />
   );
 };

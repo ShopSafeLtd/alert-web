@@ -55,13 +55,13 @@ import { ItemType } from 'antd/lib/menu/hooks/useItems';
 import { calcExpired } from 'utils/offender/get-offender-exclusion';
 import OffenderSideList from 'components/offenders/OffenderSideList';
 import moment from 'moment';
-import LinkIncident from 'components/form-components/offender/LinkIncident';
+import LinkIncident from 'components/form-components/LinkOptions/LinkIncident';
 import { useNavigate } from 'react-router';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import UpdateContent from 'views/incidents/ViewIncident/Update.view';
-import UpdateBar from 'components/form-components/update-bar';
+import UpdateBar from 'components/MessageInput/update-bar';
 import WatermarkSlide, {
   WatermarkSlideType,
 } from 'components/images/WatermartkSlide.view';
@@ -124,6 +124,8 @@ interface Props {
     open: boolean;
     index: number;
   };
+  optionRowShow: boolean;
+  setOptionRowShow: (value: boolean) => void;
 }
 
 const ViewOffender = ({
@@ -158,6 +160,8 @@ const ViewOffender = ({
   closeAddImages,
   toggleSelectImages,
   lightBoxOpen,
+  optionRowShow,
+  setOptionRowShow,
 }: Props): JSX.Element => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -266,7 +270,6 @@ const ViewOffender = ({
                     <Skeleton />
                   ) : (
                     <div>
-                      <Title level={4}>{data?.offender?.name}</Title>
                       <Row
                         style={{ marginTop: 10, marginBottom: 10 }}
                         className="offender-tags"
@@ -351,6 +354,21 @@ const ViewOffender = ({
                         )}
                       </Descriptions>
                       <Descriptions column={1} className={classes.desc}>
+                        {data?.offender?.peculiarities && (
+                          <Descriptions.Item
+                            label={
+                              <span>
+                                <FontAwesomeIcon
+                                  className={classes.descIcon}
+                                  icon={faCircleInfo}
+                                />
+                                Additional Info
+                              </span>
+                            }
+                          >
+                            {data?.offender?.peculiarities}
+                          </Descriptions.Item>
+                        )}
                         <Descriptions.Item
                           label={
                             <span>
@@ -373,21 +391,6 @@ const ViewOffender = ({
                             </Typography.Text>
                           )}
                         </Descriptions.Item>
-                        {data?.offender?.peculiarities && (
-                          <Descriptions.Item
-                            label={
-                              <span>
-                                <FontAwesomeIcon
-                                  className={classes.descIcon}
-                                  icon={faCircleInfo}
-                                />
-                                Additional Info
-                              </span>
-                            }
-                          >
-                            {data?.offender?.peculiarities}
-                          </Descriptions.Item>
-                        )}
                         {data?.offender?.incidents &&
                           data?.offender?.incidents.length > 0 && (
                             <Descriptions.Item
@@ -809,7 +812,11 @@ const ViewOffender = ({
               <Col span={12}>
                 <div className={classes.updatesContainer}>
                   <InfiniteScroll
-                    height="calc(100vh - 225px)"
+                    height={
+                      optionRowShow
+                        ? 'calc(100vh - 279px)'
+                        : 'calc(100vh - 169px)'
+                    }
                     className="update-scroll"
                     initialScrollY={0}
                     dataLength={data?.offender?.updates?.length || 0}
@@ -895,6 +902,8 @@ const ViewOffender = ({
                                 images={update.images}
                                 incidents={update.linkedIncidents}
                                 offenders={update.linkedOffenders}
+                                vehicles={update.linkedVehicles}
+                                crimeGroups={update.linkedCrimeGroups}
                                 showDate
                                 showUser
                               />
@@ -910,6 +919,8 @@ const ViewOffender = ({
                             images={update.images}
                             incidents={update.linkedIncidents}
                             offenders={update.linkedOffenders}
+                            vehicles={update.linkedVehicles}
+                            crimeGroups={update.linkedCrimeGroups}
                             showDate
                             showUser
                           />
@@ -982,6 +993,8 @@ const ViewOffender = ({
                                     images={reply.images}
                                     incidents={reply.linkedIncidents}
                                     offenders={reply.linkedOffenders}
+                                    vehicles={update.linkedVehicles}
+                                    crimeGroups={update.linkedCrimeGroups}
                                     showDate
                                     showUser
                                   />
@@ -997,6 +1010,8 @@ const ViewOffender = ({
                                 images={reply.images}
                                 incidents={reply.linkedIncidents}
                                 offenders={reply.linkedOffenders}
+                                vehicles={update.linkedVehicles}
+                                crimeGroups={update.linkedCrimeGroups}
                                 showDate
                                 showUser
                               />
@@ -1062,6 +1077,7 @@ const ViewOffender = ({
                     offenderId={offenderId}
                     setReplyTo={setReplyTo}
                     subscribed={data?.offender?.subscribed || false}
+                    setOptionRowShow={setOptionRowShow}
                   />
                 </div>
               </Col>

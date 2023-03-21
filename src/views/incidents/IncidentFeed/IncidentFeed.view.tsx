@@ -154,12 +154,12 @@ const IncidentFeed = ({
         {loading
           ? Array.from({ length: 24 }).map((_, index) => (
               // eslint-disable-next-line react/no-array-index-key
-              <Col key={index} sm={24} md={12} lg={12} xl={8} xxl={6}>
+              <Col key={index} sm={24} md={12} lg={8} xl={8} xxl={6}>
                 <IncidentSkeletonCard />
               </Col>
             ))
           : data?.listIncidents?.incidents?.map((el) => (
-              <Col sm={24} md={12} lg={12} xl={8} xxl={6} key={el?.id}>
+              <Col sm={24} md={12} lg={8} xl={8} xxl={6} key={el?.id}>
                 <IncidentCard
                   incident={el}
                   openLightbox={openLightbox}

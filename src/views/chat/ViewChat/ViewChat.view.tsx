@@ -91,7 +91,7 @@ const ViewOffender = ({
           />
         </>
       );
-    if (!data?.user?.chats?.length) return <Empty description="No chats" />;
+    if (!data?.user?.totalChats) return <Empty description="No chats" />;
     return (
       <List
         itemLayout="horizontal"
@@ -190,7 +190,13 @@ const ViewOffender = ({
                                 'Linked an offender') ||
                               (messages?.slice(-1)[0].incidents &&
                                 messages?.slice(-1)[0].incidents.length &&
-                                'Linked an incident')
+                                'Linked an incident') ||
+                              (messages?.slice(-1)[0].vehicles &&
+                                messages?.slice(-1)[0].vehicles.length &&
+                                'Linked a vehicle') ||
+                              (messages?.slice(-1)[0].crimeGroups &&
+                                messages?.slice(-1)[0].crimeGroups.length &&
+                                'Linked a crime group')
                             }`
                           : 'No Messages'}
                       </Paragraph>

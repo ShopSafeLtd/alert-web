@@ -114,6 +114,8 @@ interface Return {
     open: boolean;
     index: number;
   };
+  optionRowShow: boolean;
+  setOptionRowShow: (value: boolean) => void;
 }
 
 const useViewIncident = (incidentId: string): Return => {
@@ -124,6 +126,8 @@ const useViewIncident = (incidentId: string): Return => {
   const [saving, setSaving] = useState(false);
   const [linkOffender, setLinkOffender] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
+  const [optionRowShow, setOptionRowShow] = useState(false);
+
   const [editUpdate, setEditUpdate] = useState<{
     id: string;
     text: string;
@@ -515,6 +519,8 @@ const useViewIncident = (incidentId: string): Return => {
     userId,
     openLightbox,
     lightBoxOpen,
+    optionRowShow,
+    setOptionRowShow,
   };
 };
 

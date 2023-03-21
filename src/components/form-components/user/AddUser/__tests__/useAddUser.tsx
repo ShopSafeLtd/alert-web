@@ -256,6 +256,13 @@ const UseAddUserTest = () => {
           onSubmit({
             email: 'email',
             fullName: 'fullName',
+            incidentEmail: false,
+            incidentPush: false,
+            subscribedIncidentOnly: false,
+            subscribedOffenderOnly: false,
+            messagePush: false,
+            offenderEmail: false,
+            offenderPush: false,
             business: {
               label: '',
               value: '',

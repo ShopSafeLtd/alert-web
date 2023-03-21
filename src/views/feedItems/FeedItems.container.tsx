@@ -1,4 +1,3 @@
-import { FeedItemType } from 'graphql/generated';
 import React from 'react';
 import View from './FeedItems.view';
 import useFeedItems from './useFeedItems';
@@ -25,13 +24,6 @@ const FeedItems = (): JSX.Element => {
     saving,
     adminRights,
   } = useFeedItems();
-  console.log(
-    'inve',
-    data?.listFeedItems?.feedItems.filter(
-      ({ type }) =>
-        type === (FeedItemType.NewInvestigation || FeedItemType.Investigation)
-    )
-  );
 
   return (
     <View

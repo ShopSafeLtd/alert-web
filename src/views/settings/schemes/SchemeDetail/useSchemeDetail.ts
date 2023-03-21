@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import {
-  useSchemeQuery,
   SchemeQuery,
+  useSchemeQuery,
   useUpdateSchemeMutation,
 } from 'graphql/generated';
-import { notification, message, Upload } from 'antd';
+import { message, notification, Upload } from 'antd';
 import { useStoreState } from 'state';
 
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
@@ -14,9 +14,17 @@ interface FormData {
   logo?: { id: string; url: string; optimised: string };
   autoApproveOffenders: boolean;
   autoApproveIncidents: boolean;
+  defaultIncidentEmail: boolean;
+  defaultIncidentPush: boolean;
+  defaultSubscribedIncidentOnly: boolean;
+  defaultSubscribedOffenderOnly: boolean;
+  defaultMessagePush: boolean;
+  defaultOffenderEmail: boolean;
+  defaultOffenderPush: boolean;
   incidentRetention: number | null;
   offenderRetention: number | null;
 }
+
 interface Return {
   data: SchemeQuery | undefined;
   loading: boolean;
@@ -51,18 +59,24 @@ const useSchemeDetail = (): Return => {
             url: `${scheme?.logo?.optimised || scheme?.logo?.url}`,
           },
         ]);
+      } else {
+        setFileList([]);
       }
     },
   });
 
   const [updateScheme] = useUpdateSchemeMutation({
-    onCompleted: () => {
+    onCompleted: (res) => {
       setSaving(false);
       notification.success({
         message: 'Successfully Updated!',
         description: 'The Scheme has been updated!',
         placement: 'bottomRight',
       });
+      window.localStorage.setItem(
+        'logo',
+        res.updateScheme?.logo?.optimised || ''
+      );
     },
     onError: () => {
       setSaving(false);
@@ -88,6 +102,17 @@ const useSchemeDetail = (): Return => {
           autoApproveOffenders: { set: data.autoApproveIncidents },
           incidentRetention: { set: data.incidentRetention },
           offenderRetention: { set: data.offenderRetention },
+          defaultIncidentEmail: { set: data.defaultIncidentEmail },
+          defaultIncidentPush: { set: data.defaultIncidentPush },
+          defaultSubscribedIncidentOnly: {
+            set: data.defaultSubscribedIncidentOnly,
+          },
+          defaultSubscribedOffenderOnly: {
+            set: data.defaultSubscribedOffenderOnly,
+          },
+          defaultMessagePush: { set: data.defaultMessagePush },
+          defaultOffenderEmail: { set: data.defaultOffenderEmail },
+          defaultOffenderPush: { set: data.defaultOffenderPush },
           logo: {
             ...(imageChange && fileList.length > 0
               ? {

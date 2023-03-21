@@ -14,9 +14,9 @@
   .message-card {
     position: relative;
     width: 370px;
-    height: 100px;
-    margin: 0;
+    min-height: 100px;
     overflow: hidden;
+    border-radius: 5;
   }
   .message-image {
     height: 100px;
@@ -139,7 +139,7 @@
 .message-popover {
   .ant-popover-inner-content {
     padding: 0px;
-  } 
+  }
 }
 
 .chat-collage-image {
@@ -159,9 +159,8 @@
     right: 0;
     bottom: 0;
     left: 0;
-    color: #FFF;
+    color: #fff;
     background-color: @image-bg;
-
   }
 
   &:hover {

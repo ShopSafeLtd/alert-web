@@ -10,10 +10,11 @@ import {
   VehicleQuery,
   useVehicleQuery,
 } from 'graphql/generated';
-import { notification } from 'antd';
+import { message, notification, Upload } from 'antd';
 import { useStoreState } from 'state';
 import { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
 import { useParams } from 'react-router';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 export interface VehicleData {
   make?: string;
@@ -28,7 +29,13 @@ export interface VehicleData {
 interface Props {
   onClose: () => void;
 }
-
+interface Image extends UploadFile {
+  offenders?: {
+    id: string;
+    name?: string | undefined | null;
+  }[];
+  optimised?: string | null;
+}
 interface Return {
   data: VehicleQuery | undefined;
   loading: boolean;
@@ -51,6 +58,9 @@ interface Return {
   removeOffender: (value: string | undefined) => void;
   removeIncident: (value: string | undefined) => void;
   adminRights: boolean;
+  imgChange: UploadProps['onChange'];
+  beforeUpload: (value: RcFile) => void;
+  fileList: UploadFile[];
 }
 
 const useEditVehicle = ({ onClose }: Props): Return => {
@@ -70,6 +80,8 @@ const useEditVehicle = ({ onClose }: Props): Return => {
   const [incidentsData, setIncidentsData] = useState<
     Exclude<ListIncidentsQuery['listIncidents'], undefined | null>['incidents']
   >([]);
+  const [fileList, setFileList] = useState<Image[]>([]);
+  const [imageChange, setImageChange] = useState(false);
 
   const { data: VehicleData, loading } = useVehicleQuery({
     variables: {
@@ -80,6 +92,17 @@ const useEditVehicle = ({ onClose }: Props): Return => {
     onCompleted: ({ vehicle }) => {
       setOffendersData(<[]>vehicle?.offenders);
       setIncidentsData(<[]>vehicle?.incidents);
+      if (vehicle?.images && vehicle.images.length > 0) {
+        setFileList(
+          vehicle?.images.map((image) => ({
+            uid: `${image.id}`,
+            name: `${image.id}.png`,
+            status: 'done',
+            url: `${image.optimised || image.url}`,
+            optimised: `${image.optimised || image.url}`,
+          }))
+        );
+      }
     },
   });
   const { data: CrimeGroupsData, loading: CrimeGroupsLoading } =
@@ -109,17 +132,6 @@ const useEditVehicle = ({ onClose }: Props): Return => {
     fetchPolicy: 'cache-and-network',
   });
 
-  // const { data: listOffendersData } = useListOffendersQuery({
-  //   variables: {
-  //     scheme: {
-  //       id: schemeId,
-  //     },
-  //     order: {
-  //       updatedAt: SortOrder.Desc,
-  //     },
-  //   },
-  //   fetchPolicy: 'cache-and-network',
-  // });
   const [updateVehicle] = useUpdateVehicleMutation({
     onCompleted: () => {
       setSaving(false);
@@ -165,6 +177,30 @@ const useEditVehicle = ({ onClose }: Props): Return => {
               ? offendersData.map(({ id }) => ({ id }))
               : [],
           schemes: schemeId,
+          image: {
+            upload:
+              imageChange && fileList.length > 0
+                ? fileList
+                    .filter((item) => !item.optimised)
+                    .map((item) => ({
+                      url: {
+                        filename: item.fileName || '',
+                        mimetype: item.type || '',
+                        url: item.url || '',
+                      },
+                    }))
+                : undefined,
+            disconnect: imageChange
+              ? VehicleData?.vehicle?.images
+                  .filter(
+                    (image) =>
+                      !fileList.map((item) => item.uid).includes(image.id)
+                  )
+                  .map(({ id }) => ({
+                    id,
+                  }))
+              : [],
+          },
         },
       },
     });
@@ -208,6 +244,33 @@ const useEditVehicle = ({ onClose }: Props): Return => {
       );
     }
   };
+  // image
+  const beforeUpload = (file: RcFile) => {
+    const isFileDuplicate = fileList.find((item) => item.name === file.name);
+    if (isFileDuplicate) {
+      message.error(
+        'This image has already existed, please choose another one.'
+      );
+    }
+    return !isFileDuplicate || Upload.LIST_IGNORE;
+  };
+  const imgChange: UploadProps['onChange'] = (info) => {
+    if (info.file.response && info.file.status === 'done') {
+      setFileList([
+        ...fileList.filter((item) => item.uid !== info.file.uid),
+        {
+          ...info.file,
+          url: info.file.response[0].url,
+          fileName: info.file.response[0].blobName,
+          type: info.file.response[0].mimetype,
+        },
+      ]);
+      setImageChange(true);
+    } else {
+      setFileList(info.fileList);
+      setImageChange(true);
+    }
+  };
 
   return {
     onSubmit,
@@ -227,6 +290,9 @@ const useEditVehicle = ({ onClose }: Props): Return => {
     removeOffender,
     removeIncident,
     adminRights: role !== Role.User,
+    imgChange,
+    beforeUpload,
+    fileList,
   };
 };
 export default useEditVehicle;

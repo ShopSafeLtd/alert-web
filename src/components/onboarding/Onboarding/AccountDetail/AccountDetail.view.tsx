@@ -1,6 +1,6 @@
 import React from 'react';
 import { CurrentUserQuery } from 'graphql/generated';
-import { Button, Card, Typography, Form, Row, Col, Input } from 'antd';
+import { Button, Card, Typography, Form, Row, Col, Input, Switch } from 'antd';
 
 const { Title, Text } = Typography;
 
@@ -39,6 +39,13 @@ const EditProfile = ({
       <Form
         initialValues={{
           fullName: data?.currentUser?.fullName,
+          subscribedIncidentOnly: true,
+          incidentEmail: false,
+          incidentPush: true,
+          subscribedOffenderOnly: true,
+          offenderEmail: false,
+          offenderPush: true,
+          messagePush: true,
         }}
         onFinish={onSubmit}
       >
@@ -58,6 +65,83 @@ const EditProfile = ({
             </Form.Item>
           </Col>
         </Row>
+        <Row gutter={20} style={{ marginTop: 20, marginBottom: 20 }}>
+          <Col>
+            <Title level={3}>Notification Options</Title>
+            <Text type="secondary">
+              Choose which notifications you wish to receive and how you want to
+              receive them.
+            </Text>
+          </Col>
+        </Row>
+
+        <Title level={4} style={{ marginBottom: 0 }}>
+          Incidents
+        </Title>
+        <Form.Item
+          label="Only receive notifications for incidents that I report or follow"
+          name="subscribedIncidentOnly"
+          valuePropName="checked"
+          style={{ margin: 5, marginLeft: 20 }}
+        >
+          <Switch disabled={saving} />
+        </Form.Item>
+        <Form.Item
+          label="Push Notifications (Mobile App)"
+          name="incidentPush"
+          valuePropName="checked"
+          style={{ margin: 5, marginLeft: 20 }}
+        >
+          <Switch disabled={saving} />
+        </Form.Item>
+        <Form.Item
+          label="Email Notifications"
+          name="incidentEmail"
+          valuePropName="checked"
+          style={{ margin: 5, marginLeft: 20 }}
+        >
+          <Switch disabled={saving} />
+        </Form.Item>
+
+        <Title level={4} style={{ marginBottom: 0, marginTop: 20 }}>
+          Offenders-- Receive notifications for new offenders
+        </Title>
+
+        <Form.Item
+          label="Only receive notifications for offenders that I report or follow"
+          name="subscribedOffenderOnly"
+          valuePropName="checked"
+          style={{ margin: 5, marginLeft: 20 }}
+        >
+          <Switch disabled={saving} />
+        </Form.Item>
+        <Form.Item
+          label="Push Notifications (Mobile App)"
+          name="offenderPush"
+          valuePropName="checked"
+          style={{ margin: 5, marginLeft: 20 }}
+        >
+          <Switch disabled={saving} />
+        </Form.Item>
+        <Form.Item
+          label="Email Notifications"
+          name="offenderEmail"
+          valuePropName="checked"
+          style={{ margin: 5, marginLeft: 20 }}
+        >
+          <Switch disabled={saving} />
+        </Form.Item>
+
+        <Title level={4}>Messagess</Title>
+
+        <Form.Item
+          label="Receive notifications for new messages"
+          name="messagePush"
+          valuePropName="checked"
+          style={{ margin: 5, marginLeft: 20 }}
+        >
+          <Switch disabled={saving} style={{ marginLeft: 5 }} />
+        </Form.Item>
 
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={20} justify="end">

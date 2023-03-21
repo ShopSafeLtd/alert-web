@@ -4,6 +4,13 @@ mutation updateScheme($where: UniqueId!, $data: SchemeUpdateInput!) {
     name
     autoApproveIncidents
     autoApproveOffenders
+    defaultIncidentEmail
+    defaultIncidentPush
+    defaultSubscribedIncidentOnly
+    defaultSubscribedOffenderOnly
+    defaultMessagePush
+    defaultOffenderEmail
+    defaultOffenderPush
     incidentRetention
     offenderRetention
     logo {

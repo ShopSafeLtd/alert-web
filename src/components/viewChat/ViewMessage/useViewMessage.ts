@@ -10,7 +10,6 @@ import {
   useCreateMessageMutation,
   useDeleteChatMutation,
   useDeleteMessageMutation,
-  ListIncidentsQuery,
   SortOrder,
   useListIncidentsQuery,
   Age,
@@ -25,6 +24,8 @@ import {
   UserChatsQuery,
   UserChatsQueryVariables,
   UserChatsDocument,
+  // useListVehiclesQuery,
+  useListCrimeGroupsQuery,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import {
@@ -41,6 +42,7 @@ import { useNavigate } from 'react-router';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import moment from 'moment';
 import update from 'immutability-helper';
+import { CrimeGroupData, IncidentsData, VehicleData } from 'types/DataType';
 
 const { confirm } = Modal;
 const { getMentions } = Mentions;
@@ -109,21 +111,26 @@ interface Return {
   onPreview: (value: UploadFile) => void;
   beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
-  updateOffendersList: (value: OffenderData) => void;
   offendersData: OffenderData[];
-  incidentsData:
-    | Exclude<
-        ListIncidentsQuery['listIncidents'],
-        undefined | null
-      >['incidents']
-    | undefined;
+  incidentsData: IncidentsData;
+  crimeGroupsData: CrimeGroupData[];
+  vehiclesData: VehicleData[];
   linkIncident: boolean;
   linkOffender: boolean;
+  linkVehicle: boolean;
+  linkCrimeGroup: boolean;
   toggleLinkIncident: () => void;
   toggleLinkOffender: () => void;
+  toggleLinkVehicle: () => void;
+  toggleLinkCrimeGroup: () => void;
+  updateOffendersList: (value: OffenderData) => void;
   updateIncidentList: (value: string) => void;
+  updateVehicleList: (value: VehicleData) => void;
+  updateCrimeGroupList: (value: string) => void;
   removeOffender: (value: string | undefined) => void;
   removeIncident: (value: string | undefined) => void;
+  removeCrimeGroup: (value: string | undefined) => void;
+  removeVehicle: (value: string | undefined) => void;
   removeImage: (uid: string) => void;
   mentionedUser: { id: string; value: string }[];
   setMentionedUser: (value: { id: string; value: string }[]) => void;
@@ -157,26 +164,22 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [linkIncident, setLinkIncident] = useState(false);
   const [linkOffender, setLinkOffender] = useState(false);
+  const [linkVehicle, setLinkVehicle] = useState(false);
+  const [linkCrimeGroup, setLinkCrimeGroup] = useState(false);
+
   const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
   const [mentionedUser, setMentionedUser] = useState<
     { id: string; value: string }[]
   >([]);
-  // const [offendersData, setOffendersData] = useState<
-  //   | Exclude<
-  //       ListOffendersQuery['listOffenders'],
-  //       undefined | null
-  //     >['offenders']
-  //   | undefined
-  // >([]);
-  const [incidentsData, setIncidentsData] = useState<
-    Exclude<ListIncidentsQuery['listIncidents'], undefined | null>['incidents']
-  >([]);
+
+  const [incidentsData, setIncidentsData] = useState<IncidentsData>([]);
+  const [crimeGroupsData, setCrimeGroupsData] = useState<CrimeGroupData[]>([]);
+  const [vehiclesData, setVehiclesData] = useState<VehicleData[]>([]);
 
   useEffect(() => {
     setLoading(true);
   }, [chatId]);
 
-  const toggleShowPicker = () => setShowPicker(!showPicker);
   const errorNotification = () =>
     notification.error({
       message: 'Error!',
@@ -238,6 +241,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       }
     },
   });
+
   const { data: listIncidentsData } = useListIncidentsQuery({
     variables: {
       scheme: {
@@ -249,6 +253,34 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     },
     fetchPolicy: 'cache-and-network',
   });
+  const { data: listCrimeGroupsData } = useListCrimeGroupsQuery({
+    fetchPolicy: 'cache-and-network',
+    variables: {
+      where: {
+        schemes: {
+          some: {
+            id: {
+              equals: schemeId,
+            },
+          },
+        },
+      },
+    },
+  });
+  // const { data: listVehiclesData } = useListVehiclesQuery({
+  //   fetchPolicy: 'cache-and-network',
+  //   variables: {
+  //     where: {
+  //       schemes: {
+  //         some: {
+  //           id: {
+  //             equals: schemeId,
+  //           },
+  //         },
+  //       },
+  //     },
+  //   },
+  // });
 
   const subscribeToNewMessage = () => {
     subscribeToMore({
@@ -302,6 +334,8 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                             images: newMessage.images,
                             incidents: newMessage.incidents,
                             offenders: newMessage.offenders,
+                            vehicles: newMessage.vehicles,
+                            crimeGroups: newMessage.crimeGroups,
                           },
                         ],
                       },
@@ -452,6 +486,8 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                       images: res.createMessage.images,
                       incidents: res.createMessage.incidents,
                       offenders: res.createMessage.offenders,
+                      crimeGroups: res.createMessage.crimeGroups,
+                      vehicles: res.createMessage.vehicles,
                     },
                   ],
                 },
@@ -588,11 +624,19 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const toggleManageChat = () => {
     setManageChat(!manageChat);
   };
+  const toggleShowPicker = () => setShowPicker(!showPicker);
+
   const toggleLinkIncident = () => {
     setLinkIncident(!linkIncident);
   };
   const toggleLinkOffender = () => {
     setLinkOffender(!linkOffender);
+  };
+  const toggleLinkVehicle = () => {
+    setLinkVehicle(!linkVehicle);
+  };
+  const toggleLinkCrimeGroup = () => {
+    setLinkCrimeGroup(!linkCrimeGroup);
   };
   const updateOffendersList = (selectedOffender: OffenderData) => {
     if (!offendersData?.find(({ id }) => id === selectedOffender.id)) {
@@ -608,7 +652,24 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
         listIncidentsData?.listIncidents?.incidents.filter(
           ({ id }) => id === selectedIncidentId
         );
-      setIncidentsData([...incidentsData, ...selectedIncident]);
+      setIncidentsData([...(<[]>incidentsData), ...selectedIncident]);
+    }
+  };
+  const updateCrimeGroupList = (selectedCrimeGroupId: string) => {
+    if (
+      listCrimeGroupsData?.listCrimeGroups?.crimeGroups &&
+      listCrimeGroupsData.listCrimeGroups.total > 0
+    ) {
+      const selectedCrimeGroup =
+        listCrimeGroupsData?.listCrimeGroups?.crimeGroups.filter(
+          ({ id }) => id === selectedCrimeGroupId
+        );
+      setCrimeGroupsData([...crimeGroupsData, ...selectedCrimeGroup]);
+    }
+  };
+  const updateVehicleList = (selectedVehicle: VehicleData) => {
+    if (!vehiclesData?.find(({ id }) => id === selectedVehicle.id)) {
+      setVehiclesData([...vehiclesData, selectedVehicle]);
     }
   };
   const removeOffender = (offenderId: string | undefined) => {
@@ -622,6 +683,20 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     if (incidentId) {
       setIncidentsData(
         incidentsData?.filter((incident) => incident.id !== incidentId)
+      );
+    }
+  };
+  const removeCrimeGroup = (crimeGroupId: string | undefined) => {
+    if (crimeGroupId) {
+      setCrimeGroupsData(
+        crimeGroupsData?.filter((crimeGroup) => crimeGroup.id !== crimeGroupId)
+      );
+    }
+  };
+  const removeVehicle = (vehicleId: string | undefined) => {
+    if (vehicleId) {
+      setVehiclesData(
+        vehiclesData?.filter((vehicle) => vehicle.id !== vehicleId)
       );
     }
   };
@@ -670,15 +745,29 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     const imgWindow = window.open(src);
     imgWindow?.document.write(image.outerHTML);
   };
-
+  const onClear = () => {
+    setMessageSent(true);
+    setSaving(false);
+    form.resetFields();
+    setInputStr('');
+    setFileList([]);
+    setIncidentsData([]);
+    setOffendersData([]);
+    setVehiclesData([]);
+    setCrimeGroupsData([]);
+    setMentionedUser([]);
+  };
   const [sendMessage] = useCreateMessageMutation({
-    onCompleted: () => {},
+    onCompleted: () => {
+      onClear();
+    },
     onError: () => {
       errorNotification();
       setSaving(false);
     },
     update: updateData,
   });
+
   const onSubmit = async () => {
     const getText = (text: string) => {
       const mentions = getMentions(text);
@@ -703,8 +792,10 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     if (
       !inputStr.length &&
       !fileList.length &&
-      !incidentsData.length &&
-      !offendersData.length
+      !(incidentsData && incidentsData.length) &&
+      !offendersData.length &&
+      !vehiclesData.length &&
+      !crimeGroupsData.length
     ) {
       message.info('The message cannot be empty!');
     } else {
@@ -756,6 +847,18 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                   ? offendersData.map(({ id }) => ({ id }))
                   : undefined,
             },
+            vehicles: {
+              connect:
+                vehiclesData && vehiclesData.length
+                  ? vehiclesData.map(({ id }) => ({ id }))
+                  : undefined,
+            },
+            crimeGroups: {
+              connect:
+                crimeGroupsData && crimeGroupsData.length
+                  ? crimeGroupsData.map(({ id }) => ({ id }))
+                  : undefined,
+            },
           },
         },
         optimisticResponse: {
@@ -790,6 +893,8 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                     race: offender.race,
                   }))
                 : [],
+            vehicles: [],
+            crimeGroups: [],
             sent: false,
             type: MessageItemType.Message,
             currentUser: true,
@@ -811,6 +916,8 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       setFileList([]);
       setIncidentsData([]);
       setOffendersData([]);
+      setVehiclesData([]);
+      setCrimeGroupsData([]);
       setMentionedUser([]);
     }
   };
@@ -840,15 +947,25 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     fileList,
     offendersData,
     incidentsData,
+    crimeGroupsData,
+    vehiclesData,
     linkIncident,
     linkOffender,
+    linkVehicle,
+    linkCrimeGroup,
     toggleLinkIncident,
     toggleLinkOffender,
+    toggleLinkVehicle,
+    toggleLinkCrimeGroup,
     updateIncidentList,
     updateOffendersList,
+    updateVehicleList,
+    updateCrimeGroupList,
     removeOffender,
     removeIncident,
     removeImage,
+    removeCrimeGroup,
+    removeVehicle,
     mentionedUser,
     setMentionedUser,
     deleteImageConfirm: () => {},

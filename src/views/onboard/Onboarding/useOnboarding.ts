@@ -3,12 +3,18 @@ import { useState } from 'react';
 import { notification } from 'antd';
 
 import { useStoreState } from 'state';
-import { useUpdateUserMutation } from 'graphql/generated';
+import {
+  CurrentSchemeTermsQuery,
+  useCurrentSchemeTermsQuery,
+  useSignTermsMutation,
+  useUpdateUserMutation,
+} from 'graphql/generated';
 import { useNavigate } from 'react-router-dom';
 
 interface AccountData {
   fullName: string;
 }
+
 interface Return {
   onSubmit: () => void;
   saving: boolean;
@@ -17,6 +23,9 @@ interface Return {
   updateAccountDetail: (value: AccountData | undefined) => void;
   updateTermsSigned: () => void;
   setCurrent: (value: number) => void;
+  loading: boolean;
+  schemeTerms: CurrentSchemeTermsQuery | undefined;
+  updateSchemeTermsSigned: (value: unknown) => void;
 }
 
 const useOnboarding = (): Return => {
@@ -25,19 +34,20 @@ const useOnboarding = (): Return => {
   const [current, setCurrent] = useState(0);
   const [accountDetail, setAccountDetail] = useState<AccountData | undefined>();
   const [termsSigned, setTermsSigned] = useState(false);
+  const [schemeTermsSigned, setSchemeTermsSigned] = useState('');
   const [saving, setSaving] = useState(false);
   const navigate = useNavigate();
 
   const onNext = () => {
-    if (current < 1) {
-      setCurrent(current + 1);
-    } else {
-      setCurrent(1);
-    }
+    // if (current < 2) {
+    setCurrent(current + 1);
+    // } else {
+    //   setCurrent(1);
+    // }
   };
 
   const onBack = () => {
-    if (current > 1) {
+    if (current > 0) {
       setCurrent(current - 1);
     } else {
       setCurrent(0);
@@ -50,6 +60,19 @@ const useOnboarding = (): Return => {
   };
 
   const updateTermsSigned = () => setTermsSigned(!termsSigned);
+  const updateSchemeTermsSigned = (arg0: unknown) =>
+    setSchemeTermsSigned(arg0 as string);
+
+  const [signTerms] = useSignTermsMutation();
+
+  const { data: SchemeTerms, loading: SchemeTermsLoading } =
+    useCurrentSchemeTermsQuery({
+      variables: {
+        where: {
+          id: schemeId,
+        },
+      },
+    });
 
   const [updateUser] = useUpdateUserMutation({
     onCompleted: () => {
@@ -77,7 +100,15 @@ const useOnboarding = (): Return => {
       setSaving(false);
     }
 
-    if (termsSigned && accountDetail) {
+    if (SchemeTerms?.scheme?.currentTerms?.id && current === 1) {
+      if (termsSigned) {
+        onNext();
+        setSaving(false);
+
+        navigate('/app/onboarding/scheme-terms-conditions');
+        setTermsSigned(false);
+      }
+    } else if (termsSigned && accountDetail) {
       updateUser({
         variables: {
           where: {
@@ -85,6 +116,49 @@ const useOnboarding = (): Return => {
           },
           data: {
             fullName: { set: accountDetail.fullName },
+            termsSigned: { set: true },
+            newUser: { set: false },
+          },
+          groupWhere: {
+            scheme: {
+              id: {
+                equals: schemeId,
+              },
+            },
+          },
+          chatWhere: {
+            chat: {
+              scheme: {
+                id: {
+                  equals: schemeId,
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+
+    if (
+      schemeTermsSigned &&
+      current === 2 &&
+      SchemeTerms?.scheme?.currentTerms?.id
+    ) {
+      signTerms({
+        variables: {
+          data: {
+            signature: schemeTermsSigned,
+            termsId: SchemeTerms?.scheme?.currentTerms?.id,
+          },
+        },
+      });
+      updateUser({
+        variables: {
+          where: {
+            id: userId,
+          },
+          data: {
+            fullName: { set: accountDetail?.fullName || '' },
             termsSigned: { set: true },
             newUser: { set: false },
           },
@@ -117,6 +191,9 @@ const useOnboarding = (): Return => {
     onBack,
     updateAccountDetail,
     updateTermsSigned,
+    loading: SchemeTermsLoading,
+    schemeTerms: SchemeTerms,
+    updateSchemeTermsSigned,
   };
 };
 

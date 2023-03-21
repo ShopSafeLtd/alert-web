@@ -245,6 +245,13 @@ const UseAddUserTest = () => {
       role: Role.ContentAdmin,
       groups: [],
       chats: [],
+      incidentEmail: false,
+      incidentPush: false,
+      subscribedIncidentOnly: false,
+      subscribedOffenderOnly: false,
+      messagePush: false,
+      offenderEmail: false,
+      offenderPush: false,
     };
     const changedValues = { email: 'email' };
     onValuesChange(changedValues, value);
@@ -285,6 +292,13 @@ const UseAddUserTest = () => {
             role: Role.User,
             groups: ['groupId'],
             chats: ['chatId'],
+            incidentEmail: false,
+            incidentPush: false,
+            subscribedIncidentOnly: false,
+            subscribedOffenderOnly: false,
+            messagePush: false,
+            offenderEmail: false,
+            offenderPush: false,
           })
         }
       >

@@ -3094,6 +3094,7 @@ export type Article = {
   frequency?: Maybe<Scalars['Int']>;
   groups: Array<Group>;
   id: Scalars['String'];
+  images: Array<Image>;
   impressions: Array<Impression>;
   previewImage?: Maybe<Scalars['String']>;
   previewText?: Maybe<Scalars['String']>;
@@ -3135,6 +3136,15 @@ export type ArticleGroupsArgs = {
   before?: InputMaybe<GroupWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+};
+
+export type ArticleImagesArgs = {
+  after?: InputMaybe<ImageWhereUniqueInput>;
+  before?: InputMaybe<ImageWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ImageOrderByWithRelationInput>>;
+  where?: InputMaybe<ImageWhereInput>;
 };
 
 export type ArticleImpressionsArgs = {
@@ -6518,11 +6528,18 @@ export type Count = {
   name: Scalars['String'];
 };
 
+export type CreateArticleImages = {
+  disconnect?: InputMaybe<Array<InputMaybe<UniqueId>>>;
+  optimistic?: InputMaybe<Array<InputMaybe<CreateImageOptimistic>>>;
+  upload?: InputMaybe<Array<InputMaybe<UploadArticleImage>>>;
+};
+
 export type CreateArticleInput = {
   categories?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   documents?: InputMaybe<Array<InputMaybe<CreateDocument>>>;
   groups: Array<Scalars['String']>;
   htmlBody: Scalars['String'];
+  images?: InputMaybe<CreateArticleImages>;
   incidents?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   offenders?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   previewImage?: InputMaybe<Scalars['String']>;
@@ -6566,8 +6583,10 @@ export type CreateCrimeGroupVehicles = {
 
 export type CreateDocument = {
   fileType: Scalars['String'];
+  investigationId?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   origFileName: Scalars['String'];
+  schemeId?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   thumbnailUrl?: InputMaybe<Scalars['String']>;
   url: Scalars['String'];
@@ -6743,13 +6762,20 @@ export type CreateUserData = {
 export type CreateVehicleDataInput = {
   colour?: InputMaybe<Scalars['String']>;
   crimeGroup?: InputMaybe<Array<InputMaybe<UniqueId>>>;
-  image?: InputMaybe<ImageCreateNestedManyWithoutOffendersInput>;
+  image?: InputMaybe<CreateVehicleImages>;
+  images?: InputMaybe<Array<InputMaybe<UploadVehicleImage>>>;
   incidents?: InputMaybe<Array<InputMaybe<UniqueId>>>;
   make?: InputMaybe<Scalars['String']>;
   model?: InputMaybe<Scalars['String']>;
   offenders?: InputMaybe<Array<InputMaybe<UniqueId>>>;
   registration?: InputMaybe<Scalars['String']>;
   schemes: Scalars['String'];
+};
+
+export type CreateVehicleImages = {
+  disconnect?: InputMaybe<Array<InputMaybe<UniqueId>>>;
+  optimistic?: InputMaybe<Array<InputMaybe<CreateImageOptimistic>>>;
+  upload?: InputMaybe<Array<InputMaybe<UploadVehicleImage>>>;
 };
 
 export type CreationBreakdown = {
@@ -6769,10 +6795,13 @@ export type CrimeGroup = {
   offenders: Array<Offender>;
   reference?: Maybe<Scalars['Int']>;
   schemes: Array<Scheme>;
+  subscribed?: Maybe<Scalars['Boolean']>;
+  subscribedUsers: Array<User>;
   totalIncidents?: Maybe<Scalars['Int']>;
   totalOffenders?: Maybe<Scalars['Int']>;
   totalRecoveredValue?: Maybe<Scalars['Int']>;
   totalTheftSuccess?: Maybe<Scalars['Float']>;
+  totalUpdates?: Maybe<Scalars['Int']>;
   totalValue?: Maybe<Scalars['Int']>;
   updatedAt: Scalars['DateTime'];
   updates: Array<Update>;
@@ -6807,11 +6836,20 @@ export type CrimeGroupSchemesArgs = {
   last?: InputMaybe<Scalars['Int']>;
 };
 
+export type CrimeGroupSubscribedUsersArgs = {
+  after?: InputMaybe<UserWhereUniqueInput>;
+  before?: InputMaybe<UserWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
 export type CrimeGroupUpdatesArgs = {
   after?: InputMaybe<UpdateWhereUniqueInput>;
   before?: InputMaybe<UpdateWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UpdateOrderByWithRelationInput>>;
+  where?: InputMaybe<UpdateWhereInput>;
 };
 
 export type CrimeGroupVehiclesArgs = {
@@ -6867,6 +6905,14 @@ export type CrimeGroupCreateNestedManyWithoutSchemesInput = {
     Array<CrimeGroupCreateOrConnectWithoutSchemesInput>
   >;
   create?: InputMaybe<Array<CrimeGroupCreateWithoutSchemesInput>>;
+};
+
+export type CrimeGroupCreateNestedManyWithoutSubscribedUsersInput = {
+  connect?: InputMaybe<Array<CrimeGroupWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<CrimeGroupCreateOrConnectWithoutSubscribedUsersInput>
+  >;
+  create?: InputMaybe<Array<CrimeGroupCreateWithoutSubscribedUsersInput>>;
 };
 
 export type CrimeGroupCreateNestedManyWithoutVehiclesInput = {
@@ -6935,6 +6981,11 @@ export type CrimeGroupCreateOrConnectWithoutSchemesInput = {
   where: CrimeGroupWhereUniqueInput;
 };
 
+export type CrimeGroupCreateOrConnectWithoutSubscribedUsersInput = {
+  create: CrimeGroupCreateWithoutSubscribedUsersInput;
+  where: CrimeGroupWhereUniqueInput;
+};
+
 export type CrimeGroupCreateOrConnectWithoutUpdatesInput = {
   create: CrimeGroupCreateWithoutUpdatesInput;
   where: CrimeGroupWhereUniqueInput;
@@ -6957,6 +7008,7 @@ export type CrimeGroupCreateWithoutActionsInput = {
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutCrimeGroupsInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutCrimeGroupsInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedCrimeGroupsInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   updates?: InputMaybe<UpdateCreateNestedManyWithoutCrimeGroupInput>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCrimeGroupInput>;
@@ -6974,6 +7026,7 @@ export type CrimeGroupCreateWithoutIncidentsInput = {
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutCrimeGroupsInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutCrimeGroupsInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedCrimeGroupsInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   updates?: InputMaybe<UpdateCreateNestedManyWithoutCrimeGroupInput>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCrimeGroupInput>;
@@ -6991,6 +7044,7 @@ export type CrimeGroupCreateWithoutIntelInput = {
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutCrimeGroupsInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutCrimeGroupsInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedCrimeGroupsInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   updates?: InputMaybe<UpdateCreateNestedManyWithoutCrimeGroupInput>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCrimeGroupInput>;
@@ -7008,6 +7062,7 @@ export type CrimeGroupCreateWithoutInvestigationsInput = {
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutCrimeGroupsInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutCrimeGroupsInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedCrimeGroupsInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   updates?: InputMaybe<UpdateCreateNestedManyWithoutCrimeGroupInput>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCrimeGroupInput>;
@@ -7025,6 +7080,7 @@ export type CrimeGroupCreateWithoutLinkedUpdatesInput = {
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutCrimeGroupsInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutCrimeGroupsInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedCrimeGroupsInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   updates?: InputMaybe<UpdateCreateNestedManyWithoutCrimeGroupInput>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCrimeGroupInput>;
@@ -7042,6 +7098,7 @@ export type CrimeGroupCreateWithoutMessagesInput = {
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutCrimeGroupsInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutCrimeGroupsInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedCrimeGroupsInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   updates?: InputMaybe<UpdateCreateNestedManyWithoutCrimeGroupInput>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCrimeGroupInput>;
@@ -7059,6 +7116,7 @@ export type CrimeGroupCreateWithoutOffendersInput = {
   messages?: InputMaybe<MessageCreateNestedManyWithoutCrimeGroupsInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutCrimeGroupsInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedCrimeGroupsInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   updates?: InputMaybe<UpdateCreateNestedManyWithoutCrimeGroupInput>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCrimeGroupInput>;
@@ -7076,6 +7134,25 @@ export type CrimeGroupCreateWithoutSchemesInput = {
   messages?: InputMaybe<MessageCreateNestedManyWithoutCrimeGroupsInput>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutCrimeGroupsInput>;
   reference?: InputMaybe<Scalars['Int']>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedCrimeGroupsInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  updates?: InputMaybe<UpdateCreateNestedManyWithoutCrimeGroupInput>;
+  vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCrimeGroupInput>;
+};
+
+export type CrimeGroupCreateWithoutSubscribedUsersInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutCrimeGroupInput>;
+  alias?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['String']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeGroupsInput>;
+  intel?: InputMaybe<IntelCreateNestedManyWithoutCrimeGroupInput>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutCrimeGroupsInput>;
+  linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedCrimeGroupsInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutCrimeGroupsInput>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutCrimeGroupsInput>;
+  reference?: InputMaybe<Scalars['Int']>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutCrimeGroupsInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   updates?: InputMaybe<UpdateCreateNestedManyWithoutCrimeGroupInput>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCrimeGroupInput>;
@@ -7094,6 +7171,7 @@ export type CrimeGroupCreateWithoutUpdatesInput = {
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutCrimeGroupsInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutCrimeGroupsInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedCrimeGroupsInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCrimeGroupInput>;
 };
@@ -7111,6 +7189,7 @@ export type CrimeGroupCreateWithoutVehiclesInput = {
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutCrimeGroupsInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutCrimeGroupsInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedCrimeGroupsInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   updates?: InputMaybe<UpdateCreateNestedManyWithoutCrimeGroupInput>;
 };
@@ -7138,6 +7217,7 @@ export type CrimeGroupOrderByWithRelationInput = {
   offenders?: InputMaybe<OffenderOrderByRelationAggregateInput>;
   reference?: InputMaybe<SortOrder>;
   schemes?: InputMaybe<SchemeOrderByRelationAggregateInput>;
+  subscribedUsers?: InputMaybe<UserOrderByRelationAggregateInput>;
   updatedAt?: InputMaybe<SortOrder>;
   updates?: InputMaybe<UpdateOrderByRelationAggregateInput>;
   vehicles?: InputMaybe<VehicleOrderByRelationAggregateInput>;
@@ -7188,6 +7268,11 @@ export type CrimeGroupUpdateManyWithWhereWithoutOffendersInput = {
 };
 
 export type CrimeGroupUpdateManyWithWhereWithoutSchemesInput = {
+  data: CrimeGroupUpdateManyMutationInput;
+  where: CrimeGroupScalarWhereInput;
+};
+
+export type CrimeGroupUpdateManyWithWhereWithoutSubscribedUsersInput = {
   data: CrimeGroupUpdateManyMutationInput;
   where: CrimeGroupScalarWhereInput;
 };
@@ -7323,6 +7408,27 @@ export type CrimeGroupUpdateManyWithoutSchemesNestedInput = {
   >;
 };
 
+export type CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput = {
+  connect?: InputMaybe<Array<CrimeGroupWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<CrimeGroupCreateOrConnectWithoutSubscribedUsersInput>
+  >;
+  create?: InputMaybe<Array<CrimeGroupCreateWithoutSubscribedUsersInput>>;
+  delete?: InputMaybe<Array<CrimeGroupWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<CrimeGroupScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<CrimeGroupWhereUniqueInput>>;
+  set?: InputMaybe<Array<CrimeGroupWhereUniqueInput>>;
+  update?: InputMaybe<
+    Array<CrimeGroupUpdateWithWhereUniqueWithoutSubscribedUsersInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<CrimeGroupUpdateManyWithWhereWithoutSubscribedUsersInput>
+  >;
+  upsert?: InputMaybe<
+    Array<CrimeGroupUpsertWithWhereUniqueWithoutSubscribedUsersInput>
+  >;
+};
+
 export type CrimeGroupUpdateManyWithoutVehiclesNestedInput = {
   connect?: InputMaybe<Array<CrimeGroupWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<
@@ -7404,6 +7510,11 @@ export type CrimeGroupUpdateWithWhereUniqueWithoutSchemesInput = {
   where: CrimeGroupWhereUniqueInput;
 };
 
+export type CrimeGroupUpdateWithWhereUniqueWithoutSubscribedUsersInput = {
+  data: CrimeGroupUpdateWithoutSubscribedUsersInput;
+  where: CrimeGroupWhereUniqueInput;
+};
+
 export type CrimeGroupUpdateWithWhereUniqueWithoutVehiclesInput = {
   data: CrimeGroupUpdateWithoutVehiclesInput;
   where: CrimeGroupWhereUniqueInput;
@@ -7421,6 +7532,7 @@ export type CrimeGroupUpdateWithoutActionsInput = {
   offenders?: InputMaybe<OffenderUpdateManyWithoutCrimeGroupsNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutCrimeGroupsNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedCrimeGroupsNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updates?: InputMaybe<UpdateUpdateManyWithoutCrimeGroupNestedInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutCrimeGroupNestedInput>;
@@ -7438,6 +7550,7 @@ export type CrimeGroupUpdateWithoutIncidentsInput = {
   offenders?: InputMaybe<OffenderUpdateManyWithoutCrimeGroupsNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutCrimeGroupsNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedCrimeGroupsNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updates?: InputMaybe<UpdateUpdateManyWithoutCrimeGroupNestedInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutCrimeGroupNestedInput>;
@@ -7455,6 +7568,7 @@ export type CrimeGroupUpdateWithoutIntelInput = {
   offenders?: InputMaybe<OffenderUpdateManyWithoutCrimeGroupsNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutCrimeGroupsNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedCrimeGroupsNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updates?: InputMaybe<UpdateUpdateManyWithoutCrimeGroupNestedInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutCrimeGroupNestedInput>;
@@ -7472,6 +7586,7 @@ export type CrimeGroupUpdateWithoutInvestigationsInput = {
   offenders?: InputMaybe<OffenderUpdateManyWithoutCrimeGroupsNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutCrimeGroupsNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedCrimeGroupsNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updates?: InputMaybe<UpdateUpdateManyWithoutCrimeGroupNestedInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutCrimeGroupNestedInput>;
@@ -7489,6 +7604,7 @@ export type CrimeGroupUpdateWithoutLinkedUpdatesInput = {
   offenders?: InputMaybe<OffenderUpdateManyWithoutCrimeGroupsNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutCrimeGroupsNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedCrimeGroupsNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updates?: InputMaybe<UpdateUpdateManyWithoutCrimeGroupNestedInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutCrimeGroupNestedInput>;
@@ -7506,6 +7622,7 @@ export type CrimeGroupUpdateWithoutMessagesInput = {
   offenders?: InputMaybe<OffenderUpdateManyWithoutCrimeGroupsNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutCrimeGroupsNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedCrimeGroupsNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updates?: InputMaybe<UpdateUpdateManyWithoutCrimeGroupNestedInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutCrimeGroupNestedInput>;
@@ -7523,6 +7640,7 @@ export type CrimeGroupUpdateWithoutOffendersInput = {
   messages?: InputMaybe<MessageUpdateManyWithoutCrimeGroupsNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutCrimeGroupsNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedCrimeGroupsNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updates?: InputMaybe<UpdateUpdateManyWithoutCrimeGroupNestedInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutCrimeGroupNestedInput>;
@@ -7540,6 +7658,25 @@ export type CrimeGroupUpdateWithoutSchemesInput = {
   messages?: InputMaybe<MessageUpdateManyWithoutCrimeGroupsNestedInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutCrimeGroupsNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedCrimeGroupsNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  updates?: InputMaybe<UpdateUpdateManyWithoutCrimeGroupNestedInput>;
+  vehicles?: InputMaybe<VehicleUpdateManyWithoutCrimeGroupNestedInput>;
+};
+
+export type CrimeGroupUpdateWithoutSubscribedUsersInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutCrimeGroupNestedInput>;
+  alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeGroupsNestedInput>;
+  intel?: InputMaybe<IntelUpdateManyWithoutCrimeGroupNestedInput>;
+  investigations?: InputMaybe<InvestigationUpdateManyWithoutCrimeGroupsNestedInput>;
+  linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedCrimeGroupsNestedInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutCrimeGroupsNestedInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutCrimeGroupsNestedInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutCrimeGroupsNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updates?: InputMaybe<UpdateUpdateManyWithoutCrimeGroupNestedInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutCrimeGroupNestedInput>;
@@ -7558,6 +7695,7 @@ export type CrimeGroupUpdateWithoutUpdatesInput = {
   offenders?: InputMaybe<OffenderUpdateManyWithoutCrimeGroupsNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutCrimeGroupsNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedCrimeGroupsNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutCrimeGroupNestedInput>;
 };
@@ -7575,6 +7713,7 @@ export type CrimeGroupUpdateWithoutVehiclesInput = {
   offenders?: InputMaybe<OffenderUpdateManyWithoutCrimeGroupsNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutCrimeGroupsNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedCrimeGroupsNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updates?: InputMaybe<UpdateUpdateManyWithoutCrimeGroupNestedInput>;
 };
@@ -7615,6 +7754,12 @@ export type CrimeGroupUpsertWithWhereUniqueWithoutSchemesInput = {
   where: CrimeGroupWhereUniqueInput;
 };
 
+export type CrimeGroupUpsertWithWhereUniqueWithoutSubscribedUsersInput = {
+  create: CrimeGroupCreateWithoutSubscribedUsersInput;
+  update: CrimeGroupUpdateWithoutSubscribedUsersInput;
+  where: CrimeGroupWhereUniqueInput;
+};
+
 export type CrimeGroupUpsertWithWhereUniqueWithoutVehiclesInput = {
   create: CrimeGroupCreateWithoutVehiclesInput;
   update: CrimeGroupUpdateWithoutVehiclesInput;
@@ -7652,6 +7797,7 @@ export type CrimeGroupWhereInput = {
   offenders?: InputMaybe<OffenderListRelationFilter>;
   reference?: InputMaybe<IntNullableFilter>;
   schemes?: InputMaybe<SchemeListRelationFilter>;
+  subscribedUsers?: InputMaybe<UserListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   updates?: InputMaybe<UpdateListRelationFilter>;
   vehicles?: InputMaybe<VehicleListRelationFilter>;
@@ -8475,6 +8621,7 @@ export type FeedItem = {
   createdAt: Scalars['DateTime'];
   groups: Array<Group>;
   id: Scalars['String'];
+  images: Array<Image>;
   incident?: Maybe<Incident>;
   incidentId?: Maybe<Scalars['String']>;
   investigation?: Maybe<Investigation>;
@@ -8492,6 +8639,15 @@ export type FeedItemGroupsArgs = {
   before?: InputMaybe<GroupWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+};
+
+export type FeedItemImagesArgs = {
+  after?: InputMaybe<ImageWhereUniqueInput>;
+  before?: InputMaybe<ImageWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<ImageOrderByWithRelationInput>>;
+  where?: InputMaybe<ImageWhereInput>;
 };
 
 export type FeedItemCreateManyArticleInput = {
@@ -11458,10 +11614,12 @@ export type ImageUpdateManyWithoutVehiclesNestedInput = {
   create?: InputMaybe<Array<ImageCreateWithoutVehiclesInput>>;
   delete?: InputMaybe<Array<ImageWhereUniqueInput>>;
   deleteMany?: InputMaybe<Array<ImageScalarWhereInput>>;
-  disconnect?: InputMaybe<Array<ImageWhereUniqueInput>>;
+  disconnect?: InputMaybe<Array<InputMaybe<UniqueId>>>;
+  optimistic?: InputMaybe<Array<InputMaybe<CreateImageOptimistic>>>;
   set?: InputMaybe<Array<ImageWhereUniqueInput>>;
   update?: InputMaybe<Array<ImageUpdateWithWhereUniqueWithoutVehiclesInput>>;
   updateMany?: InputMaybe<Array<ImageUpdateManyWithWhereWithoutVehiclesInput>>;
+  upload?: InputMaybe<Array<InputMaybe<UploadVehicleImage>>>;
   upsert?: InputMaybe<Array<ImageUpsertWithWhereUniqueWithoutVehiclesInput>>;
 };
 
@@ -18459,6 +18617,21 @@ export type ListVehicles = {
   vehicles: Array<Vehicle>;
 };
 
+export type MergeOffendersInput = {
+  age?: InputMaybe<Age>;
+  build?: InputMaybe<Build>;
+  dateOfBirth?: InputMaybe<Scalars['DateTime']>;
+  gender?: InputMaybe<Gender>;
+  hair?: InputMaybe<Scalars['String']>;
+  imageIds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  mainOffenderId: Scalars['String'];
+  name?: InputMaybe<Scalars['String']>;
+  offenderIds: Array<Scalars['String']>;
+  peculiarities?: InputMaybe<Scalars['String']>;
+  race?: InputMaybe<Race>;
+  tags?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
 export type Message = {
   __typename?: 'Message';
   actions: Array<Action>;
@@ -19631,7 +19804,6 @@ export type Mutation = {
   createComment?: Maybe<Intel>;
   createCrimeGroup: CrimeGroup;
   createDocument?: Maybe<Document>;
-  createDocumentOnInvestigation?: Maybe<Document>;
   createFlow?: Maybe<Flow>;
   createGroup: Group;
   createImage: Image;
@@ -19646,9 +19818,11 @@ export type Mutation = {
   createTermsAndConditions?: Maybe<TermsAndCondition>;
   createTimes?: Maybe<Array<Incident>>;
   createUnlinkedImage?: Maybe<UnlinkedImage>;
+  createUpdateOnCrimeGroup?: Maybe<Update>;
   createUpdateOnIncident?: Maybe<Update>;
   createUpdateOnInvestigation?: Maybe<Update>;
   createUpdateOnOffender?: Maybe<Update>;
+  createUpdateOnVehicle?: Maybe<Update>;
   createUser?: Maybe<User>;
   createUserChat: UserChat;
   createUserDefault: User;
@@ -19688,6 +19862,7 @@ export type Mutation = {
   inviteExistingUser?: Maybe<User>;
   linkOrgToDem?: Maybe<Business>;
   linkUserToDem?: Maybe<User>;
+  mergeOffender?: Maybe<Offender>;
   newIncident: Incident;
   recycleExpiredData?: Maybe<SystemTask>;
   recycleIncident?: Maybe<Incident>;
@@ -19705,14 +19880,18 @@ export type Mutation = {
   setPassword?: Maybe<User>;
   signIn?: Maybe<SignIn>;
   signTerms?: Maybe<UserTerm>;
+  subscribeToCrimeGroup?: Maybe<CrimeGroup>;
   subscribeToIncident?: Maybe<Incident>;
   subscribeToInvestigation?: Maybe<Investigation>;
   subscribeToOffender?: Maybe<Offender>;
+  subscribeToVehicle?: Maybe<Vehicle>;
   syncGeoCodes?: Maybe<Array<Address>>;
   toggleUser?: Maybe<User>;
   unsubscribeFromIncident?: Maybe<Incident>;
   unsubscribeFromOffender?: Maybe<Offender>;
+  unsubscribeToCrimeGroup?: Maybe<CrimeGroup>;
   unsubscribeToInvestigation?: Maybe<Investigation>;
+  unsubscribeToVehicle?: Maybe<Vehicle>;
   updateAction?: Maybe<Action>;
   updateAddress?: Maybe<Address>;
   updateBan?: Maybe<Ban>;
@@ -19831,12 +20010,6 @@ export type MutationCreateCrimeGroupArgs = {
 
 export type MutationCreateDocumentArgs = {
   data: CreateDocument;
-  where: UniqueId;
-};
-
-export type MutationCreateDocumentOnInvestigationArgs = {
-  data: CreateDocument;
-  where: UniqueId;
 };
 
 export type MutationCreateFlowArgs = {
@@ -19893,6 +20066,11 @@ export type MutationCreateUnlinkedImageArgs = {
   scheme: Scalars['String'];
 };
 
+export type MutationCreateUpdateOnCrimeGroupArgs = {
+  crimeGroup: UniqueId;
+  data: CreateUpdateData;
+};
+
 export type MutationCreateUpdateOnIncidentArgs = {
   data: CreateUpdateData;
   incident: UniqueId;
@@ -19906,6 +20084,11 @@ export type MutationCreateUpdateOnInvestigationArgs = {
 export type MutationCreateUpdateOnOffenderArgs = {
   data: CreateUpdateData;
   offender: UniqueId;
+};
+
+export type MutationCreateUpdateOnVehicleArgs = {
+  data: CreateUpdateData;
+  vehicle: UniqueId;
 };
 
 export type MutationCreateUserArgs = {
@@ -20066,6 +20249,10 @@ export type MutationLinkUserToDemArgs = {
   where: UniqueId;
 };
 
+export type MutationMergeOffenderArgs = {
+  data: MergeOffendersInput;
+};
+
 export type MutationNewIncidentArgs = {
   data: IncidentCreateInput;
 };
@@ -20130,6 +20317,10 @@ export type MutationSignTermsArgs = {
   data: SignTermsInput;
 };
 
+export type MutationSubscribeToCrimeGroupArgs = {
+  where: UniqueId;
+};
+
 export type MutationSubscribeToIncidentArgs = {
   where: IncidentWhereUniqueInput;
 };
@@ -20140,6 +20331,10 @@ export type MutationSubscribeToInvestigationArgs = {
 
 export type MutationSubscribeToOffenderArgs = {
   where: OffenderWhereUniqueInput;
+};
+
+export type MutationSubscribeToVehicleArgs = {
+  where: UniqueId;
 };
 
 export type MutationToggleUserArgs = {
@@ -20154,7 +20349,15 @@ export type MutationUnsubscribeFromOffenderArgs = {
   where: OffenderWhereUniqueInput;
 };
 
+export type MutationUnsubscribeToCrimeGroupArgs = {
+  where: UniqueId;
+};
+
 export type MutationUnsubscribeToInvestigationArgs = {
+  where: UniqueId;
+};
+
+export type MutationUnsubscribeToVehicleArgs = {
   where: UniqueId;
 };
 
@@ -28721,6 +28924,7 @@ export type UpdateCreateManyCreatedByInput = {
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicleId?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateCreateManyCreatedByInputEnvelope = {
@@ -28740,6 +28944,7 @@ export type UpdateCreateManyCrimeGroupInput = {
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicleId?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateCreateManyCrimeGroupInputEnvelope = {
@@ -28759,6 +28964,7 @@ export type UpdateCreateManyIncidentInput = {
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicleId?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateCreateManyIncidentInputEnvelope = {
@@ -28778,6 +28984,7 @@ export type UpdateCreateManyInvestigationInput = {
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicleId?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateCreateManyInvestigationInputEnvelope = {
@@ -28797,6 +29004,7 @@ export type UpdateCreateManyOffenderInput = {
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicleId?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateCreateManyOffenderInputEnvelope = {
@@ -28816,10 +29024,31 @@ export type UpdateCreateManyReplyToInput = {
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicleId?: InputMaybe<Scalars['String']>;
 };
 
 export type UpdateCreateManyReplyToInputEnvelope = {
   data?: InputMaybe<Array<UpdateCreateManyReplyToInput>>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type UpdateCreateManyVehicleInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdById: Scalars['String'];
+  crimeGroupId?: InputMaybe<Scalars['String']>;
+  icon: UpdateIcon;
+  id?: InputMaybe<Scalars['String']>;
+  incidentId?: InputMaybe<Scalars['String']>;
+  investigationId?: InputMaybe<Scalars['String']>;
+  offenderId?: InputMaybe<Scalars['String']>;
+  replyToId?: InputMaybe<Scalars['String']>;
+  text?: InputMaybe<Scalars['String']>;
+  type: UpdateType;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type UpdateCreateManyVehicleInputEnvelope = {
+  data?: InputMaybe<Array<UpdateCreateManyVehicleInput>>;
   skipDuplicates?: InputMaybe<Scalars['Boolean']>;
 };
 
@@ -28923,6 +29152,13 @@ export type UpdateCreateNestedManyWithoutReplyToInput = {
   createMany?: InputMaybe<UpdateCreateManyReplyToInputEnvelope>;
 };
 
+export type UpdateCreateNestedManyWithoutVehicleInput = {
+  connect?: InputMaybe<Array<UpdateWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<UpdateCreateOrConnectWithoutVehicleInput>>;
+  create?: InputMaybe<Array<UpdateCreateWithoutVehicleInput>>;
+  createMany?: InputMaybe<UpdateCreateManyVehicleInputEnvelope>;
+};
+
 export type UpdateCreateNestedOneWithoutImagesInput = {
   connect?: InputMaybe<UpdateWhereUniqueInput>;
   connectOrCreate?: InputMaybe<UpdateCreateOrConnectWithoutImagesInput>;
@@ -29005,6 +29241,11 @@ export type UpdateCreateOrConnectWithoutReplyToInput = {
   where: UpdateWhereUniqueInput;
 };
 
+export type UpdateCreateOrConnectWithoutVehicleInput = {
+  create: UpdateCreateWithoutVehicleInput;
+  where: UpdateWhereUniqueInput;
+};
+
 export type UpdateCreateWithoutCreatedByInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutUpdatesInput>;
@@ -29025,6 +29266,7 @@ export type UpdateCreateWithoutCreatedByInput = {
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutUpdatesInput>;
 };
 
 export type UpdateCreateWithoutCrimeGroupInput = {
@@ -29047,6 +29289,7 @@ export type UpdateCreateWithoutCrimeGroupInput = {
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutUpdatesInput>;
 };
 
 export type UpdateCreateWithoutImagesInput = {
@@ -29069,6 +29312,7 @@ export type UpdateCreateWithoutImagesInput = {
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutUpdatesInput>;
 };
 
 export type UpdateCreateWithoutIncidentInput = {
@@ -29091,6 +29335,7 @@ export type UpdateCreateWithoutIncidentInput = {
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutUpdatesInput>;
 };
 
 export type UpdateCreateWithoutInvestigationInput = {
@@ -29113,6 +29358,7 @@ export type UpdateCreateWithoutInvestigationInput = {
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutUpdatesInput>;
 };
 
 export type UpdateCreateWithoutLinkedCrimeGroupsInput = {
@@ -29135,6 +29381,7 @@ export type UpdateCreateWithoutLinkedCrimeGroupsInput = {
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutUpdatesInput>;
 };
 
 export type UpdateCreateWithoutLinkedIncidentsInput = {
@@ -29157,6 +29404,7 @@ export type UpdateCreateWithoutLinkedIncidentsInput = {
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutUpdatesInput>;
 };
 
 export type UpdateCreateWithoutLinkedInvestigationsInput = {
@@ -29179,6 +29427,7 @@ export type UpdateCreateWithoutLinkedInvestigationsInput = {
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutUpdatesInput>;
 };
 
 export type UpdateCreateWithoutLinkedOffendersInput = {
@@ -29201,6 +29450,7 @@ export type UpdateCreateWithoutLinkedOffendersInput = {
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutUpdatesInput>;
 };
 
 export type UpdateCreateWithoutLinkedVehiclesInput = {
@@ -29223,6 +29473,7 @@ export type UpdateCreateWithoutLinkedVehiclesInput = {
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutUpdatesInput>;
 };
 
 export type UpdateCreateWithoutMentionedUsersInput = {
@@ -29245,6 +29496,7 @@ export type UpdateCreateWithoutMentionedUsersInput = {
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutUpdatesInput>;
 };
 
 export type UpdateCreateWithoutOffenderInput = {
@@ -29267,6 +29519,7 @@ export type UpdateCreateWithoutOffenderInput = {
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutUpdatesInput>;
 };
 
 export type UpdateCreateWithoutRepliesInput = {
@@ -29289,6 +29542,7 @@ export type UpdateCreateWithoutRepliesInput = {
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutUpdatesInput>;
 };
 
 export type UpdateCreateWithoutReplyToInput = {
@@ -29308,6 +29562,30 @@ export type UpdateCreateWithoutReplyToInput = {
   mentionedUsers?: InputMaybe<UserCreateNestedManyWithoutMentionedUpdatedInput>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutUpdatesInput>;
   replies?: InputMaybe<UpdateCreateNestedManyWithoutReplyToInput>;
+  text?: InputMaybe<Scalars['String']>;
+  type: UpdateType;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutUpdatesInput>;
+};
+
+export type UpdateCreateWithoutVehicleInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdBy: UserCreateNestedOneWithoutCreatedUpdatesInput;
+  crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutUpdatesInput>;
+  icon: UpdateIcon;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutUpdateInput>;
+  incident?: InputMaybe<IncidentCreateNestedOneWithoutUpdatesInput>;
+  investigation?: InputMaybe<InvestigationCreateNestedOneWithoutUpdatesInput>;
+  linkedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutLinkedUpdatesInput>;
+  linkedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutLinkedUpdatesInput>;
+  linkedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutLinkedUpdatesInput>;
+  linkedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutLinkedUpdatesInput>;
+  linkedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutLinkedUpdatesInput>;
+  mentionedUsers?: InputMaybe<UserCreateNestedManyWithoutMentionedUpdatedInput>;
+  offender?: InputMaybe<OffenderCreateNestedOneWithoutUpdatesInput>;
+  replies?: InputMaybe<UpdateCreateNestedManyWithoutReplyToInput>;
+  replyTo?: InputMaybe<UpdateCreateNestedOneWithoutRepliesInput>;
   text?: InputMaybe<Scalars['String']>;
   type: UpdateType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -29409,6 +29687,8 @@ export type UpdateOrderByWithRelationInput = {
   text?: InputMaybe<SortOrder>;
   type?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
+  vehicle?: InputMaybe<VehicleOrderByWithRelationInput>;
+  vehicleId?: InputMaybe<SortOrder>;
 };
 
 export type UpdatePasswordData = {
@@ -29433,13 +29713,16 @@ export type UpdateScalarWhereInput = {
   text?: InputMaybe<StringNullableFilter>;
   type?: InputMaybe<EnumUpdateTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+  vehicleId?: InputMaybe<StringNullableFilter>;
 };
 
 export enum UpdateType {
   Image = 'IMAGE',
   LinkedCrimeGroup = 'LINKED_CRIME_GROUP',
   LinkedIncident = 'LINKED_INCIDENT',
+  LinkedInvestigation = 'LINKED_INVESTIGATION',
   LinkedOffender = 'LINKED_OFFENDER',
+  LinkedVehicle = 'LINKED_VEHICLE',
   System = 'SYSTEM',
   Text = 'TEXT',
 }
@@ -29513,6 +29796,11 @@ export type UpdateUpdateManyWithWhereWithoutOffenderInput = {
 };
 
 export type UpdateUpdateManyWithWhereWithoutReplyToInput = {
+  data: UpdateUpdateManyMutationInput;
+  where: UpdateScalarWhereInput;
+};
+
+export type UpdateUpdateManyWithWhereWithoutVehicleInput = {
   data: UpdateUpdateManyMutationInput;
   where: UpdateScalarWhereInput;
 };
@@ -29747,6 +30035,20 @@ export type UpdateUpdateManyWithoutReplyToNestedInput = {
   upsert?: InputMaybe<Array<UpdateUpsertWithWhereUniqueWithoutReplyToInput>>;
 };
 
+export type UpdateUpdateManyWithoutVehicleNestedInput = {
+  connect?: InputMaybe<Array<UpdateWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<UpdateCreateOrConnectWithoutVehicleInput>>;
+  create?: InputMaybe<Array<UpdateCreateWithoutVehicleInput>>;
+  createMany?: InputMaybe<UpdateCreateManyVehicleInputEnvelope>;
+  delete?: InputMaybe<Array<UpdateWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<UpdateScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<UpdateWhereUniqueInput>>;
+  set?: InputMaybe<Array<UpdateWhereUniqueInput>>;
+  update?: InputMaybe<Array<UpdateUpdateWithWhereUniqueWithoutVehicleInput>>;
+  updateMany?: InputMaybe<Array<UpdateUpdateManyWithWhereWithoutVehicleInput>>;
+  upsert?: InputMaybe<Array<UpdateUpsertWithWhereUniqueWithoutVehicleInput>>;
+};
+
 export type UpdateUpdateOneWithoutImagesNestedInput = {
   connect?: InputMaybe<UpdateWhereUniqueInput>;
   connectOrCreate?: InputMaybe<UpdateCreateOrConnectWithoutImagesInput>;
@@ -29827,6 +30129,11 @@ export type UpdateUpdateWithWhereUniqueWithoutReplyToInput = {
   where: UpdateWhereUniqueInput;
 };
 
+export type UpdateUpdateWithWhereUniqueWithoutVehicleInput = {
+  data: UpdateUpdateWithoutVehicleInput;
+  where: UpdateWhereUniqueInput;
+};
+
 export type UpdateUpdateWithoutCreatedByInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutUpdatesNestedInput>;
@@ -29847,6 +30154,7 @@ export type UpdateUpdateWithoutCreatedByInput = {
   text?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumUpdateTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutUpdatesNestedInput>;
 };
 
 export type UpdateUpdateWithoutCrimeGroupInput = {
@@ -29869,6 +30177,7 @@ export type UpdateUpdateWithoutCrimeGroupInput = {
   text?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumUpdateTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutUpdatesNestedInput>;
 };
 
 export type UpdateUpdateWithoutImagesInput = {
@@ -29891,6 +30200,7 @@ export type UpdateUpdateWithoutImagesInput = {
   text?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumUpdateTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutUpdatesNestedInput>;
 };
 
 export type UpdateUpdateWithoutIncidentInput = {
@@ -29913,6 +30223,7 @@ export type UpdateUpdateWithoutIncidentInput = {
   text?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumUpdateTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutUpdatesNestedInput>;
 };
 
 export type UpdateUpdateWithoutInvestigationInput = {
@@ -29935,6 +30246,7 @@ export type UpdateUpdateWithoutInvestigationInput = {
   text?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumUpdateTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutUpdatesNestedInput>;
 };
 
 export type UpdateUpdateWithoutLinkedCrimeGroupsInput = {
@@ -29957,6 +30269,7 @@ export type UpdateUpdateWithoutLinkedCrimeGroupsInput = {
   text?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumUpdateTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutUpdatesNestedInput>;
 };
 
 export type UpdateUpdateWithoutLinkedIncidentsInput = {
@@ -29979,6 +30292,7 @@ export type UpdateUpdateWithoutLinkedIncidentsInput = {
   text?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumUpdateTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutUpdatesNestedInput>;
 };
 
 export type UpdateUpdateWithoutLinkedInvestigationsInput = {
@@ -30001,6 +30315,7 @@ export type UpdateUpdateWithoutLinkedInvestigationsInput = {
   text?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumUpdateTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutUpdatesNestedInput>;
 };
 
 export type UpdateUpdateWithoutLinkedOffendersInput = {
@@ -30023,6 +30338,7 @@ export type UpdateUpdateWithoutLinkedOffendersInput = {
   text?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumUpdateTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutUpdatesNestedInput>;
 };
 
 export type UpdateUpdateWithoutLinkedVehiclesInput = {
@@ -30045,6 +30361,7 @@ export type UpdateUpdateWithoutLinkedVehiclesInput = {
   text?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumUpdateTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutUpdatesNestedInput>;
 };
 
 export type UpdateUpdateWithoutMentionedUsersInput = {
@@ -30067,6 +30384,7 @@ export type UpdateUpdateWithoutMentionedUsersInput = {
   text?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumUpdateTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutUpdatesNestedInput>;
 };
 
 export type UpdateUpdateWithoutOffenderInput = {
@@ -30089,6 +30407,7 @@ export type UpdateUpdateWithoutOffenderInput = {
   text?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumUpdateTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutUpdatesNestedInput>;
 };
 
 export type UpdateUpdateWithoutRepliesInput = {
@@ -30111,6 +30430,7 @@ export type UpdateUpdateWithoutRepliesInput = {
   text?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumUpdateTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutUpdatesNestedInput>;
 };
 
 export type UpdateUpdateWithoutReplyToInput = {
@@ -30130,6 +30450,30 @@ export type UpdateUpdateWithoutReplyToInput = {
   mentionedUsers?: InputMaybe<UserUpdateManyWithoutMentionedUpdatedNestedInput>;
   offender?: InputMaybe<OffenderUpdateOneWithoutUpdatesNestedInput>;
   replies?: InputMaybe<UpdateUpdateManyWithoutReplyToNestedInput>;
+  text?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  type?: InputMaybe<EnumUpdateTypeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutUpdatesNestedInput>;
+};
+
+export type UpdateUpdateWithoutVehicleInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedUpdatesNestedInput>;
+  crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutUpdatesNestedInput>;
+  icon?: InputMaybe<EnumUpdateIconFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutUpdateNestedInput>;
+  incident?: InputMaybe<IncidentUpdateOneWithoutUpdatesNestedInput>;
+  investigation?: InputMaybe<InvestigationUpdateOneWithoutUpdatesNestedInput>;
+  linkedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutLinkedUpdatesNestedInput>;
+  linkedIncidents?: InputMaybe<IncidentUpdateManyWithoutLinkedUpdatesNestedInput>;
+  linkedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutLinkedUpdatesNestedInput>;
+  linkedOffenders?: InputMaybe<OffenderUpdateManyWithoutLinkedUpdatesNestedInput>;
+  linkedVehicles?: InputMaybe<VehicleUpdateManyWithoutLinkedUpdatesNestedInput>;
+  mentionedUsers?: InputMaybe<UserUpdateManyWithoutMentionedUpdatedNestedInput>;
+  offender?: InputMaybe<OffenderUpdateOneWithoutUpdatesNestedInput>;
+  replies?: InputMaybe<UpdateUpdateManyWithoutReplyToNestedInput>;
+  replyTo?: InputMaybe<UpdateUpdateOneWithoutRepliesNestedInput>;
   text?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumUpdateTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -30207,6 +30551,12 @@ export type UpdateUpsertWithWhereUniqueWithoutReplyToInput = {
   where: UpdateWhereUniqueInput;
 };
 
+export type UpdateUpsertWithWhereUniqueWithoutVehicleInput = {
+  create: UpdateCreateWithoutVehicleInput;
+  update: UpdateUpdateWithoutVehicleInput;
+  where: UpdateWhereUniqueInput;
+};
+
 export type UpdateUpsertWithoutImagesInput = {
   create: UpdateCreateWithoutImagesInput;
   update: UpdateUpdateWithoutImagesInput;
@@ -30247,6 +30597,8 @@ export type UpdateWhereInput = {
   text?: InputMaybe<StringNullableFilter>;
   type?: InputMaybe<EnumUpdateTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+  vehicle?: InputMaybe<VehicleWhereInput>;
+  vehicleId?: InputMaybe<StringNullableFilter>;
 };
 
 export type UpdateWhereUnique = {
@@ -30255,6 +30607,11 @@ export type UpdateWhereUnique = {
 
 export type UpdateWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
+};
+
+export type UploadArticleImage = {
+  file?: InputMaybe<Scalars['Upload']>;
+  url?: InputMaybe<UrlImage>;
 };
 
 export type UploadImage = {
@@ -30333,6 +30690,7 @@ export type User = {
   tags: Array<Tag>;
   termsSigned: Scalars['Boolean'];
   timeSigned?: Maybe<Scalars['DateTime']>;
+  totalChats?: Maybe<Scalars['Int']>;
   updatedAt: Scalars['DateTime'];
   uploaded: Scalars['Boolean'];
 };
@@ -30766,11 +31124,13 @@ export type UserCreateInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -30815,6 +31175,14 @@ export type UserCreateNestedManyWithoutMessageMentionsInput = {
   create?: InputMaybe<Array<UserCreateWithoutMessageMentionsInput>>;
 };
 
+export type UserCreateNestedManyWithoutSubscribedCrimeGroupsInput = {
+  connect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<UserCreateOrConnectWithoutSubscribedCrimeGroupsInput>
+  >;
+  create?: InputMaybe<Array<UserCreateWithoutSubscribedCrimeGroupsInput>>;
+};
+
 export type UserCreateNestedManyWithoutSubscribedIncidentsInput = {
   connect?: InputMaybe<Array<UserWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<
@@ -30837,6 +31205,14 @@ export type UserCreateNestedManyWithoutSubscribedOffendersInput = {
     Array<UserCreateOrConnectWithoutSubscribedOffendersInput>
   >;
   create?: InputMaybe<Array<UserCreateWithoutSubscribedOffendersInput>>;
+};
+
+export type UserCreateNestedManyWithoutSubscribedVehiclesInput = {
+  connect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<UserCreateOrConnectWithoutSubscribedVehiclesInput>
+  >;
+  create?: InputMaybe<Array<UserCreateWithoutSubscribedVehiclesInput>>;
 };
 
 export type UserCreateNestedManyWithoutTagsInput = {
@@ -31063,6 +31439,11 @@ export type UserCreateOrConnectWithoutSchemesInput = {
   where: UserWhereUniqueInput;
 };
 
+export type UserCreateOrConnectWithoutSubscribedCrimeGroupsInput = {
+  create: UserCreateWithoutSubscribedCrimeGroupsInput;
+  where: UserWhereUniqueInput;
+};
+
 export type UserCreateOrConnectWithoutSubscribedIncidentsInput = {
   create: UserCreateWithoutSubscribedIncidentsInput;
   where: UserWhereUniqueInput;
@@ -31075,6 +31456,11 @@ export type UserCreateOrConnectWithoutSubscribedInvestigationsInput = {
 
 export type UserCreateOrConnectWithoutSubscribedOffendersInput = {
   create: UserCreateWithoutSubscribedOffendersInput;
+  where: UserWhereUniqueInput;
+};
+
+export type UserCreateOrConnectWithoutSubscribedVehiclesInput = {
+  create: UserCreateWithoutSubscribedVehiclesInput;
   where: UserWhereUniqueInput;
 };
 
@@ -31132,11 +31518,13 @@ export type UserCreateWithoutActionsByUserInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -31189,11 +31577,13 @@ export type UserCreateWithoutActionsInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -31246,11 +31636,13 @@ export type UserCreateWithoutAddressesInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -31303,11 +31695,13 @@ export type UserCreateWithoutArticlesInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -31360,11 +31754,13 @@ export type UserCreateWithoutBansInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -31417,11 +31813,13 @@ export type UserCreateWithoutBusinessesInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -31474,11 +31872,13 @@ export type UserCreateWithoutChatsInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -31531,11 +31931,13 @@ export type UserCreateWithoutCreatedArticlesInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -31588,11 +31990,13 @@ export type UserCreateWithoutCreatedTagsInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -31645,11 +32049,13 @@ export type UserCreateWithoutCreatedUpdatesInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -31702,11 +32108,13 @@ export type UserCreateWithoutGroupsInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -31759,11 +32167,13 @@ export type UserCreateWithoutImagesInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -31816,11 +32226,13 @@ export type UserCreateWithoutImpressionsInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -31873,11 +32285,13 @@ export type UserCreateWithoutIncidentsInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -31930,11 +32344,13 @@ export type UserCreateWithoutIntelInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -31987,11 +32403,13 @@ export type UserCreateWithoutInvestigationsInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -32044,11 +32462,13 @@ export type UserCreateWithoutMentionedUpdatedInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -32101,11 +32521,13 @@ export type UserCreateWithoutMessageMentionsInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -32158,11 +32580,13 @@ export type UserCreateWithoutMessagesInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -32215,11 +32639,13 @@ export type UserCreateWithoutOffendersInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -32272,11 +32698,13 @@ export type UserCreateWithoutRecycledItemsInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -32329,11 +32757,72 @@ export type UserCreateWithoutSchemesInput = {
   recycled?: InputMaybe<Scalars['Boolean']>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
+  termsSigned?: InputMaybe<Scalars['Boolean']>;
+  timeSigned?: InputMaybe<Scalars['DateTime']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploaded?: InputMaybe<Scalars['Boolean']>;
+  userTerms?: InputMaybe<UserTermCreateNestedManyWithoutUserInput>;
+};
+
+export type UserCreateWithoutSubscribedCrimeGroupsInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
+  actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
+  addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  auth0Id?: InputMaybe<Scalars['String']>;
+  bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
+  businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
+  chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
+  createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  demId?: InputMaybe<Scalars['String']>;
+  disabled?: InputMaybe<Scalars['Boolean']>;
+  email: Scalars['String'];
+  expoPushTokens?: InputMaybe<ExpoPushTokenCreateNestedManyWithoutUserInput>;
+  fullName: Scalars['String'];
+  groups?: InputMaybe<GroupCreateNestedManyWithoutUsersInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutUploadedByInput>;
+  impressions?: InputMaybe<ImpressionCreateNestedManyWithoutUserInput>;
+  incidentEmail?: InputMaybe<Scalars['Boolean']>;
+  incidentPush?: InputMaybe<Scalars['Boolean']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
+  intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutCreatedByInput>;
+  ipAddress?: InputMaybe<Scalars['String']>;
+  mentionedUpdated?: InputMaybe<UpdateCreateNestedManyWithoutMentionedUsersInput>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
+  messagePush?: InputMaybe<Scalars['Boolean']>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
+  newUser?: InputMaybe<Scalars['Boolean']>;
+  offenderEmail?: InputMaybe<Scalars['Boolean']>;
+  offenderPush?: InputMaybe<Scalars['Boolean']>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutCreatedByInput>;
+  onboardSteps?: InputMaybe<OnboardSteps>;
+  oneSignalIds?: InputMaybe<OneSignalIdCreateNestedManyWithoutUserInput>;
+  organisation: Scalars['String'];
+  platform?: InputMaybe<Scalars['String']>;
+  publicName?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
+  recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
+  reference?: InputMaybe<Scalars['Int']>;
+  schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
+  subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
+  subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -32387,10 +32876,12 @@ export type UserCreateWithoutSubscribedIncidentsInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -32444,10 +32935,12 @@ export type UserCreateWithoutSubscribedInvestigationsInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -32501,10 +32994,71 @@ export type UserCreateWithoutSubscribedOffendersInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
+  termsSigned?: InputMaybe<Scalars['Boolean']>;
+  timeSigned?: InputMaybe<Scalars['DateTime']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploaded?: InputMaybe<Scalars['Boolean']>;
+  userTerms?: InputMaybe<UserTermCreateNestedManyWithoutUserInput>;
+};
+
+export type UserCreateWithoutSubscribedVehiclesInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
+  actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
+  addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  auth0Id?: InputMaybe<Scalars['String']>;
+  bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
+  businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
+  chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
+  createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  demId?: InputMaybe<Scalars['String']>;
+  disabled?: InputMaybe<Scalars['Boolean']>;
+  email: Scalars['String'];
+  expoPushTokens?: InputMaybe<ExpoPushTokenCreateNestedManyWithoutUserInput>;
+  fullName: Scalars['String'];
+  groups?: InputMaybe<GroupCreateNestedManyWithoutUsersInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutUploadedByInput>;
+  impressions?: InputMaybe<ImpressionCreateNestedManyWithoutUserInput>;
+  incidentEmail?: InputMaybe<Scalars['Boolean']>;
+  incidentPush?: InputMaybe<Scalars['Boolean']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
+  intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutCreatedByInput>;
+  ipAddress?: InputMaybe<Scalars['String']>;
+  mentionedUpdated?: InputMaybe<UpdateCreateNestedManyWithoutMentionedUsersInput>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
+  messagePush?: InputMaybe<Scalars['Boolean']>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
+  newUser?: InputMaybe<Scalars['Boolean']>;
+  offenderEmail?: InputMaybe<Scalars['Boolean']>;
+  offenderPush?: InputMaybe<Scalars['Boolean']>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutCreatedByInput>;
+  onboardSteps?: InputMaybe<OnboardSteps>;
+  oneSignalIds?: InputMaybe<OneSignalIdCreateNestedManyWithoutUserInput>;
+  organisation: Scalars['String'];
+  platform?: InputMaybe<Scalars['String']>;
+  publicName?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
+  recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
+  reference?: InputMaybe<Scalars['Int']>;
+  schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
+  subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
+  subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -32558,11 +33112,13 @@ export type UserCreateWithoutTagsInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -32615,11 +33171,13 @@ export type UserCreateWithoutUserTermsInput = {
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
   reference?: InputMaybe<Scalars['Int']>;
   schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
   subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
   termsSigned?: InputMaybe<Scalars['Boolean']>;
   timeSigned?: InputMaybe<Scalars['DateTime']>;
@@ -32695,11 +33253,13 @@ export type UserOrderByWithRelationInput = {
   recycledItems?: InputMaybe<RecycledItemOrderByRelationAggregateInput>;
   reference?: InputMaybe<SortOrder>;
   schemes?: InputMaybe<UserSchemeOrderByRelationAggregateInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupOrderByRelationAggregateInput>;
   subscribedIncidentOnly?: InputMaybe<SortOrder>;
   subscribedIncidents?: InputMaybe<IncidentOrderByRelationAggregateInput>;
   subscribedInvestigations?: InputMaybe<InvestigationOrderByRelationAggregateInput>;
   subscribedOffenderOnly?: InputMaybe<SortOrder>;
   subscribedOffenders?: InputMaybe<OffenderOrderByRelationAggregateInput>;
+  subscribedVehicles?: InputMaybe<VehicleOrderByRelationAggregateInput>;
   tags?: InputMaybe<TagOrderByRelationAggregateInput>;
   termsSigned?: InputMaybe<SortOrder>;
   timeSigned?: InputMaybe<SortOrder>;
@@ -33256,11 +33816,13 @@ export type UserUpdateInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -33323,6 +33885,11 @@ export type UserUpdateManyWithWhereWithoutMessageMentionsInput = {
   where: UserScalarWhereInput;
 };
 
+export type UserUpdateManyWithWhereWithoutSubscribedCrimeGroupsInput = {
+  data: UserUpdateManyMutationInput;
+  where: UserScalarWhereInput;
+};
+
 export type UserUpdateManyWithWhereWithoutSubscribedIncidentsInput = {
   data: UserUpdateManyMutationInput;
   where: UserScalarWhereInput;
@@ -33334,6 +33901,11 @@ export type UserUpdateManyWithWhereWithoutSubscribedInvestigationsInput = {
 };
 
 export type UserUpdateManyWithWhereWithoutSubscribedOffendersInput = {
+  data: UserUpdateManyMutationInput;
+  where: UserScalarWhereInput;
+};
+
+export type UserUpdateManyWithWhereWithoutSubscribedVehiclesInput = {
   data: UserUpdateManyMutationInput;
   where: UserScalarWhereInput;
 };
@@ -33426,6 +33998,27 @@ export type UserUpdateManyWithoutMessageMentionsNestedInput = {
   >;
 };
 
+export type UserUpdateManyWithoutSubscribedCrimeGroupsNestedInput = {
+  connect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<UserCreateOrConnectWithoutSubscribedCrimeGroupsInput>
+  >;
+  create?: InputMaybe<Array<UserCreateWithoutSubscribedCrimeGroupsInput>>;
+  delete?: InputMaybe<Array<UserWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<UserScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  set?: InputMaybe<Array<UserWhereUniqueInput>>;
+  update?: InputMaybe<
+    Array<UserUpdateWithWhereUniqueWithoutSubscribedCrimeGroupsInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<UserUpdateManyWithWhereWithoutSubscribedCrimeGroupsInput>
+  >;
+  upsert?: InputMaybe<
+    Array<UserUpsertWithWhereUniqueWithoutSubscribedCrimeGroupsInput>
+  >;
+};
+
 export type UserUpdateManyWithoutSubscribedIncidentsNestedInput = {
   connect?: InputMaybe<Array<UserWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<
@@ -33486,6 +34079,27 @@ export type UserUpdateManyWithoutSubscribedOffendersNestedInput = {
   >;
   upsert?: InputMaybe<
     Array<UserUpsertWithWhereUniqueWithoutSubscribedOffendersInput>
+  >;
+};
+
+export type UserUpdateManyWithoutSubscribedVehiclesNestedInput = {
+  connect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<UserCreateOrConnectWithoutSubscribedVehiclesInput>
+  >;
+  create?: InputMaybe<Array<UserCreateWithoutSubscribedVehiclesInput>>;
+  delete?: InputMaybe<Array<UserWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<UserScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  set?: InputMaybe<Array<UserWhereUniqueInput>>;
+  update?: InputMaybe<
+    Array<UserUpdateWithWhereUniqueWithoutSubscribedVehiclesInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<UserUpdateManyWithWhereWithoutSubscribedVehiclesInput>
+  >;
+  upsert?: InputMaybe<
+    Array<UserUpsertWithWhereUniqueWithoutSubscribedVehiclesInput>
   >;
 };
 
@@ -33677,6 +34291,11 @@ export type UserUpdateWithWhereUniqueWithoutMessageMentionsInput = {
   where: UserWhereUniqueInput;
 };
 
+export type UserUpdateWithWhereUniqueWithoutSubscribedCrimeGroupsInput = {
+  data: UserUpdateWithoutSubscribedCrimeGroupsInput;
+  where: UserWhereUniqueInput;
+};
+
 export type UserUpdateWithWhereUniqueWithoutSubscribedIncidentsInput = {
   data: UserUpdateWithoutSubscribedIncidentsInput;
   where: UserWhereUniqueInput;
@@ -33689,6 +34308,11 @@ export type UserUpdateWithWhereUniqueWithoutSubscribedInvestigationsInput = {
 
 export type UserUpdateWithWhereUniqueWithoutSubscribedOffendersInput = {
   data: UserUpdateWithoutSubscribedOffendersInput;
+  where: UserWhereUniqueInput;
+};
+
+export type UserUpdateWithWhereUniqueWithoutSubscribedVehiclesInput = {
+  data: UserUpdateWithoutSubscribedVehiclesInput;
   where: UserWhereUniqueInput;
 };
 
@@ -33741,11 +34365,13 @@ export type UserUpdateWithoutActionsByUserInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -33798,11 +34424,13 @@ export type UserUpdateWithoutActionsInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -33855,11 +34483,13 @@ export type UserUpdateWithoutAddressesInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -33912,11 +34542,13 @@ export type UserUpdateWithoutArticlesInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -33969,11 +34601,13 @@ export type UserUpdateWithoutBansInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -34026,11 +34660,13 @@ export type UserUpdateWithoutBusinessesInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -34083,11 +34719,13 @@ export type UserUpdateWithoutChatsInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -34140,11 +34778,13 @@ export type UserUpdateWithoutCreatedArticlesInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -34197,11 +34837,13 @@ export type UserUpdateWithoutCreatedTagsInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -34254,11 +34896,13 @@ export type UserUpdateWithoutCreatedUpdatesInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -34311,11 +34955,13 @@ export type UserUpdateWithoutGroupsInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -34368,11 +35014,13 @@ export type UserUpdateWithoutImagesInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -34425,11 +35073,13 @@ export type UserUpdateWithoutImpressionsInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -34482,11 +35132,13 @@ export type UserUpdateWithoutIncidentsInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -34539,11 +35191,13 @@ export type UserUpdateWithoutIntelInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -34596,11 +35250,13 @@ export type UserUpdateWithoutInvestigationsInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -34653,11 +35309,13 @@ export type UserUpdateWithoutMentionedUpdatedInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -34710,11 +35368,13 @@ export type UserUpdateWithoutMessageMentionsInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -34767,11 +35427,13 @@ export type UserUpdateWithoutMessagesInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -34824,11 +35486,13 @@ export type UserUpdateWithoutOffendersInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -34881,11 +35545,13 @@ export type UserUpdateWithoutRecycledItemsInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -34938,11 +35604,72 @@ export type UserUpdateWithoutSchemesInput = {
   recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
+  termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploaded?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  userTerms?: InputMaybe<UserTermUpdateManyWithoutUserNestedInput>;
+};
+
+export type UserUpdateWithoutSubscribedCrimeGroupsInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
+  actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
+  addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
+  businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
+  chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
+  createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  email?: InputMaybe<StringFieldUpdateOperationsInput>;
+  expoPushTokens?: InputMaybe<ExpoPushTokenUpdateManyWithoutUserNestedInput>;
+  fullName?: InputMaybe<StringFieldUpdateOperationsInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutUsersNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutUploadedByNestedInput>;
+  impressions?: InputMaybe<ImpressionUpdateManyWithoutUserNestedInput>;
+  incidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidentPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByNestedInput>;
+  intel?: InputMaybe<IntelUpdateManyWithoutCreatedByNestedInput>;
+  investigations?: InputMaybe<InvestigationUpdateManyWithoutCreatedByNestedInput>;
+  ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  mentionedUpdated?: InputMaybe<UpdateUpdateManyWithoutMentionedUsersNestedInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsNestedInput>;
+  messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutFromNestedInput>;
+  newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutCreatedByNestedInput>;
+  onboardSteps?: InputMaybe<EnumOnboardStepsFieldUpdateOperationsInput>;
+  oneSignalIds?: InputMaybe<OneSignalIdUpdateManyWithoutUserNestedInput>;
+  organisation?: InputMaybe<StringFieldUpdateOperationsInput>;
+  platform?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  publicName?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -34996,10 +35723,12 @@ export type UserUpdateWithoutSubscribedIncidentsInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -35053,10 +35782,12 @@ export type UserUpdateWithoutSubscribedInvestigationsInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -35110,10 +35841,71 @@ export type UserUpdateWithoutSubscribedOffendersInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
+  termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploaded?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  userTerms?: InputMaybe<UserTermUpdateManyWithoutUserNestedInput>;
+};
+
+export type UserUpdateWithoutSubscribedVehiclesInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
+  actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
+  addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
+  businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
+  chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
+  createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  email?: InputMaybe<StringFieldUpdateOperationsInput>;
+  expoPushTokens?: InputMaybe<ExpoPushTokenUpdateManyWithoutUserNestedInput>;
+  fullName?: InputMaybe<StringFieldUpdateOperationsInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutUsersNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutUploadedByNestedInput>;
+  impressions?: InputMaybe<ImpressionUpdateManyWithoutUserNestedInput>;
+  incidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidentPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByNestedInput>;
+  intel?: InputMaybe<IntelUpdateManyWithoutCreatedByNestedInput>;
+  investigations?: InputMaybe<InvestigationUpdateManyWithoutCreatedByNestedInput>;
+  ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  mentionedUpdated?: InputMaybe<UpdateUpdateManyWithoutMentionedUsersNestedInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsNestedInput>;
+  messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutFromNestedInput>;
+  newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutCreatedByNestedInput>;
+  onboardSteps?: InputMaybe<EnumOnboardStepsFieldUpdateOperationsInput>;
+  oneSignalIds?: InputMaybe<OneSignalIdUpdateManyWithoutUserNestedInput>;
+  organisation?: InputMaybe<StringFieldUpdateOperationsInput>;
+  platform?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  publicName?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -35167,11 +35959,13 @@ export type UserUpdateWithoutTagsInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -35224,11 +36018,13 @@ export type UserUpdateWithoutUserTermsInput = {
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
   subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
   termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
   timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -35266,6 +36062,12 @@ export type UserUpsertWithWhereUniqueWithoutMessageMentionsInput = {
   where: UserWhereUniqueInput;
 };
 
+export type UserUpsertWithWhereUniqueWithoutSubscribedCrimeGroupsInput = {
+  create: UserCreateWithoutSubscribedCrimeGroupsInput;
+  update: UserUpdateWithoutSubscribedCrimeGroupsInput;
+  where: UserWhereUniqueInput;
+};
+
 export type UserUpsertWithWhereUniqueWithoutSubscribedIncidentsInput = {
   create: UserCreateWithoutSubscribedIncidentsInput;
   update: UserUpdateWithoutSubscribedIncidentsInput;
@@ -35281,6 +36083,12 @@ export type UserUpsertWithWhereUniqueWithoutSubscribedInvestigationsInput = {
 export type UserUpsertWithWhereUniqueWithoutSubscribedOffendersInput = {
   create: UserCreateWithoutSubscribedOffendersInput;
   update: UserUpdateWithoutSubscribedOffendersInput;
+  where: UserWhereUniqueInput;
+};
+
+export type UserUpsertWithWhereUniqueWithoutSubscribedVehiclesInput = {
+  create: UserCreateWithoutSubscribedVehiclesInput;
+  update: UserUpdateWithoutSubscribedVehiclesInput;
   where: UserWhereUniqueInput;
 };
 
@@ -35428,11 +36236,13 @@ export type UserWhereInput = {
   recycledItems?: InputMaybe<RecycledItemListRelationFilter>;
   reference?: InputMaybe<IntNullableFilter>;
   schemes?: InputMaybe<UserSchemeListRelationFilter>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupListRelationFilter>;
   subscribedIncidentOnly?: InputMaybe<BoolFilter>;
   subscribedIncidents?: InputMaybe<IncidentListRelationFilter>;
   subscribedInvestigations?: InputMaybe<InvestigationListRelationFilter>;
   subscribedOffenderOnly?: InputMaybe<BoolFilter>;
   subscribedOffenders?: InputMaybe<OffenderListRelationFilter>;
+  subscribedVehicles?: InputMaybe<VehicleListRelationFilter>;
   tags?: InputMaybe<TagListRelationFilter>;
   termsSigned?: InputMaybe<BoolFilter>;
   timeSigned?: InputMaybe<DateTimeNullableFilter>;
@@ -35472,10 +36282,14 @@ export type Vehicle = {
   reference?: Maybe<Scalars['Int']>;
   registration?: Maybe<Scalars['String']>;
   schemes: Array<Scheme>;
+  subscribed?: Maybe<Scalars['Boolean']>;
+  subscribedUsers: Array<User>;
   totalCrimeGroups?: Maybe<Scalars['Int']>;
   totalIncidents?: Maybe<Scalars['Int']>;
   totalOffenders?: Maybe<Scalars['Int']>;
+  totalUpdates?: Maybe<Scalars['Int']>;
   updatedAt: Scalars['DateTime'];
+  updates: Array<Update>;
 };
 
 export type VehicleActionsArgs = {
@@ -35520,6 +36334,22 @@ export type VehicleSchemesArgs = {
   before?: InputMaybe<SchemeWhereUniqueInput>;
   first?: InputMaybe<Scalars['Int']>;
   last?: InputMaybe<Scalars['Int']>;
+};
+
+export type VehicleSubscribedUsersArgs = {
+  after?: InputMaybe<UserWhereUniqueInput>;
+  before?: InputMaybe<UserWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type VehicleUpdatesArgs = {
+  after?: InputMaybe<UpdateWhereUniqueInput>;
+  before?: InputMaybe<UpdateWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<UpdateOrderByWithRelationInput>>;
+  where?: InputMaybe<UpdateWhereInput>;
 };
 
 export type VehicleCreateNestedManyWithoutCrimeGroupInput = {
@@ -35584,10 +36414,24 @@ export type VehicleCreateNestedManyWithoutSchemesInput = {
   create?: InputMaybe<Array<VehicleCreateWithoutSchemesInput>>;
 };
 
+export type VehicleCreateNestedManyWithoutSubscribedUsersInput = {
+  connect?: InputMaybe<Array<VehicleWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<VehicleCreateOrConnectWithoutSubscribedUsersInput>
+  >;
+  create?: InputMaybe<Array<VehicleCreateWithoutSubscribedUsersInput>>;
+};
+
 export type VehicleCreateNestedOneWithoutActionsInput = {
   connect?: InputMaybe<VehicleWhereUniqueInput>;
   connectOrCreate?: InputMaybe<VehicleCreateOrConnectWithoutActionsInput>;
   create?: InputMaybe<VehicleCreateWithoutActionsInput>;
+};
+
+export type VehicleCreateNestedOneWithoutUpdatesInput = {
+  connect?: InputMaybe<VehicleWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<VehicleCreateOrConnectWithoutUpdatesInput>;
+  create?: InputMaybe<VehicleCreateWithoutUpdatesInput>;
 };
 
 export type VehicleCreateOrConnectWithoutActionsInput = {
@@ -35635,6 +36479,16 @@ export type VehicleCreateOrConnectWithoutSchemesInput = {
   where: VehicleWhereUniqueInput;
 };
 
+export type VehicleCreateOrConnectWithoutSubscribedUsersInput = {
+  create: VehicleCreateWithoutSubscribedUsersInput;
+  where: VehicleWhereUniqueInput;
+};
+
+export type VehicleCreateOrConnectWithoutUpdatesInput = {
+  create: VehicleCreateWithoutUpdatesInput;
+  where: VehicleWhereUniqueInput;
+};
+
 export type VehicleCreateWithoutActionsInput = {
   colour?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -35651,7 +36505,9 @@ export type VehicleCreateWithoutActionsInput = {
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutVehiclesInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedVehiclesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  updates?: InputMaybe<UpdateCreateNestedManyWithoutVehicleInput>;
 };
 
 export type VehicleCreateWithoutCrimeGroupInput = {
@@ -35670,7 +36526,9 @@ export type VehicleCreateWithoutCrimeGroupInput = {
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutVehiclesInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedVehiclesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  updates?: InputMaybe<UpdateCreateNestedManyWithoutVehicleInput>;
 };
 
 export type VehicleCreateWithoutImagesInput = {
@@ -35689,7 +36547,9 @@ export type VehicleCreateWithoutImagesInput = {
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutVehiclesInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedVehiclesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  updates?: InputMaybe<UpdateCreateNestedManyWithoutVehicleInput>;
 };
 
 export type VehicleCreateWithoutIncidentsInput = {
@@ -35708,7 +36568,9 @@ export type VehicleCreateWithoutIncidentsInput = {
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutVehiclesInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedVehiclesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  updates?: InputMaybe<UpdateCreateNestedManyWithoutVehicleInput>;
 };
 
 export type VehicleCreateWithoutInvestigationsInput = {
@@ -35727,7 +36589,9 @@ export type VehicleCreateWithoutInvestigationsInput = {
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutVehiclesInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedVehiclesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  updates?: InputMaybe<UpdateCreateNestedManyWithoutVehicleInput>;
 };
 
 export type VehicleCreateWithoutLinkedUpdatesInput = {
@@ -35746,7 +36610,9 @@ export type VehicleCreateWithoutLinkedUpdatesInput = {
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutVehiclesInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedVehiclesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  updates?: InputMaybe<UpdateCreateNestedManyWithoutVehicleInput>;
 };
 
 export type VehicleCreateWithoutMessagesInput = {
@@ -35765,7 +36631,9 @@ export type VehicleCreateWithoutMessagesInput = {
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutVehiclesInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedVehiclesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  updates?: InputMaybe<UpdateCreateNestedManyWithoutVehicleInput>;
 };
 
 export type VehicleCreateWithoutOffendersInput = {
@@ -35784,7 +36652,9 @@ export type VehicleCreateWithoutOffendersInput = {
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutVehiclesInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedVehiclesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  updates?: InputMaybe<UpdateCreateNestedManyWithoutVehicleInput>;
 };
 
 export type VehicleCreateWithoutSchemesInput = {
@@ -35803,6 +36673,50 @@ export type VehicleCreateWithoutSchemesInput = {
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
   reference?: InputMaybe<Scalars['Int']>;
   registration?: InputMaybe<Scalars['String']>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedVehiclesInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  updates?: InputMaybe<UpdateCreateNestedManyWithoutVehicleInput>;
+};
+
+export type VehicleCreateWithoutSubscribedUsersInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutVehicleInput>;
+  colour?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutVehiclesInput>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutVehiclesInput>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutVehiclesInput>;
+  linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedVehiclesInput>;
+  make?: InputMaybe<Scalars['String']>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutVehiclesInput>;
+  model?: InputMaybe<Scalars['String']>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
+  reference?: InputMaybe<Scalars['Int']>;
+  registration?: InputMaybe<Scalars['String']>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutVehiclesInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  updates?: InputMaybe<UpdateCreateNestedManyWithoutVehicleInput>;
+};
+
+export type VehicleCreateWithoutUpdatesInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutVehicleInput>;
+  colour?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutVehiclesInput>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutVehiclesInput>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutVehiclesInput>;
+  linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedVehiclesInput>;
+  make?: InputMaybe<Scalars['String']>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutVehiclesInput>;
+  model?: InputMaybe<Scalars['String']>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
+  reference?: InputMaybe<Scalars['Int']>;
+  registration?: InputMaybe<Scalars['String']>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutVehiclesInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedVehiclesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -35833,7 +36747,9 @@ export type VehicleOrderByWithRelationInput = {
   reference?: InputMaybe<SortOrder>;
   registration?: InputMaybe<SortOrder>;
   schemes?: InputMaybe<SchemeOrderByRelationAggregateInput>;
+  subscribedUsers?: InputMaybe<UserOrderByRelationAggregateInput>;
   updatedAt?: InputMaybe<SortOrder>;
+  updates?: InputMaybe<UpdateOrderByRelationAggregateInput>;
 };
 
 export type VehicleScalarWhereInput = {
@@ -35897,6 +36813,11 @@ export type VehicleUpdateManyWithWhereWithoutOffendersInput = {
 };
 
 export type VehicleUpdateManyWithWhereWithoutSchemesInput = {
+  data: VehicleUpdateManyMutationInput;
+  where: VehicleScalarWhereInput;
+};
+
+export type VehicleUpdateManyWithWhereWithoutSubscribedUsersInput = {
   data: VehicleUpdateManyMutationInput;
   where: VehicleScalarWhereInput;
 };
@@ -36043,6 +36964,27 @@ export type VehicleUpdateManyWithoutSchemesNestedInput = {
   upsert?: InputMaybe<Array<VehicleUpsertWithWhereUniqueWithoutSchemesInput>>;
 };
 
+export type VehicleUpdateManyWithoutSubscribedUsersNestedInput = {
+  connect?: InputMaybe<Array<VehicleWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<VehicleCreateOrConnectWithoutSubscribedUsersInput>
+  >;
+  create?: InputMaybe<Array<VehicleCreateWithoutSubscribedUsersInput>>;
+  delete?: InputMaybe<Array<VehicleWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<VehicleScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<VehicleWhereUniqueInput>>;
+  set?: InputMaybe<Array<VehicleWhereUniqueInput>>;
+  update?: InputMaybe<
+    Array<VehicleUpdateWithWhereUniqueWithoutSubscribedUsersInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<VehicleUpdateManyWithWhereWithoutSubscribedUsersInput>
+  >;
+  upsert?: InputMaybe<
+    Array<VehicleUpsertWithWhereUniqueWithoutSubscribedUsersInput>
+  >;
+};
+
 export type VehicleUpdateOneWithoutActionsNestedInput = {
   connect?: InputMaybe<VehicleWhereUniqueInput>;
   connectOrCreate?: InputMaybe<VehicleCreateOrConnectWithoutActionsInput>;
@@ -36051,6 +36993,16 @@ export type VehicleUpdateOneWithoutActionsNestedInput = {
   disconnect?: InputMaybe<Scalars['Boolean']>;
   update?: InputMaybe<VehicleUpdateWithoutActionsInput>;
   upsert?: InputMaybe<VehicleUpsertWithoutActionsInput>;
+};
+
+export type VehicleUpdateOneWithoutUpdatesNestedInput = {
+  connect?: InputMaybe<VehicleWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<VehicleCreateOrConnectWithoutUpdatesInput>;
+  create?: InputMaybe<VehicleCreateWithoutUpdatesInput>;
+  delete?: InputMaybe<Scalars['Boolean']>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+  update?: InputMaybe<VehicleUpdateWithoutUpdatesInput>;
+  upsert?: InputMaybe<VehicleUpsertWithoutUpdatesInput>;
 };
 
 export type VehicleUpdateWithWhereUniqueWithoutCrimeGroupInput = {
@@ -36093,6 +37045,11 @@ export type VehicleUpdateWithWhereUniqueWithoutSchemesInput = {
   where: VehicleWhereUniqueInput;
 };
 
+export type VehicleUpdateWithWhereUniqueWithoutSubscribedUsersInput = {
+  data: VehicleUpdateWithoutSubscribedUsersInput;
+  where: VehicleWhereUniqueInput;
+};
+
 export type VehicleUpdateWithoutActionsInput = {
   colour?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -36109,7 +37066,9 @@ export type VehicleUpdateWithoutActionsInput = {
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutVehiclesNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedVehiclesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  updates?: InputMaybe<UpdateUpdateManyWithoutVehicleNestedInput>;
 };
 
 export type VehicleUpdateWithoutCrimeGroupInput = {
@@ -36128,7 +37087,9 @@ export type VehicleUpdateWithoutCrimeGroupInput = {
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutVehiclesNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedVehiclesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  updates?: InputMaybe<UpdateUpdateManyWithoutVehicleNestedInput>;
 };
 
 export type VehicleUpdateWithoutImagesInput = {
@@ -36147,7 +37108,9 @@ export type VehicleUpdateWithoutImagesInput = {
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutVehiclesNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedVehiclesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  updates?: InputMaybe<UpdateUpdateManyWithoutVehicleNestedInput>;
 };
 
 export type VehicleUpdateWithoutIncidentsInput = {
@@ -36166,7 +37129,9 @@ export type VehicleUpdateWithoutIncidentsInput = {
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutVehiclesNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedVehiclesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  updates?: InputMaybe<UpdateUpdateManyWithoutVehicleNestedInput>;
 };
 
 export type VehicleUpdateWithoutInvestigationsInput = {
@@ -36185,7 +37150,9 @@ export type VehicleUpdateWithoutInvestigationsInput = {
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutVehiclesNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedVehiclesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  updates?: InputMaybe<UpdateUpdateManyWithoutVehicleNestedInput>;
 };
 
 export type VehicleUpdateWithoutLinkedUpdatesInput = {
@@ -36204,7 +37171,9 @@ export type VehicleUpdateWithoutLinkedUpdatesInput = {
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutVehiclesNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedVehiclesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  updates?: InputMaybe<UpdateUpdateManyWithoutVehicleNestedInput>;
 };
 
 export type VehicleUpdateWithoutMessagesInput = {
@@ -36223,7 +37192,9 @@ export type VehicleUpdateWithoutMessagesInput = {
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutVehiclesNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedVehiclesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  updates?: InputMaybe<UpdateUpdateManyWithoutVehicleNestedInput>;
 };
 
 export type VehicleUpdateWithoutOffendersInput = {
@@ -36242,7 +37213,9 @@ export type VehicleUpdateWithoutOffendersInput = {
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutVehiclesNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedVehiclesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  updates?: InputMaybe<UpdateUpdateManyWithoutVehicleNestedInput>;
 };
 
 export type VehicleUpdateWithoutSchemesInput = {
@@ -36261,6 +37234,50 @@ export type VehicleUpdateWithoutSchemesInput = {
   offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
   reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedVehiclesNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  updates?: InputMaybe<UpdateUpdateManyWithoutVehicleNestedInput>;
+};
+
+export type VehicleUpdateWithoutSubscribedUsersInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutVehicleNestedInput>;
+  colour?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutVehiclesNestedInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutVehiclesNestedInput>;
+  investigations?: InputMaybe<InvestigationUpdateManyWithoutVehiclesNestedInput>;
+  linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedVehiclesNestedInput>;
+  make?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutVehiclesNestedInput>;
+  model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutVehiclesNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  updates?: InputMaybe<UpdateUpdateManyWithoutVehicleNestedInput>;
+};
+
+export type VehicleUpdateWithoutUpdatesInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutVehicleNestedInput>;
+  colour?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutVehiclesNestedInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutVehiclesNestedInput>;
+  investigations?: InputMaybe<InvestigationUpdateManyWithoutVehiclesNestedInput>;
+  linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedVehiclesNestedInput>;
+  make?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutVehiclesNestedInput>;
+  model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutVehiclesNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedVehiclesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
@@ -36312,9 +37329,20 @@ export type VehicleUpsertWithWhereUniqueWithoutSchemesInput = {
   where: VehicleWhereUniqueInput;
 };
 
+export type VehicleUpsertWithWhereUniqueWithoutSubscribedUsersInput = {
+  create: VehicleCreateWithoutSubscribedUsersInput;
+  update: VehicleUpdateWithoutSubscribedUsersInput;
+  where: VehicleWhereUniqueInput;
+};
+
 export type VehicleUpsertWithoutActionsInput = {
   create: VehicleCreateWithoutActionsInput;
   update: VehicleUpdateWithoutActionsInput;
+};
+
+export type VehicleUpsertWithoutUpdatesInput = {
+  create: VehicleCreateWithoutUpdatesInput;
+  update: VehicleUpdateWithoutUpdatesInput;
 };
 
 export type VehicleWhereInput = {
@@ -36337,7 +37365,9 @@ export type VehicleWhereInput = {
   reference?: InputMaybe<IntNullableFilter>;
   registration?: InputMaybe<StringNullableFilter>;
   schemes?: InputMaybe<SchemeListRelationFilter>;
+  subscribedUsers?: InputMaybe<UserListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+  updates?: InputMaybe<UpdateListRelationFilter>;
 };
 
 export type VehicleWhereUniqueInput = {
@@ -36532,6 +37562,65 @@ export type CreateArticleMutation = {
   } | null;
 };
 
+export type ArticlesQueryVariables = Exact<{
+  where?: InputMaybe<ArticleWhereInput>;
+  orderBy?: InputMaybe<
+    Array<ArticleOrderByWithRelationInput> | ArticleOrderByWithRelationInput
+  >;
+}>;
+
+export type ArticlesQuery = {
+  __typename?: 'Query';
+  articles: Array<{
+    __typename?: 'Article';
+    previewImage?: string | null;
+    previewText?: string | null;
+    priority: ArticlePriority;
+    title: string;
+    updatedAt: any;
+    id: string;
+    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    createdBy: {
+      __typename?: 'User';
+      fullName: string;
+      id: string;
+      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+    };
+  }>;
+};
+
+export type ListArticlesQueryVariables = Exact<{
+  scheme: SchemeWhereUniqueInput;
+  where?: InputMaybe<ArticleWhereInput>;
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  order?: InputMaybe<ArticleOrderByWithRelationInput>;
+}>;
+
+export type ListArticlesQuery = {
+  __typename?: 'Query';
+  listArticles: {
+    __typename?: 'ListArticles';
+    total: number;
+    articles: Array<{
+      __typename?: 'Article';
+      previewImage?: string | null;
+      previewText?: string | null;
+      priority: ArticlePriority;
+      title: string;
+      updatedAt: any;
+      id: string;
+      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      createdBy: {
+        __typename?: 'User';
+        fullName: string;
+        organisation: string;
+        id: string;
+      };
+    }>;
+  };
+};
+
 export type ArticleQueryVariables = Exact<{
   where: ArticleWhereUniqueInput;
 }>;
@@ -36671,65 +37760,6 @@ export type ArticleQuery = {
       }>;
     }>;
   } | null;
-};
-
-export type ArticlesQueryVariables = Exact<{
-  where?: InputMaybe<ArticleWhereInput>;
-  orderBy?: InputMaybe<
-    Array<ArticleOrderByWithRelationInput> | ArticleOrderByWithRelationInput
-  >;
-}>;
-
-export type ArticlesQuery = {
-  __typename?: 'Query';
-  articles: Array<{
-    __typename?: 'Article';
-    previewImage?: string | null;
-    previewText?: string | null;
-    priority: ArticlePriority;
-    title: string;
-    updatedAt: any;
-    id: string;
-    tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-    createdBy: {
-      __typename?: 'User';
-      fullName: string;
-      id: string;
-      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
-    };
-  }>;
-};
-
-export type ListArticlesQueryVariables = Exact<{
-  scheme: SchemeWhereUniqueInput;
-  where?: InputMaybe<ArticleWhereInput>;
-  take?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  order?: InputMaybe<ArticleOrderByWithRelationInput>;
-}>;
-
-export type ListArticlesQuery = {
-  __typename?: 'Query';
-  listArticles: {
-    __typename?: 'ListArticles';
-    total: number;
-    articles: Array<{
-      __typename?: 'Article';
-      previewImage?: string | null;
-      previewText?: string | null;
-      priority: ArticlePriority;
-      title: string;
-      updatedAt: any;
-      id: string;
-      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
-      createdBy: {
-        __typename?: 'User';
-        fullName: string;
-        organisation: string;
-        id: string;
-      };
-    }>;
-  };
 };
 
 export type CreateUserinAuth0MutationVariables = Exact<{
@@ -37213,6 +38243,16 @@ export type CreateChatMutation = {
             id: string;
             name?: string | null;
           }>;
+          vehicles: Array<{
+            __typename?: 'Vehicle';
+            id: string;
+            reference?: number | null;
+          }>;
+          crimeGroups: Array<{
+            __typename?: 'CrimeGroup';
+            id: string;
+            reference?: number | null;
+          }>;
         }>;
       };
     }>;
@@ -37236,6 +38276,24 @@ export type SchemeChatsQuery = {
   }>;
 };
 
+export type CreateCrimeGroupMutationVariables = Exact<{
+  data: CreateCrimeGroupDataInput;
+}>;
+
+export type CreateCrimeGroupMutation = {
+  __typename?: 'Mutation';
+  createCrimeGroup: {
+    __typename?: 'CrimeGroup';
+    id: string;
+    reference?: number | null;
+    totalIncidents?: number | null;
+    totalOffenders?: number | null;
+    totalRecoveredValue?: number | null;
+    totalTheftSuccess?: number | null;
+    totalValue?: number | null;
+  };
+};
+
 export type DeleteCrimeGroupMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -37243,6 +38301,32 @@ export type DeleteCrimeGroupMutationVariables = Exact<{
 export type DeleteCrimeGroupMutation = {
   __typename?: 'Mutation';
   deleteCrimeGroup?: { __typename?: 'CrimeGroup'; id: string } | null;
+};
+
+export type SubscribeToCrimeGroupMutationVariables = Exact<{
+  where: UniqueId;
+}>;
+
+export type SubscribeToCrimeGroupMutation = {
+  __typename?: 'Mutation';
+  subscribeToCrimeGroup?: {
+    __typename?: 'CrimeGroup';
+    id: string;
+    subscribed?: boolean | null;
+  } | null;
+};
+
+export type UnsubscribeToCrimeGroupMutationVariables = Exact<{
+  where: UniqueId;
+}>;
+
+export type UnsubscribeToCrimeGroupMutation = {
+  __typename?: 'Mutation';
+  unsubscribeToCrimeGroup?: {
+    __typename?: 'CrimeGroup';
+    id: string;
+    subscribed?: boolean | null;
+  } | null;
 };
 
 export type UpdateCrimeGroupMutationVariables = Exact<{
@@ -37313,6 +38397,32 @@ export type UpdateCrimeGroupMutation = {
   } | null;
 };
 
+export type ListCrimeGroupsQueryVariables = Exact<{
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<CrimeGroupWhereInput>;
+  order?: InputMaybe<CrimeGroupOrderByWithRelationInput>;
+}>;
+
+export type ListCrimeGroupsQuery = {
+  __typename?: 'Query';
+  listCrimeGroups: {
+    __typename?: 'ListCrimeGroups';
+    total: number;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      reference?: number | null;
+      totalIncidents?: number | null;
+      totalOffenders?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      alias?: string | null;
+    }>;
+  };
+};
+
 export type CrimeGroupQueryVariables = Exact<{
   where: CrimeGroupWhereUniqueInput;
 }>;
@@ -37328,6 +38438,7 @@ export type CrimeGroupQuery = {
     totalRecoveredValue?: number | null;
     totalTheftSuccess?: number | null;
     totalValue?: number | null;
+    subscribed?: boolean | null;
     alias?: string | null;
     offenders: Array<{
       __typename?: 'Offender';
@@ -37360,6 +38471,7 @@ export type CrimeGroupQuery = {
     vehicles: Array<{
       __typename?: 'Vehicle';
       id: string;
+      reference?: number | null;
       make?: string | null;
       model?: string | null;
       updatedAt: any;
@@ -37388,51 +38500,161 @@ export type CrimeGroupQuery = {
         }>;
       };
     } | null> | null;
-  } | null;
-};
-
-export type CreateCrimeGroupMutationVariables = Exact<{
-  data: CreateCrimeGroupDataInput;
-}>;
-
-export type CreateCrimeGroupMutation = {
-  __typename?: 'Mutation';
-  createCrimeGroup: {
-    __typename?: 'CrimeGroup';
-    id: string;
-    reference?: number | null;
-    totalIncidents?: number | null;
-    totalOffenders?: number | null;
-    totalRecoveredValue?: number | null;
-    totalTheftSuccess?: number | null;
-    totalValue?: number | null;
-  };
-};
-
-export type ListCrimeGroupsQueryVariables = Exact<{
-  take?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<CrimeGroupWhereInput>;
-  order?: InputMaybe<CrimeGroupOrderByWithRelationInput>;
-}>;
-
-export type ListCrimeGroupsQuery = {
-  __typename?: 'Query';
-  listCrimeGroups: {
-    __typename?: 'ListCrimeGroups';
-    total: number;
-    crimeGroups: Array<{
-      __typename?: 'CrimeGroup';
+    updates: Array<{
+      __typename?: 'Update';
       id: string;
-      reference?: number | null;
-      totalIncidents?: number | null;
-      totalOffenders?: number | null;
-      totalRecoveredValue?: number | null;
-      totalTheftSuccess?: number | null;
-      totalValue?: number | null;
-      alias?: string | null;
+      text?: string | null;
+      type: UpdateType;
+      createdAt: any;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+      }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
+      }>;
+      linkedIncidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      linkedOffenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        updatedAt: any;
+        age?: Age | null;
+        build?: Build | null;
+        dateOfBirth?: any | null;
+        name?: string | null;
+        race?: Race | null;
+        gender?: Gender | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
+      replies: Array<{
+        __typename?: 'Update';
+        id: string;
+        text?: string | null;
+        type: UpdateType;
+        createdAt: any;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          card?: string | null;
+        }>;
+        linkedCrimeGroups: Array<{
+          __typename?: 'CrimeGroup';
+          totalOffenders?: number | null;
+          totalIncidents?: number | null;
+          alias?: string | null;
+          id: string;
+          reference?: number | null;
+          totalRecoveredValue?: number | null;
+          totalTheftSuccess?: number | null;
+          totalValue?: number | null;
+          updatedAt: any;
+        }>;
+        linkedVehicles: Array<{
+          __typename?: 'Vehicle';
+          updatedAt: any;
+          totalOffenders?: number | null;
+          registration?: string | null;
+          reference?: number | null;
+          model?: string | null;
+          make?: string | null;
+          id: string;
+          colour?: string | null;
+        }>;
+        linkedIncidents: Array<{
+          __typename?: 'Incident';
+          id: string;
+          subject?: string | null;
+          description: string;
+          dayTime?: string | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+        }>;
+        linkedOffenders: Array<{
+          __typename?: 'Offender';
+          id: string;
+          updatedAt: any;
+          age?: Age | null;
+          build?: Build | null;
+          dateOfBirth?: any | null;
+          name?: string | null;
+          race?: Race | null;
+          gender?: Gender | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+        }>;
+        createdBy: {
+          __typename?: 'User';
+          id: string;
+          fullName: string;
+          businesses: Array<{
+            __typename?: 'Business';
+            id: string;
+            name: string;
+          }>;
+        };
+      }>;
     }>;
-  };
+  } | null;
 };
 
 export type CopyEvidenceMutationVariables = Exact<{
@@ -37546,14 +38768,13 @@ export type ListDemUsersQuery = {
   };
 };
 
-export type CreateDocumentOnInvestigationMutationVariables = Exact<{
-  where: UniqueId;
+export type CreateDocumentMutationVariables = Exact<{
   data: CreateDocument;
 }>;
 
-export type CreateDocumentOnInvestigationMutation = {
+export type CreateDocumentMutation = {
   __typename?: 'Mutation';
-  createDocumentOnInvestigation?: {
+  createDocument?: {
     __typename?: 'Document';
     id: string;
     name: string;
@@ -37561,19 +38782,27 @@ export type CreateDocumentOnInvestigationMutation = {
     url: string;
     createdAt: any;
     updatedAt: any;
-    investigation: Array<{
-      __typename?: 'Investigation';
-      id: string;
-      documents: Array<{
-        __typename?: 'Document';
-        id: string;
-        name: string;
-        url: string;
-        thumbnailUrl?: string | null;
-        tags: Array<{ __typename?: 'Tag'; name: string; id: string }>;
-      }>;
-    }>;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+  } | null;
+};
+
+export type ListDocumentsOnSchemeQueryVariables = Exact<{
+  where: SchemeWhereUniqueInput;
+}>;
+
+export type ListDocumentsOnSchemeQuery = {
+  __typename?: 'Query';
+  scheme?: {
+    __typename?: 'Scheme';
+    documents: Array<{
+      __typename?: 'Document';
+      id: string;
+      name: string;
+      url: string;
+      thumbnailUrl?: string | null;
+      createdAt: any;
+      tags: Array<{ __typename?: 'Tag'; name: string; id: string }>;
+    }>;
   } | null;
 };
 
@@ -38482,6 +39711,29 @@ export type ViewIncidentQuery = {
         optimised?: string | null;
         card?: string | null;
       }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
+      }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
         id: string;
@@ -38534,6 +39786,29 @@ export type ViewIncidentQuery = {
           url?: string | null;
           optimised?: string | null;
           card?: string | null;
+        }>;
+        linkedCrimeGroups: Array<{
+          __typename?: 'CrimeGroup';
+          totalOffenders?: number | null;
+          totalIncidents?: number | null;
+          alias?: string | null;
+          id: string;
+          reference?: number | null;
+          totalRecoveredValue?: number | null;
+          totalTheftSuccess?: number | null;
+          totalValue?: number | null;
+          updatedAt: any;
+        }>;
+        linkedVehicles: Array<{
+          __typename?: 'Vehicle';
+          updatedAt: any;
+          totalOffenders?: number | null;
+          registration?: string | null;
+          reference?: number | null;
+          model?: string | null;
+          make?: string | null;
+          id: string;
+          colour?: string | null;
         }>;
         linkedIncidents: Array<{
           __typename?: 'Incident';
@@ -38815,6 +40090,29 @@ export type ViewInvestigationQuery = {
         optimised?: string | null;
         card?: string | null;
       }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
+      }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
         id: string;
@@ -38867,6 +40165,29 @@ export type ViewInvestigationQuery = {
           url?: string | null;
           optimised?: string | null;
           card?: string | null;
+        }>;
+        linkedCrimeGroups: Array<{
+          __typename?: 'CrimeGroup';
+          totalOffenders?: number | null;
+          totalIncidents?: number | null;
+          alias?: string | null;
+          id: string;
+          reference?: number | null;
+          totalRecoveredValue?: number | null;
+          totalTheftSuccess?: number | null;
+          totalValue?: number | null;
+          updatedAt: any;
+        }>;
+        linkedVehicles: Array<{
+          __typename?: 'Vehicle';
+          updatedAt: any;
+          totalOffenders?: number | null;
+          registration?: string | null;
+          reference?: number | null;
+          model?: string | null;
+          make?: string | null;
+          id: string;
+          colour?: string | null;
         }>;
         linkedIncidents: Array<{
           __typename?: 'Incident';
@@ -39001,6 +40322,35 @@ export type CreateMessageMutation = {
       url?: string | null;
       optimised?: string | null;
     }>;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        url?: string | null;
+      }>;
+    }>;
     incidents: Array<{
       __typename?: 'Incident';
       id: string;
@@ -39069,6 +40419,35 @@ export type UpdateMessageMutation = {
       url?: string | null;
       optimised?: string | null;
     }>;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        url?: string | null;
+      }>;
+    }>;
     incidents: Array<{
       __typename?: 'Incident';
       id: string;
@@ -39133,6 +40512,35 @@ export type ChatMessagesQuery = {
       url?: string | null;
       optimised?: string | null;
     }>;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        url?: string | null;
+      }>;
+    }>;
     incidents: Array<{
       __typename?: 'Incident';
       id: string;
@@ -39191,6 +40599,35 @@ export type MessagesQuery = {
       id: string;
       url?: string | null;
       optimised?: string | null;
+    }>;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        url?: string | null;
+      }>;
     }>;
     incidents: Array<{
       __typename?: 'Incident';
@@ -39253,6 +40690,35 @@ export type MessagesSubscriptionSubscription = {
       id: string;
       url?: string | null;
       optimised?: string | null;
+    }>;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        url?: string | null;
+      }>;
     }>;
     incidents: Array<{
       __typename?: 'Incident';
@@ -39385,6 +40851,15 @@ export type CreateOffenderMutation = {
       }>;
     }>;
   } | null;
+};
+
+export type MergeOffendersMutationVariables = Exact<{
+  data: MergeOffendersInput;
+}>;
+
+export type MergeOffendersMutation = {
+  __typename?: 'Mutation';
+  mergeOffender?: { __typename?: 'Offender'; id: string } | null;
 };
 
 export type RecycleOffenderMutationVariables = Exact<{
@@ -39803,6 +41278,29 @@ export type ViewOffenderQuery = {
         optimised?: string | null;
         card?: string | null;
       }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
+      }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
         id: string;
@@ -39855,6 +41353,29 @@ export type ViewOffenderQuery = {
           url?: string | null;
           optimised?: string | null;
           card?: string | null;
+        }>;
+        linkedCrimeGroups: Array<{
+          __typename?: 'CrimeGroup';
+          totalOffenders?: number | null;
+          totalIncidents?: number | null;
+          alias?: string | null;
+          id: string;
+          reference?: number | null;
+          totalRecoveredValue?: number | null;
+          totalTheftSuccess?: number | null;
+          totalValue?: number | null;
+          updatedAt: any;
+        }>;
+        linkedVehicles: Array<{
+          __typename?: 'Vehicle';
+          updatedAt: any;
+          totalOffenders?: number | null;
+          registration?: string | null;
+          reference?: number | null;
+          model?: string | null;
+          make?: string | null;
+          id: string;
+          colour?: string | null;
         }>;
         linkedIncidents: Array<{
           __typename?: 'Incident';
@@ -40266,6 +41787,19 @@ export type PerformanceReportQuery = {
   } | null;
 };
 
+export type CreateTermsAndConditionsMutationVariables = Exact<{
+  data: CreateTermsInput;
+}>;
+
+export type CreateTermsAndConditionsMutation = {
+  __typename?: 'Mutation';
+  createTermsAndConditions?: {
+    __typename?: 'TermsAndCondition';
+    id: string;
+    content: string;
+  } | null;
+};
+
 export type UpdateSchemeMutationVariables = Exact<{
   where: UniqueId;
   data: SchemeUpdateInput;
@@ -40279,6 +41813,13 @@ export type UpdateSchemeMutation = {
     name: string;
     autoApproveIncidents: boolean;
     autoApproveOffenders: boolean;
+    defaultIncidentEmail: boolean;
+    defaultIncidentPush: boolean;
+    defaultSubscribedIncidentOnly: boolean;
+    defaultSubscribedOffenderOnly: boolean;
+    defaultMessagePush: boolean;
+    defaultOffenderEmail: boolean;
+    defaultOffenderPush: boolean;
     incidentRetention?: number | null;
     offenderRetention?: number | null;
     logo?: {
@@ -40286,6 +41827,22 @@ export type UpdateSchemeMutation = {
       id: string;
       url?: string | null;
       optimised?: string | null;
+    } | null;
+  } | null;
+};
+
+export type CurrentSchemeTermsQueryVariables = Exact<{
+  where: SchemeWhereUniqueInput;
+}>;
+
+export type CurrentSchemeTermsQuery = {
+  __typename?: 'Query';
+  scheme?: {
+    __typename?: 'Scheme';
+    currentTerms?: {
+      __typename?: 'TermsAndCondition';
+      id: string;
+      content: string;
     } | null;
   } | null;
 };
@@ -40302,6 +41859,13 @@ export type SchemeQuery = {
     name: string;
     autoApproveIncidents: boolean;
     autoApproveOffenders: boolean;
+    defaultIncidentEmail: boolean;
+    defaultIncidentPush: boolean;
+    defaultSubscribedIncidentOnly: boolean;
+    defaultSubscribedOffenderOnly: boolean;
+    defaultMessagePush: boolean;
+    defaultOffenderEmail: boolean;
+    defaultOffenderPush: boolean;
     incidentRetention?: number | null;
     offenderRetention?: number | null;
     logo?: {
@@ -40387,14 +41951,14 @@ export type TagsQuery = {
   }>;
 };
 
-export type CreateUpdateOnIncidentMutationVariables = Exact<{
-  incident: UniqueId;
+export type CreateUpdateOnCrimeGroupMutationVariables = Exact<{
+  crimeGroup: UniqueId;
   data: CreateUpdateData;
 }>;
 
-export type CreateUpdateOnIncidentMutation = {
+export type CreateUpdateOnCrimeGroupMutation = {
   __typename?: 'Mutation';
-  createUpdateOnIncident?: {
+  createUpdateOnCrimeGroup?: {
     __typename?: 'Update';
     id: string;
     text?: string | null;
@@ -40406,6 +41970,29 @@ export type CreateUpdateOnIncidentMutation = {
       url?: string | null;
       optimised?: string | null;
       card?: string | null;
+    }>;
+    linkedCrimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    linkedVehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
     }>;
     linkedIncidents: Array<{
       __typename?: 'Incident';
@@ -40455,6 +42042,194 @@ export type CreateUpdateOnIncidentMutation = {
         url?: string | null;
         optimised?: string | null;
         card?: string | null;
+      }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
+      }>;
+      linkedIncidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      linkedOffenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        updatedAt: any;
+        age?: Age | null;
+        build?: Build | null;
+        dateOfBirth?: any | null;
+        name?: string | null;
+        race?: Race | null;
+        gender?: Gender | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
+    }>;
+  } | null;
+};
+
+export type CreateUpdateOnIncidentMutationVariables = Exact<{
+  incident: UniqueId;
+  data: CreateUpdateData;
+}>;
+
+export type CreateUpdateOnIncidentMutation = {
+  __typename?: 'Mutation';
+  createUpdateOnIncident?: {
+    __typename?: 'Update';
+    id: string;
+    text?: string | null;
+    type: UpdateType;
+    createdAt: any;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      card?: string | null;
+    }>;
+    linkedCrimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    linkedVehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        url?: string | null;
+      }>;
+    }>;
+    linkedIncidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+      description: string;
+      dayTime?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
+    linkedOffenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      updatedAt: any;
+      age?: Age | null;
+      build?: Build | null;
+      dateOfBirth?: any | null;
+      name?: string | null;
+      race?: Race | null;
+      gender?: Gender | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+    };
+    replies: Array<{
+      __typename?: 'Update';
+      id: string;
+      text?: string | null;
+      type: UpdateType;
+      createdAt: any;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+      }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
@@ -40550,6 +42325,29 @@ export type CreateUpdateOnInvestigationMutation = {
         optimised?: string | null;
       }>;
     }>;
+    linkedCrimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    linkedVehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+    }>;
     createdBy: {
       __typename?: 'User';
       id: string;
@@ -40568,6 +42366,29 @@ export type CreateUpdateOnInvestigationMutation = {
         url?: string | null;
         optimised?: string | null;
         card?: string | null;
+      }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
@@ -40633,6 +42454,35 @@ export type CreateUpdateOnOffenderMutation = {
       optimised?: string | null;
       card?: string | null;
     }>;
+    linkedCrimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    linkedVehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        url?: string | null;
+      }>;
+    }>;
     linkedIncidents: Array<{
       __typename?: 'Incident';
       id: string;
@@ -40681,6 +42531,188 @@ export type CreateUpdateOnOffenderMutation = {
         url?: string | null;
         optimised?: string | null;
         card?: string | null;
+      }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
+      }>;
+      linkedIncidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      linkedOffenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        updatedAt: any;
+        age?: Age | null;
+        build?: Build | null;
+        dateOfBirth?: any | null;
+        name?: string | null;
+        race?: Race | null;
+        gender?: Gender | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        fullName: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
+    }>;
+  } | null;
+};
+
+export type CreateUpdateOnVehicleMutationVariables = Exact<{
+  vehicle: UniqueId;
+  data: CreateUpdateData;
+}>;
+
+export type CreateUpdateOnVehicleMutation = {
+  __typename?: 'Mutation';
+  createUpdateOnVehicle?: {
+    __typename?: 'Update';
+    id: string;
+    text?: string | null;
+    type: UpdateType;
+    createdAt: any;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      card?: string | null;
+    }>;
+    linkedCrimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      alias?: string | null;
+      id: string;
+      reference?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      updatedAt: any;
+    }>;
+    linkedVehicles: Array<{
+      __typename?: 'Vehicle';
+      updatedAt: any;
+      totalOffenders?: number | null;
+      registration?: string | null;
+      reference?: number | null;
+      model?: string | null;
+      make?: string | null;
+      id: string;
+      colour?: string | null;
+    }>;
+    linkedIncidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+      description: string;
+      dayTime?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
+    linkedOffenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      updatedAt: any;
+      age?: Age | null;
+      build?: Build | null;
+      dateOfBirth?: any | null;
+      name?: string | null;
+      race?: Race | null;
+      gender?: Gender | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+    };
+    replies: Array<{
+      __typename?: 'Update';
+      id: string;
+      text?: string | null;
+      type: UpdateType;
+      createdAt: any;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+      }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
@@ -40770,6 +42802,15 @@ export type SendInviteMutationVariables = Exact<{
 export type SendInviteMutation = {
   __typename?: 'Mutation';
   sendInvite?: { __typename?: 'User'; id: string; newUser: boolean } | null;
+};
+
+export type SignTermsMutationVariables = Exact<{
+  data: SignTermsInput;
+}>;
+
+export type SignTermsMutation = {
+  __typename?: 'Mutation';
+  signTerms?: { __typename?: 'UserTerm'; id: string } | null;
 };
 
 export type UpdateUserMutationVariables = Exact<{
@@ -40863,6 +42904,7 @@ export type CurrentUserQuery = {
         name: string;
         autoApproveIncidents: boolean;
         autoApproveOffenders: boolean;
+        logo?: { __typename?: 'Image'; optimised?: string | null } | null;
       };
     }>;
   } | null;
@@ -40886,6 +42928,13 @@ export type UserQuery = {
     demId?: string | null;
     disabled: boolean;
     newUser: boolean;
+    incidentEmail: boolean;
+    incidentPush: boolean;
+    subscribedIncidentOnly: boolean;
+    subscribedOffenderOnly: boolean;
+    messagePush: boolean;
+    offenderEmail: boolean;
+    offenderPush: boolean;
     businesses: Array<{
       __typename?: 'Business';
       id: string;
@@ -40985,6 +43034,16 @@ export type UpdateUserChatMutation = {
             url?: string | null;
             optimised?: string | null;
           }>;
+          vehicles: Array<{
+            __typename?: 'Vehicle';
+            id: string;
+            reference?: number | null;
+          }>;
+          crimeGroups: Array<{
+            __typename?: 'CrimeGroup';
+            id: string;
+            reference?: number | null;
+          }>;
           incidents: Array<{
             __typename?: 'Incident';
             id: string;
@@ -41014,6 +43073,7 @@ export type UserChatsQuery = {
   user?: {
     __typename?: 'User';
     id: string;
+    totalChats?: number | null;
     chats: Array<{
       __typename?: 'UserChat';
       id: string;
@@ -41054,6 +43114,16 @@ export type UserChatsQuery = {
             __typename?: 'Offender';
             id: string;
             name?: string | null;
+          }>;
+          vehicles: Array<{
+            __typename?: 'Vehicle';
+            id: string;
+            reference?: number | null;
+          }>;
+          crimeGroups: Array<{
+            __typename?: 'CrimeGroup';
+            id: string;
+            reference?: number | null;
           }>;
         }>;
       };
@@ -41179,6 +43249,48 @@ export type UserNewQuery = {
   } | null;
 };
 
+export type CreateVehicleMutationVariables = Exact<{
+  data: CreateVehicleDataInput;
+}>;
+
+export type CreateVehicleMutation = {
+  __typename?: 'Mutation';
+  createVehicle: {
+    __typename?: 'Vehicle';
+    id: string;
+    make?: string | null;
+    model?: string | null;
+    registration?: string | null;
+    totalOffenders?: number | null;
+    totalIncidents?: number | null;
+    totalCrimeGroups?: number | null;
+    reference?: number | null;
+    updatedAt: any;
+    colour?: string | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      optimised?: string | null;
+      url?: string | null;
+    }>;
+    incidents: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+    }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      name?: string | null;
+    }>;
+    crimeGroup: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      reference?: number | null;
+    }>;
+  };
+};
+
 export type DeleteVehicleMutationVariables = Exact<{
   id: Scalars['String'];
 }>;
@@ -41186,6 +43298,32 @@ export type DeleteVehicleMutationVariables = Exact<{
 export type DeleteVehicleMutation = {
   __typename?: 'Mutation';
   deleteVehicle?: { __typename?: 'Vehicle'; id: string } | null;
+};
+
+export type SubscribeToVehicleMutationVariables = Exact<{
+  where: UniqueId;
+}>;
+
+export type SubscribeToVehicleMutation = {
+  __typename?: 'Mutation';
+  subscribeToVehicle?: {
+    __typename?: 'Vehicle';
+    id: string;
+    subscribed?: boolean | null;
+  } | null;
+};
+
+export type UnsubscribeToVehicleMutationVariables = Exact<{
+  where: UniqueId;
+}>;
+
+export type UnsubscribeToVehicleMutation = {
+  __typename?: 'Mutation';
+  unsubscribeToVehicle?: {
+    __typename?: 'Vehicle';
+    id: string;
+    subscribed?: boolean | null;
+  } | null;
 };
 
 export type UpdateVehicleMutationVariables = Exact<{
@@ -41201,10 +43339,17 @@ export type UpdateVehicleMutation = {
     make?: string | null;
     model?: string | null;
     registration?: string | null;
+    reference?: number | null;
     totalOffenders?: number | null;
     totalIncidents?: number | null;
     updatedAt: any;
     colour?: string | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      optimised?: string | null;
+      url?: string | null;
+    }>;
     incidents: Array<{
       __typename?: 'Incident';
       id: string;
@@ -41223,6 +43368,55 @@ export type UpdateVehicleMutation = {
   } | null;
 };
 
+export type ListVehiclesQueryVariables = Exact<{
+  take?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<VehicleWhereInput>;
+  order?: InputMaybe<VehicleOrderByWithRelationInput>;
+}>;
+
+export type ListVehiclesQuery = {
+  __typename?: 'Query';
+  listVehicles: {
+    __typename?: 'ListVehicles';
+    total: number;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      id: string;
+      make?: string | null;
+      model?: string | null;
+      registration?: string | null;
+      totalCrimeGroups?: number | null;
+      totalOffenders?: number | null;
+      totalIncidents?: number | null;
+      reference?: number | null;
+      updatedAt: any;
+      colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        url?: string | null;
+      }>;
+      incidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        subject?: string | null;
+      }>;
+      offenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        name?: string | null;
+      }>;
+      crimeGroup: Array<{
+        __typename?: 'CrimeGroup';
+        id: string;
+        reference?: number | null;
+      }>;
+    }>;
+  };
+};
+
 export type VehicleQueryVariables = Exact<{
   where: VehicleWhereUniqueInput;
 }>;
@@ -41238,8 +43432,16 @@ export type VehicleQuery = {
     totalOffenders?: number | null;
     totalIncidents?: number | null;
     totalCrimeGroups?: number | null;
+    reference?: number | null;
+    subscribed?: boolean | null;
     updatedAt: any;
     colour?: string | null;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      optimised?: string | null;
+      url?: string | null;
+    }>;
     incidents: Array<{
       __typename?: 'Incident';
       id: string;
@@ -41249,15 +43451,7 @@ export type VehicleQuery = {
       recoveredValue?: number | null;
       reference?: number | null;
       policeRef?: string | null;
-      createdBy: {
-        __typename?: 'User';
-        id: string;
-        businesses: Array<{
-          __typename?: 'Business';
-          id: string;
-          name: string;
-        }>;
-      };
+      createdBy: { __typename?: 'User'; id: string; organisation: string };
     }>;
     offenders: Array<{
       __typename?: 'Offender';
@@ -41291,84 +43485,168 @@ export type VehicleQuery = {
       __typename?: 'CrimeGroup';
       id: string;
       reference?: number | null;
-    }>;
-  } | null;
-};
-
-export type CreateVehicleMutationVariables = Exact<{
-  data: CreateVehicleDataInput;
-}>;
-
-export type CreateVehicleMutation = {
-  __typename?: 'Mutation';
-  createVehicle: {
-    __typename?: 'Vehicle';
-    id: string;
-    make?: string | null;
-    model?: string | null;
-    registration?: string | null;
-    totalOffenders?: number | null;
-    totalIncidents?: number | null;
-    updatedAt: any;
-    colour?: string | null;
-    incidents: Array<{
-      __typename?: 'Incident';
-      id: string;
-      subject?: string | null;
-    }>;
-    offenders: Array<{
-      __typename?: 'Offender';
-      id: string;
-      name?: string | null;
-    }>;
-    crimeGroup: Array<{
-      __typename?: 'CrimeGroup';
-      id: string;
-      reference?: number | null;
-    }>;
-  };
-};
-
-export type ListVehiclesQueryVariables = Exact<{
-  take?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<VehicleWhereInput>;
-  order?: InputMaybe<VehicleOrderByWithRelationInput>;
-}>;
-
-export type ListVehiclesQuery = {
-  __typename?: 'Query';
-  listVehicles: {
-    __typename?: 'ListVehicles';
-    total: number;
-    vehicles: Array<{
-      __typename?: 'Vehicle';
-      id: string;
-      make?: string | null;
-      model?: string | null;
-      registration?: string | null;
-      totalCrimeGroups?: number | null;
-      totalOffenders?: number | null;
       totalIncidents?: number | null;
-      updatedAt: any;
-      colour?: string | null;
-      incidents: Array<{
+      totalOffenders?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+      alias?: string | null;
+    }>;
+    updates: Array<{
+      __typename?: 'Update';
+      id: string;
+      text?: string | null;
+      type: UpdateType;
+      createdAt: any;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+      }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
+      }>;
+      linkedIncidents: Array<{
         __typename?: 'Incident';
         id: string;
         subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
       }>;
-      offenders: Array<{
+      linkedOffenders: Array<{
         __typename?: 'Offender';
         id: string;
+        updatedAt: any;
+        age?: Age | null;
+        build?: Build | null;
+        dateOfBirth?: any | null;
         name?: string | null;
+        race?: Race | null;
+        gender?: Gender | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
       }>;
-      crimeGroup: Array<{
-        __typename?: 'CrimeGroup';
+      createdBy: {
+        __typename?: 'User';
         id: string;
-        reference?: number | null;
+        fullName: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
+      replies: Array<{
+        __typename?: 'Update';
+        id: string;
+        text?: string | null;
+        type: UpdateType;
+        createdAt: any;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          card?: string | null;
+        }>;
+        linkedCrimeGroups: Array<{
+          __typename?: 'CrimeGroup';
+          totalOffenders?: number | null;
+          totalIncidents?: number | null;
+          alias?: string | null;
+          id: string;
+          reference?: number | null;
+          totalRecoveredValue?: number | null;
+          totalTheftSuccess?: number | null;
+          totalValue?: number | null;
+          updatedAt: any;
+        }>;
+        linkedVehicles: Array<{
+          __typename?: 'Vehicle';
+          updatedAt: any;
+          totalOffenders?: number | null;
+          registration?: string | null;
+          reference?: number | null;
+          model?: string | null;
+          make?: string | null;
+          id: string;
+          colour?: string | null;
+        }>;
+        linkedIncidents: Array<{
+          __typename?: 'Incident';
+          id: string;
+          subject?: string | null;
+          description: string;
+          dayTime?: string | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+        }>;
+        linkedOffenders: Array<{
+          __typename?: 'Offender';
+          id: string;
+          updatedAt: any;
+          age?: Age | null;
+          build?: Build | null;
+          dateOfBirth?: any | null;
+          name?: string | null;
+          race?: Race | null;
+          gender?: Gender | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+        }>;
+        createdBy: {
+          __typename?: 'User';
+          id: string;
+          fullName: string;
+          businesses: Array<{
+            __typename?: 'Business';
+            id: string;
+            name: string;
+          }>;
+        };
       }>;
     }>;
-  };
+  } | null;
 };
 
 export const ListActionsDocument = gql`
@@ -41638,6 +43916,171 @@ export type CreateArticleMutationOptions = Apollo.BaseMutationOptions<
   CreateArticleMutation,
   CreateArticleMutationVariables
 >;
+export const ArticlesDocument = gql`
+  query Articles(
+    $where: ArticleWhereInput
+    $orderBy: [ArticleOrderByWithRelationInput!]
+  ) {
+    articles(where: $where, orderBy: $orderBy) {
+      previewImage
+      previewText
+      priority
+      tags {
+        id
+        name
+      }
+      createdBy {
+        fullName
+        businesses {
+          id
+          name
+        }
+        id
+      }
+      title
+      updatedAt
+      id
+    }
+  }
+`;
+
+/**
+ * __useArticlesQuery__
+ *
+ * To run a query within a React component, call `useArticlesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useArticlesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useArticlesQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *   },
+ * });
+ */
+export function useArticlesQuery(
+  baseOptions?: Apollo.QueryHookOptions<ArticlesQuery, ArticlesQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ArticlesQuery, ArticlesQueryVariables>(
+    ArticlesDocument,
+    options
+  );
+}
+export function useArticlesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ArticlesQuery,
+    ArticlesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ArticlesQuery, ArticlesQueryVariables>(
+    ArticlesDocument,
+    options
+  );
+}
+export type ArticlesQueryHookResult = ReturnType<typeof useArticlesQuery>;
+export type ArticlesLazyQueryHookResult = ReturnType<
+  typeof useArticlesLazyQuery
+>;
+export type ArticlesQueryResult = Apollo.QueryResult<
+  ArticlesQuery,
+  ArticlesQueryVariables
+>;
+export const ListArticlesDocument = gql`
+  query listArticles(
+    $scheme: SchemeWhereUniqueInput!
+    $where: ArticleWhereInput
+    $take: Int
+    $skip: Int
+    $order: ArticleOrderByWithRelationInput
+  ) {
+    listArticles(
+      where: $where
+      order: $order
+      take: $take
+      skip: $skip
+      scheme: $scheme
+    ) {
+      articles {
+        previewImage
+        previewText
+        priority
+        tags {
+          id
+          name
+        }
+        createdBy {
+          fullName
+          organisation
+          id
+        }
+        title
+        updatedAt
+        id
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useListArticlesQuery__
+ *
+ * To run a query within a React component, call `useListArticlesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListArticlesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListArticlesQuery({
+ *   variables: {
+ *      scheme: // value for 'scheme'
+ *      where: // value for 'where'
+ *      take: // value for 'take'
+ *      skip: // value for 'skip'
+ *      order: // value for 'order'
+ *   },
+ * });
+ */
+export function useListArticlesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListArticlesQuery,
+    ListArticlesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ListArticlesQuery, ListArticlesQueryVariables>(
+    ListArticlesDocument,
+    options
+  );
+}
+export function useListArticlesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListArticlesQuery,
+    ListArticlesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ListArticlesQuery, ListArticlesQueryVariables>(
+    ListArticlesDocument,
+    options
+  );
+}
+export type ListArticlesQueryHookResult = ReturnType<
+  typeof useListArticlesQuery
+>;
+export type ListArticlesLazyQueryHookResult = ReturnType<
+  typeof useListArticlesLazyQuery
+>;
+export type ListArticlesQueryResult = Apollo.QueryResult<
+  ListArticlesQuery,
+  ListArticlesQueryVariables
+>;
 export const ArticleDocument = gql`
   query Article($where: ArticleWhereUniqueInput!) {
     article(where: $where) {
@@ -41823,171 +44266,6 @@ export type ArticleLazyQueryHookResult = ReturnType<typeof useArticleLazyQuery>;
 export type ArticleQueryResult = Apollo.QueryResult<
   ArticleQuery,
   ArticleQueryVariables
->;
-export const ArticlesDocument = gql`
-  query Articles(
-    $where: ArticleWhereInput
-    $orderBy: [ArticleOrderByWithRelationInput!]
-  ) {
-    articles(where: $where, orderBy: $orderBy) {
-      previewImage
-      previewText
-      priority
-      tags {
-        id
-        name
-      }
-      createdBy {
-        fullName
-        businesses {
-          id
-          name
-        }
-        id
-      }
-      title
-      updatedAt
-      id
-    }
-  }
-`;
-
-/**
- * __useArticlesQuery__
- *
- * To run a query within a React component, call `useArticlesQuery` and pass it any options that fit your needs.
- * When your component renders, `useArticlesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useArticlesQuery({
- *   variables: {
- *      where: // value for 'where'
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
-export function useArticlesQuery(
-  baseOptions?: Apollo.QueryHookOptions<ArticlesQuery, ArticlesQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ArticlesQuery, ArticlesQueryVariables>(
-    ArticlesDocument,
-    options
-  );
-}
-export function useArticlesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ArticlesQuery,
-    ArticlesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ArticlesQuery, ArticlesQueryVariables>(
-    ArticlesDocument,
-    options
-  );
-}
-export type ArticlesQueryHookResult = ReturnType<typeof useArticlesQuery>;
-export type ArticlesLazyQueryHookResult = ReturnType<
-  typeof useArticlesLazyQuery
->;
-export type ArticlesQueryResult = Apollo.QueryResult<
-  ArticlesQuery,
-  ArticlesQueryVariables
->;
-export const ListArticlesDocument = gql`
-  query listArticles(
-    $scheme: SchemeWhereUniqueInput!
-    $where: ArticleWhereInput
-    $take: Int
-    $skip: Int
-    $order: ArticleOrderByWithRelationInput
-  ) {
-    listArticles(
-      where: $where
-      order: $order
-      take: $take
-      skip: $skip
-      scheme: $scheme
-    ) {
-      articles {
-        previewImage
-        previewText
-        priority
-        tags {
-          id
-          name
-        }
-        createdBy {
-          fullName
-          organisation
-          id
-        }
-        title
-        updatedAt
-        id
-      }
-      total
-    }
-  }
-`;
-
-/**
- * __useListArticlesQuery__
- *
- * To run a query within a React component, call `useListArticlesQuery` and pass it any options that fit your needs.
- * When your component renders, `useListArticlesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListArticlesQuery({
- *   variables: {
- *      scheme: // value for 'scheme'
- *      where: // value for 'where'
- *      take: // value for 'take'
- *      skip: // value for 'skip'
- *      order: // value for 'order'
- *   },
- * });
- */
-export function useListArticlesQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    ListArticlesQuery,
-    ListArticlesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<ListArticlesQuery, ListArticlesQueryVariables>(
-    ListArticlesDocument,
-    options
-  );
-}
-export function useListArticlesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ListArticlesQuery,
-    ListArticlesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<ListArticlesQuery, ListArticlesQueryVariables>(
-    ListArticlesDocument,
-    options
-  );
-}
-export type ListArticlesQueryHookResult = ReturnType<
-  typeof useListArticlesQuery
->;
-export type ListArticlesLazyQueryHookResult = ReturnType<
-  typeof useListArticlesLazyQuery
->;
-export type ListArticlesQueryResult = Apollo.QueryResult<
-  ListArticlesQuery,
-  ListArticlesQueryVariables
 >;
 export const CreateUserinAuth0Document = gql`
   mutation createUserinAuth0($id: String!, $password: String!) {
@@ -43273,6 +45551,14 @@ export const CreateChatDocument = gql`
               id
               name
             }
+            vehicles {
+              id
+              reference
+            }
+            crimeGroups {
+              id
+              reference
+            }
           }
         }
       }
@@ -43384,6 +45670,62 @@ export type SchemeChatsQueryResult = Apollo.QueryResult<
   SchemeChatsQuery,
   SchemeChatsQueryVariables
 >;
+export const CreateCrimeGroupDocument = gql`
+  mutation CreateCrimeGroup($data: CreateCrimeGroupDataInput!) {
+    createCrimeGroup(data: $data) {
+      id
+      reference
+      totalIncidents
+      totalOffenders
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+    }
+  }
+`;
+export type CreateCrimeGroupMutationFn = Apollo.MutationFunction<
+  CreateCrimeGroupMutation,
+  CreateCrimeGroupMutationVariables
+>;
+
+/**
+ * __useCreateCrimeGroupMutation__
+ *
+ * To run a mutation, you first call `useCreateCrimeGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCrimeGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCrimeGroupMutation, { data, loading, error }] = useCreateCrimeGroupMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateCrimeGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateCrimeGroupMutation,
+    CreateCrimeGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateCrimeGroupMutation,
+    CreateCrimeGroupMutationVariables
+  >(CreateCrimeGroupDocument, options);
+}
+export type CreateCrimeGroupMutationHookResult = ReturnType<
+  typeof useCreateCrimeGroupMutation
+>;
+export type CreateCrimeGroupMutationResult =
+  Apollo.MutationResult<CreateCrimeGroupMutation>;
+export type CreateCrimeGroupMutationOptions = Apollo.BaseMutationOptions<
+  CreateCrimeGroupMutation,
+  CreateCrimeGroupMutationVariables
+>;
 export const DeleteCrimeGroupDocument = gql`
   mutation deleteCrimeGroup($id: String!) {
     deleteCrimeGroup(where: { id: $id }) {
@@ -43433,6 +45775,108 @@ export type DeleteCrimeGroupMutationResult =
 export type DeleteCrimeGroupMutationOptions = Apollo.BaseMutationOptions<
   DeleteCrimeGroupMutation,
   DeleteCrimeGroupMutationVariables
+>;
+export const SubscribeToCrimeGroupDocument = gql`
+  mutation SubscribeToCrimeGroup($where: UniqueId!) {
+    subscribeToCrimeGroup(where: $where) {
+      id
+      subscribed
+    }
+  }
+`;
+export type SubscribeToCrimeGroupMutationFn = Apollo.MutationFunction<
+  SubscribeToCrimeGroupMutation,
+  SubscribeToCrimeGroupMutationVariables
+>;
+
+/**
+ * __useSubscribeToCrimeGroupMutation__
+ *
+ * To run a mutation, you first call `useSubscribeToCrimeGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSubscribeToCrimeGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [subscribeToCrimeGroupMutation, { data, loading, error }] = useSubscribeToCrimeGroupMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useSubscribeToCrimeGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SubscribeToCrimeGroupMutation,
+    SubscribeToCrimeGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    SubscribeToCrimeGroupMutation,
+    SubscribeToCrimeGroupMutationVariables
+  >(SubscribeToCrimeGroupDocument, options);
+}
+export type SubscribeToCrimeGroupMutationHookResult = ReturnType<
+  typeof useSubscribeToCrimeGroupMutation
+>;
+export type SubscribeToCrimeGroupMutationResult =
+  Apollo.MutationResult<SubscribeToCrimeGroupMutation>;
+export type SubscribeToCrimeGroupMutationOptions = Apollo.BaseMutationOptions<
+  SubscribeToCrimeGroupMutation,
+  SubscribeToCrimeGroupMutationVariables
+>;
+export const UnsubscribeToCrimeGroupDocument = gql`
+  mutation UnsubscribeToCrimeGroup($where: UniqueId!) {
+    unsubscribeToCrimeGroup(where: $where) {
+      id
+      subscribed
+    }
+  }
+`;
+export type UnsubscribeToCrimeGroupMutationFn = Apollo.MutationFunction<
+  UnsubscribeToCrimeGroupMutation,
+  UnsubscribeToCrimeGroupMutationVariables
+>;
+
+/**
+ * __useUnsubscribeToCrimeGroupMutation__
+ *
+ * To run a mutation, you first call `useUnsubscribeToCrimeGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnsubscribeToCrimeGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unsubscribeToCrimeGroupMutation, { data, loading, error }] = useUnsubscribeToCrimeGroupMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUnsubscribeToCrimeGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UnsubscribeToCrimeGroupMutation,
+    UnsubscribeToCrimeGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UnsubscribeToCrimeGroupMutation,
+    UnsubscribeToCrimeGroupMutationVariables
+  >(UnsubscribeToCrimeGroupDocument, options);
+}
+export type UnsubscribeToCrimeGroupMutationHookResult = ReturnType<
+  typeof useUnsubscribeToCrimeGroupMutation
+>;
+export type UnsubscribeToCrimeGroupMutationResult =
+  Apollo.MutationResult<UnsubscribeToCrimeGroupMutation>;
+export type UnsubscribeToCrimeGroupMutationOptions = Apollo.BaseMutationOptions<
+  UnsubscribeToCrimeGroupMutation,
+  UnsubscribeToCrimeGroupMutationVariables
 >;
 export const UpdateCrimeGroupDocument = gql`
   mutation updateCrimeGroup(
@@ -43539,177 +45983,6 @@ export type UpdateCrimeGroupMutationOptions = Apollo.BaseMutationOptions<
   UpdateCrimeGroupMutation,
   UpdateCrimeGroupMutationVariables
 >;
-export const CrimeGroupDocument = gql`
-  query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
-    crimeGroup(where: $where) {
-      id
-      reference
-      totalIncidents
-      totalOffenders
-      totalRecoveredValue
-      totalTheftSuccess
-      totalValue
-      alias
-      offenders {
-        id
-        name
-        reference
-        lastActive {
-          id
-          dayTime
-        }
-        hair
-        peculiarities
-        race
-        dateOfBirth
-        dateSource
-        build
-        age
-        gender
-        images {
-          id
-          optimised
-        }
-        totalTheftSuccess
-        totalRecoveredValue
-        totalIncidents
-        totalValue
-      }
-      vehicles {
-        id
-        make
-        model
-        updatedAt
-        colour
-        registration
-        totalOffenders
-        totalIncidents
-        totalCrimeGroups
-      }
-      incidents {
-        id
-        subject
-        dayTime
-        createdBy {
-          id
-          businesses {
-            id
-            name
-          }
-        }
-        value
-        recoveredValue
-        reference
-        policeRef
-      }
-    }
-  }
-`;
-
-/**
- * __useCrimeGroupQuery__
- *
- * To run a query within a React component, call `useCrimeGroupQuery` and pass it any options that fit your needs.
- * When your component renders, `useCrimeGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCrimeGroupQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
-export function useCrimeGroupQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    CrimeGroupQuery,
-    CrimeGroupQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<CrimeGroupQuery, CrimeGroupQueryVariables>(
-    CrimeGroupDocument,
-    options
-  );
-}
-export function useCrimeGroupLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    CrimeGroupQuery,
-    CrimeGroupQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<CrimeGroupQuery, CrimeGroupQueryVariables>(
-    CrimeGroupDocument,
-    options
-  );
-}
-export type CrimeGroupQueryHookResult = ReturnType<typeof useCrimeGroupQuery>;
-export type CrimeGroupLazyQueryHookResult = ReturnType<
-  typeof useCrimeGroupLazyQuery
->;
-export type CrimeGroupQueryResult = Apollo.QueryResult<
-  CrimeGroupQuery,
-  CrimeGroupQueryVariables
->;
-export const CreateCrimeGroupDocument = gql`
-  mutation CreateCrimeGroup($data: CreateCrimeGroupDataInput!) {
-    createCrimeGroup(data: $data) {
-      id
-      reference
-      totalIncidents
-      totalOffenders
-      totalRecoveredValue
-      totalTheftSuccess
-      totalValue
-    }
-  }
-`;
-export type CreateCrimeGroupMutationFn = Apollo.MutationFunction<
-  CreateCrimeGroupMutation,
-  CreateCrimeGroupMutationVariables
->;
-
-/**
- * __useCreateCrimeGroupMutation__
- *
- * To run a mutation, you first call `useCreateCrimeGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateCrimeGroupMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createCrimeGroupMutation, { data, loading, error }] = useCreateCrimeGroupMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
-export function useCreateCrimeGroupMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateCrimeGroupMutation,
-    CreateCrimeGroupMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateCrimeGroupMutation,
-    CreateCrimeGroupMutationVariables
-  >(CreateCrimeGroupDocument, options);
-}
-export type CreateCrimeGroupMutationHookResult = ReturnType<
-  typeof useCreateCrimeGroupMutation
->;
-export type CreateCrimeGroupMutationResult =
-  Apollo.MutationResult<CreateCrimeGroupMutation>;
-export type CreateCrimeGroupMutationOptions = Apollo.BaseMutationOptions<
-  CreateCrimeGroupMutation,
-  CreateCrimeGroupMutationVariables
->;
 export const ListCrimeGroupsDocument = gql`
   query ListCrimeGroups(
     $take: Int
@@ -43785,6 +46058,257 @@ export type ListCrimeGroupsLazyQueryHookResult = ReturnType<
 export type ListCrimeGroupsQueryResult = Apollo.QueryResult<
   ListCrimeGroupsQuery,
   ListCrimeGroupsQueryVariables
+>;
+export const CrimeGroupDocument = gql`
+  query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
+    crimeGroup(where: $where) {
+      id
+      reference
+      totalIncidents
+      totalOffenders
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+      subscribed
+      alias
+      offenders {
+        id
+        name
+        reference
+        lastActive {
+          id
+          dayTime
+        }
+        hair
+        peculiarities
+        race
+        dateOfBirth
+        dateSource
+        build
+        age
+        gender
+        images {
+          id
+          optimised
+        }
+        totalTheftSuccess
+        totalRecoveredValue
+        totalIncidents
+        totalValue
+      }
+      vehicles {
+        id
+        reference
+        make
+        model
+        updatedAt
+        colour
+        registration
+        totalOffenders
+        totalIncidents
+        totalCrimeGroups
+      }
+      incidents {
+        id
+        subject
+        dayTime
+        createdBy {
+          id
+          businesses {
+            id
+            name
+          }
+        }
+        value
+        recoveredValue
+        reference
+        policeRef
+      }
+      updates(orderBy: { createdAt: desc }) {
+        id
+        text
+        type
+        createdAt
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
+        }
+        linkedIncidents {
+          id
+          subject
+          description
+          dayTime
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        linkedOffenders {
+          id
+          updatedAt
+          age
+          build
+          dateOfBirth
+          name
+          race
+          gender
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+        replies {
+          id
+          text
+          type
+          createdAt
+          images {
+            id
+            url
+            optimised
+            card
+          }
+          linkedCrimeGroups {
+            totalOffenders
+            totalIncidents
+            alias
+            id
+            reference
+            totalRecoveredValue
+            totalTheftSuccess
+            totalValue
+            updatedAt
+          }
+          linkedVehicles {
+            updatedAt
+            totalOffenders
+            registration
+            reference
+            model
+            make
+            id
+            colour
+          }
+          linkedIncidents {
+            id
+            subject
+            description
+            dayTime
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          linkedOffenders {
+            id
+            updatedAt
+            age
+            build
+            dateOfBirth
+            name
+            race
+            gender
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          createdBy {
+            id
+            fullName
+            businesses {
+              id
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useCrimeGroupQuery__
+ *
+ * To run a query within a React component, call `useCrimeGroupQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCrimeGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCrimeGroupQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useCrimeGroupQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    CrimeGroupQuery,
+    CrimeGroupQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<CrimeGroupQuery, CrimeGroupQueryVariables>(
+    CrimeGroupDocument,
+    options
+  );
+}
+export function useCrimeGroupLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    CrimeGroupQuery,
+    CrimeGroupQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<CrimeGroupQuery, CrimeGroupQueryVariables>(
+    CrimeGroupDocument,
+    options
+  );
+}
+export type CrimeGroupQueryHookResult = ReturnType<typeof useCrimeGroupQuery>;
+export type CrimeGroupLazyQueryHookResult = ReturnType<
+  typeof useCrimeGroupLazyQuery
+>;
+export type CrimeGroupQueryResult = Apollo.QueryResult<
+  CrimeGroupQuery,
+  CrimeGroupQueryVariables
 >;
 export const CopyEvidenceDocument = gql`
   mutation CopyEvidence($data: ImportDemEvidence!, $where: UniqueId!) {
@@ -44151,26 +46675,10 @@ export type ListDemUsersQueryResult = Apollo.QueryResult<
   ListDemUsersQuery,
   ListDemUsersQueryVariables
 >;
-export const CreateDocumentOnInvestigationDocument = gql`
-  mutation CreateDocumentOnInvestigation(
-    $where: UniqueId!
-    $data: CreateDocument!
-  ) {
-    createDocumentOnInvestigation(where: $where, data: $data) {
+export const CreateDocumentDocument = gql`
+  mutation CreateDocument($data: CreateDocument!) {
+    createDocument(data: $data) {
       id
-      investigation {
-        id
-        documents {
-          id
-          name
-          url
-          thumbnailUrl
-          tags {
-            name
-            id
-          }
-        }
-      }
       name
       tags {
         id
@@ -44183,51 +46691,117 @@ export const CreateDocumentOnInvestigationDocument = gql`
     }
   }
 `;
-export type CreateDocumentOnInvestigationMutationFn = Apollo.MutationFunction<
-  CreateDocumentOnInvestigationMutation,
-  CreateDocumentOnInvestigationMutationVariables
+export type CreateDocumentMutationFn = Apollo.MutationFunction<
+  CreateDocumentMutation,
+  CreateDocumentMutationVariables
 >;
 
 /**
- * __useCreateDocumentOnInvestigationMutation__
+ * __useCreateDocumentMutation__
  *
- * To run a mutation, you first call `useCreateDocumentOnInvestigationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateDocumentOnInvestigationMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useCreateDocumentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateDocumentMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [createDocumentOnInvestigationMutation, { data, loading, error }] = useCreateDocumentOnInvestigationMutation({
+ * const [createDocumentMutation, { data, loading, error }] = useCreateDocumentMutation({
  *   variables: {
- *      where: // value for 'where'
  *      data: // value for 'data'
  *   },
  * });
  */
-export function useCreateDocumentOnInvestigationMutation(
+export function useCreateDocumentMutation(
   baseOptions?: Apollo.MutationHookOptions<
-    CreateDocumentOnInvestigationMutation,
-    CreateDocumentOnInvestigationMutationVariables
+    CreateDocumentMutation,
+    CreateDocumentMutationVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<
-    CreateDocumentOnInvestigationMutation,
-    CreateDocumentOnInvestigationMutationVariables
-  >(CreateDocumentOnInvestigationDocument, options);
+    CreateDocumentMutation,
+    CreateDocumentMutationVariables
+  >(CreateDocumentDocument, options);
 }
-export type CreateDocumentOnInvestigationMutationHookResult = ReturnType<
-  typeof useCreateDocumentOnInvestigationMutation
+export type CreateDocumentMutationHookResult = ReturnType<
+  typeof useCreateDocumentMutation
 >;
-export type CreateDocumentOnInvestigationMutationResult =
-  Apollo.MutationResult<CreateDocumentOnInvestigationMutation>;
-export type CreateDocumentOnInvestigationMutationOptions =
-  Apollo.BaseMutationOptions<
-    CreateDocumentOnInvestigationMutation,
-    CreateDocumentOnInvestigationMutationVariables
-  >;
+export type CreateDocumentMutationResult =
+  Apollo.MutationResult<CreateDocumentMutation>;
+export type CreateDocumentMutationOptions = Apollo.BaseMutationOptions<
+  CreateDocumentMutation,
+  CreateDocumentMutationVariables
+>;
+export const ListDocumentsOnSchemeDocument = gql`
+  query listDocumentsOnScheme($where: SchemeWhereUniqueInput!) {
+    scheme(where: $where) {
+      documents {
+        id
+        name
+        tags {
+          name
+          id
+        }
+        url
+        thumbnailUrl
+        createdAt
+      }
+    }
+  }
+`;
+
+/**
+ * __useListDocumentsOnSchemeQuery__
+ *
+ * To run a query within a React component, call `useListDocumentsOnSchemeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListDocumentsOnSchemeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListDocumentsOnSchemeQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useListDocumentsOnSchemeQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ListDocumentsOnSchemeQuery,
+    ListDocumentsOnSchemeQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListDocumentsOnSchemeQuery,
+    ListDocumentsOnSchemeQueryVariables
+  >(ListDocumentsOnSchemeDocument, options);
+}
+export function useListDocumentsOnSchemeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListDocumentsOnSchemeQuery,
+    ListDocumentsOnSchemeQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListDocumentsOnSchemeQuery,
+    ListDocumentsOnSchemeQueryVariables
+  >(ListDocumentsOnSchemeDocument, options);
+}
+export type ListDocumentsOnSchemeQueryHookResult = ReturnType<
+  typeof useListDocumentsOnSchemeQuery
+>;
+export type ListDocumentsOnSchemeLazyQueryHookResult = ReturnType<
+  typeof useListDocumentsOnSchemeLazyQuery
+>;
+export type ListDocumentsOnSchemeQueryResult = Apollo.QueryResult<
+  ListDocumentsOnSchemeQuery,
+  ListDocumentsOnSchemeQueryVariables
+>;
 export const DeleteFeedItemDocument = gql`
   mutation deleteFeedItem($id: String!) {
     deleteFeedItem(where: { id: $id }) {
@@ -45972,6 +48546,27 @@ export const ViewIncidentDocument = gql`
           optimised
           card
         }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
+        }
         linkedIncidents {
           id
           subject
@@ -46016,6 +48611,27 @@ export const ViewIncidentDocument = gql`
             url
             optimised
             card
+          }
+          linkedCrimeGroups {
+            totalOffenders
+            totalIncidents
+            alias
+            id
+            reference
+            totalRecoveredValue
+            totalTheftSuccess
+            totalValue
+            updatedAt
+          }
+          linkedVehicles {
+            updatedAt
+            totalOffenders
+            registration
+            reference
+            model
+            make
+            id
+            colour
           }
           linkedIncidents {
             id
@@ -46634,6 +49250,27 @@ export const ViewInvestigationDocument = gql`
           optimised
           card
         }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
+        }
         linkedIncidents {
           id
           subject
@@ -46678,6 +49315,27 @@ export const ViewInvestigationDocument = gql`
             url
             optimised
             card
+          }
+          linkedCrimeGroups {
+            totalOffenders
+            totalIncidents
+            alias
+            id
+            reference
+            totalRecoveredValue
+            totalTheftSuccess
+            totalValue
+            updatedAt
+          }
+          linkedVehicles {
+            updatedAt
+            totalOffenders
+            registration
+            reference
+            model
+            make
+            id
+            colour
           }
           linkedIncidents {
             id
@@ -46856,6 +49514,32 @@ export const CreateMessageDocument = gql`
         url
         optimised
       }
+      crimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      vehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
+        images {
+          id
+          optimised
+          url
+        }
+      }
       incidents {
         id
         subject
@@ -47005,6 +49689,32 @@ export const UpdateMessageDocument = gql`
         url
         optimised
       }
+      crimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      vehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
+        images {
+          id
+          optimised
+          url
+        }
+      }
       incidents {
         id
         subject
@@ -47099,6 +49809,32 @@ export const ChatMessagesDocument = gql`
         id
         url
         optimised
+      }
+      crimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      vehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
+        images {
+          id
+          optimised
+          url
+        }
       }
       incidents {
         id
@@ -47211,6 +49947,32 @@ export const MessagesDocument = gql`
         url
         optimised
       }
+      crimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      vehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
+        images {
+          id
+          optimised
+          url
+        }
+      }
       incidents {
         id
         subject
@@ -47308,6 +50070,32 @@ export const MessagesSubscriptionDocument = gql`
         id
         url
         optimised
+      }
+      crimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      vehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
+        images {
+          id
+          optimised
+          url
+        }
       }
       incidents {
         id
@@ -47553,6 +50341,56 @@ export type CreateOffenderMutationResult =
 export type CreateOffenderMutationOptions = Apollo.BaseMutationOptions<
   CreateOffenderMutation,
   CreateOffenderMutationVariables
+>;
+export const MergeOffendersDocument = gql`
+  mutation MergeOffenders($data: MergeOffendersInput!) {
+    mergeOffender(data: $data) {
+      id
+    }
+  }
+`;
+export type MergeOffendersMutationFn = Apollo.MutationFunction<
+  MergeOffendersMutation,
+  MergeOffendersMutationVariables
+>;
+
+/**
+ * __useMergeOffendersMutation__
+ *
+ * To run a mutation, you first call `useMergeOffendersMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMergeOffendersMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [mergeOffendersMutation, { data, loading, error }] = useMergeOffendersMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useMergeOffendersMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    MergeOffendersMutation,
+    MergeOffendersMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    MergeOffendersMutation,
+    MergeOffendersMutationVariables
+  >(MergeOffendersDocument, options);
+}
+export type MergeOffendersMutationHookResult = ReturnType<
+  typeof useMergeOffendersMutation
+>;
+export type MergeOffendersMutationResult =
+  Apollo.MutationResult<MergeOffendersMutation>;
+export type MergeOffendersMutationOptions = Apollo.BaseMutationOptions<
+  MergeOffendersMutation,
+  MergeOffendersMutationVariables
 >;
 export const RecycleOffenderDocument = gql`
   mutation recycleOffender($where: UniqueId!) {
@@ -48335,6 +51173,27 @@ export const ViewOffenderDocument = gql`
           optimised
           card
         }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
+        }
         linkedIncidents {
           id
           subject
@@ -48379,6 +51238,27 @@ export const ViewOffenderDocument = gql`
             url
             optimised
             card
+          }
+          linkedCrimeGroups {
+            totalOffenders
+            totalIncidents
+            alias
+            id
+            reference
+            totalRecoveredValue
+            totalTheftSuccess
+            totalValue
+            updatedAt
+          }
+          linkedVehicles {
+            updatedAt
+            totalOffenders
+            registration
+            reference
+            model
+            make
+            id
+            colour
           }
           linkedIncidents {
             id
@@ -49218,6 +52098,58 @@ export type PerformanceReportQueryResult = Apollo.QueryResult<
   PerformanceReportQuery,
   PerformanceReportQueryVariables
 >;
+export const CreateTermsAndConditionsDocument = gql`
+  mutation createTermsAndConditions($data: CreateTermsInput!) {
+    createTermsAndConditions(data: $data) {
+      id
+      content
+    }
+  }
+`;
+export type CreateTermsAndConditionsMutationFn = Apollo.MutationFunction<
+  CreateTermsAndConditionsMutation,
+  CreateTermsAndConditionsMutationVariables
+>;
+
+/**
+ * __useCreateTermsAndConditionsMutation__
+ *
+ * To run a mutation, you first call `useCreateTermsAndConditionsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateTermsAndConditionsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createTermsAndConditionsMutation, { data, loading, error }] = useCreateTermsAndConditionsMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateTermsAndConditionsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateTermsAndConditionsMutation,
+    CreateTermsAndConditionsMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateTermsAndConditionsMutation,
+    CreateTermsAndConditionsMutationVariables
+  >(CreateTermsAndConditionsDocument, options);
+}
+export type CreateTermsAndConditionsMutationHookResult = ReturnType<
+  typeof useCreateTermsAndConditionsMutation
+>;
+export type CreateTermsAndConditionsMutationResult =
+  Apollo.MutationResult<CreateTermsAndConditionsMutation>;
+export type CreateTermsAndConditionsMutationOptions =
+  Apollo.BaseMutationOptions<
+    CreateTermsAndConditionsMutation,
+    CreateTermsAndConditionsMutationVariables
+  >;
 export const UpdateSchemeDocument = gql`
   mutation updateScheme($where: UniqueId!, $data: SchemeUpdateInput!) {
     updateScheme(where: $where, data: $data) {
@@ -49225,6 +52157,13 @@ export const UpdateSchemeDocument = gql`
       name
       autoApproveIncidents
       autoApproveOffenders
+      defaultIncidentEmail
+      defaultIncidentPush
+      defaultSubscribedIncidentOnly
+      defaultSubscribedOffenderOnly
+      defaultMessagePush
+      defaultOffenderEmail
+      defaultOffenderPush
       incidentRetention
       offenderRetention
       logo {
@@ -49279,6 +52218,67 @@ export type UpdateSchemeMutationOptions = Apollo.BaseMutationOptions<
   UpdateSchemeMutation,
   UpdateSchemeMutationVariables
 >;
+export const CurrentSchemeTermsDocument = gql`
+  query currentSchemeTerms($where: SchemeWhereUniqueInput!) {
+    scheme(where: $where) {
+      currentTerms {
+        id
+        content
+      }
+    }
+  }
+`;
+
+/**
+ * __useCurrentSchemeTermsQuery__
+ *
+ * To run a query within a React component, call `useCurrentSchemeTermsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCurrentSchemeTermsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCurrentSchemeTermsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useCurrentSchemeTermsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    CurrentSchemeTermsQuery,
+    CurrentSchemeTermsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    CurrentSchemeTermsQuery,
+    CurrentSchemeTermsQueryVariables
+  >(CurrentSchemeTermsDocument, options);
+}
+export function useCurrentSchemeTermsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    CurrentSchemeTermsQuery,
+    CurrentSchemeTermsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    CurrentSchemeTermsQuery,
+    CurrentSchemeTermsQueryVariables
+  >(CurrentSchemeTermsDocument, options);
+}
+export type CurrentSchemeTermsQueryHookResult = ReturnType<
+  typeof useCurrentSchemeTermsQuery
+>;
+export type CurrentSchemeTermsLazyQueryHookResult = ReturnType<
+  typeof useCurrentSchemeTermsLazyQuery
+>;
+export type CurrentSchemeTermsQueryResult = Apollo.QueryResult<
+  CurrentSchemeTermsQuery,
+  CurrentSchemeTermsQueryVariables
+>;
 export const SchemeDocument = gql`
   query scheme($where: SchemeWhereUniqueInput!) {
     scheme(where: $where) {
@@ -49286,6 +52286,13 @@ export const SchemeDocument = gql`
       name
       autoApproveIncidents
       autoApproveOffenders
+      defaultIncidentEmail
+      defaultIncidentPush
+      defaultSubscribedIncidentOnly
+      defaultSubscribedOffenderOnly
+      defaultMessagePush
+      defaultOffenderEmail
+      defaultOffenderPush
       incidentRetention
       offenderRetention
       logo {
@@ -49582,12 +52589,12 @@ export function useTagsLazyQuery(
 export type TagsQueryHookResult = ReturnType<typeof useTagsQuery>;
 export type TagsLazyQueryHookResult = ReturnType<typeof useTagsLazyQuery>;
 export type TagsQueryResult = Apollo.QueryResult<TagsQuery, TagsQueryVariables>;
-export const CreateUpdateOnIncidentDocument = gql`
-  mutation CreateUpdateOnIncident(
-    $incident: UniqueId!
+export const CreateUpdateOnCrimeGroupDocument = gql`
+  mutation CreateUpdateOnCrimeGroup(
+    $crimeGroup: UniqueId!
     $data: CreateUpdateData!
   ) {
-    createUpdateOnIncident(incident: $incident, data: $data) {
+    createUpdateOnCrimeGroup(crimeGroup: $crimeGroup, data: $data) {
       id
       text
       type
@@ -49597,6 +52604,27 @@ export const CreateUpdateOnIncidentDocument = gql`
         url
         optimised
         card
+      }
+      linkedCrimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      linkedVehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
       }
       linkedIncidents {
         id
@@ -49642,6 +52670,218 @@ export const CreateUpdateOnIncidentDocument = gql`
           url
           optimised
           card
+        }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
+        }
+        linkedIncidents {
+          id
+          subject
+          description
+          dayTime
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        linkedOffenders {
+          id
+          updatedAt
+          age
+          build
+          dateOfBirth
+          name
+          race
+          gender
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+export type CreateUpdateOnCrimeGroupMutationFn = Apollo.MutationFunction<
+  CreateUpdateOnCrimeGroupMutation,
+  CreateUpdateOnCrimeGroupMutationVariables
+>;
+
+/**
+ * __useCreateUpdateOnCrimeGroupMutation__
+ *
+ * To run a mutation, you first call `useCreateUpdateOnCrimeGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUpdateOnCrimeGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUpdateOnCrimeGroupMutation, { data, loading, error }] = useCreateUpdateOnCrimeGroupMutation({
+ *   variables: {
+ *      crimeGroup: // value for 'crimeGroup'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateUpdateOnCrimeGroupMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateUpdateOnCrimeGroupMutation,
+    CreateUpdateOnCrimeGroupMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateUpdateOnCrimeGroupMutation,
+    CreateUpdateOnCrimeGroupMutationVariables
+  >(CreateUpdateOnCrimeGroupDocument, options);
+}
+export type CreateUpdateOnCrimeGroupMutationHookResult = ReturnType<
+  typeof useCreateUpdateOnCrimeGroupMutation
+>;
+export type CreateUpdateOnCrimeGroupMutationResult =
+  Apollo.MutationResult<CreateUpdateOnCrimeGroupMutation>;
+export type CreateUpdateOnCrimeGroupMutationOptions =
+  Apollo.BaseMutationOptions<
+    CreateUpdateOnCrimeGroupMutation,
+    CreateUpdateOnCrimeGroupMutationVariables
+  >;
+export const CreateUpdateOnIncidentDocument = gql`
+  mutation CreateUpdateOnIncident(
+    $incident: UniqueId!
+    $data: CreateUpdateData!
+  ) {
+    createUpdateOnIncident(incident: $incident, data: $data) {
+      id
+      text
+      type
+      createdAt
+      images {
+        id
+        url
+        optimised
+        card
+      }
+      linkedCrimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      linkedVehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
+        images {
+          id
+          optimised
+          url
+        }
+      }
+      linkedIncidents {
+        id
+        subject
+        description
+        dayTime
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      linkedOffenders {
+        id
+        updatedAt
+        age
+        build
+        dateOfBirth
+        name
+        race
+        gender
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      createdBy {
+        id
+        fullName
+        businesses {
+          id
+          name
+        }
+      }
+      replies {
+        id
+        text
+        type
+        createdAt
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
         }
         linkedIncidents {
           id
@@ -49767,6 +53007,27 @@ export const CreateUpdateOnInvestigationDocument = gql`
           optimised
         }
       }
+      linkedCrimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      linkedVehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
+      }
       createdBy {
         id
         fullName
@@ -49785,6 +53046,27 @@ export const CreateUpdateOnInvestigationDocument = gql`
           url
           optimised
           card
+        }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
         }
         linkedIncidents {
           id
@@ -49885,6 +53167,32 @@ export const CreateUpdateOnOffenderDocument = gql`
         optimised
         card
       }
+      linkedCrimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      linkedVehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
+        images {
+          id
+          optimised
+          url
+        }
+      }
       linkedIncidents {
         id
         subject
@@ -49929,6 +53237,27 @@ export const CreateUpdateOnOffenderDocument = gql`
           url
           optimised
           card
+        }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
         }
         linkedIncidents {
           id
@@ -50011,6 +53340,191 @@ export type CreateUpdateOnOffenderMutationResult =
 export type CreateUpdateOnOffenderMutationOptions = Apollo.BaseMutationOptions<
   CreateUpdateOnOffenderMutation,
   CreateUpdateOnOffenderMutationVariables
+>;
+export const CreateUpdateOnVehicleDocument = gql`
+  mutation CreateUpdateOnVehicle(
+    $vehicle: UniqueId!
+    $data: CreateUpdateData!
+  ) {
+    createUpdateOnVehicle(vehicle: $vehicle, data: $data) {
+      id
+      text
+      type
+      createdAt
+      images {
+        id
+        url
+        optimised
+        card
+      }
+      linkedCrimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      linkedVehicles {
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
+      }
+      linkedIncidents {
+        id
+        subject
+        description
+        dayTime
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      linkedOffenders {
+        id
+        updatedAt
+        age
+        build
+        dateOfBirth
+        name
+        race
+        gender
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      createdBy {
+        id
+        fullName
+        businesses {
+          id
+          name
+        }
+      }
+      replies {
+        id
+        text
+        type
+        createdAt
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
+        }
+        linkedIncidents {
+          id
+          subject
+          description
+          dayTime
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        linkedOffenders {
+          id
+          updatedAt
+          age
+          build
+          dateOfBirth
+          name
+          race
+          gender
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+export type CreateUpdateOnVehicleMutationFn = Apollo.MutationFunction<
+  CreateUpdateOnVehicleMutation,
+  CreateUpdateOnVehicleMutationVariables
+>;
+
+/**
+ * __useCreateUpdateOnVehicleMutation__
+ *
+ * To run a mutation, you first call `useCreateUpdateOnVehicleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUpdateOnVehicleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUpdateOnVehicleMutation, { data, loading, error }] = useCreateUpdateOnVehicleMutation({
+ *   variables: {
+ *      vehicle: // value for 'vehicle'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateUpdateOnVehicleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateUpdateOnVehicleMutation,
+    CreateUpdateOnVehicleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateUpdateOnVehicleMutation,
+    CreateUpdateOnVehicleMutationVariables
+  >(CreateUpdateOnVehicleDocument, options);
+}
+export type CreateUpdateOnVehicleMutationHookResult = ReturnType<
+  typeof useCreateUpdateOnVehicleMutation
+>;
+export type CreateUpdateOnVehicleMutationResult =
+  Apollo.MutationResult<CreateUpdateOnVehicleMutation>;
+export type CreateUpdateOnVehicleMutationOptions = Apollo.BaseMutationOptions<
+  CreateUpdateOnVehicleMutation,
+  CreateUpdateOnVehicleMutationVariables
 >;
 export const DeleteUpdateDocument = gql`
   mutation DeleteUpdate($where: UpdateWhereUnique!) {
@@ -50220,6 +53734,55 @@ export type SendInviteMutationOptions = Apollo.BaseMutationOptions<
   SendInviteMutation,
   SendInviteMutationVariables
 >;
+export const SignTermsDocument = gql`
+  mutation signTerms($data: SignTermsInput!) {
+    signTerms(data: $data) {
+      id
+    }
+  }
+`;
+export type SignTermsMutationFn = Apollo.MutationFunction<
+  SignTermsMutation,
+  SignTermsMutationVariables
+>;
+
+/**
+ * __useSignTermsMutation__
+ *
+ * To run a mutation, you first call `useSignTermsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignTermsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [signTermsMutation, { data, loading, error }] = useSignTermsMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useSignTermsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SignTermsMutation,
+    SignTermsMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<SignTermsMutation, SignTermsMutationVariables>(
+    SignTermsDocument,
+    options
+  );
+}
+export type SignTermsMutationHookResult = ReturnType<
+  typeof useSignTermsMutation
+>;
+export type SignTermsMutationResult = Apollo.MutationResult<SignTermsMutation>;
+export type SignTermsMutationOptions = Apollo.BaseMutationOptions<
+  SignTermsMutation,
+  SignTermsMutationVariables
+>;
 export const UpdateUserDocument = gql`
   mutation updateUser(
     $where: UniqueId!
@@ -50392,6 +53955,9 @@ export const CurrentUserDocument = gql`
         id
         role
         scheme {
+          logo {
+            optimised
+          }
           id
           name
           autoApproveIncidents
@@ -50474,6 +54040,13 @@ export const UserDocument = gql`
       }
       disabled
       newUser
+      incidentEmail
+      incidentPush
+      subscribedIncidentOnly
+      subscribedOffenderOnly
+      messagePush
+      offenderEmail
+      offenderPush
       groups(where: $groupWhere) {
         id
         name
@@ -50684,6 +54257,14 @@ export const UpdateUserChatDocument = gql`
               url
               optimised
             }
+            vehicles {
+              id
+              reference
+            }
+            crimeGroups {
+              id
+              reference
+            }
             incidents {
               id
               subject
@@ -50750,6 +54331,7 @@ export const UserChatsDocument = gql`
   ) {
     user(where: $where) {
       id
+      totalChats
       chats(
         where: { chat: { scheme: { id: { equals: $scheme } } } }
         orderBy: $orderBy
@@ -50789,6 +54371,14 @@ export const UserChatsDocument = gql`
             offenders {
               id
               name
+            }
+            vehicles {
+              id
+              reference
+            }
+            crimeGroups {
+              id
+              reference
             }
           }
         }
@@ -51245,6 +54835,82 @@ export type UserNewQueryResult = Apollo.QueryResult<
   UserNewQuery,
   UserNewQueryVariables
 >;
+export const CreateVehicleDocument = gql`
+  mutation CreateVehicle($data: CreateVehicleDataInput!) {
+    createVehicle(data: $data) {
+      id
+      make
+      model
+      registration
+      totalOffenders
+      totalIncidents
+      totalCrimeGroups
+      reference
+      images {
+        id
+        optimised
+        url
+      }
+      incidents {
+        id
+        subject
+      }
+      offenders {
+        id
+        name
+      }
+      updatedAt
+      colour
+      crimeGroup {
+        id
+        reference
+      }
+    }
+  }
+`;
+export type CreateVehicleMutationFn = Apollo.MutationFunction<
+  CreateVehicleMutation,
+  CreateVehicleMutationVariables
+>;
+
+/**
+ * __useCreateVehicleMutation__
+ *
+ * To run a mutation, you first call `useCreateVehicleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateVehicleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createVehicleMutation, { data, loading, error }] = useCreateVehicleMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateVehicleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateVehicleMutation,
+    CreateVehicleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateVehicleMutation,
+    CreateVehicleMutationVariables
+  >(CreateVehicleDocument, options);
+}
+export type CreateVehicleMutationHookResult = ReturnType<
+  typeof useCreateVehicleMutation
+>;
+export type CreateVehicleMutationResult =
+  Apollo.MutationResult<CreateVehicleMutation>;
+export type CreateVehicleMutationOptions = Apollo.BaseMutationOptions<
+  CreateVehicleMutation,
+  CreateVehicleMutationVariables
+>;
 export const DeleteVehicleDocument = gql`
   mutation deleteVehicle($id: String!) {
     deleteVehicle(where: { id: $id }) {
@@ -51295,6 +54961,108 @@ export type DeleteVehicleMutationOptions = Apollo.BaseMutationOptions<
   DeleteVehicleMutation,
   DeleteVehicleMutationVariables
 >;
+export const SubscribeToVehicleDocument = gql`
+  mutation SubscribeToVehicle($where: UniqueId!) {
+    subscribeToVehicle(where: $where) {
+      id
+      subscribed
+    }
+  }
+`;
+export type SubscribeToVehicleMutationFn = Apollo.MutationFunction<
+  SubscribeToVehicleMutation,
+  SubscribeToVehicleMutationVariables
+>;
+
+/**
+ * __useSubscribeToVehicleMutation__
+ *
+ * To run a mutation, you first call `useSubscribeToVehicleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSubscribeToVehicleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [subscribeToVehicleMutation, { data, loading, error }] = useSubscribeToVehicleMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useSubscribeToVehicleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SubscribeToVehicleMutation,
+    SubscribeToVehicleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    SubscribeToVehicleMutation,
+    SubscribeToVehicleMutationVariables
+  >(SubscribeToVehicleDocument, options);
+}
+export type SubscribeToVehicleMutationHookResult = ReturnType<
+  typeof useSubscribeToVehicleMutation
+>;
+export type SubscribeToVehicleMutationResult =
+  Apollo.MutationResult<SubscribeToVehicleMutation>;
+export type SubscribeToVehicleMutationOptions = Apollo.BaseMutationOptions<
+  SubscribeToVehicleMutation,
+  SubscribeToVehicleMutationVariables
+>;
+export const UnsubscribeToVehicleDocument = gql`
+  mutation UnsubscribeToVehicle($where: UniqueId!) {
+    unsubscribeToVehicle(where: $where) {
+      id
+      subscribed
+    }
+  }
+`;
+export type UnsubscribeToVehicleMutationFn = Apollo.MutationFunction<
+  UnsubscribeToVehicleMutation,
+  UnsubscribeToVehicleMutationVariables
+>;
+
+/**
+ * __useUnsubscribeToVehicleMutation__
+ *
+ * To run a mutation, you first call `useUnsubscribeToVehicleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnsubscribeToVehicleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unsubscribeToVehicleMutation, { data, loading, error }] = useUnsubscribeToVehicleMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUnsubscribeToVehicleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UnsubscribeToVehicleMutation,
+    UnsubscribeToVehicleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UnsubscribeToVehicleMutation,
+    UnsubscribeToVehicleMutationVariables
+  >(UnsubscribeToVehicleDocument, options);
+}
+export type UnsubscribeToVehicleMutationHookResult = ReturnType<
+  typeof useUnsubscribeToVehicleMutation
+>;
+export type UnsubscribeToVehicleMutationResult =
+  Apollo.MutationResult<UnsubscribeToVehicleMutation>;
+export type UnsubscribeToVehicleMutationOptions = Apollo.BaseMutationOptions<
+  UnsubscribeToVehicleMutation,
+  UnsubscribeToVehicleMutationVariables
+>;
 export const UpdateVehicleDocument = gql`
   mutation updateVehicle($where: UniqueId!, $data: CreateVehicleDataInput!) {
     updateVehicle(where: $where, data: $data) {
@@ -51302,8 +55070,14 @@ export const UpdateVehicleDocument = gql`
       make
       model
       registration
+      reference
       totalOffenders
       totalIncidents
+      images {
+        id
+        optimised
+        url
+      }
       incidents {
         id
         subject
@@ -51365,176 +55139,6 @@ export type UpdateVehicleMutationOptions = Apollo.BaseMutationOptions<
   UpdateVehicleMutation,
   UpdateVehicleMutationVariables
 >;
-export const VehicleDocument = gql`
-  query Vehicle($where: VehicleWhereUniqueInput!) {
-    vehicle(where: $where) {
-      id
-      make
-      model
-      registration
-      totalOffenders
-      totalIncidents
-      totalCrimeGroups
-      incidents {
-        id
-        subject
-        dayTime
-        createdBy {
-          id
-          businesses {
-            id
-            name
-          }
-        }
-        value
-        recoveredValue
-        reference
-        policeRef
-      }
-      offenders {
-        id
-        name
-        reference
-        lastActive {
-          id
-          dayTime
-        }
-        hair
-        peculiarities
-        race
-        dateOfBirth
-        dateSource
-        build
-        age
-        gender
-        images {
-          id
-          optimised
-        }
-        totalTheftSuccess
-        totalRecoveredValue
-        totalIncidents
-        totalValue
-      }
-      updatedAt
-      colour
-      crimeGroup {
-        id
-        reference
-      }
-    }
-  }
-`;
-
-/**
- * __useVehicleQuery__
- *
- * To run a query within a React component, call `useVehicleQuery` and pass it any options that fit your needs.
- * When your component renders, `useVehicleQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useVehicleQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
-export function useVehicleQuery(
-  baseOptions: Apollo.QueryHookOptions<VehicleQuery, VehicleQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<VehicleQuery, VehicleQueryVariables>(
-    VehicleDocument,
-    options
-  );
-}
-export function useVehicleLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<VehicleQuery, VehicleQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<VehicleQuery, VehicleQueryVariables>(
-    VehicleDocument,
-    options
-  );
-}
-export type VehicleQueryHookResult = ReturnType<typeof useVehicleQuery>;
-export type VehicleLazyQueryHookResult = ReturnType<typeof useVehicleLazyQuery>;
-export type VehicleQueryResult = Apollo.QueryResult<
-  VehicleQuery,
-  VehicleQueryVariables
->;
-export const CreateVehicleDocument = gql`
-  mutation CreateVehicle($data: CreateVehicleDataInput!) {
-    createVehicle(data: $data) {
-      id
-      make
-      model
-      registration
-      totalOffenders
-      totalIncidents
-      incidents {
-        id
-        subject
-      }
-      offenders {
-        id
-        name
-      }
-      updatedAt
-      colour
-      crimeGroup {
-        id
-        reference
-      }
-    }
-  }
-`;
-export type CreateVehicleMutationFn = Apollo.MutationFunction<
-  CreateVehicleMutation,
-  CreateVehicleMutationVariables
->;
-
-/**
- * __useCreateVehicleMutation__
- *
- * To run a mutation, you first call `useCreateVehicleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateVehicleMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createVehicleMutation, { data, loading, error }] = useCreateVehicleMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
-export function useCreateVehicleMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateVehicleMutation,
-    CreateVehicleMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateVehicleMutation,
-    CreateVehicleMutationVariables
-  >(CreateVehicleDocument, options);
-}
-export type CreateVehicleMutationHookResult = ReturnType<
-  typeof useCreateVehicleMutation
->;
-export type CreateVehicleMutationResult =
-  Apollo.MutationResult<CreateVehicleMutation>;
-export type CreateVehicleMutationOptions = Apollo.BaseMutationOptions<
-  CreateVehicleMutation,
-  CreateVehicleMutationVariables
->;
 export const ListVehiclesDocument = gql`
   query ListVehicles(
     $take: Int
@@ -51551,6 +55155,12 @@ export const ListVehiclesDocument = gql`
         totalCrimeGroups
         totalOffenders
         totalIncidents
+        reference
+        images {
+          id
+          optimised
+          url
+        }
         incidents {
           id
           subject
@@ -51623,4 +55233,249 @@ export type ListVehiclesLazyQueryHookResult = ReturnType<
 export type ListVehiclesQueryResult = Apollo.QueryResult<
   ListVehiclesQuery,
   ListVehiclesQueryVariables
+>;
+export const VehicleDocument = gql`
+  query Vehicle($where: VehicleWhereUniqueInput!) {
+    vehicle(where: $where) {
+      id
+      make
+      model
+      registration
+      totalOffenders
+      totalIncidents
+      totalCrimeGroups
+      reference
+      subscribed
+      images {
+        id
+        optimised
+        url
+      }
+      incidents {
+        id
+        subject
+        dayTime
+        createdBy {
+          id
+          organisation
+        }
+        value
+        recoveredValue
+        reference
+        policeRef
+      }
+      offenders {
+        id
+        name
+        reference
+        lastActive {
+          id
+          dayTime
+        }
+        hair
+        peculiarities
+        race
+        dateOfBirth
+        dateSource
+        build
+        age
+        gender
+        images {
+          id
+          optimised
+        }
+        totalTheftSuccess
+        totalRecoveredValue
+        totalIncidents
+        totalValue
+      }
+      updatedAt
+      colour
+      crimeGroup {
+        id
+        reference
+        totalIncidents
+        totalOffenders
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        alias
+      }
+      updates(orderBy: { createdAt: desc }) {
+        id
+        text
+        type
+        createdAt
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
+        }
+        linkedIncidents {
+          id
+          subject
+          description
+          dayTime
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        linkedOffenders {
+          id
+          updatedAt
+          age
+          build
+          dateOfBirth
+          name
+          race
+          gender
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+        replies {
+          id
+          text
+          type
+          createdAt
+          images {
+            id
+            url
+            optimised
+            card
+          }
+          linkedCrimeGroups {
+            totalOffenders
+            totalIncidents
+            alias
+            id
+            reference
+            totalRecoveredValue
+            totalTheftSuccess
+            totalValue
+            updatedAt
+          }
+          linkedVehicles {
+            updatedAt
+            totalOffenders
+            registration
+            reference
+            model
+            make
+            id
+            colour
+          }
+          linkedIncidents {
+            id
+            subject
+            description
+            dayTime
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          linkedOffenders {
+            id
+            updatedAt
+            age
+            build
+            dateOfBirth
+            name
+            race
+            gender
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          createdBy {
+            id
+            fullName
+            businesses {
+              id
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useVehicleQuery__
+ *
+ * To run a query within a React component, call `useVehicleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useVehicleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useVehicleQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useVehicleQuery(
+  baseOptions: Apollo.QueryHookOptions<VehicleQuery, VehicleQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<VehicleQuery, VehicleQueryVariables>(
+    VehicleDocument,
+    options
+  );
+}
+export function useVehicleLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<VehicleQuery, VehicleQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<VehicleQuery, VehicleQueryVariables>(
+    VehicleDocument,
+    options
+  );
+}
+export type VehicleQueryHookResult = ReturnType<typeof useVehicleQuery>;
+export type VehicleLazyQueryHookResult = ReturnType<typeof useVehicleLazyQuery>;
+export type VehicleQueryResult = Apollo.QueryResult<
+  VehicleQuery,
+  VehicleQueryVariables
 >;

@@ -17,6 +17,13 @@ query User(
     }
     disabled
     newUser
+    incidentEmail
+    incidentPush
+    subscribedIncidentOnly
+    subscribedOffenderOnly
+    messagePush
+    offenderEmail
+    offenderPush
     groups(where: $groupWhere) {
       id
       name

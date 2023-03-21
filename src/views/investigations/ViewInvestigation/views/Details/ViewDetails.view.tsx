@@ -26,7 +26,7 @@ import moment from 'moment/moment';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import useStyles from './ViewDetails.styles';
 import UpdateContent from '../../../../incidents/ViewIncident/Update.view';
-import UpdateBar from '../../../../../components/form-components/update-bar';
+import UpdateBar from '../../../../../components/MessageInput/update-bar';
 import TabContent from '../../../../../components/TabContent';
 
 const { Title, Paragraph } = Typography;
@@ -64,6 +64,8 @@ interface Props {
   toggleAddExistingOffender: () => void;
   toggleAddExistingIncident: () => void;
   toggleAddExistingVehicle: () => void;
+  optionRowShow: boolean;
+  setOptionRowShow: (value: boolean) => void;
 }
 
 const ViewInvestigation = ({
@@ -87,6 +89,8 @@ const ViewInvestigation = ({
   toggleAddExistingOffender,
   toggleAddExistingIncident,
   toggleAddExistingVehicle,
+  optionRowShow,
+  setOptionRowShow,
 }: Props) => {
   const classes = useStyles();
 
@@ -385,7 +389,9 @@ const ViewInvestigation = ({
           <Col span={12}>
             <div className={classes.updatesContainer}>
               <InfiniteScroll
-                height="calc(100vh - 225px)"
+                height={
+                  optionRowShow ? 'calc(100vh - 279px)' : 'calc(100vh - 169px)'
+                }
                 className="update-scroll"
                 initialScrollY={0}
                 dataLength={data?.investigation?.updates?.length || 0}
@@ -471,6 +477,8 @@ const ViewInvestigation = ({
                             images={update.images}
                             incidents={update.linkedIncidents}
                             offenders={update.linkedOffenders}
+                            vehicles={update.linkedVehicles}
+                            crimeGroups={update.linkedCrimeGroups}
                             showDate
                             showUser
                           />
@@ -486,6 +494,8 @@ const ViewInvestigation = ({
                         images={update.images}
                         incidents={update.linkedIncidents}
                         offenders={update.linkedOffenders}
+                        vehicles={update.linkedVehicles}
+                        crimeGroups={update.linkedCrimeGroups}
                         showDate
                         showUser
                       />
@@ -556,6 +566,8 @@ const ViewInvestigation = ({
                                 images={reply.images}
                                 incidents={reply.linkedIncidents}
                                 offenders={reply.linkedOffenders}
+                                vehicles={update.linkedVehicles}
+                                crimeGroups={update.linkedCrimeGroups}
                                 showDate
                                 showUser
                               />
@@ -571,6 +583,8 @@ const ViewInvestigation = ({
                             images={reply.images}
                             incidents={reply.linkedIncidents}
                             offenders={reply.linkedOffenders}
+                            vehicles={update.linkedVehicles}
+                            crimeGroups={update.linkedCrimeGroups}
                             showDate
                             showUser
                           />
@@ -612,6 +626,7 @@ const ViewInvestigation = ({
                 investigationId={investigationId}
                 setReplyTo={setReplyTo}
                 subscribed={data?.investigation?.subscribed || false}
+                setOptionRowShow={setOptionRowShow}
               />
             </div>
           </Col>

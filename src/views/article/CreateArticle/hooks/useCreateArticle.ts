@@ -14,7 +14,7 @@ import {
 } from '../../../../graphql/generated';
 import { useStoreState } from '../../../../state';
 import { OffenderData } from '../../../../components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
-import { Incident } from '../../../../components/form-components/offender/LinkIncident/LinkIncident.container';
+import { Incident } from '../../../../components/form-components/LinkOptions/LinkIncident/LinkIncident.container';
 
 const { useForm } = Form;
 
@@ -33,9 +33,11 @@ const useCreateArticle = (): Props => {
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const editorRef = useRef<Editor | null>(null);
-  const [imgSrcs, setImgSrcs] = useState<string[]>([]);
+
   const [previewText, setPreviewText] = useState<string>('');
   const [previewImage, setPreviewImage] = useState<string>('');
+  const [imageList, setImageList] = useState<UploadFile[]>([]);
+
   const [groups, setGroups] = useState<{ value: string; label: string }[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
   const [categories, setCategories] = useState<SelectProps['options']>([]);
@@ -151,7 +153,7 @@ const useCreateArticle = (): Props => {
 
     setSelectedCategories(formattedValues.map((value) => ({ value })));
   };
-  const log = () => {
+  const log = (): { text: string; img: string; imgSrc: string[] } => {
     if (editorRef.current) {
       const html = editorRef.current.getContent();
       const parser = new DOMParser();
@@ -172,8 +174,7 @@ const useCreateArticle = (): Props => {
       // console.log(doc.body.innerHTML);
       const images = doc.body.querySelectorAll('img');
       const imageSrcs = Array.from(images).map((image) => image.src);
-      setImgSrcs(imageSrcs);
-      setPreviewImage(imageSrcs[0] || '');
+
       // remove all new lines from innerHTML
       doc.body.innerHTML = doc.body.innerHTML.replace(/&nbsp;/g, '');
 
@@ -189,11 +190,13 @@ const useCreateArticle = (): Props => {
       return {
         text: innerText,
         img: imageSrcs[0] || '',
+        imgSrc: imageSrcs,
       };
     }
     return {
       text: '',
       img: '',
+      imgSrc: [],
     };
   };
 
@@ -227,6 +230,7 @@ const useCreateArticle = (): Props => {
           reject(new Error(`Invalid JSON: ${xhr.responseText}`));
           return;
         }
+        setImageList([...imageList, json]);
 
         resolve(json.url);
       };
@@ -364,7 +368,13 @@ const useCreateArticle = (): Props => {
   };
 
   const [submitArticle] = useCreateArticleMutation();
-
+  // const { img: imgs } = log();
+  // const previewImageFile = imageList?.filter(({ url }) => url === imgs);
+  // console.log('articleImage1', {
+  //   filename: previewImageFile[0].fileName || '',
+  //   mimetype: previewImageFile[0].type || '',
+  //   url: previewImageFile[0].url || '',
+  // });
   const onSubmit = async () => {
     const selectedCategoryIds = selectedCategories
       .map((category) => {
@@ -379,6 +389,12 @@ const useCreateArticle = (): Props => {
       .toString()
       .toUpperCase() as ArticlePriority;
     const { img, text } = log();
+    const previewImageFile = imageList?.filter(({ url }) => url === img);
+    console.log('articleImage', {
+      filename: previewImageFile[0].fileName || '',
+      mimetype: previewImageFile[0].type || '',
+      url: previewImageFile[0].url || '',
+    });
     await submitArticle({
       variables: {
         data: {
@@ -399,6 +415,19 @@ const useCreateArticle = (): Props => {
           priority,
           incidents: incidents.map((incident) => incident.incident.id),
           offenders: offenders.map((offender) => offender.id),
+          images: {
+            upload: previewImageFile
+              ? [
+                  {
+                    url: {
+                      filename: previewImageFile[0].fileName || '',
+                      mimetype: previewImageFile[0].type || '',
+                      url: previewImageFile[0].url || '',
+                    },
+                  },
+                ]
+              : undefined,
+          },
         },
       },
     }).then((res) => {
@@ -466,7 +495,7 @@ const useCreateArticle = (): Props => {
     log,
     preview,
     exampleImageUploadHandler,
-    imgSrcs,
+
     previewText,
     previewImage,
     setPreviewImage,

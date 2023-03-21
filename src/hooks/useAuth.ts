@@ -50,13 +50,12 @@ const useAuth = (): Return => {
     groups,
     reference,
   }: HandleSuccessArgs) => {
-    window.localStorage.setItem('access_token', accessToken);
-    const color = `hsl(${Math.random() * 360}, 70%, 30%)`;
+    // const color = `hsl(${Math.random() * 360}, 70%, 30%)`;
 
-    localStorage.setItem(
-      'current-user',
-      JSON.stringify({ id, name: fullName, color })
-    );
+    // localStorage.setItem(
+    //   'current-user',
+    //   JSON.stringify({ id, name: fullName, color })
+    // );
 
     const handleNoValidScheme = () => {
       const schemeDetails = schemes[0]?.scheme;
@@ -67,6 +66,7 @@ const useAuth = (): Return => {
         autoApproveOffenders: schemeDetails?.autoApproveOffenders,
         id: schemeDetails?.id,
         name: schemeDetails?.name,
+        logo: schemeDetails?.logo?.optimised,
       });
     };
 
@@ -77,6 +77,7 @@ const useAuth = (): Return => {
         // eslint-disable-next-line @typescript-eslint/no-shadow
         ({ scheme: { id } }) => id === scheme
       );
+
       if (schemeDetails) {
         setRole({ role: schemeDetails.role });
         setScheme({
@@ -114,6 +115,14 @@ const useAuth = (): Return => {
 
   const [getCurrentUser, { loading }] = useCurrentUserLazyQuery({
     onCompleted: ({ currentUser }) => {
+      const scheme =
+        currentScheme || window.localStorage.getItem('currentScheme');
+      if (scheme) {
+        const currentS = currentUser?.schemes.find((s) => s.id === scheme);
+        if (currentS) {
+          localStorage.setItem('logo', currentS?.scheme?.logo?.optimised || '');
+        }
+      }
       handleSuccess({
         id: currentUser?.id || '',
         email: currentUser?.email || '',
@@ -289,7 +298,9 @@ const useAuth = (): Return => {
   const signOut = () => {
     clearUser();
     handleSignOut();
+    const logo = window.localStorage.getItem('logo');
     window.localStorage.clear();
+    window.localStorage.setItem('logo', logo || '');
     window.sessionStorage.clear();
   };
 
