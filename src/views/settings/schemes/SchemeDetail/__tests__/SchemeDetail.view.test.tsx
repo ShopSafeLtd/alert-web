@@ -34,6 +34,8 @@ describe('List Officer View', () => {
           imgChange={jest.fn()}
           onPreview={jest.fn()}
           fileList={[]}
+          darkFileList={[]}
+          darkImgChange={jest.fn()}
         />
       </MemoryRouter>
     );
