@@ -54,8 +54,8 @@ export default defineConfig(({ command, mode }) => {
       // }),
       // must be last
       sentryVitePlugin({
-        org: 'example-org',
-        project: 'example-project',
+        org: 'nvoyy-group',
+        project: 'alert-web',
         include: './build',
         authToken: env.SENTRY_AUTH_TOKEN,
       }),
