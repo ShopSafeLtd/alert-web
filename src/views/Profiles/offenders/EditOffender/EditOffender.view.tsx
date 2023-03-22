@@ -35,7 +35,6 @@ import { MutationUpdaterFn } from '@apollo/client';
 import AddExclusion from 'components/form-components/offender/exclusion/AddExclusion';
 import EditExclusion from 'components/form-components/offender/exclusion/EditExclusion';
 
-// import type { RangePickerProps } from 'antd/es/date-picker';
 import AddOffenderTag from 'components/form-components/tags/offenderWarnings/AddOffenderWarning';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -54,21 +53,6 @@ import EditOffenderAddress from 'components/form-components/addresses/EditOffend
 import { FormData } from './useEditOffender';
 
 const { Title, Text, Paragraph } = Typography;
-
-// interface FormData {
-//   name: string;
-//   age: Age;
-//   gender: Gender;
-//   race: Race;
-//   build: Build;
-//   hair: string;
-//   peculiarities: string;
-//   dateSource?: string;
-//   dateOfBirth?: Date;
-//   groups: string[];
-//   tags: string[];
-//   images?: [{ id: string; url: string; optimised: string }];
-// }
 
 interface AddressForm {
   alias: string;
@@ -99,13 +83,23 @@ interface EditAddressForm {
   postcode: string;
 }
 
-interface BanData {
+interface BanType {
   id: string;
-  title?: string | null | undefined;
   endDate: Date;
   startDate: Date;
   location: string;
-  description?: string | null | undefined;
+  description?: string | null;
+  new: boolean;
+  updated: boolean;
+  deleted: boolean;
+}
+
+interface BanPayloadType {
+  id: string;
+  endDate: Date;
+  startDate: Date;
+  location: string;
+  description?: string | null;
 }
 
 interface Props {
@@ -128,11 +122,12 @@ interface Props {
   addOffenderTag: boolean;
   toggleAddOffenderTag: () => void;
   updateOffenderTag: MutationUpdaterFn<CreateTagMutation>;
-  updateExclusion: (value: BanData) => void;
-  bansData: BanData[];
-  banData: BanData | null;
+  onUpdateExclusion: (value: BanPayloadType) => void;
+  onAddExclusion: (value: BanPayloadType) => void;
+  setBanData: (value: BanType) => void;
+  bansData: BanType[];
+  banData: BanType | null;
   addressesData: AddressesData[] | null;
-  setBanData: (value: BanData | null) => void;
   deleteConfirm: (value: string) => void;
   ageCheck: boolean;
   setAgeCheck: (value: boolean) => void;
@@ -193,10 +188,11 @@ const EditOffender = ({
   toggleAddExclusion,
   editExclusion,
   toggleEditExclusion,
-  updateExclusion,
   banData,
-  setBanData,
   bansData,
+  onAddExclusion,
+  onUpdateExclusion,
+  setBanData,
   deleteConfirm,
   ageCheck,
   setAgeCheck,
@@ -742,7 +738,7 @@ const EditOffender = ({
         >
           {addExclusion ? (
             <AddExclusion
-              update={updateExclusion}
+              update={onAddExclusion}
               onClose={toggleAddExclusion}
               // offenderId={data?.offender?.id}
             />
@@ -758,7 +754,7 @@ const EditOffender = ({
         >
           {editExclusion ? (
             <EditExclusion
-              update={updateExclusion}
+              update={onUpdateExclusion}
               onClose={toggleEditExclusion}
               banData={banData}
             />

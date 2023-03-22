@@ -60,7 +60,9 @@ describe('List Officer View', () => {
             endDate: new Date(),
             startDate: new Date(),
             location: 'NightSafe',
-            title: 'NightSafe',
+            deleted: false,
+            new: false,
+            updated: false,
           }}
           bansData={[]}
           setBanData={jest.fn()}
@@ -83,7 +85,8 @@ describe('List Officer View', () => {
           toggleAddExclusion={jest.fn()}
           editExclusion={false}
           toggleEditExclusion={jest.fn()}
-          updateExclusion={jest.fn()}
+          onAddExclusion={jest.fn()}
+          onUpdateExclusion={jest.fn()}
           deleteConfirm={jest.fn()}
           ageCheck={false}
           setAgeCheck={jest.fn()}
