@@ -11,8 +11,6 @@ import '~/yet-another-react-lightbox/dist/styles.css';
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
   integrations: [new BrowserTracing()],
-  release: `alert-web@${APP_VERSION}`,
-
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
   // Adjust for production
