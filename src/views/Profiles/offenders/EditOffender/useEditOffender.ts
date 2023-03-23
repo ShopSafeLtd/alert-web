@@ -29,7 +29,7 @@ import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router';
-import { CrimeGroupData } from 'types/DataType';
+import { CrimeGroupData, VehicleData } from 'types/DataType';
 import update from 'immutability-helper';
 
 const { confirm } = Modal;
@@ -42,6 +42,7 @@ interface AddAddressForm {
   county: string;
   postcode: string;
 }
+
 interface EditAddressForm {
   id: string;
   alias: string;
@@ -89,28 +90,28 @@ interface BanPayloadType {
   description?: string | null;
 }
 
-interface VehicleData {
-  id: string;
-  make?: string | null | undefined;
-  model?: string | null | undefined;
-  colour?: string | null | undefined;
-  reference?: number | null;
-  totalOffenders?: number | null;
-  registration?: string | null | undefined;
-  crimeGroup?: string[];
-  incidents?: string[];
-  offenders?: string[];
-  images?: Array<{
-    id: string;
-    url?: string | null;
-    optimised?: string | null;
-  }>;
-  edited?: boolean;
-  new: boolean;
-  existing: boolean;
-  updated: boolean;
-  deleted: boolean;
-}
+// interface VehicleData {
+//   id: string;
+//   make?: string | null | undefined;
+//   model?: string | null | undefined;
+//   colour?: string | null | undefined;
+//   reference?: number | null;
+//   totalOffenders?: number | null;
+//   registration?: string | null | undefined;
+//   crimeGroup?: string[];
+//   incidents?: string[];
+//   offenders?: string[];
+//   images?: Array<{
+//     id: string;
+//     url?: string | null;
+//     optimised?: string | null;
+//   }>;
+//   edited?: boolean;
+//   new: boolean;
+//   existing: boolean;
+//   updated: boolean;
+//   deleted: boolean;
+// }
 
 export interface FormData {
   name: string;

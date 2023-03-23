@@ -12,8 +12,11 @@ import { useAuth0 } from '@auth0/auth0-react';
 import theme from 'configs/ThemeConfig';
 import { useUserNewQuery } from 'graphql/generated';
 import { useNavigate } from 'react-router';
-import Loading from '../components/loading';
+import { ErrorBoundary, withSentryReactRouterV6Routing } from '@sentry/react';
 import PrimaryOnboarding from '../views/onboard/SetPassword';
+import Loading from '../components/loading';
+
+const SentryRoutes = withSentryReactRouterV6Routing(Routes);
 
 export const Views = (): JSX.Element => {
   const { isLoading } = useAuth0();
@@ -64,35 +67,37 @@ export const Views = (): JSX.Element => {
   if (loading || isLoading || !isSet) return <Loading />;
 
   return (
-    <div style={{ colorScheme: currentTheme }}>
-      <ThemeProvider theme={theme[currentTheme]}>
-        <IntlProvider
-          locale={currentAppLocale.locale}
-          messages={currentAppLocale.messages}
-        >
-          <ConfigProvider locale={currentAppLocale.antd}>
-            {isSet && data ? (
-              <Routes>
-                <Route path="/">
-                  <Route index element={<Navigate to="app" />} />
-                  <Route path="auth/*" element={<AuthLayout />} />
-                  <Route
-                    path="app/*"
-                    element={<AppLayout location={location} />}
-                  />
-                  <Route
-                    path="onboarding/password"
-                    element={<PrimaryOnboarding userId={userId} />}
-                  />
-                </Route>
-              </Routes>
-            ) : (
-              <Loading />
-            )}
-          </ConfigProvider>
-        </IntlProvider>
-      </ThemeProvider>
-    </div>
+    <ErrorBoundary>
+      <div style={{ colorScheme: currentTheme }}>
+        <ThemeProvider theme={theme[currentTheme]}>
+          <IntlProvider
+            locale={currentAppLocale.locale}
+            messages={currentAppLocale.messages}
+          >
+            <ConfigProvider locale={currentAppLocale.antd}>
+              {isSet && data ? (
+                <SentryRoutes>
+                  <Route path="/">
+                    <Route index element={<Navigate to="app" />} />
+                    <Route path="auth/*" element={<AuthLayout />} />
+                    <Route
+                      path="app/*"
+                      element={<AppLayout location={location} />}
+                    />
+                    <Route
+                      path="onboarding/password"
+                      element={<PrimaryOnboarding userId={userId} />}
+                    />
+                  </Route>
+                </SentryRoutes>
+              ) : (
+                <Loading />
+              )}
+            </ConfigProvider>
+          </IntlProvider>
+        </ThemeProvider>
+      </div>
+    </ErrorBoundary>
   );
 };
 
