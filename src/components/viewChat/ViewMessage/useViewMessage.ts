@@ -287,6 +287,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       document: MessagesSubscriptionDocument,
       variables: {
         chat: chatId,
+        user: userId,
       },
       updateQuery: (prev, { subscriptionData }) => {
         // update chat list
