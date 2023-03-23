@@ -16,7 +16,7 @@ describe('Detail Officer View', () => {
           imgChange={jest.fn()}
           beforeUpload={jest.fn()}
           fileList={[]}
-          onSearchOffender={jest.fn()}
+          // onSearchOffender={jest.fn()}
         />
       </MemoryRouter>
     );

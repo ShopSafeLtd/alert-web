@@ -16,7 +16,7 @@ import {
 
 import { ageValues, buildValues, genderValues, raceValues } from 'types/enums';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import DebounceSelect from 'components/form-components/DebounceSelect';
+// import DebounceSelect from 'components/form-components/DebounceSelect';
 import useStyles from './AddNewOffender.style';
 
 interface FormData {
@@ -41,9 +41,9 @@ interface Props {
   imgChange: UploadProps['onChange'];
   beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
-  onSearchOffender: (
-    value: string
-  ) => Promise<{ label: React.ReactNode; value: string }[]>;
+  // onSearchOffender: (
+  //   value: string
+  // ) => Promise<{ label: React.ReactNode; value: string }[]>;
 }
 
 const AddNewOffender = ({
@@ -55,8 +55,8 @@ const AddNewOffender = ({
   imgChange,
   beforeUpload,
   fileList,
-  onSearchOffender,
-}: Props): JSX.Element => {
+}: // onSearchOffender,
+Props): JSX.Element => {
   const classes = useStyles();
   return (
     <Form layout="vertical" onFinish={onSubmit}>
@@ -68,7 +68,8 @@ const AddNewOffender = ({
             tooltip="Enter the offenders name if you know it, if not leave this field
                 blank."
           >
-            <DebounceSelect
+            <Input className={classes.nameSelect} disabled={saving} />
+            {/* <DebounceSelect
               showSearch
               allowClear
               disabled={saving}
@@ -77,7 +78,9 @@ const AddNewOffender = ({
               style={{ width: '100%' }}
               dropdownStyle={{ padding: 0 }}
               className={classes.nameSelect}
-            />
+              mode="tags"
+              maxTagCount={1}
+            /> */}
           </Form.Item>
         </Col>
       </Row>

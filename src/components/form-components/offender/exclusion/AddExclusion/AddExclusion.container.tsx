@@ -5,11 +5,10 @@ import useAddExclusion from './useAddExclusion';
 
 interface BanData {
   id: string;
-  title?: string | null | undefined;
   endDate: Date;
   startDate: Date;
   location: string;
-  description?: string | null | undefined;
+  description: string;
 }
 interface Props {
   onClose: () => void;

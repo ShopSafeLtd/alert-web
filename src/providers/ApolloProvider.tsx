@@ -18,7 +18,7 @@ import { ReadFieldFunction } from '@apollo/client/cache/core/types/common';
 import { useAuth0 } from '@auth0/auth0-react';
 import { onError } from '@apollo/client/link/error';
 
-// import * as Sentry from '@sentry/react';
+import * as Sentry from '@sentry/react';
 
 interface Props {
   children: React.ReactNode;
@@ -55,11 +55,11 @@ const Apollo = ({ children }: Props): JSX.Element => {
   const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors)
       graphQLErrors.forEach(({ message, locations, path }) => {
-        // Sentry.captureMessage(
-        //   `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
-        //     locations
-        //   )}, Path: ${path}`
-        // );
+        Sentry.captureMessage(
+          `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
+            locations
+          )}, Path: ${path}`
+        );
         console.log(
           `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
             locations
@@ -69,7 +69,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
 
     if (networkError) {
       console.log(`[Network error]: ${networkError}`);
-      // Sentry.captureException(networkError);
+      Sentry.captureException(networkError);
     }
   });
 

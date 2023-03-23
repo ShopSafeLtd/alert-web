@@ -117,8 +117,11 @@ const useAuth = (): Return => {
     onCompleted: ({ currentUser }) => {
       const scheme =
         currentScheme || window.localStorage.getItem('currentScheme');
+
       if (scheme) {
-        const currentS = currentUser?.schemes.find((s) => s.id === scheme);
+        const currentS = currentUser?.schemes.find(
+          (s) => s.scheme.id === scheme
+        );
         if (currentS) {
           window.localStorage.setItem(
             'logo',

@@ -183,6 +183,7 @@
     "@graphql-codegen/typescript": "2.4.5",
     "@graphql-codegen/typescript-operations": "2.3.2",
     "@graphql-codegen/typescript-react-apollo": "3.2.8",
+    "@sentry/vite-plugin": "^0.4.0",
     "@types/react": "^17.0.34",
     "@types/react-swipeable-views": "^0.13.1",
     "@typescript-eslint/eslint-plugin": "5.0.0",

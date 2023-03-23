@@ -29,7 +29,8 @@ function EditOffender({ reviewed }: Props): JSX.Element {
     toggleAddExclusion,
     editExclusion,
     toggleEditExclusion,
-    updateExclusion,
+    onAddExclusion,
+    onUpdateExclusion,
     banData,
     setBanData,
     bansData,
@@ -97,7 +98,8 @@ function EditOffender({ reviewed }: Props): JSX.Element {
         toggleAddExclusion={toggleAddExclusion}
         editExclusion={editExclusion}
         toggleEditExclusion={toggleEditExclusion}
-        updateExclusion={updateExclusion}
+        onAddExclusion={onAddExclusion}
+        onUpdateExclusion={onUpdateExclusion}
         bansData={bansData}
         banData={banData}
         setBanData={setBanData}

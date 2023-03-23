@@ -46,6 +46,7 @@ export interface OffenderData {
       }[]
     | undefined;
 }
+
 export interface OffenderCardData {
   id: string;
   updatedAt?: Date | undefined;
@@ -88,7 +89,13 @@ export interface VehicleData {
     optimised?: string | null;
   }>;
   edited?: boolean;
+
+  new?: boolean;
+  existing?: boolean;
+  updated?: boolean;
+  deleted?: boolean;
 }
+
 export interface VehicleCardData {
   id: string;
   updatedAt: Date;
@@ -120,6 +127,7 @@ export interface CrimeGroupData {
   vehicles?: string[];
   offenders?: string[];
 }
+
 export interface CrimeGroupCardData {
   id: string;
   alias?: string | null;

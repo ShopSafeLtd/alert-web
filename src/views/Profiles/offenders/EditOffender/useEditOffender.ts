@@ -42,6 +42,7 @@ interface AddAddressForm {
   county: string;
   postcode: string;
 }
+
 interface EditAddressForm {
   id: string;
   alias: string;
@@ -70,14 +71,47 @@ interface Props {
   reviewed: boolean;
 }
 
-interface BanData {
+interface BanType {
   id: string;
-  title?: string | null | undefined;
   endDate: Date;
   startDate: Date;
   location: string;
-  description?: string | null | undefined;
+  description?: string | null;
+  new: boolean;
+  updated: boolean;
+  deleted: boolean;
 }
+
+interface BanPayloadType {
+  id: string;
+  endDate: Date;
+  startDate: Date;
+  location: string;
+  description?: string | null;
+}
+
+// interface VehicleData {
+//   id: string;
+//   make?: string | null | undefined;
+//   model?: string | null | undefined;
+//   colour?: string | null | undefined;
+//   reference?: number | null;
+//   totalOffenders?: number | null;
+//   registration?: string | null | undefined;
+//   crimeGroup?: string[];
+//   incidents?: string[];
+//   offenders?: string[];
+//   images?: Array<{
+//     id: string;
+//     url?: string | null;
+//     optimised?: string | null;
+//   }>;
+//   edited?: boolean;
+//   new: boolean;
+//   existing: boolean;
+//   updated: boolean;
+//   deleted: boolean;
+// }
 
 export interface FormData {
   name: string;
@@ -94,12 +128,6 @@ export interface FormData {
   images?: { id: string; url: string; optimised: string }[];
   idVerified?: boolean;
   idSource?: IdSource;
-  bans?: {
-    endDate: Date;
-    startDate: Date;
-    location: string;
-    description: string;
-  }[];
 }
 
 interface Image extends UploadFile {
@@ -131,10 +159,11 @@ interface Return {
   toggleAddExclusion: () => void;
   editExclusion: boolean;
   toggleEditExclusion: () => void;
-  updateExclusion: (value: BanData) => void;
-  bansData: BanData[];
-  banData: BanData | null;
-  setBanData: (value: BanData | null) => void;
+  onUpdateExclusion: (value: BanPayloadType) => void;
+  onAddExclusion: (value: BanPayloadType) => void;
+  setBanData: (value: BanType) => void;
+  bansData: BanType[];
+  banData: BanType | null;
   ageCheck: boolean;
   setAgeCheck: (value: boolean) => void;
   onReject: () => void;
@@ -173,6 +202,7 @@ interface Return {
   addressesData: AddressesData[] | null;
   onEditAddress: (data: EditAddressForm) => void;
   onDeleteAddress: (addressId: string) => void;
+  onAddVehicles: (data: VehicleData, existing: boolean) => void;
 }
 
 const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
@@ -199,8 +229,8 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   const [editAddress, toggleEditAddress] = useState<null | string>(null);
   const [editExclusion, setEditExclusion] = useState(false);
   const [addressesData, setAddressesData] = useState<AddressesData[]>([]);
-  const [bansData, setBansData] = useState<BanData[]>([]);
-  const [banData, setBanData] = useState<BanData | null>(null);
+  const [bansData, setBansData] = useState<BanType[]>([]);
+  const [banData, setBanData] = useState<BanType | null>(null);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   const [addNewCrimeGroup, setAddNewCrimeGroup] = useState(false);
@@ -304,7 +334,18 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
         );
       }
       if (offender?.bans && offender.bans.length > 0) {
-        setBansData(offender.bans);
+        setBansData(
+          offender.bans.map((ban) => ({
+            deleted: false,
+            description: ban.description || '',
+            endDate: ban.endDate,
+            startDate: ban.startDate,
+            id: ban.id,
+            location: ban.location,
+            new: false,
+            updated: false,
+          }))
+        );
       }
       if (offender?.addresses && offender.addresses.length > 0) {
         setAddressesData(
@@ -323,7 +364,15 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
         );
       }
       if (offender?.vehicles && offender.vehicles.length) {
-        setVehiclesData(offender.vehicles);
+        setVehiclesData(
+          offender.vehicles.map((item) => ({
+            ...item,
+            deleted: false,
+            new: false,
+            updated: false,
+            existing: false,
+          }))
+        );
       }
       if (offender?.crimeGroups && offender.crimeGroups.length) {
         setCrimeGroupsData(offender.crimeGroups);
@@ -452,59 +501,47 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   const onSubmit = async (data: FormData) => {
     setSaving(true);
     const getBans = (): OffenderUpdateInput['bans'] => {
-      if (
-        offenderData?.offender?.bans &&
-        offenderData?.offender?.bans.length > 0
-      ) {
-        const offenderBanIds = offenderData?.offender?.bans.map(
-          (ban) => ban.id
-        );
-        const existingBans = bansData.filter(({ id }) =>
-          offenderBanIds?.includes(id)
-        );
-        const newBans = bansData.filter(
-          ({ id }) => !offenderBanIds?.includes(id)
-        );
-        const deleteBanIds = offenderBanIds.filter((banId) =>
-          bansData.map((ban) => ban.id).includes(banId)
-        );
-        return {
-          update:
-            existingBans.length > 0
-              ? existingBans.map((ban) => ({
-                  where: { id: ban.id },
-                  data: {
-                    startDate: { set: ban.startDate },
-                    endDate: { set: ban.endDate },
-                    location: { set: ban.location },
-                    description: { set: ban.description || null },
-                  },
-                }))
-              : undefined,
-          create:
-            newBans.length > 0
-              ? newBans.map((ban) => ({
-                  startDate: ban?.startDate,
-                  endDate: ban?.endDate,
-                  location: ban?.location,
-                  description: ban?.description || null,
-                  scheme: {
-                    connect: {
-                      id: schemeId,
-                    },
-                  },
-                  createdBy: { connect: { id: userId } },
-                }))
-              : undefined,
-          delete:
-            deleteBanIds.length > 0
-              ? deleteBanIds.map((banId) => ({ id: banId }))
-              : undefined,
-        };
-      }
+      const newBans = bansData.filter((item) => item.new);
+      const deletedBans = bansData.filter((item) => item.deleted);
+      const updatedBans = bansData.filter((item) => item.updated);
+
       return {
-        create: undefined,
-        delete: undefined,
+        create: newBans
+          ? newBans.map((ban) => ({
+              createdBy: {
+                connect: {
+                  id: userId,
+                },
+              },
+              endDate: ban.endDate,
+              location: ban.location,
+              scheme: {
+                connect: {
+                  id: schemeId,
+                },
+              },
+              startDate: ban.startDate,
+              description: ban.description,
+            }))
+          : undefined,
+        update: updatedBans
+          ? updatedBans.map((ban) => ({
+              data: {
+                endDate: { set: ban.endDate },
+                location: { set: ban.location },
+                startDate: { set: ban.startDate },
+                description: { set: ban.description },
+              },
+              where: {
+                id: ban.id,
+              },
+            }))
+          : undefined,
+        delete: deletedBans
+          ? deletedBans.map((ban) => ({
+              id: ban.id,
+            }))
+          : undefined,
       };
     };
     const getVehicles = (): OffenderUpdateInput['vehicles'] => {
@@ -836,25 +873,85 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     setAddExistingCrimeGroup(!addExistingCrimeGroup);
   };
 
-  const updateExclusion = (value: BanData) => {
-    if (bansData && bansData.length > 0) {
-      if (bansData.find(({ id }) => id === value.id)) {
-        setBansData(
-          bansData.map((ban) => {
-            if (ban.id === value.id) {
-              return value;
-            }
-            return ban;
-          })
-        );
-      } else {
-        setBansData([...bansData, value]);
-      }
-    } else if (bansData) {
-      setBansData([value]);
+  const onUpdateExclusion = (value: BanPayloadType) => {
+    const exclusion = bansData.find((item) => item.id === value.id);
+    const index = bansData.map((item) => item.id).indexOf(value.id);
+    if (exclusion?.new) {
+      setBansData(
+        update(bansData, {
+          [index]: {
+            $set: {
+              deleted: false,
+              endDate: value.endDate,
+              id: value.id,
+              location: value.location,
+              new: true,
+              startDate: value.startDate,
+              updated: false,
+              description: value.description,
+            },
+          },
+        })
+      );
+    }
+    if (exclusion?.new === false) {
+      setBansData(
+        update(bansData, {
+          [index]: {
+            $set: {
+              ...exclusion,
+              ...value,
+              updated: true,
+            },
+          },
+        })
+      );
     }
   };
 
+  const onAddExclusion = (value: BanPayloadType) => {
+    setBansData([
+      ...bansData,
+      {
+        ...value,
+        deleted: false,
+        new: true,
+        updated: false,
+        id: `${(Math.random() * 1000).toFixed(0)}`,
+      },
+    ]);
+  };
+
+  const onRemoveExclusion = (value: string) => {
+    const exclusion = bansData.find((item) => item.id === value);
+    const index = bansData.map((item) => item.id).indexOf(value);
+    if (exclusion?.new) {
+      setBansData(bansData.filter((item) => item.id !== value));
+    }
+    if (exclusion?.new === false) {
+      setBansData(
+        update(bansData, {
+          [index]: {
+            $set: {
+              ...exclusion,
+              deleted: true,
+            },
+          },
+        })
+      );
+    }
+  };
+
+  const onAddVehicles = (vehicle: VehicleData, existing: boolean) => {
+    setVehiclesData([
+      ...vehiclesData,
+      {
+        ...vehicle,
+        new: !existing,
+        existing,
+      },
+    ]);
+  };
   const updateVehiclesData = (vehicle: VehicleData) => {
     const editedData = vehiclesData.find(({ id }) => id === vehicle.id);
     if (editedData) {
@@ -868,6 +965,12 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
       setVehiclesData([...vehiclesData, vehicle]);
     }
   };
+  const removeVehicle = (vehicleId: string) => {
+    setVehiclesData(
+      vehiclesData?.filter((vehicle) => vehicle.id !== vehicleId)
+    );
+  };
+
   const updateCrimeGroupsData = (crimeGroup: CrimeGroupData) => {
     const editedData = crimeGroupsData.find(({ id }) => id === crimeGroup.id);
     if (editedData) {
@@ -882,26 +985,18 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     }
   };
 
-  const removeVehicle = (vehicleId: string) => {
-    setVehiclesData(
-      vehiclesData?.filter((vehicle) => vehicle.id !== vehicleId)
-    );
-  };
   const removeCrimeGroup = (crimeGroupId: string) => {
     setCrimeGroupsData(
       crimeGroupsData?.filter((crimeGroup) => crimeGroup.id !== crimeGroupId)
     );
   };
 
-  const openDelete = (currentId: string | undefined) => {
-    setBansData(bansData.filter((ban) => currentId !== ban.id));
-  };
   const deleteConfirm = (currentId: string) => {
     confirm({
       title: 'Do you want to delete the exclusion?',
       content: 'This action cannot be undone.',
       onOk() {
-        openDelete(currentId);
+        onRemoveExclusion(currentId);
       },
     });
   };
@@ -933,10 +1028,11 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     toggleAddExclusion,
     editExclusion,
     toggleEditExclusion,
-    updateExclusion,
-    banData,
+    onUpdateExclusion,
+    onAddExclusion,
     setBanData,
-    bansData,
+    banData,
+    bansData: bansData.filter((item) => !item.deleted),
     deleteConfirm,
     ageCheck,
     setAgeCheck,
@@ -975,6 +1071,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     onSubmitAddress,
     onDeleteAddress,
     onEditAddress,
+    onAddVehicles,
   };
 };
 
