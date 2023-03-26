@@ -29,7 +29,7 @@ import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router';
-import { CrimeGroupData, VehicleData } from 'types/DataType';
+import { BanData, CrimeGroupData, VehicleData } from 'types/DataType';
 import update from 'immutability-helper';
 
 const { confirm } = Modal;
@@ -71,48 +71,6 @@ interface Props {
   reviewed: boolean;
 }
 
-interface BanType {
-  id: string;
-  endDate: Date;
-  startDate: Date;
-  location: string;
-  description?: string | null;
-  new: boolean;
-  updated: boolean;
-  deleted: boolean;
-}
-
-interface BanPayloadType {
-  id: string;
-  endDate: Date;
-  startDate: Date;
-  location: string;
-  description?: string | null;
-}
-
-// interface VehicleData {
-//   id: string;
-//   make?: string | null | undefined;
-//   model?: string | null | undefined;
-//   colour?: string | null | undefined;
-//   reference?: number | null;
-//   totalOffenders?: number | null;
-//   registration?: string | null | undefined;
-//   crimeGroup?: string[];
-//   incidents?: string[];
-//   offenders?: string[];
-//   images?: Array<{
-//     id: string;
-//     url?: string | null;
-//     optimised?: string | null;
-//   }>;
-//   edited?: boolean;
-//   new: boolean;
-//   existing: boolean;
-//   updated: boolean;
-//   deleted: boolean;
-// }
-
 export interface FormData {
   name: string;
   age: Age;
@@ -137,7 +95,11 @@ interface Image extends UploadFile {
   }[];
   optimised?: string | null;
 }
-
+interface BanType extends BanData {
+  new: boolean;
+  updated: boolean;
+  deleted: boolean;
+}
 interface Return {
   onSubmit: (value: FormData) => void;
   data: ViewOffenderQuery | undefined;
@@ -159,8 +121,8 @@ interface Return {
   toggleAddExclusion: () => void;
   editExclusion: boolean;
   toggleEditExclusion: () => void;
-  onUpdateExclusion: (value: BanPayloadType) => void;
-  onAddExclusion: (value: BanPayloadType) => void;
+  onUpdateExclusion: (value: BanData) => void;
+  onAddExclusion: (value: BanData) => void;
   setBanData: (value: BanType) => void;
   bansData: BanType[];
   banData: BanType | null;
@@ -344,6 +306,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
             location: ban.location,
             new: false,
             updated: false,
+            type: ban.type,
           }))
         );
       }
@@ -522,6 +485,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
               },
               startDate: ban.startDate,
               description: ban.description,
+              type: ban.type,
             }))
           : undefined,
         update: updatedBans
@@ -531,6 +495,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
                 location: { set: ban.location },
                 startDate: { set: ban.startDate },
                 description: { set: ban.description },
+                type: { set: ban.type },
               },
               where: {
                 id: ban.id,
@@ -549,7 +514,9 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
         const vehiclesIds = listVehiclesData.listVehicles.vehicles.map(
           (vehicle) => vehicle.id
         );
-
+        const removeVehicles = vehiclesIds?.filter(
+          (vehicleId) => !vehiclesData?.map(({ id }) => id).includes(vehicleId)
+        );
         const newVehicles = vehiclesData.filter(
           (item) => !vehiclesIds.includes(item.id)
         );
@@ -564,6 +531,10 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           connect: existingVehicles.length
             ? existingVehicles.map(({ id }) => ({ id }))
             : undefined,
+          disconnect:
+            removeVehicles && removeVehicles.length
+              ? removeVehicles.map((id) => ({ id }))
+              : undefined,
           update: editedVehicles.map((vehicle) => ({
             where: { id: vehicle.id },
             data: {
@@ -600,16 +571,13 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
                   vehicle.incidents && vehicle.incidents
                     ? { connect: vehicle.incidents.map((id) => ({ id })) }
                     : undefined,
-                // offenders:
-                //   vehicle.offenders && vehicle.offenders.length
-                //     ? { connect: vehicle.offenders.map((id) => ({ id })) }
-                //     : undefined,
               }))
             : undefined,
         };
       }
       return {
         connect: undefined,
+        disconnect: undefined,
         create: undefined,
       };
     };
@@ -619,10 +587,10 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           listCrimeGroupsData.listCrimeGroups.crimeGroups.map(
             (crimeGroup) => crimeGroup.id
           );
-
-        // const newCrimeGroups = crimeGroupsData.filter(
-        //   (item) => !crimeGroupsIds.includes(item.id)
-        // );
+        const removeCrimeGroups = crimeGroupsIds?.filter(
+          (crimeGroupId) =>
+            !crimeGroupsData?.map(({ id }) => id).includes(crimeGroupId)
+        );
 
         const existingCrimeGroups = crimeGroupsData.filter((item) =>
           crimeGroupsIds.includes(item.id)
@@ -632,14 +600,10 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           connect: existingCrimeGroups.length
             ? existingCrimeGroups.map(({ id }) => ({ id }))
             : undefined,
-
-          // create: newCrimeGroups.length
-          //   ? newCrimeGroups.map((crimeGroup) => ({
-          //       offenders: {
-          //         connect: crimeGroup.offenders?.map((id) => ({ id })),
-          //       },
-          //     }))
-          //   : undefined,
+          disconnect:
+            removeCrimeGroups && removeCrimeGroups.length
+              ? removeCrimeGroups.map((id) => ({ id }))
+              : undefined,
         };
       }
       return {
@@ -873,7 +837,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     setAddExistingCrimeGroup(!addExistingCrimeGroup);
   };
 
-  const onUpdateExclusion = (value: BanPayloadType) => {
+  const onUpdateExclusion = (value: BanData) => {
     const exclusion = bansData.find((item) => item.id === value.id);
     const index = bansData.map((item) => item.id).indexOf(value.id);
     if (exclusion?.new) {
@@ -889,6 +853,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
               startDate: value.startDate,
               updated: false,
               description: value.description,
+              type: value.type,
             },
           },
         })
@@ -909,7 +874,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     }
   };
 
-  const onAddExclusion = (value: BanPayloadType) => {
+  const onAddExclusion = (value: BanData) => {
     setBansData([
       ...bansData,
       {

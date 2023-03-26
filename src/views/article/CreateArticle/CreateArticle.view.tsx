@@ -19,7 +19,7 @@ import { ArticlePriority } from 'graphql/generated';
 import { UploadOutlined } from '@ant-design/icons';
 import type { FormData, ViewProps } from './types/CreateArticle';
 import AddExistingOffender from '../../../components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
-import LinkIncident from '../../../components/form-components/LinkOptions/LinkIncident';
+import LinkIncident from '../../../components/form-components/linkOptions/LinkIncident';
 
 const CreateArticleView = ({
   // log,

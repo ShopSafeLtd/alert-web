@@ -808,7 +808,10 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           const vehiclesIds = listVehiclesData.listVehicles.vehicles.map(
             (vehicle) => vehicle.id
           );
-
+          const removeVehicles = vehiclesIds?.filter(
+            (vehicleId) =>
+              !vehiclesData?.map(({ id }) => id).includes(vehicleId)
+          );
           const newVehicles = vehiclesData.filter(
             (item) => !vehiclesIds.includes(item.id)
           );
@@ -823,6 +826,10 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             connect: existingVehicles.length
               ? existingVehicles.map(({ id }) => ({ id }))
               : undefined,
+            disconnect:
+              removeVehicles && removeVehicles.length
+                ? removeVehicles.map((id) => ({ id }))
+                : undefined,
             update: editedVehicles.map((vehicle) => ({
               where: { id: vehicle.id },
               data: {
@@ -865,6 +872,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
         }
         return {
           connect: undefined,
+          disconnect: undefined,
           create: undefined,
         };
       };
@@ -878,7 +886,10 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             listCrimeGroupsData.listCrimeGroups.crimeGroups.map(
               (crimeGroup) => crimeGroup.id
             );
-
+          const removeCrimeGroups = crimeGroupsIds?.filter(
+            (crimeGroupId) =>
+              !crimeGroupsData?.map(({ id }) => id).includes(crimeGroupId)
+          );
           const newCrimeGroups = crimeGroupsData.filter(
             (item) => !crimeGroupsIds.includes(item.id)
           );
@@ -891,7 +902,10 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             connect: existingCrimeGroups.length
               ? existingCrimeGroups.map(({ id }) => ({ id }))
               : undefined,
-
+            disconnect:
+              removeCrimeGroups && removeCrimeGroups.length
+                ? removeCrimeGroups.map((id) => ({ id }))
+                : undefined,
             create: newCrimeGroups.length
               ? newCrimeGroups.map((crimeGroup) => ({
                   offenders: {
@@ -902,6 +916,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           };
         }
         return {
+          disconnect: undefined,
           connect: undefined,
           create: undefined,
         };

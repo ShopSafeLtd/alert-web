@@ -45,7 +45,7 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import moment from 'moment';
 import OffenderDetails from 'components/offenders/OffenderForm/OffenderDetails';
-import { CrimeGroupData, VehicleData } from 'types/DataType';
+import { BanData, CrimeGroupData, VehicleData } from 'types/DataType';
 import Profiles from 'components/offenders/OffenderForm/Profiles';
 import ProfileDrawer from 'components/offenders/OffenderForm/ProfileDrawer';
 import NewOffenderAddress from 'components/form-components/addresses/NewOffenderAddress';
@@ -83,23 +83,20 @@ interface EditAddressForm {
   postcode: string;
 }
 
-interface BanType {
-  id: string;
-  endDate: Date;
-  startDate: Date;
-  location: string;
-  description?: string | null;
+// interface BanType {
+//   id: string;
+//   endDate: Date;
+//   startDate: Date;
+//   location: string;
+//   description?: string | null;
+//   new: boolean;
+//   updated: boolean;
+//   deleted: boolean;
+// }
+interface BanType extends BanData {
   new: boolean;
   updated: boolean;
   deleted: boolean;
-}
-
-interface BanPayloadType {
-  id: string;
-  endDate: Date;
-  startDate: Date;
-  location: string;
-  description?: string | null;
 }
 
 interface Props {
@@ -122,8 +119,8 @@ interface Props {
   addOffenderTag: boolean;
   toggleAddOffenderTag: () => void;
   updateOffenderTag: MutationUpdaterFn<CreateTagMutation>;
-  onUpdateExclusion: (value: BanPayloadType) => void;
-  onAddExclusion: (value: BanPayloadType) => void;
+  onUpdateExclusion: (value: BanData) => void;
+  onAddExclusion: (value: BanData) => void;
   setBanData: (value: BanType) => void;
   bansData: BanType[];
   banData: BanType | null;
@@ -508,6 +505,11 @@ const EditOffender = ({
                         ellipsis: true,
                       },
                       {
+                        key: 'type',
+                        title: 'Type',
+                        dataIndex: 'type',
+                      },
+                      {
                         key: 'Edit',
                         title: 'Edit',
                         width: 50,
@@ -554,6 +556,7 @@ const EditOffender = ({
                       ),
                       location: ban.location,
                       description: ban.description,
+                      type: ban.type,
                     }))}
                   />
                 </Col>

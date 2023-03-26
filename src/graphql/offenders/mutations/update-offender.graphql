@@ -35,6 +35,7 @@ mutation updateOffender($where: UniqueId!, $data: OffenderUpdateInput!) {
       description
       startDate
       endDate
+      type
     }
     createdBy {
       id

@@ -42519,6 +42519,7 @@ export type CreateOffenderMutation = {
       description?: string | null;
       startDate: any;
       endDate: any;
+      type?: BanType | null;
     }>;
     createdBy: {
       __typename?: 'User';
@@ -42630,6 +42631,7 @@ export type UpdateOffenderMutation = {
       description?: string | null;
       startDate: any;
       endDate: any;
+      type?: BanType | null;
     }>;
     createdBy: {
       __typename?: 'User';
@@ -42925,6 +42927,7 @@ export type ViewOffenderQuery = {
       description?: string | null;
       startDate: any;
       endDate: any;
+      type?: BanType | null;
     }>;
     crimeGroups: Array<{
       __typename?: 'CrimeGroup';
@@ -52433,6 +52436,7 @@ export const CreateOffenderDocument = gql`
         description
         startDate
         endDate
+        type
       }
       createdBy {
         id
@@ -52705,6 +52709,7 @@ export const UpdateOffenderDocument = gql`
         description
         startDate
         endDate
+        type
       }
       createdBy {
         id
@@ -53286,6 +53291,7 @@ export const ViewOffenderDocument = gql`
         description
         startDate
         endDate
+        type
       }
       crimeGroups {
         id

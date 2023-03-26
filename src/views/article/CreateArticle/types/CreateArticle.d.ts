@@ -7,7 +7,7 @@ import { UploadFile } from 'antd/es/upload/interface';
 import { AddIncident, AddOffender } from '../hooks/Forms';
 import { DrawerType } from '../../../../hooks';
 import { OffenderData } from '../../../../components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
-import { Incident } from '../../../../components/form-components/LinkOptions/LinkIncident/LinkIncident.container';
+import { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/LinkIncident.container';
 
 export interface Props {
   editorRef: React.MutableRefObject<Editor | null>;

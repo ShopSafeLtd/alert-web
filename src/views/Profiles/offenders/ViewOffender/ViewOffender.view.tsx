@@ -55,7 +55,7 @@ import { ItemType } from 'antd/lib/menu/hooks/useItems';
 import { calcExpired } from 'utils/offender/get-offender-exclusion';
 import OffenderSideList from 'components/offenders/OffenderSideList';
 import moment from 'moment';
-import LinkIncident from 'components/form-components/LinkOptions/LinkIncident';
+import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import { useNavigate } from 'react-router';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';

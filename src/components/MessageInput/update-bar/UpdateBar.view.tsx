@@ -25,7 +25,7 @@ import {
 import { RcFile, UploadFile, UploadProps } from 'antd/lib/upload/interface';
 import Picker from 'emoji-picker-react';
 import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
-import LinkIncident from 'components/form-components/LinkOptions/LinkIncident';
+import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import {
   CrimeGroupData,
@@ -34,8 +34,8 @@ import {
   VehicleData,
   IncidentsData,
 } from 'types/DataType';
-import LinkCrimeGroup from 'components/form-components/LinkOptions/LinkCrimeGroup';
-import LinkVehicle from 'components/form-components/LinkOptions/LinkVehicle';
+import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
+import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import {
   CrimeGroupMessageCard,
   IncidentMessageCard,

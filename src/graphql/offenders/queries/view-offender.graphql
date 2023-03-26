@@ -47,6 +47,7 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
       description
       startDate
       endDate
+      type
     }
     crimeGroups {
       id

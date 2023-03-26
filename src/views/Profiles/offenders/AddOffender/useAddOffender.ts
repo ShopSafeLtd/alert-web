@@ -29,7 +29,7 @@ import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { CrimeGroupData, VehicleData } from 'types/DataType';
+import { BanData, CrimeGroupData, VehicleData } from 'types/DataType';
 
 const { confirm } = Modal;
 
@@ -48,27 +48,19 @@ export interface FormData {
   images?: { id: string; url: string; optimised: string }[];
   idVerified?: boolean;
   idSource?: IdSource;
-  bans?: {
-    endDate: Date;
-    startDate: Date;
-    location: string;
-    description: string;
-  }[];
+  bans?: BanData[];
+  // bans?: {
+  //   endDate: Date;
+  //   startDate: Date;
+  //   location: string;
+  //   description: string;
+  // }[];
   alias?: string;
   building?: string;
   street?: string;
   townCity?: string;
   county?: string;
   postcode?: string;
-}
-
-interface BanData {
-  id: string;
-  title?: string | null | undefined;
-  endDate: Date;
-  startDate: Date;
-  location: string;
-  description?: string | null | undefined;
 }
 
 interface Return {
@@ -329,11 +321,6 @@ const useAddOffender = (): Return => {
           .flat()
           .filter((id) => id !== (undefined || null)) as { id: string }[]; // ???
         return { connect: connectIds };
-
-        // if (connectIds.map(({ id }) => id).includes(offenderId)) {
-        // return { connect: connectIds };
-        // }
-        // return { connect: connectIds.concat({ id: offenderId }) };
       };
       await createCrimeGroup({
         variables: {
@@ -504,6 +491,7 @@ const useAddOffender = (): Return => {
                   endDate: ban?.endDate,
                   location: ban?.location,
                   description: ban?.description || null,
+                  type: ban.type || null,
                   scheme: {
                     connect: {
                       id: schemeId,
@@ -608,7 +596,7 @@ const useAddOffender = (): Return => {
       } else {
         setBansData([...bansData, value]);
       }
-    } else if (bansData) {
+    } else {
       setBansData([value]);
     }
   };

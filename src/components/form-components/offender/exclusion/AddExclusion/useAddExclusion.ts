@@ -2,27 +2,16 @@ import { useState } from 'react';
 
 import type { RangePickerProps } from 'antd/es/date-picker';
 import type { Moment } from 'moment';
+import { BanData } from 'types/DataType';
+// import { BanType } from 'graphql/generated';
 
-interface FormData {
-  endDate: Date;
-  startDate: Date;
-  location: string;
-  description: string;
-}
-interface BanData {
-  id: string;
-  endDate: Date;
-  startDate: Date;
-  location: string;
-  description: string;
-}
 interface Props {
   onClose: () => void;
   update: (value: BanData) => void;
 }
 
 interface Return {
-  onSubmit: (value: FormData) => void;
+  onSubmit: (value: BanData) => void;
   saving: boolean;
   setStartDate: (value: Moment | Date | null) => void;
   disabledDate: RangePickerProps['disabledDate'];
@@ -39,14 +28,17 @@ const useAddExclusion = ({ update, onClose }: Props): Return => {
     return current && current.valueOf() < Date.now() - 3600 * 1000 * 24;
   };
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = (data: BanData) => {
     setSaving(true);
+    console.log('data', data.type);
+
     update({
       id: Math.floor(Math.random() * 1000).toString(),
       startDate: data.startDate || null,
       endDate: data.endDate || null,
       location: data.location || '',
       description: data.description || '',
+      type: data.type || null,
     });
     onClose();
     setSaving(false);

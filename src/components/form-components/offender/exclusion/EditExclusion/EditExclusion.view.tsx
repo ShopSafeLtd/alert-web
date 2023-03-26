@@ -1,26 +1,13 @@
 import React from 'react';
-import { Button, Col, DatePicker, Form, Input, Row } from 'antd';
+import { Button, Col, DatePicker, Form, Input, Row, Select } from 'antd';
 import moment from 'moment';
 import type { Moment } from 'moment';
 import type { RangePickerProps } from 'antd/es/date-picker';
-
-interface FormData {
-  endDate: Date;
-  startDate: Date;
-  location: string;
-  description: string;
-}
-interface BanData {
-  id: string;
-  title?: string | null | undefined;
-  endDate: Date;
-  startDate: Date;
-  location: string;
-  description?: string | null | undefined;
-}
+import { BanData } from 'types/DataType';
+import { BanTypeValues } from 'types';
 
 interface Props {
-  onSubmit: (value: FormData) => void;
+  onSubmit: (value: BanData) => void;
   onClose: () => void;
   banData: BanData | null;
   saving: boolean;
@@ -42,6 +29,7 @@ const EditExclusion = ({
       endDate: moment(banData?.endDate, 'YYYY-MM-DD'),
       location: banData?.location,
       description: banData?.description || '',
+      type: banData?.type || null,
     }}
     layout="vertical"
     onFinish={onSubmit}
@@ -55,7 +43,7 @@ const EditExclusion = ({
           rules={[
             {
               required: true,
-              message: 'Please select a start date for the new exclusion.',
+              message: 'Please select a start date for the exclusion.',
             },
             ({ getFieldValue }) => ({
               validator(_, value) {
@@ -87,7 +75,7 @@ const EditExclusion = ({
           rules={[
             {
               required: true,
-              message: 'Please select a end date for the new exclusion.',
+              message: 'Please select a end date for the exclusion.',
             },
           ]}
         >
@@ -95,7 +83,17 @@ const EditExclusion = ({
         </Form.Item>
       </Col>
     </Row>
-
+    <Row gutter={16}>
+      <Col span={21}>
+        <Form.Item
+          name="type"
+          label="Type"
+          tooltip="select a type for the exclusion."
+        >
+          <Select options={BanTypeValues} disabled={saving} />
+        </Form.Item>
+      </Col>
+    </Row>
     <Row gutter={16}>
       <Col span={21}>
         <Form.Item
@@ -104,7 +102,7 @@ const EditExclusion = ({
           rules={[
             {
               required: true,
-              message: 'Please enter a location for the new exclusion.',
+              message: 'Please enter a location for the exclusion.',
             },
           ]}
         >

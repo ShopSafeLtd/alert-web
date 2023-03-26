@@ -1,15 +1,9 @@
 import React from 'react';
+import { BanData } from 'types/DataType';
 
 import View from './AddExclusion.view';
 import useAddExclusion from './useAddExclusion';
 
-interface BanData {
-  id: string;
-  endDate: Date;
-  startDate: Date;
-  location: string;
-  description: string;
-}
 interface Props {
   onClose: () => void;
   update: (value: BanData) => void;

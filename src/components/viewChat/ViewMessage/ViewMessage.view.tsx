@@ -42,11 +42,11 @@ import { faCircleXmark, faUser } from '@fortawesome/pro-solid-svg-icons';
 import AddUserChat from 'components/form-components/userChat/ManageChatMember';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
-import LinkIncident from 'components/form-components/LinkOptions/LinkIncident';
+import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { CrimeGroupData, IncidentsData, VehicleData } from 'types/DataType';
-import LinkCrimeGroup from 'components/form-components/LinkOptions/LinkCrimeGroup';
-import LinkVehicle from 'components/form-components/LinkOptions/LinkVehicle';
+import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
+import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 
 import {
   CrimeGroupMessageCard,

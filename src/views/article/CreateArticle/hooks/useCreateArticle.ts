@@ -14,7 +14,7 @@ import {
 } from '../../../../graphql/generated';
 import { useStoreState } from '../../../../state';
 import { OffenderData } from '../../../../components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
-import { Incident } from '../../../../components/form-components/LinkOptions/LinkIncident/LinkIncident.container';
+import { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/LinkIncident.container';
 
 const { useForm } = Form;
 
