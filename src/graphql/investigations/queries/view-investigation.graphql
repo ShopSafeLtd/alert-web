@@ -52,6 +52,11 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
         updatedAt
       }
       linkedVehicles {
+        images {
+          id
+          url
+          optimised
+        }
         updatedAt
         totalOffenders
         registration
@@ -118,6 +123,11 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
           updatedAt
         }
         linkedVehicles {
+          images {
+            id
+            url
+            optimised
+          }
           updatedAt
           totalOffenders
           registration

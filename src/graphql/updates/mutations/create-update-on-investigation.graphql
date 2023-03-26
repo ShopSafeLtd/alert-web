@@ -51,6 +51,11 @@ mutation CreateUpdateOnInvestigation(
       updatedAt
     }
     linkedVehicles {
+      images {
+        id
+        url
+        optimised
+      }
       updatedAt
       totalOffenders
       registration
@@ -91,6 +96,11 @@ mutation CreateUpdateOnInvestigation(
         updatedAt
       }
       linkedVehicles {
+        images {
+          id
+          url
+          optimised
+        }
         updatedAt
         totalOffenders
         registration

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row, Tag, Typography } from 'antd';
+import { Col, Row, Typography } from 'antd';
 import { FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -38,7 +38,6 @@ const IncidentFeed = ({
   isNewImage,
   isNewIncident,
 }: Props): JSX.Element => {
-  // const imagesRef = useRef<CarouselRef>(null);
   const {
     updates,
     images,
@@ -47,11 +46,12 @@ const IncidentFeed = ({
     business,
     // totalUpdates,
     subject,
-    // reference,
+    reference,
     // policeRef,
-    createdBy,
+    // createdBy,
     id,
-    offenders,
+    totalOffenders,
+    // offenders,
   } = feedItem?.incident || {};
 
   return (
@@ -75,22 +75,27 @@ const IncidentFeed = ({
         <Link to={`/app/incidents/view/${id}`}>
           {isNewIncident ? (
             <>
-              <Title style={{ marginBottom: 2 }} level={4} ellipsis>
+              <Title level={4} ellipsis>
                 {subject}
               </Title>
+              <Row style={{ marginTop: -5, marginBottom: 5 }}>
+                <Col>
+                  <Text style={{ fontSize: 14 }} type="secondary">
+                    Alert ID: {reference}
+                  </Text>
+                </Col>
+              </Row>
 
-              <Paragraph style={{ fontSize: 14 }} type="secondary" ellipsis>
-                {description}
-              </Paragraph>
               <Row>
                 <Col>
                   <FontAwesomeIcon
                     size="sm"
+                    style={{ marginRight: 5 }}
                     className="feedItem-card-icon"
                     icon={faClock}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    {dayTime}
+                    Created At: {dayTime}
                   </Text>
                 </Col>
               </Row>
@@ -100,16 +105,31 @@ const IncidentFeed = ({
                     size="sm"
                     className="feedItem-card-icon"
                     icon={faUser}
+                    style={{ marginRight: 5 }}
+                  />
+                  <Text style={{ fontSize: 14 }} type="secondary">
+                    Members: {totalOffenders || 0}
+                  </Text>
+                </Col>
+              </Row>
+              {/* <Row>
+                <Col>
+                  <FontAwesomeIcon
+                    size="sm"
+                    style={{ marginRight: 5 }}
+                    className="feedItem-card-icon"
+                    icon={faUser}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
                     {createdBy?.fullName} - {createdBy?.businesses[0]?.name}
                   </Text>
                 </Col>
-              </Row>
+              </Row> */}
               <Row wrap={false} className="incident-card-location-row">
                 <Col>
                   <FontAwesomeIcon
                     size="sm"
+                    style={{ marginRight: 5 }}
                     className="feedItem-card-icon"
                     icon={faLocationDot}
                   />
@@ -120,7 +140,16 @@ const IncidentFeed = ({
                   </Text>
                 </Col>
               </Row>
-              {offenders && offenders.length ? (
+              {description && (
+                <Paragraph
+                  type="secondary"
+                  style={{ fontSize: 14, marginTop: 10 }}
+                  ellipsis={{ rows: 3 }}
+                >
+                  {description}
+                </Paragraph>
+              )}
+              {/* {feedItem?.incident&& offenders.length ? (
                 <Row wrap={false} style={{ overflowX: 'auto', marginTop: 10 }}>
                   {offenders.map((offender) => (
                     <Link
@@ -134,7 +163,7 @@ const IncidentFeed = ({
                     </Link>
                   ))}
                 </Row>
-              ) : null}
+              ) : null} */}
             </>
           ) : (
             <>

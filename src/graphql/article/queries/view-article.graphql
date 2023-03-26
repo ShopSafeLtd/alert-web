@@ -19,6 +19,18 @@ query Article($where: ArticleWhereUniqueInput!) {
     tags {
       name
     }
+    images {
+      id
+      url
+      optimised
+      card
+    }
+    image {
+      id
+      url
+      optimised
+      card
+    }
     title
     rows {
       columns {

@@ -21,6 +21,18 @@ query listArticles(
         id
         name
       }
+      images {
+        id
+        url
+        optimised
+        card
+      }
+      image {
+        id
+        url
+        optimised
+        card
+      }
       createdBy {
         fullName
         organisation

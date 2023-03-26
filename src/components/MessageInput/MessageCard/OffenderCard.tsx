@@ -61,7 +61,9 @@ const OffenderCard = ({ offender, removeOffender, saving }: Props) => (
       <Col>
         {offender.images && offender.images.length > 0 && (
           <div style={{ width: 100, height: 100 }}>
-            <WatermarkImage url={offender.images[0].optimised} />
+            <WatermarkImage
+              url={offender.images[0].optimised || offender.images[0].url || ''}
+            />
           </div>
         )}
       </Col>

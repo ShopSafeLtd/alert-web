@@ -25,6 +25,11 @@ mutation CreateUpdateOnCrimeGroup(
       updatedAt
     }
     linkedVehicles {
+      images {
+        id
+        url
+        optimised
+      }
       updatedAt
       totalOffenders
       registration
@@ -91,6 +96,11 @@ mutation CreateUpdateOnCrimeGroup(
         updatedAt
       }
       linkedVehicles {
+        images {
+          id
+          url
+          optimised
+        }
         updatedAt
         totalOffenders
         registration

@@ -3094,6 +3094,7 @@ export type Article = {
   frequency?: Maybe<Scalars['Int']>;
   groups: Array<Group>;
   id: Scalars['String'];
+  image?: Maybe<Image>;
   images: Array<Image>;
   impressions: Array<Impression>;
   previewImage?: Maybe<Scalars['String']>;
@@ -3601,6 +3602,7 @@ export type ArticleCreateManyCreatedByInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   frequency?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['String']>;
+  imageId?: InputMaybe<Scalars['String']>;
   previewImage?: InputMaybe<Scalars['String']>;
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
@@ -3677,6 +3679,12 @@ export type ArticleCreateNestedOneWithoutFeedItemsInput = {
   create?: InputMaybe<ArticleCreateWithoutFeedItemsInput>;
 };
 
+export type ArticleCreateNestedOneWithoutImageInput = {
+  connect?: InputMaybe<ArticleWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<ArticleCreateOrConnectWithoutImageInput>;
+  create?: InputMaybe<ArticleCreateWithoutImageInput>;
+};
+
 export type ArticleCreateNestedOneWithoutImpressionsInput = {
   connect?: InputMaybe<ArticleWhereUniqueInput>;
   connectOrCreate?: InputMaybe<ArticleCreateOrConnectWithoutImpressionsInput>;
@@ -3711,6 +3719,11 @@ export type ArticleCreateOrConnectWithoutFeedItemsInput = {
 
 export type ArticleCreateOrConnectWithoutGroupsInput = {
   create: ArticleCreateWithoutGroupsInput;
+  where: ArticleWhereUniqueInput;
+};
+
+export type ArticleCreateOrConnectWithoutImageInput = {
+  create: ArticleCreateWithoutImageInput;
   where: ArticleWhereUniqueInput;
 };
 
@@ -3752,6 +3765,7 @@ export type ArticleCreateWithoutActionsInput = {
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<ImageCreateNestedOneWithoutArticleInput>;
   images?: InputMaybe<ImageCreateNestedManyWithoutArticlesInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutArticleInput>;
   previewImage?: InputMaybe<Scalars['String']>;
@@ -3776,6 +3790,7 @@ export type ArticleCreateWithoutCreatedByInput = {
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<ImageCreateNestedOneWithoutArticleInput>;
   images?: InputMaybe<ImageCreateNestedManyWithoutArticlesInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutArticleInput>;
   previewImage?: InputMaybe<Scalars['String']>;
@@ -3800,6 +3815,7 @@ export type ArticleCreateWithoutDocumentsInput = {
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<ImageCreateNestedOneWithoutArticleInput>;
   images?: InputMaybe<ImageCreateNestedManyWithoutArticlesInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutArticleInput>;
   previewImage?: InputMaybe<Scalars['String']>;
@@ -3824,6 +3840,7 @@ export type ArticleCreateWithoutFeedItemsInput = {
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<ImageCreateNestedOneWithoutArticleInput>;
   images?: InputMaybe<ImageCreateNestedManyWithoutArticlesInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutArticleInput>;
   previewImage?: InputMaybe<Scalars['String']>;
@@ -3847,6 +3864,32 @@ export type ArticleCreateWithoutGroupsInput = {
   documents?: InputMaybe<DocumentCreateNestedManyWithoutArticlesInput>;
   feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutArticleInput>;
   frequency?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<ImageCreateNestedOneWithoutArticleInput>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutArticlesInput>;
+  impressions?: InputMaybe<ImpressionCreateNestedManyWithoutArticleInput>;
+  previewImage?: InputMaybe<Scalars['String']>;
+  previewText?: InputMaybe<Scalars['String']>;
+  priority: ArticlePriority;
+  recurring?: InputMaybe<Scalars['Boolean']>;
+  rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
+  start?: InputMaybe<Scalars['DateTime']>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutArticlesInput>;
+  title: Scalars['String'];
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  users?: InputMaybe<UserCreateNestedManyWithoutArticlesInput>;
+  when?: InputMaybe<When>;
+};
+
+export type ArticleCreateWithoutImageInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutArticleInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdBy: UserCreateNestedOneWithoutCreatedArticlesInput;
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutArticlesInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutArticleInput>;
+  frequency?: InputMaybe<Scalars['Int']>;
+  groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutArticlesInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutArticleInput>;
@@ -3873,6 +3916,7 @@ export type ArticleCreateWithoutImagesInput = {
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<ImageCreateNestedOneWithoutArticleInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutArticleInput>;
   previewImage?: InputMaybe<Scalars['String']>;
   previewText?: InputMaybe<Scalars['String']>;
@@ -3897,6 +3941,7 @@ export type ArticleCreateWithoutImpressionsInput = {
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<ImageCreateNestedOneWithoutArticleInput>;
   images?: InputMaybe<ImageCreateNestedManyWithoutArticlesInput>;
   previewImage?: InputMaybe<Scalars['String']>;
   previewText?: InputMaybe<Scalars['String']>;
@@ -3921,6 +3966,7 @@ export type ArticleCreateWithoutRowsInput = {
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<ImageCreateNestedOneWithoutArticleInput>;
   images?: InputMaybe<ImageCreateNestedManyWithoutArticlesInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutArticleInput>;
   previewImage?: InputMaybe<Scalars['String']>;
@@ -3945,6 +3991,7 @@ export type ArticleCreateWithoutSchemesInput = {
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<ImageCreateNestedOneWithoutArticleInput>;
   images?: InputMaybe<ImageCreateNestedManyWithoutArticlesInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutArticleInput>;
   previewImage?: InputMaybe<Scalars['String']>;
@@ -3969,6 +4016,7 @@ export type ArticleCreateWithoutTagsInput = {
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<ImageCreateNestedOneWithoutArticleInput>;
   images?: InputMaybe<ImageCreateNestedManyWithoutArticlesInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutArticleInput>;
   previewImage?: InputMaybe<Scalars['String']>;
@@ -3993,6 +4041,7 @@ export type ArticleCreateWithoutUsersInput = {
   frequency?: InputMaybe<Scalars['Int']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutArticlesInput>;
   id?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<ImageCreateNestedOneWithoutArticleInput>;
   images?: InputMaybe<ImageCreateNestedManyWithoutArticlesInput>;
   impressions?: InputMaybe<ImpressionCreateNestedManyWithoutArticleInput>;
   previewImage?: InputMaybe<Scalars['String']>;
@@ -4028,6 +4077,8 @@ export type ArticleOrderByWithRelationInput = {
   frequency?: InputMaybe<SortOrder>;
   groups?: InputMaybe<GroupOrderByRelationAggregateInput>;
   id?: InputMaybe<SortOrder>;
+  image?: InputMaybe<ImageOrderByWithRelationInput>;
+  imageId?: InputMaybe<SortOrder>;
   images?: InputMaybe<ImageOrderByRelationAggregateInput>;
   impressions?: InputMaybe<ImpressionOrderByRelationAggregateInput>;
   previewImage?: InputMaybe<SortOrder>;
@@ -4251,6 +4302,7 @@ export type ArticleScalarWhereInput = {
   createdById?: InputMaybe<StringFilter>;
   frequency?: InputMaybe<IntNullableFilter>;
   id?: InputMaybe<StringFilter>;
+  imageId?: InputMaybe<StringNullableFilter>;
   previewImage?: InputMaybe<StringNullableFilter>;
   previewText?: InputMaybe<StringNullableFilter>;
   priority?: InputMaybe<EnumArticlePriorityFilter>;
@@ -4451,6 +4503,16 @@ export type ArticleUpdateOneWithoutFeedItemsNestedInput = {
   upsert?: InputMaybe<ArticleUpsertWithoutFeedItemsInput>;
 };
 
+export type ArticleUpdateOneWithoutImageNestedInput = {
+  connect?: InputMaybe<ArticleWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<ArticleCreateOrConnectWithoutImageInput>;
+  create?: InputMaybe<ArticleCreateWithoutImageInput>;
+  delete?: InputMaybe<Scalars['Boolean']>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+  update?: InputMaybe<ArticleUpdateWithoutImageInput>;
+  upsert?: InputMaybe<ArticleUpsertWithoutImageInput>;
+};
+
 export type ArticleUpdateOneWithoutImpressionsNestedInput = {
   connect?: InputMaybe<ArticleWhereUniqueInput>;
   connectOrCreate?: InputMaybe<ArticleCreateOrConnectWithoutImpressionsInput>;
@@ -4504,6 +4566,7 @@ export type ArticleUpdateWithoutActionsInput = {
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  image?: InputMaybe<ImageUpdateOneWithoutArticleNestedInput>;
   images?: InputMaybe<ImageUpdateManyWithoutArticlesNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutArticleNestedInput>;
   previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -4528,6 +4591,7 @@ export type ArticleUpdateWithoutCreatedByInput = {
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  image?: InputMaybe<ImageUpdateOneWithoutArticleNestedInput>;
   images?: InputMaybe<ImageUpdateManyWithoutArticlesNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutArticleNestedInput>;
   previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -4552,6 +4616,7 @@ export type ArticleUpdateWithoutDocumentsInput = {
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  image?: InputMaybe<ImageUpdateOneWithoutArticleNestedInput>;
   images?: InputMaybe<ImageUpdateManyWithoutArticlesNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutArticleNestedInput>;
   previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -4576,6 +4641,7 @@ export type ArticleUpdateWithoutFeedItemsInput = {
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  image?: InputMaybe<ImageUpdateOneWithoutArticleNestedInput>;
   images?: InputMaybe<ImageUpdateManyWithoutArticlesNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutArticleNestedInput>;
   previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -4599,6 +4665,32 @@ export type ArticleUpdateWithoutGroupsInput = {
   documents?: InputMaybe<DocumentUpdateManyWithoutArticlesNestedInput>;
   feedItems?: InputMaybe<FeedItemUpdateManyWithoutArticleNestedInput>;
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  image?: InputMaybe<ImageUpdateOneWithoutArticleNestedInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutArticlesNestedInput>;
+  impressions?: InputMaybe<ImpressionUpdateManyWithoutArticleNestedInput>;
+  previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
+  recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
+  start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutArticlesNestedInput>;
+  title?: InputMaybe<StringFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  users?: InputMaybe<UserUpdateManyWithoutArticlesNestedInput>;
+  when?: InputMaybe<NullableEnumWhenFieldUpdateOperationsInput>;
+};
+
+export type ArticleUpdateWithoutImageInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutArticleNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedArticlesNestedInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutArticlesNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutArticleNestedInput>;
+  frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutArticlesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutArticlesNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutArticleNestedInput>;
@@ -4625,6 +4717,7 @@ export type ArticleUpdateWithoutImagesInput = {
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  image?: InputMaybe<ImageUpdateOneWithoutArticleNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutArticleNestedInput>;
   previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -4649,6 +4742,7 @@ export type ArticleUpdateWithoutImpressionsInput = {
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  image?: InputMaybe<ImageUpdateOneWithoutArticleNestedInput>;
   images?: InputMaybe<ImageUpdateManyWithoutArticlesNestedInput>;
   previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -4673,6 +4767,7 @@ export type ArticleUpdateWithoutRowsInput = {
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  image?: InputMaybe<ImageUpdateOneWithoutArticleNestedInput>;
   images?: InputMaybe<ImageUpdateManyWithoutArticlesNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutArticleNestedInput>;
   previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -4697,6 +4792,7 @@ export type ArticleUpdateWithoutSchemesInput = {
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  image?: InputMaybe<ImageUpdateOneWithoutArticleNestedInput>;
   images?: InputMaybe<ImageUpdateManyWithoutArticlesNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutArticleNestedInput>;
   previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -4721,6 +4817,7 @@ export type ArticleUpdateWithoutTagsInput = {
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  image?: InputMaybe<ImageUpdateOneWithoutArticleNestedInput>;
   images?: InputMaybe<ImageUpdateManyWithoutArticlesNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutArticleNestedInput>;
   previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -4745,6 +4842,7 @@ export type ArticleUpdateWithoutUsersInput = {
   frequency?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutArticlesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  image?: InputMaybe<ImageUpdateOneWithoutArticleNestedInput>;
   images?: InputMaybe<ImageUpdateManyWithoutArticlesNestedInput>;
   impressions?: InputMaybe<ImpressionUpdateManyWithoutArticleNestedInput>;
   previewImage?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -4812,6 +4910,11 @@ export type ArticleUpsertWithoutFeedItemsInput = {
   update: ArticleUpdateWithoutFeedItemsInput;
 };
 
+export type ArticleUpsertWithoutImageInput = {
+  create: ArticleCreateWithoutImageInput;
+  update: ArticleUpdateWithoutImageInput;
+};
+
 export type ArticleUpsertWithoutImpressionsInput = {
   create: ArticleCreateWithoutImpressionsInput;
   update: ArticleUpdateWithoutImpressionsInput;
@@ -4835,6 +4938,8 @@ export type ArticleWhereInput = {
   frequency?: InputMaybe<IntNullableFilter>;
   groups?: InputMaybe<GroupListRelationFilter>;
   id?: InputMaybe<StringFilter>;
+  image?: InputMaybe<ImageWhereInput>;
+  imageId?: InputMaybe<StringNullableFilter>;
   images?: InputMaybe<ImageListRelationFilter>;
   impressions?: InputMaybe<ImpressionListRelationFilter>;
   previewImage?: InputMaybe<StringNullableFilter>;
@@ -4853,6 +4958,7 @@ export type ArticleWhereInput = {
 
 export type ArticleWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
+  imageId?: InputMaybe<Scalars['String']>;
 };
 
 export type Auth0User = {
@@ -6539,6 +6645,7 @@ export type CreateArticleInput = {
   documents?: InputMaybe<Array<InputMaybe<CreateDocument>>>;
   groups: Array<Scalars['String']>;
   htmlBody: Scalars['String'];
+  image?: InputMaybe<CreateArticlePreviewImage>;
   images?: InputMaybe<CreateArticleImages>;
   incidents?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   offenders?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -6547,6 +6654,12 @@ export type CreateArticleInput = {
   priority: ArticlePriority;
   schemeId: Scalars['String'];
   title: Scalars['String'];
+};
+
+export type CreateArticlePreviewImage = {
+  disconnect?: InputMaybe<UniqueId>;
+  optimistic?: InputMaybe<CreateImageOptimistic>;
+  upload?: InputMaybe<UploadArticleImage>;
 };
 
 export type CreateBusinessDataInput = {
@@ -6929,6 +7042,12 @@ export type CrimeGroupCreateNestedOneWithoutActionsInput = {
   create?: InputMaybe<CrimeGroupCreateWithoutActionsInput>;
 };
 
+export type CrimeGroupCreateNestedOneWithoutFeedItemsInput = {
+  connect?: InputMaybe<CrimeGroupWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<CrimeGroupCreateOrConnectWithoutFeedItemsInput>;
+  create?: InputMaybe<CrimeGroupCreateWithoutFeedItemsInput>;
+};
+
 export type CrimeGroupCreateNestedOneWithoutIntelInput = {
   connect?: InputMaybe<CrimeGroupWhereUniqueInput>;
   connectOrCreate?: InputMaybe<CrimeGroupCreateOrConnectWithoutIntelInput>;
@@ -6943,6 +7062,11 @@ export type CrimeGroupCreateNestedOneWithoutUpdatesInput = {
 
 export type CrimeGroupCreateOrConnectWithoutActionsInput = {
   create: CrimeGroupCreateWithoutActionsInput;
+  where: CrimeGroupWhereUniqueInput;
+};
+
+export type CrimeGroupCreateOrConnectWithoutFeedItemsInput = {
+  create: CrimeGroupCreateWithoutFeedItemsInput;
   where: CrimeGroupWhereUniqueInput;
 };
 
@@ -6999,6 +7123,26 @@ export type CrimeGroupCreateOrConnectWithoutVehiclesInput = {
 export type CrimeGroupCreateWithoutActionsInput = {
   alias?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutCrimeGroupInput>;
+  id?: InputMaybe<Scalars['String']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeGroupsInput>;
+  intel?: InputMaybe<IntelCreateNestedManyWithoutCrimeGroupInput>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutCrimeGroupsInput>;
+  linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedCrimeGroupsInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutCrimeGroupsInput>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutCrimeGroupsInput>;
+  reference?: InputMaybe<Scalars['Int']>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutCrimeGroupsInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedCrimeGroupsInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  updates?: InputMaybe<UpdateCreateNestedManyWithoutCrimeGroupInput>;
+  vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCrimeGroupInput>;
+};
+
+export type CrimeGroupCreateWithoutFeedItemsInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutCrimeGroupInput>;
+  alias?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
   id?: InputMaybe<Scalars['String']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeGroupsInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCrimeGroupInput>;
@@ -7018,6 +7162,7 @@ export type CrimeGroupCreateWithoutIncidentsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutCrimeGroupInput>;
   alias?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutCrimeGroupInput>;
   id?: InputMaybe<Scalars['String']>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCrimeGroupInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutCrimeGroupsInput>;
@@ -7036,6 +7181,7 @@ export type CrimeGroupCreateWithoutIntelInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutCrimeGroupInput>;
   alias?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutCrimeGroupInput>;
   id?: InputMaybe<Scalars['String']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeGroupsInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutCrimeGroupsInput>;
@@ -7054,6 +7200,7 @@ export type CrimeGroupCreateWithoutInvestigationsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutCrimeGroupInput>;
   alias?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutCrimeGroupInput>;
   id?: InputMaybe<Scalars['String']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeGroupsInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCrimeGroupInput>;
@@ -7072,6 +7219,7 @@ export type CrimeGroupCreateWithoutLinkedUpdatesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutCrimeGroupInput>;
   alias?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutCrimeGroupInput>;
   id?: InputMaybe<Scalars['String']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeGroupsInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCrimeGroupInput>;
@@ -7090,6 +7238,7 @@ export type CrimeGroupCreateWithoutMessagesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutCrimeGroupInput>;
   alias?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutCrimeGroupInput>;
   id?: InputMaybe<Scalars['String']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeGroupsInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCrimeGroupInput>;
@@ -7108,6 +7257,7 @@ export type CrimeGroupCreateWithoutOffendersInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutCrimeGroupInput>;
   alias?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutCrimeGroupInput>;
   id?: InputMaybe<Scalars['String']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeGroupsInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCrimeGroupInput>;
@@ -7126,6 +7276,7 @@ export type CrimeGroupCreateWithoutSchemesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutCrimeGroupInput>;
   alias?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutCrimeGroupInput>;
   id?: InputMaybe<Scalars['String']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeGroupsInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCrimeGroupInput>;
@@ -7144,6 +7295,7 @@ export type CrimeGroupCreateWithoutSubscribedUsersInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutCrimeGroupInput>;
   alias?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutCrimeGroupInput>;
   id?: InputMaybe<Scalars['String']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeGroupsInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCrimeGroupInput>;
@@ -7162,6 +7314,7 @@ export type CrimeGroupCreateWithoutUpdatesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutCrimeGroupInput>;
   alias?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutCrimeGroupInput>;
   id?: InputMaybe<Scalars['String']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeGroupsInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCrimeGroupInput>;
@@ -7180,6 +7333,7 @@ export type CrimeGroupCreateWithoutVehiclesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutCrimeGroupInput>;
   alias?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutCrimeGroupInput>;
   id?: InputMaybe<Scalars['String']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeGroupsInput>;
   intel?: InputMaybe<IntelCreateNestedManyWithoutCrimeGroupInput>;
@@ -7208,6 +7362,7 @@ export type CrimeGroupOrderByWithRelationInput = {
   actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
   alias?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
+  feedItems?: InputMaybe<FeedItemOrderByRelationAggregateInput>;
   id?: InputMaybe<SortOrder>;
   incidents?: InputMaybe<IncidentOrderByRelationAggregateInput>;
   intel?: InputMaybe<IntelOrderByRelationAggregateInput>;
@@ -7460,6 +7615,16 @@ export type CrimeGroupUpdateOneWithoutActionsNestedInput = {
   upsert?: InputMaybe<CrimeGroupUpsertWithoutActionsInput>;
 };
 
+export type CrimeGroupUpdateOneWithoutFeedItemsNestedInput = {
+  connect?: InputMaybe<CrimeGroupWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<CrimeGroupCreateOrConnectWithoutFeedItemsInput>;
+  create?: InputMaybe<CrimeGroupCreateWithoutFeedItemsInput>;
+  delete?: InputMaybe<Scalars['Boolean']>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+  update?: InputMaybe<CrimeGroupUpdateWithoutFeedItemsInput>;
+  upsert?: InputMaybe<CrimeGroupUpsertWithoutFeedItemsInput>;
+};
+
 export type CrimeGroupUpdateOneWithoutIntelNestedInput = {
   connect?: InputMaybe<CrimeGroupWhereUniqueInput>;
   connectOrCreate?: InputMaybe<CrimeGroupCreateOrConnectWithoutIntelInput>;
@@ -7523,6 +7688,26 @@ export type CrimeGroupUpdateWithWhereUniqueWithoutVehiclesInput = {
 export type CrimeGroupUpdateWithoutActionsInput = {
   alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutCrimeGroupNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeGroupsNestedInput>;
+  intel?: InputMaybe<IntelUpdateManyWithoutCrimeGroupNestedInput>;
+  investigations?: InputMaybe<InvestigationUpdateManyWithoutCrimeGroupsNestedInput>;
+  linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedCrimeGroupsNestedInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutCrimeGroupsNestedInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutCrimeGroupsNestedInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutCrimeGroupsNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedCrimeGroupsNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  updates?: InputMaybe<UpdateUpdateManyWithoutCrimeGroupNestedInput>;
+  vehicles?: InputMaybe<VehicleUpdateManyWithoutCrimeGroupNestedInput>;
+};
+
+export type CrimeGroupUpdateWithoutFeedItemsInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutCrimeGroupNestedInput>;
+  alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeGroupsNestedInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCrimeGroupNestedInput>;
@@ -7542,6 +7727,7 @@ export type CrimeGroupUpdateWithoutIncidentsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutCrimeGroupNestedInput>;
   alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutCrimeGroupNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCrimeGroupNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutCrimeGroupsNestedInput>;
@@ -7560,6 +7746,7 @@ export type CrimeGroupUpdateWithoutIntelInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutCrimeGroupNestedInput>;
   alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutCrimeGroupNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeGroupsNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutCrimeGroupsNestedInput>;
@@ -7578,6 +7765,7 @@ export type CrimeGroupUpdateWithoutInvestigationsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutCrimeGroupNestedInput>;
   alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutCrimeGroupNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeGroupsNestedInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCrimeGroupNestedInput>;
@@ -7596,6 +7784,7 @@ export type CrimeGroupUpdateWithoutLinkedUpdatesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutCrimeGroupNestedInput>;
   alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutCrimeGroupNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeGroupsNestedInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCrimeGroupNestedInput>;
@@ -7614,6 +7803,7 @@ export type CrimeGroupUpdateWithoutMessagesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutCrimeGroupNestedInput>;
   alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutCrimeGroupNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeGroupsNestedInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCrimeGroupNestedInput>;
@@ -7632,6 +7822,7 @@ export type CrimeGroupUpdateWithoutOffendersInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutCrimeGroupNestedInput>;
   alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutCrimeGroupNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeGroupsNestedInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCrimeGroupNestedInput>;
@@ -7650,6 +7841,7 @@ export type CrimeGroupUpdateWithoutSchemesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutCrimeGroupNestedInput>;
   alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutCrimeGroupNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeGroupsNestedInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCrimeGroupNestedInput>;
@@ -7668,6 +7860,7 @@ export type CrimeGroupUpdateWithoutSubscribedUsersInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutCrimeGroupNestedInput>;
   alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutCrimeGroupNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeGroupsNestedInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCrimeGroupNestedInput>;
@@ -7686,6 +7879,7 @@ export type CrimeGroupUpdateWithoutUpdatesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutCrimeGroupNestedInput>;
   alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutCrimeGroupNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeGroupsNestedInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCrimeGroupNestedInput>;
@@ -7704,6 +7898,7 @@ export type CrimeGroupUpdateWithoutVehiclesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutCrimeGroupNestedInput>;
   alias?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutCrimeGroupNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeGroupsNestedInput>;
   intel?: InputMaybe<IntelUpdateManyWithoutCrimeGroupNestedInput>;
@@ -7771,6 +7966,11 @@ export type CrimeGroupUpsertWithoutActionsInput = {
   update: CrimeGroupUpdateWithoutActionsInput;
 };
 
+export type CrimeGroupUpsertWithoutFeedItemsInput = {
+  create: CrimeGroupCreateWithoutFeedItemsInput;
+  update: CrimeGroupUpdateWithoutFeedItemsInput;
+};
+
 export type CrimeGroupUpsertWithoutIntelInput = {
   create: CrimeGroupCreateWithoutIntelInput;
   update: CrimeGroupUpdateWithoutIntelInput;
@@ -7788,6 +7988,7 @@ export type CrimeGroupWhereInput = {
   actions?: InputMaybe<ActionListRelationFilter>;
   alias?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  feedItems?: InputMaybe<FeedItemListRelationFilter>;
   id?: InputMaybe<StringFilter>;
   incidents?: InputMaybe<IncidentListRelationFilter>;
   intel?: InputMaybe<IntelListRelationFilter>;
@@ -8619,6 +8820,8 @@ export type FeedItem = {
   article?: Maybe<Article>;
   articleId?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
+  crimeGroup?: Maybe<CrimeGroup>;
+  crimeGroupId?: Maybe<Scalars['String']>;
   groups: Array<Group>;
   id: Scalars['String'];
   images: Array<Image>;
@@ -8632,6 +8835,8 @@ export type FeedItem = {
   offenderId?: Maybe<Scalars['String']>;
   type: FeedItemType;
   updatedAt: Scalars['DateTime'];
+  vehicle?: Maybe<Vehicle>;
+  vehicleId?: Maybe<Scalars['String']>;
 };
 
 export type FeedItemGroupsArgs = {
@@ -8652,6 +8857,7 @@ export type FeedItemImagesArgs = {
 
 export type FeedItemCreateManyArticleInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   investigationId?: InputMaybe<Scalars['String']>;
@@ -8660,6 +8866,7 @@ export type FeedItemCreateManyArticleInput = {
   offenderId?: InputMaybe<Scalars['String']>;
   type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicleId?: InputMaybe<Scalars['String']>;
 };
 
 export type FeedItemCreateManyArticleInputEnvelope = {
@@ -8667,9 +8874,29 @@ export type FeedItemCreateManyArticleInputEnvelope = {
   skipDuplicates?: InputMaybe<Scalars['Boolean']>;
 };
 
+export type FeedItemCreateManyCrimeGroupInput = {
+  articleId?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['String']>;
+  incidentId?: InputMaybe<Scalars['String']>;
+  investigationId?: InputMaybe<Scalars['String']>;
+  message: Scalars['String'];
+  model?: InputMaybe<Model>;
+  offenderId?: InputMaybe<Scalars['String']>;
+  type: FeedItemType;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicleId?: InputMaybe<Scalars['String']>;
+};
+
+export type FeedItemCreateManyCrimeGroupInputEnvelope = {
+  data?: InputMaybe<Array<FeedItemCreateManyCrimeGroupInput>>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
 export type FeedItemCreateManyIncidentInput = {
   articleId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   investigationId?: InputMaybe<Scalars['String']>;
   message: Scalars['String'];
@@ -8677,6 +8904,7 @@ export type FeedItemCreateManyIncidentInput = {
   offenderId?: InputMaybe<Scalars['String']>;
   type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicleId?: InputMaybe<Scalars['String']>;
 };
 
 export type FeedItemCreateManyIncidentInputEnvelope = {
@@ -8687,6 +8915,7 @@ export type FeedItemCreateManyIncidentInputEnvelope = {
 export type FeedItemCreateManyInvestigationInput = {
   articleId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   message: Scalars['String'];
@@ -8694,6 +8923,7 @@ export type FeedItemCreateManyInvestigationInput = {
   offenderId?: InputMaybe<Scalars['String']>;
   type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicleId?: InputMaybe<Scalars['String']>;
 };
 
 export type FeedItemCreateManyInvestigationInputEnvelope = {
@@ -8704,6 +8934,7 @@ export type FeedItemCreateManyInvestigationInputEnvelope = {
 export type FeedItemCreateManyOffenderInput = {
   articleId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroupId?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
   incidentId?: InputMaybe<Scalars['String']>;
   investigationId?: InputMaybe<Scalars['String']>;
@@ -8711,10 +8942,30 @@ export type FeedItemCreateManyOffenderInput = {
   model?: InputMaybe<Model>;
   type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicleId?: InputMaybe<Scalars['String']>;
 };
 
 export type FeedItemCreateManyOffenderInputEnvelope = {
   data?: InputMaybe<Array<FeedItemCreateManyOffenderInput>>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type FeedItemCreateManyVehicleInput = {
+  articleId?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroupId?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  incidentId?: InputMaybe<Scalars['String']>;
+  investigationId?: InputMaybe<Scalars['String']>;
+  message: Scalars['String'];
+  model?: InputMaybe<Model>;
+  offenderId?: InputMaybe<Scalars['String']>;
+  type: FeedItemType;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type FeedItemCreateManyVehicleInputEnvelope = {
+  data?: InputMaybe<Array<FeedItemCreateManyVehicleInput>>;
   skipDuplicates?: InputMaybe<Scalars['Boolean']>;
 };
 
@@ -8725,6 +8976,15 @@ export type FeedItemCreateNestedManyWithoutArticleInput = {
   >;
   create?: InputMaybe<Array<FeedItemCreateWithoutArticleInput>>;
   createMany?: InputMaybe<FeedItemCreateManyArticleInputEnvelope>;
+};
+
+export type FeedItemCreateNestedManyWithoutCrimeGroupInput = {
+  connect?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<FeedItemCreateOrConnectWithoutCrimeGroupInput>
+  >;
+  create?: InputMaybe<Array<FeedItemCreateWithoutCrimeGroupInput>>;
+  createMany?: InputMaybe<FeedItemCreateManyCrimeGroupInputEnvelope>;
 };
 
 export type FeedItemCreateNestedManyWithoutGroupsInput = {
@@ -8770,8 +9030,22 @@ export type FeedItemCreateNestedManyWithoutOffenderInput = {
   createMany?: InputMaybe<FeedItemCreateManyOffenderInputEnvelope>;
 };
 
+export type FeedItemCreateNestedManyWithoutVehicleInput = {
+  connect?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<FeedItemCreateOrConnectWithoutVehicleInput>
+  >;
+  create?: InputMaybe<Array<FeedItemCreateWithoutVehicleInput>>;
+  createMany?: InputMaybe<FeedItemCreateManyVehicleInputEnvelope>;
+};
+
 export type FeedItemCreateOrConnectWithoutArticleInput = {
   create: FeedItemCreateWithoutArticleInput;
+  where: FeedItemWhereUniqueInput;
+};
+
+export type FeedItemCreateOrConnectWithoutCrimeGroupInput = {
+  create: FeedItemCreateWithoutCrimeGroupInput;
   where: FeedItemWhereUniqueInput;
 };
 
@@ -8800,7 +9074,29 @@ export type FeedItemCreateOrConnectWithoutOffenderInput = {
   where: FeedItemWhereUniqueInput;
 };
 
+export type FeedItemCreateOrConnectWithoutVehicleInput = {
+  create: FeedItemCreateWithoutVehicleInput;
+  where: FeedItemWhereUniqueInput;
+};
+
 export type FeedItemCreateWithoutArticleInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutFeedItemsInput>;
+  groups?: InputMaybe<GroupCreateNestedManyWithoutFeedItemsInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutFeeditemsInput>;
+  incident?: InputMaybe<IncidentCreateNestedOneWithoutFeedItemsInput>;
+  investigation?: InputMaybe<InvestigationCreateNestedOneWithoutFeedItemsInput>;
+  message: Scalars['String'];
+  model?: InputMaybe<Model>;
+  offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
+  type: FeedItemType;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutFeedItemsInput>;
+};
+
+export type FeedItemCreateWithoutCrimeGroupInput = {
+  article?: InputMaybe<ArticleCreateNestedOneWithoutFeedItemsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutFeedItemsInput>;
   id?: InputMaybe<Scalars['String']>;
@@ -8812,11 +9108,13 @@ export type FeedItemCreateWithoutArticleInput = {
   offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
   type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutFeedItemsInput>;
 };
 
 export type FeedItemCreateWithoutGroupsInput = {
   article?: InputMaybe<ArticleCreateNestedOneWithoutFeedItemsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutFeedItemsInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutFeeditemsInput>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutFeedItemsInput>;
@@ -8826,11 +9124,13 @@ export type FeedItemCreateWithoutGroupsInput = {
   offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
   type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutFeedItemsInput>;
 };
 
 export type FeedItemCreateWithoutImagesInput = {
   article?: InputMaybe<ArticleCreateNestedOneWithoutFeedItemsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutFeedItemsInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutFeedItemsInput>;
   id?: InputMaybe<Scalars['String']>;
   incident?: InputMaybe<IncidentCreateNestedOneWithoutFeedItemsInput>;
@@ -8840,11 +9140,13 @@ export type FeedItemCreateWithoutImagesInput = {
   offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
   type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutFeedItemsInput>;
 };
 
 export type FeedItemCreateWithoutIncidentInput = {
   article?: InputMaybe<ArticleCreateNestedOneWithoutFeedItemsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutFeedItemsInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutFeedItemsInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutFeeditemsInput>;
@@ -8854,11 +9156,13 @@ export type FeedItemCreateWithoutIncidentInput = {
   offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
   type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutFeedItemsInput>;
 };
 
 export type FeedItemCreateWithoutInvestigationInput = {
   article?: InputMaybe<ArticleCreateNestedOneWithoutFeedItemsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutFeedItemsInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutFeedItemsInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutFeeditemsInput>;
@@ -8868,11 +9172,13 @@ export type FeedItemCreateWithoutInvestigationInput = {
   offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
   type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutFeedItemsInput>;
 };
 
 export type FeedItemCreateWithoutOffenderInput = {
   article?: InputMaybe<ArticleCreateNestedOneWithoutFeedItemsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutFeedItemsInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutFeedItemsInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutFeeditemsInput>;
@@ -8880,6 +9186,23 @@ export type FeedItemCreateWithoutOffenderInput = {
   investigation?: InputMaybe<InvestigationCreateNestedOneWithoutFeedItemsInput>;
   message: Scalars['String'];
   model?: InputMaybe<Model>;
+  type: FeedItemType;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutFeedItemsInput>;
+};
+
+export type FeedItemCreateWithoutVehicleInput = {
+  article?: InputMaybe<ArticleCreateNestedOneWithoutFeedItemsInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutFeedItemsInput>;
+  groups?: InputMaybe<GroupCreateNestedManyWithoutFeedItemsInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutFeeditemsInput>;
+  incident?: InputMaybe<IncidentCreateNestedOneWithoutFeedItemsInput>;
+  investigation?: InputMaybe<InvestigationCreateNestedOneWithoutFeedItemsInput>;
+  message: Scalars['String'];
+  model?: InputMaybe<Model>;
+  offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
   type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -8898,6 +9221,8 @@ export type FeedItemOrderByWithRelationInput = {
   article?: InputMaybe<ArticleOrderByWithRelationInput>;
   articleId?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
+  crimeGroup?: InputMaybe<CrimeGroupOrderByWithRelationInput>;
+  crimeGroupId?: InputMaybe<SortOrder>;
   groups?: InputMaybe<GroupOrderByRelationAggregateInput>;
   id?: InputMaybe<SortOrder>;
   images?: InputMaybe<ImageOrderByRelationAggregateInput>;
@@ -8911,6 +9236,8 @@ export type FeedItemOrderByWithRelationInput = {
   offenderId?: InputMaybe<SortOrder>;
   type?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
+  vehicle?: InputMaybe<VehicleOrderByWithRelationInput>;
+  vehicleId?: InputMaybe<SortOrder>;
 };
 
 export type FeedItemScalarWhereInput = {
@@ -8919,6 +9246,7 @@ export type FeedItemScalarWhereInput = {
   OR?: InputMaybe<Array<FeedItemScalarWhereInput>>;
   articleId?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  crimeGroupId?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
   incidentId?: InputMaybe<StringNullableFilter>;
   investigationId?: InputMaybe<StringNullableFilter>;
@@ -8927,9 +9255,11 @@ export type FeedItemScalarWhereInput = {
   offenderId?: InputMaybe<StringNullableFilter>;
   type?: InputMaybe<EnumFeedItemTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+  vehicleId?: InputMaybe<StringNullableFilter>;
 };
 
 export enum FeedItemType {
+  CrimegroupIntel = 'CRIMEGROUP_INTEL',
   Incident = 'INCIDENT',
   IncidentImage = 'INCIDENT_IMAGE',
   IncidentIntel = 'INCIDENT_INTEL',
@@ -8937,12 +9267,16 @@ export enum FeedItemType {
   InvestigationImage = 'INVESTIGATION_IMAGE',
   InvestigationIntel = 'INVESTIGATION_INTEL',
   NewArticle = 'NEW_ARTICLE',
+  NewCrimegroup = 'NEW_CRIMEGROUP',
   NewIncident = 'NEW_INCIDENT',
   NewInvestigation = 'NEW_INVESTIGATION',
   NewOffender = 'NEW_OFFENDER',
+  NewVehicle = 'NEW_VEHICLE',
   Offender = 'OFFENDER',
   OffenderImage = 'OFFENDER_IMAGE',
   OffenderIntel = 'OFFENDER_INTEL',
+  VehicleImage = 'VEHICLE_IMAGE',
+  VehicleIntel = 'VEHICLE_INTEL',
 }
 
 export type FeedItemUpdateManyMutationInput = {
@@ -8955,6 +9289,11 @@ export type FeedItemUpdateManyMutationInput = {
 };
 
 export type FeedItemUpdateManyWithWhereWithoutArticleInput = {
+  data: FeedItemUpdateManyMutationInput;
+  where: FeedItemScalarWhereInput;
+};
+
+export type FeedItemUpdateManyWithWhereWithoutCrimeGroupInput = {
   data: FeedItemUpdateManyMutationInput;
   where: FeedItemScalarWhereInput;
 };
@@ -8984,6 +9323,11 @@ export type FeedItemUpdateManyWithWhereWithoutOffenderInput = {
   where: FeedItemScalarWhereInput;
 };
 
+export type FeedItemUpdateManyWithWhereWithoutVehicleInput = {
+  data: FeedItemUpdateManyMutationInput;
+  where: FeedItemScalarWhereInput;
+};
+
 export type FeedItemUpdateManyWithoutArticleNestedInput = {
   connect?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<
@@ -9000,6 +9344,28 @@ export type FeedItemUpdateManyWithoutArticleNestedInput = {
     Array<FeedItemUpdateManyWithWhereWithoutArticleInput>
   >;
   upsert?: InputMaybe<Array<FeedItemUpsertWithWhereUniqueWithoutArticleInput>>;
+};
+
+export type FeedItemUpdateManyWithoutCrimeGroupNestedInput = {
+  connect?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<FeedItemCreateOrConnectWithoutCrimeGroupInput>
+  >;
+  create?: InputMaybe<Array<FeedItemCreateWithoutCrimeGroupInput>>;
+  createMany?: InputMaybe<FeedItemCreateManyCrimeGroupInputEnvelope>;
+  delete?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<FeedItemScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  set?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  update?: InputMaybe<
+    Array<FeedItemUpdateWithWhereUniqueWithoutCrimeGroupInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<FeedItemUpdateManyWithWhereWithoutCrimeGroupInput>
+  >;
+  upsert?: InputMaybe<
+    Array<FeedItemUpsertWithWhereUniqueWithoutCrimeGroupInput>
+  >;
 };
 
 export type FeedItemUpdateManyWithoutGroupsNestedInput = {
@@ -9090,8 +9456,31 @@ export type FeedItemUpdateManyWithoutOffenderNestedInput = {
   upsert?: InputMaybe<Array<FeedItemUpsertWithWhereUniqueWithoutOffenderInput>>;
 };
 
+export type FeedItemUpdateManyWithoutVehicleNestedInput = {
+  connect?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<FeedItemCreateOrConnectWithoutVehicleInput>
+  >;
+  create?: InputMaybe<Array<FeedItemCreateWithoutVehicleInput>>;
+  createMany?: InputMaybe<FeedItemCreateManyVehicleInputEnvelope>;
+  delete?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<FeedItemScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  set?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  update?: InputMaybe<Array<FeedItemUpdateWithWhereUniqueWithoutVehicleInput>>;
+  updateMany?: InputMaybe<
+    Array<FeedItemUpdateManyWithWhereWithoutVehicleInput>
+  >;
+  upsert?: InputMaybe<Array<FeedItemUpsertWithWhereUniqueWithoutVehicleInput>>;
+};
+
 export type FeedItemUpdateWithWhereUniqueWithoutArticleInput = {
   data: FeedItemUpdateWithoutArticleInput;
+  where: FeedItemWhereUniqueInput;
+};
+
+export type FeedItemUpdateWithWhereUniqueWithoutCrimeGroupInput = {
+  data: FeedItemUpdateWithoutCrimeGroupInput;
   where: FeedItemWhereUniqueInput;
 };
 
@@ -9120,7 +9509,29 @@ export type FeedItemUpdateWithWhereUniqueWithoutOffenderInput = {
   where: FeedItemWhereUniqueInput;
 };
 
+export type FeedItemUpdateWithWhereUniqueWithoutVehicleInput = {
+  data: FeedItemUpdateWithoutVehicleInput;
+  where: FeedItemWhereUniqueInput;
+};
+
 export type FeedItemUpdateWithoutArticleInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutFeedItemsNestedInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutFeedItemsNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutFeeditemsNestedInput>;
+  incident?: InputMaybe<IncidentUpdateOneWithoutFeedItemsNestedInput>;
+  investigation?: InputMaybe<InvestigationUpdateOneWithoutFeedItemsNestedInput>;
+  message?: InputMaybe<StringFieldUpdateOperationsInput>;
+  model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
+  offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsNestedInput>;
+  type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutFeedItemsNestedInput>;
+};
+
+export type FeedItemUpdateWithoutCrimeGroupInput = {
+  article?: InputMaybe<ArticleUpdateOneWithoutFeedItemsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutFeedItemsNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -9132,11 +9543,13 @@ export type FeedItemUpdateWithoutArticleInput = {
   offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsNestedInput>;
   type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutFeedItemsNestedInput>;
 };
 
 export type FeedItemUpdateWithoutGroupsInput = {
   article?: InputMaybe<ArticleUpdateOneWithoutFeedItemsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutFeedItemsNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutFeeditemsNestedInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutFeedItemsNestedInput>;
@@ -9146,11 +9559,13 @@ export type FeedItemUpdateWithoutGroupsInput = {
   offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsNestedInput>;
   type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutFeedItemsNestedInput>;
 };
 
 export type FeedItemUpdateWithoutImagesInput = {
   article?: InputMaybe<ArticleUpdateOneWithoutFeedItemsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutFeedItemsNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutFeedItemsNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incident?: InputMaybe<IncidentUpdateOneWithoutFeedItemsNestedInput>;
@@ -9160,11 +9575,13 @@ export type FeedItemUpdateWithoutImagesInput = {
   offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsNestedInput>;
   type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutFeedItemsNestedInput>;
 };
 
 export type FeedItemUpdateWithoutIncidentInput = {
   article?: InputMaybe<ArticleUpdateOneWithoutFeedItemsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutFeedItemsNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutFeedItemsNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutFeeditemsNestedInput>;
@@ -9174,11 +9591,13 @@ export type FeedItemUpdateWithoutIncidentInput = {
   offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsNestedInput>;
   type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutFeedItemsNestedInput>;
 };
 
 export type FeedItemUpdateWithoutInvestigationInput = {
   article?: InputMaybe<ArticleUpdateOneWithoutFeedItemsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutFeedItemsNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutFeedItemsNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutFeeditemsNestedInput>;
@@ -9188,11 +9607,13 @@ export type FeedItemUpdateWithoutInvestigationInput = {
   offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsNestedInput>;
   type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutFeedItemsNestedInput>;
 };
 
 export type FeedItemUpdateWithoutOffenderInput = {
   article?: InputMaybe<ArticleUpdateOneWithoutFeedItemsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutFeedItemsNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutFeedItemsNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutFeeditemsNestedInput>;
@@ -9200,6 +9621,23 @@ export type FeedItemUpdateWithoutOffenderInput = {
   investigation?: InputMaybe<InvestigationUpdateOneWithoutFeedItemsNestedInput>;
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
   model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
+  type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutFeedItemsNestedInput>;
+};
+
+export type FeedItemUpdateWithoutVehicleInput = {
+  article?: InputMaybe<ArticleUpdateOneWithoutFeedItemsNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutFeedItemsNestedInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutFeedItemsNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutFeeditemsNestedInput>;
+  incident?: InputMaybe<IncidentUpdateOneWithoutFeedItemsNestedInput>;
+  investigation?: InputMaybe<InvestigationUpdateOneWithoutFeedItemsNestedInput>;
+  message?: InputMaybe<StringFieldUpdateOperationsInput>;
+  model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
+  offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsNestedInput>;
   type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -9207,6 +9645,12 @@ export type FeedItemUpdateWithoutOffenderInput = {
 export type FeedItemUpsertWithWhereUniqueWithoutArticleInput = {
   create: FeedItemCreateWithoutArticleInput;
   update: FeedItemUpdateWithoutArticleInput;
+  where: FeedItemWhereUniqueInput;
+};
+
+export type FeedItemUpsertWithWhereUniqueWithoutCrimeGroupInput = {
+  create: FeedItemCreateWithoutCrimeGroupInput;
+  update: FeedItemUpdateWithoutCrimeGroupInput;
   where: FeedItemWhereUniqueInput;
 };
 
@@ -9240,6 +9684,12 @@ export type FeedItemUpsertWithWhereUniqueWithoutOffenderInput = {
   where: FeedItemWhereUniqueInput;
 };
 
+export type FeedItemUpsertWithWhereUniqueWithoutVehicleInput = {
+  create: FeedItemCreateWithoutVehicleInput;
+  update: FeedItemUpdateWithoutVehicleInput;
+  where: FeedItemWhereUniqueInput;
+};
+
 export type FeedItemWhereInput = {
   AND?: InputMaybe<Array<FeedItemWhereInput>>;
   NOT?: InputMaybe<Array<FeedItemWhereInput>>;
@@ -9247,6 +9697,8 @@ export type FeedItemWhereInput = {
   article?: InputMaybe<ArticleWhereInput>;
   articleId?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  crimeGroup?: InputMaybe<CrimeGroupWhereInput>;
+  crimeGroupId?: InputMaybe<StringNullableFilter>;
   groups?: InputMaybe<GroupListRelationFilter>;
   id?: InputMaybe<StringFilter>;
   images?: InputMaybe<ImageListRelationFilter>;
@@ -9260,6 +9712,8 @@ export type FeedItemWhereInput = {
   offenderId?: InputMaybe<StringNullableFilter>;
   type?: InputMaybe<EnumFeedItemTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
+  vehicle?: InputMaybe<VehicleWhereInput>;
+  vehicleId?: InputMaybe<StringNullableFilter>;
 };
 
 export type FeedItemWhereUniqueInput = {
@@ -9795,6 +10249,97 @@ export enum Gender {
   Male = 'MALE',
   Unknown = 'UNKNOWN',
 }
+
+export type GeoIp = {
+  __typename?: 'GeoIp';
+  city?: Maybe<Scalars['String']>;
+  countryCode?: Maybe<Scalars['String']>;
+  countryName?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
+  latitude?: Maybe<Scalars['Float']>;
+  loginEvents: Array<LoginEvent>;
+  longitude?: Maybe<Scalars['Float']>;
+  postalCode?: Maybe<Scalars['String']>;
+  region?: Maybe<Scalars['String']>;
+  timezone?: Maybe<Scalars['String']>;
+};
+
+export type GeoIpLoginEventsArgs = {
+  after?: InputMaybe<LoginEventWhereUniqueInput>;
+  before?: InputMaybe<LoginEventWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type GeoIpCreateNestedOneWithoutLoginEventsInput = {
+  connect?: InputMaybe<GeoIpWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<GeoIpCreateOrConnectWithoutLoginEventsInput>;
+  create?: InputMaybe<GeoIpCreateWithoutLoginEventsInput>;
+};
+
+export type GeoIpCreateOrConnectWithoutLoginEventsInput = {
+  create: GeoIpCreateWithoutLoginEventsInput;
+  where: GeoIpWhereUniqueInput;
+};
+
+export type GeoIpCreateWithoutLoginEventsInput = {
+  city?: InputMaybe<Scalars['String']>;
+  countryCode?: InputMaybe<Scalars['String']>;
+  countryName?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  latitude?: InputMaybe<Scalars['Float']>;
+  longitude?: InputMaybe<Scalars['Float']>;
+  postalCode?: InputMaybe<Scalars['String']>;
+  region?: InputMaybe<Scalars['String']>;
+  timezone?: InputMaybe<Scalars['String']>;
+};
+
+export type GeoIpUpdateOneWithoutLoginEventsNestedInput = {
+  connect?: InputMaybe<GeoIpWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<GeoIpCreateOrConnectWithoutLoginEventsInput>;
+  create?: InputMaybe<GeoIpCreateWithoutLoginEventsInput>;
+  delete?: InputMaybe<Scalars['Boolean']>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+  update?: InputMaybe<GeoIpUpdateWithoutLoginEventsInput>;
+  upsert?: InputMaybe<GeoIpUpsertWithoutLoginEventsInput>;
+};
+
+export type GeoIpUpdateWithoutLoginEventsInput = {
+  city?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  countryCode?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  countryName?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  latitude?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
+  longitude?: InputMaybe<NullableFloatFieldUpdateOperationsInput>;
+  postalCode?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  region?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  timezone?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+};
+
+export type GeoIpUpsertWithoutLoginEventsInput = {
+  create: GeoIpCreateWithoutLoginEventsInput;
+  update: GeoIpUpdateWithoutLoginEventsInput;
+};
+
+export type GeoIpWhereInput = {
+  AND?: InputMaybe<Array<GeoIpWhereInput>>;
+  NOT?: InputMaybe<Array<GeoIpWhereInput>>;
+  OR?: InputMaybe<Array<GeoIpWhereInput>>;
+  city?: InputMaybe<StringNullableFilter>;
+  countryCode?: InputMaybe<StringNullableFilter>;
+  countryName?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  latitude?: InputMaybe<FloatNullableFilter>;
+  loginEvents?: InputMaybe<LoginEventListRelationFilter>;
+  longitude?: InputMaybe<FloatNullableFilter>;
+  postalCode?: InputMaybe<StringNullableFilter>;
+  region?: InputMaybe<StringNullableFilter>;
+  timezone?: InputMaybe<StringNullableFilter>;
+};
+
+export type GeoIpWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']>;
+};
 
 export type GoodsType = {
   __typename?: 'GoodsType';
@@ -10664,6 +11209,7 @@ export type ImageOffendersArgs = {
 export type ImageCreateInput = {
   Scheme?: InputMaybe<SchemeCreateNestedManyWithoutLogoInput>;
   actions?: InputMaybe<ActionCreateNestedManyWithoutImagesInput>;
+  article?: InputMaybe<ArticleCreateNestedOneWithoutImageInput>;
   articleColumn?: InputMaybe<ArticleColumnCreateNestedOneWithoutImagesInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutImagesInput>;
   card?: InputMaybe<Scalars['String']>;
@@ -10915,6 +11461,12 @@ export type ImageCreateNestedOneWithoutActionsInput = {
   create?: InputMaybe<ImageCreateWithoutActionsInput>;
 };
 
+export type ImageCreateNestedOneWithoutArticleInput = {
+  connect?: InputMaybe<ImageWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<ImageCreateOrConnectWithoutArticleInput>;
+  create?: InputMaybe<ImageCreateWithoutArticleInput>;
+};
+
 export type ImageCreateNestedOneWithoutIntelInput = {
   connect?: InputMaybe<ImageWhereUniqueInput>;
   connectOrCreate?: InputMaybe<ImageCreateOrConnectWithoutIntelInput>;
@@ -10940,6 +11492,11 @@ export type ImageCreateOrConnectWithoutActionsInput = {
 
 export type ImageCreateOrConnectWithoutArticleColumnInput = {
   create: ImageCreateWithoutArticleColumnInput;
+  where: ImageWhereUniqueInput;
+};
+
+export type ImageCreateOrConnectWithoutArticleInput = {
+  create: ImageCreateWithoutArticleInput;
   where: ImageWhereUniqueInput;
 };
 
@@ -11000,6 +11557,7 @@ export type ImageCreateOrConnectWithoutVehiclesInput = {
 
 export type ImageCreateWithoutActionsInput = {
   Scheme?: InputMaybe<SchemeCreateNestedManyWithoutLogoInput>;
+  article?: InputMaybe<ArticleCreateNestedOneWithoutImageInput>;
   articleColumn?: InputMaybe<ArticleColumnCreateNestedOneWithoutImagesInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutImagesInput>;
   card?: InputMaybe<Scalars['String']>;
@@ -11028,6 +11586,35 @@ export type ImageCreateWithoutActionsInput = {
 export type ImageCreateWithoutArticleColumnInput = {
   Scheme?: InputMaybe<SchemeCreateNestedManyWithoutLogoInput>;
   actions?: InputMaybe<ActionCreateNestedManyWithoutImagesInput>;
+  article?: InputMaybe<ArticleCreateNestedOneWithoutImageInput>;
+  articles?: InputMaybe<ArticleCreateNestedManyWithoutImagesInput>;
+  card?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  feeditems?: InputMaybe<FeedItemCreateNestedManyWithoutImagesInput>;
+  fileNames?: InputMaybe<ImageCreatefileNamesInput>;
+  id?: InputMaybe<Scalars['String']>;
+  incident?: InputMaybe<IncidentCreateNestedOneWithoutImagesInput>;
+  intel?: InputMaybe<IntelCreateNestedOneWithoutImageInput>;
+  intelId?: InputMaybe<Scalars['String']>;
+  low?: InputMaybe<Scalars['String']>;
+  message?: InputMaybe<MessageCreateNestedOneWithoutImagesInput>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutImagesInput>;
+  optimised?: InputMaybe<Scalars['String']>;
+  optimisticUri?: InputMaybe<Scalars['String']>;
+  scheme: SchemeCreateNestedOneWithoutImagesInput;
+  schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
+  update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploaded?: InputMaybe<Scalars['Boolean']>;
+  uploadedBy: UserCreateNestedOneWithoutImagesInput;
+  url?: InputMaybe<Scalars['String']>;
+  vehicles?: InputMaybe<VehicleCreateNestedManyWithoutImagesInput>;
+};
+
+export type ImageCreateWithoutArticleInput = {
+  Scheme?: InputMaybe<SchemeCreateNestedManyWithoutLogoInput>;
+  actions?: InputMaybe<ActionCreateNestedManyWithoutImagesInput>;
+  articleColumn?: InputMaybe<ArticleColumnCreateNestedOneWithoutImagesInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutImagesInput>;
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -11055,6 +11642,7 @@ export type ImageCreateWithoutArticleColumnInput = {
 export type ImageCreateWithoutArticlesInput = {
   Scheme?: InputMaybe<SchemeCreateNestedManyWithoutLogoInput>;
   actions?: InputMaybe<ActionCreateNestedManyWithoutImagesInput>;
+  article?: InputMaybe<ArticleCreateNestedOneWithoutImageInput>;
   articleColumn?: InputMaybe<ArticleColumnCreateNestedOneWithoutImagesInput>;
   card?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -11082,6 +11670,7 @@ export type ImageCreateWithoutArticlesInput = {
 export type ImageCreateWithoutFeeditemsInput = {
   Scheme?: InputMaybe<SchemeCreateNestedManyWithoutLogoInput>;
   actions?: InputMaybe<ActionCreateNestedManyWithoutImagesInput>;
+  article?: InputMaybe<ArticleCreateNestedOneWithoutImageInput>;
   articleColumn?: InputMaybe<ArticleColumnCreateNestedOneWithoutImagesInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutImagesInput>;
   card?: InputMaybe<Scalars['String']>;
@@ -11109,6 +11698,7 @@ export type ImageCreateWithoutFeeditemsInput = {
 export type ImageCreateWithoutIncidentInput = {
   Scheme?: InputMaybe<SchemeCreateNestedManyWithoutLogoInput>;
   actions?: InputMaybe<ActionCreateNestedManyWithoutImagesInput>;
+  article?: InputMaybe<ArticleCreateNestedOneWithoutImageInput>;
   articleColumn?: InputMaybe<ArticleColumnCreateNestedOneWithoutImagesInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutImagesInput>;
   card?: InputMaybe<Scalars['String']>;
@@ -11137,6 +11727,7 @@ export type ImageCreateWithoutIncidentInput = {
 export type ImageCreateWithoutIntelInput = {
   Scheme?: InputMaybe<SchemeCreateNestedManyWithoutLogoInput>;
   actions?: InputMaybe<ActionCreateNestedManyWithoutImagesInput>;
+  article?: InputMaybe<ArticleCreateNestedOneWithoutImageInput>;
   articleColumn?: InputMaybe<ArticleColumnCreateNestedOneWithoutImagesInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutImagesInput>;
   card?: InputMaybe<Scalars['String']>;
@@ -11164,6 +11755,7 @@ export type ImageCreateWithoutIntelInput = {
 export type ImageCreateWithoutMessageInput = {
   Scheme?: InputMaybe<SchemeCreateNestedManyWithoutLogoInput>;
   actions?: InputMaybe<ActionCreateNestedManyWithoutImagesInput>;
+  article?: InputMaybe<ArticleCreateNestedOneWithoutImageInput>;
   articleColumn?: InputMaybe<ArticleColumnCreateNestedOneWithoutImagesInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutImagesInput>;
   card?: InputMaybe<Scalars['String']>;
@@ -11191,6 +11783,7 @@ export type ImageCreateWithoutMessageInput = {
 export type ImageCreateWithoutOffendersInput = {
   Scheme?: InputMaybe<SchemeCreateNestedManyWithoutLogoInput>;
   actions?: InputMaybe<ActionCreateNestedManyWithoutImagesInput>;
+  article?: InputMaybe<ArticleCreateNestedOneWithoutImageInput>;
   articleColumn?: InputMaybe<ArticleColumnCreateNestedOneWithoutImagesInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutImagesInput>;
   card?: InputMaybe<Scalars['String']>;
@@ -11218,6 +11811,7 @@ export type ImageCreateWithoutOffendersInput = {
 export type ImageCreateWithoutSchemeDarkInput = {
   Scheme?: InputMaybe<SchemeCreateNestedManyWithoutLogoInput>;
   actions?: InputMaybe<ActionCreateNestedManyWithoutImagesInput>;
+  article?: InputMaybe<ArticleCreateNestedOneWithoutImageInput>;
   articleColumn?: InputMaybe<ArticleColumnCreateNestedOneWithoutImagesInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutImagesInput>;
   card?: InputMaybe<Scalars['String']>;
@@ -11245,6 +11839,7 @@ export type ImageCreateWithoutSchemeDarkInput = {
 export type ImageCreateWithoutSchemeInput = {
   Scheme?: InputMaybe<SchemeCreateNestedManyWithoutLogoInput>;
   actions?: InputMaybe<ActionCreateNestedManyWithoutImagesInput>;
+  article?: InputMaybe<ArticleCreateNestedOneWithoutImageInput>;
   articleColumn?: InputMaybe<ArticleColumnCreateNestedOneWithoutImagesInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutImagesInput>;
   card?: InputMaybe<Scalars['String']>;
@@ -11272,6 +11867,7 @@ export type ImageCreateWithoutSchemeInput = {
 export type ImageCreateWithoutUpdateInput = {
   Scheme?: InputMaybe<SchemeCreateNestedManyWithoutLogoInput>;
   actions?: InputMaybe<ActionCreateNestedManyWithoutImagesInput>;
+  article?: InputMaybe<ArticleCreateNestedOneWithoutImageInput>;
   articleColumn?: InputMaybe<ArticleColumnCreateNestedOneWithoutImagesInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutImagesInput>;
   card?: InputMaybe<Scalars['String']>;
@@ -11299,6 +11895,7 @@ export type ImageCreateWithoutUpdateInput = {
 export type ImageCreateWithoutUploadedByInput = {
   Scheme?: InputMaybe<SchemeCreateNestedManyWithoutLogoInput>;
   actions?: InputMaybe<ActionCreateNestedManyWithoutImagesInput>;
+  article?: InputMaybe<ArticleCreateNestedOneWithoutImageInput>;
   articleColumn?: InputMaybe<ArticleColumnCreateNestedOneWithoutImagesInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutImagesInput>;
   card?: InputMaybe<Scalars['String']>;
@@ -11326,6 +11923,7 @@ export type ImageCreateWithoutUploadedByInput = {
 export type ImageCreateWithoutVehiclesInput = {
   Scheme?: InputMaybe<SchemeCreateNestedManyWithoutLogoInput>;
   actions?: InputMaybe<ActionCreateNestedManyWithoutImagesInput>;
+  article?: InputMaybe<ArticleCreateNestedOneWithoutImageInput>;
   articleColumn?: InputMaybe<ArticleColumnCreateNestedOneWithoutImagesInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutImagesInput>;
   card?: InputMaybe<Scalars['String']>;
@@ -11373,6 +11971,7 @@ export type ImageOrderByWithRelationInput = {
   Scheme?: InputMaybe<SchemeOrderByRelationAggregateInput>;
   actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
   artcleColumnId?: InputMaybe<SortOrder>;
+  article?: InputMaybe<ArticleOrderByWithRelationInput>;
   articleColumn?: InputMaybe<ArticleColumnOrderByWithRelationInput>;
   articles?: InputMaybe<ArticleOrderByRelationAggregateInput>;
   card?: InputMaybe<SortOrder>;
@@ -11429,6 +12028,7 @@ export type ImageScalarWhereInput = {
 export type ImageUpdateInput = {
   Scheme?: InputMaybe<SchemeUpdateManyWithoutLogoNestedInput>;
   actions?: InputMaybe<ActionUpdateManyWithoutImagesNestedInput>;
+  article?: InputMaybe<ArticleUpdateOneWithoutImageNestedInput>;
   articleColumn?: InputMaybe<ArticleColumnUpdateOneWithoutImagesNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutImagesNestedInput>;
   card?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -11686,6 +12286,16 @@ export type ImageUpdateOneWithoutActionsNestedInput = {
   upsert?: InputMaybe<ImageUpsertWithoutActionsInput>;
 };
 
+export type ImageUpdateOneWithoutArticleNestedInput = {
+  connect?: InputMaybe<ImageWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<ImageCreateOrConnectWithoutArticleInput>;
+  create?: InputMaybe<ImageCreateWithoutArticleInput>;
+  delete?: InputMaybe<Scalars['Boolean']>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+  update?: InputMaybe<ImageUpdateWithoutArticleInput>;
+  upsert?: InputMaybe<ImageUpsertWithoutArticleInput>;
+};
+
 export type ImageUpdateOneWithoutIntelNestedInput = {
   connect?: InputMaybe<ImageWhereUniqueInput>;
   connectOrCreate?: InputMaybe<ImageCreateOrConnectWithoutIntelInput>;
@@ -11770,6 +12380,7 @@ export type ImageUpdateWithWhereUniqueWithoutVehiclesInput = {
 
 export type ImageUpdateWithoutActionsInput = {
   Scheme?: InputMaybe<SchemeUpdateManyWithoutLogoNestedInput>;
+  article?: InputMaybe<ArticleUpdateOneWithoutImageNestedInput>;
   articleColumn?: InputMaybe<ArticleColumnUpdateOneWithoutImagesNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutImagesNestedInput>;
   card?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -11798,6 +12409,35 @@ export type ImageUpdateWithoutActionsInput = {
 export type ImageUpdateWithoutArticleColumnInput = {
   Scheme?: InputMaybe<SchemeUpdateManyWithoutLogoNestedInput>;
   actions?: InputMaybe<ActionUpdateManyWithoutImagesNestedInput>;
+  article?: InputMaybe<ArticleUpdateOneWithoutImageNestedInput>;
+  articles?: InputMaybe<ArticleUpdateManyWithoutImagesNestedInput>;
+  card?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  feeditems?: InputMaybe<FeedItemUpdateManyWithoutImagesNestedInput>;
+  fileNames?: InputMaybe<ImageUpdatefileNamesInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  incident?: InputMaybe<IncidentUpdateOneWithoutImagesNestedInput>;
+  intel?: InputMaybe<IntelUpdateOneWithoutImageNestedInput>;
+  intelId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  low?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  message?: InputMaybe<MessageUpdateOneWithoutImagesNestedInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutImagesNestedInput>;
+  optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  optimisticUri?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
+  schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
+  update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploaded?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  uploadedBy?: InputMaybe<UserUpdateOneRequiredWithoutImagesNestedInput>;
+  url?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  vehicles?: InputMaybe<VehicleUpdateManyWithoutImagesNestedInput>;
+};
+
+export type ImageUpdateWithoutArticleInput = {
+  Scheme?: InputMaybe<SchemeUpdateManyWithoutLogoNestedInput>;
+  actions?: InputMaybe<ActionUpdateManyWithoutImagesNestedInput>;
+  articleColumn?: InputMaybe<ArticleColumnUpdateOneWithoutImagesNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutImagesNestedInput>;
   card?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -11825,6 +12465,7 @@ export type ImageUpdateWithoutArticleColumnInput = {
 export type ImageUpdateWithoutArticlesInput = {
   Scheme?: InputMaybe<SchemeUpdateManyWithoutLogoNestedInput>;
   actions?: InputMaybe<ActionUpdateManyWithoutImagesNestedInput>;
+  article?: InputMaybe<ArticleUpdateOneWithoutImageNestedInput>;
   articleColumn?: InputMaybe<ArticleColumnUpdateOneWithoutImagesNestedInput>;
   card?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -11852,6 +12493,7 @@ export type ImageUpdateWithoutArticlesInput = {
 export type ImageUpdateWithoutFeeditemsInput = {
   Scheme?: InputMaybe<SchemeUpdateManyWithoutLogoNestedInput>;
   actions?: InputMaybe<ActionUpdateManyWithoutImagesNestedInput>;
+  article?: InputMaybe<ArticleUpdateOneWithoutImageNestedInput>;
   articleColumn?: InputMaybe<ArticleColumnUpdateOneWithoutImagesNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutImagesNestedInput>;
   card?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -11879,6 +12521,7 @@ export type ImageUpdateWithoutFeeditemsInput = {
 export type ImageUpdateWithoutIncidentInput = {
   Scheme?: InputMaybe<SchemeUpdateManyWithoutLogoNestedInput>;
   actions?: InputMaybe<ActionUpdateManyWithoutImagesNestedInput>;
+  article?: InputMaybe<ArticleUpdateOneWithoutImageNestedInput>;
   articleColumn?: InputMaybe<ArticleColumnUpdateOneWithoutImagesNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutImagesNestedInput>;
   card?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -11906,6 +12549,7 @@ export type ImageUpdateWithoutIncidentInput = {
 export type ImageUpdateWithoutIntelInput = {
   Scheme?: InputMaybe<SchemeUpdateManyWithoutLogoNestedInput>;
   actions?: InputMaybe<ActionUpdateManyWithoutImagesNestedInput>;
+  article?: InputMaybe<ArticleUpdateOneWithoutImageNestedInput>;
   articleColumn?: InputMaybe<ArticleColumnUpdateOneWithoutImagesNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutImagesNestedInput>;
   card?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -11933,6 +12577,7 @@ export type ImageUpdateWithoutIntelInput = {
 export type ImageUpdateWithoutMessageInput = {
   Scheme?: InputMaybe<SchemeUpdateManyWithoutLogoNestedInput>;
   actions?: InputMaybe<ActionUpdateManyWithoutImagesNestedInput>;
+  article?: InputMaybe<ArticleUpdateOneWithoutImageNestedInput>;
   articleColumn?: InputMaybe<ArticleColumnUpdateOneWithoutImagesNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutImagesNestedInput>;
   card?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -11960,6 +12605,7 @@ export type ImageUpdateWithoutMessageInput = {
 export type ImageUpdateWithoutOffendersInput = {
   Scheme?: InputMaybe<SchemeUpdateManyWithoutLogoNestedInput>;
   actions?: InputMaybe<ActionUpdateManyWithoutImagesNestedInput>;
+  article?: InputMaybe<ArticleUpdateOneWithoutImageNestedInput>;
   articleColumn?: InputMaybe<ArticleColumnUpdateOneWithoutImagesNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutImagesNestedInput>;
   card?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -11987,6 +12633,7 @@ export type ImageUpdateWithoutOffendersInput = {
 export type ImageUpdateWithoutSchemeDarkInput = {
   Scheme?: InputMaybe<SchemeUpdateManyWithoutLogoNestedInput>;
   actions?: InputMaybe<ActionUpdateManyWithoutImagesNestedInput>;
+  article?: InputMaybe<ArticleUpdateOneWithoutImageNestedInput>;
   articleColumn?: InputMaybe<ArticleColumnUpdateOneWithoutImagesNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutImagesNestedInput>;
   card?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -12014,6 +12661,7 @@ export type ImageUpdateWithoutSchemeDarkInput = {
 export type ImageUpdateWithoutSchemeInput = {
   Scheme?: InputMaybe<SchemeUpdateManyWithoutLogoNestedInput>;
   actions?: InputMaybe<ActionUpdateManyWithoutImagesNestedInput>;
+  article?: InputMaybe<ArticleUpdateOneWithoutImageNestedInput>;
   articleColumn?: InputMaybe<ArticleColumnUpdateOneWithoutImagesNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutImagesNestedInput>;
   card?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -12041,6 +12689,7 @@ export type ImageUpdateWithoutSchemeInput = {
 export type ImageUpdateWithoutUpdateInput = {
   Scheme?: InputMaybe<SchemeUpdateManyWithoutLogoNestedInput>;
   actions?: InputMaybe<ActionUpdateManyWithoutImagesNestedInput>;
+  article?: InputMaybe<ArticleUpdateOneWithoutImageNestedInput>;
   articleColumn?: InputMaybe<ArticleColumnUpdateOneWithoutImagesNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutImagesNestedInput>;
   card?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -12068,6 +12717,7 @@ export type ImageUpdateWithoutUpdateInput = {
 export type ImageUpdateWithoutUploadedByInput = {
   Scheme?: InputMaybe<SchemeUpdateManyWithoutLogoNestedInput>;
   actions?: InputMaybe<ActionUpdateManyWithoutImagesNestedInput>;
+  article?: InputMaybe<ArticleUpdateOneWithoutImageNestedInput>;
   articleColumn?: InputMaybe<ArticleColumnUpdateOneWithoutImagesNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutImagesNestedInput>;
   card?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -12095,6 +12745,7 @@ export type ImageUpdateWithoutUploadedByInput = {
 export type ImageUpdateWithoutVehiclesInput = {
   Scheme?: InputMaybe<SchemeUpdateManyWithoutLogoNestedInput>;
   actions?: InputMaybe<ActionUpdateManyWithoutImagesNestedInput>;
+  article?: InputMaybe<ArticleUpdateOneWithoutImageNestedInput>;
   articleColumn?: InputMaybe<ArticleColumnUpdateOneWithoutImagesNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutImagesNestedInput>;
   card?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -12189,6 +12840,11 @@ export type ImageUpsertWithoutActionsInput = {
   update: ImageUpdateWithoutActionsInput;
 };
 
+export type ImageUpsertWithoutArticleInput = {
+  create: ImageCreateWithoutArticleInput;
+  update: ImageUpdateWithoutArticleInput;
+};
+
 export type ImageUpsertWithoutIntelInput = {
   create: ImageCreateWithoutIntelInput;
   update: ImageUpdateWithoutIntelInput;
@@ -12211,6 +12867,7 @@ export type ImageWhereInput = {
   Scheme?: InputMaybe<SchemeListRelationFilter>;
   actions?: InputMaybe<ActionListRelationFilter>;
   artcleColumnId?: InputMaybe<StringNullableFilter>;
+  article?: InputMaybe<ArticleWhereInput>;
   articleColumn?: InputMaybe<ArticleColumnWhereInput>;
   articles?: InputMaybe<ArticleListRelationFilter>;
   card?: InputMaybe<StringNullableFilter>;
@@ -18726,9 +19383,22 @@ export type ListVehicles = {
   vehicles: Array<Vehicle>;
 };
 
+export type LoginEvent = {
+  __typename?: 'LoginEvent';
+  createdAt: Scalars['DateTime'];
+  geoIp?: Maybe<GeoIp>;
+  id?: Maybe<Scalars['ID']>;
+  ipAddress: Scalars['String'];
+  loginTime: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  user: User;
+};
+
 export type LoginEventCreateManyUserInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  geoIpAddress?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
+  ipAddress: Scalars['String'];
   loginTime: Scalars['DateTime'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -18754,7 +19424,9 @@ export type LoginEventCreateOrConnectWithoutUserInput = {
 
 export type LoginEventCreateWithoutUserInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  geoIp?: InputMaybe<GeoIpCreateNestedOneWithoutLoginEventsInput>;
   id?: InputMaybe<Scalars['String']>;
+  ipAddress: Scalars['String'];
   loginTime: Scalars['DateTime'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -18774,7 +19446,9 @@ export type LoginEventScalarWhereInput = {
   NOT?: InputMaybe<Array<LoginEventScalarWhereInput>>;
   OR?: InputMaybe<Array<LoginEventScalarWhereInput>>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  geoIpAddress?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
+  ipAddress?: InputMaybe<StringFilter>;
   loginTime?: InputMaybe<DateTimeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   userId?: InputMaybe<StringFilter>;
@@ -18783,6 +19457,7 @@ export type LoginEventScalarWhereInput = {
 export type LoginEventUpdateManyMutationInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  ipAddress?: InputMaybe<StringFieldUpdateOperationsInput>;
   loginTime?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -18815,7 +19490,9 @@ export type LoginEventUpdateWithWhereUniqueWithoutUserInput = {
 
 export type LoginEventUpdateWithoutUserInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  geoIp?: InputMaybe<GeoIpUpdateOneWithoutLoginEventsNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  ipAddress?: InputMaybe<StringFieldUpdateOperationsInput>;
   loginTime?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
@@ -18831,7 +19508,10 @@ export type LoginEventWhereInput = {
   NOT?: InputMaybe<Array<LoginEventWhereInput>>;
   OR?: InputMaybe<Array<LoginEventWhereInput>>;
   createdAt?: InputMaybe<DateTimeFilter>;
+  geoIp?: InputMaybe<GeoIpWhereInput>;
+  geoIpAddress?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
+  ipAddress?: InputMaybe<StringFilter>;
   loginTime?: InputMaybe<DateTimeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   user?: InputMaybe<UserWhereInput>;
@@ -19994,17 +20674,21 @@ export enum Model {
   Article = 'ARTICLE',
   Ban = 'BAN',
   Chat = 'CHAT',
+  CrimeGroup = 'CRIME_GROUP',
   Document = 'DOCUMENT',
   Group = 'GROUP',
   Image = 'IMAGE',
   Incident = 'INCIDENT',
+  Investigation = 'INVESTIGATION',
   Message = 'MESSAGE',
   Offender = 'OFFENDER',
   Remove = 'REMOVE',
   Scheme = 'SCHEME',
   Send = 'SEND',
   Tag = 'TAG',
+  Update = 'UPDATE',
   User = 'USER',
+  Vehicle = 'VEHICLE',
 }
 
 export type Mutation = {
@@ -24578,6 +25262,7 @@ export type QueryListFeedItemsArgs = {
   search?: InputMaybe<Scalars['String']>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<FeedItemWhereInput>;
 };
 
 export type QueryListIncidentsArgs = {
@@ -31099,6 +31784,7 @@ export type User = {
   incidentPush: Scalars['Boolean'];
   incidents: Array<Incident>;
   ipAddress?: Maybe<Scalars['String']>;
+  loginEvents: Array<LoginEvent>;
   messagePush: Scalars['Boolean'];
   messages: Array<Message>;
   newUser: Scalars['Boolean'];
@@ -31228,6 +31914,13 @@ export type UserIncidentsArgs = {
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<IncidentOrderByWithRelationInput>>;
   where?: InputMaybe<IncidentWhereInput>;
+};
+
+export type UserLoginEventsArgs = {
+  after?: InputMaybe<LoginEventWhereUniqueInput>;
+  before?: InputMaybe<LoginEventWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
 };
 
 export type UserMessagesArgs = {
@@ -36918,6 +37611,12 @@ export type VehicleCreateNestedOneWithoutActionsInput = {
   create?: InputMaybe<VehicleCreateWithoutActionsInput>;
 };
 
+export type VehicleCreateNestedOneWithoutFeedItemsInput = {
+  connect?: InputMaybe<VehicleWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<VehicleCreateOrConnectWithoutFeedItemsInput>;
+  create?: InputMaybe<VehicleCreateWithoutFeedItemsInput>;
+};
+
 export type VehicleCreateNestedOneWithoutUpdatesInput = {
   connect?: InputMaybe<VehicleWhereUniqueInput>;
   connectOrCreate?: InputMaybe<VehicleCreateOrConnectWithoutUpdatesInput>;
@@ -36931,6 +37630,11 @@ export type VehicleCreateOrConnectWithoutActionsInput = {
 
 export type VehicleCreateOrConnectWithoutCrimeGroupInput = {
   create: VehicleCreateWithoutCrimeGroupInput;
+  where: VehicleWhereUniqueInput;
+};
+
+export type VehicleCreateOrConnectWithoutFeedItemsInput = {
+  create: VehicleCreateWithoutFeedItemsInput;
   where: VehicleWhereUniqueInput;
 };
 
@@ -36983,6 +37687,7 @@ export type VehicleCreateWithoutActionsInput = {
   colour?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutVehiclesInput>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutVehiclesInput>;
@@ -37004,6 +37709,29 @@ export type VehicleCreateWithoutCrimeGroupInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutVehicleInput>;
   colour?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutVehiclesInput>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutVehiclesInput>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutVehiclesInput>;
+  linkedUpdates?: InputMaybe<UpdateCreateNestedManyWithoutLinkedVehiclesInput>;
+  make?: InputMaybe<Scalars['String']>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutVehiclesInput>;
+  model?: InputMaybe<Scalars['String']>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutVehiclesInput>;
+  reference?: InputMaybe<Scalars['Int']>;
+  registration?: InputMaybe<Scalars['String']>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutVehiclesInput>;
+  subscribedUsers?: InputMaybe<UserCreateNestedManyWithoutSubscribedVehiclesInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  updates?: InputMaybe<UpdateCreateNestedManyWithoutVehicleInput>;
+};
+
+export type VehicleCreateWithoutFeedItemsInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutVehicleInput>;
+  colour?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutVehiclesInput>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutVehiclesInput>;
@@ -37026,6 +37754,7 @@ export type VehicleCreateWithoutImagesInput = {
   colour?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   id?: InputMaybe<Scalars['String']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutVehiclesInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutVehiclesInput>;
@@ -37047,6 +37776,7 @@ export type VehicleCreateWithoutIncidentsInput = {
   colour?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutVehiclesInput>;
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutVehiclesInput>;
@@ -37068,6 +37798,7 @@ export type VehicleCreateWithoutInvestigationsInput = {
   colour?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutVehiclesInput>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutVehiclesInput>;
@@ -37089,6 +37820,7 @@ export type VehicleCreateWithoutLinkedUpdatesInput = {
   colour?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutVehiclesInput>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutVehiclesInput>;
@@ -37110,6 +37842,7 @@ export type VehicleCreateWithoutMessagesInput = {
   colour?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutVehiclesInput>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutVehiclesInput>;
@@ -37131,6 +37864,7 @@ export type VehicleCreateWithoutOffendersInput = {
   colour?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutVehiclesInput>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutVehiclesInput>;
@@ -37152,6 +37886,7 @@ export type VehicleCreateWithoutSchemesInput = {
   colour?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutVehiclesInput>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutVehiclesInput>;
@@ -37173,6 +37908,7 @@ export type VehicleCreateWithoutSubscribedUsersInput = {
   colour?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutVehiclesInput>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutVehiclesInput>;
@@ -37194,6 +37930,7 @@ export type VehicleCreateWithoutUpdatesInput = {
   colour?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedManyWithoutVehiclesInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutVehicleInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutVehiclesInput>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutVehiclesInput>;
@@ -37225,6 +37962,7 @@ export type VehicleOrderByWithRelationInput = {
   colour?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   crimeGroup?: InputMaybe<CrimeGroupOrderByRelationAggregateInput>;
+  feedItems?: InputMaybe<FeedItemOrderByRelationAggregateInput>;
   id?: InputMaybe<SortOrder>;
   images?: InputMaybe<ImageOrderByRelationAggregateInput>;
   incidents?: InputMaybe<IncidentOrderByRelationAggregateInput>;
@@ -37485,6 +38223,16 @@ export type VehicleUpdateOneWithoutActionsNestedInput = {
   upsert?: InputMaybe<VehicleUpsertWithoutActionsInput>;
 };
 
+export type VehicleUpdateOneWithoutFeedItemsNestedInput = {
+  connect?: InputMaybe<VehicleWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<VehicleCreateOrConnectWithoutFeedItemsInput>;
+  create?: InputMaybe<VehicleCreateWithoutFeedItemsInput>;
+  delete?: InputMaybe<Scalars['Boolean']>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+  update?: InputMaybe<VehicleUpdateWithoutFeedItemsInput>;
+  upsert?: InputMaybe<VehicleUpsertWithoutFeedItemsInput>;
+};
+
 export type VehicleUpdateOneWithoutUpdatesNestedInput = {
   connect?: InputMaybe<VehicleWhereUniqueInput>;
   connectOrCreate?: InputMaybe<VehicleCreateOrConnectWithoutUpdatesInput>;
@@ -37544,6 +38292,7 @@ export type VehicleUpdateWithoutActionsInput = {
   colour?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutVehiclesNestedInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutVehiclesNestedInput>;
@@ -37565,6 +38314,29 @@ export type VehicleUpdateWithoutCrimeGroupInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutVehicleNestedInput>;
   colour?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutVehiclesNestedInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutVehiclesNestedInput>;
+  investigations?: InputMaybe<InvestigationUpdateManyWithoutVehiclesNestedInput>;
+  linkedUpdates?: InputMaybe<UpdateUpdateManyWithoutLinkedVehiclesNestedInput>;
+  make?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutVehiclesNestedInput>;
+  model?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutVehiclesNestedInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  registration?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutVehiclesNestedInput>;
+  subscribedUsers?: InputMaybe<UserUpdateManyWithoutSubscribedVehiclesNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  updates?: InputMaybe<UpdateUpdateManyWithoutVehicleNestedInput>;
+};
+
+export type VehicleUpdateWithoutFeedItemsInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutVehicleNestedInput>;
+  colour?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutVehiclesNestedInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutVehiclesNestedInput>;
@@ -37587,6 +38359,7 @@ export type VehicleUpdateWithoutImagesInput = {
   colour?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutVehiclesNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutVehiclesNestedInput>;
@@ -37608,6 +38381,7 @@ export type VehicleUpdateWithoutIncidentsInput = {
   colour?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutVehiclesNestedInput>;
   investigations?: InputMaybe<InvestigationUpdateManyWithoutVehiclesNestedInput>;
@@ -37629,6 +38403,7 @@ export type VehicleUpdateWithoutInvestigationsInput = {
   colour?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutVehiclesNestedInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutVehiclesNestedInput>;
@@ -37650,6 +38425,7 @@ export type VehicleUpdateWithoutLinkedUpdatesInput = {
   colour?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutVehiclesNestedInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutVehiclesNestedInput>;
@@ -37671,6 +38447,7 @@ export type VehicleUpdateWithoutMessagesInput = {
   colour?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutVehiclesNestedInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutVehiclesNestedInput>;
@@ -37692,6 +38469,7 @@ export type VehicleUpdateWithoutOffendersInput = {
   colour?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutVehiclesNestedInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutVehiclesNestedInput>;
@@ -37713,6 +38491,7 @@ export type VehicleUpdateWithoutSchemesInput = {
   colour?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutVehiclesNestedInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutVehiclesNestedInput>;
@@ -37734,6 +38513,7 @@ export type VehicleUpdateWithoutSubscribedUsersInput = {
   colour?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutVehiclesNestedInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutVehiclesNestedInput>;
@@ -37755,6 +38535,7 @@ export type VehicleUpdateWithoutUpdatesInput = {
   colour?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateManyWithoutVehiclesNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutVehicleNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutVehiclesNestedInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutVehiclesNestedInput>;
@@ -37830,6 +38611,11 @@ export type VehicleUpsertWithoutActionsInput = {
   update: VehicleUpdateWithoutActionsInput;
 };
 
+export type VehicleUpsertWithoutFeedItemsInput = {
+  create: VehicleCreateWithoutFeedItemsInput;
+  update: VehicleUpdateWithoutFeedItemsInput;
+};
+
 export type VehicleUpsertWithoutUpdatesInput = {
   create: VehicleCreateWithoutUpdatesInput;
   update: VehicleUpdateWithoutUpdatesInput;
@@ -37843,6 +38629,7 @@ export type VehicleWhereInput = {
   colour?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   crimeGroup?: InputMaybe<CrimeGroupListRelationFilter>;
+  feedItems?: InputMaybe<FeedItemListRelationFilter>;
   id?: InputMaybe<StringFilter>;
   images?: InputMaybe<ImageListRelationFilter>;
   incidents?: InputMaybe<IncidentListRelationFilter>;
@@ -37932,6 +38719,20 @@ export type CreateArticleMutation = {
     }>;
     createdBy: { __typename?: 'User'; fullName: string };
     tags: Array<{ __typename?: 'Tag'; name: string }>;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      card?: string | null;
+    }>;
+    image?: {
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      card?: string | null;
+    } | null;
     rows: Array<{
       __typename?: 'ArticleRow';
       columns: Array<{
@@ -38070,6 +38871,20 @@ export type ArticlesQuery = {
     updatedAt: any;
     id: string;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      card?: string | null;
+    }>;
+    image?: {
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      card?: string | null;
+    } | null;
     createdBy: {
       __typename?: 'User';
       fullName: string;
@@ -38101,6 +38916,20 @@ export type ListArticlesQuery = {
       updatedAt: any;
       id: string;
       tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+      }>;
+      image?: {
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+      } | null;
       createdBy: {
         __typename?: 'User';
         fullName: string;
@@ -38132,6 +38961,20 @@ export type ArticleQuery = {
     }>;
     createdBy: { __typename?: 'User'; fullName: string };
     tags: Array<{ __typename?: 'Tag'; name: string }>;
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      card?: string | null;
+    }>;
+    image?: {
+      __typename?: 'Image';
+      id: string;
+      url?: string | null;
+      optimised?: string | null;
+      card?: string | null;
+    } | null;
     rows: Array<{
       __typename?: 'ArticleRow';
       columns: Array<{
@@ -39025,6 +39868,12 @@ export type CrimeGroupQuery = {
         make?: string | null;
         id: string;
         colour?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
@@ -39101,6 +39950,12 @@ export type CrimeGroupQuery = {
           make?: string | null;
           id: string;
           colour?: string | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
         }>;
         linkedIncidents: Array<{
           __typename?: 'Incident';
@@ -39309,6 +40164,7 @@ export type FeedItemsQueryVariables = Exact<{
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
   order?: InputMaybe<FeedItemOrderByWithRelationInput>;
+  where?: InputMaybe<FeedItemWhereInput>;
   take?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
   after?: InputMaybe<Scalars['String']>;
@@ -39328,6 +40184,8 @@ export type FeedItemsQuery = {
       updatedAt: any;
       message: string;
       model?: Model | null;
+      crimeGroupId?: string | null;
+      vehicleId?: string | null;
       investigationId?: string | null;
       id: string;
       incidentId?: string | null;
@@ -39351,11 +40209,225 @@ export type FeedItemsQuery = {
             name: string;
           }>;
         };
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          card?: string | null;
+        }>;
+        image?: {
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          card?: string | null;
+        } | null;
+      } | null;
+      crimeGroup?: {
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        totalUpdates?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+        updates: Array<{
+          __typename?: 'Update';
+          id: string;
+          text?: string | null;
+          icon: UpdateIcon;
+          type: UpdateType;
+          createdAt: any;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+            card?: string | null;
+          }>;
+          linkedCrimeGroups: Array<{
+            __typename?: 'CrimeGroup';
+            totalOffenders?: number | null;
+            totalIncidents?: number | null;
+            alias?: string | null;
+            id: string;
+            reference?: number | null;
+            totalRecoveredValue?: number | null;
+            totalTheftSuccess?: number | null;
+            totalValue?: number | null;
+            updatedAt: any;
+          }>;
+          linkedVehicles: Array<{
+            __typename?: 'Vehicle';
+            updatedAt: any;
+            totalOffenders?: number | null;
+            registration?: string | null;
+            reference?: number | null;
+            model?: string | null;
+            make?: string | null;
+            id: string;
+            colour?: string | null;
+            images: Array<{
+              __typename?: 'Image';
+              id: string;
+              url?: string | null;
+              optimised?: string | null;
+            }>;
+          }>;
+          linkedIncidents: Array<{
+            __typename?: 'Incident';
+            id: string;
+            subject?: string | null;
+            description: string;
+            dayTime?: string | null;
+            images: Array<{
+              __typename?: 'Image';
+              id: string;
+              url?: string | null;
+              optimised?: string | null;
+            }>;
+          }>;
+          linkedOffenders: Array<{
+            __typename?: 'Offender';
+            id: string;
+            updatedAt: any;
+            age?: Age | null;
+            build?: Build | null;
+            dateOfBirth?: any | null;
+            name?: string | null;
+            race?: Race | null;
+            gender?: Gender | null;
+            images: Array<{
+              __typename?: 'Image';
+              id: string;
+              url?: string | null;
+              optimised?: string | null;
+            }>;
+          }>;
+          createdBy: {
+            __typename?: 'User';
+            id: string;
+            fullName: string;
+            businesses: Array<{
+              __typename?: 'Business';
+              id: string;
+              name: string;
+            }>;
+          };
+        }>;
+      } | null;
+      vehicle?: {
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        totalUpdates?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          optimised?: string | null;
+          url?: string | null;
+        }>;
+        updates: Array<{
+          __typename?: 'Update';
+          id: string;
+          text?: string | null;
+          icon: UpdateIcon;
+          type: UpdateType;
+          createdAt: any;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+            card?: string | null;
+          }>;
+          linkedCrimeGroups: Array<{
+            __typename?: 'CrimeGroup';
+            totalOffenders?: number | null;
+            totalIncidents?: number | null;
+            alias?: string | null;
+            id: string;
+            reference?: number | null;
+            totalRecoveredValue?: number | null;
+            totalTheftSuccess?: number | null;
+            totalValue?: number | null;
+            updatedAt: any;
+          }>;
+          linkedVehicles: Array<{
+            __typename?: 'Vehicle';
+            updatedAt: any;
+            totalOffenders?: number | null;
+            registration?: string | null;
+            reference?: number | null;
+            model?: string | null;
+            make?: string | null;
+            id: string;
+            colour?: string | null;
+            images: Array<{
+              __typename?: 'Image';
+              id: string;
+              url?: string | null;
+              optimised?: string | null;
+            }>;
+          }>;
+          linkedIncidents: Array<{
+            __typename?: 'Incident';
+            id: string;
+            subject?: string | null;
+            description: string;
+            dayTime?: string | null;
+            images: Array<{
+              __typename?: 'Image';
+              id: string;
+              url?: string | null;
+              optimised?: string | null;
+            }>;
+          }>;
+          linkedOffenders: Array<{
+            __typename?: 'Offender';
+            id: string;
+            updatedAt: any;
+            age?: Age | null;
+            build?: Build | null;
+            dateOfBirth?: any | null;
+            name?: string | null;
+            race?: Race | null;
+            gender?: Gender | null;
+            images: Array<{
+              __typename?: 'Image';
+              id: string;
+              url?: string | null;
+              optimised?: string | null;
+            }>;
+          }>;
+          createdBy: {
+            __typename?: 'User';
+            id: string;
+            fullName: string;
+            businesses: Array<{
+              __typename?: 'Business';
+              id: string;
+              name: string;
+            }>;
+          };
+        }>;
       } | null;
       investigation?: {
         __typename?: 'Investigation';
         id: string;
         name: string;
+        reference?: number | null;
         totalOffenders?: number | null;
         totalIncidents?: number | null;
         totalCrimeGroups?: number | null;
@@ -39376,12 +40448,44 @@ export type FeedItemsQuery = {
           __typename?: 'Update';
           id: string;
           text?: string | null;
+          icon: UpdateIcon;
           type: UpdateType;
+          createdAt: any;
           images: Array<{
             __typename?: 'Image';
             id: string;
-            optimised?: string | null;
             url?: string | null;
+            optimised?: string | null;
+            card?: string | null;
+          }>;
+          linkedCrimeGroups: Array<{
+            __typename?: 'CrimeGroup';
+            totalOffenders?: number | null;
+            totalIncidents?: number | null;
+            alias?: string | null;
+            id: string;
+            reference?: number | null;
+            totalRecoveredValue?: number | null;
+            totalTheftSuccess?: number | null;
+            totalValue?: number | null;
+            updatedAt: any;
+          }>;
+          linkedVehicles: Array<{
+            __typename?: 'Vehicle';
+            updatedAt: any;
+            totalOffenders?: number | null;
+            registration?: string | null;
+            reference?: number | null;
+            model?: string | null;
+            make?: string | null;
+            id: string;
+            colour?: string | null;
+            images: Array<{
+              __typename?: 'Image';
+              id: string;
+              url?: string | null;
+              optimised?: string | null;
+            }>;
           }>;
           linkedIncidents: Array<{
             __typename?: 'Incident';
@@ -39400,7 +40504,12 @@ export type FeedItemsQuery = {
             __typename?: 'Offender';
             id: string;
             updatedAt: any;
+            age?: Age | null;
+            build?: Build | null;
+            dateOfBirth?: any | null;
             name?: string | null;
+            race?: Race | null;
+            gender?: Gender | null;
             images: Array<{
               __typename?: 'Image';
               id: string;
@@ -39408,6 +40517,16 @@ export type FeedItemsQuery = {
               optimised?: string | null;
             }>;
           }>;
+          createdBy: {
+            __typename?: 'User';
+            id: string;
+            fullName: string;
+            businesses: Array<{
+              __typename?: 'Business';
+              id: string;
+              name: string;
+            }>;
+          };
         }>;
       } | null;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
@@ -39427,12 +40546,44 @@ export type FeedItemsQuery = {
           __typename?: 'Update';
           id: string;
           text?: string | null;
+          icon: UpdateIcon;
           type: UpdateType;
+          createdAt: any;
           images: Array<{
             __typename?: 'Image';
             id: string;
-            optimised?: string | null;
             url?: string | null;
+            optimised?: string | null;
+            card?: string | null;
+          }>;
+          linkedCrimeGroups: Array<{
+            __typename?: 'CrimeGroup';
+            totalOffenders?: number | null;
+            totalIncidents?: number | null;
+            alias?: string | null;
+            id: string;
+            reference?: number | null;
+            totalRecoveredValue?: number | null;
+            totalTheftSuccess?: number | null;
+            totalValue?: number | null;
+            updatedAt: any;
+          }>;
+          linkedVehicles: Array<{
+            __typename?: 'Vehicle';
+            updatedAt: any;
+            totalOffenders?: number | null;
+            registration?: string | null;
+            reference?: number | null;
+            model?: string | null;
+            make?: string | null;
+            id: string;
+            colour?: string | null;
+            images: Array<{
+              __typename?: 'Image';
+              id: string;
+              url?: string | null;
+              optimised?: string | null;
+            }>;
           }>;
           linkedIncidents: Array<{
             __typename?: 'Incident';
@@ -39451,7 +40602,12 @@ export type FeedItemsQuery = {
             __typename?: 'Offender';
             id: string;
             updatedAt: any;
+            age?: Age | null;
+            build?: Build | null;
+            dateOfBirth?: any | null;
             name?: string | null;
+            race?: Race | null;
+            gender?: Gender | null;
             images: Array<{
               __typename?: 'Image';
               id: string;
@@ -39459,6 +40615,16 @@ export type FeedItemsQuery = {
               optimised?: string | null;
             }>;
           }>;
+          createdBy: {
+            __typename?: 'User';
+            id: string;
+            fullName: string;
+            businesses: Array<{
+              __typename?: 'Business';
+              id: string;
+              name: string;
+            }>;
+          };
         }>;
         crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
         business?: { __typename?: 'Business'; id: string; name: string } | null;
@@ -39479,34 +40645,12 @@ export type FeedItemsQuery = {
           url?: string | null;
         }>;
         groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-        offenders: Array<{
-          __typename?: 'Offender';
-          id: string;
-          name?: string | null;
-          age?: Age | null;
-          gender?: Gender | null;
-          race?: Race | null;
-          dateOfBirth?: any | null;
-          build?: Build | null;
-          recycled: boolean;
-          images: Array<{
-            __typename?: 'Image';
-            id: string;
-            url?: string | null;
-            optimised?: string | null;
-            card?: string | null;
-            offenders: Array<{
-              __typename?: 'Offender';
-              id: string;
-              name?: string | null;
-            }>;
-          }>;
-        }>;
       } | null;
       offender?: {
         __typename?: 'Offender';
         id: string;
         createdAt: any;
+        reference?: number | null;
         updatedAt: any;
         age?: Age | null;
         build?: Build | null;
@@ -39541,12 +40685,44 @@ export type FeedItemsQuery = {
           __typename?: 'Update';
           id: string;
           text?: string | null;
+          icon: UpdateIcon;
           type: UpdateType;
+          createdAt: any;
           images: Array<{
             __typename?: 'Image';
             id: string;
-            optimised?: string | null;
             url?: string | null;
+            optimised?: string | null;
+            card?: string | null;
+          }>;
+          linkedCrimeGroups: Array<{
+            __typename?: 'CrimeGroup';
+            totalOffenders?: number | null;
+            totalIncidents?: number | null;
+            alias?: string | null;
+            id: string;
+            reference?: number | null;
+            totalRecoveredValue?: number | null;
+            totalTheftSuccess?: number | null;
+            totalValue?: number | null;
+            updatedAt: any;
+          }>;
+          linkedVehicles: Array<{
+            __typename?: 'Vehicle';
+            updatedAt: any;
+            totalOffenders?: number | null;
+            registration?: string | null;
+            reference?: number | null;
+            model?: string | null;
+            make?: string | null;
+            id: string;
+            colour?: string | null;
+            images: Array<{
+              __typename?: 'Image';
+              id: string;
+              url?: string | null;
+              optimised?: string | null;
+            }>;
           }>;
           linkedIncidents: Array<{
             __typename?: 'Incident';
@@ -39565,7 +40741,12 @@ export type FeedItemsQuery = {
             __typename?: 'Offender';
             id: string;
             updatedAt: any;
+            age?: Age | null;
+            build?: Build | null;
+            dateOfBirth?: any | null;
             name?: string | null;
+            race?: Race | null;
+            gender?: Gender | null;
             images: Array<{
               __typename?: 'Image';
               id: string;
@@ -39573,6 +40754,16 @@ export type FeedItemsQuery = {
               optimised?: string | null;
             }>;
           }>;
+          createdBy: {
+            __typename?: 'User';
+            id: string;
+            fullName: string;
+            businesses: Array<{
+              __typename?: 'Business';
+              id: string;
+              name: string;
+            }>;
+          };
         }>;
         images: Array<{
           __typename?: 'Image';
@@ -40223,6 +41414,12 @@ export type ViewIncidentQuery = {
         make?: string | null;
         id: string;
         colour?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
@@ -40299,6 +41496,12 @@ export type ViewIncidentQuery = {
           make?: string | null;
           id: string;
           colour?: string | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
         }>;
         linkedIncidents: Array<{
           __typename?: 'Incident';
@@ -40602,6 +41805,12 @@ export type ViewInvestigationQuery = {
         make?: string | null;
         id: string;
         colour?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
@@ -40678,6 +41887,12 @@ export type ViewInvestigationQuery = {
           make?: string | null;
           id: string;
           colour?: string | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
         }>;
         linkedIncidents: Array<{
           __typename?: 'Incident';
@@ -41791,6 +43006,12 @@ export type ViewOffenderQuery = {
         make?: string | null;
         id: string;
         colour?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
@@ -41867,6 +43088,12 @@ export type ViewOffenderQuery = {
           make?: string | null;
           id: string;
           colour?: string | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
         }>;
         linkedIncidents: Array<{
           __typename?: 'Incident';
@@ -42496,6 +43723,12 @@ export type CreateUpdateOnCrimeGroupMutation = {
       make?: string | null;
       id: string;
       colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
     }>;
     linkedIncidents: Array<{
       __typename?: 'Incident';
@@ -42568,6 +43801,12 @@ export type CreateUpdateOnCrimeGroupMutation = {
         make?: string | null;
         id: string;
         colour?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
@@ -42850,6 +44089,12 @@ export type CreateUpdateOnInvestigationMutation = {
       make?: string | null;
       id: string;
       colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
     }>;
     createdBy: {
       __typename?: 'User';
@@ -42892,6 +44137,12 @@ export type CreateUpdateOnInvestigationMutation = {
         make?: string | null;
         id: string;
         colour?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
@@ -43057,6 +44308,12 @@ export type CreateUpdateOnOffenderMutation = {
         make?: string | null;
         id: string;
         colour?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
@@ -43144,6 +44401,12 @@ export type CreateUpdateOnVehicleMutation = {
       make?: string | null;
       id: string;
       colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
     }>;
     linkedIncidents: Array<{
       __typename?: 'Incident';
@@ -43216,6 +44479,12 @@ export type CreateUpdateOnVehicleMutation = {
         make?: string | null;
         id: string;
         colour?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
@@ -44031,6 +45300,12 @@ export type VehicleQuery = {
         make?: string | null;
         id: string;
         colour?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
@@ -44107,6 +45382,12 @@ export type VehicleQuery = {
           make?: string | null;
           id: string;
           colour?: string | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
         }>;
         linkedIncidents: Array<{
           __typename?: 'Incident';
@@ -44254,6 +45535,18 @@ export const CreateArticleDocument = gql`
         name
       }
       title
+      images {
+        id
+        url
+        optimised
+        card
+      }
+      image {
+        id
+        url
+        optimised
+        card
+      }
       rows {
         columns {
           text
@@ -44433,6 +45726,18 @@ export const ArticlesDocument = gql`
         id
         name
       }
+      images {
+        id
+        url
+        optimised
+        card
+      }
+      image {
+        id
+        url
+        optimised
+        card
+      }
       createdBy {
         fullName
         businesses {
@@ -44516,6 +45821,18 @@ export const ListArticlesDocument = gql`
         tags {
           id
           name
+        }
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        image {
+          id
+          url
+          optimised
+          card
         }
         createdBy {
           fullName
@@ -44605,6 +45922,18 @@ export const ArticleDocument = gql`
       priority
       tags {
         name
+      }
+      images {
+        id
+        url
+        optimised
+        card
+      }
+      image {
+        id
+        url
+        optimised
+        card
       }
       title
       rows {
@@ -46659,6 +47988,11 @@ export const CrimeGroupDocument = gql`
           make
           id
           colour
+          images {
+            id
+            url
+            optimised
+          }
         }
         linkedIncidents {
           id
@@ -46725,6 +48059,11 @@ export const CrimeGroupDocument = gql`
             make
             id
             colour
+            images {
+              id
+              url
+              optimised
+            }
           }
           linkedIncidents {
             id
@@ -47361,12 +48700,14 @@ export const FeedItemsDocument = gql`
     $schemeId: String!
     $search: String
     $order: FeedItemOrderByWithRelationInput
+    $where: FeedItemWhereInput
     $take: Int
     $skip: Int
     $after: String
     $groups: [String!]
   ) {
     listFeedItems(
+      where: $where
       schemeId: $schemeId
       search: $search
       order: $order
@@ -47393,6 +48734,18 @@ export const FeedItemsDocument = gql`
               name
             }
           }
+          images {
+            id
+            url
+            optimised
+            card
+          }
+          image {
+            id
+            url
+            optimised
+            card
+          }
           previewImage
           previewText
           priority
@@ -47402,10 +48755,187 @@ export const FeedItemsDocument = gql`
         updatedAt
         message
         model
+        crimeGroupId
+        crimeGroup {
+          totalOffenders
+          totalIncidents
+          totalUpdates
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+          updates(orderBy: { createdAt: desc }) {
+            id
+            text
+            icon
+            type
+            createdAt
+            images {
+              id
+              url
+              optimised
+              card
+            }
+            linkedCrimeGroups {
+              totalOffenders
+              totalIncidents
+              alias
+              id
+              reference
+              totalRecoveredValue
+              totalTheftSuccess
+              totalValue
+              updatedAt
+            }
+            linkedVehicles {
+              updatedAt
+              totalOffenders
+              registration
+              reference
+              model
+              images {
+                id
+                url
+                optimised
+              }
+              make
+              id
+              colour
+            }
+            linkedIncidents {
+              id
+              subject
+              description
+              dayTime
+              images {
+                id
+                url
+                optimised
+              }
+            }
+            linkedOffenders {
+              id
+              updatedAt
+              age
+              build
+              dateOfBirth
+              name
+              race
+              gender
+              images {
+                id
+                url
+                optimised
+              }
+            }
+            createdBy {
+              id
+              fullName
+              businesses {
+                id
+                name
+              }
+            }
+          }
+        }
+        vehicleId
+        vehicle {
+          updatedAt
+          totalOffenders
+          totalUpdates
+          registration
+          reference
+          model
+          make
+          id
+          colour
+          images {
+            id
+            optimised
+            url
+          }
+          updates(orderBy: { createdAt: desc }) {
+            id
+            text
+            icon
+            type
+            createdAt
+            images {
+              id
+              url
+              optimised
+              card
+            }
+            linkedCrimeGroups {
+              totalOffenders
+              totalIncidents
+              alias
+              id
+              reference
+              totalRecoveredValue
+              totalTheftSuccess
+              totalValue
+              updatedAt
+            }
+            linkedVehicles {
+              updatedAt
+              totalOffenders
+              registration
+              reference
+              model
+              make
+              id
+              colour
+              images {
+                id
+                url
+                optimised
+              }
+            }
+            linkedIncidents {
+              id
+              subject
+              description
+              dayTime
+              images {
+                id
+                url
+                optimised
+              }
+            }
+            linkedOffenders {
+              id
+              updatedAt
+              age
+              build
+              dateOfBirth
+              name
+              race
+              gender
+              images {
+                id
+                url
+                optimised
+              }
+            }
+            createdBy {
+              id
+              fullName
+              businesses {
+                id
+                name
+              }
+            }
+          }
+        }
         investigationId
         investigation {
           id
           name
+          reference
           totalOffenders
           totalIncidents
           totalCrimeGroups
@@ -47422,10 +48952,41 @@ export const FeedItemsDocument = gql`
           }
           updates(orderBy: { createdAt: desc }) {
             id
+            text
+            icon
+            type
+            createdAt
             images {
               id
-              optimised
               url
+              optimised
+              card
+            }
+            linkedCrimeGroups {
+              totalOffenders
+              totalIncidents
+              alias
+              id
+              reference
+              totalRecoveredValue
+              totalTheftSuccess
+              totalValue
+              updatedAt
+            }
+            linkedVehicles {
+              updatedAt
+              totalOffenders
+              registration
+              reference
+              model
+              make
+              images {
+                id
+                url
+                optimised
+              }
+              id
+              colour
             }
             linkedIncidents {
               id
@@ -47441,15 +49002,26 @@ export const FeedItemsDocument = gql`
             linkedOffenders {
               id
               updatedAt
+              age
+              build
+              dateOfBirth
               name
+              race
+              gender
               images {
                 id
                 url
                 optimised
               }
             }
-            text
-            type
+            createdBy {
+              id
+              fullName
+              businesses {
+                id
+                name
+              }
+            }
           }
         }
         groups {
@@ -47462,6 +49034,7 @@ export const FeedItemsDocument = gql`
           subject
           policeRef
           reference
+          reference
           description
           dayTime
           date
@@ -47469,10 +49042,41 @@ export const FeedItemsDocument = gql`
           totalUpdates
           updates(orderBy: { createdAt: desc }) {
             id
+            text
+            icon
+            type
+            createdAt
             images {
               id
-              optimised
               url
+              optimised
+              card
+            }
+            linkedCrimeGroups {
+              totalOffenders
+              totalIncidents
+              alias
+              id
+              reference
+              totalRecoveredValue
+              totalTheftSuccess
+              totalValue
+              updatedAt
+            }
+            linkedVehicles {
+              updatedAt
+              totalOffenders
+              registration
+              reference
+              model
+              images {
+                id
+                url
+                optimised
+              }
+              make
+              id
+              colour
             }
             linkedIncidents {
               id
@@ -47488,15 +49092,26 @@ export const FeedItemsDocument = gql`
             linkedOffenders {
               id
               updatedAt
+              age
+              build
+              dateOfBirth
               name
+              race
+              gender
               images {
                 id
                 url
                 optimised
               }
             }
-            text
-            type
+            createdBy {
+              id
+              fullName
+              businesses {
+                id
+                name
+              }
+            }
           }
           crimeTypes {
             id
@@ -47524,31 +49139,12 @@ export const FeedItemsDocument = gql`
             id
             name
           }
-          offenders {
-            id
-            name
-            age
-            gender
-            race
-            dateOfBirth
-            build
-            images(first: 1) {
-              id
-              url
-              optimised
-              card
-              offenders {
-                id
-                name
-              }
-            }
-            recycled
-          }
         }
         incidentId
         offender {
           id
           createdAt
+          reference
           updatedAt
           age
           bans {
@@ -47579,10 +49175,41 @@ export const FeedItemsDocument = gql`
           }
           updates(orderBy: { createdAt: desc }) {
             id
+            text
+            icon
+            type
+            createdAt
             images {
               id
-              optimised
               url
+              optimised
+              card
+            }
+            linkedCrimeGroups {
+              totalOffenders
+              totalIncidents
+              alias
+              id
+              reference
+              totalRecoveredValue
+              totalTheftSuccess
+              totalValue
+              updatedAt
+            }
+            linkedVehicles {
+              updatedAt
+              totalOffenders
+              registration
+              reference
+              model
+              make
+              id
+              images {
+                id
+                url
+                optimised
+              }
+              colour
             }
             linkedIncidents {
               id
@@ -47598,17 +49225,28 @@ export const FeedItemsDocument = gql`
             linkedOffenders {
               id
               updatedAt
+              age
+              build
+              dateOfBirth
               name
+              race
+              gender
               images {
                 id
                 url
                 optimised
               }
             }
-            text
-            type
+            createdBy {
+              id
+              fullName
+              businesses {
+                id
+                name
+              }
+            }
           }
-          images {
+          images(orderBy: { createdAt: desc }) {
             id
             url
             optimised
@@ -47664,7 +49302,7 @@ export const FeedItemsDocument = gql`
                 name
               }
             }
-            images {
+            images(orderBy: { createdAt: desc }) {
               id
               optimised
             }
@@ -47692,6 +49330,7 @@ export const FeedItemsDocument = gql`
  *      schemeId: // value for 'schemeId'
  *      search: // value for 'search'
  *      order: // value for 'order'
+ *      where: // value for 'where'
  *      take: // value for 'take'
  *      skip: // value for 'skip'
  *      after: // value for 'after'
@@ -49062,6 +50701,11 @@ export const ViewIncidentDocument = gql`
           updatedAt
         }
         linkedVehicles {
+          images {
+            id
+            url
+            optimised
+          }
           updatedAt
           totalOffenders
           registration
@@ -49070,6 +50714,11 @@ export const ViewIncidentDocument = gql`
           make
           id
           colour
+          images {
+            id
+            url
+            optimised
+          }
         }
         linkedIncidents {
           id
@@ -49128,6 +50777,11 @@ export const ViewIncidentDocument = gql`
             updatedAt
           }
           linkedVehicles {
+            images {
+              id
+              url
+              optimised
+            }
             updatedAt
             totalOffenders
             registration
@@ -49136,6 +50790,11 @@ export const ViewIncidentDocument = gql`
             make
             id
             colour
+            images {
+              id
+              url
+              optimised
+            }
           }
           linkedIncidents {
             id
@@ -49766,6 +51425,11 @@ export const ViewInvestigationDocument = gql`
           updatedAt
         }
         linkedVehicles {
+          images {
+            id
+            url
+            optimised
+          }
           updatedAt
           totalOffenders
           registration
@@ -49832,6 +51496,11 @@ export const ViewInvestigationDocument = gql`
             updatedAt
           }
           linkedVehicles {
+            images {
+              id
+              url
+              optimised
+            }
             updatedAt
             totalOffenders
             registration
@@ -51690,6 +53359,11 @@ export const ViewOffenderDocument = gql`
           updatedAt
         }
         linkedVehicles {
+          images {
+            id
+            url
+            optimised
+          }
           updatedAt
           totalOffenders
           registration
@@ -51756,6 +53430,11 @@ export const ViewOffenderDocument = gql`
             updatedAt
           }
           linkedVehicles {
+            images {
+              id
+              url
+              optimised
+            }
             updatedAt
             totalOffenders
             registration
@@ -53132,6 +54811,11 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
         updatedAt
       }
       linkedVehicles {
+        images {
+          id
+          url
+          optimised
+        }
         updatedAt
         totalOffenders
         registration
@@ -53198,6 +54882,11 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
           updatedAt
         }
         linkedVehicles {
+          images {
+            id
+            url
+            optimised
+          }
           updatedAt
           totalOffenders
           registration
@@ -53534,6 +55223,11 @@ export const CreateUpdateOnInvestigationDocument = gql`
         updatedAt
       }
       linkedVehicles {
+        images {
+          id
+          url
+          optimised
+        }
         updatedAt
         totalOffenders
         registration
@@ -53574,6 +55268,11 @@ export const CreateUpdateOnInvestigationDocument = gql`
           updatedAt
         }
         linkedVehicles {
+          images {
+            id
+            url
+            optimised
+          }
           updatedAt
           totalOffenders
           registration
@@ -53765,6 +55464,11 @@ export const CreateUpdateOnOffenderDocument = gql`
           updatedAt
         }
         linkedVehicles {
+          images {
+            id
+            url
+            optimised
+          }
           updatedAt
           totalOffenders
           registration
@@ -53884,6 +55588,11 @@ export const CreateUpdateOnVehicleDocument = gql`
         updatedAt
       }
       linkedVehicles {
+        images {
+          id
+          url
+          optimised
+        }
         updatedAt
         totalOffenders
         registration
@@ -53950,6 +55659,11 @@ export const CreateUpdateOnVehicleDocument = gql`
           updatedAt
         }
         linkedVehicles {
+          images {
+            id
+            url
+            optimised
+          }
           updatedAt
           totalOffenders
           registration
@@ -55842,6 +57556,11 @@ export const VehicleDocument = gql`
           updatedAt
         }
         linkedVehicles {
+          images {
+            id
+            url
+            optimised
+          }
           updatedAt
           totalOffenders
           registration
@@ -55908,6 +57627,11 @@ export const VehicleDocument = gql`
             updatedAt
           }
           linkedVehicles {
+            images {
+              id
+              url
+              optimised
+            }
             updatedAt
             totalOffenders
             registration

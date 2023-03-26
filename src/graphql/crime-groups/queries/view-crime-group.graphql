@@ -93,6 +93,11 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
         make
         id
         colour
+        images {
+          id
+          url
+          optimised
+        }
       }
       linkedIncidents {
         id
@@ -159,6 +164,11 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
           make
           id
           colour
+          images {
+            id
+            url
+            optimised
+          }
         }
         linkedIncidents {
           id

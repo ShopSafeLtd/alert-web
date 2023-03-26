@@ -87,6 +87,11 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
         updatedAt
       }
       linkedVehicles {
+        images {
+          id
+          url
+          optimised
+        }
         updatedAt
         totalOffenders
         registration
@@ -153,6 +158,11 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
           updatedAt
         }
         linkedVehicles {
+          images {
+            id
+            url
+            optimised
+          }
           updatedAt
           totalOffenders
           registration

@@ -6,6 +6,8 @@ import {
   RecycleIncidentMutation,
   Role,
   SortOrder,
+  useListBusinessesQuery,
+  useListGoodsTypesQuery,
   useListIncidentsQuery,
   useSchemeGroupsQuery,
   useTagsQuery,
@@ -44,6 +46,25 @@ interface Return {
   tagsLoading: boolean;
   updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
   onNavigate: () => void;
+  sortFilter: boolean;
+  toggleSortFilter: () => void;
+  setPeculiarities: (value: string) => void;
+  peculiarities: string;
+  clearFilters: () => void;
+  gallery: string[];
+  setGallery: (values: string[]) => void;
+  groupsFilter: string[];
+  setGroupsFilter: (value: string[]) => void;
+  crimeTypesFilter: string[];
+  setCrimeTypesFilter: (value: string[]) => void;
+  goodsFilter: string[];
+  goods: { value: string; label: string }[];
+  setGoodsFilter: (value: string[]) => void;
+  businesses: { value: string; label: string; location: string }[];
+  businessesFilter: string[];
+  setBusinessesFilter: (value: string[]) => void;
+  businessesLoading: boolean;
+  goodsLoading: boolean;
 }
 
 const getSizeOptions = () => {
@@ -70,8 +91,16 @@ const useIncidentFeed = (): Return => {
   const setIncidentsState = useStoreActions(
     (actions) => actions.data.setIncidents
   );
+  // filter initial state
+  const [sortFilter, setSortFilter] = useState(false);
+  const [businessesFilter, setBusinessesFilter] = useState<string[]>([]);
+  const [crimeTypesFilter, setCrimeTypesFilter] = useState<string[]>([]);
+  const [groupsFilter, setGroupsFilter] = useState<string[]>([]);
+  const [goodsFilter, setGoodsFilter] = useState<string[]>([]);
+  const [peculiarities, setPeculiarities] = useState('');
+  const [gallery, setGallery] = useState<string[]>([]);
 
-  // local State
+  // lightBox
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
   );
@@ -80,7 +109,118 @@ const useIncidentFeed = (): Return => {
     index: 0,
   });
 
+  const queryVariables = {
+    scheme: {
+      id: schemeId,
+    },
+    order: {
+      createdAt:
+        order === IncidentSort.createdAtDesc ? SortOrder.Desc : SortOrder.Asc,
+    },
+    where: {
+      crimeTypes: crimeTypesFilter.length
+        ? {
+            some: {
+              id: {
+                in: crimeTypesFilter,
+              },
+            },
+          }
+        : undefined,
+      groups: groupsFilter.length
+        ? {
+            some: {
+              id: {
+                in: groupsFilter,
+              },
+            },
+          }
+        : undefined,
+      approved: gallery.includes('APPROVED')
+        ? {
+            equals: true,
+          }
+        : undefined,
+      subscribed: gallery.includes('SUBSCRIBED')
+        ? {
+            equals: true,
+          }
+        : undefined,
+      policeInvolved: gallery.includes('POLICEINVOLVED')
+        ? {
+            equals: true,
+          }
+        : undefined,
+      policeReported: gallery.includes('POLICEREPORTED')
+        ? {
+            equals: true,
+          }
+        : undefined,
+      OR: [
+        {
+          subject: {
+            contains: variables.search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+        {
+          createdBy: {
+            OR: [
+              {
+                fullName: {
+                  contains: variables.search,
+                  mode: QueryMode.Insensitive,
+                },
+              },
+              {
+                businesses: {
+                  some: {
+                    name: {
+                      contains: variables.search,
+                      mode: QueryMode.Insensitive,
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        },
+      ],
+      peculiarities: peculiarities
+        ? {
+            mode: QueryMode.Insensitive,
+            contains: peculiarities,
+          }
+        : undefined,
+      business: businessesFilter.length
+        ? {
+            id: {
+              in: businessesFilter,
+            },
+          }
+        : undefined,
+      incidentItems: goodsFilter.length
+        ? {
+            some: {
+              goodsType: {
+                id: {
+                  in: goodsFilter,
+                },
+              },
+            },
+          }
+        : undefined,
+    },
+    take: pagination.pageSize,
+    skip: pagination.pageSize * (pagination.page - 1),
+  };
   // Queries
+  // Fetch incidents
+  const { data, loading } = useListIncidentsQuery({
+    variables: queryVariables,
+    fetchPolicy: 'cache-and-network',
+  });
+
   // Fetch scheme groups if scheme admin
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
@@ -94,17 +234,56 @@ const useIncidentFeed = (): Return => {
     },
     fetchPolicy: 'cache-and-network',
     skip: role !== Role.SchemeAdmin,
-    onCompleted: (result) => {
-      setIncidentsState({
-        pagination,
-        variables: {
-          ...variables,
-          groups: result.groups.map((group) => group.id),
+  });
+
+  // Fetch scheme tags
+  const { data: tagsData, loading: tagsLoading } = useTagsQuery({
+    variables: {
+      where: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
         },
-        order,
-      });
+        dataType: {
+          equals: Model.Incident,
+        },
+      },
     },
   });
+
+  const { data: businessesData, loading: businessesLoading } =
+    useListBusinessesQuery({
+      variables: {
+        orderBy: { name: SortOrder.Asc },
+        where: {
+          schemes: {
+            some: {
+              id: {
+                equals: schemeId,
+              },
+            },
+          },
+          users:
+            role !== Role.SchemeAdmin
+              ? {
+                  some: {
+                    groups: {
+                      some: {
+                        id: {
+                          in: variables.groups.map((id) => id),
+                        },
+                      },
+                    },
+                  },
+                }
+              : undefined,
+        },
+      },
+    });
+
+  const { data: goodsData, loading: goodsLoading } = useListGoodsTypesQuery({});
+
   // On mount
   useEffect(() => {
     const sizeOptions = getSizeOptions();
@@ -125,89 +304,6 @@ const useIncidentFeed = (): Return => {
     });
     // eslint-disable-next-line
   }, []);
-
-  // Fetch scheme tags
-  const { data: tagsData, loading: tagsLoading } = useTagsQuery({
-    variables: {
-      where: {
-        scheme: {
-          id: {
-            equals: schemeId,
-          },
-        },
-        dataType: {
-          equals: Model.Incident,
-        },
-      },
-    },
-  });
-
-  // Fetch incidents
-  const { data, loading } = useListIncidentsQuery({
-    variables: {
-      scheme: {
-        id: schemeId,
-      },
-      order: {
-        createdAt:
-          order === IncidentSort.createdAtDesc ? SortOrder.Desc : SortOrder.Asc,
-      },
-      where: {
-        crimeTypes: variables.crimeTypes.length
-          ? {
-              some: {
-                id: {
-                  in: variables.crimeTypes,
-                },
-              },
-            }
-          : undefined,
-        groups: variables.groups.length
-          ? {
-              some: {
-                id: {
-                  in: variables.groups,
-                },
-              },
-            }
-          : undefined,
-        OR: [
-          {
-            subject: {
-              contains: variables.search,
-              mode: QueryMode.Insensitive,
-            },
-          },
-          {
-            createdBy: {
-              OR: [
-                {
-                  fullName: {
-                    contains: variables.search,
-                    mode: QueryMode.Insensitive,
-                  },
-                },
-                {
-                  businesses: {
-                    some: {
-                      name: {
-                        contains: variables.search,
-                        mode: QueryMode.Insensitive,
-                      },
-                    },
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-      take: pagination.pageSize,
-      skip: pagination.pageSize * (pagination.page - 1),
-    },
-    fetchPolicy: 'cache-and-network',
-  });
-
   // update Incident list after deleting an item
   const updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation> = (
     store,
@@ -217,69 +313,7 @@ const useIncidentFeed = (): Return => {
 
     const existingData = store.readQuery<ListIncidentsQuery>({
       query: ListIncidentsDocument,
-      variables: {
-        scheme: {
-          id: schemeId,
-        },
-        order: {
-          createdAt:
-            order === IncidentSort.createdAtDesc
-              ? SortOrder.Desc
-              : SortOrder.Asc,
-        },
-        where: {
-          crimeTypes: variables.crimeTypes.length
-            ? {
-                some: {
-                  id: {
-                    in: variables.crimeTypes,
-                  },
-                },
-              }
-            : undefined,
-          groups: variables.groups.length
-            ? {
-                some: {
-                  id: {
-                    in: variables.groups,
-                  },
-                },
-              }
-            : undefined,
-          OR: [
-            {
-              subject: {
-                contains: variables.search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              createdBy: {
-                OR: [
-                  {
-                    fullName: {
-                      contains: variables.search,
-                      mode: QueryMode.Insensitive,
-                    },
-                  },
-                  {
-                    businesses: {
-                      some: {
-                        name: {
-                          contains: variables.search,
-                          mode: QueryMode.Insensitive,
-                        },
-                      },
-                    },
-                  },
-                ],
-              },
-            },
-          ],
-        },
-        take: pagination.pageSize,
-        skip: pagination.pageSize * (pagination.page - 1),
-      },
+      variables: queryVariables,
     });
 
     if (existingData === null) return;
@@ -296,71 +330,10 @@ const useIncidentFeed = (): Return => {
         },
         __typename: 'Query',
       },
-      variables: {
-        scheme: {
-          id: schemeId,
-        },
-        order: {
-          createdAt:
-            order === IncidentSort.createdAtDesc
-              ? SortOrder.Desc
-              : SortOrder.Asc,
-        },
-        where: {
-          crimeTypes: variables.crimeTypes.length
-            ? {
-                some: {
-                  id: {
-                    in: variables.crimeTypes,
-                  },
-                },
-              }
-            : undefined,
-          groups: variables.groups.length
-            ? {
-                some: {
-                  id: {
-                    in: variables.groups,
-                  },
-                },
-              }
-            : undefined,
-          OR: [
-            {
-              subject: {
-                contains: variables.search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              createdBy: {
-                OR: [
-                  {
-                    fullName: {
-                      contains: variables.search,
-                      mode: QueryMode.Insensitive,
-                    },
-                  },
-                  {
-                    businesses: {
-                      some: {
-                        name: {
-                          contains: variables.search,
-                          mode: QueryMode.Insensitive,
-                        },
-                      },
-                    },
-                  },
-                ],
-              },
-            },
-          ],
-        },
-        take: pagination.pageSize,
-        skip: pagination.pageSize * (pagination.page - 1),
-      },
+      variables: queryVariables,
     });
   };
+
   // Functions
   const triggerLightbox = (elements: { src: string }[], index: number) => {
     setLightboxElements(elements);
@@ -433,7 +406,18 @@ const useIncidentFeed = (): Return => {
       order,
     });
   };
+  const toggleSortFilter = () => {
+    setSortFilter(!sortFilter);
+  };
 
+  const clearFilters = () => {
+    setGroupsFilter([]);
+    setCrimeTypesFilter([]);
+    setGoodsFilter([]);
+    setPeculiarities('');
+    setBusinessesFilter([]);
+    setOrder(IncidentSort.createdAtDesc);
+  };
   return {
     data,
     loading,
@@ -462,6 +446,34 @@ const useIncidentFeed = (): Return => {
     lightboxElements,
     lightBoxOpen,
     openLightbox: triggerLightbox,
+    sortFilter,
+    toggleSortFilter,
+    clearFilters,
+    gallery,
+    peculiarities,
+    setGallery,
+    setPeculiarities,
+    groupsFilter,
+    setGroupsFilter,
+    businesses:
+      businessesData?.listBusinesses.businesses.map((item) => ({
+        value: item.id,
+        label: item.name,
+        location: item.locations[0]?.full || '',
+      })) || [],
+    businessesFilter,
+    goods:
+      goodsData?.listGoodsTypes.goodsTypes.map((item) => ({
+        value: item.id,
+        label: item.name,
+      })) || [],
+    goodsFilter,
+    setGoodsFilter,
+    setBusinessesFilter,
+    crimeTypesFilter,
+    setCrimeTypesFilter,
+    goodsLoading,
+    businessesLoading,
   };
 };
 

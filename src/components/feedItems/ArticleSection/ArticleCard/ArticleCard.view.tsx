@@ -29,7 +29,7 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
     id,
     title,
     tags,
-    previewImage,
+    image,
     previewText,
     updatedAt,
     priority,
@@ -40,7 +40,7 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
   return (
     <Link to={`/app/article/view/${id}`}>
       <div className={classes.card}>
-        {previewImage ? (
+        {image ? (
           <div
             style={{
               width: '100%',
@@ -49,7 +49,7 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
             }}
             key={id}
           >
-            <WatermarkImage url={previewImage} />
+            <WatermarkImage url={image.optimised || image.url || ''} />
           </div>
         ) : (
           <Skeleton.Image className={classes.skeletonImage} />

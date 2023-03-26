@@ -96,6 +96,11 @@ mutation createUpdateOnOffender(
         updatedAt
       }
       linkedVehicles {
+        images {
+          id
+          url
+          optimised
+        }
         updatedAt
         totalOffenders
         registration

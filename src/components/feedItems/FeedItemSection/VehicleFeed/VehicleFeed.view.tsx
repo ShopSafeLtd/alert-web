@@ -3,32 +3,23 @@ import { Col, Row, Typography } from 'antd';
 import { FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faEarth,
-  faMarsAndVenus,
-  faUserClock,
-  faUserTag,
+  faCar,
+  faCarSide,
+  faPalette,
+  faUser,
 } from '@fortawesome/pro-light-svg-icons';
-
-import {
-  calcAge,
-  getOffenderAge,
-  getOffenderBuild,
-  getOffenderGender,
-  getOffenderRace,
-} from 'utils/offender/get-offender-desc';
 import { Link } from 'react-router-dom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import UpdateContent from '../UpdateContent';
 
 const { Title, Text } = Typography;
-
 interface Props {
   feedItem:
     | Exclude<FeedItemsQuery['listFeedItems'], undefined | null>['feedItems'][0]
     | null
     | undefined;
   isNewImage?: boolean;
-  isNewOffender?: boolean;
+  isNewVehicle?: boolean;
 }
 const ImageContainer = ({ src }: { src: string }) => (
   <div
@@ -41,31 +32,29 @@ const ImageContainer = ({ src }: { src: string }) => (
     <WatermarkImage url={src} />
   </div>
 );
-const OffenderFeed = ({
+const VehicleFeed = ({
   feedItem,
   isNewImage,
-  isNewOffender,
+  isNewVehicle,
 }: Props): JSX.Element => {
   // const imagesRef = useRef<CarouselRef>(null);
-
   const {
-    age,
-    build,
-    gender,
-    name,
-    race,
-    dateOfBirth,
-    reference,
+    make,
+    model,
+    registration,
+    colour,
+
+    // totalUpdates,
     id,
     updates,
     images,
-    // lastActive,
-    // incidents,
-  } = feedItem?.offender || {};
+    totalOffenders,
+    reference,
+  } = feedItem?.vehicle || {};
 
   return (
     <Row gutter={20} wrap={false}>
-      {(isNewOffender || isNewImage) && images && images.length ? (
+      {(isNewVehicle || isNewImage) && images && images.length ? (
         <Col>
           <ImageContainer src={images[0].optimised || images[0].url || ''} />
         </Col>
@@ -80,17 +69,36 @@ const OffenderFeed = ({
         </Col>
       ) : null}
 
-      <Link to={`/app/offenders/view/${id}`}>
+      <Link to={`/app/vehicles/view/${id}`}>
         <Col flex={1}>
-          {isNewOffender ? (
+          {isNewVehicle ? (
             <>
               <Title level={4} ellipsis>
-                {name}
+                {registration ||
+                  `Alert ID: ${reference}` ||
+                  'Unidentified Vehicle'}
               </Title>
-              <Row style={{ marginTop: -5, marginBottom: 5 }}>
+
+              {registration ? (
+                <Row style={{ marginTop: -5, marginBottom: 5 }}>
+                  <Col>
+                    <Text style={{ fontSize: 14 }} type="secondary">
+                      Alert ID: {reference}
+                    </Text>
+                  </Col>
+                </Row>
+              ) : null}
+
+              <Row>
                 <Col>
+                  <FontAwesomeIcon
+                    size="sm"
+                    style={{ marginRight: 5 }}
+                    className="feedItem-card-icon"
+                    icon={faUser}
+                  />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Alert ID: {reference}
+                    Members: {totalOffenders || 0}
                   </Text>
                 </Col>
               </Row>
@@ -100,24 +108,10 @@ const OffenderFeed = ({
                     size="sm"
                     style={{ marginRight: 5 }}
                     className="feedItem-card-icon"
-                    icon={faUserClock}
+                    icon={faCar}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Age:
-                    {dateOfBirth ? calcAge(dateOfBirth) : getOffenderAge(age)}
-                  </Text>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <FontAwesomeIcon
-                    size="sm"
-                    style={{ marginRight: 5 }}
-                    className="feedItem-card-icon"
-                    icon={faUserTag}
-                  />
-                  <Text style={{ fontSize: 14 }} type="secondary">
-                    Build:{getOffenderBuild(build)}
+                    Make: {make || 'Unknown'}
                   </Text>
                 </Col>
               </Row>
@@ -127,10 +121,10 @@ const OffenderFeed = ({
                     size="sm"
                     style={{ marginRight: 5 }}
                     className="feedItem-card-icon"
-                    icon={faMarsAndVenus}
+                    icon={faCarSide}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Sex: {getOffenderGender(gender)}
+                    Model: {model || 'Unknown'}
                   </Text>
                 </Col>
               </Row>
@@ -140,10 +134,10 @@ const OffenderFeed = ({
                     size="sm"
                     style={{ marginRight: 5 }}
                     className="feedItem-card-icon"
-                    icon={faEarth}
+                    icon={faPalette}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Ethnicity: {getOffenderRace(race, false)}
+                    Colour: {colour || 'Unknown'}
                   </Text>
                 </Col>
               </Row>
@@ -152,7 +146,11 @@ const OffenderFeed = ({
             <>
               {updates && updates.length ? (
                 <UpdateContent
-                  title={name || 'Unidentified Offender'}
+                  title={
+                    registration ||
+                    `Alert ID: ${reference}` ||
+                    'Unidentified Vehicle'
+                  }
                   update={updates[0]}
                 />
               ) : null}
@@ -164,4 +162,4 @@ const OffenderFeed = ({
   );
 };
 
-export default OffenderFeed;
+export default VehicleFeed;

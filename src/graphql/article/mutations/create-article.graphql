@@ -20,6 +20,18 @@ mutation CreateArticle($data: CreateArticleInput!) {
       name
     }
     title
+    images {
+      id
+      url
+      optimised
+      card
+    }
+    image {
+      id
+      url
+      optimised
+      card
+    }
     rows {
       columns {
         text

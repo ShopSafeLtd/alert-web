@@ -302,9 +302,7 @@ const useUpdateBar = ({
     setCrimeGroupsData([]);
   };
   const [createIncidentUpdate] = useCreateUpdateOnIncidentMutation({
-    onCompleted: () => {
-      onClear();
-    },
+    onCompleted: () => {},
     onError: () => {
       setSaving(false);
       notification.error({
@@ -315,9 +313,7 @@ const useUpdateBar = ({
     },
   });
   const [createOffenderUpdate] = useCreateUpdateOnOffenderMutation({
-    onCompleted: () => {
-      onClear();
-    },
+    onCompleted: () => {},
     onError: () => {
       setSaving(false);
       notification.error({
@@ -328,9 +324,7 @@ const useUpdateBar = ({
     },
   });
   const [createVehicleUpdate] = useCreateUpdateOnVehicleMutation({
-    onCompleted: () => {
-      onClear();
-    },
+    onCompleted: () => {},
     onError: () => {
       setSaving(false);
       notification.error({
@@ -341,11 +335,8 @@ const useUpdateBar = ({
     },
   });
   const [createCrimeGroupUpdate] = useCreateUpdateOnCrimeGroupMutation({
-    onCompleted: () => {
-      onClear();
-    },
+    onCompleted: () => {},
     onError: () => {
-      setSaving(false);
       notification.error({
         message: 'Error!',
         description: 'Whoops, there are some errors. Please try again. ',
@@ -354,9 +345,7 @@ const useUpdateBar = ({
     },
   });
   const [createInvestigationUpdate] = useCreateUpdateOnInvestigationMutation({
-    onCompleted: () => {
-      onClear();
-    },
+    onCompleted: () => {},
     onError: () => {
       setSaving(false);
       notification.error({
@@ -481,6 +470,8 @@ const useUpdateBar = ({
         if (updateIncidents && updateIncidents.length > 0)
           return UpdateType.LinkedIncident;
         if (updateOffenders.length > 0) return UpdateType.LinkedOffender;
+        if (vehiclesData.length > 0) return UpdateType.LinkedVehicle;
+        if (crimeGroupsData.length > 0) return UpdateType.LinkedCrimeGroup;
         return UpdateType.Text;
       };
 

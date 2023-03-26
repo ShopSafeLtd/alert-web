@@ -2,10 +2,11 @@ import React from 'react';
 import { Col, Row, Typography } from 'antd';
 import { FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock, faUser } from '@fortawesome/pro-light-svg-icons';
+import { faExclamationCircle, faUser } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
+
 import WatermarkImage from 'components/images/WatermarkImage.view';
+
 import UpdateContent from '../UpdateContent';
 
 const { Title, Text, Paragraph } = Typography;
@@ -34,8 +35,15 @@ const InvestigationFeed = ({
   isNewImage,
   isNewInvestigation,
 }: Props): JSX.Element => {
-  const { updates, name, description, updatedAt, createdBy, id } =
-    feedItem?.investigation || {};
+  const {
+    updates,
+    name,
+    description,
+    reference,
+    totalOffenders,
+    totalIncidents,
+    id,
+  } = feedItem?.investigation || {};
 
   return (
     <Row gutter={15} wrap={false} key={id || ''} style={{ width: '100%' }}>
@@ -53,26 +61,53 @@ const InvestigationFeed = ({
         <Link to={`/app/investigations/view/${id}`}>
           {isNewInvestigation ? (
             <>
-              <Title style={{ marginBottom: 2 }} level={4} ellipsis>
+              <Title level={4} ellipsis>
                 {name}
               </Title>
-
-              <Paragraph style={{ fontSize: 14 }} type="secondary" ellipsis>
-                {description}
-              </Paragraph>
+              <Row style={{ marginTop: -5, marginBottom: 5 }}>
+                <Col>
+                  <Text style={{ fontSize: 14 }} type="secondary">
+                    Alert ID: {reference}
+                  </Text>
+                </Col>
+              </Row>
               <Row>
                 <Col>
                   <FontAwesomeIcon
                     size="sm"
                     className="feedItem-card-icon"
-                    icon={faClock}
+                    icon={faUser}
+                    style={{ marginRight: 5 }}
                   />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    {moment(updatedAt).calendar()}
+                    Members: {totalOffenders || 0}
                   </Text>
                 </Col>
               </Row>
               <Row>
+                <Col>
+                  <FontAwesomeIcon
+                    size="sm"
+                    className="feedItem-card-icon"
+                    icon={faExclamationCircle}
+                    style={{ marginRight: 5 }}
+                  />
+                  <Text style={{ fontSize: 14 }} type="secondary">
+                    Total Incidents: {totalIncidents || 0}
+                  </Text>
+                </Col>
+              </Row>
+
+              {description && (
+                <Paragraph
+                  type="secondary"
+                  style={{ fontSize: 14, marginTop: 10 }}
+                  ellipsis={{ rows: 3 }}
+                >
+                  {description}
+                </Paragraph>
+              )}
+              {/* <Row>
                 <Col>
                   <FontAwesomeIcon
                     size="sm"
@@ -83,7 +118,7 @@ const InvestigationFeed = ({
                     {createdBy?.fullName} - {createdBy?.businesses[0]?.name}
                   </Text>
                 </Col>
-              </Row>
+              </Row> */}
             </>
           ) : (
             <>

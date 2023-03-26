@@ -1,17 +1,19 @@
 import React from 'react';
 import { ListIncidentsQuery, RecycleIncidentMutation } from 'graphql/generated';
-import { Affix, Button, Card, Col, Input, Pagination, Row, Select } from 'antd';
+import { Affix, Button, Card, Col, Drawer, Input, Pagination, Row } from 'antd';
 import IncidentCard from 'components/incidents/IncidentCard';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
 import { IncidentSort } from 'state';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { faFilter, faPlus } from '@fortawesome/pro-light-svg-icons';
 import { MutationUpdaterFn } from '@apollo/client';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import WatermarkSlide, {
   WatermarkSlideType,
 } from 'components/images/WatermartkSlide.view';
+import CheckTags from 'components/form-components/check-tags/CheckTags.view';
+import IncidentFilter from 'components/incidents/IncidentFilter';
 
 interface Props {
   data: ListIncidentsQuery | undefined;
@@ -27,22 +29,34 @@ interface Props {
   onPaginationChange: (page: number, pageSize: number) => void;
   pagination: { page: number; pageSize: number; sizeOptions: string[] };
   order: IncidentSort;
-  variables: {
-    groups: string[];
-    crimeTypes: string[];
-  };
   setOrder: (value: IncidentSort) => void;
   search: string;
   setSearch: (value: string) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
-  onGroupsChange: (groups: string[]) => void;
-
   crimeTypes: { value: string; label: string }[];
-  onCrimeTypesChange: (crimeTypes: string[]) => void;
   tagsLoading: boolean;
   updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
   onNavigate: () => void;
+  sortFilter: boolean;
+  toggleSortFilter: () => void;
+  setPeculiarities: (value: string) => void;
+  peculiarities: string;
+  clearFilters: () => void;
+  gallery: string[];
+  setGallery: (values: string[]) => void;
+  groupsFilter: string[];
+  setGroupsFilter: (value: string[]) => void;
+  crimeTypesFilter: string[];
+  setCrimeTypesFilter: (value: string[]) => void;
+  goodsFilter: string[];
+  goods: { value: string; label: string }[];
+  setGoodsFilter: (value: string[]) => void;
+  businesses: { value: string; label: string; location: string }[];
+  businessesFilter: string[];
+  setBusinessesFilter: (value: string[]) => void;
+  goodsLoading: boolean;
+  businessesLoading: boolean;
 }
 
 const IncidentFeed = ({
@@ -58,19 +72,104 @@ const IncidentFeed = ({
   setSearch,
   groups,
   groupsLoading,
-  onGroupsChange,
-  variables,
   crimeTypes,
-  onCrimeTypesChange,
   tagsLoading,
   updateIncidentList,
   lightBoxOpen,
   onNavigate,
+  sortFilter,
+  toggleSortFilter,
+  clearFilters,
+  gallery,
+  peculiarities,
+  setGallery,
+  setPeculiarities,
+  groupsFilter,
+  setGroupsFilter,
+  businesses,
+  businessesFilter,
+  goods,
+  goodsFilter,
+  setGoodsFilter,
+  setBusinessesFilter,
+  goodsLoading,
+  businessesLoading,
+  crimeTypesFilter,
+  setCrimeTypesFilter,
 }: Props): JSX.Element => (
   <div className="feed-container" style={{ padding: 10 }}>
     <Affix offsetTop={5}>
       <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 5 }}>
-        <Row gutter={8}>
+        <Row align="middle" gutter={16}>
+          <Col>
+            <Input
+              size="small"
+              style={{ width: 350 }}
+              placeholder="Search Incidents..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </Col>
+          <Col flex={1}>
+            <CheckTags
+              mode="radio"
+              value={gallery}
+              onChange={setGallery}
+              options={[
+                {
+                  label: 'Active',
+                  value: 'ACTIVE',
+                },
+                {
+                  label: 'Approved',
+                  value: 'APPROVED',
+                },
+                {
+                  label: 'Subscribed',
+                  value: 'SUBSCRIBED',
+                },
+                {
+                  label: 'PoliceInvolved',
+                  value: 'POLICEINVOLVED',
+                },
+                // {
+                //   label: 'PoliceReported',
+                //   value: 'POLICEREPORTED',
+                // },
+              ]}
+            />
+          </Col>
+          <Col>
+            <Button
+              onClick={toggleSortFilter}
+              icon={
+                <FontAwesomeIcon
+                  icon={faFilter}
+                  size="lg"
+                  style={{ marginRight: 5 }}
+                />
+              }
+            >
+              Sort &amp; Filter
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              type="primary"
+              onClick={onNavigate}
+              icon={
+                <FontAwesomeIcon
+                  icon={faPlus}
+                  size="lg"
+                  style={{ marginRight: 5 }}
+                />
+              }
+            >
+              Add Incident
+            </Button>
+          </Col>
+        </Row>
+        {/* <Row gutter={8}>
           <Col>
             <Select
               placeholder="Groups"
@@ -145,7 +244,7 @@ const IncidentFeed = ({
               Add Incident
             </Button>
           </Col>
-        </Row>
+        </Row> */}
       </Card>
     </Affix>
 
@@ -182,7 +281,36 @@ const IncidentFeed = ({
         </Col>
       </Row>
     </div>
-
+    <Drawer
+      title="Incident Filters"
+      visible={sortFilter}
+      onClose={toggleSortFilter}
+      width={500}
+    >
+      <IncidentFilter
+        order={order}
+        setOrder={setOrder}
+        groups={groups}
+        groupsLoading={groupsLoading}
+        groupsFilter={groupsFilter}
+        setGroupsFilter={setGroupsFilter}
+        crimeTypes={crimeTypes}
+        crimeTypesFilter={crimeTypesFilter}
+        tagsLoading={tagsLoading}
+        setCrimeTypesFilter={setCrimeTypesFilter}
+        clearFilters={clearFilters}
+        peculiarities={peculiarities}
+        setPeculiarities={setPeculiarities}
+        goods={goods}
+        setGoodsFilter={setGoodsFilter}
+        goodsFilter={goodsFilter}
+        businessesFilter={businessesFilter}
+        businesses={businesses}
+        setBusinessesFilter={setBusinessesFilter}
+        goodsLoading={goodsLoading}
+        businessesLoading={businessesLoading}
+      />
+    </Drawer>
     <Lightbox
       open={lightBoxOpen.open}
       close={() => openLightbox([], 0)}

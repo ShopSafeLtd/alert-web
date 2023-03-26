@@ -23,6 +23,19 @@ const FeedItems = (): JSX.Element => {
     onDeleteFeedItem,
     saving,
     adminRights,
+    typesFilter,
+    setTypesFilter,
+    groupsFilter,
+    setGroupsFilter,
+    sortFilter,
+    toggleSortFilter,
+    clearFilters,
+    order,
+    setOrder,
+    groups,
+    groupsLoading,
+    gallery,
+    setGallery,
   } = useFeedItems();
 
   return (
@@ -46,6 +59,19 @@ const FeedItems = (): JSX.Element => {
       adminRights={adminRights}
       // updateIncidentList={updateIncidentList}
       // onNavigate={onNavigate}
+      typesFilter={typesFilter}
+      setTypesFilter={setTypesFilter}
+      groupsFilter={groupsFilter}
+      setGroupsFilter={setGroupsFilter}
+      sortFilter={sortFilter}
+      toggleSortFilter={toggleSortFilter}
+      clearFilters={clearFilters}
+      order={order}
+      setOrder={setOrder}
+      groups={groups}
+      groupsLoading={groupsLoading}
+      gallery={gallery}
+      setGallery={setGallery}
     />
   );
 };

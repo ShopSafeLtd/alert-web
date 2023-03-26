@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Form, SelectProps, UploadProps } from 'antd';
 import type { Editor } from 'tinymce';
 import { UploadFile } from 'antd/es/upload/interface';
@@ -49,6 +49,9 @@ const useCreateArticle = (): Props => {
   const [selectedCategories, setSelectedCategories] = useState<
     { value: string }[]
   >([]);
+  useEffect(() => {
+    console.log('imageList', imageList);
+  }, [imageList]);
 
   const navigate = useNavigate();
   const { loading: groupsLoading } = useSchemeGroupsQuery({
@@ -231,7 +234,6 @@ const useCreateArticle = (): Props => {
           return;
         }
         setImageList([...imageList, json]);
-
         resolve(json.url);
       };
 
@@ -292,6 +294,8 @@ const useCreateArticle = (): Props => {
             }
             const json = JSON.parse(xhr.responseText)[0];
 
+            setImageList([...imageList, json]);
+
             if (!json || typeof json.url !== 'string') {
               reject(new Error(`Invalid JSON: ${xhr.responseText}`));
               return;
@@ -328,6 +332,14 @@ const useCreateArticle = (): Props => {
 
             if (meta.filetype === 'file') {
               fileList.push({
+                ...file,
+                url,
+                name: file.name,
+                uid: id,
+              } as UploadFile);
+            }
+            if (meta.filetype === 'image') {
+              imageList.push({
                 ...file,
                 url,
                 name: file.name,
@@ -388,13 +400,12 @@ const useCreateArticle = (): Props => {
       .getFieldValue('importance')
       .toString()
       .toUpperCase() as ArticlePriority;
-    const { img, text } = log();
-    const previewImageFile = imageList?.filter(({ url }) => url === img);
-    console.log('articleImage', {
-      filename: previewImageFile[0].fileName || '',
-      mimetype: previewImageFile[0].type || '',
-      url: previewImageFile[0].url || '',
-    });
+    const { img, text, imgSrc } = log();
+    // const previewImageFile = imageList?.filter(({ url }) => url === img);
+    const articleImages = imageList?.filter(({ url }) =>
+      imgSrc.includes(url || '')
+    );
+
     await submitArticle({
       variables: {
         data: {
@@ -416,18 +427,30 @@ const useCreateArticle = (): Props => {
           incidents: incidents.map((incident) => incident.incident.id),
           offenders: offenders.map((offender) => offender.id),
           images: {
-            upload: previewImageFile
-              ? [
-                  {
+            upload:
+              articleImages && articleImages.length
+                ? articleImages.map((item) => ({
                     url: {
-                      filename: previewImageFile[0].fileName || '',
-                      mimetype: previewImageFile[0].type || '',
-                      url: previewImageFile[0].url || '',
+                      filename: item.fileName || '',
+                      mimetype: item.type || '',
+                      url: item.url || '',
                     },
-                  },
-                ]
-              : undefined,
+                  }))
+                : undefined,
           },
+          // images: {
+          //   upload: previewImageFile
+          //     ? [
+          //         {
+          //           url: {
+          //             filename: previewImageFile[0].fileName || '',
+          //             mimetype: previewImageFile[0].type || '',
+          //             url: previewImageFile[0].url || '',
+          //           },
+          //         },
+          //       ]
+          //     : undefined,
+          // },
         },
       },
     }).then((res) => {

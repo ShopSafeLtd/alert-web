@@ -13,7 +13,6 @@ export interface Props {
   editorRef: React.MutableRefObject<Editor | null>;
   log: () => void;
   preview: () => void;
-
   previewText: string;
   previewImage: string;
   setPreviewImage: (arg0: string) => void;

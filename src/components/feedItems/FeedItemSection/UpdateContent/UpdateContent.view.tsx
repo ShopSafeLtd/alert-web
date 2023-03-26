@@ -1,11 +1,13 @@
 import React from 'react';
-import { Card, Col, Descriptions, Row, Typography } from 'antd';
+import { Typography } from 'antd';
 import { UpdateType } from 'graphql/generated';
-
-import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessageDots } from '@fortawesome/pro-light-svg-icons';
-import WatermarkImage from 'components/images/WatermarkImage.view';
+import { CrimeGroupData, IncidentCardData, VehicleData } from 'types/DataType';
+import IncidentCard from 'components/MessageInput/MessageCard/IncidentCard';
+import VehicleCard from 'components/MessageInput/MessageCard/VehicleCard';
+import OffenderCard from 'components/MessageInput/MessageCard/OffenderCard';
+import CrimeGroupList from 'components/MessageInput/MessageCard/CrimeGroupList';
 
 const { Title, Text, Paragraph } = Typography;
 interface UpdateData {
@@ -17,39 +19,21 @@ interface UpdateData {
     optimised?: string | null;
     url?: string | null;
   }[];
-  linkedIncidents: {
-    id: string;
-    subject?: string | null;
-    description: string;
-    dayTime?: string | null;
-    images?: {
-      id: string;
-      optimised?: string | null;
-      url?: string | null;
-    }[];
-  }[];
+  linkedIncidents: IncidentCardData[];
   linkedOffenders: {
     id: string;
     updatedAt?: Date;
     name?: string | null;
     images?: { id: string; optimised?: string | null; url?: string | null }[];
   }[];
+  linkedVehicles: VehicleData[];
+  linkedCrimeGroups: CrimeGroupData[];
 }
 interface Props {
   update: UpdateData | undefined;
   title: string;
 }
-const ImageContainer = ({ src }: { src: string }) => (
-  <div
-    style={{
-      width: 100,
-      height: 100,
-      borderRadius: 5,
-    }}
-  >
-    <WatermarkImage url={src} />
-  </div>
-);
+
 const UpdateContent = ({ update, title }: Props): JSX.Element => {
   const getContent = (content: string) =>
     content.split(/(@\[.*?\]\(.*?\))/).map((item) => {
@@ -64,27 +48,33 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
     });
   return (
     <>
-      {update?.text ? (
+      {!(
+        update?.linkedIncidents.length ||
+        update?.linkedOffenders.length ||
+        update?.linkedCrimeGroups.length ||
+        update?.linkedVehicles.length
+      ) ? (
         <div style={{ marginBottom: -10 }}>
           <Title level={4} style={{ marginBottom: 2 }} ellipsis>
             {title}
           </Title>
 
-          <Paragraph
-            style={{ fontSize: 14, marginTop: 5 }}
-            type="secondary"
-            ellipsis={{ rows: 3 }}
-          >
-            <FontAwesomeIcon
-              size="sm"
-              className="feedItem-card-icon"
-              icon={faMessageDots}
-            />
-            {getContent(update.text)}
-          </Paragraph>
+          {update?.text ? (
+            <Paragraph
+              style={{ fontSize: 14, marginTop: 5 }}
+              type="secondary"
+              ellipsis={{ rows: 3 }}
+            >
+              <FontAwesomeIcon
+                size="sm"
+                className="feedItem-card-icon"
+                icon={faMessageDots}
+              />
+              {getContent(update.text)}
+            </Paragraph>
+          ) : null}
         </div>
-      ) : null}
-      {!update?.text ? (
+      ) : (
         <>
           {update?.linkedIncidents[0] ? (
             <>
@@ -94,58 +84,9 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
                   className="feedItem-card-icon"
                   icon={faMessageDots}
                 />
-                Link an incident
+                {update?.text ? getContent(update?.text) : 'Link an incident'}
               </Title>
-              <Card
-                style={{ borderRadius: 5, margin: 0 }}
-                size="small"
-                className="message-card"
-              >
-                <Row gutter={5} wrap={false}>
-                  <Col>
-                    {update.linkedIncidents[0].images &&
-                    update.linkedIncidents[0].images.length > 0 ? (
-                      <ImageContainer
-                        src={
-                          update.linkedIncidents[0].images[0].optimised || ''
-                        }
-                      />
-                    ) : null}
-                  </Col>
-                  <Col
-                    flex={1}
-                    style={{
-                      marginTop: 10,
-                      marginLeft: 5,
-                    }}
-                  >
-                    <Paragraph
-                      strong
-                      ellipsis
-                      style={{
-                        marginBottom: '0.5rem',
-                        fontSize: 15,
-                      }}
-                    >
-                      {update.linkedIncidents[0].subject}
-                    </Paragraph>
-                    <Descriptions size="small">
-                      <Descriptions.Item label="Created At">
-                        {update.linkedIncidents[0].dayTime}
-                      </Descriptions.Item>
-                    </Descriptions>
-                    <Paragraph
-                      type="secondary"
-                      ellipsis
-                      style={{
-                        marginBottom: '0.5rem',
-                      }}
-                    >
-                      {update.linkedIncidents[0].description}
-                    </Paragraph>
-                  </Col>
-                </Row>
-              </Card>
+              <IncidentCard incident={update.linkedIncidents[0]} />
             </>
           ) : null}
           {update?.linkedOffenders[0] ? (
@@ -156,47 +97,39 @@ const UpdateContent = ({ update, title }: Props): JSX.Element => {
                   className="feedItem-card-icon"
                   icon={faMessageDots}
                 />
-                Link an offender
+                {update?.text ? getContent(update?.text) : 'Link an offender'}
               </Title>
-              <Card
-                style={{ borderRadius: 5, margin: 0 }}
-                size="small"
-                className="message-card"
-              >
-                <Row gutter={5} wrap={false}>
-                  <Col>
-                    {update.linkedOffenders[0].images &&
-                    update.linkedOffenders[0].images.length > 0 ? (
-                      <ImageContainer
-                        src={
-                          update.linkedOffenders[0].images[0].optimised || ''
-                        }
-                      />
-                    ) : null}
-                  </Col>
-
-                  <Col
-                    flex={1}
-                    style={{
-                      marginTop: 10,
-                      marginLeft: 5,
-                    }}
-                  >
-                    <Title level={4}>{update.linkedOffenders[0].name}</Title>
-                    <Descriptions size="small">
-                      <Descriptions.Item label="Last Active">
-                        {moment(
-                          update.linkedOffenders[0].updatedAt || moment()
-                        ).format(`ddd MMM DD YYYY - HH:mm`)}
-                      </Descriptions.Item>
-                    </Descriptions>
-                  </Col>
-                </Row>
-              </Card>
+              <OffenderCard offender={update.linkedOffenders[0]} />
+            </>
+          ) : null}
+          {update?.linkedVehicles[0] ? (
+            <>
+              <Title style={{ fontSize: 14, marginLeft: 5 }}>
+                <FontAwesomeIcon
+                  size="sm"
+                  className="feedItem-card-icon"
+                  icon={faMessageDots}
+                />
+                {update?.text ? getContent(update?.text) : 'Link a vehicle'}
+              </Title>
+              <VehicleCard vehicle={update.linkedVehicles[0]} />
+            </>
+          ) : null}
+          {update?.linkedCrimeGroups && update?.linkedCrimeGroups.length ? (
+            <>
+              <Title style={{ fontSize: 14, marginLeft: 5 }}>
+                <FontAwesomeIcon
+                  size="sm"
+                  className="feedItem-card-icon"
+                  icon={faMessageDots}
+                />
+                {update?.text ? getContent(update?.text) : 'Link crime groups'}
+              </Title>
+              <CrimeGroupList crimeGroups={update.linkedCrimeGroups} isIntel />
             </>
           ) : null}
         </>
-      ) : null}
+      )}
     </>
   );
 };
