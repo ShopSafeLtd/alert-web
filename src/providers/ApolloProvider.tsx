@@ -19,6 +19,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { onError } from '@apollo/client/link/error';
 
 import * as Sentry from '@sentry/react';
+import { useStoreState } from '../state';
 
 interface Props {
   children: React.ReactNode;
@@ -27,7 +28,7 @@ interface Props {
 const Apollo = ({ children }: Props): JSX.Element => {
   const accessToken = localStorage.getItem('accessToken');
   const { getAccessTokenSilently, isAuthenticated } = useAuth0();
-
+  const currentScheme = useStoreState((state) => state.scheme.id);
   const wsClient = new SubscriptionClient(
     import.meta.env.VITE_GRAPHQL_WS_URL,
     // "wss://alert-api-dev.azurewebsites.net/graphql",
@@ -83,6 +84,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
         headers: {
           ...headers,
           Authorization: authToken ? `Bearer ${authToken}` : '',
+          currentScheme,
         },
         ...context,
       };
