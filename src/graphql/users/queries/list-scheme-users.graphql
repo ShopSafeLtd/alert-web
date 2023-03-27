@@ -9,9 +9,11 @@ query ListSchemeUsers(
     fullName
     firstLetter
     email
+    publicName
     businesses {
       id
       name
+      fullName
     }
     status
     groups(where: $groupWhere) {

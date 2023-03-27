@@ -68,8 +68,7 @@ const useFeedItems = (): Return => {
 
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
-  const groups = useStoreState((state) => state.user.groups);
-  const role = useStoreState((state) => state.user.role);
+  const { role, groups, id: userId } = useStoreState((state) => state.user);
   const pagination = useStoreState((state) => state.data.feedItems.pagination);
   const variables = useStoreState((state) => state.data.feedItems.variables);
   const order = useStoreState((state) => state.data.feedItems.order);
@@ -88,6 +87,7 @@ const useFeedItems = (): Return => {
     pageSize: 12,
     sizeOptions: ['12'],
   });
+
   const queryVariables = {
     schemeId,
     order: {
@@ -98,6 +98,12 @@ const useFeedItems = (): Return => {
     take: pagination.pageSize,
     skip: (pagination.page - 1) * pagination.pageSize,
     where: {
+      // createdAt: filterCreatedAt
+      //   ? {
+      //       gte: filterCreatedAt.startDate,
+      //       lte: filterCreatedAt.endDate,
+      //     }
+      //   : undefined,
       groups: groupsFilter.length
         ? {
             some: {
@@ -114,6 +120,62 @@ const useFeedItems = (): Return => {
               in: typesFilter,
             }
           : undefined,
+
+      offender: {
+        subscribedUsers: gallery.includes('SUBSCRIBED')
+          ? {
+              some: {
+                id: {
+                  equals: userId,
+                },
+              },
+            }
+          : undefined,
+      },
+      incident: {
+        subscribedUsers: gallery.includes('SUBSCRIBED')
+          ? {
+              some: {
+                id: {
+                  equals: userId,
+                },
+              },
+            }
+          : undefined,
+      },
+      vehicle: {
+        subscribedUsers: gallery.includes('SUBSCRIBED')
+          ? {
+              some: {
+                id: {
+                  equals: userId,
+                },
+              },
+            }
+          : undefined,
+      },
+      crimeGroup: {
+        subscribedUsers: gallery.includes('SUBSCRIBED')
+          ? {
+              some: {
+                id: {
+                  equals: userId,
+                },
+              },
+            }
+          : undefined,
+      },
+      investigation: {
+        subscribedUsers: gallery.includes('SUBSCRIBED')
+          ? {
+              some: {
+                id: {
+                  equals: userId,
+                },
+              },
+            }
+          : undefined,
+      },
     },
   };
   // Queries

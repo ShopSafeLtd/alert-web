@@ -46,6 +46,7 @@ mutation updateCrimeGroup(
       createdBy {
         id
         businesses {
+          fullName
           id
           name
         }

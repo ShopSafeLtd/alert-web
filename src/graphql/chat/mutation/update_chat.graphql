@@ -8,6 +8,7 @@ mutation updateChat($where: UniqueId!, $data: ChatUpdateInput!) {
         id
         fullName
         businesses {
+          fullName
           id
           name
         }

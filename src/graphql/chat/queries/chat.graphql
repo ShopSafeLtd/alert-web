@@ -10,6 +10,7 @@ query Chat($where: ChatWhereUniqueInput!) {
         id
         fullName
         businesses {
+          fullName
           id
           name
         }

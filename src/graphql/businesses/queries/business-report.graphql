@@ -1,4 +1,8 @@
-query BusinessReport($where: BusinessWhereUniqueInput!, $endDate: DateTime, $startDate: DateTime) {
+query BusinessReport(
+  $where: BusinessWhereUniqueInput!
+  $endDate: DateTime
+  $startDate: DateTime
+) {
   business(where: $where) {
     id
     name
@@ -20,6 +24,7 @@ query BusinessReport($where: BusinessWhereUniqueInput!, $endDate: DateTime, $sta
         businesses {
           id
           name
+          fullName
         }
       }
     }

@@ -94,8 +94,7 @@ const useOffenderFeed = (): Return => {
 
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
-  const groups = useStoreState((state) => state.user.groups);
-  const role = useStoreState((state) => state.user.role);
+  const { role, groups, id: userId } = useStoreState((state) => state.user);
   const pagination = useStoreState((state) => state.data.offenders.pagination);
   const variables = useStoreState((state) => state.data.offenders.variables);
   const order = useStoreState((state) => state.data.offenders.order);
@@ -173,11 +172,16 @@ const useOffenderFeed = (): Return => {
             equals: true,
           }
         : undefined,
-      subscribed: gallery.includes('SUBSCRIBED')
+      subscribedUsers: gallery.includes('SUBSCRIBED')
         ? {
-            equals: true,
+            some: {
+              id: {
+                equals: userId,
+              },
+            },
           }
         : undefined,
+
       gender:
         sex.length > 0
           ? {

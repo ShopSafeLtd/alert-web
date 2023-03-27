@@ -30,6 +30,7 @@ mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
       id
       fullName
       businesses {
+        fullName
         id
         name
       }

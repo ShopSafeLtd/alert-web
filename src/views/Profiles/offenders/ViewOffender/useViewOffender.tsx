@@ -83,8 +83,8 @@ interface Return {
 
 const useViewOffender = (offenderId: string): Return => {
   const navigate = useNavigate();
-
   const role = useStoreState((state) => state.user.role);
+  const groups = useStoreState((state) => state.user.groups);
   const userId = useStoreState((state) => state.user.id);
   const [saving, setSaving] = useState(false);
   const [optionRowShow, setOptionRowShow] = useState(false);
@@ -102,7 +102,7 @@ const useViewOffender = (offenderId: string): Return => {
   const openLightbox = (index: number) => {
     setLightBoxOpen({ open: !lightBoxOpen.open, index });
   };
-
+  const groupsId = groups.map((group) => group.id);
   const [loadMore, setLoadMore] = useState(false);
   const [replyTo, setReplyTo] = useState<{
     id: string;
@@ -129,6 +129,12 @@ const useViewOffender = (offenderId: string): Return => {
     variables: {
       where: {
         id: offenderId,
+      },
+      banWhere: {
+        groups:
+          role === Role.User || role === Role.ContentAdmin
+            ? { some: { id: { in: groupsId } } }
+            : undefined,
       },
     },
     onCompleted: (res) => {

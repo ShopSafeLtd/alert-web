@@ -1,4 +1,9 @@
-query ListActions($take: Int, $skip: Int, $where: ActionWhereInput, $orderBy: [ActionOrderByWithRelationInput!]) {
+query ListActions(
+  $take: Int
+  $skip: Int
+  $where: ActionWhereInput
+  $orderBy: [ActionOrderByWithRelationInput!]
+) {
   listActions(take: $take, skip: $skip, where: $where, orderBy: $orderBy) {
     total
     actions {
@@ -11,6 +16,7 @@ query ListActions($take: Int, $skip: Int, $where: ActionWhereInput, $orderBy: [A
         id
         fullName
         businesses {
+          fullName
           id
           name
         }

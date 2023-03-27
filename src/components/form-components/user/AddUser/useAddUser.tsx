@@ -41,6 +41,7 @@ interface FormData {
   messagePush: boolean;
   offenderEmail: boolean;
   offenderPush: boolean;
+  publicName: boolean;
 }
 interface Props {
   onClose: () => void;
@@ -254,6 +255,7 @@ const useAddUser = ({
             fullName: data.fullName,
             groups: data.groups.map((id) => ({ id })),
             role: data.role,
+            publicName: data.publicName,
             scheme: {
               id: schemeId,
             },

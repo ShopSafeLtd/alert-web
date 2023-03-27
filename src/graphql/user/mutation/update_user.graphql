@@ -9,20 +9,24 @@ mutation updateUser(
     id
     fullName
     email
+    status
+    demId
+    publicName
     businesses {
       id
       name
-    }
-    addresses(where: { primary: { equals: true } }) {
-      id
-      building
-      street
-      townCity
-      county
-      postcode
+      fullName
+      demId
     }
     disabled
     newUser
+    incidentEmail
+    incidentPush
+    subscribedIncidentOnly
+    subscribedOffenderOnly
+    messagePush
+    offenderEmail
+    offenderPush
     groups(where: $groupWhere) {
       id
       name
@@ -30,6 +34,7 @@ mutation updateUser(
     chats(where: $chatWhere) {
       id
       chat {
+        id
         name
       }
     }
@@ -37,10 +42,5 @@ mutation updateUser(
       id
       role
     }
-    incidentEmail
-    incidentPush
-    offenderEmail
-    offenderPush
-    messagePush
   }
 }

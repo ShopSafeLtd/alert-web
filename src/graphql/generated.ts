@@ -6666,6 +6666,7 @@ export type CreateBusinessDataInput = {
   location?: InputMaybe<AddressCreateWithoutBusinessInput>;
   name: Scalars['String'];
   parent?: InputMaybe<BusinessParentInput>;
+  publicName: Scalars['Boolean'];
   schemes: SchemeCreateNestedManyWithoutBusinessesInput;
   users?: InputMaybe<UserCreateNestedManyWithoutBusinessesInput>;
 };
@@ -6868,6 +6869,7 @@ export type CreateUserData = {
   fullName: Scalars['String'];
   groups: Array<InputMaybe<UniqueId>>;
   organisation?: InputMaybe<Scalars['String']>;
+  publicName: Scalars['Boolean'];
   role: Role;
   scheme: UniqueId;
 };
@@ -30021,6 +30023,7 @@ export type UpdateBusinessDataInput = {
   location?: InputMaybe<AddressUpdateWithWhereUniqueWithoutBusinessInput>;
   name: StringFieldUpdateOperationsInput;
   parent?: InputMaybe<BusinessParentInput>;
+  publicName: Scalars['Boolean'];
   schemes?: InputMaybe<SchemeUpdateWithWhereUniqueWithoutBusinessesInput>;
   users?: InputMaybe<UserUpdateWithWhereUniqueWithoutBusinessesInput>;
 };
@@ -31793,6 +31796,8 @@ export type User = {
   offenders: Array<Offender>;
   onboardSteps: OnboardSteps;
   organisation: Scalars['String'];
+  origFirstLetter?: Maybe<Scalars['String']>;
+  origName: Scalars['String'];
   platform?: Maybe<Scalars['String']>;
   publicName: Scalars['Boolean'];
   recycled: Scalars['Boolean'];
@@ -38853,6 +38858,15 @@ export type CreateArticleMutation = {
   } | null;
 };
 
+export type DeleteArticleMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+export type DeleteArticleMutation = {
+  __typename?: 'Mutation';
+  deleteArticle?: { __typename?: 'Article'; id: string } | null;
+};
+
 export type ArticlesQueryVariables = Exact<{
   where?: InputMaybe<ArticleWhereInput>;
   orderBy?: InputMaybe<
@@ -39244,8 +39258,17 @@ export type CreateBusinessMutation = {
     __typename?: 'Business';
     id: string;
     name: string;
+    fullName: string;
+    publicName: boolean;
+    demId?: string | null;
     totalUsers: number;
-    parent?: { __typename?: 'Business'; id: string; name: string } | null;
+    parent?: {
+      __typename?: 'Business';
+      id: string;
+      name: string;
+      fullName: string;
+      publicName: boolean;
+    } | null;
     locations: Array<{
       __typename?: 'Address';
       id: string;
@@ -39288,8 +39311,17 @@ export type UpdateBusinessMutation = {
     __typename?: 'Business';
     id: string;
     name: string;
+    fullName: string;
+    publicName: boolean;
+    demId?: string | null;
     totalUsers: number;
-    parent?: { __typename?: 'Business'; id: string; name: string } | null;
+    parent?: {
+      __typename?: 'Business';
+      id: string;
+      name: string;
+      fullName: string;
+      publicName: boolean;
+    } | null;
     locations: Array<{
       __typename?: 'Address';
       id: string;
@@ -39328,6 +39360,7 @@ export type BusinessReportQuery = {
           __typename?: 'Business';
           id: string;
           name: string;
+          fullName: string;
         }>;
       };
     }>;
@@ -39369,8 +39402,15 @@ export type BusinessQuery = {
     __typename?: 'Business';
     id: string;
     name: string;
+    fullName: string;
+    publicName: boolean;
     demId?: string | null;
-    parent?: { __typename?: 'Business'; id: string; name: string } | null;
+    parent?: {
+      __typename?: 'Business';
+      id: string;
+      name: string;
+      fullName: string;
+    } | null;
     locations: Array<{
       __typename?: 'Address';
       id: string;
@@ -39389,7 +39429,14 @@ export type EditBusinessQuery = {
     __typename?: 'Business';
     id: string;
     name: string;
-    parent?: { __typename?: 'Business'; id: string; name: string } | null;
+    fullName: string;
+    publicName: boolean;
+    parent?: {
+      __typename?: 'Business';
+      id: string;
+      name: string;
+      fullName: string;
+    } | null;
     locations: Array<{
       __typename?: 'Address';
       id: string;
@@ -39418,8 +39465,17 @@ export type ListBusinessesQuery = {
       __typename?: 'Business';
       id: string;
       name: string;
+      fullName: string;
+      publicName: boolean;
+      demId?: string | null;
       totalUsers: number;
-      parent?: { __typename?: 'Business'; id: string; name: string } | null;
+      parent?: {
+        __typename?: 'Business';
+        id: string;
+        name: string;
+        fullName: string;
+        publicName: boolean;
+      } | null;
       locations: Array<{
         __typename?: 'Address';
         id: string;
@@ -39445,6 +39501,8 @@ export type SearchBusinessesQuery = {
       __typename?: 'Business';
       id: string;
       name: string;
+      fullName: string;
+      publicName: boolean;
       locations: Array<{
         __typename?: 'Address';
         id: string;
@@ -40207,6 +40265,7 @@ export type FeedItemsQuery = {
             __typename?: 'Business';
             id: string;
             name: string;
+            fullName: string;
           }>;
         };
         images: Array<{
@@ -40315,6 +40374,7 @@ export type FeedItemsQuery = {
             fullName: string;
             businesses: Array<{
               __typename?: 'Business';
+              fullName: string;
               id: string;
               name: string;
             }>;
@@ -40417,6 +40477,7 @@ export type FeedItemsQuery = {
             fullName: string;
             businesses: Array<{
               __typename?: 'Business';
+              fullName: string;
               id: string;
               name: string;
             }>;
@@ -40440,6 +40501,7 @@ export type FeedItemsQuery = {
           fullName: string;
           businesses: Array<{
             __typename?: 'Business';
+            fullName: string;
             id: string;
             name: string;
           }>;
@@ -40523,6 +40585,7 @@ export type FeedItemsQuery = {
             fullName: string;
             businesses: Array<{
               __typename?: 'Business';
+              fullName: string;
               id: string;
               name: string;
             }>;
@@ -40621,6 +40684,7 @@ export type FeedItemsQuery = {
             fullName: string;
             businesses: Array<{
               __typename?: 'Business';
+              fullName: string;
               id: string;
               name: string;
             }>;
@@ -40634,6 +40698,7 @@ export type FeedItemsQuery = {
           fullName: string;
           businesses: Array<{
             __typename?: 'Business';
+            fullName: string;
             id: string;
             name: string;
           }>;
@@ -40760,6 +40825,7 @@ export type FeedItemsQuery = {
             fullName: string;
             businesses: Array<{
               __typename?: 'Business';
+              fullName: string;
               id: string;
               name: string;
             }>;
@@ -40780,6 +40846,7 @@ export type FeedItemsQuery = {
           fullName: string;
           businesses: Array<{
             __typename?: 'Business';
+            fullName: string;
             id: string;
             name: string;
           }>;
@@ -40803,6 +40870,7 @@ export type FeedItemsQuery = {
             fullName: string;
             businesses: Array<{
               __typename?: 'Business';
+              fullName: string;
               id: string;
               name: string;
             }>;
@@ -42209,6 +42277,8 @@ export type ChatMessagesQuery = {
       __typename?: 'User';
       id: string;
       fullName: string;
+      origName: string;
+      origFirstLetter?: string | null;
       firstLetter?: string | null;
     } | null;
     images: Array<{
@@ -42877,6 +42947,7 @@ export type SearchOffendersQuery = {
 
 export type ViewOffenderQueryVariables = Exact<{
   where: OffenderWhereUniqueInput;
+  banWhere?: InputMaybe<BanWhereInput>;
 }>;
 
 export type ViewOffenderQuery = {
@@ -44603,28 +44674,30 @@ export type UpdateUserMutation = {
     id: string;
     fullName: string;
     email: string;
+    status?: string | null;
+    demId?: string | null;
+    publicName: boolean;
     disabled: boolean;
     newUser: boolean;
     incidentEmail: boolean;
     incidentPush: boolean;
+    subscribedIncidentOnly: boolean;
+    subscribedOffenderOnly: boolean;
+    messagePush: boolean;
     offenderEmail: boolean;
     offenderPush: boolean;
-    messagePush: boolean;
-    businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
-    addresses: Array<{
-      __typename?: 'Address';
+    businesses: Array<{
+      __typename?: 'Business';
       id: string;
-      building?: string | null;
-      street: string;
-      townCity: string;
-      county?: string | null;
-      postcode: string;
+      name: string;
+      fullName: string;
+      demId?: string | null;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     chats: Array<{
       __typename?: 'UserChat';
       id: string;
-      chat: { __typename?: 'Chat'; name: string };
+      chat: { __typename?: 'Chat'; id: string; name: string };
     }>;
     schemes: Array<{ __typename?: 'UserScheme'; id: string; role: Role }>;
   } | null;
@@ -44651,6 +44724,7 @@ export type CurrentUserQuery = {
     email: string;
     reference?: number | null;
     demId?: string | null;
+    publicName: boolean;
     newUser: boolean;
     incidentEmail: boolean;
     incidentPush: boolean;
@@ -44702,6 +44776,7 @@ export type UserQuery = {
     email: string;
     status?: string | null;
     demId?: string | null;
+    publicName: boolean;
     disabled: boolean;
     newUser: boolean;
     incidentEmail: boolean;
@@ -44715,6 +44790,7 @@ export type UserQuery = {
       __typename?: 'Business';
       id: string;
       name: string;
+      fullName: string;
       demId?: string | null;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
@@ -44918,9 +44994,16 @@ export type CreateUserInDatabaseMutation = {
     __typename?: 'User';
     id: string;
     fullName: string;
+    firstLetter?: string | null;
     email: string;
+    publicName: boolean;
     status?: string | null;
-    businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+    businesses: Array<{
+      __typename?: 'Business';
+      id: string;
+      name: string;
+      fullName: string;
+    }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
   } | null;
 };
@@ -44937,9 +45020,16 @@ export type InviteExistingUserMutation = {
     __typename?: 'User';
     id: string;
     fullName: string;
+    firstLetter?: string | null;
     email: string;
+    publicName: boolean;
     status?: string | null;
-    businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+    businesses: Array<{
+      __typename?: 'Business';
+      id: string;
+      name: string;
+      fullName: string;
+    }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
   } | null;
 };
@@ -44959,6 +45049,7 @@ export type ListBusinessUsersQuery = {
     id: string;
     fullName: string;
     status?: string | null;
+    publicName: boolean;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
   }>;
 };
@@ -44980,8 +45071,14 @@ export type ListSchemeUsersQuery = {
     fullName: string;
     firstLetter?: string | null;
     email: string;
+    publicName: boolean;
     status?: string | null;
-    businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+    businesses: Array<{
+      __typename?: 'Business';
+      id: string;
+      name: string;
+      fullName: string;
+    }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
   }>;
 };
@@ -44997,6 +45094,7 @@ export type SearchUserQuery = {
     id: string;
     fullName: string;
     email: string;
+    publicName: boolean;
     businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
     addresses: Array<{
       __typename?: 'Address';
@@ -45715,6 +45813,56 @@ export type CreateArticleMutationResult =
 export type CreateArticleMutationOptions = Apollo.BaseMutationOptions<
   CreateArticleMutation,
   CreateArticleMutationVariables
+>;
+export const DeleteArticleDocument = gql`
+  mutation deleteArticle($id: String!) {
+    deleteArticle(where: { id: $id }) {
+      id
+    }
+  }
+`;
+export type DeleteArticleMutationFn = Apollo.MutationFunction<
+  DeleteArticleMutation,
+  DeleteArticleMutationVariables
+>;
+
+/**
+ * __useDeleteArticleMutation__
+ *
+ * To run a mutation, you first call `useDeleteArticleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteArticleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteArticleMutation, { data, loading, error }] = useDeleteArticleMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteArticleMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteArticleMutation,
+    DeleteArticleMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteArticleMutation,
+    DeleteArticleMutationVariables
+  >(DeleteArticleDocument, options);
+}
+export type DeleteArticleMutationHookResult = ReturnType<
+  typeof useDeleteArticleMutation
+>;
+export type DeleteArticleMutationResult =
+  Apollo.MutationResult<DeleteArticleMutation>;
+export type DeleteArticleMutationOptions = Apollo.BaseMutationOptions<
+  DeleteArticleMutation,
+  DeleteArticleMutationVariables
 >;
 export const ArticlesDocument = gql`
   query Articles(
@@ -46583,9 +46731,14 @@ export const CreateBusinessDocument = gql`
     createBusiness(data: $data) {
       id
       name
+      fullName
+      publicName
+      demId
       parent {
         id
         name
+        fullName
+        publicName
       }
       locations {
         id
@@ -46718,9 +46871,14 @@ export const UpdateBusinessDocument = gql`
     updateBusiness(data: $data, where: $where) {
       id
       name
+      fullName
+      publicName
+      demId
       parent {
         id
         name
+        fullName
+        publicName
       }
       locations {
         id
@@ -46801,6 +46959,7 @@ export const BusinessReportDocument = gql`
           businesses {
             id
             name
+            fullName
           }
         }
       }
@@ -46890,10 +47049,13 @@ export const BusinessDocument = gql`
     business(where: $where) {
       id
       name
+      fullName
+      publicName
       demId
       parent {
         id
         name
+        fullName
       }
       locations {
         id
@@ -46953,9 +47115,12 @@ export const EditBusinessDocument = gql`
     business(where: $where) {
       id
       name
+      fullName
+      publicName
       parent {
         id
         name
+        fullName
       }
       locations {
         id
@@ -47031,9 +47196,14 @@ export const ListBusinessesDocument = gql`
       businesses {
         id
         name
+        fullName
+        publicName
+        demId
         parent {
           id
           name
+          fullName
+          publicName
         }
         locations {
           id
@@ -47110,6 +47280,8 @@ export const SearchBusinessesDocument = gql`
       businesses {
         id
         name
+        fullName
+        publicName
         locations {
           id
           full
@@ -48735,6 +48907,7 @@ export const FeedItemsDocument = gql`
             businesses {
               id
               name
+              fullName
             }
           }
           images {
@@ -48838,6 +49011,7 @@ export const FeedItemsDocument = gql`
               id
               fullName
               businesses {
+                fullName
                 id
                 name
               }
@@ -48928,6 +49102,7 @@ export const FeedItemsDocument = gql`
               id
               fullName
               businesses {
+                fullName
                 id
                 name
               }
@@ -48949,6 +49124,7 @@ export const FeedItemsDocument = gql`
             id
             fullName
             businesses {
+              fullName
               id
               name
             }
@@ -49021,6 +49197,7 @@ export const FeedItemsDocument = gql`
               id
               fullName
               businesses {
+                fullName
                 id
                 name
               }
@@ -49111,6 +49288,7 @@ export const FeedItemsDocument = gql`
               id
               fullName
               businesses {
+                fullName
                 id
                 name
               }
@@ -49129,6 +49307,7 @@ export const FeedItemsDocument = gql`
             id
             fullName
             businesses {
+              fullName
               id
               name
             }
@@ -49244,6 +49423,7 @@ export const FeedItemsDocument = gql`
               id
               fullName
               businesses {
+                fullName
                 id
                 name
               }
@@ -49271,6 +49451,7 @@ export const FeedItemsDocument = gql`
             id
             fullName
             businesses {
+              fullName
               id
               name
             }
@@ -49301,6 +49482,7 @@ export const FeedItemsDocument = gql`
               id
               fullName
               businesses {
+                fullName
                 id
                 name
               }
@@ -51975,6 +52157,8 @@ export const ChatMessagesDocument = gql`
       from {
         id
         fullName
+        origName
+        origFirstLetter
         firstLetter
       }
       sent
@@ -53242,7 +53426,10 @@ export type SearchOffendersQueryResult = Apollo.QueryResult<
   SearchOffendersQueryVariables
 >;
 export const ViewOffenderDocument = gql`
-  query ViewOffender($where: OffenderWhereUniqueInput!) {
+  query ViewOffender(
+    $where: OffenderWhereUniqueInput!
+    $banWhere: BanWhereInput
+  ) {
     offender(where: $where) {
       id
       createdAt
@@ -53284,7 +53471,7 @@ export const ViewOffenderDocument = gql`
         id
         name
       }
-      bans {
+      bans(orderBy: { startDate: desc }, where: $banWhere) {
         id
         title
         location
@@ -53503,6 +53690,7 @@ export const ViewOffenderDocument = gql`
  * const { data, loading, error } = useViewOffenderQuery({
  *   variables: {
  *      where: // value for 'where'
+ *      banWhere: // value for 'banWhere'
  *   },
  * });
  */
@@ -56030,20 +56218,24 @@ export const UpdateUserDocument = gql`
       id
       fullName
       email
+      status
+      demId
+      publicName
       businesses {
         id
         name
-      }
-      addresses(where: { primary: { equals: true } }) {
-        id
-        building
-        street
-        townCity
-        county
-        postcode
+        fullName
+        demId
       }
       disabled
       newUser
+      incidentEmail
+      incidentPush
+      subscribedIncidentOnly
+      subscribedOffenderOnly
+      messagePush
+      offenderEmail
+      offenderPush
       groups(where: $groupWhere) {
         id
         name
@@ -56051,6 +56243,7 @@ export const UpdateUserDocument = gql`
       chats(where: $chatWhere) {
         id
         chat {
+          id
           name
         }
       }
@@ -56058,11 +56251,6 @@ export const UpdateUserDocument = gql`
         id
         role
       }
-      incidentEmail
-      incidentPush
-      offenderEmail
-      offenderPush
-      messagePush
     }
   }
 `;
@@ -56173,6 +56361,7 @@ export const CurrentUserDocument = gql`
       email
       reference
       demId
+      publicName
       businesses {
         id
         name
@@ -56271,9 +56460,11 @@ export const UserDocument = gql`
       email
       status
       demId
+      publicName
       businesses {
         id
         name
+        fullName
         demId
       }
       disabled
@@ -56680,10 +56871,13 @@ export const CreateUserInDatabaseDocument = gql`
     createUserInDatabase(data: $data) {
       id
       fullName
+      firstLetter
       email
+      publicName
       businesses {
         id
         name
+        fullName
       }
       status
       groups(where: $groupWhere) {
@@ -56746,10 +56940,13 @@ export const InviteExistingUserDocument = gql`
     inviteExistingUser(data: $data, where: $where) {
       id
       fullName
+      firstLetter
       email
+      publicName
       businesses {
         id
         name
+        fullName
       }
       status
       groups(where: $groupWhere) {
@@ -56814,6 +57011,7 @@ export const ListBusinessUsersDocument = gql`
       id
       fullName
       status
+      publicName
       groups(where: $groupWhere) {
         id
         name
@@ -56886,9 +57084,11 @@ export const ListSchemeUsersDocument = gql`
       fullName
       firstLetter
       email
+      publicName
       businesses {
         id
         name
+        fullName
       }
       status
       groups(where: $groupWhere) {
@@ -56962,6 +57162,7 @@ export const SearchUserDocument = gql`
         name
       }
       email
+      publicName
       addresses(where: { primary: { equals: true } }) {
         id
         postcode

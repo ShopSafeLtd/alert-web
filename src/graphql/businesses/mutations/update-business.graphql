@@ -1,10 +1,18 @@
-mutation UpdateBusiness($data: UpdateBusinessDataInput!, $where: BusinessWhereUniqueInput!) {
+mutation UpdateBusiness(
+  $data: UpdateBusinessDataInput!
+  $where: BusinessWhereUniqueInput!
+) {
   updateBusiness(data: $data, where: $where) {
     id
     name
+    fullName
+    publicName
+    demId
     parent {
       id
       name
+      fullName
+      publicName
     }
     locations {
       id

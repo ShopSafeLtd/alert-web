@@ -9,9 +9,15 @@ query ListBusinesses(
     businesses {
       id
       name
+      fullName
+      publicName
+      demId
       parent {
         id
         name
+
+        fullName
+        publicName
       }
       locations {
         id

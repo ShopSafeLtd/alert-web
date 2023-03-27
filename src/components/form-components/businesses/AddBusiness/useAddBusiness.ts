@@ -25,6 +25,7 @@ interface OnSubmitValues {
   townCity: string;
   county: string;
   postcode: string;
+  publicName: boolean;
 }
 
 interface Props {
@@ -129,6 +130,7 @@ const useAddBusiness = ({ onClose }: Props): Return => {
       variables: {
         data: {
           name: values.name,
+          publicName: values.publicName,
           schemes: {
             connect: [
               {
@@ -156,11 +158,15 @@ const useAddBusiness = ({ onClose }: Props): Return => {
         createBusiness: {
           id: `${Math.random()}`,
           name: values.name,
+          fullName: values.name,
+          publicName: values.publicName,
           totalUsers: 0,
           parent: values.parent
             ? {
                 id: values.parent.value,
                 name: values.parent.label,
+                fullName: values.parent.label,
+                publicName: values.publicName,
               }
             : null,
           locations: [

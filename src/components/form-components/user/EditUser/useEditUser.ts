@@ -35,6 +35,7 @@ interface FormData {
   messagePush: boolean;
   offenderEmail: boolean;
   offenderPush: boolean;
+  publicName: boolean;
 }
 interface Props {
   onClose: () => void;
@@ -155,6 +156,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
             fullName: { set: data.fullName },
             incidentEmail: { set: data.incidentEmail },
             incidentPush: { set: data.incidentPush },
+            publicName: { set: data.publicName },
             subscribedIncidentOnly: { set: data.subscribedIncidentOnly },
             subscribedOffenderOnly: { set: data.subscribedOffenderOnly },
             messagePush: { set: data.messagePush },

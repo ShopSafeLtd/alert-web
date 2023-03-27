@@ -25,6 +25,7 @@ query Articles(
     createdBy {
       fullName
       businesses {
+        fullName
         id
         name
       }

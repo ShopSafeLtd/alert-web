@@ -10,9 +10,11 @@ query User(
     email
     status
     demId
+    publicName
     businesses {
       id
       name
+      fullName
       demId
     }
     disabled

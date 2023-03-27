@@ -1,8 +1,4 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
-  "cSpell.words": [
-    "antd",
-    "Lightbox",
-    "reactflow"
-  ]
+  "cSpell.words": ["antd", "Lightbox", "reactflow", "systerm"]
 }

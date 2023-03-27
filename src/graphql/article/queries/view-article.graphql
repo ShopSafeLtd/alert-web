@@ -56,6 +56,7 @@ query Article($where: ArticleWhereUniqueInput!) {
             id
             fullName
             businesses {
+              fullName
               id
               name
             }
@@ -117,6 +118,7 @@ query Article($where: ArticleWhereUniqueInput!) {
             id
             fullName
             businesses {
+              fullName
               id
               name
             }
@@ -140,6 +142,7 @@ query Article($where: ArticleWhereUniqueInput!) {
               id
               fullName
               businesses {
+                fullName
                 id
                 name
               }

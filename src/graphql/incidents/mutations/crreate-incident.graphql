@@ -29,6 +29,7 @@ mutation createIncident($data: CreateIncidentData!) {
       id
       fullName
       businesses {
+        fullName
         id
         name
       }

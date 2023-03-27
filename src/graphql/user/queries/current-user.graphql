@@ -1,43 +1,44 @@
 query currentUser {
-    currentUser {
-        id
-        fullName
-        email
-        reference
-        demId
-        businesses {
-            id
-            name
-            demId
-        }
-        newUser
-        groups {
-            id
-            name
-            scheme {
-                id
-            }
-        }
-        schemes {
-            id
-            role
-            scheme {
-                logo {
-                    optimised
-                }
-                darkLogo {
-                    optimised
-                }
-                id
-                name
-                autoApproveIncidents
-                autoApproveOffenders
-            }
-        }
-        incidentEmail
-        incidentPush
-        offenderEmail
-        offenderPush
-        messagePush
+  currentUser {
+    id
+    fullName
+    email
+    reference
+    demId
+    publicName
+    businesses {
+      id
+      name
+      demId
     }
+    newUser
+    groups {
+      id
+      name
+      scheme {
+        id
+      }
+    }
+    schemes {
+      id
+      role
+      scheme {
+        logo {
+          optimised
+        }
+        darkLogo {
+          optimised
+        }
+        id
+        name
+        autoApproveIncidents
+        autoApproveOffenders
+      }
+    }
+    incidentEmail
+    incidentPush
+    offenderEmail
+    offenderPush
+    messagePush
+  }
 }
