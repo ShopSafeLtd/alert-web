@@ -69,6 +69,7 @@
     "unicorn/prefer-add-event-listener": "off",
     "react/destructuring-assignment": "error",
     "unicorn/prefer-query-selector": "off",
+    "no-restricted-exports": "off",
     "@typescript-eslint/consistent-type-imports": [
       "error",
       {
