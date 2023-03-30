@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Row, Typography } from 'antd';
-import { FeedItemsQuery } from 'graphql/generated';
+import type { FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCar,
@@ -54,7 +54,7 @@ const VehicleFeed = ({
 
   return (
     <Row gutter={20} wrap={false}>
-      {(isNewVehicle || isNewImage) && images && images.length ? (
+      {(isNewVehicle || isNewImage) && images && images.length > 0 ? (
         <Col>
           <ImageContainer src={images[0].optimised || images[0].url || ''} />
         </Col>
@@ -144,7 +144,7 @@ const VehicleFeed = ({
             </>
           ) : (
             <>
-              {updates && updates.length ? (
+              {updates && updates.length > 0 ? (
                 <UpdateContent
                   title={
                     registration ||

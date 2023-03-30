@@ -1,11 +1,17 @@
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import React from 'react';
 import { createStore, StoreProvider, createTypedHooks } from 'easy-peasy';
 
-import authModel, { AuthModel } from './auth-model';
-import themeModel, { ThemeModel } from './theme-model';
-import userModel, { UserModel } from './user-model';
-import schemeModel, { SchemeModel } from './scheme-model';
-import dataModel, { DataModel } from './data-model';
+import type { AuthModel } from './auth-model';
+import authModel from './auth-model';
+import type { ThemeModel } from './theme-model';
+import themeModel from './theme-model';
+import type { UserModel } from './user-model';
+import userModel from './user-model';
+import type { SchemeModel } from './scheme-model';
+import schemeModel from './scheme-model';
+import type { DataModel } from './data-model';
+import dataModel from './data-model';
 
 interface StoreModel {
   auth: AuthModel;

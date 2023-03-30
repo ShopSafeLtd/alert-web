@@ -1,13 +1,8 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import {
-  Age,
-  Build,
-  Gender,
-  ListOffendersQuery,
-  Race,
-} from 'graphql/generated';
+import type { ListOffendersQuery } from 'graphql/generated';
+import { Age, Build, Gender, Race } from 'graphql/generated';
 import {
   Button,
   Col,
@@ -32,9 +27,8 @@ import OffenderTile from 'components/offenders/OffenderTile';
 import OffenderTileSkeleton from 'components/offenders/OffenderTileSkeleton';
 import Lightbox from 'yet-another-react-lightbox';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import WatermarkSlide, {
-  WatermarkSlideType,
-} from 'components/images/WatermartkSlide.view';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import useStyles from './AddExistingOffender.styles';
 
 const { Paragraph, Text } = Typography;
@@ -107,7 +101,7 @@ const AddExistingOffender = ({
     if (!data?.listOffenders && loading)
       return (
         <Row wrap gutter={16}>
-          {Array(data?.listOffenders?.total || 24)
+          {Array.from({ length: data?.listOffenders?.total || 24 })
             .fill(0)
             .map(() => (
               <Col span={6} className="offender-item">

@@ -11,14 +11,11 @@ import {
   Divider,
   Popconfirm,
 } from 'antd';
-import {
-  Age,
-  Build,
-  Gender,
+import type {
   ListOffendersQuery,
-  Race,
   SearchOffendersQuery,
 } from 'graphql/generated';
+import { Age, Build, Gender, Race } from 'graphql/generated';
 import AddExisitingOffender from 'components/form-components/incident/offender/AddExistingOffender';
 import {
   getAge,

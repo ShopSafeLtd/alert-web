@@ -1,18 +1,20 @@
 import { useState } from 'react';
+import type {
+  ListCrimeGroupsQuery,
+  ListIncidentsQuery,
+  VehicleQuery,
+} from 'graphql/generated';
 import {
   useUpdateVehicleMutation,
   useListCrimeGroupsQuery,
-  ListCrimeGroupsQuery,
   SortOrder,
   useListIncidentsQuery,
-  ListIncidentsQuery,
   Role,
-  VehicleQuery,
   useVehicleQuery,
 } from 'graphql/generated';
 import { message, notification, Upload } from 'antd';
 import { useStoreState } from 'state';
-import { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
+import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
 import { useParams } from 'react-router';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
@@ -165,15 +167,15 @@ const useEditVehicle = ({ onClose }: Props): Return => {
           colour: data.colour || '',
           registration: data.registration || '',
           crimeGroup:
-            data?.crimeGroup && data.crimeGroup.length
+            data?.crimeGroup && data.crimeGroup.length > 0
               ? data?.crimeGroup?.map((id) => ({ id }))
               : [],
           incidents:
-            incidentsData && incidentsData.length
+            incidentsData && incidentsData.length > 0
               ? incidentsData.map(({ id }) => ({ id }))
               : [],
           offenders:
-            offendersData && offendersData.length
+            offendersData && offendersData.length > 0
               ? offendersData.map(({ id }) => ({ id }))
               : [],
           schemes: schemeId,

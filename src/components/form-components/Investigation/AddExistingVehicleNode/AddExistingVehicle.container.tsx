@@ -2,7 +2,7 @@ import React from 'react';
 
 import View from './AddExistingVehicle.view';
 import useAddExistingVehicle from './useAddExistingVehicle';
-import { Vehicle } from '../../../react-flow/nodes/vehicle-node';
+import type { Vehicle } from '../../../react-flow/nodes/vehicle-node';
 
 interface Props {
   onClose: () => void;

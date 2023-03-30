@@ -1,25 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import {
+import type {
+  CreateUserInDatabaseMutation,
+  InviteExistingUserMutation,
   Role,
-  SchemeGroupsQuery,
   SchemeChatsQuery,
+  SchemeGroupsQuery,
+  SearchBusinessesQuery,
+  SearchBusinessesQueryVariables,
+} from 'graphql/generated';
+import {
+  QueryMode,
+  SearchBusinessesDocument,
   SortOrder,
   useCreateUserInDatabaseMutation,
   useInviteExistingUserMutation,
-  useSchemeGroupsQuery,
   useSchemeChatsQuery,
-  CreateUserInDatabaseMutation,
-  useSearchUserQuery,
-  InviteExistingUserMutation,
-  SearchBusinessesQuery,
-  SearchBusinessesQueryVariables,
-  SearchBusinessesDocument,
-  QueryMode,
+  useSchemeGroupsQuery,
   useSchemeQuery,
+  useSearchUserQuery,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
-import { MutationUpdaterFn, useApolloClient } from '@apollo/client';
-import { Modal, notification, Form, FormInstance, Typography } from 'antd';
+import type { MutationUpdaterFn } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
+import type { FormInstance } from 'antd';
+import { Form, Modal, notification, Typography } from 'antd';
 
 const { confirm } = Modal;
 const { useForm } = Form;
@@ -43,6 +47,7 @@ interface FormData {
   offenderPush: boolean;
   publicName: boolean;
 }
+
 interface Props {
   onClose: () => void;
   update: MutationUpdaterFn<CreateUserInDatabaseMutation>;
@@ -52,6 +57,7 @@ interface Props {
     label: string;
   };
 }
+
 interface Return {
   onSubmit: (value: FormData) => void;
   groupsData: SchemeGroupsQuery | undefined;
@@ -69,6 +75,13 @@ interface Return {
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
 }
 
+const errorNotification = () =>
+  notification.error({
+    message: 'Error!',
+    description: 'Whoops, there are some errors. Please try again. ',
+    placement: 'bottomRight',
+  });
+
 const useAddUser = ({
   onClose,
   update,
@@ -82,13 +95,6 @@ const useAddUser = ({
   const [existingUser, setExistingUser] = useState(false);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState<string | null>(null);
-
-  const errorNotification = () =>
-    notification.error({
-      message: 'Error!',
-      description: 'Whoops, there are some errors. Please try again. ',
-      placement: 'bottomRight',
-    });
 
   useEffect(() => {
     form.setFieldsValue({
@@ -300,7 +306,7 @@ const useAddUser = ({
         },
       })
       .then((response) =>
-        response.data.listBusinesses.businesses.length
+        response.data.listBusinesses.businesses.length > 0
           ? response.data.listBusinesses.businesses.map((item) => ({
               label: (
                 <div>

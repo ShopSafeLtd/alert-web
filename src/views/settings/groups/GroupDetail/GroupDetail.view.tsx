@@ -1,5 +1,5 @@
 import React from 'react';
-import { GroupQuery } from 'graphql/generated';
+import type { GroupQuery } from 'graphql/generated';
 import { Button, PageHeader, Card, Table, Drawer } from 'antd';
 import EditGroup from 'components/form-components/group/EditGroup';
 import { Link } from 'react-router-dom';

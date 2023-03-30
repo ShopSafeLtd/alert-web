@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
+import type { CurrentUserQuery } from 'graphql/generated';
 import {
-  CurrentUserQuery,
   useCurrentUserQuery,
   useUpdateUserMutation,
   useResetPasswordMutation,

@@ -1,4 +1,4 @@
-import {
+import type {
   Age,
   BanType,
   Build,
@@ -6,7 +6,7 @@ import {
   ListIncidentsQuery,
   Race,
 } from 'graphql/generated';
-import { Moment } from 'moment';
+import type { Moment } from 'moment';
 
 // BanData
 export interface BanData {

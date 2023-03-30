@@ -13,17 +13,21 @@ import {
   Table,
   Tooltip,
 } from 'antd';
-import { ListCrimeGroupsQuery, ListIncidentsQuery } from 'graphql/generated';
-import { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
+import type {
+  ListCrimeGroupsQuery,
+  ListIncidentsQuery,
+} from 'graphql/generated';
+import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
 import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
-import { VehicleData } from 'types/DataType';
+import type { VehicleData } from 'types/DataType';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import useStyles from './EditVehicle.styles';
 
 const { confirm } = Modal;
+
 interface FormData {
   make?: string;
   model?: string;
@@ -33,6 +37,7 @@ interface FormData {
   incidents?: string[];
   offenders?: string[];
 }
+
 interface Props {
   onClose: () => void;
   data: VehicleData | undefined;
@@ -79,9 +84,7 @@ const EditVehicle = ({
   adminRights,
 }: Props): JSX.Element => {
   const classes = useStyles();
-  return !data ? (
-    <Skeleton />
-  ) : (
+  return data ? (
     <div>
       <Form
         initialValues={{
@@ -90,7 +93,7 @@ const EditVehicle = ({
           colour: data?.colour || '',
           registration: data?.registration || '',
           crimeGroup:
-            data?.crimeGroup && data.crimeGroup.length
+            data?.crimeGroup && data.crimeGroup.length > 0
               ? data.crimeGroup.map((id) => id)
               : [],
         }}
@@ -156,7 +159,7 @@ const EditVehicle = ({
         )}
         {adminRights && (
           <Row gutter={16}>
-            {!(incidentsData && incidentsData.length) && (
+            {!(incidentsData && incidentsData.length > 0) && (
               <Col>
                 <Button
                   onClick={toggleLinkIncident}
@@ -173,7 +176,7 @@ const EditVehicle = ({
                 </Button>
               </Col>
             )}
-            {!(offendersData && offendersData.length) && (
+            {!(offendersData && offendersData.length > 0) && (
               <Col>
                 <div>
                   <Button
@@ -195,7 +198,7 @@ const EditVehicle = ({
           </Row>
         )}
 
-        {incidentsData && incidentsData.length ? (
+        {incidentsData && incidentsData.length > 0 ? (
           <>
             <Divider>Linked Incidents</Divider>
             <Table
@@ -278,7 +281,7 @@ const EditVehicle = ({
           </>
         ) : null}
 
-        {offendersData && offendersData.length ? (
+        {offendersData && offendersData.length > 0 ? (
           <>
             <Divider>Linked Offenders</Divider>
             <Table
@@ -421,6 +424,8 @@ const EditVehicle = ({
         )}
       </Drawer>
     </div>
+  ) : (
+    <Skeleton />
   );
 };
 

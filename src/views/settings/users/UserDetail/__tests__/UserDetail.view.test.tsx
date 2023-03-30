@@ -20,6 +20,7 @@ describe('Detail Officer View', () => {
       messagePush: false,
       offenderEmail: false,
       offenderPush: false,
+      publicName: true,
       addresses: [
         {
           building: 'building',

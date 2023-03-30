@@ -10,9 +10,16 @@ describe('Detail Officer View', () => {
       name: 'test group',
       users: [
         {
+          publicName: true,
           id: 'test userId',
           fullName: 'test user',
-          businesses: [{ name: 'test business', id: '' }],
+          businesses: [
+            {
+              name: 'test business',
+              id: '',
+              fullName: 'test user',
+            },
+          ],
         },
       ],
     },

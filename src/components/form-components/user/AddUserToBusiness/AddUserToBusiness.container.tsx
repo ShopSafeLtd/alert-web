@@ -1,6 +1,6 @@
 import React from 'react';
-import { MutationUpdaterFn } from '@apollo/client';
-import { AddUsersToBusinessMutation } from 'graphql/generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { AddUsersToBusinessMutation } from 'graphql/generated';
 import View from './AddUserToBusiness.view';
 import useAddUserToBusiness from './useAddUserToBusiness';
 

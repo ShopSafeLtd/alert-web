@@ -1,9 +1,9 @@
 import React from 'react';
-import {
+import type {
   CreateUserInDatabaseMutation,
   InviteExistingUserMutation,
 } from 'graphql/generated';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import View from './AddUser.view';
 import useAddUser from './useAddUser';
 

@@ -11,7 +11,7 @@ import {
   Typography,
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { OffenderCardData } from 'types/DataType';
+import type { OffenderCardData } from 'types/DataType';
 import moment from 'moment';
 
 const { Title } = Typography;

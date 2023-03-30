@@ -7,14 +7,14 @@ import MobileNav from 'components/layout-components/AntD/navigation/MobileNav';
 import AppViews from 'navigation/app-views/router';
 import { Grid, Layout } from 'antd';
 import navigationConfig from 'configs/NavigationConfig';
-import {
-  SIDE_NAV_COLLAPSED_WIDTH,
-  SIDE_NAV_WIDTH,
-} from 'constants/ThemeConstant';
 import utils from 'utils';
 import { useThemeSwitcher } from 'react-css-theme-switcher/src';
 import { NavType, useStoreState } from 'state';
 import { Navigate } from 'react-router-dom';
+import {
+  SIDE_NAV_COLLAPSED_WIDTH,
+  SIDE_NAV_WIDTH,
+} from '../../constants/ThemeConstant';
 
 const { Content } = Layout;
 const { useBreakpoint } = Grid;
@@ -52,9 +52,7 @@ export const AppLayout = ({ location }: Props): JSX.Element => {
     return <Loading cover="page" />;
   }
 
-  return !loggedIn ? (
-    <Navigate to="/auth" />
-  ) : (
+  return loggedIn ? (
     <Layout>
       {/* <HeaderNav isMobile={isMobile} /> */}
       {isNavTop && !isMobile ? <TopNav routeInfo={currentRouteInfo} /> : null}
@@ -90,6 +88,8 @@ export const AppLayout = ({ location }: Props): JSX.Element => {
       </Layout>
       {isMobile && <MobileNav routeInfo={currentRouteInfo} />}
     </Layout>
+  ) : (
+    <Navigate to="/auth" />
   );
 };
 

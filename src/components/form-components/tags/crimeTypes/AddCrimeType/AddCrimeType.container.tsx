@@ -1,6 +1,6 @@
 import React from 'react';
-import { MutationUpdaterFn } from '@apollo/client';
-import { CreateTagMutation, TagType } from 'graphql/generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateTagMutation, TagType } from 'graphql/generated';
 import View from './AddCrimeType.view';
 import useAddCrimeType from './useAddCrimeType';
 

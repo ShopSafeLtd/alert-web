@@ -3,7 +3,7 @@ import { Button, Col, DatePicker, Form, Input, Row, Select } from 'antd';
 import moment from 'moment';
 import type { Moment } from 'moment';
 import type { RangePickerProps } from 'antd/es/date-picker';
-import { BanData } from 'types/DataType';
+import type { BanData } from 'types/DataType';
 import { BanTypeValues } from 'types';
 
 interface Props {

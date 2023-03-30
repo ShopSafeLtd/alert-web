@@ -1,13 +1,15 @@
 import { useApolloClient } from '@apollo/client';
 import { notification } from 'antd';
-import {
-  ListBusinessesDocument,
+import type {
   ListBusinessesQuery,
   ListBusinessesQueryVariables,
-  QueryMode,
-  SearchBusinessesDocument,
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
+} from 'graphql/generated';
+import {
+  ListBusinessesDocument,
+  QueryMode,
+  SearchBusinessesDocument,
   SortOrder,
   useCreateBusinessMutation,
 } from 'graphql/generated';
@@ -204,7 +206,7 @@ const useAddBusiness = ({ onClose }: Props): Return => {
         },
       })
       .then((response) =>
-        response.data.listBusinesses.businesses.length
+        response.data.listBusinesses.businesses.length > 0
           ? response.data.listBusinesses.businesses.map((item) => ({
               label: item?.name || '',
               value: item?.id || '',

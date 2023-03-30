@@ -1,6 +1,6 @@
 import React from 'react';
 import View from './DocumentsView';
-import { ViewInvestigationQuery } from '../../../../../graphql/generated';
+import type { ViewInvestigationQuery } from '../../../../../graphql/generated';
 
 interface Props {
   data:

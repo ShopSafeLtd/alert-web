@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListCrimeGroupsQuery } from 'graphql/generated';
+import type { ListCrimeGroupsQuery } from 'graphql/generated';
 import { Button, Col, Input, Row, Table } from 'antd';
 
 interface Props {

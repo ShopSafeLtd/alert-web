@@ -12,7 +12,7 @@ import {
   Tag,
   Typography,
 } from 'antd';
-import { ListOffendersQuery } from 'graphql/generated';
+import type { ListOffendersQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
@@ -41,7 +41,7 @@ import {
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
 
-import { CarouselRef } from 'antd/lib/carousel';
+import type { CarouselRef } from 'antd/lib/carousel';
 
 import { Link } from 'react-router-dom';
 import moment from 'moment';

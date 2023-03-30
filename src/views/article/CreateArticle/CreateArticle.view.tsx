@@ -268,6 +268,7 @@ const CreateArticleView = ({
                   file_picker_types: 'file, image, media',
                   file_picker_callback: filePickerCallback,
                   promotion: false,
+                  default_link_target: '_blank',
                   content_style:
                     'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                 }}

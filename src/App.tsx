@@ -44,7 +44,7 @@ init({
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
   // Adjust for production
-  tracesSampleRate: 1.0,
+  tracesSampleRate: 1,
   beforeSend(event) {
     const logRocketSession = LogRocket.sessionURL;
     if (logRocketSession !== null && event.extra) {

@@ -11,7 +11,7 @@ import {
   Typography,
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { VehicleData } from 'types/DataType';
+import type { VehicleData } from 'types/DataType';
 
 const { Paragraph } = Typography;
 

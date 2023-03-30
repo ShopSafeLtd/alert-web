@@ -58,7 +58,7 @@ const Terms = (): JSX.Element => {
   const backgroundStyle = {
     background:
       theme === 'dark'
-        ? 'linear-gradient(to right, #cb2d3e, #ef473a)'
+        ? 'linear-gradient(to right, #cb2d3e, #ef473b)'
         : 'linear-gradient(to right, #cb2d3e, #ef473a)',
     display: 'flex',
     justifyContent: 'center',

@@ -4,8 +4,8 @@ import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { MemoryRouter } from 'react-router-dom';
 import {
-  Role,
   CurrentUserDocument,
+  Role,
   UpdateUserDocument,
 } from 'graphql/generated';
 import { storeModel } from 'state';

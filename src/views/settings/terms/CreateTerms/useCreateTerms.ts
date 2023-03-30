@@ -1,4 +1,5 @@
-import React, { useRef } from 'react';
+import type React from 'react';
+import { useRef } from 'react';
 import type { Editor } from 'tinymce';
 import { useNavigate } from 'react-router';
 import { notification } from 'antd';

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
+import type {
   Age,
   Build,
   CreateTagMutation,
@@ -7,16 +7,19 @@ import {
   IncidentUpdateInput,
   ListGoodsTypesQuery,
   ListOffendersQuery,
-  Model,
-  QueryMode,
   Race,
-  Role,
-  SearchBusinessesDocument,
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
+  TagsQuery,
+  ViewIncidentQuery,
+} from 'graphql/generated';
+import {
+  Model,
+  QueryMode,
+  Role,
+  SearchBusinessesDocument,
   SortOrder,
   TagsDocument,
-  TagsQuery,
   useListCrimeGroupsQuery,
   useListGoodsTypesQuery,
   useListOffendersQuery,
@@ -26,16 +29,16 @@ import {
   useTagsQuery,
   useUpdateIncidentMutation,
   useViewIncidentQuery,
-  ViewIncidentQuery,
 } from 'graphql/generated';
 import { message, Modal, notification, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import { MutationUpdaterFn, useApolloClient } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import update from 'immutability-helper';
-import { UploadChangeParam } from 'antd/lib/upload';
-import { CrimeGroupData, VehicleData } from 'types/DataType';
+import type { UploadChangeParam } from 'antd/lib/upload';
+import type { CrimeGroupData, VehicleData } from 'types/DataType';
 
 const { confirm } = Modal;
 
@@ -165,6 +168,21 @@ interface Return {
   vehiclesData: VehicleData[];
 }
 
+const onPreview = async (file: UploadFile) => {
+  let src = file.url as string;
+  if (!src) {
+    src = await new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file.originFileObj as RcFile);
+      reader.addEventListener('load', () => resolve(reader.result as string));
+    });
+  }
+  const image = new Image();
+  image.src = src;
+  const imgWindow = window.open(src);
+  imgWindow?.document.write(image.outerHTML);
+};
+
 const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const navigate = useNavigate();
   const client = useApolloClient();
@@ -222,17 +240,17 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     },
 
     onCompleted: ({ incident }) => {
-      if (incident?.offenders && incident.offenders.length) {
+      if (incident?.offenders && incident.offenders.length > 0) {
         setOffendersData(incident.offenders);
       }
-      if (incident?.vehicles && incident.vehicles.length) {
+      if (incident?.vehicles && incident.vehicles.length > 0) {
         setVehiclesData(incident.vehicles);
       }
-      if (incident?.crimeGroups && incident.crimeGroups.length) {
+      if (incident?.crimeGroups && incident.crimeGroups.length > 0) {
         setCrimeGroupsData(incident.crimeGroups);
       }
       // imageList
-      if (incident?.images && incident.images.length) {
+      if (incident?.images && incident.images.length > 0) {
         setFileList(
           incident?.images.map((image) => ({
             uid: `${image.id}`,
@@ -336,14 +354,15 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           updatedAt: SortOrder.Desc,
         },
         take: 20,
-        where: searchOffenders.length
-          ? {
-              name: {
-                contains: searchOffenders,
-                mode: QueryMode.Insensitive,
-              },
-            }
-          : undefined,
+        where:
+          searchOffenders.length > 0
+            ? {
+                name: {
+                  contains: searchOffenders,
+                  mode: QueryMode.Insensitive,
+                },
+              }
+            : undefined,
       },
     });
   // mutation
@@ -475,20 +494,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
       setImageChange(true);
     }
   };
-  const onPreview = async (file: UploadFile) => {
-    let src = file.url as string;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj as RcFile);
-        reader.onload = () => resolve(reader.result as string);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
-  };
 
   const toggleAddIncidentTag = () => {
     setAddIncidentTag(!addIncidentTag);
@@ -600,15 +605,15 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     offenders: OffenderData[];
   }) => {
     if (offendersData) {
-      const changedOffendersIds = data.offenders.map(({ id }) => id);
-      const originalOffendersIds = offendersData.map(({ id }) => id);
+      const changedOffendersIds = new Set(data.offenders.map(({ id }) => id));
+      const originalOffendersIds = new Set(offendersData.map(({ id }) => id));
       const originalImageOffendersIds =
         fileList
           .find(({ uid }) => uid === data.image.uid)
           ?.offenders?.map(({ id }) => id) || [];
       const updatedOffenders = offendersData
         .map((offender) => {
-          if (changedOffendersIds.includes(offender.id))
+          if (changedOffendersIds.has(offender.id))
             return data.offenders.find(({ id }) => id === offender.id);
           if (originalImageOffendersIds.includes(offender.id))
             return {
@@ -621,7 +626,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
         })
         .filter(isOffenderData);
       const newOffenders = data.offenders.filter(
-        (offender) => !originalOffendersIds.includes(offender.id)
+        (offender) => !originalOffendersIds.has(offender.id)
       );
 
       setOffendersData([...updatedOffenders, ...newOffenders]);
@@ -692,32 +697,20 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const onSubmit = (data: FormData) => {
     setSaving(true);
 
-    if (!offendersData) {
-      confirm({
-        title: 'No Offenders',
-        content: 'Please select or add at least one offender for the incident.',
-        cancelText: 'Find Offenders',
-        onCancel() {
-          toggleAddExistingOffender();
-        },
-        okText: 'Add New Offender',
-        onOk() {
-          toggleAddOffender();
-        },
-      });
-      setSaving(false);
-    } else {
+    if (offendersData) {
       const getOffenders = (): IncidentUpdateInput['offenders'] => {
         if (
           offendersData &&
           listOffendersData?.listOffenders &&
           incidentData?.incident
         ) {
-          const offendersIds = listOffendersData.listOffenders.offenders.map(
-            (offender) => offender.id
+          const offendersIds = new Set(
+            listOffendersData.listOffenders.offenders.map(
+              (offender) => offender.id
+            )
           );
           const existingOffenders = offendersData.filter((item) =>
-            offendersIds.includes(item.id)
+            offendersIds.has(item.id)
           );
           const existingOffendersWithImages = existingOffenders
             .filter((offender) =>
@@ -728,7 +721,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
               images: offender.images?.filter((image) => image.new),
             }));
           const newOffenders = offendersData.filter(
-            (item) => !offendersIds.includes(item.id)
+            (item) => !offendersIds.has(item.id)
           );
           const deletedOffenders = incidentData?.incident?.offenders?.filter(
             (offender) =>
@@ -740,14 +733,15 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           // );
 
           return {
-            connect: existingOffenders.length
-              ? existingOffenders.map((offender) => ({ id: offender.id }))
-              : undefined,
+            connect:
+              existingOffenders.length > 0
+                ? existingOffenders.map((offender) => ({ id: offender.id }))
+                : undefined,
             update: existingOffendersWithImages.map((offender) => ({
               where: { id: offender.id },
               data: {
                 images:
-                  offender.images && offender.images.length
+                  offender.images && offender.images.length > 0
                     ? {
                         connect: offender.images?.map((image) => ({
                           id: image.id,
@@ -756,40 +750,43 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                     : {},
               },
             })),
-            create: newOffenders.length
-              ? newOffenders.map((offender) => ({
-                  name: offender.name || 'Unidentified Offender',
-                  gender: offender.gender || null,
-                  race: offender.race || null,
-                  build: offender.build || null,
-                  hair: offender.hair || null,
-                  peculiarities: offender.peculiarities || null,
-                  age: offender.age || null,
-                  dateSource: offender.dateSource || null,
-                  dateOfBirth: offender.dateOfBirth || null,
-                  groups: data.groups.length
-                    ? { connect: data.groups.map((id) => ({ id })) }
-                    : undefined,
-                  scheme: { connect: { id: schemeId } },
-                  createdBy: { connect: { id: userId } },
-                  localId: offender.id,
-                  images:
-                    offender?.images &&
-                    offender.images.length &&
-                    offender.images?.filter((image) => image.new === true)
-                      ? {
-                          connect: offender.images
-                            ?.filter((image) => image.new === true)
-                            .map((image) => ({
-                              id: image.id,
-                            })),
-                        }
-                      : {},
-                }))
-              : undefined,
-            disconnect: deletedOffenders.length
-              ? deletedOffenders.map((offender) => ({ id: offender.id }))
-              : undefined,
+            create:
+              newOffenders.length > 0
+                ? newOffenders.map((offender) => ({
+                    name: offender.name || 'Unidentified Offender',
+                    gender: offender.gender || null,
+                    race: offender.race || null,
+                    build: offender.build || null,
+                    hair: offender.hair || null,
+                    peculiarities: offender.peculiarities || null,
+                    age: offender.age || null,
+                    dateSource: offender.dateSource || null,
+                    dateOfBirth: offender.dateOfBirth || null,
+                    groups:
+                      data.groups.length > 0
+                        ? { connect: data.groups.map((id) => ({ id })) }
+                        : undefined,
+                    scheme: { connect: { id: schemeId } },
+                    createdBy: { connect: { id: userId } },
+                    localId: offender.id,
+                    images:
+                      offender?.images &&
+                      offender.images.length > 0 &&
+                      offender.images?.filter((image) => image.new === true)
+                        ? {
+                            connect: offender.images
+                              ?.filter((image) => image.new === true)
+                              .map((image) => ({
+                                id: image.id,
+                              })),
+                          }
+                        : {},
+                  }))
+                : undefined,
+            disconnect:
+              deletedOffenders.length > 0
+                ? deletedOffenders.map((offender) => ({ id: offender.id }))
+                : undefined,
           };
         }
 
@@ -823,11 +820,12 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             ({ edited }) => edited === true
           );
           return {
-            connect: existingVehicles.length
-              ? existingVehicles.map(({ id }) => ({ id }))
-              : undefined,
+            connect:
+              existingVehicles.length > 0
+                ? existingVehicles.map(({ id }) => ({ id }))
+                : undefined,
             disconnect:
-              removeVehicles && removeVehicles.length
+              removeVehicles && removeVehicles.length > 0
                 ? removeVehicles.map((id) => ({ id }))
                 : undefined,
             update: editedVehicles.map((vehicle) => ({
@@ -838,36 +836,36 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
                 colour: { set: vehicle.colour },
                 registration: { set: vehicle.registration },
                 crimeGroup:
-                  vehicle.crimeGroup && vehicle.crimeGroup.length
+                  vehicle.crimeGroup && vehicle.crimeGroup.length > 0
                     ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
                     : undefined,
-                incidents:
-                  vehicle.incidents && vehicle.incidents
-                    ? { connect: vehicle.incidents.map((id) => ({ id })) }
-                    : undefined,
+                incidents: vehicle.incidents
+                  ? { connect: vehicle.incidents.map((id) => ({ id })) }
+                  : undefined,
                 offenders:
-                  vehicle.offenders && vehicle.offenders.length
+                  vehicle.offenders && vehicle.offenders.length > 0
                     ? { connect: vehicle.offenders.map((id) => ({ id })) }
                     : undefined,
               },
             })),
 
-            create: newVehicles.length
-              ? newVehicles.map((vehicle) => ({
-                  make: vehicle.make,
-                  model: vehicle.model,
-                  colour: vehicle.colour,
-                  registration: vehicle.registration,
-                  crimeGroup:
-                    vehicle.crimeGroup && vehicle.crimeGroup.length
-                      ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
-                      : undefined,
-                  offenders:
-                    vehicle.offenders && vehicle.offenders.length
-                      ? { connect: vehicle.offenders.map((id) => ({ id })) }
-                      : undefined,
-                }))
-              : undefined,
+            create:
+              newVehicles.length > 0
+                ? newVehicles.map((vehicle) => ({
+                    make: vehicle.make,
+                    model: vehicle.model,
+                    colour: vehicle.colour,
+                    registration: vehicle.registration,
+                    crimeGroup:
+                      vehicle.crimeGroup && vehicle.crimeGroup.length > 0
+                        ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
+                        : undefined,
+                    offenders:
+                      vehicle.offenders && vehicle.offenders.length > 0
+                        ? { connect: vehicle.offenders.map((id) => ({ id })) }
+                        : undefined,
+                  }))
+                : undefined,
           };
         }
         return {
@@ -899,20 +897,22 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           );
 
           return {
-            connect: existingCrimeGroups.length
-              ? existingCrimeGroups.map(({ id }) => ({ id }))
-              : undefined,
+            connect:
+              existingCrimeGroups.length > 0
+                ? existingCrimeGroups.map(({ id }) => ({ id }))
+                : undefined,
             disconnect:
-              removeCrimeGroups && removeCrimeGroups.length
+              removeCrimeGroups && removeCrimeGroups.length > 0
                 ? removeCrimeGroups.map((id) => ({ id }))
                 : undefined,
-            create: newCrimeGroups.length
-              ? newCrimeGroups.map((crimeGroup) => ({
-                  offenders: {
-                    connect: crimeGroup.offenders?.map((id) => ({ id })),
-                  },
-                }))
-              : undefined,
+            create:
+              newCrimeGroups.length > 0
+                ? newCrimeGroups.map((crimeGroup) => ({
+                    offenders: {
+                      connect: crimeGroup.offenders?.map((id) => ({ id })),
+                    },
+                  }))
+                : undefined,
           };
         }
         return {
@@ -999,7 +999,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             crimeGroups: getCrimeGroups(),
             images: {
               upload:
-                imageChange && fileList.length
+                imageChange && fileList.length > 0
                   ? fileList
                       .filter((item) => !item.optimised)
                       .map((item) => ({
@@ -1024,6 +1024,20 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           },
         },
       });
+    } else {
+      confirm({
+        title: 'No Offenders',
+        content: 'Please select or add at least one offender for the incident.',
+        cancelText: 'Find Offenders',
+        onCancel() {
+          toggleAddExistingOffender();
+        },
+        okText: 'Add New Offender',
+        onOk() {
+          toggleAddOffender();
+        },
+      });
+      setSaving(false);
     }
   };
 
@@ -1059,7 +1073,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
         },
       })
       .then((response) =>
-        response.data.listBusinesses.businesses.length
+        response.data.listBusinesses.businesses.length > 0
           ? response.data.listBusinesses.businesses.map((item) => ({
               label: item?.name || '',
               value: item?.id || '',

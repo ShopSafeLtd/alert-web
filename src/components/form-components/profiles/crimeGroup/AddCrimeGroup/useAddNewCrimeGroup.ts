@@ -1,13 +1,9 @@
 import { useEffect, useState } from 'react';
 
-import {
-  ListOffendersQuery,
-  QueryMode,
-  SortOrder,
-  useListOffendersQuery,
-} from 'graphql/generated';
+import type { ListOffendersQuery } from 'graphql/generated';
+import { QueryMode, SortOrder, useListOffendersQuery } from 'graphql/generated';
 import { useStoreActions, useStoreState } from 'state';
-import { CrimeGroupData } from 'types/DataType';
+import type { CrimeGroupData } from 'types/DataType';
 
 interface Props {
   onClose: () => void;

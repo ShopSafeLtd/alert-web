@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import { Card, Col, Row } from 'antd';
 import { useStoreState } from 'state';
 import { useAuth0 } from '@auth0/auth0-react';
-import { LoginForm, Props } from '../../components/LoginForm';
+import type { Props } from '../../components/LoginForm';
+import { LoginForm } from '../../components/LoginForm';
 import Loading from '../../../../components/loading';
 
 const LoginOne = (props: Props): JSX.Element => {
@@ -11,19 +12,17 @@ const LoginOne = (props: Props): JSX.Element => {
   const backgroundStyle = {
     background:
       theme === 'dark'
-        ? 'linear-gradient(to right, #cb2d3e, #ef473a)'
+        ? 'linear-gradient(to right, #cb2d3e, #ef473b)'
         : 'linear-gradient(to right, #cb2d3e, #ef473a)',
   };
   useEffect(() => {
-    if (!isAuthenticated) {
-      if (!isLoading) {
-        if (localStorage.getItem('logo')) {
-          loginWithRedirect({
-            'ext-logo': localStorage.getItem('logo'),
-          });
-        } else {
-          loginWithRedirect();
-        }
+    if (!isAuthenticated && !isLoading) {
+      if (localStorage.getItem('logo')) {
+        loginWithRedirect({
+          'ext-logo': localStorage.getItem('logo'),
+        });
+      } else {
+        loginWithRedirect();
       }
     }
   }, []);

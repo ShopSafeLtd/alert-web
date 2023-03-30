@@ -21,7 +21,6 @@ export type Scalars = {
   Float: number;
   DateTime: any;
   Json: any;
-  /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
 
@@ -6706,6 +6705,12 @@ export type CreateDocument = {
   url: Scalars['String'];
 };
 
+export type CreateEventInput = {
+  auth0Id: Scalars['String'];
+  geoIp?: InputMaybe<GeoIpInput>;
+  ip: Scalars['String'];
+};
+
 export type CreateFlowInput = {
   description?: InputMaybe<Scalars['String']>;
   investigationId: Scalars['String'];
@@ -10296,6 +10301,19 @@ export type GeoIpCreateWithoutLoginEventsInput = {
   timezone?: InputMaybe<Scalars['String']>;
 };
 
+export type GeoIpInput = {
+  cityName?: InputMaybe<Scalars['String']>;
+  continentCode?: InputMaybe<Scalars['String']>;
+  countryCode?: InputMaybe<Scalars['String']>;
+  countryCode3?: InputMaybe<Scalars['String']>;
+  countryName?: InputMaybe<Scalars['String']>;
+  latitude?: InputMaybe<Scalars['Float']>;
+  longitude?: InputMaybe<Scalars['Float']>;
+  subdivisionCode?: InputMaybe<Scalars['String']>;
+  subdivisionName?: InputMaybe<Scalars['String']>;
+  timeZone?: InputMaybe<Scalars['String']>;
+};
+
 export type GeoIpUpdateOneWithoutLoginEventsNestedInput = {
   connect?: InputMaybe<GeoIpWhereUniqueInput>;
   connectOrCreate?: InputMaybe<GeoIpCreateOrConnectWithoutLoginEventsInput>;
@@ -11179,8 +11197,10 @@ export type Image = {
   id: Scalars['String'];
   incident?: Maybe<Incident>;
   low?: Maybe<Scalars['String']>;
+  lowPersisted?: Maybe<Scalars['String']>;
   offenders: Array<Offender>;
   optimised?: Maybe<Scalars['String']>;
+  optimisedPersisted?: Maybe<Scalars['String']>;
   optimisticUri?: Maybe<Scalars['String']>;
   scheme: Scheme;
   update?: Maybe<Update>;
@@ -11188,6 +11208,7 @@ export type Image = {
   uploaded: Scalars['Boolean'];
   uploadedBy: User;
   url?: Maybe<Scalars['String']>;
+  urlPersisted?: Maybe<Scalars['String']>;
 };
 
 export type ImageActionsArgs = {
@@ -20720,6 +20741,7 @@ export type Mutation = {
   createImage: Image;
   createIncident?: Maybe<Incident>;
   createInvestigation?: Maybe<Investigation>;
+  createLoginEvent?: Maybe<LoginEvent>;
   createMessage?: Maybe<MessageItem>;
   createMessageDefault: Message;
   createOffender?: Maybe<Offender>;
@@ -20941,6 +20963,10 @@ export type MutationCreateIncidentArgs = {
 
 export type MutationCreateInvestigationArgs = {
   data: CreateInvestigationInput;
+};
+
+export type MutationCreateLoginEventArgs = {
+  data: CreateEventInput;
 };
 
 export type MutationCreateMessageArgs = {
@@ -31787,6 +31813,7 @@ export type User = {
   incidentPush: Scalars['Boolean'];
   incidents: Array<Incident>;
   ipAddress?: Maybe<Scalars['String']>;
+  lastLogin?: Maybe<LoginEvent>;
   loginEvents: Array<LoginEvent>;
   messagePush: Scalars['Boolean'];
   messages: Array<Message>;
@@ -38695,6 +38722,7 @@ export type ListActionsQuery = {
         fullName: string;
         businesses: Array<{
           __typename?: 'Business';
+          fullName: string;
           id: string;
           name: string;
         }>;
@@ -38765,6 +38793,7 @@ export type CreateArticleMutation = {
             fullName: string;
             businesses: Array<{
               __typename?: 'Business';
+              fullName: string;
               id: string;
               name: string;
             }>;
@@ -38818,6 +38847,7 @@ export type CreateArticleMutation = {
             fullName: string;
             businesses: Array<{
               __typename?: 'Business';
+              fullName: string;
               id: string;
               name: string;
             }>;
@@ -38842,6 +38872,7 @@ export type CreateArticleMutation = {
               fullName: string;
               businesses: Array<{
                 __typename?: 'Business';
+                fullName: string;
                 id: string;
                 name: string;
               }>;
@@ -38903,7 +38934,12 @@ export type ArticlesQuery = {
       __typename?: 'User';
       fullName: string;
       id: string;
-      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+      businesses: Array<{
+        __typename?: 'Business';
+        fullName: string;
+        id: string;
+        name: string;
+      }>;
     };
   }>;
 };
@@ -39016,6 +39052,7 @@ export type ArticleQuery = {
             fullName: string;
             businesses: Array<{
               __typename?: 'Business';
+              fullName: string;
               id: string;
               name: string;
             }>;
@@ -39069,6 +39106,7 @@ export type ArticleQuery = {
             fullName: string;
             businesses: Array<{
               __typename?: 'Business';
+              fullName: string;
               id: string;
               name: string;
             }>;
@@ -39093,6 +39131,7 @@ export type ArticleQuery = {
               fullName: string;
               businesses: Array<{
                 __typename?: 'Business';
+                fullName: string;
                 id: string;
                 name: string;
               }>;
@@ -39243,6 +39282,7 @@ export type AddUsersToBusinessMutation = {
       id: string;
       fullName: string;
       status?: string | null;
+      publicName: boolean;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     }>;
   };
@@ -39295,6 +39335,7 @@ export type RemoveUserFromBusinessMutation = {
       id: string;
       fullName: string;
       status?: string | null;
+      publicName: boolean;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     }>;
   };
@@ -39541,6 +39582,7 @@ export type UpdateChatMutation = {
         fullName: string;
         businesses: Array<{
           __typename?: 'Business';
+          fullName: string;
           id: string;
           name: string;
         }>;
@@ -39571,6 +39613,7 @@ export type ChatQuery = {
         firstLetter?: string | null;
         businesses: Array<{
           __typename?: 'Business';
+          fullName: string;
           id: string;
           name: string;
         }>;
@@ -39601,8 +39644,10 @@ export type CreateChatMutation = {
         id: string;
         fullName: string;
         firstLetter?: string | null;
+        origName: string;
         businesses: Array<{
           __typename?: 'Business';
+          fullName: string;
           id: string;
           name: string;
         }>;
@@ -39780,6 +39825,7 @@ export type UpdateCrimeGroupMutation = {
         id: string;
         businesses: Array<{
           __typename?: 'Business';
+          fullName: string;
           id: string;
           name: string;
         }>;
@@ -39886,6 +39932,7 @@ export type CrimeGroupQuery = {
         id: string;
         businesses: Array<{
           __typename?: 'Business';
+          fullName: string;
           id: string;
           name: string;
         }>;
@@ -40051,6 +40098,7 @@ export type CrimeGroupQuery = {
           fullName: string;
           businesses: Array<{
             __typename?: 'Business';
+            fullName: string;
             id: string;
             name: string;
           }>;
@@ -40922,7 +40970,12 @@ export type UpdateGroupMutation = {
       __typename?: 'User';
       id: string;
       fullName: string;
-      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+      businesses: Array<{
+        __typename?: 'Business';
+        fullName: string;
+        id: string;
+        name: string;
+      }>;
     }>;
   } | null;
 };
@@ -40942,7 +40995,12 @@ export type GroupQuery = {
       __typename?: 'User';
       id: string;
       fullName: string;
-      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+      businesses: Array<{
+        __typename?: 'Business';
+        fullName: string;
+        id: string;
+        name: string;
+      }>;
     }>;
   } | null;
 };
@@ -41034,7 +41092,12 @@ export type CreateIncidentMutation = {
       __typename?: 'User';
       id: string;
       fullName: string;
-      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+      businesses: Array<{
+        __typename?: 'Business';
+        fullName: string;
+        id: string;
+        name: string;
+      }>;
     };
     images: Array<{
       __typename?: 'Image';
@@ -41144,7 +41207,12 @@ export type UpdateIncidentMutation = {
       __typename?: 'User';
       id: string;
       fullName: string;
-      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+      businesses: Array<{
+        __typename?: 'Business';
+        fullName: string;
+        id: string;
+        name: string;
+      }>;
     };
     images: Array<{
       __typename?: 'Image';
@@ -42088,6 +42156,7 @@ export type CreateMessageMutation = {
       id: string;
       fullName: string;
       firstLetter?: string | null;
+      origName: string;
     } | null;
     images: Array<{
       __typename?: 'Image';
@@ -42786,6 +42855,7 @@ export type ListOffendersQuery = {
         __typename?: 'Image';
         id: string;
         optimised?: string | null;
+        optimisedPersisted?: string | null;
       }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
       createdBy: {
@@ -43619,12 +43689,14 @@ export type UpdateSchemeMutation = {
       id: string;
       url?: string | null;
       optimised?: string | null;
+      optimisedPersisted?: string | null;
     } | null;
     darkLogo?: {
       __typename?: 'Image';
       id: string;
       url?: string | null;
       optimised?: string | null;
+      optimisedPersisted?: string | null;
     } | null;
   } | null;
 };
@@ -44753,8 +44825,14 @@ export type CurrentUserQuery = {
         name: string;
         autoApproveIncidents: boolean;
         autoApproveOffenders: boolean;
-        logo?: { __typename?: 'Image'; optimised?: string | null } | null;
-        darkLogo?: { __typename?: 'Image'; optimised?: string | null } | null;
+        logo?: {
+          __typename?: 'Image';
+          optimisedPersisted?: string | null;
+        } | null;
+        darkLogo?: {
+          __typename?: 'Image';
+          optimisedPersisted?: string | null;
+        } | null;
       };
     }>;
   } | null;
@@ -45554,6 +45632,7 @@ export const ListActionsDocument = gql`
           id
           fullName
           businesses {
+            fullName
             id
             name
           }
@@ -45672,6 +45751,7 @@ export const CreateArticleDocument = gql`
               id
               fullName
               businesses {
+                fullName
                 id
                 name
               }
@@ -45733,6 +45813,7 @@ export const CreateArticleDocument = gql`
               id
               fullName
               businesses {
+                fullName
                 id
                 name
               }
@@ -45756,6 +45837,7 @@ export const CreateArticleDocument = gql`
                 id
                 fullName
                 businesses {
+                  fullName
                   id
                   name
                 }
@@ -45892,6 +45974,7 @@ export const ArticlesDocument = gql`
       createdBy {
         fullName
         businesses {
+          fullName
           id
           name
         }
@@ -46111,6 +46194,7 @@ export const ArticleDocument = gql`
               id
               fullName
               businesses {
+                fullName
                 id
                 name
               }
@@ -46172,6 +46256,7 @@ export const ArticleDocument = gql`
               id
               fullName
               businesses {
+                fullName
                 id
                 name
               }
@@ -46195,6 +46280,7 @@ export const ArticleDocument = gql`
                 id
                 fullName
                 businesses {
+                  fullName
                   id
                   name
                 }
@@ -46672,6 +46758,7 @@ export const AddUsersToBusinessDocument = gql`
         id
         fullName
         status
+        publicName
         groups(where: $groupWhere) {
           id
           name
@@ -46809,6 +46896,7 @@ export const RemoveUserFromBusinessDocument = gql`
         id
         fullName
         status
+        publicName
         groups(where: $groupWhere) {
           id
           name
@@ -47405,6 +47493,7 @@ export const UpdateChatDocument = gql`
           id
           fullName
           businesses {
+            fullName
             id
             name
           }
@@ -47470,6 +47559,7 @@ export const ChatDocument = gql`
           id
           fullName
           businesses {
+            fullName
             id
             name
           }
@@ -47529,7 +47619,9 @@ export const CreateChatDocument = gql`
           id
           fullName
           firstLetter
+          origName
           businesses {
+            fullName
             id
             name
           }
@@ -47935,6 +48027,7 @@ export const UpdateCrimeGroupDocument = gql`
         createdBy {
           id
           businesses {
+            fullName
             id
             name
           }
@@ -48123,6 +48216,7 @@ export const CrimeGroupDocument = gql`
         createdBy {
           id
           businesses {
+            fullName
             id
             name
           }
@@ -48270,6 +48364,7 @@ export const CrimeGroupDocument = gql`
             id
             fullName
             businesses {
+              fullName
               id
               name
             }
@@ -49673,6 +49768,7 @@ export const UpdateGroupDocument = gql`
         id
         fullName
         businesses {
+          fullName
           id
           name
         }
@@ -49734,6 +49830,7 @@ export const GroupDocument = gql`
         id
         fullName
         businesses {
+          fullName
           id
           name
         }
@@ -49994,6 +50091,7 @@ export const CreateIncidentDocument = gql`
         id
         fullName
         businesses {
+          fullName
           id
           name
         }
@@ -50265,6 +50363,7 @@ export const UpdateIncidentDocument = gql`
         id
         fullName
         businesses {
+          fullName
           id
           name
         }
@@ -51862,6 +51961,7 @@ export const CreateMessageDocument = gql`
         id
         fullName
         firstLetter
+        origName
       }
       sent
       showUser
@@ -53073,6 +53173,7 @@ export const ListOffendersDocument = gql`
         images {
           id
           optimised
+          optimisedPersisted
         }
         groups {
           id
@@ -54548,11 +54649,13 @@ export const UpdateSchemeDocument = gql`
         id
         url
         optimised
+        optimisedPersisted
       }
       darkLogo {
         id
         url
         optimised
+        optimisedPersisted
       }
     }
   }
@@ -56380,10 +56483,10 @@ export const CurrentUserDocument = gql`
         role
         scheme {
           logo {
-            optimised
+            optimisedPersisted
           }
           darkLogo {
-            optimised
+            optimisedPersisted
           }
           id
           name

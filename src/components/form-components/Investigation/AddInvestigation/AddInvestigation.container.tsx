@@ -1,5 +1,5 @@
-import { MutationUpdaterFn } from '@apollo/client';
-import { CreateInvestigationMutation } from 'graphql/generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateInvestigationMutation } from 'graphql/generated';
 import React from 'react';
 import View from './AddInvestigation.view';
 import useAddInvestigation from './useAddInvestigation';

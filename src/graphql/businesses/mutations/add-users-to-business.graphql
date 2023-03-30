@@ -11,6 +11,7 @@ mutation AddUsersToBusiness(
       id
       fullName
       status
+      publicName
       groups(where: $groupWhere) {
         id
         name

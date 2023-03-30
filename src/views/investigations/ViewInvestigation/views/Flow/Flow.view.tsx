@@ -1,15 +1,18 @@
-import React, { DragEvent, useMemo } from 'react';
-import ReactFlow, {
-  Background,
-  BackgroundVariant,
-  Controls,
+import type { DragEvent } from 'react';
+import React, { useMemo } from 'react';
+import type {
   Edge,
-  MiniMap,
   Node,
   OnConnect,
   OnEdgesChange,
   OnNodesChange,
   ReactFlowInstance,
+} from 'reactflow';
+import ReactFlow, {
+  Background,
+  BackgroundVariant,
+  Controls,
+  MiniMap,
 } from 'reactflow';
 import { Button, Card, Spin } from 'antd';
 import OffenderNode from 'components/react-flow/nodes/offender-node';
@@ -106,8 +109,7 @@ FlowProps) => {
   );
 
   const nodeColor = (node: string) => {
-    const nodeIndex =
-      Object.keys(nodeTypes).findIndex((key) => key === node) || 0;
+    const nodeIndex = Object.keys(nodeTypes).indexOf(node) || 0;
     return visualColours[nodeIndex];
   };
 

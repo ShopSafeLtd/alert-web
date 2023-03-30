@@ -1,8 +1,11 @@
 import React from 'react';
 import { Button, Col, Drawer, Input, Row, Table } from 'antd';
-import { CreateVehicleMutation, ListVehiclesQuery } from 'graphql/generated';
+import type {
+  CreateVehicleMutation,
+  ListVehiclesQuery,
+} from 'graphql/generated';
 import { Link } from 'react-router-dom';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

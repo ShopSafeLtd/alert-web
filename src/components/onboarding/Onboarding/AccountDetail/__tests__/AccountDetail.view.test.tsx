@@ -17,6 +17,7 @@ describe('Detail Officer View', () => {
       messagePush: true,
       offenderEmail: true,
       offenderPush: true,
+      publicName: true,
       groups: [
         {
           id: 'test',

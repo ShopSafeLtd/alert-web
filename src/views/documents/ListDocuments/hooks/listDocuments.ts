@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Props as Return } from '../types/Documents';
+import type { Props as Return } from '../types/Documents';
 import { useStoreState } from '../../../../state';
 import {
   Role,

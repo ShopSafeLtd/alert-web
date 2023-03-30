@@ -1,8 +1,8 @@
 import React from 'react';
-import { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
-import { ListOffendersQuery } from 'graphql/generated';
-import { UploadChangeParam } from 'antd/lib/upload';
-import { UploadFile } from 'antd/lib/upload/interface';
+import type { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
+import type { ListOffendersQuery } from 'graphql/generated';
+import type { UploadChangeParam } from 'antd/lib/upload';
+import type { UploadFile } from 'antd/lib/upload/interface';
 import View from './Profiles.view';
 import useProfiles from './useProfiles';
 

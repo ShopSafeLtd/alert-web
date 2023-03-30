@@ -1,10 +1,11 @@
 import React from 'react';
-import {
+import type {
   CreateTagMutation,
   ListCrimeGroupsQuery,
   ListVehiclesQuery,
 } from 'graphql/generated';
 
+import type { FormInstance } from 'antd';
 import {
   Button,
   Card,
@@ -12,7 +13,6 @@ import {
   Drawer,
   Empty,
   Form,
-  FormInstance,
   Input,
   PageHeader,
   Row,
@@ -38,13 +38,13 @@ import {
   faTrash,
   faUpload,
 } from '@fortawesome/pro-light-svg-icons';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 
-import { BanData, CrimeGroupData, VehicleData } from 'types/DataType';
+import type { BanData, CrimeGroupData, VehicleData } from 'types/DataType';
 import Profiles from 'components/offenders/OffenderForm/Profiles';
 import ProfileDrawer from 'components/offenders/OffenderForm/ProfileDrawer';
 import OffenderDetails from 'components/offenders/OffenderForm/OffenderDetails';
-import { FormData } from './useAddOffender';
+import type { FormData } from './useAddOffender';
 
 const { Title, Text, Paragraph } = Typography;
 

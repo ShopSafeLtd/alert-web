@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListOffendersQuery } from 'graphql/generated';
+import type { ListOffendersQuery } from 'graphql/generated';
 import {
   Col,
   Divider,

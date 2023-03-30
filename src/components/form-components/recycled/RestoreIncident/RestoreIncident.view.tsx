@@ -1,5 +1,5 @@
 import React from 'react';
-import { RecycledItemQuery } from 'graphql/generated';
+import type { RecycledItemQuery } from 'graphql/generated';
 import { Button, Col, Row, Skeleton, Descriptions, Popconfirm } from 'antd';
 import moment from 'moment';
 

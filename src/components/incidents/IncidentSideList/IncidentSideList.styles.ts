@@ -1,5 +1,5 @@
 import { createUseStyles } from 'react-jss';
-import { Theme } from 'configs/ThemeConfig';
+import type { Theme } from 'configs/ThemeConfig';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   sideList: {

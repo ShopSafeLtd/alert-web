@@ -2,7 +2,8 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import { createStore, StoreProvider } from 'easy-peasy';
-import { Role, ViewOffenderQuery } from 'graphql/generated';
+import type { ViewOffenderQuery } from 'graphql/generated';
+import { Role } from 'graphql/generated';
 import { storeModel } from 'state/store';
 
 import { OffenderSort } from 'state';

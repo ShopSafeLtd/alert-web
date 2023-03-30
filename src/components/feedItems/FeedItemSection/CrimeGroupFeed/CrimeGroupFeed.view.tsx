@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Row, Typography } from 'antd';
-import { FeedItemsQuery } from 'graphql/generated';
+import type { FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faExclamationCircle,
@@ -95,7 +95,7 @@ const CrimeGroupFeed = ({ feedItem, isNewCrimeGroup }: Props): JSX.Element => {
             </>
           ) : (
             <>
-              {updates && updates.length ? (
+              {updates && updates.length > 0 ? (
                 <UpdateContent
                   title={alias || `Alert ID: ${reference}`}
                   update={updates[0]}

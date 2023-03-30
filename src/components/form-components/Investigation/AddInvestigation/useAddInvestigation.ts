@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import {
-  CreateInvestigationMutation,
-  useCreateInvestigationMutation,
-} from 'graphql/generated';
+import type { CreateInvestigationMutation } from 'graphql/generated';
+import { useCreateInvestigationMutation } from 'graphql/generated';
 import { notification } from 'antd';
 import { useStoreState } from 'state';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 
 export interface InvestigationData {
   id?: string;

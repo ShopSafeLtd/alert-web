@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useRef } from 'react';
-import { ListOffendersQuery } from 'graphql/generated';
+import type { ListOffendersQuery } from 'graphql/generated';
 import {
   Button,
   Carousel,
@@ -37,11 +37,10 @@ import moment from 'moment';
 import OffenderTile from 'components/offenders/OffenderTile';
 import OffenderTileSkeleton from 'components/offenders/OffenderTileSkeleton';
 import Lightbox from 'yet-another-react-lightbox';
-import { CarouselRef } from 'antd/lib/carousel';
+import type { CarouselRef } from 'antd/lib/carousel';
 import { faAngleLeft, faAngleRight } from '@fortawesome/pro-solid-svg-icons';
-import WatermarkSlide, {
-  WatermarkSlideType,
-} from 'components/images/WatermartkSlide.view';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 
 const { Title } = Typography;
@@ -90,7 +89,7 @@ const AddExistingOffender = ({
     if (!data?.listOffenders && loading)
       return (
         <Row wrap gutter={16}>
-          {Array(data?.listOffenders?.total || 24)
+          {Array.from({ length: data?.listOffenders?.total || 24 })
             .fill(0)
             .map(() => (
               <Col span={4} className="offender-item">

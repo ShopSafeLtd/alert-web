@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col, Input, Row, Table } from 'antd';
-import { ListCrimeGroupsQuery } from 'graphql/generated';
+import type { ListCrimeGroupsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import useStyles from './ListCrimeGroups.styles';
 

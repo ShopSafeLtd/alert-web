@@ -14,22 +14,23 @@ import {
   Tooltip,
   Upload,
 } from 'antd';
-import {
+import type {
   ListCrimeGroupsQuery,
   ListIncidentsQuery,
   VehicleQuery,
 } from 'graphql/generated';
-import { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
+import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
 import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import { VehicleData } from './useEditVehicle';
+import type { VehicleData } from './useEditVehicle';
 import useStyles from './EditVehicle.styles';
 
 const { confirm } = Modal;
+
 interface Props {
   onClose: () => void;
   data: VehicleQuery | undefined;
@@ -182,7 +183,7 @@ const EditVehicle = ({
 
         {adminRights && (
           <Row gutter={16}>
-            {!(incidentsData && incidentsData.length) && (
+            {!(incidentsData && incidentsData.length > 0) && (
               <Col>
                 <Button
                   onClick={toggleLinkIncident}
@@ -199,7 +200,7 @@ const EditVehicle = ({
                 </Button>
               </Col>
             )}
-            {!(offendersData && offendersData.length) && (
+            {!(offendersData && offendersData.length > 0) && (
               <Col>
                 <div>
                   <Button
@@ -221,7 +222,7 @@ const EditVehicle = ({
           </Row>
         )}
 
-        {incidentsData && incidentsData.length ? (
+        {incidentsData && incidentsData.length > 0 ? (
           <>
             <Divider>Linked Incidents</Divider>
             <Table
@@ -304,7 +305,7 @@ const EditVehicle = ({
           </>
         ) : null}
 
-        {offendersData && offendersData.length ? (
+        {offendersData && offendersData.length > 0 ? (
           <>
             <Divider>Linked Offenders</Divider>
             <Table

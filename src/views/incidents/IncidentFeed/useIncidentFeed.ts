@@ -1,9 +1,11 @@
+import type {
+  ListIncidentsQuery,
+  RecycleIncidentMutation,
+} from 'graphql/generated';
 import {
   ListIncidentsDocument,
-  ListIncidentsQuery,
   Model,
   QueryMode,
-  RecycleIncidentMutation,
   Role,
   SortOrder,
   useListBusinessesQuery,
@@ -14,7 +16,7 @@ import {
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import { IncidentSort, useStoreActions, useStoreState } from 'state';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 
 interface Return {
@@ -117,24 +119,26 @@ const useIncidentFeed = (): Return => {
         order === IncidentSort.createdAtDesc ? SortOrder.Desc : SortOrder.Asc,
     },
     where: {
-      crimeTypes: crimeTypesFilter.length
-        ? {
-            some: {
-              id: {
-                in: crimeTypesFilter,
+      crimeTypes:
+        crimeTypesFilter.length > 0
+          ? {
+              some: {
+                id: {
+                  in: crimeTypesFilter,
+                },
               },
-            },
-          }
-        : undefined,
-      groups: groupsFilter.length
-        ? {
-            some: {
-              id: {
-                in: groupsFilter,
+            }
+          : undefined,
+      groups:
+        groupsFilter.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groupsFilter,
+                },
               },
-            },
-          }
-        : undefined,
+            }
+          : undefined,
       approved: gallery.includes('APPROVED')
         ? {
             equals: true,
@@ -195,24 +199,26 @@ const useIncidentFeed = (): Return => {
             contains: peculiarities,
           }
         : undefined,
-      business: businessesFilter.length
-        ? {
-            id: {
-              in: businessesFilter,
-            },
-          }
-        : undefined,
-      incidentItems: goodsFilter.length
-        ? {
-            some: {
-              goodsType: {
-                id: {
-                  in: goodsFilter,
+      business:
+        businessesFilter.length > 0
+          ? {
+              id: {
+                in: businessesFilter,
+              },
+            }
+          : undefined,
+      incidentItems:
+        goodsFilter.length > 0
+          ? {
+              some: {
+                goodsType: {
+                  id: {
+                    in: goodsFilter,
+                  },
                 },
               },
-            },
-          }
-        : undefined,
+            }
+          : undefined,
     },
     take: pagination.pageSize,
     skip: pagination.pageSize * (pagination.page - 1),
@@ -268,8 +274,9 @@ const useIncidentFeed = (): Return => {
             },
           },
           users:
-            role !== Role.SchemeAdmin
-              ? {
+            role === Role.SchemeAdmin
+              ? undefined
+              : {
                   some: {
                     groups: {
                       some: {
@@ -279,8 +286,7 @@ const useIncidentFeed = (): Return => {
                       },
                     },
                   },
-                }
-              : undefined,
+                },
         },
       },
     });

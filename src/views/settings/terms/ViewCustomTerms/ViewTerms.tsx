@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Card } from 'antd';
-import { ReturnProps as Props } from './types/ViewCustomTerms';
+import type { ReturnProps as Props } from './types/ViewCustomTerms';
 
 const ViewTerms = ({ data, loading, isAdmin, editTerms }: Props) => (
   <>

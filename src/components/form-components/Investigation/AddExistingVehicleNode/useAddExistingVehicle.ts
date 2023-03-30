@@ -1,12 +1,8 @@
 import { useState } from 'react';
 
-import {
-  ListVehiclesQuery,
-  QueryMode,
-  SortOrder,
-  useListVehiclesQuery,
-} from 'graphql/generated';
-import { Vehicle } from '../../../react-flow/nodes/vehicle-node';
+import type { ListVehiclesQuery } from 'graphql/generated';
+import { QueryMode, SortOrder, useListVehiclesQuery } from 'graphql/generated';
+import type { Vehicle } from '../../../react-flow/nodes/vehicle-node';
 
 interface Props {
   onClose: () => void;

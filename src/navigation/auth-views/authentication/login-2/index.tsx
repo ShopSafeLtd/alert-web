@@ -1,7 +1,8 @@
 import React from 'react';
 import { Row, Col } from 'antd';
 import { useStoreState } from 'state';
-import { LoginForm, Props } from '../../components/LoginForm';
+import type { Props } from '../../components/LoginForm';
+import { LoginForm } from '../../components/LoginForm';
 
 const backgroundURL = '/img/others/img-17.jpg';
 const backgroundStyle = {

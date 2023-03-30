@@ -24,10 +24,10 @@ query currentUser {
       role
       scheme {
         logo {
-          optimised
+          optimisedPersisted
         }
         darkLogo {
-          optimised
+          optimisedPersisted
         }
         id
         name

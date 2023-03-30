@@ -1,5 +1,5 @@
 import React from 'react';
-import {
+import type {
   Age,
   Build,
   Gender,
@@ -11,16 +11,15 @@ import {
 import { Affix, Button, Card, Col, Drawer, Input, Pagination, Row } from 'antd';
 import OffenderCard from 'components/offenders/OffenderCard';
 import OffenderSkeletonCard from 'components/offenders/OffenderSkeletonCard/OffenderSkeletonCard.view';
-import { OffenderSort } from 'state';
+import type { OffenderSort } from 'state';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faPlus } from '@fortawesome/pro-light-svg-icons';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
-import WatermarkSlide, {
-  WatermarkSlideType,
-} from 'components/images/WatermartkSlide.view';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import OffenderFilter from 'components/offenders/OffenderFilter';
 // import useStyles from './OffenderFeed.styles';
 

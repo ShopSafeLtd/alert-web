@@ -1,11 +1,13 @@
-import {
+import type {
   DeleteFeedItemMutation,
-  FeedItemsDocument,
   FeedItemsQuery,
   ListArticlesQuery,
   ListOffendersQuery,
   ListUnapprovedIncidentsQuery,
   Model,
+} from 'graphql/generated';
+import {
+  FeedItemsDocument,
   QueryMode,
   Role,
   SortOrder,
@@ -19,9 +21,9 @@ import {
 import { useEffect, useState } from 'react';
 import { FeedItemSort, useStoreActions, useStoreState } from 'state';
 import { useNavigate } from 'react-router-dom';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
-import { PaginationModel } from 'types/DataType';
+import type { PaginationModel } from 'types/DataType';
 
 interface Return {
   data: FeedItemsQuery | undefined;
@@ -104,15 +106,16 @@ const useFeedItems = (): Return => {
       //       lte: filterCreatedAt.endDate,
       //     }
       //   : undefined,
-      groups: groupsFilter.length
-        ? {
-            some: {
-              id: {
-                in: groupsFilter,
+      groups:
+        groupsFilter.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groupsFilter,
+                },
               },
-            },
-          }
-        : undefined,
+            }
+          : undefined,
 
       model:
         typesFilter.length > 0

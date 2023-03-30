@@ -16,7 +16,8 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { CrimeGroupQuery, UpdateType } from 'graphql/generated';
+import type { CrimeGroupQuery } from 'graphql/generated';
+import { UpdateType } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBell,
@@ -34,12 +35,13 @@ import AddExistingVehicle from 'components/form-components/crimeGroup/vehicle/Ad
 import AddAlias from 'components/form-components/crimeGroup/Alias';
 
 import UpdateContent from 'views/incidents/ViewIncident/Update.view';
-import UpdateBar from 'components/MessageInput/update-bar';
+import UpdateBar from 'components/MessageInput/UpdateBar';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import useStyles from './ViewCrimeGroup.styles';
 
 const { Title } = Typography;
 const { confirm } = Modal;
+
 interface Props {
   data: CrimeGroupQuery | undefined;
   loading: boolean;

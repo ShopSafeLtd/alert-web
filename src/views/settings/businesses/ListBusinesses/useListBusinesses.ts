@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import type { ListBusinessesQuery } from 'graphql/generated';
 import {
-  ListBusinessesQuery,
   QueryMode,
   SortOrder,
   useListBusinessesQuery,

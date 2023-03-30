@@ -11,7 +11,7 @@ import {
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faUpload, faUsers } from '@fortawesome/pro-light-svg-icons';
-import { UploadProps, RcFile, UploadFile } from 'antd/es/upload/interface';
+import type { UploadProps, RcFile, UploadFile } from 'antd/es/upload/interface';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 
 const { Title, Paragraph, Text } = Typography;

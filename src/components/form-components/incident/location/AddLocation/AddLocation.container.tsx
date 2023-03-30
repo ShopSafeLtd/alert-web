@@ -1,5 +1,5 @@
 import React from 'react';
-import { LocationData } from 'types/DataType';
+import type { LocationData } from 'types/DataType';
 import useAddOffender from './useAddLocation';
 import View from './AddLocation.view';
 

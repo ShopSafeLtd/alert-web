@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-import {
+import type {
   Age,
   Build,
   Gender,
   Race,
+  ViewIncidentQuery,
+  ViewIncidentQueryVariables,
+} from 'graphql/generated';
+import {
   Role,
   useAddImagesToIncidentMutation,
   useDeleteUpdateMutation,
@@ -15,8 +19,6 @@ import {
   useUpdateUpdateMutation,
   useViewIncidentQuery,
   ViewIncidentDocument,
-  ViewIncidentQuery,
-  ViewIncidentQueryVariables,
 } from 'graphql/generated';
 import update from 'immutability-helper';
 
@@ -25,7 +27,7 @@ import { Modal, notification } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit } from '@fortawesome/pro-solid-svg-icons';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
-import { ItemType } from 'antd/lib/menu/hooks/useItems';
+import type { ItemType } from 'antd/lib/menu/hooks/useItems';
 import { useNavigate } from 'react-router';
 
 const { confirm } = Modal;
@@ -414,11 +416,9 @@ const useViewIncident = (incidentId: string): Return => {
                 data: {
                   incident: {
                     ...oldData.incident,
-                    updates: [
-                      ...oldData.incident.updates.filter(
-                        (item) => item.id !== result.data?.deleteUpdate?.id
-                      ),
-                    ],
+                    updates: oldData.incident.updates.filter(
+                      (item) => item.id !== result.data?.deleteUpdate?.id
+                    ),
                   },
                 },
               });

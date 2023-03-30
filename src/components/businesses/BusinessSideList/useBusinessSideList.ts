@@ -1,8 +1,5 @@
-import {
-  ListBusinessesQuery,
-  SortOrder,
-  useListBusinessesQuery,
-} from 'graphql/generated';
+import type { ListBusinessesQuery } from 'graphql/generated';
+import { SortOrder, useListBusinessesQuery } from 'graphql/generated';
 import { useState } from 'react';
 import { useStoreState } from 'state';
 

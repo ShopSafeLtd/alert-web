@@ -1,5 +1,5 @@
-import { MutationUpdaterFn } from '@apollo/client';
-import { CreateVehicleMutation } from 'graphql/generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateVehicleMutation } from 'graphql/generated';
 import React from 'react';
 import View from './AddVehicle.view';
 import useAddVehicle from './useAddVehicle';

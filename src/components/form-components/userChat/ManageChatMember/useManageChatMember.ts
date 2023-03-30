@@ -1,28 +1,31 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
 import {
-  // ChatQuery,
   SortOrder,
+  useChatQuery,
   useListSchemeUsersQuery,
   useUpdateChatMutation,
-  useChatQuery,
 } from 'graphql/generated';
 import { Modal, notification } from 'antd';
 
 const { confirm } = Modal;
+
 interface FormData {
   user: string[];
 }
+
 interface MemberData {
   id: string;
   fullName: string;
   businesses: { id: string; name: string }[];
   firstLetter?: string | null;
 }
+
 interface Props {
   onClose: () => void;
   chatId: string;
 }
+
 interface Return {
   onSubmit: () => void;
   addMemberUpdate: (value: FormData) => void;
@@ -111,7 +114,7 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
       .map((userChat) => userChat);
     if (addData && addData.length > 0) {
       if (membersData && membersData.length > 0) {
-        setMembersData(membersData.concat(addData));
+        setMembersData([...membersData, ...addData]);
       } else {
         setMembersData(addData);
       }

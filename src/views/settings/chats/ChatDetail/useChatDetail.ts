@@ -1,9 +1,6 @@
 import { useState } from 'react';
-import {
-  useChatQuery,
-  ChatQuery,
-  useDeleteChatMutation,
-} from 'graphql/generated';
+import type { ChatQuery } from 'graphql/generated';
+import { useChatQuery, useDeleteChatMutation } from 'graphql/generated';
 
 import { notification, Modal } from 'antd';
 

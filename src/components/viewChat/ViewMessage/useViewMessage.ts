@@ -1,48 +1,47 @@
 import { useEffect, useState } from 'react';
-import {
+import type {
+  Age,
+  Build,
+  ChatMessagesQuery,
+  ChatMessagesQueryVariables,
   ChatQuery,
   CreateMessageMutation,
-  DeleteMessageMutation,
   DeleteChatMutation,
+  DeleteMessageMutation,
+  Gender,
+  Race,
+  UserChatsQuery,
+  UserChatsQueryVariables,
+} from 'graphql/generated';
+import {
+  ChatMessagesDocument,
+  MessageItemType,
   MessagesSubscriptionDocument,
   Role,
+  SortOrder,
+  useChatMessagesQuery,
   useChatQuery,
   useCreateMessageMutation,
   useDeleteChatMutation,
   useDeleteMessageMutation,
-  SortOrder,
-  useListIncidentsQuery,
-  Age,
-  Gender,
-  Race,
-  Build,
-  useChatMessagesQuery,
-  ChatMessagesQuery,
-  ChatMessagesDocument,
-  ChatMessagesQueryVariables,
-  MessageItemType,
-  UserChatsQuery,
-  UserChatsQueryVariables,
-  UserChatsDocument,
-  // useListVehiclesQuery,
   useListCrimeGroupsQuery,
+  useListIncidentsQuery,
+  UserChatsDocument,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
-import {
-  notification,
-  Form,
-  FormInstance,
-  Modal,
-  message,
-  Upload,
-  Mentions,
-} from 'antd';
-import { MutationUpdaterFn, useApolloClient } from '@apollo/client';
+import type { FormInstance } from 'antd';
+import { Form, Mentions, message, Modal, notification, Upload } from 'antd';
+import type { MutationUpdaterFn } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import moment from 'moment';
 import update from 'immutability-helper';
-import { CrimeGroupData, IncidentsData, VehicleData } from 'types/DataType';
+import type {
+  CrimeGroupData,
+  IncidentsData,
+  VehicleData,
+} from 'types/DataType';
 
 const { confirm } = Modal;
 const { getMentions } = Mentions;
@@ -52,6 +51,7 @@ interface Props {
   chatId: string;
   updateUserChatList: MutationUpdaterFn<DeleteChatMutation>;
 }
+
 export interface OffenderData {
   id: string;
   updatedAt?: Date;
@@ -81,12 +81,14 @@ export interface OffenderData {
   }[];
   imageUid?: string[] | undefined;
 }
+
 interface MemberData {
   id: string;
   fullName: string;
   businesses: { id: string; name: string }[];
   firstLetter?: string | null;
 }
+
 interface Return {
   onSubmit: () => void;
   data: ChatMessagesQuery | undefined;
@@ -140,6 +142,14 @@ interface Return {
   setMessageSent: (value: boolean) => void;
 }
 
+// TODO: create generic and import it as this is used a lot
+const errorNotification = () =>
+  notification.error({
+    message: 'Error!',
+    description: 'Whoops, there are some errors. Please try again. ',
+    placement: 'bottomRight',
+  });
+
 const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const apolloStore = useApolloClient();
 
@@ -179,13 +189,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   useEffect(() => {
     setLoading(true);
   }, [chatId]);
-
-  const errorNotification = () =>
-    notification.error({
-      message: 'Error!',
-      description: 'Whoops, there are some errors. Please try again. ',
-      placement: 'bottomRight',
-    });
 
   const { subscribeToMore, data, fetchMore } = useChatMessagesQuery({
     fetchPolicy: 'cache-and-network',
@@ -738,7 +741,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       src = await new Promise((resolve) => {
         const reader = new FileReader();
         reader.readAsDataURL(file.originFileObj as RcFile);
-        reader.onload = () => resolve(reader.result as string);
+        reader.addEventListener('load', () => resolve(reader.result as string));
       });
     }
     const image = new Image();
@@ -769,34 +772,32 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     update: updateData,
   });
 
-  const onSubmit = async () => {
-    const getText = (text: string) => {
-      const mentions = getMentions(text);
-      let newText = text;
+  const getText = (text: string) => {
+    const mentions = getMentions(text);
+    let newText = text;
 
-      for (let i = 0; i < mentions.length; i++) {
-        const mention = mentions[i];
-
-        const mentioned = membersData?.find(
-          (member) => mention.value === member.fullName
+    // eslint-disable-next-line no-restricted-syntax
+    for (const mention of mentions) {
+      const mentioned = membersData?.find(
+        (member) => mention.value === member.fullName
+      );
+      if (mentioned)
+        newText = newText.replace(
+          `@${mention.value}`,
+          `@[${mentioned.fullName}](${mentioned.id})`
         );
-        if (mentioned)
-          newText = newText.replace(
-            `@${mention.value}`,
-            `@[${mentioned.fullName}](${mentioned.id})`
-          );
-      }
+    }
 
-      return newText;
-    };
-
+    return newText;
+  };
+  const onSubmit = async () => {
     if (
-      !inputStr.length &&
-      !fileList.length &&
-      !(incidentsData && incidentsData.length) &&
-      !offendersData.length &&
-      !vehiclesData.length &&
-      !crimeGroupsData.length
+      inputStr.length === 0 &&
+      fileList.length === 0 &&
+      !(incidentsData && incidentsData.length > 0) &&
+      offendersData.length === 0 &&
+      vehiclesData.length === 0 &&
+      crimeGroupsData.length === 0
     ) {
       message.info('The message cannot be empty!');
     } else {
@@ -850,13 +851,13 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
             },
             vehicles: {
               connect:
-                vehiclesData && vehiclesData.length
+                vehiclesData && vehiclesData.length > 0
                   ? vehiclesData.map(({ id }) => ({ id }))
                   : undefined,
             },
             crimeGroups: {
               connect:
-                crimeGroupsData && crimeGroupsData.length
+                crimeGroupsData && crimeGroupsData.length > 0
                   ? crimeGroupsData.map(({ id }) => ({ id }))
                   : undefined,
             },

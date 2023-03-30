@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
-import {
-  ListCrimeGroupsDocument,
+import type {
   ListCrimeGroupsQuery,
   ListCrimeGroupsQueryVariables,
   ListOffendersQuery,
   SearchOffendersQuery,
+} from 'graphql/generated';
+import {
+  ListCrimeGroupsDocument,
   SortOrder,
   useCreateCrimeGroupMutation,
   useListOffendersQuery,

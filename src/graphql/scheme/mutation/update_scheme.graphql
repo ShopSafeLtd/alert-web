@@ -17,11 +17,12 @@ mutation updateScheme($where: UniqueId!, $data: SchemeUpdateInput!) {
             id
             url
             optimised
+            optimisedPersisted
         }
         darkLogo {
             id
             url
             optimised
-        }
+            optimisedPersisted        }
     }
 }

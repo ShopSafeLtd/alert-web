@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListBusinessesQuery } from 'graphql/generated';
+import type { ListBusinessesQuery } from 'graphql/generated';
 import { Divider, Pagination, Skeleton, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import useStyles from './BusinessSideList.styles';

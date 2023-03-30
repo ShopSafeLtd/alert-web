@@ -299,6 +299,7 @@ const UseEditUserTest = () => {
             fullName: 'fullName',
             email: 'email',
             role: Role.User,
+            publicName: true,
             business: {
               value: '',
               label: '',

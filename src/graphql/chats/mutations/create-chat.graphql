@@ -12,6 +12,7 @@ mutation createChat($data: ChatCreateInput!) {
         id
         fullName
         firstLetter
+        origName
         businesses {
           fullName
           id

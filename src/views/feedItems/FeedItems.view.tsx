@@ -1,12 +1,12 @@
 import React from 'react';
-import {
+import type {
   FeedItemsQuery,
-  FeedItemType,
   ListArticlesQuery,
   ListOffendersQuery,
   ListUnapprovedIncidentsQuery,
   Model,
 } from 'graphql/generated';
+import { FeedItemType } from 'graphql/generated';
 import {
   Button,
   Card,
@@ -41,11 +41,11 @@ import IncidentFeed from 'components/feedItems/FeedItemSection/IncidentFeed';
 import OffenderFeed from 'components/feedItems/FeedItemSection/OffenderFeed';
 import ArticleFeed from 'components/feedItems/FeedItemSection/ArticleFeed';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
-import { PaginationModel } from 'types/DataType';
+import type { PaginationModel } from 'types/DataType';
 import InvestigationFeed from 'components/feedItems/FeedItemSection/investigationFeed';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import FeedItemFilter from 'components/feedItems/FeedItemFilter';
-import { FeedItemSort } from 'state';
+import type { FeedItemSort } from 'state';
 import VehicleFeed from 'components/feedItems/FeedItemSection/VehicleFeed';
 import CrimeGroupFeed from 'components/feedItems/FeedItemSection/CrimeGroupFeed';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';

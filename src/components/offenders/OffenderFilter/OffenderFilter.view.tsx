@@ -1,12 +1,7 @@
 import React from 'react';
 import { Button, Col, Input, Row, Select, Typography } from 'antd';
-import {
-  Age,
-  Build,
-  Gender,
-  Race,
-  SearchBusinessesQuery,
-} from 'graphql/generated';
+import type { SearchBusinessesQuery } from 'graphql/generated';
+import { Age, Build, Gender, Race } from 'graphql/generated';
 import { OffenderSort } from 'state';
 import useStyles from './OffenderFilter.styles';
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
+import type { ListCrimeGroupsQuery } from 'graphql/generated';
 import {
-  ListCrimeGroupsQuery,
   QueryMode,
   SortOrder,
   useListCrimeGroupsQuery,

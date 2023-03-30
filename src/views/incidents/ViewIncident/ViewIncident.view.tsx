@@ -1,15 +1,14 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import {
+import type {
   Age,
   Build,
-  CrimeType,
   Gender,
   Race,
-  UpdateType,
   ViewIncidentQuery,
 } from 'graphql/generated';
+import { CrimeType, UpdateType } from 'graphql/generated';
 import {
   Button,
   Checkbox,
@@ -48,16 +47,15 @@ import {
 } from 'utils/offender/get-offender-desc';
 import { Link } from 'react-router-dom';
 import IncidentSideList from 'components/incidents/IncidentSideList';
-import UpdateBar from 'components/MessageInput/update-bar';
+import UpdateBar from 'components/MessageInput/UpdateBar';
 import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
-import { ItemType } from 'antd/lib/menu/hooks/useItems';
+import type { ItemType } from 'antd/lib/menu/hooks/useItems';
 import { useNavigate } from 'react-router';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import WatermarkSlide, {
-  WatermarkSlideType,
-} from 'components/images/WatermartkSlide.view';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import UpdateContent from './Update.view';
 import useStyles from './ViewIncident.styles';

@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
-import { action, Action } from 'easy-peasy';
+import type { Action } from 'easy-peasy';
+import { action } from 'easy-peasy';
 
 export interface SetSchemePayload {
   name: string;

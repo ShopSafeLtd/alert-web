@@ -1,26 +1,29 @@
 import { useState } from 'react';
-import {
+import type {
   Age,
   Build,
   CreateTagMutation,
   Gender,
-  Model,
   OffenderUpdateInput,
   Race,
+  TagsQuery,
+  ViewOffenderQuery,
+} from 'graphql/generated';
+import {
+  Model,
   Role,
   TagsDocument,
-  TagsQuery,
   useRecycleOffenderMutation,
   useSchemeGroupsQuery,
   useTagsQuery,
   useUpdateOffenderMutation,
   useViewOffenderQuery,
-  ViewOffenderQuery,
 } from 'graphql/generated';
-import { Form, FormInstance, message, Modal, notification, Upload } from 'antd';
+import type { FormInstance } from 'antd';
+import { Form, message, Modal, notification, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router';
 
 export interface OffenderData {
@@ -123,6 +126,13 @@ interface Return {
   setSelectedItems: (value: string[]) => void;
 }
 
+const errorNotification = () => {
+  notification.error({
+    message: 'error!',
+    description: 'Whoops, there are some errors. Please try again. ',
+    placement: 'bottomRight',
+  });
+};
 const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   const navigate = useNavigate();
   const [form] = Form.useForm<FormData>();
@@ -146,14 +156,6 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   const [bansData, setBansData] = useState<BanData[]>([]);
   const [banData, setBanData] = useState<BanData | null>(null);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
-
-  const errorNotification = () => {
-    notification.error({
-      message: 'error!',
-      description: 'Whoops, there are some errors. Please try again. ',
-      placement: 'bottomRight',
-    });
-  };
 
   const { data: offenderData, loading } = useViewOffenderQuery({
     variables: {
@@ -463,7 +465,7 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
       src = await new Promise((resolve) => {
         const reader = new FileReader();
         reader.readAsDataURL(file.originFileObj as RcFile);
-        reader.onload = () => resolve(reader.result as string);
+        reader.addEventListener('load', () => resolve(reader.result as string));
       });
     }
     const image = new Image();
@@ -495,7 +497,7 @@ const useEditOffender = ({ offenderId, onClose, update }: Props): Return => {
   };
   const updateExclusion = (value: BanData) => {
     if (bansData && bansData.length > 0) {
-      if (bansData.find(({ id }) => id === value.id)) {
+      if (bansData.some(({ id }) => id === value.id)) {
         setBansData(
           bansData.map((ban) => {
             if (ban.id === value.id) {

@@ -1,18 +1,36 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { NavItem } from 'configs/NavigationConfig';
+import type { NavItem } from 'configs/NavigationConfig';
 
-class Utils {
+function cutHex(h: string) {
+  return h.charAt(0) === '#' ? h.slice(1, 7) : h;
+}
+
+function hexToR(h: string) {
+  return Number.parseInt(cutHex(h).slice(0, 2), 16);
+}
+
+function hexToG(h: string) {
+  return Number.parseInt(cutHex(h).slice(2, 4), 16);
+}
+
+function hexToB(h: string) {
+  return Number.parseInt(cutHex(h).slice(4, 6), 16);
+}
+
+const trim = (str: string) => str.replace(/^\s+|\s+$/gm, '');
+
+const Utils = {
   /**
    * Get first character from first & last sentences of a username
    * @param {String} name - Username
    * @return {String} 2 characters string
    */
-  static getNameInitial(name: string) {
+  getNameInitial(name: string) {
     const initials = name.match(/\b\w/g) || [];
     return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
-  }
+  },
 
   /**
    * Get current path related object from Navigation Tree
@@ -20,32 +38,21 @@ class Utils {
    * @param {String} path - Location path you looking for e.g '/app/dashboards/analytic'
    * @return {Object} object that contained the path string
    */
-  static getRouteInfo(navTree: NavItem[], path: string): NavItem {
+  getRouteInfo(navTree: NavItem[], path: string): NavItem {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     return navTree.find((route) => path.includes(route.path))!;
-  }
+  },
 
   /**
    * Get accessible color contrast
    * @param {String} hex - Hex color code e.g '#3e82f7'
    * @return {String} 'dark' or 'light'
    */
-  static getColorContrast(hex: string): 'light' | 'dark' {
+  getColorContrast(hex: string): 'light' | 'dark' {
     if (!hex) {
       return 'dark';
     }
-    function cutHex(h: string) {
-      return h.charAt(0) === '#' ? h.substring(1, 7) : h;
-    }
-    function hexToR(h: string) {
-      return parseInt(cutHex(h).substring(0, 2), 16);
-    }
-    function hexToG(h: string) {
-      return parseInt(cutHex(h).substring(2, 4), 16);
-    }
-    function hexToB(h: string) {
-      return parseInt(cutHex(h).substring(4, 6), 16);
-    }
+
     const threshold = 130;
     const hRed = hexToR(hex);
     const hGreen = hexToG(hex);
@@ -56,7 +63,7 @@ class Utils {
       return 'dark';
     }
     return 'light';
-  }
+  },
 
   /**
    * Darken or lighten a hex color
@@ -64,13 +71,13 @@ class Utils {
    * @param {Number} percent - Percentage -100 to 100, positive for lighten, negative for darken
    * @return {String} Darken or lighten color
    */
-  static shadeColor(color: string, percent: number) {
-    let R = parseInt(color.substring(1, 3), 16);
-    let G = parseInt(color.substring(3, 5), 16);
-    let B = parseInt(color.substring(5, 7), 16);
-    R = parseInt(`${(R * (100 + percent)) / 100}`, 10);
-    G = parseInt(`${(G * (100 + percent)) / 100}`, 10);
-    B = parseInt(`${(B * (100 + percent)) / 100}`, 10);
+  shadeColor(color: string, percent: number) {
+    let R = Number.parseInt(color.slice(1, 3), 16);
+    let G = Number.parseInt(color.slice(3, 5), 16);
+    let B = Number.parseInt(color.slice(5, 7), 16);
+    R = Number.parseInt(`${(R * (100 + percent)) / 100}`, 10);
+    G = Number.parseInt(`${(G * (100 + percent)) / 100}`, 10);
+    B = Number.parseInt(`${(B * (100 + percent)) / 100}`, 10);
     R = R < 255 ? R : 255;
     G = G < 255 ? G : 255;
     B = B < 255 ? B : 255;
@@ -81,23 +88,22 @@ class Utils {
     const BB =
       B.toString(16).length === 1 ? `0${B.toString(16)}` : B.toString(16);
     return `#${RR}${GG}${BB}`;
-  }
+  },
 
   /**
    * Convert RGBA to HEX
    * @param {String} rgba - RGBA color code e.g 'rgba(197, 200, 198, .2)')'
    * @return {String} HEX color
    */
-  static rgbaToHex(rgba: string) {
-    const trim = (str: string) => str.replace(/^\s+|\s+$/gm, '');
-    const inParts = rgba.substring(rgba.indexOf('(')).split(',');
-    const r = parseInt(trim(inParts[0].substring(1)), 10);
-    const g = parseInt(trim(inParts[1]), 10);
-    const b = parseInt(trim(inParts[2]), 10);
-    const a = parseInt(
-      parseFloat(trim(inParts[3].substring(0, inParts[3].length - 1))).toFixed(
-        2
-      ),
+  rgbaToHex(rgba: string) {
+    const inParts = rgba.slice(Math.max(0, rgba.indexOf('('))).split(',');
+    const r = Number.parseInt(trim(inParts[0].slice(1)), 10);
+    const g = Number.parseInt(trim(inParts[1]), 10);
+    const b = Number.parseInt(trim(inParts[2]), 10);
+    const a = Number.parseInt(
+      Number.parseFloat(
+        trim(inParts[3].slice(0, Math.max(0, inParts[3].length - 1)))
+      ).toFixed(2),
       10
     );
     const outParts = [
@@ -106,16 +112,17 @@ class Utils {
       b.toString(16),
       Math.round(a * 255)
         .toString(16)
-        .substring(0, 2),
+        .slice(0, 2),
     ];
 
-    outParts.forEach((part, i) => {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const [i, part] of outParts.entries()) {
       if (part.length === 1) {
         outParts[i] = `0${part}`;
       }
-    });
+    }
     return `#${outParts.join('')}`;
-  }
+  },
 
   /**
    * Returns either a positive or negative
@@ -124,7 +131,7 @@ class Utils {
    * @param {any} negative - value that return when negative
    * @return {any} positive or negative value based on param
    */
-  static getSignNum(number: number, positive: any, negative: any) {
+  getSignNum(number: number, positive: any, negative: any) {
     if (number > 0) {
       return positive;
     }
@@ -132,7 +139,7 @@ class Utils {
       return negative;
     }
     return null;
-  }
+  },
 
   /**
    * Returns either ascending or descending value
@@ -142,7 +149,7 @@ class Utils {
    * @return {any} a value minus b value
    */
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  static antdTableSorter(a: any, b: any, key: string) {
+  antdTableSorter(a: any, b: any, key: string) {
     if (typeof a[key] === 'number' && typeof b[key] === 'number') {
       return a[key] - b[key];
     }
@@ -155,7 +162,7 @@ class Utils {
       return 0;
     }
     return 0;
-  }
+  },
 
   /**
    * Filter array of object
@@ -165,13 +172,13 @@ class Utils {
    * @return {Array} a value minus b value
    */
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  static filterArray(list: any[], key: string, value: any) {
+  filterArray(list: any[], key: string, value: any) {
     let data = list;
     if (list) {
       data = list.filter((item) => item[key] === value);
     }
     return data;
-  }
+  },
 
   /**
    * Remove object from array by value
@@ -180,13 +187,13 @@ class Utils {
    * @param {any} value  - target value
    * @return {Array} Array that removed target object
    */
-  static deleteArrayRow(list: any[], key: string, value: any) {
+  deleteArrayRow(list: any[], key: string, value: any) {
     let data = list;
     if (list) {
       data = list.filter((item) => item[key] !== value);
     }
     return data;
-  }
+  },
 
   /**
    * Wild card search on all property of the object
@@ -194,7 +201,7 @@ class Utils {
    * @param {Array} list - array for search
    * @return {Array} array of object contained keyword
    */
-  static wildCardSearch(list: any[], input: number | string) {
+  wildCardSearch(list: any[], input: number | string) {
     // eslint-disable-next-line consistent-return
     const searchText = (item: any) => {
       // eslint-disable-next-line no-restricted-syntax
@@ -207,7 +214,7 @@ class Utils {
           item[key]
             .toString()
             .toUpperCase()
-            .indexOf(input.toString().toUpperCase()) !== -1
+            .includes(input.toString().toUpperCase())
         ) {
           return true;
         }
@@ -215,14 +222,14 @@ class Utils {
     };
     list = list.filter((value) => searchText(value));
     return list;
-  }
+  },
 
   /**
    * Get Breakpoint
    * @param {Object} screens - Grid.useBreakpoint() from antd
    * @return {Array} array of breakpoint size
    */
-  static getBreakPoint(screens: any) {
+  getBreakPoint(screens: any) {
     const breakpoints = [];
     // eslint-disable-next-line no-restricted-syntax
     for (const key in screens) {
@@ -235,8 +242,8 @@ class Utils {
       }
     }
     return breakpoints;
-  }
-}
+  },
+};
 
 export enum LocalStorageKeys {
   HYTALK_SYNC_TIMESTAMP = 'HYTALK_SYNC_TIMESTAMP',

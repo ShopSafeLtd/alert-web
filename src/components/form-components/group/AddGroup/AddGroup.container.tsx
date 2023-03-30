@@ -1,5 +1,5 @@
-import { MutationUpdaterFn } from '@apollo/client';
-import { CreateGroupMutation } from 'graphql/generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateGroupMutation } from 'graphql/generated';
 import React from 'react';
 import View from './AddGroup.view';
 import useAddGroup from './useAddGroup';

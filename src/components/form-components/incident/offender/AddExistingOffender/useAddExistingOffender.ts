@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
 
-import {
+import type {
   Age,
   Build,
   Gender,
   ListOffendersQuery,
-  QueryMode,
   Race,
-  SortOrder,
-  useListOffendersQuery,
 } from 'graphql/generated';
+import { QueryMode, SortOrder, useListOffendersQuery } from 'graphql/generated';
 import { useStoreState } from 'state';
 
 export interface OffenderData {
@@ -212,29 +210,28 @@ const useAddExistingOffender = ({
     setSaving(true);
     if (
       data?.listOffenders?.offenders &&
-      data.listOffenders.offenders.length > 0
+      data.listOffenders.offenders.length > 0 &&
+      selectedOffender
     ) {
-      if (selectedOffender) {
-        update({
-          id: selectedOffender.id,
-          updatedAt: selectedOffender.updatedAt,
-          name: selectedOffender.name || 'Unidentified Offender',
-          age: selectedOffender.age || null,
-          gender: selectedOffender.gender || null,
-          race: selectedOffender.race || null,
-          build: selectedOffender.build || null,
-          dateOfBirth: selectedOffender.dateOfBirth || null,
-          hair: selectedOffender.hair,
-          peculiarities: selectedOffender.peculiarities,
-          tags: selectedOffender.tags,
-          lastActive: selectedOffender.lastActive || null,
-          images:
-            selectedOffender.images.map(({ id, optimised }) => ({
-              id,
-              optimised,
-            })) || null,
-        });
-      }
+      update({
+        id: selectedOffender.id,
+        updatedAt: selectedOffender.updatedAt,
+        name: selectedOffender.name || 'Unidentified Offender',
+        age: selectedOffender.age || null,
+        gender: selectedOffender.gender || null,
+        race: selectedOffender.race || null,
+        build: selectedOffender.build || null,
+        dateOfBirth: selectedOffender.dateOfBirth || null,
+        hair: selectedOffender.hair,
+        peculiarities: selectedOffender.peculiarities,
+        tags: selectedOffender.tags,
+        lastActive: selectedOffender.lastActive || null,
+        images:
+          selectedOffender.images.map(({ id, optimised }) => ({
+            id,
+            optimised,
+          })) || null,
+      });
     }
     setSaving(false);
     onClose();

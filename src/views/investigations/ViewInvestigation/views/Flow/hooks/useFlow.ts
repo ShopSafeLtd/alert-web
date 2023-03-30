@@ -1,35 +1,29 @@
-import React, {
-  DragEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
-import {
+import type { DragEvent } from 'react';
+import type React from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type {
   Edge,
   Node,
   OnConnect,
   OnEdgesChange,
   OnNodesChange,
   ReactFlowInstance,
-  useReactFlow,
 } from 'reactflow';
+import { useReactFlow } from 'reactflow';
 import moment from 'moment/moment';
 import { useDebouncedCallback } from 'use-debounce';
 
-import { YMap } from 'yjs/dist/src/internals';
+import type { YMap } from 'yjs/dist/src/internals';
 import { useUsers } from 'y-presence';
-import { WebsocketProvider } from 'y-websocket';
+import type { WebsocketProvider } from 'y-websocket';
 import useWebRtcProvider from './useWebRtcProvidor';
 import useNodesStateSynced from './useNodesStateSynced';
 import useEdgesStateSynced from './useEdgesStateSynced';
 import { useStoreState } from '../../../../../../state';
 import useObservableListener from './useObservableListener';
 import styles from '../style.module.css';
-import {
-  useUpdateFlowMutation,
-  ViewInvestigationQuery,
-} from '../../../../../../graphql/generated';
+import type { ViewInvestigationQuery } from '../../../../../../graphql/generated';
+import { useUpdateFlowMutation } from '../../../../../../graphql/generated';
 
 interface Return {
   nodes: Node[];
@@ -208,12 +202,16 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
     const fetchFallback = async () => {
       if (provider.wsconnected && clientCount === 0) {
         const initData = importData?.investigation?.flows[0];
-        initData?.nodes?.forEach((node) => {
-          nodesMap.set(node.id, node as Node);
-        });
-        initData?.edges?.forEach((edge: Edge) => {
-          edgesMap.set(edge.id, edge as Edge);
-        });
+        if (initData?.nodes)
+          // eslint-disable-next-line no-restricted-syntax,no-unsafe-optional-chaining
+          for (const node of initData?.nodes) {
+            nodesMap.set(node.id, node as Node);
+          }
+        if (initData?.edges)
+          // eslint-disable-next-line no-restricted-syntax,no-unsafe-optional-chaining
+          for (const edge of initData?.edges) {
+            edgesMap.set(edge.id, edge as Edge);
+          }
       }
 
       usedFallbackRef.current = true;
@@ -244,7 +242,7 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
   //   };
   // }, []);
 
-  const getId = () => `dndnode_${Math.random() * 10000}_${investigationId}`;
+  const getId = () => `dndnode_${Math.random() * 10_000}_${investigationId}`;
 
   useEffect(() => {
     const updateSavedWhen = () => {
@@ -264,7 +262,7 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
       }
     };
 
-    const interval = setInterval(() => updateSavedWhen(), 10000);
+    const interval = setInterval(() => updateSavedWhen(), 10_000);
 
     return () => clearInterval(interval);
   }, []);
@@ -296,7 +294,7 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
     if (wrapperRef.current) {
       const wrapperBounds = wrapperRef.current.getBoundingClientRect();
       const type = event.dataTransfer.getData('application/reactflow');
-      if (typeof type === 'undefined' || !type) {
+      if (type === undefined || !type) {
         return;
       }
       const position = project({

@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import { UpdateType, ViewOffenderQuery } from 'graphql/generated';
+import type { ViewOffenderQuery } from 'graphql/generated';
+import { UpdateType } from 'graphql/generated';
 import {
   Button,
   Checkbox,
@@ -51,7 +52,7 @@ import {
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
-import { ItemType } from 'antd/lib/menu/hooks/useItems';
+import type { ItemType } from 'antd/lib/menu/hooks/useItems';
 import { calcExpired } from 'utils/offender/get-offender-exclusion';
 import OffenderSideList from 'components/offenders/OffenderSideList';
 import moment from 'moment';
@@ -61,10 +62,9 @@ import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import UpdateContent from 'views/incidents/ViewIncident/Update.view';
-import UpdateBar from 'components/MessageInput/update-bar';
-import WatermarkSlide, {
-  WatermarkSlideType,
-} from 'components/images/WatermartkSlide.view';
+import UpdateBar from 'components/MessageInput/UpdateBar';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import useStyles from './ViewOffender.styles';
 

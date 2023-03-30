@@ -1,8 +1,10 @@
-import { SelectProps, UploadProps } from 'antd';
-import {
-  ListDocumentsOnSchemeDocument,
+import type { SelectProps, UploadProps } from 'antd';
+import type {
   ListDocumentsOnSchemeQuery,
   ListDocumentsOnSchemeQueryVariables,
+} from 'graphql/generated';
+import {
+  ListDocumentsOnSchemeDocument,
   Model,
   useCreateDocumentMutation,
   useCreateTagMutation,
@@ -10,7 +12,7 @@ import {
 } from 'graphql/generated';
 import { useState } from 'react';
 import { useStoreState } from 'state';
-import { UploadFile } from 'antd/es/upload/interface';
+import type { UploadFile } from 'antd/es/upload/interface';
 
 interface OnSubmitValues {
   name: string;
@@ -90,11 +92,14 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
 
   const categoriesChange = (values: { value: string }[]) => {
     const formattedValues: string[] = [];
-    values.forEach((value) => {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const value of values) {
       const found = categories?.find(
         (category) => category.value === value.value
       );
-      if (!found) {
+      if (found) {
+        formattedValues.push(value.value);
+      } else {
         createTag({
           variables: {
             data: {
@@ -116,10 +121,8 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
         }).then((result) => {
           formattedValues.push(result.data?.createTag?.name || '');
         });
-      } else {
-        formattedValues.push(value.value);
       }
-    });
+    }
 
     setSelectedCategories(formattedValues.map((value) => ({ value })));
   };
@@ -188,7 +191,7 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
         variables: {
           data: {
             investigationId: investigationId || null,
-            schemeId: !investigationId ? currentScheme : undefined,
+            schemeId: investigationId ? undefined : currentScheme,
             name: values.name,
             url: fileList[0].url || '',
             tags: selectedCategoryIds,

@@ -2,7 +2,8 @@
 import React from 'react';
 import { Row, Col, Typography } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
-import moment, { Moment } from 'moment';
+import type { Moment } from 'moment';
+import moment from 'moment';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import {
   CrimeGroupMessageList,
@@ -10,7 +11,7 @@ import {
   OffenderMessageCard,
   VehicleMessageCard,
 } from 'components/MessageInput/MessageCard';
-import {
+import type {
   CrimeGroupData,
   ImageCardData,
   IncidentCardData,
@@ -133,7 +134,7 @@ interface Props extends DatedMessages {
 }
 
 const getContent = (content: string) =>
-  content.split(/(@\[.*?\]\(.*?\))/).map((item) => {
+  content.split(/(@\[.*?]\(.*?\))/).map((item) => {
     if (item.includes('@[')) {
       return (
         <Text strong key={item}>
@@ -189,7 +190,7 @@ const UpdateContent = ({
               flex={1}
             >
               <Text ellipsis style={{ fontSize: 13 }} strong>
-                {userId !== from?.id ? from?.fullName : 'You'}
+                {userId === from?.id ? 'You' : from?.fullName}
               </Text>
             </Col>
             <Col>

@@ -4,7 +4,7 @@ import { Row, Col, Typography, Avatar } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import {
+import type {
   CrimeGroupData,
   ImageCardData,
   IncidentCardData,
@@ -122,7 +122,7 @@ interface Props {
 }
 
 const getContent = (content: string) =>
-  content.split(/(@\[.*?\]\(.*?\))/).map((item) => {
+  content.split(/(@\[.*?]\(.*?\))/).map((item) => {
     if (item.includes('@[')) {
       return (
         <Text strong key={item}>

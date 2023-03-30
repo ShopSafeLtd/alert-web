@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import {
+import type {
   Age,
   Gender,
   Race,
   Build,
   SearchOffendersQuery,
   SearchOffendersQueryVariables,
+} from 'graphql/generated';
+import {
   SearchOffendersDocument,
   QueryMode,
   SortOrder,

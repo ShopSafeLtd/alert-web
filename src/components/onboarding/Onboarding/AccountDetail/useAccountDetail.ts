@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { CurrentUserQuery, useCurrentUserQuery } from 'graphql/generated';
+import type { CurrentUserQuery } from 'graphql/generated';
+import { useCurrentUserQuery } from 'graphql/generated';
 import { useNavigate } from 'react-router-dom';
 
 interface AccountData {

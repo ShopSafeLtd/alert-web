@@ -1,5 +1,5 @@
 import React from 'react';
-import { SchemeQuery } from 'graphql/generated';
+import type { SchemeQuery } from 'graphql/generated';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import {
   Button,

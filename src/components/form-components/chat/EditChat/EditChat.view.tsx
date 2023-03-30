@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChatQuery, ListSchemeUsersQuery } from 'graphql/generated';
+import type { ChatQuery, ListSchemeUsersQuery } from 'graphql/generated';
 import { Button, Col, Form, Input, Row, Select, Skeleton } from 'antd';
 
 interface FormData {

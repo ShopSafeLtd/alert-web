@@ -2,7 +2,7 @@ import { useDrawerState } from 'hooks';
 import React from 'react';
 import View from './CreateArticle.view';
 import useCreateArticle from './hooks/useCreateArticle';
-import { AddIncident, AddOffender } from './hooks/Forms';
+import type { AddIncident, AddOffender } from './hooks/Forms';
 
 const CreateArticleContainer = () => {
   const {

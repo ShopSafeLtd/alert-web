@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Age, Build, Gender, Race } from 'graphql/generated';
-import { UploadFile } from 'antd/lib/upload/interface';
+import type { Age, Build, Gender, Race } from 'graphql/generated';
+import type { UploadFile } from 'antd/lib/upload/interface';
 
 interface OffenderData {
   id: string;

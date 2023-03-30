@@ -12,7 +12,7 @@ import {
   Skeleton,
   Typography,
 } from 'antd';
-import {
+import type {
   CreateChatMutation,
   DeleteChatMutation,
   UserChatsQuery,
@@ -23,7 +23,7 @@ import { Link } from 'react-router-dom';
 import ViewMessage from 'components/viewChat/ViewMessage';
 
 import AddChat from 'components/form-components/chat/AddChat';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import { formatDate } from 'utils';
 
 const { Title, Paragraph, Text } = Typography;
@@ -43,7 +43,7 @@ interface Props {
 
 const getContent = (content: string) =>
   content
-    .split(/(@\[.*?\]\(.*?\))/)
+    .split(/(@\[.*?]\(.*?\))/)
     .map((item) => {
       if (item.includes('@[')) {
         return `${item.replace('@[', '').replace(/(]\(.*?\))/, '')} `;
@@ -179,7 +179,7 @@ const ViewOffender = ({
                             [You were mentioned]
                           </Text>
                         )}
-                        {messages && messages.length
+                        {messages && messages.length > 0
                           ? `${messages?.slice(-1)[0].from.fullName} : ${
                               getContent(messages?.slice(-1)[0].content) ||
                               (messages?.slice(-1)[0].images &&

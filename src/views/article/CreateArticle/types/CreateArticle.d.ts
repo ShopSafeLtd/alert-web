@@ -1,13 +1,12 @@
 // import { Editor } from 'tinymce';
-import React from 'react';
-import type { SelectProps } from 'antd';
-import { FormInstance, UploadProps } from 'antd';
+import type React from 'react';
+import type { FormInstance, SelectProps, UploadProps } from 'antd';
 import type { Editor } from 'tinymce';
-import { UploadFile } from 'antd/es/upload/interface';
-import { AddIncident, AddOffender } from '../hooks/Forms';
-import { DrawerType } from '../../../../hooks';
-import { OffenderData } from '../../../../components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
-import { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/LinkIncident.container';
+import type { UploadFile } from 'antd/es/upload/interface';
+import type { AddIncident, AddOffender } from '../hooks/Forms';
+import type { DrawerType } from '../../../../hooks';
+import type { OffenderData } from '../../../../components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
+import type { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/LinkIncident.container';
 
 export interface Props {
   editorRef: React.MutableRefObject<Editor | null>;
@@ -43,6 +42,7 @@ export interface Props {
   offenders: OffenderData[];
   removeIncident: (id: string) => void;
   removeOffender: (id: string) => void;
+
   exampleImageUploadHandler(
     blobInfo: { blob: () => string | Blob; filename: () => string | undefined },
     progress: (arg0: number) => void

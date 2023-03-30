@@ -1,12 +1,9 @@
 import { useState } from 'react';
-import {
-  useCreateTagMutation,
-  CreateTagMutation,
-  Model,
-} from 'graphql/generated';
+import type { CreateTagMutation } from 'graphql/generated';
+import { useCreateTagMutation, Model } from 'graphql/generated';
 import { useStoreState } from 'state';
 import { notification } from 'antd';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 
 interface FormData {
   name: string;

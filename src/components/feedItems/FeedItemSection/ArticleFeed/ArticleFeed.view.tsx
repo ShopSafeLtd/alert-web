@@ -1,6 +1,7 @@
 import React from 'react';
 import { Col, Row, Tag, Typography } from 'antd';
-import { ArticlePriority, FeedItemsQuery } from 'graphql/generated';
+import type { FeedItemsQuery } from 'graphql/generated';
+import { ArticlePriority } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import { faExclamationCircle, faUser } from '@fortawesome/pro-light-svg-icons';
@@ -72,7 +73,7 @@ const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
           >
             {previewText}
           </Paragraph>
-          {tags && tags.length ? (
+          {tags && tags.length > 0 ? (
             <Row wrap={false} style={{ overflowX: 'auto', marginTop: 10 }}>
               {tags.map((tag) => (
                 <Tag key={tag.id}>{tag.name}</Tag>

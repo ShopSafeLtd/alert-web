@@ -1,9 +1,9 @@
 import React from 'react';
 import { Table, Row, Col, Input, Drawer, Button } from 'antd';
-import { CreateChatMutation, SchemeChatsQuery } from 'graphql/generated';
+import type { CreateChatMutation, SchemeChatsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import AddChat from 'components/form-components/chat/AddChat';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 

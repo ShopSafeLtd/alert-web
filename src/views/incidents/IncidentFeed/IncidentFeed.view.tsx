@@ -1,17 +1,19 @@
 import React from 'react';
-import { ListIncidentsQuery, RecycleIncidentMutation } from 'graphql/generated';
+import type {
+  ListIncidentsQuery,
+  RecycleIncidentMutation,
+} from 'graphql/generated';
 import { Affix, Button, Card, Col, Drawer, Input, Pagination, Row } from 'antd';
 import IncidentCard from 'components/incidents/IncidentCard';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
-import { IncidentSort } from 'state';
+import type { IncidentSort } from 'state';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFilter, faPlus } from '@fortawesome/pro-light-svg-icons';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import WatermarkSlide, {
-  WatermarkSlideType,
-} from 'components/images/WatermartkSlide.view';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import IncidentFilter from 'components/incidents/IncidentFilter';
 

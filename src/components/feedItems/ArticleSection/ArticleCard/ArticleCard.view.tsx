@@ -1,6 +1,7 @@
 import React from 'react';
 import { Col, Row, Skeleton, Tag, Typography } from 'antd';
-import { ArticlePriority, ListArticlesQuery } from 'graphql/generated';
+import type { ListArticlesQuery } from 'graphql/generated';
+import { ArticlePriority } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -93,7 +94,7 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
             </Col>
           </Row>
 
-          {tags && tags.length ? (
+          {tags && tags.length > 0 ? (
             <Row
               // wrap={false}
               style={{

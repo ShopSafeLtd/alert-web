@@ -1,7 +1,8 @@
 import React from 'react';
 import { Card, Row, Col } from 'antd';
 import { useStoreState } from 'state';
-import { RegisterForm, Props } from '../../components/RegisterForm';
+import type { Props } from '../../components/RegisterForm';
+import { RegisterForm } from '../../components/RegisterForm';
 
 const backgroundStyle = {
   backgroundImage: 'url(/img/others/img-17.jpg)',

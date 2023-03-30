@@ -11,7 +11,8 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { UpdateType, ViewInvestigationQuery } from 'graphql/generated';
+import type { ViewInvestigationQuery } from 'graphql/generated';
+import { UpdateType } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBell,
@@ -26,10 +27,11 @@ import moment from 'moment/moment';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import useStyles from './ViewDetails.styles';
 import UpdateContent from '../../../../incidents/ViewIncident/Update.view';
-import UpdateBar from '../../../../../components/MessageInput/update-bar';
+import UpdateBar from '../../../../../components/MessageInput/UpdateBar';
 import TabContent from '../../../../../components/TabContent';
 
 const { Title, Paragraph } = Typography;
+
 interface Props {
   data: ViewInvestigationQuery | undefined;
   loading: boolean;

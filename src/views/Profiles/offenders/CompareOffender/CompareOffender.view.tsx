@@ -11,13 +11,8 @@ import {
   Row,
   Typography,
 } from 'antd';
-import {
-  Age,
-  Build,
-  Gender,
-  Race,
-  ViewOffenderCompareQuery,
-} from 'graphql/generated';
+import type { ViewOffenderCompareQuery } from 'graphql/generated';
+import { Age, Build, Gender, Race } from 'graphql/generated';
 import { getAge, getBuild, getEthnicity, getSex } from 'utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -27,12 +22,13 @@ import {
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
-import GridLayout, { Layout } from 'react-grid-layout';
+import type { Layout } from 'react-grid-layout';
+import GridLayout from 'react-grid-layout';
 import AddExisitingOffender from 'components/form-components/incident/offender/AddExistingOffender';
-import { OffenderData } from 'components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
+import type { OffenderData } from 'components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import useStyles from './CompareOffender.styles';
-import { OffenderField, Selected } from './useCompareIncident';
+import type { OffenderField, Selected } from './useCompareIncident';
 
 const { Text, Title } = Typography;
 
@@ -264,7 +260,7 @@ const CompareIncident = ({
                     )}
                   </Row>
                   <Card className={classes.card} bodyStyle={{ padding: 0 }}>
-                    {offender.images.length ? (
+                    {offender.images.length > 0 ? (
                       <Carousel>
                         {offender.images.map((image) => (
                           <div
@@ -458,14 +454,13 @@ const CompareIncident = ({
             setLayout(e);
           }}
           layout={offenders
-            .map((offender) =>
+            .flatMap((offender) =>
               offender.images.map((image) => ({
                 ...image,
                 name: offender.name,
                 offenderId: offender.id,
               }))
             )
-            .flat()
             .map((image, index) => ({
               i: image.id,
               h: 3,
@@ -476,14 +471,13 @@ const CompareIncident = ({
             }))}
         >
           {offenders
-            .map((offender) =>
+            .flatMap((offender) =>
               offender.images.map((image) => ({
                 ...image,
                 name: offender.name,
                 offenderId: offender.id,
               }))
             )
-            .flat()
             .map((image) => (
               <div className={classes.gridCard} key={image.id}>
                 <GridImage

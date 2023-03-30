@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col, Form, Input, Row, Skeleton } from 'antd';
-import { CrimeGroupQuery } from 'graphql/generated';
+import type { CrimeGroupQuery } from 'graphql/generated';
 
 interface FormData {
   alias: string;

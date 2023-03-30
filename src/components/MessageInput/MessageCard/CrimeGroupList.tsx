@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Table } from 'antd';
-import { CrimeGroupData } from 'types/DataType';
+import type { CrimeGroupData } from 'types/DataType';
 
 // const { Title } = Typography;
 

@@ -9,6 +9,7 @@ mutation createMessage($data: MessageCreateWithoutActionsInput!) {
       id
       fullName
       firstLetter
+      origName
     }
     sent
     showUser

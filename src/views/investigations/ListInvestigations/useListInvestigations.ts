@@ -1,8 +1,10 @@
-import { MutationUpdaterFn } from '@apollo/client';
-import {
+import type { MutationUpdaterFn } from '@apollo/client';
+import type {
   CreateInvestigationMutation,
-  ListInvestigationsDocument,
   ListInvestigationsQuery,
+} from 'graphql/generated';
+import {
+  ListInvestigationsDocument,
   useListInvestigationsQuery,
 } from 'graphql/generated';
 import { useState } from 'react';
@@ -58,9 +60,11 @@ const useListInvestigations = (): Return => {
             investigations:
               existingData?.listInvestigations?.investigations &&
               existingData.listInvestigations.investigations.length > 0
-                ? existingData?.listInvestigations?.investigations.concat(
-                    res?.createInvestigation || []
-                  )
+                ? [
+                    // eslint-disable-next-line no-unsafe-optional-chaining
+                    ...existingData?.listInvestigations?.investigations,
+                    res?.createInvestigation || [],
+                  ]
                 : [res.createInvestigation],
           },
           __typename: 'Query',

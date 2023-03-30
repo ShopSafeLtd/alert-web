@@ -1,6 +1,7 @@
 import React from 'react';
 import View from './EditOffender.view';
-import useEditOffender, { OffenderData } from './useEditOffender';
+import type { OffenderData } from './useEditOffender';
+import useEditOffender from './useEditOffender';
 
 interface Props {
   id: string;

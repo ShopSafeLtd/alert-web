@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LocationData } from 'types/DataType';
+import type { LocationData } from 'types/DataType';
 
 interface Props {
   onClose: () => void;

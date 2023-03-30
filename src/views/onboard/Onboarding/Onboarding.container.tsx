@@ -14,6 +14,7 @@ const Onboarding = (): JSX.Element => {
     loading,
     schemeTerms,
     updateSchemeTermsSigned,
+    name,
   } = useOnboarding();
   return (
     <View
@@ -27,6 +28,7 @@ const Onboarding = (): JSX.Element => {
       updateTermsSigned={updateTermsSigned}
       updateSchemeTermsSigned={updateSchemeTermsSigned}
       updateAccountDetail={updateAccountDetail}
+      name={name}
     />
   );
 };

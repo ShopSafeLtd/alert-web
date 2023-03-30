@@ -1,4 +1,4 @@
-import { ArticleQuery } from '../../../../graphql/generated';
+import type { ArticleQuery } from '../../../../graphql/generated';
 
 export interface Props {
   id: string;

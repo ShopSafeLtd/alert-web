@@ -1,16 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-import {
+import type {
   Age,
   Build,
   Gender,
-  ListOffendersDocument,
   ListOffendersQuery,
-  Model,
-  QueryMode,
   Race,
   RecycleOffenderMutation,
-  Role,
   SearchBusinessesQuery,
+} from 'graphql/generated';
+import {
+  ListOffendersDocument,
+  Model,
+  QueryMode,
+  Role,
   SortOrder,
   useListOffendersQuery,
   useSchemeGroupsQuery,
@@ -19,7 +21,7 @@ import {
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import { OffenderSort, useStoreActions, useStoreState } from 'state';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 
 interface Return {
@@ -131,24 +133,26 @@ const useOffenderFeed = (): Return => {
         order === OffenderSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
     },
     where: {
-      tags: warnings.length
-        ? {
-            some: {
-              id: {
-                in: warnings,
+      tags:
+        warnings.length > 0
+          ? {
+              some: {
+                id: {
+                  in: warnings,
+                },
               },
-            },
-          }
-        : undefined,
-      groups: groupsFilter.length
-        ? {
-            some: {
-              id: {
-                in: groupsFilter,
+            }
+          : undefined,
+      groups:
+        groupsFilter.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groupsFilter,
+                },
               },
-            },
-          }
-        : undefined,
+            }
+          : undefined,
       OR: [
         {
           name: {

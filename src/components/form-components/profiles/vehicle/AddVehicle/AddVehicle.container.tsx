@@ -1,5 +1,5 @@
 import React from 'react';
-import { VehicleData } from 'types/DataType';
+import type { VehicleData } from 'types/DataType';
 
 import View from './AddVehicle.view';
 import useAddVehicle from './useAddVehicle';

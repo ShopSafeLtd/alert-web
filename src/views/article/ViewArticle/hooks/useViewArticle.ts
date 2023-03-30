@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useArticleQuery } from '../../../../graphql/generated';
-import { Props, ReturnProps } from '../types/ViewArticle';
+import type { Props, ReturnProps } from '../types/ViewArticle';
 
 const useViewArticle = ({ id }: Props): ReturnProps => {
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(

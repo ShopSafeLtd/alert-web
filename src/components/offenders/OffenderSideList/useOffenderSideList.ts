@@ -1,8 +1,5 @@
-import {
-  ListOffendersQuery,
-  SortOrder,
-  useListOffendersQuery,
-} from 'graphql/generated';
+import type { ListOffendersQuery } from 'graphql/generated';
+import { SortOrder, useListOffendersQuery } from 'graphql/generated';
 import { useStoreState, OffenderSort, useStoreActions } from 'state';
 
 interface Return {

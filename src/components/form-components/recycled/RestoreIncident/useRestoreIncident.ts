@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import {
+import type {
   RecycledItemQuery,
-  useRecycledItemQuery,
-  useRestoreIncidentMutation,
-  useDeleteIncidentMutation,
   RestoreIncidentMutation,
   DeleteIncidentMutation,
 } from 'graphql/generated';
-import { MutationUpdaterFn } from '@apollo/client';
+import {
+  useRecycledItemQuery,
+  useRestoreIncidentMutation,
+  useDeleteIncidentMutation,
+} from 'graphql/generated';
+import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
 
 interface Props {

@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { notification } from 'antd';
 
 import { useStoreState } from 'state';
+import type { CurrentSchemeTermsQuery } from 'graphql/generated';
 import {
-  CurrentSchemeTermsQuery,
   useCurrentSchemeTermsQuery,
   useSignTermsMutation,
   useUpdateUserMutation,
@@ -26,6 +26,7 @@ interface Return {
   loading: boolean;
   schemeTerms: CurrentSchemeTermsQuery | undefined;
   updateSchemeTermsSigned: (value: unknown) => void;
+  name: string;
 }
 
 const useOnboarding = (): Return => {
@@ -115,7 +116,7 @@ const useOnboarding = (): Return => {
             id: userId,
           },
           data: {
-            fullName: { set: accountDetail.fullName },
+            fullName: { set: accountDetail?.fullName },
             termsSigned: { set: true },
             newUser: { set: false },
           },
@@ -148,7 +149,7 @@ const useOnboarding = (): Return => {
         variables: {
           data: {
             signature: schemeTermsSigned,
-            termsId: SchemeTerms?.scheme?.currentTerms?.id,
+            termsId: SchemeTerms?.scheme?.currentTerms?.id || '',
           },
         },
       });
@@ -183,6 +184,11 @@ const useOnboarding = (): Return => {
     }
   };
 
+  const name = useMemo(
+    () => accountDetail?.fullName || '',
+    [accountDetail?.fullName]
+  );
+
   return {
     onSubmit,
     saving,
@@ -194,6 +200,7 @@ const useOnboarding = (): Return => {
     loading: SchemeTermsLoading,
     schemeTerms: SchemeTerms,
     updateSchemeTermsSigned,
+    name,
   };
 };
 

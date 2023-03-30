@@ -1,8 +1,10 @@
 import { Modal, notification } from 'antd';
-import {
-  CrimeGroupDocument,
+import type {
   CrimeGroupQuery,
   CrimeGroupQueryVariables,
+} from 'graphql/generated';
+import {
+  CrimeGroupDocument,
   Role,
   useCrimeGroupQuery,
   useDeleteCrimeGroupMutation,
@@ -99,10 +101,10 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
       },
     },
     onCompleted: ({ crimeGroup }) => {
-      if (crimeGroup?.offenders && crimeGroup.offenders.length) {
+      if (crimeGroup?.offenders && crimeGroup.offenders.length > 0) {
         setOffenderIds(crimeGroup.offenders.map(({ id }) => id));
       }
-      if (crimeGroup?.vehicles && crimeGroup.vehicles.length) {
+      if (crimeGroup?.vehicles && crimeGroup.vehicles.length > 0) {
         setVehicleIds(crimeGroup.vehicles.map(({ id }) => id));
       }
     },
@@ -227,11 +229,9 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
                 data: {
                   crimeGroup: {
                     ...oldData.crimeGroup,
-                    updates: [
-                      ...oldData.crimeGroup.updates.filter(
-                        (item) => item.id !== result.data?.deleteUpdate?.id
-                      ),
-                    ],
+                    updates: oldData.crimeGroup.updates.filter(
+                      (item) => item.id !== result.data?.deleteUpdate?.id
+                    ),
                   },
                 },
               });

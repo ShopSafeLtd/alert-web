@@ -2,13 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Picker from 'emoji-picker-react';
 
+import type { FormInstance } from 'antd';
 import {
   Button,
   Col,
   Divider,
   Drawer,
   Form,
-  FormInstance,
   Mentions,
   PageHeader,
   Popconfirm,
@@ -29,22 +29,26 @@ import {
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
+import type {
   Age,
   Build,
+  ChatMessagesQuery,
   ChatQuery,
   Gender,
   Race,
-  ChatMessagesQuery,
-  MessageItemType,
 } from 'graphql/generated';
+import { MessageItemType } from 'graphql/generated';
 import { faCircleXmark, faUser } from '@fortawesome/pro-solid-svg-icons';
 import AddUserChat from 'components/form-components/userChat/ManageChatMember';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { CrimeGroupData, IncidentsData, VehicleData } from 'types/DataType';
+import type {
+  CrimeGroupData,
+  IncidentsData,
+  VehicleData,
+} from 'types/DataType';
 import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 

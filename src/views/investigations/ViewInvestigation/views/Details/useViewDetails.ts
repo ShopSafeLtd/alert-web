@@ -1,3 +1,7 @@
+import type {
+  ViewInvestigationQuery,
+  ViewInvestigationQueryVariables,
+} from 'graphql/generated';
 import {
   Role,
   useDeleteUpdateMutation,
@@ -6,8 +10,6 @@ import {
   useUpdateUpdateMutation,
   useViewInvestigationQuery,
   ViewInvestigationDocument,
-  ViewInvestigationQuery,
-  ViewInvestigationQueryVariables,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import update from 'immutability-helper';
@@ -196,11 +198,9 @@ const useViewDetails = ({ investigationId }: Props): Return => {
                 data: {
                   investigation: {
                     ...oldData.investigation,
-                    updates: [
-                      ...oldData.investigation.updates.filter(
-                        (item) => item.id !== result.data?.deleteUpdate?.id
-                      ),
-                    ],
+                    updates: oldData.investigation.updates.filter(
+                      (item) => item.id !== result.data?.deleteUpdate?.id
+                    ),
                   },
                 },
               });

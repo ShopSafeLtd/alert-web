@@ -1,14 +1,16 @@
 import { useState } from 'react';
-import {
-  useCreateGroupMutation,
+import type {
   CreateGroupMutation,
   ListSchemeUsersQuery,
+} from 'graphql/generated';
+import {
+  useCreateGroupMutation,
   useListSchemeUsersQuery,
   SortOrder,
 } from 'graphql/generated';
 import { notification } from 'antd';
 import { useStoreState } from 'state';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 
 interface FormData {
   name: string;

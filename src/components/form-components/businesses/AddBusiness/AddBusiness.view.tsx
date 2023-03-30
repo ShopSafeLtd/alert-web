@@ -13,6 +13,7 @@ interface FormData {
   townCity: string;
   county: string;
   postcode: string;
+  publicName: boolean;
 }
 
 interface Props {

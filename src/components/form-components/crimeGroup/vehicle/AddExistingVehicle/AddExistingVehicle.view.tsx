@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListVehiclesQuery } from 'graphql/generated';
+import type { ListVehiclesQuery } from 'graphql/generated';
 import { Button, Col, Input, Row, Table } from 'antd';
 
 interface Props {

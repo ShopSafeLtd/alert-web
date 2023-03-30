@@ -28,7 +28,7 @@ const CheckTag = ({ active, label, value, onClick, tooltip }: Props) => {
           size="lg"
           className={classes.selectIcon}
           style={{ color: active ? 'red' : undefined }}
-          icon={!active ? faCheckCircle : faCheckCircleSolid}
+          icon={active ? faCheckCircleSolid : faCheckCircle}
         />
         {label}
       </Row>

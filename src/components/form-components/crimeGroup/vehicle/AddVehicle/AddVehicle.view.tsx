@@ -13,8 +13,11 @@ import {
   Table,
   Tooltip,
 } from 'antd';
-import { ListCrimeGroupsQuery, ListIncidentsQuery } from 'graphql/generated';
-import { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
+import type {
+  ListCrimeGroupsQuery,
+  ListIncidentsQuery,
+} from 'graphql/generated';
+import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
 import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -29,7 +32,9 @@ interface FormData {
   registration?: string;
   crimeGroup?: string[];
 }
+
 const { confirm } = Modal;
+
 interface Props {
   onClose: () => void;
   onSubmit: (value: FormData) => void;
@@ -133,7 +138,7 @@ const AddVehicle = ({
         )}
         {adminRights && (
           <Row gutter={16}>
-            {!(incidentsData && incidentsData.length) && (
+            {!(incidentsData && incidentsData.length > 0) && (
               <Col>
                 <Button
                   onClick={toggleLinkIncident}
@@ -150,7 +155,7 @@ const AddVehicle = ({
                 </Button>
               </Col>
             )}
-            {!(offendersData && offendersData.length) && (
+            {!(offendersData && offendersData.length > 0) && (
               <Col>
                 <div>
                   <Button
@@ -172,7 +177,7 @@ const AddVehicle = ({
           </Row>
         )}
 
-        {incidentsData && incidentsData.length ? (
+        {incidentsData && incidentsData.length > 0 ? (
           <>
             <Divider>Linked Incidents</Divider>
             <Table
@@ -255,7 +260,7 @@ const AddVehicle = ({
           </>
         ) : null}
 
-        {offendersData && offendersData.length ? (
+        {offendersData && offendersData.length > 0 ? (
           <>
             <Divider>Linked Offenders</Divider>
             <Table

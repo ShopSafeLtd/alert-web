@@ -15,6 +15,7 @@ mutation RemoveUserFromBusiness(
       id
       fullName
       status
+      publicName
       groups(where: $groupWhere) {
         id
         name

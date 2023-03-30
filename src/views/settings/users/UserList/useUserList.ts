@@ -1,16 +1,18 @@
 import { useState } from 'react';
-import {
-  useListSchemeUsersQuery,
+import type {
   ListSchemeUsersQuery,
-  QueryMode,
-  useSchemeGroupsQuery,
   SchemeGroupsQuery,
   CreateUserInDatabaseMutation,
-  ListSchemeUsersDocument,
   InviteExistingUserMutation,
 } from 'graphql/generated';
+import {
+  useListSchemeUsersQuery,
+  QueryMode,
+  useSchemeGroupsQuery,
+  ListSchemeUsersDocument,
+} from 'graphql/generated';
 import { useStoreState } from 'state';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 
 interface Return {
   data: ListSchemeUsersQuery | undefined;

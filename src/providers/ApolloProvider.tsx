@@ -14,7 +14,7 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { createUploadLink } from 'apollo-upload-client';
 
-import { ReadFieldFunction } from '@apollo/client/cache/core/types/common';
+import type { ReadFieldFunction } from '@apollo/client/cache/core/types/common';
 import { useAuth0 } from '@auth0/auth0-react';
 import { onError } from '@apollo/client/link/error';
 
@@ -55,7 +55,8 @@ const Apollo = ({ children }: Props): JSX.Element => {
   // TODO: Add error handling
   const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors)
-      graphQLErrors.forEach(({ message, locations, path }) => {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const { message, locations, path } of graphQLErrors) {
         Sentry.captureMessage(
           `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
             locations
@@ -66,7 +67,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
             locations
           )}, Path: ${path}`
         );
-      });
+      }
 
     if (networkError) {
       console.log(`[Network error]: ${networkError}`);
@@ -105,7 +106,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
   //   },
   //   ...context,
   // }));
-
+  // eslint-disable-next-line unicorn/prefer-spread
   const authHttp = errorLink.concat(middlewareLink).concat(httpLink);
 
   const link = split(
@@ -124,6 +125,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
     incoming: any,
     readField: ReadFieldFunction,
     args: Record<string, any> | null
+    // eslint-disable-next-line unicorn/consistent-function-scoping
   ) => {
     const removeRecycledItems = (data = []) =>
       data.filter((el: any) => !readField('recycled', el));
@@ -132,9 +134,9 @@ const Apollo = ({ children }: Props): JSX.Element => {
 
     if (!args?.after) return [...incomingData];
 
-    const existingIds = existing.map((el: any) => readField('id', el));
+    const existingIds = new Set(existing.map((el: any) => readField('id', el)));
     const newItems = incoming.filter(
-      (el: any) => !existingIds.includes(readField('id', el))
+      (el: any) => !existingIds.has(readField('id', el))
     );
     return [...existingData, ...newItems];
   };
@@ -144,16 +146,19 @@ const Apollo = ({ children }: Props): JSX.Element => {
       User: {
         fields: {
           schemes: {
+            // eslint-disable-next-line @typescript-eslint/default-param-last
             merge(_existing = [], incoming: any[]) {
               return [...incoming];
             },
           },
           chats: {
+            // eslint-disable-next-line @typescript-eslint/default-param-last
             merge(_existing = [], incoming: any[]) {
               return [...incoming];
             },
           },
           groups: {
+            // eslint-disable-next-line @typescript-eslint/default-param-last
             merge(_existing = [], incoming: any[]) {
               return [...incoming];
             },
@@ -163,6 +168,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
       Group: {
         fields: {
           users: {
+            // eslint-disable-next-line @typescript-eslint/default-param-last
             merge(_existing = [], incoming: any[]) {
               return [...incoming];
             },
@@ -172,6 +178,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
       Chat: {
         fields: {
           members: {
+            // eslint-disable-next-line @typescript-eslint/default-param-last
             merge(_existing = [], incoming: any[]) {
               return [...incoming];
             },
@@ -239,6 +246,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
           },
           users: {
             keyArgs: ['id'],
+            // eslint-disable-next-line @typescript-eslint/default-param-last
             merge(_existing = [], incoming: any[]) {
               return [...incoming];
             },
@@ -247,14 +255,14 @@ const Apollo = ({ children }: Props): JSX.Element => {
             keyArgs: ['where'],
             merge(existing, incoming, { readField, args }) {
               if (existing) {
-                const existingIds = existing.map((el: any) =>
-                  readField('id', el)
+                const existingIds = new Set(
+                  existing.map((el: any) => readField('id', el))
                 );
 
                 return [
                   ...existing,
                   ...incoming.filter(
-                    (el: any) => !existingIds.includes(readField('id', el))
+                    (el: any) => !existingIds.has(readField('id', el))
                   ),
                 ];
                 // return [...incoming]
@@ -266,14 +274,14 @@ const Apollo = ({ children }: Props): JSX.Element => {
             keyArgs: ['where'],
             merge(existing, incoming, { readField, args }) {
               if (existing && args?.skip) {
-                const existingIds = existing.map((el: any) =>
-                  readField('id', el)
+                const existingIds = new Set(
+                  existing.map((el: any) => readField('id', el))
                 );
 
                 return [
                   ...existing,
                   ...incoming.filter(
-                    (el: any) => !existingIds.includes(readField('id', el))
+                    (el: any) => !existingIds.has(readField('id', el))
                   ),
                 ];
                 // return [...incoming]

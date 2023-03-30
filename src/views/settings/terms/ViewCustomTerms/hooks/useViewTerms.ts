@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import { ReturnProps } from '../types/ViewCustomTerms';
+import type { ReturnProps } from '../types/ViewCustomTerms';
 import { useStoreState } from '../../../../../state';
 import {
   Role,

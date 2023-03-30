@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Col, Row, Statistic, Table, Typography } from 'antd';
-import { PerformanceReportQuery } from 'graphql/generated';
+import type { PerformanceReportQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faComments,

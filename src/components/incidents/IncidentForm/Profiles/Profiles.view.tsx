@@ -26,7 +26,7 @@ import {
   faUpload,
   faUser,
 } from '@fortawesome/pro-light-svg-icons';
-import { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
+import type { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
 import {
   calcAge,
   getOffenderAge,
@@ -34,9 +34,9 @@ import {
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
-import { ListOffendersQuery } from 'graphql/generated';
-import { UploadChangeParam } from 'antd/lib/upload';
-import { UploadFile } from 'antd/es/upload/interface';
+import type { ListOffendersQuery } from 'graphql/generated';
+import type { UploadChangeParam } from 'antd/lib/upload';
+import type { UploadFile } from 'antd/es/upload/interface';
 import ProfileDrawer from 'components/incidents/IncidentForm/ProfileDrawer';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 
@@ -256,11 +256,11 @@ const Profiles = ({
 
     <Row gutter={20} style={{ marginTop: 10 }}>
       <Col flex={1}>
-        {(offendersData && offendersData.length) ||
-        (vehiclesData && vehiclesData.length) ||
-        (crimeGroupsData && crimeGroupsData.length) ? (
+        {(offendersData && offendersData.length > 0) ||
+        (vehiclesData && vehiclesData.length > 0) ||
+        (crimeGroupsData && crimeGroupsData.length > 0) ? (
           <>
-            {offendersData && offendersData.length ? (
+            {offendersData && offendersData.length > 0 ? (
               <>
                 {/* <Title level={4} style={{ marginLeft: 20 }}>
                   Offenders
@@ -284,7 +284,7 @@ const Profiles = ({
                         record
                         // images?: { id: string; optimised: string }[],
                       ) => {
-                        if (record.images && record.images.length) {
+                        if (record.images && record.images.length > 0) {
                           return (
                             <img
                               style={{ width: 80 }}
@@ -397,7 +397,7 @@ const Profiles = ({
               </>
             ) : null}
 
-            {crimeGroupsData && crimeGroupsData.length ? (
+            {crimeGroupsData && crimeGroupsData.length > 0 ? (
               <>
                 <Divider>Crime Groups</Divider>
                 <Table
@@ -491,7 +491,7 @@ const Profiles = ({
                 />
               </>
             ) : null}
-            {vehiclesData && vehiclesData.length ? (
+            {vehiclesData && vehiclesData.length > 0 ? (
               <>
                 <Divider>Vehicles</Divider>
                 <Table

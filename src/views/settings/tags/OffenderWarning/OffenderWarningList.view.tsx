@@ -10,11 +10,11 @@ import {
   Tooltip,
 } from 'antd';
 
-import { CreateTagMutation, TagsQuery } from 'graphql/generated';
+import type { CreateTagMutation, TagsQuery } from 'graphql/generated';
 import AddOffender from 'components/form-components/tags/offenderWarnings/AddOffenderWarning';
 import EditOffender from 'components/form-components/tags/offenderWarnings/EditOffenderWarning';
 
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faPenToSquare,

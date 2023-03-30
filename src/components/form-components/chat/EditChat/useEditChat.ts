@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
+import type { ChatQuery, ListSchemeUsersQuery } from 'graphql/generated';
 import {
-  ChatQuery,
   SortOrder,
   useListSchemeUsersQuery,
   useUpdateChatMutation,
-  ListSchemeUsersQuery,
   useChatQuery,
 } from 'graphql/generated';
 import { notification } from 'antd';

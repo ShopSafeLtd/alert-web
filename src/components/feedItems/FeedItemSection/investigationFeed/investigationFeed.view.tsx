@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Row, Typography } from 'antd';
-import { FeedItemsQuery } from 'graphql/generated';
+import type { FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationCircle, faUser } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
@@ -122,7 +122,7 @@ const InvestigationFeed = ({
             </>
           ) : (
             <>
-              {updates && updates.length ? (
+              {updates && updates.length > 0 ? (
                 <UpdateContent title={name || ''} update={updates[0]} />
               ) : null}
             </>

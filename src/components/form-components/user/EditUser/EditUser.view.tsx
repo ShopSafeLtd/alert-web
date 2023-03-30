@@ -1,10 +1,10 @@
 import React from 'react';
-import {
-  Role,
+import type {
   UserQuery,
   SchemeGroupsQuery,
   SchemeChatsQuery,
 } from 'graphql/generated';
+import { Role } from 'graphql/generated';
 import {
   Button,
   Col,

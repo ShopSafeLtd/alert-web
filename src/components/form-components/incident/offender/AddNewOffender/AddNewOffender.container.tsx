@@ -1,5 +1,5 @@
 import React from 'react';
-import { Age, Gender, Race, Build } from 'graphql/generated';
+import type { Age, Gender, Race, Build } from 'graphql/generated';
 import useAddNewOffender from './useAddNewOffender';
 import View from './AddNewOffender.view';
 

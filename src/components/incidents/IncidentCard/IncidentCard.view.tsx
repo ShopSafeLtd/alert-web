@@ -12,7 +12,7 @@ import {
   Tag,
   Typography,
 } from 'antd';
-import { ListIncidentsQuery } from 'graphql/generated';
+import type { ListIncidentsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
@@ -27,7 +27,7 @@ import {
   faAngleRight,
   faArrowsMaximize,
 } from '@fortawesome/pro-solid-svg-icons';
-import { CarouselRef } from 'antd/lib/carousel';
+import type { CarouselRef } from 'antd/lib/carousel';
 import { Link } from 'react-router-dom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 

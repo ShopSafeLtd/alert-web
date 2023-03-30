@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Row, Typography } from 'antd';
-import { FeedItemsQuery } from 'graphql/generated';
+import type { FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faClock,
@@ -65,7 +65,7 @@ const IncidentFeed = ({
           />
         </Col>
       ) : null}
-      {(isNewIncident || isNewImage) && images && images.length ? (
+      {(isNewIncident || isNewImage) && images && images.length > 0 ? (
         <Col>
           <ImageContainer src={images[0].optimised || images[0].url || ''} />
         </Col>
@@ -167,7 +167,7 @@ const IncidentFeed = ({
             </>
           ) : (
             <>
-              {updates && updates.length ? (
+              {updates && updates.length > 0 ? (
                 <UpdateContent title={subject || ''} update={updates[0]} />
               ) : null}
             </>

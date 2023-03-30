@@ -1,5 +1,5 @@
 import React from 'react';
-import { BanData } from 'types/DataType';
+import type { BanData } from 'types/DataType';
 import View from './EditExclusion.view';
 import useEditExclusion from './useEditExclusion';
 

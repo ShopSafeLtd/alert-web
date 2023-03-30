@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col, Form, Input, Row, Select } from 'antd';
-import { ListSchemeUsersQuery } from 'graphql/generated';
+import type { ListSchemeUsersQuery } from 'graphql/generated';
 
 interface FormData {
   name: string;

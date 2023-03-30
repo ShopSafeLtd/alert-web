@@ -1,12 +1,9 @@
 import { useStoreState } from 'state';
-import {
-  RecycleOffenderMutation,
-  Role,
-  useRecycleOffenderMutation,
-} from 'graphql/generated';
+import type { RecycleOffenderMutation } from 'graphql/generated';
+import { Role, useRecycleOffenderMutation } from 'graphql/generated';
 import { notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 
 interface Props {
   createdById: string | undefined;

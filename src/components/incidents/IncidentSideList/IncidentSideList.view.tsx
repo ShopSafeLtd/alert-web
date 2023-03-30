@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListIncidentsQuery } from 'graphql/generated';
+import type { ListIncidentsQuery } from 'graphql/generated';
 import { Row, Col, Typography, Divider, Pagination, Spin } from 'antd';
 import { Link } from 'react-router-dom';
 import useStyles from './IncidentSideList.styles';

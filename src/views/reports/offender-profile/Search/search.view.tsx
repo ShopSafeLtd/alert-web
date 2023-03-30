@@ -9,7 +9,7 @@ import {
   Tag,
   Typography,
 } from 'antd';
-import { SearchOffendersQuery } from 'graphql/generated';
+import type { SearchOffendersQuery } from 'graphql/generated';
 import { getAge, getBuild, getEthnicity, getSex } from 'utils';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import useStyles from './search.styles';

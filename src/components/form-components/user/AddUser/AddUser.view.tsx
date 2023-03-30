@@ -1,10 +1,11 @@
 import React from 'react';
-import { Role, SchemeGroupsQuery, SchemeChatsQuery } from 'graphql/generated';
+import type { SchemeGroupsQuery, SchemeChatsQuery } from 'graphql/generated';
+import { Role } from 'graphql/generated';
+import type { FormInstance } from 'antd';
 import {
   Button,
   Col,
   Form,
-  FormInstance,
   Input,
   Row,
   Select,

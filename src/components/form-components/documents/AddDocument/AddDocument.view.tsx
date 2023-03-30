@@ -1,16 +1,6 @@
 import React from 'react';
-import {
-  Button,
-  Card,
-  Col,
-  Form,
-  Input,
-  Row,
-  Select,
-  SelectProps,
-  Upload,
-  UploadProps,
-} from 'antd';
+import type { SelectProps, UploadProps } from 'antd';
+import { Button, Card, Col, Form, Input, Row, Select, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 
 interface OnSubmitValues {

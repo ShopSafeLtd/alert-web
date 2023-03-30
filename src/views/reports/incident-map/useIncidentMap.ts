@@ -1,10 +1,6 @@
 import { useStoreState } from 'state';
-import {
-  IncidentMapQuery,
-  SchemeGroupsQuery,
-  useIncidentMapQuery,
-  useSchemeGroupsQuery,
-} from 'graphql/generated';
+import type { IncidentMapQuery, SchemeGroupsQuery } from 'graphql/generated';
+import { useIncidentMapQuery, useSchemeGroupsQuery } from 'graphql/generated';
 
 interface Return {
   data: IncidentMapQuery | undefined;

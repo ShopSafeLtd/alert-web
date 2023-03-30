@@ -1,7 +1,5 @@
-import {
-  PerformanceReportQuery,
-  usePerformanceReportQuery,
-} from 'graphql/generated';
+import type { PerformanceReportQuery } from 'graphql/generated';
+import { usePerformanceReportQuery } from 'graphql/generated';
 import { useStoreState } from 'state';
 
 interface Return {

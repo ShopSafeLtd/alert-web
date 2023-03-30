@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { Doc } from 'yjs';
 import { WebsocketProvider } from 'y-websocket';
-import useYjsAwareness, { User } from './useYjsAwareness';
+import type { User } from './useYjsAwareness';
+import useYjsAwareness from './useYjsAwareness';
 
 // import ydoc from '../../../../../../components/react-flow/yDoc/yDoc';
 

@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import type {
+  ViewOffenderQuery,
+  ViewOffenderQueryVariables,
+} from 'graphql/generated';
 import {
   Role,
   useAddImagesToOffenderMutation,
@@ -9,13 +13,11 @@ import {
   useUpdateUpdateMutation,
   useViewOffenderQuery,
   ViewOffenderDocument,
-  ViewOffenderQuery,
-  ViewOffenderQueryVariables,
 } from 'graphql/generated';
 
 import { Modal, notification } from 'antd';
 import { useStoreState } from 'state';
-import { ItemType } from 'antd/lib/menu/hooks/useItems';
+import type { ItemType } from 'antd/lib/menu/hooks/useItems';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPeople, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { useNavigate } from 'react-router';
@@ -320,11 +322,9 @@ const useViewOffender = (offenderId: string): Return => {
                 data: {
                   offender: {
                     ...oldData.offender,
-                    updates: [
-                      ...oldData.offender.updates.filter(
-                        (item) => item.id !== result.data?.deleteUpdate?.id
-                      ),
-                    ],
+                    updates: oldData.offender.updates.filter(
+                      (item) => item.id !== result.data?.deleteUpdate?.id
+                    ),
                   },
                 },
               });

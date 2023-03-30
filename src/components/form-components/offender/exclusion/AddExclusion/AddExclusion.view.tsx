@@ -4,7 +4,7 @@ import type { Moment } from 'moment';
 
 import type { RangePickerProps } from 'antd/es/date-picker';
 
-import { BanData } from 'types/DataType';
+import type { BanData } from 'types/DataType';
 import BanTypeValues from 'types/enums/ban-type';
 
 // interface FormData {

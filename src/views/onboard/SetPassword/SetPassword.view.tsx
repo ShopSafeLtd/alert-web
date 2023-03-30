@@ -59,7 +59,7 @@ const SetPassword = ({ onSubmit, saving }: Props): JSX.Element => (
                   message: 'Please set a password for the account.',
                 },
                 {
-                  pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+                  pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[\dA-Za-z]{8,}$/,
                   message:
                     'Password must contain upper and lower case letters, a number, and be at least 8 characters long.',
                 },

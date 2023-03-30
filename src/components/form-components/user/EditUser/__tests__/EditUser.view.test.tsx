@@ -13,6 +13,7 @@ describe('Detail Officer View', () => {
       email: '@shopsafe.uk',
       disabled: false,
       newUser: false,
+      publicName: true,
       groups: [
         {
           id: 'groupId',

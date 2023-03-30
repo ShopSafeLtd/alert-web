@@ -250,6 +250,8 @@ const UseAddUserTest = () => {
       subscribedIncidentOnly: false,
       subscribedOffenderOnly: false,
       messagePush: false,
+      publicName: true,
+
       offenderEmail: false,
       offenderPush: false,
     };
@@ -291,6 +293,8 @@ const UseAddUserTest = () => {
             },
             role: Role.User,
             groups: ['groupId'],
+            publicName: true,
+
             chats: ['chatId'],
             incidentEmail: false,
             incidentPush: false,

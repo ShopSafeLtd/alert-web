@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import type { RangePickerProps } from 'antd/es/date-picker';
 import type { Moment } from 'moment';
-import { BanData } from 'types/DataType';
+import type { BanData } from 'types/DataType';
 // import { BanType } from 'graphql/generated';
 
 interface Props {

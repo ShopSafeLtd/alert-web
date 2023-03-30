@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {
+import type {
   Age,
   Build,
   CreateCrimeGroupDataInput,
@@ -9,14 +9,16 @@ import {
   Gender,
   IdSource,
   ListCrimeGroupsQuery,
-  ListOffendersDocument,
   ListOffendersQuery,
   ListVehiclesQuery,
-  Model,
   Race,
+  TagsQuery,
+} from 'graphql/generated';
+import {
+  ListOffendersDocument,
+  Model,
   Role,
   TagsDocument,
-  TagsQuery,
   useCreateCrimeGroupMutation,
   useCreateOffenderMutation,
   useListCrimeGroupsQuery,
@@ -24,12 +26,13 @@ import {
   useSchemeGroupsQuery,
   useTagsQuery,
 } from 'graphql/generated';
-import { Form, FormInstance, message, Modal, notification, Upload } from 'antd';
+import type { FormInstance } from 'antd';
+import { Form, message, Modal, notification, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
-import { BanData, CrimeGroupData, VehicleData } from 'types/DataType';
+import type { BanData, CrimeGroupData, VehicleData } from 'types/DataType';
 
 const { confirm } = Modal;
 
@@ -293,7 +296,8 @@ const useAddOffender = (): Return => {
           offenders:
             existingData?.listOffenders?.offenders &&
             existingData.listOffenders.offenders.length > 0
-              ? existingData?.listOffenders?.offenders.concat(
+              ? // eslint-disable-next-line unicorn/prefer-spread
+                existingData?.listOffenders?.offenders.concat(
                   res.createOffender
                 )
               : [res.createOffender],
@@ -308,20 +312,20 @@ const useAddOffender = (): Return => {
     });
   };
   const [createCrimeGroup] = useCreateCrimeGroupMutation({});
+  const getOffender = (): CreateCrimeGroupDataInput['offenders'] => {
+    const newCrimeGroups = crimeGroupsData.filter((item) =>
+      listCrimeGroupsData?.listCrimeGroups.crimeGroups.filter(
+        ({ id }) => id !== item.id
+      )
+    );
+    const connectIds = newCrimeGroups
+      .flatMap((crimeGroup) => crimeGroup.offenders?.map((id) => ({ id })))
+      .filter((id) => id !== (undefined || null)) as { id: string }[]; // ???
+    return { connect: connectIds };
+  };
+
   const [createOffender] = useCreateOffenderMutation({
     onCompleted: async () => {
-      const getOffender = (): CreateCrimeGroupDataInput['offenders'] => {
-        const newCrimeGroups = crimeGroupsData.filter((item) =>
-          listCrimeGroupsData?.listCrimeGroups.crimeGroups.filter(
-            ({ id }) => id !== item.id
-          )
-        );
-        const connectIds = newCrimeGroups
-          .map((crimeGroup) => crimeGroup.offenders?.map((id) => ({ id })))
-          .flat()
-          .filter((id) => id !== (undefined || null)) as { id: string }[]; // ???
-        return { connect: connectIds };
-      };
       await createCrimeGroup({
         variables: {
           data: {
@@ -361,23 +365,24 @@ const useAddOffender = (): Return => {
     setSaving(true);
     const getVehicles = (): CreateOffenderData['vehicles'] => {
       if (vehiclesData && listVehiclesData?.listVehicles) {
-        const vehiclesIds = listVehiclesData.listVehicles.vehicles.map(
-          (vehicle) => vehicle.id
+        const vehiclesIds = new Set(
+          listVehiclesData.listVehicles.vehicles.map((vehicle) => vehicle.id)
         );
 
         const newVehicles = vehiclesData.filter(
-          (item) => !vehiclesIds.includes(item.id)
+          (item) => !vehiclesIds.has(item.id)
         );
         const existingVehicles = vehiclesData.filter((item) =>
-          vehiclesIds.includes(item.id)
+          vehiclesIds.has(item.id)
         );
         const editedVehicles = existingVehicles.filter(
           ({ edited }) => edited === true
         );
         return {
-          connect: existingVehicles.length
-            ? existingVehicles.map(({ id }) => ({ id }))
-            : undefined,
+          connect:
+            existingVehicles.length > 0
+              ? existingVehicles.map(({ id }) => ({ id }))
+              : undefined,
           update: editedVehicles.map((vehicle) => ({
             where: { id: vehicle.id },
             data: {
@@ -386,36 +391,35 @@ const useAddOffender = (): Return => {
               colour: { set: vehicle.colour },
               registration: { set: vehicle.registration },
               crimeGroup:
-                vehicle.crimeGroup && vehicle.crimeGroup.length
+                vehicle.crimeGroup && vehicle.crimeGroup.length > 0
                   ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
                   : undefined,
-              incidents:
-                vehicle.incidents && vehicle.incidents
-                  ? { connect: vehicle.incidents.map((id) => ({ id })) }
-                  : undefined,
+              incidents: vehicle.incidents
+                ? { connect: vehicle.incidents.map((id) => ({ id })) }
+                : undefined,
               offenders:
-                vehicle.offenders && vehicle.offenders.length
+                vehicle.offenders && vehicle.offenders.length > 0
                   ? { connect: vehicle.offenders.map((id) => ({ id })) }
                   : undefined,
             },
           })),
 
-          create: newVehicles.length
-            ? newVehicles.map((vehicle) => ({
-                make: vehicle.make,
-                model: vehicle.model,
-                colour: vehicle.colour,
-                registration: vehicle.registration,
-                crimeGroup:
-                  vehicle.crimeGroup && vehicle.crimeGroup.length
-                    ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
-                    : undefined,
-                incidents:
-                  vehicle.incidents && vehicle.incidents
+          create:
+            newVehicles.length > 0
+              ? newVehicles.map((vehicle) => ({
+                  make: vehicle.make,
+                  model: vehicle.model,
+                  colour: vehicle.colour,
+                  registration: vehicle.registration,
+                  crimeGroup:
+                    vehicle.crimeGroup && vehicle.crimeGroup.length > 0
+                      ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
+                      : undefined,
+                  incidents: vehicle.incidents
                     ? { connect: vehicle.incidents.map((id) => ({ id })) }
                     : undefined,
-              }))
-            : undefined,
+                }))
+              : undefined,
         };
       }
       return {
@@ -425,19 +429,21 @@ const useAddOffender = (): Return => {
     };
     const getCrimeGroups = (): CreateOffenderData['crimeGroups'] => {
       if (crimeGroupsData && listCrimeGroupsData?.listCrimeGroups) {
-        const crimeGroupsIds =
+        const crimeGroupsIds = new Set(
           listCrimeGroupsData.listCrimeGroups.crimeGroups.map(
             (crimeGroup) => crimeGroup.id
-          );
+          )
+        );
 
         const existingCrimeGroups = crimeGroupsData.filter((item) =>
-          crimeGroupsIds.includes(item.id)
+          crimeGroupsIds.has(item.id)
         );
 
         return {
-          connect: existingCrimeGroups.length
-            ? existingCrimeGroups.map(({ id }) => ({ id }))
-            : undefined,
+          connect:
+            existingCrimeGroups.length > 0
+              ? existingCrimeGroups.map(({ id }) => ({ id }))
+              : undefined,
         };
       }
       return {
@@ -552,7 +558,7 @@ const useAddOffender = (): Return => {
       src = await new Promise((resolve) => {
         const reader = new FileReader();
         reader.readAsDataURL(file.originFileObj as RcFile);
-        reader.onload = () => resolve(reader.result as string);
+        reader.addEventListener('load', () => resolve(reader.result as string));
       });
     }
     const image = new Image();
@@ -584,7 +590,7 @@ const useAddOffender = (): Return => {
   };
   const updateExclusion = (value: BanData) => {
     if (bansData && bansData.length > 0) {
-      if (bansData.find(({ id }) => id === value.id)) {
+      if (bansData.some(({ id }) => id === value.id)) {
         setBansData(
           bansData.map((ban) => {
             if (ban.id === value.id) {

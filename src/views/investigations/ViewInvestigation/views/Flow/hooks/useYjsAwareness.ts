@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Doc } from 'yjs';
+import type { Doc } from 'yjs';
 import * as awarenessProtocol from 'y-protocols/awareness';
 import getRandomColor from '../../../../../../utils/getRandomColor';
 

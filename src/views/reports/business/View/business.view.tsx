@@ -11,8 +11,9 @@ import {
   Button,
   DatePicker,
 } from 'antd';
-import { BusinessReportQuery } from 'graphql/generated';
-import moment, { Moment } from 'moment';
+import type { BusinessReportQuery } from 'graphql/generated';
+import type { Moment } from 'moment';
+import moment from 'moment';
 import BusinessSideList from 'components/businesses/BusinessSideList';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload } from '@fortawesome/pro-light-svg-icons';

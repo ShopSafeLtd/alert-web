@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import { AddressesQuery } from 'graphql/generated';
+import type { AddressesQuery } from 'graphql/generated';
 import { Button, Col, Form, Radio, Row, Skeleton, Typography } from 'antd';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faLocationDot } from '@fortawesome/pro-light-svg-icons';

@@ -1,9 +1,9 @@
 import React from 'react';
+import type { FormInstance } from 'antd';
 import {
   Button,
   Col,
   Form,
-  FormInstance,
   Input,
   Row,
   Skeleton,
