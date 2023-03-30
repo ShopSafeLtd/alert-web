@@ -203,7 +203,6 @@ const SchemeTerms = ({
                             );
                           }}
                         >
-                          {/*  select for each of the FONT_FAMILIES with the select option value bieng the font, the text being name */}
                           {FONT_FAMILIES.map((font) => (
                             <Select.Option
                               key={font}
