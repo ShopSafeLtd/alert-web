@@ -5,6 +5,7 @@ import svgrPlugin from 'vite-plugin-svgr';
 import envCompatible from 'vite-plugin-env-compatible';
 // import checker from 'vite-plugin-checker';
 import removeConsole from 'vite-plugin-remove-console';
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 
 // local host launch fix
 const dns = require('node:dns');
@@ -36,13 +37,12 @@ export default defineConfig(({ mode }) => {
       //   },
       // }),
       // must be last
-      // sentryVitePlugin({
-      //
-      //   org: 'nvoyy-group',
-      //   project: 'alert-web',
-      //   include: './build',
-      //   authToken: env.SENTRY_AUTH_TOKEN,
-      // }),
+      sentryVitePlugin({
+        org: 'nvoyy-group',
+        project: 'alert-web',
+        include: './build',
+        authToken: env.SENTRY_AUTH_TOKEN,
+      }),
     ],
     define: {
       APP_VERSION: JSON.stringify(process.env.npm_package_version),
