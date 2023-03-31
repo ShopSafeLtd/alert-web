@@ -15,7 +15,6 @@
     },
     "ecmaVersion": 12,
     "sourceType": "module",
-    "emitDecoratorMetadata": true,
     "project": "./tsconfig.json"
   },
   "plugins": [

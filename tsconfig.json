@@ -6,7 +6,6 @@
     "downlevelIteration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "emitDecoratorMetadata": true,
     "inlineSources": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
