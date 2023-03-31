@@ -53,7 +53,6 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
       createdBy {
         id
         businesses {
-          fullName
           id
           name
         }
@@ -127,6 +126,7 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
         }
       }
       createdBy {
+        origName
         id
         fullName
         businesses {
@@ -198,10 +198,10 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
           }
         }
         createdBy {
+          origName
           id
           fullName
           businesses {
-            fullName
             id
             name
           }

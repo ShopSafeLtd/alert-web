@@ -16,7 +16,7 @@ import { notification } from 'antd';
 interface FormData {
   name: string;
   description: string;
-  users?: string[];
+  users: string[];
 }
 interface Props {
   onClose: () => void;

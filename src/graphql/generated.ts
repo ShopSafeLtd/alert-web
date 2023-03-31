@@ -21,6 +21,7 @@ export type Scalars = {
   Float: number;
   DateTime: any;
   Json: any;
+  /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
 
@@ -39283,6 +39284,7 @@ export type AddUsersToBusinessMutation = {
       fullName: string;
       status?: string | null;
       publicName: boolean;
+      loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: any }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     }>;
   };
@@ -39336,6 +39338,7 @@ export type RemoveUserFromBusinessMutation = {
       fullName: string;
       status?: string | null;
       publicName: boolean;
+      loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: any }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     }>;
   };
@@ -39611,6 +39614,8 @@ export type ChatQuery = {
         id: string;
         fullName: string;
         firstLetter?: string | null;
+        origFirstLetter?: string | null;
+        origName: string;
         businesses: Array<{
           __typename?: 'Business';
           fullName: string;
@@ -39644,6 +39649,7 @@ export type CreateChatMutation = {
         id: string;
         fullName: string;
         firstLetter?: string | null;
+        origFirstLetter?: string | null;
         origName: string;
         businesses: Array<{
           __typename?: 'Business';
@@ -39662,7 +39668,12 @@ export type CreateChatMutation = {
           id: string;
           content: string;
           createdAt: any;
-          from: { __typename?: 'User'; id: string; fullName: string };
+          from: {
+            __typename?: 'User';
+            id: string;
+            fullName: string;
+            origName: string;
+          };
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -39932,7 +39943,6 @@ export type CrimeGroupQuery = {
         id: string;
         businesses: Array<{
           __typename?: 'Business';
-          fullName: string;
           id: string;
           name: string;
         }>;
@@ -40012,6 +40022,7 @@ export type CrimeGroupQuery = {
       }>;
       createdBy: {
         __typename?: 'User';
+        origName: string;
         id: string;
         fullName: string;
         businesses: Array<{
@@ -40094,11 +40105,11 @@ export type CrimeGroupQuery = {
         }>;
         createdBy: {
           __typename?: 'User';
+          origName: string;
           id: string;
           fullName: string;
           businesses: Array<{
             __typename?: 'Business';
-            fullName: string;
             id: string;
             name: string;
           }>;
@@ -41488,6 +41499,12 @@ export type ViewIncidentQuery = {
       totalIncidents?: number | null;
       totalOffenders?: number | null;
       updatedAt: any;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
     }>;
     offenders: Array<{
       __typename?: 'Offender';
@@ -41589,6 +41606,7 @@ export type ViewIncidentQuery = {
       }>;
       createdBy: {
         __typename?: 'User';
+        origName: string;
         id: string;
         fullName: string;
         businesses: Array<{
@@ -41671,6 +41689,7 @@ export type ViewIncidentQuery = {
         }>;
         createdBy: {
           __typename?: 'User';
+          origName: string;
           id: string;
           fullName: string;
           businesses: Array<{
@@ -41905,6 +41924,7 @@ export type ViewInvestigationQuery = {
       totalCrimeGroups?: number | null;
       totalOffenders?: number | null;
       totalIncidents?: number | null;
+      reference?: number | null;
     }>;
     updates: Array<{
       __typename?: 'Update';
@@ -41980,6 +42000,7 @@ export type ViewInvestigationQuery = {
       }>;
       createdBy: {
         __typename?: 'User';
+        origName: string;
         id: string;
         fullName: string;
         businesses: Array<{
@@ -42062,6 +42083,7 @@ export type ViewInvestigationQuery = {
         }>;
         createdBy: {
           __typename?: 'User';
+          origName: string;
           id: string;
           fullName: string;
           businesses: Array<{
@@ -42156,6 +42178,7 @@ export type CreateMessageMutation = {
       id: string;
       fullName: string;
       firstLetter?: string | null;
+      origFirstLetter?: string | null;
       origName: string;
     } | null;
     images: Array<{
@@ -42252,6 +42275,8 @@ export type UpdateMessageMutation = {
       __typename?: 'User';
       id: string;
       fullName: string;
+      origFirstLetter?: string | null;
+      firstLetter?: string | null;
       businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
     };
     chat: { __typename?: 'Chat'; id: string; name: string };
@@ -43189,6 +43214,7 @@ export type ViewOffenderQuery = {
       }>;
       createdBy: {
         __typename?: 'User';
+        origName: string;
         id: string;
         fullName: string;
         businesses: Array<{
@@ -43271,6 +43297,7 @@ export type ViewOffenderQuery = {
         }>;
         createdBy: {
           __typename?: 'User';
+          origName: string;
           id: string;
           fullName: string;
           businesses: Array<{
@@ -43908,6 +43935,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
     }>;
     createdBy: {
       __typename?: 'User';
+      origName: string;
       id: string;
       fullName: string;
       businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
@@ -43986,6 +44014,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
       }>;
       createdBy: {
         __typename?: 'User';
+        origName: string;
         id: string;
         fullName: string;
         businesses: Array<{
@@ -44079,6 +44108,7 @@ export type CreateUpdateOnIncidentMutation = {
     }>;
     createdBy: {
       __typename?: 'User';
+      origName: string;
       id: string;
       fullName: string;
       businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
@@ -44118,6 +44148,12 @@ export type CreateUpdateOnIncidentMutation = {
         make?: string | null;
         id: string;
         colour?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
       }>;
       linkedIncidents: Array<{
         __typename?: 'Incident';
@@ -44151,6 +44187,7 @@ export type CreateUpdateOnIncidentMutation = {
       }>;
       createdBy: {
         __typename?: 'User';
+        origName: string;
         id: string;
         fullName: string;
         businesses: Array<{
@@ -44244,6 +44281,7 @@ export type CreateUpdateOnInvestigationMutation = {
     }>;
     createdBy: {
       __typename?: 'User';
+      origName: string;
       id: string;
       fullName: string;
       businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
@@ -44322,6 +44360,7 @@ export type CreateUpdateOnInvestigationMutation = {
       }>;
       createdBy: {
         __typename?: 'User';
+        origName: string;
         id: string;
         fullName: string;
         businesses: Array<{
@@ -44415,6 +44454,7 @@ export type CreateUpdateOnOffenderMutation = {
     }>;
     createdBy: {
       __typename?: 'User';
+      origName: string;
       id: string;
       fullName: string;
       businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
@@ -44493,6 +44533,7 @@ export type CreateUpdateOnOffenderMutation = {
       }>;
       createdBy: {
         __typename?: 'User';
+        origName: string;
         id: string;
         fullName: string;
         businesses: Array<{
@@ -44586,6 +44627,7 @@ export type CreateUpdateOnVehicleMutation = {
     }>;
     createdBy: {
       __typename?: 'User';
+      origName: string;
       id: string;
       fullName: string;
       businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
@@ -44664,6 +44706,7 @@ export type CreateUpdateOnVehicleMutation = {
       }>;
       createdBy: {
         __typename?: 'User';
+        origName: string;
         id: string;
         fullName: string;
         businesses: Array<{
@@ -44908,7 +44951,13 @@ export type CreateUserChatMutation = {
         id: string;
         content: string;
         createdAt: any;
-        from: { __typename?: 'User'; id: string; fullName: string };
+        from: {
+          __typename?: 'User';
+          id: string;
+          fullName: string;
+          origFirstLetter?: string | null;
+          origName: string;
+        };
       }>;
     };
   };
@@ -44957,7 +45006,13 @@ export type UpdateUserChatMutation = {
           id: string;
           content: string;
           createdAt: any;
-          from: { __typename?: 'User'; id: string; fullName: string };
+          from: {
+            __typename?: 'User';
+            id: string;
+            fullName: string;
+            origFirstLetter?: string | null;
+            origName: string;
+          };
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -45016,6 +45071,8 @@ export type UserChatsQuery = {
         id: string;
         fullName: string;
         firstLetter?: string | null;
+        origFirstLetter?: string | null;
+        origName: string;
       };
       chat: {
         __typename?: 'Chat';
@@ -45028,7 +45085,14 @@ export type UserChatsQuery = {
           id: string;
           content: string;
           createdAt: any;
-          from: { __typename?: 'User'; id: string; fullName: string };
+          from: {
+            __typename?: 'User';
+            id: string;
+            fullName: string;
+            origFirstLetter?: string | null;
+            origName: string;
+            firstLetter?: string | null;
+          };
           images: Array<{
             __typename?: 'Image';
             id: string;
@@ -45073,6 +45137,8 @@ export type CreateUserInDatabaseMutation = {
     id: string;
     fullName: string;
     firstLetter?: string | null;
+    origName: string;
+    origFirstLetter?: string | null;
     email: string;
     publicName: boolean;
     status?: string | null;
@@ -45083,6 +45149,7 @@ export type CreateUserInDatabaseMutation = {
       fullName: string;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: any }>;
   } | null;
 };
 
@@ -45099,6 +45166,8 @@ export type InviteExistingUserMutation = {
     id: string;
     fullName: string;
     firstLetter?: string | null;
+    origName: string;
+    origFirstLetter?: string | null;
     email: string;
     publicName: boolean;
     status?: string | null;
@@ -45109,6 +45178,7 @@ export type InviteExistingUserMutation = {
       fullName: string;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: any }>;
   } | null;
 };
 
@@ -45128,6 +45198,7 @@ export type ListBusinessUsersQuery = {
     fullName: string;
     status?: string | null;
     publicName: boolean;
+    loginEvents: Array<{ __typename?: 'LoginEvent'; loginTime: any }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
   }>;
 };
@@ -45148,6 +45219,8 @@ export type ListSchemeUsersQuery = {
     id: string;
     fullName: string;
     firstLetter?: string | null;
+    origName: string;
+    origFirstLetter?: string | null;
     email: string;
     publicName: boolean;
     status?: string | null;
@@ -45158,6 +45231,36 @@ export type ListSchemeUsersQuery = {
       fullName: string;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+  }>;
+};
+
+export type SchemeUsersQueryVariables = Exact<{
+  scheme?: InputMaybe<Scalars['String']>;
+  search?: InputMaybe<Scalars['String']>;
+  orderByName?: InputMaybe<SortOrder>;
+  orderByBusinesses?: InputMaybe<BusinessOrderByRelationAggregateInput>;
+  orderByCreatedAt?: InputMaybe<SortOrder>;
+  disabled?: InputMaybe<BoolFilter>;
+  newUser?: InputMaybe<BoolFilter>;
+  role?: InputMaybe<Role>;
+  after?: InputMaybe<UserWhereUniqueInput>;
+}>;
+
+export type SchemeUsersQuery = {
+  __typename?: 'Query';
+  users: Array<{
+    __typename?: 'User';
+    id: string;
+    fullName: string;
+    newUser: boolean;
+    disabled: boolean;
+    businesses: Array<{
+      __typename?: 'Business';
+      id: string;
+      name: string;
+      fullName: string;
+    }>;
+    schemes: Array<{ __typename?: 'UserScheme'; id: string; role: Role }>;
   }>;
 };
 
@@ -45518,6 +45621,7 @@ export type VehicleQuery = {
       }>;
       createdBy: {
         __typename?: 'User';
+        origName: string;
         id: string;
         fullName: string;
         businesses: Array<{
@@ -45600,6 +45704,7 @@ export type VehicleQuery = {
         }>;
         createdBy: {
           __typename?: 'User';
+          origName: string;
           id: string;
           fullName: string;
           businesses: Array<{
@@ -46759,6 +46864,9 @@ export const AddUsersToBusinessDocument = gql`
         fullName
         status
         publicName
+        loginEvents {
+          loginTime
+        }
         groups(where: $groupWhere) {
           id
           name
@@ -46897,6 +47005,9 @@ export const RemoveUserFromBusinessDocument = gql`
         fullName
         status
         publicName
+        loginEvents {
+          loginTime
+        }
         groups(where: $groupWhere) {
           id
           name
@@ -47558,12 +47669,14 @@ export const ChatDocument = gql`
         user {
           id
           fullName
+          firstLetter
+          origFirstLetter
+          origName
           businesses {
             fullName
             id
             name
           }
-          firstLetter
         }
       }
     }
@@ -47619,6 +47732,7 @@ export const CreateChatDocument = gql`
           id
           fullName
           firstLetter
+          origFirstLetter
           origName
           businesses {
             fullName
@@ -47637,6 +47751,7 @@ export const CreateChatDocument = gql`
             from {
               id
               fullName
+              origName
             }
             images {
               id
@@ -48216,7 +48331,6 @@ export const CrimeGroupDocument = gql`
         createdBy {
           id
           businesses {
-            fullName
             id
             name
           }
@@ -48290,6 +48404,7 @@ export const CrimeGroupDocument = gql`
           }
         }
         createdBy {
+          origName
           id
           fullName
           businesses {
@@ -48361,10 +48476,10 @@ export const CrimeGroupDocument = gql`
             }
           }
           createdBy {
+            origName
             id
             fullName
             businesses {
-              fullName
               id
               name
             }
@@ -50934,6 +51049,11 @@ export const ViewIncidentDocument = gql`
         totalIncidents
         totalOffenders
         updatedAt
+        images {
+          id
+          url
+          optimised
+        }
       }
       offenders {
         id
@@ -51031,6 +51151,7 @@ export const ViewIncidentDocument = gql`
           }
         }
         createdBy {
+          origName
           id
           fullName
           businesses {
@@ -51107,6 +51228,7 @@ export const ViewIncidentDocument = gql`
             }
           }
           createdBy {
+            origName
             id
             fullName
             businesses {
@@ -51685,6 +51807,7 @@ export const ViewInvestigationDocument = gql`
         totalCrimeGroups
         totalOffenders
         totalIncidents
+        reference
       }
       updates(orderBy: { createdAt: desc }) {
         id
@@ -51750,6 +51873,7 @@ export const ViewInvestigationDocument = gql`
           }
         }
         createdBy {
+          origName
           id
           fullName
           businesses {
@@ -51821,6 +51945,7 @@ export const ViewInvestigationDocument = gql`
             }
           }
           createdBy {
+            origName
             id
             fullName
             businesses {
@@ -51961,6 +52086,7 @@ export const CreateMessageDocument = gql`
         id
         fullName
         firstLetter
+        origFirstLetter
         origName
       }
       sent
@@ -52131,6 +52257,8 @@ export const UpdateMessageDocument = gql`
       from {
         id
         fullName
+        origFirstLetter
+        firstLetter
         businesses {
           id
           name
@@ -53694,6 +53822,7 @@ export const ViewOffenderDocument = gql`
           }
         }
         createdBy {
+          origName
           id
           fullName
           businesses {
@@ -53765,6 +53894,7 @@ export const ViewOffenderDocument = gql`
             }
           }
           createdBy {
+            origName
             id
             fullName
             businesses {
@@ -55149,6 +55279,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
         }
       }
       createdBy {
+        origName
         id
         fullName
         businesses {
@@ -55220,6 +55351,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
           }
         }
         createdBy {
+          origName
           id
           fullName
           businesses {
@@ -55345,6 +55477,7 @@ export const CreateUpdateOnIncidentDocument = gql`
         }
       }
       createdBy {
+        origName
         id
         fullName
         businesses {
@@ -55383,6 +55516,11 @@ export const CreateUpdateOnIncidentDocument = gql`
           make
           id
           colour
+          images {
+            id
+            url
+            optimised
+          }
         }
         linkedIncidents {
           id
@@ -55411,6 +55549,7 @@ export const CreateUpdateOnIncidentDocument = gql`
           }
         }
         createdBy {
+          origName
           id
           fullName
           businesses {
@@ -55535,6 +55674,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
         colour
       }
       createdBy {
+        origName
         id
         fullName
         businesses {
@@ -55606,6 +55746,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
           }
         }
         createdBy {
+          origName
           id
           fullName
           businesses {
@@ -55731,6 +55872,7 @@ export const CreateUpdateOnOffenderDocument = gql`
         }
       }
       createdBy {
+        origName
         id
         fullName
         businesses {
@@ -55802,6 +55944,7 @@ export const CreateUpdateOnOffenderDocument = gql`
           }
         }
         createdBy {
+          origName
           id
           fullName
           businesses {
@@ -55926,6 +56069,7 @@ export const CreateUpdateOnVehicleDocument = gql`
         }
       }
       createdBy {
+        origName
         id
         fullName
         businesses {
@@ -55997,6 +56141,7 @@ export const CreateUpdateOnVehicleDocument = gql`
           }
         }
         createdBy {
+          origName
           id
           fullName
           businesses {
@@ -56657,6 +56802,8 @@ export const CreateUserChatDocument = gql`
           from {
             id
             fullName
+            origFirstLetter
+            origName
           }
         }
       }
@@ -56783,6 +56930,8 @@ export const UpdateUserChatDocument = gql`
             from {
               id
               fullName
+              origFirstLetter
+              origName
             }
             images {
               id
@@ -56877,6 +57026,8 @@ export const UserChatsDocument = gql`
           id
           fullName
           firstLetter
+          origFirstLetter
+          origName
         }
         chat {
           id
@@ -56890,6 +57041,9 @@ export const UserChatsDocument = gql`
             from {
               id
               fullName
+              origFirstLetter
+              origName
+              firstLetter
             }
             images {
               id
@@ -56975,6 +57129,8 @@ export const CreateUserInDatabaseDocument = gql`
       id
       fullName
       firstLetter
+      origName
+      origFirstLetter
       email
       publicName
       businesses {
@@ -56986,6 +57142,9 @@ export const CreateUserInDatabaseDocument = gql`
       groups(where: $groupWhere) {
         id
         name
+      }
+      loginEvents {
+        loginTime
       }
     }
   }
@@ -57044,6 +57203,8 @@ export const InviteExistingUserDocument = gql`
       id
       fullName
       firstLetter
+      origName
+      origFirstLetter
       email
       publicName
       businesses {
@@ -57055,6 +57216,9 @@ export const InviteExistingUserDocument = gql`
       groups(where: $groupWhere) {
         id
         name
+      }
+      loginEvents {
+        loginTime
       }
     }
   }
@@ -57115,6 +57279,9 @@ export const ListBusinessUsersDocument = gql`
       fullName
       status
       publicName
+      loginEvents {
+        loginTime
+      }
       groups(where: $groupWhere) {
         id
         name
@@ -57186,6 +57353,8 @@ export const ListSchemeUsersDocument = gql`
       id
       fullName
       firstLetter
+      origName
+      origFirstLetter
       email
       publicName
       businesses {
@@ -57254,6 +57423,112 @@ export type ListSchemeUsersLazyQueryHookResult = ReturnType<
 export type ListSchemeUsersQueryResult = Apollo.QueryResult<
   ListSchemeUsersQuery,
   ListSchemeUsersQueryVariables
+>;
+export const SchemeUsersDocument = gql`
+  query schemeUsers(
+    $scheme: String
+    $search: String
+    $orderByName: SortOrder
+    $orderByBusinesses: BusinessOrderByRelationAggregateInput
+    $orderByCreatedAt: SortOrder
+    $disabled: BoolFilter
+    $newUser: BoolFilter
+    $role: Role
+    $after: UserWhereUniqueInput
+  ) {
+    users(
+      where: {
+        schemes: {
+          some: {
+            recycled: { equals: false }
+            role: { equals: $role }
+            scheme: { id: { equals: $scheme } }
+          }
+        }
+        recycled: { equals: false }
+        OR: [{ fullName: { contains: $search } }]
+        disabled: $disabled
+        newUser: $newUser
+      }
+      orderBy: {
+        fullName: $orderByName
+        businesses: $orderByBusinesses
+        createdAt: $orderByCreatedAt
+      }
+      after: $after
+    ) {
+      id
+      fullName
+      businesses {
+        id
+        name
+        fullName
+      }
+      newUser
+      disabled
+      schemes(where: { scheme: { id: { equals: $scheme } } }) {
+        id
+        role
+      }
+    }
+  }
+`;
+
+/**
+ * __useSchemeUsersQuery__
+ *
+ * To run a query within a React component, call `useSchemeUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSchemeUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSchemeUsersQuery({
+ *   variables: {
+ *      scheme: // value for 'scheme'
+ *      search: // value for 'search'
+ *      orderByName: // value for 'orderByName'
+ *      orderByBusinesses: // value for 'orderByBusinesses'
+ *      orderByCreatedAt: // value for 'orderByCreatedAt'
+ *      disabled: // value for 'disabled'
+ *      newUser: // value for 'newUser'
+ *      role: // value for 'role'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useSchemeUsersQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    SchemeUsersQuery,
+    SchemeUsersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SchemeUsersQuery, SchemeUsersQueryVariables>(
+    SchemeUsersDocument,
+    options
+  );
+}
+export function useSchemeUsersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SchemeUsersQuery,
+    SchemeUsersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<SchemeUsersQuery, SchemeUsersQueryVariables>(
+    SchemeUsersDocument,
+    options
+  );
+}
+export type SchemeUsersQueryHookResult = ReturnType<typeof useSchemeUsersQuery>;
+export type SchemeUsersLazyQueryHookResult = ReturnType<
+  typeof useSchemeUsersLazyQuery
+>;
+export type SchemeUsersQueryResult = Apollo.QueryResult<
+  SchemeUsersQuery,
+  SchemeUsersQueryVariables
 >;
 export const SearchUserDocument = gql`
   query SearchUser($where: UserWhereUniqueInput!) {
@@ -57907,6 +58182,7 @@ export const VehicleDocument = gql`
           }
         }
         createdBy {
+          origName
           id
           fullName
           businesses {
@@ -57978,6 +58254,7 @@ export const VehicleDocument = gql`
             }
           }
           createdBy {
+            origName
             id
             fullName
             businesses {

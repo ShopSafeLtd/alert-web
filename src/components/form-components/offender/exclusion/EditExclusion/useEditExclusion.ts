@@ -35,10 +35,9 @@ const useEditBan = ({ onClose, update, banData }: Props): Return => {
   const onSubmit = (data: BanData) => {
     setSaving(true);
     update({
-      // ???
       ...banData,
       id: banData?.id || '',
-      // title: banData?.title || null,
+      title: banData?.title || null,
       startDate: data.startDate,
       endDate: data.endDate,
       location: data.location || '',

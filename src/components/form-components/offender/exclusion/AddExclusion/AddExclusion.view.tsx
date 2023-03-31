@@ -31,6 +31,22 @@ const AddExclusion = ({
 }: Props): JSX.Element => (
   <Form layout="vertical" onFinish={onSubmit}>
     <Row gutter={16}>
+      <Col span={21}>
+        <Form.Item
+          name="title"
+          label="Exclusion Title"
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: 'Please enter a title for the new exclusion.',
+          //   },
+          // ]}
+        >
+          <Input disabled={saving} />
+        </Form.Item>
+      </Col>
+    </Row>
+    <Row gutter={16}>
       <Col span={11}>
         <Form.Item
           name="startDate"

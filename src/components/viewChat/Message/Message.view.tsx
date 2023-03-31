@@ -105,6 +105,8 @@ interface Props {
         id: string;
         fullName?: string | null | undefined;
         firstLetter?: string | null | undefined;
+        origName?: string | null | undefined;
+        origFirstLetter?: string | null | undefined;
       }
     | undefined
     | null;
@@ -154,7 +156,7 @@ const Content = ({
   >
     {showUser && (
       <Col>
-        <Avatar className="message-avatar">{from?.firstLetter}</Avatar>
+        <Avatar className="message-avatar">{from?.origFirstLetter}</Avatar>
       </Col>
     )}
     <Col>
@@ -191,64 +193,60 @@ const Content = ({
             </Text>
           </Col>
         </Row>
-        <>
-          {images && images.length > 0 && (
-            <Row style={{ margin: 5 }}>
-              {images.length === 1 ? (
-                images.map((image) => (
-                  <Col key={image.id}>
-                    <div style={{ height: 300, width: 300 }}>
-                      <WatermarkImage url={image.optimised} />
-                    </div>
-                  </Col>
-                ))
-              ) : (
-                <Row style={{ backgroundColor: '#FFF', width: 500 }}>
-                  {images.map((image, index) => (
-                    <Col
-                      key={image.id}
-                      span={getImageSpan(images.length, index)}
-                    >
-                      <CollageImage
-                        index={index}
-                        length={images.length}
-                        src={image.optimised}
-                      />
-                    </Col>
-                  ))}
-                </Row>
-              )}
-            </Row>
-          )}
-          {offenders &&
-            offenders.length > 0 &&
-            offenders.map((offender) => (
-              <OffenderMessageCard key={offender.id} offender={offender} />
-            ))}
-          {incidents &&
-            incidents.length > 0 &&
-            incidents.map((incident) => (
-              <IncidentMessageCard key={incident.id} incident={incident} />
-            ))}
-          {vehicles &&
-            vehicles.length > 0 &&
-            vehicles.map((vehicle) => (
-              <VehicleMessageCard key={vehicle.id} vehicle={vehicle} />
-            ))}
 
-          {crimeGroups && crimeGroups.length > 0 && (
-            <CrimeGroupMessageList crimeGroups={crimeGroups} />
-          )}
-          {content && (
-            <Row key={id}>
-              <div className="message-content-bubble">
-                <Col>
-                  <Text>{getContent(content)}</Text>
+        {images && images.length > 0 && (
+          <Row style={{ margin: 5 }}>
+            {images.length === 1 ? (
+              images.map((image) => (
+                <Col key={image.id}>
+                  <div style={{ height: 300, width: 300 }}>
+                    <WatermarkImage url={image.optimised} />
+                  </div>
                 </Col>
-              </div>
-            </Row>
-          )}
-        </>
+              ))
+            ) : (
+              <Row style={{ backgroundColor: '#FFF', width: 500 }}>
+                {images.map((image, index) => (
+                  <Col key={image.id} span={getImageSpan(images.length, index)}>
+                    <CollageImage
+                      index={index}
+                      length={images.length}
+                      src={image.optimised}
+                    />
+                  </Col>
+                ))}
+              </Row>
+            )}
+          </Row>
+        )}
+        {offenders &&
+          offenders.length > 0 &&
+          offenders.map((offender) => (
+            <OffenderMessageCard key={offender.id} offender={offender} />
+          ))}
+        {incidents &&
+          incidents.length > 0 &&
+          incidents.map((incident) => (
+            <IncidentMessageCard key={incident.id} incident={incident} />
+          ))}
+        {vehicles &&
+          vehicles.length > 0 &&
+          vehicles.map((vehicle) => (
+            <VehicleMessageCard key={vehicle.id} vehicle={vehicle} />
+          ))}
+
+        {crimeGroups && crimeGroups.length > 0 && (
+          <CrimeGroupMessageList crimeGroups={crimeGroups} />
+        )}
+        {content && (
+          <Row key={id}>
+            <div className="message-content-bubble">
+              <Col>
+                <Text>{getContent(content)}</Text>
+              </Col>
+            </div>
+          </Row>
+        )}
       </div>
     </Col>
   </Row>

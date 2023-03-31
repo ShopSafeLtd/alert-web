@@ -64,7 +64,7 @@ const AddGroup = ({
           rules={[
             {
               required: true,
-              message: 'Please selected at least one user for a group.',
+              message: 'Please selected at least one user for the new group.',
             },
           ]}
         >

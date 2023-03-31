@@ -28,6 +28,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
       totalCrimeGroups
       totalOffenders
       totalIncidents
+      reference
     }
     updates(orderBy: { createdAt: desc }) {
       id
@@ -93,6 +94,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
         }
       }
       createdBy {
+        origName
         id
         fullName
         businesses {
@@ -164,6 +166,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
           }
         }
         createdBy {
+          origName
           id
           fullName
           businesses {

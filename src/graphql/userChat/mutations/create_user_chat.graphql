@@ -19,6 +19,8 @@ mutation createUserChat($data: UserChatCreateInput!) {
         from {
           id
           fullName
+          origFirstLetter
+          origName
         }
       }
     }

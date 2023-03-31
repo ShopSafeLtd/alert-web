@@ -16,17 +16,13 @@ import {
 import { faTrash, faUser } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddUserToChat from 'components/form-components/userChat/AddUserToChat';
+import type { ListSchemeUsersQuery } from 'graphql/generated';
+import type { MemberData } from './useManageChatMember';
 
 const { Title } = Typography;
 
 interface FormData {
   user: string[];
-}
-interface MemberData {
-  id: string;
-  fullName: string;
-  businesses: { id: string; name: string }[];
-  firstLetter?: string | null;
 }
 
 interface Props {
@@ -34,7 +30,10 @@ interface Props {
   onSubmit: () => void;
   addMemberUpdate: (value: FormData) => void;
   loading: boolean;
-  usersData: MemberData[] | undefined;
+  usersData:
+    | Exclude<ListSchemeUsersQuery['users'], undefined | null>
+    | null
+    | undefined;
   saving: boolean;
   addMember: boolean;
   toggleAddMember: () => void;
@@ -65,7 +64,14 @@ const EditChat = ({
             loading={loading}
             split={false}
             dataSource={membersData}
-            renderItem={({ id, fullName, businesses, firstLetter }) => (
+            renderItem={({
+              id,
+              // fullName,
+              businesses,
+              // firstLetter,
+              origFirstLetter,
+              origName,
+            }) => (
               <List.Item
                 // className={chatId === id ? 'chat-item current' : 'chat-item'}
                 key={id}
@@ -80,13 +86,13 @@ const EditChat = ({
                         // marginLeft: 15,
                       }}
                     >
-                      {firstLetter}
+                      {origFirstLetter}
                     </Avatar>
                   }
                   title={
                     <Row align="middle" gutter={5}>
                       <Col style={{ marginTop: 9 }}>
-                        <Title level={4}>{fullName}</Title>
+                        <Title level={4}>{origName}</Title>
                       </Col>
                       <Col flex={1}>
                         <Tag color="red" style={{ padding: 3 }}>

@@ -68,7 +68,16 @@ const EditChat = ({
 
       <Row gutter={16}>
         <Col span={23}>
-          <Form.Item name="user" label="Users">
+          <Form.Item
+            name="user"
+            label="Users"
+            rules={[
+              {
+                required: true,
+                message: 'Please added at least one user for the chat group.',
+              },
+            ]}
+          >
             <Select
               loading={usersLoading}
               disabled={saving}

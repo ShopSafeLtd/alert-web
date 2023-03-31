@@ -8,6 +8,8 @@ query ListSchemeUsers(
     id
     fullName
     firstLetter
+    origName
+    origFirstLetter
     email
     publicName
     businesses {

@@ -172,8 +172,7 @@ const useViewBusiness = (): Return => {
             },
           },
           data: {
-            // eslint-disable-next-line no-unsafe-optional-chaining
-            users: [...result.data?.removeUserFromBusiness.users],
+            users: result.data?.removeUserFromBusiness.users,
           },
         });
     },

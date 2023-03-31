@@ -56,7 +56,6 @@ const DonutChartWidget = (props: Props) => {
         <Chart
           type="donut"
           options={options}
-          // @ts-expect-error array type wrong
           series={series}
           width={width}
           height={height}

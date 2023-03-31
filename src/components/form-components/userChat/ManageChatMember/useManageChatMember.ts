@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
+import type { ListSchemeUsersQuery } from 'graphql/generated';
 import {
   SortOrder,
   useChatQuery,
@@ -14,13 +15,21 @@ interface FormData {
   user: string[];
 }
 
-interface MemberData {
+export interface MemberData {
   id: string;
   fullName: string;
   businesses: { id: string; name: string }[];
-  firstLetter?: string | null;
+  firstLetter?: string | null | undefined;
+  origName: string;
+  origFirstLetter?: string | null | undefined;
 }
-
+// type MemberData =
+//   | Exclude<
+//       ListSchemeUsersQuery['users'],
+//       undefined | null
+//     >[0]
+//   | null
+//   | undefined;
 interface Props {
   onClose: () => void;
   chatId: string;
@@ -30,7 +39,10 @@ interface Return {
   onSubmit: () => void;
   addMemberUpdate: (value: FormData) => void;
   loading: boolean;
-  usersData: MemberData[] | undefined;
+  usersData:
+    | Exclude<ListSchemeUsersQuery['users'], undefined | null>
+    | null
+    | undefined;
   saving: boolean;
   addMember: boolean;
   toggleAddMember: () => void;

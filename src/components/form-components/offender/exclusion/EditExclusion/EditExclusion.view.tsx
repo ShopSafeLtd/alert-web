@@ -25,6 +25,7 @@ const EditExclusion = ({
 }: Props): JSX.Element => (
   <Form
     initialValues={{
+      title: banData?.title,
       startDate: moment(banData?.startDate, 'YYYY-MM-DD'),
       endDate: moment(banData?.endDate, 'YYYY-MM-DD'),
       location: banData?.location,
@@ -34,6 +35,22 @@ const EditExclusion = ({
     layout="vertical"
     onFinish={onSubmit}
   >
+    <Row gutter={16}>
+      <Col span={21}>
+        <Form.Item
+          name="title"
+          label="Exclusion Title"
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: 'Please enter a title for the new exclusion.',
+          //   },
+          // ]}
+        >
+          <Input disabled={saving} />
+        </Form.Item>
+      </Col>
+    </Row>
     <Row gutter={16}>
       <Col span={11}>
         <Form.Item

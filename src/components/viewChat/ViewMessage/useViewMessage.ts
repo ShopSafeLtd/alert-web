@@ -332,6 +332,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                             createdAt: newMessage.createdAt,
                             from: {
                               fullName: newMessage.from?.fullName || '',
+                              origName: newMessage.from?.fullName || '',
                               id: newMessage.id || '',
                             },
                             id: newMessage.id,
@@ -484,6 +485,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                       createdAt: res.createMessage.createdAt,
                       from: {
                         fullName: res.createMessage.from?.fullName || '',
+                        origName: res.createMessage.from?.fullName || '',
                         id: res.createMessage.id || '',
                       },
                       id: res.createMessage.id,
@@ -905,6 +907,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
               fullName: userFullName,
               id: userId,
               firstLetter: userFullName.slice(1)[0],
+              origName: userFullName,
             },
             paddingTop: true,
             showUser: false,

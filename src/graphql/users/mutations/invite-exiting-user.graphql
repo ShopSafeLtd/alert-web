@@ -7,6 +7,8 @@ mutation inviteExistingUser(
     id
     fullName
     firstLetter
+    origName
+    origFirstLetter
     email
     publicName
     businesses {
@@ -18,6 +20,9 @@ mutation inviteExistingUser(
     groups(where: $groupWhere) {
       id
       name
+    }
+    loginEvents {
+      loginTime
     }
   }
 }

@@ -63,6 +63,7 @@ mutation CreateUpdateOnVehicle($vehicle: UniqueId!, $data: CreateUpdateData!) {
       }
     }
     createdBy {
+      origName
       id
       fullName
       businesses {
@@ -134,6 +135,7 @@ mutation CreateUpdateOnVehicle($vehicle: UniqueId!, $data: CreateUpdateData!) {
         }
       }
       createdBy {
+        origName
         id
         fullName
         businesses {

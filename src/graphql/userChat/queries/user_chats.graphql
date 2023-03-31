@@ -19,6 +19,8 @@ query userChats(
         id
         fullName
         firstLetter
+        origFirstLetter
+        origName
       }
       chat {
         id
@@ -32,6 +34,9 @@ query userChats(
           from {
             id
             fullName
+            origFirstLetter
+            origName
+            firstLetter
           }
           images {
             id

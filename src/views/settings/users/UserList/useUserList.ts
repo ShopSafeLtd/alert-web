@@ -39,6 +39,7 @@ const useUserList = (): Return => {
   const { data, loading } = useListSchemeUsersQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
+      // orderBy:{businesses:{_count:}}
       where: {
         schemes: {
           some: {
@@ -55,6 +56,7 @@ const useUserList = (): Return => {
         recycled: {
           equals: false,
         },
+
         groups:
           selectedGroups.length > 0
             ? {

@@ -271,7 +271,9 @@ const ViewBusiness = ({
                     usersData?.users.map((user) => ({
                       groups: user.groups,
                       key: user.id,
-                      lastLogin: moment().format('HH:mm DD/MM/YY'),
+                      lastLogin: moment(user.loginEvents[0].loginTime).format(
+                        'HH:mm DD/MM/YY'
+                      ),
                       name: user.fullName,
                       status: user.status || 'Unknown',
                     })) || []

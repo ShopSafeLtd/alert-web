@@ -66,6 +66,7 @@ mutation CreateUpdateOnCrimeGroup(
       }
     }
     createdBy {
+      origName
       id
       fullName
       businesses {
@@ -137,6 +138,7 @@ mutation CreateUpdateOnCrimeGroup(
         }
       }
       createdBy {
+        origName
         id
         fullName
         businesses {

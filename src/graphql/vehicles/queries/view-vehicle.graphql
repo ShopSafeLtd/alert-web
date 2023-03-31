@@ -128,6 +128,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
         }
       }
       createdBy {
+        origName
         id
         fullName
         businesses {
@@ -199,6 +200,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
           }
         }
         createdBy {
+          origName
           id
           fullName
           businesses {

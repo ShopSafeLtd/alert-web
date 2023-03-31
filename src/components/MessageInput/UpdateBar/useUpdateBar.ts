@@ -544,6 +544,7 @@ const useUpdateBar = ({
               createdAt: new Date(),
               createdBy: {
                 fullName,
+                origName: fullName,
                 id: userId,
                 businesses,
                 __typename: 'User',
@@ -631,6 +632,7 @@ const useUpdateBar = ({
               createdAt: new Date(),
               createdBy: {
                 fullName,
+                origName: fullName,
                 id: userId,
                 businesses,
                 __typename: 'User',
@@ -718,6 +720,7 @@ const useUpdateBar = ({
               createdAt: new Date(),
               createdBy: {
                 fullName,
+                origName: fullName,
                 id: userId,
                 businesses,
                 __typename: 'User',
@@ -808,6 +811,7 @@ const useUpdateBar = ({
               createdAt: new Date(),
               createdBy: {
                 fullName,
+                origName: fullName,
                 id: userId,
                 businesses,
                 __typename: 'User',
@@ -893,6 +897,7 @@ const useUpdateBar = ({
               createdAt: new Date(),
               createdBy: {
                 fullName,
+                origName: fullName,
                 id: userId,
                 businesses,
                 __typename: 'User',

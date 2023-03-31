@@ -30,10 +30,10 @@ const useAddExclusion = ({ update, onClose }: Props): Return => {
 
   const onSubmit = (data: BanData) => {
     setSaving(true);
-    console.log('data', data.type);
 
     update({
       id: Math.floor(Math.random() * 1000).toString(),
+      title: data.title || null,
       startDate: data.startDate || null,
       endDate: data.endDate || null,
       location: data.location || '',
