@@ -1,5 +1,6 @@
-import type React, { DragEvent } from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import type React from 'react';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+import { DragEvent, useCallback, useEffect, useRef, useState } from 'react';
 import type {
   Edge,
   Node,
