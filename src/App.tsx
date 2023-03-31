@@ -66,29 +66,27 @@ if (import.meta.env.PROD) {
   });
 }
 
-function App(): JSX.Element {
-  return (
-    <div className="App">
-      <ThemeSwitcherProvider
-        themeMap={themes}
-        defaultTheme={ThemeConfig.currentTheme}
-        insertionPoint="styles-insertion-point"
+const App = (): JSX.Element => (
+  <div className="App">
+    <ThemeSwitcherProvider
+      themeMap={themes}
+      defaultTheme={ThemeConfig.currentTheme}
+      insertionPoint="styles-insertion-point"
+    >
+      <LoadScript
+        googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
+        libraries={['visualization']}
       >
-        <LoadScript
-          googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
-          libraries={['visualization']}
-        >
-          <Store>
-            <ApolloProvider>
-              <Router>
-                <Views />
-              </Router>
-            </ApolloProvider>
-          </Store>
-        </LoadScript>
-      </ThemeSwitcherProvider>
-    </div>
-  );
-}
+        <Store>
+          <ApolloProvider>
+            <Router>
+              <Views />
+            </Router>
+          </ApolloProvider>
+        </Store>
+      </LoadScript>
+    </ThemeSwitcherProvider>
+  </div>
+);
 
 export default App;

@@ -93,16 +93,12 @@ const CrimeGroupFeed = ({ feedItem, isNewCrimeGroup }: Props): JSX.Element => {
                 </Col>
               </Row>
             </>
-          ) : (
-            <>
-              {updates && updates.length > 0 ? (
-                <UpdateContent
-                  title={alias || `Alert ID: ${reference}`}
-                  update={updates[0]}
-                />
-              ) : null}
-            </>
-          )}
+          ) : updates && updates.length > 0 ? (
+            <UpdateContent
+              title={alias || `Alert ID: ${reference}`}
+              update={updates[0]}
+            />
+          ) : null}
         </Col>
       </Link>
     </Row>

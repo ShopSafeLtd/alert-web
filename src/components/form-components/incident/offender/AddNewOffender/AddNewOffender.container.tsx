@@ -26,7 +26,7 @@ interface Props {
   onClose: () => void;
   update: (value: OffenderData) => void;
 }
-function AddNewOffender({ onClose, update }: Props): JSX.Element {
+const AddNewOffender = ({ onClose, update }: Props): JSX.Element => {
   const {
     onSubmit,
     saving,
@@ -55,6 +55,6 @@ function AddNewOffender({ onClose, update }: Props): JSX.Element {
       />
     </div>
   );
-}
+};
 
 export default AddNewOffender;

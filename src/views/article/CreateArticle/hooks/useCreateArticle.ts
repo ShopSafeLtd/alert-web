@@ -5,7 +5,6 @@ import type { Editor } from 'tinymce';
 import type { UploadFile } from 'antd/es/upload/interface';
 import { useNavigate } from 'react-router';
 import type { Props } from '../types/CreateArticle';
-import { FormData } from '../types/CreateArticle';
 import type { ArticlePriority } from '../../../../graphql/generated';
 import {
   Model,
@@ -19,6 +18,16 @@ import type { OffenderData } from '../../../../components/form-components/incide
 import type { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/LinkIncident.container';
 
 const { useForm } = Form;
+
+interface FormData {
+  title: string;
+  content: string;
+  groups: string[];
+  categories: string[];
+  importance: 'Important' | 'Normal';
+}
+
+export type { FormData };
 
 const useCreateArticle = (): Props => {
   const siteUrl = `${window.location.href.split('/app/')[0]}/app/`;

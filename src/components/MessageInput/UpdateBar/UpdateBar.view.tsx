@@ -200,6 +200,8 @@ const UpdateBar = ({
             onChange={onUpdateImageChange}
             onPreview={onUpdateImagePreview}
             beforeUpload={beforeUpdateImageUpload}
+            // TODO
+            // eslint-disable-next-line react/no-unstable-nested-components
             itemRender={(el, file) => (
               <div className="update-upload-card">
                 <div>

@@ -62,10 +62,9 @@ const ReactFlowPro = ({ importData }: Props) => {
   );
 };
 
-export default function Flow({ importData }: Props) {
-  return (
-    <ReactFlowProvider>
-      <ReactFlowPro importData={importData} />
-    </ReactFlowProvider>
-  );
-}
+const Flow = ({ importData }: Props) => (
+  <ReactFlowProvider>
+    <ReactFlowPro importData={importData} />
+  </ReactFlowProvider>
+);
+export default Flow;

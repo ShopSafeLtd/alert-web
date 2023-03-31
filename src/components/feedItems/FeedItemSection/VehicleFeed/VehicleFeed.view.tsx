@@ -13,6 +13,7 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import UpdateContent from '../UpdateContent';
 
 const { Title, Text } = Typography;
+
 interface Props {
   feedItem:
     | Exclude<FeedItemsQuery['listFeedItems'], undefined | null>['feedItems'][0]
@@ -21,6 +22,7 @@ interface Props {
   isNewImage?: boolean;
   isNewVehicle?: boolean;
 }
+
 const ImageContainer = ({ src }: { src: string }) => (
   <div
     style={{
@@ -142,20 +144,16 @@ const VehicleFeed = ({
                 </Col>
               </Row>
             </>
-          ) : (
-            <>
-              {updates && updates.length > 0 ? (
-                <UpdateContent
-                  title={
-                    registration ||
-                    `Alert ID: ${reference}` ||
-                    'Unidentified Vehicle'
-                  }
-                  update={updates[0]}
-                />
-              ) : null}
-            </>
-          )}
+          ) : updates && updates.length > 0 ? (
+            <UpdateContent
+              title={
+                registration ||
+                `Alert ID: ${reference}` ||
+                'Unidentified Vehicle'
+              }
+              update={updates[0]}
+            />
+          ) : null}
         </Col>
       </Link>
     </Row>

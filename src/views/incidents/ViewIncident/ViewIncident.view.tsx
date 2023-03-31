@@ -439,6 +439,8 @@ const ViewIncident = ({
                             size="small"
                             rowClassName={classes.offenderRow}
                             pagination={false}
+                            // TODO
+                            // eslint-disable-next-line react/no-unstable-nested-components
                             summary={(tableData) => {
                               const totalValue = tableData
                                 .map((item) => item.value || 0)
@@ -448,19 +450,17 @@ const ViewIncident = ({
                                 .reduce((a, b) => a + b, 0);
 
                               return (
-                                <>
-                                  <Table.Summary.Row>
-                                    <Table.Summary.Cell index={0}>
-                                      Total:
-                                    </Table.Summary.Cell>
-                                    <Table.Summary.Cell index={1}>
-                                      £{totalValue.toFixed(2)}
-                                    </Table.Summary.Cell>
-                                    <Table.Summary.Cell index={1}>
-                                      £{totalRecovered.toFixed(2)}
-                                    </Table.Summary.Cell>
-                                  </Table.Summary.Row>
-                                </>
+                                <Table.Summary.Row>
+                                  <Table.Summary.Cell index={0}>
+                                    Total:
+                                  </Table.Summary.Cell>
+                                  <Table.Summary.Cell index={1}>
+                                    £{totalValue.toFixed(2)}
+                                  </Table.Summary.Cell>
+                                  <Table.Summary.Cell index={1}>
+                                    £{totalRecovered.toFixed(2)}
+                                  </Table.Summary.Cell>
+                                </Table.Summary.Row>
                               );
                             }}
                           />

@@ -7,7 +7,7 @@ interface Props {
   reviewed: boolean;
 }
 
-function EditOffender({ reviewed }: Props): JSX.Element {
+const EditOffender = ({ reviewed }: Props): JSX.Element => {
   const offenderId = useParams().id || '';
   const {
     onSubmit,
@@ -142,6 +142,6 @@ function EditOffender({ reviewed }: Props): JSX.Element {
       />
     </div>
   );
-}
+};
 
 export default EditOffender;

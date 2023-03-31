@@ -2,7 +2,7 @@ import React from 'react';
 import View from './AddIncident.view';
 import useAddIncident from './useAddIncident';
 
-function EditIncident(): JSX.Element {
+const EditIncident = (): JSX.Element => {
   const {
     addIncidentTag,
     assignOffendersToImages,
@@ -92,6 +92,6 @@ function EditIncident(): JSX.Element {
       />
     </div>
   );
-}
+};
 
 export default EditIncident;

@@ -116,7 +116,7 @@ const useAddBusiness = ({ onClose }: Props): Return => {
           },
           data: {
             listBusinesses: {
-              total: existingData?.listBusinesses.total + 1,
+              total: (existingData?.listBusinesses.total || 0) + 1,
               businesses: [
                 ...existingData.listBusinesses.businesses,
                 result.data?.createBusiness,

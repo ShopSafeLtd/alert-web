@@ -41,51 +41,49 @@ const IncidentSideList = ({
         </div>
       )}
       {data?.listIncidents?.incidents.map((incident) => (
-        <>
-          <Link to={`/app/incidents/view/${incident.id}`} key={incident.id}>
-            <div
-              className={`${classes.item} ${
-                current === incident.id ? 'current' : undefined
-              }`}
-            >
-              <Row wrap={false}>
-                <Col className={classes.itemContent} flex={1}>
-                  <Typography.Text strong={current === incident.id} ellipsis>
-                    {incident.subject}
-                  </Typography.Text>
-                  <Typography.Paragraph
-                    className={classes.itemDesc}
-                    type="secondary"
-                    ellipsis
-                  >
-                    {incident.description}
-                  </Typography.Paragraph>
-                  <Row>
-                    <Col flex={1}>
-                      <Typography.Paragraph
-                        className={classes.itemDetail}
-                        type="secondary"
-                        ellipsis
-                      >
-                        {incident.business?.name}
-                      </Typography.Paragraph>
-                    </Col>
-                    <Col>
-                      <Typography.Paragraph
-                        className={classes.itemDetail}
-                        type="secondary"
-                        ellipsis
-                      >
-                        {incident.dayTime}
-                      </Typography.Paragraph>
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-              <Divider className={classes.itemDivider} />
-            </div>
-          </Link>
-        </>
+        <Link to={`/app/incidents/view/${incident.id}`} key={incident.id}>
+          <div
+            className={`${classes.item} ${
+              current === incident.id ? 'current' : undefined
+            }`}
+          >
+            <Row wrap={false}>
+              <Col className={classes.itemContent} flex={1}>
+                <Typography.Text strong={current === incident.id} ellipsis>
+                  {incident.subject}
+                </Typography.Text>
+                <Typography.Paragraph
+                  className={classes.itemDesc}
+                  type="secondary"
+                  ellipsis
+                >
+                  {incident.description}
+                </Typography.Paragraph>
+                <Row>
+                  <Col flex={1}>
+                    <Typography.Paragraph
+                      className={classes.itemDetail}
+                      type="secondary"
+                      ellipsis
+                    >
+                      {incident.business?.name}
+                    </Typography.Paragraph>
+                  </Col>
+                  <Col>
+                    <Typography.Paragraph
+                      className={classes.itemDetail}
+                      type="secondary"
+                      ellipsis
+                    >
+                      {incident.dayTime}
+                    </Typography.Paragraph>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+            <Divider className={classes.itemDivider} />
+          </div>
+        </Link>
       ))}
       {!loading && (
         <Pagination

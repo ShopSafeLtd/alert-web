@@ -7,7 +7,7 @@ interface Props {
   reviewed: boolean;
 }
 
-function EditIncident({ reviewed }: Props): JSX.Element {
+const EditIncident = ({ reviewed }: Props): JSX.Element => {
   const incidentId = useParams().id || '';
 
   const {
@@ -101,6 +101,6 @@ function EditIncident({ reviewed }: Props): JSX.Element {
       />
     </div>
   );
-}
+};
 
 export default EditIncident;

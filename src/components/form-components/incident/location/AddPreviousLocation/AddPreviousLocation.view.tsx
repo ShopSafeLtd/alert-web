@@ -30,57 +30,55 @@ const ViewOffender = ({
   !data && loading ? (
     <Skeleton />
   ) : (
-    <>
-      <Form layout="vertical" onFinish={onSubmit} className="previous-location">
-        <Form.Item
-          name="selectedLocation"
-          label="Previous Locations:"
-          rules={[
-            {
-              required: true,
-              message: 'Please at least select an location for the incident.',
-            },
-          ]}
-        >
-          <Radio.Group>
-            {data?.addresses &&
-              data.addresses.map((location) => (
-                <Row wrap={false} key={location.id} align="bottom">
-                  <Radio
-                    value={location.id}
-                    key={location.id}
-                    style={{ placeItems: 'normal' }}
-                  >
-                    <Paragraph ellipsis key={location.id}>
-                      {location.full}
-                    </Paragraph>
-                  </Radio>
-                </Row>
-              ))}
-          </Radio.Group>
-        </Form.Item>
+    <Form layout="vertical" onFinish={onSubmit} className="previous-location">
+      <Form.Item
+        name="selectedLocation"
+        label="Previous Locations:"
+        rules={[
+          {
+            required: true,
+            message: 'Please at least select an location for the incident.',
+          },
+        ]}
+      >
+        <Radio.Group>
+          {data?.addresses &&
+            data.addresses.map((location) => (
+              <Row wrap={false} key={location.id} align="bottom">
+                <Radio
+                  value={location.id}
+                  key={location.id}
+                  style={{ placeItems: 'normal' }}
+                >
+                  <Paragraph ellipsis key={location.id}>
+                    {location.full}
+                  </Paragraph>
+                </Radio>
+              </Row>
+            ))}
+        </Radio.Group>
+      </Form.Item>
 
-        <Form.Item>
-          <Row style={{ marginTop: 30 }} gutter={10} justify="end">
-            <Col>
-              <Button disabled={saving} onClick={onClose}>
-                Cancel
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                disabled={saving}
-                loading={saving}
-                type="primary"
-                htmlType="submit"
-              >
-                Select Location
-              </Button>
-            </Col>
-          </Row>
-        </Form.Item>
-      </Form>
-    </>
+      <Form.Item>
+        <Row style={{ marginTop: 30 }} gutter={10} justify="end">
+          <Col>
+            <Button disabled={saving} onClick={onClose}>
+              Cancel
+            </Button>
+          </Col>
+          <Col>
+            <Button
+              disabled={saving}
+              loading={saving}
+              type="primary"
+              htmlType="submit"
+            >
+              Select Location
+            </Button>
+          </Col>
+        </Row>
+      </Form.Item>
+    </Form>
   );
 
 export default ViewOffender;

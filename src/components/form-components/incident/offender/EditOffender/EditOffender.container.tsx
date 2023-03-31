@@ -9,7 +9,7 @@ interface Props {
   update: (value: OffenderData) => void;
 }
 
-function EditOffender({ id, onClose, update }: Props): JSX.Element {
+const EditOffender = ({ id, onClose, update }: Props): JSX.Element => {
   const offenderId = id;
   const {
     onSubmit,
@@ -80,6 +80,6 @@ function EditOffender({ id, onClose, update }: Props): JSX.Element {
       />
     </div>
   );
-}
+};
 
 export default EditOffender;

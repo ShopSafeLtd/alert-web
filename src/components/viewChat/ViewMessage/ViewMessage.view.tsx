@@ -427,6 +427,8 @@ const ViewMessages = ({
               onChange={imgChange}
               onPreview={onPreview}
               beforeUpload={beforeUpload}
+              // TODO
+              // eslint-disable-next-line react/no-unstable-nested-components
               itemRender={(el, file) => (
                 <div className="message-upload-card">
                   <div>

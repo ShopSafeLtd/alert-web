@@ -478,39 +478,32 @@ const ViewOffender = ({
                               key: 'duration',
                               title: 'Duration',
                               dataIndex: 'duration',
-                              render: (value) => (
-                                <>
-                                  <Text>{value}</Text>
-                                </>
-                              ),
+                              render: (value) => <Text>{value}</Text>,
                             },
                             {
                               key: 'status',
                               title: 'Status',
                               dataIndex: 'status',
-                              render: (value, record) => (
-                                <>
-                                  {calcExpired(new Date(record.endDate)) ? (
-                                    <Tag
-                                      color="red"
-                                      style={{
-                                        marginLeft: 10,
-                                      }}
-                                    >
-                                      EXPIRED
-                                    </Tag>
-                                  ) : (
-                                    <Tag
-                                      color="success"
-                                      style={{
-                                        marginLeft: 10,
-                                      }}
-                                    >
-                                      ACTIVE
-                                    </Tag>
-                                  )}
-                                </>
-                              ),
+                              render: (value, record) =>
+                                calcExpired(new Date(record.endDate)) ? (
+                                  <Tag
+                                    color="red"
+                                    style={{
+                                      marginLeft: 10,
+                                    }}
+                                  >
+                                    EXPIRED
+                                  </Tag>
+                                ) : (
+                                  <Tag
+                                    color="success"
+                                    style={{
+                                      marginLeft: 10,
+                                    }}
+                                  >
+                                    ACTIVE
+                                  </Tag>
+                                ),
                             },
                             {
                               key: 'location',

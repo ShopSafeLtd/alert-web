@@ -52,89 +52,86 @@ const getContent = (content: string) =>
     return <Text key={item}>{item}</Text>;
   });
 
-const UpdateContent = ({ update, title }: Props): JSX.Element => (
-  <>
-    {update?.linkedIncidents.length ||
-    update?.linkedOffenders.length ||
-    update?.linkedCrimeGroups.length ||
-    update?.linkedVehicles.length ? (
-      <>
-        {update?.linkedIncidents[0] ? (
-          <>
-            <Title style={{ fontSize: 14, marginLeft: 5 }}>
-              <FontAwesomeIcon
-                size="sm"
-                className="feedItem-card-icon"
-                icon={faMessageDots}
-              />
-              {update?.text ? getContent(update?.text) : 'Link an incident'}
-            </Title>
-            <IncidentCard incident={update.linkedIncidents[0]} />
-          </>
-        ) : null}
-        {update?.linkedOffenders[0] ? (
-          <>
-            <Title style={{ fontSize: 14, marginLeft: 5 }}>
-              <FontAwesomeIcon
-                size="sm"
-                className="feedItem-card-icon"
-                icon={faMessageDots}
-              />
-              {update?.text ? getContent(update?.text) : 'Link an offender'}
-            </Title>
-            <OffenderCard offender={update.linkedOffenders[0]} />
-          </>
-        ) : null}
-        {update?.linkedVehicles[0] ? (
-          <>
-            <Title style={{ fontSize: 14, marginLeft: 5 }}>
-              <FontAwesomeIcon
-                size="sm"
-                className="feedItem-card-icon"
-                icon={faMessageDots}
-              />
-              {update?.text ? getContent(update?.text) : 'Link a vehicle'}
-            </Title>
-            <VehicleCard vehicle={update.linkedVehicles[0]} />
-          </>
-        ) : null}
-        {update?.linkedCrimeGroups && update?.linkedCrimeGroups.length ? (
-          <>
-            <Title style={{ fontSize: 14, marginLeft: 5 }}>
-              <FontAwesomeIcon
-                size="sm"
-                className="feedItem-card-icon"
-                icon={faMessageDots}
-              />
-              {update?.text ? getContent(update?.text) : 'Link crime groups'}
-            </Title>
-            <CrimeGroupList crimeGroups={update.linkedCrimeGroups} isIntel />
-          </>
-        ) : null}
-      </>
-    ) : (
-      <div style={{ marginBottom: -10 }}>
-        <Title level={4} style={{ marginBottom: 2 }} ellipsis>
-          {title}
-        </Title>
-
-        {update?.text ? (
-          <Paragraph
-            style={{ fontSize: 14, marginTop: 5 }}
-            type="secondary"
-            ellipsis={{ rows: 3 }}
-          >
+const UpdateContent = ({ update, title }: Props): JSX.Element =>
+  update?.linkedIncidents.length ||
+  update?.linkedOffenders.length ||
+  update?.linkedCrimeGroups.length ||
+  update?.linkedVehicles.length ? (
+    <>
+      {update?.linkedIncidents[0] ? (
+        <>
+          <Title style={{ fontSize: 14, marginLeft: 5 }}>
             <FontAwesomeIcon
               size="sm"
               className="feedItem-card-icon"
               icon={faMessageDots}
             />
-            {getContent(update.text)}
-          </Paragraph>
-        ) : null}
-      </div>
-    )}
-  </>
-);
+            {update?.text ? getContent(update?.text) : 'Link an incident'}
+          </Title>
+          <IncidentCard incident={update.linkedIncidents[0]} />
+        </>
+      ) : null}
+      {update?.linkedOffenders[0] ? (
+        <>
+          <Title style={{ fontSize: 14, marginLeft: 5 }}>
+            <FontAwesomeIcon
+              size="sm"
+              className="feedItem-card-icon"
+              icon={faMessageDots}
+            />
+            {update?.text ? getContent(update?.text) : 'Link an offender'}
+          </Title>
+          <OffenderCard offender={update.linkedOffenders[0]} />
+        </>
+      ) : null}
+      {update?.linkedVehicles[0] ? (
+        <>
+          <Title style={{ fontSize: 14, marginLeft: 5 }}>
+            <FontAwesomeIcon
+              size="sm"
+              className="feedItem-card-icon"
+              icon={faMessageDots}
+            />
+            {update?.text ? getContent(update?.text) : 'Link a vehicle'}
+          </Title>
+          <VehicleCard vehicle={update.linkedVehicles[0]} />
+        </>
+      ) : null}
+      {update?.linkedCrimeGroups && update?.linkedCrimeGroups.length ? (
+        <>
+          <Title style={{ fontSize: 14, marginLeft: 5 }}>
+            <FontAwesomeIcon
+              size="sm"
+              className="feedItem-card-icon"
+              icon={faMessageDots}
+            />
+            {update?.text ? getContent(update?.text) : 'Link crime groups'}
+          </Title>
+          <CrimeGroupList crimeGroups={update.linkedCrimeGroups} isIntel />
+        </>
+      ) : null}
+    </>
+  ) : (
+    <div style={{ marginBottom: -10 }}>
+      <Title level={4} style={{ marginBottom: 2 }} ellipsis>
+        {title}
+      </Title>
+
+      {update?.text ? (
+        <Paragraph
+          style={{ fontSize: 14, marginTop: 5 }}
+          type="secondary"
+          ellipsis={{ rows: 3 }}
+        >
+          <FontAwesomeIcon
+            size="sm"
+            className="feedItem-card-icon"
+            icon={faMessageDots}
+          />
+          {getContent(update.text)}
+        </Paragraph>
+      ) : null}
+    </div>
+  );
 
 export default UpdateContent;

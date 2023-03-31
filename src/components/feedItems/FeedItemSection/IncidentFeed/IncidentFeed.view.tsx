@@ -22,6 +22,7 @@ interface Props {
   isNewImage?: boolean;
   isNewIncident?: boolean;
 }
+
 const ImageContainer = ({ src }: { src: string }) => (
   <div
     style={{
@@ -165,13 +166,9 @@ const IncidentFeed = ({
                 </Row>
               ) : null} */}
             </>
-          ) : (
-            <>
-              {updates && updates.length > 0 ? (
-                <UpdateContent title={subject || ''} update={updates[0]} />
-              ) : null}
-            </>
-          )}
+          ) : updates && updates.length > 0 ? (
+            <UpdateContent title={subject || ''} update={updates[0]} />
+          ) : null}
         </Link>
       </Col>
     </Row>

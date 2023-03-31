@@ -69,6 +69,8 @@ const ListVehicles = ({
         loading={loading}
         size="small"
         onRow={(record) => ({
+          // TODO
+          // eslint-disable-next-line react/no-unstable-nested-components
           onClick: () => <Link to={`view/${record.key}`} />,
         })}
         columns={[

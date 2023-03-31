@@ -30,6 +30,7 @@ interface Props {
   isNewImage?: boolean;
   isNewOffender?: boolean;
 }
+
 const ImageContainer = ({ src }: { src: string }) => (
   <div
     style={{
@@ -148,16 +149,12 @@ const OffenderFeed = ({
                 </Col>
               </Row>
             </>
-          ) : (
-            <>
-              {updates && updates.length > 0 ? (
-                <UpdateContent
-                  title={name || 'Unidentified Offender'}
-                  update={updates[0]}
-                />
-              ) : null}
-            </>
-          )}
+          ) : updates && updates.length > 0 ? (
+            <UpdateContent
+              title={name || 'Unidentified Offender'}
+              update={updates[0]}
+            />
+          ) : null}
         </Col>
       </Link>
     </Row>
