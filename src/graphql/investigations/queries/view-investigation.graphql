@@ -39,6 +39,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
         id
         url
         optimised
+        optimisedPersisted
         card
       }
       linkedCrimeGroups {
@@ -57,6 +58,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
           id
           url
           optimised
+          optimisedPersisted
         }
         updatedAt
         totalOffenders
@@ -76,6 +78,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
           id
           url
           optimised
+          optimisedPersisted
         }
       }
       linkedOffenders {
@@ -91,6 +94,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
           id
           url
           optimised
+          optimisedPersisted
         }
       }
       createdBy {
@@ -110,6 +114,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
         images {
           id
           url
+          optimisedPersisted
           optimised
           card
         }
@@ -128,6 +133,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
           images {
             id
             url
+            optimisedPersisted
             optimised
           }
           updatedAt
@@ -163,6 +169,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
             id
             url
             optimised
+            optimisedPersisted
           }
         }
         createdBy {
@@ -185,6 +192,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
       images {
         id
         optimised
+        optimisedPersisted
       }
     }
     incidents {

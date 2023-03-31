@@ -41937,6 +41937,7 @@ export type ViewInvestigationQuery = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        optimisedPersisted?: string | null;
         card?: string | null;
       }>;
       linkedCrimeGroups: Array<{
@@ -41966,6 +41967,7 @@ export type ViewInvestigationQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          optimisedPersisted?: string | null;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -41979,6 +41981,7 @@ export type ViewInvestigationQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          optimisedPersisted?: string | null;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -41996,6 +41999,7 @@ export type ViewInvestigationQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          optimisedPersisted?: string | null;
         }>;
       }>;
       createdBy: {
@@ -42019,6 +42023,7 @@ export type ViewInvestigationQuery = {
           __typename?: 'Image';
           id: string;
           url?: string | null;
+          optimisedPersisted?: string | null;
           optimised?: string | null;
           card?: string | null;
         }>;
@@ -42048,6 +42053,7 @@ export type ViewInvestigationQuery = {
             __typename?: 'Image';
             id: string;
             url?: string | null;
+            optimisedPersisted?: string | null;
             optimised?: string | null;
           }>;
         }>;
@@ -42079,6 +42085,7 @@ export type ViewInvestigationQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            optimisedPersisted?: string | null;
           }>;
         }>;
         createdBy: {
@@ -42104,6 +42111,7 @@ export type ViewInvestigationQuery = {
         __typename?: 'Image';
         id: string;
         optimised?: string | null;
+        optimisedPersisted?: string | null;
       }>;
     }>;
     incidents: Array<{
@@ -51818,6 +51826,7 @@ export const ViewInvestigationDocument = gql`
           id
           url
           optimised
+          optimisedPersisted
           card
         }
         linkedCrimeGroups {
@@ -51836,6 +51845,7 @@ export const ViewInvestigationDocument = gql`
             id
             url
             optimised
+            optimisedPersisted
           }
           updatedAt
           totalOffenders
@@ -51855,6 +51865,7 @@ export const ViewInvestigationDocument = gql`
             id
             url
             optimised
+            optimisedPersisted
           }
         }
         linkedOffenders {
@@ -51870,6 +51881,7 @@ export const ViewInvestigationDocument = gql`
             id
             url
             optimised
+            optimisedPersisted
           }
         }
         createdBy {
@@ -51889,6 +51901,7 @@ export const ViewInvestigationDocument = gql`
           images {
             id
             url
+            optimisedPersisted
             optimised
             card
           }
@@ -51907,6 +51920,7 @@ export const ViewInvestigationDocument = gql`
             images {
               id
               url
+              optimisedPersisted
               optimised
             }
             updatedAt
@@ -51942,6 +51956,7 @@ export const ViewInvestigationDocument = gql`
               id
               url
               optimised
+              optimisedPersisted
             }
           }
           createdBy {
@@ -51963,6 +51978,7 @@ export const ViewInvestigationDocument = gql`
         images {
           id
           optimised
+          optimisedPersisted
         }
       }
       incidents {

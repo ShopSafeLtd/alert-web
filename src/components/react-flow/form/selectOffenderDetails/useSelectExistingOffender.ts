@@ -15,7 +15,7 @@ export interface Offender {
   images:
     | {
         id: string;
-        optimised: string;
+        optimisedPersisted: string;
       }[]
     | null
     | undefined;

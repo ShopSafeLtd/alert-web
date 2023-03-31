@@ -1,5 +1,4 @@
-import type { DragEvent } from 'react';
-import type React from 'react';
+import type React, { DragEvent } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type {
   Edge,

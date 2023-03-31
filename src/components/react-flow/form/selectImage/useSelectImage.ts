@@ -39,7 +39,7 @@ const useSelectImage = ({
         offenders: ImportData?.investigation?.offenders.map((offender) => ({
           name: offender.name || '',
           images: offender.images.map((image) => ({
-            url: image.optimised || '',
+            url: image.optimisedPersisted || '',
           })),
         })),
       }
