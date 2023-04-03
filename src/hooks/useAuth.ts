@@ -1,8 +1,7 @@
-import { useMutation, useLazyQuery, useApolloClient } from "@apollo/client";
-import { useStoreActions, useStoreState, SetUserPayload } from "state";
+import { useApolloClient, useLazyQuery, useMutation } from "@apollo/client";
+import { SetUserPayload, useStoreActions, useStoreState } from "state";
 import jwtDecode from "jwt-decode";
 import LogRocket from "logrocket";
-
 import { CurrentUser, CurrentUserRes } from "graphql-src/auth/queries";
 import { SignIn, SignInArgs, SignInRes } from "graphql-src/auth/mutations";
 
@@ -166,6 +165,14 @@ export const useAuth = () => {
           },
         });
 
+        if (
+          data?.currentUser?.schemes
+            .flatMap((schemes) => schemes.scheme.id)
+            .includes("clfi9000c0000piabawfn9s2w") ||
+          data.currentUser.email === "alex@shopsafe.uk"
+        ) {
+          window.location.replace("https://staging.shopsafealert.co.uk/");
+        }
         onLoginSuccess({
           accessToken: signIn.accessToken,
           email: data.currentUser.email,
