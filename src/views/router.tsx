@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
-import AppLayout from 'layouts/app-layout';
-import AuthLayout from 'layouts/auth-layout';
-import AppLocale from 'lang';
-import { IntlProvider } from 'react-intl';
-import { ConfigProvider } from 'antd';
-import { APP_PREFIX_PATH, AUTH_PREFIX_PATH } from 'configs/AppConfig';
-import { useStoreState } from 'state';
-import Loading from './auth-views/authentication/loading';
-import { useAuth } from 'hooks';
-import { useQuery } from '@apollo/client';
-import { UserNew, UserNewArgs, UserNewRes } from 'graphql-src/users/queries';
+import React, { useEffect, useState } from "react";
+import { Redirect, Route, Switch, withRouter } from "react-router-dom";
+import AppLayout from "layouts/app-layout";
+import AuthLayout from "layouts/auth-layout";
+import AppLocale from "lang";
+import { IntlProvider } from "react-intl";
+import { ConfigProvider } from "antd";
+import { APP_PREFIX_PATH, AUTH_PREFIX_PATH } from "configs/AppConfig";
+import { useStoreState } from "state";
+import Loading from "./auth-views/authentication/loading";
+import { useAuth } from "hooks";
+import { useQuery } from "@apollo/client";
+import { UserNew, UserNewArgs, UserNewRes } from "graphql-src/users/queries";
 
-import PrimaryOnboarding from '../old-components/users/onboard/Primary/PrimaryOnboarding';
+import PrimaryOnboarding from "../old-components/users/onboard/Primary/PrimaryOnboarding";
 
 interface Props {
   history: any;
@@ -20,12 +20,12 @@ interface Props {
 }
 
 export const Views = (props: Props) => {
-  const [newUserId, setNewUserId] = useState<string>('');
+  const [newUserId, setNewUserId] = useState<string>("");
 
   const locale = useStoreState((state) => state.theme.locale);
   const loggedIn = useStoreState((state) => state.auth.loggedIn);
   const isSet = useStoreState((state) => state.auth.isSet);
-
+  const schemes = useStoreState((state) => state.user.schemes);
   const { location } = props;
 
   // @ts-expect-error
@@ -39,18 +39,26 @@ export const Views = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    let newUserId = location?.pathname?.split('/onboarding/')[1] || '';
-    if (newUserId !== 'password') {
+    let newUserId = location?.pathname?.split("/onboarding/")[1] || "";
+    if (newUserId !== "password") {
       setNewUserId(newUserId);
     }
   }, [location]);
 
   const { data } = useQuery<UserNewRes, UserNewArgs>(UserNew, {
-    fetchPolicy: 'network-only',
+    fetchPolicy: "network-only",
     variables: {
       id: newUserId,
     },
   });
+
+  if (
+    schemes
+      .flatMap((schemes) => schemes.scheme.id)
+      .includes("clfi9000c0000piabawfn9s2w")
+  ) {
+    window.location.replace("https://staging.shopsafealert.co.uk/");
+  }
 
   return (
     <IntlProvider
