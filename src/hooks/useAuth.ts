@@ -168,8 +168,7 @@ export const useAuth = () => {
         if (
           data?.currentUser?.schemes
             .flatMap((schemes) => schemes.scheme.id)
-            .includes("clfi9000c0000piabawfn9s2w") ||
-          data.currentUser.email === "alex@shopsafe.uk"
+            .includes("clfi9000c0000piabawfn9s2w")
         ) {
           window.location.replace("https://staging.shopsafealert.co.uk/");
         }
