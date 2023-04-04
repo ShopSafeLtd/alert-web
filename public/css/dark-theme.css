@@ -1546,6 +1546,9 @@ html {
   --antd-wave-shadow-color: #de4436;
   --scroll-bar: 0;
 }
+@-ms-viewport {
+  width: device-width;
+}
 body {
   margin: 0;
   color: #b4bed2;
@@ -3364,6 +3367,7 @@ li:last-child > .ant-breadcrumb-separator {
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   touch-action: manipulation;
   height: 40px;
@@ -5355,6 +5359,7 @@ a.ant-btn-sm {
 }
 .ant-card-loading .ant-card-body {
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-card-small > .ant-card-head {
@@ -6446,6 +6451,7 @@ a.ant-btn-sm {
   cursor: pointer;
   transition: color 0.3s;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-comment-actions > li > span:hover {
@@ -6578,9 +6584,16 @@ a.ant-btn-sm {
   -webkit-user-select: none;
   user-select: none;
 }
+.ant-picker-input > input:-ms-input-placeholder {
+  color: #617190;
+  -ms-user-select: none;
+  user-select: none;
+  text-overflow: ellipsis;
+}
 .ant-picker-input > input::placeholder {
   color: #617190;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-picker-input > input:placeholder-shown {
@@ -9100,6 +9113,7 @@ _:-ms-fullscreen
   color: #72849a;
   cursor: help;
   -webkit-writing-mode: horizontal-tb;
+  -ms-writing-mode: lr-tb;
   writing-mode: horizontal-tb;
   -webkit-margin-start: 4px;
   margin-inline-start: 4px;
@@ -14549,6 +14563,7 @@ _:-ms-fullscreen
   -webkit-animation-duration: 0.3s;
   animation-duration: 0.3s;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-image-preview-mask {
@@ -14595,6 +14610,7 @@ _:-ms-fullscreen
   transform: scale3d(1, 1, 1);
   cursor: grab;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   pointer-events: auto;
 }
@@ -14741,9 +14757,16 @@ _:-ms-fullscreen
   -webkit-user-select: none;
   user-select: none;
 }
+.ant-input-affix-wrapper:-ms-input-placeholder {
+  color: #617190;
+  -ms-user-select: none;
+  user-select: none;
+  text-overflow: ellipsis;
+}
 .ant-input-affix-wrapper::placeholder {
   color: #617190;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-input-affix-wrapper:placeholder-shown {
@@ -14998,9 +15021,16 @@ _:-ms-fullscreen
   -webkit-user-select: none;
   user-select: none;
 }
+.ant-input:-ms-input-placeholder {
+  color: #617190;
+  -ms-user-select: none;
+  user-select: none;
+  text-overflow: ellipsis;
+}
 .ant-input::placeholder {
   color: #617190;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-input:placeholder-shown {
@@ -15690,9 +15720,16 @@ _:-ms-fullscreen
   -webkit-user-select: none;
   user-select: none;
 }
+.ant-input-number-affix-wrapper:-ms-input-placeholder {
+  color: #617190;
+  -ms-user-select: none;
+  user-select: none;
+  text-overflow: ellipsis;
+}
 .ant-input-number-affix-wrapper::placeholder {
   color: #617190;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-input-number-affix-wrapper:placeholder-shown {
@@ -15906,9 +15943,16 @@ _:-ms-fullscreen
   -webkit-user-select: none;
   user-select: none;
 }
+.ant-input-number:-ms-input-placeholder {
+  color: #617190;
+  -ms-user-select: none;
+  user-select: none;
+  text-overflow: ellipsis;
+}
 .ant-input-number::placeholder {
   color: #617190;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-input-number:placeholder-shown {
@@ -16388,6 +16432,7 @@ _:-ms-fullscreen
   line-height: 12px;
   transition: all 0.1s linear;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-input-number-handler-down-inner > *,
@@ -16459,9 +16504,16 @@ _:-ms-fullscreen
   -webkit-user-select: none;
   user-select: none;
 }
+.ant-input-number-input:-ms-input-placeholder {
+  color: #617190;
+  -ms-user-select: none;
+  user-select: none;
+  text-overflow: ellipsis;
+}
 .ant-input-number-input::placeholder {
   color: #617190;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-input-number-input:placeholder-shown {
@@ -17119,11 +17171,18 @@ _:-ms-fullscreen
   -webkit-user-select: none;
   user-select: none;
 }
+.ant-mentions:-ms-input-placeholder {
+  color: #617190;
+  -ms-user-select: none;
+  user-select: none;
+  text-overflow: ellipsis;
+}
 .ant-mentions::placeholder,
 .ant-mentions > textarea::placeholder,
 .ant-pagination-options-quick-jumper input::placeholder {
   color: #617190;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-mentions:placeholder-shown {
@@ -17235,8 +17294,13 @@ _:-ms-fullscreen
   resize: none;
   background-color: transparent;
 }
-.ant-mentions > textarea:placeholder-shown,
-.ant-pagination-options-quick-jumper input:placeholder-shown {
+.ant-mentions > textarea:-ms-input-placeholder {
+  color: #617190;
+  -ms-user-select: none;
+  user-select: none;
+  text-overflow: ellipsis;
+}
+.ant-mentions > textarea:placeholder-shown {
   text-overflow: ellipsis;
 }
 .ant-mentions-measure {
@@ -18585,6 +18649,7 @@ table tr th.ant-table-selection-column .ant-radio-wrapper {
   -webkit-animation-duration: 0.3s;
   animation-duration: 0.3s;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-modal-mask {
@@ -19548,6 +19613,7 @@ table tr th.ant-table-selection-column .ant-radio-wrapper {
   outline: 0;
   cursor: pointer;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-pagination-item a {
@@ -19696,6 +19762,7 @@ table tr th.ant-table-selection-column .ant-radio-wrapper {
   color: #b4bed2;
   cursor: pointer;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-pagination-next .ant-pagination-item-link,
@@ -19781,6 +19848,15 @@ table tr th.ant-table-selection-column .ant-radio-wrapper {
   width: 50px;
   height: 40px;
   margin: 0 8px;
+}
+.ant-pagination-options-quick-jumper input:-ms-input-placeholder {
+  color: #617190;
+  -ms-user-select: none;
+  user-select: none;
+  text-overflow: ellipsis;
+}
+.ant-pagination-options-quick-jumper input:placeholder-shown {
+  text-overflow: ellipsis;
 }
 .ant-pagination-options-quick-jumper input:hover {
   border-color: #9e3d3a;
@@ -20026,6 +20102,7 @@ textarea.ant-pagination-options-quick-jumper input {
   text-align: left;
   cursor: auto;
   -webkit-user-select: text;
+  -ms-user-select: text;
   user-select: text;
 }
 .ant-popover-content {
@@ -20893,6 +20970,7 @@ span.ant-radio + * {
   color: #4d5b75;
   transition: all 0.3s;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-rate-star-first .anticon,
@@ -21155,6 +21233,7 @@ span.ant-radio + * {
 .ant-select-single .ant-select-selector .ant-select-selection-item {
   position: relative;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-select-single .ant-select-selector .ant-select-selection-placeholder {
@@ -21326,6 +21405,7 @@ span.ant-radio + * {
   cursor: default;
   transition: font-size 0.3s, line-height 0.3s, height 0.3s;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   -webkit-margin-end: 8.5px;
   margin-inline-end: 8.5px;
@@ -22318,6 +22398,7 @@ span.ant-radio + * {
   word-break: keep-all;
   cursor: pointer;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-slider-mark-text-active {
@@ -22503,6 +22584,7 @@ span.ant-radio + * {
   clear: both;
   opacity: 0.5;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   pointer-events: none;
 }
@@ -23597,6 +23679,7 @@ span.ant-radio + * {
   cursor: pointer;
   transition: all 0.2s;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-switch:focus {
@@ -24376,6 +24459,7 @@ table tr th.ant-table-selection-column.ant-table-cell-fix-left {
   transform: scale(1.17647059);
   transition: all 0.3s;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-table-row-expand-icon:focus-visible,
@@ -26510,6 +26594,7 @@ tr.ant-table-expanded-row .ant-descriptions-view table {
 .ant-tree.ant-tree-directory .ant-tree-treenode .ant-tree-node-content-wrapper {
   border-radius: 0;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-tree.ant-tree-directory
@@ -26842,6 +26927,7 @@ tr.ant-table-expanded-row .ant-descriptions-view table {
   align-self: stretch;
   white-space: nowrap;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-tree-indent-unit {
@@ -26861,6 +26947,7 @@ tr.ant-table-expanded-row .ant-descriptions-view table {
   text-align: center;
   cursor: pointer;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-tree-switcher .ant-select-tree-switcher-icon,
@@ -26946,6 +27033,7 @@ tr.ant-table-expanded-row .ant-descriptions-view table {
 .ant-tree-node-content-wrapper {
   line-height: 24px;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-tree-node-content-wrapper .ant-tree-drop-indicator {
@@ -27331,6 +27419,7 @@ tr.ant-table-expanded-row .ant-descriptions-view table {
   align-self: stretch;
   white-space: nowrap;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-select-tree-indent-unit {
@@ -27350,6 +27439,7 @@ tr.ant-table-expanded-row .ant-descriptions-view table {
   text-align: center;
   cursor: pointer;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-select-tree-switcher .ant-select-tree-switcher-icon,
@@ -27441,6 +27531,7 @@ tr.ant-table-expanded-row .ant-descriptions-view table {
 .ant-select-tree-node-content-wrapper {
   line-height: 24px;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-select-tree-node-content-wrapper .ant-tree-drop-indicator {
@@ -27520,6 +27611,7 @@ a.ant-typography.ant-typography-danger:hover {
   color: #9ea8bb;
   cursor: not-allowed;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .ant-typography p,
@@ -31072,6 +31164,7 @@ tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after {
   align-items: flex-start;
   cursor: pointer;
   -webkit-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   margin-right: 36px;
 }

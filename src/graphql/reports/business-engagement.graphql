@@ -1,0 +1,15 @@
+query BusinessEngagement($where: UserContributionWhereInput!) {
+  businessContribution(where: $where) {
+    businessContributions {
+      name
+      totalUsers
+      totalIncidents
+      totalOffenders
+      totalUpdates
+      totalMessages
+      totalLogins
+    }
+    total
+  }
+
+}

@@ -5677,6 +5677,23 @@ export type BusinessValueStatsArgs = {
   startDate?: InputMaybe<Scalars['DateTime']>;
 };
 
+export type BusinessContributions = {
+  __typename?: 'BusinessContributions';
+  averageLossValue?: Maybe<Scalars['Float']>;
+  highestTotalValueGoodLost?: Maybe<Scalars['Float']>;
+  mostCommonGoodLost?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  totalIncidents: Scalars['Int'];
+  totalLogins: Scalars['Int'];
+  totalLostValue: Scalars['Float'];
+  totalMessages: Scalars['Int'];
+  totalOffenders: Scalars['Int'];
+  totalRecoveredValue: Scalars['Float'];
+  totalSuccessRate: Scalars['Float'];
+  totalUpdates: Scalars['Int'];
+  totalUsers: Scalars['Int'];
+};
+
 export type BusinessCreateManyParentInput = {
   createdAt?: InputMaybe<Scalars['DateTime']>;
   demId?: InputMaybe<Scalars['String']>;
@@ -6899,6 +6916,16 @@ export type CreateVehicleImages = {
   upload?: InputMaybe<Array<InputMaybe<UploadVehicleImage>>>;
 };
 
+export type CreatedDataCounts = {
+  __typename?: 'CreatedDataCounts';
+  crimeGroups: Scalars['Int'];
+  incidents: Scalars['Int'];
+  messages: Scalars['Int'];
+  offenders: Scalars['Int'];
+  updates: Scalars['Int'];
+  vehicles: Scalars['Int'];
+};
+
 export type CreationBreakdown = {
   __typename?: 'CreationBreakdown';
   data?: Maybe<Array<Count>>;
@@ -7384,6 +7411,17 @@ export type CrimeGroupOrderByWithRelationInput = {
   updatedAt?: InputMaybe<SortOrder>;
   updates?: InputMaybe<UpdateOrderByRelationAggregateInput>;
   vehicles?: InputMaybe<VehicleOrderByRelationAggregateInput>;
+};
+
+export type CrimeGroupPerformance = {
+  __typename?: 'CrimeGroupPerformance';
+  alertId: Scalars['String'];
+  alias: Scalars['String'];
+  totalIncidents: Scalars['Int'];
+  totalLostValue: Scalars['Float'];
+  totalOffenders: Scalars['Int'];
+  totalRecoveredValue: Scalars['Float'];
+  totalSuccessRate: Scalars['Float'];
 };
 
 export type CrimeGroupScalarWhereInput = {
@@ -8027,6 +8065,11 @@ export enum CrimeType {
   TheftHandling = 'THEFT_HANDLING',
   Violence = 'VIOLENCE',
 }
+
+export type DateRangeInput = {
+  endDate: Scalars['DateTime'];
+  startDate: Scalars['DateTime'];
+};
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: InputMaybe<Scalars['DateTime']>;
@@ -10428,6 +10471,12 @@ export type GoodsTypeWhereInput = {
 
 export type GoodsTypeWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
+};
+
+export type Graph = {
+  __typename?: 'Graph';
+  label: Scalars['String'];
+  value: Scalars['Int'];
 };
 
 export type Group = {
@@ -15208,6 +15257,15 @@ export type IncidentScalarWhereInput = {
   weekOfYear?: InputMaybe<IntNullableFilter>;
 };
 
+export type IncidentSummary = {
+  __typename?: 'IncidentSummary';
+  incidentsReportedToPolice: Scalars['Int'];
+  incidentsWherePoliceAttended: Scalars['Int'];
+  lastIncidentDate?: Maybe<Scalars['DateTime']>;
+  mostCommonCrimeType: Scalars['String'];
+  totalIncidents: Scalars['Int'];
+};
+
 export type IncidentTotal = {
   __typename?: 'IncidentTotal';
   data?: Maybe<Array<TagTotal>>;
@@ -19341,9 +19399,21 @@ export type ListArticles = {
   total: Scalars['Int'];
 };
 
+export type ListBusinessContribution = {
+  __typename?: 'ListBusinessContribution';
+  businessContributions: Array<BusinessContributions>;
+  total: Scalars['Int'];
+};
+
 export type ListBusinesses = {
   __typename?: 'ListBusinesses';
   businesses: Array<Business>;
+  total: Scalars['Int'];
+};
+
+export type ListCrimeGroupPerformance = {
+  __typename?: 'ListCrimeGroupPerformance';
+  crimeGroupPerformance: Array<CrimeGroupPerformance>;
   total: Scalars['Int'];
 };
 
@@ -19395,10 +19465,28 @@ export type ListInvestigations = {
   total: Scalars['Int'];
 };
 
+export type ListOffenderPerformance = {
+  __typename?: 'ListOffenderPerformance';
+  offenderPerformance: Array<OffenderPerformance>;
+  total: Scalars['Int'];
+};
+
 export type ListOffenders = {
   __typename?: 'ListOffenders';
   offenders: Array<Offender>;
   total: Scalars['Int'];
+};
+
+export type ListTargetedGoods = {
+  __typename?: 'ListTargetedGoods';
+  targetedGoods: Array<TargetedGood>;
+  total: Scalars['Int'];
+};
+
+export type ListUserContribution = {
+  __typename?: 'ListUserContribution';
+  total: Scalars['Int'];
+  userContributions: Array<UserContribution>;
 };
 
 export type ListVehicles = {
@@ -19544,6 +19632,15 @@ export type LoginEventWhereInput = {
 
 export type LoginEventWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
+};
+
+export type LossTotals = {
+  __typename?: 'LossTotals';
+  averagePerIncident: Scalars['Float'];
+  averageSuccessRate: Scalars['Float'];
+  totalIncidents: Scalars['Int'];
+  totalLostValue: Scalars['Float'];
+  totalRecoveredValue: Scalars['Float'];
 };
 
 export type MergeOffendersInput = {
@@ -23270,6 +23367,18 @@ export type OffenderOrderByWithRelationInput = {
   vehicles?: InputMaybe<VehicleOrderByRelationAggregateInput>;
 };
 
+export type OffenderPerformance = {
+  __typename?: 'OffenderPerformance';
+  alertId: Scalars['String'];
+  lastIncidentDate?: Maybe<Scalars['DateTime']>;
+  name: Scalars['String'];
+  primaryPhoto?: Maybe<Scalars['String']>;
+  totalIncidents: Scalars['Int'];
+  totalLostValue: Scalars['Float'];
+  totalRecoveredValue: Scalars['Float'];
+  totalSuccessRate: Scalars['Float'];
+};
+
 export type OffenderScalarWhereInput = {
   AND?: InputMaybe<Array<OffenderScalarWhereInput>>;
   NOT?: InputMaybe<Array<OffenderScalarWhereInput>>;
@@ -25019,6 +25128,18 @@ export type OptimisticImage = {
   uri: Scalars['String'];
 };
 
+export type PerformanceReport = {
+  __typename?: 'PerformanceReport';
+  createdDataCounts?: Maybe<CreatedDataCounts>;
+  crimeTypeDonut?: Maybe<Array<Maybe<Graph>>>;
+  goodsTypeCountDonut?: Maybe<Array<Maybe<Graph>>>;
+  goodsTypeValueDonut?: Maybe<Array<Maybe<Graph>>>;
+  incidentDayOfWeekLine?: Maybe<Array<Maybe<Graph>>>;
+  incidentSummary?: Maybe<IncidentSummary>;
+  involvedTagCountDonut?: Maybe<Array<Maybe<Graph>>>;
+  lossTotals?: Maybe<LossTotals>;
+};
+
 export type Query = {
   __typename?: 'Query';
   action?: Maybe<Action>;
@@ -25031,10 +25152,12 @@ export type Query = {
   ban?: Maybe<Ban>;
   bans: Array<Ban>;
   business?: Maybe<Business>;
+  businessContribution?: Maybe<ListBusinessContribution>;
   chat?: Maybe<Chat>;
   chatMessages: Array<MessageItem>;
   chats: Array<Chat>;
   crimeGroup?: Maybe<CrimeGroup>;
+  crimeGroupPerformance?: Maybe<ListCrimeGroupPerformance>;
   currentUser?: Maybe<User>;
   feedItems: Array<FeedItem>;
   group?: Maybe<Group>;
@@ -25043,6 +25166,7 @@ export type Query = {
   images: Array<Image>;
   incident?: Maybe<Incident>;
   incidentFeed?: Maybe<Array<Maybe<Incident>>>;
+  incidentHeatPerformance?: Maybe<ListIncidents>;
   incidents: Array<Incident>;
   investigation?: Maybe<Investigation>;
   investigations: Array<Investigation>;
@@ -25064,6 +25188,8 @@ export type Query = {
   offender?: Maybe<Offender>;
   offenderFeed?: Maybe<Array<Maybe<Offender>>>;
   offenders: Array<Offender>;
+  offendersPerformance?: Maybe<ListOffenderPerformance>;
+  performanceReport?: Maybe<PerformanceReport>;
   recycledItem?: Maybe<RecycledItem>;
   recycledItems?: Maybe<Array<Maybe<RecycledItem>>>;
   reportUserLogin?: Maybe<User>;
@@ -25071,10 +25197,12 @@ export type Query = {
   schemes: Array<Scheme>;
   tag?: Maybe<Tag>;
   tags: Array<Tag>;
+  targetedGoods?: Maybe<ListTargetedGoods>;
   user?: Maybe<User>;
   userByEmail?: Maybe<User>;
   userChat?: Maybe<UserChat>;
   userChats: Array<UserChat>;
+  userContributions?: Maybe<ListUserContribution>;
   userNew?: Maybe<UserNew>;
   userScheme?: Maybe<UserScheme>;
   userSchemes: Array<UserScheme>;
@@ -25142,6 +25270,10 @@ export type QueryBusinessArgs = {
   where: BusinessWhereUniqueInput;
 };
 
+export type QueryBusinessContributionArgs = {
+  where: UserContributionWhereInput;
+};
+
 export type QueryChatArgs = {
   where: ChatWhereUniqueInput;
 };
@@ -25163,6 +25295,10 @@ export type QueryChatsArgs = {
 
 export type QueryCrimeGroupArgs = {
   where: CrimeGroupWhereUniqueInput;
+};
+
+export type QueryCrimeGroupPerformanceArgs = {
+  where: UserContributionWhereInput;
 };
 
 export type QueryFeedItemsArgs = {
@@ -25213,6 +25349,10 @@ export type QueryIncidentFeedArgs = {
   order?: InputMaybe<IncidentOrderByWithRelationInput>;
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
+};
+
+export type QueryIncidentHeatPerformanceArgs = {
+  where: UserContributionWhereInput;
 };
 
 export type QueryIncidentsArgs = {
@@ -25367,6 +25507,14 @@ export type QueryOffendersArgs = {
   where?: InputMaybe<OffenderWhereInput>;
 };
 
+export type QueryOffendersPerformanceArgs = {
+  where: UserContributionWhereInput;
+};
+
+export type QueryPerformanceReportArgs = {
+  where: UserContributionWhereInput;
+};
+
 export type QueryRecycledItemArgs = {
   where: RecycledItemWhereUniqueInput;
 };
@@ -25411,6 +25559,10 @@ export type QueryTagsArgs = {
   where?: InputMaybe<TagWhereInput>;
 };
 
+export type QueryTargetedGoodsArgs = {
+  where: UserContributionWhereInput;
+};
+
 export type QueryUserArgs = {
   where: UserWhereUniqueInput;
 };
@@ -25430,6 +25582,10 @@ export type QueryUserChatsArgs = {
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<UserChatOrderByWithRelationInput>>;
   where?: InputMaybe<UserChatWhereInput>;
+};
+
+export type QueryUserContributionsArgs = {
+  where: UserContributionWhereInput;
 };
 
 export type QueryUserNewArgs = {
@@ -29739,6 +29895,18 @@ export type TagWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
 };
 
+export type TargetedGood = {
+  __typename?: 'TargetedGood';
+  alertId: Scalars['String'];
+  averageLossValue: Scalars['Float'];
+  name: Scalars['String'];
+  totalIncidents: Scalars['Int'];
+  totalLostValue: Scalars['Float'];
+  totalOffenders: Scalars['Int'];
+  totalRecoveredValue: Scalars['Float'];
+  totalSuccessRate: Scalars['Float'];
+};
+
 export type TermsAndCondition = {
   __typename?: 'TermsAndCondition';
   content: Scalars['String'];
@@ -32231,6 +32399,22 @@ export type UserChatWhereInput = {
 
 export type UserChatWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
+};
+
+export type UserContribution = {
+  __typename?: 'UserContribution';
+  name: Scalars['String'];
+  totalIncidents: Scalars['Int'];
+  totalLogins: Scalars['Int'];
+  totalMessages: Scalars['Int'];
+  totalOffenders: Scalars['Int'];
+  totalUpdates: Scalars['Int'];
+};
+
+export type UserContributionWhereInput = {
+  dateRange: DateRangeInput;
+  groupIds: Array<Scalars['String']>;
+  schemeIds: Array<Scalars['String']>;
 };
 
 export type UserCreateInput = {
@@ -43486,6 +43670,28 @@ export type RecycledItemsQuery = {
   } | null> | null;
 };
 
+export type BusinessEngagementQueryVariables = Exact<{
+  where: UserContributionWhereInput;
+}>;
+
+export type BusinessEngagementQuery = {
+  __typename?: 'Query';
+  businessContribution?: {
+    __typename?: 'ListBusinessContribution';
+    total: number;
+    businessContributions: Array<{
+      __typename?: 'BusinessContributions';
+      name: string;
+      totalUsers: number;
+      totalIncidents: number;
+      totalOffenders: number;
+      totalUpdates: number;
+      totalMessages: number;
+      totalLogins: number;
+    }>;
+  } | null;
+};
+
 export type IncidentMapQueryVariables = Exact<{
   where: IncidentWhereInput;
 }>;
@@ -43640,47 +43846,154 @@ export type OffenderProfileQuery = {
 };
 
 export type PerformanceReportQueryVariables = Exact<{
-  where: SchemeWhereUniqueInput;
+  where: UserContributionWhereInput;
 }>;
 
 export type PerformanceReportQuery = {
   __typename?: 'Query';
-  scheme?: {
-    __typename?: 'Scheme';
-    id: string;
-    name: string;
-    incidentsCreated?: number | null;
-    messagesSent?: number | null;
-    offendersCreated?: number | null;
-    updatesCreated?: number | null;
-    creationBreakdown?: {
-      __typename?: 'CreationBreakdown';
-      scale?: Array<string> | null;
-      data?: Array<{
-        __typename?: 'Count';
-        count: Array<number>;
-        name: string;
-      }> | null;
+  performanceReport?: {
+    __typename?: 'PerformanceReport';
+    createdDataCounts?: {
+      __typename?: 'CreatedDataCounts';
+      crimeGroups: number;
+      incidents: number;
+      messages: number;
+      offenders: number;
+      updates: number;
+      vehicles: number;
     } | null;
-    incidentsByType?: {
-      __typename?: 'IncidentsByType';
-      data?: Array<number> | null;
-      types?: Array<string> | null;
+    incidentSummary?: {
+      __typename?: 'IncidentSummary';
+      totalIncidents: number;
+      lastIncidentDate?: any | null;
+      incidentsReportedToPolice: number;
+      incidentsWherePoliceAttended: number;
+      mostCommonCrimeType: string;
     } | null;
-    topContributors?: Array<{
-      __typename?: 'TopContributors';
+    crimeTypeDonut?: Array<{
+      __typename?: 'Graph';
+      label: string;
+      value: number;
+    } | null> | null;
+    involvedTagCountDonut?: Array<{
+      __typename?: 'Graph';
+      label: string;
+      value: number;
+    } | null> | null;
+    incidentDayOfWeekLine?: Array<{
+      __typename?: 'Graph';
+      label: string;
+      value: number;
+    } | null> | null;
+    lossTotals?: {
+      __typename?: 'LossTotals';
+      totalIncidents: number;
+      totalLostValue: number;
+      totalRecoveredValue: number;
+      averagePerIncident: number;
+      averageSuccessRate: number;
+    } | null;
+    goodsTypeCountDonut?: Array<{
+      __typename?: 'Graph';
+      label: string;
+      value: number;
+    } | null> | null;
+    goodsTypeValueDonut?: Array<{
+      __typename?: 'Graph';
+      label: string;
+      value: number;
+    } | null> | null;
+  } | null;
+  offendersPerformance?: {
+    __typename?: 'ListOffenderPerformance';
+    total: number;
+    offenderPerformance: Array<{
+      __typename?: 'OffenderPerformance';
+      primaryPhoto?: string | null;
+      alertId: string;
+      name: string;
+      totalIncidents: number;
+      totalLostValue: number;
+      totalRecoveredValue: number;
+      totalSuccessRate: number;
+      lastIncidentDate?: any | null;
+    }>;
+  } | null;
+  businessContribution?: {
+    __typename?: 'ListBusinessContribution';
+    total: number;
+    businessContributions: Array<{
+      __typename?: 'BusinessContributions';
+      name: string;
+      totalUsers: number;
+      totalIncidents: number;
+      totalOffenders: number;
+      totalUpdates: number;
+      totalMessages: number;
+      totalLogins: number;
+      totalSuccessRate: number;
+      totalRecoveredValue: number;
+      totalLostValue: number;
+      mostCommonGoodLost?: string | null;
+      highestTotalValueGoodLost?: number | null;
+      averageLossValue?: number | null;
+    }>;
+  } | null;
+  crimeGroupPerformance?: {
+    __typename?: 'ListCrimeGroupPerformance';
+    total: number;
+    crimeGroupPerformance: Array<{
+      __typename?: 'CrimeGroupPerformance';
+      totalSuccessRate: number;
+      totalRecoveredValue: number;
+      totalOffenders: number;
+      totalLostValue: number;
+      totalIncidents: number;
+      alias: string;
+      alertId: string;
+    }>;
+  } | null;
+  userContributions?: {
+    __typename?: 'ListUserContribution';
+    total: number;
+    userContributions: Array<{
+      __typename?: 'UserContribution';
+      name: string;
+      totalIncidents: number;
+      totalOffenders: number;
+      totalUpdates: number;
+      totalMessages: number;
+      totalLogins: number;
+    }>;
+  } | null;
+  targetedGoods?: {
+    __typename?: 'ListTargetedGoods';
+    total: number;
+    targetedGoods: Array<{
+      __typename?: 'TargetedGood';
+      alertId: string;
+      name: string;
+      totalIncidents: number;
+      totalOffenders: number;
+      totalLostValue: number;
+      totalRecoveredValue: number;
+      totalSuccessRate: number;
+      averageLossValue: number;
+    }>;
+  } | null;
+  incidentHeatPerformance?: {
+    __typename?: 'ListIncidents';
+    total: number;
+    incidents: Array<{
+      __typename?: 'Incident';
       id: string;
-      fullName: string;
-      incidentsCreated: number;
-      offendersCreated: number;
-      updatesCreated: number;
-      messagesSent: number;
-      businesses: Array<{
-        __typename?: 'Business';
+      location?: {
+        __typename?: 'Address';
         id: string;
-        name: string;
-      } | null>;
-    }> | null;
+        geoLat?: number | null;
+        geoLng?: number | null;
+      } | null;
+    }>;
   } | null;
 };
 
@@ -54398,6 +54711,73 @@ export type RecycledItemsQueryResult = Apollo.QueryResult<
   RecycledItemsQuery,
   RecycledItemsQueryVariables
 >;
+export const BusinessEngagementDocument = gql`
+  query BusinessEngagement($where: UserContributionWhereInput!) {
+    businessContribution(where: $where) {
+      businessContributions {
+        name
+        totalUsers
+        totalIncidents
+        totalOffenders
+        totalUpdates
+        totalMessages
+        totalLogins
+      }
+      total
+    }
+  }
+`;
+
+/**
+ * __useBusinessEngagementQuery__
+ *
+ * To run a query within a React component, call `useBusinessEngagementQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBusinessEngagementQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBusinessEngagementQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useBusinessEngagementQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    BusinessEngagementQuery,
+    BusinessEngagementQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    BusinessEngagementQuery,
+    BusinessEngagementQueryVariables
+  >(BusinessEngagementDocument, options);
+}
+export function useBusinessEngagementLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    BusinessEngagementQuery,
+    BusinessEngagementQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    BusinessEngagementQuery,
+    BusinessEngagementQueryVariables
+  >(BusinessEngagementDocument, options);
+}
+export type BusinessEngagementQueryHookResult = ReturnType<
+  typeof useBusinessEngagementQuery
+>;
+export type BusinessEngagementLazyQueryHookResult = ReturnType<
+  typeof useBusinessEngagementLazyQuery
+>;
+export type BusinessEngagementQueryResult = Apollo.QueryResult<
+  BusinessEngagementQuery,
+  BusinessEngagementQueryVariables
+>;
 export const IncidentMapDocument = gql`
   query IncidentMap($where: IncidentWhereInput!) {
     incidents(where: $where) {
@@ -54638,36 +55018,127 @@ export type OffenderProfileQueryResult = Apollo.QueryResult<
   OffenderProfileQueryVariables
 >;
 export const PerformanceReportDocument = gql`
-  query PerformanceReport($where: SchemeWhereUniqueInput!) {
-    scheme(where: $where) {
-      id
-      name
-      incidentsCreated
-      messagesSent
-      offendersCreated
-      updatesCreated
-      creationBreakdown {
-        data {
-          count
-          name
-        }
-        scale
+  query PerformanceReport($where: UserContributionWhereInput!) {
+    performanceReport(where: $where) {
+      createdDataCounts {
+        crimeGroups
+        incidents
+        messages
+        offenders
+        updates
+        vehicles
       }
-      incidentsByType {
-        data
-        types
+      incidentSummary {
+        totalIncidents
+        lastIncidentDate
+        incidentsReportedToPolice
+        incidentsWherePoliceAttended
+        mostCommonCrimeType
       }
-      topContributors {
+      crimeTypeDonut {
+        label
+        value
+      }
+      involvedTagCountDonut {
+        label
+        value
+      }
+      incidentDayOfWeekLine {
+        label
+        value
+      }
+      lossTotals {
+        totalIncidents
+        totalLostValue
+        totalRecoveredValue
+        averagePerIncident
+        averageSuccessRate
+      }
+      goodsTypeCountDonut {
+        label
+        value
+      }
+      goodsTypeValueDonut {
+        label
+        value
+      }
+    }
+    offendersPerformance(where: $where) {
+      total
+      offenderPerformance {
+        primaryPhoto
+        alertId
+        name
+        totalIncidents
+        totalLostValue
+        totalRecoveredValue
+        totalSuccessRate
+        lastIncidentDate
+      }
+    }
+    businessContribution(where: $where) {
+      businessContributions {
+        name
+        totalUsers
+        totalIncidents
+        totalOffenders
+        totalUpdates
+        totalMessages
+        totalLogins
+        totalSuccessRate
+        totalRecoveredValue
+        totalLostValue
+        mostCommonGoodLost
+        highestTotalValueGoodLost
+        averageLossValue
+      }
+      total
+    }
+    crimeGroupPerformance(where: $where) {
+      crimeGroupPerformance {
+        totalSuccessRate
+        totalRecoveredValue
+        totalOffenders
+        totalLostValue
+        totalIncidents
+        alias
+        alertId
+      }
+      total
+    }
+    userContributions(where: $where) {
+      total
+      userContributions {
+        name
+        totalIncidents
+        totalOffenders
+        totalUpdates
+        totalMessages
+        totalLogins
+      }
+    }
+    targetedGoods(where: $where) {
+      targetedGoods {
+        alertId
+        name
+        totalIncidents
+        totalOffenders
+        totalLostValue
+        totalRecoveredValue
+        totalSuccessRate
+        averageLossValue
+      }
+      total
+    }
+    incidentHeatPerformance(where: $where) {
+      total
+      incidents {
         id
-        fullName
-        businesses {
+        location {
           id
-          name
+          geoLat
+          geoLng
         }
-        incidentsCreated
-        offendersCreated
-        updatesCreated
-        messagesSent
       }
     }
   }

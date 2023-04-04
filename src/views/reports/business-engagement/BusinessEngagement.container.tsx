@@ -1,6 +1,6 @@
 import React from 'react';
-import View from './performance-report.view';
-import usePerformanceReport from './use-performance-report';
+import View from './BusinessEngagement.view';
+import useBusinessEngagement from './useBusinessEngagement';
 
 const PerformanceReport = () => {
   const {
@@ -12,7 +12,7 @@ const PerformanceReport = () => {
     groupsLoading,
     setSelectedGroups,
     selectedGroups,
-  } = usePerformanceReport();
+  } = useBusinessEngagement();
   return (
     <View
       setSelectedGroups={setSelectedGroups}

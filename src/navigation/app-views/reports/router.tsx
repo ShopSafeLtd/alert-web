@@ -6,6 +6,7 @@ import OffenderProfileSearch from 'views/reports/offender-profile/Search';
 import IncidentMap from 'views/reports/incident-map';
 import BusinessSearch from 'views/reports/business/Search';
 import BusinessView from 'views/reports/business/View';
+import BusinessEngagement from 'views/reports/business-engagement';
 
 const Article = (): JSX.Element => (
   <Routes>
@@ -14,6 +15,8 @@ const Article = (): JSX.Element => (
     <Route path="offender-profile/:id" element={<OffenderProfileView />} />
     <Route path="incident-map" element={<IncidentMap />} />
     <Route path="business" element={<BusinessSearch />} />
+    <Route path="business-engagement" element={<BusinessEngagement />} />
+
     <Route path="business/:id" element={<BusinessView />} />
   </Routes>
 );

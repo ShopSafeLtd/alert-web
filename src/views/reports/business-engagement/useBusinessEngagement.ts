@@ -1,6 +1,6 @@
-import type { PerformanceReportQuery } from 'graphql/generated';
+import type { BusinessEngagementQuery } from 'graphql/generated';
 import {
-  usePerformanceReportQuery,
+  useBusinessEngagementQuery,
   useSchemeGroupsQuery,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 interface Return {
   loading: boolean;
-  data: PerformanceReportQuery | undefined;
+  data: BusinessEngagementQuery | undefined;
   groups: SelectOptions[];
 
   dateRange: { startDate: Date; endDate: Date };
@@ -23,7 +23,7 @@ export interface SelectOptions {
   value: string;
 }
 
-const usePerformanceReport = (): Return => {
+const useBusinessEngagement = (): Return => {
   const currentScheme = useStoreState((state) => state.scheme.id);
   const [groups, setGroups] = useState<SelectOptions[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
@@ -65,7 +65,7 @@ const usePerformanceReport = (): Return => {
     }
   }, [groupsData]);
 
-  const { data, loading } = usePerformanceReportQuery({
+  const { data, loading } = useBusinessEngagementQuery({
     fetchPolicy: 'cache-and-network',
     skip:
       !currentScheme ||
@@ -106,4 +106,4 @@ const usePerformanceReport = (): Return => {
   };
 };
 
-export default usePerformanceReport;
+export default useBusinessEngagement;
