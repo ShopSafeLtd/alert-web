@@ -29,11 +29,17 @@ import type { PointTooltipProps } from '@nivo/line';
 import { ResponsiveLine } from '@nivo/line';
 import moment from 'moment/moment';
 import { ResponsiveRadialBar } from '@nivo/radial-bar';
+import { GoogleMap, HeatmapLayer, Marker } from '@react-google-maps/api';
 import useStyles from './OffenderReport.styles';
 import type { SelectOptions } from './useOffenderReport';
 import OffenderSideList from '../../../components/offenders/OffenderSideList';
 import WatermarkImage from '../../../components/images/WatermarkImage.view';
 import { getAge, getBuild, getEthnicity, getSex } from '../../../utils';
+
+const containerStyle = {
+  width: '100%',
+  height: '600px',
+};
 
 const { Title, Text } = Typography;
 
@@ -549,6 +555,77 @@ const PerformanceReport = ({
             <Row gutter={16}>
               <Col span={12}>
                 <div style={{ height: 400 }}>
+                  <Typography.Title level={4}>Crime Types</Typography.Title>
+                  {data?.offenderReport?.goodsTypeLossRecovered &&
+                  data?.offenderReport?.goodsTypeLossRecovered.length > 0 ? (
+                    <ResponsiveRadialBar
+                      margin={{ top: 40, right: 80, bottom: 80, left: 0 }}
+                      valueFormat=">-.2f"
+                      padding={0.4}
+                      cornerRadius={2}
+                      radialAxisStart={{
+                        tickSize: 5,
+                        tickPadding: 5,
+                        tickRotation: 0,
+                      }}
+                      circularAxisOuter={{
+                        tickSize: 5,
+                        tickPadding: 12,
+                        tickRotation: 0,
+                      }}
+                      legends={[
+                        {
+                          anchor: 'right',
+                          direction: 'column',
+                          justify: false,
+                          translateX: 80,
+                          translateY: 0,
+                          itemsSpacing: 6,
+                          itemDirection: 'left-to-right',
+                          itemWidth: 100,
+                          itemHeight: 18,
+                          itemTextColor: '#999',
+                          symbolSize: 18,
+                          symbolShape: 'square',
+                          effects: [
+                            {
+                              on: 'hover',
+                              style: {
+                                itemTextColor: '#000',
+                              },
+                            },
+                          ],
+                        },
+                      ]}
+                      data={data?.offenderReport?.goodsTypeLossRecovered?.map(
+                        (item) => ({
+                          id: item?.label || '',
+                          data: item?.data
+                            ? item?.data?.map((d) => ({
+                                x: d?.label || '',
+                                y: d?.value || 0,
+                              }))
+                            : [
+                                {
+                                  x: 'No data',
+                                  y: 0,
+                                },
+                              ],
+                        })
+                      )}
+                    />
+                  ) : (
+                    <Empty description="No goods lost/recovered" />
+                  )}
+                </div>
+              </Col>
+            </Row>
+          </Card>
+
+          <Card style={{ marginTop: 24 }} loading={loading}>
+            <Row gutter={16}>
+              <Col span={12}>
+                <div style={{ height: 400 }}>
                   <Typography.Title level={4}>
                     Incidents by time of day
                   </Typography.Title>
@@ -979,6 +1056,149 @@ const PerformanceReport = ({
               </Card>
             </Col>
           </Row>
+          <Card style={{ marginTop: 24 }} loading={loading}>
+            <Typography.Title level={4}>Incidents heatmap</Typography.Title>
+            <GoogleMap
+              mapContainerStyle={containerStyle}
+              center={{
+                lat:
+                  data?.offenderReport?.incidentsTable?.incidents[0]?.location
+                    ?.geoLat || 51.5081,
+                lng:
+                  data?.offenderReport?.incidentsTable?.incidents[0]?.location
+                    ?.geoLng || 0.0759,
+              }}
+              zoom={10}
+              clickableIcons={false}
+              options={{
+                streetViewControl: false,
+                styles: [
+                  { elementType: 'geometry', stylers: [{ color: '#242f3e' }] },
+                  {
+                    elementType: 'labels.text.stroke',
+                    stylers: [{ color: '#242f3e' }],
+                  },
+                  {
+                    elementType: 'labels.text.fill',
+                    stylers: [{ color: '#746855' }],
+                  },
+                  {
+                    featureType: 'administrative.locality',
+                    elementType: 'labels.text.fill',
+                    stylers: [{ color: '#d59563' }],
+                  },
+                  {
+                    featureType: 'poi',
+                    elementType: 'labels.text.fill',
+                    stylers: [{ color: '#d59563' }],
+                  },
+                  {
+                    featureType: 'poi.park',
+                    elementType: 'geometry',
+                    stylers: [{ color: '#263c3f' }],
+                  },
+                  {
+                    featureType: 'poi.park',
+                    elementType: 'labels.text.fill',
+                    stylers: [{ color: '#6b9a76' }],
+                  },
+                  {
+                    featureType: 'road',
+                    elementType: 'geometry',
+                    stylers: [{ color: '#38414e' }],
+                  },
+                  {
+                    featureType: 'road',
+                    elementType: 'geometry.stroke',
+                    stylers: [{ color: '#212a37' }],
+                  },
+                  {
+                    featureType: 'road',
+                    elementType: 'labels.text.fill',
+                    stylers: [{ color: '#9ca5b3' }],
+                  },
+                  {
+                    featureType: 'road.highway',
+                    elementType: 'geometry',
+                    stylers: [{ color: '#746855' }],
+                  },
+                  {
+                    featureType: 'road.highway',
+                    elementType: 'geometry.stroke',
+                    stylers: [{ color: '#1f2835' }],
+                  },
+                  {
+                    featureType: 'road.highway',
+                    elementType: 'labels.text.fill',
+                    stylers: [{ color: '#f3d19c' }],
+                  },
+                  {
+                    featureType: 'transit',
+                    elementType: 'geometry',
+                    stylers: [{ color: '#2f3948' }],
+                  },
+                  {
+                    featureType: 'transit.station',
+                    elementType: 'labels.text.fill',
+                    stylers: [{ color: '#d59563' }],
+                  },
+                  {
+                    featureType: 'water',
+                    elementType: 'geometry',
+                    stylers: [{ color: '#17263c' }],
+                  },
+                  {
+                    featureType: 'water',
+                    elementType: 'labels.text.fill',
+                    stylers: [{ color: '#515c6d' }],
+                  },
+                  {
+                    featureType: 'water',
+                    elementType: 'labels.text.stroke',
+                    stylers: [{ color: '#17263c' }],
+                  },
+                ],
+              }}
+            >
+              {/* Child components, such as markers, info windows, etc. */}
+              <HeatmapLayer
+                // required
+                data={
+                  data?.offenderReport?.incidentsTable?.incidents
+                    ?.filter(
+                      (incident) =>
+                        incident.location?.geoLat && incident.location.geoLng
+                    )
+                    .map(
+                      (incident) =>
+                        new google.maps.LatLng(
+                          incident?.location?.geoLat || 0,
+                          incident?.location?.geoLng || 0
+                        )
+                    ) || []
+                }
+                options={{
+                  radius: 50,
+                  opacity: 0.8,
+                }}
+              />
+
+              {data?.offenderReport?.offenderSummary?.addresses &&
+                data?.offenderReport?.offenderSummary?.addresses.length > 0 &&
+                data?.offenderReport?.offenderSummary?.addresses.map(
+                  (address) => (
+                    <Marker
+                      label={address.full || ''}
+                      key={address.id}
+                      position={{
+                        lat: address.geoLat || 0,
+                        lng: address.geoLng || 0,
+                      }}
+                    />
+                  )
+                )}
+            </GoogleMap>
+          </Card>
         </div>
       </Col>
     </Row>

@@ -7424,6 +7424,14 @@ export type CrimeGroupPerformance = {
   totalSuccessRate: Scalars['Float'];
 };
 
+export type CrimeGroupReportInput = {
+  businessIds: Array<Scalars['String']>;
+  crimeGroupId: Scalars['String'];
+  dateRange: DateRangeInput;
+  groupIds: Array<Scalars['String']>;
+  schemeIds: Array<Scalars['String']>;
+};
+
 export type CrimeGroupScalarWhereInput = {
   AND?: InputMaybe<Array<CrimeGroupScalarWhereInput>>;
   NOT?: InputMaybe<Array<CrimeGroupScalarWhereInput>>;
@@ -32445,6 +32453,7 @@ export type UserContribution = {
 };
 
 export type UserContributionWhereInput = {
+  crimeGroupId?: InputMaybe<Scalars['String']>;
   dateRange: DateRangeInput;
   groupIds: Array<Scalars['String']>;
   offenderId?: InputMaybe<Scalars['String']>;
@@ -43947,6 +43956,9 @@ export type OffenderReportQuery = {
           __typename?: 'Address';
           full?: string | null;
           alias?: string | null;
+          id: string;
+          geoLat?: number | null;
+          geoLng?: number | null;
         } | null;
         crimeTypes: Array<{ __typename?: 'Tag'; name: string; id: string }>;
       }>;
@@ -43972,6 +43984,13 @@ export type OffenderReportQuery = {
       reference?: number | null;
       gender?: Gender | null;
       name?: string | null;
+      addresses: Array<{
+        __typename?: 'Address';
+        id: string;
+        geoLng?: number | null;
+        geoLat?: number | null;
+        full?: string | null;
+      }>;
       images: Array<{
         __typename?: 'Image';
         optimisedPersisted?: string | null;
@@ -55239,6 +55258,9 @@ export const OffenderReportDocument = gql`
           location {
             full
             alias
+            id
+            geoLat
+            geoLng
           }
           totalOffenders
           crimeTypes {
@@ -55268,6 +55290,12 @@ export const OffenderReportDocument = gql`
         race
         reference
         gender
+        addresses {
+          id
+          geoLng
+          geoLat
+          full
+        }
         name
         images {
           optimisedPersisted
