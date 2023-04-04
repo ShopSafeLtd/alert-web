@@ -1,4 +1,7 @@
-query OffenderReport($where: OffenderReportInput!, $targetedWhere: UserContributionWhereInput!) {
+query OffenderReport(
+  $where: OffenderReportInput!
+  $targetedWhere: UserContributionWhereInput!
+) {
   offenderReport(where: $where) {
     crimeTypeBusinessRadial {
       label
@@ -50,6 +53,9 @@ query OffenderReport($where: OffenderReportInput!, $targetedWhere: UserContribut
         location {
           full
           alias
+          id
+          geoLat
+          geoLng
         }
         totalOffenders
         crimeTypes {
@@ -79,6 +85,11 @@ query OffenderReport($where: OffenderReportInput!, $targetedWhere: UserContribut
       race
       reference
       gender
+      addresses {
+        id
+        geoLng
+        geoLat
+      }
       name
       images {
         optimisedPersisted
