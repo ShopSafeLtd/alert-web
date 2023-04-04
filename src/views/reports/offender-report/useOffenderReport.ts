@@ -1,14 +1,15 @@
-import type { PerformanceReportQuery } from 'graphql/generated';
+import type { OffenderReportQuery } from 'graphql/generated';
 import {
-  usePerformanceReportQuery,
+  useOffenderReportQuery,
   useSchemeGroupsQuery,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 interface Return {
   loading: boolean;
-  data: PerformanceReportQuery | undefined;
+  data: OffenderReportQuery | undefined;
   groups: SelectOptions[];
 
   dateRange: { startDate: Date; endDate: Date };
@@ -16,6 +17,10 @@ interface Return {
   setSelectedGroups: (groups: string[]) => void;
   groupsLoading: boolean;
   selectedGroups: string[];
+  selectedBusiness: string[];
+  setSelectedBusiness: (businesses: string[]) => void;
+  businesses: SelectOptions[];
+  selectedOffender: string;
 }
 
 export interface SelectOptions {
@@ -24,7 +29,13 @@ export interface SelectOptions {
 }
 
 const useOffenderReport = (): Return => {
+  const { id: selectedOffender } = useParams();
+
   const currentScheme = useStoreState((state) => state.scheme.id);
+  const businesses = useStoreState((state) => state.user.businesses);
+  const [selectedBusiness, setSelectedBusiness] = useState<string[]>(
+    businesses ? businesses.map((business) => business.id) : []
+  );
   const [groups, setGroups] = useState<SelectOptions[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
   const [dateRange, setDateRangeState] = useState<{
@@ -65,16 +76,25 @@ const useOffenderReport = (): Return => {
     }
   }, [groupsData]);
 
-  const { data, loading } = usePerformanceReportQuery({
+  const { data, loading } = useOffenderReportQuery({
     fetchPolicy: 'cache-and-network',
     skip:
       !currentScheme ||
       !groups ||
+      !selectedOffender ||
       groupsLoading ||
       !selectedGroups ||
       selectedGroups.filter(Boolean).length === 0,
     variables: {
       where: {
+        offenderId: selectedOffender || '',
+        businessIds: selectedBusiness,
+        dateRange,
+        schemeIds: [currentScheme],
+        groupIds: selectedGroups,
+      },
+      targetedWhere: {
+        offenderId: selectedOffender || '',
         dateRange,
         schemeIds: [currentScheme],
         groupIds: selectedGroups,
@@ -103,6 +123,15 @@ const useOffenderReport = (): Return => {
     setSelectedGroups,
     groupsLoading,
     selectedGroups,
+    businesses: businesses
+      ? businesses.map((business) => ({
+          label: business.name,
+          value: business.id,
+        }))
+      : [],
+    selectedBusiness,
+    setSelectedBusiness,
+    selectedOffender: selectedOffender || '',
   };
 };
 

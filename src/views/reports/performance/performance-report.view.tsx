@@ -1164,7 +1164,7 @@ const PerformanceReport = ({
               size="small"
               pagination={{
                 total:
-                  data?.businessContribution?.businessContributions?.filter(
+                  data?.targetedGoods?.targetedGoods?.filter(
                     (business) => business.totalIncidents > 0
                   ).length || 0,
                 defaultPageSize: 10,

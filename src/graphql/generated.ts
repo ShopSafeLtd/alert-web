@@ -23379,6 +23379,28 @@ export type OffenderPerformance = {
   totalSuccessRate: Scalars['Float'];
 };
 
+export type OffenderReport = {
+  __typename?: 'OffenderReport';
+  crimeTypeBusinessRadial?: Maybe<Array<Maybe<RadialGraph>>>;
+  crimeTypeDonut?: Maybe<Array<Maybe<Graph>>>;
+  goodsTypeLossRecovered?: Maybe<Array<Maybe<RadialGraph>>>;
+  incidentDayOfWeekGraph?: Maybe<Array<Maybe<Graph>>>;
+  incidentMonthGraph?: Maybe<Array<Maybe<Graph>>>;
+  incidentSummary?: Maybe<IncidentSummary>;
+  incidentTimeOfDayDonut?: Maybe<Array<Maybe<Graph>>>;
+  incidentsTable?: Maybe<ListIncidents>;
+  lossTotals?: Maybe<LossTotals>;
+  offenderSummary?: Maybe<Offender>;
+};
+
+export type OffenderReportInput = {
+  businessIds: Array<Scalars['String']>;
+  dateRange: DateRangeInput;
+  groupIds: Array<Scalars['String']>;
+  offenderId: Scalars['String'];
+  schemeIds: Array<Scalars['String']>;
+};
+
 export type OffenderScalarWhereInput = {
   AND?: InputMaybe<Array<OffenderScalarWhereInput>>;
   NOT?: InputMaybe<Array<OffenderScalarWhereInput>>;
@@ -25187,6 +25209,7 @@ export type Query = {
   messages: Array<Message>;
   offender?: Maybe<Offender>;
   offenderFeed?: Maybe<Array<Maybe<Offender>>>;
+  offenderReport?: Maybe<OffenderReport>;
   offenders: Array<Offender>;
   offendersPerformance?: Maybe<ListOffenderPerformance>;
   performanceReport?: Maybe<PerformanceReport>;
@@ -25498,6 +25521,10 @@ export type QueryOffenderFeedArgs = {
   userId: Scalars['String'];
 };
 
+export type QueryOffenderReportArgs = {
+  where: OffenderReportInput;
+};
+
 export type QueryOffendersArgs = {
   after?: InputMaybe<OffenderWhereUniqueInput>;
   before?: InputMaybe<OffenderWhereUniqueInput>;
@@ -25632,6 +25659,12 @@ export enum Race {
   Ic6 = 'IC6',
   Unknown = 'UNKNOWN',
 }
+
+export type RadialGraph = {
+  __typename?: 'RadialGraph';
+  data: Array<Graph>;
+  label: Scalars['String'];
+};
 
 export type RecycledItem = {
   __typename?: 'RecycledItem';
@@ -32414,6 +32447,7 @@ export type UserContribution = {
 export type UserContributionWhereInput = {
   dateRange: DateRangeInput;
   groupIds: Array<Scalars['String']>;
+  offenderId?: InputMaybe<Scalars['String']>;
   schemeIds: Array<Scalars['String']>;
 };
 
@@ -43845,6 +43879,138 @@ export type OffenderProfileQuery = {
   } | null;
 };
 
+export type OffenderReportQueryVariables = Exact<{
+  where: OffenderReportInput;
+  targetedWhere: UserContributionWhereInput;
+}>;
+
+export type OffenderReportQuery = {
+  __typename?: 'Query';
+  offenderReport?: {
+    __typename?: 'OffenderReport';
+    crimeTypeBusinessRadial?: Array<{
+      __typename?: 'RadialGraph';
+      label: string;
+      data: Array<{ __typename?: 'Graph'; value: number; label: string }>;
+    } | null> | null;
+    crimeTypeDonut?: Array<{
+      __typename?: 'Graph';
+      label: string;
+      value: number;
+    } | null> | null;
+    goodsTypeLossRecovered?: Array<{
+      __typename?: 'RadialGraph';
+      label: string;
+      data: Array<{ __typename?: 'Graph'; label: string; value: number }>;
+    } | null> | null;
+    incidentDayOfWeekGraph?: Array<{
+      __typename?: 'Graph';
+      value: number;
+      label: string;
+    } | null> | null;
+    incidentMonthGraph?: Array<{
+      __typename?: 'Graph';
+      value: number;
+      label: string;
+    } | null> | null;
+    incidentSummary?: {
+      __typename?: 'IncidentSummary';
+      totalIncidents: number;
+      mostCommonCrimeType: string;
+      lastIncidentDate?: any | null;
+      incidentsWherePoliceAttended: number;
+      incidentsReportedToPolice: number;
+    } | null;
+    incidentTimeOfDayDonut?: Array<{
+      __typename?: 'Graph';
+      value: number;
+      label: string;
+    } | null> | null;
+    incidentsTable?: {
+      __typename?: 'ListIncidents';
+      total: number;
+      incidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        reference?: number | null;
+        date: any;
+        totalOffenders?: number | null;
+        policeReported: boolean;
+        policeInvolved: boolean;
+        policeRef?: string | null;
+        incidentItems: Array<{
+          __typename?: 'IncidentItem';
+          value: number;
+          recoveredValue: number;
+        }>;
+        location?: {
+          __typename?: 'Address';
+          full?: string | null;
+          alias?: string | null;
+        } | null;
+        crimeTypes: Array<{ __typename?: 'Tag'; name: string; id: string }>;
+      }>;
+    } | null;
+    lossTotals?: {
+      __typename?: 'LossTotals';
+      totalRecoveredValue: number;
+      totalLostValue: number;
+      averagePerIncident: number;
+      averageSuccessRate: number;
+      totalIncidents: number;
+    } | null;
+    offenderSummary?: {
+      __typename?: 'Offender';
+      id: string;
+      age?: Age | null;
+      dateSource?: string | null;
+      peculiarities?: string | null;
+      dateOfBirth?: any | null;
+      build?: Build | null;
+      hair?: string | null;
+      race?: Race | null;
+      reference?: number | null;
+      gender?: Gender | null;
+      name?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        optimisedPersisted?: string | null;
+      }>;
+    } | null;
+  } | null;
+  targetedGoods?: {
+    __typename?: 'ListTargetedGoods';
+    total: number;
+    targetedGoods: Array<{
+      __typename?: 'TargetedGood';
+      totalSuccessRate: number;
+      totalRecoveredValue: number;
+      totalOffenders: number;
+      totalLostValue: number;
+      totalIncidents: number;
+      name: string;
+      averageLossValue: number;
+      alertId: string;
+    }>;
+  } | null;
+  businessContribution?: {
+    __typename?: 'ListBusinessContribution';
+    total: number;
+    businessContributions: Array<{
+      __typename?: 'BusinessContributions';
+      name: string;
+      totalIncidents: number;
+      totalOffenders: number;
+      totalLostValue: number;
+      totalRecoveredValue: number;
+      totalSuccessRate: number;
+      mostCommonGoodLost?: string | null;
+      highestTotalValueGoodLost?: number | null;
+      averageLossValue?: number | null;
+    }>;
+  } | null;
+};
+
 export type PerformanceReportQueryVariables = Exact<{
   where: UserContributionWhereInput;
 }>;
@@ -55016,6 +55182,178 @@ export type OffenderProfileLazyQueryHookResult = ReturnType<
 export type OffenderProfileQueryResult = Apollo.QueryResult<
   OffenderProfileQuery,
   OffenderProfileQueryVariables
+>;
+export const OffenderReportDocument = gql`
+  query OffenderReport(
+    $where: OffenderReportInput!
+    $targetedWhere: UserContributionWhereInput!
+  ) {
+    offenderReport(where: $where) {
+      crimeTypeBusinessRadial {
+        label
+        data {
+          value
+          label
+        }
+      }
+      crimeTypeDonut {
+        label
+        value
+      }
+      goodsTypeLossRecovered {
+        label
+        data {
+          label
+          value
+        }
+      }
+      incidentDayOfWeekGraph {
+        value
+        label
+      }
+      incidentMonthGraph {
+        value
+        label
+      }
+      incidentSummary {
+        totalIncidents
+        mostCommonCrimeType
+        lastIncidentDate
+        incidentsWherePoliceAttended
+        incidentsReportedToPolice
+      }
+      incidentTimeOfDayDonut {
+        value
+        label
+      }
+      incidentsTable {
+        total
+        incidents {
+          id
+          reference
+          date
+          incidentItems {
+            value
+            recoveredValue
+          }
+          location {
+            full
+            alias
+          }
+          totalOffenders
+          crimeTypes {
+            name
+            id
+          }
+          policeReported
+          policeInvolved
+          policeRef
+        }
+      }
+      lossTotals {
+        totalRecoveredValue
+        totalLostValue
+        averagePerIncident
+        averageSuccessRate
+        totalIncidents
+      }
+      offenderSummary {
+        id
+        age
+        dateSource
+        peculiarities
+        dateOfBirth
+        build
+        hair
+        race
+        reference
+        gender
+        name
+        images {
+          optimisedPersisted
+        }
+      }
+    }
+    targetedGoods(where: $targetedWhere) {
+      total
+      targetedGoods {
+        totalSuccessRate
+        totalRecoveredValue
+        totalOffenders
+        totalLostValue
+        totalIncidents
+        name
+        averageLossValue
+        alertId
+      }
+    }
+    businessContribution(where: $targetedWhere) {
+      total
+      businessContributions {
+        name
+        totalIncidents
+        totalOffenders
+        totalLostValue
+        totalRecoveredValue
+        totalSuccessRate
+        mostCommonGoodLost
+        highestTotalValueGoodLost
+        averageLossValue
+      }
+    }
+  }
+`;
+
+/**
+ * __useOffenderReportQuery__
+ *
+ * To run a query within a React component, call `useOffenderReportQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOffenderReportQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOffenderReportQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      targetedWhere: // value for 'targetedWhere'
+ *   },
+ * });
+ */
+export function useOffenderReportQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    OffenderReportQuery,
+    OffenderReportQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<OffenderReportQuery, OffenderReportQueryVariables>(
+    OffenderReportDocument,
+    options
+  );
+}
+export function useOffenderReportLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    OffenderReportQuery,
+    OffenderReportQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<OffenderReportQuery, OffenderReportQueryVariables>(
+    OffenderReportDocument,
+    options
+  );
+}
+export type OffenderReportQueryHookResult = ReturnType<
+  typeof useOffenderReportQuery
+>;
+export type OffenderReportLazyQueryHookResult = ReturnType<
+  typeof useOffenderReportLazyQuery
+>;
+export type OffenderReportQueryResult = Apollo.QueryResult<
+  OffenderReportQuery,
+  OffenderReportQueryVariables
 >;
 export const PerformanceReportDocument = gql`
   query PerformanceReport($where: UserContributionWhereInput!) {

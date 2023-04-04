@@ -12,6 +12,10 @@ const OffenderReport = () => {
     groupsLoading,
     setSelectedGroups,
     selectedGroups,
+    setSelectedBusiness,
+    selectedBusiness,
+    businesses,
+    selectedOffender,
   } = useOffenderReport();
   return (
     <View
@@ -23,6 +27,10 @@ const OffenderReport = () => {
       dateRange={dateRange}
       groups={groups}
       groupsLoading={groupsLoading}
+      setSelectedBusiness={setSelectedBusiness}
+      selectedBusiness={selectedBusiness}
+      businesses={businesses}
+      selectedOffender={selectedOffender}
     />
   );
 };
