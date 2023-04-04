@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
+import type { ListVehiclesQuery } from 'graphql/generated';
 import {
-  ListVehiclesQuery,
   QueryMode,
   SortOrder,
   useListVehiclesQuery,

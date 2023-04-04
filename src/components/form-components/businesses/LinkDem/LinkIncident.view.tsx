@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import { ListDemCompaniesQuery } from 'graphql/generated';
+import type { ListDemCompaniesQuery } from 'graphql/generated';
 import { Button, Col, Row, Table } from 'antd';
 
 interface Props {

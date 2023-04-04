@@ -1,10 +1,10 @@
 import React from 'react';
-import {
-  Role,
+import type {
   UserQuery,
   SchemeGroupsQuery,
   SchemeChatsQuery,
 } from 'graphql/generated';
+import { Role } from 'graphql/generated';
 import {
   Button,
   Col,
@@ -37,6 +37,7 @@ interface FormData {
   messagePush: boolean;
   offenderEmail: boolean;
   offenderPush: boolean;
+  publicName: boolean;
 }
 
 interface Props {
@@ -86,6 +87,7 @@ const EditUser = ({
           data?.user?.chats && data.user.chats.length > 0
             ? data.user.chats.map(({ chat }) => chat.id)
             : [],
+        publicName: data?.user?.publicName,
         incidentEmail: data?.user?.incidentEmail,
         incidentPush: data?.user?.incidentPush,
         subscribedIncidentOnly: data?.user?.subscribedIncidentOnly,
@@ -227,7 +229,22 @@ const EditUser = ({
           </Form.Item>
         </Col>
       </Row>
-
+      <Form.Item
+        label="Show user name in the system"
+        name="publicName"
+        valuePropName="checked"
+        style={{
+          marginBottom: 0,
+          flexDirection: 'row',
+          justifyItems: 'center',
+        }}
+      >
+        <Switch
+          disabled={saving}
+          style={{ marginLeft: 10, marginTop: -22 }}
+          className="scheme-detail-switch"
+        />
+      </Form.Item>
       <Title level={4} style={{ marginBottom: 15 }}>
         Notification Settings:
       </Title>

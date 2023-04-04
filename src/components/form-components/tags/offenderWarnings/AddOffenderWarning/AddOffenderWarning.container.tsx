@@ -1,5 +1,5 @@
-import { MutationUpdaterFn } from '@apollo/client';
-import { CreateTagMutation } from 'graphql/generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { CreateTagMutation } from 'graphql/generated';
 import React from 'react';
 import View from './AddOffenderWarning.view';
 import useAddOffenderWarning from './useAddOffenderWarning';

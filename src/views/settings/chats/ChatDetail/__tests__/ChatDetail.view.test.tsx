@@ -12,9 +12,17 @@ describe('Detail Officer View', () => {
         {
           id: 'userChatId',
           user: {
+            publicName: true,
+            origName: 'test user',
             id: 'test userId',
             fullName: 'test user',
-            businesses: [{ name: 'test business', id: '' }],
+            businesses: [
+              {
+                name: 'test business',
+                id: '',
+                fullName: 'test user',
+              },
+            ],
           },
         },
       ],

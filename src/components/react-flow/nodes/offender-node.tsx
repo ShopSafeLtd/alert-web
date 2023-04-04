@@ -16,7 +16,8 @@ interface Offender {
   images:
     | {
         id: string;
-        optimised: string;
+        optimised?: string;
+        optimisedPersisted?: string;
       }[]
     | null
     | undefined;
@@ -32,6 +33,7 @@ interface Offender {
   gender?: Gender | null | undefined;
   race?: Race | null | undefined;
 }
+
 interface Props {
   data: {
     color: string;
@@ -41,6 +43,7 @@ interface Props {
   id: string;
   selected: boolean;
 }
+
 // @ts-ignore
 
 const connectionNodeIdSelector = (state) => state.connectionNodeId;

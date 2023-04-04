@@ -12,7 +12,10 @@ mutation createChat($data: ChatCreateInput!) {
         id
         fullName
         firstLetter
+        origFirstLetter
+        origName
         businesses {
+          fullName
           id
           name
         }
@@ -28,6 +31,7 @@ mutation createChat($data: ChatCreateInput!) {
           from {
             id
             fullName
+            origName
           }
           images {
             id

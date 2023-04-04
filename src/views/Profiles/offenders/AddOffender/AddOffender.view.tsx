@@ -1,10 +1,11 @@
 import React from 'react';
-import {
+import type {
   CreateTagMutation,
   ListCrimeGroupsQuery,
   ListVehiclesQuery,
 } from 'graphql/generated';
 
+import type { FormInstance } from 'antd';
 import {
   Button,
   Card,
@@ -12,7 +13,6 @@ import {
   Drawer,
   Empty,
   Form,
-  FormInstance,
   Input,
   PageHeader,
   Row,
@@ -38,24 +38,15 @@ import {
   faTrash,
   faUpload,
 } from '@fortawesome/pro-light-svg-icons';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 
-import { CrimeGroupData, VehicleData } from 'types/DataType';
+import type { BanData, CrimeGroupData, VehicleData } from 'types/DataType';
 import Profiles from 'components/offenders/OffenderForm/Profiles';
 import ProfileDrawer from 'components/offenders/OffenderForm/ProfileDrawer';
 import OffenderDetails from 'components/offenders/OffenderForm/OffenderDetails';
-import { FormData } from './useAddOffender';
+import type { FormData } from './useAddOffender';
 
 const { Title, Text, Paragraph } = Typography;
-
-interface BanData {
-  id: string;
-  title?: string | null | undefined;
-  endDate: Date;
-  startDate: Date;
-  location: string;
-  description?: string | null | undefined;
-}
 
 interface Props {
   onSubmit: (value: FormData) => void;
@@ -354,6 +345,11 @@ const AddOffender = ({
                     ellipsis: true,
                   },
                   {
+                    key: 'type',
+                    title: 'Type',
+                    dataIndex: 'type',
+                  },
+                  {
                     key: 'Options',
                     title: 'Options',
                     dataIndex: 'Options',
@@ -392,6 +388,7 @@ const AddOffender = ({
                     new Date(ban?.startDate),
                     new Date(ban?.endDate)
                   ),
+                  type: ban.type,
                   location: ban.location,
                   description: ban.description,
                 }))}

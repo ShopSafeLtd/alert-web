@@ -32,10 +32,13 @@ export const NavScheme = () => {
     window.localStorage.removeItem(LocalStorageKeys.INCIDENT_FILTER);
     window.localStorage.removeItem(LocalStorageKeys.OFFENDER_FILTER);
     window.localStorage.setItem('currentScheme', scheme.scheme.id);
-    window.localStorage.setItem('logo', scheme.scheme.logo?.optimised || '');
+    window.localStorage.setItem(
+      'logo',
+      scheme.scheme.logo?.optimisedPersisted || ''
+    );
     window.localStorage.setItem(
       'logo-dark',
-      scheme.scheme.darkLogo?.optimised || ''
+      scheme.scheme.darkLogo?.optimisedPersisted || ''
     );
 
     setScheme({
@@ -43,7 +46,7 @@ export const NavScheme = () => {
       autoApproveOffenders: scheme.scheme.autoApproveOffenders,
       id: scheme.scheme.id,
       name: scheme.scheme.name,
-      logo: scheme.scheme.logo?.optimised,
+      logo: scheme.scheme.logo?.optimisedPersisted,
     });
     handleVisibleChange(false);
   };

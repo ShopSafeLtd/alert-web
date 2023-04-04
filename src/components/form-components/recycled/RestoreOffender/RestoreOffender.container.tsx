@@ -1,9 +1,9 @@
 import React from 'react';
-import {
+import type {
   RestoreOffenderMutation,
   DeleteOffenderMutation,
 } from 'graphql/generated';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import View from './RestoreOffender.view';
 import useRestoreOffender from './useRestoreOffender';
 

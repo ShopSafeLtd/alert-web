@@ -11,7 +11,7 @@ import {
   Typography,
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { VehicleData } from 'types/DataType';
+import type { VehicleData } from 'types/DataType';
 
 const { Paragraph } = Typography;
 
@@ -23,7 +23,11 @@ interface Props {
 
 const VehicleCard = ({ vehicle, removeVehicle, saving }: Props) => (
   <Card
-    style={{ margin: removeVehicle ? 0 : 5, maxWidth: 370, overflow: 'hidden' }}
+    style={{
+      margin: removeVehicle ? 0 : 5,
+      maxWidth: 370,
+      overflow: 'hidden',
+    }}
     bodyStyle={{
       padding: 0,
       marginLeft: -2,
@@ -56,7 +60,9 @@ const VehicleCard = ({ vehicle, removeVehicle, saving }: Props) => (
       <Col>
         {vehicle.images && vehicle.images.length > 0 && (
           <div style={{ width: 100, height: 100 }}>
-            <WatermarkImage url={vehicle.images[0].optimised} />
+            <WatermarkImage
+              url={vehicle.images[0].optimised || vehicle.images[0].url || ''}
+            />
           </div>
         )}
       </Col>
@@ -86,5 +92,4 @@ const VehicleCard = ({ vehicle, removeVehicle, saving }: Props) => (
     </Row>
   </Card>
 );
-
 export default VehicleCard;

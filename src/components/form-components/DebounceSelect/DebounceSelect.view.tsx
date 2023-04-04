@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Select, SelectProps, Spin } from 'antd';
+import type { SelectProps } from 'antd';
+import { Select, Spin } from 'antd';
 import React, { useMemo, useRef, useState } from 'react';
 import debounce from 'lodash/debounce';
 
@@ -38,10 +39,8 @@ const DebounceSelect = <
       fetchRef.current += 1;
       setOptions([]);
       setFetching(true);
-      if (setValue) {
-        if (value !== '') {
-          setValue([value]);
-        }
+      if (setValue && value !== '') {
+        setValue([value]);
       }
       fetchOptions(value).then((newOptions) => {
         setOptions(newOptions);

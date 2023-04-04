@@ -1,5 +1,5 @@
 import React from 'react';
-import { TagQuery } from 'graphql/generated';
+import type { TagQuery } from 'graphql/generated';
 import { Button, Col, Form, Input, Row, Skeleton, Typography } from 'antd';
 
 const { Text } = Typography;

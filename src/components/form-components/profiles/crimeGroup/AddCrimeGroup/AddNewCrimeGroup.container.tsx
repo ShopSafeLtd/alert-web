@@ -1,5 +1,5 @@
 import React from 'react';
-import { CrimeGroupData } from 'types/DataType';
+import type { CrimeGroupData } from 'types/DataType';
 import View from './AddNewCrimeGroup.view';
 import useAddCrimeGroup from './useAddNewCrimeGroup';
 

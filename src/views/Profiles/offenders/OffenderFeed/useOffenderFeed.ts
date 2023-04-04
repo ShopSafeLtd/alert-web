@@ -1,15 +1,18 @@
-import {
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+import type {
   Age,
   Build,
   Gender,
-  ListOffendersDocument,
   ListOffendersQuery,
-  Model,
-  QueryMode,
   Race,
   RecycleOffenderMutation,
-  Role,
   SearchBusinessesQuery,
+} from 'graphql/generated';
+import {
+  ListOffendersDocument,
+  Model,
+  QueryMode,
+  Role,
   SortOrder,
   useListOffendersQuery,
   useSchemeGroupsQuery,
@@ -18,7 +21,7 @@ import {
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import { OffenderSort, useStoreActions, useStoreState } from 'state';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 
 interface Return {
@@ -74,6 +77,7 @@ interface Return {
   businesses: string[];
   setBusinesses: (value: string[]) => void;
   businessData: SearchBusinessesQuery | undefined;
+  businessesLoading: boolean;
 }
 
 const getSizeOptions = () => {
@@ -92,8 +96,7 @@ const useOffenderFeed = (): Return => {
 
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
-  const groups = useStoreState((state) => state.user.groups);
-  const role = useStoreState((state) => state.user.role);
+  const { role, groups, id: userId } = useStoreState((state) => state.user);
   const pagination = useStoreState((state) => state.data.offenders.pagination);
   const variables = useStoreState((state) => state.data.offenders.variables);
   const order = useStoreState((state) => state.data.offenders.order);
@@ -121,6 +124,132 @@ const useOffenderFeed = (): Return => {
   const [gallery, setGallery] = useState<string[]>([]);
   const [businesses, setBusinesses] = useState<string[]>([]);
 
+  const queryVariables = {
+    scheme: {
+      id: schemeId,
+    },
+    order: {
+      updatedAt:
+        order === OffenderSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
+    },
+    where: {
+      tags:
+        warnings.length > 0
+          ? {
+              some: {
+                id: {
+                  in: warnings,
+                },
+              },
+            }
+          : undefined,
+      groups:
+        groupsFilter.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groupsFilter,
+                },
+              },
+            }
+          : undefined,
+      OR: [
+        {
+          name: {
+            contains: variables.search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+      ],
+      name: gallery.includes('ID')
+        ? {
+            equals: 'Unidentified Offender',
+          }
+        : undefined,
+      active: gallery.includes('ACTIVE')
+        ? {
+            equals: true,
+          }
+        : undefined,
+      approved: gallery.includes('APPROVED')
+        ? {
+            equals: true,
+          }
+        : undefined,
+      subscribedUsers: gallery.includes('SUBSCRIBED')
+        ? {
+            some: {
+              id: {
+                equals: userId,
+              },
+            },
+          }
+        : undefined,
+
+      gender:
+        sex.length > 0
+          ? {
+              in: sex,
+            }
+          : undefined,
+      age:
+        age.length > 0
+          ? {
+              in: age,
+            }
+          : undefined,
+      build:
+        build.length > 0
+          ? {
+              in: build,
+            }
+          : undefined,
+      race:
+        ethnicity.length > 0
+          ? {
+              in: ethnicity,
+            }
+          : undefined,
+      hair: hair
+        ? {
+            contains: hair,
+            mode: QueryMode.Insensitive,
+          }
+        : undefined,
+      peculiarities: peculiarities
+        ? {
+            mode: QueryMode.Insensitive,
+            contains: peculiarities,
+          }
+        : undefined,
+      incidents:
+        businesses.length > 0
+          ? {
+              some: {
+                business:
+                  businesses.length > 0
+                    ? {
+                        id: {
+                          in: businesses,
+                        },
+                      }
+                    : undefined,
+              },
+            }
+          : undefined,
+      bans: gallery.includes('BANNED')
+        ? {
+            some: {
+              id: {
+                contains: '',
+              },
+            },
+          }
+        : undefined,
+    },
+    take: pagination.pageSize,
+    skip: pagination.pageSize * (pagination.page - 1),
+  };
   // Queries
   // Fetch scheme groups if scheme admin
   const { data: groupData, loading: groupsLoading } = useSchemeGroupsQuery({
@@ -135,16 +264,6 @@ const useOffenderFeed = (): Return => {
     },
     fetchPolicy: 'cache-and-network',
     skip: role !== Role.SchemeAdmin,
-    onCompleted: (result) => {
-      setOffendersState({
-        pagination,
-        variables: {
-          ...variables,
-          groups: result.groups.map((group) => group.id),
-        },
-        order,
-      });
-    },
   });
   // On mount
   useEffect(() => {
@@ -187,125 +306,27 @@ const useOffenderFeed = (): Return => {
 
   // Fetch Offenders
   const { data, loading } = useListOffendersQuery({
-    variables: {
-      scheme: {
-        id: schemeId,
-      },
-      order: {
-        updatedAt:
-          order === OffenderSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
-      },
-      where: {
-        groups: groupsFilter.length
-          ? {
-              some: {
-                id: {
-                  in: groupsFilter,
-                },
-              },
-            }
-          : undefined,
-        OR: [
-          {
-            name: {
-              contains: variables.search,
-              mode: QueryMode.Insensitive,
-            },
-          },
-        ],
-        name: gallery.includes('ID')
-          ? {
-              equals: 'Unidentified Offender',
-            }
-          : undefined,
-        active: gallery.includes('ACTIVE')
-          ? {
-              equals: true,
-            }
-          : undefined,
-        gender:
-          sex.length > 0
-            ? {
-                in: sex,
-              }
-            : undefined,
-        age:
-          age.length > 0
-            ? {
-                in: age,
-              }
-            : undefined,
-        build:
-          build.length > 0
-            ? {
-                in: build,
-              }
-            : undefined,
-        race:
-          ethnicity.length > 0
-            ? {
-                in: ethnicity,
-              }
-            : undefined,
-        hair: hair
-          ? {
-              contains: hair,
-              mode: QueryMode.Insensitive,
-            }
-          : undefined,
-        peculiarities: peculiarities
-          ? {
-              mode: QueryMode.Insensitive,
-              contains: peculiarities,
-            }
-          : undefined,
-        incidents:
-          businesses.length > 0
-            ? {
-                some: {
-                  business:
-                    businesses.length > 0
-                      ? {
-                          id: {
-                            in: businesses,
-                          },
-                        }
-                      : undefined,
-                },
-              }
-            : undefined,
-        bans: gallery.includes('BANNED')
-          ? {
-              some: {
-                id: {
-                  contains: '',
-                },
-              },
-            }
-          : undefined,
-      },
-      take: pagination.pageSize,
-      skip: pagination.pageSize * (pagination.page - 1),
-    },
+    variables: queryVariables,
     fetchPolicy: 'cache-and-network',
   });
 
-  const { data: businessData } = useSearchBusinessesQuery({
-    variables: {
-      where: {
-        schemes: {
-          some: {
-            id: {
-              equals: schemeId,
+  const { data: businessData, loading: businessesLoading } =
+    useSearchBusinessesQuery({
+      variables: {
+        where: {
+          schemes: {
+            some: {
+              id: {
+                equals: schemeId,
+              },
             },
           },
         },
+        orderBy: {
+          name: SortOrder.Asc,
+        },
       },
-      orderBy: {
-        name: SortOrder.Asc,
-      },
-    },
-  });
+    });
 
   // update Offender list after deleting an item
   const updateOffenderList: MutationUpdaterFn<RecycleOffenderMutation> = (
@@ -316,47 +337,7 @@ const useOffenderFeed = (): Return => {
 
     const existingData = store.readQuery<ListOffendersQuery>({
       query: ListOffendersDocument,
-      variables: {
-        scheme: {
-          id: schemeId,
-        },
-        order: {
-          updatedAt:
-            order === OffenderSort.updatedAtDesc
-              ? SortOrder.Desc
-              : SortOrder.Asc,
-        },
-        where: {
-          tags: variables.tags.length
-            ? {
-                some: {
-                  id: {
-                    in: variables.tags,
-                  },
-                },
-              }
-            : undefined,
-          groups: variables.groups.length
-            ? {
-                some: {
-                  id: {
-                    in: variables.groups,
-                  },
-                },
-              }
-            : undefined,
-          OR: [
-            {
-              name: {
-                contains: variables.search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-          ],
-        },
-        take: pagination.pageSize,
-        skip: pagination.pageSize * (pagination.page - 1),
-      },
+      variables: queryVariables,
     });
 
     if (existingData === null) return;
@@ -373,47 +354,7 @@ const useOffenderFeed = (): Return => {
         },
         __typename: 'Query',
       },
-      variables: {
-        scheme: {
-          id: schemeId,
-        },
-        order: {
-          updatedAt:
-            order === OffenderSort.updatedAtDesc
-              ? SortOrder.Desc
-              : SortOrder.Asc,
-        },
-        where: {
-          tags: warnings.length
-            ? {
-                some: {
-                  id: {
-                    in: warnings,
-                  },
-                },
-              }
-            : undefined,
-          groups: groupsFilter.length
-            ? {
-                some: {
-                  id: {
-                    in: groupsFilter,
-                  },
-                },
-              }
-            : undefined,
-          OR: [
-            {
-              name: {
-                contains: variables.search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-          ],
-        },
-        take: pagination.pageSize,
-        skip: pagination.pageSize * (pagination.page - 1),
-      },
+      variables: queryVariables,
     });
   };
   // Functions
@@ -494,6 +435,8 @@ const useOffenderFeed = (): Return => {
   };
 
   const clearFilters = () => {
+    setGroupsFilter([]);
+    setWarnings([]);
     setAge([]);
     setBuild([]);
     setEthnicity([]);
@@ -501,6 +444,7 @@ const useOffenderFeed = (): Return => {
     setPeculiarities('');
     setSex([]);
     setBusinesses([]);
+    setOrder(OffenderSort.updatedAtDesc);
   };
 
   return {
@@ -555,6 +499,7 @@ const useOffenderFeed = (): Return => {
     businessData,
     businesses,
     setBusinesses,
+    businessesLoading,
   };
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChatQuery } from 'graphql/generated';
+import type { ChatQuery } from 'graphql/generated';
 import { Button, PageHeader, Card, Table, Drawer } from 'antd';
 import EditChat from 'components/form-components/chat/EditChat';
 import { Link } from 'react-router-dom';

@@ -1,8 +1,10 @@
-import { MutationUpdaterFn } from '@apollo/client';
-import {
+import type { MutationUpdaterFn } from '@apollo/client';
+import type {
   CreateVehicleMutation,
-  ListVehiclesDocument,
   ListVehiclesQuery,
+} from 'graphql/generated';
+import {
+  ListVehiclesDocument,
   QueryMode,
   SortOrder,
   useListVehiclesQuery,
@@ -83,7 +85,12 @@ const useListVehicles = (): Return => {
           vehicles:
             existingData?.listVehicles?.vehicles &&
             existingData.listVehicles.vehicles.length > 0
-              ? existingData?.listVehicles?.vehicles.concat(res.createVehicle)
+              ? [
+                  ...(existingData?.listVehicles?.vehicles || []),
+                  ...(Array.isArray(res.createVehicle)
+                    ? res.createVehicle
+                    : [res.createVehicle]),
+                ]
               : [res.createVehicle],
         },
         __typename: 'Query',

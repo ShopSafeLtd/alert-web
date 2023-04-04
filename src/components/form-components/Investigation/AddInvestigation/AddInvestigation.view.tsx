@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col, Form, Input, Row } from 'antd';
-import { InvestigationData } from './useAddInvestigation';
+import type { InvestigationData } from './useAddInvestigation';
 
 interface Props {
   onClose: () => void;

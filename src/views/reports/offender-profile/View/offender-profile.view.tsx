@@ -13,13 +13,8 @@ import {
   Button,
 } from 'antd';
 import OffenderSideList from 'components/offenders/OffenderSideList';
-import {
-  Age,
-  Build,
-  Gender,
-  OffenderProfileQuery,
-  Race,
-} from 'graphql/generated';
+import type { OffenderProfileQuery } from 'graphql/generated';
+import { Age, Build, Gender, Race } from 'graphql/generated';
 import { getAge, getBuild, getEthnicity, getSex } from 'utils';
 import { ResponsiveBar } from '@nivo/bar';
 import { ResponsivePie } from '@nivo/pie';

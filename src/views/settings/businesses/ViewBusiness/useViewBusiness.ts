@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import {
+import type {
   AddUsersToBusinessMutation,
   BusinessQuery,
   CreateUserInDatabaseMutation,
   InviteExistingUserMutation,
   ListActionsQuery,
-  ListBusinessUsersDocument,
   ListBusinessUsersQuery,
   ListBusinessUsersQueryVariables,
+} from 'graphql/generated';
+import {
+  ListBusinessUsersDocument,
   SortOrder,
   useBusinessQuery,
   useListActionsQuery,
@@ -16,7 +18,7 @@ import {
 } from 'graphql/generated';
 import { useParams } from 'react-router';
 import { useStoreState } from 'state';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
 
 interface Return {
@@ -170,7 +172,7 @@ const useViewBusiness = (): Return => {
             },
           },
           data: {
-            users: [...result.data?.removeUserFromBusiness.users],
+            users: result.data?.removeUserFromBusiness.users,
           },
         });
     },

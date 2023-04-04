@@ -51,6 +51,11 @@ mutation CreateUpdateOnInvestigation(
       updatedAt
     }
     linkedVehicles {
+      images {
+        id
+        url
+        optimised
+      }
       updatedAt
       totalOffenders
       registration
@@ -61,6 +66,7 @@ mutation CreateUpdateOnInvestigation(
       colour
     }
     createdBy {
+      origName
       id
       fullName
       businesses {
@@ -91,6 +97,11 @@ mutation CreateUpdateOnInvestigation(
         updatedAt
       }
       linkedVehicles {
+        images {
+          id
+          url
+          optimised
+        }
         updatedAt
         totalOffenders
         registration
@@ -127,6 +138,7 @@ mutation CreateUpdateOnInvestigation(
         }
       }
       createdBy {
+        origName
         id
         fullName
         businesses {

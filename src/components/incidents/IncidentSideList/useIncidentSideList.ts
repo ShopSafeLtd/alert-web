@@ -1,8 +1,5 @@
-import {
-  ListIncidentsQuery,
-  SortOrder,
-  useListIncidentsQuery,
-} from 'graphql/generated';
+import type { ListIncidentsQuery } from 'graphql/generated';
+import { SortOrder, useListIncidentsQuery } from 'graphql/generated';
 import { useStoreState, IncidentSort, useStoreActions } from 'state';
 
 interface Return {

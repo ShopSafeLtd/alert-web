@@ -1,16 +1,28 @@
-mutation inviteExistingUser($data: UserUpdateInput!, $where: UniqueId!, $groupWhere: GroupWhereInput) {
+mutation inviteExistingUser(
+  $data: UserUpdateInput!
+  $where: UniqueId!
+  $groupWhere: GroupWhereInput
+) {
   inviteExistingUser(data: $data, where: $where) {
     id
     fullName
+    firstLetter
+    origName
+    origFirstLetter
     email
+    publicName
     businesses {
       id
       name
+      fullName
     }
     status
     groups(where: $groupWhere) {
       id
       name
+    }
+    loginEvents {
+      loginTime
     }
   }
 }

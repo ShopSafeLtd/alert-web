@@ -1,14 +1,14 @@
 import React from 'react';
 import { Table, Drawer, Button, Typography, Row, Col } from 'antd';
 import { SyncOutlined } from '@ant-design/icons';
-import {
+import type {
   RecycledItemsQuery,
   RestoreIncidentMutation,
   DeleteIncidentMutation,
   RestoreOffenderMutation,
   DeleteOffenderMutation,
 } from 'graphql/generated';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import moment from 'moment';
 
 import EditIncident from 'components/form-components/recycled/RestoreIncident';

@@ -2,10 +2,13 @@ query Business($where: BusinessWhereUniqueInput!) {
   business(where: $where) {
     id
     name
+    fullName
+    publicName
     demId
     parent {
       id
       name
+      fullName
     }
     locations {
       id

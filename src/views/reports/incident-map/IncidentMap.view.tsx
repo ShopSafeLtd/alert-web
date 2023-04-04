@@ -1,6 +1,6 @@
 import React from 'react';
 import { GoogleMap, HeatmapLayer } from '@react-google-maps/api';
-import { IncidentMapQuery, SchemeGroupsQuery } from 'graphql/generated';
+import type { IncidentMapQuery, SchemeGroupsQuery } from 'graphql/generated';
 import { Col, DatePicker, Row, Select, Spin, Typography } from 'antd';
 import useStyles from './IncidentMap.styles';
 
@@ -45,7 +45,11 @@ const IncidentMap = ({ data, loading, groupsData, groupsLoading }: Props) => {
           <RangePicker />
         </Col>
       </Row>
-      {!loading ? (
+      {loading ? (
+        <div className={classes.loadingPage}>
+          <Spin />
+        </div>
+      ) : (
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={{
@@ -167,10 +171,6 @@ const IncidentMap = ({ data, loading, groupsData, groupsLoading }: Props) => {
             }}
           />
         </GoogleMap>
-      ) : (
-        <div className={classes.loadingPage}>
-          <Spin />
-        </div>
       )}
     </div>
   );

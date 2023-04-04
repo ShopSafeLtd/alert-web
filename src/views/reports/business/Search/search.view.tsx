@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col, Input, Row, Table, Typography } from 'antd';
-import { SearchBusinessesQuery } from 'graphql/generated';
+import type { SearchBusinessesQuery } from 'graphql/generated';
 import useStyles from './search.styles';
 
 const { Title } = Typography;

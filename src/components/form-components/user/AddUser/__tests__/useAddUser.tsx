@@ -29,6 +29,8 @@ const mocks = [
     result: {
       data: {
         user: {
+          publicName: true,
+
           id: 'userId',
           fullName: 'test user',
           business: {
@@ -263,6 +265,8 @@ const UseAddUserTest = () => {
             messagePush: false,
             offenderEmail: false,
             offenderPush: false,
+            publicName: true,
+
             business: {
               label: '',
               value: '',

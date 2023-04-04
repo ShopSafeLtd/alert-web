@@ -11,7 +11,7 @@ import {
   Typography,
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { OffenderCardData } from 'types/DataType';
+import type { OffenderCardData } from 'types/DataType';
 import moment from 'moment';
 
 const { Title } = Typography;
@@ -61,7 +61,9 @@ const OffenderCard = ({ offender, removeOffender, saving }: Props) => (
       <Col>
         {offender.images && offender.images.length > 0 && (
           <div style={{ width: 100, height: 100 }}>
-            <WatermarkImage url={offender.images[0].optimised} />
+            <WatermarkImage
+              url={offender.images[0].optimised || offender.images[0].url || ''}
+            />
           </div>
         )}
       </Col>

@@ -9,6 +9,8 @@ query SearchBusinesses(
     businesses {
       id
       name
+      fullName
+      publicName
       locations {
         id
         full

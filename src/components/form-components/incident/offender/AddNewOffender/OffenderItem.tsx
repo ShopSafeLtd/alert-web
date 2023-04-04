@@ -1,7 +1,7 @@
 import React from 'react';
-import { SearchOffendersQuery } from 'graphql/generated';
+import type { SearchOffendersQuery } from 'graphql/generated';
 import { createUseStyles } from 'react-jss';
-import { Theme } from 'configs/ThemeConfig';
+import type { Theme } from 'configs/ThemeConfig';
 import { Col, Row, Typography } from 'antd';
 import { getAge, getBuild, getEthnicity, getSex } from 'utils';
 import WatermarkImage from 'components/images/WatermarkImage.view';

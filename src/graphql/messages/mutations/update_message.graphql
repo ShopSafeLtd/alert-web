@@ -8,6 +8,8 @@ mutation updateMessage(
     from {
       id
       fullName
+      origFirstLetter
+      firstLetter
       businesses {
         id
         name

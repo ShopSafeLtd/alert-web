@@ -11,7 +11,8 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { UpdateType, ViewInvestigationQuery } from 'graphql/generated';
+import type { ViewInvestigationQuery } from 'graphql/generated';
+import { UpdateType } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBell,
@@ -21,15 +22,16 @@ import {
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 
-import { Link } from 'react-router-dom';
-import moment from 'moment/moment';
+// import { Link } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useNavigate } from 'react-router';
 import useStyles from './ViewDetails.styles';
 import UpdateContent from '../../../../incidents/ViewIncident/Update.view';
-import UpdateBar from '../../../../../components/MessageInput/update-bar';
+import UpdateBar from '../../../../../components/MessageInput/UpdateBar';
 import TabContent from '../../../../../components/TabContent';
 
 const { Title, Paragraph } = Typography;
+
 interface Props {
   data: ViewInvestigationQuery | undefined;
   loading: boolean;
@@ -93,6 +95,7 @@ const ViewInvestigation = ({
   setOptionRowShow,
 }: Props) => {
   const classes = useStyles();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -311,49 +314,52 @@ const ViewInvestigation = ({
                 className={classes.table}
                 dataSource={data?.investigation?.vehicles.map((vehicle) => ({
                   key: vehicle.id,
+                  reference: vehicle?.reference,
                   make: vehicle.make,
                   colour: vehicle.colour,
                   model: vehicle.model,
                   registration: vehicle.registration,
-                  updatedAt: vehicle.updatedAt,
-                  totalCrimeGroup: vehicle.totalCrimeGroups,
+
                   totalOffenders: vehicle.totalOffenders,
                   totalIncidents: vehicle.totalIncidents,
                 }))}
                 loading={loading}
                 size="small"
                 onRow={(record) => ({
-                  onClick: () => <Link to={`view/${record.key}`} />,
+                  // onClick: () => <Link to={`view/${record.key}`} />,
+                  onClick: () =>
+                    navigate(`/app/investigations/view/${record.key}`),
                 })}
                 pagination={{
                   hideOnSinglePage: true,
                 }}
                 columns={[
                   {
+                    key: 'reference',
+                    dataIndex: 'reference',
+                    title: 'Alert ID',
+                  },
+                  {
+                    key: 'registration',
+                    dataIndex: 'registration',
+                    title: 'Registration',
+                  },
+
+                  {
                     key: 'make',
                     dataIndex: 'make',
                     title: 'Make',
                   },
-                  {
-                    key: 'updatedAt',
-                    dataIndex: 'updatedAt',
-                    title: 'UpdatedAt',
-                    render: (value) =>
-                      moment(value || moment()).format(
-                        `ddd MMM DD YYYY - HH:mm`
-                      ),
-                  },
+
                   {
                     key: 'colour',
                     dataIndex: 'colour',
                     title: 'Colour',
-                    // render: (value) => `£${value || 0}`,
                   },
                   {
                     key: 'model',
                     dataIndex: 'model',
                     title: 'Model',
-                    // render: (value) => `£${value || 0}`,
                   },
                   {
                     key: 'totalOffenders',
@@ -365,23 +371,6 @@ const ViewInvestigation = ({
                     dataIndex: 'totalIncidents',
                     title: 'Incidents',
                   },
-                  {
-                    key: 'totalCrimeGroups',
-                    dataIndex: 'totalCrimeGroups',
-                    title: 'Crime Groups',
-                  },
-                  {
-                    key: 'registration',
-                    dataIndex: 'registration',
-                    title: 'Registration',
-                    // render: (value) => `${value?.toFixed(0) || 0}%`,
-                  },
-                  // {
-                  //   key: 'crimeGroup',
-                  //   dataIndex: 'crimeGroup',
-                  //   title: 'crimeGroup',
-                  //   render: (value,item) => `${item.crimeGroup.}%`,
-                  // },
                 ]}
               />
             </Card>

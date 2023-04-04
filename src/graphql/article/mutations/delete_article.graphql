@@ -1,0 +1,5 @@
+mutation deleteArticle($id: String!) {
+  deleteArticle(where: { id: $id }) {
+    id
+  }
+}

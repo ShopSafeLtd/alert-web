@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import type { ListOffendersQuery } from 'graphql/generated';
 import {
-  ListOffendersQuery,
   QueryMode,
   SortOrder,
   useListOffendersQuery,
@@ -134,20 +134,19 @@ const useAddExistingOffender = ({ onClose, offenderIds }: Props): Return => {
     setSaving(true);
     if (
       data?.listOffenders?.offenders &&
-      data.listOffenders.offenders.length > 0
+      data.listOffenders.offenders.length > 0 &&
+      selectedOffender
     ) {
-      if (selectedOffender) {
-        updateInvestigation({
-          variables: {
-            where: {
-              id: params.id || '',
-            },
-            data: {
-              offenderIds: [selectedOffender.id],
-            },
+      updateInvestigation({
+        variables: {
+          where: {
+            id: params.id || '',
           },
-        });
-      }
+          data: {
+            offenderIds: [selectedOffender.id],
+          },
+        },
+      });
     }
     setSaving(false);
     onClose();

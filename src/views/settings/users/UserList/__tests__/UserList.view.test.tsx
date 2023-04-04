@@ -9,9 +9,11 @@ describe('List Officer View', () => {
       {
         id: 'test userId',
         fullName: 'test user',
+        origName: 'testUser',
         email: 'user.email',
         businesses: [],
         groups: [{ id: 'groupId', name: 'test group' }],
+        publicName: true,
       },
     ],
   };

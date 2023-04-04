@@ -1,6 +1,6 @@
 import React from 'react';
-import { MutationUpdaterFn } from '@apollo/client';
-import { DeleteChatMutation } from 'graphql/generated';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { DeleteChatMutation } from 'graphql/generated';
 import View from './ViewMessage.view';
 import useViewMessages from './useViewMessage';
 

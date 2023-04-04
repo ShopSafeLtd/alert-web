@@ -5,7 +5,7 @@ import EditVehicle from 'components/form-components/profiles/vehicle/EditVehicle
 import AddExistingVehicle from 'components/form-components/profiles/vehicle/AddExistingVehicle';
 import AddExistingCrimeGroup from 'components/form-components/profiles/crimeGroup/AddExistingCrimeGroup';
 import AddCrimeGroup from 'components/form-components/profiles/crimeGroup/AddCrimeGroup';
-import { CrimeGroupData, VehicleData } from 'types/DataType';
+import type { CrimeGroupData, VehicleData } from 'types/DataType';
 
 interface Props {
   vehiclesData: VehicleData[];

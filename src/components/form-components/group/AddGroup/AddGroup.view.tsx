@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col, Form, Input, Row, Select } from 'antd';
-import { ListSchemeUsersQuery } from 'graphql/generated';
+import type { ListSchemeUsersQuery } from 'graphql/generated';
 
 interface FormData {
   name: string;
@@ -64,7 +64,7 @@ const AddGroup = ({
           rules={[
             {
               required: true,
-              message: 'Please selected at least one user for a group.',
+              message: 'Please selected at least one user for the new group.',
             },
           ]}
         >

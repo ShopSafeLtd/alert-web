@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import type { CrimeGroupQuery } from 'graphql/generated';
 import {
-  CrimeGroupQuery,
   useCrimeGroupQuery,
   useUpdateCrimeGroupMutation,
 } from 'graphql/generated';

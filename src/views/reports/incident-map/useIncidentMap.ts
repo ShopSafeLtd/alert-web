@@ -1,10 +1,6 @@
 import { useStoreState } from 'state';
-import {
-  IncidentMapQuery,
-  SchemeGroupsQuery,
-  useIncidentMapQuery,
-  useSchemeGroupsQuery,
-} from 'graphql/generated';
+import type { IncidentMapQuery, SchemeGroupsQuery } from 'graphql/generated';
+import { useIncidentMapQuery, useSchemeGroupsQuery } from 'graphql/generated';
 
 interface Return {
   data: IncidentMapQuery | undefined;
@@ -15,8 +11,7 @@ interface Return {
 
 const useIncidentMap = (): Return => {
   const currentScheme = useStoreState((state) => state.scheme.id);
-
-  const { data, loading } = useIncidentMapQuery({
+  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
       where: {
         scheme: {
@@ -28,7 +23,7 @@ const useIncidentMap = (): Return => {
     },
   });
 
-  const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
+  const { data, loading } = useIncidentMapQuery({
     variables: {
       where: {
         scheme: {

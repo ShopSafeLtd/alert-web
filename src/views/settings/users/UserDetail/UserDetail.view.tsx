@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserQuery } from 'graphql/generated';
+import type { UserQuery } from 'graphql/generated';
 import { RoleValues } from 'types';
 
 import {

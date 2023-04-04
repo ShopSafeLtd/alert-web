@@ -24,6 +24,8 @@ mutation updateUserChat($where: UniqueId!, $data: UserUpdateInput!) {
           from {
             id
             fullName
+            origFirstLetter
+            origName
           }
           images {
             id

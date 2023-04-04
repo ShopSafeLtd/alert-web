@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Col, Form, Input, Row, Typography } from 'antd';
+import { Button, Col, Form, Input, Row, Switch, Typography } from 'antd';
 import DebounceSelect from 'components/form-components/DebounceSelect';
 
 interface FormData {
@@ -13,6 +13,7 @@ interface FormData {
   townCity: string;
   county: string;
   postcode: string;
+  publicName: boolean;
 }
 
 interface Props {
@@ -33,6 +34,22 @@ const AddBusiness = ({
   <Form<FormData> layout="vertical" onFinish={onSubmit}>
     <Form.Item name="name" label="Business Name" rules={[{ required: true }]}>
       <Input disabled={saving} />
+    </Form.Item>
+    <Form.Item
+      label="Show business name in the system"
+      name="publicName"
+      valuePropName="checked"
+      style={{
+        marginBottom: 0,
+        flexDirection: 'row',
+        justifyItems: 'center',
+      }}
+    >
+      <Switch
+        disabled={saving}
+        style={{ marginLeft: 10, marginTop: -22 }}
+        className="scheme-detail-switch"
+      />
     </Form.Item>
     <Form.Item name="parent" label="Parent Business">
       <DebounceSelect

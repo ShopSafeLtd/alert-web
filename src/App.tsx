@@ -44,7 +44,7 @@ init({
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
   // Adjust for production
-  tracesSampleRate: 1.0,
+  tracesSampleRate: 1,
   beforeSend(event) {
     const logRocketSession = LogRocket.sessionURL;
     if (logRocketSession !== null && event.extra) {
@@ -66,29 +66,27 @@ if (import.meta.env.PROD) {
   });
 }
 
-function App(): JSX.Element {
-  return (
-    <div className="App">
-      <ThemeSwitcherProvider
-        themeMap={themes}
-        defaultTheme={ThemeConfig.currentTheme}
-        insertionPoint="styles-insertion-point"
+const App = (): JSX.Element => (
+  <div className="App">
+    <ThemeSwitcherProvider
+      themeMap={themes}
+      defaultTheme={ThemeConfig.currentTheme}
+      insertionPoint="styles-insertion-point"
+    >
+      <LoadScript
+        googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
+        libraries={['visualization']}
       >
-        <LoadScript
-          googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
-          libraries={['visualization']}
-        >
-          <Store>
-            <ApolloProvider>
-              <Router>
-                <Views />
-              </Router>
-            </ApolloProvider>
-          </Store>
-        </LoadScript>
-      </ThemeSwitcherProvider>
-    </div>
-  );
-}
+        <Store>
+          <ApolloProvider>
+            <Router>
+              <Views />
+            </Router>
+          </ApolloProvider>
+        </Store>
+      </LoadScript>
+    </ThemeSwitcherProvider>
+  </div>
+);
 
 export default App;

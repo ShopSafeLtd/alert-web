@@ -1,7 +1,5 @@
-import {
-  useViewInvestigationQuery,
-  ViewInvestigationQuery,
-} from 'graphql/generated';
+import type { ViewInvestigationQuery } from 'graphql/generated';
+import { useViewInvestigationQuery } from 'graphql/generated';
 import { useState } from 'react';
 import { useStoreState } from '../../../state';
 
@@ -45,16 +43,16 @@ const useViewInvestigation = (investigationId: string): Return => {
       },
     },
     onCompleted: ({ investigation }) => {
-      if (investigation?.offenders && investigation.offenders.length) {
+      if (investigation?.offenders && investigation.offenders.length > 0) {
         setOffenderIds(investigation.offenders.map(({ id }) => id));
       }
-      if (investigation?.vehicles && investigation.vehicles.length) {
+      if (investigation?.vehicles && investigation.vehicles.length > 0) {
         setVehicleIds(investigation.vehicles.map(({ id }) => id));
       }
-      if (investigation?.crimeGroups && investigation.crimeGroups.length) {
+      if (investigation?.crimeGroups && investigation.crimeGroups.length > 0) {
         setCrimeGroupIds(investigation.crimeGroups.map(({ id }) => id));
       }
-      if (investigation?.incidents && investigation.incidents.length) {
+      if (investigation?.incidents && investigation.incidents.length > 0) {
         setIncidentIds(investigation.incidents.map(({ id }) => id));
       }
     },

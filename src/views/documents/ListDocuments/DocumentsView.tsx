@@ -19,7 +19,7 @@ const DocumentsView = ({
     ) || []
   );
   // convert tags to string array
-  const tagsArray = Array.from(tags);
+  const tagsArray = [...tags];
 
   return (
     <TabContent>

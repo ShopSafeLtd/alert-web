@@ -11,6 +11,10 @@ mutation AddUsersToBusiness(
       id
       fullName
       status
+      publicName
+      loginEvents {
+        loginTime
+      }
       groups(where: $groupWhere) {
         id
         name

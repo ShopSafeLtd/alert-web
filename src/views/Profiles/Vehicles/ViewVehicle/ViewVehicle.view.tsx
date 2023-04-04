@@ -18,7 +18,8 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import { UpdateType, VehicleQuery } from 'graphql/generated';
+import type { VehicleQuery } from 'graphql/generated';
+import { UpdateType } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBell,
@@ -31,12 +32,11 @@ import EditVehicle from 'components/form-components/Vehicle/EditVehicle';
 import moment from 'moment';
 import UpdateContent from 'views/incidents/ViewIncident/Update.view';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import WatermarkSlide, {
-  WatermarkSlideType,
-} from 'components/images/WatermartkSlide.view';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
 
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import UpdateBar from 'components/MessageInput/update-bar';
+import UpdateBar from 'components/MessageInput/UpdateBar';
 import Lightbox from 'yet-another-react-lightbox';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import useStyles from './ViewVehicle.styles';

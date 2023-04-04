@@ -1,5 +1,5 @@
 const getMentionContent = (content: string) =>
-  content.split(/(@\[.*?\]\(.*?\))/).map((item) => {
+  content.split(/(@\[.*?]\(.*?\))/).map((item) => {
     if (item.includes('@[')) {
       return item.replace('@[', '').replace(/(]\(.*?\))/, '');
     }

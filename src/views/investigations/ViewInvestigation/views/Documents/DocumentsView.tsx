@@ -25,7 +25,7 @@ const DocumentsView = ({
     data?.flatMap((document) => document.tags.map((tag) => tag.name)) || []
   );
   // convert tags to string array
-  const tagsArray = Array.from(tags);
+  const tagsArray = [...tags];
 
   return (
     <TabContent>

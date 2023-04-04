@@ -1,10 +1,13 @@
 import { useApolloClient } from '@apollo/client';
-import { notification, Form, FormInstance } from 'antd';
+import type { FormInstance } from 'antd';
+import { notification, Form } from 'antd';
+import type {
+  SearchBusinessesQuery,
+  SearchBusinessesQueryVariables,
+} from 'graphql/generated';
 import {
   QueryMode,
   SearchBusinessesDocument,
-  SearchBusinessesQuery,
-  SearchBusinessesQueryVariables,
   useEditBusinessQuery,
   useUpdateBusinessMutation,
 } from 'graphql/generated';
@@ -22,6 +25,7 @@ interface OnSubmitValues {
   townCity: string;
   county: string;
   postcode: string;
+  publicName: boolean;
 }
 
 interface Props {
@@ -59,6 +63,7 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         building: res.business?.locations[0]?.building || '',
         county: res.business?.locations[0]?.county || '',
         name: res.business?.name || '',
+        publicName: res.business?.publicName,
         parent: res.business
           ? {
               label: res.business?.parent?.name,
@@ -100,6 +105,7 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         },
         data: {
           name: { set: values.name },
+          publicName: values.publicName,
           parent: values.parent.value
             ? {
                 connect: {
@@ -125,10 +131,14 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         updateBusiness: {
           id: `${Math.random()}`,
           name: values.name,
+          fullName: values.name,
+          publicName: values.publicName,
           totalUsers: 0,
           parent: {
             id: values.parent.value,
             name: values.parent.label,
+            fullName: values.parent.label,
+            publicName: values.publicName,
           },
           locations: [
             {
@@ -170,7 +180,7 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         },
       })
       .then((response) =>
-        response.data.listBusinesses.businesses.length
+        response.data.listBusinesses.businesses.length > 0
           ? response.data.listBusinesses.businesses.map((item) => ({
               label: item?.name || '',
               value: item?.id || '',

@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useStoreState } from 'state';
-import {
+import type {
   CreateChatMutation,
   DeleteChatMutation,
+  UserChatsQuery,
+} from 'graphql/generated';
+import {
   Role,
   SortOrder,
   UserChatsDocument,
-  UserChatsQuery,
   useUpdateUserChatMutation,
   useUserChatsQuery,
 } from 'graphql/generated';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router';
 
 interface Return {

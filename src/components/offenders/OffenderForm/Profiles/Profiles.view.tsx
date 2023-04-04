@@ -18,9 +18,12 @@ import {
   faPlus,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
-import { CrimeGroupData, VehicleData } from 'types/DataType';
+import type { CrimeGroupData, VehicleData } from 'types/DataType';
 
-import { ListCrimeGroupsQuery, ListVehiclesQuery } from 'graphql/generated';
+import type {
+  ListCrimeGroupsQuery,
+  ListVehiclesQuery,
+} from 'graphql/generated';
 
 const { Title, Paragraph } = Typography;
 
@@ -156,10 +159,10 @@ const Profiles = ({
 
     <Row gutter={20} style={{ marginTop: 10 }}>
       <Col flex={1}>
-        {(vehiclesData && vehiclesData.length) ||
-        (crimeGroupsData && crimeGroupsData.length) ? (
+        {(vehiclesData && vehiclesData.length > 0) ||
+        (crimeGroupsData && crimeGroupsData.length > 0) ? (
           <>
-            {crimeGroupsData && crimeGroupsData.length ? (
+            {crimeGroupsData && crimeGroupsData.length > 0 ? (
               <>
                 <Divider>Crime Groups</Divider>
                 <Table
@@ -253,7 +256,7 @@ const Profiles = ({
                 />
               </>
             ) : null}
-            {vehiclesData && vehiclesData.length ? (
+            {vehiclesData && vehiclesData.length > 0 ? (
               <>
                 <Divider>Vehicles</Divider>
                 <Table

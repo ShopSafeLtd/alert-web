@@ -1,5 +1,6 @@
 import React from 'react';
-import { CrimeType, TagQuery, TagType } from 'graphql/generated';
+import type { TagQuery } from 'graphql/generated';
+import { CrimeType, TagType } from 'graphql/generated';
 import {
   Button,
   Col,

@@ -1,13 +1,12 @@
 import { Modal, notification } from 'antd';
 
+import type { VehicleQuery, VehicleQueryVariables } from 'graphql/generated';
 import {
-  VehicleQuery,
   useVehicleQuery,
   useDeleteVehicleMutation,
   useDeleteUpdateMutation,
   useUpdateUpdateMutation,
   Role,
-  VehicleQueryVariables,
   VehicleDocument,
   useSubscribeToVehicleMutation,
   useUnsubscribeToVehicleMutation,
@@ -211,11 +210,9 @@ const useViewVehicle = (vehicleId: string): Return => {
                 data: {
                   vehicle: {
                     ...oldData.vehicle,
-                    updates: [
-                      ...oldData.vehicle.updates.filter(
-                        (item) => item.id !== result.data?.deleteUpdate?.id
-                      ),
-                    ],
+                    updates: oldData.vehicle.updates.filter(
+                      (item) => item.id !== result.data?.deleteUpdate?.id
+                    ),
                   },
                 },
               });

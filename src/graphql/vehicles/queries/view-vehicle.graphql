@@ -87,6 +87,11 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
         updatedAt
       }
       linkedVehicles {
+        images {
+          id
+          url
+          optimised
+        }
         updatedAt
         totalOffenders
         registration
@@ -123,6 +128,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
         }
       }
       createdBy {
+        origName
         id
         fullName
         businesses {
@@ -153,6 +159,11 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
           updatedAt
         }
         linkedVehicles {
+          images {
+            id
+            url
+            optimised
+          }
           updatedAt
           totalOffenders
           registration
@@ -189,6 +200,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
           }
         }
         createdBy {
+          origName
           id
           fullName
           businesses {

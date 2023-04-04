@@ -10,7 +10,7 @@ import {
   Row,
   Typography,
 } from 'antd';
-import { CrimeGroupData } from 'types/DataType';
+import type { CrimeGroupData } from 'types/DataType';
 
 const { Title } = Typography;
 

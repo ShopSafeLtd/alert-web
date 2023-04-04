@@ -9,7 +9,7 @@ import {
   Drawer,
   Button,
 } from 'antd';
-import {
+import type {
   ListSchemeUsersQuery,
   SchemeGroupsQuery,
   CreateUserInDatabaseMutation,
@@ -17,7 +17,7 @@ import {
 } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import AddUser from 'components/form-components/user/AddUser';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 

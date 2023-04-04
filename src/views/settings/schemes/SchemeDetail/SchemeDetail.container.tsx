@@ -2,7 +2,7 @@ import React from 'react';
 import View from './SchemeDetail.view';
 import useSchemeDetail from './useSchemeDetail';
 
-function SchemeDetail(): JSX.Element {
+const SchemeDetail = (): JSX.Element => {
   const {
     data,
     loading,
@@ -29,6 +29,6 @@ function SchemeDetail(): JSX.Element {
       onPreview={onPreview}
     />
   );
-}
+};
 
 export default SchemeDetail;

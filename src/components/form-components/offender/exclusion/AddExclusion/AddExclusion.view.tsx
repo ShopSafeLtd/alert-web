@@ -1,18 +1,21 @@
 import React from 'react';
-import { Button, Col, Form, Input, Row, DatePicker } from 'antd';
+import { Button, Col, Form, Input, Row, DatePicker, Select } from 'antd';
 import type { Moment } from 'moment';
 
 import type { RangePickerProps } from 'antd/es/date-picker';
 
-interface FormData {
-  endDate: Date;
-  startDate: Date;
-  location: string;
-  description: string;
-}
+import type { BanData } from 'types/DataType';
+import BanTypeValues from 'types/enums/ban-type';
+
+// interface FormData {
+//   endDate: Date;
+//   startDate: Date;
+//   location: string;
+//   description: string;
+// }
 
 interface Props {
-  onSubmit: (value: FormData) => void;
+  onSubmit: (value: BanData) => void;
   onClose: () => void;
   saving: boolean;
   setStartDate: (value: Moment | Date | null) => void;
@@ -27,6 +30,22 @@ const AddExclusion = ({
   disabledDate,
 }: Props): JSX.Element => (
   <Form layout="vertical" onFinish={onSubmit}>
+    <Row gutter={16}>
+      <Col span={21}>
+        <Form.Item
+          name="title"
+          label="Exclusion Title"
+          // rules={[
+          //   {
+          //     required: true,
+          //     message: 'Please enter a title for the new exclusion.',
+          //   },
+          // ]}
+        >
+          <Input disabled={saving} />
+        </Form.Item>
+      </Col>
+    </Row>
     <Row gutter={16}>
       <Col span={11}>
         <Form.Item
@@ -73,6 +92,17 @@ const AddExclusion = ({
           ]}
         >
           <DatePicker disabled={saving} disabledDate={disabledDate} />
+        </Form.Item>
+      </Col>
+    </Row>
+    <Row gutter={16}>
+      <Col span={21}>
+        <Form.Item
+          name="type"
+          label="Type"
+          tooltip="select a ban type for the new exclusion."
+        >
+          <Select options={BanTypeValues} disabled={saving} />
         </Form.Item>
       </Col>
     </Row>

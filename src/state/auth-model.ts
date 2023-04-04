@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
-import { action, Action } from "easy-peasy";
+import type { Action } from 'easy-peasy';
+import { action } from 'easy-peasy';
 
 export interface AuthModel {
   isSet: boolean;
@@ -16,15 +17,15 @@ export interface AuthModel {
   signOut: Action<AuthModel>;
   signUp: Action<AuthModel, string>;
   showLoading: Action<AuthModel>;
-  expired: Action<AuthModel>
+  expired: Action<AuthModel>;
 }
 
 const authModel: AuthModel = {
   isSet: false,
   loading: false,
-  message: "",
+  message: '',
   showMessage: false,
-  redirect: "",
+  redirect: '',
   token: null,
   loggedIn: false,
 
@@ -32,7 +33,7 @@ const authModel: AuthModel = {
     state.isSet = true;
     state.loading = false;
     state.loggedIn = true;
-    state.redirect = "/";
+    state.redirect = '/';
     state.token = payload;
   }),
   setAuthMessage: action((state, payload) => {
@@ -41,13 +42,13 @@ const authModel: AuthModel = {
     state.loading = false;
   }),
   hideAuthMessage: action((state) => {
-    state.message = "";
+    state.message = '';
     state.showMessage = false;
   }),
   signOut: action((state) => {
     state.loggedIn = false;
     state.token = null;
-    state.redirect = "/";
+    state.redirect = '/';
     state.loading = false;
   }),
   signUp: action((state, payload) => {

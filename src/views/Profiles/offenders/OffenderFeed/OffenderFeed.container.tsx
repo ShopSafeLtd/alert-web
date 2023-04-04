@@ -1,8 +1,8 @@
 import React from 'react';
 import View from './OffenderFeed.view';
-import useIncidentFeed from './useOffenderFeed';
+import useOffenderFeed from './useOffenderFeed';
 
-const IncidentFeed = (): JSX.Element => {
+const OffenderFeed = (): JSX.Element => {
   const {
     data,
     loading,
@@ -45,7 +45,8 @@ const IncidentFeed = (): JSX.Element => {
     businessData,
     businesses,
     setBusinesses,
-  } = useIncidentFeed();
+    businessesLoading,
+  } = useOffenderFeed();
   return (
     <View
       lightBoxOpen={lightBoxOpen}
@@ -89,8 +90,9 @@ const IncidentFeed = (): JSX.Element => {
       businessData={businessData}
       businesses={businesses}
       setBusinesses={setBusinesses}
+      businessesLoading={businessesLoading}
     />
   );
 };
 
-export default IncidentFeed;
+export default OffenderFeed;

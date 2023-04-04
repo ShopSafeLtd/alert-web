@@ -1,6 +1,7 @@
 import React from 'react';
 import { Col, Row, Skeleton, Tag, Typography } from 'antd';
-import { ArticlePriority, ListArticlesQuery } from 'graphql/generated';
+import type { ListArticlesQuery } from 'graphql/generated';
+import { ArticlePriority } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -29,7 +30,7 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
     id,
     title,
     tags,
-    previewImage,
+    image,
     previewText,
     updatedAt,
     priority,
@@ -40,7 +41,7 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
   return (
     <Link to={`/app/article/view/${id}`}>
       <div className={classes.card}>
-        {previewImage ? (
+        {image ? (
           <div
             style={{
               width: '100%',
@@ -49,7 +50,7 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
             }}
             key={id}
           >
-            <WatermarkImage url={previewImage} />
+            <WatermarkImage url={image.optimised || image.url || ''} />
           </div>
         ) : (
           <Skeleton.Image className={classes.skeletonImage} />
@@ -93,7 +94,7 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
             </Col>
           </Row>
 
-          {tags && tags.length ? (
+          {tags && tags.length > 0 ? (
             <Row
               // wrap={false}
               style={{

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { TagQuery, useUpdateTagMutation, useTagQuery } from 'graphql/generated';
+import type { TagQuery } from 'graphql/generated';
+import { useUpdateTagMutation, useTagQuery } from 'graphql/generated';
 import { notification } from 'antd';
 
 interface FormData {

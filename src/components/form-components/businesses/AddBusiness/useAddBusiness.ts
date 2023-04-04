@@ -1,13 +1,15 @@
 import { useApolloClient } from '@apollo/client';
 import { notification } from 'antd';
-import {
-  ListBusinessesDocument,
+import type {
   ListBusinessesQuery,
   ListBusinessesQueryVariables,
-  QueryMode,
-  SearchBusinessesDocument,
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
+} from 'graphql/generated';
+import {
+  ListBusinessesDocument,
+  QueryMode,
+  SearchBusinessesDocument,
   SortOrder,
   useCreateBusinessMutation,
 } from 'graphql/generated';
@@ -25,6 +27,7 @@ interface OnSubmitValues {
   townCity: string;
   county: string;
   postcode: string;
+  publicName: boolean;
 }
 
 interface Props {
@@ -113,7 +116,7 @@ const useAddBusiness = ({ onClose }: Props): Return => {
           },
           data: {
             listBusinesses: {
-              total: existingData?.listBusinesses.total + 1,
+              total: (existingData?.listBusinesses.total || 0) + 1,
               businesses: [
                 ...existingData.listBusinesses.businesses,
                 result.data?.createBusiness,
@@ -129,6 +132,7 @@ const useAddBusiness = ({ onClose }: Props): Return => {
       variables: {
         data: {
           name: values.name,
+          publicName: values.publicName,
           schemes: {
             connect: [
               {
@@ -156,11 +160,15 @@ const useAddBusiness = ({ onClose }: Props): Return => {
         createBusiness: {
           id: `${Math.random()}`,
           name: values.name,
+          fullName: values.name,
+          publicName: values.publicName,
           totalUsers: 0,
           parent: values.parent
             ? {
                 id: values.parent.value,
                 name: values.parent.label,
+                fullName: values.parent.label,
+                publicName: values.publicName,
               }
             : null,
           locations: [
@@ -198,7 +206,7 @@ const useAddBusiness = ({ onClose }: Props): Return => {
         },
       })
       .then((response) =>
-        response.data.listBusinesses.businesses.length
+        response.data.listBusinesses.businesses.length > 0
           ? response.data.listBusinesses.businesses.map((item) => ({
               label: item?.name || '',
               value: item?.id || '',

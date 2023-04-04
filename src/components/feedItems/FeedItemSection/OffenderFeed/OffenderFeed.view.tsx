@@ -1,16 +1,14 @@
 import React from 'react';
 import { Col, Row, Typography } from 'antd';
-import { FeedItemsQuery } from 'graphql/generated';
+import type { FeedItemsQuery } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faClock,
   faEarth,
   faMarsAndVenus,
   faUserClock,
   faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
 
-import moment from 'moment';
 import {
   calcAge,
   getOffenderAge,
@@ -32,6 +30,7 @@ interface Props {
   isNewImage?: boolean;
   isNewOffender?: boolean;
 }
+
 const ImageContainer = ({ src }: { src: string }) => (
   <div
     style={{
@@ -57,10 +56,7 @@ const OffenderFeed = ({
     name,
     race,
     dateOfBirth,
-    updatedAt,
-    // createdAt,
-    // bans,
-    // totalUpdates,
+    reference,
     id,
     updates,
     images,
@@ -70,14 +66,7 @@ const OffenderFeed = ({
 
   return (
     <Row gutter={20} wrap={false}>
-      {/* <Button
-        onClick={() => {
-          console.log('images1', images);
-        }}
-      >
-        onclick
-      </Button> */}
-      {(isNewOffender || isNewImage) && images && images.length ? (
+      {(isNewOffender || isNewImage) && images && images.length > 0 ? (
         <Col>
           <ImageContainer src={images[0].optimised || images[0].url || ''} />
         </Col>
@@ -96,22 +85,13 @@ const OffenderFeed = ({
         <Col flex={1}>
           {isNewOffender ? (
             <>
-              <Title style={{ marginBottom: 10 }} level={4} ellipsis>
+              <Title level={4} ellipsis>
                 {name}
               </Title>
-              <Row style={{ marginBottom: 10 }}>
+              <Row style={{ marginTop: -5, marginBottom: 5 }}>
                 <Col>
-                  <FontAwesomeIcon
-                    size="sm"
-                    className="feedItem-card-icon"
-                    icon={faClock}
-                    style={{ marginBottom: -1 }}
-                  />
                   <Text style={{ fontSize: 14 }} type="secondary">
-                    Last updated:
-                    {moment(updatedAt || moment()).format(
-                      `ddd MMM DD YYYY - HH:mm`
-                    )}
+                    Alert ID: {reference}
                   </Text>
                 </Col>
               </Row>
@@ -119,6 +99,7 @@ const OffenderFeed = ({
                 <Col>
                   <FontAwesomeIcon
                     size="sm"
+                    style={{ marginRight: 5 }}
                     className="feedItem-card-icon"
                     icon={faUserClock}
                   />
@@ -132,6 +113,7 @@ const OffenderFeed = ({
                 <Col>
                   <FontAwesomeIcon
                     size="sm"
+                    style={{ marginRight: 5 }}
                     className="feedItem-card-icon"
                     icon={faUserTag}
                   />
@@ -144,6 +126,7 @@ const OffenderFeed = ({
                 <Col flex={1}>
                   <FontAwesomeIcon
                     size="sm"
+                    style={{ marginRight: 5 }}
                     className="feedItem-card-icon"
                     icon={faMarsAndVenus}
                   />
@@ -156,6 +139,7 @@ const OffenderFeed = ({
                 <Col>
                   <FontAwesomeIcon
                     size="sm"
+                    style={{ marginRight: 5 }}
                     className="feedItem-card-icon"
                     icon={faEarth}
                   />
@@ -165,16 +149,12 @@ const OffenderFeed = ({
                 </Col>
               </Row>
             </>
-          ) : (
-            <>
-              {updates && updates.length ? (
-                <UpdateContent
-                  title={name || 'Unidentified Offender'}
-                  update={updates[0]}
-                />
-              ) : null}
-            </>
-          )}
+          ) : updates && updates.length > 0 ? (
+            <UpdateContent
+              title={name || 'Unidentified Offender'}
+              update={updates[0]}
+            />
+          ) : null}
         </Col>
       </Link>
     </Row>

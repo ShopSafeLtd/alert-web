@@ -1,12 +1,23 @@
-import {
+import type {
   Age,
+  BanType,
   Build,
   Gender,
   ListIncidentsQuery,
   Race,
 } from 'graphql/generated';
-import { Moment } from 'moment';
+import type { Moment } from 'moment';
 
+// BanData
+export interface BanData {
+  id: string;
+  title?: string | null | undefined;
+  type?: BanType | null;
+  endDate: Date;
+  startDate: Date;
+  location: string;
+  description?: string | null | undefined;
+}
 // Offender
 export interface OffenderData {
   id: string;
@@ -35,16 +46,7 @@ export interface OffenderData {
     new?: boolean;
   }[];
   imageUid?: string[] | undefined;
-  bans?:
-    | {
-        id: string;
-        title?: string | null | undefined;
-        endDate: Date;
-        startDate: Date;
-        location: string;
-        description?: string | null | undefined;
-      }[]
-    | undefined;
+  bans?: BanData[] | undefined;
 }
 
 export interface OffenderCardData {
@@ -140,16 +142,6 @@ export interface ImageCardData {
   id: string;
   url?: string | null;
   optimised?: string | null;
-}
-
-// BanData
-export interface BanData {
-  id: string;
-  title?: string | null | undefined;
-  endDate: Date;
-  startDate: Date;
-  location: string;
-  description?: string | null | undefined;
 }
 
 // LocationData

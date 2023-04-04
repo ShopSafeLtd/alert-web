@@ -1,7 +1,7 @@
 import React from 'react';
 import View from './LinkIncident.view';
 import useLinkIncident from './useLinkIncident';
-import { ListIncidentsQuery } from '../../../../graphql/generated';
+import type { ListIncidentsQuery } from '../../../../graphql/generated';
 
 export interface Incident {
   incident: Exclude<

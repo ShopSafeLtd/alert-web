@@ -22,6 +22,7 @@ const UseAddExclusionTest = () => {
             endDate: new Date('2022-08-31T11:25:32.702Z'),
             location: 'location',
             description: 'new description',
+            id: '',
           })
         }
       >

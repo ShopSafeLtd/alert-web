@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
+import type { GroupQuery, ListSchemeUsersQuery } from 'graphql/generated';
 import {
-  GroupQuery,
   SortOrder,
   useListSchemeUsersQuery,
   useUpdateGroupMutation,
-  ListSchemeUsersQuery,
   useGroupQuery,
 } from 'graphql/generated';
 import { notification } from 'antd';

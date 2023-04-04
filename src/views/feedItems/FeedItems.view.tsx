@@ -1,16 +1,18 @@
 import React from 'react';
-import {
+import type {
   FeedItemsQuery,
-  FeedItemType,
   ListArticlesQuery,
   ListOffendersQuery,
   ListUnapprovedIncidentsQuery,
+  Model,
 } from 'graphql/generated';
+import { FeedItemType } from 'graphql/generated';
 import {
   Button,
   Card,
   Col,
   Divider,
+  Drawer,
   Empty,
   Input,
   Modal,
@@ -25,6 +27,7 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faExclamationCircle,
+  faFilter,
   faNewspaper,
   faTrash,
   faUser,
@@ -38,9 +41,14 @@ import IncidentFeed from 'components/feedItems/FeedItemSection/IncidentFeed';
 import OffenderFeed from 'components/feedItems/FeedItemSection/OffenderFeed';
 import ArticleFeed from 'components/feedItems/FeedItemSection/ArticleFeed';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
-import { PaginationModel } from 'types/DataType';
+import type { PaginationModel } from 'types/DataType';
 import InvestigationFeed from 'components/feedItems/FeedItemSection/investigationFeed';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import FeedItemFilter from 'components/feedItems/FeedItemFilter';
+import type { FeedItemSort } from 'state';
+import VehicleFeed from 'components/feedItems/FeedItemSection/VehicleFeed';
+import CrimeGroupFeed from 'components/feedItems/FeedItemSection/CrimeGroupFeed';
+import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 
 const { Title, Paragraph, Text } = Typography;
 const { confirm } = Modal;
@@ -63,6 +71,19 @@ interface Props {
   onDeleteFeedItem: (value: string) => void;
   saving: boolean;
   adminRights: boolean;
+  sortFilter: boolean;
+  toggleSortFilter: () => void;
+  groupsFilter: string[];
+  setGroupsFilter: (value: string[]) => void;
+  typesFilter: Model[];
+  setTypesFilter: (value: Model[]) => void;
+  clearFilters: () => void;
+  order: FeedItemSort;
+  setOrder: (value: FeedItemSort) => void;
+  groups: { value: string; label: string }[];
+  groupsLoading: boolean;
+  gallery: string[];
+  setGallery: (values: string[]) => void;
 }
 
 const FeedItem = ({
@@ -83,13 +104,26 @@ const FeedItem = ({
   adminRights,
   articlePagination,
   onArticlePaginationChange,
+  typesFilter,
+  setTypesFilter,
+  groupsFilter,
+  setGroupsFilter,
+  sortFilter,
+  toggleSortFilter,
+  clearFilters,
+  order,
+  setOrder,
+  groups,
+  groupsLoading,
+  gallery,
+  setGallery,
 }: // updateIncidentList,
 // onNavigate,
 Props): JSX.Element => (
   <div className="feed-container" style={{ height: '100vh', padding: 15 }}>
     <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 10 }}>
-      <Row wrap={false} gutter={8}>
-        <Col span={10}>
+      <Row align="middle" gutter={16}>
+        <Col span={10} xl={8}>
           <Row>
             <Col span={24} xxl={24} xl={24}>
               <Input
@@ -102,7 +136,33 @@ Props): JSX.Element => (
             </Col>
           </Row>
         </Col>
-        <Col flex={1} />
+        <Col flex={1}>
+          <CheckTags
+            mode="radio"
+            value={gallery}
+            onChange={setGallery}
+            options={[
+              {
+                label: 'Subscribed',
+                value: 'SUBSCRIBED',
+              },
+            ]}
+          />
+        </Col>
+        <Col>
+          <Button
+            onClick={toggleSortFilter}
+            icon={
+              <FontAwesomeIcon
+                icon={faFilter}
+                size="lg"
+                style={{ marginRight: 5 }}
+              />
+            }
+          >
+            Sort &amp; Filter
+          </Button>
+        </Col>
         <Col>
           <Link to="/app/incidents/add">
             <Button size="small" type="primary">
@@ -219,6 +279,12 @@ Props): JSX.Element => (
                           isNewInvestigation
                         />
                       )}
+                      {feedItem?.type === FeedItemType.NewVehicle && (
+                        <VehicleFeed feedItem={feedItem} isNewVehicle />
+                      )}
+                      {feedItem?.type === FeedItemType.NewCrimegroup && (
+                        <CrimeGroupFeed feedItem={feedItem} isNewCrimeGroup />
+                      )}
                       {/* update details  */}
                       {feedItem?.type === FeedItemType.Incident && (
                         <IncidentFeed feedItem={feedItem} />
@@ -240,6 +306,9 @@ Props): JSX.Element => (
                       {feedItem?.type === FeedItemType.InvestigationImage && (
                         <InvestigationFeed feedItem={feedItem} isNewImage />
                       )}
+                      {feedItem?.type === FeedItemType.VehicleImage && (
+                        <VehicleFeed feedItem={feedItem} isNewImage />
+                      )}
                       {/* add new intel */}
                       {feedItem?.type === FeedItemType.IncidentIntel && (
                         <IncidentFeed feedItem={feedItem} />
@@ -249,6 +318,12 @@ Props): JSX.Element => (
                       )}
                       {feedItem?.type === FeedItemType.InvestigationIntel && (
                         <InvestigationFeed feedItem={feedItem} />
+                      )}
+                      {feedItem?.type === FeedItemType.VehicleIntel && (
+                        <VehicleFeed feedItem={feedItem} />
+                      )}
+                      {feedItem?.type === FeedItemType.CrimegroupIntel && (
+                        <CrimeGroupFeed feedItem={feedItem} />
                       )}
 
                       {/* article */}
@@ -535,6 +610,24 @@ Props): JSX.Element => (
         </Row>
       </Col>
     </Row>
+    <Drawer
+      title="Feed Item Filters"
+      visible={sortFilter}
+      onClose={toggleSortFilter}
+      width={500}
+    >
+      <FeedItemFilter
+        order={order}
+        setOrder={setOrder}
+        groups={groups}
+        groupsLoading={groupsLoading}
+        typesFilter={typesFilter}
+        setTypesFilter={setTypesFilter}
+        groupsFilter={groupsFilter}
+        setGroupsFilter={setGroupsFilter}
+        clearFilters={clearFilters}
+      />
+    </Drawer>
   </div>
 );
 

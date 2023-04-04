@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import type { UserQuery } from 'graphql/generated';
 import {
   useDeleteUserFromSchemeMutation,
-  UserQuery,
   useSendInviteMutation,
   useUpdateUserDisableMutation,
   useUserQuery,
@@ -27,6 +27,13 @@ interface Return {
   deleteConfirm: () => void;
 }
 
+const errorNotification = () => {
+  notification.error({
+    message: 'Error!',
+    description: 'Whoops, there are some errors. Please try again. ',
+    placement: 'bottomRight',
+  });
+};
 const useUserDetail = (userId: string): Return => {
   const navigate = useNavigate();
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -39,13 +46,6 @@ const useUserDetail = (userId: string): Return => {
   // TODO: need to change this to be based on current business
   const business = useStoreState((state) => state.user.businesses);
   const demId = business.map((item) => item.demId)[0];
-  const errorNotification = () => {
-    notification.error({
-      message: 'Error!',
-      description: 'Whoops, there are some errors. Please try again. ',
-      placement: 'bottomRight',
-    });
-  };
 
   const { data, loading } = useUserQuery({
     fetchPolicy: 'cache-and-network',

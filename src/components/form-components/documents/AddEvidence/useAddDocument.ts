@@ -1,12 +1,14 @@
-import { SelectProps } from 'antd';
+import type { SelectProps } from 'antd';
+import type {
+  ViewInvestigationQuery,
+  ViewInvestigationQueryVariables,
+} from 'graphql/generated';
 import {
   Model,
   useCopyEvidenceMutation,
   useCreateTagMutation,
   useTagsQuery,
   ViewInvestigationDocument,
-  ViewInvestigationQuery,
-  ViewInvestigationQueryVariables,
 } from 'graphql/generated';
 import { useState } from 'react';
 import { useStoreState } from 'state';
@@ -104,11 +106,14 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
 
   const categoriesChange = (values: { value: string }[]) => {
     const formattedValues: string[] = [];
-    values.forEach((value) => {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const value of values) {
       const found = categories?.find(
         (category) => category.value === value.value
       );
-      if (!found) {
+      if (found) {
+        formattedValues.push(value.value);
+      } else {
         createTag({
           variables: {
             data: {
@@ -130,10 +135,8 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
         }).then((result) => {
           formattedValues.push(result.data?.createTag?.name || '');
         });
-      } else {
-        formattedValues.push(value.value);
       }
-    });
+    }
 
     setSelectedCategories(formattedValues.map((value) => ({ value })));
   };

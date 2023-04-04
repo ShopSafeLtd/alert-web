@@ -20,6 +20,18 @@ mutation CreateArticle($data: CreateArticleInput!) {
       name
     }
     title
+    images {
+      id
+      url
+      optimised
+      card
+    }
+    image {
+      id
+      url
+      optimised
+      card
+    }
     rows {
       columns {
         text
@@ -44,6 +56,7 @@ mutation CreateArticle($data: CreateArticleInput!) {
             id
             fullName
             businesses {
+              fullName
               id
               name
             }
@@ -105,6 +118,7 @@ mutation CreateArticle($data: CreateArticleInput!) {
             id
             fullName
             businesses {
+              fullName
               id
               name
             }
@@ -128,6 +142,7 @@ mutation CreateArticle($data: CreateArticleInput!) {
               id
               fullName
               businesses {
+                fullName
                 id
                 name
               }

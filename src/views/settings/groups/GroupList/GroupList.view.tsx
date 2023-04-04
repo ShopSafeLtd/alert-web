@@ -1,9 +1,9 @@
 import React from 'react';
 import { Table, Row, Col, Input, Drawer, Button } from 'antd';
-import { CreateGroupMutation, SchemeGroupsQuery } from 'graphql/generated';
+import type { CreateGroupMutation, SchemeGroupsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import AddGroup from 'components/form-components/group/AddGroup';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 

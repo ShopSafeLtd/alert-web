@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListBusinessesQuery } from 'graphql/generated';
+import type { ListBusinessesQuery } from 'graphql/generated';
 import { Button, Col, Drawer, Input, Row, Table } from 'antd';
 import { Link } from 'react-router-dom';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';

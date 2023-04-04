@@ -3,7 +3,7 @@ import { ReactFlowProvider } from 'reactflow';
 import React from 'react';
 import useFlow from './hooks/useFlow';
 import ReactFlowView from './Flow.view';
-import { ViewInvestigationQuery } from '../../../../../graphql/generated';
+import type { ViewInvestigationQuery } from '../../../../../graphql/generated';
 
 interface Props {
   importData: ViewInvestigationQuery | undefined;
@@ -62,10 +62,9 @@ const ReactFlowPro = ({ importData }: Props) => {
   );
 };
 
-export default function Flow({ importData }: Props) {
-  return (
-    <ReactFlowProvider>
-      <ReactFlowPro importData={importData} />
-    </ReactFlowProvider>
-  );
-}
+const Flow = ({ importData }: Props) => (
+  <ReactFlowProvider>
+    <ReactFlowPro importData={importData} />
+  </ReactFlowProvider>
+);
+export default Flow;

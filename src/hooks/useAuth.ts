@@ -1,4 +1,5 @@
-import { SetUserPayload, useStoreActions, useStoreState } from 'state';
+import type { SetUserPayload } from 'state';
+import { useStoreActions, useStoreState } from 'state';
 import LogRocket from 'logrocket';
 import { useCurrentUserLazyQuery } from 'graphql/generated';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -66,7 +67,8 @@ const useAuth = (): Return => {
         autoApproveOffenders: schemeDetails?.autoApproveOffenders,
         id: schemeDetails?.id,
         name: schemeDetails?.name,
-        logo: schemeDetails?.logo?.optimised,
+        logo: schemeDetails?.logo?.optimisedPersisted,
+        darkLogo: schemeDetails?.darkLogo?.optimisedPersisted,
       });
     };
 
@@ -85,6 +87,8 @@ const useAuth = (): Return => {
           autoApproveOffenders: schemeDetails.scheme.autoApproveOffenders,
           id: schemeDetails.scheme.id,
           name: schemeDetails.scheme.name,
+          logo: schemeDetails.scheme.logo?.optimisedPersisted,
+          darkLogo: schemeDetails.scheme.darkLogo?.optimisedPersisted,
         });
       } else {
         handleNoValidScheme();
@@ -125,14 +129,14 @@ const useAuth = (): Return => {
         if (currentS) {
           window.localStorage.setItem(
             'logo',
-            currentS?.scheme?.logo?.optimised || ''
+            currentS?.scheme?.logo?.optimisedPersisted || ''
           );
-          if (!currentS?.scheme?.logo?.optimised) {
+          if (!currentS?.scheme?.logo?.optimisedPersisted) {
             window.localStorage.clear();
           }
           window.localStorage.setItem(
             'logo-dark',
-            currentS?.scheme?.darkLogo?.optimised || ''
+            currentS?.scheme?.darkLogo?.optimisedPersisted || ''
           );
         }
       }
@@ -156,7 +160,7 @@ const useAuth = (): Return => {
 
   const rehydrateAuth = () => {
     if (user !== undefined) {
-      if (new Date().getTime() < user.exp * 1000) {
+      if (Date.now() < user.exp * 1000) {
         if (user.iss === 'https://alert.eu.auth0.com/') {
           getCurrentUser();
         } else if (isAuthenticated) {
@@ -291,8 +295,8 @@ const useAuth = (): Return => {
 
           authenticated(newToken);
           window.localStorage.setItem('access_token', newToken);
-        } catch (e) {
-          if (e instanceof Error) setAuthMessage(e.message);
+        } catch (error) {
+          if (error instanceof Error) setAuthMessage(error.message);
           // console.error(e);
         }
       })();

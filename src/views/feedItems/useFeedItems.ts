@@ -1,10 +1,13 @@
-import {
+import type {
   DeleteFeedItemMutation,
-  FeedItemsDocument,
   FeedItemsQuery,
   ListArticlesQuery,
   ListOffendersQuery,
   ListUnapprovedIncidentsQuery,
+  Model,
+} from 'graphql/generated';
+import {
+  FeedItemsDocument,
   QueryMode,
   Role,
   SortOrder,
@@ -15,12 +18,12 @@ import {
   useListUnapprovedIncidentsQuery,
   useSchemeGroupsQuery,
 } from 'graphql/generated';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FeedItemSort, useStoreActions, useStoreState } from 'state';
 import { useNavigate } from 'react-router-dom';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
-import { PaginationModel } from 'types/DataType';
+import type { PaginationModel } from 'types/DataType';
 
 interface Return {
   data: FeedItemsQuery | undefined;
@@ -50,6 +53,15 @@ interface Return {
   onDeleteFeedItem: (value: string) => void;
   saving: boolean;
   adminRights: boolean;
+  sortFilter: boolean;
+  toggleSortFilter: () => void;
+  groupsFilter: string[];
+  setGroupsFilter: (value: string[]) => void;
+  typesFilter: Model[];
+  setTypesFilter: (value: Model[]) => void;
+  clearFilters: () => void;
+  gallery: string[];
+  setGallery: (values: string[]) => void;
 }
 
 const useFeedItems = (): Return => {
@@ -58,8 +70,7 @@ const useFeedItems = (): Return => {
 
   // Global State
   const schemeId = useStoreState((state) => state.scheme.id);
-  const groups = useStoreState((state) => state.user.groups);
-  const role = useStoreState((state) => state.user.role);
+  const { role, groups, id: userId } = useStoreState((state) => state.user);
   const pagination = useStoreState((state) => state.data.feedItems.pagination);
   const variables = useStoreState((state) => state.data.feedItems.variables);
   const order = useStoreState((state) => state.data.feedItems.order);
@@ -68,12 +79,108 @@ const useFeedItems = (): Return => {
     (actions) => actions.data.setFeedItems
   );
   const [search, setSearch] = useState('');
+  const [sortFilter, setSortFilter] = useState(false);
+  const [typesFilter, setTypesFilter] = useState<Model[]>([]);
+  const [groupsFilter, setGroupsFilter] = useState<string[]>([]);
+  const [gallery, setGallery] = useState<string[]>([]);
+
   const [articlePagination, setArticlePagination] = useState<PaginationModel>({
     page: 1,
     pageSize: 12,
     sizeOptions: ['12'],
   });
 
+  const queryVariables = {
+    schemeId,
+    order: {
+      updatedAt:
+        order === FeedItemSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
+    },
+    search,
+    take: pagination.pageSize,
+    skip: (pagination.page - 1) * pagination.pageSize,
+    where: {
+      // createdAt: filterCreatedAt
+      //   ? {
+      //       gte: filterCreatedAt.startDate,
+      //       lte: filterCreatedAt.endDate,
+      //     }
+      //   : undefined,
+      groups:
+        groupsFilter.length > 0
+          ? {
+              some: {
+                id: {
+                  in: groupsFilter,
+                },
+              },
+            }
+          : undefined,
+
+      model:
+        typesFilter.length > 0
+          ? {
+              in: typesFilter,
+            }
+          : undefined,
+
+      offender: {
+        subscribedUsers: gallery.includes('SUBSCRIBED')
+          ? {
+              some: {
+                id: {
+                  equals: userId,
+                },
+              },
+            }
+          : undefined,
+      },
+      incident: {
+        subscribedUsers: gallery.includes('SUBSCRIBED')
+          ? {
+              some: {
+                id: {
+                  equals: userId,
+                },
+              },
+            }
+          : undefined,
+      },
+      vehicle: {
+        subscribedUsers: gallery.includes('SUBSCRIBED')
+          ? {
+              some: {
+                id: {
+                  equals: userId,
+                },
+              },
+            }
+          : undefined,
+      },
+      crimeGroup: {
+        subscribedUsers: gallery.includes('SUBSCRIBED')
+          ? {
+              some: {
+                id: {
+                  equals: userId,
+                },
+              },
+            }
+          : undefined,
+      },
+      investigation: {
+        subscribedUsers: gallery.includes('SUBSCRIBED')
+          ? {
+              some: {
+                id: {
+                  equals: userId,
+                },
+              },
+            }
+          : undefined,
+      },
+    },
+  };
   // Queries
   // Fetch scheme groups if scheme admin
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
@@ -88,48 +195,30 @@ const useFeedItems = (): Return => {
     },
     fetchPolicy: 'cache-and-network',
     skip: role !== Role.SchemeAdmin,
-    // onCompleted: (result) => {
-    //   setFeedItemsState({
-    //     pagination,
-    //     variables: {
-    //       ...variables,
-    //       groups: result.groups.map((group) => group.id),
-    //     },
-    //     order,
-    //   });
-    // },
   });
 
   // On mount
-  // useEffect(() => {
-  //   const sizeOptions = getSizeOptions();
-  //   setFeedItemsState({
-  //     pagination: {
-  //       ...pagination,
-  //       sizeOptions,
-  //       pageSize: Number(sizeOptions[0]),
-  //     },
-  //     variables: {
-  //       ...variables,
-  //       groups:
-  //         role === Role.SchemeAdmin
-  //           ? groupsData?.groups.map((group) => group.id) || []
-  //           : groups.map((group) => group.id),
-  //     },
-  //     order,
-  //   });
-  // }, []);
+  useEffect(() => {
+    // const sizeOptions = getSizeOptions();
+    setFeedItemsState({
+      pagination: {
+        ...pagination,
+        // sizeOptions,
+        // pageSize: Number(sizeOptions[0]),
+      },
+      variables: {
+        ...variables,
+        groups:
+          role === Role.SchemeAdmin
+            ? groupsData?.groups.map((group) => group.id) || []
+            : groups.map((group) => group.id),
+      },
+      order,
+    });
+  }, []);
 
   const { data, loading } = useFeedItemsQuery({
-    variables: {
-      schemeId,
-      order: {
-        updatedAt: SortOrder.Desc,
-      },
-      search,
-      take: pagination.pageSize,
-      skip: (pagination.page - 1) * pagination.pageSize,
-    },
+    variables: queryVariables,
     fetchPolicy: 'cache-and-network',
   });
 
@@ -175,7 +264,6 @@ const useFeedItems = (): Return => {
         },
       },
     });
-  console.log('search', search);
 
   const { data: recentOffenderData, loading: recentOffenderLoading } =
     useListOffendersQuery({
@@ -199,19 +287,7 @@ const useFeedItems = (): Return => {
 
     const existingData = store.readQuery<FeedItemsQuery>({
       query: FeedItemsDocument,
-      variables: {
-        schemeId,
-        order: {
-          updatedAt: SortOrder.Desc,
-        },
-        groups:
-          variables.groups && variables.groups.length > 0
-            ? variables.groups.map((id) => id)
-            : undefined,
-        search: variables.search,
-        take: pagination.pageSize,
-        skip: (pagination.page - 1) * pagination.pageSize,
-      },
+      variables: queryVariables,
     });
 
     if (existingData === null) return;
@@ -228,19 +304,7 @@ const useFeedItems = (): Return => {
         },
         __typename: 'Query',
       },
-      variables: {
-        schemeId,
-        order: {
-          updatedAt: SortOrder.Desc,
-        },
-        groups:
-          variables.groups && variables.groups.length > 0
-            ? variables.groups.map((id) => id)
-            : undefined,
-        search: variables.search,
-        take: pagination.pageSize,
-        skip: (pagination.page - 1) * pagination.pageSize,
-      },
+      variables: queryVariables,
     });
   };
   const [deleteFeedItem] = useDeleteFeedItemMutation({
@@ -319,7 +383,15 @@ const useFeedItems = (): Return => {
   //     order,
   //   });
   // };
+  const toggleSortFilter = () => {
+    setSortFilter(!sortFilter);
+  };
 
+  const clearFilters = () => {
+    setGroupsFilter([]);
+    setTypesFilter([]);
+    setOrder(FeedItemSort.updatedAtDesc);
+  };
   return {
     data,
     loading,
@@ -345,13 +417,21 @@ const useFeedItems = (): Return => {
     groupsLoading,
     onGroupsChange,
     variables,
-    // updateIncidentList,
     onNavigate,
     unapprovedIncidents,
     unapprovedIncidentsLoading,
     onDeleteFeedItem,
     saving,
     adminRights: role !== Role.User,
+    typesFilter,
+    setTypesFilter,
+    groupsFilter,
+    setGroupsFilter,
+    sortFilter,
+    toggleSortFilter,
+    clearFilters,
+    gallery,
+    setGallery,
   };
 };
 

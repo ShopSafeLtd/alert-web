@@ -18,7 +18,7 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import {
+import type {
   AddUsersToBusinessMutation,
   BusinessQuery,
   CreateUserInDatabaseMutation,
@@ -40,7 +40,7 @@ import moment from 'moment';
 import EditBusiness from 'components/form-components/businesses/EditBusiness';
 import AddUser from 'components/form-components/user/AddUser';
 import AddUserToBusiness from 'components/form-components/user/AddUserToBusiness';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import useStyles from './ViewBusiness.styles';
 import LinkDem from '../../../../components/form-components/businesses/LinkDem';
 
@@ -271,7 +271,9 @@ const ViewBusiness = ({
                     usersData?.users.map((user) => ({
                       groups: user.groups,
                       key: user.id,
-                      lastLogin: moment().format('HH:mm DD/MM/YY'),
+                      lastLogin: moment(user.loginEvents[0].loginTime).format(
+                        'HH:mm DD/MM/YY'
+                      ),
                       name: user.fullName,
                       status: user.status || 'Unknown',
                     })) || []

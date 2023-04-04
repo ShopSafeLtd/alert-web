@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
+import type { ListIncidentsQuery } from 'graphql/generated';
 import {
-  ListIncidentsQuery,
   QueryMode,
   SortOrder,
   useListIncidentsQuery,

@@ -1,11 +1,8 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
 import { useNavigate } from 'react-router-dom';
-import {
-  QueryMode,
-  useSearchBusinessesQuery,
-  SearchBusinessesQuery,
-} from 'graphql/generated';
+import type { SearchBusinessesQuery } from 'graphql/generated';
+import { QueryMode, useSearchBusinessesQuery } from 'graphql/generated';
 
 interface Return {
   searchBusinessData: SearchBusinessesQuery | undefined;

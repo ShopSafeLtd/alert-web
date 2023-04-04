@@ -1,16 +1,18 @@
 import { useState } from 'react';
-import {
-  useListSchemeUsersQuery,
+import type {
   ListSchemeUsersQuery,
-  QueryMode,
-  useSchemeGroupsQuery,
   SchemeGroupsQuery,
   CreateUserInDatabaseMutation,
-  ListSchemeUsersDocument,
   InviteExistingUserMutation,
 } from 'graphql/generated';
+import {
+  useListSchemeUsersQuery,
+  QueryMode,
+  useSchemeGroupsQuery,
+  ListSchemeUsersDocument,
+} from 'graphql/generated';
 import { useStoreState } from 'state';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 
 interface Return {
   data: ListSchemeUsersQuery | undefined;
@@ -37,6 +39,7 @@ const useUserList = (): Return => {
   const { data, loading } = useListSchemeUsersQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
+      // orderBy:{businesses:{_count:}}
       where: {
         schemes: {
           some: {
@@ -53,6 +56,7 @@ const useUserList = (): Return => {
         recycled: {
           equals: false,
         },
+
         groups:
           selectedGroups.length > 0
             ? {

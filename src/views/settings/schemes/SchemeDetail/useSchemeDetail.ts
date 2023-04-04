@@ -1,9 +1,6 @@
 import { useState } from 'react';
-import {
-  SchemeQuery,
-  useSchemeQuery,
-  useUpdateSchemeMutation,
-} from 'graphql/generated';
+import type { SchemeQuery } from 'graphql/generated';
+import { useSchemeQuery, useUpdateSchemeMutation } from 'graphql/generated';
 import { message, notification, Upload } from 'antd';
 import { useStoreState } from 'state';
 
@@ -92,11 +89,11 @@ const useSchemeDetail = (): Return => {
       });
       window.localStorage.setItem(
         'logo',
-        res.updateScheme?.logo?.optimised || ''
+        res.updateScheme?.logo?.optimisedPersisted || ''
       );
       window.localStorage.setItem(
         'logo-dark',
-        res.updateScheme?.darkLogo?.optimised || ''
+        res.updateScheme?.darkLogo?.optimisedPersisted || ''
       );
     },
     onError: () => {
@@ -234,7 +231,7 @@ const useSchemeDetail = (): Return => {
       src = await new Promise((resolve) => {
         const reader = new FileReader();
         reader.readAsDataURL(file.originFileObj as RcFile);
-        reader.onload = () => resolve(reader.result as string);
+        reader.addEventListener('load', () => resolve(reader.result as string));
       });
     }
     const image = new Image();

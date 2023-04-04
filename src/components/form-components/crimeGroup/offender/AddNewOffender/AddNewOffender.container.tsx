@@ -5,7 +5,7 @@ import View from './AddNewOffender.view';
 interface Props {
   onClose: () => void;
 }
-function AddNewOffender({ onClose }: Props): JSX.Element {
+const AddNewOffender = ({ onClose }: Props): JSX.Element => {
   const {
     onSubmit,
     saving,
@@ -31,6 +31,6 @@ function AddNewOffender({ onClose }: Props): JSX.Element {
       />
     </div>
   );
-}
+};
 
 export default AddNewOffender;

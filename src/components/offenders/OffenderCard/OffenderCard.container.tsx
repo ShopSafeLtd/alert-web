@@ -1,6 +1,9 @@
 import React from 'react';
-import { ListOffendersQuery, RecycleOffenderMutation } from 'graphql/generated';
-import { MutationUpdaterFn } from '@apollo/client';
+import type {
+  ListOffendersQuery,
+  RecycleOffenderMutation,
+} from 'graphql/generated';
+import type { MutationUpdaterFn } from '@apollo/client';
 import View from './OffenderCard.view';
 import useOffenderCard from './useOffenderCard';
 

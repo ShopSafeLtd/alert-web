@@ -1,12 +1,13 @@
 import React from 'react';
+import type { FormInstance } from 'antd';
 import {
   Button,
   Col,
   Form,
-  FormInstance,
   Input,
   Row,
   Skeleton,
+  Switch,
   Typography,
 } from 'antd';
 import DebounceSelect from 'components/form-components/DebounceSelect';
@@ -21,6 +22,7 @@ interface FormData {
   street: string;
   townCity: string;
   county: string;
+  publicName: boolean;
   postcode: string;
 }
 
@@ -46,6 +48,23 @@ const EditBusiness = ({
   <Form<FormData> layout="vertical" onFinish={onSubmit} form={form}>
     <Form.Item name="name" label="Business Name" rules={[{ required: true }]}>
       {loading ? <Skeleton.Input /> : <Input disabled={saving} />}
+    </Form.Item>
+
+    <Form.Item
+      label="Show business name in the system"
+      name="publicName"
+      valuePropName="checked"
+      style={{
+        marginBottom: 0,
+        flexDirection: 'row',
+        justifyItems: 'center',
+      }}
+    >
+      <Switch
+        disabled={saving}
+        style={{ marginLeft: 10, marginTop: -22 }}
+        className="scheme-detail-switch"
+      />
     </Form.Item>
     <Form.Item name="parent" label="Parent Business">
       {loading ? (

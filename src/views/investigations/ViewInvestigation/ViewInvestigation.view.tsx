@@ -5,7 +5,7 @@ import AddExistingVehicle from 'components/form-components/Investigation/AddExis
 import LinkIncident from 'components/form-components/Investigation/AddIncident/LinkIncident.container';
 import AddExistingCrimeGroup from 'components/form-components/Investigation/AddExistingCrimeGroup';
 import { createUseStyles } from 'react-jss';
-import { ViewInvestigationQuery } from '../../../graphql/generated';
+import type { ViewInvestigationQuery } from '../../../graphql/generated';
 import Flow from './views/Flow/Flow.container';
 import ViewDetails from './views/Details';
 import DocumentsContainer from './views/Documents/Documents.container';

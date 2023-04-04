@@ -2,7 +2,7 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import RestoreOffender from '../RestoreOffender.view';
-import { RecycledItemQuery } from '../../../../../graphql/generated';
+import type { RecycledItemQuery } from '../../../../../graphql/generated';
 
 describe('List Officer View', () => {
   const data: RecycledItemQuery = {

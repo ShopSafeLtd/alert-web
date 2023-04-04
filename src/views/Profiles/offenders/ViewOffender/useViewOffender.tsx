@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import type {
+  ViewOffenderQuery,
+  ViewOffenderQueryVariables,
+} from 'graphql/generated';
 import {
   Role,
   useAddImagesToOffenderMutation,
@@ -9,13 +13,11 @@ import {
   useUpdateUpdateMutation,
   useViewOffenderQuery,
   ViewOffenderDocument,
-  ViewOffenderQuery,
-  ViewOffenderQueryVariables,
 } from 'graphql/generated';
 
 import { Modal, notification } from 'antd';
 import { useStoreState } from 'state';
-import { ItemType } from 'antd/lib/menu/hooks/useItems';
+import type { ItemType } from 'antd/lib/menu/hooks/useItems';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPeople, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { useNavigate } from 'react-router';
@@ -83,8 +85,8 @@ interface Return {
 
 const useViewOffender = (offenderId: string): Return => {
   const navigate = useNavigate();
-
   const role = useStoreState((state) => state.user.role);
+  const groups = useStoreState((state) => state.user.groups);
   const userId = useStoreState((state) => state.user.id);
   const [saving, setSaving] = useState(false);
   const [optionRowShow, setOptionRowShow] = useState(false);
@@ -102,7 +104,7 @@ const useViewOffender = (offenderId: string): Return => {
   const openLightbox = (index: number) => {
     setLightBoxOpen({ open: !lightBoxOpen.open, index });
   };
-
+  const groupsId = groups.map((group) => group.id);
   const [loadMore, setLoadMore] = useState(false);
   const [replyTo, setReplyTo] = useState<{
     id: string;
@@ -129,6 +131,12 @@ const useViewOffender = (offenderId: string): Return => {
     variables: {
       where: {
         id: offenderId,
+      },
+      banWhere: {
+        groups:
+          role === Role.User || role === Role.ContentAdmin
+            ? { some: { id: { in: groupsId } } }
+            : undefined,
       },
     },
     onCompleted: (res) => {
@@ -314,11 +322,9 @@ const useViewOffender = (offenderId: string): Return => {
                 data: {
                   offender: {
                     ...oldData.offender,
-                    updates: [
-                      ...oldData.offender.updates.filter(
-                        (item) => item.id !== result.data?.deleteUpdate?.id
-                      ),
-                    ],
+                    updates: oldData.offender.updates.filter(
+                      (item) => item.id !== result.data?.deleteUpdate?.id
+                    ),
                   },
                 },
               });

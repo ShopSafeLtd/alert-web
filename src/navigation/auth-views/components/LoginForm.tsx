@@ -2,21 +2,23 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect } from 'react';
-import { Button, Form, Input, Divider, Alert } from 'antd';
-import { MailOutlined, LockOutlined } from '@ant-design/icons';
-import { GoogleSVG, FacebookSVG } from 'assets/svg/icon';
+import { Alert, Button, Divider, Form, Input } from 'antd';
+import { LockOutlined, MailOutlined } from '@ant-design/icons';
+import { FacebookSVG, GoogleSVG } from 'assets/svg/icon';
 import CustomIcon from 'components/util-components/AntD/CustomIcon';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useStoreState, useStoreActions } from 'state';
+import { useStoreActions, useStoreState } from 'state';
 import { AUTH_PREFIX_PATH } from 'configs/AppConfig';
 
 export interface Props {
   otherSignIn?: boolean;
   showForgetPassword?: boolean;
-  onForgetPasswordClick?(): void;
   extra?: any;
   allowRedirect: boolean;
+
+  // eslint-disable-next-line react/no-unused-prop-types
+  onForgetPasswordClick?(): void;
 }
 
 export const LoginForm = (props: Props): JSX.Element => {

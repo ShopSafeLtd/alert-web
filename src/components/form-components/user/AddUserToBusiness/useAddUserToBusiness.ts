@@ -1,8 +1,10 @@
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
-import {
+import type {
   AddUsersToBusinessMutation,
   ListSchemeUsersQuery,
+} from 'graphql/generated';
+import {
   SortOrder,
   useAddUsersToBusinessMutation,
   useListSchemeUsersQuery,

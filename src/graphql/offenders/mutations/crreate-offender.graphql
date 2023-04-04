@@ -36,6 +36,7 @@ mutation createOffender($data: CreateOffenderData!) {
       description
       startDate
       endDate
+      type
     }
     createdBy {
       id

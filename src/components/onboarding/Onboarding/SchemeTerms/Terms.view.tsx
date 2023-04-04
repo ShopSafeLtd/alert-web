@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Card,
@@ -6,11 +6,19 @@ import {
   Col,
   Form,
   Row,
+  Select,
   Space,
+  Tabs,
   Typography,
+  Upload,
 } from 'antd';
 import { Link } from 'react-router-dom';
+import ReactDOMServer from 'react-dom/server';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFileUpload } from '@fortawesome/pro-light-svg-icons';
 import SignatureInput from '../../../SignBox';
+import FONT_FAMILIES from './utils/Fonts';
+import SigSeal from './SigSeal';
 
 const { Text, Title } = Typography;
 
@@ -21,6 +29,7 @@ interface Props {
   setCurrent: (value: number) => void;
   content: string;
   updateBox: () => void;
+  name: string;
 }
 
 const SchemeTerms = ({
@@ -30,7 +39,15 @@ const SchemeTerms = ({
   setCurrent,
   content,
   updateBox,
+  name,
 }: Props): JSX.Element => {
+  const [selectedFont, setSelectedFont] = useState(FONT_FAMILIES[0]);
+  const [sign, setSign] = useState('');
+  const [tab, setTab] = useState('generate');
+  const [file, setFile] = useState<{
+    file: string;
+    name: string;
+  } | null>(null);
   setCurrent(2);
 
   return (
@@ -90,13 +107,187 @@ const SchemeTerms = ({
             <Form.Item
               name="termsSignature"
               rules={[
-                {
-                  required: true,
-                  message: 'Please sign the terms',
-                },
+                () => ({
+                  validator() {
+                    if (tab === 'generate') {
+                      if (selectedFont) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(
+                        new Error('Please select a signature!')
+                      );
+                    }
+                    if (tab === 'upload') {
+                      if (file) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(
+                        new Error('Please upload a signature!')
+                      );
+                    }
+                    if (tab === 'draw') {
+                      if (sign) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(new Error('Please sign!'));
+                    }
+                    return Promise.reject(
+                      new Error('Please select/enter a signature!')
+                    );
+                  },
+                }),
               ]}
             >
-              <SignatureInput hidden={false} onChange={update} />
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <Card style={{ width: '100%', display: 'flex' }}>
+                  <Tabs
+                    activeKey={tab}
+                    onChange={(tabKey) => {
+                      setTab(tabKey);
+                      if (tabKey === 'upload' && file?.file) {
+                        setSign('');
+
+                        update(
+                          ReactDOMServer.renderToString(
+                            <img
+                              src={`data:application/pdf;base64,${file?.file}`}
+                              alt="file"
+                              height={100}
+                              width={300}
+                            />
+                          )
+                        );
+                      }
+                      if (tabKey === 'generate') {
+                        setSign('');
+                        update(
+                          ReactDOMServer.renderToString(
+                            <SigSeal
+                              key={selectedFont}
+                              name={name}
+                              font={selectedFont}
+                              height={100}
+                              width={300}
+                            />
+                          )
+                        );
+                      }
+                      if (tabKey === 'draw') {
+                        update('');
+                      }
+                    }}
+                    type="card"
+                    style={{ height: 250, width: 500 }}
+                    destroyInactiveTabPane
+                  >
+                    <Tabs.TabPane tab="Generate" key="generate">
+                      <Select
+                        style={{
+                          fontFamily: selectedFont,
+                          marginBottom: 20,
+                        }}
+                        defaultValue={selectedFont}
+                        onChange={(value) => {
+                          setSelectedFont(value);
+                          update(
+                            ReactDOMServer.renderToString(
+                              <SigSeal
+                                key={selectedFont}
+                                name={name}
+                                font={selectedFont}
+                                height={100}
+                                width={300}
+                              />
+                            )
+                          );
+                        }}
+                      >
+                        {FONT_FAMILIES.map((font) => (
+                          <Select.Option
+                            key={font}
+                            value={font}
+                            style={{
+                              fontFamily: font,
+                            }}
+                          >
+                            {name}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                      <SigSeal
+                        key={selectedFont}
+                        name={name}
+                        font={selectedFont}
+                        height={100}
+                        width={300}
+                      />
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="Upload" key="upload">
+                      <>
+                        <Upload
+                          showUploadList={false}
+                          beforeUpload={(f) => {
+                            const reader = new FileReader();
+                            reader.addEventListener('load', (e) => {
+                              if (e.target) {
+                                const base64File = e.target.result;
+                                if (typeof base64File === 'string') {
+                                  const base64result = base64File.split(',')[1];
+
+                                  setFile({
+                                    file: base64result,
+                                    name: f.name,
+                                  });
+                                  update(
+                                    ReactDOMServer.renderToString(
+                                      <img
+                                        src={`data:application/pdf;base64,${base64result}`}
+                                        alt="file"
+                                        height={100}
+                                        width={300}
+                                      />
+                                    )
+                                  );
+                                }
+                              }
+                            });
+                            reader.readAsDataURL(f);
+                            // Prevent upload
+                            return false;
+                          }}
+                        >
+                          <Button key="uploadButton" type="primary">
+                            <FontAwesomeIcon
+                              icon={faFileUpload}
+                              style={{ fontSize: 16, marginRight: '10px' }}
+                            />
+                            Upload
+                          </Button>
+                        </Upload>
+                        {file && (
+                          <div style={{ paddingTop: 10, paddingLeft: 10 }}>
+                            <img
+                              src={`data:application/pdf;base64,${file.file}`}
+                              alt="file"
+                              height={100}
+                              width={300}
+                            />
+                          </div>
+                        )}
+                      </>
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="Draw" key="draw">
+                      <SignatureInput
+                        hidden={false}
+                        onChange={(val: string) => {
+                          update(val);
+                          setSign(val);
+                        }}
+                      />
+                    </Tabs.TabPane>
+                  </Tabs>
+                </Card>
+              </div>
             </Form.Item>
           </Col>
         </Row>

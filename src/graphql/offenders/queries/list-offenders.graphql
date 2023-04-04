@@ -1,91 +1,92 @@
 query listOffenders(
-  $scheme: SchemeWhereUniqueInput!
-  $where: OffenderWhereInput
-  $order: OffenderOrderByWithRelationInput
-  $take: Int
-  $skip: Int
+    $scheme: SchemeWhereUniqueInput!
+    $where: OffenderWhereInput
+    $order: OffenderOrderByWithRelationInput
+    $take: Int
+    $skip: Int
 ) {
-  listOffenders(
-    scheme: $scheme
-    where: $where
-    order: $order
-    take: $take
-    skip: $skip
-  ) {
-    offenders {
-      id
-      createdAt
-      updatedAt
-      totalIncidents
-      reference
-      age
-      build
-      dateOfBirth
-      dateSource
-      hair
-      gender
-      name
-      race
-      peculiarities
-      approved
-      active
-      lastActive {
-        id
-        dayTime
-      }
-      tags {
-        id
-        name
-      }
-      images {
-        id
-        optimised
-      }
-      groups {
-        id
-        name
-      }
-      tags {
-        id
-        name
-      }
-      createdBy {
-        id
-        fullName
-        businesses {
-          id
-          name
-        }
-      }
-      incidents {
-        id
-        subject
-        description
-        dayTime
-        date
-        crimeTypes {
-          id
-          name
-        }
-        approved
-        location {
-          id
-          full
-        }
-        createdBy {
-          id
-          fullName
-          businesses {
+    listOffenders(
+        scheme: $scheme
+        where: $where
+        order: $order
+        take: $take
+        skip: $skip
+    ) {
+        offenders {
             id
+            createdAt
+            updatedAt
+            totalIncidents
+            reference
+            age
+            build
+            dateOfBirth
+            dateSource
+            hair
+            gender
             name
-          }
+            race
+            peculiarities
+            approved
+            active
+            lastActive {
+                id
+                dayTime
+            }
+            tags {
+                id
+                name
+            }
+            images {
+                id
+                optimised
+                optimisedPersisted
+            }
+            groups {
+                id
+                name
+            }
+            tags {
+                id
+                name
+            }
+            createdBy {
+                id
+                fullName
+                businesses {
+                    id
+                    name
+                }
+            }
+            incidents {
+                id
+                subject
+                description
+                dayTime
+                date
+                crimeTypes {
+                    id
+                    name
+                }
+                approved
+                location {
+                    id
+                    full
+                }
+                createdBy {
+                    id
+                    fullName
+                    businesses {
+                        id
+                        name
+                    }
+                }
+                images {
+                    id
+                    optimised
+                }
+            }
         }
-        images {
-          id
-          optimised
-        }
-      }
+        total
     }
-    total
-  }
 }

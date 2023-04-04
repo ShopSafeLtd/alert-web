@@ -1,11 +1,6 @@
 import { useState } from 'react';
-import {
-  Age,
-  Gender,
-  Race,
-  Build,
-  useUpdateCrimeGroupMutation,
-} from 'graphql/generated';
+import type { Age, Gender, Race, Build } from 'graphql/generated';
+import { useUpdateCrimeGroupMutation } from 'graphql/generated';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import { message, notification, Upload } from 'antd';
 import { useParams } from 'react-router';

@@ -1,10 +1,11 @@
 import React from 'react';
-import { Role, SchemeGroupsQuery, SchemeChatsQuery } from 'graphql/generated';
+import type { SchemeGroupsQuery, SchemeChatsQuery } from 'graphql/generated';
+import { Role } from 'graphql/generated';
+import type { FormInstance } from 'antd';
 import {
   Button,
   Col,
   Form,
-  FormInstance,
   Input,
   Row,
   Select,
@@ -32,6 +33,7 @@ interface FormData {
   messagePush: boolean;
   offenderEmail: boolean;
   offenderPush: boolean;
+  publicName: boolean;
 }
 
 interface Props {
@@ -240,6 +242,23 @@ const AddUser = ({
         </Form.Item>
       </Col>
     </Row>
+
+    <Form.Item
+      label="Show user name in the system"
+      name="publicName"
+      valuePropName="checked"
+      style={{
+        marginBottom: 0,
+        flexDirection: 'row',
+        justifyItems: 'center',
+      }}
+    >
+      <Switch
+        disabled={saving}
+        style={{ marginLeft: 10, marginTop: -22 }}
+        className="scheme-detail-switch"
+      />
+    </Form.Item>
 
     <Title level={4} style={{ marginBottom: 15 }}>
       Notification Settings:

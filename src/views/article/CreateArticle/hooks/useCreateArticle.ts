@@ -1,11 +1,12 @@
-import { useRef, useState } from 'react';
-import { Form, SelectProps, UploadProps } from 'antd';
+import { useEffect, useRef, useState } from 'react';
+import type { SelectProps, UploadProps } from 'antd';
+import { Form } from 'antd';
 import type { Editor } from 'tinymce';
-import { UploadFile } from 'antd/es/upload/interface';
+import type { UploadFile } from 'antd/es/upload/interface';
 import { useNavigate } from 'react-router';
-import type { FormData, Props } from '../types/CreateArticle';
+import type { Props } from '../types/CreateArticle';
+import type { ArticlePriority } from '../../../../graphql/generated';
 import {
-  ArticlePriority,
   Model,
   useCreateArticleMutation,
   useCreateTagMutation,
@@ -13,10 +14,20 @@ import {
   useTagsQuery,
 } from '../../../../graphql/generated';
 import { useStoreState } from '../../../../state';
-import { OffenderData } from '../../../../components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
-import { Incident } from '../../../../components/form-components/LinkOptions/LinkIncident/LinkIncident.container';
+import type { OffenderData } from '../../../../components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
+import type { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/LinkIncident.container';
 
 const { useForm } = Form;
+
+interface FormData {
+  title: string;
+  content: string;
+  groups: string[];
+  categories: string[];
+  importance: 'Important' | 'Normal';
+}
+
+export type { FormData };
 
 const useCreateArticle = (): Props => {
   const siteUrl = `${window.location.href.split('/app/')[0]}/app/`;
@@ -49,6 +60,9 @@ const useCreateArticle = (): Props => {
   const [selectedCategories, setSelectedCategories] = useState<
     { value: string }[]
   >([]);
+  useEffect(() => {
+    console.log('imageList', imageList);
+  }, [imageList]);
 
   const navigate = useNavigate();
   const { loading: groupsLoading } = useSchemeGroupsQuery({
@@ -120,11 +134,14 @@ const useCreateArticle = (): Props => {
 
   const categoriesChange = (values: { value: string }[]) => {
     const formattedValues: string[] = [];
-    values.forEach((value) => {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const value of values) {
       const found = categories?.find(
         (category) => category.value === value.value
       );
-      if (!found) {
+      if (found) {
+        formattedValues.push(value.value);
+      } else {
         createTag({
           variables: {
             data: {
@@ -146,10 +163,8 @@ const useCreateArticle = (): Props => {
         }).then((result) => {
           formattedValues.push(result.data?.createTag?.name || '');
         });
-      } else {
-        formattedValues.push(value.value);
       }
-    });
+    }
 
     setSelectedCategories(formattedValues.map((value) => ({ value })));
   };
@@ -173,7 +188,7 @@ const useCreateArticle = (): Props => {
       // }
       // console.log(doc.body.innerHTML);
       const images = doc.body.querySelectorAll('img');
-      const imageSrcs = Array.from(images).map((image) => image.src);
+      const imageSrcs = [...images].map((image) => image.src);
 
       // remove all new lines from innerHTML
       doc.body.innerHTML = doc.body.innerHTML.replace(/&nbsp;/g, '');
@@ -182,7 +197,7 @@ const useCreateArticle = (): Props => {
       doc.body.innerText = doc.body.innerText.replace(/(\r\n|\n|\r)/gm, '');
       const innerText =
         doc.body.innerText.length > 120
-          ? `${doc.body.innerText.substring(0, 120)}...`
+          ? `${doc.body.innerText.slice(0, 120)}...`
           : doc.body.innerText;
 
       setPreviewText(innerText);
@@ -209,11 +224,11 @@ const useCreateArticle = (): Props => {
       xhr.withCredentials = false;
       xhr.open('POST', import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT);
 
-      xhr.upload.onprogress = (e) => {
+      xhr.upload.addEventListener('progress', (e) => {
         progress((e.loaded / e.total) * 100);
-      };
+      });
 
-      xhr.onload = () => {
+      xhr.addEventListener('load', () => {
         if (xhr.status === 403) {
           // eslint-disable-next-line prefer-promise-reject-errors
           reject({ message: `HTTP Error: ${xhr.status}`, remove: true });
@@ -231,9 +246,8 @@ const useCreateArticle = (): Props => {
           return;
         }
         setImageList([...imageList, json]);
-
         resolve(json.url);
-      };
+      });
 
       xhr.onerror = () => {
         reject(
@@ -254,7 +268,54 @@ const useCreateArticle = (): Props => {
       editorRef.current.execCommand('mcePreview');
     }
   };
+  const upload = ({
+    blob,
+    fileName,
+  }: {
+    blob: Blob;
+    fileName: string;
+  }): Promise<string> =>
+    new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.withCredentials = false;
+      xhr.open('POST', import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT);
 
+      xhr.addEventListener('load', () => {
+        if (xhr.status === 403) {
+          // eslint-disable-next-line prefer-promise-reject-errors
+          reject({ message: `HTTP Error: ${xhr.status}`, remove: true });
+          return;
+        }
+
+        if (xhr.status < 200 || xhr.status >= 300) {
+          reject(new Error(`HTTP Error: ${xhr.status}`));
+          return;
+        }
+        const json = JSON.parse(xhr.responseText)[0];
+
+        setImageList([...imageList, json]);
+
+        if (!json || typeof json.url !== 'string') {
+          reject(new Error(`Invalid JSON: ${xhr.responseText}`));
+          return;
+        }
+
+        resolve(json.url);
+      });
+
+      xhr.onerror = () => {
+        reject(
+          new Error(
+            `Image upload failed due to a XHR Transport error. Code: ${xhr.status}`
+          )
+        );
+      };
+
+      const formData = new FormData();
+      formData.append('file', blob, fileName);
+
+      xhr.send(formData);
+    });
   const filePickerCallback = (
     callback: (arg0: string, arg1: { title: string }) => void,
     value: string,
@@ -264,59 +325,13 @@ const useCreateArticle = (): Props => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*,.pdf');
-    input.onchange = () => {
+    input.addEventListener('change', () => {
       if (input.files === null) return;
       const file = input.files[0];
-      const upload = ({
-        blob,
-        fileName,
-      }: {
-        blob: Blob;
-        fileName: string;
-      }): Promise<string> =>
-        new Promise((resolve, reject) => {
-          const xhr = new XMLHttpRequest();
-          xhr.withCredentials = false;
-          xhr.open('POST', import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT);
-
-          xhr.onload = () => {
-            if (xhr.status === 403) {
-              // eslint-disable-next-line prefer-promise-reject-errors
-              reject({ message: `HTTP Error: ${xhr.status}`, remove: true });
-              return;
-            }
-
-            if (xhr.status < 200 || xhr.status >= 300) {
-              reject(new Error(`HTTP Error: ${xhr.status}`));
-              return;
-            }
-            const json = JSON.parse(xhr.responseText)[0];
-
-            if (!json || typeof json.url !== 'string') {
-              reject(new Error(`Invalid JSON: ${xhr.responseText}`));
-              return;
-            }
-
-            resolve(json.url);
-          };
-
-          xhr.onerror = () => {
-            reject(
-              new Error(
-                `Image upload failed due to a XHR Transport error. Code: ${xhr.status}`
-              )
-            );
-          };
-
-          const formData = new FormData();
-          formData.append('file', blob, fileName);
-
-          xhr.send(formData);
-        });
 
       const reader = new FileReader();
-      reader.onload = () => {
-        const id = `blobid${new Date().getTime()}`;
+      reader.addEventListener('load', () => {
+        const id = `blobid${Date.now()}`;
 
         // eslint-disable-next-line
         const { blobCache } = (window as any).tinymce.activeEditor.editorUpload;
@@ -334,14 +349,22 @@ const useCreateArticle = (): Props => {
                 uid: id,
               } as UploadFile);
             }
+            if (meta.filetype === 'image') {
+              imageList.push({
+                ...file,
+                url,
+                name: file.name,
+                uid: id,
+              } as UploadFile);
+            }
             callback(url, { title: file.name });
           }
         );
         // blobCache.add(blobInfo);
         // callback(blobInfo.blobUri(), { title: file.name });
-      };
+      });
       reader.readAsDataURL(file);
-    };
+    });
 
     input.click();
     // /* Provide file and text for the link dialog */
@@ -388,13 +411,12 @@ const useCreateArticle = (): Props => {
       .getFieldValue('importance')
       .toString()
       .toUpperCase() as ArticlePriority;
-    const { img, text } = log();
-    const previewImageFile = imageList?.filter(({ url }) => url === img);
-    console.log('articleImage', {
-      filename: previewImageFile[0].fileName || '',
-      mimetype: previewImageFile[0].type || '',
-      url: previewImageFile[0].url || '',
-    });
+    const { img, text, imgSrc } = log();
+    // const previewImageFile = imageList?.filter(({ url }) => url === img);
+    const articleImages = imageList?.filter(({ url }) =>
+      imgSrc.includes(url || '')
+    );
+
     await submitArticle({
       variables: {
         data: {
@@ -416,18 +438,30 @@ const useCreateArticle = (): Props => {
           incidents: incidents.map((incident) => incident.incident.id),
           offenders: offenders.map((offender) => offender.id),
           images: {
-            upload: previewImageFile
-              ? [
-                  {
+            upload:
+              articleImages && articleImages.length > 0
+                ? articleImages.map((item) => ({
                     url: {
-                      filename: previewImageFile[0].fileName || '',
-                      mimetype: previewImageFile[0].type || '',
-                      url: previewImageFile[0].url || '',
+                      filename: item.fileName || '',
+                      mimetype: item.type || '',
+                      url: item.url || '',
                     },
-                  },
-                ]
-              : undefined,
+                  }))
+                : undefined,
           },
+          // images: {
+          //   upload: previewImageFile
+          //     ? [
+          //         {
+          //           url: {
+          //             filename: previewImageFile[0].fileName || '',
+          //             mimetype: previewImageFile[0].type || '',
+          //             url: previewImageFile[0].url || '',
+          //           },
+          //         },
+          //       ]
+          //     : undefined,
+          // },
         },
       },
     }).then((res) => {

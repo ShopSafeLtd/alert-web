@@ -1,13 +1,14 @@
 import React from 'react';
-import {
+import type {
   AddressesQuery,
   CreateTagMutation,
   ListGoodsTypesQuery,
   ListOffendersQuery,
-  TagType,
 } from 'graphql/generated';
-import { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
+import { TagType } from 'graphql/generated';
+import type { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
 
+import type { FormInstance } from 'antd';
 import {
   Button,
   Card,
@@ -15,7 +16,6 @@ import {
   DatePicker,
   Drawer,
   Form,
-  FormInstance,
   Input,
   InputNumber,
   PageHeader,
@@ -25,11 +25,11 @@ import {
   Typography,
 } from 'antd';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import AddIncidentTag from 'components/form-components/tags/crimeTypes/AddCrimeType';
 import moment from 'moment';
 import AssignImageOffender from 'components/form-components/incident/image/AssignImageOffenders';
-import { UploadChangeParam } from 'antd/lib/upload';
+import type { UploadChangeParam } from 'antd/lib/upload';
 import IncidentDetails from 'components/incidents/IncidentForm/IncidentDetails';
 import Profiles from 'components/incidents/IncidentForm/Profiles';
 import ImageSection from 'components/incidents/IncidentForm/ImageSection';

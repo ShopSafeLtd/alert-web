@@ -78,6 +78,11 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       totalIncidents
       totalOffenders
       updatedAt
+      images {
+        id
+        url
+        optimised
+      }
     }
     offenders {
       id
@@ -129,6 +134,11 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
         updatedAt
       }
       linkedVehicles {
+        images {
+          id
+          url
+          optimised
+        }
         updatedAt
         totalOffenders
         registration
@@ -137,6 +147,11 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
         make
         id
         colour
+        images {
+          id
+          url
+          optimised
+        }
       }
       linkedIncidents {
         id
@@ -165,6 +180,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
         }
       }
       createdBy {
+        origName
         id
         fullName
         businesses {
@@ -195,6 +211,11 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
           updatedAt
         }
         linkedVehicles {
+          images {
+            id
+            url
+            optimised
+          }
           updatedAt
           totalOffenders
           registration
@@ -203,6 +224,11 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
           make
           id
           colour
+          images {
+            id
+            url
+            optimised
+          }
         }
         linkedIncidents {
           id
@@ -231,6 +257,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
           }
         }
         createdBy {
+          origName
           id
           fullName
           businesses {

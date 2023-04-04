@@ -11,16 +11,18 @@ import {
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faUpload, faUsers } from '@fortawesome/pro-light-svg-icons';
-import { UploadProps, RcFile, UploadFile } from 'antd/es/upload/interface';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 
 const { Title, Paragraph, Text } = Typography;
+
 interface Image extends UploadFile {
   offenders?: {
     id: string;
     name?: string | undefined | null;
   }[];
 }
+
 interface Props {
   titleOrder: number;
   imgChange: UploadProps['onChange'];
@@ -94,6 +96,8 @@ const ImageSection = ({
           onChange={imgChange}
           beforeUpload={beforeUpload}
           accept=".png,.jpeg,.webp"
+          // TODO
+          // eslint-disable-next-line react/no-unstable-nested-components
           itemRender={(el, file: Image) => (
             <div className="image-card" key={el.key}>
               {file.url === undefined && (

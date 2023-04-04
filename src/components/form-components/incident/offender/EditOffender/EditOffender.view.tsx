@@ -1,6 +1,7 @@
 import React from 'react';
-import { CreateTagMutation, ViewOffenderQuery } from 'graphql/generated';
+import type { CreateTagMutation, ViewOffenderQuery } from 'graphql/generated';
 
+import type { FormInstance } from 'antd';
 import {
   Button,
   Col,
@@ -8,7 +9,6 @@ import {
   Drawer,
   Empty,
   Form,
-  FormInstance,
   Input,
   Row,
   Select,
@@ -26,7 +26,7 @@ import {
   calcDuration,
   calcExpired,
 } from 'utils/offender/get-offender-exclusion';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import AddExclusion from 'components/form-components/offender/exclusion/AddExclusion';
 import EditExclusion from 'components/form-components/offender/exclusion/EditExclusion';
 
@@ -40,7 +40,7 @@ import {
   faUpload,
 } from '@fortawesome/pro-light-svg-icons';
 import moment from 'moment';
-import { FormData } from './useEditOffender';
+import type { FormData } from './useEditOffender';
 
 const { Title, Text, Paragraph } = Typography;
 

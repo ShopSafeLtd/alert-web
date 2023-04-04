@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { Grid, Drawer } from 'antd';
 import utils from 'utils';
 import { MenuOutlined } from '@ant-design/icons';
-import CSS from 'csstype';
+import type CSS from 'csstype';
 
 const { useBreakpoint } = Grid;
 
@@ -94,7 +94,7 @@ export const InnerAppLayout = (props: InnerAppLayoutProps): JSX.Element => {
         {isMobile ? (
           <div
             className={`font-size-lg mb-3 ${
-              !sideContentGutter ? 'pt-3 px-3' : ''
+              sideContentGutter ? '' : 'pt-3 px-3'
             }`}
           >
             <MenuOutlined onClick={() => openSideContentMobile()} />

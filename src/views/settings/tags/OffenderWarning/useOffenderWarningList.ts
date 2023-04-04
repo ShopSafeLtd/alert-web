@@ -1,16 +1,18 @@
 import { useState } from 'react';
+import type {
+  TagsQuery,
+  CreateTagMutation,
+  DeleteTagMutation,
+} from 'graphql/generated';
 import {
   QueryMode,
   useTagsQuery,
-  TagsQuery,
   TagsDocument,
-  CreateTagMutation,
   useDeleteTagMutation,
   Model,
-  DeleteTagMutation,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import { notification, Modal } from 'antd';
 
 const { confirm } = Modal;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CurrentUserQuery } from 'graphql/generated';
+import type { CurrentUserQuery } from 'graphql/generated';
 import { Button, Card, Typography, Form, Row, Col, Input, Switch } from 'antd';
 
 const { Title, Text } = Typography;

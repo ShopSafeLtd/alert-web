@@ -1,6 +1,7 @@
 import React from 'react';
 import View from './EditOffender.view';
-import useEditOffender, { OffenderData } from './useEditOffender';
+import type { OffenderData } from './useEditOffender';
+import useEditOffender from './useEditOffender';
 
 interface Props {
   id: string;
@@ -8,7 +9,7 @@ interface Props {
   update: (value: OffenderData) => void;
 }
 
-function EditOffender({ id, onClose, update }: Props): JSX.Element {
+const EditOffender = ({ id, onClose, update }: Props): JSX.Element => {
   const offenderId = id;
   const {
     onSubmit,
@@ -79,6 +80,6 @@ function EditOffender({ id, onClose, update }: Props): JSX.Element {
       />
     </div>
   );
-}
+};
 
 export default EditOffender;

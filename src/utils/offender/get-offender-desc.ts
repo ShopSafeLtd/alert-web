@@ -1,11 +1,5 @@
-import {
-  Age,
-  Build,
-  Gender,
-  IdSource,
-  Incident,
-  Race,
-} from 'graphql/generated';
+import type { Incident } from 'graphql/generated';
+import { Age, Build, Gender, IdSource, Race } from 'graphql/generated';
 
 export const getOffenderGender = (
   gender: Gender | undefined | null
@@ -95,12 +89,12 @@ export const getLastOffence = (
     const location = incidents[0]?.createdBy.businesses[0]?.name;
 
     const now = Date.now();
-
+    const text = `, reported by ${location}`;
     // eslint-disable-next-line consistent-return
     return {
       message: `${((now - incident) / 1000 / 60 / 60 / 24).toFixed(
         0
-      )} days ago${short ? '' : `, reported by ${location}`}`,
+      )} days ago${short ? '' : text}`,
       id: incidents[0].id,
     };
   }

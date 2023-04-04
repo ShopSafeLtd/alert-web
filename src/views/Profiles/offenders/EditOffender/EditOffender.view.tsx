@@ -1,11 +1,12 @@
 import React from 'react';
-import {
+import type {
   CreateTagMutation,
   ListCrimeGroupsQuery,
   ListVehiclesQuery,
   ViewOffenderQuery,
 } from 'graphql/generated';
 
+import type { FormInstance } from 'antd';
 import {
   Button,
   Card,
@@ -13,7 +14,6 @@ import {
   Drawer,
   Empty,
   Form,
-  FormInstance,
   PageHeader,
   Popconfirm,
   Row,
@@ -31,7 +31,7 @@ import {
   calcDuration,
   calcExpired,
 } from 'utils/offender/get-offender-exclusion';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import AddExclusion from 'components/form-components/offender/exclusion/AddExclusion';
 import EditExclusion from 'components/form-components/offender/exclusion/EditExclusion';
 
@@ -45,12 +45,12 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import moment from 'moment';
 import OffenderDetails from 'components/offenders/OffenderForm/OffenderDetails';
-import { CrimeGroupData, VehicleData } from 'types/DataType';
+import type { BanData, CrimeGroupData, VehicleData } from 'types/DataType';
 import Profiles from 'components/offenders/OffenderForm/Profiles';
 import ProfileDrawer from 'components/offenders/OffenderForm/ProfileDrawer';
 import NewOffenderAddress from 'components/form-components/addresses/NewOffenderAddress';
 import EditOffenderAddress from 'components/form-components/addresses/EditOffenderAddress';
-import { FormData } from './useEditOffender';
+import type { FormData } from './useEditOffender';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -83,23 +83,20 @@ interface EditAddressForm {
   postcode: string;
 }
 
-interface BanType {
-  id: string;
-  endDate: Date;
-  startDate: Date;
-  location: string;
-  description?: string | null;
+// interface BanType {
+//   id: string;
+//   endDate: Date;
+//   startDate: Date;
+//   location: string;
+//   description?: string | null;
+//   new: boolean;
+//   updated: boolean;
+//   deleted: boolean;
+// }
+interface BanType extends BanData {
   new: boolean;
   updated: boolean;
   deleted: boolean;
-}
-
-interface BanPayloadType {
-  id: string;
-  endDate: Date;
-  startDate: Date;
-  location: string;
-  description?: string | null;
 }
 
 interface Props {
@@ -122,8 +119,8 @@ interface Props {
   addOffenderTag: boolean;
   toggleAddOffenderTag: () => void;
   updateOffenderTag: MutationUpdaterFn<CreateTagMutation>;
-  onUpdateExclusion: (value: BanPayloadType) => void;
-  onAddExclusion: (value: BanPayloadType) => void;
+  onUpdateExclusion: (value: BanData) => void;
+  onAddExclusion: (value: BanData) => void;
   setBanData: (value: BanType) => void;
   bansData: BanType[];
   banData: BanType | null;
@@ -508,6 +505,11 @@ const EditOffender = ({
                         ellipsis: true,
                       },
                       {
+                        key: 'type',
+                        title: 'Type',
+                        dataIndex: 'type',
+                      },
+                      {
                         key: 'Edit',
                         title: 'Edit',
                         width: 50,
@@ -554,6 +556,7 @@ const EditOffender = ({
                       ),
                       location: ban.location,
                       description: ban.description,
+                      type: ban.type,
                     }))}
                   />
                 </Col>

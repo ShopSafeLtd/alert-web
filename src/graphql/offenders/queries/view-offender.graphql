@@ -1,4 +1,7 @@
-query ViewOffender($where: OffenderWhereUniqueInput!) {
+query ViewOffender(
+  $where: OffenderWhereUniqueInput!
+  $banWhere: BanWhereInput
+) {
   offender(where: $where) {
     id
     createdAt
@@ -40,13 +43,14 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
       id
       name
     }
-    bans {
+    bans(orderBy: { startDate: desc }, where: $banWhere) {
       id
       title
       location
       description
       startDate
       endDate
+      type
     }
     crimeGroups {
       id
@@ -120,6 +124,11 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
         updatedAt
       }
       linkedVehicles {
+        images {
+          id
+          url
+          optimised
+        }
         updatedAt
         totalOffenders
         registration
@@ -156,6 +165,7 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
         }
       }
       createdBy {
+        origName
         id
         fullName
         businesses {
@@ -186,6 +196,11 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
           updatedAt
         }
         linkedVehicles {
+          images {
+            id
+            url
+            optimised
+          }
           updatedAt
           totalOffenders
           registration
@@ -222,6 +237,7 @@ query ViewOffender($where: OffenderWhereUniqueInput!) {
           }
         }
         createdBy {
+          origName
           id
           fullName
           businesses {

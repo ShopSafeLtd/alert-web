@@ -4,7 +4,7 @@ import { Card, Steps } from 'antd';
 import AccountDetail from 'components/onboarding/Onboarding/AccountDetail';
 import Terms from 'components/onboarding/Onboarding/Terms';
 import { Route, Routes } from 'react-router';
-import { CurrentSchemeTermsQuery } from '../../../graphql/generated';
+import type { CurrentSchemeTermsQuery } from '../../../graphql/generated';
 import SchemeTerms from '../../../components/onboarding/Onboarding/SchemeTerms';
 
 const { Step } = Steps;
@@ -24,6 +24,7 @@ interface Props {
   updateSchemeTermsSigned: (value: unknown) => void;
   loading: boolean;
   schemeTerms: CurrentSchemeTermsQuery | undefined;
+  name: string;
 }
 
 const Onboarding = ({
@@ -37,9 +38,10 @@ const Onboarding = ({
   loading,
   schemeTerms,
   updateSchemeTermsSigned,
+  name,
 }: Props): JSX.Element => (
   <div className="page-container">
-    <Card loading={loading} style={{ height: '100%' }}>
+    <Card loading={loading}>
       <Steps
         type="navigation"
         current={current}
@@ -93,6 +95,7 @@ const Onboarding = ({
               saving={saving}
               setCurrent={setCurrent}
               content={schemeTerms?.scheme?.currentTerms?.content || ''}
+              name={name}
             />
           }
         />

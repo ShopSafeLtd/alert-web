@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button, Col, Drawer, Row, Table } from 'antd';
-import {
+import type {
   CreateInvestigationMutation,
   ListInvestigationsQuery,
 } from 'graphql/generated';
 import { Link } from 'react-router-dom';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import useStyles from './ListInvestigations.styles';
 import AddInvestigation from '../../../components/form-components/Investigation/AddInvestigation';
 

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
 import { useNavigate } from 'react-router-dom';
+import type { SearchOffendersQuery } from 'graphql/generated';
 import {
   useSearchOffendersQuery,
   SortOrder,
-  SearchOffendersQuery,
   QueryMode,
 } from 'graphql/generated';
 

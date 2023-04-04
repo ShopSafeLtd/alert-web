@@ -1,11 +1,10 @@
 import React from 'react';
 import { Col, Row, Tag, Typography } from 'antd';
-import { ArticlePriority, FeedItemsQuery } from 'graphql/generated';
+import type { FeedItemsQuery } from 'graphql/generated';
+import { ArticlePriority } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/pro-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import { faUser } from '@fortawesome/pro-light-svg-icons';
-import moment from 'moment';
+import { faExclamationCircle, faUser } from '@fortawesome/pro-light-svg-icons';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 
 const { Title, Paragraph, Text } = Typography;
@@ -30,50 +29,40 @@ const ImageContainer = ({ src }: { src: string }) => (
 const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
   // const imagesRef = useRef<CarouselRef>(null);
 
-  const {
-    id,
-    title,
-    tags,
-    previewImage,
-    previewText,
-    priority,
-    createdBy,
-    updatedAt,
-  } = feedItem?.article || {};
+  const { id, title, tags, image, previewText, priority, createdBy } =
+    feedItem?.article || {};
 
   return (
     <Row gutter={15} wrap={false} key={id || ''}>
-      {previewImage ? (
+      {image ? (
         <Col>
-          <ImageContainer src={previewImage} />
+          <ImageContainer src={image.optimised || image.url || ''} />
         </Col>
       ) : null}
 
       <Link to={`/app/article/view/${id}`}>
         <Col flex={1}>
           <Title style={{ marginBottom: 2 }} level={4} ellipsis>
-            {title?.replace(/^\S/, (s) => s.toUpperCase())}
-
             {priority === ArticlePriority.High && (
               <FontAwesomeIcon
                 size="sm"
                 className="feedItem-card-icon"
-                icon={faStar}
-                style={{ marginLeft: 5 }}
+                icon={faExclamationCircle}
+                style={{ marginRight: 8 }}
               />
             )}
+            {title?.replace(/^\S/, (s) => s.toUpperCase())}
           </Title>
 
           <Row style={{ marginTop: 10 }}>
             <Col>
               <FontAwesomeIcon
                 size="sm"
+                style={{ marginRight: 5 }}
                 className="feedItem-card-icon"
                 icon={faUser}
               />
-              <Text type="secondary">
-                {createdBy?.fullName} - - {moment(updatedAt).calendar()}
-              </Text>
+              <Text type="secondary">{createdBy?.fullName}</Text>
             </Col>
           </Row>
           <Paragraph
@@ -84,7 +73,7 @@ const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
           >
             {previewText}
           </Paragraph>
-          {tags && tags.length ? (
+          {tags && tags.length > 0 ? (
             <Row wrap={false} style={{ overflowX: 'auto', marginTop: 10 }}>
               {tags.map((tag) => (
                 <Tag key={tag.id}>{tag.name}</Tag>

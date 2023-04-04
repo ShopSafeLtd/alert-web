@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
+import type { ListDemUsersQuery } from 'graphql/generated';
 import {
-  ListDemUsersQuery,
   useLinkUserToDemMutation,
   useListDemUsersQuery,
 } from 'graphql/generated';

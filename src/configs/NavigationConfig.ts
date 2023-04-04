@@ -177,6 +177,14 @@ const adminOnlyItems: NavItem[] = [
         submenu: [],
       },
       {
+        key: 'business engagement',
+        path: `${APP_PREFIX_PATH}/reports/business-engagement`,
+        title: 'Business Engagement',
+        icon: faBuilding,
+        breadcrumb: true,
+        submenu: [],
+      },
+      {
         key: 'incidentMap',
         path: `${APP_PREFIX_PATH}/reports/incident-map`,
         title: 'Incident Map',

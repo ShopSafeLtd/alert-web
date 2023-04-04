@@ -4,7 +4,6 @@ import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 import envCompatible from 'vite-plugin-env-compatible';
 // import checker from 'vite-plugin-checker';
-// import { EsLinter, linterPlugin, TypeScriptLinter } from 'vite-plugin-linter';
 import removeConsole from 'vite-plugin-remove-console';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 
@@ -19,7 +18,7 @@ const pathResolve = (pathStr: string) => {
 };
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command, mode }) => {
+export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
   return {
@@ -28,23 +27,8 @@ export default defineConfig(({ command, mode }) => {
       envCompatible(),
       viteTsconfigPaths(),
       svgrPlugin(),
-      removeConsole(),
       // will remove console from prod builds, remove if testing is needed on live
-      // linterPlugin({
-      //   include: ['./src/**/*.ts', './src/**/*.tsx'],
-      //   linters: [
-      //     new EsLinter({
-      //       configEnv: configEnv,
-      //       serveOptions: { clearCacheOnStart: true, useEslintrc: true },
-      //     }),
-      //     new TypeScriptLinter(),
-      //   ],
-      //
-      //   build: {
-      //     includeMode: 'filesInFolder',
-      //     disable: true,
-      //   },
-      // }),
+      removeConsole(),
       // checker({
       //   // checks for ts and eslint errors on dev, remove if not needed/any issues such as high memory usage
       //   typescript: true,
@@ -69,7 +53,7 @@ export default defineConfig(({ command, mode }) => {
     },
     resolve: {
       alias: [
-        // { find: '@', replacement: path.resolve(__dirname, 'src') },
+        { find: '@', replacement: path.resolve(__dirname, 'src') },
         // fix less import by: @import ~
         // https://github.com/vitejs/vite/issues/2185#issuecomment-784637827
         { find: /^~/, replacement: pathResolve('./node_modules') },

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
-import { useAddressesQuery, AddressesQuery } from 'graphql/generated';
+import type { AddressesQuery } from 'graphql/generated';
+import { useAddressesQuery } from 'graphql/generated';
 
 import { useStoreState } from 'state';
 

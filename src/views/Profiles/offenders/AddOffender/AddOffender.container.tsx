@@ -3,7 +3,7 @@ import View from './AddOffender.view';
 
 import useAddOffender from './useAddOffender';
 
-function AddOffender(): JSX.Element {
+const AddOffender = (): JSX.Element => {
   const {
     onSubmit,
     saving,
@@ -115,6 +115,6 @@ function AddOffender(): JSX.Element {
       />
     </div>
   );
-}
+};
 
 export default AddOffender;

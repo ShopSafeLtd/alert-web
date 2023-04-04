@@ -1,20 +1,22 @@
 import { useState } from 'react';
-import {
-  useCreateChatMutation,
+import type {
   CreateChatMutation,
   ListSchemeUsersQuery,
+} from 'graphql/generated';
+import {
+  useCreateChatMutation,
   useListSchemeUsersQuery,
   SortOrder,
 } from 'graphql/generated';
 
 import { useStoreState } from 'state';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
 
 interface FormData {
   name: string;
   description: string;
-  users?: string[];
+  users: string[];
 }
 interface Props {
   onClose: () => void;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Col, Row, Table, Typography } from 'antd';
-import { ListSchemeUsersQuery } from 'graphql/generated';
+import type { ListSchemeUsersQuery } from 'graphql/generated';
 
 interface Props {
   data: ListSchemeUsersQuery | undefined;

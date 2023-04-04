@@ -1,4 +1,5 @@
-import { Drawer, DrawerProps } from 'antd';
+import type { DrawerProps } from 'antd';
+import { Drawer } from 'antd';
 import React from 'react';
 
 /**

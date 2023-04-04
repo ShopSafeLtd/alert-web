@@ -1,18 +1,20 @@
 import { useState } from 'react';
+import type {
+  CreateVehicleMutation,
+  ListCrimeGroupsQuery,
+  ListIncidentsQuery,
+} from 'graphql/generated';
 import {
   useCreateVehicleMutation,
-  CreateVehicleMutation,
   useListCrimeGroupsQuery,
-  ListCrimeGroupsQuery,
   SortOrder,
   useListIncidentsQuery,
-  ListIncidentsQuery,
   Role,
 } from 'graphql/generated';
 import { message, notification, Upload } from 'antd';
 import { useStoreState } from 'state';
-import { MutationUpdaterFn } from '@apollo/client';
-import { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
+import type { MutationUpdaterFn } from '@apollo/client';
+import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 
 export interface VehicleData {
@@ -126,15 +128,15 @@ const useAddVehicle = ({ onClose, update }: Props): Return => {
           colour: data.colour || '',
           registration: data.registration || '',
           crimeGroup:
-            data?.crimeGroup && data.crimeGroup.length
+            data?.crimeGroup && data.crimeGroup.length > 0
               ? data?.crimeGroup?.map((id) => ({ id }))
               : [],
           incidents:
-            incidentsData && incidentsData.length
+            incidentsData && incidentsData.length > 0
               ? incidentsData.map(({ id }) => ({ id }))
               : [],
           offenders:
-            offendersData && offendersData.length
+            offendersData && offendersData.length > 0
               ? offendersData.map(({ id }) => ({ id }))
               : [],
           schemes: schemeId,

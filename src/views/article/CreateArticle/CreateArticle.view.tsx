@@ -17,9 +17,10 @@ import {
 } from 'antd';
 import { ArticlePriority } from 'graphql/generated';
 import { UploadOutlined } from '@ant-design/icons';
-import type { FormData, ViewProps } from './types/CreateArticle';
+import type { ViewProps } from './types/CreateArticle';
 import AddExistingOffender from '../../../components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
-import LinkIncident from '../../../components/form-components/LinkOptions/LinkIncident';
+import LinkIncident from '../../../components/form-components/linkOptions/LinkIncident';
+import type { FormData } from './hooks/useCreateArticle';
 
 const CreateArticleView = ({
   // log,
@@ -54,6 +55,7 @@ const CreateArticleView = ({
   removeIncident,
 }: ViewProps) => {
   const forms = {
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     null: <></>,
     addIncident: (
       <LinkIncident
@@ -268,6 +270,7 @@ const CreateArticleView = ({
                   file_picker_types: 'file, image, media',
                   file_picker_callback: filePickerCallback,
                   promotion: false,
+                  default_link_target: '_blank',
                   content_style:
                     'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
                 }}

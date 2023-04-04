@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import View from './ChatDetail.view';
 import useChatDetail from './useChatDetail';
 
-function ChatDetail(): JSX.Element {
+const ChatDetail = (): JSX.Element => {
   const chatId = useParams().id || '';
 
   const { data, loading, editChat, toggleEditChat, saving, deleteConfirm } =
@@ -20,6 +20,6 @@ function ChatDetail(): JSX.Element {
       />
     </div>
   );
-}
+};
 
 export default ChatDetail;

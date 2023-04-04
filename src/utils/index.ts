@@ -1,5 +1,5 @@
+/* eslint-disable */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-/* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { NavItem } from 'configs/NavigationConfig';
 
@@ -34,18 +34,23 @@ class Utils {
     if (!hex) {
       return 'dark';
     }
+
     function cutHex(h: string) {
       return h.charAt(0) === '#' ? h.substring(1, 7) : h;
     }
+
     function hexToR(h: string) {
       return parseInt(cutHex(h).substring(0, 2), 16);
     }
+
     function hexToG(h: string) {
       return parseInt(cutHex(h).substring(2, 4), 16);
     }
+
     function hexToB(h: string) {
       return parseInt(cutHex(h).substring(4, 6), 16);
     }
+
     const threshold = 130;
     const hRed = hexToR(hex);
     const hGreen = hexToG(hex);

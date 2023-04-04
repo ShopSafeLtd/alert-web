@@ -35,7 +35,8 @@ interface Props {
     images:
       | {
           id: string;
-          optimised: string;
+          optimised?: string;
+          optimisedPersisted?: string;
         }[]
       | null
       | undefined;
@@ -66,7 +67,9 @@ const OffenderCard = ({ offender }: Props): JSX.Element => {
           {offender?.images?.map((image) => (
             <div key={image.id}>
               <div className="offender-card-image">
-                <WatermarkImage url={image.optimised} />
+                <WatermarkImage
+                  url={image.optimisedPersisted ?? image.optimised}
+                />
               </div>
             </div>
           ))}

@@ -8,10 +8,14 @@ query ListSchemeUsers(
     id
     fullName
     firstLetter
+    origName
+    origFirstLetter
     email
+    publicName
     businesses {
       id
       name
+      fullName
     }
     status
     groups(where: $groupWhere) {

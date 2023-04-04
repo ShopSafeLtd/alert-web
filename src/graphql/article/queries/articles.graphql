@@ -10,9 +10,22 @@ query Articles(
       id
       name
     }
+    images {
+      id
+      url
+      optimised
+      card
+    }
+    image {
+      id
+      url
+      optimised
+      card
+    }
     createdBy {
       fullName
       businesses {
+        fullName
         id
         name
       }

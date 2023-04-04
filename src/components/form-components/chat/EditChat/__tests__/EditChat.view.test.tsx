@@ -14,7 +14,9 @@ describe('Detail Officer View', () => {
           user: {
             id: 'test userId',
             fullName: 'test user',
-            businesses: [{ name: 'user business', id: '' }],
+            publicName: true,
+            businesses: [{ name: 'user business', id: '', fullName: '' }],
+            origName: 'test user',
           },
         },
       ],
@@ -25,8 +27,10 @@ describe('Detail Officer View', () => {
       {
         id: 'userId',
         fullName: 'testUser',
+        origName: 'testUser',
         email: 'user email',
-        businesses: [{ name: 'user business', id: '' }],
+        publicName: true,
+        businesses: [{ name: 'user business', id: '', fullName: '' }],
         status: 'enabled',
         groups: [{ id: 'groupId', name: 'test group' }],
       },

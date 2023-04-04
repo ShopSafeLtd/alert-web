@@ -8,6 +8,8 @@ query ChatMessages($where: ChatMessagesWhereInput!, $take: Int, $skip: Int) {
     from {
       id
       fullName
+      origName
+      origFirstLetter
       firstLetter
     }
     sent

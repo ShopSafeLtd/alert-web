@@ -1,15 +1,6 @@
 import React from 'react';
-import {
-  Button,
-  Card,
-  Col,
-  Drawer,
-  Form,
-  Input,
-  Row,
-  Select,
-  SelectProps,
-} from 'antd';
+import type { SelectProps } from 'antd';
+import { Button, Card, Col, Drawer, Form, Input, Row, Select } from 'antd';
 import LinkDem from '../ImportEvidence';
 
 interface OnSubmitValues {

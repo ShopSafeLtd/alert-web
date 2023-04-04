@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button, Col, Form, Input, Row, Select } from 'antd';
-import { ListSchemeUsersQuery } from 'graphql/generated';
+import type { ListSchemeUsersQuery } from 'graphql/generated';
 
 interface FormData {
   name: string;
   description: string;
-  users?: string[];
+  users: string[];
 }
 
 interface Props {
@@ -49,7 +49,16 @@ const AddChat = ({
 
     <Row gutter={16}>
       <Col span={23}>
-        <Form.Item name="users" label="Users">
+        <Form.Item
+          name="users"
+          label="Users"
+          rules={[
+            {
+              required: true,
+              message: 'Please added at least one user for the new chat group.',
+            },
+          ]}
+        >
           <Select
             loading={usersLoading}
             disabled={saving}

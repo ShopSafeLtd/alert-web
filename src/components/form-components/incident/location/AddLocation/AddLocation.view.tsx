@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Form, Input, Row, Col, Typography } from 'antd';
-import { LocationData } from 'types/DataType';
+import type { LocationData } from 'types/DataType';
 
 interface Props {
   onClose: () => void;

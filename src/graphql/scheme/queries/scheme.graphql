@@ -1,27 +1,27 @@
 query scheme($where: SchemeWhereUniqueInput!) {
-    scheme(where: $where) {
-        id
-        name
-        autoApproveIncidents
-        autoApproveOffenders
-        defaultIncidentEmail
-        defaultIncidentPush
-        defaultSubscribedIncidentOnly
-        defaultSubscribedOffenderOnly
-        defaultMessagePush
-        defaultOffenderEmail
-        defaultOffenderPush
-        incidentRetention
-        offenderRetention
-        darkLogo {
-            id
-            url
-            optimised
-        }
-        logo {
-            id
-            url
-            optimised
-        }
+  scheme(where: $where) {
+    id
+    name
+    autoApproveIncidents
+    autoApproveOffenders
+    defaultIncidentEmail
+    defaultIncidentPush
+    defaultSubscribedIncidentOnly
+    defaultSubscribedOffenderOnly
+    defaultMessagePush
+    defaultOffenderEmail
+    defaultOffenderPush
+    incidentRetention
+    offenderRetention
+    darkLogo {
+      id
+      url
+      optimised
     }
+    logo {
+      id
+      url
+      optimised
+    }
+  }
 }

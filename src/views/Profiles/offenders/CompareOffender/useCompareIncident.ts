@@ -1,3 +1,4 @@
+import type { ViewOffenderCompareQuery } from 'graphql/generated';
 import {
   Age,
   Build,
@@ -5,11 +6,10 @@ import {
   Race,
   useMergeOffendersMutation,
   useViewOffenderCompareLazyQuery,
-  ViewOffenderCompareQuery,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { OffenderData } from 'components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
+import type { OffenderData } from 'components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
 
 type Offender = Exclude<ViewOffenderCompareQuery['offender'], undefined | null>;
 export type OffenderField =
@@ -183,7 +183,7 @@ const compareIncident = (): Return => {
 
   const removeOffender = (offender: Offender) => {
     setOffenders(offenders.filter((item) => item.id !== offender.id));
-    const first = offenders.filter((item) => item.id !== offender.id)[0];
+    const first = offenders.find((item) => item.id !== offender.id);
     const ageSelected = selected.age === offender.id;
     const buildSelected = selected.build === offender.id;
     const hairSelected = selected.hair === offender.id;
@@ -194,33 +194,33 @@ const compareIncident = (): Return => {
     const raceSelected = selected.race === offender.id;
 
     setSelected({
-      age: ageSelected ? first.id : selected.age,
-      build: buildSelected ? first.id : selected.build,
-      gender: genderSelected ? first.id : selected.gender,
-      hair: hairSelected ? first.id : selected.hair,
-      dateOfBirth: dateSelected ? first.id : selected.dateOfBirth,
-      dateSource: dateSourceSelected ? first.id : selected.dateSource,
-      name: nameSelected ? first.id : selected.name,
-      race: raceSelected ? first.id : selected.race,
+      age: ageSelected ? first?.id || '' : selected.age,
+      build: buildSelected ? first?.id || '' : selected.build,
+      gender: genderSelected ? first?.id || '' : selected.gender,
+      hair: hairSelected ? first?.id || '' : selected.hair,
+      dateOfBirth: dateSelected ? first?.id || '' : selected.dateOfBirth,
+      dateSource: dateSourceSelected ? first?.id || '' : selected.dateSource,
+      name: nameSelected ? first?.id || '' : selected.name,
+      race: raceSelected ? first?.id || '' : selected.race,
     });
 
     const imageIds = offender.images?.map(({ id }) => id);
     const tagIds = offender.tags?.map(({ id }) => id);
     setPreview({
       ...preview,
-      age: ageSelected ? first.age : preview.age,
-      build: buildSelected ? first.build : preview.build,
-      dateOfBirth: dateSelected ? first.dateOfBirth : preview.dateOfBirth,
-      dateSource: dateSourceSelected ? first.dateSource : preview.dateSource,
-      gender: genderSelected ? first.gender : preview.gender,
-      hair: hairSelected ? first.hair : preview.hair,
+      age: ageSelected ? first?.age : preview.age,
+      build: buildSelected ? first?.build : preview.build,
+      dateOfBirth: dateSelected ? first?.dateOfBirth : preview.dateOfBirth,
+      dateSource: dateSourceSelected ? first?.dateSource : preview.dateSource,
+      gender: genderSelected ? first?.gender : preview.gender,
+      hair: hairSelected ? first?.hair : preview.hair,
       images: preview.images.filter(({ id }) => !imageIds.includes(id)),
-      name: nameSelected ? first.name : preview.name,
+      name: nameSelected ? first?.name : preview.name,
       peculiarities: offenders
         .filter((item) => item.id !== offender.id)
         .map(({ peculiarities }) => peculiarities)
         .toString(),
-      race: raceSelected ? first.race : preview.race,
+      race: raceSelected ? first?.race : preview.race,
       tags: preview.tags.filter(({ id }) => !tagIds.includes(id)),
     });
   };
@@ -234,7 +234,7 @@ const compareIncident = (): Return => {
     if (newOffenders.length > 0)
       setPreview({
         ...newOffenders[0],
-        images: newOffenders.map((offender) => offender.images).flat(),
+        images: newOffenders.flatMap((offender) => offender.images),
       });
 
     setMode('column');

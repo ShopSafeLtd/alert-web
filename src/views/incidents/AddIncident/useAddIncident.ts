@@ -1,24 +1,31 @@
-import { useEffect, useState } from 'react';
-import {
+import type { MutationUpdaterFn } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
+import type { FormInstance } from 'antd';
+import { Form, message, Modal, notification, Upload } from 'antd';
+import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
+import type { UploadChangeParam } from 'antd/lib/upload';
+import type {
   AddressesQuery,
   CreateIncidentData,
   CreateIncidentMutation,
   CreateTagMutation,
-  CrimeType,
   ListGoodsTypesQuery,
-  ListIncidentsDocument,
   ListIncidentsQuery,
   ListOffendersQuery,
+  SearchBusinessesQuery,
+  SearchBusinessesQueryVariables,
+  TagsQuery,
+  TagType,
+} from 'graphql/generated';
+import {
+  CrimeType,
+  ListIncidentsDocument,
   Model,
   QueryMode,
   Role,
   SearchBusinessesDocument,
-  SearchBusinessesQuery,
-  SearchBusinessesQueryVariables,
   SortOrder,
   TagsDocument,
-  TagsQuery,
-  TagType,
   useAddressesQuery,
   useCreateIncidentMutation,
   useListCrimeGroupsQuery,
@@ -28,15 +35,12 @@ import {
   useSchemeGroupsQuery,
   useTagsQuery,
 } from 'graphql/generated';
-import { Form, FormInstance, message, Modal, notification, Upload } from 'antd';
-import { useStoreActions, useStoreState } from 'state';
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import { MutationUpdaterFn, useApolloClient } from '@apollo/client';
 import update from 'immutability-helper';
-import { UploadChangeParam } from 'antd/lib/upload';
-import { useNavigate } from 'react-router-dom';
-import { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
 import moment from 'moment';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useStoreActions, useStoreState } from 'state';
+import type { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
 
 const { confirm } = Modal;
 const { useForm } = Form;
@@ -312,14 +316,15 @@ const useEditIncident = (): Return => {
           updatedAt: SortOrder.Desc,
         },
         take: 20,
-        where: searchOffenders.length
-          ? {
-              name: {
-                contains: searchOffenders,
-                mode: QueryMode.Insensitive,
-              },
-            }
-          : undefined,
+        where:
+          searchOffenders.length > 0
+            ? {
+                name: {
+                  contains: searchOffenders,
+                  mode: QueryMode.Insensitive,
+                },
+              }
+            : undefined,
       },
     });
 
@@ -389,10 +394,9 @@ const useEditIncident = (): Return => {
           ...existingData.listIncidents,
           incidents:
             existingData?.listIncidents?.incidents &&
-            existingData.listIncidents.incidents.length
-              ? existingData?.listIncidents?.incidents.concat(
-                  res.createIncident
-                )
+            existingData.listIncidents.incidents.length > 0
+              ? // eslint-disable-next-line no-unsafe-optional-chaining
+                [...existingData?.listIncidents?.incidents, res.createIncident]
               : [res.createIncident],
         },
         __typename: 'Query',
@@ -414,7 +418,7 @@ const useEditIncident = (): Return => {
         description: 'The Incident has been added!',
         placement: 'bottomRight',
       });
-      navigate(`/app/incidents`);
+      navigate('/app/incidents');
     },
     onError: () => {
       setSaving(false);
@@ -514,15 +518,15 @@ const useEditIncident = (): Return => {
     offenders: OffenderData[];
   }) => {
     if (offendersData) {
-      const changedOffendersIds = data.offenders.map(({ id }) => id);
-      const originalOffendersIds = offendersData.map(({ id }) => id);
+      const changedOffendersIds = new Set(data.offenders.map(({ id }) => id));
+      const originalOffendersIds = new Set(offendersData.map(({ id }) => id));
       const originalImageOffendersIds =
         fileList
           .find(({ uid }) => uid === data.image.uid)
           ?.offenders?.map(({ id }) => id) || [];
       const updatedOffenders = offendersData
         .map((offender) => {
-          if (changedOffendersIds.includes(offender.id))
+          if (changedOffendersIds.has(offender.id))
             return data.offenders.find(({ id }) => id === offender.id);
           if (originalImageOffendersIds.includes(offender.id))
             return {
@@ -535,7 +539,7 @@ const useEditIncident = (): Return => {
         })
         .filter(isOffenderData);
       const newOffenders = data.offenders.filter(
-        (offender) => !originalOffendersIds.includes(offender.id)
+        (offender) => !originalOffendersIds.has(offender.id)
       );
       setOffendersData([...updatedOffenders, ...newOffenders]);
     }
@@ -687,22 +691,16 @@ const useEditIncident = (): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    if (!offendersData) {
-      confirm({
-        title: 'No Offenders',
-        content: 'Please select or add at least one offender for the incident.',
-        cancelText: 'Find Offenders',
-        okText: 'Add New Offender',
-      });
-      setSaving(false);
-    } else {
+    if (offendersData) {
       const getOffenders = (): CreateIncidentData['offenders'] => {
         if (offendersData && listOffendersData?.listOffenders) {
-          const offendersIds = listOffendersData.listOffenders.offenders.map(
-            (offender) => offender.id
+          const offendersIds = new Set(
+            listOffendersData.listOffenders.offenders.map(
+              (offender) => offender.id
+            )
           );
           const existingOffenders = offendersData.filter((item) =>
-            offendersIds.includes(item.id)
+            offendersIds.has(item.id)
           );
           const existingOffendersWithImages = existingOffenders
             .filter((offender) =>
@@ -713,18 +711,19 @@ const useEditIncident = (): Return => {
               images: offender.images?.filter((image) => image.new),
             }));
           const newOffenders = offendersData.filter(
-            (item) => !offendersIds.includes(item.id)
+            (item) => !offendersIds.has(item.id)
           );
 
           return {
-            connect: existingOffenders.length
-              ? existingOffenders.map((offender) => ({ id: offender.id }))
-              : undefined,
+            connect:
+              existingOffenders.length > 0
+                ? existingOffenders.map((offender) => ({ id: offender.id }))
+                : undefined,
             update: existingOffendersWithImages.map((offender) => ({
               where: { id: offender.id },
               data: {
                 images:
-                  offender.images && offender.images.length
+                  offender.images && offender.images.length > 0
                     ? {
                         upload: offender.images?.map((image) => ({
                           url: {
@@ -737,43 +736,44 @@ const useEditIncident = (): Return => {
                     : {},
               },
             })),
-            create: newOffenders.length
-              ? newOffenders.map((offender) => ({
-                  name: offender.name || 'Unidentified Offender',
-                  gender: offender.gender || null,
-                  race: offender.race || null,
-                  build: offender.build || null,
-                  hair: offender.hair || null,
-                  peculiarities: offender.peculiarities || null,
-                  age: offender.age || null,
-                  dateSource: offender.dateSource || null,
-                  dateOfBirth: offender.dateOfBirth || null,
-                  groups: {
-                    connect:
-                      groups.length > 1
-                        ? data.groups.map((id) => ({ id }))
-                        : groups.map(({ id }) => ({ id })),
-                  },
-                  // groups.length > 1
-                  //   ? { connect: data.groups.map((id) => ({ id })) }
-                  //   : { connect: groups.map(({ id }) => ({ id })) },
-                  scheme: { connect: { id: schemeId } },
-                  createdBy: { connect: { id: userId } },
-                  localId: offender.id,
-                  images: {
-                    // create:
-                    upload: offender.images
-                      ?.filter((image) => image.new === true)
-                      .map((image) => ({
-                        url: {
-                          filename: image.fileName || '',
-                          mimetype: image.type || '',
-                          url: image.url || '',
-                        },
-                      })),
-                  },
-                }))
-              : undefined,
+            create:
+              newOffenders.length > 0
+                ? newOffenders.map((offender) => ({
+                    name: offender.name || 'Unidentified Offender',
+                    gender: offender.gender || null,
+                    race: offender.race || null,
+                    build: offender.build || null,
+                    hair: offender.hair || null,
+                    peculiarities: offender.peculiarities || null,
+                    age: offender.age || null,
+                    dateSource: offender.dateSource || null,
+                    dateOfBirth: offender.dateOfBirth || null,
+                    groups: {
+                      connect:
+                        groups.length > 1
+                          ? data.groups.map((id) => ({ id }))
+                          : groups.map(({ id }) => ({ id })),
+                    },
+                    // groups.length > 1
+                    //   ? { connect: data.groups.map((id) => ({ id })) }
+                    //   : { connect: groups.map(({ id }) => ({ id })) },
+                    scheme: { connect: { id: schemeId } },
+                    createdBy: { connect: { id: userId } },
+                    localId: offender.id,
+                    images: {
+                      // create:
+                      upload: offender.images
+                        ?.filter((image) => image.new === true)
+                        .map((image) => ({
+                          url: {
+                            filename: image.fileName || '',
+                            mimetype: image.type || '',
+                            url: image.url || '',
+                          },
+                        })),
+                    },
+                  }))
+                : undefined,
           };
         }
         return {
@@ -783,24 +783,25 @@ const useEditIncident = (): Return => {
       };
       const getVehicles = (): CreateIncidentData['vehicles'] => {
         if (vehiclesData && listVehiclesData?.listVehicles) {
-          const vehiclesIds = listVehiclesData.listVehicles.vehicles.map(
-            (vehicle) => vehicle.id
+          const vehiclesIds = new Set(
+            listVehiclesData.listVehicles.vehicles.map((vehicle) => vehicle.id)
           );
 
           const newVehicles = vehiclesData.filter(
-            (item) => !vehiclesIds.includes(item.id)
+            (item) => !vehiclesIds.has(item.id)
           );
 
           const existingVehicles = vehiclesData.filter((item) =>
-            vehiclesIds.includes(item.id)
+            vehiclesIds.has(item.id)
           );
           const editedVehicles = existingVehicles.filter(
             ({ edited }) => edited === true
           );
           return {
-            connect: existingVehicles.length
-              ? existingVehicles.map(({ id }) => ({ id }))
-              : undefined,
+            connect:
+              existingVehicles.length > 0
+                ? existingVehicles.map(({ id }) => ({ id }))
+                : undefined,
             update: editedVehicles.map((vehicle) => ({
               where: { id: vehicle.id },
               data: {
@@ -809,36 +810,36 @@ const useEditIncident = (): Return => {
                 colour: { set: vehicle.colour },
                 registration: { set: vehicle.registration },
                 crimeGroup:
-                  vehicle.crimeGroup && vehicle.crimeGroup.length
+                  vehicle.crimeGroup && vehicle.crimeGroup.length > 0
                     ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
                     : undefined,
-                incidents:
-                  vehicle.incidents && vehicle.incidents
-                    ? { connect: vehicle.incidents.map((id) => ({ id })) }
-                    : undefined,
+                incidents: vehicle.incidents
+                  ? { connect: vehicle.incidents.map((id) => ({ id })) }
+                  : undefined,
                 offenders:
-                  vehicle.offenders && vehicle.offenders.length
+                  vehicle.offenders && vehicle.offenders.length > 0
                     ? { connect: vehicle.offenders.map((id) => ({ id })) }
                     : undefined,
               },
             })),
 
-            create: newVehicles.length
-              ? newVehicles.map((vehicle) => ({
-                  make: vehicle.make,
-                  model: vehicle.model,
-                  colour: vehicle.colour,
-                  registration: vehicle.registration,
-                  crimeGroup:
-                    vehicle.crimeGroup && vehicle.crimeGroup.length
-                      ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
-                      : undefined,
-                  offenders:
-                    vehicle.offenders && vehicle.offenders.length
-                      ? { connect: vehicle.offenders.map((id) => ({ id })) }
-                      : undefined,
-                }))
-              : undefined,
+            create:
+              newVehicles.length > 0
+                ? newVehicles.map((vehicle) => ({
+                    make: vehicle.make,
+                    model: vehicle.model,
+                    colour: vehicle.colour,
+                    registration: vehicle.registration,
+                    crimeGroup:
+                      vehicle.crimeGroup && vehicle.crimeGroup.length > 0
+                        ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
+                        : undefined,
+                    offenders:
+                      vehicle.offenders && vehicle.offenders.length > 0
+                        ? { connect: vehicle.offenders.map((id) => ({ id })) }
+                        : undefined,
+                  }))
+                : undefined,
           };
         }
         return {
@@ -848,31 +849,34 @@ const useEditIncident = (): Return => {
       };
       const getCrimeGroups = (): CreateIncidentData['crimeGroups'] => {
         if (crimeGroupsData && listCrimeGroupsData?.listCrimeGroups) {
-          const crimeGroupsIds =
+          const crimeGroupsIds = new Set(
             listCrimeGroupsData.listCrimeGroups.crimeGroups.map(
               (crimeGroup) => crimeGroup.id
-            );
+            )
+          );
 
           const newCrimeGroups = crimeGroupsData.filter(
-            (item) => !crimeGroupsIds.includes(item.id)
+            (item) => !crimeGroupsIds.has(item.id)
           );
 
           const existingCrimeGroups = crimeGroupsData.filter((item) =>
-            crimeGroupsIds.includes(item.id)
+            crimeGroupsIds.has(item.id)
           );
 
           return {
-            connect: existingCrimeGroups.length
-              ? existingCrimeGroups.map(({ id }) => ({ id }))
-              : undefined,
+            connect:
+              existingCrimeGroups.length > 0
+                ? existingCrimeGroups.map(({ id }) => ({ id }))
+                : undefined,
 
-            create: newCrimeGroups.length
-              ? newCrimeGroups.map((crimeGroup) => ({
-                  offenders: {
-                    connect: crimeGroup.offenders?.map((id) => ({ id })),
-                  },
-                }))
-              : undefined,
+            create:
+              newCrimeGroups.length > 0
+                ? newCrimeGroups.map((crimeGroup) => ({
+                    offenders: {
+                      connect: crimeGroup.offenders?.map((id) => ({ id })),
+                    },
+                  }))
+                : undefined,
           };
         }
         return {
@@ -922,7 +926,7 @@ const useEditIncident = (): Return => {
             crimeGroups: getCrimeGroups(),
             images: {
               create:
-                imageChange && fileList.length
+                imageChange && fileList.length > 0
                   ? fileList
                       .map((item) => ({
                         url: {
@@ -931,12 +935,20 @@ const useEditIncident = (): Return => {
                           url: item.url || '',
                         },
                       }))
-                      .filter((obj) => obj.url !== undefined)
+                      .filter((object) => object.url !== undefined)
                   : undefined,
             },
           },
         },
       });
+    } else {
+      confirm({
+        title: 'No Offenders',
+        content: 'Please select or add at least one offender for the incident.',
+        cancelText: 'Find Offenders',
+        okText: 'Add New Offender',
+      });
+      setSaving(false);
     }
   };
 
@@ -964,7 +976,7 @@ const useEditIncident = (): Return => {
         },
       })
       .then((response) =>
-        response.data.listBusinesses.businesses.length
+        response.data.listBusinesses.businesses.length > 0
           ? response.data.listBusinesses.businesses.map((item) => ({
               label: item?.name || '',
               value: item?.id || '',
@@ -1023,49 +1035,43 @@ const useEditIncident = (): Return => {
     }
 
     // add new line to goods table if all have a goodsType
-    if (changedValues.goods) {
-      if (
-        changedValues.goods
-          .map((item) => item?.goodsType !== undefined)
-          .includes(true) &&
-        !values.goods
-          .map((item) => item?.goodsType !== undefined)
-          .includes(false)
-      ) {
-        form.setFieldsValue({
-          goods: [
-            ...form.getFieldValue('goods'),
-            {
-              goodsType: undefined,
-              recoveredValue: 0,
-              value: undefined,
-            },
-          ],
-        });
-      }
+    if (
+      changedValues.goods &&
+      changedValues.goods
+        .map((item) => item?.goodsType !== undefined)
+        .includes(true) &&
+      !values.goods.map((item) => item?.goodsType !== undefined).includes(false)
+    ) {
+      form.setFieldsValue({
+        goods: [
+          ...form.getFieldValue('goods'),
+          {
+            goodsType: undefined,
+            recoveredValue: 0,
+            value: undefined,
+          },
+        ],
+      });
     }
 
     // enable profiles when goods is completed
-    if (changedValues.goods)
-      if (
-        values.goods
-          .map((item) => {
-            if (
-              item.goodsType !== undefined &&
-              item.recoveredValue !== undefined &&
-              item.value !== undefined
-            )
-              return true;
-            return false;
-          })
-          .includes(true) &&
-        !formStages.profiles
-      ) {
-        setFormStages({
-          ...formStages,
-          profiles: true,
-        });
-      }
+    if (
+      changedValues.goods &&
+      values.goods
+        .map(
+          (item) =>
+            item.goodsType !== undefined &&
+            item.recoveredValue !== undefined &&
+            item.value !== undefined
+        )
+        .includes(true) &&
+      !formStages.profiles
+    ) {
+      setFormStages({
+        ...formStages,
+        profiles: true,
+      });
+    }
 
     // enable fields when profile is added
     if (changedValues.profiles && !formStages.images) {
@@ -1112,28 +1118,22 @@ const useEditIncident = (): Return => {
           tags.includes('Theft & Handling')
             ? `The goods lost in this incident total £${
                 values.goods
-                  .filter((item) => {
-                    if (
+                  .filter(
+                    (item) =>
                       item.goodsType !== undefined &&
                       item.recoveredValue !== undefined &&
                       item.value !== undefined
-                    )
-                      return true;
-                    return false;
-                  })
+                  )
                   .map((item) => item.value)
                   .reduce((a, b) => (a || 0) + (b || 0))
                   ?.toFixed(2) || 0
               } of which a value of £${values.goods
-                .filter((item) => {
-                  if (
+                .filter(
+                  (item) =>
                     item.goodsType !== undefined &&
                     item.recoveredValue !== undefined &&
                     item.value !== undefined
-                  )
-                    return true;
-                  return false;
-                })
+                )
                 .map((item) => item.recoveredValue)
                 .reduce((a, b) => (a || 0) + (b || 0))
                 .toFixed(2)} was recovered.`

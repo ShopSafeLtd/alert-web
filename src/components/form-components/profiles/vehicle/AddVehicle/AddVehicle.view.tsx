@@ -13,10 +13,13 @@ import {
   Table,
   Tooltip,
 } from 'antd';
-import { ListCrimeGroupsQuery, ListIncidentsQuery } from 'graphql/generated';
-import { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
+import type {
+  ListCrimeGroupsQuery,
+  ListIncidentsQuery,
+} from 'graphql/generated';
+import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
 import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
-import LinkIncident from 'components/form-components/LinkOptions/LinkIncident';
+import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import WatermarkImage from 'components/images/WatermarkImage.view';
@@ -29,7 +32,9 @@ interface FormData {
   registration?: string;
   crimeGroup?: string[];
 }
+
 const { confirm } = Modal;
+
 interface Props {
   onClose: () => void;
   onSubmit: (value: FormData) => void;
@@ -173,7 +178,7 @@ const AddVehicle = ({
           </Row>
         )}
 
-        {incidentsData && incidentsData.length ? (
+        {incidentsData && incidentsData.length > 0 ? (
           <>
             <Divider>Linked Incidents</Divider>
             <Table
@@ -236,7 +241,7 @@ const AddVehicle = ({
           </>
         ) : null}
 
-        {offendersData && offendersData.length ? (
+        {offendersData && offendersData.length > 0 ? (
           <>
             <Divider>Linked Offenders</Divider>
             <Table

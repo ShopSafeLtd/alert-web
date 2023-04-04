@@ -1,17 +1,15 @@
 import { useState } from 'react';
 
-import {
+import type {
   Age,
   Build,
   Gender,
   ListVehiclesQuery,
-  QueryMode,
   Race,
-  SortOrder,
-  useListVehiclesQuery,
 } from 'graphql/generated';
+import { QueryMode, SortOrder, useListVehiclesQuery } from 'graphql/generated';
 import { useStoreState } from 'state';
-import { VehicleData } from 'types/DataType';
+import type { VehicleData } from 'types/DataType';
 
 export interface OffenderData {
   id: string;
@@ -131,17 +129,16 @@ const useAddExistingVehicle = ({
         colour: selectedData.colour || '',
         registration: selectedData.registration || '',
         crimeGroup:
-          selectedData.crimeGroup && selectedData.crimeGroup.length
+          selectedData.crimeGroup && selectedData.crimeGroup.length > 0
             ? selectedData.crimeGroup?.map(({ id }) => id)
             : [],
         incidents:
-          selectedData.incidents && selectedData.incidents.length
+          selectedData.incidents && selectedData.incidents.length > 0
             ? selectedData.incidents.map(({ id }) => id)
             : [],
-        offenders:
-          selectedData.offenders && selectedData.offenders
-            ? selectedData.offenders.map(({ id }) => id)
-            : [],
+        offenders: selectedData.offenders
+          ? selectedData.offenders.map(({ id }) => id)
+          : [],
       });
     }
     setSaving(false);

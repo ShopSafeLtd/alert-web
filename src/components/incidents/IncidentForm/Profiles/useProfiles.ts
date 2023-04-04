@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { ListOffendersQuery } from 'graphql/generated';
-import { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
-import { UploadChangeParam } from 'antd/lib/upload';
-import { UploadFile } from 'antd/lib/upload/interface';
+import type { ListOffendersQuery } from 'graphql/generated';
+import type { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
+import type { UploadChangeParam } from 'antd/lib/upload';
+import type { UploadFile } from 'antd/lib/upload/interface';
 
 type Offender = Exclude<
   ListOffendersQuery['listOffenders'],

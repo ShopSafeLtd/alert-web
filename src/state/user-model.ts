@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
-import { action, Action } from 'easy-peasy';
+import type { Action } from 'easy-peasy';
+import { action } from 'easy-peasy';
 import { Role } from 'graphql/generated';
 
 export interface SetUserPayload {
@@ -36,13 +37,13 @@ export interface Scheme {
     autoApproveOffenders: boolean;
     logo?:
       | {
-          optimised?: string | null | undefined;
+          optimisedPersisted?: string | null | undefined;
         }
       | null
       | undefined;
     darkLogo?:
       | {
-          optimised?: string | null | undefined;
+          optimisedPersisted?: string | null | undefined;
         }
       | null
       | undefined;

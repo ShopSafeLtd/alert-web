@@ -1,16 +1,18 @@
 import { useState } from 'react';
+import type {
+  ListCrimeGroupsQuery,
+  ListIncidentsQuery,
+} from 'graphql/generated';
 import {
   useListCrimeGroupsQuery,
-  ListCrimeGroupsQuery,
   SortOrder,
   useListIncidentsQuery,
-  ListIncidentsQuery,
   Role,
   useUpdateCrimeGroupMutation,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 
-import { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
+import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
 import { useParams } from 'react-router';
 import { notification } from 'antd';
 // import { VehicleData } from 'types/DataType';
@@ -130,13 +132,13 @@ const useAddVehicle = ({ onClose }: Props): Return => {
                 registration: data.registration || '',
                 incidents: {
                   connect:
-                    incidentsData && incidentsData.length
+                    incidentsData && incidentsData.length > 0
                       ? incidentsData.map(({ id }) => ({ id }))
                       : undefined,
                 },
                 offenders: {
                   connect:
-                    offendersData && offendersData.length
+                    offendersData && offendersData.length > 0
                       ? offendersData.map(({ id }) => ({ id }))
                       : undefined,
                 },

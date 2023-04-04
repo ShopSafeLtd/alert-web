@@ -2,9 +2,14 @@ mutation CreateBusiness($data: CreateBusinessDataInput!) {
   createBusiness(data: $data) {
     id
     name
+    fullName
+    publicName
+    demId
     parent {
       id
       name
+      fullName
+      publicName
     }
     locations {
       id

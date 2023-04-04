@@ -3,10 +3,9 @@ import { Card, Col, List, Row, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import WatermarkSlide, {
-  WatermarkSlideType,
-} from 'components/images/WatermartkSlide.view';
-import { ReturnProps as Props } from './types/ViewArticle';
+import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import type { ReturnProps as Props } from './types/ViewArticle';
 import IncidentCard from '../../../components/incidents/IncidentCard';
 import OffenderCard from '../../../components/offenders/OffenderCard';
 

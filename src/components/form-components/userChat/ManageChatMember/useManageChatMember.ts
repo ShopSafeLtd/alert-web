@@ -1,33 +1,48 @@
 import { useState } from 'react';
 import { useStoreState } from 'state';
+import type { ListSchemeUsersQuery } from 'graphql/generated';
 import {
-  // ChatQuery,
   SortOrder,
+  useChatQuery,
   useListSchemeUsersQuery,
   useUpdateChatMutation,
-  useChatQuery,
 } from 'graphql/generated';
 import { Modal, notification } from 'antd';
 
 const { confirm } = Modal;
+
 interface FormData {
   user: string[];
 }
-interface MemberData {
+
+export interface MemberData {
   id: string;
   fullName: string;
   businesses: { id: string; name: string }[];
-  firstLetter?: string | null;
+  firstLetter?: string | null | undefined;
+  origName: string;
+  origFirstLetter?: string | null | undefined;
 }
+// type MemberData =
+//   | Exclude<
+//       ListSchemeUsersQuery['users'],
+//       undefined | null
+//     >[0]
+//   | null
+//   | undefined;
 interface Props {
   onClose: () => void;
   chatId: string;
 }
+
 interface Return {
   onSubmit: () => void;
   addMemberUpdate: (value: FormData) => void;
   loading: boolean;
-  usersData: MemberData[] | undefined;
+  usersData:
+    | Exclude<ListSchemeUsersQuery['users'], undefined | null>
+    | null
+    | undefined;
   saving: boolean;
   addMember: boolean;
   toggleAddMember: () => void;
@@ -111,7 +126,7 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
       .map((userChat) => userChat);
     if (addData && addData.length > 0) {
       if (membersData && membersData.length > 0) {
-        setMembersData(membersData.concat(addData));
+        setMembersData([...membersData, ...addData]);
       } else {
         setMembersData(addData);
       }

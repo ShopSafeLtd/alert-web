@@ -1,6 +1,9 @@
 import React from 'react';
-import { ListIncidentsQuery, RecycleIncidentMutation } from 'graphql/generated';
-import { MutationUpdaterFn } from '@apollo/client';
+import type {
+  ListIncidentsQuery,
+  RecycleIncidentMutation,
+} from 'graphql/generated';
+import type { MutationUpdaterFn } from '@apollo/client';
 import View from './IncidentCard.view';
 import useIncidentCard from './useIncidentCard';
 

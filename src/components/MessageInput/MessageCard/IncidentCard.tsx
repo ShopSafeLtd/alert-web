@@ -11,7 +11,7 @@ import {
   Typography,
 } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import { IncidentCardData } from 'types/DataType';
+import type { IncidentCardData } from 'types/DataType';
 
 const { Paragraph } = Typography;
 
@@ -59,7 +59,9 @@ const IncidentCard = ({ incident, removeIncident, saving }: Props) => (
       <Col>
         {incident?.images && incident.images.length > 0 && (
           <div style={{ width: 100, height: 100 }}>
-            <WatermarkImage url={incident.images[0].optimised} />
+            <WatermarkImage
+              url={incident.images[0].optimised || incident.images[0].url || ''}
+            />
           </div>
         )}
       </Col>

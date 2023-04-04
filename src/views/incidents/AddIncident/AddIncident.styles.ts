@@ -1,4 +1,4 @@
-import { Theme } from 'configs/ThemeConfig';
+import type { Theme } from 'configs/ThemeConfig';
 import { createUseStyles } from 'react-jss';
 
 const styles = createUseStyles((theme: Theme) => ({

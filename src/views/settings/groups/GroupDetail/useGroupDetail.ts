@@ -1,9 +1,6 @@
 import { useState } from 'react';
-import {
-  useGroupQuery,
-  GroupQuery,
-  useDeleteGroupMutation,
-} from 'graphql/generated';
+import type { GroupQuery } from 'graphql/generated';
+import { useGroupQuery, useDeleteGroupMutation } from 'graphql/generated';
 
 import { notification, Modal } from 'antd';
 

@@ -82,6 +82,7 @@ describe('Detail Officer View', () => {
                 open: false,
                 index: 0,
               }}
+              businessesLoading={false}
               data={data}
               loading={false}
               lightboxElements={[]}

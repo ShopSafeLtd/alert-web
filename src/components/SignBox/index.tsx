@@ -1,34 +1,39 @@
+import { Button } from 'antd';
 import React, { useRef } from 'react';
 import Signature from 'react-signature-canvas';
-import { Button } from 'antd';
 
 type ReactSignatureCanvas = Signature;
 
-interface SignatureInputProps {
-  onChange: ((value: unknown) => void) | undefined;
+interface SignatureInputProperties {
+  onChange: ((value: string) => void) | undefined;
   hidden: boolean;
 }
 
 const SignatureInput = ({
   onChange,
   hidden,
-}: SignatureInputProps): JSX.Element => {
-  const signatureRef = useRef<ReactSignatureCanvas | null>(null);
+}: SignatureInputProperties): JSX.Element => {
+  const signatureReference = useRef<ReactSignatureCanvas | null>(null);
 
   const onClear = () => {
-    signatureRef?.current?.clear();
+    signatureReference?.current?.clear();
     if (onChange) onChange('');
   };
 
   const handleChange = () => {
-    if (onChange) onChange(signatureRef?.current?.toDataURL());
+    if (onChange)
+      onChange(
+        `<img alt="signature" src="${
+          signatureReference?.current?.toDataURL() as string
+        }" height="100" width="300"/>`
+      );
   };
 
   return (
     <>
       <div hidden={hidden}>
         <Signature
-          ref={signatureRef}
+          ref={signatureReference}
           canvasProps={{
             width: 400,
             height: 120,

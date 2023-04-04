@@ -28,6 +28,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
       totalCrimeGroups
       totalOffenders
       totalIncidents
+      reference
     }
     updates(orderBy: { createdAt: desc }) {
       id
@@ -38,6 +39,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
         id
         url
         optimised
+        optimisedPersisted
         card
       }
       linkedCrimeGroups {
@@ -52,6 +54,12 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
         updatedAt
       }
       linkedVehicles {
+        images {
+          id
+          url
+          optimised
+          optimisedPersisted
+        }
         updatedAt
         totalOffenders
         registration
@@ -70,6 +78,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
           id
           url
           optimised
+          optimisedPersisted
         }
       }
       linkedOffenders {
@@ -85,9 +94,11 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
           id
           url
           optimised
+          optimisedPersisted
         }
       }
       createdBy {
+        origName
         id
         fullName
         businesses {
@@ -103,6 +114,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
         images {
           id
           url
+          optimisedPersisted
           optimised
           card
         }
@@ -118,6 +130,12 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
           updatedAt
         }
         linkedVehicles {
+          images {
+            id
+            url
+            optimisedPersisted
+            optimised
+          }
           updatedAt
           totalOffenders
           registration
@@ -151,9 +169,11 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
             id
             url
             optimised
+            optimisedPersisted
           }
         }
         createdBy {
+          origName
           id
           fullName
           businesses {
@@ -172,6 +192,7 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
       images {
         id
         optimised
+        optimisedPersisted
       }
     }
     incidents {

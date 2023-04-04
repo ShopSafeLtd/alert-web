@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { Button, Form, FormInstance, FormItemProps, Row } from 'antd';
+import type { FormInstance, FormItemProps } from 'antd';
+import { Button, Form, Row } from 'antd';
 import { Grow } from 'components/layout-components/AntD';
 
 interface Field extends FormItemProps {

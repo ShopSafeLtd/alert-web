@@ -1,18 +1,27 @@
-mutation createUserInDatabase($data: CreateUserData!,$groupWhere: GroupWhereInput) {
-  createUserInDatabase(
-    data: $data
-  ) {
+mutation createUserInDatabase(
+  $data: CreateUserData!
+  $groupWhere: GroupWhereInput
+) {
+  createUserInDatabase(data: $data) {
     id
     fullName
+    firstLetter
+    origName
+    origFirstLetter
     email
+    publicName
     businesses {
       id
       name
+      fullName
     }
     status
     groups(where: $groupWhere) {
       id
       name
+    }
+    loginEvents {
+      loginTime
     }
   }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import EditIncident from '../EditIncident.view';
-import { ViewIncidentQuery } from '../../../../graphql/generated';
+import type { ViewIncidentQuery } from '../../../../graphql/generated';
 
 describe('List Officer View', () => {
   const data: ViewIncidentQuery = {

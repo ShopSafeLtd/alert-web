@@ -9,14 +9,14 @@ import {
   Modal,
   Skeleton,
 } from 'antd';
-import { Age, Build, Gender, Race } from 'graphql/generated';
+import type { Age, Build, Gender, Race } from 'graphql/generated';
 import {
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
-import { UploadFile } from 'antd/lib/upload/interface';
+import type { UploadFile } from 'antd/lib/upload/interface';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import AddExistingOffender from '../../offender/AddExistingOffender';
 import AddOffender from '../../offender/AddNewOffender';

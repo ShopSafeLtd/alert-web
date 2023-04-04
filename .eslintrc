@@ -4,6 +4,8 @@
     "plugin:@typescript-eslint/recommended",
     "airbnb",
     "airbnb-typescript",
+    "plugin:sonarjs/recommended",
+    "plugin:unicorn/recommended",
     "prettier"
   ],
   "parser": "@typescript-eslint/parser",
@@ -17,7 +19,9 @@
   },
   "plugins": [
     "react",
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "sonarjs",
+    "unicorn"
   ],
   "ignorePatterns": [
     ".eslintrc.js",
@@ -26,6 +30,24 @@
   "rules": {
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-explicit-any": "error",
+    "arrow-body-style": [
+      "error",
+      "as-needed"
+    ],
+    "react/function-component-definition": [
+      2,
+      {
+        "namedComponents": "arrow-function",
+        "unnamedComponents": "arrow-function"
+      }
+    ],
+    "react/self-closing-comp": [
+      "error",
+      {
+        "component": true,
+        "html": true
+      }
+    ],
     "no-plusplus": [
       2,
       {
@@ -33,6 +55,26 @@
       }
     ],
     "react/require-default-props": "off",
-    "react/destructuring-assignment": "off"
+    "sonarjs/no-duplicate-string": "warn",
+    "sonarjs/cognitive-complexity": "warn",
+    "react-hooks/rules-of-hooks": "off",
+    "@typescript-eslint/space-before-blocks": "off",
+    "unicorn/filename-case": "off",
+    "unicorn/no-null": "off",
+    "unicorn/no-useless-undefined": "off",
+    "unicorn/no-array-callback-reference": "off",
+    "unicorn/prevent-abbreviations": "off",
+    "unicorn/no-abusive-eslint-disable": "off",
+    "unicorn/prefer-dom-node-text-content": "off",
+    "unicorn/prefer-add-event-listener": "off",
+    "react/destructuring-assignment": "error",
+    "unicorn/prefer-query-selector": "off",
+    "no-restricted-exports": "off",
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      {
+        "prefer": "type-imports"
+      }
+    ]
   }
 }

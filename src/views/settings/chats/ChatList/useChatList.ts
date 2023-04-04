@@ -1,13 +1,12 @@
 import { useState } from 'react';
+import type { SchemeChatsQuery, CreateChatMutation } from 'graphql/generated';
 import {
   QueryMode,
   useSchemeChatsQuery,
-  SchemeChatsQuery,
   SchemeChatsDocument,
-  CreateChatMutation,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
-import { MutationUpdaterFn } from '@apollo/client';
+import type { MutationUpdaterFn } from '@apollo/client';
 
 interface Return {
   data: SchemeChatsQuery | undefined;
