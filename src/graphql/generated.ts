@@ -43989,6 +43989,7 @@ export type OffenderReportQuery = {
         id: string;
         geoLng?: number | null;
         geoLat?: number | null;
+        full?: string | null;
       }>;
       images: Array<{
         __typename?: 'Image';
@@ -55293,6 +55294,7 @@ export const OffenderReportDocument = gql`
           id
           geoLng
           geoLat
+          full
         }
         name
         images {

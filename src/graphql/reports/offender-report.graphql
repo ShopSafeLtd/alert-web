@@ -89,6 +89,7 @@ query OffenderReport(
         id
         geoLng
         geoLat
+        full
       }
       name
       images {

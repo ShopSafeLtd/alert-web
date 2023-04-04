@@ -1188,10 +1188,11 @@ const PerformanceReport = ({
                 data?.offenderReport?.offenderSummary?.addresses.map(
                   (address) => (
                     <Marker
+                      label={address.full || ''}
                       key={address.id}
                       position={{
-                        lat: address.geoLat,
-                        lng: address.geoLng,
+                        lat: address.geoLat || 0,
+                        lng: address.geoLng || 0,
                       }}
                     />
                   )
