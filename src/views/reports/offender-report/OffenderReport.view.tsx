@@ -407,8 +407,7 @@ const PerformanceReport = ({
                   <Statistic
                     title="Average Success Rate"
                     value={`${(
-                      (data?.offenderReport?.lossTotals?.averageSuccessRate ||
-                        0) * 100
+                      data?.offenderReport?.lossTotals?.averageSuccessRate || 0
                     ).toFixed(2)}%`}
                     prefix={
                       <FontAwesomeIcon
@@ -774,7 +773,9 @@ const PerformanceReport = ({
                         .toFixed(2),
                       location: incident.location?.alias || '',
                       totalOffenders: incident.totalOffenders || 0,
-                      crimeTypes: incident.crimeTypes?.join(', ') || '',
+                      crimeTypes:
+                        incident.crimeTypes?.map((t) => t.name).join(', ') ||
+                        '',
                       policeReported: incident.policeInvolved ? 'Yes' : 'No',
                       policeAttended: incident.policeReported ? 'Yes' : 'No',
                       crimeRef: incident.policeRef || '',
