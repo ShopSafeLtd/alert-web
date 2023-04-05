@@ -596,7 +596,7 @@ const PerformanceReport = ({
                 axisLeft={{
                   tickPadding: 15,
                   tickSize: 1,
-                  legend: 'Calls',
+                  legend: 'Incidents',
                   legendOffset: -44,
                   legendPosition: 'middle',
                 }}

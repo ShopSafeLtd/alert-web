@@ -5960,6 +5960,19 @@ export type BusinessParentInput = {
   connect?: InputMaybe<BusinessWhereUniqueInput>;
 };
 
+export type BusinessReport = {
+  __typename?: 'BusinessReport';
+  crimeTypeDonut?: Maybe<Array<Maybe<Graph>>>;
+  goodsTypeLossRecovered?: Maybe<Array<Maybe<RadialGraph>>>;
+  incidentDayOfWeekGraph?: Maybe<Array<Maybe<Graph>>>;
+  incidentMonthGraph?: Maybe<Array<Maybe<Graph>>>;
+  incidentSummary?: Maybe<IncidentSummary>;
+  incidentTimeOfDayDonut?: Maybe<Array<Maybe<Graph>>>;
+  incidentsTable?: Maybe<ListIncidents>;
+  involvedTagDonut?: Maybe<Array<Maybe<Graph>>>;
+  lossTotals?: Maybe<LossTotals>;
+};
+
 export type BusinessScalarWhereInput = {
   AND?: InputMaybe<Array<BusinessScalarWhereInput>>;
   NOT?: InputMaybe<Array<BusinessScalarWhereInput>>;
@@ -6891,10 +6904,17 @@ export type CreateUserData = {
   email: Scalars['String'];
   fullName: Scalars['String'];
   groups: Array<InputMaybe<UniqueId>>;
+  incidentEmail?: InputMaybe<Scalars['Boolean']>;
+  incidentPush?: InputMaybe<Scalars['Boolean']>;
+  messagePush?: InputMaybe<Scalars['Boolean']>;
+  offenderEmail?: InputMaybe<Scalars['Boolean']>;
+  offenderPush?: InputMaybe<Scalars['Boolean']>;
   organisation?: InputMaybe<Scalars['String']>;
   publicName: Scalars['Boolean'];
   role: Role;
   scheme: UniqueId;
+  subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
+  subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type CreateVehicleDataInput = {
@@ -6941,6 +6961,7 @@ export type CrimeGroup = {
   incidents?: Maybe<Array<Maybe<Incident>>>;
   intel: Array<Intel>;
   offenders: Array<Offender>;
+  ref?: Maybe<Scalars['String']>;
   reference?: Maybe<Scalars['Int']>;
   schemes: Array<Scheme>;
   subscribed?: Maybe<Scalars['Boolean']>;
@@ -7389,6 +7410,12 @@ export type CrimeGroupListRelationFilter = {
   some?: InputMaybe<CrimeGroupWhereInput>;
 };
 
+export type CrimeGroupMap = {
+  __typename?: 'CrimeGroupMap';
+  incidentsCoords?: Maybe<Array<Maybe<HeatMapLatLng>>>;
+  offenderMarkers?: Maybe<Array<Maybe<MapMarker>>>;
+};
+
 export type CrimeGroupOrderByRelationAggregateInput = {
   _count?: InputMaybe<SortOrder>;
 };
@@ -7422,6 +7449,21 @@ export type CrimeGroupPerformance = {
   totalOffenders: Scalars['Int'];
   totalRecoveredValue: Scalars['Float'];
   totalSuccessRate: Scalars['Float'];
+};
+
+export type CrimeGroupReport = {
+  __typename?: 'CrimeGroupReport';
+  crimeGroupMap?: Maybe<CrimeGroupMap>;
+  crimeTypeByOffender?: Maybe<Array<Maybe<RadialGraph>>>;
+  goodsTypeLossRecovered?: Maybe<Array<Maybe<RadialGraph>>>;
+  incidentDayOfWeekGraph?: Maybe<Array<Maybe<Graph>>>;
+  incidentMonthGraph?: Maybe<Array<Maybe<Graph>>>;
+  incidentSummary?: Maybe<IncidentSummary>;
+  incidentTimeOfDayDonut?: Maybe<Array<Maybe<Graph>>>;
+  incidentsTable?: Maybe<ListIncidents>;
+  lossTotals?: Maybe<LossTotals>;
+  offenderGoodsTypeValue?: Maybe<Array<Maybe<RadialGraph>>>;
+  offenderTable?: Maybe<ListOffenders>;
 };
 
 export type CrimeGroupReportInput = {
@@ -11239,6 +11281,12 @@ export type GroupWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
 };
 
+export type HeatMapLatLng = {
+  __typename?: 'HeatMapLatLng';
+  lat: Scalars['Float'];
+  lng: Scalars['Float'];
+};
+
 export enum IdSource {
   DrivingLicence = 'DRIVING_LICENCE',
   IdCard = 'ID_CARD',
@@ -13422,6 +13470,7 @@ export type Incident = {
   recoveredValue?: Maybe<Scalars['Float']>;
   recycleBin?: Maybe<RecycledItem>;
   recycled: Scalars['Boolean'];
+  ref?: Maybe<Scalars['String']>;
   reference?: Maybe<Scalars['Int']>;
   scheme: Scheme;
   schemeId: Scalars['String'];
@@ -18027,6 +18076,7 @@ export type Investigation = {
   intel: Array<Intel>;
   name: Scalars['String'];
   offenders: Array<Offender>;
+  ref?: Maybe<Scalars['String']>;
   reference?: Maybe<Scalars['Int']>;
   scheme: Scheme;
   subscribed?: Maybe<Scalars['Boolean']>;
@@ -19649,6 +19699,12 @@ export type LossTotals = {
   totalIncidents: Scalars['Int'];
   totalLostValue: Scalars['Float'];
   totalRecoveredValue: Scalars['Float'];
+};
+
+export type MapMarker = {
+  __typename?: 'MapMarker';
+  coords: HeatMapLatLng;
+  name?: Maybe<Scalars['String']>;
 };
 
 export type MergeOffendersInput = {
@@ -21916,6 +21972,7 @@ export type Offender = {
   race?: Maybe<Race>;
   recycleBin?: Maybe<RecycledItem>;
   recycled: Scalars['Boolean'];
+  ref?: Maybe<Scalars['String']>;
   reference?: Maybe<Scalars['Int']>;
   scheme: Scheme;
   schemeId: Scalars['String'];
@@ -25188,6 +25245,7 @@ export type Query = {
   chats: Array<Chat>;
   crimeGroup?: Maybe<CrimeGroup>;
   crimeGroupPerformance?: Maybe<ListCrimeGroupPerformance>;
+  crimeGroupReport?: Maybe<CrimeGroupReport>;
   currentUser?: Maybe<User>;
   feedItems: Array<FeedItem>;
   group?: Maybe<Group>;
@@ -25330,6 +25388,10 @@ export type QueryCrimeGroupArgs = {
 
 export type QueryCrimeGroupPerformanceArgs = {
   where: UserContributionWhereInput;
+};
+
+export type QueryCrimeGroupReportArgs = {
+  where: CrimeGroupReportInput;
 };
 
 export type QueryFeedItemsArgs = {
@@ -37722,6 +37784,7 @@ export type Vehicle = {
   make?: Maybe<Scalars['String']>;
   model?: Maybe<Scalars['String']>;
   offenders: Array<Offender>;
+  ref?: Maybe<Scalars['String']>;
   reference?: Maybe<Scalars['Int']>;
   registration?: Maybe<Scalars['String']>;
   schemes: Array<Scheme>;
@@ -43734,6 +43797,162 @@ export type BusinessEngagementQuery = {
       totalUpdates: number;
       totalMessages: number;
       totalLogins: number;
+    }>;
+  } | null;
+};
+
+export type CrimeGroupReportQueryVariables = Exact<{
+  where: CrimeGroupReportInput;
+  whereContribution: UserContributionWhereInput;
+  whereCrimeGroup: CrimeGroupWhereUniqueInput;
+}>;
+
+export type CrimeGroupReportQuery = {
+  __typename?: 'Query';
+  crimeGroup?: {
+    __typename?: 'CrimeGroup';
+    id: string;
+    reference?: number | null;
+    alias?: string | null;
+  } | null;
+  crimeGroupReport?: {
+    __typename?: 'CrimeGroupReport';
+    crimeGroupMap?: {
+      __typename?: 'CrimeGroupMap';
+      offenderMarkers?: Array<{
+        __typename?: 'MapMarker';
+        name?: string | null;
+        coords: { __typename?: 'HeatMapLatLng'; lng: number; lat: number };
+      } | null> | null;
+      incidentsCoords?: Array<{
+        __typename?: 'HeatMapLatLng';
+        lng: number;
+        lat: number;
+      } | null> | null;
+    } | null;
+    crimeTypeByOffender?: Array<{
+      __typename?: 'RadialGraph';
+      label: string;
+      data: Array<{ __typename?: 'Graph'; value: number; label: string }>;
+    } | null> | null;
+    goodsTypeLossRecovered?: Array<{
+      __typename?: 'RadialGraph';
+      label: string;
+      data: Array<{ __typename?: 'Graph'; value: number; label: string }>;
+    } | null> | null;
+    incidentDayOfWeekGraph?: Array<{
+      __typename?: 'Graph';
+      value: number;
+      label: string;
+    } | null> | null;
+    incidentMonthGraph?: Array<{
+      __typename?: 'Graph';
+      value: number;
+      label: string;
+    } | null> | null;
+    incidentSummary?: {
+      __typename?: 'IncidentSummary';
+      mostCommonCrimeType: string;
+      totalIncidents: number;
+      lastIncidentDate?: any | null;
+      incidentsWherePoliceAttended: number;
+      incidentsReportedToPolice: number;
+    } | null;
+    incidentTimeOfDayDonut?: Array<{
+      __typename?: 'Graph';
+      value: number;
+      label: string;
+    } | null> | null;
+    incidentsTable?: {
+      __typename?: 'ListIncidents';
+      total: number;
+      incidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        reference?: number | null;
+        date: any;
+        totalOffenders?: number | null;
+        policeReported: boolean;
+        policeInvolved: boolean;
+        policeRef?: string | null;
+        incidentItems: Array<{
+          __typename?: 'IncidentItem';
+          value: number;
+          recoveredValue: number;
+        }>;
+        location?: {
+          __typename?: 'Address';
+          full?: string | null;
+          alias?: string | null;
+          id: string;
+          geoLat?: number | null;
+          geoLng?: number | null;
+        } | null;
+        crimeTypes: Array<{ __typename?: 'Tag'; name: string; id: string }>;
+      }>;
+    } | null;
+    lossTotals?: {
+      __typename?: 'LossTotals';
+      totalRecoveredValue: number;
+      totalLostValue: number;
+      totalIncidents: number;
+      averagePerIncident: number;
+      averageSuccessRate: number;
+    } | null;
+    offenderGoodsTypeValue?: Array<{
+      __typename?: 'RadialGraph';
+      label: string;
+      data: Array<{ __typename?: 'Graph'; label: string; value: number }>;
+    } | null> | null;
+  } | null;
+  offendersPerformance?: {
+    __typename?: 'ListOffenderPerformance';
+    total: number;
+    offenderPerformance: Array<{
+      __typename?: 'OffenderPerformance';
+      primaryPhoto?: string | null;
+      alertId: string;
+      name: string;
+      totalIncidents: number;
+      totalLostValue: number;
+      totalRecoveredValue: number;
+      totalSuccessRate: number;
+      lastIncidentDate?: any | null;
+    }>;
+  } | null;
+  businessContribution?: {
+    __typename?: 'ListBusinessContribution';
+    total: number;
+    businessContributions: Array<{
+      __typename?: 'BusinessContributions';
+      name: string;
+      totalUsers: number;
+      totalIncidents: number;
+      totalOffenders: number;
+      totalUpdates: number;
+      totalMessages: number;
+      totalLogins: number;
+      totalLostValue: number;
+      totalRecoveredValue: number;
+      totalSuccessRate: number;
+      mostCommonGoodLost?: string | null;
+      highestTotalValueGoodLost?: number | null;
+      averageLossValue?: number | null;
+    }>;
+  } | null;
+  targetedGoods?: {
+    __typename?: 'ListTargetedGoods';
+    total: number;
+    targetedGoods: Array<{
+      __typename?: 'TargetedGood';
+      alertId: string;
+      name: string;
+      totalIncidents: number;
+      totalOffenders: number;
+      totalLostValue: number;
+      totalRecoveredValue: number;
+      totalSuccessRate: number;
+      averageLossValue: number;
     }>;
   } | null;
 };
@@ -55105,6 +55324,205 @@ export type BusinessEngagementLazyQueryHookResult = ReturnType<
 export type BusinessEngagementQueryResult = Apollo.QueryResult<
   BusinessEngagementQuery,
   BusinessEngagementQueryVariables
+>;
+export const CrimeGroupReportDocument = gql`
+  query CrimeGroupReport(
+    $where: CrimeGroupReportInput!
+    $whereContribution: UserContributionWhereInput!
+    $whereCrimeGroup: CrimeGroupWhereUniqueInput!
+  ) {
+    crimeGroup(where: $whereCrimeGroup) {
+      id
+      reference
+      alias
+    }
+    crimeGroupReport(where: $where) {
+      crimeGroupMap {
+        offenderMarkers {
+          coords {
+            lng
+            lat
+          }
+          name
+        }
+        incidentsCoords {
+          lng
+          lat
+        }
+      }
+      crimeTypeByOffender {
+        label
+        data {
+          value
+          label
+        }
+      }
+      goodsTypeLossRecovered {
+        label
+        data {
+          value
+          label
+        }
+      }
+      incidentDayOfWeekGraph {
+        value
+        label
+      }
+      incidentMonthGraph {
+        value
+        label
+      }
+      incidentSummary {
+        mostCommonCrimeType
+        totalIncidents
+        lastIncidentDate
+        incidentsWherePoliceAttended
+        incidentsReportedToPolice
+      }
+      incidentTimeOfDayDonut {
+        value
+        label
+      }
+      incidentsTable {
+        incidents {
+          id
+          reference
+          date
+          incidentItems {
+            value
+            recoveredValue
+          }
+          location {
+            full
+            alias
+            id
+            geoLat
+            geoLng
+          }
+          totalOffenders
+          crimeTypes {
+            name
+            id
+          }
+          policeReported
+          policeInvolved
+          policeRef
+        }
+        total
+      }
+      lossTotals {
+        totalRecoveredValue
+        totalLostValue
+        totalIncidents
+        averagePerIncident
+        averageSuccessRate
+      }
+      offenderGoodsTypeValue {
+        label
+        data {
+          label
+          value
+        }
+      }
+    }
+    offendersPerformance(where: $whereContribution) {
+      total
+      offenderPerformance {
+        primaryPhoto
+        alertId
+        name
+        totalIncidents
+        totalLostValue
+        totalRecoveredValue
+        totalSuccessRate
+        lastIncidentDate
+      }
+    }
+    businessContribution(where: $whereContribution) {
+      total
+      businessContributions {
+        name
+        totalUsers
+        totalIncidents
+        totalOffenders
+        totalUpdates
+        totalMessages
+        totalLogins
+        totalLostValue
+        totalRecoveredValue
+        totalSuccessRate
+        mostCommonGoodLost
+        highestTotalValueGoodLost
+        averageLossValue
+      }
+    }
+    targetedGoods(where: $whereContribution) {
+      total
+      targetedGoods {
+        alertId
+        name
+        totalIncidents
+        totalOffenders
+        totalLostValue
+        totalRecoveredValue
+        totalSuccessRate
+        averageLossValue
+      }
+    }
+  }
+`;
+
+/**
+ * __useCrimeGroupReportQuery__
+ *
+ * To run a query within a React component, call `useCrimeGroupReportQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCrimeGroupReportQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCrimeGroupReportQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      whereContribution: // value for 'whereContribution'
+ *      whereCrimeGroup: // value for 'whereCrimeGroup'
+ *   },
+ * });
+ */
+export function useCrimeGroupReportQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    CrimeGroupReportQuery,
+    CrimeGroupReportQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<CrimeGroupReportQuery, CrimeGroupReportQueryVariables>(
+    CrimeGroupReportDocument,
+    options
+  );
+}
+export function useCrimeGroupReportLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    CrimeGroupReportQuery,
+    CrimeGroupReportQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    CrimeGroupReportQuery,
+    CrimeGroupReportQueryVariables
+  >(CrimeGroupReportDocument, options);
+}
+export type CrimeGroupReportQueryHookResult = ReturnType<
+  typeof useCrimeGroupReportQuery
+>;
+export type CrimeGroupReportLazyQueryHookResult = ReturnType<
+  typeof useCrimeGroupReportLazyQuery
+>;
+export type CrimeGroupReportQueryResult = Apollo.QueryResult<
+  CrimeGroupReportQuery,
+  CrimeGroupReportQueryVariables
 >;
 export const IncidentMapDocument = gql`
   query IncidentMap($where: IncidentWhereInput!) {
