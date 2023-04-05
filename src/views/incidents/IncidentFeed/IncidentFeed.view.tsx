@@ -103,7 +103,7 @@ const IncidentFeed = ({
     <Affix offsetTop={5}>
       <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 5 }}>
         <Row align="middle" gutter={16}>
-          <Col span={5}>
+          <Col span={4} xxl={6}>
             <Input
               size="small"
               // style={{ width: 350 }}
@@ -125,19 +125,25 @@ const IncidentFeed = ({
                 {
                   label: 'Not Approved',
                   value: 'NOT APPROVED',
+                  needAdminRight: true,
                 },
                 {
                   label: 'Following',
                   value: 'FOLLOWING',
                 },
                 {
+                  label: 'My Data',
+                  value: 'MYDATA',
+                },
+
+                {
                   label: 'PoliceInvolved',
                   value: 'POLICEINVOLVED',
                 },
-                {
-                  label: 'PoliceReported',
-                  value: 'POLICEREPORTED',
-                },
+                // {
+                //   label: 'PoliceReported',
+                //   value: 'POLICEREPORTED',
+                // },
               ]}
             />
           </Col>

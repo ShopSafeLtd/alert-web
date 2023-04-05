@@ -406,7 +406,11 @@ const ViewCrimeGroup = ({
               data?.crimeGroup?.incidents.length > 0 &&
               !loading ? (
                 <IncidentTable
-                  incidents={data?.crimeGroup?.incidents}
+                  // TODO
+                  // @ts-expect-error says can be null
+                  incidents={data?.crimeGroup?.incidents.filter(
+                    (incident) => incident !== null
+                  )}
                   hasNavigation
                 />
               ) : (

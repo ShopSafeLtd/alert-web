@@ -125,18 +125,25 @@ const useFeedItems = (): Return => {
           : undefined,
 
       offender: {
-        subscribedUsers: gallery.includes('SUBSCRIBED')
+        subscribedUsers: gallery.includes('FOLLOWING')
           ? {
               some: {
                 id: {
                   equals: userId,
                 },
+              },
+            }
+          : undefined,
+        createdBy: gallery.includes('MYDATA')
+          ? {
+              id: {
+                equals: userId,
               },
             }
           : undefined,
       },
       incident: {
-        subscribedUsers: gallery.includes('SUBSCRIBED')
+        subscribedUsers: gallery.includes('FOLLOWING')
           ? {
               some: {
                 id: {
@@ -145,9 +152,16 @@ const useFeedItems = (): Return => {
               },
             }
           : undefined,
+        createdBy: gallery.includes('MYDATA')
+          ? {
+              id: {
+                equals: userId,
+              },
+            }
+          : undefined,
       },
       vehicle: {
-        subscribedUsers: gallery.includes('SUBSCRIBED')
+        subscribedUsers: gallery.includes('FOLLOWING')
           ? {
               some: {
                 id: {
@@ -158,7 +172,7 @@ const useFeedItems = (): Return => {
           : undefined,
       },
       crimeGroup: {
-        subscribedUsers: gallery.includes('SUBSCRIBED')
+        subscribedUsers: gallery.includes('FOLLOWING')
           ? {
               some: {
                 id: {
@@ -169,7 +183,7 @@ const useFeedItems = (): Return => {
           : undefined,
       },
       investigation: {
-        subscribedUsers: gallery.includes('SUBSCRIBED')
+        subscribedUsers: gallery.includes('FOLLOWING')
           ? {
               some: {
                 id: {

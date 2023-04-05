@@ -124,7 +124,7 @@ Props): JSX.Element => (
   <div className="feed-container" style={{ height: '100vh', padding: 15 }}>
     <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 10 }}>
       <Row align="middle" gutter={16}>
-        <Col span={5}>
+        <Col span={4} xxl={6}>
           <Input
             size="small"
             placeholder="Search for anything in alert..."
@@ -139,16 +139,17 @@ Props): JSX.Element => (
             onChange={setGallery}
             options={[
               {
+                label: 'Not Approved',
+                value: 'NOT APPROVED',
+                needAdminRight: true,
+              },
+              {
                 label: 'Following',
                 value: 'FOLLOWING',
               },
               {
                 label: 'My Data',
                 value: 'MYDATA',
-              },
-              {
-                label: 'Not Approved',
-                value: 'NOT APPROVED',
               },
             ]}
           />

@@ -1,5 +1,7 @@
 import { Col, Row, Skeleton } from 'antd';
+import { Role } from 'graphql/generated';
 import React from 'react';
+import { useStoreState } from 'state';
 import CheckTag from '../check-tag/CheckTag.view';
 
 interface Props {
@@ -9,6 +11,7 @@ interface Props {
     label: string;
     value: string;
     tooltip?: string;
+    needAdminRight?: boolean;
   }[];
   mode?: 'check' | 'radio';
   loading?: boolean;
@@ -21,6 +24,8 @@ const CheckTags = ({
   mode = 'check',
   loading = false,
 }: Props) => {
+  const adminRights =
+    useStoreState((state) => state.user.role) === Role.SchemeAdmin;
   const toggleOption = (e: string) => {
     if (mode === 'check') {
       if (value.includes(e)) {
@@ -63,13 +68,15 @@ const CheckTags = ({
     <Row gutter={[10, 10]}>
       {options.map((option) => (
         <Col>
-          <CheckTag
-            value={option.value}
-            label={option.label}
-            tooltip={option.tooltip}
-            active={value.includes(option.value)}
-            onClick={toggleOption}
-          />
+          {!option.needAdminRight || adminRights ? (
+            <CheckTag
+              value={option.value}
+              label={option.label}
+              tooltip={option.tooltip}
+              active={value.includes(option.value)}
+              onClick={toggleOption}
+            />
+          ) : null}
         </Col>
       ))}
     </Row>

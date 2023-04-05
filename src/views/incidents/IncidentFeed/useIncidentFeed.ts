@@ -139,6 +139,7 @@ const useIncidentFeed = (): Return => {
               },
             }
           : undefined,
+
       approved: gallery.includes('NOT APPROVED')
         ? {
             equals: false,
@@ -163,42 +164,56 @@ const useIncidentFeed = (): Return => {
             equals: true,
           }
         : undefined,
-      OR: [
+      AND: [
         {
-          subject: {
-            contains: variables.search,
-            mode: QueryMode.Insensitive,
-          },
-        },
-        {
-          createdBy: {
-            OR: [
-              {
-                fullName: {
-                  contains: variables.search,
-                  mode: QueryMode.Insensitive,
-                },
+          OR: [
+            {
+              subject: {
+                contains: variables.search,
+                mode: QueryMode.Insensitive,
               },
-              {
-                businesses: {
-                  some: {
-                    name: {
+            },
+            {
+              ref: {
+                contains: variables.search,
+                mode: QueryMode.Insensitive,
+              },
+            },
+            {
+              createdBy: {
+                OR: [
+                  {
+                    fullName: {
                       contains: variables.search,
                       mode: QueryMode.Insensitive,
                     },
                   },
-                },
+
+                  {
+                    businesses: {
+                      some: {
+                        name: {
+                          contains: variables.search,
+                          mode: QueryMode.Insensitive,
+                        },
+                      },
+                    },
+                  },
+                ],
               },
-            ],
-          },
+            },
+          ],
+        },
+        {
+          createdBy: gallery.includes('MYDATA')
+            ? {
+                id: {
+                  equals: userId,
+                },
+              }
+            : undefined,
         },
       ],
-      peculiarities: peculiarities
-        ? {
-            mode: QueryMode.Insensitive,
-            contains: peculiarities,
-          }
-        : undefined,
       business:
         businessesFilter.length > 0
           ? {
