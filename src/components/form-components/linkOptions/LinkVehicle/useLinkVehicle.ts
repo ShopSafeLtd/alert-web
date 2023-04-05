@@ -76,17 +76,17 @@ const useLinkVehicle = ({ onClose, update, vehicleIds }: Props): Return => {
         },
         OR: [
           {
-            make: {
+            registration: {
               contains: search,
               mode: QueryMode.Insensitive,
             },
           },
-          {
-            model: {
-              contains: search,
-              mode: QueryMode.Insensitive,
-            },
-          },
+          // {
+          //   reference: {
+          //     contains: search,
+          //     mode: QueryMode.Insensitive,
+          //   },
+          // },
         ],
       },
     },
@@ -109,6 +109,9 @@ const useLinkVehicle = ({ onClose, update, vehicleIds }: Props): Return => {
       update({
         id: selectedVehicle.id,
         make: selectedVehicle.make,
+        colour: selectedVehicle.colour,
+        model: selectedVehicle.model,
+        registration: selectedVehicle.registration,
         reference: selectedVehicle.reference,
         totalOffenders: selectedVehicle.totalOffenders,
         images:

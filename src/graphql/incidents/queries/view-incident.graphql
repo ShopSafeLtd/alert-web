@@ -70,6 +70,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     }
     vehicles {
       id
+      reference
       colour
       model
       make
@@ -86,6 +87,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     }
     offenders {
       id
+      reference
       createdAt
       updatedAt
       age

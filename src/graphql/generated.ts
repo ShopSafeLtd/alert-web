@@ -40159,12 +40159,10 @@ export type CrimeGroupQuery = {
     incidents?: Array<{
       __typename?: 'Incident';
       id: string;
-      subject?: string | null;
-      dayTime?: string | null;
-      value?: number | null;
-      recoveredValue?: number | null;
       reference?: number | null;
-      policeRef?: string | null;
+      dayTime?: string | null;
+      date: any;
+      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
       createdBy: {
         __typename?: 'User';
         id: string;
@@ -41718,6 +41716,7 @@ export type ViewIncidentQuery = {
     vehicles: Array<{
       __typename?: 'Vehicle';
       id: string;
+      reference?: number | null;
       colour?: string | null;
       model?: string | null;
       make?: string | null;
@@ -41736,6 +41735,7 @@ export type ViewIncidentQuery = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
+      reference?: number | null;
       createdAt: any;
       updatedAt: any;
       age?: Age | null;
@@ -43090,10 +43090,10 @@ export type ListOffendersQuery = {
     offenders: Array<{
       __typename?: 'Offender';
       id: string;
+      reference?: number | null;
       createdAt: any;
       updatedAt: any;
       totalIncidents?: number | null;
-      reference?: number | null;
       age?: Age | null;
       build?: Build | null;
       dateOfBirth?: any | null;
@@ -43131,6 +43131,7 @@ export type ListOffendersQuery = {
       incidents: Array<{
         __typename?: 'Incident';
         id: string;
+        reference?: number | null;
         subject?: string | null;
         description: string;
         dayTime?: string | null;
@@ -43344,6 +43345,7 @@ export type ViewOffenderQuery = {
     vehicles: Array<{
       __typename?: 'Vehicle';
       id: string;
+      reference?: number | null;
       colour?: string | null;
       model?: string | null;
       make?: string | null;
@@ -43362,6 +43364,7 @@ export type ViewOffenderQuery = {
     incidents: Array<{
       __typename?: 'Incident';
       id: string;
+      reference?: number | null;
       dayTime?: string | null;
       date: any;
       crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
@@ -43991,6 +43994,133 @@ export type OffenderReportQuery = {
         geoLat?: number | null;
         full?: string | null;
       }>;
+      images: Array<{
+        __typename?: 'Image';
+        optimisedPersisted?: string | null;
+      }>;
+    } | null;
+  } | null;
+  targetedGoods?: {
+    __typename?: 'ListTargetedGoods';
+    total: number;
+    targetedGoods: Array<{
+      __typename?: 'TargetedGood';
+      totalSuccessRate: number;
+      totalRecoveredValue: number;
+      totalOffenders: number;
+      totalLostValue: number;
+      totalIncidents: number;
+      name: string;
+      averageLossValue: number;
+      alertId: string;
+    }>;
+  } | null;
+  businessContribution?: {
+    __typename?: 'ListBusinessContribution';
+    total: number;
+    businessContributions: Array<{
+      __typename?: 'BusinessContributions';
+      name: string;
+      totalIncidents: number;
+      totalOffenders: number;
+      totalLostValue: number;
+      totalRecoveredValue: number;
+      totalSuccessRate: number;
+      mostCommonGoodLost?: string | null;
+      highestTotalValueGoodLost?: number | null;
+      averageLossValue?: number | null;
+    }>;
+  } | null;
+};
+
+export type OffenderReportQuery = {
+  __typename?: 'Query';
+  offenderReport?: {
+    __typename?: 'OffenderReport';
+    crimeTypeBusinessRadial?: Array<{
+      __typename?: 'RadialGraph';
+      label: string;
+      data: Array<{ __typename?: 'Graph'; value: number; label: string }>;
+    } | null> | null;
+    crimeTypeDonut?: Array<{
+      __typename?: 'Graph';
+      label: string;
+      value: number;
+    } | null> | null;
+    goodsTypeLossRecovered?: Array<{
+      __typename?: 'RadialGraph';
+      label: string;
+      data: Array<{ __typename?: 'Graph'; label: string; value: number }>;
+    } | null> | null;
+    incidentDayOfWeekGraph?: Array<{
+      __typename?: 'Graph';
+      value: number;
+      label: string;
+    } | null> | null;
+    incidentMonthGraph?: Array<{
+      __typename?: 'Graph';
+      value: number;
+      label: string;
+    } | null> | null;
+    incidentSummary?: {
+      __typename?: 'IncidentSummary';
+      totalIncidents: number;
+      mostCommonCrimeType: string;
+      lastIncidentDate?: any | null;
+      incidentsWherePoliceAttended: number;
+      incidentsReportedToPolice: number;
+    } | null;
+    incidentTimeOfDayDonut?: Array<{
+      __typename?: 'Graph';
+      value: number;
+      label: string;
+    } | null> | null;
+    incidentsTable?: {
+      __typename?: 'ListIncidents';
+      total: number;
+      incidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        reference?: number | null;
+        date: any;
+        totalOffenders?: number | null;
+        policeReported: boolean;
+        policeInvolved: boolean;
+        policeRef?: string | null;
+        incidentItems: Array<{
+          __typename?: 'IncidentItem';
+          value: number;
+          recoveredValue: number;
+        }>;
+        location?: {
+          __typename?: 'Address';
+          full?: string | null;
+          alias?: string | null;
+        } | null;
+        crimeTypes: Array<{ __typename?: 'Tag'; name: string; id: string }>;
+      }>;
+    } | null;
+    lossTotals?: {
+      __typename?: 'LossTotals';
+      totalRecoveredValue: number;
+      totalLostValue: number;
+      averagePerIncident: number;
+      averageSuccessRate: number;
+      totalIncidents: number;
+    } | null;
+    offenderSummary?: {
+      __typename?: 'Offender';
+      id: string;
+      age?: Age | null;
+      dateSource?: string | null;
+      peculiarities?: string | null;
+      dateOfBirth?: any | null;
+      build?: Build | null;
+      hair?: string | null;
+      race?: Race | null;
+      reference?: number | null;
+      gender?: Gender | null;
+      name?: string | null;
       images: Array<{
         __typename?: 'Image';
         optimisedPersisted?: string | null;
@@ -46006,13 +46136,19 @@ export type VehicleQuery = {
     incidents: Array<{
       __typename?: 'Incident';
       id: string;
-      subject?: string | null;
-      dayTime?: string | null;
-      value?: number | null;
-      recoveredValue?: number | null;
       reference?: number | null;
-      policeRef?: string | null;
-      createdBy: { __typename?: 'User'; id: string; organisation: string };
+      dayTime?: string | null;
+      date: any;
+      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      createdBy: {
+        __typename?: 'User';
+        id: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
     }>;
     offenders: Array<{
       __typename?: 'Offender';
@@ -48832,8 +48968,13 @@ export const CrimeGroupDocument = gql`
       }
       incidents {
         id
-        subject
+        reference
         dayTime
+        date
+        crimeTypes {
+          id
+          name
+        }
         createdBy {
           id
           businesses {
@@ -48841,10 +48982,6 @@ export const CrimeGroupDocument = gql`
             name
           }
         }
-        value
-        recoveredValue
-        reference
-        policeRef
       }
       updates(orderBy: { createdAt: desc }) {
         id
@@ -51547,6 +51684,7 @@ export const ViewIncidentDocument = gql`
       }
       vehicles {
         id
+        reference
         colour
         model
         make
@@ -51563,6 +51701,7 @@ export const ViewIncidentDocument = gql`
       }
       offenders {
         id
+        reference
         createdAt
         updatedAt
         age
@@ -53789,6 +53928,7 @@ export const ListOffendersDocument = gql`
     ) {
       offenders {
         id
+        reference
         createdAt
         updatedAt
         totalIncidents
@@ -53835,6 +53975,7 @@ export const ListOffendersDocument = gql`
         }
         incidents {
           id
+          reference
           subject
           description
           dayTime
@@ -54235,6 +54376,7 @@ export const ViewOffenderDocument = gql`
       }
       vehicles {
         id
+        reference
         colour
         model
         make
@@ -54254,6 +54396,7 @@ export const ViewOffenderDocument = gql`
       }
       incidents {
         id
+        reference
         dayTime
         date
         crimeTypes {
@@ -55225,42 +55368,57 @@ export const OffenderReportDocument = gql`
           label
           value
         }
-      }
-      incidentDayOfWeekGraph {
-        value
-        label
-      }
-      incidentMonthGraph {
-        value
-        label
-      }
-      incidentSummary {
-        totalIncidents
-        mostCommonCrimeType
-        lastIncidentDate
-        incidentsWherePoliceAttended
-        incidentsReportedToPolice
-      }
-      incidentTimeOfDayDonut {
-        value
-        label
-      }
-      incidentsTable {
-        total
-        incidents {
+        incidentsTable {
+          total
+          incidents {
+            id
+            reference
+            date
+            incidentItems {
+              value
+              recoveredValue
+            }
+            location {
+              full
+              alias
+              id
+              geoLat
+              geoLng
+            }
+            totalOffenders
+            crimeTypes {
+              name
+              id
+            }
+            policeReported
+            policeInvolved
+            policeRef
+          }
+        }
+        lossTotals {
+          totalRecoveredValue
+          totalLostValue
+          averagePerIncident
+          averageSuccessRate
+          totalIncidents
+        }
+        offenderSummary {
           id
           reference
-          date
-          incidentItems {
-            value
-            recoveredValue
+          gender
+          addresses {
+            id
+            geoLng
+            geoLat
+            full
+          }
+          name
+          images {
+            optimisedPersisted
           }
           location {
             full
             alias
-            id
-            geoLat
-            geoLng
           }
           totalOffenders
           crimeTypes {
@@ -55290,12 +55448,6 @@ export const OffenderReportDocument = gql`
         race
         reference
         gender
-        addresses {
-          id
-          geoLng
-          geoLat
-          full
-        }
         name
         images {
           optimisedPersisted
@@ -58923,16 +59075,20 @@ export const VehicleDocument = gql`
       }
       incidents {
         id
-        subject
+        reference
         dayTime
+        date
+        crimeTypes {
+          id
+          name
+        }
         createdBy {
           id
-          organisation
+          businesses {
+            id
+            name
+          }
         }
-        value
-        recoveredValue
-        reference
-        policeRef
       }
       offenders {
         id

@@ -8,7 +8,7 @@ import type {
   CreateTagMutation,
   Gender,
   IdSource,
-  ListCrimeGroupsQuery,
+  // ListCrimeGroupsQuery,
   ListOffendersQuery,
   ListVehiclesQuery,
   Race,
@@ -97,7 +97,7 @@ interface Return {
   setSelectedItems: (value: string[]) => void;
   form: FormInstance<FormData>;
   listVehiclesData: ListVehiclesQuery | undefined;
-  listCrimeGroupsData: ListCrimeGroupsQuery | undefined;
+  // listCrimeGroupsData: ListCrimeGroupsQuery | undefined;
   addNewVehicle: boolean;
   addExistingVehicle: boolean;
   toggleAddNewVehicle: () => void;
@@ -719,7 +719,7 @@ const useAddOffender = (): Return => {
     updateCrimeGroupsData,
     removeCrimeGroup,
     listVehiclesData,
-    listCrimeGroupsData,
+    // listCrimeGroupsData,
     onValuesChange,
     idVerified,
   };

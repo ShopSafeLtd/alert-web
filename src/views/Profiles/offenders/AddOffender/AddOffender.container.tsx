@@ -53,7 +53,7 @@ const AddOffender = (): JSX.Element => {
     updateCrimeGroupsData,
     removeCrimeGroup,
     listVehiclesData,
-    listCrimeGroupsData,
+    // listCrimeGroupsData,
     idVerified,
     onValuesChange,
   } = useAddOffender();
@@ -109,7 +109,7 @@ const AddOffender = (): JSX.Element => {
         crimeGroupsData={crimeGroupsData}
         updateCrimeGroupsData={updateCrimeGroupsData}
         listVehiclesData={listVehiclesData}
-        listCrimeGroupsData={listCrimeGroupsData}
+        // listCrimeGroupsData={listCrimeGroupsData}
         idVerified={idVerified}
         onValuesChange={onValuesChange}
       />

@@ -1019,9 +1019,17 @@ const useEditIncident = (): Return => {
       }
     }
 
-    console.log(changedValues);
+    console.log('changedValues', changedValues);
+    console.log('values', values);
 
-    if (changedValues.fellingTags) {
+    if (
+      values.fellingTags &&
+      // values.tags &&
+      // values.tags.length > 0
+      // &&
+      values.involvedTags &&
+      values.involvedTags.length > 0
+    ) {
       const tags = values.tags
         .map((id) => tagsData?.tags.find((tag) => tag.id === id))
         .map((tag) => tag?.crimeType || CrimeType.Other);

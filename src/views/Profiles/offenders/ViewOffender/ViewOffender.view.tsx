@@ -25,7 +25,6 @@ import {
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faArrowUpRightFromSquare,
   faBell,
   faBellSlash,
   faChevronDown,
@@ -57,7 +56,6 @@ import { calcExpired } from 'utils/offender/get-offender-exclusion';
 import OffenderSideList from 'components/offenders/OffenderSideList';
 import moment from 'moment';
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
-import { useNavigate } from 'react-router';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -66,6 +64,9 @@ import UpdateBar from 'components/MessageInput/UpdateBar';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import IncidentTable from 'components/tables/IncidentTable';
+import VehicleTable from 'components/tables/VehicleTable';
+import CrimeGroupTable from 'components/tables/CrimeGroupTable';
 import useStyles from './ViewOffender.styles';
 
 const { Title, Text } = Typography;
@@ -164,7 +165,6 @@ const ViewOffender = ({
   setOptionRowShow,
 }: Props): JSX.Element => {
   const classes = useStyles();
-  const navigate = useNavigate();
   return (
     <div className="page-container">
       <Row wrap={false}>
@@ -425,6 +425,7 @@ const ViewOffender = ({
                             `ddd MMM DD YYYY - HH:mm`
                           )}
                         </Descriptions.Item>
+
                         <Descriptions.Item
                           label={
                             <span>
@@ -436,13 +437,16 @@ const ViewOffender = ({
                             </span>
                           }
                         >
-                          {data?.offender?.crimeGroups &&
-                          data?.offender?.crimeGroups.length > 0
-                            ? data?.offender?.crimeGroups.map((group) => (
-                                <Tag key={group.id}>CG-{group.reference}</Tag>
-                              ))
-                            : 'None'}
+                          <Row>
+                            {data?.offender?.crimeGroups &&
+                            data?.offender?.crimeGroups.length > 0
+                              ? data?.offender?.crimeGroups.map((group) => (
+                                  <Tag key={group.id}>CG-{group.reference}</Tag>
+                                ))
+                              : 'None'}
+                          </Row>
                         </Descriptions.Item>
+
                         <Descriptions.Item
                           label={
                             <span>
@@ -454,21 +458,24 @@ const ViewOffender = ({
                             </span>
                           }
                         >
-                          {data?.offender?.groups?.map((group) => (
-                            <Tag key={group.id}>{group.name}</Tag>
-                          ))}
+                          <Row>
+                            {data?.offender?.groups?.map((group) => (
+                              <Tag key={group.id}>{group.name}</Tag>
+                            ))}
+                          </Row>
                         </Descriptions.Item>
                       </Descriptions>
-                      <Title level={4}>Exclusions</Title>
+                      <Title level={4} style={{ marginTop: 30 }}>
+                        Exclusions
+                      </Title>
                       {data?.offender?.bans.length && !loading ? (
                         <Table
                           size="small"
                           loading={loading}
                           pagination={
-                            data.offender.bans &&
-                            data?.offender.bans.length > 10
+                            data.offender.bans && data?.offender.bans.length > 5
                               ? {
-                                  pageSize: 10,
+                                  pageSize: 5,
                                 }
                               : false
                           }
@@ -529,11 +536,13 @@ const ViewOffender = ({
                         />
                       ) : (
                         <Empty
-                          description="No exclusions on offender"
+                          description="No exclusions for this offender"
                           image={Empty.PRESENTED_IMAGE_SIMPLE}
                         />
                       )}
-                      <Title level={4}>Addresses</Title>
+                      <Title level={4} style={{ marginTop: 30 }}>
+                        Addresses
+                      </Title>
                       {data?.offender?.addresses.length && !loading ? (
                         <Table
                           size="small"
@@ -573,231 +582,51 @@ const ViewOffender = ({
                           image={Empty.PRESENTED_IMAGE_SIMPLE}
                         />
                       )}
-                      <Title level={4}>Incidents</Title>
+
+                      <Title level={4} style={{ marginTop: 30 }}>
+                        Incidents
+                      </Title>
                       {data?.offender?.incidents.length && !loading ? (
-                        <Table
-                          size="small"
-                          loading={loading}
-                          columns={[
-                            {
-                              key: 'types',
-                              title: 'Types',
-                              dataIndex: 'types',
-                            },
-                            {
-                              key: 'date',
-                              title: 'Date',
-                              dataIndex: 'date',
-                            },
-                            {
-                              key: 'location',
-                              title: 'Location',
-                              dataIndex: 'location',
-                            },
-                            {
-                              title: '',
-                              dataIndex: 'actions',
-                              key: 'actions',
-                              render: (_, record) => (
-                                <Button type="text" size="small">
-                                  <FontAwesomeIcon
-                                    icon={faArrowUpRightFromSquare}
-                                    onClick={() =>
-                                      navigate(
-                                        `/app/incidents/view/${record.key}`
-                                      )
-                                    }
-                                  />
-                                </Button>
-                              ),
-                            },
-                          ]}
-                          dataSource={data?.offender?.incidents.map(
-                            (incident) => ({
-                              types: incident.crimeTypes.map(
-                                (type, index) =>
-                                  `${index > 0 ? ' ' : ''}${type.name}`
-                              ),
-                              date: incident.dayTime,
-                              location: incident.createdBy.businesses[0]?.name,
-                              key: incident.id,
-                            })
-                          )}
-                          pagination={
-                            data?.offender?.incidents &&
-                            data?.offender?.incidents.length > 10
-                              ? {
-                                  pageSize: 10,
-                                }
-                              : false
-                          }
+                        <IncidentTable
+                          incidents={data?.offender?.incidents}
+                          hasNavigation
                         />
                       ) : (
                         <Empty
-                          description="No incidents on offender"
+                          description="No incidents for this offender"
                           image={Empty.PRESENTED_IMAGE_SIMPLE}
                         />
                       )}
-                      {data?.offender?.vehicles.length && !loading ? (
-                        <div className="incident-offender-container">
-                          {/* <Divider>Offender</Divider> */}
-                          <Title level={4} style={{ marginTop: 20 }}>
-                            Vehicles
-                          </Title>
-                          <Table
-                            columns={[
-                              {
-                                key: 'make',
-                                dataIndex: 'make',
-                                title: 'Make',
-                              },
-                              {
-                                key: 'colour',
-                                dataIndex: 'colour',
-                                title: 'Colour',
-                              },
-                              {
-                                key: 'model',
-                                dataIndex: 'model',
-                                title: 'Model',
-                              },
-                              {
-                                key: 'registration',
-                                dataIndex: 'registration',
-                                title: 'Registration',
-                              },
 
-                              {
-                                title: '',
-                                dataIndex: 'actions',
-                                key: 'actions',
-                                render: (_, record) => (
-                                  <Button type="text" size="small">
-                                    <FontAwesomeIcon
-                                      icon={faArrowUpRightFromSquare}
-                                      onClick={() =>
-                                        navigate(
-                                          `/app/vehicles/view/${record.key}`
-                                        )
-                                      }
-                                    />
-                                  </Button>
-                                ),
-                              },
-                            ]}
-                            dataSource={data?.offender?.vehicles.map(
-                              (vehicle) => ({
-                                key: vehicle.id,
-                                make: vehicle.make,
-                                colour: vehicle.colour,
-                                model: vehicle.model,
-                                registration: vehicle.registration,
-                              })
-                            )}
-                            size="small"
-                            pagination={
-                              data?.offender?.vehicles &&
-                              data?.offender?.vehicles.length > 5
-                                ? {
-                                    pageSize: 5,
-                                  }
-                                : false
-                            }
-                            rowClassName={classes.offenderRow}
-                          />
-                        </div>
-                      ) : null}
+                      <Title level={4} style={{ marginTop: 30 }}>
+                        Vehicles
+                      </Title>
                       {data?.offender?.vehicles.length && !loading ? (
-                        <div className="incident-offender-container">
-                          {/* <Divider>Offender</Divider> */}
-                          <Title level={4} style={{ marginTop: 20 }}>
-                            Crime Groups
-                          </Title>
-                          <Table
-                            columns={[
-                              {
-                                key: 'reference',
-                                dataIndex: 'reference',
-                                title: 'Alert ID',
-                              },
-                              {
-                                key: 'alias',
-                                dataIndex: 'alias',
-                                title: 'Alias',
-                              },
-                              {
-                                key: 'totalOffenders',
-                                dataIndex: 'totalOffenders',
-                                title: 'Members',
-                              },
-                              {
-                                key: 'totalIncidents',
-                                dataIndex: 'totalIncidents',
-                                title: 'Incidents',
-                              },
-                              {
-                                key: 'totalValue',
-                                dataIndex: 'totalValue',
-                                title: 'Lost Value',
-                                render: (value) => `£${value || 0}`,
-                              },
-                              // {
-                              //   key: 'totalRecoveredValue',
-                              //   dataIndex: 'totalRecoveredValue',
-                              //   title: 'Recovered Value',
-                              //   render: (value) => `£${value || 0}`,
-                              // },
-                              // {
-                              //   key: 'totalTheftSuccess',
-                              //   dataIndex: 'totalTheftSuccess',
-                              //   title: 'Success Rate',
-                              //   render: (value) => `${value?.toFixed(0) || 0}%`,
-                              // },
+                        <VehicleTable
+                          vehicles={data?.offender?.vehicles}
+                          hasNavigation
+                        />
+                      ) : (
+                        <Empty
+                          description="No vehicles for this offender"
+                          image={Empty.PRESENTED_IMAGE_SIMPLE}
+                        />
+                      )}
 
-                              {
-                                title: '',
-                                dataIndex: 'actions',
-                                key: 'actions',
-                                render: (_, record) => (
-                                  <Button type="text" size="small">
-                                    <FontAwesomeIcon
-                                      icon={faArrowUpRightFromSquare}
-                                      onClick={() =>
-                                        navigate(
-                                          `/app/crime-groups/view/${record.key}`
-                                        )
-                                      }
-                                    />
-                                  </Button>
-                                ),
-                              },
-                            ]}
-                            dataSource={data?.offender?.crimeGroups.map(
-                              (crimeGroup) => ({
-                                key: crimeGroup.id,
-                                reference: crimeGroup.reference,
-                                alias: crimeGroup.alias,
-                                totalOffenders: crimeGroup.totalOffenders,
-                                totalIncidents: crimeGroup.totalIncidents,
-                                totalValue: crimeGroup.totalValue,
-                                // totalRecoveredValue:
-                                //   crimeGroup.totalRecoveredValue,
-                                // totalTheftSuccess: crimeGroup.totalTheftSuccess,
-                              })
-                            )}
-                            size="small"
-                            pagination={
-                              data?.offender?.vehicles &&
-                              data?.offender?.vehicles.length > 5
-                                ? {
-                                    pageSize: 5,
-                                  }
-                                : false
-                            }
-                            rowClassName={classes.offenderRow}
-                          />
-                        </div>
-                      ) : null}
+                      <Title level={4} style={{ marginTop: 30 }}>
+                        Crime Groups
+                      </Title>
+                      {data?.offender?.crimeGroups.length && !loading ? (
+                        <CrimeGroupTable
+                          crimeGroups={data?.offender?.crimeGroups}
+                          hasNavigation
+                        />
+                      ) : (
+                        <Empty
+                          description="No crime groups for this offender"
+                          image={Empty.PRESENTED_IMAGE_SIMPLE}
+                        />
+                      )}
                     </div>
                   )}
                 </div>

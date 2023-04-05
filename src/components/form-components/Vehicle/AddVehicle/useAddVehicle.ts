@@ -1,43 +1,28 @@
 import { useState } from 'react';
 import type {
-  CreateVehicleMutation,
   ListCrimeGroupsQuery,
   ListIncidentsQuery,
 } from 'graphql/generated';
 import {
-  useCreateVehicleMutation,
   useListCrimeGroupsQuery,
   SortOrder,
   useListIncidentsQuery,
   Role,
 } from 'graphql/generated';
-import { message, notification, Upload } from 'antd';
+import { message, Upload } from 'antd';
 import { useStoreState } from 'state';
-import type { MutationUpdaterFn } from '@apollo/client';
 import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-
-export interface VehicleData {
-  id?: string;
-  make?: string;
-  model?: string;
-  colour?: string;
-  registration?: string;
-  crimeGroup?: string[];
-  incidents?: string[];
-  offenders?: string[];
-}
+import type { VehicleData } from 'types/DataType';
 
 interface Props {
-  onClose: () => void;
-  update: MutationUpdaterFn<CreateVehicleMutation>;
+  update: (value: VehicleData) => void;
 }
 
 interface Return {
   onSubmit: (value: VehicleData) => void;
   CrimeGroupsData: ListCrimeGroupsQuery | undefined;
   CrimeGroupsLoading: boolean;
-  saving: boolean;
   offendersData: OffenderData[];
   incidentsData:
     | Exclude<
@@ -58,10 +43,9 @@ interface Return {
   fileList: UploadFile[];
 }
 
-const useAddVehicle = ({ onClose, update }: Props): Return => {
+const useAddVehicle = ({ update }: Props): Return => {
   const role = useStoreState((state) => state.user.role);
   const schemeId = useStoreState((state) => state.scheme.id);
-  const [saving, setSaving] = useState(false);
   const [linkIncident, setLinkIncident] = useState(false);
   const [linkOffender, setLinkOffender] = useState(false);
   const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
@@ -70,6 +54,8 @@ const useAddVehicle = ({ onClose, update }: Props): Return => {
   >([]);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [imageChange, setImageChange] = useState(false);
+
+  // query
   const { data: CrimeGroupsData, loading: CrimeGroupsLoading } =
     useListCrimeGroupsQuery({
       fetchPolicy: 'cache-and-network',
@@ -97,63 +83,69 @@ const useAddVehicle = ({ onClose, update }: Props): Return => {
     fetchPolicy: 'cache-and-network',
   });
 
-  const [createVehicle] = useCreateVehicleMutation({
-    onCompleted: () => {
-      setSaving(false);
-      onClose();
-      notification.success({
-        message: 'Successfully Added!',
-        description: 'The vehicle has been added! ',
-        placement: 'bottomRight',
-      });
-    },
-    onError: () => {
-      setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
-    },
-    update,
-  });
-
   const onSubmit = (data: VehicleData) => {
-    setSaving(true);
-    createVehicle({
-      variables: {
-        data: {
-          make: data.make || '',
-          model: data.model || '',
-          colour: data.colour || '',
-          registration: data.registration || '',
-          crimeGroup:
-            data?.crimeGroup && data.crimeGroup.length > 0
-              ? data?.crimeGroup?.map((id) => ({ id }))
-              : [],
-          incidents:
-            incidentsData && incidentsData.length > 0
-              ? incidentsData.map(({ id }) => ({ id }))
-              : [],
-          offenders:
-            offendersData && offendersData.length > 0
-              ? offendersData.map(({ id }) => ({ id }))
-              : [],
-          schemes: schemeId,
-          image: {
-            upload:
-              imageChange && fileList.length > 0
-                ? fileList.map((item) => ({
-                    url: {
-                      filename: item.fileName || '',
-                      mimetype: item.type || '',
-                      url: item.url || '',
-                    },
-                  }))
-                : undefined,
-          },
-        },
-      },
+    // createVehicle({
+    //   variables: {
+    //     data: {
+    //       make: data.make || '',
+    //       model: data.model || '',
+    //       colour: data.colour || '',
+    //       registration: data.registration || '',
+    //       crimeGroup:
+    //         data?.crimeGroup && data.crimeGroup.length > 0
+    //           ? data?.crimeGroup?.map((id) => ({ id }))
+    //           : [],
+    //       incidents:
+    //         incidentsData && incidentsData.length > 0
+    //           ? incidentsData.map(({ id }) => ({ id }))
+    //           : [],
+    //       offenders:
+    //         offendersData && offendersData.length > 0
+    //           ? offendersData.map(({ id }) => ({ id }))
+    //           : [],
+    //       schemes: schemeId,
+    //       image: {
+    //         upload:
+    //           imageChange && fileList.length > 0
+    //             ? fileList.map((item) => ({
+    //                 url: {
+    //                   filename: item.fileName || '',
+    //                   mimetype: item.type || '',
+    //                   url: item.url || '',
+    //                 },
+    //               }))
+    //             : undefined,
+    //       },
+    //     },
+    //   },
+    // });
+    update({
+      id: Math.floor(Math.random() * 1000).toString(),
+      make: data.make || '',
+      model: data.model || '',
+      colour: data.colour || '',
+      registration: data.registration || '',
+      crimeGroup:
+        data?.crimeGroup && data.crimeGroup.length > 0
+          ? data?.crimeGroup?.map((id) => id)
+          : [],
+      incidents:
+        incidentsData && incidentsData.length > 0
+          ? incidentsData.map(({ id }) => id)
+          : [],
+      offenders:
+        offendersData && offendersData.length > 0
+          ? offendersData.map(({ id }) => id)
+          : [],
+      images:
+        imageChange && fileList.length > 0
+          ? fileList.map((item) => ({
+              id: item.uid,
+              filename: item.fileName || '',
+              mimetype: item.type || '',
+              url: item.url || '',
+            }))
+          : [],
     });
   };
   // function
@@ -227,7 +219,6 @@ const useAddVehicle = ({ onClose, update }: Props): Return => {
     onSubmit,
     CrimeGroupsData,
     CrimeGroupsLoading,
-    saving,
     offendersData,
     incidentsData,
     linkIncident,

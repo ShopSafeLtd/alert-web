@@ -64,6 +64,7 @@ query ViewOffender(
     }
     vehicles {
       id
+      reference
       colour
       model
       make
@@ -83,6 +84,7 @@ query ViewOffender(
     }
     incidents {
       id
+      reference
       dayTime
       date
       crimeTypes {

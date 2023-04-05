@@ -72,13 +72,7 @@ const useEditVehicle = ({ onClose }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [linkIncident, setLinkIncident] = useState(false);
   const [linkOffender, setLinkOffender] = useState(false);
-  // const [offendersData, setOffendersData] = useState<| Exclude<
-  //      ListOffendersQuery['listOffenders'],
-  //       undefined | null
-  //     >['offenders']
-  //   | undefined>([]);
   const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
-
   const [incidentsData, setIncidentsData] = useState<
     Exclude<ListIncidentsQuery['listIncidents'], undefined | null>['incidents']
   >([]);

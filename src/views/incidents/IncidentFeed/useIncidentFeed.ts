@@ -139,12 +139,12 @@ const useIncidentFeed = (): Return => {
               },
             }
           : undefined,
-      approved: gallery.includes('APPROVED')
+      approved: gallery.includes('NOT APPROVED')
         ? {
-            equals: true,
+            equals: false,
           }
         : undefined,
-      subscribedUsers: gallery.includes('SUBSCRIBED')
+      subscribedUsers: gallery.includes('FOLLOWING')
         ? {
             some: {
               id: {

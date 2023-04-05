@@ -103,10 +103,10 @@ const IncidentFeed = ({
     <Affix offsetTop={5}>
       <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 5 }}>
         <Row align="middle" gutter={16}>
-          <Col>
+          <Col span={5}>
             <Input
               size="small"
-              style={{ width: 350 }}
+              // style={{ width: 350 }}
               placeholder="Search Incidents..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -123,21 +123,21 @@ const IncidentFeed = ({
                   value: 'ACTIVE',
                 },
                 {
-                  label: 'Approved',
-                  value: 'APPROVED',
+                  label: 'Not Approved',
+                  value: 'NOT APPROVED',
                 },
                 {
-                  label: 'Subscribed',
-                  value: 'SUBSCRIBED',
+                  label: 'Following',
+                  value: 'FOLLOWING',
                 },
                 {
                   label: 'PoliceInvolved',
                   value: 'POLICEINVOLVED',
                 },
-                // {
-                //   label: 'PoliceReported',
-                //   value: 'POLICEREPORTED',
-                // },
+                {
+                  label: 'PoliceReported',
+                  value: 'POLICEREPORTED',
+                },
               ]}
             />
           </Col>

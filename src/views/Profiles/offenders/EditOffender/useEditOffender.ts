@@ -6,7 +6,7 @@ import type {
   CreateTagMutation,
   Gender,
   IdSource,
-  ListCrimeGroupsQuery,
+  // ListCrimeGroupsQuery,
   ListVehiclesQuery,
   OffenderUpdateInput,
   Race,
@@ -140,7 +140,7 @@ interface Return {
   selectedItems: string[];
   setSelectedItems: (value: string[]) => void;
   listVehiclesData: ListVehiclesQuery | undefined;
-  listCrimeGroupsData: ListCrimeGroupsQuery | undefined;
+  // listCrimeGroupsData: ListCrimeGroupsQuery | undefined;
   addNewVehicle: boolean;
   addExistingVehicle: boolean;
   toggleAddNewVehicle: () => void;
@@ -1033,7 +1033,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     updateCrimeGroupsData,
     removeCrimeGroup,
     listVehiclesData,
-    listCrimeGroupsData,
+    // listCrimeGroupsData,
     onValuesChange,
     idVerified,
     addAddress,

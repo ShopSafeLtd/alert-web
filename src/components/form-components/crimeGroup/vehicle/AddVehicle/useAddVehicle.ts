@@ -148,7 +148,6 @@ const useAddVehicle = ({ onClose }: Props): Return => {
         },
       },
     });
-
     onClose();
   };
   // function

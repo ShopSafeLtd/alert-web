@@ -220,7 +220,7 @@ const EditIncident = ({
           </Row>
           <Form.Item
             name="tags"
-            tooltip="Select the relevant crime types for this incident, these help to categorise the incident,"
+            tooltip="Select the relevant crime types for this incident, these help to categorise the incident."
             rules={[
               {
                 required: true,

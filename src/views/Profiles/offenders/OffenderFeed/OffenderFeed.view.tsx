@@ -153,8 +153,8 @@ const OffenderFeed = ({
                   value: 'APPROVED',
                 },
                 {
-                  label: 'Subscribed',
-                  value: 'SUBSCRIBED',
+                  label: 'Following',
+                  value: 'FOLLOWING',
                 },
               ]}
             />

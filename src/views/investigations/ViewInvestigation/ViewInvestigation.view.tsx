@@ -36,13 +36,13 @@ interface Props {
 const useStyles = createUseStyles({
   sideListContent: {
     height: '100vh',
-    paddingTop: 10,
+    // paddingTop: 10,
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
     marginRight: 0,
     paddingRight: 0,
-
+    // overflow: 'hidden',
     '& .no-padding': {
       padding: 0,
     },
@@ -72,8 +72,8 @@ const ViewInvestigation = ({
   const classes = useStyles();
 
   return (
-    <div style={{ height: 'calc((100vh - 98px)' }}>
-      <div style={{ overflow: 'hidden' }} className={classes.sideListContent}>
+    <div style={{ height: '100vh' }}>
+      <div className={classes.sideListContent}>
         <Tabs>
           <Tabs.TabPane key="Dashboard" tab="Details">
             <ViewDetails

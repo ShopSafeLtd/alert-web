@@ -61,7 +61,7 @@ const EditOffender = ({ reviewed }: Props): JSX.Element => {
     updateCrimeGroupsData,
     removeCrimeGroup,
     listVehiclesData,
-    listCrimeGroupsData,
+    // listCrimeGroupsData,
     idVerified,
     onValuesChange,
     addAddress,
@@ -128,7 +128,7 @@ const EditOffender = ({ reviewed }: Props): JSX.Element => {
         crimeGroupsData={crimeGroupsData}
         updateCrimeGroupsData={updateCrimeGroupsData}
         listVehiclesData={listVehiclesData}
-        listCrimeGroupsData={listCrimeGroupsData}
+        // listCrimeGroupsData={listCrimeGroupsData}
         idVerified={idVerified}
         onValuesChange={onValuesChange}
         addAddress={addAddress}

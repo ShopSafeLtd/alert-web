@@ -4,6 +4,7 @@ import type {
   CrimeGroupQueryVariables,
 } from 'graphql/generated';
 import {
+  useUpdateCrimeGroupMutation,
   CrimeGroupDocument,
   Role,
   useCrimeGroupQuery,
@@ -16,6 +17,7 @@ import {
 import { useEffect, useState } from 'react';
 import update from 'immutability-helper';
 import { useStoreState } from 'state';
+import type { VehicleData } from 'types/DataType';
 
 const { confirm } = Modal;
 interface Return {
@@ -62,6 +64,7 @@ interface Return {
   setOptionRowShow: (value: boolean) => void;
   editRights: boolean;
   toggleSubscribe: () => void;
+  submitNewVehicle: (value: VehicleData) => void;
 }
 
 const useViewCrimeGroup = (crimeGroupId: string): Return => {
@@ -93,7 +96,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     if (editUpdate) setEditUpdateInput(editUpdate.text);
   }, [editUpdate]);
 
-  const { data, loading } = useCrimeGroupQuery({
+  const { data: crimeGroupsData, loading } = useCrimeGroupQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
@@ -127,6 +130,60 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const toggleAddAlias = () => {
     setAddAlias(!addAlias);
   };
+  const [updateCrimeGroup] = useUpdateCrimeGroupMutation({
+    onCompleted: () => {
+      setSaving(false);
+      toggleAddNewVehicle();
+      notification.success({
+        message: 'Successfully Updated!',
+        description: 'The vehicle has been added to the crime group! ',
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      setSaving(false);
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
+    },
+  });
+
+  const submitNewVehicle = (data: VehicleData) => {
+    setSaving(true);
+    updateCrimeGroup({
+      variables: {
+        where: {
+          id: crimeGroupId,
+        },
+        data: {
+          vehicles: {
+            create: [
+              {
+                make: data.make || '',
+                model: data.model || '',
+                colour: data.colour || '',
+                registration: data.registration || '',
+                incidents: {
+                  connect:
+                    data.incidents && data.incidents.length > 0
+                      ? data.incidents.map((id) => ({ id }))
+                      : undefined,
+                },
+                offenders: {
+                  connect:
+                    data.offenders && data.offenders.length > 0
+                      ? data.offenders.map((id) => ({ id }))
+                      : undefined,
+                },
+              },
+            ],
+          },
+        },
+      },
+    });
+  };
   const [deleteCrimeGroup] = useDeleteCrimeGroupMutation({
     onCompleted: () => {
       setSaving(false);
@@ -155,6 +212,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
       },
     });
   };
+
   const [deleteUpdate] = useDeleteUpdateMutation();
 
   const handleDeleteUpdate = (updateId: string) => {
@@ -280,7 +338,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const [unsubscribeFromCrimeGroup] = useUnsubscribeToCrimeGroupMutation();
 
   const toggleSubscribe = () => {
-    if (data?.crimeGroup?.subscribed) {
+    if (crimeGroupsData?.crimeGroup?.subscribed) {
       unsubscribeFromCrimeGroup({
         variables: {
           where: { id: crimeGroupId },
@@ -314,8 +372,9 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     setLoadMore(true);
   };
   return {
-    data,
-    loading: (data === null || data === undefined) && loading,
+    data: crimeGroupsData,
+    loading:
+      (crimeGroupsData === null || crimeGroupsData === undefined) && loading,
     saving,
     offenderIds,
     vehicleIds,
@@ -345,6 +404,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     loadMore,
     confirmDeleteUpdate,
     toggleSubscribe,
+    submitNewVehicle,
   };
 };
 

@@ -176,7 +176,7 @@ const useOffenderFeed = (): Return => {
             equals: true,
           }
         : undefined,
-      subscribedUsers: gallery.includes('SUBSCRIBED')
+      subscribedUsers: gallery.includes('FOLLOWING')
         ? {
             some: {
               id: {

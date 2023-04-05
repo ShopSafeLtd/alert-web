@@ -21,6 +21,7 @@ export interface BanData {
 // Offender
 export interface OffenderData {
   id: string;
+  reference?: number | null;
   name?: string | null;
   age?: Age | null;
   gender?: Gender | null;
@@ -89,9 +90,10 @@ export interface VehicleData {
     id: string;
     url?: string | null;
     optimised?: string | null;
+    fileName?: string | null;
+    type?: string | null;
   }>;
   edited?: boolean;
-
   new?: boolean;
   existing?: boolean;
   updated?: boolean;

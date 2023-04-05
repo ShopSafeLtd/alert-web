@@ -16,16 +16,20 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
     }
     incidents {
       id
-      subject
+      reference
       dayTime
+      date
+      crimeTypes {
+        id
+        name
+      }
       createdBy {
         id
-        organisation
+        businesses {
+          id
+          name
+        }
       }
-      value
-      recoveredValue
-      reference
-      policeRef
     }
     offenders {
       id

@@ -5,6 +5,7 @@ import {
   Col,
   Drawer,
   Dropdown,
+  Empty,
   Input,
   Menu,
   Modal,
@@ -12,7 +13,6 @@ import {
   Row,
   Space,
   Statistic,
-  Table,
   Tooltip,
   Typography,
 } from 'antd';
@@ -30,13 +30,17 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import AddExistingOffender from 'components/form-components/crimeGroup/offender/AddExistingOffender';
 import AddNewOffender from 'components/form-components/crimeGroup/offender/AddNewOffender';
-import AddVehicle from 'components/form-components/crimeGroup/vehicle/AddVehicle';
 import AddExistingVehicle from 'components/form-components/crimeGroup/vehicle/AddExistingVehicle';
 import AddAlias from 'components/form-components/crimeGroup/Alias';
-
 import UpdateContent from 'views/incidents/ViewIncident/Update.view';
 import UpdateBar from 'components/MessageInput/UpdateBar';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import type { VehicleData } from 'types/DataType';
+import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
+
+import VehicleTable from 'components/tables/VehicleTable';
+import OffenderTable from 'components/tables/OffenderTable';
+import IncidentTable from 'components/tables/IncidentTable';
 import useStyles from './ViewCrimeGroup.styles';
 
 const { Title } = Typography;
@@ -87,6 +91,7 @@ interface Props {
   editRights: boolean;
   toggleSubscribe: () => void;
   crimeGroupId: string;
+  submitNewVehicle: (value: VehicleData) => void;
 }
 
 const ViewCrimeGroup = ({
@@ -122,8 +127,10 @@ const ViewCrimeGroup = ({
   confirmDeleteUpdate,
   toggleSubscribe,
   crimeGroupId,
+  submitNewVehicle,
 }: Props) => {
   const classes = useStyles();
+
   const optionMenuItems = [
     {
       label: 'Add Alias',
@@ -153,7 +160,7 @@ const ViewCrimeGroup = ({
           <Row>
             <Col className={classes.centerCell} flex={1}>
               <Title className={classes.headerTitle} level={4}>
-                {`Alert ID: ${data?.crimeGroup?.reference}`}
+                {`Alert ID: ${data?.crimeGroup?.reference} `}
               </Title>
             </Col>
             {editRights && (
@@ -317,34 +324,17 @@ const ViewCrimeGroup = ({
                 </Col>
               </Row>
 
-              <Table
-                columns={[
-                  {
-                    key: 'reference',
-                    dataIndex: 'reference',
-                    title: 'Alert ID',
-                  },
-                  {
-                    key: 'name',
-                    dataIndex: 'name',
-                    title: 'Name',
-                  },
-                  {
-                    key: 'totalIncidents',
-                    dataIndex: 'totalIncidents',
-                    title: 'Total Incidents',
-                  },
-                ]}
-                size="small"
-                dataSource={
-                  data?.crimeGroup?.offenders.map((offender) => ({
-                    key: offender.id,
-                    reference: offender.reference,
-                    name: offender.name,
-                    totalIncidents: offender.totalIncidents,
-                  })) || []
-                }
-              />
+              {data?.crimeGroup?.offenders.length && !loading ? (
+                <OffenderTable
+                  offenders={data?.crimeGroup?.offenders}
+                  hasNavigation
+                />
+              ) : (
+                <Empty
+                  description="No offenders for this crime group"
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                />
+              )}
             </Card>
             <Card loading={loading}>
               <Row align="middle" style={{ marginBottom: 10 }}>
@@ -398,108 +388,33 @@ const ViewCrimeGroup = ({
                 </Col>
               </Row>
 
-              <Table
-                columns={[
-                  {
-                    key: 'reference',
-                    dataIndex: 'reference',
-                    title: 'Alert ID',
-                  },
-                  {
-                    key: 'registration',
-                    dataIndex: 'registration',
-                    title: 'Registration',
-                  },
-                  {
-                    key: 'make',
-                    dataIndex: 'make',
-                    title: 'Make',
-                  },
-                  {
-                    key: 'model',
-                    dataIndex: 'model',
-                    title: 'Model',
-                  },
-                  {
-                    key: 'colour',
-                    dataIndex: 'colour',
-                    title: 'Colour',
-                  },
-
-                  {
-                    key: 'totalOffenders',
-                    dataIndex: 'totalOffenders',
-                    title: 'Members',
-                  },
-                ]}
-                size="small"
-                dataSource={
-                  data?.crimeGroup?.vehicles.map((vehicle) => ({
-                    key: vehicle.id,
-                    make: vehicle.make,
-                    colour: vehicle.colour,
-                    model: vehicle.model,
-                    registration: vehicle.registration,
-                    reference: vehicle.reference,
-                    totalOffenders: vehicle.totalOffenders,
-                  })) || []
-                }
-              />
+              {data?.crimeGroup?.vehicles.length && !loading ? (
+                <VehicleTable
+                  vehicles={data?.crimeGroup?.vehicles}
+                  hasNavigation
+                />
+              ) : (
+                <Empty
+                  description="No vehicles for this crime group"
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                />
+              )}
             </Card>
             <Card loading={loading}>
               <Title level={4}>Incidents</Title>
-              <Table
-                columns={[
-                  {
-                    key: 'reference',
-                    dataIndex: 'reference',
-                    title: 'Alert ID',
-                  },
-                  {
-                    key: 'policeRef',
-                    dataIndex: 'policeRef',
-                    title: 'Crime No.',
-                  },
-                  {
-                    key: 'subject',
-                    dataIndex: 'subject',
-                    title: 'Subject',
-                  },
-                  {
-                    key: 'date',
-                    dataIndex: 'date',
-                    title: 'Date',
-                  },
-                  {
-                    key: 'location',
-                    dataIndex: 'location',
-                    title: 'Location',
-                  },
-                  {
-                    key: 'value',
-                    dataIndex: 'value',
-                    title: 'Value',
-                  },
-                  {
-                    key: 'recoveredValue',
-                    dataIndex: 'recoveredValue',
-                    title: 'Recovered Value',
-                  },
-                ]}
-                size="small"
-                dataSource={
-                  data?.crimeGroup?.incidents?.map((incident) => ({
-                    key: incident?.id,
-                    reference: incident?.reference,
-                    policeRef: incident?.policeRef,
-                    subject: incident?.subject,
-                    date: incident?.dayTime,
-                    location: incident?.createdBy.businesses[0]?.name,
-                    value: incident?.value,
-                    recoveredValue: incident?.recoveredValue,
-                  })) || []
-                }
-              />
+              {data?.crimeGroup?.incidents &&
+              data?.crimeGroup?.incidents.length > 0 &&
+              !loading ? (
+                <IncidentTable
+                  incidents={data?.crimeGroup?.incidents}
+                  hasNavigation
+                />
+              ) : (
+                <Empty
+                  description="No incidents for this crime group"
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                />
+              )}
             </Card>
           </div>
         </Col>
@@ -797,7 +712,15 @@ const ViewCrimeGroup = ({
         width="600"
         onClose={toggleAddNewVehicle}
       >
-        {addNewVehicle ? <AddVehicle onClose={toggleAddNewVehicle} /> : <div />}
+        {addNewVehicle ? (
+          <AddVehicle
+            onClose={toggleAddNewVehicle}
+            update={submitNewVehicle}
+            saving={saving}
+          />
+        ) : (
+          <div />
+        )}
       </Drawer>
       <Drawer
         title="Add Existing Vehicles"

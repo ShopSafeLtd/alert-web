@@ -1,5 +1,5 @@
 import React from 'react';
-import { faUser } from '@fortawesome/pro-light-svg-icons';
+// import { faUser } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, Tooltip, Typography } from 'antd';
 import { faCheckCircle } from '@fortawesome/pro-solid-svg-icons';
@@ -39,13 +39,15 @@ const OffenderTile = ({
       }}
     >
       <WatermarkImage url={offender.images[0]?.optimised} />
-      {offender.images.length === 0 && (
+      {/* {offender.images && offender.images.length > 0 ? (
+        <WatermarkImage url={offender.images[0]?.optimised} />
+      ) : (
         <FontAwesomeIcon
           style={{ color: 'rgb(114, 132, 154)' }}
           icon={faUser}
           size="3x"
         />
-      )}
+      )} */}
       <Paragraph
         style={{
           whiteSpace: 'nowrap',

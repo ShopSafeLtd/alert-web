@@ -394,9 +394,9 @@ const useFeedItems = (): Return => {
   };
   return {
     data,
-    loading,
+    loading: !data && loading,
     articleData,
-    articleLoading,
+    articleLoading: !articleData && articleLoading,
     recentOffenderData,
     recentOffenderLoading,
     onPaginationChange,

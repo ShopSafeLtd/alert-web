@@ -113,7 +113,7 @@ const ViewInvestigation = ({
               </Col>
             </Row>
           </Col>
-          <Col span={12}>
+          <Col span={12} style={{ height: '100%' }}>
             <Row>
               <Col className={classes.centerCell} flex={1}>
                 <Title className={classes.headerTitle} level={4}>
@@ -375,7 +375,10 @@ const ViewInvestigation = ({
               />
             </Card>
           </Col>
-          <Col span={12}>
+          <Col
+            span={12}
+            style={{ display: 'hidden', height: 'calc(100vh - 125px)' }}
+          >
             <div className={classes.updatesContainer}>
               <InfiniteScroll
                 height={
