@@ -1,0 +1,139 @@
+query CrimeGroupReport($where: CrimeGroupReportInput!, $whereContribution: UserContributionWhereInput!, $whereCrimeGroup: CrimeGroupWhereUniqueInput!) {
+  crimeGroup(where: $whereCrimeGroup) {
+      id
+      reference
+      alias }
+  crimeGroupReport(where: $where) {
+    crimeGroupMap {
+      offenderMarkers {
+        coords {
+          lng
+          lat
+        }
+        name
+      }
+      incidentsCoords {
+        lng
+        lat
+      }
+    }
+    crimeTypeByOffender {
+      label
+      data {
+        value
+        label
+      }
+    }
+    goodsTypeLossRecovered {
+      label
+      data {
+        value
+        label
+      }
+    }
+    incidentDayOfWeekGraph {
+      value
+      label
+    }
+    incidentMonthGraph {
+      value
+      label
+    }
+    incidentSummary {
+      mostCommonCrimeType
+      totalIncidents
+      lastIncidentDate
+      incidentsWherePoliceAttended
+      incidentsReportedToPolice
+    }
+    incidentTimeOfDayDonut {
+      value
+      label
+    }
+    incidentsTable {
+      incidents {
+        id
+        reference
+        date
+        incidentItems {
+          value
+          recoveredValue
+        }
+        location {
+          full
+          alias
+          id
+          geoLat
+          geoLng
+        }
+        totalOffenders
+        crimeTypes {
+          name
+          id
+        }
+        policeReported
+        policeInvolved
+        policeRef
+      }
+      total
+    }
+    lossTotals {
+      totalRecoveredValue
+      totalLostValue
+      totalIncidents
+      averagePerIncident
+      averageSuccessRate
+    }
+    offenderGoodsTypeValue {
+      label
+      data {
+        label
+        value
+      }
+    }
+  }
+  offendersPerformance(where: $whereContribution) {
+    total
+    offenderPerformance {
+                    primaryPhoto
+      alertId
+      name
+      totalIncidents
+      totalLostValue
+      totalRecoveredValue
+      totalSuccessRate
+      lastIncidentDate
+    }
+  }
+  businessContribution(where: $whereContribution) {
+    total
+    businessContributions {
+      name
+      totalUsers
+      totalIncidents
+      totalOffenders
+      totalUpdates
+      totalMessages
+      totalLogins
+      totalLostValue
+      totalRecoveredValue
+      totalSuccessRate
+      mostCommonGoodLost
+      highestTotalValueGoodLost
+      averageLossValue
+    }
+  }
+  targetedGoods(where: $whereContribution) {
+    total
+    targetedGoods {
+      alertId
+      name
+      totalIncidents
+      totalOffenders
+      totalLostValue
+      totalRecoveredValue
+      totalSuccessRate
+      averageLossValue
+    }
+  }
+}
