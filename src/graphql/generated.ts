@@ -46421,6 +46421,9 @@ export type VehicleQuery = {
       reference?: number | null;
       dayTime?: string | null;
       date: any;
+      policeRef?: string | null;
+      subject?: string | null;
+      value?: number | null;
       crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
       createdBy: {
         __typename?: 'User';
@@ -59551,6 +59554,9 @@ export const VehicleDocument = gql`
         reference
         dayTime
         date
+        policeRef
+        subject
+        value
         crimeTypes {
           id
           name

@@ -71,25 +71,6 @@ const CrimeGroupReport = ({
 }: Props) => {
   const classes = useStyles();
 
-  // const goodsTypeData = () => {
-  //   const initData = data?.crimeGroupReport?.offenderGoodsTypeValue?.map(
-  //     (item) => ({
-  //       label: item?.label || '',
-  //       ...crimeTypeByOffenderData(item || { data: null }),
-  //     })
-  //   );
-  //   const filteredData = initData?.filter(
-  //     (item) => Object.keys(item).length > 2
-  //   );
-  //   if (!filteredData)
-  //     return [
-  //       {
-  //         label: 'No Data',
-  //       },
-  //     ];
-  //   return filteredData;
-  // };
-
   const tooltip = ({ point }: PointTooltipProps) => (
     <div
       style={{
