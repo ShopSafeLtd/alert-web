@@ -31,6 +31,7 @@ import { GoogleMap, HeatmapLayer, Marker } from '@react-google-maps/api';
 import CrimeGroupSideList from 'components/crimeGroups/sidelist';
 import type { SelectOptions } from './useCrimeGroupReport';
 import useStyles from './CrimeGroupReport.styles';
+import filteredBarData from './utils/FilteredBarData';
 
 const containerStyle = {
   width: '100%',
@@ -54,17 +55,6 @@ interface Props {
   businesses: SelectOptions[];
 }
 
-const crimeTypeByOffenderData = (item: {
-  data: { label: string; value: number }[] | null | undefined;
-}) => {
-  if (!item?.data) return {};
-  const data = Object.fromEntries(
-    item?.data?.map((d) => [d?.label || ' ', d?.value || 0])
-  );
-  if (data) return { ...data };
-  return undefined;
-};
-
 const CrimeGroupReport = ({
   data,
   loading,
@@ -81,47 +71,24 @@ const CrimeGroupReport = ({
 }: Props) => {
   const classes = useStyles();
 
-  const goodsTypeData = () => {
-    const initData = data?.crimeGroupReport?.offenderGoodsTypeValue?.map(
-      (item) => ({
-        label: item?.label || '',
-        ...crimeTypeByOffenderData(item || { data: null }),
-      })
-    );
-    const filteredData = initData?.filter(
-      (item) => Object.keys(item).length > 2
-    );
-    if (!filteredData)
-      return [
-        {
-          label: 'No Data',
-        },
-      ];
-    return filteredData;
-  };
-  const crimeTypeBar = () => {
-    const initData = data?.crimeGroupReport?.crimeTypeByOffender?.map(
-      (item) => ({
-        label: item?.label || '',
-        ...crimeTypeByOffenderData(item || { data: null }),
-      })
-    );
-
-    // filter out all objects that only have a id and label
-    const filteredData = initData?.filter(
-      (item) => Object.keys(item).length > 2
-    );
-    if (!filteredData)
-      return [
-        {
-          label: 'No Data',
-        },
-      ];
-    return filteredData;
-    // console.log(filteredData);
-    // if (!filteredData) return [];
-    // return filteredData;
-  };
+  // const goodsTypeData = () => {
+  //   const initData = data?.crimeGroupReport?.offenderGoodsTypeValue?.map(
+  //     (item) => ({
+  //       label: item?.label || '',
+  //       ...crimeTypeByOffenderData(item || { data: null }),
+  //     })
+  //   );
+  //   const filteredData = initData?.filter(
+  //     (item) => Object.keys(item).length > 2
+  //   );
+  //   if (!filteredData)
+  //     return [
+  //       {
+  //         label: 'No Data',
+  //       },
+  //     ];
+  //   return filteredData;
+  // };
 
   const tooltip = ({ point }: PointTooltipProps) => (
     <div
@@ -494,11 +461,16 @@ const CrimeGroupReport = ({
                     Crime Types By Offender
                   </Typography.Title>
                   {data?.crimeGroupReport?.crimeTypeByOffender &&
-                  data?.crimeGroupReport?.crimeTypeByOffender.length > 0 ? (
+                  data?.crimeGroupReport?.crimeTypeByOffender.length > 0 &&
+                  filteredBarData({
+                    data: data?.crimeGroupReport?.crimeTypeByOffender,
+                  }).length > 0 ? (
                     <ResponsiveBar
                       indexBy="label"
                       data={
-                        crimeTypeBar() || [
+                        filteredBarData({
+                          data: data?.crimeGroupReport?.crimeTypeByOffender,
+                        }) || [
                           {
                             country: 'No Data',
                             label: 'No Data',
@@ -507,8 +479,10 @@ const CrimeGroupReport = ({
                       }
                       keys={
                         Object.keys(
-                          // eslint-disable-next-line unicorn/no-array-reduce
-                          crimeTypeBar().reduce((acc, cur) => ({
+                          filteredBarData({
+                            data: data?.crimeGroupReport?.crimeTypeByOffender,
+                            // eslint-disable-next-line unicorn/no-array-reduce
+                          }).reduce((acc, cur) => ({
                             ...acc,
                             ...cur,
                           }))
@@ -568,7 +542,10 @@ const CrimeGroupReport = ({
                     Goods Type Value By Offender
                   </Typography.Title>
                   {data?.crimeGroupReport?.offenderGoodsTypeValue &&
-                  data?.crimeGroupReport?.offenderGoodsTypeValue.length > 0 ? (
+                  data?.crimeGroupReport?.offenderGoodsTypeValue.length > 0 &&
+                  filteredBarData({
+                    data: data?.crimeGroupReport?.offenderGoodsTypeValue,
+                  }).length > 0 ? (
                     <ResponsiveBar
                       legends={[
                         {
@@ -596,7 +573,9 @@ const CrimeGroupReport = ({
                       ]}
                       indexBy="label"
                       data={
-                        goodsTypeData() || [
+                        filteredBarData({
+                          data: data?.crimeGroupReport?.offenderGoodsTypeValue,
+                        }) || [
                           {
                             label: 'No Data',
                           },
@@ -604,8 +583,11 @@ const CrimeGroupReport = ({
                       }
                       keys={
                         Object.keys(
-                          // eslint-disable-next-line unicorn/no-array-reduce
-                          goodsTypeData().reduce((acc, cur) => ({
+                          filteredBarData({
+                            data: data?.crimeGroupReport
+                              ?.offenderGoodsTypeValue,
+                            // eslint-disable-next-line unicorn/no-array-reduce
+                          }).reduce((acc, cur) => ({
                             ...acc,
                             ...cur,
                           }))
@@ -750,7 +732,7 @@ const CrimeGroupReport = ({
               <Col span={12}>
                 <div style={{ height: 400 }}>
                   <Typography.Title level={4}>
-                    Incidents by day of month
+                    Incidents by month
                   </Typography.Title>
                   {data?.crimeGroupReport?.incidentMonthGraph &&
                   data?.crimeGroupReport?.incidentMonthGraph.length > 0 ? (
