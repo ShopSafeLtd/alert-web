@@ -155,6 +155,14 @@ export interface LocationData {
   postcode: string;
 }
 
+export interface AddressData {
+  alias?: string | null;
+  building?: string | null;
+  street: string;
+  townCity: string;
+  county?: string | null;
+  postcode: string;
+}
 // SchemeUserData
 export interface SchemeUserData {
   id: string;

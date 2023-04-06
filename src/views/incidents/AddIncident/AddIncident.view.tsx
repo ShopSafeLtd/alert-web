@@ -6,7 +6,12 @@ import type {
   ListOffendersQuery,
 } from 'graphql/generated';
 import { TagType } from 'graphql/generated';
-import type { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
+import type {
+  CrimeGroupData,
+  LocationData,
+  OffenderData,
+  VehicleData,
+} from 'types/DataType';
 
 import type { FormInstance } from 'antd';
 import {
@@ -37,9 +42,10 @@ import DebounceSelect from 'components/form-components/DebounceSelect';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
+import AddLocation from 'components/form-components/incident/location/AddLocation';
 import useStyles from './AddIncident.styles';
 
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph, Text } = Typography;
 
 interface FormData {
   subject: string;
@@ -135,6 +141,10 @@ interface Props {
     details: boolean;
     groups: boolean;
   };
+  addNewAddress: boolean;
+  toggleAddNewAddress: () => void;
+  updateNewAddressData: (value: LocationData | undefined) => void;
+  newAddressData: LocationData | undefined;
 }
 
 const EditIncident = ({
@@ -178,6 +188,10 @@ const EditIncident = ({
   updateOffendersData,
   updateVehiclesData,
   vehiclesData,
+  addNewAddress,
+  toggleAddNewAddress,
+  updateNewAddressData,
+  newAddressData,
 }: Props): JSX.Element => {
   const classes = useStyles();
 
@@ -305,14 +319,14 @@ const EditIncident = ({
           </Row>
           <Row>
             <Col span={16}>
-              <Row gutter={32} align="middle">
+              <Row gutter={64} align="middle">
                 <Col>
                   <Form.Item
                     name="business"
                     label="Business"
                     rules={[
                       {
-                        required: true,
+                        required: !newAddressData,
                         message: 'Please select a business for the incident.',
                       },
                     ]}
@@ -325,8 +339,21 @@ const EditIncident = ({
                       fetchOptions={onSearchBusiness}
                       style={{ width: 300 }}
                     />
+                    <Button
+                      style={{ color: 'red', marginLeft: 5 }}
+                      onClick={toggleAddNewAddress}
+                      icon={
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          style={{ marginRight: 5 }}
+                        />
+                      }
+                    >
+                      Enter Address
+                    </Button>
                   </Form.Item>
                 </Col>
+
                 <Col>
                   <Form.Item
                     name="date"
@@ -353,6 +380,43 @@ const EditIncident = ({
               </Row>
             </Col>
           </Row>
+          {newAddressData && (
+            <>
+              <Row gutter={8}>
+                <Col>
+                  <Title level={4} style={{ fontSize: 15, marginTop: 5 }}>
+                    Location:
+                  </Title>
+                </Col>
+              </Row>
+              <Row align="middle" gutter={16}>
+                <Col>
+                  <Text>
+                    {newAddressData?.building &&
+                      `${newAddressData?.building}, `}
+                    {`${newAddressData?.street}, `}
+                    {`${newAddressData?.townCity}, `}
+                    {newAddressData?.county && `${newAddressData?.county}, `}
+                    {newAddressData?.postcode}
+                  </Text>
+                </Col>
+                <Col className={classes.clearButton}>
+                  <Button
+                    style={{ color: 'red', marginLeft: 5 }}
+                    onClick={() => updateNewAddressData(undefined)}
+                    icon={
+                      <FontAwesomeIcon
+                        icon={faTrash}
+                        style={{ marginRight: 5 }}
+                      />
+                    }
+                  >
+                    Clear Address
+                  </Button>
+                </Col>
+              </Row>
+            </>
+          )}
         </Card>
 
         {/* Goods */}
@@ -734,7 +798,19 @@ const EditIncident = ({
           <div />
         )}
       </Drawer>
-
+      <Drawer
+        title="Enter Address"
+        visible={addNewAddress}
+        width="600"
+        onClose={toggleAddNewAddress}
+      >
+        {addNewAddress && (
+          <AddLocation
+            onClose={toggleAddNewAddress}
+            update={updateNewAddressData}
+          />
+        )}
+      </Drawer>
       <AssignImageOffender
         image={newImage || undefined}
         offenderData={offendersData || []}

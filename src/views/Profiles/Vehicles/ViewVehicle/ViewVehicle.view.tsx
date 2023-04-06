@@ -221,6 +221,7 @@ const ViewVehicle = ({
                     data?.vehicle?.images && data?.vehicle?.images.length > 0
                       ? undefined
                       : 0,
+                  marginBottom: 20,
                 }}
               >
                 {data?.vehicle?.images.map((image, i) => (

@@ -123,76 +123,187 @@ const useFeedItems = (): Return => {
               in: typesFilter,
             }
           : undefined,
-
-      offender: {
-        subscribedUsers: gallery.includes('FOLLOWING')
-          ? {
-              some: {
-                id: {
-                  equals: userId,
-                },
+      AND: [
+        {
+          OR: [
+            {
+              offender: {
+                subscribedUsers: gallery.includes('FOLLOWING')
+                  ? {
+                      some: {
+                        id: {
+                          equals: userId,
+                        },
+                      },
+                    }
+                  : undefined,
               },
-            }
-          : undefined,
-        createdBy: gallery.includes('MYDATA')
-          ? {
-              id: {
-                equals: userId,
+            },
+            {
+              incident: {
+                subscribedUsers: gallery.includes('FOLLOWING')
+                  ? {
+                      some: {
+                        id: {
+                          equals: userId,
+                        },
+                      },
+                    }
+                  : undefined,
               },
-            }
-          : undefined,
-      },
-      incident: {
-        subscribedUsers: gallery.includes('FOLLOWING')
-          ? {
-              some: {
-                id: {
-                  equals: userId,
-                },
+            },
+            {
+              vehicle: {
+                subscribedUsers: gallery.includes('FOLLOWING')
+                  ? {
+                      some: {
+                        id: {
+                          equals: userId,
+                        },
+                      },
+                    }
+                  : undefined,
               },
-            }
-          : undefined,
-        createdBy: gallery.includes('MYDATA')
-          ? {
-              id: {
-                equals: userId,
+            },
+            {
+              crimeGroup: {
+                subscribedUsers: gallery.includes('FOLLOWING')
+                  ? {
+                      some: {
+                        id: {
+                          equals: userId,
+                        },
+                      },
+                    }
+                  : undefined,
               },
-            }
-          : undefined,
-      },
-      vehicle: {
-        subscribedUsers: gallery.includes('FOLLOWING')
-          ? {
-              some: {
-                id: {
-                  equals: userId,
-                },
+            },
+            {
+              investigation: {
+                subscribedUsers: gallery.includes('FOLLOWING')
+                  ? {
+                      some: {
+                        id: {
+                          equals: userId,
+                        },
+                      },
+                    }
+                  : undefined,
               },
-            }
-          : undefined,
-      },
-      crimeGroup: {
-        subscribedUsers: gallery.includes('FOLLOWING')
-          ? {
-              some: {
-                id: {
-                  equals: userId,
-                },
+            },
+          ],
+        },
+        {
+          OR: [
+            // createdBy: gallery.includes('MYDATA')
+            //       ? {
+            //           id: {
+            //             equals: userId,
+            //           },
+            //         }
+            //       : undefined,
+            {
+              offender: {
+                createdBy: gallery.includes('MYDATA')
+                  ? {
+                      id: {
+                        equals: userId,
+                      },
+                    }
+                  : undefined,
               },
-            }
-          : undefined,
-      },
-      investigation: {
-        subscribedUsers: gallery.includes('FOLLOWING')
-          ? {
-              some: {
-                id: {
-                  equals: userId,
-                },
+            },
+            {
+              incident: {
+                createdBy: gallery.includes('MYDATA')
+                  ? {
+                      id: {
+                        equals: userId,
+                      },
+                    }
+                  : undefined,
               },
-            }
-          : undefined,
-      },
+            },
+            // {
+            //   vehicle: {
+            //     createdBy: gallery.includes('MYDATA')
+            //       ? {
+            //           id: {
+            //             equals: userId,
+            //           },
+            //         }
+            //       : undefined,
+            //   },
+            // },
+            // {
+            //   crimeGroup: {
+            //     createdBy: gallery.includes('MYDATA')
+            //       ? {
+            //           id: {
+            //             equals: userId,
+            //           },
+            //         }
+            //       : undefined,
+            //   },
+            // },
+            {
+              investigation: {
+                createdBy: gallery.includes('MYDATA')
+                  ? {
+                      id: {
+                        equals: userId,
+                      },
+                    }
+                  : undefined,
+              },
+            },
+          ],
+        },
+        // {
+        //   OR: [
+        //     {
+        //       offender: {
+        //         ref: {
+        //           contains: variables.search,
+        //           mode: QueryMode.Insensitive,
+        //         },
+        //       },
+        //     },
+        //     {
+        //       incident: {
+        //         ref: {
+        //           contains: variables.search,
+        //           mode: QueryMode.Insensitive,
+        //         },
+        //       },
+        //     },
+        //     {
+        //       vehicle: {
+        //         ref: {
+        //           contains: search,
+        //           mode: QueryMode.Insensitive,
+        //         },
+        //       },
+        //     },
+        //     {
+        //       crimeGroup: {
+        //         ref: {
+        //           contains: variables.search,
+        //           mode: QueryMode.Insensitive,
+        //         },
+        //       },
+        //     },
+        //     {
+        //       investigation: {
+        //         ref: {
+        //           contains: variables.search,
+        //           mode: QueryMode.Insensitive,
+        //         },
+        //       },
+        //     },
+        //   ],
+        // },
+      ],
     },
   };
   // Queries
@@ -243,6 +354,14 @@ const useFeedItems = (): Return => {
         id: schemeId,
       },
       where: {
+        createdBy: gallery.includes('MYDATA')
+          ? {
+              id: {
+                equals: userId,
+              },
+            }
+          : undefined,
+
         OR: [
           {
             title: {
@@ -275,6 +394,64 @@ const useFeedItems = (): Return => {
           approved: {
             equals: false,
           },
+          subscribedUsers: gallery.includes('FOLLOWING')
+            ? {
+                some: {
+                  id: {
+                    equals: userId,
+                  },
+                },
+              }
+            : undefined,
+          AND: [
+            {
+              OR: [
+                {
+                  subject: {
+                    contains: search,
+                    mode: QueryMode.Insensitive,
+                  },
+                },
+                {
+                  ref: {
+                    contains: search,
+                    mode: QueryMode.Insensitive,
+                  },
+                },
+                {
+                  createdBy: {
+                    OR: [
+                      {
+                        fullName: {
+                          contains: search,
+                          mode: QueryMode.Insensitive,
+                        },
+                      },
+                      {
+                        businesses: {
+                          some: {
+                            name: {
+                              contains: search,
+                              mode: QueryMode.Insensitive,
+                            },
+                          },
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+            {
+              createdBy: gallery.includes('MYDATA')
+                ? {
+                    id: {
+                      equals: userId,
+                    },
+                  }
+                : undefined,
+            },
+          ],
         },
       },
     });
@@ -290,6 +467,43 @@ const useFeedItems = (): Return => {
           updatedAt: SortOrder.Desc,
         },
         take: 10,
+        where: {
+          approved: gallery.includes('NOT APPROVED')
+            ? {
+                equals: false,
+              }
+            : undefined,
+          subscribedUsers: gallery.includes('FOLLOWING')
+            ? {
+                some: {
+                  id: {
+                    equals: userId,
+                  },
+                },
+              }
+            : undefined,
+          createdBy: gallery.includes('MYDATA')
+            ? {
+                id: {
+                  equals: userId,
+                },
+              }
+            : undefined,
+          OR: [
+            {
+              name: {
+                contains: search,
+                mode: QueryMode.Insensitive,
+              },
+            },
+            {
+              ref: {
+                contains: search,
+                mode: QueryMode.Insensitive,
+              },
+            },
+          ],
+        },
       },
     });
   // delete feedItem

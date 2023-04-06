@@ -44,7 +44,6 @@ const useListVehicles = (): Return => {
           },
         },
       },
-
       OR: [
         {
           make: {
@@ -53,7 +52,13 @@ const useListVehicles = (): Return => {
           },
         },
         {
-          model: {
+          ref: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+        {
+          registration: {
             contains: search,
             mode: QueryMode.Insensitive,
           },

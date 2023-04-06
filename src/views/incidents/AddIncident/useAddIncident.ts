@@ -18,6 +18,7 @@ import type {
   TagType,
 } from 'graphql/generated';
 import {
+  useBusinessQuery,
   CrimeType,
   ListIncidentsDocument,
   Model,
@@ -40,7 +41,12 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStoreActions, useStoreState } from 'state';
-import type { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
+import type {
+  LocationData,
+  CrimeGroupData,
+  OffenderData,
+  VehicleData,
+} from 'types/DataType';
 
 const { confirm } = Modal;
 const { useForm } = Form;
@@ -141,6 +147,10 @@ interface Return {
     details: boolean;
     groups: boolean;
   };
+  addNewAddress: boolean;
+  toggleAddNewAddress: () => void;
+  updateNewAddressData: (value: LocationData | undefined) => void;
+  newAddressData: LocationData | undefined;
 }
 
 const useEditIncident = (): Return => {
@@ -160,6 +170,8 @@ const useEditIncident = (): Return => {
   );
 
   const [addIncidentTag, setAddIncidentTag] = useState(false);
+  const [addNewAddress, setAddNewAddress] = useState(false);
+  const [newAddressData, setNewAddressData] = useState<LocationData>();
 
   const [crimeGroupsData, setCrimeGroupsData] = useState<CrimeGroupData[]>([]);
 
@@ -432,9 +444,14 @@ const useEditIncident = (): Return => {
   });
 
   // functions
+  const toggleAddNewAddress = () => {
+    setAddNewAddress(!addNewAddress);
+  };
   const toggleAddIncidentTag = () => {
     setAddIncidentTag(!addIncidentTag);
   };
+  const updateNewAddressData = (address: LocationData | undefined) =>
+    setNewAddressData(address);
 
   const updateOffendersData = (offender: OffenderData) => {
     setOffendersData([...offendersData, offender]);
@@ -884,6 +901,37 @@ const useEditIncident = (): Return => {
           create: undefined,
         };
       };
+      const getLocation = (): CreateIncidentData['location'] => {
+        if (newAddressData) {
+          return {
+            create: {
+              building: newAddressData.building,
+              county: newAddressData.county,
+              postcode: newAddressData.postcode,
+              street: newAddressData.street,
+              townCity: newAddressData.townCity,
+            },
+          };
+        }
+        const { data: businessData } = useBusinessQuery({
+          fetchPolicy: 'cache-and-network',
+          variables: {
+            where: {
+              id: data.business.value,
+            },
+          },
+        });
+        const locationId = businessData?.business?.locations[0].id;
+        if (locationId) {
+          return {
+            previous: { id: locationId },
+          };
+        }
+        return {
+          create: undefined,
+          previous: undefined,
+        };
+      };
       createIncident({
         variables: {
           data: {
@@ -938,6 +986,7 @@ const useEditIncident = (): Return => {
                       .filter((object) => object.url !== undefined)
                   : undefined,
             },
+            location: getLocation(),
           },
         },
       });
@@ -1019,14 +1068,10 @@ const useEditIncident = (): Return => {
       }
     }
 
-    console.log('changedValues', changedValues);
-    console.log('values', values);
-
     if (
       values.fellingTags &&
-      // values.tags &&
-      // values.tags.length > 0
-      // &&
+      values.tags &&
+      values.tags.length > 0 &&
       values.involvedTags &&
       values.involvedTags.length > 0
     ) {
@@ -1226,6 +1271,10 @@ const useEditIncident = (): Return => {
     onValuesChange,
     isTheft,
     goodsTypesData,
+    addNewAddress,
+    toggleAddNewAddress,
+    updateNewAddressData,
+    newAddressData,
   };
 };
 
