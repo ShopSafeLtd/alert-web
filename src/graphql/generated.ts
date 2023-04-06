@@ -32676,6 +32676,7 @@ export type UserContribution = {
 };
 
 export type UserContributionWhereInput = {
+  crimeGroupId?: InputMaybe<Scalars['String']>;
   dateRange: DateRangeInput;
   groupIds: Array<Scalars['String']>;
   offenderId?: InputMaybe<Scalars['String']>;
@@ -43971,6 +43972,24 @@ export type RecycledItemsQuery = {
 export type BusinessEngagementQueryVariables = Exact<{
   where: UserContributionWhereInput;
 }>;
+
+export type BusinessEngagementQuery = {
+  __typename?: 'Query';
+  businessContribution?: {
+    __typename?: 'ListBusinessContribution';
+    total: number;
+    businessContributions: Array<{
+      __typename?: 'BusinessContributions';
+      name: string;
+      totalUsers: number;
+      totalIncidents: number;
+      totalOffenders: number;
+      totalUpdates: number;
+      totalMessages: number;
+      totalLogins: number;
+    }>;
+  } | null;
+};
 
 export type CrimeGroupReportQueryVariables = Exact<{
   where: CrimeGroupReportInput;
