@@ -16,6 +16,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     padding: '7px 20px',
     display: 'flex',
     alignItems: 'center',
+    height: 60,
   },
   headerTitle: {
     marginBottom: '0px !important',
@@ -26,14 +27,16 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
   content: {
     width: '100%',
-    height: 'calc(100vh - 55px)',
+    height: 'calc(100vh - 125px)',
   },
   detailsHeader: {
     paddingRight: 20,
   },
   detailsContainer: {
     padding: 15,
-    paddingTop: 20,
+    paddingBottom: 0,
+    height: '100%',
+    overflow: 'auto',
   },
   table: {
     marginTop: 10,

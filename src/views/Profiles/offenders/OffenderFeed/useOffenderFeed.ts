@@ -160,7 +160,20 @@ const useOffenderFeed = (): Return => {
             mode: QueryMode.Insensitive,
           },
         },
+        {
+          ref: {
+            contains: variables.search,
+            mode: QueryMode.Insensitive,
+          },
+        },
       ],
+      createdBy: gallery.includes('MYDATA')
+        ? {
+            id: {
+              equals: userId,
+            },
+          }
+        : undefined,
       name: gallery.includes('ID')
         ? {
             equals: 'Unidentified Offender',
@@ -171,12 +184,12 @@ const useOffenderFeed = (): Return => {
             equals: true,
           }
         : undefined,
-      approved: gallery.includes('APPROVED')
+      approved: gallery.includes('NOT APPROVED')
         ? {
-            equals: true,
+            equals: false,
           }
         : undefined,
-      subscribedUsers: gallery.includes('SUBSCRIBED')
+      subscribedUsers: gallery.includes('FOLLOWING')
         ? {
             some: {
               id: {

@@ -40,7 +40,6 @@ import { formatDate } from 'utils';
 import IncidentFeed from 'components/feedItems/FeedItemSection/IncidentFeed';
 import OffenderFeed from 'components/feedItems/FeedItemSection/OffenderFeed';
 import ArticleFeed from 'components/feedItems/FeedItemSection/ArticleFeed';
-import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
 import type { PaginationModel } from 'types/DataType';
 import InvestigationFeed from 'components/feedItems/FeedItemSection/investigationFeed';
 import WatermarkImage from 'components/images/WatermarkImage.view';
@@ -49,6 +48,8 @@ import type { FeedItemSort } from 'state';
 import VehicleFeed from 'components/feedItems/FeedItemSection/VehicleFeed';
 import CrimeGroupFeed from 'components/feedItems/FeedItemSection/CrimeGroupFeed';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
+import ArticleSkeletonCard from 'components/feedItems/ArticleSection/ArticleSkeletonCard';
+import FeedItemSkeletonCard from 'components/feedItems/FeedItemSection/FeedItemSkeletonCard';
 
 const { Title, Paragraph, Text } = Typography;
 const { confirm } = Modal;
@@ -123,18 +124,13 @@ Props): JSX.Element => (
   <div className="feed-container" style={{ height: '100vh', padding: 15 }}>
     <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 10 }}>
       <Row align="middle" gutter={16}>
-        <Col span={10} xl={8}>
-          <Row>
-            <Col span={24} xxl={24} xl={24}>
-              <Input
-                size="small"
-                style={{ width: '100%' }}
-                placeholder="Search for anything in alert..."
-                // value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </Col>
-          </Row>
+        <Col span={4} xxl={6}>
+          <Input
+            size="small"
+            placeholder="Search for anything in alert..."
+            // value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </Col>
         <Col flex={1}>
           <CheckTags
@@ -143,8 +139,17 @@ Props): JSX.Element => (
             onChange={setGallery}
             options={[
               {
-                label: 'Subscribed',
-                value: 'SUBSCRIBED',
+                label: 'Not Approved',
+                value: 'NOT APPROVED',
+                needAdminRight: true,
+              },
+              {
+                label: 'Following',
+                value: 'FOLLOWING',
+              },
+              {
+                label: 'My Data',
+                value: 'MYDATA',
               },
             ]}
           />
@@ -206,140 +211,160 @@ Props): JSX.Element => (
             paddingBottom: 20,
           }}
         >
-          {data?.listFeedItems?.feedItems &&
-          data.listFeedItems?.feedItems.length
-            ? data.listFeedItems?.feedItems.map((feedItem) => (
-                <Card
-                  style={{
-                    width: '100%',
-                    marginBottom: 10,
-                  }}
-                  key={feedItem?.id}
-                  bodyStyle={{ padding: 0, marginLeft: 5 }}
-                  loading={loading}
-                >
-                  <>
-                    <Row style={{ margin: '8px 8px 4px' }}>
-                      <Col flex={1}>
-                        <Title style={{ margin: 0, fontSize: 14 }} level={4}>
-                          {feedItem?.message}
-                        </Title>
-                      </Col>
-                      <Col>
-                        <Text type="secondary" style={{ fontSize: 14 }}>
-                          {formatDate(feedItem?.updatedAt)}
-                        </Text>
-                      </Col>
-                      {adminRights ? (
-                        <Col>
+          {loading ? (
+            Array.from({ length: 24 }).map((_, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <FeedItemSkeletonCard key={index} />
+            ))
+          ) : (
+            <div>
+              {data?.listFeedItems?.feedItems &&
+              data.listFeedItems?.feedItems.length
+                ? data.listFeedItems?.feedItems.map((feedItem) => (
+                    <Card
+                      style={{
+                        width: '99%',
+                        marginBottom: 10,
+                      }}
+                      key={feedItem?.id}
+                      bodyStyle={{ padding: 0, marginLeft: 5 }}
+                      loading={loading}
+                    >
+                      <>
+                        <Row style={{ margin: '8px 8px 4px' }}>
+                          <Col flex={1}>
+                            <Title
+                              style={{ margin: 0, fontSize: 14 }}
+                              level={4}
+                            >
+                              {feedItem?.message}
+                            </Title>
+                          </Col>
+                          <Col>
+                            <Text type="secondary" style={{ fontSize: 14 }}>
+                              {formatDate(feedItem?.updatedAt)}
+                            </Text>
+                          </Col>
                           {adminRights ? (
-                            <Button
-                              type="text"
-                              style={{
-                                height: 25,
-                                width: 30,
-                                marginTop: -15,
-                                marginLeft: 5,
-                              }}
-                              disabled={saving}
-                              icon={
-                                <FontAwesomeIcon
-                                  style={{ marginBottom: 2 }}
-                                  icon={faTrash}
-                                  size="sm"
+                            <Col>
+                              {adminRights ? (
+                                <Button
+                                  type="text"
+                                  style={{
+                                    height: 25,
+                                    width: 30,
+                                    marginTop: -15,
+                                    marginLeft: 5,
+                                  }}
+                                  disabled={saving}
+                                  icon={
+                                    <FontAwesomeIcon
+                                      style={{ marginBottom: 2 }}
+                                      icon={faTrash}
+                                      size="sm"
+                                    />
+                                  }
+                                  onClick={() => {
+                                    confirm({
+                                      title:
+                                        'Do you want to delete the feedItem?',
+                                      content: 'This action cannot be undone.',
+                                      onOk() {
+                                        onDeleteFeedItem(feedItem.id);
+                                      },
+                                    });
+                                  }}
+                                  size="small"
                                 />
-                              }
-                              onClick={() => {
-                                confirm({
-                                  title: 'Do you want to delete the feedItem?',
-                                  content: 'This action cannot be undone.',
-                                  onOk() {
-                                    onDeleteFeedItem(feedItem.id);
-                                  },
-                                });
-                              }}
-                              size="small"
-                            />
+                              ) : null}
+                            </Col>
                           ) : null}
-                        </Col>
-                      ) : null}
-                    </Row>
-                    <Divider style={{ margin: 0 }} />
-                    <div style={{ padding: 10 }}>
-                      {/* create new incident/offender */}
-                      {feedItem?.type === FeedItemType.NewIncident && (
-                        <IncidentFeed feedItem={feedItem} isNewIncident />
-                      )}
-                      {feedItem?.type === FeedItemType.NewOffender && (
-                        <OffenderFeed feedItem={feedItem} isNewOffender />
-                      )}
-                      {feedItem?.type === FeedItemType.NewInvestigation && (
-                        <InvestigationFeed
-                          feedItem={feedItem}
-                          isNewInvestigation
-                        />
-                      )}
-                      {feedItem?.type === FeedItemType.NewVehicle && (
-                        <VehicleFeed feedItem={feedItem} isNewVehicle />
-                      )}
-                      {feedItem?.type === FeedItemType.NewCrimegroup && (
-                        <CrimeGroupFeed feedItem={feedItem} isNewCrimeGroup />
-                      )}
-                      {/* update details  */}
-                      {feedItem?.type === FeedItemType.Incident && (
-                        <IncidentFeed feedItem={feedItem} />
-                      )}
-                      {feedItem?.type === FeedItemType.Offender && (
-                        <OffenderFeed feedItem={feedItem} />
-                      )}
-                      {feedItem?.type === FeedItemType.Investigation && (
-                        <InvestigationFeed feedItem={feedItem} />
-                      )}
+                        </Row>
+                        <Divider style={{ margin: 0 }} />
+                        <div style={{ padding: 10 }}>
+                          {/* create new incident/offender */}
+                          {feedItem?.type === FeedItemType.NewIncident && (
+                            <IncidentFeed feedItem={feedItem} isNewIncident />
+                          )}
+                          {feedItem?.type === FeedItemType.NewOffender && (
+                            <OffenderFeed feedItem={feedItem} isNewOffender />
+                          )}
+                          {feedItem?.type === FeedItemType.NewInvestigation && (
+                            <InvestigationFeed
+                              feedItem={feedItem}
+                              isNewInvestigation
+                            />
+                          )}
+                          {feedItem?.type === FeedItemType.NewVehicle && (
+                            <VehicleFeed feedItem={feedItem} isNewVehicle />
+                          )}
+                          {feedItem?.type === FeedItemType.NewCrimegroup && (
+                            <CrimeGroupFeed
+                              feedItem={feedItem}
+                              isNewCrimeGroup
+                            />
+                          )}
+                          {/* update details  */}
+                          {feedItem?.type === FeedItemType.Incident && (
+                            <IncidentFeed feedItem={feedItem} />
+                          )}
+                          {feedItem?.type === FeedItemType.Offender && (
+                            <OffenderFeed feedItem={feedItem} />
+                          )}
+                          {feedItem?.type === FeedItemType.Investigation && (
+                            <InvestigationFeed feedItem={feedItem} />
+                          )}
 
-                      {/* add new images */}
-                      {feedItem?.type === FeedItemType.IncidentImage && (
-                        <IncidentFeed feedItem={feedItem} isNewImage />
-                      )}
-                      {feedItem?.type === FeedItemType.OffenderImage && (
-                        <OffenderFeed feedItem={feedItem} isNewImage />
-                      )}
-                      {feedItem?.type === FeedItemType.InvestigationImage && (
-                        <InvestigationFeed feedItem={feedItem} isNewImage />
-                      )}
-                      {feedItem?.type === FeedItemType.VehicleImage && (
-                        <VehicleFeed feedItem={feedItem} isNewImage />
-                      )}
-                      {/* add new intel */}
-                      {feedItem?.type === FeedItemType.IncidentIntel && (
-                        <IncidentFeed feedItem={feedItem} />
-                      )}
-                      {feedItem?.type === FeedItemType.OffenderIntel && (
-                        <OffenderFeed feedItem={feedItem} />
-                      )}
-                      {feedItem?.type === FeedItemType.InvestigationIntel && (
-                        <InvestigationFeed feedItem={feedItem} />
-                      )}
-                      {feedItem?.type === FeedItemType.VehicleIntel && (
-                        <VehicleFeed feedItem={feedItem} />
-                      )}
-                      {feedItem?.type === FeedItemType.CrimegroupIntel && (
-                        <CrimeGroupFeed feedItem={feedItem} />
-                      )}
+                          {/* add new images */}
+                          {feedItem?.type === FeedItemType.IncidentImage && (
+                            <IncidentFeed feedItem={feedItem} isNewImage />
+                          )}
+                          {feedItem?.type === FeedItemType.OffenderImage && (
+                            <OffenderFeed feedItem={feedItem} isNewImage />
+                          )}
+                          {feedItem?.type ===
+                            FeedItemType.InvestigationImage && (
+                            <InvestigationFeed feedItem={feedItem} isNewImage />
+                          )}
+                          {feedItem?.type === FeedItemType.VehicleImage && (
+                            <VehicleFeed feedItem={feedItem} isNewImage />
+                          )}
+                          {/* add new intel */}
+                          {feedItem?.type === FeedItemType.IncidentIntel && (
+                            <IncidentFeed feedItem={feedItem} />
+                          )}
+                          {feedItem?.type === FeedItemType.OffenderIntel && (
+                            <OffenderFeed feedItem={feedItem} />
+                          )}
+                          {feedItem?.type ===
+                            FeedItemType.InvestigationIntel && (
+                            <InvestigationFeed feedItem={feedItem} />
+                          )}
+                          {feedItem?.type === FeedItemType.VehicleIntel && (
+                            <VehicleFeed feedItem={feedItem} />
+                          )}
+                          {feedItem?.type === FeedItemType.CrimegroupIntel && (
+                            <CrimeGroupFeed feedItem={feedItem} />
+                          )}
 
-                      {/* article */}
-                      {feedItem?.type === FeedItemType.NewArticle && (
-                        <ArticleFeed feedItem={feedItem} />
-                      )}
-                    </div>
-                  </>
-                </Card>
-              ))
-            : null}
+                          {/* article */}
+                          {feedItem?.type === FeedItemType.NewArticle && (
+                            <ArticleFeed feedItem={feedItem} />
+                          )}
+                        </div>
+                      </>
+                    </Card>
+                  ))
+                : null}
+            </div>
+          )}
+
           <Row justify="center">
             <Col>
               <Pagination
                 total={data?.listFeedItems?.total}
-                pageSizeOptions={['20']}
+                // pageSizeOptions={['20']}
+                showSizeChanger={false}
                 pageSize={pagination.pageSize}
                 current={pagination.page}
                 onChange={onPaginationChange}
@@ -359,8 +384,9 @@ Props): JSX.Element => (
 
           {recentOffenderLoading ? (
             <Row gutter={8} style={{ height: 145 }}>
-              {[1, 2, 3, 4, 5].map((key) => (
-                <Col key={key}>
+              {Array.from({ length: 8 }).map((_, index) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <Col key={index}>
                   <Skeleton.Avatar
                     active
                     shape="square"
@@ -464,21 +490,24 @@ Props): JSX.Element => (
                 Recent Bulletins
               </Title>
               <Divider style={{ margin: '0 0 10px' }} />
+
               <Row gutter={[8, 8]}>
                 {articleLoading
                   ? Array.from({ length: 24 }).map((_, index) => (
                       // eslint-disable-next-line react/no-array-index-key
                       <Col key={index} xxl={8} span={24}>
-                        <IncidentSkeletonCard />
+                        <ArticleSkeletonCard />
                       </Col>
                     ))
                   : articleData?.listArticles?.articles.map((article) => (
                       <Col
                         span={24}
                         xxl={8}
-                        style={{
-                          alignItems: 'stretch',
-                        }}
+                        style={
+                          {
+                            // alignItems: 'stretch',
+                          }
+                        }
                       >
                         <ArticleCard article={article} />
                       </Col>
@@ -488,11 +517,13 @@ Props): JSX.Element => (
                 <Col>
                   <Pagination
                     total={articleData?.listArticles.total}
-                    pageSizeOptions={['12']}
+                    // pageSizeOptions={['12']}
+                    showSizeChanger={false}
                     pageSize={articlePagination.pageSize}
                     current={articlePagination.page}
                     onChange={onArticlePaginationChange}
                     showTotal={(total) => `Total Bulletins: ${total}`}
+                    hideOnSinglePage
                   />
                 </Col>
               </Row>

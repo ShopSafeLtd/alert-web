@@ -24,7 +24,7 @@ interface Props {
     | undefined;
 }
 
-const ArticleFeed = ({ article }: Props): JSX.Element => {
+const ArticleCard = ({ article }: Props): JSX.Element => {
   // const imagesRef = useRef<CarouselRef>(null);
   const {
     id,
@@ -57,7 +57,7 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
         )}
         <div
           className="feedItem-card-content"
-          style={{ padding: '0 20px 20px' }}
+          style={{ padding: '0 20px 20px', alignItems: 'stretch' }}
         >
           <Title level={4}>
             {priority === ArticlePriority.High && (
@@ -70,10 +70,14 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
             )}
             {title?.replace(/^\S/, (s) => s.toUpperCase())}
           </Title>
-          <Paragraph className="feedItem-card-desc" ellipsis={{ rows: 3 }}>
+          <Paragraph
+            className="feedItem-card-desc"
+            ellipsis={{ rows: 3 }}
+            style={{ height: 100 }}
+          >
             {previewText}
           </Paragraph>
-          <Row style={{ marginBottom: 10 }}>
+          <Row style={{ marginBottom: 10, alignItems: 'flex-end' }}>
             <Col flex={1}>
               <FontAwesomeIcon
                 size="sm"
@@ -96,7 +100,7 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
 
           {tags && tags.length > 0 ? (
             <Row
-              // wrap={false}
+              wrap={false}
               style={{
                 overflowX: 'auto',
                 alignItems: 'flex-end',
@@ -129,4 +133,4 @@ const ArticleFeed = ({ article }: Props): JSX.Element => {
   );
 };
 
-export default ArticleFeed;
+export default ArticleCard;

@@ -48,8 +48,13 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
     }
     incidents {
       id
-      subject
+      reference
       dayTime
+      date
+      crimeTypes {
+        id
+        name
+      }
       createdBy {
         id
         businesses {
@@ -57,10 +62,6 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
           name
         }
       }
-      value
-      recoveredValue
-      reference
-      policeRef
     }
     updates(orderBy: { createdAt: desc }) {
       id

@@ -121,10 +121,9 @@ const OffenderFeed = ({
     <Affix offsetTop={5}>
       <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 5 }}>
         <Row align="middle" gutter={16}>
-          <Col>
+          <Col span={4} xxl={6}>
             <Input
               size="small"
-              style={{ width: 350 }}
               placeholder="Search Offenders..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -137,24 +136,29 @@ const OffenderFeed = ({
               onChange={setGallery}
               options={[
                 {
+                  label: 'Active',
+                  value: 'ACTIVE',
+                },
+                {
+                  label: 'Not Approved',
+                  value: 'NOT APPROVED',
+                  needAdminRight: true,
+                },
+                {
+                  label: 'Following',
+                  value: 'FOLLOWING',
+                },
+                {
+                  label: 'My Data',
+                  value: 'MYDATA',
+                },
+                {
                   label: 'Banned',
                   value: 'BANNED',
                 },
                 {
                   label: 'Seeking ID',
                   value: 'ID',
-                },
-                {
-                  label: 'Active',
-                  value: 'ACTIVE',
-                },
-                {
-                  label: 'Approved',
-                  value: 'APPROVED',
-                },
-                {
-                  label: 'Subscribed',
-                  value: 'SUBSCRIBED',
                 },
               ]}
             />

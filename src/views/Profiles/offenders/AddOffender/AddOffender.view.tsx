@@ -1,9 +1,5 @@
 import React from 'react';
-import type {
-  CreateTagMutation,
-  ListCrimeGroupsQuery,
-  ListVehiclesQuery,
-} from 'graphql/generated';
+import type { CreateTagMutation, ListVehiclesQuery } from 'graphql/generated';
 
 import type { FormInstance } from 'antd';
 import {
@@ -42,7 +38,6 @@ import type { MutationUpdaterFn } from '@apollo/client';
 
 import type { BanData, CrimeGroupData, VehicleData } from 'types/DataType';
 import Profiles from 'components/offenders/OffenderForm/Profiles';
-import ProfileDrawer from 'components/offenders/OffenderForm/ProfileDrawer';
 import OffenderDetails from 'components/offenders/OffenderForm/OffenderDetails';
 import type { FormData } from './useAddOffender';
 
@@ -79,7 +74,7 @@ interface Props {
   setSelectedItems: (value: string[]) => void;
   form: FormInstance<FormData> | undefined;
   listVehiclesData: ListVehiclesQuery | undefined;
-  listCrimeGroupsData: ListCrimeGroupsQuery | undefined;
+  // listCrimeGroupsData: ListCrimeGroupsQuery | undefined;
   addNewVehicle: boolean;
   addExistingVehicle: boolean;
   toggleAddNewVehicle: () => void;
@@ -151,7 +146,7 @@ const AddOffender = ({
   updateCrimeGroupsData,
   removeCrimeGroup,
   listVehiclesData,
-  listCrimeGroupsData,
+  // listCrimeGroupsData,
   idVerified,
   onValuesChange,
 }: Props): JSX.Element => (
@@ -253,8 +248,16 @@ const AddOffender = ({
           toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
           crimeGroupsData={crimeGroupsData}
           listVehiclesData={listVehiclesData}
-          listCrimeGroupsData={listCrimeGroupsData}
           titleNumber={3}
+          addNewVehicle={addNewVehicle}
+          addExistingVehicle={addExistingVehicle}
+          editVehicleId={editVehicleId}
+          updateVehiclesData={updateVehiclesData}
+          addNewCrimeGroup={addNewCrimeGroup}
+          addExistingCrimeGroup={addExistingCrimeGroup}
+          editCrimeGroupId={editCrimeGroupId}
+          setEditCrimeGroupId={setEditCrimeGroupId}
+          updateCrimeGroupsData={updateCrimeGroupsData}
         />
       </Card>
       <Card>
@@ -592,24 +595,6 @@ const AddOffender = ({
         <div />
       )}
     </Drawer>
-    <ProfileDrawer
-      addNewVehicle={addNewVehicle}
-      addExistingVehicle={addExistingVehicle}
-      editVehicleId={editVehicleId}
-      setEditVehicleId={setEditVehicleId}
-      toggleAddNewVehicle={toggleAddNewVehicle}
-      toggleAddExistingVehicle={toggleAddExistingVehicle}
-      vehiclesData={vehiclesData}
-      updateVehiclesData={updateVehiclesData}
-      addNewCrimeGroup={addNewCrimeGroup}
-      addExistingCrimeGroup={addExistingCrimeGroup}
-      editCrimeGroupId={editCrimeGroupId}
-      setEditCrimeGroupId={setEditCrimeGroupId}
-      toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
-      toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
-      crimeGroupsData={crimeGroupsData}
-      updateCrimeGroupsData={updateCrimeGroupsData}
-    />
   </div>
 );
 export default AddOffender;

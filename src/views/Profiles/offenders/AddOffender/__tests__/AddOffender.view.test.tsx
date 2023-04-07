@@ -45,9 +45,6 @@ describe('List Officer View', () => {
           crimeGroupsData={[]}
           editCrimeGroupId="test"
           editVehicleId="test"
-          listCrimeGroupsData={{
-            listCrimeGroups: { crimeGroups: [], total: 0 },
-          }}
           listVehiclesData={{ listVehicles: { total: 0, vehicles: [] } }}
           removeCrimeGroup={jest.fn()}
           removeVehicle={jest.fn()}

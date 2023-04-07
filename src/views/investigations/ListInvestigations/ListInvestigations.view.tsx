@@ -6,6 +6,7 @@ import type {
 } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import type { MutationUpdaterFn } from '@apollo/client';
+import { useNavigate } from 'react-router';
 import useStyles from './ListInvestigations.styles';
 import AddInvestigation from '../../../components/form-components/Investigation/AddInvestigation';
 
@@ -25,6 +26,7 @@ const listInvestigations = ({
   updateInvestigationList,
 }: Props) => {
   const classes = useStyles();
+  const navigate = useNavigate();
 
   return (
     <div className={classes.page}>
@@ -55,7 +57,7 @@ const listInvestigations = ({
         loading={loading}
         size="small"
         onRow={(record) => ({
-          onClick: () => <Link to={`view/${record.key}`} />,
+          onClick: () => navigate(`/app/investigations/view/${record.key}`),
         })}
         columns={[
           {
@@ -71,14 +73,7 @@ const listInvestigations = ({
             key: 'description',
             dataIndex: 'description',
             title: 'Description',
-            // render: (value) => `${value?.toFixed(0) || 0}%`,
           },
-          // {
-          //   key: 'crimeGroup',
-          //   dataIndex: 'crimeGroup',
-          //   title: 'crimeGroup',
-          //   render: (value,item) => `${item.crimeGroup.}%`,
-          // },
         ]}
       />
       <Drawer

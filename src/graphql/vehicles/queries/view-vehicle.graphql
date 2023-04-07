@@ -1,214 +1,221 @@
 query Vehicle($where: VehicleWhereUniqueInput!) {
-  vehicle(where: $where) {
-    id
-    make
-    model
-    registration
-    totalOffenders
-    totalIncidents
-    totalCrimeGroups
-    reference
-    subscribed
-    images {
-      id
-      optimised
-      url
-    }
-    incidents {
-      id
-      subject
-      dayTime
-      createdBy {
+    vehicle(where: $where) {
         id
-        organisation
-      }
-      value
-      recoveredValue
-      reference
-      policeRef
-    }
-    offenders {
-      id
-      name
-      reference
-      lastActive {
-        id
-        dayTime
-      }
-      hair
-      peculiarities
-      race
-      dateOfBirth
-      dateSource
-      build
-      age
-      gender
-      images {
-        id
-        optimised
-      }
-      totalTheftSuccess
-      totalRecoveredValue
-      totalIncidents
-      totalValue
-    }
-    updatedAt
-    colour
-    crimeGroup {
-      id
-      reference
-      totalIncidents
-      totalOffenders
-      totalRecoveredValue
-      totalTheftSuccess
-      totalValue
-      alias
-    }
-    updates(orderBy: { createdAt: desc }) {
-      id
-      text
-      type
-      createdAt
-      images {
-        id
-        url
-        optimised
-        card
-      }
-      linkedCrimeGroups {
+        make
+        model
+        registration
         totalOffenders
         totalIncidents
-        alias
-        id
+        totalCrimeGroups
         reference
-        totalRecoveredValue
-        totalTheftSuccess
-        totalValue
-        updatedAt
-      }
-      linkedVehicles {
+        subscribed
         images {
-          id
-          url
-          optimised
-        }
-        updatedAt
-        totalOffenders
-        registration
-        reference
-        model
-        make
-        id
-        colour
-      }
-      linkedIncidents {
-        id
-        subject
-        description
-        dayTime
-        images {
-          id
-          url
-          optimised
-        }
-      }
-      linkedOffenders {
-        id
-        updatedAt
-        age
-        build
-        dateOfBirth
-        name
-        race
-        gender
-        images {
-          id
-          url
-          optimised
-        }
-      }
-      createdBy {
-        origName
-        id
-        fullName
-        businesses {
-          id
-          name
-        }
-      }
-      replies {
-        id
-        text
-        type
-        createdAt
-        images {
-          id
-          url
-          optimised
-          card
-        }
-        linkedCrimeGroups {
-          totalOffenders
-          totalIncidents
-          alias
-          id
-          reference
-          totalRecoveredValue
-          totalTheftSuccess
-          totalValue
-          updatedAt
-        }
-        linkedVehicles {
-          images {
             id
-            url
             optimised
-          }
-          updatedAt
-          totalOffenders
-          registration
-          reference
-          model
-          make
-          id
-          colour
+            url
         }
-        linkedIncidents {
-          id
-          subject
-          description
-          dayTime
-          images {
+        incidents {
             id
-            url
-            optimised
-          }
+            reference
+            dayTime
+            date
+            policeRef
+            subject
+            value
+            crimeTypes {
+                id
+                name
+            }
+            createdBy {
+                id
+                businesses {
+                    id
+                    name
+                }
+            }
         }
-        linkedOffenders {
-          id
-          updatedAt
-          age
-          build
-          dateOfBirth
-          name
-          race
-          gender
-          images {
-            id
-            url
-            optimised
-          }
-        }
-        createdBy {
-          origName
-          id
-          fullName
-          businesses {
+        offenders {
             id
             name
-          }
+            reference
+            lastActive {
+                id
+                dayTime
+            }
+            hair
+            peculiarities
+            race
+            dateOfBirth
+            dateSource
+            build
+            age
+            gender
+            images {
+                id
+                optimised
+            }
+            totalTheftSuccess
+            totalRecoveredValue
+            totalIncidents
+            totalValue
         }
-      }
+        updatedAt
+        colour
+        crimeGroup {
+            id
+            reference
+            totalIncidents
+            totalOffenders
+            totalRecoveredValue
+            totalTheftSuccess
+            totalValue
+            alias
+        }
+        updates(orderBy: { createdAt: desc }) {
+            id
+            text
+            type
+            createdAt
+            images {
+                id
+                url
+                optimised
+                card
+            }
+            linkedCrimeGroups {
+                totalOffenders
+                totalIncidents
+                alias
+                id
+                reference
+                totalRecoveredValue
+                totalTheftSuccess
+                totalValue
+                updatedAt
+            }
+            linkedVehicles {
+                images {
+                    id
+                    url
+                    optimised
+                }
+                updatedAt
+                totalOffenders
+                registration
+                reference
+                model
+                make
+                id
+                colour
+            }
+            linkedIncidents {
+                id
+                subject
+                description
+                dayTime
+                images {
+                    id
+                    url
+                    optimised
+                }
+            }
+            linkedOffenders {
+                id
+                updatedAt
+                age
+                build
+                dateOfBirth
+                name
+                race
+                gender
+                images {
+                    id
+                    url
+                    optimised
+                }
+            }
+            createdBy {
+                origName
+                id
+                fullName
+                businesses {
+                    id
+                    name
+                }
+            }
+            replies {
+                id
+                text
+                type
+                createdAt
+                images {
+                    id
+                    url
+                    optimised
+                    card
+                }
+                linkedCrimeGroups {
+                    totalOffenders
+                    totalIncidents
+                    alias
+                    id
+                    reference
+                    totalRecoveredValue
+                    totalTheftSuccess
+                    totalValue
+                    updatedAt
+                }
+                linkedVehicles {
+                    images {
+                        id
+                        url
+                        optimised
+                    }
+                    updatedAt
+                    totalOffenders
+                    registration
+                    reference
+                    model
+                    make
+                    id
+                    colour
+                }
+                linkedIncidents {
+                    id
+                    subject
+                    description
+                    dayTime
+                    images {
+                        id
+                        url
+                        optimised
+                    }
+                }
+                linkedOffenders {
+                    id
+                    updatedAt
+                    age
+                    build
+                    dateOfBirth
+                    name
+                    race
+                    gender
+                    images {
+                        id
+                        url
+                        optimised
+                    }
+                }
+                createdBy {
+                    origName
+                    id
+                    fullName
+                    businesses {
+                        id
+                        name
+                    }
+                }
+            }
+        }
     }
-  }
 }

@@ -3,7 +3,7 @@ import type { LocationData } from 'types/DataType';
 
 interface Props {
   onClose: () => void;
-  update: (value: LocationData | undefined) => void;
+  update: (value: LocationData) => void;
 }
 
 interface Return {

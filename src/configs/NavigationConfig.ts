@@ -192,6 +192,14 @@ const adminOnlyItems: NavItem[] = [
         breadcrumb: true,
         submenu: [],
       },
+      {
+        key: 'crime-groups',
+        path: `${APP_PREFIX_PATH}/reports/crime-groups`,
+        title: 'Crime Groups',
+        icon: faPeopleGroup,
+        breadcrumb: true,
+        submenu: [],
+      },
     ],
   },
   {

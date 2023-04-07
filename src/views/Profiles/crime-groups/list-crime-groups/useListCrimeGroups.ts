@@ -40,6 +40,12 @@ const useListCrimeGroups = (): Return => {
             },
           },
           {
+            ref: {
+              contains: search,
+              mode: QueryMode.Insensitive,
+            },
+          },
+          {
             offenders: {
               some: {
                 OR: [

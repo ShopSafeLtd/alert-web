@@ -1,16 +1,17 @@
 import React from 'react';
 import { Button, Col, Drawer, Input, Row, Table } from 'antd';
 import type {
-  CreateVehicleMutation,
+  // CreateVehicleMutation,
   ListVehiclesQuery,
 } from 'graphql/generated';
 import { Link } from 'react-router-dom';
-import type { MutationUpdaterFn } from '@apollo/client';
+// import type { MutationUpdaterFn } from '@apollo/client';
 import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUpRightFromSquare } from '@fortawesome/pro-light-svg-icons';
 import { useNavigate } from 'react-router';
+import type { VehicleData } from 'types/DataType';
 import useStyles from './ListVehicles.styles';
 
 interface Props {
@@ -20,7 +21,8 @@ interface Props {
   setSearch: (value: string) => void;
   addVehicle: boolean;
   toggleAddVehicle: () => void;
-  updateVehicleList: MutationUpdaterFn<CreateVehicleMutation>;
+  // updateVehicleList: MutationUpdaterFn<CreateVehicleMutation>;
+  onSubmit: (value: VehicleData) => void;
 }
 
 const ListVehicles = ({
@@ -30,7 +32,8 @@ const ListVehicles = ({
   setSearch,
   addVehicle,
   toggleAddVehicle,
-  updateVehicleList,
+  // updateVehicleList,
+  onSubmit,
 }: Props) => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -62,24 +65,19 @@ const ListVehicles = ({
           model: vehicle.model,
           registration: vehicle.registration,
           updatedAt: vehicle.updatedAt,
-          totalCrimeGroup: vehicle.totalCrimeGroups,
+          totalCrimeGroups: vehicle.totalCrimeGroups,
           totalOffenders: vehicle.totalOffenders,
           totalIncidents: vehicle.totalIncidents,
         }))}
         loading={loading}
         size="small"
-        onRow={(record) => ({
-          // TODO
-          // eslint-disable-next-line react/no-unstable-nested-components
-          onClick: () => <Link to={`view/${record.key}`} />,
-        })}
         columns={[
           {
             key: 'reference',
             dataIndex: 'reference',
             title: 'Alert ID',
             render: (value, item) => (
-              <Link to={`view/${item.key}`}>{value}</Link>
+              <Link to={`view/${item.key}`}>V-{value}</Link>
             ),
           },
           {
@@ -90,7 +88,6 @@ const ListVehicles = ({
               <Link to={`view/${item.key}`}>{value}</Link>
             ),
           },
-
           {
             key: 'make',
             dataIndex: 'make',
@@ -128,7 +125,6 @@ const ListVehicles = ({
             dataIndex: 'totalCrimeGroups',
             title: 'Crime Groups',
           },
-
           {
             title: '',
             dataIndex: 'actions',
@@ -149,7 +145,7 @@ const ListVehicles = ({
         onClose={toggleAddVehicle}
       >
         {addVehicle ? (
-          <AddVehicle update={updateVehicleList} onClose={toggleAddVehicle} />
+          <AddVehicle update={onSubmit} onClose={toggleAddVehicle} />
         ) : (
           <div />
         )}

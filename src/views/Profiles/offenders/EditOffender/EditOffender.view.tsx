@@ -1,7 +1,6 @@
 import React from 'react';
 import type {
   CreateTagMutation,
-  ListCrimeGroupsQuery,
   ListVehiclesQuery,
   ViewOffenderQuery,
 } from 'graphql/generated';
@@ -47,7 +46,7 @@ import moment from 'moment';
 import OffenderDetails from 'components/offenders/OffenderForm/OffenderDetails';
 import type { BanData, CrimeGroupData, VehicleData } from 'types/DataType';
 import Profiles from 'components/offenders/OffenderForm/Profiles';
-import ProfileDrawer from 'components/offenders/OffenderForm/ProfileDrawer';
+// import ProfileDrawer from 'components/offenders/OffenderForm/ProfileDrawer';
 import NewOffenderAddress from 'components/form-components/addresses/NewOffenderAddress';
 import EditOffenderAddress from 'components/form-components/addresses/EditOffenderAddress';
 import type { FormData } from './useEditOffender';
@@ -135,7 +134,7 @@ interface Props {
   setSelectedItems: (value: string[]) => void;
   form: FormInstance<FormData> | undefined;
   listVehiclesData: ListVehiclesQuery | undefined;
-  listCrimeGroupsData: ListCrimeGroupsQuery | undefined;
+  // listCrimeGroupsData: ListCrimeGroupsQuery | undefined;
   addNewVehicle: boolean;
   addExistingVehicle: boolean;
   toggleAddNewVehicle: () => void;
@@ -218,7 +217,7 @@ const EditOffender = ({
   updateCrimeGroupsData,
   removeCrimeGroup,
   listVehiclesData,
-  listCrimeGroupsData,
+  // listCrimeGroupsData,
   onValuesChange,
   idVerified,
   addAddress,
@@ -414,8 +413,17 @@ const EditOffender = ({
               toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
               crimeGroupsData={crimeGroupsData}
               listVehiclesData={listVehiclesData}
-              listCrimeGroupsData={listCrimeGroupsData}
+              // listCrimeGroupsData={listCrimeGroupsData}
               titleNumber={adminRights ? 3 : 2}
+              addNewVehicle={addNewVehicle}
+              addExistingVehicle={addExistingVehicle}
+              editVehicleId={editVehicleId}
+              updateVehiclesData={updateVehiclesData}
+              addNewCrimeGroup={addNewCrimeGroup}
+              addExistingCrimeGroup={addExistingCrimeGroup}
+              editCrimeGroupId={editCrimeGroupId}
+              setEditCrimeGroupId={setEditCrimeGroupId}
+              updateCrimeGroupsData={updateCrimeGroupsData}
             />
           </Card>
           <Card>
@@ -792,24 +800,6 @@ const EditOffender = ({
             />
           )}
         </Drawer>
-        <ProfileDrawer
-          addNewVehicle={addNewVehicle}
-          addExistingVehicle={addExistingVehicle}
-          editVehicleId={editVehicleId}
-          setEditVehicleId={setEditVehicleId}
-          toggleAddNewVehicle={toggleAddNewVehicle}
-          toggleAddExistingVehicle={toggleAddExistingVehicle}
-          vehiclesData={vehiclesData}
-          updateVehiclesData={updateVehiclesData}
-          addNewCrimeGroup={addNewCrimeGroup}
-          addExistingCrimeGroup={addExistingCrimeGroup}
-          editCrimeGroupId={editCrimeGroupId}
-          setEditCrimeGroupId={setEditCrimeGroupId}
-          toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
-          toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
-          crimeGroupsData={crimeGroupsData}
-          updateCrimeGroupsData={updateCrimeGroupsData}
-        />
       </>
     )}
   </div>

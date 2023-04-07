@@ -3,12 +3,14 @@ import { Drawer } from 'antd';
 import AddOffender from 'components/form-components/incident/offender/AddNewOffender';
 import AddExistingOffender from 'components/form-components/incident/offender/AddExistingOffender';
 import EditOffender from 'components/form-components/incident/offender/EditOffender';
-import AddVehicle from 'components/form-components/profiles/vehicle/AddVehicle';
+
 import EditVehicle from 'components/form-components/profiles/vehicle/EditVehicle';
-import AddExistingVehicle from 'components/form-components/profiles/vehicle/AddExistingVehicle';
+// import AddExistingVehicle from 'components/form-components/profiles/vehicle/AddExistingVehicle';
 import AddExistingCrimeGroup from 'components/form-components/profiles/crimeGroup/AddExistingCrimeGroup';
 import AddCrimeGroup from 'components/form-components/profiles/crimeGroup/AddCrimeGroup';
 import type { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
+import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
+import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 
 interface Props {
   addExistingCrimeGroup: boolean;
@@ -21,7 +23,7 @@ interface Props {
   editCrimeGroupId: string;
   editOffenderId: string;
   editVehicleId: string;
-  isIncident?: boolean;
+  fromIncident?: boolean;
   offendersData: OffenderData[];
   setEditCrimeGroupId: (value: string) => void;
   setEditOffenderId: (arg0: string) => void;
@@ -65,7 +67,7 @@ const ProfileDrawer = ({
   toggleAddNewCrimeGroup,
   toggleAddExistingCrimeGroup,
   updateCrimeGroupsData,
-  isIncident,
+  fromIncident,
 }: Props): JSX.Element => (
   <>
     {/* offeder */}
@@ -127,7 +129,7 @@ const ProfileDrawer = ({
       zIndex={1001}
     >
       {addExistingVehicle ? (
-        <AddExistingVehicle
+        <LinkVehicle
           update={updateVehiclesData}
           vehicleIds={vehiclesData.map(({ id }) => id)}
           onClose={toggleAddExistingVehicle}
@@ -146,8 +148,8 @@ const ProfileDrawer = ({
         <AddVehicle
           update={updateVehiclesData}
           onClose={toggleAddNewVehicle}
-          // isIncident={isIncident !== undefined ? isIncident : false}
-          isIncident={!!isIncident}
+          // fromIncident={fromIncident !== undefined ? fromIncident : false}
+          fromIncident={!!fromIncident}
         />
       ) : (
         <div />

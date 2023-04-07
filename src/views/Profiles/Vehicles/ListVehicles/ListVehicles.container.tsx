@@ -10,7 +10,8 @@ const ListVehicles = () => {
     setSearch,
     addVehicle,
     toggleAddVehicle,
-    updateVehicleList,
+    // updateVehicleList,
+    onSubmit,
   } = useListVehicles();
 
   return (
@@ -21,7 +22,8 @@ const ListVehicles = () => {
       setSearch={setSearch}
       addVehicle={addVehicle}
       toggleAddVehicle={toggleAddVehicle}
-      updateVehicleList={updateVehicleList}
+      // updateVehicleList={updateVehicleList}
+      onSubmit={onSubmit}
     />
   );
 };

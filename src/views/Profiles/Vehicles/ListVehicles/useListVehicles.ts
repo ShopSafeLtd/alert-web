@@ -1,9 +1,11 @@
 import type { MutationUpdaterFn } from '@apollo/client';
+import { notification } from 'antd';
 import type {
   CreateVehicleMutation,
   ListVehiclesQuery,
 } from 'graphql/generated';
 import {
+  useCreateVehicleMutation,
   ListVehiclesDocument,
   QueryMode,
   SortOrder,
@@ -11,6 +13,7 @@ import {
 } from 'graphql/generated';
 import { useState } from 'react';
 import { useStoreState } from 'state';
+import type { VehicleData } from 'types/DataType';
 
 interface Return {
   data: ListVehiclesQuery | undefined;
@@ -19,13 +22,16 @@ interface Return {
   setSearch: (value: string) => void;
   addVehicle: boolean;
   toggleAddVehicle: () => void;
-  updateVehicleList: MutationUpdaterFn<CreateVehicleMutation>;
+  // updateVehicleList: MutationUpdaterFn<CreateVehicleMutation>;
+  onSubmit: (value: VehicleData) => void;
 }
 
 const useListVehicles = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const [addVehicle, setAddVehicle] = useState(false);
   const [search, setSearch] = useState('');
+  // const [saving, setSaving] = useState(false);
+
   const variables = {
     order: {
       updatedAt: SortOrder.Desc,
@@ -38,7 +44,6 @@ const useListVehicles = (): Return => {
           },
         },
       },
-
       OR: [
         {
           make: {
@@ -47,7 +52,13 @@ const useListVehicles = (): Return => {
           },
         },
         {
-          model: {
+          ref: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+        {
+          registration: {
             contains: search,
             mode: QueryMode.Insensitive,
           },
@@ -55,7 +66,7 @@ const useListVehicles = (): Return => {
       ],
     },
   };
-  const { data, loading } = useListVehiclesQuery({
+  const { data: vehiclesData, loading } = useListVehiclesQuery({
     fetchPolicy: 'cache-and-network',
     variables,
   });
@@ -98,14 +109,75 @@ const useListVehicles = (): Return => {
       variables,
     });
   };
+
+  const [createVehicle] = useCreateVehicleMutation({
+    onCompleted: () => {
+      // setSaving(false);
+      toggleAddVehicle();
+      notification.success({
+        message: 'Successfully Added!',
+        description: 'The vehicle has been added! ',
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      // setSaving(false);
+      notification.error({
+        message: 'Error!',
+        description: 'Whoops, there are some errors. Please try again. ',
+        placement: 'bottomRight',
+      });
+    },
+    update: updateVehicleList,
+  });
+
+  const onSubmit = (data: VehicleData) => {
+    // setSaving(true);
+    createVehicle({
+      variables: {
+        data: {
+          make: data.make || '',
+          model: data.model || '',
+          colour: data.colour || '',
+          registration: data.registration || '',
+          crimeGroup:
+            data?.crimeGroup && data.crimeGroup.length > 0
+              ? data?.crimeGroup?.map((id) => ({ id }))
+              : [],
+          incidents:
+            data.incidents && data.incidents.length > 0
+              ? data.incidents.map((id) => ({ id }))
+              : [],
+          offenders:
+            data.offenders && data.offenders.length > 0
+              ? data.offenders.map((id) => ({ id }))
+              : [],
+          schemes: schemeId,
+          image: {
+            upload:
+              data.images && data.images.length > 0
+                ? data.images.map((item) => ({
+                    url: {
+                      filename: item.fileName || '',
+                      mimetype: item.type || '',
+                      url: item.url || '',
+                    },
+                  }))
+                : undefined,
+          },
+        },
+      },
+    });
+  };
   return {
-    data,
+    data: vehiclesData,
     loading,
     search,
     setSearch,
     addVehicle,
     toggleAddVehicle,
-    updateVehicleList,
+    // updateVehicleList,
+    onSubmit,
   };
 };
 

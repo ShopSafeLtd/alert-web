@@ -1,11 +1,13 @@
 import React from 'react';
 import { Drawer } from 'antd';
-import AddVehicle from 'components/form-components/profiles/vehicle/AddVehicle';
+
 import EditVehicle from 'components/form-components/profiles/vehicle/EditVehicle';
-import AddExistingVehicle from 'components/form-components/profiles/vehicle/AddExistingVehicle';
+// import AddExistingVehicle from 'components/form-components/profiles/vehicle/AddExistingVehicle';
 import AddExistingCrimeGroup from 'components/form-components/profiles/crimeGroup/AddExistingCrimeGroup';
 import AddCrimeGroup from 'components/form-components/profiles/crimeGroup/AddCrimeGroup';
 import type { CrimeGroupData, VehicleData } from 'types/DataType';
+import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
+import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 
 interface Props {
   vehiclesData: VehicleData[];
@@ -24,6 +26,7 @@ interface Props {
   editCrimeGroupId: string;
   setEditCrimeGroupId: (value: string) => void;
   updateCrimeGroupsData: (value: CrimeGroupData) => void;
+  fromOffender?: boolean;
 }
 
 const ProfileDrawer = ({
@@ -43,6 +46,7 @@ const ProfileDrawer = ({
   toggleAddNewCrimeGroup,
   toggleAddExistingCrimeGroup,
   updateCrimeGroupsData,
+  fromOffender,
 }: Props): JSX.Element => (
   <>
     <Drawer
@@ -53,7 +57,12 @@ const ProfileDrawer = ({
       zIndex={1001}
     >
       {addExistingVehicle ? (
-        <AddExistingVehicle
+        // <AddExistingVehicle
+        //   update={updateVehiclesData}
+        //   vehicleIds={vehiclesData.map(({ id }) => id)}
+        //   onClose={toggleAddExistingVehicle}
+        // />
+        <LinkVehicle
           update={updateVehiclesData}
           vehicleIds={vehiclesData.map(({ id }) => id)}
           onClose={toggleAddExistingVehicle}
@@ -69,7 +78,11 @@ const ProfileDrawer = ({
       onClose={toggleAddNewVehicle}
     >
       {addNewVehicle ? (
-        <AddVehicle update={updateVehiclesData} onClose={toggleAddNewVehicle} />
+        <AddVehicle
+          update={updateVehiclesData}
+          onClose={toggleAddNewVehicle}
+          fromOffender={!!fromOffender}
+        />
       ) : (
         <div />
       )}

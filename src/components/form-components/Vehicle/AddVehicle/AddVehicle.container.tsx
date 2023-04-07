@@ -1,20 +1,30 @@
-import type { MutationUpdaterFn } from '@apollo/client';
-import type { CreateVehicleMutation } from 'graphql/generated';
+// import type { MutationUpdaterFn } from '@apollo/client';
+// import type { CreateVehicleMutation } from 'graphql/generated';
 import React from 'react';
+import type { VehicleData } from 'types/DataType';
 import View from './AddVehicle.view';
 import useAddVehicle from './useAddVehicle';
 
 interface Props {
   onClose: () => void;
-  update: MutationUpdaterFn<CreateVehicleMutation>;
+  // update: MutationUpdaterFn<CreateVehicleMutation>;
+  update: (value: VehicleData) => void;
+  fromIncident?: boolean | undefined;
+  fromOffender?: boolean | undefined;
+  saving?: boolean;
 }
 
-const AddVehicle = ({ onClose, update }: Props): JSX.Element => {
+const AddVehicle = ({
+  onClose,
+  update,
+  fromIncident,
+  fromOffender,
+  saving,
+}: Props): JSX.Element => {
   const {
     onSubmit,
     CrimeGroupsData,
     CrimeGroupsLoading,
-    saving,
     offendersData,
     incidentsData,
     linkIncident,
@@ -30,7 +40,7 @@ const AddVehicle = ({ onClose, update }: Props): JSX.Element => {
     beforeUpload,
     fileList,
   } = useAddVehicle({
-    onClose,
+    // onClose,
     update,
   });
 
@@ -55,6 +65,8 @@ const AddVehicle = ({ onClose, update }: Props): JSX.Element => {
       imgChange={imgChange}
       beforeUpload={beforeUpload}
       fileList={fileList}
+      fromIncident={fromIncident}
+      fromOffender={fromOffender}
     />
   );
 };

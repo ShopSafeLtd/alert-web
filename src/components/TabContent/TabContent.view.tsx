@@ -11,7 +11,7 @@ const TabContent = ({ children }: Props): JSX.Element => (
     className="tab-content"
     style={{
       width: '100%',
-      height: 'calc(((100vh - 112px))',
+      height: 'calc(100vh - 65px)',
       overflowY: 'auto',
       overflowX: 'hidden',
     }}

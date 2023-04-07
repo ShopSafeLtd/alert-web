@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Form, Input, Row, Col, Typography } from 'antd';
+import { Button, Form, Input, Row, Col } from 'antd';
 import type { LocationData } from 'types/DataType';
 
 interface Props {
@@ -8,11 +8,8 @@ interface Props {
   saving: boolean;
 }
 
-const AddOffender = ({ onClose, onSubmit, saving }: Props): JSX.Element => (
+const AddLocation = ({ onClose, onSubmit, saving }: Props): JSX.Element => (
   <Form layout="vertical" onFinish={onSubmit}>
-    <Typography.Title level={4} style={{ marginBottom: 15 }}>
-      New Location:
-    </Typography.Title>
     <Row gutter={16}>
       <Col span={12}>
         <Form.Item name="building" label="Building">
@@ -86,11 +83,11 @@ const AddOffender = ({ onClose, onSubmit, saving }: Props): JSX.Element => (
             type="primary"
             htmlType="submit"
           >
-            Add New Location
+            Save
           </Button>
         </Col>
       </Row>
     </Form.Item>
   </Form>
 );
-export default AddOffender;
+export default AddLocation;

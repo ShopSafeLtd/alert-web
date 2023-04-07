@@ -25,7 +25,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import type { VehicleData } from './useAddVehicle';
+import type { VehicleData } from 'types/DataType';
 import useStyles from './AddVehicle.styles';
 
 const { confirm } = Modal;
@@ -35,7 +35,7 @@ interface Props {
   onSubmit: (value: VehicleData) => void;
   CrimeGroupsData: ListCrimeGroupsQuery | undefined;
   CrimeGroupsLoading: boolean;
-  saving: boolean;
+  saving?: boolean;
   offendersData: OffenderData[];
   incidentsData:
     | Exclude<
@@ -54,6 +54,8 @@ interface Props {
   imgChange: UploadProps['onChange'];
   beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
+  fromIncident?: boolean;
+  fromOffender?: boolean;
 }
 
 const AddVehicle = ({
@@ -76,6 +78,8 @@ const AddVehicle = ({
   imgChange,
   beforeUpload,
   fileList,
+  fromIncident,
+  fromOffender,
 }: Props): JSX.Element => {
   const classes = useStyles();
   return (
@@ -83,16 +87,7 @@ const AddVehicle = ({
       <Form layout="vertical" onFinish={onSubmit}>
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item
-              name="make"
-              label="Make"
-              // rules={[
-              //   {
-              //     required: true,
-              //     message: 'Please enter a make for the new vehicle.',
-              //   },
-              // ]}
-            >
+            <Form.Item name="make" label="Make">
               <Input disabled={saving} />
             </Form.Item>
           </Col>
@@ -129,7 +124,7 @@ const AddVehicle = ({
                   options={CrimeGroupsData?.listCrimeGroups.crimeGroups.map(
                     (crimeGroup) => ({
                       value: crimeGroup.id,
-                      label: crimeGroup.reference,
+                      label: `CG-${crimeGroup.reference}`,
                     })
                   )}
                 />
@@ -161,7 +156,7 @@ const AddVehicle = ({
         </Row>
         {adminRights && (
           <Row gutter={16}>
-            {!(incidentsData && incidentsData.length > 0) && (
+            {!fromIncident && (
               <Col>
                 <Button
                   onClick={toggleLinkIncident}
@@ -178,7 +173,8 @@ const AddVehicle = ({
                 </Button>
               </Col>
             )}
-            {!(offendersData && offendersData.length > 0) && (
+
+            {!fromOffender && (
               <Col>
                 <div>
                   <Button
@@ -260,26 +256,6 @@ const AddVehicle = ({
               pagination={false}
               size="small"
             />
-            {adminRights && (
-              <Row gutter={16} style={{ marginTop: 5 }}>
-                <Col flex={1} />
-                <Col>
-                  <Button
-                    onClick={toggleLinkIncident}
-                    disabled={saving || linkOffender}
-                    icon={
-                      <FontAwesomeIcon
-                        className="button-icon"
-                        icon={faPlus}
-                        size="lg"
-                      />
-                    }
-                  >
-                    Link Incident
-                  </Button>
-                </Col>
-              </Row>
-            )}
           </>
         ) : null}
 
@@ -350,7 +326,7 @@ const AddVehicle = ({
               pagination={false}
               size="small"
             />
-            {adminRights && (
+            {/* {adminRights && (
               <Row gutter={16} style={{ marginTop: 5 }}>
                 <Col flex={1} />
                 <Col>
@@ -369,7 +345,7 @@ const AddVehicle = ({
                   </Button>
                 </Col>
               </Row>
-            )}
+            )} */}
           </>
         ) : null}
 

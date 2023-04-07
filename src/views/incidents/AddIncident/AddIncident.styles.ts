@@ -26,6 +26,7 @@ const styles = createUseStyles((theme: Theme) => ({
     color: '#4d5b75',
     marginRight: 8,
   },
+  clearButton: { alignItems: 'center' },
 }));
 
 export default styles;

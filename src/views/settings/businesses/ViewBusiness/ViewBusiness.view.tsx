@@ -96,38 +96,41 @@ const ViewBusiness = ({
   const classNames = useStyles();
   return (
     <div className={classNames.page}>
-      <BusinessSideList current={businessId} />
-      <div className={classNames.content}>
-        <PageHeader
-          onBack={() => window.history.back()}
-          title={data?.business?.name}
-          extra={[
-            <Button
-              key="5"
-              // disabled={!!data?.business?.demId}
-              disabled
-              onClick={toggleLinkDem}
-            >
-              Link to DEM{' '}
-            </Button>,
-            <Button
-              key="4"
-              icon={
-                <FontAwesomeIcon
-                  style={{ marginRight: 5 }}
-                  size="lg"
-                  icon={faEdit}
-                />
-              }
-              onClick={toggleEdit}
-            >
-              Edit Business
-            </Button>,
-          ]}
-        />
-        <div className={classNames.details}>
-          <Row gutter={16}>
-            <Col span={16} xxl={12}>
+      <Row wrap={false} style={{ height: '100vh', display: 'hidden' }}>
+        <Col>
+          <BusinessSideList current={businessId} />
+        </Col>
+        <Col flex={1} className={classNames.content}>
+          <PageHeader
+            onBack={() => window.history.back()}
+            title={data?.business?.name}
+            extra={[
+              <Button
+                key="5"
+                // disabled={!!data?.business?.demId}
+                disabled
+                onClick={toggleLinkDem}
+              >
+                Link to DEM
+              </Button>,
+              <Button
+                key="4"
+                icon={
+                  <FontAwesomeIcon
+                    style={{ marginRight: 5 }}
+                    size="lg"
+                    icon={faEdit}
+                  />
+                }
+                onClick={toggleEdit}
+              >
+                Edit Business
+              </Button>,
+            ]}
+          />
+
+          <Row gutter={16} className={classNames.details}>
+            <Col span={16} xxl={12} className={classNames.detailCol}>
               <Card>
                 <Typography.Title level={4}>Details</Typography.Title>
                 <Descriptions column={1}>
@@ -271,9 +274,12 @@ const ViewBusiness = ({
                     usersData?.users.map((user) => ({
                       groups: user.groups,
                       key: user.id,
-                      lastLogin: moment(user.loginEvents[0].loginTime).format(
-                        'HH:mm DD/MM/YY'
-                      ),
+                      lastLogin:
+                        user.loginEvents && user.loginEvents.length > 0
+                          ? moment(user.loginEvents[0]?.loginTime || '').format(
+                              'HH:mm DD/MM/YY'
+                            )
+                          : 'No LogIn Data',
                       name: user.fullName,
                       status: user.status || 'Unknown',
                     })) || []
@@ -282,8 +288,8 @@ const ViewBusiness = ({
                 />
               </Card>
             </Col>
-            <Col span={8} xxl={12}>
-              <Card className={classNames.recent}>
+            <Col span={8} xxl={12} className={classNames.detailCol}>
+              <Card>
                 <Typography.Title level={4} style={{ marginBottom: 30 }}>
                   Recent Activity
                 </Typography.Title>
@@ -327,8 +333,8 @@ const ViewBusiness = ({
               </Card>
             </Col>
           </Row>
-        </div>
-      </div>
+        </Col>
+      </Row>
 
       <Drawer
         title="Edit Business"

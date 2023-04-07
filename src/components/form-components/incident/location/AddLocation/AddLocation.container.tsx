@@ -5,7 +5,7 @@ import View from './AddLocation.view';
 
 interface Props {
   onClose: () => void;
-  update: (value: LocationData | undefined) => void;
+  update: (value: LocationData) => void;
 }
 const AddOffender = ({ onClose, update }: Props): JSX.Element => {
   const { onSubmit, saving } = useAddOffender({ onClose, update });

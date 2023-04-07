@@ -97,7 +97,7 @@ const PerformanceReport = ({
       </Col>
       <Col flex={1}>
         <div className={classes.page}>
-          <Title level={2}>Performance Report</Title>
+          <Title level={2}>Offender Report</Title>
           <Row style={{ marginBottom: 10 }}>
             <Col span={6}>
               <Select
@@ -738,7 +738,7 @@ const PerformanceReport = ({
                     axisLeft={{
                       tickPadding: 15,
                       tickSize: 1,
-                      legend: 'Calls',
+                      legend: 'Incidents',
                       legendOffset: -44,
                       legendPosition: 'middle',
                     }}

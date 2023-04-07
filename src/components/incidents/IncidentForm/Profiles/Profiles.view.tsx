@@ -19,12 +19,11 @@ import {
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faEdit,
+  // faEdit,
   faMagnifyingGlass,
   faPlus,
   faTrash,
   faUpload,
-  faUser,
 } from '@fortawesome/pro-light-svg-icons';
 import type { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
 import {
@@ -180,42 +179,7 @@ const Profiles = ({
           </Button>
         </Dropdown>
       </Col>
-      <Col>
-        <Dropdown
-          overlay={
-            <Menu
-              items={[
-                {
-                  label: 'Add Existing Crime Groups',
-                  key: '1',
-                  icon: (
-                    <FontAwesomeIcon
-                      icon={faMagnifyingGlass}
-                      style={{ marginRight: 5 }}
-                    />
-                  ),
-                  onClick: () => toggleAddExistingCrimeGroup(),
-                },
-                {
-                  label: 'Create New Crime Group',
-                  key: '2',
-                  icon: (
-                    <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
-                  ),
-                  onClick: () => toggleAddNewCrimeGroup(),
-                },
-              ]}
-            />
-          }
-        >
-          <Button
-            style={{ color: 'red' }}
-            icon={<FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />}
-          >
-            Crime Groups
-          </Button>
-        </Dropdown>
-      </Col>
+
       <Col>
         <Dropdown
           overlay={
@@ -252,6 +216,43 @@ const Profiles = ({
           </Button>
         </Dropdown>
       </Col>
+      <Col>
+        {/* <Dropdown
+          overlay={
+            <Menu
+              items={[
+                {
+                  label: 'Add Existing Crime Groups',
+                  key: '1',
+                  icon: (
+                    <FontAwesomeIcon
+                      icon={faMagnifyingGlass}
+                      style={{ marginRight: 5 }}
+                    />
+                  ),
+                  onClick: () => toggleAddExistingCrimeGroup(),
+                },
+                {
+                  label: 'Create New Crime Group',
+                  key: '2',
+                  icon: (
+                    <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
+                  ),
+                  onClick: () => toggleAddNewCrimeGroup(),
+                },
+              ]}
+            />
+          }
+        > */}
+        <Button
+          style={{ color: 'red' }}
+          onClick={toggleAddExistingCrimeGroup}
+          icon={<FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />}
+        >
+          Crime Groups
+        </Button>
+        {/* </Dropdown> */}
+      </Col>
     </Row>
 
     <Row gutter={20} style={{ marginTop: 10 }}>
@@ -268,22 +269,19 @@ const Profiles = ({
                 <Divider>Offenders</Divider>
                 <Table
                   size="small"
-                  pagination={{
-                    defaultPageSize: 20,
-                    pageSize: 20,
-                  }}
-                  // title="Offenders"
                   columns={[
                     {
+                      key: 'reference',
+                      dataIndex: 'reference',
+                      title: 'Alert ID',
+                      width: 100,
+                    },
+                    {
                       key: 'images',
-                      title: '',
+                      title: 'Image',
                       dataIndex: 'images',
                       width: 150,
-                      render: (
-                        _,
-                        record
-                        // images?: { id: string; optimised: string }[],
-                      ) => {
+                      render: (_, record) => {
                         if (record.images && record.images.length > 0) {
                           return (
                             <img
@@ -320,6 +318,7 @@ const Profiles = ({
                         );
                       },
                     },
+
                     {
                       key: 'name',
                       title: 'Name',
@@ -345,19 +344,19 @@ const Profiles = ({
                       title: 'Ethnicity',
                       dataIndex: 'race',
                     },
-                    {
-                      key: 'edit',
-                      title: 'Edit',
-                      dataIndex: '',
-                      width: 50,
-                      render: (_, record) => (
-                        <Button
-                          onClick={() => setEditOffenderId(record.key)}
-                          disabled
-                          icon={<FontAwesomeIcon icon={faEdit} />}
-                        />
-                      ),
-                    },
+                    // {
+                    //   key: 'edit',
+                    //   title: 'Edit',
+                    //   dataIndex: '',
+                    //   width: 50,
+                    //   render: (_, record) => (
+                    //     <Button
+                    //       onClick={() => setEditOffenderId(record.key)}
+                    //       disabled
+                    //       icon={<FontAwesomeIcon icon={faEdit} />}
+                    //     />
+                    //   ),
+                    // },
                     {
                       key: 'delete',
                       title: 'Delete',
@@ -384,6 +383,7 @@ const Profiles = ({
                   ]}
                   dataSource={offendersData.map((offender) => ({
                     key: offender.id,
+                    reference: offender.reference,
                     name: offender.name,
                     age: offender?.dateOfBirth
                       ? calcAge(offender?.dateOfBirth)
@@ -393,10 +393,129 @@ const Profiles = ({
                     race: getOffenderRace(offender.race),
                     images: offender.images,
                   }))}
+                  pagination={
+                    offendersData && offendersData.length > 5
+                      ? {
+                          pageSize: 5,
+                        }
+                      : false
+                  }
                 />
               </>
             ) : null}
 
+            {vehiclesData && vehiclesData.length > 0 ? (
+              <>
+                <Divider>Vehicles</Divider>
+                <Table
+                  columns={[
+                    {
+                      key: 'reference',
+                      dataIndex: 'reference',
+                      title: 'Alert ID',
+                      width: 100,
+                    },
+                    {
+                      key: 'images',
+                      title: 'Image',
+                      dataIndex: 'images',
+                      width: 150,
+                      render: (
+                        _,
+                        record
+                        // images?: { id: string; optimised: string }[],
+                      ) => {
+                        if (record.images && record.images.length > 0) {
+                          return (
+                            <img
+                              style={{ width: 80 }}
+                              key={record.images[0]?.id || ''}
+                              src={record.images[0]?.optimised || ''}
+                              alt={record.images[0]?.optimised || ''}
+                            />
+                          );
+                        }
+                        return <div />;
+                      },
+                    },
+
+                    {
+                      key: 'registration',
+                      dataIndex: 'registration',
+                      title: 'Registration',
+                    },
+                    {
+                      key: 'make',
+                      dataIndex: 'make',
+                      title: 'Make',
+                    },
+                    {
+                      key: 'colour',
+                      dataIndex: 'colour',
+                      title: 'Colour',
+                    },
+                    {
+                      key: 'model',
+                      dataIndex: 'model',
+                      title: 'Model',
+                    },
+                    // {
+                    //   key: 'edit',
+                    //   title: 'Edit',
+                    //   dataIndex: '',
+                    //   width: 50,
+                    //   render: (_, record) => (
+                    //     <Button
+                    //       onClick={() => setEditVehicleId(record.key)}
+                    //       disabled
+                    //       icon={<FontAwesomeIcon icon={faEdit} />}
+                    //     />
+                    //   ),
+                    // },
+                    {
+                      key: 'delete',
+                      title: 'Delete',
+                      dataIndex: 'delete',
+                      width: 50,
+                      render: (_, record) => (
+                        <Popconfirm
+                          placement="topLeft"
+                          title="Remove the vehicle?"
+                          onConfirm={() => {
+                            removeVehicle(record.key);
+                          }}
+                          okText="Yes"
+                          cancelText="No"
+                          overlayInnerStyle={{ padding: 10 }}
+                        >
+                          <Button
+                            disabled={saving}
+                            icon={<FontAwesomeIcon icon={faTrash} />}
+                          />
+                        </Popconfirm>
+                      ),
+                    },
+                  ]}
+                  dataSource={vehiclesData.map((vehicle) => ({
+                    key: vehicle.id,
+                    reference: vehicle.reference,
+                    make: vehicle.make,
+                    colour: vehicle.colour,
+                    model: vehicle.model,
+                    registration: vehicle.registration,
+                    images: vehicle.images,
+                  }))}
+                  size="small"
+                  pagination={
+                    vehiclesData && vehiclesData.length > 5
+                      ? {
+                          pageSize: 5,
+                        }
+                      : false
+                  }
+                />
+              </>
+            ) : null}
             {crimeGroupsData && crimeGroupsData.length > 0 ? (
               <>
                 <Divider>Crime Groups</Divider>
@@ -406,6 +525,7 @@ const Profiles = ({
                       key: 'reference',
                       dataIndex: 'reference',
                       title: 'Alert ID',
+                      width: 100,
                     },
                     {
                       key: 'alias',
@@ -440,19 +560,19 @@ const Profiles = ({
                       title: 'Success Rate',
                       render: (value) => `${value?.toFixed(0) || 0}%`,
                     },
-                    {
-                      key: 'edit',
-                      title: 'Edit',
-                      dataIndex: '',
-                      width: 50,
-                      render: (_, record) => (
-                        <Button
-                          onClick={() => setEditVehicleId(record.key)}
-                          disabled
-                          icon={<FontAwesomeIcon icon={faEdit} />}
-                        />
-                      ),
-                    },
+                    // {
+                    //   key: 'edit',
+                    //   title: 'Edit',
+                    //   dataIndex: '',
+                    //   width: 50,
+                    //   render: (_, record) => (
+                    //     <Button
+                    //       onClick={() => setEditVehicleId(record.key)}
+                    //       disabled
+                    //       icon={<FontAwesomeIcon icon={faEdit} />}
+                    //     />
+                    //   ),
+                    // },
                     {
                       key: 'delete',
                       title: 'Delete',
@@ -488,82 +608,13 @@ const Profiles = ({
                     totalTheftSuccess: crimeGroup.totalTheftSuccess,
                   }))}
                   size="small"
-                />
-              </>
-            ) : null}
-            {vehiclesData && vehiclesData.length > 0 ? (
-              <>
-                <Divider>Vehicles</Divider>
-                <Table
-                  columns={[
-                    {
-                      key: 'registration',
-                      dataIndex: 'registration',
-                      title: 'Registration',
-                    },
-                    {
-                      key: 'make',
-                      dataIndex: 'make',
-                      title: 'Make',
-                    },
-                    {
-                      key: 'colour',
-                      dataIndex: 'colour',
-                      title: 'Colour',
-                    },
-                    {
-                      key: 'model',
-                      dataIndex: 'model',
-                      title: 'Model',
-                    },
-                    {
-                      key: 'edit',
-                      title: 'Edit',
-                      dataIndex: '',
-                      width: 50,
-                      render: (_, record) => (
-                        <Button
-                          onClick={() => setEditVehicleId(record.key)}
-                          disabled
-                          icon={<FontAwesomeIcon icon={faEdit} />}
-                        />
-                      ),
-                    },
-                    {
-                      key: 'delete',
-                      title: 'Delete',
-                      dataIndex: 'delete',
-                      width: 50,
-                      render: (_, record) => (
-                        <Popconfirm
-                          placement="topLeft"
-                          title="Remove the vehicle?"
-                          onConfirm={() => {
-                            removeVehicle(record.key);
-                          }}
-                          okText="Yes"
-                          cancelText="No"
-                          overlayInnerStyle={{ padding: 10 }}
-                        >
-                          <Button
-                            disabled={saving}
-                            icon={<FontAwesomeIcon icon={faTrash} />}
-                          />
-                        </Popconfirm>
-                      ),
-                    },
-                  ]}
-                  dataSource={vehiclesData.map((vehicle) => ({
-                    key: vehicle.id,
-                    make: vehicle.make,
-                    colour: vehicle.colour,
-                    model: vehicle.model,
-                    registration: vehicle.registration,
-                    totalCrimeGroup: vehicle.crimeGroup?.length || 0,
-                    totalOffenders: vehicle.offenders?.length || 0,
-                    totalIncidents: vehicle.incidents?.length || 0,
-                  }))}
-                  size="small"
+                  pagination={
+                    crimeGroupsData && crimeGroupsData.length > 5
+                      ? {
+                          pageSize: 5,
+                        }
+                      : false
+                  }
                 />
               </>
             ) : null}
@@ -637,13 +688,13 @@ const Profiles = ({
                           }}
                         >
                           <WatermarkImage url={offender.images[0]?.optimised} />
-                          {offender.images.length === 0 && (
+                          {/* {offender.images.length === 0 && (
                             <FontAwesomeIcon
                               style={{ color: 'rgb(114, 132, 154)' }}
                               icon={faUser}
                               size="3x"
                             />
-                          )}
+                          )} */}
                           <Paragraph
                             style={{
                               whiteSpace: 'nowrap',
@@ -684,7 +735,7 @@ const Profiles = ({
       editCrimeGroupId={editCrimeGroupId}
       editOffenderId={editOffenderId}
       editVehicleId={editVehicleId}
-      isIncident
+      fromIncident
       offendersData={offendersData}
       setEditCrimeGroupId={setEditCrimeGroupId}
       setEditOffenderId={setEditOffenderId}

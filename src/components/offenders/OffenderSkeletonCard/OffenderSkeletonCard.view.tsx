@@ -6,7 +6,7 @@ const OffenderSkeletonCard = (): JSX.Element => (
     <Skeleton.Image />
 
     <div
-      style={{ paddingLeft: 10, paddingRight: 10 }}
+      style={{ paddingLeft: 10, paddingTop: 10 }}
       className="incident-card-content"
     >
       <Skeleton active />

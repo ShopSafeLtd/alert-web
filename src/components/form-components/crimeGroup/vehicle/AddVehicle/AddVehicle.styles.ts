@@ -8,8 +8,8 @@ const useStyles = createUseStyles({
     marginBottom: 10,
   },
   searchImage: {
-    height: 96,
-    // height: 69, // TODO: choose one
+    // height: 96,
+    height: 69,
     width: 69,
   },
   searchImageContainer: {

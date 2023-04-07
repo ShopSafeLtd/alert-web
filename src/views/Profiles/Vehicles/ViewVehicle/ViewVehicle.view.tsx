@@ -6,6 +6,7 @@ import {
   Descriptions,
   Drawer,
   Dropdown,
+  Empty,
   Input,
   Menu,
   Modal,
@@ -14,7 +15,6 @@ import {
   Skeleton,
   Space,
   Statistic,
-  Table,
   Tooltip,
   Typography,
 } from 'antd';
@@ -34,11 +34,13 @@ import UpdateContent from 'views/incidents/ViewIncident/Update.view';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
-
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import UpdateBar from 'components/MessageInput/UpdateBar';
 import Lightbox from 'yet-another-react-lightbox';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import OffenderTable from 'components/tables/OffenderTable';
+import CrimeGroupTable from 'components/tables/CrimeGroupTable';
+import IncidentTable from 'components/tables/IncidentTable';
 import useStyles from './ViewVehicle.styles';
 
 const { Title } = Typography;
@@ -219,6 +221,7 @@ const ViewVehicle = ({
                     data?.vehicle?.images && data?.vehicle?.images.length > 0
                       ? undefined
                       : 0,
+                  marginBottom: 20,
                 }}
               >
                 {data?.vehicle?.images.map((image, i) => (
@@ -308,121 +311,45 @@ const ViewVehicle = ({
             )}
             <Card loading={loading}>
               <Title level={4}>Offenders</Title>
-              <Table
-                columns={[
-                  {
-                    key: 'reference',
-                    dataIndex: 'reference',
-                    title: 'Alert ID',
-                  },
-                  {
-                    key: 'name',
-                    dataIndex: 'name',
-                    title: 'Name',
-                  },
-                  {
-                    key: 'totalIncidents',
-                    dataIndex: 'totalIncidents',
-                    title: 'Total Incidents',
-                  },
-                ]}
-                size="small"
-                dataSource={
-                  data?.vehicle?.offenders.map((offender) => ({
-                    key: offender.id,
-                    reference: offender.reference,
-                    name: offender.name,
-                    totalIncidents: offender.totalIncidents,
-                  })) || []
-                }
-              />
+              {data?.vehicle?.offenders.length && !loading ? (
+                <OffenderTable
+                  offenders={data?.vehicle?.offenders}
+                  hasNavigation
+                />
+              ) : (
+                <Empty
+                  description="No offenders for this vehicle"
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                />
+              )}
             </Card>
             <Card loading={loading}>
               <Title level={4}>Incidents</Title>
-              <Table
-                columns={[
-                  {
-                    key: 'reference',
-                    dataIndex: 'reference',
-                    title: 'Alert ID',
-                  },
-                  {
-                    key: 'policeRef',
-                    dataIndex: 'policeRef',
-                    title: 'Crime No.',
-                  },
-                  {
-                    key: 'subject',
-                    dataIndex: 'subject',
-                    title: 'Subject',
-                  },
-                  {
-                    key: 'date',
-                    dataIndex: 'date',
-                    title: 'Date',
-                  },
-
-                  {
-                    key: 'value',
-                    dataIndex: 'value',
-                    title: 'Value',
-                  },
-                ]}
-                size="small"
-                dataSource={
-                  data?.vehicle?.incidents?.map((incident) => ({
-                    key: incident?.id,
-                    reference: incident?.reference,
-                    policeRef: incident?.policeRef,
-                    subject: incident?.subject,
-                    date: incident?.dayTime,
-                    // location: incident?.createdBy.businesses[0]?.name,
-                    value: incident?.value,
-                    // recoveredValue: incident?.recoveredValue,
-                  })) || []
-                }
-              />
+              {data?.vehicle?.incidents.length && !loading ? (
+                <IncidentTable
+                  incidents={data?.vehicle?.incidents}
+                  hasNavigation
+                />
+              ) : (
+                <Empty
+                  description="No incidents for this vehicle"
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                />
+              )}
             </Card>
             <Card loading={loading}>
               <Title level={4}>Crime Groups</Title>
-              <Table
-                columns={[
-                  {
-                    key: 'reference',
-                    dataIndex: 'reference',
-                    title: 'Alert ID',
-                  },
-                  {
-                    key: 'alias',
-                    dataIndex: 'alias',
-                    title: 'Alias',
-                  },
-
-                  {
-                    key: 'totalOffenders',
-                    dataIndex: 'totalOffenders',
-                    title: 'Members',
-                  },
-                  {
-                    key: 'totalIncidents',
-                    dataIndex: 'totalIncidents',
-                    title: 'Incidents',
-                  },
-                ]}
-                size="small"
-                dataSource={
-                  data?.vehicle?.crimeGroup?.map((crimeGroup) => ({
-                    key: crimeGroup.id,
-                    reference: crimeGroup.reference,
-                    totalOffenders: crimeGroup.totalOffenders,
-                    totalIncidents: crimeGroup.totalIncidents,
-                    totalValue: crimeGroup.totalValue,
-                    totalRecoveredValue: crimeGroup.totalRecoveredValue,
-                    totalTheftSuccess: crimeGroup.totalTheftSuccess,
-                    alias: crimeGroup.alias,
-                  })) || []
-                }
-              />
+              {data?.vehicle?.crimeGroup.length && !loading ? (
+                <CrimeGroupTable
+                  crimeGroups={data?.vehicle?.crimeGroup}
+                  hasNavigation
+                />
+              ) : (
+                <Empty
+                  description="No crime groups for this vehicle"
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                />
+              )}
             </Card>
           </div>
         </Col>

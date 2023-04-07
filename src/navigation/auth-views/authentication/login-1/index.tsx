@@ -17,7 +17,7 @@ const LoginOne = (props: Props): JSX.Element => {
   };
   useEffect(() => {
     if (!isAuthenticated && !isLoading) {
-      if (localStorage.getItem('logo')) {
+      if (localStorage.getItem('logo')?.endsWith('.webp')) {
         loginWithRedirect({
           'ext-logo': localStorage.getItem('logo'),
         });
