@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddBusiness from 'components/form-components/businesses/AddBusiness';
+import LinkBusiness from 'components/form-components/businesses/LinkBusiness';
 import useStyles from './ListBusinesses.styles';
 
 interface TableData {
@@ -23,6 +24,8 @@ interface Props {
   onSearchChange: (value: string) => void;
   addVisible: boolean;
   toggleAddVisible: () => void;
+  linkVisible: boolean;
+  toggleLinkVisible: () => void;
 }
 
 const ListBusinesses = ({
@@ -32,12 +35,14 @@ const ListBusinesses = ({
   searchValue,
   addVisible,
   toggleAddVisible,
+  linkVisible,
+  toggleLinkVisible,
 }: Props) => {
   const classNames = useStyles();
 
   return (
     <div className={classNames.page}>
-      <Row className={classNames.actions}>
+      <Row gutter={8} className={classNames.actions}>
         <Col span={8}>
           <Input
             placeholder="Search businesses..."
@@ -55,7 +60,22 @@ const ListBusinesses = ({
                 style={{ marginRight: 5 }}
               />
             }
-            type="primary"
+            danger
+            onClick={toggleLinkVisible}
+          >
+            Link Existing Business
+          </Button>
+        </Col>
+        <Col>
+          <Button
+            icon={
+              <FontAwesomeIcon
+                icon={faPlus}
+                size="lg"
+                style={{ marginRight: 5 }}
+              />
+            }
+            danger
             onClick={toggleAddVisible}
           >
             New Business
@@ -106,12 +126,20 @@ const ListBusinesses = ({
       />
 
       <Drawer
-        visible={addVisible}
+        open={addVisible}
         onClose={toggleAddVisible}
         title="Add New Business"
         width={600}
       >
         {addVisible && <AddBusiness onClose={toggleAddVisible} />}
+      </Drawer>
+      <Drawer
+        open={linkVisible}
+        onClose={toggleLinkVisible}
+        title="Add New Business"
+        width={600}
+      >
+        {linkVisible && <LinkBusiness onClose={toggleLinkVisible} />}
       </Drawer>
     </div>
   );

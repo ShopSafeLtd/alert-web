@@ -16,6 +16,11 @@ const UserList = (): JSX.Element => {
     toggleAddUser,
     updateUserList,
     updateExitingUserList,
+    currentPage,
+    currentPageSize,
+    onPaginationChange,
+    editUser,
+    toggleEditUser,
   } = useUserList();
 
   return (
@@ -32,6 +37,11 @@ const UserList = (): JSX.Element => {
       toggleAddUser={toggleAddUser}
       updateUserList={updateUserList}
       updateExitingUserList={updateExitingUserList}
+      onPaginationChange={onPaginationChange}
+      currentPage={currentPage}
+      currentPageSize={currentPageSize}
+      editUser={editUser}
+      toggleEditUser={toggleEditUser}
     />
   );
 };

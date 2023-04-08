@@ -104,7 +104,7 @@ const UseUserListTest = () => {
   const { data, loading, groupsData, groupsLoading } = useUserList();
   const Users =
     data &&
-    data.users.map((el) => (
+    data.listUsers.users.map((el) => (
       <div key={el.id}>
         <span>{el.id}</span>
         <span>{el.fullName}</span>

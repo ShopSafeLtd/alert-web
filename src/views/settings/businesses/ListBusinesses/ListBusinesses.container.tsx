@@ -10,6 +10,8 @@ const ListBusinesses = () => {
     searchValue,
     addVisible,
     toggleAddVisible,
+    linkVisible,
+    toggleLinkVisible,
   } = useListBusinesses();
 
   return (
@@ -20,6 +22,8 @@ const ListBusinesses = () => {
       searchValue={searchValue}
       addVisible={addVisible}
       toggleAddVisible={toggleAddVisible}
+      linkVisible={linkVisible}
+      toggleLinkVisible={toggleLinkVisible}
     />
   );
 };

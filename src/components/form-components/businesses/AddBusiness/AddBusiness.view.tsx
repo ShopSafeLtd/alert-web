@@ -31,7 +31,11 @@ const AddBusiness = ({
   onSearchBusiness,
   saving,
 }: Props) => (
-  <Form<FormData> layout="vertical" onFinish={onSubmit}>
+  <Form<FormData>
+    layout="vertical"
+    onFinish={onSubmit}
+    initialValues={{ publicName: true }}
+  >
     <Form.Item name="name" label="Business Name" rules={[{ required: true }]}>
       <Input disabled={saving} />
     </Form.Item>

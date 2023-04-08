@@ -265,7 +265,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
       .then((response) =>
         response.data.listBusinesses.businesses.length > 0
           ? response.data.listBusinesses.businesses.map((item) => ({
-              label: item?.name || '',
+              label: `${item?.name} (${item?.locations[0]?.full})`,
               value: item?.id || '',
             }))
           : [
