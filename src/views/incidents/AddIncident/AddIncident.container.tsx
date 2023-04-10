@@ -36,8 +36,6 @@ const EditIncident = (): JSX.Element => {
     toggleAddIncidentTag,
     updateCrimeGroupsData,
     updateIncidentTag,
-    updateOffender,
-    updateOffendersData,
     updateVehiclesData,
     vehiclesData,
     formStages,
@@ -48,6 +46,7 @@ const EditIncident = (): JSX.Element => {
     toggleAddNewAddress,
     updateNewAddressData,
     newAddressData,
+    onAddOffender,
   } = useAddIncident();
 
   return (
@@ -85,8 +84,6 @@ const EditIncident = (): JSX.Element => {
         toggleAddIncidentTag={toggleAddIncidentTag}
         updateCrimeGroupsData={updateCrimeGroupsData}
         updateIncidentTag={updateIncidentTag}
-        updateOffender={updateOffender}
-        updateOffendersData={updateOffendersData}
         updateVehiclesData={updateVehiclesData}
         vehiclesData={vehiclesData}
         formStages={formStages}
@@ -97,6 +94,7 @@ const EditIncident = (): JSX.Element => {
         toggleAddNewAddress={toggleAddNewAddress}
         updateNewAddressData={updateNewAddressData}
         newAddressData={newAddressData}
+        onAddOffender={onAddOffender}
       />
     </div>
   );

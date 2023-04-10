@@ -29,6 +29,9 @@ interface OffenderData {
     new?: boolean;
   }[];
   imageUid?: string[] | undefined;
+  new: boolean;
+  existing: boolean;
+  edited: boolean;
 }
 
 interface Image extends UploadFile {
@@ -57,7 +60,7 @@ const AssignImageOffender = ({
     offendersData,
     toggleAddExistingOffender,
     toggleAddOffender,
-    updateOffendersList,
+    onAddOffender,
     selected,
     toggleOffender,
     submitImage,
@@ -75,7 +78,7 @@ const AssignImageOffender = ({
       toggleAddOffender={toggleAddOffender}
       addExistingOffender={addExistingOffender}
       addOffender={addOffender}
-      updateOffendersList={updateOffendersList}
+      onAddOffender={onAddOffender}
       selected={selected}
       toggleOffender={toggleOffender}
       onCancel={onCancel}

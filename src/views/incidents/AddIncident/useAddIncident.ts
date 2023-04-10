@@ -18,7 +18,6 @@ import type {
   TagType,
 } from 'graphql/generated';
 import {
-  useBusinessQuery,
   CrimeType,
   ListIncidentsDocument,
   Model,
@@ -44,12 +43,18 @@ import { useStoreActions, useStoreState } from 'state';
 import type {
   LocationData,
   CrimeGroupData,
-  OffenderData,
+  OffenderData as GlobalOffenderData,
   VehicleData,
 } from 'types/DataType';
 
 const { confirm } = Modal;
 const { useForm } = Form;
+
+interface OffenderData extends GlobalOffenderData {
+  new: boolean;
+  existing: boolean;
+  edited: boolean;
+}
 
 interface FormData {
   subject: string;
@@ -82,6 +87,7 @@ interface Image extends UploadFile {
   offenders?: {
     id: string;
     name?: string | undefined | null;
+    new?: boolean;
   }[];
 }
 
@@ -133,8 +139,7 @@ interface Return {
   toggleAddIncidentTag: () => void;
   updateCrimeGroupsData: (value: CrimeGroupData) => void;
   updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
-  updateOffender: (value: OffenderData) => void;
-  updateOffendersData: (value: OffenderData) => void;
+  onAddOffender: (value: GlobalOffenderData, existing: boolean) => void;
   updateVehiclesData: (value: VehicleData) => void;
   vehiclesData: VehicleData[];
   formStages: {
@@ -175,9 +180,6 @@ const useEditIncident = (): Return => {
 
   const [crimeGroupsData, setCrimeGroupsData] = useState<CrimeGroupData[]>([]);
 
-  const [editedOffender, setEditedOffender] = useState<
-    OffenderData | undefined
-  >();
   const [formStages, setFormStages] = useState({
     crimeTypes: true,
     where: false,
@@ -198,17 +200,17 @@ const useEditIncident = (): Return => {
   const [searchOffenders, setSearchOffenders] = useState<string>('');
   const [vehiclesData, setVehiclesData] = useState<VehicleData[]>([]);
 
-  useEffect(() => {
-    if (editedOffender) {
-      setOffendersData([
-        ...(offendersData?.filter(({ id }) => id !== editedOffender.id) || []),
-        {
-          ...editedOffender,
-        },
-      ]);
-      setEditedOffender(undefined);
-    }
-  }, [editedOffender]);
+  // useEffect(() => {
+  //   if (editedOffender) {
+  //     setOffendersData([
+  //       ...(offendersData?.filter(({ id }) => id !== editedOffender.id) || []),
+  //       {
+  //         ...editedOffender,
+  //       },
+  //     ]);
+  //     setEditedOffender(undefined);
+  //   }
+  // }, [editedOffender]);
 
   useEffect(() => {
     if (businesses.length > 0)
@@ -453,8 +455,16 @@ const useEditIncident = (): Return => {
   const updateNewAddressData = (address: LocationData | undefined) =>
     setNewAddressData(address);
 
-  const updateOffendersData = (offender: OffenderData) => {
-    setOffendersData([...offendersData, offender]);
+  const onAddOffender = (offender: GlobalOffenderData, existing: boolean) => {
+    setOffendersData([
+      ...offendersData,
+      {
+        ...offender,
+        edited: false,
+        existing,
+        new: !existing,
+      },
+    ]);
     if (offender.id.length === 3 && offender.images) {
       setFileList([
         ...fileList,
@@ -466,15 +476,10 @@ const useEditIncident = (): Return => {
             fileName: image.fileName || '',
             url: image.url || '',
             type: image.type || '',
-            offenders: [offender],
           })
         ),
       ]);
     }
-  };
-
-  const updateOffender = (offender: OffenderData) => {
-    setEditedOffender(offender);
   };
 
   const updateVehiclesData = (vehicle: VehicleData) => {
@@ -719,14 +724,6 @@ const useEditIncident = (): Return => {
           const existingOffenders = offendersData.filter((item) =>
             offendersIds.has(item.id)
           );
-          const existingOffendersWithImages = existingOffenders
-            .filter((offender) =>
-              offender.images?.map((image) => image.new).includes(true)
-            )
-            .map((offender) => ({
-              ...offender,
-              images: offender.images?.filter((image) => image.new),
-            }));
           const newOffenders = offendersData.filter(
             (item) => !offendersIds.has(item.id)
           );
@@ -736,23 +733,6 @@ const useEditIncident = (): Return => {
               existingOffenders.length > 0
                 ? existingOffenders.map((offender) => ({ id: offender.id }))
                 : undefined,
-            update: existingOffendersWithImages.map((offender) => ({
-              where: { id: offender.id },
-              data: {
-                images:
-                  offender.images && offender.images.length > 0
-                    ? {
-                        upload: offender.images?.map((image) => ({
-                          url: {
-                            filename: image.fileName || '',
-                            mimetype: image.type || '',
-                            url: image.url || '',
-                          },
-                        })),
-                      }
-                    : {},
-              },
-            })),
             create:
               newOffenders.length > 0
                 ? newOffenders.map((offender) => ({
@@ -777,18 +757,6 @@ const useEditIncident = (): Return => {
                     scheme: { connect: { id: schemeId } },
                     createdBy: { connect: { id: userId } },
                     localId: offender.id,
-                    images: {
-                      // create:
-                      upload: offender.images
-                        ?.filter((image) => image.new === true)
-                        .map((image) => ({
-                          url: {
-                            filename: image.fileName || '',
-                            mimetype: image.type || '',
-                            url: image.url || '',
-                          },
-                        })),
-                    },
                   }))
                 : undefined,
           };
@@ -913,23 +881,9 @@ const useEditIncident = (): Return => {
             },
           };
         }
-        const { data: businessData } = useBusinessQuery({
-          fetchPolicy: 'cache-and-network',
-          variables: {
-            where: {
-              id: data.business.value,
-            },
-          },
-        });
-        const locationId = businessData?.business?.locations[0].id;
-        if (locationId) {
-          return {
-            previous: { id: locationId },
-          };
-        }
+
         return {
           create: undefined,
-          previous: undefined,
         };
       };
       createIncident({
@@ -982,6 +936,10 @@ const useEditIncident = (): Return => {
                           mimetype: item.type || '',
                           url: item.url || '',
                         },
+                        offenders: item.offenders?.map((offender) => ({
+                          id: offender.id,
+                          new: offender.new || false,
+                        })),
                       }))
                       .filter((object) => object.url !== undefined)
                   : undefined,
@@ -1243,7 +1201,7 @@ const useEditIncident = (): Return => {
     addIncidentTag,
     toggleAddIncidentTag,
     updateIncidentTag,
-    updateOffendersData,
+    onAddOffender,
     offendersData,
     form,
     recentOffenderData,
@@ -1259,7 +1217,6 @@ const useEditIncident = (): Return => {
     removeOffender,
     adminRights: role !== Role.User,
     offenderImgChange,
-    updateOffender,
     vehiclesData,
     updateVehiclesData,
     removeVehicle,

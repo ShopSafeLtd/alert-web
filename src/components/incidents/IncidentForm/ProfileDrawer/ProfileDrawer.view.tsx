@@ -36,9 +36,9 @@ interface Props {
   toggleAddOffender: () => void;
   updateCrimeGroupsData: (value: CrimeGroupData) => void;
   updateOffender: (value: OffenderData) => void;
-  updateOffendersData: (value: OffenderData) => void;
   updateVehiclesData: (value: VehicleData) => void;
   vehiclesData: VehicleData[];
+  onAddOffender: (value: OffenderData, existing: boolean) => void;
 }
 
 const ProfileDrawer = ({
@@ -47,7 +47,6 @@ const ProfileDrawer = ({
   toggleAddOffender,
   addExistingOffender,
   toggleAddExistingOffender,
-  updateOffendersData,
   editOffenderId,
   setEditOffenderId,
   updateOffender,
@@ -68,6 +67,7 @@ const ProfileDrawer = ({
   toggleAddExistingCrimeGroup,
   updateCrimeGroupsData,
   fromIncident,
+  onAddOffender,
 }: Props): JSX.Element => (
   <>
     {/* offeder */}
@@ -80,7 +80,10 @@ const ProfileDrawer = ({
       zIndex={1001}
     >
       {addOffender ? (
-        <AddOffender update={updateOffendersData} onClose={toggleAddOffender} />
+        <AddOffender
+          update={(data) => onAddOffender(data, false)}
+          onClose={toggleAddOffender}
+        />
       ) : (
         <div />
       )}
@@ -94,7 +97,7 @@ const ProfileDrawer = ({
     >
       {addExistingOffender ? (
         <AddExistingOffender
-          update={updateOffendersData}
+          update={(data) => onAddOffender(data, true)}
           offenderIds={offendersData.map(({ id }) => id)}
           onClose={toggleAddExistingOffender}
         />

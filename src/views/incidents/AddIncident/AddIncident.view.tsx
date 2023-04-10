@@ -9,7 +9,7 @@ import { TagType } from 'graphql/generated';
 import type {
   CrimeGroupData,
   LocationData,
-  OffenderData,
+  OffenderData as GlobalOffenderData,
   VehicleData,
 } from 'types/DataType';
 
@@ -47,6 +47,12 @@ import useStyles from './AddIncident.styles';
 
 const { Title, Paragraph, Text } = Typography;
 
+interface OffenderData extends GlobalOffenderData {
+  new: boolean;
+  existing: boolean;
+  edited: boolean;
+}
+
 interface FormData {
   subject: string;
   description: string;
@@ -78,6 +84,7 @@ interface Image extends UploadFile {
   offenders?: {
     id: string;
     name?: string | undefined | null;
+    new?: boolean;
   }[];
 }
 
@@ -127,8 +134,7 @@ interface Props {
   toggleAddIncidentTag: () => void;
   updateCrimeGroupsData: (value: CrimeGroupData) => void;
   updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
-  updateOffender: (value: OffenderData) => void;
-  updateOffendersData: (value: OffenderData) => void;
+  onAddOffender: (value: GlobalOffenderData, existing: boolean) => void;
   updateVehiclesData: (value: VehicleData) => void;
   vehiclesData: VehicleData[];
   formStages: {
@@ -184,8 +190,7 @@ const EditIncident = ({
   toggleAddIncidentTag,
   updateCrimeGroupsData,
   updateIncidentTag,
-  updateOffender,
-  updateOffendersData,
+  onAddOffender,
   updateVehiclesData,
   vehiclesData,
   addNewAddress,
@@ -593,10 +598,10 @@ const EditIncident = ({
               setSearchOffenders={setSearchOffenders}
               titleOrder={isTheft ? 4 : 3}
               updateCrimeGroupsData={updateCrimeGroupsData}
-              updateOffender={updateOffender}
-              updateOffendersData={updateOffendersData}
+              updateOffender={() => {}}
               updateVehiclesData={updateVehiclesData}
               vehiclesData={vehiclesData}
+              onAddOffender={onAddOffender}
             />
           </Form.Item>
         </Card>
@@ -785,7 +790,7 @@ const EditIncident = ({
 
       <Drawer
         title="Add Crime Type"
-        visible={addIncidentTag}
+        open={addIncidentTag}
         width="400"
         onClose={toggleAddIncidentTag}
       >
@@ -800,7 +805,7 @@ const EditIncident = ({
       </Drawer>
       <Drawer
         title="Enter Address"
-        visible={addNewAddress}
+        open={addNewAddress}
         width="600"
         onClose={toggleAddNewAddress}
       >
