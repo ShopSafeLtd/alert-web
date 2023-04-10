@@ -36,8 +36,8 @@ const CrimeGroupFeed = ({ feedItem, isNewCrimeGroup }: Props): JSX.Element => {
   } = feedItem?.crimeGroup || {};
 
   return (
-    <Row gutter={20} wrap={false}>
-      <Link to={`/app/crimeGroups/view/${id}`}>
+    <Link to={`/app/crimeGroups/view/${id}`}>
+      <Row gutter={20} wrap={false} style={{ width: '100%' }}>
         <Col flex={1}>
           {isNewCrimeGroup ? (
             <>
@@ -100,8 +100,8 @@ const CrimeGroupFeed = ({ feedItem, isNewCrimeGroup }: Props): JSX.Element => {
             />
           ) : null}
         </Col>
-      </Link>
-    </Row>
+      </Row>
+    </Link>
   );
 };
 

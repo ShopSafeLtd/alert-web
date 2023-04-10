@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Col, Input, Row, Table } from 'antd';
 import type { ListCrimeGroupsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 import useStyles from './ListCrimeGroups.styles';
 
 interface Props {
@@ -41,6 +42,7 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
           totalRecoveredValue: crimeGroup.totalRecoveredValue,
           totalTheftSuccess: crimeGroup.totalTheftSuccess,
           alias: crimeGroup.alias,
+          updatedAt: crimeGroup.updatedAt,
         }))}
         loading={loading}
         size="small"
@@ -86,6 +88,12 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
             dataIndex: 'totalTheftSuccess',
             title: 'Success Rate',
             render: (value) => `${value?.toFixed(0) || 0}%`,
+          },
+          {
+            key: 'updatedAt',
+            dataIndex: 'updatedAt',
+            title: 'UpdatedAt',
+            render: (value) => moment(value || moment()).calendar(),
           },
         ]}
       />

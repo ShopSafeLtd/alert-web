@@ -56,24 +56,24 @@ const IncidentFeed = ({
   } = feedItem?.incident || {};
 
   return (
-    <Row gutter={15} wrap={false} key={id || ''} style={{ width: '100%' }}>
-      {!isNewImage && updates && updates[0]?.images[0] ? (
-        <Col>
-          <ImageContainer
-            src={
-              updates[0].images[0].optimised || updates[0].images[0].url || ''
-            }
-          />
-        </Col>
-      ) : null}
-      {(isNewIncident || isNewImage) && images && images.length > 0 ? (
-        <Col>
-          <ImageContainer src={images[0].optimised || images[0].url || ''} />
-        </Col>
-      ) : null}
+    <Link to={`/app/incidents/view/${id}`}>
+      <Row gutter={15} wrap={false} key={id || ''} style={{ width: '100%' }}>
+        {!isNewImage && updates && updates[0]?.images[0] ? (
+          <Col>
+            <ImageContainer
+              src={
+                updates[0].images[0].optimised || updates[0].images[0].url || ''
+              }
+            />
+          </Col>
+        ) : null}
+        {(isNewIncident || isNewImage) && images && images.length > 0 ? (
+          <Col>
+            <ImageContainer src={images[0].optimised || images[0].url || ''} />
+          </Col>
+        ) : null}
 
-      <Col flex={1}>
-        <Link to={`/app/incidents/view/${id}`}>
+        <Col flex={1}>
           {isNewIncident ? (
             <>
               <Title level={4} ellipsis>
@@ -169,9 +169,9 @@ const IncidentFeed = ({
           ) : updates && updates.length > 0 ? (
             <UpdateContent title={subject || ''} update={updates[0]} />
           ) : null}
-        </Link>
-      </Col>
-    </Row>
+        </Col>
+      </Row>
+    </Link>
   );
 };
 

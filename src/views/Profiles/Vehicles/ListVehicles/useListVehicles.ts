@@ -52,9 +52,8 @@ const useListVehicles = (): Return => {
           },
         },
         {
-          ref: {
-            contains: search,
-            mode: QueryMode.Insensitive,
+          reference: {
+            equals: Number(search),
           },
         },
         {

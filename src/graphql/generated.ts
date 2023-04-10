@@ -21388,6 +21388,7 @@ export type Mutation = {
   updateGroupDefault?: Maybe<Group>;
   updateImage?: Maybe<Image>;
   updateIncident?: Maybe<Incident>;
+  updateIncidentBusinesses?: Maybe<SystemTask>;
   updateInvestigation?: Maybe<Investigation>;
   updateMessage?: Maybe<Message>;
   updateOffender?: Maybe<Offender>;
@@ -26586,6 +26587,7 @@ export type Scheme = {
   defaultMessagePush: Scalars['Boolean'];
   defaultOffenderEmail: Scalars['Boolean'];
   defaultOffenderPush: Scalars['Boolean'];
+  defaultPublicOffenderDOB: Scalars['Boolean'];
   defaultSubscribedIncidentOnly: Scalars['Boolean'];
   defaultSubscribedOffenderOnly: Scalars['Boolean'];
   documents: Array<Document>;
@@ -26802,6 +26804,7 @@ export type SchemeCreateInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -26835,6 +26838,7 @@ export type SchemeCreateManyDarkLogoInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['String']>;
@@ -26861,6 +26865,7 @@ export type SchemeCreateManyLogoInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['String']>;
@@ -27146,6 +27151,7 @@ export type SchemeCreateWithoutActionsInSchemeInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27186,6 +27192,7 @@ export type SchemeCreateWithoutActionsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27226,6 +27233,7 @@ export type SchemeCreateWithoutArticlesInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27266,6 +27274,7 @@ export type SchemeCreateWithoutBansInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27306,6 +27315,7 @@ export type SchemeCreateWithoutBusinessesInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27346,6 +27356,7 @@ export type SchemeCreateWithoutChatsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27386,6 +27397,7 @@ export type SchemeCreateWithoutCrimeGroupsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27426,6 +27438,7 @@ export type SchemeCreateWithoutDarkLogoInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27467,6 +27480,7 @@ export type SchemeCreateWithoutDocumentsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
@@ -27507,6 +27521,7 @@ export type SchemeCreateWithoutGroupsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27547,6 +27562,7 @@ export type SchemeCreateWithoutImagesInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27587,6 +27603,7 @@ export type SchemeCreateWithoutIncidentsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27627,6 +27644,7 @@ export type SchemeCreateWithoutIntelInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27667,6 +27685,7 @@ export type SchemeCreateWithoutInvestigationsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27707,6 +27726,7 @@ export type SchemeCreateWithoutLogoInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27747,6 +27767,7 @@ export type SchemeCreateWithoutMembersInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27787,6 +27808,7 @@ export type SchemeCreateWithoutMessagesInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27827,6 +27849,7 @@ export type SchemeCreateWithoutOffendersInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27867,6 +27890,7 @@ export type SchemeCreateWithoutRecycledItemsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27907,6 +27931,7 @@ export type SchemeCreateWithoutTagsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27947,6 +27972,7 @@ export type SchemeCreateWithoutTermsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27987,6 +28013,7 @@ export type SchemeCreateWithoutVehiclesInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -28038,6 +28065,7 @@ export type SchemeOrderByWithRelationInput = {
   defaultMessagePush?: InputMaybe<SortOrder>;
   defaultOffenderEmail?: InputMaybe<SortOrder>;
   defaultOffenderPush?: InputMaybe<SortOrder>;
+  defaultPublicOffenderDOB?: InputMaybe<SortOrder>;
   defaultSubscribedIncidentOnly?: InputMaybe<SortOrder>;
   defaultSubscribedOffenderOnly?: InputMaybe<SortOrder>;
   documents?: InputMaybe<DocumentOrderByRelationAggregateInput>;
@@ -28076,6 +28104,7 @@ export type SchemeScalarWhereInput = {
   defaultMessagePush?: InputMaybe<BoolFilter>;
   defaultOffenderEmail?: InputMaybe<BoolFilter>;
   defaultOffenderPush?: InputMaybe<BoolFilter>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFilter>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFilter>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFilter>;
   id?: InputMaybe<StringFilter>;
@@ -28104,6 +28133,7 @@ export type SchemeUpdateInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28137,6 +28167,7 @@ export type SchemeUpdateManyMutationInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -28453,6 +28484,7 @@ export type SchemeUpdateWithoutActionsInSchemeInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28493,6 +28525,7 @@ export type SchemeUpdateWithoutActionsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28533,6 +28566,7 @@ export type SchemeUpdateWithoutArticlesInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28573,6 +28607,7 @@ export type SchemeUpdateWithoutBansInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28613,6 +28648,7 @@ export type SchemeUpdateWithoutBusinessesInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28653,6 +28689,7 @@ export type SchemeUpdateWithoutChatsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28693,6 +28730,7 @@ export type SchemeUpdateWithoutCrimeGroupsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28733,6 +28771,7 @@ export type SchemeUpdateWithoutDarkLogoInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28774,6 +28813,7 @@ export type SchemeUpdateWithoutDocumentsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
@@ -28814,6 +28854,7 @@ export type SchemeUpdateWithoutGroupsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28854,6 +28895,7 @@ export type SchemeUpdateWithoutImagesInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28894,6 +28936,7 @@ export type SchemeUpdateWithoutIncidentsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28934,6 +28977,7 @@ export type SchemeUpdateWithoutIntelInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28974,6 +29018,7 @@ export type SchemeUpdateWithoutInvestigationsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -29014,6 +29059,7 @@ export type SchemeUpdateWithoutLogoInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -29054,6 +29100,7 @@ export type SchemeUpdateWithoutMembersInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -29094,6 +29141,7 @@ export type SchemeUpdateWithoutMessagesInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -29134,6 +29182,7 @@ export type SchemeUpdateWithoutOffendersInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -29174,6 +29223,7 @@ export type SchemeUpdateWithoutRecycledItemsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -29214,6 +29264,7 @@ export type SchemeUpdateWithoutTagsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -29254,6 +29305,7 @@ export type SchemeUpdateWithoutTermsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -29294,6 +29346,7 @@ export type SchemeUpdateWithoutVehiclesInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -29454,6 +29507,7 @@ export type SchemeWhereInput = {
   defaultMessagePush?: InputMaybe<BoolFilter>;
   defaultOffenderEmail?: InputMaybe<BoolFilter>;
   defaultOffenderPush?: InputMaybe<BoolFilter>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFilter>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFilter>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFilter>;
   documents?: InputMaybe<DocumentListRelationFilter>;
@@ -41450,6 +41504,7 @@ export type ListCrimeGroupsQuery = {
       totalTheftSuccess?: number | null;
       totalValue?: number | null;
       alias?: string | null;
+      updatedAt: any;
     }>;
   };
 };
@@ -45785,6 +45840,7 @@ export type SchemeQuery = {
     defaultMessagePush: boolean;
     defaultOffenderEmail: boolean;
     defaultOffenderPush: boolean;
+    defaultPublicOffenderDOB: boolean;
     incidentRetention?: number | null;
     offenderRetention?: number | null;
     darkLogo?: {
@@ -50352,6 +50408,7 @@ export const ListCrimeGroupsDocument = gql`
         totalTheftSuccess
         totalValue
         alias
+        updatedAt
       }
       total
     }
@@ -57599,6 +57656,7 @@ export const SchemeDocument = gql`
       defaultMessagePush
       defaultOffenderEmail
       defaultOffenderPush
+      defaultPublicOffenderDOB
       incidentRetention
       offenderRetention
       darkLogo {

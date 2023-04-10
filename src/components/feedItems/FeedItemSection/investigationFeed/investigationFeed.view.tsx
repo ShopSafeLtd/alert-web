@@ -47,19 +47,19 @@ const InvestigationFeed = ({
   } = feedItem?.investigation || {};
 
   return (
-    <Row gutter={15} wrap={false} key={id || ''} style={{ width: '100%' }}>
-      {!isNewImage && updates && updates[0]?.images[0] ? (
-        <Col>
-          <ImageContainer
-            src={
-              updates[0].images[0].optimised || updates[0].images[0].url || ''
-            }
-          />
-        </Col>
-      ) : null}
+    <Link to={`/app/investigations/view/${id}`}>
+      <Row gutter={15} wrap={false} key={id || ''} style={{ width: '100%' }}>
+        {!isNewImage && updates && updates[0]?.images[0] ? (
+          <Col>
+            <ImageContainer
+              src={
+                updates[0].images[0].optimised || updates[0].images[0].url || ''
+              }
+            />
+          </Col>
+        ) : null}
 
-      <Col flex={1}>
-        <Link to={`/app/investigations/view/${id}`}>
+        <Col flex={1}>
           {isNewInvestigation ? (
             <>
               <Title level={4} ellipsis>
@@ -124,9 +124,9 @@ const InvestigationFeed = ({
           ) : updates && updates.length > 0 ? (
             <UpdateContent title={name || ''} update={updates[0]} />
           ) : null}
-        </Link>
-      </Col>
-    </Row>
+        </Col>
+      </Row>
+    </Link>
   );
 };
 

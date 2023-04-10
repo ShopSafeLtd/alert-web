@@ -3,7 +3,17 @@ import type {
   ListIncidentsQuery,
   RecycleIncidentMutation,
 } from 'graphql/generated';
-import { Affix, Button, Card, Col, Drawer, Input, Pagination, Row } from 'antd';
+import {
+  Affix,
+  Button,
+  Card,
+  Col,
+  Drawer,
+  Empty,
+  Input,
+  Pagination,
+  Row,
+} from 'antd';
 import IncidentCard from 'components/incidents/IncidentCard';
 import IncidentSkeletonCard from 'components/incidents/IncidentSkeletonCard';
 import type { IncidentSort } from 'state';
@@ -177,103 +187,41 @@ const IncidentFeed = ({
             </Button>
           </Col>
         </Row>
-        {/* <Row gutter={8}>
-          <Col>
-            <Select
-              placeholder="Groups"
-              mode="multiple"
-              size="small"
-              maxTagCount={2}
-              style={{ minWidth: 150 }}
-              loading={groupsLoading}
-              onChange={onGroupsChange}
-              value={variables.groups}
-            >
-              {groups.map((group) => (
-                <Select.Option value={group.value}>{group.label}</Select.Option>
-              ))}
-            </Select>
-          </Col>
-          <Col>
-            <Select
-              placeholder="Crime Types"
-              mode="multiple"
-              size="small"
-              maxTagCount={2}
-              style={{ minWidth: 200 }}
-              onChange={onCrimeTypesChange}
-              value={variables.crimeTypes}
-              loading={tagsLoading}
-            >
-              {crimeTypes.map((crimeType) => (
-                <Select.Option value={crimeType.value}>
-                  {crimeType.label}
-                </Select.Option>
-              ))}
-            </Select>
-          </Col>
-          <Col flex={1}>
-            <Input
-              size="small"
-              style={{ width: '80%' }}
-              placeholder="Search incidents..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </Col>
-
-          <Col>
-            <Select
-              value={order}
-              onChange={setOrder}
-              size="small"
-              style={{ minWidth: 150, marginRight: 5 }}
-            >
-              <Select.Option value={IncidentSort.createdAtDesc}>
-                Newest First
-              </Select.Option>
-              <Select.Option value={IncidentSort.createdAtAsc}>
-                Oldest First
-              </Select.Option>
-            </Select>
-          </Col>
-          <Col>
-            <Button
-              type="primary"
-              onClick={onNavigate}
-              icon={
-                <FontAwesomeIcon
-                  icon={faPlus}
-                  size="lg"
-                  style={{ marginRight: 5 }}
-                />
-              }
-            >
-              Add Incident
-            </Button>
-          </Col>
-        </Row> */}
       </Card>
     </Affix>
 
     <div style={{ paddingBottom: 10 }}>
       <Row gutter={8}>
-        {loading
-          ? Array.from({ length: 24 }).map((_, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <Col key={index} sm={24} md={12} lg={8} xl={8} xxl={6}>
-                <IncidentSkeletonCard />
-              </Col>
-            ))
-          : data?.listIncidents?.incidents?.map((el) => (
-              <Col sm={24} md={12} lg={8} xl={8} xxl={6} key={el?.id}>
-                <IncidentCard
-                  incident={el}
-                  openLightbox={openLightbox}
-                  update={updateIncidentList}
-                />
-              </Col>
-            ))}
+        {loading ? (
+          Array.from({ length: 24 }).map((_, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <Col key={index} sm={24} md={12} lg={8} xl={8} xxl={6}>
+              <IncidentSkeletonCard />
+            </Col>
+          ))
+        ) : data?.listIncidents?.total ? (
+          data?.listIncidents?.incidents?.map((el) => (
+            <Col sm={24} md={12} lg={8} xl={8} xxl={6} key={el?.id}>
+              <IncidentCard
+                incident={el}
+                openLightbox={openLightbox}
+                update={updateIncidentList}
+              />
+            </Col>
+          ))
+        ) : (
+          <div
+            style={{
+              display: 'flex',
+              flex: 1,
+              height: 'calc(100vh - 100px)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Empty description="No Incidents" />
+          </div>
+        )}
       </Row>
       <Row justify="center">
         <Col>

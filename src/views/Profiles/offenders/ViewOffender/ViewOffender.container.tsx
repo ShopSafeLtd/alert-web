@@ -39,6 +39,7 @@ const ViewOffender = (): JSX.Element => {
     lightBoxOpen,
     optionRowShow,
     setOptionRowShow,
+    publicOffenderDOB,
   } = useViewOffender(offenderId);
 
   return (
@@ -76,6 +77,7 @@ const ViewOffender = (): JSX.Element => {
       toggleSelectImages={toggleSelectImages}
       optionRowShow={optionRowShow}
       setOptionRowShow={setOptionRowShow}
+      publicOffenderDOB={publicOffenderDOB}
     />
   );
 };

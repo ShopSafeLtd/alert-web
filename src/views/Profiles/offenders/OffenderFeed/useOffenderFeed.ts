@@ -161,9 +161,8 @@ const useOffenderFeed = (): Return => {
           },
         },
         {
-          ref: {
-            contains: variables.search,
-            mode: QueryMode.Insensitive,
+          reference: {
+            equals: Number(variables.search),
           },
         },
       ],

@@ -8,7 +8,17 @@ import type {
   RecycleOffenderMutation,
   SearchBusinessesQuery,
 } from 'graphql/generated';
-import { Affix, Button, Card, Col, Drawer, Input, Pagination, Row } from 'antd';
+import {
+  Affix,
+  Button,
+  Card,
+  Col,
+  Drawer,
+  Empty,
+  Input,
+  Pagination,
+  Row,
+} from 'antd';
 import OffenderCard from 'components/offenders/OffenderCard';
 import OffenderSkeletonCard from 'components/offenders/OffenderSkeletonCard/OffenderSkeletonCard.view';
 import type { OffenderSort } from 'state';
@@ -198,38 +208,52 @@ const OffenderFeed = ({
 
     <div style={{ paddingBottom: 10 }}>
       <Row gutter={8}>
-        {loading
-          ? Array.from({ length: 24 }).map((_, index) => (
-              <Col
-                style={{ marginBottom: 10 }}
-                // eslint-disable-next-line react/no-array-index-key
-                key={index}
-                sm={24}
-                md={12}
-                lg={8}
-                xl={8}
-                xxl={6}
-              >
-                <OffenderSkeletonCard />
-              </Col>
-            ))
-          : data?.listOffenders?.offenders?.map((item) => (
-              <Col
-                style={{ marginBottom: 10 }}
-                sm={24}
-                md={12}
-                lg={8}
-                xl={8}
-                xxl={6}
-                key={item?.id}
-              >
-                <OffenderCard
-                  offender={item}
-                  openLightbox={openLightbox}
-                  update={updateOffenderList}
-                />
-              </Col>
-            ))}
+        {loading ? (
+          Array.from({ length: 24 }).map((_, index) => (
+            <Col
+              style={{ marginBottom: 10 }}
+              // eslint-disable-next-line react/no-array-index-key
+              key={index}
+              sm={24}
+              md={12}
+              lg={8}
+              xl={8}
+              xxl={6}
+            >
+              <OffenderSkeletonCard />
+            </Col>
+          ))
+        ) : data?.listOffenders?.total ? (
+          data?.listOffenders?.offenders?.map((item) => (
+            <Col
+              style={{ marginBottom: 10 }}
+              sm={24}
+              md={12}
+              lg={8}
+              xl={8}
+              xxl={6}
+              key={item?.id}
+            >
+              <OffenderCard
+                offender={item}
+                openLightbox={openLightbox}
+                update={updateOffenderList}
+              />
+            </Col>
+          ))
+        ) : (
+          <div
+            style={{
+              display: 'flex',
+              flex: 1,
+              height: 'calc(100vh - 100px)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Empty description="No Offenders" />
+          </div>
+        )}
       </Row>
 
       <Row justify="center">

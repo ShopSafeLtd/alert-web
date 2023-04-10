@@ -44,6 +44,7 @@ interface FormData {
   defaultMessagePush: boolean;
   defaultOffenderEmail: boolean;
   defaultOffenderPush: boolean;
+  defaultPublicOffenderDOB: boolean;
   incidentRetention: number | null;
   offenderRetention: number | null;
   logo?: { id: string; url: string; optimised: string };
@@ -383,7 +384,30 @@ const SchemeDetail = ({
             </Col>
           </Row>
         </Card>
+        <Card>
+          <Title level={4}>Default Offender Settings:</Title>
+          {/* <Text type="secondary">
+            The settings that will be selected by default for all new users
+            created in the scheme.
+          </Text> */}
 
+          <Row>
+            <Col span={15}>
+              <Form.Item
+                label="Date of birth of offenders are visible"
+                name="defaultPublicOffenderDOB"
+                valuePropName="checked"
+                style={{ marginBottom: 0 }}
+              >
+                <Switch
+                  disabled={saving}
+                  style={{ marginLeft: 5 }}
+                  className="scheme-detail-switch"
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Card>
         <Form.Item>
           <Row style={{ marginTop: 30 }} gutter={16} justify="end">
             <Col>

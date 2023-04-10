@@ -11,6 +11,7 @@ query scheme($where: SchemeWhereUniqueInput!) {
     defaultMessagePush
     defaultOffenderEmail
     defaultOffenderPush
+    defaultPublicOffenderDOB
     incidentRetention
     offenderRetention
     darkLogo {
