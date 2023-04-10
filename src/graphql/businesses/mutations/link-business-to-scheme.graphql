@@ -1,0 +1,23 @@
+mutation LinkBusinessToScheme(
+  $business: BusinessWhereUniqueInput!
+  $scheme: SchemeWhereUniqueInput!
+) {
+  linkBusinessToScheme(business: $business, scheme: $scheme) {
+    id
+    name
+    fullName
+    publicName
+    demId
+    parent {
+      id
+      name
+      fullName
+      publicName
+    }
+    locations {
+      id
+      full
+    }
+    totalUsers
+  }
+}

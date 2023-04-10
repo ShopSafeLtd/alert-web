@@ -5,10 +5,11 @@ import useEditUser from './useEditUser';
 
 interface Props {
   onClose: () => void;
+  id?: string | undefined;
 }
 
-const EditUser = ({ onClose }: Props): JSX.Element => {
-  const userId = useParams().id || '';
+const EditUser = ({ onClose, id }: Props): JSX.Element => {
+  const userId = useParams().id || id || '';
   const {
     onSubmit,
     data,

@@ -31,6 +31,8 @@ const DebounceSelect = <
   setValue,
   ...props
 }: DebounceSelectProps) => {
+  console.log(props.value);
+
   const [fetching, setFetching] = useState(false);
   const [options, setOptions] = useState<ValueType[]>([]);
   const fetchRef = useRef(0);

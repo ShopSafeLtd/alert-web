@@ -10,7 +10,7 @@ import {
   Button,
 } from 'antd';
 import type {
-  ListSchemeUsersQuery,
+  ListUsersQuery,
   SchemeGroupsQuery,
   CreateUserInDatabaseMutation,
   InviteExistingUserMutation,
@@ -19,10 +19,11 @@ import { Link } from 'react-router-dom';
 import AddUser from 'components/form-components/user/AddUser';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { faEdit, faPlus } from '@fortawesome/pro-light-svg-icons';
+import EditUser from 'components/form-components/user/EditUser';
 
 interface Props {
-  data: ListSchemeUsersQuery | undefined;
+  data: ListUsersQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
@@ -34,6 +35,11 @@ interface Props {
   toggleAddUser: () => void;
   updateUserList: MutationUpdaterFn<CreateUserInDatabaseMutation>;
   updateExitingUserList: MutationUpdaterFn<InviteExistingUserMutation>;
+  onPaginationChange: (page: number, pageSize: number) => void;
+  currentPage: number;
+  currentPageSize: number;
+  toggleEditUser: (value?: string | undefined) => void;
+  editUser: string | undefined;
 }
 
 const UserList = ({
@@ -49,6 +55,11 @@ const UserList = ({
   toggleAddUser,
   updateUserList,
   updateExitingUserList,
+  onPaginationChange,
+  currentPage,
+  currentPageSize,
+  editUser,
+  toggleEditUser,
 }: Props): JSX.Element => (
   <div className="list-view">
     <Row gutter={8} style={{ marginBottom: 10 }}>
@@ -98,8 +109,13 @@ const UserList = ({
       size="small"
       loading={loading}
       pagination={{
-        defaultPageSize: 20,
-        pageSize: 20,
+        defaultPageSize: 50,
+        pageSize: currentPageSize,
+        showSizeChanger: true,
+        current: currentPage,
+        onChange: onPaginationChange,
+        total: data?.listUsers.total,
+        showTotal: (total) => `Total Users: ${total}`,
       }}
       columns={[
         {
@@ -144,8 +160,23 @@ const UserList = ({
           title: 'Groups',
           dataIndex: 'groups',
         },
+        {
+          key: 'actions',
+          title: '',
+          dataIndex: 'actions',
+          width: 50,
+          render: (_, record) => (
+            <Button
+              size="small"
+              type="text"
+              onClick={() => toggleEditUser(record.key)}
+            >
+              <FontAwesomeIcon size="lg" icon={faEdit} />
+            </Button>
+          ),
+        },
       ]}
-      dataSource={data?.users.map((user) => ({
+      dataSource={data?.listUsers.users.map((user) => ({
         key: user.id,
         name: user.fullName,
         emailAddress: user.email,
@@ -160,7 +191,7 @@ const UserList = ({
 
     <Drawer
       title="Invite New User"
-      visible={addUser}
+      open={addUser}
       width="800"
       onClose={toggleAddUser}
     >
@@ -170,6 +201,18 @@ const UserList = ({
           updateSearch={updateExitingUserList}
           onClose={toggleAddUser}
         />
+      ) : (
+        <div />
+      )}
+    </Drawer>
+    <Drawer
+      title="Edit User"
+      open={editUser !== undefined}
+      width="800"
+      onClose={() => toggleEditUser()}
+    >
+      {editUser ? (
+        <EditUser onClose={() => toggleEditUser()} id={editUser} />
       ) : (
         <div />
       )}

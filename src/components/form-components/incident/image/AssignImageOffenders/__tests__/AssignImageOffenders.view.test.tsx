@@ -16,7 +16,7 @@ describe('Detail Officer View', () => {
           toggleAddOffender={jest.fn()}
           addExistingOffender={false}
           addOffender={false}
-          updateOffendersList={jest.fn()}
+          onAddOffender={jest.fn()}
           selected={[]}
           toggleOffender={jest.fn()}
         />

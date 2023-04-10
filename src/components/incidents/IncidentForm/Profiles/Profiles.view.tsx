@@ -82,9 +82,9 @@ interface Props {
   toggleAddOffender: () => void;
   updateCrimeGroupsData: (value: CrimeGroupData) => void;
   updateOffender: (value: OffenderData) => void;
-  updateOffendersData: (value: OffenderData) => void;
   updateVehiclesData: (value: VehicleData) => void;
   vehiclesData: VehicleData[];
+  onAddOffender: (value: OffenderData, existing: boolean) => void;
 }
 
 const Profiles = ({
@@ -123,8 +123,8 @@ const Profiles = ({
   setEditCrimeGroupId,
   updateCrimeGroupsData,
   updateOffender,
-  updateOffendersData,
   updateVehiclesData,
+  onAddOffender,
 }: Props): JSX.Element => (
   <>
     <Row gutter={10} align="middle">
@@ -748,15 +748,15 @@ const Profiles = ({
       toggleAddOffender={toggleAddOffender}
       updateCrimeGroupsData={updateCrimeGroupsData}
       updateOffender={updateOffender}
-      updateOffendersData={updateOffendersData}
       updateVehiclesData={updateVehiclesData}
       vehiclesData={vehiclesData}
+      onAddOffender={onAddOffender}
     />
     <Modal
       onCancel={() => setAddRecentOffender(null)}
       visible={addRecentOffender !== null}
       onOk={() => {
-        if (addRecentOffender) updateOffendersData(addRecentOffender);
+        if (addRecentOffender) onAddOffender(addRecentOffender, true);
         setAddRecentOffender(null);
       }}
       okText="Add to incident"

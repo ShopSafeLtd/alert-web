@@ -17,6 +17,9 @@ const UseAssignImageOffendersTest = () => {
       images: [],
       name: 'Unidentified Offender',
       race: null,
+      new: false,
+      existing: false,
+      edited: false,
     },
   ];
   const image = {

@@ -20,8 +20,8 @@ interface Props {
   removeVehicleParent: (vehicleId: string) => void;
   updateCrimeGroupsDataParent: (value: CrimeGroupData) => void;
   updateOffenderParent: (value: OffenderData) => void;
-  updateOffendersDataParent: (value: OffenderData) => void;
   updateVehiclesDataParent: (value: VehicleData) => void;
+  onAddOffenderParent: (value: OffenderData, existing: boolean) => void;
   value?: OffenderData[];
 }
 
@@ -56,8 +56,8 @@ interface Return {
   updateCrimeGroupsData: (value: CrimeGroupData) => void;
   updateOffender: (value: OffenderData) => void;
   updateOffenderParent: (value: OffenderData) => void;
-  updateOffendersData: (value: OffenderData) => void;
   updateVehiclesData: (value: VehicleData) => void;
+  onAddOffender: (value: OffenderData, existing: boolean) => void;
 }
 
 const useProfiles = ({
@@ -68,9 +68,9 @@ const useProfiles = ({
   removeVehicleParent,
   updateCrimeGroupsDataParent,
   updateOffenderParent,
-  updateOffendersDataParent,
   updateVehiclesDataParent,
   value,
+  onAddOffenderParent,
 }: Props): Return => {
   const [addExistingCrimeGroup, setAddExistingCrimeGroup] = useState(false);
   const [addExistingOffender, setAddExistingOffender] = useState(false);
@@ -110,8 +110,8 @@ const useProfiles = ({
   const updateOffender = (data: OffenderData) => {
     updateOffenderParent(data);
   };
-  const updateOffendersData = (data: OffenderData) => {
-    updateOffendersDataParent(data);
+  const onAddOffender = (data: OffenderData, existing: boolean) => {
+    onAddOffenderParent(data, existing);
     if (onChange) {
       if (value) {
         onChange([...value, data]);
@@ -164,7 +164,7 @@ const useProfiles = ({
     toggleAddOffender,
     updateCrimeGroupsData,
     updateOffender,
-    updateOffendersData,
+    onAddOffender,
     updateVehiclesData,
     removeCrimeGroup,
     removeOffender,

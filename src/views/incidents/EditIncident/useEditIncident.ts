@@ -1,13 +1,9 @@
 import { useEffect, useState } from 'react';
 import type {
-  Age,
-  Build,
   CreateTagMutation,
-  Gender,
   IncidentUpdateInput,
   ListGoodsTypesQuery,
   ListOffendersQuery,
-  Race,
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
   TagsQuery,
@@ -38,7 +34,11 @@ import { useApolloClient } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import update from 'immutability-helper';
 import type { UploadChangeParam } from 'antd/lib/upload';
-import type { CrimeGroupData, VehicleData } from 'types/DataType';
+import type {
+  CrimeGroupData,
+  VehicleData,
+  OffenderData as OffenderDataGlobal,
+} from 'types/DataType';
 
 const { confirm } = Modal;
 
@@ -78,33 +78,11 @@ interface FormData {
   }[];
 }
 
-interface OffenderData {
-  id: string;
-  name?: string | null;
-  age?: Age | null;
-  gender?: Gender | null;
-  race?: Race | null;
-  build?: Build | null;
-  dateOfBirth?: Date | null;
-  hair?: string | null;
-  dateSource?: string | null;
-  peculiarities?: string | null;
-  approved?: boolean | null;
-  groups?:
-    | {
-        id: string;
-        name: string;
-      }[]
-    | undefined;
-  images?: {
-    id: string;
-    optimised?: string | null;
-    url?: string | null;
-    fileName?: string | null;
-    type?: string | null;
-    new?: boolean;
-  }[];
-  imageUid?: string[] | undefined;
+interface OffenderData extends OffenderDataGlobal {
+  new: boolean;
+  existing: boolean;
+  edited: boolean;
+  deleted: boolean;
 }
 
 interface Image extends UploadFile {
@@ -121,7 +99,7 @@ interface Return {
   adminRights: boolean;
   assignOffendersToImages: (data: {
     image: Image;
-    offenders: OffenderData[];
+    offenders: OffenderDataGlobal[];
   }) => void;
   beforeUpload: (value: RcFile) => void;
   crimeGroupsData: CrimeGroupData[];
@@ -162,8 +140,8 @@ interface Return {
   toggleAddIncidentTag: () => void;
   updateCrimeGroupsData: (value: CrimeGroupData) => void;
   updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
-  updateOffender: (value: OffenderData) => void;
-  updateOffendersData: (value: OffenderData) => void;
+  updateOffender: (value: OffenderDataGlobal) => void;
+  updateOffendersData: (value: OffenderDataGlobal) => void;
   updateVehiclesData: (value: VehicleData) => void;
   vehiclesData: VehicleData[];
 }
@@ -241,7 +219,15 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
 
     onCompleted: ({ incident }) => {
       if (incident?.offenders && incident.offenders.length > 0) {
-        setOffendersData(incident.offenders);
+        setOffendersData(
+          incident.offenders.map((offender) => ({
+            ...offender,
+            deleted: false,
+            edited: false,
+            existing: false,
+            new: false,
+          }))
+        );
       }
       if (incident?.vehicles && incident.vehicles.length > 0) {
         setVehiclesData(incident.vehicles);
@@ -504,11 +490,26 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const toggleAddExistingOffender = () => {
     setAddExistingOffender(!addExistingOffender);
   };
-  const updateOffendersData = (offender: OffenderData) => {
-    setOffendersData([...offendersData, offender]);
+  const updateOffendersData = (offender: OffenderDataGlobal) => {
+    setOffendersData([
+      ...offendersData,
+      {
+        ...offender,
+        deleted: false,
+        edited: false,
+        existing: false,
+        new: false,
+      },
+    ]);
   };
-  const updateOffender = (offender: OffenderData) => {
-    setEditedOffender(offender);
+  const updateOffender = (offender: OffenderDataGlobal) => {
+    setEditedOffender({
+      ...offender,
+      deleted: false,
+      edited: false,
+      existing: false,
+      new: false,
+    });
   };
 
   const updateVehiclesData = (vehicle: VehicleData) => {
@@ -602,7 +603,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
 
   const assignOffendersToImages = (data: {
     image: Image;
-    offenders: OffenderData[];
+    offenders: OffenderDataGlobal[];
   }) => {
     if (offendersData) {
       const changedOffendersIds = new Set(data.offenders.map(({ id }) => id));
@@ -624,12 +625,22 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             };
           return offender;
         })
+        // @ts-expect-error type mismatch
         .filter(isOffenderData);
       const newOffenders = data.offenders.filter(
         (offender) => !originalOffendersIds.has(offender.id)
       );
 
-      setOffendersData([...updatedOffenders, ...newOffenders]);
+      setOffendersData([
+        ...updatedOffenders,
+        ...newOffenders.map((offender) => ({
+          ...offender,
+          deleted: false,
+          edited: false,
+          existing: false,
+          new: false,
+        })),
+      ]);
     }
 
     // find index of file in fileList array

@@ -39,7 +39,11 @@ import moment from 'moment';
 
 import AssignImageOffender from 'components/form-components/incident/image/AssignImageOffenders';
 import type { UploadChangeParam } from 'antd/lib/upload';
-import type { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
+import type {
+  CrimeGroupData,
+  OffenderData as OffenderDataGlobal,
+  VehicleData,
+} from 'types/DataType';
 import Profiles from 'components/incidents/IncidentForm/Profiles';
 import ImageSection from 'components/incidents/IncidentForm/ImageSection';
 import DebounceSelect from 'components/form-components/DebounceSelect';
@@ -89,12 +93,19 @@ type Offender = Exclude<
   null | undefined
 >['offenders'][0];
 
+interface OffenderData extends OffenderDataGlobal {
+  new: boolean;
+  existing: boolean;
+  edited: boolean;
+  deleted: boolean;
+}
+
 interface Props {
   addIncidentTag: boolean;
   addRecentOffender: Offender | null;
   assignOffendersToImages: (data: {
     image: Image;
-    offenders: OffenderData[];
+    offenders: OffenderDataGlobal[];
   }) => void;
   beforeUpload: (value: RcFile) => void;
   data: ViewIncidentQuery | undefined;
@@ -129,8 +140,8 @@ interface Props {
   tagsLoading: boolean;
   toggleAddIncidentTag: () => void;
   updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
-  updateOffendersData: (value: OffenderData) => void;
-  updateOffender: (value: OffenderData) => void;
+  updateOffendersData: (value: OffenderDataGlobal) => void;
+  updateOffender: (value: OffenderDataGlobal) => void;
   vehiclesData: VehicleData[];
   updateVehiclesData: (value: VehicleData) => void;
   removeVehicle: (vehicleId: string) => void;
@@ -615,7 +626,7 @@ const EditIncident = ({
             titleOrder={4}
             updateCrimeGroupsData={updateCrimeGroupsData}
             updateOffender={updateOffender}
-            updateOffendersData={updateOffendersData}
+            onAddOffender={updateOffendersData}
             updateVehiclesData={updateVehiclesData}
             vehiclesData={vehiclesData}
           />

@@ -25,10 +25,10 @@ interface Props {
   titleOrder: number;
   updateCrimeGroupsData: (value: CrimeGroupData) => void;
   updateOffender: (value: OffenderData) => void;
-  updateOffendersData: (value: OffenderData) => void;
   updateVehiclesData: (value: VehicleData) => void;
   value?: OffenderData[];
   vehiclesData: VehicleData[];
+  onAddOffender: (value: OffenderData, existing: boolean) => void;
 }
 
 const Profiles = ({
@@ -47,10 +47,10 @@ const Profiles = ({
   titleOrder,
   updateCrimeGroupsData: updateCrimeGroupsDataParent,
   updateOffender: updateOffenderParent,
-  updateOffendersData: updateOffendersDataParent,
   updateVehiclesData: updateVehiclesDataParent,
   value,
   vehiclesData,
+  onAddOffender: onAddOffenderParent,
 }: Props) => {
   const {
     addExistingCrimeGroup,
@@ -79,7 +79,7 @@ const Profiles = ({
     toggleAddOffender,
     updateCrimeGroupsData,
     updateOffender,
-    updateOffendersData,
+    onAddOffender,
     updateVehiclesData,
   } = useProfiles({
     offenderImgChangeParent,
@@ -89,9 +89,9 @@ const Profiles = ({
     removeVehicleParent,
     updateCrimeGroupsDataParent,
     updateOffenderParent,
-    updateOffendersDataParent,
     updateVehiclesDataParent,
     value,
+    onAddOffenderParent,
   });
 
   return (
@@ -130,9 +130,9 @@ const Profiles = ({
       toggleAddOffender={toggleAddOffender}
       updateCrimeGroupsData={updateCrimeGroupsData}
       updateOffender={updateOffender}
-      updateOffendersData={updateOffendersData}
       updateVehiclesData={updateVehiclesData}
       vehiclesData={vehiclesData}
+      onAddOffender={onAddOffender}
     />
   );
 };

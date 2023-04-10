@@ -31,6 +31,12 @@ interface OffenderData {
   imageUid?: string[] | undefined;
 }
 
+interface OffenderDataPayload extends OffenderData {
+  new: boolean;
+  existing: boolean;
+  edited: boolean;
+}
+
 interface Image extends UploadFile {
   offenders?: {
     id: string;
@@ -39,18 +45,18 @@ interface Image extends UploadFile {
 }
 
 interface Props {
-  offenderData: OffenderData[];
+  offenderData: OffenderDataPayload[];
   image: Image | undefined;
-  onSubmit: (data: { image: Image; offenders: OffenderData[] }) => void;
+  onSubmit: (data: { image: Image; offenders: OffenderDataPayload[] }) => void;
 }
 
 interface Return {
-  offendersData: OffenderData[];
+  offendersData: OffenderDataPayload[];
   addOffender: boolean;
   toggleAddOffender: () => void;
   addExistingOffender: boolean;
   toggleAddExistingOffender: () => void;
-  updateOffendersList: (value: OffenderData) => void;
+  onAddOffender: (value: OffenderData, existing: boolean) => void;
   toggleOffender: (id: string) => void;
   selected: string[];
   submitImage: () => void;
@@ -61,7 +67,7 @@ const useAssignImageOffender = ({
   image,
   onSubmit,
 }: Props): Return => {
-  const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
+  const [offendersData, setOffendersData] = useState<OffenderDataPayload[]>([]);
   const [addOffender, setAddOffender] = useState(false);
   const [addExistingOffender, setAddExistingOffender] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
@@ -90,14 +96,22 @@ const useAssignImageOffender = ({
     }
   };
 
-  const updateOffendersList = (data: OffenderData) => {
-    setOffendersData([...offendersData, data]);
+  const onAddOffender = (data: OffenderData, existing: boolean) => {
+    setOffendersData([
+      ...offendersData,
+      {
+        ...data,
+        edited: false,
+        existing,
+        new: !existing,
+      },
+    ]);
     toggleOffender(data.id);
   };
 
   const isOffenderData = (
-    item: OffenderData | undefined
-  ): item is OffenderData => !!item;
+    item: OffenderDataPayload | undefined
+  ): item is OffenderDataPayload => !!item;
 
   const submitImage = () => {
     setSelected([]);
@@ -140,7 +154,7 @@ const useAssignImageOffender = ({
     toggleAddExistingOffender,
     addOffender,
     toggleAddOffender,
-    updateOffendersList,
+    onAddOffender,
     toggleOffender,
     selected,
     submitImage,

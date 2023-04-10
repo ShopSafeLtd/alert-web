@@ -5,17 +5,20 @@ import UserList from '../UserList.view';
 
 describe('List Officer View', () => {
   const data = {
-    users: [
-      {
-        id: 'test userId',
-        fullName: 'test user',
-        origName: 'testUser',
-        email: 'user.email',
-        businesses: [],
-        groups: [{ id: 'groupId', name: 'test group' }],
-        publicName: true,
-      },
-    ],
+    listUsers: {
+      users: [
+        {
+          id: 'test userId',
+          fullName: 'test user',
+          origName: 'testUser',
+          email: 'user.email',
+          businesses: [],
+          groups: [{ id: 'groupId', name: 'test group' }],
+          publicName: true,
+        },
+      ],
+      total: 1,
+    },
   };
   const groupsData = {
     groups: [{ id: 'groupId', name: 'test group' }],
@@ -37,6 +40,11 @@ describe('List Officer View', () => {
           toggleAddUser={jest.fn()}
           updateUserList={jest.fn()}
           updateExitingUserList={jest.fn()}
+          currentPage={1}
+          currentPageSize={30}
+          onPaginationChange={jest.fn()}
+          editUser=""
+          toggleEditUser={jest.fn()}
         />
       </MemoryRouter>
     );

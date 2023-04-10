@@ -14,6 +14,8 @@ interface Return {
   onSearchChange: (value: string) => void;
   addVisible: boolean;
   toggleAddVisible: () => void;
+  linkVisible: boolean;
+  toggleLinkVisible: () => void;
 }
 
 const useListBusinesses = (): Return => {
@@ -21,6 +23,7 @@ const useListBusinesses = (): Return => {
 
   const [searchValue, onSearchChange] = useState('');
   const [addVisible, setAddVisible] = useState(false);
+  const [linkVisible, setLinkVisible] = useState(false);
 
   const { data } = useListBusinessesQuery({
     fetchPolicy: 'cache-and-network',
@@ -48,6 +51,10 @@ const useListBusinesses = (): Return => {
     setAddVisible(!addVisible);
   };
 
+  const toggleLinkVisible = () => {
+    setLinkVisible(!linkVisible);
+  };
+
   return {
     data,
     loading: !data,
@@ -55,6 +62,8 @@ const useListBusinesses = (): Return => {
     searchValue,
     addVisible,
     toggleAddVisible,
+    linkVisible,
+    toggleLinkVisible,
   };
 };
 
