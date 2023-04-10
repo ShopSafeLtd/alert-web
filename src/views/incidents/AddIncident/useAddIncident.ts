@@ -213,13 +213,14 @@ const useEditIncident = (): Return => {
   // }, [editedOffender]);
 
   useEffect(() => {
-    if (businesses.length > 0)
+    if (businesses.length > 0) {
       form.setFieldsValue({
         business: {
           label: businesses[0].name,
           value: businesses[0].id,
         },
       });
+    }
   }, [businesses]);
 
   const navigate = useNavigate();
@@ -274,14 +275,6 @@ const useEditIncident = (): Return => {
         dataType: {
           equals: Model.Incident,
         },
-      },
-    },
-  });
-
-  const { data: listOffendersData } = useListOffendersQuery({
-    variables: {
-      scheme: {
-        id: schemeId,
       },
     },
   });
@@ -715,18 +708,11 @@ const useEditIncident = (): Return => {
     setSaving(true);
     if (offendersData) {
       const getOffenders = (): CreateIncidentData['offenders'] => {
-        if (offendersData && listOffendersData?.listOffenders) {
-          const offendersIds = new Set(
-            listOffendersData.listOffenders.offenders.map(
-              (offender) => offender.id
-            )
+        if (offendersData) {
+          const existingOffenders = offendersData.filter(
+            (item) => item.existing
           );
-          const existingOffenders = offendersData.filter((item) =>
-            offendersIds.has(item.id)
-          );
-          const newOffenders = offendersData.filter(
-            (item) => !offendersIds.has(item.id)
-          );
+          const newOffenders = offendersData.filter((item) => item.new);
 
           return {
             connect:
@@ -751,9 +737,6 @@ const useEditIncident = (): Return => {
                           ? data.groups.map((id) => ({ id }))
                           : groups.map(({ id }) => ({ id })),
                     },
-                    // groups.length > 1
-                    //   ? { connect: data.groups.map((id) => ({ id })) }
-                    //   : { connect: groups.map(({ id }) => ({ id })) },
                     scheme: { connect: { id: schemeId } },
                     createdBy: { connect: { id: userId } },
                     localId: offender.id,

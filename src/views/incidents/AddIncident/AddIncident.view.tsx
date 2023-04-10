@@ -326,39 +326,45 @@ const EditIncident = ({
             <Col span={16}>
               <Row gutter={64} align="middle">
                 <Col>
-                  <Form.Item
-                    name="business"
-                    label="Business"
-                    rules={[
-                      {
-                        required: !newAddressData,
-                        message: 'Please select a business for the incident.',
-                      },
-                    ]}
-                  >
-                    <DebounceSelect
-                      showSearch
-                      allowClear
-                      disabled={saving}
-                      placeholder="Search for a business..."
-                      fetchOptions={onSearchBusiness}
-                      style={{ width: 300 }}
-                    />
-                    <Button
-                      style={{ color: 'red', marginLeft: 5 }}
-                      onClick={toggleAddNewAddress}
-                      icon={
-                        <FontAwesomeIcon
-                          icon={faPlus}
-                          style={{ marginRight: 5 }}
+                  <Row>
+                    <Col>
+                      <Form.Item
+                        name="business"
+                        label="Business"
+                        rules={[
+                          {
+                            required: !newAddressData,
+                            message:
+                              'Please select a business for the incident.',
+                          },
+                        ]}
+                      >
+                        <DebounceSelect
+                          showSearch
+                          allowClear
+                          disabled={saving}
+                          placeholder="Search for a business..."
+                          fetchOptions={onSearchBusiness}
+                          style={{ width: 300 }}
                         />
-                      }
-                    >
-                      Enter Address
-                    </Button>
-                  </Form.Item>
+                      </Form.Item>
+                    </Col>
+                    <Col>
+                      <Button
+                        style={{ color: 'red', marginLeft: 5, marginTop: 30 }}
+                        onClick={toggleAddNewAddress}
+                        icon={
+                          <FontAwesomeIcon
+                            icon={faPlus}
+                            style={{ marginRight: 5 }}
+                          />
+                        }
+                      >
+                        Enter Address
+                      </Button>
+                    </Col>
+                  </Row>
                 </Col>
-
                 <Col>
                   <Form.Item
                     name="date"
