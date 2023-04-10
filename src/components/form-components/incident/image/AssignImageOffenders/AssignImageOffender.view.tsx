@@ -50,6 +50,12 @@ interface OffenderData {
   imageUid?: string[] | undefined;
 }
 
+interface OffenderDataPayload extends OffenderData {
+  new: boolean;
+  existing: boolean;
+  edited: boolean;
+}
+
 interface Image extends UploadFile {
   offenders?: {
     id: string;
@@ -59,12 +65,12 @@ interface Image extends UploadFile {
 
 interface Props {
   image: Image | undefined;
-  offendersData: OffenderData[];
+  offendersData: OffenderDataPayload[];
   toggleAddOffender: () => void;
   toggleAddExistingOffender: () => void;
   addExistingOffender: boolean;
   addOffender: boolean;
-  updateOffendersList: (value: OffenderData) => void;
+  onAddOffender: (value: OffenderData, existing: boolean) => void;
   toggleOffender: (id: string) => void;
   selected: string[];
   onCancel: () => void;
@@ -78,14 +84,14 @@ const AssignImageOffender = ({
   toggleAddOffender,
   addExistingOffender,
   addOffender,
-  updateOffendersList,
+  onAddOffender,
   selected,
   toggleOffender,
   onCancel,
   onSubmit,
 }: Props): JSX.Element => (
   <Modal
-    visible={image !== undefined}
+    open={image !== undefined}
     title="Are there offenders in your image?"
     bodyStyle={{ padding: 0 }}
     okText="Assign Offenders"
@@ -190,7 +196,7 @@ const AssignImageOffender = ({
         {addOffender && (
           <AddOffender
             onClose={toggleAddOffender}
-            update={updateOffendersList}
+            update={(data) => onAddOffender(data, false)}
           />
         )}
       </Drawer>
@@ -206,7 +212,7 @@ const AssignImageOffender = ({
           <AddExistingOffender
             onClose={toggleAddExistingOffender}
             offenderIds={offendersData.map(({ id }) => id)}
-            update={updateOffendersList}
+            update={(data) => onAddOffender(data, true)}
           />
         )}
       </Drawer>

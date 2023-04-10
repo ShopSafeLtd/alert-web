@@ -30,7 +30,7 @@ const ArticleCard = ({ article }: Props): JSX.Element => {
     id,
     title,
     tags,
-    image,
+    images,
     previewText,
     updatedAt,
     priority,
@@ -41,7 +41,7 @@ const ArticleCard = ({ article }: Props): JSX.Element => {
   return (
     <Link to={`/app/article/view/${id}`}>
       <div className={classes.card}>
-        {image ? (
+        {images && images.length > 0 ? (
           <div
             style={{
               width: '100%',
@@ -50,7 +50,9 @@ const ArticleCard = ({ article }: Props): JSX.Element => {
             }}
             key={id}
           >
-            <WatermarkImage url={image.optimised || image.url || ''} />
+            <WatermarkImage
+              url={images[0]?.optimised || images[0]?.url || ''}
+            />
           </div>
         ) : (
           <Skeleton.Image className={classes.skeletonImage} />
