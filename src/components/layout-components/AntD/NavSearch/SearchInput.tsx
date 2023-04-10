@@ -91,6 +91,7 @@ const SearchInput = (props: Props) => {
   const { active, close, isMobile, mode } = props;
   const [value, setValue] = useState('');
   const [options, setOptions] = useState<searchResultRes[]>([]);
+  // @ts-expect-error type error
   const inputRef = useRef<Input>(null);
 
   const onSelect = () => {

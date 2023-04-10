@@ -1,0 +1,60 @@
+mutation updateCrimeGroup(
+  $where: UniqueId!
+  $data: UpdateCrimeGroupDataInput!
+) {
+  updateCrimeGroup(where: $where, data: $data) {
+    id
+    alias
+    reference
+    totalIncidents
+    totalOffenders
+    totalRecoveredValue
+    totalTheftSuccess
+    totalValue
+    offenders {
+      id
+      name
+      reference
+      lastActive {
+        id
+        dayTime
+      }
+      hair
+      peculiarities
+      race
+      dateOfBirth
+      dateSource
+      build
+      age
+      gender
+      images {
+        id
+        optimised
+      }
+      totalTheftSuccess
+      totalRecoveredValue
+      totalIncidents
+      totalValue
+    }
+    vehicles {
+      id
+    }
+    incidents {
+      id
+      subject
+      dayTime
+      createdBy {
+        id
+        businesses {
+          fullName
+          id
+          name
+        }
+      }
+      value
+      recoveredValue
+      reference
+      policeRef
+    }
+  }
+}

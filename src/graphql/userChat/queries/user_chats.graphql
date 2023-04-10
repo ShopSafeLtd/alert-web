@@ -1,0 +1,66 @@
+query userChats(
+  $where: UserWhereUniqueInput!
+  $orderBy: [UserChatOrderByWithRelationInput!]
+  $scheme: String!
+) {
+  user(where: $where) {
+    id
+    totalChats
+    chats(
+      where: { chat: { scheme: { id: { equals: $scheme } } } }
+      orderBy: $orderBy
+    ) {
+      id
+      newMessages
+      mentioned
+      updatedAt
+      createdAt
+      user {
+        id
+        fullName
+        firstLetter
+        origFirstLetter
+        origName
+      }
+      chat {
+        id
+        name
+        firstLetter
+        totalMembers
+        messages(first: 1, orderBy: [{ createdAt: desc }]) {
+          id
+          content
+          createdAt
+          from {
+            id
+            fullName
+            origFirstLetter
+            origName
+            firstLetter
+          }
+          images {
+            id
+            url
+            optimised
+          }
+          incidents {
+            id
+            subject
+          }
+          offenders {
+            id
+            name
+          }
+          vehicles {
+            id
+            reference
+          }
+          crimeGroups {
+            id
+            reference
+          }
+        }
+      }
+    }
+  }
+}

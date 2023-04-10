@@ -1,9 +1,15 @@
 import React from 'react';
-import { Menu, Dropdown, Avatar, Row } from 'antd';
+import { Avatar, Dropdown, Menu, Row, Switch, Typography } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
-import { useStoreState } from 'state';
+import { useStoreActions, useStoreState } from 'state';
 import { useAuth } from 'hooks';
 import { APP_PREFIX_PATH } from 'configs/AppConfig';
+import { useAuth0 } from '@auth0/auth0-react';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMoon, faSun } from '@fortawesome/pro-light-svg-icons';
+import { useThemeSwitcher } from 'react-css-theme-switcher/src';
+import { LocalStorageKeys, typedLocalStorage } from 'utils';
 
 interface MenuItem {
   title: string;
@@ -41,9 +47,14 @@ const menuItem: MenuItem[] = [
 ];
 
 export const NavProfile = () => {
+  const { switcher, themes } = useThemeSwitcher();
+
   const name = useStoreState((state) => state.user.fullName);
   const email = useStoreState((state) => state.user.email);
+  const currentTheme = useStoreState((state) => state.theme.currentTheme);
+  const switchTheme = useStoreActions((actions) => actions.theme.switchTheme);
   const { signOut } = useAuth();
+  const { logout } = useAuth0();
 
   const profileMenu = (
     <div className="nav-profile nav-dropdown">
@@ -62,20 +73,45 @@ export const NavProfile = () => {
         </div>
       </div>
       <div className="nav-profile-body">
+        <div style={{ padding: '0 15px 10px' }}>
+          <Typography.Text>Theme Mode: </Typography.Text>
+          <Switch
+            checkedChildren={<FontAwesomeIcon color="#F5F3CE" icon={faMoon} />}
+            unCheckedChildren={
+              <FontAwesomeIcon color="GoldenRod" icon={faSun} />
+            }
+            checked={currentTheme === 'dark'}
+            onChange={(value) => {
+              switchTheme(value ? 'dark' : 'light');
+              typedLocalStorage.set(
+                LocalStorageKeys.theme,
+                value ? 'dark' : 'light'
+              );
+
+              switcher({ theme: value ? themes.dark : themes.light });
+            }}
+          />
+        </div>
         <Menu>
           {menuItem.map((el, i) => {
             return (
               <Menu.Item key={i}>
-                <a href={el.path}>
+                <Link to={el.path}>
                   <Row>
                     {/* <Icon className="mr-3" type={el.icon} /> */}
                     <span className="font-weight-normal">{el.title}</span>
                   </Row>
-                </a>
+                </Link>
               </Menu.Item>
             );
           })}
-          <Menu.Item key={menuItem.length + 1} onClick={(e) => signOut()}>
+          <Menu.Item
+            key={menuItem.length + 1}
+            onClick={() => {
+              signOut();
+              logout({ returnTo: window.location.origin });
+            }}
+          >
             <Row>
               <LogoutOutlined className="mr-3" />
               <span className="font-weight-normal">Sign Out</span>
@@ -86,14 +122,34 @@ export const NavProfile = () => {
     </div>
   );
   return (
-    <Dropdown placement="bottomRight" overlay={profileMenu} trigger={['click']}>
-      <Menu className="d-flex align-item-center" mode="horizontal">
-        <Menu.Item>
-          <Avatar style={{ backgroundColor: 'rgb(222, 68, 54)' }}>
-            {name?.charAt(0)}
-          </Avatar>
-        </Menu.Item>
-      </Menu>
+    <Dropdown placement="topRight" overlay={profileMenu} trigger={['click']}>
+      <Menu
+        className="d-flex align-item-center"
+        mode="horizontal"
+        style={{ width: '100%' }}
+        items={[
+          {
+            key: 0,
+            style: {
+              width: '100%',
+            },
+            label: (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Avatar
+                  size="small"
+                  style={{
+                    backgroundColor: 'rgb(222, 68, 54)',
+                    marginRight: 10,
+                  }}
+                >
+                  {name?.charAt(0)}
+                </Avatar>
+                <Typography.Text className="mb-0">{name}</Typography.Text>
+              </div>
+            ),
+          },
+        ]}
+      />
     </Dropdown>
   );
 };

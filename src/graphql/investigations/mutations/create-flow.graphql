@@ -1,0 +1,7 @@
+mutation CreateFlow($data: CreateFlowInput!) {
+    createFlow(data: $data) {
+        id
+        name
+        description
+    }
+}

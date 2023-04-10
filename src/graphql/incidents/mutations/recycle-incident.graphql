@@ -1,0 +1,5 @@
+mutation recycleIncident($where: UniqueId!) {
+  recycleIncident(where: $where) {
+    id
+  }
+}

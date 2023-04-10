@@ -1,0 +1,45 @@
+query User(
+  $where: UserWhereUniqueInput!
+  $groupWhere: GroupWhereInput
+  $chatWhere: UserChatWhereInput
+  $schemeWhere: UserSchemeWhereInput
+) {
+  user(where: $where) {
+    id
+    fullName
+    email
+    status
+    demId
+    publicName
+    businesses {
+      id
+      name
+      fullName
+      demId
+    }
+    disabled
+    newUser
+    incidentEmail
+    incidentPush
+    subscribedIncidentOnly
+    subscribedOffenderOnly
+    messagePush
+    offenderEmail
+    offenderPush
+    groups(where: $groupWhere) {
+      id
+      name
+    }
+    chats(where: $chatWhere) {
+      id
+      chat {
+        id
+        name
+      }
+    }
+    schemes(where: $schemeWhere) {
+      id
+      role
+    }
+  }
+}

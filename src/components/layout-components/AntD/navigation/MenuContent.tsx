@@ -1,12 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, Grid } from 'antd';
+import { Grid, Menu, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import IntlMessage from '../../../util-components/AntD/IntlMessage';
 import navConfig, { NavItem } from 'configs/NavigationConfig';
 import utils from 'utils';
-import { useStoreState, useStoreActions, NavType, SideNavTheme } from 'state';
+import { NavType, SideNavTheme, useStoreActions, useStoreState } from 'state';
 import { APP_NAME } from 'configs/AppConfig';
+import NavScheme from './NavScheme';
+import NavProfile from './NavProfile';
+import Logo from './Logo';
 
 const { SubMenu } = Menu;
 const { useBreakpoint } = Grid;
@@ -34,14 +37,42 @@ const Icon = ({ icon }: { icon: any }) => (
     style={{ fontSize: 22, marginRight: 10, marginBottom: -3 }}
   />
 );
+const SubIcon = ({ icon }: { icon: any }) => (
+  <FontAwesomeIcon
+    icon={icon}
+    style={{ fontSize: 18, marginRight: 10, width: 22, marginLeft: 10 }}
+    size="lg"
+  />
+);
 
 interface SideNavContentProps {
   sideNavTheme: SideNavTheme;
   routeInfo: NavItem;
   hideGroupTitle?: boolean;
   localization: boolean;
+
   onMobileNavToggle(value: boolean): void;
 }
+
+interface GetLogoArgs {
+  navCollapsed: boolean;
+  logoType?: string;
+}
+
+const getLogo = (props: GetLogoArgs) => {
+  const { navCollapsed, logoType } = props;
+  if (logoType === 'light') {
+    if (navCollapsed) {
+      return '/img/logo-sm.svg';
+    }
+    return '/img/dark-logo.svg';
+  }
+
+  if (navCollapsed) {
+    return '/img/logo.png';
+  }
+  return '/img/light-logo.svg';
+};
 
 const SideNavContent = (props: SideNavContentProps) => {
   const {
@@ -51,7 +82,7 @@ const SideNavContent = (props: SideNavContentProps) => {
     localization,
     onMobileNavToggle,
   } = props;
-
+  const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const isMobile = !utils.getBreakPoint(useBreakpoint()).includes('lg');
   const closeMobileNav = () => {
     if (isMobile) {
@@ -60,10 +91,10 @@ const SideNavContent = (props: SideNavContentProps) => {
   };
 
   const userRole = useStoreState((state) => state.user.role);
-  const navigationConfig =
-    userRole === 'SCHEME_ADMIN'
-      ? navConfig
-      : navConfig.filter((el) => el.title !== 'sidenav.scheme');
+  const navigationConfig = navConfig.filter((el) =>
+    el.roles?.includes(userRole)
+  );
+  const customLogo = !!window.localStorage.getItem('logo');
 
   return (
     <div
@@ -75,13 +106,18 @@ const SideNavContent = (props: SideNavContentProps) => {
         overflow: 'hidden',
       }}
     >
+      <Logo logoType="default" />
       <Menu
         theme={sideNavTheme === SideNavTheme.LIGHT ? 'light' : 'dark'}
         mode="inline"
         style={{ flex: 1, borderRight: 0 }}
         defaultSelectedKeys={[routeInfo?.key]}
         defaultOpenKeys={setDefaultOpen(routeInfo?.key)}
-        className={hideGroupTitle ? 'hide-group-title' : ''}
+        className={
+          hideGroupTitle
+            ? 'hide-group-title nav-menu-overflowed'
+            : 'nav-menu-overflowed'
+        }
       >
         {navigationConfig.map((menu) =>
           menu.submenu.length > 0 ? (
@@ -117,9 +153,9 @@ const SideNavContent = (props: SideNavContentProps) => {
                     ))}
                   </SubMenu>
                 ) : (
-                  <Menu.Item key={subMenuFirst.key}>
+                  <Menu.Item key={subMenuFirst.key} style={{ paddingLeft: 15 }}>
                     {subMenuFirst.icon ? (
-                      <Icon icon={subMenuFirst.icon} />
+                      <SubIcon icon={subMenuFirst.icon} />
                     ) : null}
                     <span>{setLocale(localization, subMenuFirst.title)}</span>
                     <Link
@@ -141,11 +177,32 @@ const SideNavContent = (props: SideNavContentProps) => {
           )
         )}
       </Menu>
-      <span style={{ padding: '12px' }}>
-        Copyright &copy; {`${new Date().getFullYear()}`} <br />
-        <span className="font-weight-semibold">{`${APP_NAME}`}</span> <br />
+      <NavScheme />
+      <NavProfile />
+      {customLogo && (
+        <img
+          src={getLogo({
+            logoType: currentTheme,
+            navCollapsed: false,
+          })}
+          alt={`${APP_NAME} logo`}
+          style={{ width: 80, marginLeft: 10, marginTop: 10 }}
+        />
+      )}
+      <Typography.Text
+        type="secondary"
+        style={{
+          paddingLeft: 12,
+          paddingRight: 12,
+          paddingBottom: 12,
+          paddingTop: 5,
+          fontSize: 10,
+        }}
+      >
+        Copyright &copy; {`${new Date().getFullYear()}`}
+        <span className="font-weight-semibold"> {`${APP_NAME}`} </span>
         All rights reserved.
-      </span>
+      </Typography.Text>
     </div>
   );
 };

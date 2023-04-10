@@ -1,3 +1,6 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable react/button-has-type */
 import React, { useEffect, useRef, useState } from 'react';
 import {
   DropDownProps,
@@ -14,10 +17,11 @@ import {
   IoChevronForward,
 } from 'react-icons/io5';
 
-import CardMenu from './Menu';
-
 import { useStoreState, useStoreActions } from 'state';
 import { CarouselRef } from 'antd/lib/carousel';
+import CardMenu from './Menu';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+
 const { TabPane } = Tabs;
 
 interface Approval {
@@ -33,6 +37,7 @@ interface Props {
   images: { id: string; url: string; optimised: string | undefined }[];
   menu: DropDownProps['overlay'];
   approval: Approval;
+  // eslint-disable-next-line react/require-default-props
   additionalItems?: JSX.Element[];
 }
 
@@ -59,7 +64,7 @@ const Layout: React.FC<Props> = ({
   menu,
   approval,
   additionalItems,
-}) => {
+}: Props) => {
   const [imageIndex, setImageIndex] = useState<number>(0);
   const [overlay, setOverlay] = useState<boolean>(!approval.approved);
   const userRole = useStoreState((state) => state.user.role);
@@ -81,7 +86,7 @@ const Layout: React.FC<Props> = ({
   const prevImage = () => carouselRef.current?.prev();
   const onImageIndexChange = (index: number) => setImageIndex(index);
 
-  const admin = userRole !== 'USER' ? true : false;
+  const admin = userRole !== 'USER';
 
   return (
     <div key={key} className="feed-card">
@@ -134,17 +139,16 @@ const Layout: React.FC<Props> = ({
             dots={false}
           >
             {images.map((image) => (
-              <div key={image.id}>
-                <img
-                  alt=""
-                  onClick={() =>
-                    toggleLightBox({
-                      images: lightBoxImages,
-                      index: imageIndex,
-                    })
-                  }
-                  style={{ backgroundImage: `url(${image.url})` }}
-                />
+              <div
+                key={image.id}
+                onClick={() =>
+                  toggleLightBox({
+                    images: lightBoxImages,
+                    index: imageIndex,
+                  })
+                }
+              >
+                <WatermarkImage url={image.url} />
               </div>
             ))}
           </Carousel>

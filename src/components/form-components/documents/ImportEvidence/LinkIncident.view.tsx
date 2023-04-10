@@ -1,0 +1,100 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+import React from 'react';
+import type { ListDemEvidenceQuery } from 'graphql/generated';
+import { Button, Col, Row, Skeleton, Table } from 'antd';
+import moment from 'moment';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+
+interface Props {
+  onClose: () => void;
+  onSubmit: () => void;
+  saving: boolean;
+  data: ListDemEvidenceQuery | undefined;
+  loading: boolean;
+  onSelect: (item: { key: string }) => void;
+}
+
+const LinkDemCompany = ({
+  onClose,
+  onSubmit,
+  saving,
+  data,
+  loading,
+  onSelect,
+}: Props): JSX.Element => (
+  <div className="add-existing-offender">
+    <Table
+      columns={[
+        {
+          title: 'Thumbnail',
+          dataIndex: 'thumbnail',
+          key: 'thumbnail',
+          render: (thumbnail: string | null | undefined) =>
+            thumbnail ? (
+              <div style={{ width: 180, height: 180 }}>
+                <WatermarkImage url={thumbnail} />
+              </div>
+            ) : (
+              <Skeleton.Image style={{ width: 180 }} />
+            ),
+        },
+        {
+          title: 'Type',
+          dataIndex: 'type',
+          key: 'type',
+        },
+        {
+          title: 'Importance',
+          dataIndex: 'importance',
+          key: 'importance',
+        },
+        {
+          title: 'Recorded On',
+          dataIndex: 'createdAt',
+          key: 'createdAt',
+          render: (value) => moment(value).format('DD/MM/YYYY'),
+        },
+      ]}
+      dataSource={data?.listDemEvidence.demEvidence.map((evidence) => ({
+        key: evidence.id || '',
+        thumbnail: evidence.thumbnailUrl || '',
+        url: evidence.playbackUrl || '',
+        type: evidence.type || '',
+        importance: evidence.importance || '',
+        createdAt: evidence.createdAt,
+      }))}
+      rowSelection={{
+        type: 'radio',
+        onSelect,
+      }}
+      pagination={{
+        total: data?.listDemEvidence?.total,
+        pageSize: 24,
+        showSizeChanger: false,
+        position: ['bottomCenter'],
+      }}
+      loading={loading}
+      size="small"
+    />
+    <Row gutter={16} style={{ paddingBottom: 30 }} justify="end">
+      <Col>
+        <Button onClick={onClose} disabled={saving} type="text">
+          Cancel
+        </Button>
+      </Col>
+      <Col>
+        <Button
+          loading={saving}
+          disabled={saving}
+          onClick={onSubmit}
+          type="primary"
+        >
+          Import Evidence
+        </Button>
+      </Col>
+    </Row>
+  </div>
+);
+
+export default LinkDemCompany;

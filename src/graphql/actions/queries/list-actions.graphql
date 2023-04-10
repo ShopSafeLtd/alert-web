@@ -1,0 +1,26 @@
+query ListActions(
+  $take: Int
+  $skip: Int
+  $where: ActionWhereInput
+  $orderBy: [ActionOrderByWithRelationInput!]
+) {
+  listActions(take: $take, skip: $skip, where: $where, orderBy: $orderBy) {
+    total
+    actions {
+      id
+      description
+      dataType
+      reason
+      createdAt
+      byUser {
+        id
+        fullName
+        businesses {
+          fullName
+          id
+          name
+        }
+      }
+    }
+  }
+}

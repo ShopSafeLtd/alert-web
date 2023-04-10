@@ -1,0 +1,47 @@
+query listArticles(
+  $scheme: SchemeWhereUniqueInput!
+  $where: ArticleWhereInput
+  $take: Int
+  $skip: Int
+  $order: ArticleOrderByWithRelationInput
+) {
+  listArticles(
+    where: $where
+    order: $order
+    take: $take
+    skip: $skip
+
+    scheme: $scheme
+  ) {
+    articles {
+      previewImage
+      previewText
+      priority
+      tags {
+        id
+        name
+      }
+      images {
+        id
+        url
+        optimised
+        card
+      }
+      image {
+        id
+        url
+        optimised
+        card
+      }
+      createdBy {
+        fullName
+        organisation
+        id
+      }
+      title
+      updatedAt
+      id
+    }
+    total
+  }
+}

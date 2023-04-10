@@ -1,59 +1,170 @@
-import { 
-  action,
-  Action,
-} from 'easy-peasy'
+/* eslint-disable no-param-reassign */
+import type { Action } from 'easy-peasy';
+import { action } from 'easy-peasy';
 
+export enum IncidentSort {
+  createdAtDesc = 'CREATED_AT_DESC',
+  createdAtAsc = 'CREATED_AT_ASC',
+}
+export enum OffenderSort {
+  updatedAtDesc = 'UPDATED_AT_DESC',
+  updatedAtAsc = 'UPDATED_AT_ASC',
+}
+export enum FeedItemSort {
+  updatedAtDesc = 'UPDATED_AT_DESC',
+  updatedAtAsc = 'UPDATED_AT_ASC',
+}
+interface Incidents {
+  pagination: {
+    page: number;
+    pageSize: number;
+    sizeOptions: string[];
+  };
+  variables: {
+    search: string;
+    crimeTypes: string[];
+    groups: string[];
+  };
+  order: IncidentSort;
+}
+interface Offenders {
+  pagination: {
+    page: number;
+    pageSize: number;
+    sizeOptions: string[];
+  };
+  variables: {
+    search: string;
+    tags: string[];
+    groups: string[];
+  };
+  order: OffenderSort;
+}
+interface FeedItems {
+  pagination: {
+    page: number;
+    pageSize: number;
+    sizeOptions: string[];
+  };
+  variables: {
+    search: string;
+    groups: string[];
+  };
+  order: FeedItemSort;
+}
+
+interface Vehicles {
+  pagination: {
+    page: number;
+    pageSize: number;
+    sizeOptions: string[];
+  };
+
+  search: string;
+}
+interface CrimeGroups {
+  pagination: {
+    page: number;
+    pageSize: number;
+    sizeOptions: string[];
+  };
+
+  search: string;
+}
 export interface DataModel {
-  users: {
-    name: {name: string; id: string};
-    status: string;
-    services: string[]
-  }[]
+  incidents: Incidents;
+  offenders: Offenders;
+  feedItems: FeedItems;
+  vehicles: Vehicles;
+  crimeGroups: CrimeGroups;
 
-  addUser: Action<DataModel, {
-    name: {name: string; id: string};
-    status: string;
-    services: string[]
-  }>;
+  setIncidents: Action<DataModel, Incidents>;
+  setOffenders: Action<DataModel, Offenders>;
+  setFeedItems: Action<DataModel, FeedItems>;
+  setVehicles: Action<DataModel, Vehicles>;
+  setCrimeGroups: Action<DataModel, CrimeGroups>;
 }
 
-const dataModel:DataModel = {
-  users: [{
-    name: { name: 'Warden 1', id: '0' },
-    services: ['HYTALK', 'DEM'],
-    status: 'Active'
-  }, {
-    name: { name: 'Warden 2', id: '1' },
-    services: ['HYTALK', 'DEM'],
-    status: 'Active'
-  }, {
-    name: { name: 'Warden 3', id: '2' },
-    services: ['HYTALK', 'DEM'],
-    status: 'Active'
-  }, {
-    name: { name: 'Warden 4', id: '3' },
-    services: ['HYTALK', 'DEM'],
-    status: 'Active'
-  }, {
-    name: { name: 'Warden 5', id: '4' },
-    services: ['HYTALK'],
-    status: 'Active'
-  }, {
-    name: { name: 'Warden 6', id: '5' },
-    services: ['HYTALK', 'DEM'],
-    status: 'Active'
-  }, {
-    name: { name: 'Warden 7', id: '6' },
-    services: ['HYTALK', 'DEM'],
-    status: 'Active'
-  }],
+const dataModel: DataModel = {
+  incidents: {
+    pagination: {
+      page: 1,
+      pageSize: 24,
+      sizeOptions: ['24'],
+    },
+    variables: {
+      search: '',
+      crimeTypes: [],
+      groups: [],
+    },
+    order: IncidentSort.createdAtDesc,
+  },
 
-  addUser: action((state, payload) => {
-    state.users = [
-      ...state.users,
-      payload
-    ]
-  }) 
-}
+  setIncidents: action((state, payload) => {
+    state.incidents = payload;
+  }),
 
-export default dataModel
+  offenders: {
+    pagination: {
+      page: 1,
+      pageSize: 24,
+      sizeOptions: ['24'],
+    },
+    variables: {
+      search: '',
+      tags: [],
+      groups: [],
+    },
+    order: OffenderSort.updatedAtDesc,
+  },
+
+  setOffenders: action((state, payload) => {
+    state.offenders = payload;
+  }),
+
+  feedItems: {
+    pagination: {
+      page: 1,
+      pageSize: 20,
+      sizeOptions: ['20'],
+    },
+    variables: {
+      search: '',
+      groups: [],
+    },
+    order: FeedItemSort.updatedAtDesc,
+  },
+
+  setFeedItems: action((state, payload) => {
+    state.feedItems = payload;
+  }),
+
+  vehicles: {
+    pagination: {
+      page: 1,
+      pageSize: 20,
+      sizeOptions: ['20'],
+    },
+
+    search: '',
+  },
+
+  setVehicles: action((state, payload) => {
+    state.vehicles = payload;
+  }),
+
+  crimeGroups: {
+    pagination: {
+      page: 1,
+      pageSize: 20,
+      sizeOptions: ['20'],
+    },
+    search: '',
+  },
+
+  setCrimeGroups: action((state, payload) => {
+    state.crimeGroups = payload;
+  }),
+};
+
+export default dataModel;

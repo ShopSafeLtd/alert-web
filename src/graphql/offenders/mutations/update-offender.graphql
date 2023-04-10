@@ -1,0 +1,49 @@
+mutation updateOffender($where: UniqueId!, $data: OffenderUpdateInput!) {
+  updateOffender(where: $where, data: $data) {
+    id
+    createdAt
+    updatedAt
+    age
+    build
+    dateOfBirth
+    dateSource
+    hair
+    gender
+    name
+    race
+    peculiarities
+    approved
+    active
+    idVerified
+    idSource
+    images {
+      id
+      url
+      optimised
+    }
+    groups {
+      id
+      name
+    }
+    tags {
+      id
+      name
+    }
+    bans {
+      id
+      location
+      description
+      startDate
+      endDate
+      type
+    }
+    createdBy {
+      id
+      fullName
+      businesses {
+        id
+        name
+      }
+    }
+  }
+}

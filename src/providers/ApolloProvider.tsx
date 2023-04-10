@@ -1,30 +1,39 @@
-import React from "react";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React from 'react';
 import {
-  ApolloProvider,
   ApolloClient,
+  ApolloProvider,
   InMemoryCache,
   split,
-} from "@apollo/client";
-import { persistCache } from "apollo3-cache-persist";
+} from '@apollo/client';
 
-import { setContext } from "@apollo/client/link/context";
-import { WebSocketLink } from "@apollo/client/link/ws";
-import { getMainDefinition } from "@apollo/client/utilities";
-import { SubscriptionClient } from "subscriptions-transport-ws";
-import { createUploadLink } from "apollo-upload-client";
+import { setContext } from '@apollo/client/link/context';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { getMainDefinition } from '@apollo/client/utilities';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
+import { createUploadLink } from 'apollo-upload-client';
 
-import { ReadFieldFunction } from "@apollo/client/cache/core/types/common";
+import type { ReadFieldFunction } from '@apollo/client/cache/core/types/common';
+import { useAuth0 } from '@auth0/auth0-react';
+import { onError } from '@apollo/client/link/error';
+
+import * as Sentry from '@sentry/react';
+import { useStoreState } from '../state';
 
 interface Props {
   children: React.ReactNode;
 }
 
-const Apollo = ({ children }: Props) => {
-  const accessToken = localStorage.getItem("accessToken");
-
+const Apollo = ({ children }: Props): JSX.Element => {
+  const accessToken = localStorage.getItem('accessToken');
+  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+  const currentScheme = useStoreState((state) => state.scheme.id);
   const wsClient = new SubscriptionClient(
+    import.meta.env.VITE_GRAPHQL_WS_URL,
     // "wss://alert-api-dev.azurewebsites.net/graphql",
-    "wss://alert-api-dev-development.azurewebsites.net/graphql",
+    // 'wss://alert-dev-api.herokuapp.com/graphql',
+    // 'ws://localhost:4000/graphql',
     {
       reconnect: true,
       connectionParams: {
@@ -37,28 +46,75 @@ const Apollo = ({ children }: Props) => {
 
   const httpLink = createUploadLink({
     // uri: "https://alert-api-dev.azurewebsites.net/graphql",
-    uri: "https://alert-api-dev-development.azurewebsites.net/graphql",
-    // uri: "http://localhost:4000/graphql",
+    // uri: "https://alert-api-dev-development.azurewebsites.net/graphql",
+    // uri: 'http://localhost:4000/graphql',
+    // uri: 'https://alert-dev-api.herokuapp.com/graphql',
+    uri: import.meta.env.VITE_GRAPHQL_URL,
   });
 
-  const middlewareLink = setContext((_, { headers, ...context }) => {
-    const accessToken = localStorage.getItem("accessToken");
+  // TODO: Add error handling
+  const errorLink = onError(({ graphQLErrors, networkError }) => {
+    if (graphQLErrors)
+      // eslint-disable-next-line no-restricted-syntax
+      for (const { message, locations, path } of graphQLErrors) {
+        Sentry.captureMessage(
+          `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
+            locations
+          )}, Path: ${path}`
+        );
+        console.log(
+          `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
+            locations
+          )}, Path: ${path}`
+        );
+      }
+
+    if (networkError) {
+      console.log(`[Network error]: ${networkError}`);
+      Sentry.captureException(networkError);
+    }
+  });
+
+  const middlewareLink = setContext(async (_, { headers, ...context }) => {
+    if (isAuthenticated) {
+      const authToken = await getAccessTokenSilently({
+        audience: `https://app.shopsafealert.co.uk`,
+        scope: 'openid read:current_user',
+      });
+      return {
+        headers: {
+          ...headers,
+          Authorization: authToken ? `Bearer ${authToken}` : '',
+          currentScheme,
+        },
+        ...context,
+      };
+    }
     return {
       headers: {
         ...headers,
-        ...(accessToken ? { authorization: `Bearer ${accessToken}` } : {}),
+        Authorization: `Bearer ''`,
       },
       ...context,
     };
   });
 
-  const authHttp = middlewareLink.concat(httpLink);
+  // const middlewareLink = setContext((_, { headers, ...context }) => ({
+  //   headers: {
+  //     ...headers,
+  //     ...(accessToken ? { authorization: `Bearer ${accessToken}` } : {}),
+  //   },
+  //   ...context,
+  // }));
+  // eslint-disable-next-line unicorn/prefer-spread
+  const authHttp = errorLink.concat(middlewareLink).concat(httpLink);
 
   const link = split(
     ({ query }) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const { kind, operation } = getMainDefinition(query);
-      return kind === "OperationDefinition" && operation === "subscription";
+      return kind === 'OperationDefinition' && operation === 'subscription';
     },
     wsLink,
     authHttp
@@ -69,18 +125,18 @@ const Apollo = ({ children }: Props) => {
     incoming: any,
     readField: ReadFieldFunction,
     args: Record<string, any> | null
+    // eslint-disable-next-line unicorn/consistent-function-scoping
   ) => {
-    const removeRecycledItems = (data = []) => {
-      return data.filter((el: any) => !readField("recycled", el));
-    };
+    const removeRecycledItems = (data = []) =>
+      data.filter((el: any) => !readField('recycled', el));
     const existingData = removeRecycledItems(existing) || [];
     const incomingData = removeRecycledItems(incoming) || [];
 
     if (!args?.after) return [...incomingData];
 
-    const existingIds = existing.map((el: any) => readField("id", el));
+    const existingIds = new Set(existing.map((el: any) => readField('id', el)));
     const newItems = incoming.filter(
-      (el: any) => !existingIds.includes(readField("id", el))
+      (el: any) => !existingIds.has(readField('id', el))
     );
     return [...existingData, ...newItems];
   };
@@ -90,17 +146,20 @@ const Apollo = ({ children }: Props) => {
       User: {
         fields: {
           schemes: {
-            merge(existing = [], incoming: any[]) {
+            // eslint-disable-next-line @typescript-eslint/default-param-last
+            merge(_existing = [], incoming: any[]) {
               return [...incoming];
             },
           },
           chats: {
-            merge(existing = [], incoming: any[]) {
+            // eslint-disable-next-line @typescript-eslint/default-param-last
+            merge(_existing = [], incoming: any[]) {
               return [...incoming];
             },
           },
           groups: {
-            merge(existing = [], incoming: any[]) {
+            // eslint-disable-next-line @typescript-eslint/default-param-last
+            merge(_existing = [], incoming: any[]) {
               return [...incoming];
             },
           },
@@ -109,7 +168,8 @@ const Apollo = ({ children }: Props) => {
       Group: {
         fields: {
           users: {
-            merge(existing = [], incoming: any[]) {
+            // eslint-disable-next-line @typescript-eslint/default-param-last
+            merge(_existing = [], incoming: any[]) {
               return [...incoming];
             },
           },
@@ -118,7 +178,8 @@ const Apollo = ({ children }: Props) => {
       Chat: {
         fields: {
           members: {
-            merge(existing = [], incoming: any[]) {
+            // eslint-disable-next-line @typescript-eslint/default-param-last
+            merge(_existing = [], incoming: any[]) {
               return [...incoming];
             },
           },
@@ -128,13 +189,13 @@ const Apollo = ({ children }: Props) => {
         fields: {
           incidentFeed: {
             keyArgs: [
-              "schemeId",
-              "userId",
-              "order",
-              "search",
-              "crimeTypes",
-              "groups",
-              "approved",
+              'schemeId',
+              'userId',
+              'order',
+              'search',
+              'crimeTypes',
+              'groups',
+              'approved',
             ],
             merge(existing, incoming, { readField, args }) {
               return defaultFeedCacheMerge(existing, incoming, readField, args);
@@ -142,50 +203,89 @@ const Apollo = ({ children }: Props) => {
           },
           offenderFeed: {
             keyArgs: [
-              "schemeId",
-              "userId",
-              "order",
-              "search",
-              "groups",
-              "tags",
-              "ethnicity",
-              "sex",
-              "approved",
+              'schemeId',
+              'userId',
+              'order',
+              'search',
+              'groups',
+              'tags',
+              'ethnicity',
+              'sex',
+              'approved',
             ],
             merge(existing, incoming, { readField, args }) {
               return defaultFeedCacheMerge(existing, incoming, readField, args);
             },
           },
           offenders: {
-            keyArgs: ["schemeId", "order", "search", "groups"],
+            keyArgs: ['schemeId', 'order', 'search', 'groups'],
             merge(existing, incoming, { readField, args }) {
               return defaultFeedCacheMerge(existing, incoming, readField, args);
             },
           },
           recycledItems: {
-            keyArgs: ["schemeId"],
+            keyArgs: ['schemeId'],
             merge(existing, incoming, { readField, args }) {
               let existingIds: any[] = [];
               let newExisting: any[] = [];
               let newItems: any[] = [];
-              if (!!existing) {
-                existingIds = existing.map((el: any) => readField("id", el));
+              if (existing) {
+                existingIds = existing.map((el: any) => readField('id', el));
                 newExisting = existing;
               }
-              if (!!incoming)
+              if (incoming)
                 newItems = incoming.filter(
-                  (el: any) => !existingIds.includes(readField("id", el))
+                  (el: any) => !existingIds.includes(readField('id', el))
                 );
 
               const newOutput = [...newExisting, ...newItems];
               const defaultOutput = [...incoming];
 
-              return !!args!.after ? [...newOutput] : [...defaultOutput];
+              return args?.after ? [...newOutput] : [...defaultOutput];
             },
           },
           users: {
-            keyArgs: ["id"],
-            merge(existing = [], incoming: any[]) {
+            keyArgs: ['id'],
+            // eslint-disable-next-line @typescript-eslint/default-param-last
+            merge(_existing = [], incoming: any[]) {
+              return [...incoming];
+            },
+          },
+          messages: {
+            keyArgs: ['where'],
+            merge(existing, incoming, { readField, args }) {
+              if (existing) {
+                const existingIds = new Set(
+                  existing.map((el: any) => readField('id', el))
+                );
+
+                return [
+                  ...existing,
+                  ...incoming.filter(
+                    (el: any) => !existingIds.has(readField('id', el))
+                  ),
+                ];
+                // return [...incoming]
+              }
+              return [...incoming];
+            },
+          },
+          chatMessages: {
+            keyArgs: ['where'],
+            merge(existing, incoming, { readField, args }) {
+              if (existing && args?.skip) {
+                const existingIds = new Set(
+                  existing.map((el: any) => readField('id', el))
+                );
+
+                return [
+                  ...existing,
+                  ...incoming.filter(
+                    (el: any) => !existingIds.has(readField('id', el))
+                  ),
+                ];
+                // return [...incoming]
+              }
               return [...incoming];
             },
           },
@@ -194,12 +294,12 @@ const Apollo = ({ children }: Props) => {
     },
   });
 
-  (async () => {
-    await persistCache({
-      cache,
-      storage: window.localStorage,
-    });
-  })();
+  // (async () => {
+  //   await persistCache({
+  //     cache,
+  //     storage: window.localStorage,
+  //   });
+  // })();
 
   const client = new ApolloClient({
     link,

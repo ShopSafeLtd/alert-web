@@ -1,0 +1,6 @@
+mutation sendInvite($user: String!) {
+  sendInvite(user: $user) {
+    id
+    newUser
+  }
+}

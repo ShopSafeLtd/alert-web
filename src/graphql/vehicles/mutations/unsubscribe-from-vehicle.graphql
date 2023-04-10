@@ -1,0 +1,6 @@
+mutation UnsubscribeToVehicle($where: UniqueId!) {
+  unsubscribeToVehicle(where: $where) {
+    id
+    subscribed
+  }
+}

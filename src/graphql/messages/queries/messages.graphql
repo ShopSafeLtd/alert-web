@@ -1,0 +1,82 @@
+query messages($chat: String, $before: MessageWhereUniqueInput) {
+  messages(
+    where: { chat: { id: { equals: $chat } } }
+    last: 30
+    orderBy: { createdAt: asc }
+    before: $before
+  ) {
+    id
+    sent
+    from {
+      id
+      fullName
+      businesses {
+        id
+        name
+      }
+    }
+    chat {
+      id
+      name
+    }
+    content
+    createdAt
+    images {
+      id
+      url
+      optimised
+    }
+    crimeGroups {
+      totalOffenders
+      totalIncidents
+      alias
+      id
+      reference
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+      updatedAt
+    }
+    vehicles {
+      updatedAt
+      totalOffenders
+      registration
+      reference
+      model
+      make
+      id
+      colour
+      images {
+        id
+        optimised
+        url
+      }
+    }
+    incidents {
+      id
+      subject
+      description
+      dayTime
+      images {
+        id
+        url
+        optimised
+      }
+    }
+    offenders {
+      id
+      updatedAt
+      age
+      build
+      dateOfBirth
+      name
+      race
+      gender
+      images {
+        id
+        url
+        optimised
+      }
+    }
+  }
+}

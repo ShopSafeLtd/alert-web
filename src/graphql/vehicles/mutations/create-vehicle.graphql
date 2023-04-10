@@ -1,0 +1,31 @@
+mutation CreateVehicle($data: CreateVehicleDataInput!) {
+  createVehicle(data: $data) {
+    id
+    make
+    model
+    registration
+    totalOffenders
+    totalIncidents
+    totalCrimeGroups
+    reference
+    images {
+      id
+      optimised
+      url
+    }
+    incidents {
+      id
+      subject
+    }
+    offenders {
+      id
+      name
+    }
+    updatedAt
+    colour
+    crimeGroup {
+      id
+      reference
+    }
+  }
+}

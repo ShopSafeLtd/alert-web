@@ -1,0 +1,26 @@
+query ListSchemeUsers(
+  $where: UserWhereInput
+  $orderBy: [UserOrderByWithRelationInput!]
+  $after: UserWhereUniqueInput
+  $groupWhere: GroupWhereInput
+) {
+  users(where: $where, orderBy: $orderBy, after: $after) {
+    id
+    fullName
+    firstLetter
+    origName
+    origFirstLetter
+    email
+    publicName
+    businesses {
+      id
+      name
+      fullName
+    }
+    status
+    groups(where: $groupWhere) {
+      id
+      name
+    }
+  }
+}

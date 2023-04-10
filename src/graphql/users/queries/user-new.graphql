@@ -1,0 +1,8 @@
+query userNew($id: String!) {
+  userNew(id: $id) {
+    id
+    email
+    newUser
+    hasAuth0Id
+  }
+}

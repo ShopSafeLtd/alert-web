@@ -1,3 +1,3 @@
-export const isAuthorised = (userRole: string, allowedRoles: string[]) => {
-  return allowedRoles.includes(userRole) ? true : false;
-};
+const isAuthorised = (userRole: string, allowedRoles: string[]): boolean =>
+  !!allowedRoles.includes(userRole);
+export default isAuthorised;

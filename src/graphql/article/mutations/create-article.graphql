@@ -1,0 +1,159 @@
+mutation CreateArticle($data: CreateArticleInput!) {
+  createArticle(data: $data) {
+    id
+    groups {
+      id
+      name
+    }
+
+    documents {
+      id
+      name
+      url
+    }
+    createdBy {
+      fullName
+    }
+    createdAt
+    priority
+    tags {
+      name
+    }
+    title
+    images {
+      id
+      url
+      optimised
+      card
+    }
+    image {
+      id
+      url
+      optimised
+      card
+    }
+    rows {
+      columns {
+        text
+        incidents {
+          id
+          subject
+          description
+          dayTime
+          reference
+          policeRef
+          crimeTypes {
+            id
+            name
+          }
+          approved
+          uploaded
+          location {
+            id
+            full
+          }
+          createdBy {
+            id
+            fullName
+            businesses {
+              fullName
+              id
+              name
+            }
+          }
+          images {
+            id
+            url
+            optimised
+            card
+            offenders {
+              id
+            }
+          }
+          groups {
+            id
+            name
+          }
+          offenders {
+            id
+            name
+          }
+        }
+        offenders {
+          id
+          createdAt
+          updatedAt
+          age
+          build
+          dateOfBirth
+          dateSource
+          hair
+          gender
+          name
+          race
+          peculiarities
+          approved
+          active
+          lastActive {
+            id
+            dayTime
+          }
+          tags {
+            id
+            name
+          }
+          images {
+            id
+            optimised
+          }
+          groups {
+            id
+            name
+          }
+          tags {
+            id
+            name
+          }
+          createdBy {
+            id
+            fullName
+            businesses {
+              fullName
+              id
+              name
+            }
+          }
+          incidents {
+            id
+            subject
+            description
+            dayTime
+            date
+            crimeTypes {
+              id
+              name
+            }
+            approved
+            location {
+              id
+              full
+            }
+            createdBy {
+              id
+              fullName
+              businesses {
+                fullName
+                id
+                name
+              }
+            }
+            images {
+              id
+              optimised
+            }
+          }
+        }
+      }
+    }
+  }
+}

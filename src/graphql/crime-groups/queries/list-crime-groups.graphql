@@ -1,0 +1,20 @@
+query ListCrimeGroups(
+  $take: Int
+  $skip: Int
+  $where: CrimeGroupWhereInput
+  $order: CrimeGroupOrderByWithRelationInput
+) {
+  listCrimeGroups(take: $take, skip: $skip, where: $where, order: $order) {
+    crimeGroups {
+      id
+      reference
+      totalIncidents
+      totalOffenders
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+      alias
+    }
+    total
+  }
+}

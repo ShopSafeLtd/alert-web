@@ -1,5 +1,5 @@
 // calculate the difference in days between start and end date
-const calcDuration = (startDate: Date, endDate: Date) => {
+const calcDuration = (startDate: Date, endDate: Date): string => {
   const start = new Date(startDate).valueOf();
   const end = new Date(endDate).valueOf();
 

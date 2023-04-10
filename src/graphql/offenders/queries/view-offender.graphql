@@ -1,0 +1,253 @@
+query ViewOffender(
+  $where: OffenderWhereUniqueInput!
+  $banWhere: BanWhereInput
+) {
+  offender(where: $where) {
+    id
+    createdAt
+    updatedAt
+    age
+    build
+    dateOfBirth
+    dateSource
+    hair
+    gender
+    name
+    race
+    peculiarities
+    subscribed
+    approved
+    active
+    idVerified
+    idSource
+    images {
+      id
+      url
+      optimised
+    }
+    addresses {
+      id
+      full
+      building
+      street
+      townCity
+      county
+      postcode
+      alias
+    }
+    groups {
+      id
+      name
+    }
+    tags {
+      id
+      name
+    }
+    bans(orderBy: { startDate: desc }, where: $banWhere) {
+      id
+      title
+      location
+      description
+      startDate
+      endDate
+      type
+    }
+    crimeGroups {
+      id
+      reference
+      alias
+      totalIncidents
+      totalOffenders
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+    }
+    vehicles {
+      id
+      reference
+      colour
+      model
+      make
+      registration
+      totalCrimeGroups
+      totalIncidents
+      totalOffenders
+      updatedAt
+    }
+    createdBy {
+      id
+      fullName
+      businesses {
+        id
+        name
+      }
+    }
+    incidents {
+      id
+      reference
+      dayTime
+      date
+      crimeTypes {
+        id
+        name
+      }
+      createdBy {
+        id
+        businesses {
+          id
+          name
+        }
+      }
+    }
+    crimeGroups {
+      id
+      reference
+    }
+    updates(orderBy: { createdAt: desc }) {
+      id
+      text
+      type
+      createdAt
+      images {
+        id
+        url
+        optimised
+        card
+      }
+      linkedCrimeGroups {
+        totalOffenders
+        totalIncidents
+        alias
+        id
+        reference
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+        updatedAt
+      }
+      linkedVehicles {
+        images {
+          id
+          url
+          optimised
+        }
+        updatedAt
+        totalOffenders
+        registration
+        reference
+        model
+        make
+        id
+        colour
+      }
+      linkedIncidents {
+        id
+        subject
+        description
+        dayTime
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      linkedOffenders {
+        id
+        updatedAt
+        age
+        build
+        dateOfBirth
+        name
+        race
+        gender
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      createdBy {
+        origName
+        id
+        fullName
+        businesses {
+          id
+          name
+        }
+      }
+      replies {
+        id
+        text
+        type
+        createdAt
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          images {
+            id
+            url
+            optimised
+          }
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
+        }
+        linkedIncidents {
+          id
+          subject
+          description
+          dayTime
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        linkedOffenders {
+          id
+          updatedAt
+          age
+          build
+          dateOfBirth
+          name
+          race
+          gender
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        createdBy {
+          origName
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+}

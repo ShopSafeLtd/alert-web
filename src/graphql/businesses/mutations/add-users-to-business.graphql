@@ -1,0 +1,24 @@
+mutation AddUsersToBusiness(
+  $data: [UserWhereUniqueInput!]!
+  $where: BusinessWhereUniqueInput!
+  $schemeWhere: SchemeWhereUniqueInput!
+  $groupWhere: GroupWhereInput
+) {
+  addUsersToBusiness(data: $data, where: $where, schemeWhere: $schemeWhere) {
+    id
+    name
+    users {
+      id
+      fullName
+      status
+      publicName
+      loginEvents {
+        loginTime
+      }
+      groups(where: $groupWhere) {
+        id
+        name
+      }
+    }
+  }
+}

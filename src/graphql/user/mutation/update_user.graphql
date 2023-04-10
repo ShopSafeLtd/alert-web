@@ -1,0 +1,46 @@
+mutation updateUser(
+  $where: UniqueId!
+  $data: UserUpdateInput!
+  $groupWhere: GroupWhereInput
+  $chatWhere: UserChatWhereInput
+  $schemeWhere: UserSchemeWhereInput
+) {
+  updateUser(where: $where, data: $data) {
+    id
+    fullName
+    email
+    status
+    demId
+    publicName
+    businesses {
+      id
+      name
+      fullName
+      demId
+    }
+    disabled
+    newUser
+    incidentEmail
+    incidentPush
+    subscribedIncidentOnly
+    subscribedOffenderOnly
+    messagePush
+    offenderEmail
+    offenderPush
+    groups(where: $groupWhere) {
+      id
+      name
+    }
+    chats(where: $chatWhere) {
+      id
+      chat {
+        id
+        name
+      }
+    }
+    schemes(where: $schemeWhere) {
+      id
+      role
+    }
+  }
+}

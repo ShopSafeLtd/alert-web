@@ -1,0 +1,9 @@
+mutation updateTag($where: UniqueId!, $data: TagUpdateInput!) {
+  updateTag(where: $where, data: $data) {
+    id
+    name
+    description
+    type
+    crimeType
+  }
+}

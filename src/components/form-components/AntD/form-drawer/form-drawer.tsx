@@ -1,121 +1,51 @@
-import React, { useState } from "react";
-import { Drawer, Result, Button, notification } from "antd";
+import type { DrawerProps } from 'antd';
+import { Drawer } from 'antd';
+import React from 'react';
 
-interface RenderFormArgs {
-  handleClose(): void;
-  onSuccess(): void;
-  onError(): void;
-}
-
-interface Props {
+/**
+ * @description In addition to the defined props, accepts any AntD drawer props. https://ant.design/components/drawer/
+ */
+interface FormDrawerProps extends DrawerProps {
+  title: React.ReactNode;
   visible: boolean;
-  onClose(): void;
-  successText: string;
-  errorText?: string;
-  title: string;
+  onClose: () => void;
   width?: number;
-  renderForm(args: RenderFormArgs): JSX.Element;
-  noAddAnother?: boolean;
-  notificationResult?: boolean;
+  children: JSX.Element;
 }
 
-export const FormDrawer = ({
+/**
+ * @see {@link FormDrawerProps}
+ * @param {React.ReactNode} props.title - form title
+ * @param {boolean} props.visible - if false, drawer closed
+ * @param {function} props.onClose - action to perform when 'x' close button is pressed
+ * @param {number} props.width - default = 480
+ * @param {JSX.Element} props.children - the component to render inside the form drawer
+ * @returns JSX.Element
+ *
+ * @description A small abstraction over the AntD drawer component which provides a way to keep all form drawers consistent across the application.
+ */
+const FormDrawer = ({
+  title,
   visible,
   onClose,
-  errorText,
-  successText,
-  title,
-  width,
-  renderForm,
-  noAddAnother,
-  notificationResult
-}: Props) => {
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(false);
+  width = 480,
+  children,
+  ...props
+}: FormDrawerProps): JSX.Element => (
+  <Drawer
+    title={title}
+    visible={visible}
+    onClose={onClose}
+    width={width}
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...props}
+  >
+    {children}
+  </Drawer>
+);
 
-  const onSuccess = () => {
-    if (!notificationResult) {
-      setSuccess(true)
-    } else {
-      notification['success']({
-        message: successText,
-        placement: 'bottomRight'
-      });
-      onClose();
-    }
-  };
-
-  const onError = () => {
-    if (!notificationResult) {
-      setError(true)
-    } else {
-      notification['error']({
-        message: 'An error has occurred!',
-        description: 'This error has been reported to our team.',
-        placement: 'bottomRight'
-      })
-      onClose();
-    }
-  };
-
-  const handleClose = () => {
-    setSuccess(false);
-    setError(false);
-    onClose();
-  };
-
-  const handleAddAnother = () => {
-    setSuccess(false);
-  };
-
-  const extra = [
-    <Button type="primary" key="console" onClick={handleClose}>
-      Go Back
-    </Button>
-  ]
-
-  !noAddAnother && extra.push(<Button type="default" key="console" onClick={handleAddAnother}>
-    Add Another
-  </Button>)
-
-  return (
-    <Drawer
-      title={title}
-      placement="right"
-      closable={false}
-      onClose={handleClose}
-      visible={visible}
-      width={width ? width : 500}
-      bodyStyle={{ display: "flex" }}
-    >
-      {visible && success ? (
-        <Result
-          style={{ flex: 1 }}
-          status="success"
-          title={successText}
-          extra={extra}
-        />
-      ) : error ? (
-        <Result
-          style={{ flex: 1 }}
-          status="error"
-          title="An error has occurred!"
-          subTitle={
-            errorText ? errorText : "This error has been reported to our team."
-          }
-          extra={[
-            <Button type="primary" danger key="console" onClick={handleClose}>
-              Go Back
-            </Button>,
-          ]}
-        />
-      ) : visible && (
-        renderForm({
-          onError,
-          onSuccess,
-          handleClose,
-        })
-      )}
-    </Drawer>
-  );
+FormDrawer.defaultProps = {
+  width: 480,
 };
+
+export default FormDrawer;

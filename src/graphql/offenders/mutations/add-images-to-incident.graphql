@@ -1,0 +1,14 @@
+mutation AddImagesToOffender(
+  $offender: OffenderWhereUniqueInput!
+  $images: [ImageWhereUniqueInput!]!
+) {
+  addImagesToOffender(offender: $offender, images: $images) {
+    id
+    images {
+      id
+      url
+      optimised
+      card
+    }
+  }
+}

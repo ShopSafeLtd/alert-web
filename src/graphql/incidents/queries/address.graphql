@@ -1,0 +1,12 @@
+query addresses($where: AddressWhereInput) {
+  addresses(where: $where) {
+    id
+    building
+    street
+    townCity
+    county
+    postcode
+    primary
+    full
+  }
+}

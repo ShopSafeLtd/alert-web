@@ -1,0 +1,9 @@
+query tags($where: TagWhereInput!) {
+  tags(where: $where) {
+    id
+    name
+    description
+    crimeType
+    type
+  }
+}

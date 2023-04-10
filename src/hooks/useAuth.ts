@@ -1,26 +1,26 @@
-import { useApolloClient, useLazyQuery, useMutation } from "@apollo/client";
-import { SetUserPayload, useStoreActions, useStoreState } from "state";
-import jwtDecode from "jwt-decode";
-import LogRocket from "logrocket";
-import { CurrentUser, CurrentUserRes } from "graphql-src/auth/queries";
-import { SignIn, SignInArgs, SignInRes } from "graphql-src/auth/mutations";
+import type { SetUserPayload } from 'state';
+import { useStoreActions, useStoreState } from 'state';
+import LogRocket from 'logrocket';
+import { useCurrentUserLazyQuery } from 'graphql/generated';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useEffect } from 'react';
 
-interface DecodedToken {
-  aud: string;
-  email: string;
-  email_verified: boolean;
-  exp: number;
-  iat: number;
-  iss: string;
-  name: string;
-  nickname: string;
-  picture: string;
-  sub: string;
-  updated_at: string;
+interface Return {
+  rehydrateAuth: () => void;
+  signOut: () => void;
+  onLoginSuccess: (data: OnLoginSuccessArgs) => void;
+  getCurrentUser: () => void;
+  loading: boolean;
 }
 
-export const useAuth = () => {
-  const client = useApolloClient();
+interface OnLoginSuccessArgs extends SetUserPayload {
+  accessToken: string;
+}
+
+const useAuth = (): Return => {
+  const { getAccessTokenSilently, isAuthenticated, user } = useAuth0();
+
+  // const client = useApolloClient();
   const authenticated = useStoreActions(
     (actions) => actions.auth.authenticated
   );
@@ -44,30 +44,42 @@ export const useAuth = () => {
     accessToken,
     fullName,
     email,
-    organisation,
+    businesses,
     onboarded,
     schemes,
+    demId,
+    groups,
+    reference,
   }: HandleSuccessArgs) => {
-    window.localStorage.setItem("accessToken", accessToken);
+    // const color = `hsl(${Math.random() * 360}, 70%, 30%)`;
+
+    // localStorage.setItem(
+    //   'current-user',
+    //   JSON.stringify({ id, name: fullName, color })
+    // );
 
     const handleNoValidScheme = () => {
       const schemeDetails = schemes[0]?.scheme;
-      window.localStorage.setItem("currentScheme", schemeDetails?.id);
+      window.localStorage.setItem('currentScheme', schemeDetails?.id);
       setRole({ role: schemes[0]?.role });
       setScheme({
         autoApproveIncidents: schemeDetails?.autoApproveIncidents,
         autoApproveOffenders: schemeDetails?.autoApproveOffenders,
         id: schemeDetails?.id,
         name: schemeDetails?.name,
+        logo: schemeDetails?.logo?.optimisedPersisted,
+        darkLogo: schemeDetails?.darkLogo?.optimisedPersisted,
       });
     };
 
     const scheme =
-      currentScheme || window.localStorage.getItem("currentScheme");
+      currentScheme || window.localStorage.getItem('currentScheme');
     if (scheme) {
       const schemeDetails = schemes?.find(
+        // eslint-disable-next-line @typescript-eslint/no-shadow
         ({ scheme: { id } }) => id === scheme
       );
+
       if (schemeDetails) {
         setRole({ role: schemeDetails.role });
         setScheme({
@@ -75,6 +87,8 @@ export const useAuth = () => {
           autoApproveOffenders: schemeDetails.scheme.autoApproveOffenders,
           id: schemeDetails.scheme.id,
           name: schemeDetails.scheme.name,
+          logo: schemeDetails.scheme.logo?.optimisedPersisted,
+          darkLogo: schemeDetails.scheme.darkLogo?.optimisedPersisted,
         });
       } else {
         handleNoValidScheme();
@@ -83,7 +97,7 @@ export const useAuth = () => {
       handleNoValidScheme();
     }
 
-    LogRocket.identify(id!, {
+    LogRocket.identify(id, {
       fullName,
       email,
     });
@@ -92,48 +106,105 @@ export const useAuth = () => {
       id,
       email,
       fullName,
-      organisation,
+      businesses,
       onboarded,
       schemes,
+      groups,
+      isSet: true,
+      demId,
+      reference,
     });
     authenticated(accessToken);
   };
 
+  const [getCurrentUser, { loading }] = useCurrentUserLazyQuery({
+    onCompleted: ({ currentUser }) => {
+      const scheme =
+        currentScheme || window.localStorage.getItem('currentScheme');
+
+      if (scheme) {
+        const currentS = currentUser?.schemes.find(
+          (s) => s.scheme.id === scheme
+        );
+        if (currentS) {
+          window.localStorage.setItem(
+            'logo',
+            currentS?.scheme?.logo?.optimisedPersisted || ''
+          );
+          if (!currentS?.scheme?.logo?.optimisedPersisted) {
+            window.localStorage.clear();
+          }
+          window.localStorage.setItem(
+            'logo-dark',
+            currentS?.scheme?.darkLogo?.optimisedPersisted || ''
+          );
+        }
+      }
+      handleSuccess({
+        id: currentUser?.id || '',
+        email: currentUser?.email || '',
+        fullName: currentUser?.fullName || '',
+        accessToken: window.localStorage.getItem('access_token') || '',
+        businesses: currentUser?.businesses || [],
+        onboarded: !currentUser?.newUser,
+        schemes: currentUser?.schemes || [],
+        groups: currentUser?.groups || [],
+        demId: currentUser?.demId || '',
+        isSet: true,
+        reference: `${currentUser?.reference}` || '',
+      });
+    },
+    onError: () => expired(),
+    fetchPolicy: 'cache-and-network',
+  });
+
   const rehydrateAuth = () => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (!!accessToken) {
-      let token: DecodedToken = jwtDecode(accessToken);
-      if (new Date().getTime() < token.exp * 1000) {
-        if (token.iss === "https://alert.eu.auth0.com/") {
-          getCurrentUser({
-            context: {
-              headers: {
-                authorization: `Bearer ${accessToken}`,
-              },
-            },
-          });
+    if (user !== undefined) {
+      if (Date.now() < user.exp * 1000) {
+        if (user.iss === 'https://alert.eu.auth0.com/') {
+          getCurrentUser();
+        } else if (isAuthenticated) {
+          getCurrentUser();
         } else {
           expired();
         }
       } else {
         expired();
       }
+    } else if (isAuthenticated) {
+      getCurrentUser();
     } else {
       expired();
     }
+    // const accessToken = localStorage.getItem('accessToken');
+    // if (accessToken) {
+    //   const token: DecodedToken = jwtDecode(accessToken);
+    //   if (new Date().getTime() < token.exp * 1000) {
+    //     if (token.iss === 'https://alert.eu.auth0.com/') {
+    //       getCurrentUser({
+    //         context: {
+    //           headers: {
+    //             authorization: `Bearer ${accessToken}`,
+    //           },
+    //         },
+    //       });
+    //     } else {
+    //       expired();
+    //     }
+    //   } else {
+    //     expired();
+    //   }
+    // } else {
+    //   expired();
+    // }
   };
 
-  interface OnLoginSuccessArgs extends SetUserPayload {
-    accessToken: string;
-  }
-
   const onLoginSuccess = (data: OnLoginSuccessArgs) => {
-    window.localStorage.setItem("accessToken", data.accessToken);
+    window.localStorage.setItem('access_token', data.accessToken);
 
-    const scheme = window.localStorage.getItem("currentScheme");
-    if (scheme) {
-    } else {
-      window.localStorage.setItem("currentScheme", data.schemes[0].scheme.id);
+    const scheme = window.localStorage.getItem('currentScheme');
+    if (!scheme) {
+      window.localStorage.setItem('currentScheme', data.schemes[0].scheme.id);
     }
 
     LogRocket.identify(data.id, {
@@ -147,94 +218,121 @@ export const useAuth = () => {
       email: data.email,
       fullName: data.fullName,
       onboarded: data.onboarded,
-      organisation: data.organisation,
+      businesses: data.businesses,
       schemes: data.schemes,
+      groups: data.groups,
+      isSet: true,
+      demId: data.demId,
+      reference: data.reference,
     });
   };
 
-  const [handleLogin] = useMutation<SignInRes, SignInArgs>(SignIn, {
-    onCompleted: async ({ signIn }) => {
-      try {
-        const { data } = await client.query<CurrentUserRes>({
-          query: CurrentUser,
-          fetchPolicy: "network-only",
-          context: {
-            headers: {
-              authorization: `Bearer ${signIn.accessToken}`,
-            },
-          },
-        });
+  // useEffect(() => {
+  //   // authenticated from auth0
+  //   if (isAuthenticated) {
+  //     (async () => {
+  //       try {
+  //         const token = await getAccessTokenSilently();
+  //         authenticated(token);
+  //         window.localStorage.setItem('accessToken', token);
+  //         try {
+  //           const { data } = await client.query<CurrentUserQuery>({
+  //             query: CurrentUserDocument,
+  //             fetchPolicy: 'network-only',
+  //             context: {
+  //               headers: {
+  //                 authorization: `Bearer ${token}`,
+  //               },
+  //             },
+  //           });
+  //           console.log(data);
+  //           // Adding this in breaks the side and top navs. Not sure why atm
+  //           // onLoginSuccess({
+  //           //   accessToken: token || '',
+  //           //   email: data.currentUser?.email || '',
+  //           //   fullName: data.currentUser?.fullName || '',
+  //           //   id: data.currentUser?.id || '',
+  //           //   onboarded: data.currentUser?.newUser || false,
+  //           //   organisation: data.currentUser?.organisation || '',
+  //           //   schemes: data.currentUser?.schemes || [],
+  //           //   groups: data.currentUser?.groups || [],
+  //           // });
+  //           // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //         } catch (err: any) {
+  //           setAuthMessage(err.message);
+  //           console.log(err);
+  //         }
+  //       } catch (e) {
+  //         // eslint-disable-next-line no-console
+  //         console.error(e);
+  //       }
+  //
+  //       // try {
+  //
+  //       //   onLoginSuccess({
+  //       //     accessToken: token || '',
+  //       //     email: data.currentUser?.email || '',
+  //       //     fullName: data.currentUser?.fullName || '',
+  //       //     id: data.currentUser?.id || '',
+  //       //     onboarded: data.currentUser?.newUser || false,
+  //       //     organisation: data.currentUser?.organisation || '',
+  //       //     schemes: data.currentUser?.schemes || [],
+  //       //     groups: data.currentUser?.groups || [],
+  //       //   });
+  //       //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //       // } catch (err: any) {
+  //       //   setAuthMessage(err.message);
+  //       //   console.log(err);
+  //       // }
+  //     })();
+  //   }
+  // }, [isAuthenticated]);
+  useEffect(() => {
+    if (isAuthenticated) {
+      (async () => {
+        try {
+          const newToken = await getAccessTokenSilently();
 
-        if (
-          data?.currentUser?.schemes
-            .flatMap((schemes) => schemes.scheme.id)
-            .includes("clfi9000c0000piabawfn9s2w")
-        ) {
-          window.location.replace("https://staging.shopsafealert.co.uk/");
+          authenticated(newToken);
+          window.localStorage.setItem('access_token', newToken);
+        } catch (error) {
+          if (error instanceof Error) setAuthMessage(error.message);
+          // console.error(e);
         }
-        onLoginSuccess({
-          accessToken: signIn.accessToken,
-          email: data.currentUser.email,
-          fullName: data.currentUser.fullName,
-          id: data.currentUser.id,
-          onboarded: !data.currentUser.newUser,
-          organisation: data.currentUser.organisation,
-          schemes: data.currentUser.schemes,
-        });
-      } catch (err) {
-        setAuthMessage(err.message);
-        console.log(err);
-      }
-    },
-    onError: (error) => {
-      console.log(error);
-      setAuthMessage(error.message);
-      throw new Error(error.message);
-    },
-  });
-
-  const [getCurrentUser] = useLazyQuery<CurrentUserRes>(CurrentUser, {
-    onCompleted: ({ currentUser }) => {
-      handleSuccess({
-        id: currentUser?.id,
-        email: currentUser?.email,
-        fullName: currentUser?.fullName,
-        accessToken: window.localStorage.getItem("accessToken")!,
-        organisation: currentUser?.organisation,
-        onboarded: !currentUser.newUser,
-        schemes: currentUser.schemes,
-      });
-    },
-    onError: (error) => expired(),
-  });
-
-  interface LoginArgs {
-    email: string;
-    password: string;
-  }
-
-  const login = ({ email, password }: LoginArgs) => {
-    window.localStorage.removeItem("accessToken");
-    handleLogin({
-      variables: {
-        email,
-        password,
-      },
-    });
-  };
+      })();
+    }
+  }, [isAuthenticated]);
+  // const login = ({ email, password }: LoginArgs) => {
+  //   window.localStorage.removeItem('accessToken');
+  //   handleLogin({
+  //     variables: {
+  //       email,
+  //       password,
+  //     },
+  //   });
+  // };
 
   const signOut = () => {
     clearUser();
     handleSignOut();
+    const logo = window.localStorage.getItem('logo');
+    const dLogo = window.localStorage.getItem('logo-dark');
+
     window.localStorage.clear();
+    window.localStorage.setItem('logo', logo || '');
+    window.localStorage.setItem('logo-dark', dLogo || '');
+
     window.sessionStorage.clear();
   };
 
   return {
-    login,
+    // login,
+    loading,
     rehydrateAuth,
     signOut,
     onLoginSuccess,
     getCurrentUser,
   };
 };
+
+export default useAuth;

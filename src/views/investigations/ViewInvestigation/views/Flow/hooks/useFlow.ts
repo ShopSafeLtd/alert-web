@@ -1,0 +1,457 @@
+import type React from 'react';
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+import { DragEvent, useCallback, useEffect, useRef, useState } from 'react';
+import type {
+  Edge,
+  Node,
+  OnConnect,
+  OnEdgesChange,
+  OnNodesChange,
+  ReactFlowInstance,
+} from 'reactflow';
+import { useReactFlow } from 'reactflow';
+import moment from 'moment/moment';
+import { useDebouncedCallback } from 'use-debounce';
+
+import type { YMap } from 'yjs/dist/src/internals';
+import { useUsers } from 'y-presence';
+import type { WebsocketProvider } from 'y-websocket';
+import useWebRtcProvider from './useWebRtcProvidor';
+import useNodesStateSynced from './useNodesStateSynced';
+import useEdgesStateSynced from './useEdgesStateSynced';
+import { useStoreState } from '../../../../../../state';
+import useObservableListener from './useObservableListener';
+import styles from '../style.module.css';
+import type { ViewInvestigationQuery } from '../../../../../../graphql/generated';
+import { useUpdateFlowMutation } from '../../../../../../graphql/generated';
+
+interface Return {
+  nodes: Node[];
+  onNodesChange: OnNodesChange;
+  edges: Edge[];
+  onEdgesChange: OnEdgesChange;
+  onConnect: OnConnect;
+  clientCount: number;
+  isSynced: boolean;
+  setReactFlowInstance: (instance: ReactFlowInstance | null) => void;
+  savedWhen: string | null;
+  onSave: () => void;
+  onNodeClick: (event: React.MouseEvent, node: Node) => void;
+  onDrop: (
+    event: DragEvent,
+    data?: {
+      url?: string;
+    }
+  ) => void;
+  onDragOver: (event: DragEvent) => void;
+  wrapperRef: React.RefObject<HTMLDivElement>;
+  nodesMap: YMap<Node>;
+  loading: boolean;
+  offenders: {
+    name: string;
+    url: string[];
+  }[];
+  setSelected: (id: string) => void;
+  saving: boolean;
+
+  // eslint-disable-next-line
+  users: Map<number, { [p: string]: any }>;
+  handlePointMove: (e: React.PointerEvent) => void;
+  provider: WebsocketProvider;
+  reactFlowInstance: ReactFlowInstance | null;
+}
+
+const TIMEOUT = 3000 + Math.floor(Math.random() * 7000);
+
+interface Props {
+  investigationId: string;
+  importData: ViewInvestigationQuery | undefined;
+}
+
+const useFlow = ({ investigationId, importData }: Props): Return => {
+  const currentUser = useStoreState((state) => state.user);
+
+  const provider: WebsocketProvider = useWebRtcProvider(
+    currentUser,
+    investigationId
+  );
+  const [selected, setSelected] = useState<string | null>(null);
+  const [savedWhen, setSavedWhen] = useState<string | null>(
+    importData?.investigation?.flows[0].updatedAt
+      ? moment(importData?.investigation?.flows[0].updatedAt).fromNow()
+      : null
+  );
+
+  // const { data: importData, loading } = useViewInvestigationQuery({
+  //   skip: !investigationId,
+  //   variables: {
+  //     where: {
+  //       id: investigationId,
+  //     },
+  //   },
+  //   onCompleted: (TData) => {
+  //     const meta = provider.doc.getMap('meta');
+  //     const lastSaved = meta.get('lastSaved') as number;
+  //     if (
+  //       lastSaved &&
+  //       lastSaved <
+  //         new Date(TData?.investigation?.flows[0].updatedAt || '').getTime()
+  //     ) {
+  //       setSavedWhen(
+  //         moment(TData?.investigation?.flows[0].updatedAt).fromNow()
+  //       );
+  //     }
+  //   },
+  // });
+
+  const [updateFlow, { loading: saving }] = useUpdateFlowMutation();
+
+  const nodesMap = provider.doc.getMap<Node>('nodes');
+  const edgesMap = provider.doc.getMap<Edge>('edges');
+  const [nodes, onNodesChange] = useNodesStateSynced({ nodesMap, edgesMap });
+  const [edges, onEdgesChange, onConnect] = useEdgesStateSynced({ edgesMap });
+  const [clientCount, setClientCount] = useState<number>(0);
+  const [isSynced, setIsSynced] = useState<boolean>(false);
+  const usedFallbackRef = useRef<boolean>(false);
+  const [reactFlowInstance, setReactFlowInstance] =
+    useState<ReactFlowInstance | null>(null);
+
+  const offenders =
+    importData?.investigation?.offenders.map((offender) => ({
+      name: offender.name || '',
+      url: offender.images?.map((image) => image?.optimised || ''),
+    })) || [];
+  const onSave = useCallback(() => {
+    if (reactFlowInstance && usedFallbackRef?.current && !isSynced) {
+      const flow = reactFlowInstance.toObject();
+      if (
+        flow.nodes.length <= 0 &&
+        importData?.investigation?.flows &&
+        importData?.investigation?.flows[0].nodes.length > 0
+      ) {
+        return;
+      }
+
+      const meta = provider.doc.getMap('meta');
+      const date = new Date();
+
+      meta.set('lastSaved', date.getTime());
+      setSavedWhen(moment(date).fromNow());
+
+      updateFlow({
+        variables: {
+          where: {
+            id: importData?.investigation?.flows[0].id || '',
+          },
+          data: {
+            nodes: flow.nodes.map((node: Node) => ({
+              data: node.data,
+              id: node.id,
+              positionX: Math.round(node.position.x),
+              positionY: Math.round(node.position.y),
+              type: node.type || '',
+              height: node.height || 0,
+              width: node.width || 0,
+              positionAbX: Math.round(node.positionAbsolute?.x || 0),
+              positionAbY: Math.round(node.positionAbsolute?.y || 0),
+            })),
+            edges: flow.edges.map((edge: Edge) => ({
+              id: edge.id,
+              type: edge.type || '',
+              markerEnd: edge.markerEnd || '',
+              source: edge.source || '',
+              sourceHandle: edge.sourceHandle || '',
+              target: edge.target || '',
+              targetHandle: edge.targetHandle || '',
+            })),
+          },
+        },
+      });
+    }
+  }, [reactFlowInstance]);
+  const handleSave = useCallback(() => {
+    if (isSynced || clientCount === 0) {
+      onSave();
+    }
+  }, [onSave, investigationId, provider.doc, isSynced, clientCount]);
+  const handleSaveDebounced = useDebouncedCallback(handleSave, TIMEOUT);
+  const handlePeersChange = useCallback(
+    ({ bcconnected }) => {
+      setClientCount(bcconnected ? 1 : 0);
+    },
+    [setClientCount]
+  );
+  useObservableListener('peers', handlePeersChange, provider);
+
+  const handleSynced = useCallback(
+    ({ synced }) => {
+      setIsSynced(synced);
+    },
+    [setIsSynced]
+  );
+  useObservableListener('synced', handleSynced, provider);
+
+  const handleYDocUpdate = useCallback(() => {
+    handleSaveDebounced.cancel();
+  }, [handleSaveDebounced]);
+
+  useObservableListener('update', handleYDocUpdate, provider.doc);
+
+  useEffect(() => {
+    if (usedFallbackRef.current) return;
+    const fetchFallback = async () => {
+      if (provider.wsconnected && clientCount === 0) {
+        const initData = importData?.investigation?.flows[0];
+        if (initData?.nodes)
+          // eslint-disable-next-line no-restricted-syntax,no-unsafe-optional-chaining
+          for (const node of initData?.nodes) {
+            nodesMap.set(node.id, node as Node);
+          }
+        if (initData?.edges)
+          // eslint-disable-next-line no-restricted-syntax,no-unsafe-optional-chaining
+          for (const edge of initData?.edges) {
+            edgesMap.set(edge.id, edge as Edge);
+          }
+      }
+
+      usedFallbackRef.current = true;
+    };
+    const timeoutId = window.setTimeout(fetchFallback, 1000);
+
+    // eslint-disable-next-line consistent-return
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [
+    importData,
+    investigationId,
+    provider.wsconnected,
+    clientCount,
+    reactFlowInstance,
+  ]);
+
+  // useEffect(() => {
+  //
+  //   const timeoutId = window.setTimeout(updateSavedWhen, 1000);
+  //
+  //   // eslint-disable-next-line consistent-return
+  //   return () => {
+  //     // clear prescence
+  //     provider.awareness.setLocalStateField('user', null);
+  //     window.clearTimeout(timeoutId);
+  //   };
+  // }, []);
+
+  const getId = () => `dndnode_${Math.random() * 10_000}_${investigationId}`;
+
+  useEffect(() => {
+    const updateSavedWhen = () => {
+      const meta = provider.doc.getMap('meta');
+      const lastSaved = meta.get('lastSaved') as number;
+
+      if (
+        lastSaved &&
+        lastSaved >
+          new Date(importData?.investigation?.flows[0].updatedAt).getTime()
+      ) {
+        setSavedWhen(moment(new Date(lastSaved)).fromNow());
+      } else {
+        setSavedWhen(
+          moment(importData?.investigation?.flows[0].updatedAt).fromNow()
+        );
+      }
+    };
+
+    const interval = setInterval(() => updateSavedWhen(), 10_000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const { project } = useReactFlow();
+  // const fitViewOptions: FitViewOptions = {
+  //   padding: 0.2,
+  // };
+  useEffect(() => {
+    handleSaveDebounced();
+  }, [handleSaveDebounced, nodes, edges]);
+
+  const onChange = useCallback((value, id) => {
+    const currentNode = nodesMap.get(id);
+    if (!currentNode) {
+      return;
+    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    nodesMap.set(id, {
+      ...currentNode,
+      data: { ...currentNode.data, color: value },
+    });
+  }, []);
+
+  const onDrop = (event: DragEvent) => {
+    event.preventDefault();
+    if (wrapperRef.current) {
+      const wrapperBounds = wrapperRef.current.getBoundingClientRect();
+      const type = event.dataTransfer.getData('application/reactflow');
+      if (type === undefined || !type) {
+        return;
+      }
+      const position = project({
+        x: event.clientX - wrapperBounds.x - 80,
+        y: event.clientY - wrapperBounds.top - 20,
+      });
+      const id = getId();
+      if (type === 'offenderDetailsNode') {
+        const newNode: Node = {
+          id,
+          type,
+          position,
+          height: 550,
+          width: 290,
+          style: {
+            height: 550,
+            width: 290,
+          },
+          zIndex: 1,
+          data: {
+            label: `${type}`,
+            id,
+            onChange,
+            imageUrl: selected,
+            text: '',
+          },
+        };
+        setSelected(null);
+        nodesMap.set(newNode.id, newNode);
+      } else if (type === 'incidentDetailsNode') {
+        const newNode: Node = {
+          id,
+          type,
+          position,
+          height: 350,
+          width: 290,
+          style: {
+            height: 350,
+            width: 290,
+          },
+          zIndex: 1,
+          data: {
+            label: `${type}`,
+            id,
+            onChange,
+            imageUrl: selected,
+            text: '',
+          },
+        };
+        setSelected(null);
+        nodesMap.set(newNode.id, newNode);
+      } else {
+        const newNode: Node = {
+          id,
+          type,
+          position,
+          height: 200,
+          width: 200,
+          style: {
+            height: 200,
+            width: 200,
+          },
+          zIndex: 1,
+          data: {
+            label: `${type}`,
+            id,
+            onChange,
+            imageUrl: selected,
+            text: '',
+          },
+        };
+        setSelected(null);
+        nodesMap.set(newNode.id, newNode);
+      }
+    }
+  };
+
+  const onNodeClick = useCallback((_, node) => {
+    const currentNode = nodesMap.get(node.id);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    nodesMap.set(node.id, {
+      ...currentNode,
+      className: styles.blink,
+    });
+
+    window.setTimeout(() => {
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      const currentNode = nodesMap.get(node.id);
+      if (currentNode) {
+        nodesMap.set(node.id, {
+          ...currentNode,
+          className: undefined,
+        });
+      }
+    }, 3000);
+  }, []);
+
+  useEffect(
+    () => () => {
+      provider.awareness.setLocalStateField('user', null);
+    },
+    []
+  );
+
+  const onDragOver = useCallback((event) => {
+    event.preventDefault();
+    // eslint-disable-next-line no-param-reassign
+    event.dataTransfer.dropEffect = 'move';
+  }, []);
+
+  const users = useUsers(provider.awareness);
+  const handlePointMove = useCallback(
+    (e: React.PointerEvent) => e, // TODO: fix this
+    // const bounds = wrapperRef.current?.getBoundingClientRect();
+    // if (wrapperRef?.current) {
+    //   const wrapperBounds = wrapperRef.current.getBoundingClientRect();
+    //   const position = project({
+    //     x: e.clientX - wrapperBounds.left,
+    //     y: e.clientY - wrapperBounds.top,
+    //   });
+    //   provider.awareness.setLocalStateField('cursor', {
+    //     x: position?.x || 0,
+    //     y: position?.y || 0,
+    //   });
+    // }
+    []
+  );
+
+  return {
+    nodes,
+    onNodesChange,
+    edges,
+    onEdgesChange,
+    onConnect,
+    clientCount,
+    isSynced,
+    reactFlowInstance,
+    setReactFlowInstance,
+    savedWhen,
+    onSave,
+    onNodeClick,
+    onDrop,
+    onDragOver,
+    wrapperRef,
+    nodesMap,
+    loading:
+      importData?.investigation?.flows[0] && provider.wsconnected
+        ? false
+        : provider.wsconnecting,
+    offenders,
+    setSelected,
+    saving,
+    users,
+    handlePointMove,
+    provider,
+  };
+};
+
+export default useFlow;

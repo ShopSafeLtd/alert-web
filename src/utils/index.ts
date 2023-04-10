@@ -1,3 +1,6 @@
+/* eslint-disable */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NavItem } from 'configs/NavigationConfig';
 
 class Utils {
@@ -7,7 +10,7 @@ class Utils {
    * @return {String} 2 characters string
    */
   static getNameInitial(name: string) {
-    let initials = name.match(/\b\w/g) || [];
+    const initials = name.match(/\b\w/g) || [];
     return ((initials.shift() || '') + (initials.pop() || '')).toUpperCase();
   }
 
@@ -18,9 +21,8 @@ class Utils {
    * @return {Object} object that contained the path string
    */
   static getRouteInfo(navTree: NavItem[], path: string): NavItem {
-    return navTree.find((route) => {
-      return path.includes(route.path);
-    })!;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return navTree.find((route) => path.includes(route.path))!;
   }
 
   /**
@@ -28,32 +30,37 @@ class Utils {
    * @param {String} hex - Hex color code e.g '#3e82f7'
    * @return {String} 'dark' or 'light'
    */
-  static getColorContrast(hex: string) {
+  static getColorContrast(hex: string): 'light' | 'dark' {
     if (!hex) {
       return 'dark';
     }
+
+    function cutHex(h: string) {
+      return h.charAt(0) === '#' ? h.substring(1, 7) : h;
+    }
+
+    function hexToR(h: string) {
+      return parseInt(cutHex(h).substring(0, 2), 16);
+    }
+
+    function hexToG(h: string) {
+      return parseInt(cutHex(h).substring(2, 4), 16);
+    }
+
+    function hexToB(h: string) {
+      return parseInt(cutHex(h).substring(4, 6), 16);
+    }
+
     const threshold = 130;
     const hRed = hexToR(hex);
     const hGreen = hexToG(hex);
     const hBlue = hexToB(hex);
-    function hexToR(h: any) {
-      return parseInt(cutHex(h).substring(0, 2), 16);
-    }
-    function hexToG(h: any) {
-      return parseInt(cutHex(h).substring(2, 4), 16);
-    }
-    function hexToB(h: any) {
-      return parseInt(cutHex(h).substring(4, 6), 16);
-    }
-    function cutHex(h: any) {
-      return h.charAt(0) === '#' ? h.substring(1, 7) : h;
-    }
+
     const cBrightness = (hRed * 299 + hGreen * 587 + hBlue * 114) / 1000;
     if (cBrightness > threshold) {
       return 'dark';
-    } else {
-      return 'light';
     }
+    return 'light';
   }
 
   /**
@@ -66,9 +73,9 @@ class Utils {
     let R = parseInt(color.substring(1, 3), 16);
     let G = parseInt(color.substring(3, 5), 16);
     let B = parseInt(color.substring(5, 7), 16);
-    R = parseInt(`${(R * (100 + percent)) / 100}`);
-    G = parseInt(`${(G * (100 + percent)) / 100}`);
-    B = parseInt(`${(B * (100 + percent)) / 100}`);
+    R = parseInt(`${(R * (100 + percent)) / 100}`, 10);
+    G = parseInt(`${(G * (100 + percent)) / 100}`, 10);
+    B = parseInt(`${(B * (100 + percent)) / 100}`, 10);
     R = R < 255 ? R : 255;
     G = G < 255 ? G : 255;
     B = B < 255 ? B : 255;
@@ -88,15 +95,16 @@ class Utils {
    */
   static rgbaToHex(rgba: string) {
     const trim = (str: string) => str.replace(/^\s+|\s+$/gm, '');
-    const inParts = rgba.substring(rgba.indexOf('(')).split(','),
-      r = parseInt(trim(inParts[0].substring(1)), 10),
-      g = parseInt(trim(inParts[1]), 10),
-      b = parseInt(trim(inParts[2]), 10),
-      a = parseInt(
-        parseFloat(
-          trim(inParts[3].substring(0, inParts[3].length - 1))
-        ).toFixed(2)
-      );
+    const inParts = rgba.substring(rgba.indexOf('(')).split(',');
+    const r = parseInt(trim(inParts[0].substring(1)), 10);
+    const g = parseInt(trim(inParts[1]), 10);
+    const b = parseInt(trim(inParts[2]), 10);
+    const a = parseInt(
+      parseFloat(trim(inParts[3].substring(0, inParts[3].length - 1))).toFixed(
+        2
+      ),
+      10
+    );
     const outParts = [
       r.toString(16),
       g.toString(16),
@@ -106,9 +114,9 @@ class Utils {
         .substring(0, 2),
     ];
 
-    outParts.forEach(function (part, i) {
+    outParts.forEach((part, i) => {
       if (part.length === 1) {
-        outParts[i] = '0' + part;
+        outParts[i] = `0${part}`;
       }
     });
     return `#${outParts.join('')}`;
@@ -138,6 +146,7 @@ class Utils {
    * @param {String} key - object key for compare
    * @return {any} a value minus b value
    */
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   static antdTableSorter(a: any, b: any, key: string) {
     if (typeof a[key] === 'number' && typeof b[key] === 'number') {
       return a[key] - b[key];
@@ -146,9 +155,11 @@ class Utils {
     if (typeof a[key] === 'string' && typeof b[key] === 'string') {
       a = a[key].toLowerCase();
       b = b[key].toLowerCase();
-      return a > b ? -1 : b > a ? 1 : 0;
+      if (a > b) return -1;
+      if (b > a) return 1;
+      return 0;
     }
-    return;
+    return 0;
   }
 
   /**
@@ -158,6 +169,7 @@ class Utils {
    * @param {any} value  - value that excluded from filter
    * @return {Array} a value minus b value
    */
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   static filterArray(list: any[], key: string, value: any) {
     let data = list;
     if (list) {
@@ -188,9 +200,12 @@ class Utils {
    * @return {Array} array of object contained keyword
    */
   static wildCardSearch(list: any[], input: number | string) {
+    // eslint-disable-next-line consistent-return
     const searchText = (item: any) => {
-      for (let key in item) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const key in item) {
         if (item[key] == null) {
+          // eslint-disable-next-line no-continue
           continue;
         }
         if (
@@ -213,8 +228,10 @@ class Utils {
    * @return {Array} array of breakpoint size
    */
   static getBreakPoint(screens: any) {
-    let breakpoints = [];
+    const breakpoints = [];
+    // eslint-disable-next-line no-restricted-syntax
     for (const key in screens) {
+      // eslint-disable-next-line no-prototype-builtins
       if (screens.hasOwnProperty(key)) {
         const element = screens[key];
         if (element) {
@@ -226,9 +243,35 @@ class Utils {
   }
 }
 
+export enum LocalStorageKeys {
+  HYTALK_SYNC_TIMESTAMP = 'HYTALK_SYNC_TIMESTAMP',
+  access_token = 'access_token',
+  lang = 'language',
+  theme = 'theme',
+}
+
+const set = (key: LocalStorageKeys, value: string): void => {
+  window.localStorage.setItem(key, value);
+};
+
+const get = (key: LocalStorageKeys): string | null =>
+  window.localStorage.getItem(key);
+
+const remove = (key: LocalStorageKeys): void => {
+  window.localStorage.removeItem(key);
+};
+
+export const typedLocalStorage = {
+  set,
+  get,
+  remove,
+};
+
 export default Utils;
 export { default as calcAge } from './calc-age';
 export { default as calcDuration } from './calc-duration';
 export { default as getLastOffence } from './get-last-offence';
 export * from './get-offender-property-values';
-export * from './is-authorised';
+export { default as isAuthorised } from './is-authorised';
+export { default as formatDate } from './formatDate';
+export { default as getMentionContent } from './formatDate';

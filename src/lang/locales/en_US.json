@@ -1,6 +1,12 @@
 {
-	"sidenav.incidents": "Incidents",
-	"sidenav.offenders": "Offenders",
-	"sidenav.chat": "Chat",
-	"sidenav.scheme": "Scheme"
+  "sidenav.incidents": "Incidents",
+  "sidenav.investigations": "Investigations",
+  "sidenav.profiles": "Profiles",
+  "sidenav.offenders": "Offenders",
+  "sidenav.chat": "Chat",
+  "sidenav.settings": "Settings",
+  "sidenav.reports": "Reports",
+  "Performance": "Performance",
+  "Offender": "Offender",
+  "sidenav.documents": "Documents"
 }

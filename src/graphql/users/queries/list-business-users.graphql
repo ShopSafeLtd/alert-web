@@ -1,0 +1,19 @@
+query ListBusinessUsers(
+  $where: UserWhereInput
+  $orderBy: [UserOrderByWithRelationInput!]
+  $groupWhere: GroupWhereInput
+) {
+  users(where: $where, orderBy: $orderBy) {
+    id
+    fullName
+    status
+    publicName
+    loginEvents {
+      loginTime
+    }
+    groups(where: $groupWhere) {
+      id
+      name
+    }
+  }
+}

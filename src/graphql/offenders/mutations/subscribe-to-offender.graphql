@@ -1,0 +1,6 @@
+mutation SubscribeToOffender($where: OffenderWhereUniqueInput!) {
+  subscribeToOffender(where: $where) {
+    id
+    subscribed
+  }
+}

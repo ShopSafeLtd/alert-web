@@ -1,0 +1,276 @@
+.view-incident {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .incident-images {
+    width: 100%;
+    min-height: 180px;
+    padding: 0px 10px;
+    @media only screen and (min-height: 800px) {
+      min-height: 250px;
+    }
+  }
+
+  .incident-image {
+    height: 160px;
+    width: 160px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+      height: 170px;
+      width: 170px;
+      @media only screen and (min-height: 800px) {
+        height: 240px;
+        width: 240px;
+      }
+    }
+    @media only screen and (min-height: 800px) {
+      height: 230px;
+      width: 230px;
+    }
+  }
+
+  .incident-tab-content {
+    flex: 1;
+  }
+
+  .incident-content {
+    flex: 1;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ant-tabs-bottom > .ant-tabs-nav,
+  .ant-tabs-bottom > div > .ant-tabs-nav,
+  .ant-tabs-top > .ant-tabs-nav,
+  .ant-tabs-top > div > .ant-tabs-nav {
+    margin: 0px;
+  }
+
+  .incident-header-bar {
+    border-bottom: 1px solid rgb(237, 242, 249);
+    padding: 5px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .incident-details-main {
+    border-right: 1px solid rgb(237, 242, 249);
+    padding: 15px;
+    flex: 1;
+  }
+
+  .incident-descriptions {
+    margin-top: 10px;
+    .ant-skeleton-title {
+      margin: 0px;
+    }
+
+    .ant-descriptions-item {
+      padding-bottom: 10px;
+    }
+  }
+
+  .incident-description-icon {
+    margin-right: 5px;
+    color: rgb(222, 68, 54);
+  }
+
+  .incident-tags {
+    margin-top: 10px;
+    margin-bottom: 5px;
+  }
+
+  .incident-offenders-title {
+    margin-top: 10px;
+    margin-left: 10px;
+  }
+
+  .incident-offenders {
+    margin-top: 0px;
+  }
+
+  .incident-offender {
+    background-color: #fff;
+
+    &:hover {
+      background-color: #fafafa;
+    }
+  }
+
+  .incident-offender-content {
+    padding: 10px 20px;
+  }
+
+  .offender-image-skeleton {
+    height: 110px;
+    width: 120px;
+  }
+
+  .offender-image {
+    height: 110px;
+    width: 120px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .ant-divider-horizontal {
+    margin: 0px;
+  }
+
+  .incident-offender-name {
+    font-size: 14px;
+  }
+
+  .incident-offenders-empty {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .incident-offender-container {
+    margin-top: 20px;
+  }
+}
+
+.update-collage-image {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  cursor: pointer;
+  position: relative;
+  .chat-collage-image-overlay {
+    opacity: 0;
+    transition: opacity 0.3s ease 0s;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    justify-content: center;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  &:hover {
+    .chat-collage-image-overlay {
+      opacity: 1;
+    }
+  }
+}
+
+.update-container {
+  .currentUser {
+    background: #ff5252;
+    color: #fff !important;
+  }
+  .update-avatar {
+    background: #fde3cf;
+    color: #f56a00;
+  }
+  .currentUser-card {
+    background: rgba(222, 68, 54, 0.1);
+  }
+  .update-content-card {
+    display: inline-block;
+    max-width: 100%;
+    background: @component-background;
+    border: 1px solid @border-color-base;
+    border-radius: 5px;
+  }
+  .update-card {
+    position: relative;
+    width: 370px;
+    margin: 0;
+    overflow: hidden;
+  }
+  .update-content-bubble {
+    max-width: 100%;
+    word-break: break-word;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #585858;
+  }
+}
+.update-reply {
+  margin-left: 48px;
+}
+
+.update-wrapper {
+  margin-bottom: 10px;
+}
+
+.update-scroll {
+  padding-right: 10px;
+  padding: 15px;
+}
+
+.incident-updates {
+  position: relative;
+  height: calc(100vh - 301px);
+}
+
+.update-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: @body-background;
+  padding-top: 2px;
+  border-top: 1px solid @border-color-base;
+}
+
+.reply-to-highlight {
+  width: 3px;
+  background-color: #f56a00;
+  margin-right: 5px;
+  height: 35px;
+}
+
+.update-upload-card {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border: 1px solid @border-color-base;
+  border-radius: 10px;
+}
+.update-info-card {
+  position: relative;
+  width: 370px;
+  height: 100px;
+  margin: 0;
+  overflow: hidden;
+}
+
+.update-info-container {
+  // max-height: 100px;
+  // margin: 0;
+  // margin-bottom: 5;
+  // overflow: auto;
+  .ant-upload-list {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+  .info-remove-button {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    z-index: 100;
+  }
+  .ant-upload-list-picture-card-container {
+    width: 100px;
+    height: 100px;
+  }
+}

@@ -1,7 +1,6 @@
 .app-content {
     padding: @layout-content-gutter;
-    margin-top: @header-height;
-    min-height: calc(100vh - @content-height-offset);
+    min-height: 100vh;
     position: relative;
 
     .app-breadcrumb {
@@ -27,8 +26,7 @@
         margin-right: auto;
         width: 100%;
         .screen-tablet-above({
-            margin-top: @header-height + @top-nav-height;
-            min-height: calc(100vh - @content-height-offset - @top-nav-height);
+            min-height: 100vh;
         })
     }
 

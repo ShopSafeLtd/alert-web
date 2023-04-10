@@ -1,0 +1,66 @@
+query recycledItems(
+  $schemeId: String!
+  $search: String
+  $order: RecycledItemOrderByWithRelationInput
+  $first: Int
+  $after: String
+  $dataType: [String!]
+) {
+  recycledItems(
+    schemeId: $schemeId
+    search: $search
+    order: $order
+    first: $first
+    after: $after
+    dataType: $dataType
+  ) {
+    id
+    deletedAt
+    deletedBy {
+      id
+      fullName
+      businesses {
+        id
+        name
+      }
+    }
+    expiresAt
+    incident {
+      id
+      createdBy {
+        id
+        fullName
+        businesses {
+          id
+          name
+        }
+      }
+      date
+      location {
+        id
+        full
+      }
+      recycled
+      subject
+    }
+    offender {
+      id
+      gender
+      incidents {
+        id
+        date
+        location {
+          id
+          full
+        }
+      }
+      name
+      race
+      recycled
+    }
+    scheme {
+      id
+    }
+    systemTask
+  }
+}

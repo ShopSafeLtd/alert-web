@@ -1,10 +1,13 @@
+import { Role } from 'graphql/generated';
+
 export enum Roles {
-  admin = "ADMIN",
-  user = "USER",
+  admin = 'ADMIN',
+  user = 'USER',
 }
 
 export const RoleValues = {
-  SCHEME_ADMIN: "Scheme Admin",
-  CONTENT_ADMIN: "Content Admin",
-  USER: "User",
+  [Role.SchemeAdmin]: 'Scheme Admin',
+  [Role.ContentAdmin]: 'Content Admin',
+  [Role.User]: 'User',
+  [Role.ShopsafeAdmin]: 'Shopsafe Admin',
 } as const;

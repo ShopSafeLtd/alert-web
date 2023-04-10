@@ -1,0 +1,127 @@
+query OffenderReport(
+  $where: OffenderReportInput!
+  $targetedWhere: UserContributionWhereInput!
+) {
+  offenderReport(where: $where) {
+    crimeTypeBusinessRadial {
+      label
+      data {
+        value
+        label
+      }
+    }
+    crimeTypeDonut {
+      label
+      value
+    }
+    goodsTypeLossRecovered {
+      label
+      data {
+        label
+        value
+      }
+    }
+    incidentDayOfWeekGraph {
+      value
+      label
+    }
+    incidentMonthGraph {
+      value
+      label
+    }
+    incidentSummary {
+      totalIncidents
+      mostCommonCrimeType
+      lastIncidentDate
+      incidentsWherePoliceAttended
+      incidentsReportedToPolice
+    }
+    incidentTimeOfDayDonut {
+      value
+      label
+    }
+    incidentsTable {
+      total
+      incidents {
+        id
+        reference
+        date
+        incidentItems {
+          value
+          recoveredValue
+        }
+        location {
+          full
+          alias
+          id
+          geoLat
+          geoLng
+        }
+        totalOffenders
+        crimeTypes {
+          name
+          id
+        }
+        policeReported
+        policeInvolved
+        policeRef
+      }
+    }
+    lossTotals {
+      totalRecoveredValue
+      totalLostValue
+      averagePerIncident
+      averageSuccessRate
+      totalIncidents
+    }
+    offenderSummary {
+      id
+      age
+      dateSource
+      peculiarities
+      dateOfBirth
+      build
+      hair
+      race
+      reference
+      gender
+      addresses {
+        id
+        geoLng
+        geoLat
+        full
+      }
+      name
+      images {
+        optimisedPersisted
+      }
+    }
+  }
+  targetedGoods(where: $targetedWhere) {
+    total
+    targetedGoods {
+      totalSuccessRate
+      totalRecoveredValue
+      totalOffenders
+      totalLostValue
+      totalIncidents
+      name
+      averageLossValue
+      alertId
+    }
+  }
+  businessContribution(where: $targetedWhere) {
+    total
+    businessContributions {
+      name
+      totalIncidents
+      totalOffenders
+      totalLostValue
+      totalRecoveredValue
+      totalSuccessRate
+      mostCommonGoodLost
+      highestTotalValueGoodLost
+      averageLossValue
+    }
+  }
+}

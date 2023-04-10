@@ -1,18 +1,16 @@
-import React, { useState } from 'react';
-import { Menu, Dropdown, Typography, List, Row, Col } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Col, Dropdown, List, Menu, Row, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCity,
-  faCaretDown,
-  faArrowRight,
-} from '@fortawesome/pro-light-svg-icons';
+import { faArrowRight, faCaretDown } from '@fortawesome/pro-light-svg-icons';
 import { LocalStorageKeys } from 'types';
 
-import { useStoreState, Scheme, useStoreActions } from 'state';
+import { Scheme, useStoreActions, useStoreState } from 'state';
+import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router-dom';
 
 const { Text } = Typography;
 
-export const NavNotification = () => {
+export const NavScheme = () => {
   const schemes = useStoreState((state) => state.user.schemes);
   const activeScheme = useStoreState((state) => state.scheme.id);
   const activeSchemeName = useStoreState((state) => state.scheme.name);
@@ -24,15 +22,31 @@ export const NavNotification = () => {
     setVisible(flag);
   };
 
+  const navigate = useNavigate();
+  const location = useLocation();
+  useEffect(() => {
+    navigate(location.pathname);
+  }, [activeScheme]);
+
   const handleSchemeChange = (scheme: Scheme) => {
     window.localStorage.removeItem(LocalStorageKeys.INCIDENT_FILTER);
     window.localStorage.removeItem(LocalStorageKeys.OFFENDER_FILTER);
     window.localStorage.setItem('currentScheme', scheme.scheme.id);
+    window.localStorage.setItem(
+      'logo',
+      scheme.scheme.logo?.optimisedPersisted || ''
+    );
+    window.localStorage.setItem(
+      'logo-dark',
+      scheme.scheme.darkLogo?.optimisedPersisted || ''
+    );
+
     setScheme({
       autoApproveIncidents: scheme.scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.scheme.autoApproveOffenders,
       id: scheme.scheme.id,
       name: scheme.scheme.name,
+      logo: scheme.scheme.logo?.optimisedPersisted,
     });
     handleVisibleChange(false);
   };
@@ -83,34 +97,45 @@ export const NavNotification = () => {
     </div>
   );
 
-  return (
+  return schemes.length > 1 ? (
     <Dropdown
-      placement="bottomRight"
+      placement="topRight"
       overlay={schemeList}
       onVisibleChange={handleVisibleChange}
       visible={visible}
       trigger={['click']}
     >
-      <Menu mode="horizontal">
-        <Menu.Item>
-          <FontAwesomeIcon
-            style={{ fontSize: 20, color: '#424242', marginRight: 10 }}
-            icon={faCity}
-          />
-          <Text>{activeSchemeName}</Text>
-          <FontAwesomeIcon
-            style={{
-              fontSize: 20,
-              color: '#424242',
-              marginLeft: 10,
-              marginBottom: -3,
-            }}
-            icon={faCaretDown}
-          />
-        </Menu.Item>
-      </Menu>
+      <Menu
+        mode="horizontal"
+        style={{ width: '100%' }}
+        items={[
+          {
+            key: 0,
+            style: {
+              width: '100%',
+              padding: 0,
+            },
+            label: (
+              <div style={{ padding: '0 20px', maxWidth: '100%' }}>
+                <Text ellipsis>{activeSchemeName}</Text>
+                <FontAwesomeIcon
+                  style={{
+                    fontSize: 20,
+                    color: '#424242',
+                    marginLeft: 10,
+                    marginBottom: -3,
+                  }}
+                  icon={faCaretDown}
+                />
+              </div>
+            ),
+          },
+        ]}
+      />
     </Dropdown>
+  ) : (
+    <div />
   );
 };
 
-export default NavNotification;
+export default NavScheme;

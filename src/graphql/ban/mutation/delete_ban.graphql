@@ -1,0 +1,5 @@
+mutation deleteBan($id: String!) {
+  deleteBan(where: { id: $id }) {
+    id
+  }
+}

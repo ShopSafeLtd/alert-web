@@ -1,0 +1,36 @@
+import React from 'react';
+import View from './Onboarding.view';
+import useOnboarding from './useOnboarding';
+
+const Onboarding = (): JSX.Element => {
+  const {
+    onSubmit,
+    saving,
+    current,
+    onBack,
+    updateAccountDetail,
+    updateTermsSigned,
+    setCurrent,
+    loading,
+    schemeTerms,
+    updateSchemeTermsSigned,
+    name,
+  } = useOnboarding();
+  return (
+    <View
+      loading={loading}
+      schemeTerms={schemeTerms}
+      saving={saving}
+      current={current}
+      setCurrent={setCurrent}
+      onBack={onBack}
+      onSubmit={onSubmit}
+      updateTermsSigned={updateTermsSigned}
+      updateSchemeTermsSigned={updateSchemeTermsSigned}
+      updateAccountDetail={updateAccountDetail}
+      name={name}
+    />
+  );
+};
+
+export default Onboarding;

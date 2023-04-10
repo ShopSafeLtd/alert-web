@@ -1,7 +1,11 @@
-import React from "react";
-import { Card } from "antd";
-import ApexChart, { Props as DefaultChatProps } from "react-apexcharts";
-import { apexPieChartDefaultOption } from "constants/ChartConstant";
+/* eslint-disable react/default-props-match-prop-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/require-default-props */
+/* eslint-disable react/jsx-props-no-spreading */
+import React from 'react';
+import { Card } from 'antd';
+import ApexChart, { Props as DefaultChatProps } from 'react-apexcharts';
+import { apexPieChartDefaultOption } from 'constants/ChartConstant';
 
 const defaultOption = apexPieChartDefaultOption;
 
@@ -11,9 +15,7 @@ interface ChatProps extends DefaultChatProps {
   height: number | string;
 }
 
-const Chart = (props: ChatProps) => {
-  return <ApexChart {...props} />;
-};
+const Chart = (props: ChatProps) => <ApexChart {...props} />;
 
 interface Props {
   series: string[];
@@ -30,15 +32,15 @@ const DonutChartWidget = (props: Props) => {
     series = [],
     customOptions,
     labels = [],
-    width = "100%",
+    width = '100%',
     height = 250,
-    title = "",
+    title = '',
     extra,
-	} = props;
-	
-	let options = defaultOption;
-	
-	// @ts-expect-error
+  } = props;
+
+  let options = defaultOption;
+
+  // @ts-expect-error array type wrong
   options.labels = labels;
   options.plotOptions.pie.donut.labels.total.label = title;
   if (!title) {
@@ -46,8 +48,8 @@ const DonutChartWidget = (props: Props) => {
   }
   if (customOptions) {
     options = { ...options, ...customOptions };
-	}
-	
+  }
+
   return (
     <Card>
       <div className="text-center">
@@ -67,9 +69,9 @@ const DonutChartWidget = (props: Props) => {
 DonutChartWidget.defaultProps = {
   series: [],
   labels: [],
-  title: "",
+  title: '',
   height: 250,
-  width: "100%",
+  width: '100%',
 };
 
 export default DonutChartWidget;

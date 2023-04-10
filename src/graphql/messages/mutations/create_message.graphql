@@ -1,0 +1,77 @@
+mutation createMessage($data: MessageCreateWithoutActionsInput!) {
+  createMessage(data: $data) {
+    id
+    content
+    createdAt
+    currentUser
+    formattedDateTime
+    from {
+      id
+      fullName
+      firstLetter
+      origFirstLetter
+      origName
+    }
+    sent
+    showUser
+    paddingTop
+    type
+    images {
+      id
+      url
+      optimised
+    }
+    crimeGroups {
+      totalOffenders
+      totalIncidents
+      alias
+      id
+      reference
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+      updatedAt
+    }
+    vehicles {
+      updatedAt
+      totalOffenders
+      registration
+      reference
+      model
+      make
+      id
+      colour
+      images {
+        id
+        optimised
+        url
+      }
+    }
+    incidents {
+      id
+      subject
+      description
+      dayTime
+      images {
+        id
+        url
+        optimised
+      }
+    }
+    offenders {
+      id
+      updatedAt
+      age
+      build
+      dateOfBirth
+      name
+      race
+      gender
+      images {
+        id
+        url
+        optimised
+      }
+    }
+  }
+}

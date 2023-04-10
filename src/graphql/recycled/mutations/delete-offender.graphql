@@ -1,0 +1,5 @@
+mutation deleteOffender($where: UniqueId!) {
+  deleteOffender(where: $where) {
+    id
+  }
+}

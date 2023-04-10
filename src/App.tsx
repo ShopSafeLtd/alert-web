@@ -1,83 +1,92 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import Views from './views/router';
-import { Route, Switch } from 'react-router-dom';
-import { ThemeSwitcherProvider } from 'react-css-theme-switcher';
-import { ThemeProvider, StylesProvider } from '@material-ui/styles';
+import {
+  BrowserRouter as Router,
+  createRoutesFromChildren,
+  matchRoutes,
+  useLocation,
+  useNavigationType,
+} from 'react-router-dom';
+import Views from 'navigation/router';
+import { ThemeSwitcherProvider } from 'react-css-theme-switcher/src';
+import { LoadScript } from '@react-google-maps/api';
+import {
+  configureScope,
+  init,
+  reactRouterV6Instrumentation,
+} from '@sentry/react';
 import LogRocket from 'logrocket';
-import { createMuiTheme } from '@material-ui/core/styles';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import MomentUtils from '@date-io/moment';
+import { BrowserTracing } from '@sentry/tracing';
 import ApolloProvider from './providers/ApolloProvider';
 
-import { ThemeConfig, Store } from './state';
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
 
-LogRocket.init('ub3rsv/gotalk-portal');
+import { Store, ThemeConfig } from './state';
 
 const themes = {
-  dark: `${process.env.PUBLIC_URL}/css/dark-theme.css`,
-  light: `${process.env.PUBLIC_URL}/css/light-theme.css`,
+  dark: `/css/dark-theme.css`,
+  light: `/css/light-theme.css`,
 };
 
-// const httpLink = createUploadLink({
-//   //uri: 'https://portal.gotalk.co.uk/api/graphql',
-//   uri: "http://localhost:4000/graphql",
-// });
-
-// const authLink = setContext((_, { headers }) => {
-//   // get the authentication token from local storage if it exists
-//   const token = localStorage.getItem("accessToken");
-//   // return the headers to the context so httpLink can read them
-//   return {
-//     headers: {
-//       ...headers,
-//       authorization: token ? `Bearer ${token}` : "",
-//     },
-//   };
-// });
-
-// const client = new ApolloClient({
-//   link: authLink.concat(httpLink),
-//   cache: new InMemoryCache(),
-// });
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      light: '#E57373',
-      main: '#EF5350',
-      dark: '#E53935',
-      contrastText: '#FFFFFF',
-    },
+init({
+  dsn: import.meta.env.VITE_SENTRY_DSN,
+  integrations: [
+    new BrowserTracing({
+      routingInstrumentation: reactRouterV6Instrumentation(
+        React.useEffect,
+        useLocation,
+        useNavigationType,
+        createRoutesFromChildren,
+        matchRoutes
+      ),
+    }),
+  ],
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // Adjust for production
+  tracesSampleRate: 1,
+  beforeSend(event) {
+    const logRocketSession = LogRocket.sessionURL;
+    if (logRocketSession !== null && event.extra) {
+      // eslint-disable-next-line no-param-reassign
+      event.extra.LogRocket = logRocketSession;
+      return event;
+    }
+    return event;
   },
 });
 
-function App() {
-  return (
-    <div className="App">
-      <Store>
-        <ApolloProvider>
-          <ThemeSwitcherProvider
-            themeMap={themes}
-            defaultTheme={ThemeConfig.currentTheme}
-            insertionPoint="styles-insertion-point"
-          >
-            <MuiPickersUtilsProvider utils={MomentUtils}>
-              <StylesProvider injectFirst>
-                <ThemeProvider theme={theme}>
-                  <Router>
-                    <Switch>
-                      <Route path="/" component={Views} />
-                    </Switch>
-                  </Router>
-                </ThemeProvider>
-              </StylesProvider>
-            </MuiPickersUtilsProvider>
-          </ThemeSwitcherProvider>
-        </ApolloProvider>
-      </Store>
-    </div>
-  );
+if (import.meta.env.PROD) {
+  LogRocket.init('ub3rsv/alert');
+
+  LogRocket.getSessionURL((sessionURL) => {
+    configureScope((scope) => {
+      scope.setExtra('sessionURL', sessionURL);
+    });
+  });
 }
+
+const App = (): JSX.Element => (
+  <div className="App">
+    <ThemeSwitcherProvider
+      themeMap={themes}
+      defaultTheme={ThemeConfig.currentTheme}
+      insertionPoint="styles-insertion-point"
+    >
+      <LoadScript
+        googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
+        libraries={['visualization']}
+      >
+        <Store>
+          <ApolloProvider>
+            <Router>
+              <Views />
+            </Router>
+          </ApolloProvider>
+        </Store>
+      </LoadScript>
+    </ThemeSwitcherProvider>
+  </div>
+);
 
 export default App;

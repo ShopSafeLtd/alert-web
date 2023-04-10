@@ -1,0 +1,55 @@
+mutation updateUserChat($where: UniqueId!, $data: UserUpdateInput!) {
+  updateUser(where: $where, data: $data) {
+    id
+    chats {
+      id
+      newMessages
+      mentioned
+      updatedAt
+      createdAt
+      user {
+        id
+        fullName
+        firstLetter
+      }
+      chat {
+        id
+        name
+        firstLetter
+        totalMembers
+        messages {
+          id
+          content
+          createdAt
+          from {
+            id
+            fullName
+            origFirstLetter
+            origName
+          }
+          images {
+            id
+            url
+            optimised
+          }
+          vehicles {
+            id
+            reference
+          }
+          crimeGroups {
+            id
+            reference
+          }
+          incidents {
+            id
+            subject
+          }
+          offenders {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+}

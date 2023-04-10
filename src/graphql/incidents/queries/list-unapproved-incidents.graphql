@@ -1,0 +1,50 @@
+query listUnapprovedIncidents(
+  $scheme: SchemeWhereUniqueInput!
+  $where: IncidentWhereInput
+  $order: IncidentOrderByWithRelationInput
+  $take: Int
+  $skip: Int
+) {
+  listIncidents(
+    scheme: $scheme
+    where: $where
+    order: $order
+    take: $take
+    skip: $skip
+  ) {
+    incidents {
+      id
+      subject
+      dayTime
+      date
+      reference
+      business {
+        id
+        name
+      }
+      images {
+        id
+        optimised
+        url
+      }
+      crimeTypes {
+        id
+        name
+      }
+      approved
+      createdBy {
+        id
+        fullName
+        businesses {
+          id
+          name
+        }
+      }
+      groups {
+        id
+        name
+      }
+    }
+    total
+  }
+}

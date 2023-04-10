@@ -1,0 +1,122 @@
+query OffenderProfile(
+  $where: OffenderWhereUniqueInput!
+  $orderBy: [BanOrderByWithRelationInput!]
+  $first: Int
+  $incidentsOrderBy: [IncidentOrderByWithRelationInput!]
+) {
+  offender(where: $where) {
+    age
+    bans(orderBy: $orderBy) {
+      id
+      endDate
+      active
+      startDate
+      title
+    }
+    crimeGroups {
+      id
+      reference
+    }
+    dateOfBirth
+    dateSource
+    gender
+    hair
+    build
+    id
+    incidentsByHour {
+      name
+      count
+    }
+    incidentsByDayOfWeek {
+      name
+      count
+    }
+    incidentsByMonth {
+      name
+      count
+    }
+    incidentTotals {
+      month
+      data {
+        name
+        count
+      }
+    }
+    goodsTypesTotals {
+      avgLostValue
+      businessId
+      avgRecoveredValue
+      count
+      successRate
+      totalRecoveredValue
+      totalLostValue
+      goodsType {
+        id
+        name
+      }
+    }
+    images(first: $first) {
+      id
+      optimised
+      url
+    }
+    incidents(orderBy: $incidentsOrderBy) {
+      id
+      dayTime
+      date
+      crimeTypes {
+        id
+        name
+      }
+      value
+      recoveredValue
+      reference
+      createdBy {
+        id
+        businesses {
+          id
+          name
+        }
+      }
+    }
+    lastActive {
+      id
+      dayTime
+      date
+      crimeTypes {
+        id
+        name
+      }
+      createdBy {
+        id
+        businesses {
+          id
+          name
+        }
+      }
+      value
+      recoveredValue
+      reference
+    }
+    name
+    peculiarities
+    race
+    reference
+    tags {
+      id
+      name
+    }
+    totalIncidents
+    totalRecoveredValue
+    totalTheftSuccess
+    totalValue
+    updatedAt
+    vehicles {
+      id
+      make
+      model
+      registration
+      colour
+    }
+  }
+}

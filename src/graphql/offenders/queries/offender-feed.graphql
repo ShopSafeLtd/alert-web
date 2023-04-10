@@ -1,0 +1,71 @@
+query offenderFeed(
+  $userId: String!
+  $schemeId: String!
+  $search: String
+  $order: OffenderOrderByWithRelationInput
+  $first: Int
+  $cursor: String
+  $active: Boolean
+  $banned: Boolean
+  $groups: [String]
+  $tags: [String!]
+  $ethnicity: [String]
+  $sex: [String]
+  $approved: Boolean
+) {
+  offenderFeed(
+    userId: $userId
+    schemeId: $schemeId
+    search: $search
+    order: $order
+    first: $first
+    after: $cursor
+    active: $active
+    banned: $banned
+    groups: $groups
+    tags: $tags
+    ethnicity: $ethnicity
+    sex: $sex
+    approved: $approved
+  ) {
+    id
+    createdAt
+    updatedAt
+    totalIncidents
+    reference
+    age
+    build
+    dateOfBirth
+    dateSource
+    gender
+    hair
+    name
+    peculiarities
+    race
+    approved
+    uploaded
+    active
+    images {
+      id
+      url
+      optimised
+      card
+    }
+    tags {
+      id
+      name
+    }
+    groups {
+      id
+      name
+    }
+    createdBy {
+      id
+      fullName
+      businesses {
+        id
+        name
+      }
+    }
+  }
+}

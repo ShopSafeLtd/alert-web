@@ -1,0 +1,16 @@
+query Group($where: GroupWhereUniqueInput!) {
+  group(where: $where) {
+    id
+    name
+    description
+    users {
+      id
+      fullName
+      businesses {
+        fullName
+        id
+        name
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+mutation UnsubscribeToCrimeGroup($where: UniqueId!) {
+  unsubscribeToCrimeGroup(where: $where) {
+    id
+    subscribed
+  }
+}

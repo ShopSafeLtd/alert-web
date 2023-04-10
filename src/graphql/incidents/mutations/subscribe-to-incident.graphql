@@ -1,0 +1,6 @@
+mutation SubscribeToIncident($where: IncidentWhereUniqueInput!) {
+  subscribeToIncident(where: $where) {
+    id
+    subscribed
+  }
+}

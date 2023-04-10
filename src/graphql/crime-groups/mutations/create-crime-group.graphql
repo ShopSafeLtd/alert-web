@@ -1,0 +1,11 @@
+mutation CreateCrimeGroup($data: CreateCrimeGroupDataInput!) {
+  createCrimeGroup(data: $data) {
+    id
+      reference
+      totalIncidents
+      totalOffenders
+      totalRecoveredValue
+      totalTheftSuccess
+      totalValue
+  }
+}

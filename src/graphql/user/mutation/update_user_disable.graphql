@@ -1,0 +1,6 @@
+mutation updateUserDisable($where: UniqueId!, $data: UserUpdateInput!) {
+  updateUser(where: $where, data: $data) {
+    id
+    disabled
+  }
+}

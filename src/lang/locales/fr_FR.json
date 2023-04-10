@@ -1,11 +1,10 @@
 {
-	"home": "Domicile",
-	
-	"sidenav.portalUsers": "Personnel",
-	"sidenav.distributors": "Distributeurs",
-	"sidenav.dealers": "Concessionnaires",
-	"sidenav.customers": "Les Clients",
-	"sidenav.products": "Des Produits",
-	"sidenav.dealerTiers": "Niveaux De Concessionnaire",
-	"sidenav.goTalkStaff": "Personnel GoTalk"
+  "home": "Domicile",
+  "sidenav.portalUsers": "Personnel",
+  "sidenav.distributors": "Distributeurs",
+  "sidenav.dealers": "Concessionnaires",
+  "sidenav.customers": "Les Clients",
+  "sidenav.products": "Des Produits",
+  "sidenav.dealerTiers": "Niveaux De Concessionnaire",
+  "sidenav.goTalkStaff": "Personnel GoTalk"
 }

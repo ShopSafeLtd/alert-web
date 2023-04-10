@@ -1,5 +1,9 @@
-import React from 'react'
-import { Input, InputNumber, Form, InputNumberProps } from 'antd'
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/prop-types */
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React from 'react';
+import { Input, InputNumber, Form, InputNumberProps } from 'antd';
 
 interface EditableCellProps<T> extends React.HTMLAttributes<HTMLElement> {
   editing: boolean;
@@ -9,10 +13,10 @@ interface EditableCellProps<T> extends React.HTMLAttributes<HTMLElement> {
   record: T;
   index: number;
   children: React.ReactNode;
-  formatter?: InputNumberProps['formatter']
+  formatter?: InputNumberProps['formatter'];
 }
 
-type EditableCellType<T = any> = React.FC<EditableCellProps<T>>
+type EditableCellType<T = any> = React.FC<EditableCellProps<T>>;
 
 export const EditableCell: EditableCellType = ({
   editing,
@@ -25,7 +29,8 @@ export const EditableCell: EditableCellType = ({
   formatter,
   ...restProps
 }) => {
-  const inputNode = inputType === 'number' ? <InputNumber formatter={formatter} /> : <Input />;
+  const inputNode =
+    inputType === 'number' ? <InputNumber formatter={formatter} /> : <Input />;
 
   return (
     <td {...restProps}>

@@ -1,0 +1,14 @@
+mutation CreateDocument($data: CreateDocument!) {
+    createDocument(data: $data) {
+        id
+        name
+        tags {
+            id
+            name
+        }
+        thumbnailUrl
+        url
+        createdAt
+        updatedAt
+    }
+}

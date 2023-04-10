@@ -1,0 +1,75 @@
+mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
+  updateIncident(where: $where, data: $data) {
+    id
+    subject
+    description
+    dayTime
+    date
+    time
+    value
+    recoveredValue
+    policeReported
+    policeRef
+    policeInvolved
+    subscribed
+    crimeTypes {
+      id
+      name
+    }
+    approved
+    location {
+      id
+      building
+      street
+      townCity
+      county
+      postcode
+      full
+    }
+    createdBy {
+      id
+      fullName
+      businesses {
+        fullName
+        id
+        name
+      }
+    }
+    images {
+      id
+      optimised
+      url
+    }
+    groups {
+      id
+      name
+    }
+    offenders {
+      id
+      createdAt
+      updatedAt
+      age
+      build
+      dateOfBirth
+      dateSource
+      gender
+      hair
+      name
+      peculiarities
+      race
+      approved
+      uploaded
+      active
+      images {
+        id
+        url
+        optimised
+        card
+      }
+      tags {
+        id
+        name
+      }
+    }
+  }
+}

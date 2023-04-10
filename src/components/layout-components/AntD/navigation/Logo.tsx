@@ -1,29 +1,29 @@
-import React from "react";
-import { APP_NAME } from "configs/AppConfig";
-import utils from "utils";
-import { Grid } from "antd";
-import { useStoreState } from "state";
-
-const { useBreakpoint } = Grid;
+import React from 'react';
+import { APP_NAME } from 'configs/AppConfig';
+import { useStoreState } from 'state';
 
 interface GetLogoArgs {
   navCollapsed: boolean;
   logoType?: string;
+  logo?: string | null;
 }
 
 const getLogo = (props: GetLogoArgs) => {
-  const { navCollapsed, logoType } = props;
-  if (logoType === "light") {
+  const { navCollapsed, logoType, logo } = props;
+  if (logo) {
+    return logo;
+  }
+  if (logoType === 'light') {
     if (navCollapsed) {
-      return "/img/logo-sm.svg";
+      return '/img/logo-sm.svg';
     }
-    return "/img/logo-white.svg";
+    return '/img/dark-logo.svg';
   }
 
   if (navCollapsed) {
-    return "/img/logo.png";
+    return '/img/logo.png';
   }
-  return "/img/logo.png";
+  return '/img/light-logo.svg';
 };
 
 interface GetLogoDisplayArgs {
@@ -33,9 +33,9 @@ interface GetLogoDisplayArgs {
 
 const getLogoDisplay = ({ isMobile, mobileLogo }: GetLogoDisplayArgs) => {
   if (isMobile && !mobileLogo) {
-    return "d-none";
+    return 'd-none';
   } else {
-    return "logo";
+    return 'logo';
   }
 };
 
@@ -46,20 +46,28 @@ interface Props {
 
 export const Logo = (props: Props) => {
   const navCollapsed = useStoreState((state) => state.theme.navCollapsed);
-  const isMobile = !utils.getBreakPoint(useBreakpoint()).includes("lg");
-
+  const currentTheme = useStoreState((state) => state.theme.currentTheme);
+  const customLogoLight = window.localStorage.getItem('logo');
+  const customLogoDark =
+    window.localStorage.getItem('logo-dark') || customLogoLight;
+  const customLogo =
+    currentTheme === 'light' ? customLogoLight : customLogoDark;
   return (
     <div
-      className={getLogoDisplay({ isMobile, mobileLogo: props.mobileLogo })}
       style={{
-        width: 110,
-        marginLeft: 10,
+        display: 'flex',
+        justifyContent: 'center',
+        padding: '15px 0 20px',
       }}
     >
       <img
-        src={getLogo({ logoType: props.logoType, navCollapsed })}
+        src={getLogo({
+          logoType: currentTheme,
+          navCollapsed,
+          logo: customLogo,
+        })}
         alt={`${APP_NAME} logo`}
-        style={{ width: 110 }}
+        style={{ width: 130 }}
       />
     </div>
   );
