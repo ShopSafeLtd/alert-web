@@ -134,7 +134,7 @@ const OffenderWarningList = ({
                 </Tooltip>
               </Col>
               <Col>
-                <Tooltip title="Delete Tag">
+                <Tooltip title="Remove Tag">
                   <Button
                     size="small"
                     disabled={saving}

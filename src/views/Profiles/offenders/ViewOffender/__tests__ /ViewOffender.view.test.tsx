@@ -99,6 +99,7 @@ describe('Detail Officer View', () => {
               toggleSelectImages={jest.fn()}
               optionRowShow={false}
               setOptionRowShow={jest.fn()}
+              publicOffenderDOB={false}
             />
           </MockedProvider>
         </MemoryRouter>

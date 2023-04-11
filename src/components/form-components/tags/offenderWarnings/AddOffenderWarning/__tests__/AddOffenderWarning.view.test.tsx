@@ -11,6 +11,8 @@ describe('List Officer View', () => {
           onSubmit={jest.fn()}
           saving={false}
           onClose={jest.fn()}
+          userSchemes={[]}
+          schemeId=""
         />
       </MemoryRouter>
     );

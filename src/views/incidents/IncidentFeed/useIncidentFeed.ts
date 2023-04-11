@@ -13,6 +13,7 @@ import {
   useListIncidentsQuery,
   useSchemeGroupsQuery,
   useTagsQuery,
+  TagType,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import { IncidentSort, useStoreActions, useStoreState } from 'state';
@@ -289,13 +290,18 @@ const useIncidentFeed = (): Return => {
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     variables: {
       where: {
-        scheme: {
-          id: {
-            equals: schemeId,
+        schemes: {
+          some: {
+            id: {
+              in: [schemeId],
+            },
           },
         },
         dataType: {
           equals: Model.Incident,
+        },
+        type: {
+          equals: TagType.IncidentCrimeType,
         },
       },
     },

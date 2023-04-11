@@ -1,25 +1,37 @@
 import React from 'react';
-import { Button, Col, Form, Input, Row, Typography } from 'antd';
+import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
+import type { Scheme } from 'state';
 
 const { Text } = Typography;
 
 interface FormData {
   name: string;
   description: string;
+  schemes: string[];
 }
 
 interface Props {
   onSubmit: (value: FormData) => void;
   onClose: () => void;
   saving: boolean;
+  userSchemes: Scheme[];
+  schemeId: string;
 }
 
 const AddOffenderWarning = ({
   onSubmit,
   onClose,
   saving,
+  userSchemes,
+  schemeId,
 }: Props): JSX.Element => (
-  <Form layout="vertical" onFinish={onSubmit}>
+  <Form
+    layout="vertical"
+    onFinish={onSubmit}
+    initialValues={{
+      schemes: [schemeId],
+    }}
+  >
     <Row style={{ marginBottom: 30 }}>
       <Col>
         <Text type="secondary">
@@ -48,6 +60,28 @@ const AddOffenderWarning = ({
       <Col span={24}>
         <Form.Item name="description" label="Description">
           <Input.TextArea rows={10} disabled={saving} />
+        </Form.Item>
+      </Col>
+
+      <Col span={24}>
+        <Form.Item
+          name="schemes"
+          label="Schemes"
+          rules={[
+            {
+              required: true,
+              message: 'Please select at least one scheme.',
+            },
+          ]}
+        >
+          <Select
+            disabled={saving}
+            mode="multiple"
+            options={userSchemes.map((scheme) => ({
+              value: scheme.scheme.id,
+              label: scheme.scheme.name,
+            }))}
+          />
         </Form.Item>
       </Col>
     </Row>

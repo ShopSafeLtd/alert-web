@@ -123,6 +123,7 @@ describe('Detail Officer View', () => {
               businessData={{ listBusinesses: { businesses: [], total: 0 } }}
               businesses={[]}
               setBusinesses={jest.fn()}
+              setCreatedAtFilter={jest.fn()}
             />
           </MockedProvider>
         </MemoryRouter>

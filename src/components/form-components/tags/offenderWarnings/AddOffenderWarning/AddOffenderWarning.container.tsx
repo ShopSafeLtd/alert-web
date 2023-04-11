@@ -10,12 +10,20 @@ interface Props {
 }
 
 const AddOffenderWarning = ({ onClose, update }: Props): JSX.Element => {
-  const { onSubmit, saving } = useAddOffenderWarning({
+  const { onSubmit, saving, userSchemes, schemeId } = useAddOffenderWarning({
     onClose,
     update,
   });
 
-  return <View onSubmit={onSubmit} onClose={onClose} saving={saving} />;
+  return (
+    <View
+      onSubmit={onSubmit}
+      onClose={onClose}
+      saving={saving}
+      userSchemes={userSchemes}
+      schemeId={schemeId}
+    />
+  );
 };
 
 export default AddOffenderWarning;

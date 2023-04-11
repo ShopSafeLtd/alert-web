@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { CreateTagMutation, CrimeType } from 'graphql/generated';
 import { useCreateTagMutation, Model, TagType } from 'graphql/generated';
+import type { Scheme } from 'state';
 import { useStoreState } from 'state';
 import { notification } from 'antd';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -9,6 +10,7 @@ interface FormData {
   name: string;
   description: string;
   crimeType: CrimeType;
+  schemes: string[];
 }
 
 interface Props {
@@ -20,6 +22,8 @@ interface Props {
 interface Return {
   onSubmit: (value: FormData) => void;
   saving: boolean;
+  userSchemes: Scheme[];
+  schemeId: string;
 }
 
 const useAddCrimeType = ({
@@ -28,6 +32,7 @@ const useAddCrimeType = ({
   type = TagType.IncidentCrimeType,
 }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
+  const userSchemes = useStoreState((state) => state.user.schemes);
   const userId = useStoreState((state) => state.user.id);
   const [saving, setSaving] = useState(false);
 
@@ -60,10 +65,10 @@ const useAddCrimeType = ({
           name: data.name,
           description: data.description || '',
           crimeType: data.crimeType,
-          scheme: {
-            connect: {
-              id: schemeId,
-            },
+          schemes: {
+            connect: data.schemes.map((id) => ({
+              id,
+            })),
           },
           createdBy: { connect: { id: userId } },
           dataType: Model.Incident,
@@ -76,6 +81,8 @@ const useAddCrimeType = ({
   return {
     onSubmit,
     saving,
+    schemeId,
+    userSchemes,
   };
 };
 export default useAddCrimeType;

@@ -100,6 +100,8 @@ const SchemeDetail = ({
           defaultMessagePush: data?.scheme?.defaultMessagePush,
           defaultOffenderEmail: data?.scheme?.defaultOffenderEmail,
           defaultOffenderPush: data?.scheme?.defaultOffenderPush,
+          defaultPublicOffenderDOB:
+            data?.scheme?.defaultPublicOffenderDOB || false,
         }}
       >
         <Card>
