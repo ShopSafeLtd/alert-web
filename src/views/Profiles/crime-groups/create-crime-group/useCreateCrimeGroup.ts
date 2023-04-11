@@ -154,6 +154,8 @@ const useCreateCrimeGroup = (): Return => {
             totalRecoveredValue: 0,
             totalTheftSuccess: 0,
             totalValue: 0,
+            updatedAt: new Date(),
+            alias: '',
           },
         },
       });

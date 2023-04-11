@@ -41674,6 +41674,8 @@ export type CreateCrimeGroupMutation = {
     totalRecoveredValue?: number | null;
     totalTheftSuccess?: number | null;
     totalValue?: number | null;
+    alias?: string | null;
+    updatedAt: any;
   };
 };
 
@@ -50673,6 +50675,8 @@ export const CreateCrimeGroupDocument = gql`
       totalRecoveredValue
       totalTheftSuccess
       totalValue
+      alias
+      updatedAt
     }
   }
 `;
