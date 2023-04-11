@@ -21369,6 +21369,7 @@ export type Mutation = {
   subscribeToOffender?: Maybe<Offender>;
   subscribeToVehicle?: Maybe<Vehicle>;
   syncGeoCodes?: Maybe<Array<Address>>;
+  syncNewSchemeTags?: Maybe<SystemTask>;
   toggleUser?: Maybe<User>;
   unsubscribeFromIncident?: Maybe<Incident>;
   unsubscribeFromOffender?: Maybe<Offender>;
@@ -21388,6 +21389,7 @@ export type Mutation = {
   updateGroupDefault?: Maybe<Group>;
   updateImage?: Maybe<Image>;
   updateIncident?: Maybe<Incident>;
+  updateIncidentBusinesses?: Maybe<SystemTask>;
   updateInvestigation?: Maybe<Investigation>;
   updateMessage?: Maybe<Message>;
   updateOffender?: Maybe<Offender>;
@@ -26586,6 +26588,7 @@ export type Scheme = {
   defaultMessagePush: Scalars['Boolean'];
   defaultOffenderEmail: Scalars['Boolean'];
   defaultOffenderPush: Scalars['Boolean'];
+  defaultPublicOffenderDOB: Scalars['Boolean'];
   defaultSubscribedIncidentOnly: Scalars['Boolean'];
   defaultSubscribedOffenderOnly: Scalars['Boolean'];
   documents: Array<Document>;
@@ -26606,6 +26609,7 @@ export type Scheme = {
   offenders: Array<Offender>;
   offendersCreated?: Maybe<Scalars['Int']>;
   recycledItems: Array<RecycledItem>;
+  schemeTags: Array<Tag>;
   tags: Array<Tag>;
   terms: Array<TermsAndCondition>;
   topContributors?: Maybe<Array<TopContributors>>;
@@ -26752,6 +26756,15 @@ export type SchemeRecycledItemsArgs = {
   last?: InputMaybe<Scalars['Int']>;
 };
 
+export type SchemeSchemeTagsArgs = {
+  after?: InputMaybe<TagWhereUniqueInput>;
+  before?: InputMaybe<TagWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<TagOrderByWithRelationInput>>;
+  where?: InputMaybe<TagWhereInput>;
+};
+
 export type SchemeTagsArgs = {
   after?: InputMaybe<TagWhereUniqueInput>;
   before?: InputMaybe<TagWhereUniqueInput>;
@@ -26802,6 +26815,7 @@ export type SchemeCreateInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -26820,6 +26834,7 @@ export type SchemeCreateInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -26835,6 +26850,7 @@ export type SchemeCreateManyDarkLogoInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['String']>;
@@ -26861,6 +26877,7 @@ export type SchemeCreateManyLogoInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   id?: InputMaybe<Scalars['String']>;
@@ -26914,6 +26931,14 @@ export type SchemeCreateNestedManyWithoutLogoInput = {
   connectOrCreate?: InputMaybe<Array<SchemeCreateOrConnectWithoutLogoInput>>;
   create?: InputMaybe<Array<SchemeCreateWithoutLogoInput>>;
   createMany?: InputMaybe<SchemeCreateManyLogoInputEnvelope>;
+};
+
+export type SchemeCreateNestedManyWithoutSchemeTagsInput = {
+  connect?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<SchemeCreateOrConnectWithoutSchemeTagsInput>
+  >;
+  create?: InputMaybe<Array<SchemeCreateWithoutSchemeTagsInput>>;
 };
 
 export type SchemeCreateNestedManyWithoutVehiclesInput = {
@@ -27115,6 +27140,11 @@ export type SchemeCreateOrConnectWithoutRecycledItemsInput = {
   where: SchemeWhereUniqueInput;
 };
 
+export type SchemeCreateOrConnectWithoutSchemeTagsInput = {
+  create: SchemeCreateWithoutSchemeTagsInput;
+  where: SchemeWhereUniqueInput;
+};
+
 export type SchemeCreateOrConnectWithoutTagsInput = {
   create: SchemeCreateWithoutTagsInput;
   where: SchemeWhereUniqueInput;
@@ -27146,6 +27176,7 @@ export type SchemeCreateWithoutActionsInSchemeInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27164,6 +27195,7 @@ export type SchemeCreateWithoutActionsInSchemeInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27186,6 +27218,7 @@ export type SchemeCreateWithoutActionsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27204,6 +27237,7 @@ export type SchemeCreateWithoutActionsInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27226,6 +27260,7 @@ export type SchemeCreateWithoutArticlesInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27244,6 +27279,7 @@ export type SchemeCreateWithoutArticlesInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27266,6 +27302,7 @@ export type SchemeCreateWithoutBansInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27284,6 +27321,7 @@ export type SchemeCreateWithoutBansInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27306,6 +27344,7 @@ export type SchemeCreateWithoutBusinessesInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27324,6 +27363,7 @@ export type SchemeCreateWithoutBusinessesInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27346,6 +27386,7 @@ export type SchemeCreateWithoutChatsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27364,6 +27405,7 @@ export type SchemeCreateWithoutChatsInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27386,6 +27428,7 @@ export type SchemeCreateWithoutCrimeGroupsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27404,6 +27447,7 @@ export type SchemeCreateWithoutCrimeGroupsInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27426,6 +27470,7 @@ export type SchemeCreateWithoutDarkLogoInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27444,6 +27489,7 @@ export type SchemeCreateWithoutDarkLogoInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27467,6 +27513,7 @@ export type SchemeCreateWithoutDocumentsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
@@ -27484,6 +27531,7 @@ export type SchemeCreateWithoutDocumentsInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27507,6 +27555,7 @@ export type SchemeCreateWithoutGroupsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27524,6 +27573,7 @@ export type SchemeCreateWithoutGroupsInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27547,6 +27597,7 @@ export type SchemeCreateWithoutImagesInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27564,6 +27615,7 @@ export type SchemeCreateWithoutImagesInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27587,6 +27639,7 @@ export type SchemeCreateWithoutIncidentsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27604,6 +27657,7 @@ export type SchemeCreateWithoutIncidentsInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27627,6 +27681,7 @@ export type SchemeCreateWithoutIntelInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27644,6 +27699,7 @@ export type SchemeCreateWithoutIntelInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27667,6 +27723,7 @@ export type SchemeCreateWithoutInvestigationsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27684,6 +27741,7 @@ export type SchemeCreateWithoutInvestigationsInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27707,6 +27765,7 @@ export type SchemeCreateWithoutLogoInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27724,6 +27783,7 @@ export type SchemeCreateWithoutLogoInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27747,6 +27807,7 @@ export type SchemeCreateWithoutMembersInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27764,6 +27825,7 @@ export type SchemeCreateWithoutMembersInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27787,6 +27849,7 @@ export type SchemeCreateWithoutMessagesInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27804,6 +27867,7 @@ export type SchemeCreateWithoutMessagesInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27827,6 +27891,7 @@ export type SchemeCreateWithoutOffendersInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27844,6 +27909,7 @@ export type SchemeCreateWithoutOffendersInput = {
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27867,6 +27933,7 @@ export type SchemeCreateWithoutRecycledItemsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27884,6 +27951,49 @@ export type SchemeCreateWithoutRecycledItemsInput = {
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
+  terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+};
+
+export type SchemeCreateWithoutSchemeTagsInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
+  actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
+  autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
+  autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
+  businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
+  chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
+  defaultIncidentEmail?: InputMaybe<Scalars['Boolean']>;
+  defaultIncidentPush?: InputMaybe<Scalars['Boolean']>;
+  defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
+  defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
+  defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
+  defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
+  defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  incidentImpact?: InputMaybe<Scalars['Boolean']>;
+  incidentRetention?: InputMaybe<Scalars['Int']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutSchemeInput>;
+  intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
+  logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
+  members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
+  name: Scalars['String'];
+  offenderRetention?: InputMaybe<Scalars['Int']>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
+  recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27907,6 +28017,7 @@ export type SchemeCreateWithoutTagsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27925,6 +28036,7 @@ export type SchemeCreateWithoutTagsInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
@@ -27947,6 +28059,7 @@ export type SchemeCreateWithoutTermsInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -27965,6 +28078,7 @@ export type SchemeCreateWithoutTermsInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
@@ -27987,6 +28101,7 @@ export type SchemeCreateWithoutVehiclesInput = {
   defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
   defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
@@ -28005,6 +28120,7 @@ export type SchemeCreateWithoutVehiclesInput = {
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
   recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -28038,6 +28154,7 @@ export type SchemeOrderByWithRelationInput = {
   defaultMessagePush?: InputMaybe<SortOrder>;
   defaultOffenderEmail?: InputMaybe<SortOrder>;
   defaultOffenderPush?: InputMaybe<SortOrder>;
+  defaultPublicOffenderDOB?: InputMaybe<SortOrder>;
   defaultSubscribedIncidentOnly?: InputMaybe<SortOrder>;
   defaultSubscribedOffenderOnly?: InputMaybe<SortOrder>;
   documents?: InputMaybe<DocumentOrderByRelationAggregateInput>;
@@ -28057,6 +28174,7 @@ export type SchemeOrderByWithRelationInput = {
   offenderRetention?: InputMaybe<SortOrder>;
   offenders?: InputMaybe<OffenderOrderByRelationAggregateInput>;
   recycledItems?: InputMaybe<RecycledItemOrderByRelationAggregateInput>;
+  schemeTags?: InputMaybe<TagOrderByRelationAggregateInput>;
   tags?: InputMaybe<TagOrderByRelationAggregateInput>;
   terms?: InputMaybe<TermsAndConditionOrderByRelationAggregateInput>;
   updatedAt?: InputMaybe<SortOrder>;
@@ -28076,6 +28194,7 @@ export type SchemeScalarWhereInput = {
   defaultMessagePush?: InputMaybe<BoolFilter>;
   defaultOffenderEmail?: InputMaybe<BoolFilter>;
   defaultOffenderPush?: InputMaybe<BoolFilter>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFilter>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFilter>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFilter>;
   id?: InputMaybe<StringFilter>;
@@ -28104,6 +28223,7 @@ export type SchemeUpdateInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28122,6 +28242,7 @@ export type SchemeUpdateInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -28137,6 +28258,7 @@ export type SchemeUpdateManyMutationInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -28168,6 +28290,11 @@ export type SchemeUpdateManyWithWhereWithoutDarkLogoInput = {
 };
 
 export type SchemeUpdateManyWithWhereWithoutLogoInput = {
+  data: SchemeUpdateManyMutationInput;
+  where: SchemeScalarWhereInput;
+};
+
+export type SchemeUpdateManyWithWhereWithoutSchemeTagsInput = {
   data: SchemeUpdateManyMutationInput;
   where: SchemeScalarWhereInput;
 };
@@ -28258,6 +28385,23 @@ export type SchemeUpdateManyWithoutLogoNestedInput = {
   update?: InputMaybe<Array<SchemeUpdateWithWhereUniqueWithoutLogoInput>>;
   updateMany?: InputMaybe<Array<SchemeUpdateManyWithWhereWithoutLogoInput>>;
   upsert?: InputMaybe<Array<SchemeUpsertWithWhereUniqueWithoutLogoInput>>;
+};
+
+export type SchemeUpdateManyWithoutSchemeTagsNestedInput = {
+  connect?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<SchemeCreateOrConnectWithoutSchemeTagsInput>
+  >;
+  create?: InputMaybe<Array<SchemeCreateWithoutSchemeTagsInput>>;
+  delete?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<SchemeScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  set?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  update?: InputMaybe<Array<SchemeUpdateWithWhereUniqueWithoutSchemeTagsInput>>;
+  updateMany?: InputMaybe<
+    Array<SchemeUpdateManyWithWhereWithoutSchemeTagsInput>
+  >;
+  upsert?: InputMaybe<Array<SchemeUpsertWithWhereUniqueWithoutSchemeTagsInput>>;
 };
 
 export type SchemeUpdateManyWithoutVehiclesNestedInput = {
@@ -28371,14 +28515,6 @@ export type SchemeUpdateOneRequiredWithoutRecycledItemsNestedInput = {
   upsert?: InputMaybe<SchemeUpsertWithoutRecycledItemsInput>;
 };
 
-export type SchemeUpdateOneRequiredWithoutTagsNestedInput = {
-  connect?: InputMaybe<SchemeWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<SchemeCreateOrConnectWithoutTagsInput>;
-  create?: InputMaybe<SchemeCreateWithoutTagsInput>;
-  update?: InputMaybe<SchemeUpdateWithoutTagsInput>;
-  upsert?: InputMaybe<SchemeUpsertWithoutTagsInput>;
-};
-
 export type SchemeUpdateOneRequiredWithoutTermsNestedInput = {
   connect?: InputMaybe<SchemeWhereUniqueInput>;
   connectOrCreate?: InputMaybe<SchemeCreateOrConnectWithoutTermsInput>;
@@ -28407,6 +28543,16 @@ export type SchemeUpdateOneWithoutDocumentsNestedInput = {
   upsert?: InputMaybe<SchemeUpsertWithoutDocumentsInput>;
 };
 
+export type SchemeUpdateOneWithoutTagsNestedInput = {
+  connect?: InputMaybe<SchemeWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<SchemeCreateOrConnectWithoutTagsInput>;
+  create?: InputMaybe<SchemeCreateWithoutTagsInput>;
+  delete?: InputMaybe<Scalars['Boolean']>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+  update?: InputMaybe<SchemeUpdateWithoutTagsInput>;
+  upsert?: InputMaybe<SchemeUpsertWithoutTagsInput>;
+};
+
 export type SchemeUpdateWithWhereUniqueWithoutArticlesInput = {
   data: SchemeUpdateWithoutArticlesInput;
   where: SchemeWhereUniqueInput;
@@ -28432,6 +28578,11 @@ export type SchemeUpdateWithWhereUniqueWithoutLogoInput = {
   where: SchemeWhereUniqueInput;
 };
 
+export type SchemeUpdateWithWhereUniqueWithoutSchemeTagsInput = {
+  data: SchemeUpdateWithoutSchemeTagsInput;
+  where: SchemeWhereUniqueInput;
+};
+
 export type SchemeUpdateWithWhereUniqueWithoutVehiclesInput = {
   data: SchemeUpdateWithoutVehiclesInput;
   where: SchemeWhereUniqueInput;
@@ -28453,6 +28604,7 @@ export type SchemeUpdateWithoutActionsInSchemeInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28471,6 +28623,7 @@ export type SchemeUpdateWithoutActionsInSchemeInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -28493,6 +28646,7 @@ export type SchemeUpdateWithoutActionsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28511,6 +28665,7 @@ export type SchemeUpdateWithoutActionsInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -28533,6 +28688,7 @@ export type SchemeUpdateWithoutArticlesInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28551,6 +28707,7 @@ export type SchemeUpdateWithoutArticlesInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -28573,6 +28730,7 @@ export type SchemeUpdateWithoutBansInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28591,6 +28749,7 @@ export type SchemeUpdateWithoutBansInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -28613,6 +28772,7 @@ export type SchemeUpdateWithoutBusinessesInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28631,6 +28791,7 @@ export type SchemeUpdateWithoutBusinessesInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -28653,6 +28814,7 @@ export type SchemeUpdateWithoutChatsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28671,6 +28833,7 @@ export type SchemeUpdateWithoutChatsInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -28693,6 +28856,7 @@ export type SchemeUpdateWithoutCrimeGroupsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28711,6 +28875,7 @@ export type SchemeUpdateWithoutCrimeGroupsInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -28733,6 +28898,7 @@ export type SchemeUpdateWithoutDarkLogoInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28751,6 +28917,7 @@ export type SchemeUpdateWithoutDarkLogoInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -28774,6 +28941,7 @@ export type SchemeUpdateWithoutDocumentsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
@@ -28791,6 +28959,7 @@ export type SchemeUpdateWithoutDocumentsInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -28814,6 +28983,7 @@ export type SchemeUpdateWithoutGroupsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28831,6 +29001,7 @@ export type SchemeUpdateWithoutGroupsInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -28854,6 +29025,7 @@ export type SchemeUpdateWithoutImagesInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28871,6 +29043,7 @@ export type SchemeUpdateWithoutImagesInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -28894,6 +29067,7 @@ export type SchemeUpdateWithoutIncidentsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28911,6 +29085,7 @@ export type SchemeUpdateWithoutIncidentsInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -28934,6 +29109,7 @@ export type SchemeUpdateWithoutIntelInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28951,6 +29127,7 @@ export type SchemeUpdateWithoutIntelInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -28974,6 +29151,7 @@ export type SchemeUpdateWithoutInvestigationsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -28991,6 +29169,7 @@ export type SchemeUpdateWithoutInvestigationsInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -29014,6 +29193,7 @@ export type SchemeUpdateWithoutLogoInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -29031,6 +29211,7 @@ export type SchemeUpdateWithoutLogoInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -29054,6 +29235,7 @@ export type SchemeUpdateWithoutMembersInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -29071,6 +29253,7 @@ export type SchemeUpdateWithoutMembersInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -29094,6 +29277,7 @@ export type SchemeUpdateWithoutMessagesInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -29111,6 +29295,7 @@ export type SchemeUpdateWithoutMessagesInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -29134,6 +29319,7 @@ export type SchemeUpdateWithoutOffendersInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -29151,6 +29337,7 @@ export type SchemeUpdateWithoutOffendersInput = {
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -29174,6 +29361,7 @@ export type SchemeUpdateWithoutRecycledItemsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -29191,6 +29379,49 @@ export type SchemeUpdateWithoutRecycledItemsInput = {
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
+  terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+};
+
+export type SchemeUpdateWithoutSchemeTagsInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
+  actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
+  autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
+  businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
+  chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
+  defaultIncidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultIncidentPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutSchemeNestedInput>;
+  intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
+  investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
+  logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
+  members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
+  recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -29214,6 +29445,7 @@ export type SchemeUpdateWithoutTagsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -29232,6 +29464,7 @@ export type SchemeUpdateWithoutTagsInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
@@ -29254,6 +29487,7 @@ export type SchemeUpdateWithoutTermsInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -29272,6 +29506,7 @@ export type SchemeUpdateWithoutTermsInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
@@ -29294,6 +29529,7 @@ export type SchemeUpdateWithoutVehiclesInput = {
   defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
@@ -29312,6 +29548,7 @@ export type SchemeUpdateWithoutVehiclesInput = {
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
   recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -29344,6 +29581,12 @@ export type SchemeUpsertWithWhereUniqueWithoutDarkLogoInput = {
 export type SchemeUpsertWithWhereUniqueWithoutLogoInput = {
   create: SchemeCreateWithoutLogoInput;
   update: SchemeUpdateWithoutLogoInput;
+  where: SchemeWhereUniqueInput;
+};
+
+export type SchemeUpsertWithWhereUniqueWithoutSchemeTagsInput = {
+  create: SchemeCreateWithoutSchemeTagsInput;
+  update: SchemeUpdateWithoutSchemeTagsInput;
   where: SchemeWhereUniqueInput;
 };
 
@@ -29454,6 +29697,7 @@ export type SchemeWhereInput = {
   defaultMessagePush?: InputMaybe<BoolFilter>;
   defaultOffenderEmail?: InputMaybe<BoolFilter>;
   defaultOffenderPush?: InputMaybe<BoolFilter>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFilter>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFilter>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFilter>;
   documents?: InputMaybe<DocumentListRelationFilter>;
@@ -29473,6 +29717,7 @@ export type SchemeWhereInput = {
   offenderRetention?: InputMaybe<IntNullableFilter>;
   offenders?: InputMaybe<OffenderListRelationFilter>;
   recycledItems?: InputMaybe<RecycledItemListRelationFilter>;
+  schemeTags?: InputMaybe<TagListRelationFilter>;
   tags?: InputMaybe<TagListRelationFilter>;
   terms?: InputMaybe<TermsAndConditionListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -29599,7 +29844,8 @@ export type Tag = {
   incidents: Array<Incident>;
   name: Scalars['String'];
   offenders: Array<Offender>;
-  scheme: Scheme;
+  scheme?: Maybe<Scheme>;
+  schemes: Array<Scheme>;
   type: TagType;
   updatedAt: Scalars['DateTime'];
   uploaded?: Maybe<Scalars['Boolean']>;
@@ -29647,6 +29893,13 @@ export type TagOffendersArgs = {
   where?: InputMaybe<OffenderWhereInput>;
 };
 
+export type TagSchemesArgs = {
+  after?: InputMaybe<SchemeWhereUniqueInput>;
+  before?: InputMaybe<SchemeWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
 export type TagUsersArgs = {
   after?: InputMaybe<UserWhereUniqueInput>;
   before?: InputMaybe<UserWhereUniqueInput>;
@@ -29669,7 +29922,8 @@ export type TagCreateInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeTypesInput>;
   name: Scalars['String'];
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutTagsInput>;
-  scheme: SchemeCreateNestedOneWithoutTagsInput;
+  scheme?: InputMaybe<SchemeCreateNestedOneWithoutTagsInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutSchemeTagsInput>;
   type?: InputMaybe<TagType>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
@@ -29683,7 +29937,7 @@ export type TagCreateManyCreatedByInput = {
   description: Scalars['String'];
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
-  schemeId: Scalars['String'];
+  schemeId?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<TagType>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
@@ -29750,6 +30004,12 @@ export type TagCreateNestedManyWithoutSchemeInput = {
   createMany?: InputMaybe<TagCreateManySchemeInputEnvelope>;
 };
 
+export type TagCreateNestedManyWithoutSchemesInput = {
+  connect?: InputMaybe<Array<TagWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<TagCreateOrConnectWithoutSchemesInput>>;
+  create?: InputMaybe<Array<TagCreateWithoutSchemesInput>>;
+};
+
 export type TagCreateNestedManyWithoutUsersInput = {
   connect?: InputMaybe<Array<TagWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<Array<TagCreateOrConnectWithoutUsersInput>>;
@@ -29797,6 +30057,11 @@ export type TagCreateOrConnectWithoutSchemeInput = {
   where: TagWhereUniqueInput;
 };
 
+export type TagCreateOrConnectWithoutSchemesInput = {
+  create: TagCreateWithoutSchemesInput;
+  where: TagWhereUniqueInput;
+};
+
 export type TagCreateOrConnectWithoutUsersInput = {
   create: TagCreateWithoutUsersInput;
   where: TagWhereUniqueInput;
@@ -29814,7 +30079,8 @@ export type TagCreateWithoutActionsInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeTypesInput>;
   name: Scalars['String'];
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutTagsInput>;
-  scheme: SchemeCreateNestedOneWithoutTagsInput;
+  scheme?: InputMaybe<SchemeCreateNestedOneWithoutTagsInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutSchemeTagsInput>;
   type?: InputMaybe<TagType>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
@@ -29833,7 +30099,8 @@ export type TagCreateWithoutArticlesInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeTypesInput>;
   name: Scalars['String'];
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutTagsInput>;
-  scheme: SchemeCreateNestedOneWithoutTagsInput;
+  scheme?: InputMaybe<SchemeCreateNestedOneWithoutTagsInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutSchemeTagsInput>;
   type?: InputMaybe<TagType>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
@@ -29852,7 +30119,8 @@ export type TagCreateWithoutCreatedByInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeTypesInput>;
   name: Scalars['String'];
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutTagsInput>;
-  scheme: SchemeCreateNestedOneWithoutTagsInput;
+  scheme?: InputMaybe<SchemeCreateNestedOneWithoutTagsInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutSchemeTagsInput>;
   type?: InputMaybe<TagType>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
@@ -29871,7 +30139,8 @@ export type TagCreateWithoutDocumentsInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeTypesInput>;
   name: Scalars['String'];
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutTagsInput>;
-  scheme: SchemeCreateNestedOneWithoutTagsInput;
+  scheme?: InputMaybe<SchemeCreateNestedOneWithoutTagsInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutSchemeTagsInput>;
   type?: InputMaybe<TagType>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
@@ -29890,7 +30159,8 @@ export type TagCreateWithoutIncidentsInput = {
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutTagsInput>;
-  scheme: SchemeCreateNestedOneWithoutTagsInput;
+  scheme?: InputMaybe<SchemeCreateNestedOneWithoutTagsInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutSchemeTagsInput>;
   type?: InputMaybe<TagType>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
@@ -29909,7 +30179,8 @@ export type TagCreateWithoutOffendersInput = {
   id?: InputMaybe<Scalars['String']>;
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeTypesInput>;
   name: Scalars['String'];
-  scheme: SchemeCreateNestedOneWithoutTagsInput;
+  scheme?: InputMaybe<SchemeCreateNestedOneWithoutTagsInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutSchemeTagsInput>;
   type?: InputMaybe<TagType>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
@@ -29929,6 +30200,27 @@ export type TagCreateWithoutSchemeInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeTypesInput>;
   name: Scalars['String'];
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutTagsInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutSchemeTagsInput>;
+  type?: InputMaybe<TagType>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploaded?: InputMaybe<Scalars['Boolean']>;
+  users?: InputMaybe<UserCreateNestedManyWithoutTagsInput>;
+};
+
+export type TagCreateWithoutSchemesInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutTagInput>;
+  articles?: InputMaybe<ArticleCreateNestedManyWithoutTagsInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdBy: UserCreateNestedOneWithoutCreatedTagsInput;
+  crimeType?: InputMaybe<CrimeType>;
+  dataType: Model;
+  description: Scalars['String'];
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutTagsInput>;
+  id?: InputMaybe<Scalars['String']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeTypesInput>;
+  name: Scalars['String'];
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutTagsInput>;
+  scheme?: InputMaybe<SchemeCreateNestedOneWithoutTagsInput>;
   type?: InputMaybe<TagType>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
@@ -29948,7 +30240,8 @@ export type TagCreateWithoutUsersInput = {
   incidents?: InputMaybe<IncidentCreateNestedManyWithoutCrimeTypesInput>;
   name: Scalars['String'];
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutTagsInput>;
-  scheme: SchemeCreateNestedOneWithoutTagsInput;
+  scheme?: InputMaybe<SchemeCreateNestedOneWithoutTagsInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutSchemeTagsInput>;
   type?: InputMaybe<TagType>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
@@ -29980,6 +30273,7 @@ export type TagOrderByWithRelationInput = {
   offenders?: InputMaybe<OffenderOrderByRelationAggregateInput>;
   scheme?: InputMaybe<SchemeOrderByWithRelationInput>;
   schemeId?: InputMaybe<SortOrder>;
+  schemes?: InputMaybe<SchemeOrderByRelationAggregateInput>;
   type?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
   uploaded?: InputMaybe<SortOrder>;
@@ -29997,7 +30291,7 @@ export type TagScalarWhereInput = {
   description?: InputMaybe<StringFilter>;
   id?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
-  schemeId?: InputMaybe<StringFilter>;
+  schemeId?: InputMaybe<StringNullableFilter>;
   type?: InputMaybe<EnumTagTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   uploaded?: InputMaybe<BoolNullableFilter>;
@@ -30029,7 +30323,8 @@ export type TagUpdateInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeTypesNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutTagsNestedInput>;
-  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutTagsNestedInput>;
+  scheme?: InputMaybe<SchemeUpdateOneWithoutTagsNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutSchemeTagsNestedInput>;
   type?: InputMaybe<EnumTagTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -30074,6 +30369,11 @@ export type TagUpdateManyWithWhereWithoutOffendersInput = {
 };
 
 export type TagUpdateManyWithWhereWithoutSchemeInput = {
+  data: TagUpdateManyMutationInput;
+  where: TagScalarWhereInput;
+};
+
+export type TagUpdateManyWithWhereWithoutSchemesInput = {
   data: TagUpdateManyMutationInput;
   where: TagScalarWhereInput;
 };
@@ -30163,6 +30463,19 @@ export type TagUpdateManyWithoutSchemeNestedInput = {
   upsert?: InputMaybe<Array<TagUpsertWithWhereUniqueWithoutSchemeInput>>;
 };
 
+export type TagUpdateManyWithoutSchemesNestedInput = {
+  connect?: InputMaybe<Array<TagWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<TagCreateOrConnectWithoutSchemesInput>>;
+  create?: InputMaybe<Array<TagCreateWithoutSchemesInput>>;
+  delete?: InputMaybe<Array<TagWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<TagScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<TagWhereUniqueInput>>;
+  set?: InputMaybe<Array<TagWhereUniqueInput>>;
+  update?: InputMaybe<Array<TagUpdateWithWhereUniqueWithoutSchemesInput>>;
+  updateMany?: InputMaybe<Array<TagUpdateManyWithWhereWithoutSchemesInput>>;
+  upsert?: InputMaybe<Array<TagUpsertWithWhereUniqueWithoutSchemesInput>>;
+};
+
 export type TagUpdateManyWithoutUsersNestedInput = {
   connect?: InputMaybe<Array<TagWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<Array<TagCreateOrConnectWithoutUsersInput>>;
@@ -30216,6 +30529,11 @@ export type TagUpdateWithWhereUniqueWithoutSchemeInput = {
   where: TagWhereUniqueInput;
 };
 
+export type TagUpdateWithWhereUniqueWithoutSchemesInput = {
+  data: TagUpdateWithoutSchemesInput;
+  where: TagWhereUniqueInput;
+};
+
 export type TagUpdateWithWhereUniqueWithoutUsersInput = {
   data: TagUpdateWithoutUsersInput;
   where: TagWhereUniqueInput;
@@ -30233,7 +30551,8 @@ export type TagUpdateWithoutActionsInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeTypesNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutTagsNestedInput>;
-  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutTagsNestedInput>;
+  scheme?: InputMaybe<SchemeUpdateOneWithoutTagsNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutSchemeTagsNestedInput>;
   type?: InputMaybe<EnumTagTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -30252,7 +30571,8 @@ export type TagUpdateWithoutArticlesInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeTypesNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutTagsNestedInput>;
-  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutTagsNestedInput>;
+  scheme?: InputMaybe<SchemeUpdateOneWithoutTagsNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutSchemeTagsNestedInput>;
   type?: InputMaybe<EnumTagTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -30271,7 +30591,8 @@ export type TagUpdateWithoutCreatedByInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeTypesNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutTagsNestedInput>;
-  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutTagsNestedInput>;
+  scheme?: InputMaybe<SchemeUpdateOneWithoutTagsNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutSchemeTagsNestedInput>;
   type?: InputMaybe<EnumTagTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -30290,7 +30611,8 @@ export type TagUpdateWithoutDocumentsInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeTypesNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutTagsNestedInput>;
-  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutTagsNestedInput>;
+  scheme?: InputMaybe<SchemeUpdateOneWithoutTagsNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutSchemeTagsNestedInput>;
   type?: InputMaybe<EnumTagTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -30309,7 +30631,8 @@ export type TagUpdateWithoutIncidentsInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutTagsNestedInput>;
-  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutTagsNestedInput>;
+  scheme?: InputMaybe<SchemeUpdateOneWithoutTagsNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutSchemeTagsNestedInput>;
   type?: InputMaybe<EnumTagTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -30328,7 +30651,8 @@ export type TagUpdateWithoutOffendersInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeTypesNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
-  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutTagsNestedInput>;
+  scheme?: InputMaybe<SchemeUpdateOneWithoutTagsNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutSchemeTagsNestedInput>;
   type?: InputMaybe<EnumTagTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -30348,6 +30672,27 @@ export type TagUpdateWithoutSchemeInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeTypesNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutTagsNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutSchemeTagsNestedInput>;
+  type?: InputMaybe<EnumTagTypeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
+  users?: InputMaybe<UserUpdateManyWithoutTagsNestedInput>;
+};
+
+export type TagUpdateWithoutSchemesInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutTagNestedInput>;
+  articles?: InputMaybe<ArticleUpdateManyWithoutTagsNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdBy?: InputMaybe<UserUpdateOneRequiredWithoutCreatedTagsNestedInput>;
+  crimeType?: InputMaybe<NullableEnumCrimeTypeFieldUpdateOperationsInput>;
+  dataType?: InputMaybe<EnumModelFieldUpdateOperationsInput>;
+  description?: InputMaybe<StringFieldUpdateOperationsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutTagsNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeTypesNestedInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutTagsNestedInput>;
+  scheme?: InputMaybe<SchemeUpdateOneWithoutTagsNestedInput>;
   type?: InputMaybe<EnumTagTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -30367,7 +30712,8 @@ export type TagUpdateWithoutUsersInput = {
   incidents?: InputMaybe<IncidentUpdateManyWithoutCrimeTypesNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutTagsNestedInput>;
-  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutTagsNestedInput>;
+  scheme?: InputMaybe<SchemeUpdateOneWithoutTagsNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutSchemeTagsNestedInput>;
   type?: InputMaybe<EnumTagTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
@@ -30409,6 +30755,12 @@ export type TagUpsertWithWhereUniqueWithoutSchemeInput = {
   where: TagWhereUniqueInput;
 };
 
+export type TagUpsertWithWhereUniqueWithoutSchemesInput = {
+  create: TagCreateWithoutSchemesInput;
+  update: TagUpdateWithoutSchemesInput;
+  where: TagWhereUniqueInput;
+};
+
 export type TagUpsertWithWhereUniqueWithoutUsersInput = {
   create: TagCreateWithoutUsersInput;
   update: TagUpdateWithoutUsersInput;
@@ -30438,7 +30790,8 @@ export type TagWhereInput = {
   name?: InputMaybe<StringFilter>;
   offenders?: InputMaybe<OffenderListRelationFilter>;
   scheme?: InputMaybe<SchemeWhereInput>;
-  schemeId?: InputMaybe<StringFilter>;
+  schemeId?: InputMaybe<StringNullableFilter>;
+  schemes?: InputMaybe<SchemeListRelationFilter>;
   type?: InputMaybe<EnumTagTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   uploaded?: InputMaybe<BoolNullableFilter>;
@@ -41450,6 +41803,7 @@ export type ListCrimeGroupsQuery = {
       totalTheftSuccess?: number | null;
       totalValue?: number | null;
       alias?: string | null;
+      updatedAt: any;
     }>;
   };
 };
@@ -42859,6 +43213,293 @@ export type AddressesQuery = {
     primary?: boolean | null;
     full?: string | null;
   }>;
+};
+
+export type EditIncidentQueryVariables = Exact<{
+  where: IncidentWhereUniqueInput;
+}>;
+
+export type EditIncidentQuery = {
+  __typename?: 'Query';
+  incident?: {
+    __typename?: 'Incident';
+    id: string;
+    subject?: string | null;
+    description: string;
+    dayTime?: string | null;
+    date: any;
+    time: any;
+    reference?: number | null;
+    ref?: string | null;
+    policeReported: boolean;
+    policeRef?: string | null;
+    policeNo?: string | null;
+    policeInvolved: boolean;
+    subscribed?: boolean | null;
+    totalValue?: number | null;
+    totalRecoveredValue?: number | null;
+    approved?: boolean | null;
+    crimeTypes: Array<{
+      __typename?: 'Tag';
+      id: string;
+      name: string;
+      crimeType?: CrimeType | null;
+    }>;
+    involvedTags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    impactTags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    incidentItems: Array<{
+      __typename?: 'IncidentItem';
+      id: string;
+      name: string;
+      value: number;
+      recoveredValue: number;
+      goodsType: { __typename?: 'GoodsType'; id: string };
+    }>;
+    business?: { __typename?: 'Business'; id: string; name: string } | null;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+    };
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      optimised?: string | null;
+      url?: string | null;
+      offenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        name?: string | null;
+      }>;
+    }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      reference?: number | null;
+      alias?: string | null;
+      totalIncidents?: number | null;
+      totalOffenders?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+    }>;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      id: string;
+      reference?: number | null;
+      colour?: string | null;
+      model?: string | null;
+      make?: string | null;
+      registration?: string | null;
+      totalCrimeGroups?: number | null;
+      totalIncidents?: number | null;
+      totalOffenders?: number | null;
+      updatedAt: any;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      reference?: number | null;
+      createdAt: any;
+      updatedAt: any;
+      age?: Age | null;
+      build?: Build | null;
+      dateOfBirth?: any | null;
+      dateSource?: string | null;
+      gender?: Gender | null;
+      hair?: string | null;
+      name?: string | null;
+      peculiarities?: string | null;
+      race?: Race | null;
+      approved?: boolean | null;
+      uploaded?: boolean | null;
+      active?: boolean | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+      }>;
+      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    }>;
+    updates: Array<{
+      __typename?: 'Update';
+      id: string;
+      text?: string | null;
+      type: UpdateType;
+      createdAt: any;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+      }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      linkedIncidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      linkedOffenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        updatedAt: any;
+        age?: Age | null;
+        build?: Build | null;
+        dateOfBirth?: any | null;
+        name?: string | null;
+        race?: Race | null;
+        gender?: Gender | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      createdBy: {
+        __typename?: 'User';
+        origName: string;
+        id: string;
+        fullName: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
+      replies: Array<{
+        __typename?: 'Update';
+        id: string;
+        text?: string | null;
+        type: UpdateType;
+        createdAt: any;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          card?: string | null;
+        }>;
+        linkedCrimeGroups: Array<{
+          __typename?: 'CrimeGroup';
+          totalOffenders?: number | null;
+          totalIncidents?: number | null;
+          alias?: string | null;
+          id: string;
+          reference?: number | null;
+          totalRecoveredValue?: number | null;
+          totalTheftSuccess?: number | null;
+          totalValue?: number | null;
+          updatedAt: any;
+        }>;
+        linkedVehicles: Array<{
+          __typename?: 'Vehicle';
+          updatedAt: any;
+          totalOffenders?: number | null;
+          registration?: string | null;
+          reference?: number | null;
+          model?: string | null;
+          make?: string | null;
+          id: string;
+          colour?: string | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+        }>;
+        linkedIncidents: Array<{
+          __typename?: 'Incident';
+          id: string;
+          subject?: string | null;
+          description: string;
+          dayTime?: string | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+        }>;
+        linkedOffenders: Array<{
+          __typename?: 'Offender';
+          id: string;
+          updatedAt: any;
+          age?: Age | null;
+          build?: Build | null;
+          dateOfBirth?: any | null;
+          name?: string | null;
+          race?: Race | null;
+          gender?: Gender | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+        }>;
+        createdBy: {
+          __typename?: 'User';
+          origName: string;
+          id: string;
+          fullName: string;
+          businesses: Array<{
+            __typename?: 'Business';
+            id: string;
+            name: string;
+          }>;
+        };
+      }>;
+    }>;
+  } | null;
 };
 
 export type IncidentFeedQueryVariables = Exact<{
@@ -45785,6 +46426,7 @@ export type SchemeQuery = {
     defaultMessagePush: boolean;
     defaultOffenderEmail: boolean;
     defaultOffenderPush: boolean;
+    defaultPublicOffenderDOB: boolean;
     incidentRetention?: number | null;
     offenderRetention?: number | null;
     darkLogo?: {
@@ -50352,6 +50994,7 @@ export const ListCrimeGroupsDocument = gql`
         totalTheftSuccess
         totalValue
         alias
+        updatedAt
       }
       total
     }
@@ -52762,6 +53405,337 @@ export type AddressesLazyQueryHookResult = ReturnType<
 export type AddressesQueryResult = Apollo.QueryResult<
   AddressesQuery,
   AddressesQueryVariables
+>;
+export const EditIncidentDocument = gql`
+  query EditIncident($where: IncidentWhereUniqueInput!) {
+    incident(where: $where) {
+      id
+      subject
+      description
+      dayTime
+      date
+      time
+      reference
+      ref
+      policeReported
+      policeRef
+      policeNo
+      policeInvolved
+      subscribed
+      totalValue
+      totalRecoveredValue
+      crimeTypes {
+        id
+        name
+        crimeType
+      }
+      involvedTags {
+        id
+        name
+      }
+      impactTags {
+        id
+        name
+      }
+      incidentItems {
+        id
+        name
+        value
+        recoveredValue
+        goodsType {
+          id
+        }
+      }
+      approved
+      business {
+        id
+        name
+      }
+      createdBy {
+        id
+        fullName
+        businesses {
+          id
+          name
+        }
+      }
+      images {
+        id
+        optimised
+        url
+        offenders {
+          id
+          name
+        }
+      }
+      groups {
+        id
+        name
+      }
+      crimeGroups {
+        id
+        reference
+        alias
+        totalIncidents
+        totalOffenders
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+      }
+      vehicles {
+        id
+        reference
+        colour
+        model
+        make
+        registration
+        totalCrimeGroups
+        totalIncidents
+        totalOffenders
+        updatedAt
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      offenders {
+        id
+        reference
+        createdAt
+        updatedAt
+        age
+        build
+        dateOfBirth
+        dateSource
+        gender
+        hair
+        name
+        peculiarities
+        race
+        approved
+        uploaded
+        active
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        tags {
+          id
+          name
+        }
+      }
+      updates(orderBy: { createdAt: desc }) {
+        id
+        text
+        type
+        createdAt
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          images {
+            id
+            url
+            optimised
+          }
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        linkedIncidents {
+          id
+          subject
+          description
+          dayTime
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        linkedOffenders {
+          id
+          updatedAt
+          age
+          build
+          dateOfBirth
+          name
+          race
+          gender
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        createdBy {
+          origName
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+        replies {
+          id
+          text
+          type
+          createdAt
+          images {
+            id
+            url
+            optimised
+            card
+          }
+          linkedCrimeGroups {
+            totalOffenders
+            totalIncidents
+            alias
+            id
+            reference
+            totalRecoveredValue
+            totalTheftSuccess
+            totalValue
+            updatedAt
+          }
+          linkedVehicles {
+            images {
+              id
+              url
+              optimised
+            }
+            updatedAt
+            totalOffenders
+            registration
+            reference
+            model
+            make
+            id
+            colour
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          linkedIncidents {
+            id
+            subject
+            description
+            dayTime
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          linkedOffenders {
+            id
+            updatedAt
+            age
+            build
+            dateOfBirth
+            name
+            race
+            gender
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          createdBy {
+            origName
+            id
+            fullName
+            businesses {
+              id
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useEditIncidentQuery__
+ *
+ * To run a query within a React component, call `useEditIncidentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEditIncidentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEditIncidentQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useEditIncidentQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    EditIncidentQuery,
+    EditIncidentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<EditIncidentQuery, EditIncidentQueryVariables>(
+    EditIncidentDocument,
+    options
+  );
+}
+export function useEditIncidentLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    EditIncidentQuery,
+    EditIncidentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<EditIncidentQuery, EditIncidentQueryVariables>(
+    EditIncidentDocument,
+    options
+  );
+}
+export type EditIncidentQueryHookResult = ReturnType<
+  typeof useEditIncidentQuery
+>;
+export type EditIncidentLazyQueryHookResult = ReturnType<
+  typeof useEditIncidentLazyQuery
+>;
+export type EditIncidentQueryResult = Apollo.QueryResult<
+  EditIncidentQuery,
+  EditIncidentQueryVariables
 >;
 export const IncidentFeedDocument = gql`
   query incidentFeed(
@@ -57599,6 +58573,7 @@ export const SchemeDocument = gql`
       defaultMessagePush
       defaultOffenderEmail
       defaultOffenderPush
+      defaultPublicOffenderDOB
       incidentRetention
       offenderRetention
       darkLogo {

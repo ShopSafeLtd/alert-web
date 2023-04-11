@@ -46,6 +46,7 @@ const OffenderFeed = (): JSX.Element => {
     businesses,
     setBusinesses,
     businessesLoading,
+    setCreatedAtFilter,
   } = useOffenderFeed();
   return (
     <View
@@ -91,6 +92,7 @@ const OffenderFeed = (): JSX.Element => {
       businesses={businesses}
       setBusinesses={setBusinesses}
       businessesLoading={businessesLoading}
+      setCreatedAtFilter={setCreatedAtFilter}
     />
   );
 };

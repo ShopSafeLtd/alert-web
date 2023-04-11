@@ -40,6 +40,8 @@ const IncidentFeed = (): JSX.Element => {
     crimeTypesFilter,
     goodsLoading,
     businessesLoading,
+    setIncidentDateFilter,
+    setCreatedAtFilter,
   } = useIncidentFeed();
 
   return (
@@ -83,6 +85,8 @@ const IncidentFeed = (): JSX.Element => {
       setBusinessesFilter={setBusinessesFilter}
       goodsLoading={goodsLoading}
       businessesLoading={businessesLoading}
+      setIncidentDateFilter={setIncidentDateFilter}
+      setCreatedAtFilter={setCreatedAtFilter}
     />
   );
 };

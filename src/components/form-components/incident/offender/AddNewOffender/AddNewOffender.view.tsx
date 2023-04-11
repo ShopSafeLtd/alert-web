@@ -41,9 +41,7 @@ interface Props {
   imgChange: UploadProps['onChange'];
   beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
-  // onSearchOffender: (
-  //   value: string
-  // ) => Promise<{ label: React.ReactNode; value: string }[]>;
+  hideImages?: boolean;
 }
 
 const AddNewOffender = ({
@@ -55,8 +53,8 @@ const AddNewOffender = ({
   imgChange,
   beforeUpload,
   fileList,
-}: // onSearchOffender,
-Props): JSX.Element => {
+  hideImages,
+}: Props): JSX.Element => {
   const classes = useStyles();
   return (
     <Form layout="vertical" onFinish={onSubmit}>
@@ -69,18 +67,6 @@ Props): JSX.Element => {
                 blank."
           >
             <Input className={classes.nameSelect} disabled={saving} />
-            {/* <DebounceSelect
-              showSearch
-              allowClear
-              disabled={saving}
-              placeholder="Unidentified Offender"
-              fetchOptions={onSearchOffender}
-              style={{ width: '100%' }}
-              dropdownStyle={{ padding: 0 }}
-              className={classes.nameSelect}
-              mode="tags"
-              maxTagCount={1}
-            /> */}
           </Form.Item>
         </Col>
       </Row>
@@ -184,28 +170,30 @@ Props): JSX.Element => {
           </Col>
         )}
       </Row>
-      <Row>
-        <Col>
-          <Form.Item
-            name="images"
-            label="Images"
-            tooltip="Please add any images that you have of the offender."
-          >
-            <Upload
-              action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
-              className="upload-images"
-              style={{ width: '50%', height: '50%' }}
-              listType="picture-card"
-              fileList={fileList}
-              onChange={imgChange}
-              beforeUpload={beforeUpload}
-              accept=".png,.jpeg,.webp"
+      {hideImages && (
+        <Row>
+          <Col>
+            <Form.Item
+              name="images"
+              label="Images"
+              tooltip="Please add any images that you have of the offender."
             >
-              {fileList.length < 10 && '+ Upload'}
-            </Upload>
-          </Form.Item>
-        </Col>
-      </Row>
+              <Upload
+                action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
+                className="upload-images"
+                style={{ width: '50%', height: '50%' }}
+                listType="picture-card"
+                fileList={fileList}
+                onChange={imgChange}
+                beforeUpload={beforeUpload}
+                accept=".png,.jpeg,.webp"
+              >
+                {fileList.length < 10 && '+ Upload'}
+              </Upload>
+            </Form.Item>
+          </Col>
+        </Row>
+      )}
 
       <Form.Item>
         <Row style={{ marginTop: 30 }} gutter={10} justify="end">

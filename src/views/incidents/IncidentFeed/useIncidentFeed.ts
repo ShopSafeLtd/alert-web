@@ -13,11 +13,13 @@ import {
   useListIncidentsQuery,
   useSchemeGroupsQuery,
   useTagsQuery,
+  TagType,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import { IncidentSort, useStoreActions, useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
+import type { DateType } from 'types/DataType';
 
 interface Return {
   data: ListIncidentsQuery | undefined;
@@ -67,6 +69,8 @@ interface Return {
   setBusinessesFilter: (value: string[]) => void;
   businessesLoading: boolean;
   goodsLoading: boolean;
+  setIncidentDateFilter: (value: DateType | undefined) => void;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
 }
 
 const getSizeOptions = () => {
@@ -100,6 +104,12 @@ const useIncidentFeed = (): Return => {
   const [goodsFilter, setGoodsFilter] = useState<string[]>([]);
   const [peculiarities, setPeculiarities] = useState('');
   const [gallery, setGallery] = useState<string[]>([]);
+  const [createdAtFilter, setCreatedAtFilter] = useState<
+    DateType | undefined
+  >();
+  const [incidentDateFilter, setIncidentDateFilter] = useState<
+    DateType | undefined
+  >();
 
   // lightBox
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
@@ -119,6 +129,18 @@ const useIncidentFeed = (): Return => {
         order === IncidentSort.createdAtDesc ? SortOrder.Desc : SortOrder.Asc,
     },
     where: {
+      createdAt: createdAtFilter
+        ? {
+            gte: createdAtFilter.startDate,
+            lte: createdAtFilter.endDate,
+          }
+        : undefined,
+      date: incidentDateFilter
+        ? {
+            gte: incidentDateFilter.startDate,
+            lte: incidentDateFilter.endDate,
+          }
+        : undefined,
       crimeTypes:
         crimeTypesFilter.length > 0
           ? {
@@ -139,7 +161,12 @@ const useIncidentFeed = (): Return => {
               },
             }
           : undefined,
-
+      description: peculiarities
+        ? {
+            mode: QueryMode.Insensitive,
+            contains: peculiarities,
+          }
+        : undefined,
       approved: gallery.includes('NOT APPROVED')
         ? {
             equals: false,
@@ -174,9 +201,8 @@ const useIncidentFeed = (): Return => {
               },
             },
             {
-              ref: {
-                contains: variables.search,
-                mode: QueryMode.Insensitive,
+              reference: {
+                equals: Number(variables.search),
               },
             },
             {
@@ -264,13 +290,18 @@ const useIncidentFeed = (): Return => {
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     variables: {
       where: {
-        scheme: {
-          id: {
-            equals: schemeId,
+        schemes: {
+          some: {
+            id: {
+              in: [schemeId],
+            },
           },
         },
         dataType: {
           equals: Model.Incident,
+        },
+        type: {
+          equals: TagType.IncidentCrimeType,
         },
       },
     },
@@ -498,6 +529,8 @@ const useIncidentFeed = (): Return => {
     setCrimeTypesFilter,
     goodsLoading,
     businessesLoading,
+    setCreatedAtFilter,
+    setIncidentDateFilter,
   };
 };
 

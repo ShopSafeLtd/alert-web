@@ -103,9 +103,11 @@ const useCreateArticle = (): Props => {
   const { loading: tagsLoading } = useTagsQuery({
     variables: {
       where: {
-        scheme: {
-          id: {
-            equals: schemeId,
+        schemes: {
+          some: {
+            id: {
+              in: [schemeId],
+            },
           },
         },
         dataType: {
@@ -152,10 +154,12 @@ const useCreateArticle = (): Props => {
                 },
               },
               description: '',
-              scheme: {
-                connect: {
-                  id: schemeId,
-                },
+              schemes: {
+                connect: [
+                  {
+                    id: schemeId,
+                  },
+                ],
               },
               dataType: Model.Article,
             },

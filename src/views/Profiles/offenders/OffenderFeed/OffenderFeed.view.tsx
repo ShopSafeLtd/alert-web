@@ -8,7 +8,17 @@ import type {
   RecycleOffenderMutation,
   SearchBusinessesQuery,
 } from 'graphql/generated';
-import { Affix, Button, Card, Col, Drawer, Input, Pagination, Row } from 'antd';
+import {
+  Affix,
+  Button,
+  Card,
+  Col,
+  Drawer,
+  Empty,
+  Input,
+  Pagination,
+  Row,
+} from 'antd';
 import OffenderCard from 'components/offenders/OffenderCard';
 import OffenderSkeletonCard from 'components/offenders/OffenderSkeletonCard/OffenderSkeletonCard.view';
 import type { OffenderSort } from 'state';
@@ -21,6 +31,7 @@ import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import OffenderFilter from 'components/offenders/OffenderFilter';
+import type { DateType } from 'types/DataType';
 // import useStyles from './OffenderFeed.styles';
 
 interface Props {
@@ -71,6 +82,7 @@ interface Props {
   setBusinesses: (value: string[]) => void;
   businessData: SearchBusinessesQuery | undefined;
   businessesLoading: boolean;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
 }
 
 const OffenderFeed = ({
@@ -116,6 +128,7 @@ const OffenderFeed = ({
   businesses,
   setBusinesses,
   businessesLoading,
+  setCreatedAtFilter,
 }: Props): JSX.Element => (
   <div className="feed-container">
     <Affix offsetTop={5}>
@@ -198,38 +211,58 @@ const OffenderFeed = ({
 
     <div style={{ paddingBottom: 10 }}>
       <Row gutter={8}>
-        {loading
-          ? Array.from({ length: 24 }).map((_, index) => (
-              <Col
-                style={{ marginBottom: 10 }}
-                // eslint-disable-next-line react/no-array-index-key
-                key={index}
-                sm={24}
-                md={12}
-                lg={8}
-                xl={8}
-                xxl={6}
-              >
-                <OffenderSkeletonCard />
-              </Col>
-            ))
-          : data?.listOffenders?.offenders?.map((item) => (
-              <Col
-                style={{ marginBottom: 10 }}
-                sm={24}
-                md={12}
-                lg={8}
-                xl={8}
-                xxl={6}
-                key={item?.id}
-              >
-                <OffenderCard
-                  offender={item}
-                  openLightbox={openLightbox}
-                  update={updateOffenderList}
-                />
-              </Col>
-            ))}
+        {loading ? (
+          Array.from({ length: 24 }).map((_, index) => (
+            <Col
+              style={{ marginBottom: 10 }}
+              // eslint-disable-next-line react/no-array-index-key
+              key={index}
+              sm={24}
+              md={12}
+              lg={8}
+              xl={8}
+              xxl={6}
+            >
+              <OffenderSkeletonCard />
+            </Col>
+          ))
+        ) : data?.listOffenders?.total ? (
+          data?.listOffenders?.offenders?.map((item) => (
+            <Col
+              style={{ marginBottom: 10 }}
+              sm={24}
+              md={12}
+              lg={8}
+              xl={8}
+              xxl={6}
+              key={item?.id}
+            >
+              <OffenderCard
+                offender={item}
+                openLightbox={openLightbox}
+                update={updateOffenderList}
+              />
+            </Col>
+          ))
+        ) : (
+          <div
+            style={{
+              display: 'flex',
+              flex: 1,
+              height: 'calc(100vh - 100px)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Empty
+              description={
+                search === ''
+                  ? 'No Offenders'
+                  : 'No offenders match your search criteria'
+              }
+            />
+          </div>
+        )}
       </Row>
 
       <Row justify="center">
@@ -281,6 +314,7 @@ const OffenderFeed = ({
         businesses={businesses}
         setBusinesses={setBusinesses}
         businessesLoading={businessesLoading}
+        setCreatedAtFilter={setCreatedAtFilter}
       />
     </Drawer>
 

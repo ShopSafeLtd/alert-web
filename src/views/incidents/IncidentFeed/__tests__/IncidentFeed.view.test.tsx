@@ -64,6 +64,8 @@ describe('Detail Officer View', () => {
         <MemoryRouter>
           <MockedProvider mocks={[]} addTypename={false}>
             <IncidentFeed
+              setCreatedAtFilter={jest.fn()}
+              setIncidentDateFilter={jest.fn()}
               lightBoxOpen={{
                 open: false,
                 index: 0,

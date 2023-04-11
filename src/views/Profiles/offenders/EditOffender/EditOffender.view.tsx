@@ -295,30 +295,34 @@ const EditOffender = ({
                     Addresses
                   </Title>
                 </Col>
-                <Col style={{ marginRight: 5 }}>
-                  <Paragraph
-                    style={{ marginBottom: 1, marginLeft: 5 }}
-                    type="secondary"
-                    italic
-                  >
-                    - Add any of the known addresses for the offender.
-                  </Paragraph>
-                </Col>
-                <Col>
-                  <Button
-                    disabled={saving}
-                    onClick={toggleAddAddress}
-                    style={{ marginTop: -30, marginLeft: 15, color: 'red' }}
-                    icon={
-                      <FontAwesomeIcon
-                        icon={faPlus}
-                        style={{ marginRight: 5 }}
-                      />
-                    }
-                  >
-                    Add Address
-                  </Button>
-                </Col>
+                {adminRights && (
+                  <>
+                    <Col style={{ marginRight: 5 }}>
+                      <Paragraph
+                        style={{ marginBottom: 1, marginLeft: 5 }}
+                        type="secondary"
+                        italic
+                      >
+                        - Add any of the known addresses for the offender.
+                      </Paragraph>
+                    </Col>
+                    <Col>
+                      <Button
+                        disabled={saving}
+                        onClick={toggleAddAddress}
+                        style={{ marginTop: -30, marginLeft: 15, color: 'red' }}
+                        icon={
+                          <FontAwesomeIcon
+                            icon={faPlus}
+                            style={{ marginRight: 5 }}
+                          />
+                        }
+                      >
+                        Add Address
+                      </Button>
+                    </Col>
+                  </>
+                )}
               </Row>
               <Table
                 size="small"

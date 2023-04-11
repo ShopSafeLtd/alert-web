@@ -20,6 +20,7 @@ describe('List Officer View', () => {
       defaultMessagePush: false,
       defaultOffenderEmail: false,
       defaultOffenderPush: false,
+      defaultPublicOffenderDOB: true,
     },
   };
   it('renders the page', () => {

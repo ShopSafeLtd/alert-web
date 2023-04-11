@@ -419,9 +419,11 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     variables: {
       where: {
-        scheme: {
-          id: {
-            equals: schemeId,
+        schemes: {
+          some: {
+            id: {
+              in: [schemeId],
+            },
           },
         },
         dataType: {

@@ -52,7 +52,6 @@ describe('List Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <EditIncident
-          updateOffender={jest.fn()}
           onSubmit={jest.fn()}
           data={data}
           loading={false}
@@ -80,18 +79,16 @@ describe('List Officer View', () => {
           recentOffenderLoading={false}
           removeImage={jest.fn()}
           removeImageFromOffender={jest.fn()}
-          removeOffender={jest.fn()}
           searchOffenders=""
           setAddRecentOffender={jest.fn()}
           setAssignToImage={jest.fn()}
           setSearchOffenders={jest.fn()}
-          crimeGroupsData={[]}
-          removeCrimeGroup={jest.fn()}
           removeVehicle={jest.fn()}
-          updateCrimeGroupsData={jest.fn()}
-          updateOffendersData={jest.fn()}
           updateVehiclesData={jest.fn()}
           onSearchBusiness={jest.fn()}
+          onAddOffender={jest.fn()}
+          onEditOffender={jest.fn()}
+          onRemoveOffender={jest.fn()}
           vehiclesData={[]}
           goodsTypesData={{ listGoodsTypes: { goodsTypes: [], total: 0 } }}
         />

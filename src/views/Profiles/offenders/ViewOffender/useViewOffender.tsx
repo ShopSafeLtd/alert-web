@@ -4,6 +4,7 @@ import type {
   ViewOffenderQueryVariables,
 } from 'graphql/generated';
 import {
+  useSchemeQuery,
   Role,
   useAddImagesToOffenderMutation,
   useDeleteUpdateMutation,
@@ -81,16 +82,18 @@ interface Return {
   closeAddImages: () => void;
   optionRowShow: boolean;
   setOptionRowShow: (value: boolean) => void;
+  publicOffenderDOB: boolean;
 }
 
 const useViewOffender = (offenderId: string): Return => {
   const navigate = useNavigate();
+  const schemeId = useStoreState((state) => state.scheme.id);
   const role = useStoreState((state) => state.user.role);
   const groups = useStoreState((state) => state.user.groups);
   const userId = useStoreState((state) => state.user.id);
   const [saving, setSaving] = useState(false);
+  const [publicOffenderDOB, setPublicOffenderDOB] = useState(false);
   const [optionRowShow, setOptionRowShow] = useState(false);
-
   const [linkIncident, setLinkIncident] = useState(false);
   const [optionMenuItems, setOptionsMenuItems] = useState<ItemType[]>([]);
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
@@ -147,7 +150,12 @@ const useViewOffender = (offenderId: string): Return => {
       );
     },
   });
-
+  useSchemeQuery({
+    variables: { where: { id: schemeId } },
+    onCompleted: ({ scheme }) => {
+      setPublicOffenderDOB(scheme?.defaultPublicOffenderDOB || false);
+    },
+  });
   const [updateOffender] = useUpdateOffenderMutation({
     onCompleted: () => {
       setSaving(false);
@@ -474,6 +482,7 @@ const useViewOffender = (offenderId: string): Return => {
     lightBoxOpen,
     optionRowShow,
     setOptionRowShow,
+    publicOffenderDOB,
   };
 };
 

@@ -127,6 +127,7 @@ interface Props {
   };
   optionRowShow: boolean;
   setOptionRowShow: (value: boolean) => void;
+  publicOffenderDOB: boolean;
 }
 
 const ViewOffender = ({
@@ -163,6 +164,7 @@ const ViewOffender = ({
   lightBoxOpen,
   optionRowShow,
   setOptionRowShow,
+  publicOffenderDOB,
 }: Props): JSX.Element => {
   const classes = useStyles();
   return (
@@ -281,21 +283,23 @@ const ViewOffender = ({
                         ))}
                       </Row>
                       <Descriptions column={2}>
-                        <Descriptions.Item
-                          label={
-                            <span>
-                              <FontAwesomeIcon
-                                className={classes.descIcon}
-                                icon={faUserClock}
-                              />
-                              Age
-                            </span>
-                          }
-                        >
-                          {data?.offender?.dateOfBirth
-                            ? calcAge(data?.offender?.dateOfBirth)
-                            : getOffenderAge(data?.offender?.age)}
-                        </Descriptions.Item>
+                        {(publicOffenderDOB || editRights) && (
+                          <Descriptions.Item
+                            label={
+                              <span>
+                                <FontAwesomeIcon
+                                  className={classes.descIcon}
+                                  icon={faUserClock}
+                                />
+                                Age
+                              </span>
+                            }
+                          >
+                            {data?.offender?.dateOfBirth
+                              ? calcAge(data?.offender?.dateOfBirth)
+                              : getOffenderAge(data?.offender?.age)}
+                          </Descriptions.Item>
+                        )}
 
                         <Descriptions.Item
                           label={
@@ -540,47 +544,51 @@ const ViewOffender = ({
                           image={Empty.PRESENTED_IMAGE_SIMPLE}
                         />
                       )}
-                      <Title level={4} style={{ marginTop: 30 }}>
-                        Addresses
-                      </Title>
-                      {data?.offender?.addresses.length && !loading ? (
-                        <Table
-                          size="small"
-                          loading={loading}
-                          pagination={
-                            data.offender.addresses &&
-                            data?.offender.addresses.length > 10
-                              ? {
-                                  pageSize: 10,
-                                }
-                              : false
-                          }
-                          className={classes.exclusions}
-                          columns={[
-                            {
-                              key: 'alias',
-                              title: 'Alias',
-                              dataIndex: 'alias',
-                            },
-                            {
-                              key: 'full',
-                              title: 'Full Address',
-                              dataIndex: 'full',
-                            },
-                          ]}
-                          dataSource={data?.offender?.addresses.map(
-                            (address) => ({
-                              key: address.id,
-                              alias: address.alias,
-                              full: address.full,
-                            })
+                      {editRights && (
+                        <>
+                          <Title level={4} style={{ marginTop: 30 }}>
+                            Addresses
+                          </Title>
+                          {data?.offender?.addresses.length && !loading ? (
+                            <Table
+                              size="small"
+                              loading={loading}
+                              pagination={
+                                data.offender.addresses &&
+                                data?.offender.addresses.length > 10
+                                  ? {
+                                      pageSize: 10,
+                                    }
+                                  : false
+                              }
+                              className={classes.exclusions}
+                              columns={[
+                                {
+                                  key: 'alias',
+                                  title: 'Alias',
+                                  dataIndex: 'alias',
+                                },
+                                {
+                                  key: 'full',
+                                  title: 'Full Address',
+                                  dataIndex: 'full',
+                                },
+                              ]}
+                              dataSource={data?.offender?.addresses.map(
+                                (address) => ({
+                                  key: address.id,
+                                  alias: address.alias,
+                                  full: address.full,
+                                })
+                              )}
+                            />
+                          ) : (
+                            <Empty
+                              description="No addresses for this offender"
+                              image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            />
                           )}
-                        />
-                      ) : (
-                        <Empty
-                          description="No addresses for this offender"
-                          image={Empty.PRESENTED_IMAGE_SIMPLE}
-                        />
+                        </>
                       )}
 
                       <Title level={4} style={{ marginTop: 30 }}>

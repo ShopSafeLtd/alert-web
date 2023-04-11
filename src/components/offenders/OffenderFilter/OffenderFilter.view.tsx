@@ -1,10 +1,12 @@
 import React from 'react';
-import { Button, Col, Input, Row, Select, Typography } from 'antd';
+import { Button, Col, Input, Row, Select, Typography, DatePicker } from 'antd';
 import type { SearchBusinessesQuery } from 'graphql/generated';
 import { Age, Build, Gender, Race } from 'graphql/generated';
 import { OffenderSort } from 'state';
+import type { DateType } from 'types/DataType';
 import useStyles from './OffenderFilter.styles';
 
+const { RangePicker } = DatePicker;
 interface Props {
   order: OffenderSort;
   setOrder: (value: OffenderSort) => void;
@@ -33,6 +35,7 @@ interface Props {
   setBusinesses: (value: string[]) => void;
   businessData: SearchBusinessesQuery | undefined;
   businessesLoading: boolean;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
 }
 
 const OffenderFilter = ({
@@ -63,6 +66,7 @@ const OffenderFilter = ({
   businesses,
   setBusinesses,
   businessesLoading,
+  setCreatedAtFilter,
 }: Props): JSX.Element => {
   const classes = useStyles();
   return (
@@ -92,6 +96,24 @@ const OffenderFilter = ({
               Oldest First
             </Select.Option>
           </Select>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={23}>
+          <Typography.Paragraph className={classes.selectTitle}>
+            Created Between
+          </Typography.Paragraph>
+
+          <RangePicker
+            className={classes.select}
+            onChange={(value) => {
+              if (value && value[0] && value[1])
+                setCreatedAtFilter({
+                  startDate: new Date(value[0].valueOf()),
+                  endDate: new Date(value[1].valueOf()),
+                });
+            }}
+          />
         </Col>
       </Row>
       <Row gutter={16}>

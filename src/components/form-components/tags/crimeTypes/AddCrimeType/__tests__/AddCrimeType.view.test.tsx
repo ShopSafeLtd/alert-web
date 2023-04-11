@@ -7,7 +7,13 @@ describe('List Officer View', () => {
   it('renders the page', () => {
     const { getByText } = render(
       <MemoryRouter>
-        <AddCrimeType onSubmit={jest.fn()} saving={false} onClose={jest.fn()} />
+        <AddCrimeType
+          onSubmit={jest.fn()}
+          saving={false}
+          onClose={jest.fn()}
+          schemeId=""
+          userSchemes={[]}
+        />
       </MemoryRouter>
     );
     expect(getByText('Cancel')).toBeInTheDocument();

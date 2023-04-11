@@ -15,7 +15,6 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
     addRecentOffender,
     assignOffendersToImages,
     beforeUpload,
-    crimeGroupsData,
     data,
     fileList,
     groups,
@@ -32,10 +31,8 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
     onSubmit,
     recentOffenderData,
     recentOffenderLoading,
-    removeCrimeGroup,
     removeImage,
     removeImageFromOffender,
-    removeOffender,
     removeVehicle,
     saving,
     searchOffenders,
@@ -45,13 +42,13 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
     tags,
     tagsLoading,
     toggleAddIncidentTag,
-    updateCrimeGroupsData,
     updateIncidentTag,
-    updateOffender,
-    updateOffendersData,
     updateVehiclesData,
     vehiclesData,
     goodsTypesData,
+    onAddOffender,
+    onEditOffender,
+    onRemoveOffender,
   } = useEditIncident({ incidentId, reviewed });
   return (
     <div>
@@ -60,7 +57,6 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
         addRecentOffender={addRecentOffender}
         assignOffendersToImages={assignOffendersToImages}
         beforeUpload={beforeUpload}
-        crimeGroupsData={crimeGroupsData}
         data={data}
         fileList={fileList}
         goodsTypesData={goodsTypesData}
@@ -78,10 +74,8 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
         onSubmit={onSubmit}
         recentOffenderData={recentOffenderData}
         recentOffenderLoading={recentOffenderLoading}
-        removeCrimeGroup={removeCrimeGroup}
         removeImage={removeImage}
         removeImageFromOffender={removeImageFromOffender}
-        removeOffender={removeOffender}
         removeVehicle={removeVehicle}
         reviewed={reviewed}
         saving={saving}
@@ -92,12 +86,12 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
         tags={tags}
         tagsLoading={tagsLoading}
         toggleAddIncidentTag={toggleAddIncidentTag}
-        updateCrimeGroupsData={updateCrimeGroupsData}
         updateIncidentTag={updateIncidentTag}
-        updateOffender={updateOffender}
-        updateOffendersData={updateOffendersData}
         updateVehiclesData={updateVehiclesData}
         vehiclesData={vehiclesData}
+        onAddOffender={onAddOffender}
+        onEditOffender={onEditOffender}
+        onRemoveOffender={onRemoveOffender}
       />
     </div>
   );

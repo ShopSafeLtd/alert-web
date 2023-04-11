@@ -53,6 +53,7 @@ const UseAddCrimeTypeTest = () => {
             name: 'data.name',
             description: 'data.description',
             crimeType: CrimeType.TheftHandling,
+            schemes: [],
           })
         }
       >

@@ -7,7 +7,6 @@ const EditIncident = (): JSX.Element => {
     addIncidentTag,
     assignOffendersToImages,
     beforeUpload,
-    crimeGroupsData,
     fileList,
     form,
     groups,
@@ -22,7 +21,6 @@ const EditIncident = (): JSX.Element => {
     primaryAddress,
     recentOffenderData,
     recentOffenderLoading,
-    removeCrimeGroup,
     removeImage,
     removeImageFromOffender,
     removeOffender,
@@ -34,7 +32,6 @@ const EditIncident = (): JSX.Element => {
     tags,
     tagsLoading,
     toggleAddIncidentTag,
-    updateCrimeGroupsData,
     updateIncidentTag,
     updateVehiclesData,
     vehiclesData,
@@ -55,7 +52,6 @@ const EditIncident = (): JSX.Element => {
         addIncidentTag={addIncidentTag}
         assignOffendersToImages={assignOffendersToImages}
         beforeUpload={beforeUpload}
-        crimeGroupsData={crimeGroupsData}
         fileList={fileList}
         form={form}
         groups={groups}
@@ -70,7 +66,6 @@ const EditIncident = (): JSX.Element => {
         primaryAddress={primaryAddress}
         recentOffenderData={recentOffenderData}
         recentOffenderLoading={recentOffenderLoading}
-        removeCrimeGroup={removeCrimeGroup}
         removeImage={removeImage}
         removeImageFromOffender={removeImageFromOffender}
         removeOffender={removeOffender}
@@ -82,7 +77,6 @@ const EditIncident = (): JSX.Element => {
         tags={tags}
         tagsLoading={tagsLoading}
         toggleAddIncidentTag={toggleAddIncidentTag}
-        updateCrimeGroupsData={updateCrimeGroupsData}
         updateIncidentTag={updateIncidentTag}
         updateVehiclesData={updateVehiclesData}
         vehiclesData={vehiclesData}

@@ -33,14 +33,14 @@ const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
     feedItem?.article || {};
 
   return (
-    <Row gutter={15} wrap={false} key={id || ''}>
-      {image ? (
-        <Col>
-          <ImageContainer src={image.optimised || image.url || ''} />
-        </Col>
-      ) : null}
+    <Link to={`/app/article/view/${id}`}>
+      <Row gutter={15} wrap={false} key={id || ''} style={{ width: '100%' }}>
+        {image ? (
+          <Col>
+            <ImageContainer src={image.optimised || image.url || ''} />
+          </Col>
+        ) : null}
 
-      <Link to={`/app/article/view/${id}`}>
         <Col flex={1}>
           <Title style={{ marginBottom: 2 }} level={4} ellipsis>
             {priority === ArticlePriority.High && (
@@ -81,8 +81,8 @@ const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
             </Row>
           ) : null}
         </Col>
-      </Link>
-    </Row>
+      </Row>{' '}
+    </Link>
   );
 };
 

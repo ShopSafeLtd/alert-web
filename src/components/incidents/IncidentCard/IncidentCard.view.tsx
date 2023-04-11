@@ -59,7 +59,11 @@ const IncidentCard = ({
   const imagesRef = useRef<CarouselRef>(null);
 
   return (
-    <Card className="incident-card" key={incident.id || ''}>
+    <Card
+      className="incident-card"
+      key={incident.id || ''}
+      bodyStyle={{ overflow: 'hidden', borderRadius: 10 }}
+    >
       {!incident?.approved && (
         <div className="incident-card-overlay">
           <Title level={4} className="incident-card-approval-title">

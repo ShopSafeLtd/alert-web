@@ -188,3 +188,9 @@ export interface DatedMessages {
   crimeGroups?: CrimeGroupData[];
   createdAt?: Moment;
 }
+
+// date
+export interface DateType {
+  startDate: Moment | Date;
+  endDate: Moment | Date;
+}
