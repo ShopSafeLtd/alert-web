@@ -31,6 +31,7 @@ import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import OffenderFilter from 'components/offenders/OffenderFilter';
+import type { DateType } from 'types/DataType';
 // import useStyles from './OffenderFeed.styles';
 
 interface Props {
@@ -81,6 +82,7 @@ interface Props {
   setBusinesses: (value: string[]) => void;
   businessData: SearchBusinessesQuery | undefined;
   businessesLoading: boolean;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
 }
 
 const OffenderFeed = ({
@@ -126,6 +128,7 @@ const OffenderFeed = ({
   businesses,
   setBusinesses,
   businessesLoading,
+  setCreatedAtFilter,
 }: Props): JSX.Element => (
   <div className="feed-container">
     <Affix offsetTop={5}>
@@ -251,7 +254,13 @@ const OffenderFeed = ({
               justifyContent: 'center',
             }}
           >
-            <Empty description="No Offenders" />
+            <Empty
+              description={
+                search === ''
+                  ? 'No Offenders'
+                  : 'No offenders match your search criteria'
+              }
+            />
           </div>
         )}
       </Row>
@@ -305,6 +314,7 @@ const OffenderFeed = ({
         businesses={businesses}
         setBusinesses={setBusinesses}
         businessesLoading={businessesLoading}
+        setCreatedAtFilter={setCreatedAtFilter}
       />
     </Drawer>
 

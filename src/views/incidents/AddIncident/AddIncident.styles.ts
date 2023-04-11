@@ -8,7 +8,7 @@ const styles = createUseStyles((theme: Theme) => ({
     right: 0,
     bottom: 0,
     left: 0,
-    zIndex: 1,
+    zIndex: 1000,
     backgroundColor: 'rgba(0,0,0,0.8)',
     borderRadius: 10,
   },

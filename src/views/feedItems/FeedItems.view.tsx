@@ -39,7 +39,7 @@ import { formatDate } from 'utils';
 import IncidentFeed from 'components/feedItems/FeedItemSection/IncidentFeed';
 import OffenderFeed from 'components/feedItems/FeedItemSection/OffenderFeed';
 import ArticleFeed from 'components/feedItems/FeedItemSection/ArticleFeed';
-import type { PaginationModel } from 'types/DataType';
+import type { DateType, PaginationModel } from 'types/DataType';
 import InvestigationFeed from 'components/feedItems/FeedItemSection/investigationFeed';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import FeedItemFilter from 'components/feedItems/FeedItemFilter';
@@ -65,7 +65,7 @@ interface Props {
   pagination: { page: number; pageSize: number; sizeOptions: string[] };
   articlePagination: PaginationModel;
   onArticlePaginationChange: (page: number, pageSize: number) => void;
-  // search: string;
+  search: string;
   setSearch: (value: string) => void;
   unapprovedIncidents: ListUnapprovedIncidentsQuery | undefined;
   unapprovedIncidentsLoading: boolean;
@@ -85,6 +85,7 @@ interface Props {
   groupsLoading: boolean;
   gallery: string[];
   setGallery: (values: string[]) => void;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
 }
 
 const FeedItem = ({
@@ -96,7 +97,7 @@ const FeedItem = ({
   recentOffenderLoading,
   onPaginationChange,
   pagination,
-  // search,
+  search,
   setSearch,
   unapprovedIncidents,
   unapprovedIncidentsLoading,
@@ -118,6 +119,7 @@ const FeedItem = ({
   groupsLoading,
   gallery,
   setGallery,
+  setCreatedAtFilter,
 }: // updateIncidentList,
 // onNavigate,
 Props): JSX.Element => {
@@ -369,7 +371,13 @@ Props): JSX.Element => {
                 justifyContent: 'center',
               }}
             >
-              <Empty description="No Feed Items" />
+              <Empty
+                description={
+                  search === ''
+                    ? 'No Feed Items'
+                    : 'No feed items match your search criteria'
+                }
+              />
             </Card>
           )}
         </Col>
@@ -481,7 +489,13 @@ Props): JSX.Element => {
                       justifyContent: 'center',
                     }}
                   >
-                    <Empty description="No Offenders" />
+                    <Empty
+                      description={
+                        search === ''
+                          ? 'No Offenders'
+                          : 'No offenders match your search criteria'
+                      }
+                    />
                   </div>
                 )}
               </Row>
@@ -538,7 +552,13 @@ Props): JSX.Element => {
                         height: 'calc(100vh - 400px)',
                       }}
                     >
-                      <Empty description="No Bulletins" />
+                      <Empty
+                        description={
+                          search === ''
+                            ? 'No Bulletins'
+                            : 'No bulletins match your search criteria'
+                        }
+                      />
                     </div>
                   )}
                 </Row>
@@ -707,6 +727,7 @@ Props): JSX.Element => {
           groupsFilter={groupsFilter}
           setGroupsFilter={setGroupsFilter}
           clearFilters={clearFilters}
+          setCreatedAtFilter={setCreatedAtFilter}
         />
       </Drawer>
     </div>

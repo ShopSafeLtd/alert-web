@@ -1,9 +1,12 @@
 import React from 'react';
-import { Button, Col, Row, Select, Typography } from 'antd';
+import { Button, Col, Row, Select, Typography, DatePicker } from 'antd';
 
 import { FeedItemSort } from 'state';
 import { Model } from 'graphql/generated';
+import type { DateType } from 'types/DataType';
 import useStyles from './FeedItemFilter.styles';
+
+const { RangePicker } = DatePicker;
 
 interface Props {
   order: FeedItemSort;
@@ -15,6 +18,7 @@ interface Props {
   typesFilter: Model[];
   setTypesFilter: (value: Model[]) => void;
   clearFilters: () => void;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
 }
 
 const FeedItemFilter = ({
@@ -27,6 +31,7 @@ const FeedItemFilter = ({
   groupsFilter,
   setGroupsFilter,
   clearFilters,
+  setCreatedAtFilter,
 }: Props): JSX.Element => {
   const classes = useStyles();
 
@@ -60,6 +65,24 @@ const FeedItemFilter = ({
               Oldest First
             </Select.Option>
           </Select>
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={23}>
+          <Typography.Paragraph className={classes.selectTitle}>
+            Created Between
+          </Typography.Paragraph>
+
+          <RangePicker
+            className={classes.select}
+            onChange={(value) => {
+              if (value && value[0] && value[1])
+                setCreatedAtFilter({
+                  startDate: new Date(value[0].valueOf()),
+                  endDate: new Date(value[1].valueOf()),
+                });
+            }}
+          />
         </Col>
       </Row>
       <Row gutter={16}>

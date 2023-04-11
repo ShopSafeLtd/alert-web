@@ -26,6 +26,7 @@ import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view'
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import IncidentFilter from 'components/incidents/IncidentFilter';
+import type { DateType } from 'types/DataType';
 
 interface Props {
   data: ListIncidentsQuery | undefined;
@@ -69,6 +70,8 @@ interface Props {
   setBusinessesFilter: (value: string[]) => void;
   goodsLoading: boolean;
   businessesLoading: boolean;
+  setIncidentDateFilter: (value: DateType | undefined) => void;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
 }
 
 const IncidentFeed = ({
@@ -108,6 +111,8 @@ const IncidentFeed = ({
   businessesLoading,
   crimeTypesFilter,
   setCrimeTypesFilter,
+  setIncidentDateFilter,
+  setCreatedAtFilter,
 }: Props): JSX.Element => (
   <div className="feed-container" style={{ padding: 10 }}>
     <Affix offsetTop={5}>
@@ -206,7 +211,13 @@ const IncidentFeed = ({
               justifyContent: 'center',
             }}
           >
-            <Empty description="No Incidents" />
+            <Empty
+              description={
+                search === ''
+                  ? 'No Incidents'
+                  : 'No incidents match your search criteria'
+              }
+            />
           </div>
         )}
       </Row>
@@ -252,6 +263,8 @@ const IncidentFeed = ({
         setBusinessesFilter={setBusinessesFilter}
         goodsLoading={goodsLoading}
         businessesLoading={businessesLoading}
+        setIncidentDateFilter={setIncidentDateFilter}
+        setCreatedAtFilter={setCreatedAtFilter}
       />
     </Drawer>
     <Lightbox
