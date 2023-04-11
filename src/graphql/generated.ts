@@ -42916,6 +42916,293 @@ export type AddressesQuery = {
   }>;
 };
 
+export type EditIncidentQueryVariables = Exact<{
+  where: IncidentWhereUniqueInput;
+}>;
+
+export type EditIncidentQuery = {
+  __typename?: 'Query';
+  incident?: {
+    __typename?: 'Incident';
+    id: string;
+    subject?: string | null;
+    description: string;
+    dayTime?: string | null;
+    date: any;
+    time: any;
+    reference?: number | null;
+    ref?: string | null;
+    policeReported: boolean;
+    policeRef?: string | null;
+    policeNo?: string | null;
+    policeInvolved: boolean;
+    subscribed?: boolean | null;
+    totalValue?: number | null;
+    totalRecoveredValue?: number | null;
+    approved?: boolean | null;
+    crimeTypes: Array<{
+      __typename?: 'Tag';
+      id: string;
+      name: string;
+      crimeType?: CrimeType | null;
+    }>;
+    involvedTags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    impactTags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    incidentItems: Array<{
+      __typename?: 'IncidentItem';
+      id: string;
+      name: string;
+      value: number;
+      recoveredValue: number;
+      goodsType: { __typename?: 'GoodsType'; id: string };
+    }>;
+    business?: { __typename?: 'Business'; id: string; name: string } | null;
+    createdBy: {
+      __typename?: 'User';
+      id: string;
+      fullName: string;
+      businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+    };
+    images: Array<{
+      __typename?: 'Image';
+      id: string;
+      optimised?: string | null;
+      url?: string | null;
+      offenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        name?: string | null;
+      }>;
+    }>;
+    groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      reference?: number | null;
+      alias?: string | null;
+      totalIncidents?: number | null;
+      totalOffenders?: number | null;
+      totalRecoveredValue?: number | null;
+      totalTheftSuccess?: number | null;
+      totalValue?: number | null;
+    }>;
+    vehicles: Array<{
+      __typename?: 'Vehicle';
+      id: string;
+      reference?: number | null;
+      colour?: string | null;
+      model?: string | null;
+      make?: string | null;
+      registration?: string | null;
+      totalCrimeGroups?: number | null;
+      totalIncidents?: number | null;
+      totalOffenders?: number | null;
+      updatedAt: any;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+      }>;
+    }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      reference?: number | null;
+      createdAt: any;
+      updatedAt: any;
+      age?: Age | null;
+      build?: Build | null;
+      dateOfBirth?: any | null;
+      dateSource?: string | null;
+      gender?: Gender | null;
+      hair?: string | null;
+      name?: string | null;
+      peculiarities?: string | null;
+      race?: Race | null;
+      approved?: boolean | null;
+      uploaded?: boolean | null;
+      active?: boolean | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+      }>;
+      tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+    }>;
+    updates: Array<{
+      __typename?: 'Update';
+      id: string;
+      text?: string | null;
+      type: UpdateType;
+      createdAt: any;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        url?: string | null;
+        optimised?: string | null;
+        card?: string | null;
+      }>;
+      linkedCrimeGroups: Array<{
+        __typename?: 'CrimeGroup';
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        alias?: string | null;
+        id: string;
+        reference?: number | null;
+        totalRecoveredValue?: number | null;
+        totalTheftSuccess?: number | null;
+        totalValue?: number | null;
+        updatedAt: any;
+      }>;
+      linkedVehicles: Array<{
+        __typename?: 'Vehicle';
+        updatedAt: any;
+        totalOffenders?: number | null;
+        registration?: string | null;
+        reference?: number | null;
+        model?: string | null;
+        make?: string | null;
+        id: string;
+        colour?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      linkedIncidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        subject?: string | null;
+        description: string;
+        dayTime?: string | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      linkedOffenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        updatedAt: any;
+        age?: Age | null;
+        build?: Build | null;
+        dateOfBirth?: any | null;
+        name?: string | null;
+        race?: Race | null;
+        gender?: Gender | null;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+        }>;
+      }>;
+      createdBy: {
+        __typename?: 'User';
+        origName: string;
+        id: string;
+        fullName: string;
+        businesses: Array<{
+          __typename?: 'Business';
+          id: string;
+          name: string;
+        }>;
+      };
+      replies: Array<{
+        __typename?: 'Update';
+        id: string;
+        text?: string | null;
+        type: UpdateType;
+        createdAt: any;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          card?: string | null;
+        }>;
+        linkedCrimeGroups: Array<{
+          __typename?: 'CrimeGroup';
+          totalOffenders?: number | null;
+          totalIncidents?: number | null;
+          alias?: string | null;
+          id: string;
+          reference?: number | null;
+          totalRecoveredValue?: number | null;
+          totalTheftSuccess?: number | null;
+          totalValue?: number | null;
+          updatedAt: any;
+        }>;
+        linkedVehicles: Array<{
+          __typename?: 'Vehicle';
+          updatedAt: any;
+          totalOffenders?: number | null;
+          registration?: string | null;
+          reference?: number | null;
+          model?: string | null;
+          make?: string | null;
+          id: string;
+          colour?: string | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+        }>;
+        linkedIncidents: Array<{
+          __typename?: 'Incident';
+          id: string;
+          subject?: string | null;
+          description: string;
+          dayTime?: string | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+        }>;
+        linkedOffenders: Array<{
+          __typename?: 'Offender';
+          id: string;
+          updatedAt: any;
+          age?: Age | null;
+          build?: Build | null;
+          dateOfBirth?: any | null;
+          name?: string | null;
+          race?: Race | null;
+          gender?: Gender | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+          }>;
+        }>;
+        createdBy: {
+          __typename?: 'User';
+          origName: string;
+          id: string;
+          fullName: string;
+          businesses: Array<{
+            __typename?: 'Business';
+            id: string;
+            name: string;
+          }>;
+        };
+      }>;
+    }>;
+  } | null;
+};
+
 export type IncidentFeedQueryVariables = Exact<{
   schemeId: Scalars['String'];
   search?: InputMaybe<Scalars['String']>;
@@ -52819,6 +53106,337 @@ export type AddressesLazyQueryHookResult = ReturnType<
 export type AddressesQueryResult = Apollo.QueryResult<
   AddressesQuery,
   AddressesQueryVariables
+>;
+export const EditIncidentDocument = gql`
+  query EditIncident($where: IncidentWhereUniqueInput!) {
+    incident(where: $where) {
+      id
+      subject
+      description
+      dayTime
+      date
+      time
+      reference
+      ref
+      policeReported
+      policeRef
+      policeNo
+      policeInvolved
+      subscribed
+      totalValue
+      totalRecoveredValue
+      crimeTypes {
+        id
+        name
+        crimeType
+      }
+      involvedTags {
+        id
+        name
+      }
+      impactTags {
+        id
+        name
+      }
+      incidentItems {
+        id
+        name
+        value
+        recoveredValue
+        goodsType {
+          id
+        }
+      }
+      approved
+      business {
+        id
+        name
+      }
+      createdBy {
+        id
+        fullName
+        businesses {
+          id
+          name
+        }
+      }
+      images {
+        id
+        optimised
+        url
+        offenders {
+          id
+          name
+        }
+      }
+      groups {
+        id
+        name
+      }
+      crimeGroups {
+        id
+        reference
+        alias
+        totalIncidents
+        totalOffenders
+        totalRecoveredValue
+        totalTheftSuccess
+        totalValue
+      }
+      vehicles {
+        id
+        reference
+        colour
+        model
+        make
+        registration
+        totalCrimeGroups
+        totalIncidents
+        totalOffenders
+        updatedAt
+        images {
+          id
+          url
+          optimised
+        }
+      }
+      offenders {
+        id
+        reference
+        createdAt
+        updatedAt
+        age
+        build
+        dateOfBirth
+        dateSource
+        gender
+        hair
+        name
+        peculiarities
+        race
+        approved
+        uploaded
+        active
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        tags {
+          id
+          name
+        }
+      }
+      updates(orderBy: { createdAt: desc }) {
+        id
+        text
+        type
+        createdAt
+        images {
+          id
+          url
+          optimised
+          card
+        }
+        linkedCrimeGroups {
+          totalOffenders
+          totalIncidents
+          alias
+          id
+          reference
+          totalRecoveredValue
+          totalTheftSuccess
+          totalValue
+          updatedAt
+        }
+        linkedVehicles {
+          images {
+            id
+            url
+            optimised
+          }
+          updatedAt
+          totalOffenders
+          registration
+          reference
+          model
+          make
+          id
+          colour
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        linkedIncidents {
+          id
+          subject
+          description
+          dayTime
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        linkedOffenders {
+          id
+          updatedAt
+          age
+          build
+          dateOfBirth
+          name
+          race
+          gender
+          images {
+            id
+            url
+            optimised
+          }
+        }
+        createdBy {
+          origName
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+        replies {
+          id
+          text
+          type
+          createdAt
+          images {
+            id
+            url
+            optimised
+            card
+          }
+          linkedCrimeGroups {
+            totalOffenders
+            totalIncidents
+            alias
+            id
+            reference
+            totalRecoveredValue
+            totalTheftSuccess
+            totalValue
+            updatedAt
+          }
+          linkedVehicles {
+            images {
+              id
+              url
+              optimised
+            }
+            updatedAt
+            totalOffenders
+            registration
+            reference
+            model
+            make
+            id
+            colour
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          linkedIncidents {
+            id
+            subject
+            description
+            dayTime
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          linkedOffenders {
+            id
+            updatedAt
+            age
+            build
+            dateOfBirth
+            name
+            race
+            gender
+            images {
+              id
+              url
+              optimised
+            }
+          }
+          createdBy {
+            origName
+            id
+            fullName
+            businesses {
+              id
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useEditIncidentQuery__
+ *
+ * To run a query within a React component, call `useEditIncidentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEditIncidentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEditIncidentQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useEditIncidentQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    EditIncidentQuery,
+    EditIncidentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<EditIncidentQuery, EditIncidentQueryVariables>(
+    EditIncidentDocument,
+    options
+  );
+}
+export function useEditIncidentLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    EditIncidentQuery,
+    EditIncidentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<EditIncidentQuery, EditIncidentQueryVariables>(
+    EditIncidentDocument,
+    options
+  );
+}
+export type EditIncidentQueryHookResult = ReturnType<
+  typeof useEditIncidentQuery
+>;
+export type EditIncidentLazyQueryHookResult = ReturnType<
+  typeof useEditIncidentLazyQuery
+>;
+export type EditIncidentQueryResult = Apollo.QueryResult<
+  EditIncidentQuery,
+  EditIncidentQueryVariables
 >;
 export const IncidentFeedDocument = gql`
   query incidentFeed(

@@ -129,15 +129,6 @@ const IncidentFeed = ({
               onChange={setGallery}
               options={[
                 {
-                  label: 'Active',
-                  value: 'ACTIVE',
-                },
-                {
-                  label: 'Not Approved',
-                  value: 'NOT APPROVED',
-                  needAdminRight: true,
-                },
-                {
                   label: 'Following',
                   value: 'FOLLOWING',
                 },
@@ -145,15 +136,11 @@ const IncidentFeed = ({
                   label: 'My Data',
                   value: 'MYDATA',
                 },
-
                 {
-                  label: 'PoliceInvolved',
-                  value: 'POLICEINVOLVED',
+                  label: 'Not Approved',
+                  value: 'NOT APPROVED',
+                  needAdminRight: true,
                 },
-                // {
-                //   label: 'PoliceReported',
-                //   value: 'POLICEREPORTED',
-                // },
               ]}
             />
           </Col>

@@ -25,8 +25,13 @@ interface OffenderData {
 interface Props {
   onClose: () => void;
   update: (value: OffenderData) => void;
+  hideImages?: boolean;
 }
-const AddNewOffender = ({ onClose, update }: Props): JSX.Element => {
+const AddNewOffender = ({
+  onClose,
+  update,
+  hideImages,
+}: Props): JSX.Element => {
   const {
     onSubmit,
     saving,
@@ -35,7 +40,6 @@ const AddNewOffender = ({ onClose, update }: Props): JSX.Element => {
     imgChange,
     beforeUpload,
     fileList,
-    // onSearchOffender,
   } = useAddNewOffender({
     onClose,
     update,
@@ -51,6 +55,7 @@ const AddNewOffender = ({ onClose, update }: Props): JSX.Element => {
         imgChange={imgChange}
         beforeUpload={beforeUpload}
         fileList={fileList}
+        hideImages={hideImages}
         // onSearchOffender={onSearchOffender}
       />
     </div>

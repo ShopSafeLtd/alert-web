@@ -40,7 +40,6 @@ import moment from 'moment';
 import AssignImageOffender from 'components/form-components/incident/image/AssignImageOffenders';
 import type { UploadChangeParam } from 'antd/lib/upload';
 import type {
-  CrimeGroupData,
   OffenderData as OffenderDataGlobal,
   VehicleData,
 } from 'types/DataType';
@@ -129,7 +128,6 @@ interface Props {
   recentOffenderLoading: boolean;
   removeImage: (uid: string) => void;
   removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
-  removeOffender: (offenderId: string) => void;
   reviewed: boolean;
   saving: boolean;
   searchOffenders: string;
@@ -140,17 +138,15 @@ interface Props {
   tagsLoading: boolean;
   toggleAddIncidentTag: () => void;
   updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
-  updateOffendersData: (value: OffenderDataGlobal) => void;
-  updateOffender: (value: OffenderDataGlobal) => void;
   vehiclesData: VehicleData[];
   updateVehiclesData: (value: VehicleData) => void;
   removeVehicle: (vehicleId: string) => void;
-  removeCrimeGroup: (crimeGroupId: string) => void;
-  crimeGroupsData: CrimeGroupData[];
-  updateCrimeGroupsData: (value: CrimeGroupData) => void;
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
+  onAddOffender: (offender: OffenderDataGlobal, existing: boolean) => void;
+  onEditOffender: (offender: OffenderDataGlobal) => void;
+  onRemoveOffender: (offenderId: string) => void;
 }
 
 const EditIncident = ({
@@ -158,7 +154,6 @@ const EditIncident = ({
   addRecentOffender,
   assignOffendersToImages,
   beforeUpload,
-  crimeGroupsData,
   data,
   fileList,
   goodsTypesData,
@@ -176,10 +171,8 @@ const EditIncident = ({
   onSubmit,
   recentOffenderData,
   recentOffenderLoading,
-  removeCrimeGroup,
   removeImage,
   removeImageFromOffender,
-  removeOffender,
   removeVehicle,
   reviewed,
   saving,
@@ -190,12 +183,12 @@ const EditIncident = ({
   tags,
   tagsLoading,
   toggleAddIncidentTag,
-  updateCrimeGroupsData,
   updateIncidentTag,
-  updateOffender,
-  updateOffendersData,
   updateVehiclesData,
   vehiclesData,
+  onAddOffender,
+  onEditOffender,
+  onRemoveOffender,
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader
@@ -612,21 +605,18 @@ const EditIncident = ({
         </Card>
         <Card style={{ marginBottom: 10 }}>
           <Profiles
-            crimeGroupsData={crimeGroupsData}
             offenderImgChange={offenderImgChange}
             offendersData={offendersData}
             recentOffenderData={recentOffenderData}
             recentOffenderLoading={recentOffenderLoading}
-            removeCrimeGroup={removeCrimeGroup}
-            removeOffender={removeOffender}
+            removeOffender={onRemoveOffender}
             removeVehicle={removeVehicle}
             saving={saving}
             searchOffenders={searchOffenders}
             setSearchOffenders={setSearchOffenders}
             titleOrder={4}
-            updateCrimeGroupsData={updateCrimeGroupsData}
-            updateOffender={updateOffender}
-            onAddOffender={updateOffendersData}
+            updateOffender={onEditOffender}
+            onAddOffender={onAddOffender}
             updateVehiclesData={updateVehiclesData}
             vehiclesData={vehiclesData}
           />
@@ -741,7 +731,7 @@ const EditIncident = ({
       onCancel={() => setAddRecentOffender(null)}
       visible={addRecentOffender !== null}
       onOk={() => {
-        if (addRecentOffender) updateOffendersData(addRecentOffender);
+        if (addRecentOffender) onAddOffender(addRecentOffender, true);
         setAddRecentOffender(null);
       }}
       okText="Add to incident"

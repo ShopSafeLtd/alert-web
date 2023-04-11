@@ -25,7 +25,7 @@ import {
   faTrash,
   faUpload,
 } from '@fortawesome/pro-light-svg-icons';
-import type { CrimeGroupData, OffenderData, VehicleData } from 'types/DataType';
+import type { OffenderData, VehicleData } from 'types/DataType';
 import {
   calcAge,
   getOffenderAge,
@@ -45,15 +45,11 @@ type Offender = Exclude<
   null | undefined
 >['offenders'][0];
 interface Props {
-  addExistingCrimeGroup: boolean;
   addExistingOffender: boolean;
   addExistingVehicle: boolean;
-  addNewCrimeGroup: boolean;
   addNewVehicle: boolean;
   addOffender: boolean;
   addRecentOffender: Offender | null;
-  crimeGroupsData: CrimeGroupData[];
-  editCrimeGroupId: string;
   editOffenderId: string;
   editVehicleId: string;
   offenderImgChange: (
@@ -63,24 +59,19 @@ interface Props {
   offendersData: OffenderData[];
   recentOffenderData: ListOffendersQuery | undefined;
   recentOffenderLoading: boolean;
-  removeCrimeGroup: (crimeGroupId: string) => void;
   removeOffender: (offenderId: string) => void;
   removeVehicle: (vehicleId: string) => void;
   saving: boolean;
   searchOffenders: string;
   setAddRecentOffender: (value: Offender | null) => void;
-  setEditCrimeGroupId: (value: string) => void;
   setEditOffenderId: (value: string) => void;
   setEditVehicleId: (value: string) => void;
   setSearchOffenders: (value: string) => void;
   titleOrder: number;
-  toggleAddExistingCrimeGroup: () => void;
   toggleAddExistingOffender: () => void;
   toggleAddExistingVehicle: () => void;
-  toggleAddNewCrimeGroup: () => void;
   toggleAddNewVehicle: () => void;
   toggleAddOffender: () => void;
-  updateCrimeGroupsData: (value: CrimeGroupData) => void;
   updateOffender: (value: OffenderData) => void;
   updateVehiclesData: (value: VehicleData) => void;
   vehiclesData: VehicleData[];
@@ -95,10 +86,6 @@ const Profiles = ({
   setEditVehicleId,
   vehiclesData,
   removeVehicle,
-  toggleAddNewCrimeGroup,
-  toggleAddExistingCrimeGroup,
-  crimeGroupsData,
-  removeCrimeGroup,
   offendersData,
   removeOffender,
   setEditOffenderId,
@@ -110,18 +97,13 @@ const Profiles = ({
   searchOffenders,
   setSearchOffenders,
   offenderImgChange,
-  addExistingCrimeGroup,
   addExistingOffender,
   addExistingVehicle,
-  addNewCrimeGroup,
   addNewVehicle,
   addOffender,
   addRecentOffender,
-  editCrimeGroupId,
   editOffenderId,
   editVehicleId,
-  setEditCrimeGroupId,
-  updateCrimeGroupsData,
   updateOffender,
   updateVehiclesData,
   onAddOffender,
@@ -216,50 +198,12 @@ const Profiles = ({
           </Button>
         </Dropdown>
       </Col>
-      <Col>
-        {/* <Dropdown
-          overlay={
-            <Menu
-              items={[
-                {
-                  label: 'Add Existing Crime Groups',
-                  key: '1',
-                  icon: (
-                    <FontAwesomeIcon
-                      icon={faMagnifyingGlass}
-                      style={{ marginRight: 5 }}
-                    />
-                  ),
-                  onClick: () => toggleAddExistingCrimeGroup(),
-                },
-                {
-                  label: 'Create New Crime Group',
-                  key: '2',
-                  icon: (
-                    <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
-                  ),
-                  onClick: () => toggleAddNewCrimeGroup(),
-                },
-              ]}
-            />
-          }
-        > */}
-        <Button
-          style={{ color: 'red' }}
-          onClick={toggleAddExistingCrimeGroup}
-          icon={<FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />}
-        >
-          Crime Groups
-        </Button>
-        {/* </Dropdown> */}
-      </Col>
     </Row>
 
     <Row gutter={20} style={{ marginTop: 10 }}>
       <Col flex={1}>
         {(offendersData && offendersData.length > 0) ||
-        (vehiclesData && vehiclesData.length > 0) ||
-        (crimeGroupsData && crimeGroupsData.length > 0) ? (
+        (vehiclesData && vehiclesData.length > 0) ? (
           <>
             {offendersData && offendersData.length > 0 ? (
               <>
@@ -516,108 +460,6 @@ const Profiles = ({
                 />
               </>
             ) : null}
-            {crimeGroupsData && crimeGroupsData.length > 0 ? (
-              <>
-                <Divider>Crime Groups</Divider>
-                <Table
-                  columns={[
-                    {
-                      key: 'reference',
-                      dataIndex: 'reference',
-                      title: 'Alert ID',
-                      width: 100,
-                    },
-                    {
-                      key: 'alias',
-                      dataIndex: 'alias',
-                      title: 'Alias',
-                    },
-                    {
-                      key: 'totalOffenders',
-                      dataIndex: 'totalOffenders',
-                      title: 'Members',
-                    },
-                    {
-                      key: 'totalIncidents',
-                      dataIndex: 'totalIncidents',
-                      title: 'Incidents',
-                    },
-                    {
-                      key: 'totalValue',
-                      dataIndex: 'totalValue',
-                      title: 'Lost Value',
-                      render: (value) => `£${value || 0}`,
-                    },
-                    {
-                      key: 'totalRecoveredValue',
-                      dataIndex: 'totalRecoveredValue',
-                      title: 'Recovered Value',
-                      render: (value) => `£${value || 0}`,
-                    },
-                    {
-                      key: 'totalTheftSuccess',
-                      dataIndex: 'totalTheftSuccess',
-                      title: 'Success Rate',
-                      render: (value) => `${value?.toFixed(0) || 0}%`,
-                    },
-                    // {
-                    //   key: 'edit',
-                    //   title: 'Edit',
-                    //   dataIndex: '',
-                    //   width: 50,
-                    //   render: (_, record) => (
-                    //     <Button
-                    //       onClick={() => setEditVehicleId(record.key)}
-                    //       disabled
-                    //       icon={<FontAwesomeIcon icon={faEdit} />}
-                    //     />
-                    //   ),
-                    // },
-                    {
-                      key: 'delete',
-                      title: 'Delete',
-                      dataIndex: 'delete',
-                      width: 50,
-                      render: (_, record) => (
-                        <Popconfirm
-                          placement="topLeft"
-                          title="Remove the crime group?"
-                          onConfirm={() => {
-                            removeCrimeGroup(record.key);
-                          }}
-                          okText="Yes"
-                          cancelText="No"
-                          overlayInnerStyle={{ padding: 10 }}
-                        >
-                          <Button
-                            disabled={saving}
-                            icon={<FontAwesomeIcon icon={faTrash} />}
-                          />
-                        </Popconfirm>
-                      ),
-                    },
-                  ]}
-                  dataSource={crimeGroupsData.map((crimeGroup) => ({
-                    key: crimeGroup.id,
-                    reference: crimeGroup.reference,
-                    alias: crimeGroup.alias,
-                    totalOffenders: crimeGroup.totalOffenders,
-                    totalIncidents: crimeGroup.totalIncidents,
-                    totalValue: crimeGroup.totalValue,
-                    totalRecoveredValue: crimeGroup.totalRecoveredValue,
-                    totalTheftSuccess: crimeGroup.totalTheftSuccess,
-                  }))}
-                  size="small"
-                  pagination={
-                    crimeGroupsData && crimeGroupsData.length > 5
-                      ? {
-                          pageSize: 5,
-                        }
-                      : false
-                  }
-                />
-              </>
-            ) : null}
           </>
         ) : (
           <div>
@@ -673,7 +515,6 @@ const Profiles = ({
                       >
                         <Card
                           onClick={() => setAddRecentOffender(offender)}
-                          className="offender-card"
                           bodyStyle={{
                             width: 120,
                             height: 120,
@@ -725,28 +566,20 @@ const Profiles = ({
     </Row>
 
     <ProfileDrawer
-      addExistingCrimeGroup={addExistingCrimeGroup}
       addExistingOffender={addExistingOffender}
       addExistingVehicle={addExistingVehicle}
-      addNewCrimeGroup={addNewCrimeGroup}
       addNewVehicle={addNewVehicle}
       addOffender={addOffender}
-      crimeGroupsData={crimeGroupsData}
-      editCrimeGroupId={editCrimeGroupId}
       editOffenderId={editOffenderId}
       editVehicleId={editVehicleId}
       fromIncident
       offendersData={offendersData}
-      setEditCrimeGroupId={setEditCrimeGroupId}
       setEditOffenderId={setEditOffenderId}
       setEditVehicleId={setEditVehicleId}
-      toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
       toggleAddExistingOffender={toggleAddExistingOffender}
       toggleAddExistingVehicle={toggleAddExistingVehicle}
-      toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
       toggleAddNewVehicle={toggleAddNewVehicle}
       toggleAddOffender={toggleAddOffender}
-      updateCrimeGroupsData={updateCrimeGroupsData}
       updateOffender={updateOffender}
       updateVehiclesData={updateVehiclesData}
       vehiclesData={vehiclesData}
