@@ -244,13 +244,13 @@ const Profiles = ({
             />
           }
         > */}
-        <Button
+        {/* <Button
           style={{ color: 'red' }}
           onClick={toggleAddExistingCrimeGroup}
           icon={<FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />}
         >
           Crime Groups
-        </Button>
+        </Button> */}
         {/* </Dropdown> */}
       </Col>
     </Row>

@@ -23,7 +23,7 @@ import { FeedItemSort, useStoreActions, useStoreState } from 'state';
 import { useNavigate } from 'react-router-dom';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
-import type { PaginationModel } from 'types/DataType';
+import type { DateType, PaginationModel } from 'types/DataType';
 
 interface Return {
   data: FeedItemsQuery | undefined;
@@ -62,6 +62,7 @@ interface Return {
   clearFilters: () => void;
   gallery: string[];
   setGallery: (values: string[]) => void;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
 }
 
 const useFeedItems = (): Return => {
@@ -82,6 +83,9 @@ const useFeedItems = (): Return => {
   const [sortFilter, setSortFilter] = useState(false);
   const [typesFilter, setTypesFilter] = useState<Model[]>([]);
   const [groupsFilter, setGroupsFilter] = useState<string[]>([]);
+  const [createdAtFilter, setCreatedAtFilter] = useState<
+    DateType | undefined
+  >();
   const [gallery, setGallery] = useState<string[]>([]);
 
   const [articlePagination, setArticlePagination] = useState<PaginationModel>({
@@ -91,6 +95,12 @@ const useFeedItems = (): Return => {
   });
 
   const itemVariables = {
+    createdAt: createdAtFilter
+      ? {
+          gte: createdAtFilter.startDate,
+          lte: createdAtFilter.endDate,
+        }
+      : undefined,
     subscribedUsers: gallery.includes('FOLLOWING')
       ? {
           some: {
@@ -251,6 +261,12 @@ const useFeedItems = (): Return => {
         id: schemeId,
       },
       where: {
+        createdAt: createdAtFilter
+          ? {
+              gte: createdAtFilter.startDate,
+              lte: createdAtFilter.endDate,
+            }
+          : undefined,
         createdBy: gallery.includes('MYDATA')
           ? {
               id: {
@@ -288,6 +304,12 @@ const useFeedItems = (): Return => {
         skip: 0,
         take: 10,
         where: {
+          createdAt: createdAtFilter
+            ? {
+                gte: createdAtFilter.startDate,
+                lte: createdAtFilter.endDate,
+              }
+            : undefined,
           approved: {
             equals: false,
           },
@@ -365,6 +387,12 @@ const useFeedItems = (): Return => {
         },
         take: 10,
         where: {
+          createdAt: createdAtFilter
+            ? {
+                gte: createdAtFilter.startDate,
+                lte: createdAtFilter.endDate,
+              }
+            : undefined,
           approved: gallery.includes('NOT APPROVED')
             ? {
                 equals: false,
@@ -557,6 +585,7 @@ const useFeedItems = (): Return => {
     clearFilters,
     gallery,
     setGallery,
+    setCreatedAtFilter,
   };
 };
 
