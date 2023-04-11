@@ -52,6 +52,7 @@ const UseAddOffenderWarningTest = () => {
           onSubmit({
             name: 'data.name',
             description: 'data.description',
+            schemes: [],
           })
         }
       >

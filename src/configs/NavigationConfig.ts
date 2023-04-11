@@ -139,7 +139,7 @@ const userOnlyItems: NavItem[] = [
     icon: faFile,
     breadcrumb: true,
     submenu: [],
-    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
+    roles: [Role.User, Role.SchemeAdmin, Role.ShopsafeAdmin],
   },
 ];
 

@@ -23,7 +23,7 @@ import { FeedItemSort, useStoreActions, useStoreState } from 'state';
 import { useNavigate } from 'react-router-dom';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
-import type { PaginationModel } from 'types/DataType';
+import type { DateType, PaginationModel } from 'types/DataType';
 
 interface Return {
   data: FeedItemsQuery | undefined;
@@ -62,6 +62,7 @@ interface Return {
   clearFilters: () => void;
   gallery: string[];
   setGallery: (values: string[]) => void;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
 }
 
 const useFeedItems = (): Return => {
@@ -82,6 +83,9 @@ const useFeedItems = (): Return => {
   const [sortFilter, setSortFilter] = useState(false);
   const [typesFilter, setTypesFilter] = useState<Model[]>([]);
   const [groupsFilter, setGroupsFilter] = useState<string[]>([]);
+  const [createdAtFilter, setCreatedAtFilter] = useState<
+    DateType | undefined
+  >();
   const [gallery, setGallery] = useState<string[]>([]);
 
   const [articlePagination, setArticlePagination] = useState<PaginationModel>({
@@ -90,13 +94,42 @@ const useFeedItems = (): Return => {
     sizeOptions: ['12'],
   });
 
+  const itemVariables = {
+    createdAt: createdAtFilter
+      ? {
+          gte: createdAtFilter.startDate,
+          lte: createdAtFilter.endDate,
+        }
+      : undefined,
+    subscribedUsers: gallery.includes('FOLLOWING')
+      ? {
+          some: {
+            id: {
+              equals: userId,
+            },
+          },
+        }
+      : undefined,
+    createdBy: gallery.includes('MYDATA')
+      ? {
+          id: {
+            equals: userId,
+          },
+        }
+      : undefined,
+    reference: search
+      ? {
+          equals: Number(search),
+        }
+      : undefined,
+  };
   const queryVariables = {
+    search,
     schemeId,
     order: {
       updatedAt:
         order === FeedItemSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
     },
-    search,
     take: pagination.pageSize,
     skip: (pagination.page - 1) * pagination.pageSize,
     where: {
@@ -123,186 +156,60 @@ const useFeedItems = (): Return => {
               in: typesFilter,
             }
           : undefined,
+
       AND: [
-        {
-          OR: [
-            {
-              offender: {
-                subscribedUsers: gallery.includes('FOLLOWING')
-                  ? {
-                      some: {
-                        id: {
-                          equals: userId,
-                        },
-                      },
-                    }
-                  : undefined,
-              },
-            },
-            {
-              incident: {
-                subscribedUsers: gallery.includes('FOLLOWING')
-                  ? {
-                      some: {
-                        id: {
-                          equals: userId,
-                        },
-                      },
-                    }
-                  : undefined,
-              },
-            },
-            {
-              vehicle: {
-                subscribedUsers: gallery.includes('FOLLOWING')
-                  ? {
-                      some: {
-                        id: {
-                          equals: userId,
-                        },
-                      },
-                    }
-                  : undefined,
-              },
-            },
-            {
-              crimeGroup: {
-                subscribedUsers: gallery.includes('FOLLOWING')
-                  ? {
-                      some: {
-                        id: {
-                          equals: userId,
-                        },
-                      },
-                    }
-                  : undefined,
-              },
-            },
-            {
-              investigation: {
-                subscribedUsers: gallery.includes('FOLLOWING')
-                  ? {
-                      some: {
-                        id: {
-                          equals: userId,
-                        },
-                      },
-                    }
-                  : undefined,
-              },
-            },
-          ],
-        },
-        {
-          OR: [
-            // createdBy: gallery.includes('MYDATA')
-            //       ? {
-            //           id: {
-            //             equals: userId,
-            //           },
-            //         }
-            //       : undefined,
-            {
-              offender: {
-                createdBy: gallery.includes('MYDATA')
-                  ? {
-                      id: {
-                        equals: userId,
-                      },
-                    }
-                  : undefined,
-              },
-            },
-            {
-              incident: {
-                createdBy: gallery.includes('MYDATA')
-                  ? {
-                      id: {
-                        equals: userId,
-                      },
-                    }
-                  : undefined,
-              },
-            },
-            // {
-            //   vehicle: {
-            //     createdBy: gallery.includes('MYDATA')
-            //       ? {
-            //           id: {
-            //             equals: userId,
-            //           },
-            //         }
-            //       : undefined,
-            //   },
-            // },
-            // {
-            //   crimeGroup: {
-            //     createdBy: gallery.includes('MYDATA')
-            //       ? {
-            //           id: {
-            //             equals: userId,
-            //           },
-            //         }
-            //       : undefined,
-            //   },
-            // },
-            {
-              investigation: {
-                createdBy: gallery.includes('MYDATA')
-                  ? {
-                      id: {
-                        equals: userId,
-                      },
-                    }
-                  : undefined,
-              },
-            },
-          ],
-        },
         // {
-        //   OR: [
-        //     {
-        //       offender: {
-        //         ref: {
-        //           contains: variables.search,
-        //           mode: QueryMode.Insensitive,
-        //         },
-        //       },
-        //     },
-        //     {
-        //       incident: {
-        //         ref: {
-        //           contains: variables.search,
-        //           mode: QueryMode.Insensitive,
-        //         },
-        //       },
-        //     },
-        //     {
-        //       vehicle: {
-        //         ref: {
-        //           contains: search,
-        //           mode: QueryMode.Insensitive,
-        //         },
-        //       },
-        //     },
-        //     {
-        //       crimeGroup: {
-        //         ref: {
-        //           contains: variables.search,
-        //           mode: QueryMode.Insensitive,
-        //         },
-        //       },
-        //     },
-        //     {
-        //       investigation: {
-        //         ref: {
-        //           contains: variables.search,
-        //           mode: QueryMode.Insensitive,
-        //         },
-        //       },
-        //     },
-        //   ],
+        //   message: {
+        //     contains: search,
+        //     mode: QueryMode.Insensitive,
+        //   },
         // },
+        {
+          offender: {
+            approved: gallery.includes('NOT APPROVED')
+              ? {
+                  equals: false,
+                }
+              : undefined,
+          },
+        },
+        {
+          incident: {
+            approved: gallery.includes('NOT APPROVED')
+              ? {
+                  equals: false,
+                }
+              : undefined,
+          },
+        },
+        {
+          OR: [
+            {
+              createdBy: gallery.includes('MYDATA')
+                ? {
+                    id: {
+                      equals: userId,
+                    },
+                  }
+                : undefined,
+            },
+            {
+              offender: itemVariables,
+            },
+            {
+              incident: itemVariables,
+            },
+            {
+              vehicle: itemVariables,
+            },
+            {
+              crimeGroup: itemVariables,
+            },
+            {
+              investigation: itemVariables,
+            },
+          ],
+        },
       ],
     },
   };
@@ -354,6 +261,12 @@ const useFeedItems = (): Return => {
         id: schemeId,
       },
       where: {
+        createdAt: createdAtFilter
+          ? {
+              gte: createdAtFilter.startDate,
+              lte: createdAtFilter.endDate,
+            }
+          : undefined,
         createdBy: gallery.includes('MYDATA')
           ? {
               id: {
@@ -391,6 +304,12 @@ const useFeedItems = (): Return => {
         skip: 0,
         take: 10,
         where: {
+          createdAt: createdAtFilter
+            ? {
+                gte: createdAtFilter.startDate,
+                lte: createdAtFilter.endDate,
+              }
+            : undefined,
           approved: {
             equals: false,
           },
@@ -468,6 +387,12 @@ const useFeedItems = (): Return => {
         },
         take: 10,
         where: {
+          createdAt: createdAtFilter
+            ? {
+                gte: createdAtFilter.startDate,
+                lte: createdAtFilter.endDate,
+              }
+            : undefined,
           approved: gallery.includes('NOT APPROVED')
             ? {
                 equals: false,
@@ -660,6 +585,7 @@ const useFeedItems = (): Return => {
     clearFilters,
     gallery,
     setGallery,
+    setCreatedAtFilter,
   };
 };
 

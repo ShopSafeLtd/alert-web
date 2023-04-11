@@ -159,7 +159,7 @@ const CrimeTypeList = ({
                   </Tooltip>
                 </Col>
                 <Col>
-                  <Tooltip title="Delete Crime Type">
+                  <Tooltip title="Remove Crime Type">
                     <Button
                       size="small"
                       disabled={saving}
@@ -266,7 +266,7 @@ const CrimeTypeList = ({
                   </Tooltip>
                 </Col>
                 <Col>
-                  <Tooltip title="Delete Crime Type">
+                  <Tooltip title="Remove Crime Type">
                     <Button
                       size="small"
                       disabled={saving}
@@ -373,7 +373,7 @@ const CrimeTypeList = ({
                   </Tooltip>
                 </Col>
                 <Col>
-                  <Tooltip title="Delete Crime Type">
+                  <Tooltip title="Remove Crime Type">
                     <Button
                       size="small"
                       disabled={saving}

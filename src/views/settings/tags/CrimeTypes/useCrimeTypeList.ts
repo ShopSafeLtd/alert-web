@@ -1,16 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type {
   TagsQuery,
   CreateTagMutation,
-  DeleteTagMutation,
+  UpdateTagMutation,
 } from 'graphql/generated';
 import {
   QueryMode,
   useTagsQuery,
   TagsDocument,
-  useDeleteTagMutation,
   Model,
   TagType,
+  useUpdateTagMutation,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -46,6 +46,7 @@ interface Return {
 
 const useCrimeTypeList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeName = useStoreState((state) => state.scheme.name);
   const [incidentId, setIncidentId] = useState('');
   const [search, setSearch] = useState('');
   const [saving, setSaving] = useState(false);
@@ -53,6 +54,161 @@ const useCrimeTypeList = (): Return => {
   const [addInvolved, setAddInvolved] = useState(false);
   const [addImpact, setAddImpact] = useState(false);
   const [editIncident, setEditIncident] = useState(false);
+  const [crimeTypesVars, setCrimeTypesVars] = useState({
+    where: {
+      schemes: {
+        some: {
+          id: {
+            in: [schemeId],
+          },
+        },
+      },
+      type: {
+        equals: TagType.IncidentCrimeType,
+      },
+      dataType: {
+        equals: Model.Incident,
+      },
+      OR: [
+        {
+          name: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+        {
+          description: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+      ],
+    },
+  });
+  const [involvedTagsVars, setInvolvedTagsVars] = useState({
+    where: {
+      schemes: {
+        some: {
+          id: {
+            in: [schemeId],
+          },
+        },
+      },
+      type: {
+        equals: TagType.IncidentInvolved,
+      },
+      dataType: {
+        equals: Model.Incident,
+      },
+      OR: [
+        {
+          name: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+        {
+          description: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+      ],
+    },
+  });
+  const [impactTagsVars, setImpactTagsVars] = useState({
+    where: {
+      schemes: {
+        some: {
+          id: {
+            in: [schemeId],
+          },
+        },
+      },
+      type: {
+        equals: TagType.IncidentImpact,
+      },
+      dataType: {
+        equals: Model.Incident,
+      },
+      OR: [
+        {
+          name: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+        {
+          description: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+      ],
+    },
+  });
+
+  useEffect(() => {
+    setCrimeTypesVars({
+      where: {
+        ...crimeTypesVars.where,
+        OR: [
+          {
+            name: {
+              contains: search,
+              mode: QueryMode.Insensitive,
+            },
+          },
+          {
+            description: {
+              contains: search,
+              mode: QueryMode.Insensitive,
+            },
+          },
+        ],
+      },
+    });
+
+    setInvolvedTagsVars({
+      where: {
+        ...involvedTagsVars.where,
+        OR: [
+          {
+            name: {
+              contains: search,
+              mode: QueryMode.Insensitive,
+            },
+          },
+          {
+            description: {
+              contains: search,
+              mode: QueryMode.Insensitive,
+            },
+          },
+        ],
+      },
+    });
+
+    setImpactTagsVars({
+      where: {
+        ...impactTagsVars.where,
+        OR: [
+          {
+            name: {
+              contains: search,
+              mode: QueryMode.Insensitive,
+            },
+          },
+          {
+            description: {
+              contains: search,
+              mode: QueryMode.Insensitive,
+            },
+          },
+        ],
+      },
+    });
+  }, [search]);
 
   const toggleAddIncident = () => {
     setAddIncident(!addIncident);
@@ -69,89 +225,17 @@ const useCrimeTypeList = (): Return => {
 
   const { data, loading } = useTagsQuery({
     fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        scheme: { id: { equals: schemeId } },
-        type: {
-          equals: TagType.IncidentCrimeType,
-        },
-        dataType: {
-          equals: Model.Incident,
-        },
-        OR: [
-          {
-            name: {
-              contains: search,
-              mode: QueryMode.Insensitive,
-            },
-          },
-          {
-            description: {
-              contains: search,
-              mode: QueryMode.Insensitive,
-            },
-          },
-        ],
-      },
-    },
+    variables: crimeTypesVars,
   });
 
   const { data: involvedData, loading: involvedLoading } = useTagsQuery({
     fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        scheme: { id: { equals: schemeId } },
-        type: {
-          equals: TagType.IncidentInvolved,
-        },
-        dataType: {
-          equals: Model.Incident,
-        },
-        OR: [
-          {
-            name: {
-              contains: search,
-              mode: QueryMode.Insensitive,
-            },
-          },
-          {
-            description: {
-              contains: search,
-              mode: QueryMode.Insensitive,
-            },
-          },
-        ],
-      },
-    },
+    variables: involvedTagsVars,
   });
 
   const { data: impactData, loading: impactLoading } = useTagsQuery({
     fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        scheme: { id: { equals: schemeId } },
-        type: {
-          equals: TagType.IncidentImpact,
-        },
-        dataType: {
-          equals: Model.Incident,
-        },
-        OR: [
-          {
-            name: {
-              contains: search,
-              mode: QueryMode.Insensitive,
-            },
-          },
-          {
-            description: {
-              contains: search,
-              mode: QueryMode.Insensitive,
-            },
-          },
-        ],
-      },
-    },
+    variables: impactTagsVars,
   });
 
   // update list after adding a new item
@@ -164,31 +248,7 @@ const useCrimeTypeList = (): Return => {
     // get existing Incident list data from Apollo store
     const existingData = store.readQuery<TagsQuery>({
       query: TagsDocument,
-      variables: {
-        where: {
-          scheme: { id: { equals: schemeId } },
-          type: {
-            equals: TagType.IncidentImpact,
-          },
-          dataType: {
-            equals: Model.Incident,
-          },
-          OR: [
-            {
-              name: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              description: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-          ],
-        },
-      },
+      variables: impactTagsVars,
     });
 
     if (existingData === null) return;
@@ -200,31 +260,7 @@ const useCrimeTypeList = (): Return => {
         tags: [...existingData.tags, res.createTag],
         __typename: 'Query',
       },
-      variables: {
-        where: {
-          scheme: { id: { equals: schemeId } },
-          type: {
-            equals: TagType.IncidentImpact,
-          },
-          dataType: {
-            equals: Model.Incident,
-          },
-          OR: [
-            {
-              name: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              description: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-          ],
-        },
-      },
+      variables: impactTagsVars,
     });
   };
 
@@ -237,31 +273,7 @@ const useCrimeTypeList = (): Return => {
     // get existing Incident list data from Apollo store
     const existingData = store.readQuery<TagsQuery>({
       query: TagsDocument,
-      variables: {
-        where: {
-          scheme: { id: { equals: schemeId } },
-          type: {
-            equals: TagType.IncidentInvolved,
-          },
-          dataType: {
-            equals: Model.Incident,
-          },
-          OR: [
-            {
-              name: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              description: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-          ],
-        },
-      },
+      variables: involvedTagsVars,
     });
 
     if (existingData === null) return;
@@ -273,31 +285,7 @@ const useCrimeTypeList = (): Return => {
         tags: [...existingData.tags, res.createTag],
         __typename: 'Query',
       },
-      variables: {
-        where: {
-          scheme: { id: { equals: schemeId } },
-          type: {
-            equals: TagType.IncidentInvolved,
-          },
-          dataType: {
-            equals: Model.Incident,
-          },
-          OR: [
-            {
-              name: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              description: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-          ],
-        },
-      },
+      variables: involvedTagsVars,
     });
   };
 
@@ -310,31 +298,7 @@ const useCrimeTypeList = (): Return => {
     // get existing Incident list data from Apollo store
     const existingData = store.readQuery<TagsQuery>({
       query: TagsDocument,
-      variables: {
-        where: {
-          scheme: { id: { equals: schemeId } },
-          type: {
-            equals: TagType.IncidentCrimeType,
-          },
-          dataType: {
-            equals: Model.Incident,
-          },
-          OR: [
-            {
-              name: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              description: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-          ],
-        },
-      },
+      variables: crimeTypesVars,
     });
 
     if (existingData === null) return;
@@ -346,36 +310,12 @@ const useCrimeTypeList = (): Return => {
         tags: [...existingData.tags, res.createTag],
         __typename: 'Query',
       },
-      variables: {
-        where: {
-          scheme: { id: { equals: schemeId } },
-          type: {
-            equals: TagType.IncidentCrimeType,
-          },
-          dataType: {
-            equals: Model.Incident,
-          },
-          OR: [
-            {
-              name: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              description: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-          ],
-        },
-      },
+      variables: crimeTypesVars,
     });
   };
 
   // update list after deleting an item
-  const update: MutationUpdaterFn<DeleteTagMutation> = (
+  const update: MutationUpdaterFn<UpdateTagMutation> = (
     store,
     { data: res }
   ) => {
@@ -384,87 +324,15 @@ const useCrimeTypeList = (): Return => {
     // get existing Incident list data from Apollo store
     const existingData = store.readQuery<TagsQuery>({
       query: TagsDocument,
-      variables: {
-        where: {
-          scheme: { id: { equals: schemeId } },
-          type: {
-            equals: TagType.IncidentCrimeType,
-          },
-          dataType: {
-            equals: Model.Incident,
-          },
-          OR: [
-            {
-              name: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              description: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-          ],
-        },
-      },
+      variables: crimeTypesVars,
     });
     const existingInvolvedData = store.readQuery<TagsQuery>({
       query: TagsDocument,
-      variables: {
-        where: {
-          scheme: { id: { equals: schemeId } },
-          type: {
-            equals: TagType.IncidentInvolved,
-          },
-          dataType: {
-            equals: Model.Incident,
-          },
-          OR: [
-            {
-              name: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              description: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-          ],
-        },
-      },
+      variables: involvedTagsVars,
     });
     const existingImpactData = store.readQuery<TagsQuery>({
       query: TagsDocument,
-      variables: {
-        where: {
-          scheme: { id: { equals: schemeId } },
-          type: {
-            equals: TagType.IncidentImpact,
-          },
-          dataType: {
-            equals: Model.Incident,
-          },
-          OR: [
-            {
-              name: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              description: {
-                contains: search,
-                mode: QueryMode.Insensitive,
-              },
-            },
-          ],
-        },
-      },
+      variables: impactTagsVars,
     });
 
     // write the new data to the Apollo store
@@ -473,115 +341,43 @@ const useCrimeTypeList = (): Return => {
         query: TagsDocument,
         data: {
           tags: existingData.tags.filter(
-            (tag) => tag.id !== res?.deleteTag?.id
+            (tag) => tag.id !== res?.updateTag?.id
           ),
           __typename: 'Query',
         },
-        variables: {
-          where: {
-            scheme: { id: { equals: schemeId } },
-            type: {
-              equals: TagType.IncidentCrimeType,
-            },
-            dataType: {
-              equals: Model.Incident,
-            },
-            OR: [
-              {
-                name: {
-                  contains: search,
-                  mode: QueryMode.Insensitive,
-                },
-              },
-              {
-                description: {
-                  contains: search,
-                  mode: QueryMode.Insensitive,
-                },
-              },
-            ],
-          },
-        },
+        variables: crimeTypesVars,
       });
     if (existingInvolvedData)
       store.writeQuery<TagsQuery>({
         query: TagsDocument,
         data: {
           tags: existingInvolvedData.tags.filter(
-            (tag) => tag.id !== res?.deleteTag?.id
+            (tag) => tag.id !== res?.updateTag?.id
           ),
           __typename: 'Query',
         },
-        variables: {
-          where: {
-            scheme: { id: { equals: schemeId } },
-            type: {
-              equals: TagType.IncidentInvolved,
-            },
-            dataType: {
-              equals: Model.Incident,
-            },
-            OR: [
-              {
-                name: {
-                  contains: search,
-                  mode: QueryMode.Insensitive,
-                },
-              },
-              {
-                description: {
-                  contains: search,
-                  mode: QueryMode.Insensitive,
-                },
-              },
-            ],
-          },
-        },
+        variables: involvedTagsVars,
       });
     if (existingImpactData)
       store.writeQuery<TagsQuery>({
         query: TagsDocument,
         data: {
           tags: existingImpactData.tags.filter(
-            (tag) => tag.id !== res?.deleteTag?.id
+            (tag) => tag.id !== res?.updateTag?.id
           ),
           __typename: 'Query',
         },
-        variables: {
-          where: {
-            scheme: { id: { equals: schemeId } },
-            type: {
-              equals: TagType.IncidentImpact,
-            },
-            dataType: {
-              equals: Model.Incident,
-            },
-            OR: [
-              {
-                name: {
-                  contains: search,
-                  mode: QueryMode.Insensitive,
-                },
-              },
-              {
-                description: {
-                  contains: search,
-                  mode: QueryMode.Insensitive,
-                },
-              },
-            ],
-          },
-        },
+        variables: impactTagsVars,
       });
   };
 
   // delete
-  const [deleteTag] = useDeleteTagMutation({
+  const [updateTag] = useUpdateTagMutation({
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Deleted!',
-        description: 'The crime type has been deleted!',
+        message: 'Successfully Removed',
+        description: `The crime type has been removed from ${schemeName}!`,
         placement: 'bottomRight',
       });
     },
@@ -598,17 +394,29 @@ const useCrimeTypeList = (): Return => {
   const openDelete = (currentId: string) => {
     setSaving(true);
     if (currentId)
-      deleteTag({
+      updateTag({
         variables: {
-          id: currentId,
+          where: {
+            id: currentId,
+          },
+          data: {
+            schemes: {
+              disconnect: [
+                {
+                  id: schemeId,
+                },
+              ],
+            },
+          },
         },
       });
   };
 
   const deleteConfirm = (currentId: string) => {
     confirm({
-      title: 'Do you want to delete the crime type?',
-      content: 'This action cannot be undone.',
+      title: 'Are you sure?',
+      content:
+        'This will remove this crime type from this scheme, bu not any other schemes you may have added it to.',
       onOk() {
         openDelete(currentId);
       },

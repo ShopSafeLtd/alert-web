@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Col, Form, Input, Row, Select, Typography } from 'antd';
 import { CrimeType, TagType } from 'graphql/generated';
+import type { Scheme } from 'state';
 
 const { Text } = Typography;
 
@@ -8,6 +9,7 @@ interface FormData {
   name: string;
   description: string;
   crimeType: CrimeType;
+  schemes: string[];
 }
 
 interface Props {
@@ -15,6 +17,8 @@ interface Props {
   onClose: () => void;
   saving: boolean;
   type?: TagType;
+  userSchemes: Scheme[];
+  schemeId: string;
 }
 
 const AddCrimeType = ({
@@ -22,8 +26,16 @@ const AddCrimeType = ({
   onClose,
   saving,
   type = TagType.IncidentCrimeType,
+  schemeId,
+  userSchemes,
 }: Props): JSX.Element => (
-  <Form layout="vertical" onFinish={onSubmit}>
+  <Form
+    layout="vertical"
+    onFinish={onSubmit}
+    initialValues={{
+      schemes: [schemeId],
+    }}
+  >
     <Row style={{ marginBottom: 30 }}>
       <Col>
         <Text type="secondary">
@@ -66,31 +78,48 @@ const AddCrimeType = ({
               },
             ]}
           >
-            <Select disabled={saving}>
-              <Select.Option value={CrimeType.Burglary}>Burglary</Select.Option>
-              <Select.Option value={CrimeType.CriminalDamage}>
-                Criminal Damage
-              </Select.Option>
-              <Select.Option value={CrimeType.Drugs}>Drugs</Select.Option>
-              <Select.Option value={CrimeType.FraudForgery}>
-                Fraud & Forgery
-              </Select.Option>
-              <Select.Option value={CrimeType.Robbery}>Robbery</Select.Option>
-              <Select.Option value={CrimeType.SexualOffences}>
-                Sexual Offences
-              </Select.Option>
-              <Select.Option value={CrimeType.TheftHandling}>
-                Theft & Handling
-              </Select.Option>
-              <Select.Option value={CrimeType.Violence}>
-                Violence Against The Person
-              </Select.Option>
-              <Select.Option value={CrimeType.Other}>Other</Select.Option>
-            </Select>
+            <Select
+              disabled={saving}
+              options={[
+                { value: CrimeType.Burglary, label: 'Burglary' },
+                { value: CrimeType.CriminalDamage, label: 'Criminal Damage' },
+                { value: CrimeType.Drugs, label: 'Drugs' },
+                { value: CrimeType.FraudForgery, label: 'Fraud & Forgery' },
+                { value: CrimeType.Robbery, label: 'Robbery' },
+                { value: CrimeType.SexualOffences, label: 'Sexual Offences' },
+                { value: CrimeType.TheftHandling, label: 'Theft & Handling' },
+                {
+                  value: CrimeType.Violence,
+                  label: 'Violence Against The Person',
+                },
+                { value: CrimeType.Other, label: 'Other' },
+              ]}
+            />
           </Form.Item>
         </Col>
       )}
     </Row>
+    <Col span={24}>
+      <Form.Item
+        name="schemes"
+        label="Schemes"
+        rules={[
+          {
+            required: true,
+            message: 'Please select at least one scheme.',
+          },
+        ]}
+      >
+        <Select
+          disabled={saving}
+          mode="multiple"
+          options={userSchemes.map((scheme) => ({
+            value: scheme.scheme.id,
+            label: scheme.scheme.name,
+          }))}
+        />
+      </Form.Item>
+    </Col>
 
     <Form.Item>
       <Row style={{ marginTop: 30 }} gutter={16} justify="end">

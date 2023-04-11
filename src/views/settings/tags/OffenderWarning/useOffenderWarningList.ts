@@ -2,13 +2,13 @@ import { useState } from 'react';
 import type {
   TagsQuery,
   CreateTagMutation,
-  DeleteTagMutation,
+  UpdateTagMutation,
 } from 'graphql/generated';
 import {
   QueryMode,
   useTagsQuery,
   TagsDocument,
-  useDeleteTagMutation,
+  useUpdateTagMutation,
   Model,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
@@ -35,6 +35,7 @@ interface Return {
 
 const useOffenderWarningList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
+  const schemeName = useStoreState((state) => state.scheme.name);
   const [offenderId, setOffenderId] = useState('');
   const [search, setSearch] = useState('');
   const [saving, setSaving] = useState(false);
@@ -52,7 +53,13 @@ const useOffenderWarningList = (): Return => {
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
-        scheme: { id: { equals: schemeId } },
+        schemes: {
+          some: {
+            id: {
+              in: [schemeId],
+            },
+          },
+        },
         dataType: {
           equals: Model.Offender,
         },
@@ -85,7 +92,13 @@ const useOffenderWarningList = (): Return => {
       query: TagsDocument,
       variables: {
         where: {
-          scheme: { id: { equals: schemeId } },
+          schemes: {
+            some: {
+              id: {
+                in: [schemeId],
+              },
+            },
+          },
           dataType: {
             equals: Model.Offender,
           },
@@ -117,7 +130,13 @@ const useOffenderWarningList = (): Return => {
       },
       variables: {
         where: {
-          scheme: { id: { equals: schemeId } },
+          schemes: {
+            some: {
+              id: {
+                in: [schemeId],
+              },
+            },
+          },
           dataType: {
             equals: Model.Offender,
           },
@@ -140,7 +159,7 @@ const useOffenderWarningList = (): Return => {
     });
   };
   // update list after deleting an item
-  const update: MutationUpdaterFn<DeleteTagMutation> = (
+  const update: MutationUpdaterFn<UpdateTagMutation> = (
     store,
     { data: res }
   ) => {
@@ -151,7 +170,13 @@ const useOffenderWarningList = (): Return => {
       query: TagsDocument,
       variables: {
         where: {
-          scheme: { id: { equals: schemeId } },
+          schemes: {
+            some: {
+              id: {
+                in: [schemeId],
+              },
+            },
+          },
           dataType: {
             equals: Model.Offender,
           },
@@ -179,12 +204,18 @@ const useOffenderWarningList = (): Return => {
     store.writeQuery<TagsQuery>({
       query: TagsDocument,
       data: {
-        tags: existingData.tags.filter((tag) => tag.id !== res?.deleteTag?.id),
+        tags: existingData.tags.filter((tag) => tag.id !== res?.updateTag?.id),
         __typename: 'Query',
       },
       variables: {
         where: {
-          scheme: { id: { equals: schemeId } },
+          schemes: {
+            some: {
+              id: {
+                in: [schemeId],
+              },
+            },
+          },
           dataType: {
             equals: Model.Offender,
           },
@@ -208,12 +239,12 @@ const useOffenderWarningList = (): Return => {
   };
 
   // delete
-  const [deleteTag] = useDeleteTagMutation({
+  const [updateTag] = useUpdateTagMutation({
     onCompleted: () => {
       setSaving(false);
       notification.success({
-        message: 'Successfully Deleted!',
-        description: 'The offender warning has been deleted!',
+        message: 'Successfully Removed',
+        description: `The crime type has been removed from ${schemeName}!`,
         placement: 'bottomRight',
       });
     },
@@ -230,9 +261,20 @@ const useOffenderWarningList = (): Return => {
   const openDelete = (currentId: string) => {
     setSaving(true);
     if (currentId)
-      deleteTag({
+      updateTag({
         variables: {
-          id: currentId,
+          where: {
+            id: currentId,
+          },
+          data: {
+            schemes: {
+              disconnect: [
+                {
+                  id: schemeId,
+                },
+              ],
+            },
+          },
         },
       });
   };

@@ -7,7 +7,6 @@ import type {
 } from 'graphql/generated';
 import { TagType } from 'graphql/generated';
 import type {
-  CrimeGroupData,
   LocationData,
   OffenderData as GlobalOffenderData,
   VehicleData,
@@ -95,7 +94,6 @@ interface Props {
     offenders: OffenderData[];
   }) => void;
   beforeUpload: (value: RcFile) => void;
-  crimeGroupsData: CrimeGroupData[];
   fileList: Image[];
   form: FormInstance<FormData>;
   goodsTypesData: ListGoodsTypesQuery | undefined;
@@ -120,7 +118,6 @@ interface Props {
     | undefined;
   recentOffenderData: ListOffendersQuery | undefined;
   recentOffenderLoading: boolean;
-  removeCrimeGroup: (crimeGroupId: string) => void;
   removeImage: (uid: string) => void;
   removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
   removeOffender: (offenderId: string) => void;
@@ -132,7 +129,6 @@ interface Props {
   tags: { value: string; label: string; tooltip: string; type: TagType }[];
   tagsLoading: boolean;
   toggleAddIncidentTag: () => void;
-  updateCrimeGroupsData: (value: CrimeGroupData) => void;
   updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
   onAddOffender: (value: GlobalOffenderData, existing: boolean) => void;
   updateVehiclesData: (value: VehicleData) => void;
@@ -157,7 +153,6 @@ const EditIncident = ({
   addIncidentTag,
   assignOffendersToImages,
   beforeUpload,
-  crimeGroupsData,
   fileList,
   form,
   formStages,
@@ -176,7 +171,6 @@ const EditIncident = ({
   primaryAddress,
   recentOffenderData,
   recentOffenderLoading,
-  removeCrimeGroup,
   removeImage,
   removeImageFromOffender,
   removeOffender,
@@ -188,7 +182,6 @@ const EditIncident = ({
   tags,
   tagsLoading,
   toggleAddIncidentTag,
-  updateCrimeGroupsData,
   updateIncidentTag,
   onAddOffender,
   updateVehiclesData,
@@ -591,19 +584,16 @@ const EditIncident = ({
           {!formStages.profiles && <div className={classes.cardOverlay} />}
           <Form.Item name="profiles">
             <Profiles
-              crimeGroupsData={crimeGroupsData}
               offenderImgChange={offenderImgChange}
               offendersData={offendersData}
               recentOffenderData={recentOffenderData}
               recentOffenderLoading={recentOffenderLoading}
-              removeCrimeGroup={removeCrimeGroup}
               removeOffender={removeOffender}
               removeVehicle={removeVehicle}
               saving={saving}
               searchOffenders={searchOffenders}
               setSearchOffenders={setSearchOffenders}
               titleOrder={isTheft ? 4 : 3}
-              updateCrimeGroupsData={updateCrimeGroupsData}
               updateOffender={() => {}}
               updateVehiclesData={updateVehiclesData}
               vehiclesData={vehiclesData}

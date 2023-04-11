@@ -220,9 +220,11 @@ const useAddOffender = (): Return => {
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
-        scheme: {
-          id: {
-            equals: schemeId,
+        schemes: {
+          some: {
+            id: {
+              in: [schemeId],
+            },
           },
         },
         dataType: {

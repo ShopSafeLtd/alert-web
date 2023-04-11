@@ -86,6 +86,7 @@ const UseRecycledItemListTest = () => {
             defaultOffenderPush: true,
             defaultSubscribedIncidentOnly: true,
             defaultSubscribedOffenderOnly: true,
+            defaultPublicOffenderDOB: true,
           })
         }
       >

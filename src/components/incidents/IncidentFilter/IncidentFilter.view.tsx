@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, Col, Input, Row, Select, Typography } from 'antd';
-
+import { Button, Col, DatePicker, Input, Row, Select, Typography } from 'antd';
 import { IncidentSort } from 'state';
+import type { DateType } from 'types/DataType';
 import useStyles from './IncidentFilter.styles';
 
+const { RangePicker } = DatePicker;
 interface Props {
   order: IncidentSort;
   setOrder: (value: IncidentSort) => void;
@@ -13,14 +14,11 @@ interface Props {
   tagsLoading: boolean;
   crimeTypesFilter: string[];
   setCrimeTypesFilter: (value: string[]) => void;
-
   setPeculiarities: (value: string) => void;
-
   peculiarities: string;
   clearFilters: () => void;
   groupsFilter: string[];
   setGroupsFilter: (value: string[]) => void;
-
   businessesFilter: string[];
   setBusinessesFilter: (value: string[]) => void;
   businesses: { value: string; label: string; location: string }[];
@@ -29,6 +27,8 @@ interface Props {
   setGoodsFilter: (value: string[]) => void;
   businessesLoading: boolean;
   goodsLoading: boolean;
+  setIncidentDateFilter: (value: DateType | undefined) => void;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
 }
 
 const IncidentFilter = ({
@@ -53,6 +53,8 @@ const IncidentFilter = ({
   setCrimeTypesFilter,
   goodsLoading,
   businessesLoading,
+  setCreatedAtFilter,
+  setIncidentDateFilter,
 }: Props): JSX.Element => {
   const classes = useStyles();
   return (
@@ -83,6 +85,42 @@ const IncidentFilter = ({
               Oldest First
             </Select.Option>
           </Select>
+        </Col>
+      </Row>
+
+      <Row gutter={16}>
+        <Col span={23}>
+          <Typography.Paragraph className={classes.selectTitle}>
+            Created Between
+          </Typography.Paragraph>
+
+          <RangePicker
+            className={classes.select}
+            onChange={(value) => {
+              if (value && value[0] && value[1])
+                setCreatedAtFilter({
+                  startDate: new Date(value[0].valueOf()),
+                  endDate: new Date(value[1].valueOf()),
+                });
+            }}
+          />
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={23}>
+          <Typography.Paragraph className={classes.selectTitle}>
+            Occurred Between
+          </Typography.Paragraph>
+          <RangePicker
+            className={classes.select}
+            onChange={(value) => {
+              if (value && value[0] && value[1])
+                setIncidentDateFilter({
+                  startDate: new Date(value[0].valueOf()),
+                  endDate: new Date(value[1].valueOf()),
+                });
+            }}
+          />
         </Col>
       </Row>
       <Row gutter={16}>
@@ -166,6 +204,7 @@ const IncidentFilter = ({
           />
         </Col>
       </Row>
+
       <Typography.Paragraph className={classes.filtersTitle}>
         Locations
       </Typography.Paragraph>

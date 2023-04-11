@@ -65,23 +65,23 @@ const OffenderFeed = ({
   } = feedItem?.offender || {};
 
   return (
-    <Row gutter={20} wrap={false}>
-      {(isNewOffender || isNewImage) && images && images.length > 0 ? (
-        <Col>
-          <ImageContainer src={images[0].optimised || images[0].url || ''} />
-        </Col>
-      ) : null}
-      {!isNewImage && updates && updates[0]?.images[0] ? (
-        <Col>
-          <ImageContainer
-            src={
-              updates[0].images[0].optimised || updates[0].images[0].url || ''
-            }
-          />
-        </Col>
-      ) : null}
+    <Link to={`/app/offenders/view/${id}`}>
+      <Row gutter={20} wrap={false} style={{ width: '100%' }}>
+        {(isNewOffender || isNewImage) && images && images.length > 0 ? (
+          <Col>
+            <ImageContainer src={images[0].optimised || images[0].url || ''} />
+          </Col>
+        ) : null}
+        {!isNewImage && updates && updates[0]?.images[0] ? (
+          <Col>
+            <ImageContainer
+              src={
+                updates[0].images[0].optimised || updates[0].images[0].url || ''
+              }
+            />
+          </Col>
+        ) : null}
 
-      <Link to={`/app/offenders/view/${id}`}>
         <Col flex={1}>
           {isNewOffender ? (
             <>
@@ -156,8 +156,8 @@ const OffenderFeed = ({
             />
           ) : null}
         </Col>
-      </Link>
-    </Row>
+      </Row>
+    </Link>
   );
 };
 

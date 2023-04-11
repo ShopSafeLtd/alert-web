@@ -23,6 +23,7 @@ import { useEffect, useState } from 'react';
 import { OffenderSort, useStoreActions, useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
+import type { DateType } from 'types/DataType';
 
 interface Return {
   data: ListOffendersQuery | undefined;
@@ -78,6 +79,7 @@ interface Return {
   setBusinesses: (value: string[]) => void;
   businessData: SearchBusinessesQuery | undefined;
   businessesLoading: boolean;
+  setCreatedAtFilter: (value: DateType | undefined) => void;
 }
 
 const getSizeOptions = () => {
@@ -123,6 +125,9 @@ const useOffenderFeed = (): Return => {
   const [peculiarities, setPeculiarities] = useState('');
   const [gallery, setGallery] = useState<string[]>([]);
   const [businesses, setBusinesses] = useState<string[]>([]);
+  const [createdAtFilter, setCreatedAtFilter] = useState<
+    DateType | undefined
+  >();
 
   const queryVariables = {
     scheme: {
@@ -133,6 +138,12 @@ const useOffenderFeed = (): Return => {
         order === OffenderSort.updatedAtDesc ? SortOrder.Desc : SortOrder.Asc,
     },
     where: {
+      createdAt: createdAtFilter
+        ? {
+            gte: createdAtFilter.startDate,
+            lte: createdAtFilter.endDate,
+          }
+        : undefined,
       tags:
         warnings.length > 0
           ? {
@@ -161,9 +172,8 @@ const useOffenderFeed = (): Return => {
           },
         },
         {
-          ref: {
-            contains: variables.search,
-            mode: QueryMode.Insensitive,
+          reference: {
+            equals: Number(variables.search),
           },
         },
       ],
@@ -305,9 +315,11 @@ const useOffenderFeed = (): Return => {
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
     variables: {
       where: {
-        scheme: {
-          id: {
-            equals: schemeId,
+        schemes: {
+          some: {
+            id: {
+              in: [schemeId],
+            },
           },
         },
         dataType: {
@@ -513,6 +525,7 @@ const useOffenderFeed = (): Return => {
     businesses,
     setBusinesses,
     businessesLoading,
+    setCreatedAtFilter,
   };
 };
 

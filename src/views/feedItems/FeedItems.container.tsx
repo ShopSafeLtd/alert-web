@@ -14,7 +14,7 @@ const FeedItems = (): JSX.Element => {
     pagination,
     articlePagination,
     onArticlePaginationChange,
-    // search,
+    search,
     setSearch,
     unapprovedIncidents,
     unapprovedIncidentsLoading,
@@ -36,6 +36,7 @@ const FeedItems = (): JSX.Element => {
     groupsLoading,
     gallery,
     setGallery,
+    setCreatedAtFilter,
   } = useFeedItems();
 
   return (
@@ -50,7 +51,7 @@ const FeedItems = (): JSX.Element => {
       pagination={pagination}
       articlePagination={articlePagination}
       onArticlePaginationChange={onArticlePaginationChange}
-      // search={search}
+      search={search}
       setSearch={setSearch}
       unapprovedIncidents={unapprovedIncidents}
       unapprovedIncidentsLoading={unapprovedIncidentsLoading}
@@ -72,6 +73,7 @@ const FeedItems = (): JSX.Element => {
       groupsLoading={groupsLoading}
       gallery={gallery}
       setGallery={setGallery}
+      setCreatedAtFilter={setCreatedAtFilter}
     />
   );
 };

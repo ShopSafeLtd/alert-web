@@ -79,9 +79,11 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
   const { loading: tagsLoading } = useTagsQuery({
     variables: {
       where: {
-        scheme: {
-          id: {
-            equals: currentScheme,
+        schemes: {
+          some: {
+            id: {
+              in: [currentScheme],
+            },
           },
         },
         dataType: {
@@ -124,10 +126,12 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
                 },
               },
               description: '',
-              scheme: {
-                connect: {
-                  id: currentScheme,
-                },
+              schemes: {
+                connect: [
+                  {
+                    id: currentScheme,
+                  },
+                ],
               },
               dataType: Model.Document,
             },

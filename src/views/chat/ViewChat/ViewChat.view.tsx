@@ -91,7 +91,20 @@ const ViewOffender = ({
           />
         </>
       );
-    if (!data?.user?.totalChats) return <Empty description="No chats" />;
+    if (!data?.user?.totalChats)
+      return (
+        <div
+          style={{
+            display: 'flex',
+            width: '100%',
+            alignItems: 'center',
+            justifyContent: 'center',
+            // height: 'calc(100vh - 400px)',
+          }}
+        >
+          <Empty description="No Chats" />
+        </div>
+      );
     return (
       <List
         itemLayout="horizontal"

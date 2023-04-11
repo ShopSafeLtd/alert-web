@@ -18,6 +18,7 @@ interface FormData {
   defaultMessagePush: boolean;
   defaultOffenderEmail: boolean;
   defaultOffenderPush: boolean;
+  defaultPublicOffenderDOB: boolean;
   incidentRetention: number | null;
   offenderRetention: number | null;
 }
@@ -131,6 +132,7 @@ const useSchemeDetail = (): Return => {
           defaultMessagePush: { set: data.defaultMessagePush },
           defaultOffenderEmail: { set: data.defaultOffenderEmail },
           defaultOffenderPush: { set: data.defaultOffenderPush },
+          defaultPublicOffenderDOB: { set: data.defaultPublicOffenderDOB },
           logo: {
             ...(imageChange && fileList.length > 0
               ? {
@@ -143,9 +145,7 @@ const useSchemeDetail = (): Return => {
                   },
                 }
               : undefined),
-            // ...(imageChange && fileList.length > 0
-            //   ? { upload: { file: fileList[0]?.originFileObj } }
-            //   : {}),
+
             ...(imageChange && fileList.length === 0 ? { delete: true } : {}),
           },
           darkLogo: {
@@ -160,9 +160,7 @@ const useSchemeDetail = (): Return => {
                   },
                 }
               : undefined),
-            // ...(imageChange && fileList.length > 0
-            //   ? { upload: { file: fileList[0]?.originFileObj } }
-            //   : {}),
+
             ...(darkImageChange && darkFileList.length === 0
               ? { delete: true }
               : {}),

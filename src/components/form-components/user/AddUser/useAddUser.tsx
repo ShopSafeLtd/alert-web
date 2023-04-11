@@ -216,22 +216,6 @@ const useAddUser = ({
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    console.log(data, {
-      email: data.email,
-      fullName: data.fullName,
-      groups: data.groups.map((id) => ({ id })),
-      role: data.role,
-      publicName: data.publicName,
-      scheme: {
-        id: schemeId,
-      },
-      chats: data.chats.map((id) => ({ id })),
-      businesses: [
-        {
-          id: data.business.value,
-        },
-      ],
-    });
 
     if (existingUser && userData?.user) {
       inviteExistingUser({
