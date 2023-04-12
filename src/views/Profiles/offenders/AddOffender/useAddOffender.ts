@@ -366,91 +366,79 @@ const useAddOffender = (): Return => {
   const onSubmit = (data: FormData) => {
     setSaving(true);
     const getVehicles = (): CreateOffenderData['vehicles'] => {
-      if (vehiclesData && listVehiclesData?.listVehicles) {
-        const vehiclesIds = new Set(
-          listVehiclesData.listVehicles.vehicles.map((vehicle) => vehicle.id)
-        );
+      const vehiclesIds = new Set(
+        listVehiclesData?.listVehicles.vehicles.map((vehicle) => vehicle.id)
+      );
 
-        const newVehicles = vehiclesData.filter(
-          (item) => !vehiclesIds.has(item.id)
-        );
-        const existingVehicles = vehiclesData.filter((item) =>
-          vehiclesIds.has(item.id)
-        );
-        const editedVehicles = existingVehicles.filter(
-          ({ edited }) => edited === true
-        );
-        return {
-          connect:
-            existingVehicles.length > 0
-              ? existingVehicles.map(({ id }) => ({ id }))
-              : undefined,
-          update: editedVehicles.map((vehicle) => ({
-            where: { id: vehicle.id },
-            data: {
-              make: { set: vehicle.make },
-              model: { set: vehicle.model },
-              colour: { set: vehicle.colour },
-              registration: { set: vehicle.registration },
-              crimeGroup:
-                vehicle.crimeGroup && vehicle.crimeGroup.length > 0
-                  ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
-                  : undefined,
-              incidents: vehicle.incidents
-                ? { connect: vehicle.incidents.map((id) => ({ id })) }
-                : undefined,
-              offenders:
-                vehicle.offenders && vehicle.offenders.length > 0
-                  ? { connect: vehicle.offenders.map((id) => ({ id })) }
-                  : undefined,
-            },
-          })),
-
-          create:
-            newVehicles.length > 0
-              ? newVehicles.map((vehicle) => ({
-                  make: vehicle.make,
-                  model: vehicle.model,
-                  colour: vehicle.colour,
-                  registration: vehicle.registration,
-                  crimeGroup:
-                    vehicle.crimeGroup && vehicle.crimeGroup.length > 0
-                      ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
-                      : undefined,
-                  incidents: vehicle.incidents
-                    ? { connect: vehicle.incidents.map((id) => ({ id })) }
-                    : undefined,
-                }))
-              : undefined,
-        };
-      }
+      const newVehicles = vehiclesData.filter(
+        (item) => !vehiclesIds.has(item.id)
+      );
+      const existingVehicles = vehiclesData.filter((item) =>
+        vehiclesIds.has(item.id)
+      );
+      const editedVehicles = existingVehicles.filter(
+        ({ edited }) => edited === true
+      );
       return {
-        connect: undefined,
-        create: undefined,
+        connect:
+          existingVehicles.length > 0
+            ? existingVehicles.map(({ id }) => ({ id }))
+            : undefined,
+        update: editedVehicles.map((vehicle) => ({
+          where: { id: vehicle.id },
+          data: {
+            make: { set: vehicle.make },
+            model: { set: vehicle.model },
+            colour: { set: vehicle.colour },
+            registration: { set: vehicle.registration },
+            crimeGroup:
+              vehicle.crimeGroup && vehicle.crimeGroup.length > 0
+                ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
+                : undefined,
+            incidents: vehicle.incidents
+              ? { connect: vehicle.incidents.map((id) => ({ id })) }
+              : undefined,
+            offenders:
+              vehicle.offenders && vehicle.offenders.length > 0
+                ? { connect: vehicle.offenders.map((id) => ({ id })) }
+                : undefined,
+          },
+        })),
+
+        create:
+          newVehicles.length > 0
+            ? newVehicles.map((vehicle) => ({
+                make: vehicle.make,
+                model: vehicle.model,
+                colour: vehicle.colour,
+                registration: vehicle.registration,
+                crimeGroup:
+                  vehicle.crimeGroup && vehicle.crimeGroup.length > 0
+                    ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
+                    : undefined,
+                incidents: vehicle.incidents
+                  ? { connect: vehicle.incidents.map((id) => ({ id })) }
+                  : undefined,
+              }))
+            : undefined,
       };
     };
     const getCrimeGroups = (): CreateOffenderData['crimeGroups'] => {
-      if (crimeGroupsData && listCrimeGroupsData?.listCrimeGroups) {
-        const crimeGroupsIds = new Set(
-          listCrimeGroupsData.listCrimeGroups.crimeGroups.map(
-            (crimeGroup) => crimeGroup.id
-          )
-        );
+      const crimeGroupsIds = new Set(
+        listCrimeGroupsData?.listCrimeGroups.crimeGroups.map(
+          (crimeGroup) => crimeGroup.id
+        )
+      );
 
-        const existingCrimeGroups = crimeGroupsData.filter((item) =>
-          crimeGroupsIds.has(item.id)
-        );
+      const existingCrimeGroups = crimeGroupsData.filter((item) =>
+        crimeGroupsIds.has(item.id)
+      );
 
-        return {
-          connect:
-            existingCrimeGroups.length > 0
-              ? existingCrimeGroups.map(({ id }) => ({ id }))
-              : undefined,
-        };
-      }
       return {
-        connect: undefined,
-        create: undefined,
+        connect:
+          existingCrimeGroups.length > 0
+            ? existingCrimeGroups.map(({ id }) => ({ id }))
+            : undefined,
       };
     };
     createOffender({
@@ -478,7 +466,6 @@ const useAddOffender = (): Return => {
           scheme: schemeId,
           vehicles: getVehicles(),
           crimeGroups: getCrimeGroups(),
-
           image: {
             upload:
               imageChange && fileList.length > 0
