@@ -4,7 +4,9 @@ import {
   useSchemeGroupsQuery,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
-import { useEffect, useState } from 'react';
+import type { RefObject } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useReactToPrint } from 'react-to-print';
 
 interface Return {
   loading: boolean;
@@ -16,6 +18,9 @@ interface Return {
   setSelectedGroups: (groups: string[]) => void;
   groupsLoading: boolean;
   selectedGroups: string[];
+  componentRef: RefObject<HTMLDivElement>;
+  handlePrint: () => void;
+  isPrinting: boolean;
 }
 
 export interface SelectOptions {
@@ -24,6 +29,9 @@ export interface SelectOptions {
 }
 
 const usePerformanceReport = (): Return => {
+  const [isPrinting, setIsPrinting] = useState(false);
+  const componentRef = useRef<HTMLDivElement>(null);
+
   const currentScheme = useStoreState((state) => state.scheme.id);
   const [groups, setGroups] = useState<SelectOptions[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
@@ -94,6 +102,32 @@ const usePerformanceReport = (): Return => {
     });
   };
 
+  const promiseResolveRef = useRef<(() => void) | null>(null);
+  useEffect(() => {
+    if (isPrinting && promiseResolveRef.current) {
+      // Resolves the Promise, letting `react-to-print` know that the DOM updates are completed
+      promiseResolveRef.current();
+    }
+  }, [isPrinting]);
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    pageStyle:
+      '@page { size: A4; margin: 10mm } @media print { body { -webkit-print-color-adjust: exact; page-break-inside: avoid;} }',
+    onBeforeGetContent: () =>
+      new Promise((resolve) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        promiseResolveRef.current = resolve;
+        setIsPrinting(true);
+        console.log('printing');
+      }),
+    onAfterPrint: () => {
+      // Reset the Promise resolve so we can print again
+      promiseResolveRef.current = null;
+      setIsPrinting(false);
+    },
+  });
+  console.log(isPrinting);
   return {
     data,
     loading,
@@ -103,6 +137,9 @@ const usePerformanceReport = (): Return => {
     setSelectedGroups,
     groupsLoading,
     selectedGroups,
+    componentRef,
+    handlePrint,
+    isPrinting,
   };
 };
 

@@ -8,17 +8,11 @@ const useStyles = createUseStyles({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  '@media print': {
-    page: `overflowY: unset !important; height: unset !important;`,
-    actionBar: `display: none !important;`,
-    dateRow: `clear: both; page-break-after: always;`,
+
+  logo: {
+    display: 'none',
   },
-  page: {
-    width: '100%',
-    height: '100vh',
-    padding: 20,
-    overflowY: 'auto',
-  },
+
   imageCol: {
     marginRight: 20,
     backgroundColor: 'rgba(190, 190, 190, 0.2)',

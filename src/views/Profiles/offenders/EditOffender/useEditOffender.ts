@@ -532,106 +532,93 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
       };
     };
     const getVehicles = (): OffenderUpdateInput['vehicles'] => {
-      if (vehiclesData && listVehiclesData?.listVehicles) {
-        const vehiclesIds = listVehiclesData.listVehicles.vehicles.map(
-          (vehicle) => vehicle.id
-        );
-        const removeVehicles = vehiclesIds?.filter(
-          (vehicleId) => !vehiclesData?.map(({ id }) => id).includes(vehicleId)
-        );
-        const newVehicles = vehiclesData.filter(
-          (item) => !vehiclesIds.includes(item.id)
-        );
+      const vehiclesIds =
+        listVehiclesData?.listVehicles.vehicles.map((vehicle) => vehicle.id) ||
+        [];
+      const removeVehicles = vehiclesIds?.filter(
+        (vehicleId) => !vehiclesData?.map(({ id }) => id).includes(vehicleId)
+      );
+      const newVehicles = vehiclesData.filter(
+        (item) => !vehiclesIds.includes(item.id)
+      );
 
-        const existingVehicles = vehiclesData.filter((item) =>
-          vehiclesIds.includes(item.id)
-        );
-        const editedVehicles = existingVehicles.filter(
-          ({ edited }) => edited === true
-        );
-        return {
-          connect:
-            existingVehicles.length > 0
-              ? existingVehicles.map(({ id }) => ({ id }))
-              : undefined,
-          disconnect:
-            removeVehicles && removeVehicles.length > 0
-              ? removeVehicles.map((id) => ({ id }))
-              : undefined,
-          update: editedVehicles.map((vehicle) => ({
-            where: { id: vehicle.id },
-            data: {
-              make: { set: vehicle.make },
-              model: { set: vehicle.model },
-              colour: { set: vehicle.colour },
-              registration: { set: vehicle.registration },
-              crimeGroup:
-                vehicle.crimeGroup && vehicle.crimeGroup.length > 0
-                  ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
-                  : undefined,
-              incidents: vehicle.incidents
-                ? { connect: vehicle.incidents.map((id) => ({ id })) }
-                : undefined,
-              offenders:
-                vehicle.offenders && vehicle.offenders.length > 0
-                  ? { connect: vehicle.offenders.map((id) => ({ id })) }
-                  : undefined,
-            },
-          })),
-
-          create:
-            newVehicles.length > 0
-              ? newVehicles.map((vehicle) => ({
-                  make: vehicle.make,
-                  model: vehicle.model,
-                  colour: vehicle.colour,
-                  registration: vehicle.registration,
-                  crimeGroup:
-                    vehicle.crimeGroup && vehicle.crimeGroup.length > 0
-                      ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
-                      : undefined,
-                  incidents: vehicle.incidents
-                    ? { connect: vehicle.incidents.map((id) => ({ id })) }
-                    : undefined,
-                }))
-              : undefined,
-        };
-      }
+      const existingVehicles = vehiclesData.filter((item) =>
+        vehiclesIds.includes(item.id)
+      );
+      const editedVehicles = existingVehicles.filter(
+        ({ edited }) => edited === true
+      );
       return {
-        connect: undefined,
-        disconnect: undefined,
-        create: undefined,
+        connect:
+          existingVehicles.length > 0
+            ? existingVehicles.map(({ id }) => ({ id }))
+            : undefined,
+        disconnect:
+          removeVehicles && removeVehicles.length > 0
+            ? removeVehicles.map((id) => ({ id }))
+            : undefined,
+        update: editedVehicles.map((vehicle) => ({
+          where: { id: vehicle.id },
+          data: {
+            make: { set: vehicle.make },
+            model: { set: vehicle.model },
+            colour: { set: vehicle.colour },
+            registration: { set: vehicle.registration },
+            crimeGroup:
+              vehicle.crimeGroup && vehicle.crimeGroup.length > 0
+                ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
+                : undefined,
+            incidents: vehicle.incidents
+              ? { connect: vehicle.incidents.map((id) => ({ id })) }
+              : undefined,
+            offenders:
+              vehicle.offenders && vehicle.offenders.length > 0
+                ? { connect: vehicle.offenders.map((id) => ({ id })) }
+                : undefined,
+          },
+        })),
+
+        create:
+          newVehicles.length > 0
+            ? newVehicles.map((vehicle) => ({
+                make: vehicle.make,
+                model: vehicle.model,
+                colour: vehicle.colour,
+                registration: vehicle.registration,
+                crimeGroup:
+                  vehicle.crimeGroup && vehicle.crimeGroup.length > 0
+                    ? { connect: vehicle.crimeGroup?.map((id) => ({ id })) }
+                    : undefined,
+                incidents: vehicle.incidents
+                  ? { connect: vehicle.incidents.map((id) => ({ id })) }
+                  : undefined,
+              }))
+            : undefined,
       };
     };
     const getCrimeGroups = (): OffenderUpdateInput['crimeGroups'] => {
-      if (crimeGroupsData && listCrimeGroupsData?.listCrimeGroups) {
-        const crimeGroupsIds =
-          listCrimeGroupsData.listCrimeGroups.crimeGroups.map(
-            (crimeGroup) => crimeGroup.id
-          );
-        const removeCrimeGroups = crimeGroupsIds?.filter(
-          (crimeGroupId) =>
-            !crimeGroupsData?.map(({ id }) => id).includes(crimeGroupId)
+      const crimeGroupsIds =
+        listCrimeGroupsData?.listCrimeGroups.crimeGroups.map(
+          (crimeGroup) => crimeGroup.id
         );
+      const removeCrimeGroups = crimeGroupsIds?.filter(
+        (crimeGroupId) =>
+          !crimeGroupsData?.map(({ id }) => id).includes(crimeGroupId)
+      );
 
-        const existingCrimeGroups = crimeGroupsData.filter((item) =>
-          crimeGroupsIds.includes(item.id)
-        );
+      const existingCrimeGroups = crimeGroupsData.filter((item) =>
+        crimeGroupsIds?.includes(item.id)
+      );
 
-        return {
-          connect:
-            existingCrimeGroups.length > 0
-              ? existingCrimeGroups.map(({ id }) => ({ id }))
-              : undefined,
-          disconnect:
-            removeCrimeGroups && removeCrimeGroups.length > 0
-              ? removeCrimeGroups.map((id) => ({ id }))
-              : undefined,
-        };
-      }
       return {
-        connect: undefined,
-        create: undefined,
+        connect:
+          existingCrimeGroups.length > 0
+            ? existingCrimeGroups.map(({ id }) => ({ id }))
+            : undefined,
+        disconnect:
+          removeCrimeGroups && removeCrimeGroups.length > 0
+            ? removeCrimeGroups.map((id) => ({ id }))
+            : undefined,
       };
     };
     await updateOffender({
