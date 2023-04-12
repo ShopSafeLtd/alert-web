@@ -68,3 +68,51 @@
   font-family: 'Rock Salt';
   src: url('@/assets/fonts/RockSalt-Regular.ttf');
 }
+.logo {
+  display: none;
+}
+.printable-graph {
+  width: 90%;
+  height: 400px;
+}
+.no-break {
+  page-break-inside: avoid;
+}
+@media print {
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
+  @page {
+    size: A4;
+    margin: 10mm;
+    background: white;
+  }
+  .ant-card-bordered {
+    border: 0px solid #000;
+  }
+  .logo {
+    display: flex;
+    width: 100%;
+    height: 100px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  .print-title {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+  .printable-graph {
+    width: 90% !important;
+    max-width: 90% !important;
+  }
+  .ant-table-pagination {
+    display: none;
+  }
+  .page {
+    overflow-y: unset !important;
+    height: unset !important;
+    page-break-inside: avoid;
+  }
+}

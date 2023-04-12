@@ -12,6 +12,8 @@ const PerformanceReport = () => {
     groupsLoading,
     setSelectedGroups,
     selectedGroups,
+    handlePrint,
+    componentRef,
   } = useBusinessEngagement();
   return (
     <View
@@ -23,6 +25,8 @@ const PerformanceReport = () => {
       dateRange={dateRange}
       groups={groups}
       groupsLoading={groupsLoading}
+      handlePrint={handlePrint}
+      componentRef={componentRef}
     />
   );
 };

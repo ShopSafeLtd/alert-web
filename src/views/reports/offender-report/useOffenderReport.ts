@@ -4,8 +4,10 @@ import {
   useSchemeGroupsQuery,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
-import { useEffect, useState } from 'react';
+import type { RefObject } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useReactToPrint } from 'react-to-print';
 
 interface Return {
   loading: boolean;
@@ -21,6 +23,8 @@ interface Return {
   setSelectedBusiness: (businesses: string[]) => void;
   businesses: SelectOptions[];
   selectedOffender: string;
+  componentRef: RefObject<HTMLDivElement>;
+  handlePrint: () => void;
 }
 
 export interface SelectOptions {
@@ -30,7 +34,6 @@ export interface SelectOptions {
 
 const useOffenderReport = (): Return => {
   const { id: selectedOffender } = useParams();
-
   const currentScheme = useStoreState((state) => state.scheme.id);
   const businesses = useStoreState((state) => state.user.businesses);
   const [selectedBusiness, setSelectedBusiness] = useState<string[]>(
@@ -114,6 +117,37 @@ const useOffenderReport = (): Return => {
     });
   };
 
+  const componentRef = useRef<HTMLDivElement>(null);
+
+  const [isPrinting, setIsPrinting] = useState(false);
+
+  const promiseResolveRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    if (isPrinting && promiseResolveRef.current) {
+      // Resolves the Promise, letting `react-to-print` know that the DOM updates are completed
+      promiseResolveRef.current();
+    }
+  }, [isPrinting]);
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    pageStyle:
+      '@page { size: A4; margin: 10mm } @media print { body { -webkit-print-color-adjust: exact; page-break-inside: avoid;} }',
+    onBeforeGetContent: () =>
+      new Promise((resolve) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        promiseResolveRef.current = resolve;
+        setIsPrinting(true);
+      }),
+    onAfterPrint: () => {
+      // Reset the Promise resolve so we can print again
+      promiseResolveRef.current = null;
+      setIsPrinting(false);
+    },
+  });
+
   return {
     data,
     loading,
@@ -132,6 +166,8 @@ const useOffenderReport = (): Return => {
     selectedBusiness,
     setSelectedBusiness,
     selectedOffender: selectedOffender || '',
+    componentRef,
+    handlePrint,
   };
 };
 

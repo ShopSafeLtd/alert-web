@@ -1,5 +1,6 @@
+import type { RefObject } from 'react';
 import React from 'react';
-import { Card, Col, Row, Select, Table, Typography } from 'antd';
+import { Button, Card, Col, Row, Select, Table, Typography } from 'antd';
 import type { BusinessEngagementQuery } from 'graphql/generated';
 import DatePicker from 'components/util-components/DatePicker';
 import useStyles from './performance-report.styles';
@@ -16,6 +17,8 @@ interface Props {
   setDateRange: (dateRange: { startDate: Date; endDate: Date }) => void;
   setSelectedGroups: (groups: string[]) => void;
   selectedGroups: string[];
+  componentRef: RefObject<HTMLDivElement>;
+  handlePrint: () => void;
 }
 
 const PerformanceReport = ({
@@ -27,13 +30,27 @@ const PerformanceReport = ({
   setSelectedGroups,
   groupsLoading,
   selectedGroups,
+  handlePrint,
+  componentRef,
 }: Props) => {
   const classes = useStyles();
+  const logo = localStorage.getItem('logo');
 
   return (
-    <div className={classes.page}>
-      <Title level={2}>Business Engagement</Title>
-      <Row style={{ marginBottom: 10 }}>
+    <div className={classes.page} ref={componentRef}>
+      <div className="logo">
+        <img
+          style={{ height: '100%', width: '25 %' }}
+          src={logo || ''}
+          alt="logo"
+        />
+      </div>
+      <Title level={2} className="print-title">
+        Business Engagement:
+        {dateRange.startDate.toLocaleDateString()} -{' '}
+        {dateRange.endDate.toLocaleDateString()}
+      </Title>
+      <Row className="no-print" style={{ marginBottom: 10 }}>
         <Col span={6}>
           <Select
             placeholder="Select Groups"
@@ -88,11 +105,18 @@ const PerformanceReport = ({
             }}
           />
         </Col>
+        <Col>
+          <Button type="primary" onClick={handlePrint}>
+            Print
+          </Button>
+        </Col>
       </Row>
       <Row gutter={16}>
         <Col span={24}>
           <Card loading={loading} style={{ height: '100%' }}>
-            <Title level={4}>Business Contributions</Title>
+            <Title className="no-print" level={4}>
+              Business Contributions
+            </Title>
             <Table
               size="small"
               pagination={{

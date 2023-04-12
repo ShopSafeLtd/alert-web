@@ -2,7 +2,7 @@ import React from 'react';
 import View from './performance-report.view';
 import usePerformanceReport from './use-performance-report';
 
-const PerformanceReport = () => {
+const PerformanceReport = (): JSX.Element => {
   const {
     data,
     loading,
@@ -12,9 +12,13 @@ const PerformanceReport = () => {
     groupsLoading,
     setSelectedGroups,
     selectedGroups,
+    componentRef,
+    handlePrint,
   } = usePerformanceReport();
   return (
     <View
+      componentRef={componentRef}
+      handlePrint={handlePrint}
       setSelectedGroups={setSelectedGroups}
       selectedGroups={selectedGroups}
       loading={loading}

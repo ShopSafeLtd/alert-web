@@ -1,6 +1,8 @@
-const dataFormatToBar = (item: {
-  data: { label: string; value: number }[] | null | undefined;
-}) => {
+interface DataFormatToBarParams {
+  item: { data: { label: string; value: number }[] | null | undefined };
+}
+
+const dataFormatToBar = ({ item }: DataFormatToBarParams) => {
   if (!item?.data) return {};
   const data = Object.fromEntries(
     item?.data?.map((d) => [d?.label || ' ', d?.value || 0])
@@ -22,7 +24,7 @@ interface FilteredBarDataParams {
 const filteredBarData = ({ data }: FilteredBarDataParams) => {
   const initData = data?.map((item) => ({
     label: item?.label || '',
-    ...dataFormatToBar(item || { data: null }),
+    ...dataFormatToBar({ item: item || { data: null } }),
   }));
   const filteredData = initData?.filter((item) => Object.keys(item).length > 2);
   if (!filteredData)
