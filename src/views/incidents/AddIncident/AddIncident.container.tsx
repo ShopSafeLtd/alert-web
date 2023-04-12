@@ -44,6 +44,9 @@ const EditIncident = (): JSX.Element => {
     updateNewAddressData,
     newAddressData,
     onAddOffender,
+    dontKnowGoods,
+    goodsVisible,
+    knowGoods,
   } = useAddIncident();
 
   return (
@@ -89,6 +92,9 @@ const EditIncident = (): JSX.Element => {
         updateNewAddressData={updateNewAddressData}
         newAddressData={newAddressData}
         onAddOffender={onAddOffender}
+        dontKnowGoods={dontKnowGoods}
+        goodsVisible={goodsVisible}
+        knowGoods={knowGoods}
       />
     </div>
   );

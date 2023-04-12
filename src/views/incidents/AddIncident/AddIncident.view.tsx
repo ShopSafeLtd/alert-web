@@ -147,6 +147,9 @@ interface Props {
   toggleAddNewAddress: () => void;
   updateNewAddressData: (value: LocationData | undefined) => void;
   newAddressData: LocationData | undefined;
+  goodsVisible: boolean;
+  dontKnowGoods: () => void;
+  knowGoods: () => void;
 }
 
 const EditIncident = ({
@@ -190,6 +193,9 @@ const EditIncident = ({
   toggleAddNewAddress,
   updateNewAddressData,
   newAddressData,
+  dontKnowGoods,
+  goodsVisible,
+  knowGoods,
 }: Props): JSX.Element => {
   const classes = useStyles();
 
@@ -438,7 +444,9 @@ const EditIncident = ({
               </Col>
               <Col>
                 <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
-                  What goods were involved?
+                  {goodsVisible
+                    ? 'What goods were involved?'
+                    : 'Do you know what goods were involved?'}
                 </Title>
               </Col>
               <Col>
@@ -451,128 +459,146 @@ const EditIncident = ({
                 </Paragraph>
               </Col>
             </Row>
-            <Form.List
-              name="goods"
-              rules={[
-                {
-                  validator: async (rule, value) => {
-                    if (value.length === 0) throw new Error('Something wrong!');
+            {goodsVisible ? (
+              <Form.List
+                name="goods"
+                rules={[
+                  {
+                    validator: async (rule, value) => {
+                      if (value.length === 0)
+                        throw new Error('Something wrong!');
+                    },
                   },
-                },
-              ]}
-            >
-              {(fields, { add, remove }) => (
-                <>
-                  {fields.map(({ key, name, ...restField }, index) => (
-                    <Row key={key} gutter={8}>
-                      <Col>
-                        <Form.Item
-                          // eslint-disable-next-line
-                          {...restField}
-                          label={index ? '' : 'Type of Goods'}
-                          name={[name, 'goodsType']}
-                          rules={[
-                            {
-                              required: index === 0,
-                              message: 'Please enter a type',
-                            },
-                          ]}
-                        >
-                          <Select
-                            placeholder="Select goods..."
-                            style={{ width: 300 }}
-                            allowClear
-                            options={goodsTypesData?.listGoodsTypes.goodsTypes.map(
-                              (goodsType) => ({
-                                value: goodsType.id,
-                                label: goodsType.name,
-                              })
-                            )}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col>
-                        <Form.Item
-                          // eslint-disable-next-line
-                          {...restField}
-                          name={[name, 'value']}
-                          label={index ? '' : 'Value'}
-                          rules={[
-                            {
-                              required: index === 0,
-                              message: 'Please enter a value',
-                            },
-                          ]}
-                          tooltip="The value of the goods involved in the incident, both lost and recovered."
-                        >
-                          <InputNumber
-                            style={{ width: 150 }}
-                            prefix="£"
-                            precision={2}
-                            min={0}
-                          />
-                        </Form.Item>
-                      </Col>
-                      <Col>
-                        <Form.Item
-                          // eslint-disable-next-line
-                          {...restField}
-                          name={[name, 'recoveredValue']}
-                          label={index ? '' : 'Value Recovered'}
-                          rules={[
-                            {
-                              required: index === 0,
-                              message: 'Please enter a value',
-                            },
-                          ]}
-                          tooltip="The value of the goods that were recovered."
-                        >
-                          <InputNumber
-                            style={{ width: 150 }}
-                            prefix="£"
-                            precision={2}
-                            min={0}
-                          />
-                        </Form.Item>
-                      </Col>
-                      {fields.length > 1 && (
+                ]}
+              >
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }, index) => (
+                      <Row key={key} gutter={8}>
+                        <Col>
+                          <Form.Item
+                            // eslint-disable-next-line
+                            {...restField}
+                            label={index ? '' : 'Type of Goods'}
+                            name={[name, 'goodsType']}
+                            rules={[
+                              {
+                                required: index === 0,
+                                message: 'Please enter a type',
+                              },
+                            ]}
+                          >
+                            <Select
+                              placeholder="Select goods..."
+                              style={{ width: 300 }}
+                              allowClear
+                              options={goodsTypesData?.listGoodsTypes.goodsTypes.map(
+                                (goodsType) => ({
+                                  value: goodsType.id,
+                                  label: goodsType.name,
+                                })
+                              )}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col>
+                          <Form.Item
+                            // eslint-disable-next-line
+                            {...restField}
+                            name={[name, 'value']}
+                            label={index ? '' : 'Value'}
+                            rules={[
+                              {
+                                required: index === 0,
+                                message: 'Please enter a value',
+                              },
+                            ]}
+                            tooltip="The value of the goods involved in the incident, both lost and recovered."
+                          >
+                            <InputNumber
+                              style={{ width: 150 }}
+                              prefix="£"
+                              precision={2}
+                              min={0}
+                            />
+                          </Form.Item>
+                        </Col>
+                        <Col>
+                          <Form.Item
+                            // eslint-disable-next-line
+                            {...restField}
+                            name={[name, 'recoveredValue']}
+                            label={index ? '' : 'Value Recovered'}
+                            rules={[
+                              {
+                                required: index === 0,
+                                message: 'Please enter a value',
+                              },
+                            ]}
+                            tooltip="The value of the goods that were recovered."
+                          >
+                            <InputNumber
+                              style={{ width: 150 }}
+                              prefix="£"
+                              precision={2}
+                              min={0}
+                            />
+                          </Form.Item>
+                        </Col>
+                        {fields.length > 1 && (
+                          <Col>
+                            <Button
+                              style={{ marginTop: index === 0 ? 30 : 0 }}
+                              size="small"
+                              onClick={() => remove(name)}
+                            >
+                              <FontAwesomeIcon size="lg" icon={faTrash} />
+                            </Button>
+                          </Col>
+                        )}
+                      </Row>
+                    ))}
+                    <Form.Item>
+                      <Row justify="center">
                         <Col>
                           <Button
-                            style={{ marginTop: index === 0 ? 30 : 0 }}
-                            size="small"
-                            onClick={() => remove(name)}
+                            onClick={() =>
+                              add({
+                                recoveredValue: 0,
+                              })
+                            }
+                            block
+                            icon={
+                              <FontAwesomeIcon
+                                style={{ marginRight: 8 }}
+                                icon={faPlus}
+                              />
+                            }
                           >
-                            <FontAwesomeIcon size="lg" icon={faTrash} />
+                            Add Item
                           </Button>
                         </Col>
-                      )}
-                    </Row>
-                  ))}
-                  <Form.Item>
-                    <Row justify="center">
-                      <Col>
-                        <Button
-                          onClick={() =>
-                            add({
-                              recoveredValue: 0,
-                            })
-                          }
-                          block
-                          icon={
-                            <FontAwesomeIcon
-                              style={{ marginRight: 8 }}
-                              icon={faPlus}
-                            />
-                          }
-                        >
-                          Add Item
-                        </Button>
-                      </Col>
-                    </Row>
-                  </Form.Item>
-                </>
-              )}
-            </Form.List>
+                      </Row>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            ) : (
+              <div style={{ paddingTop: 10, paddingBottom: 20 }}>
+                <Row gutter={16}>
+                  <Col>
+                    <Button onClick={knowGoods} danger>
+                      I know the goods involved
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Button onClick={dontKnowGoods}>
+                      I don&apos;t know the goods involved
+                    </Button>
+                  </Col>
+                </Row>
+              </div>
+            )}
           </Card>
         )}
 

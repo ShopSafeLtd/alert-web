@@ -151,6 +151,9 @@ interface Return {
   toggleAddNewAddress: () => void;
   updateNewAddressData: (value: LocationData | undefined) => void;
   newAddressData: LocationData | undefined;
+  goodsVisible: boolean;
+  dontKnowGoods: () => void;
+  knowGoods: () => void;
 }
 
 const useEditIncident = (): Return => {
@@ -170,6 +173,7 @@ const useEditIncident = (): Return => {
   );
 
   const [addIncidentTag, setAddIncidentTag] = useState(false);
+  const [goodsVisible, setGoodsVisible] = useState(false);
   const [addNewAddress, setAddNewAddress] = useState(false);
   const [newAddressData, setNewAddressData] = useState<LocationData>();
 
@@ -784,7 +788,7 @@ const useEditIncident = (): Return => {
           create: undefined,
         };
       };
-      console.log(groupData, data);
+
       createIncident({
         variables: {
           data: {
@@ -911,14 +915,12 @@ const useEditIncident = (): Return => {
         form.setFieldsValue({
           goods: [
             {
-              goodsType: undefined,
+              goodsType:
+                goodsTypesData?.listGoodsTypes.goodsTypes.find(
+                  (item) => item.name === 'Unknown'
+                )?.id || undefined,
               recoveredValue: 0,
-              value: undefined,
-            },
-            {
-              goodsType: undefined,
-              recoveredValue: 0,
-              value: undefined,
+              value: 0,
             },
           ],
         });
@@ -1073,6 +1075,32 @@ const useEditIncident = (): Return => {
     }
   };
 
+  const dontKnowGoods = () => {
+    setGoodsVisible(true);
+    setFormStages({
+      ...formStages,
+      profiles: true,
+    });
+  };
+
+  const knowGoods = () => {
+    setGoodsVisible(true);
+    form.setFieldsValue({
+      goods: [
+        {
+          goodsType: undefined,
+          recoveredValue: 0,
+          value: undefined,
+        },
+        {
+          goodsType: undefined,
+          recoveredValue: 0,
+          value: undefined,
+        },
+      ],
+    });
+  };
+
   return {
     onSubmit,
     saving,
@@ -1128,6 +1156,9 @@ const useEditIncident = (): Return => {
     toggleAddNewAddress,
     updateNewAddressData,
     newAddressData,
+    dontKnowGoods,
+    goodsVisible,
+    knowGoods,
   };
 };
 

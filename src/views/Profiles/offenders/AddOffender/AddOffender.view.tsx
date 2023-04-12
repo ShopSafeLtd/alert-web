@@ -236,14 +236,12 @@ const AddOffender = ({
         {/* <Divider /> */}
         <Profiles
           saving={saving}
-          // adminRights={adminRights}
           setEditVehicleId={setEditVehicleId}
           toggleAddNewVehicle={toggleAddNewVehicle}
           toggleAddExistingVehicle={toggleAddExistingVehicle}
           vehiclesData={vehiclesData}
           removeVehicle={removeVehicle}
           removeCrimeGroup={removeCrimeGroup}
-          // setEditCrimeGroupId={setEditCrimeGroupId}
           toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
           toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
           crimeGroupsData={crimeGroupsData}
@@ -475,8 +473,8 @@ const AddOffender = ({
           </Col>
         </Row>
       </Card>
-      <Card>
-        {groups.length > 1 && (
+      {groups.length > 1 && (
+        <Card>
           <>
             <Row align="bottom" style={{ marginBottom: 30 }}>
               <Col>
@@ -529,8 +527,8 @@ const AddOffender = ({
               </Col>
             </Row>
           </>
-        )}
-      </Card>
+        </Card>
+      )}
 
       <Form.Item>
         <Row style={{ marginTop: 30 }} gutter={10} justify="end">
