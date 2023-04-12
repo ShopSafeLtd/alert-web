@@ -30,7 +30,7 @@ interface Props {
 const AddNewOffender = ({
   onClose,
   update,
-  hideImages,
+  hideImages = false,
 }: Props): JSX.Element => {
   const {
     onSubmit,

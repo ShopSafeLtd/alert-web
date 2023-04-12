@@ -170,7 +170,7 @@ const AddNewOffender = ({
           </Col>
         )}
       </Row>
-      {hideImages && (
+      {!hideImages && (
         <Row>
           <Col>
             <Form.Item
