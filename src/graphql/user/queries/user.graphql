@@ -26,6 +26,14 @@ query User(
     messagePush
     offenderEmail
     offenderPush
+    signedTerms {
+      id
+      signature
+      terms {
+        id
+        version
+      }
+    }
     groups(where: $groupWhere) {
       id
       name
