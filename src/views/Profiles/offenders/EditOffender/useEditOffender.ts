@@ -423,6 +423,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   });
 
   const { data: tagsData, loading: tagsLoading } = useTagsQuery({
+    fetchPolicy: 'cache-and-network',
     variables: {
       where: {
         schemes: {
