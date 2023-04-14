@@ -37,6 +37,7 @@ mutation createChat($data: ChatCreateInput!) {
             id
             url
             optimised
+            position
           }
           incidents {
             id

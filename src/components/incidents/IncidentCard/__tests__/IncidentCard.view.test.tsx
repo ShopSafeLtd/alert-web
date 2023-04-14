@@ -1,6 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
+import { ImagePosition } from 'graphql/generated';
 import IncidentCard from '../IncidentCard.view';
 
 describe('Detail Officer View', () => {
@@ -25,6 +26,7 @@ describe('Detail Officer View', () => {
         id: 'cl6owsuzo33227f9pe9zk4wone',
         optimised: null,
         url: 'htt',
+        position: ImagePosition.CenterCenter,
       },
     ],
     offenders: [],

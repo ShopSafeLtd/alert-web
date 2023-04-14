@@ -68,7 +68,10 @@ const OffenderSideList = ({
               <Col>
                 {offender.images.length > 0 ? (
                   <div className={classes.image}>
-                    <WatermarkImage url={offender.images[0].optimised} />
+                    <WatermarkImage
+                      url={offender.images[0].optimised}
+                      position={offender.images[0].position}
+                    />
                   </div>
                 ) : (
                   <Skeleton.Image className={classes.imageSkeleton} />

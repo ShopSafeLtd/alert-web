@@ -54,6 +54,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
       id
       optimised
       url
+      position
       offenders {
         id
         name
@@ -88,6 +89,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
         id
         url
         optimised
+        position
       }
     }
     offenders {
@@ -112,6 +114,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
         url
         optimised
         card
+        position
       }
       tags {
         id
@@ -127,6 +130,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
         id
         url
         optimised
+        position
         card
       }
       linkedCrimeGroups {
@@ -145,6 +149,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
           id
           url
           optimised
+          position
         }
         updatedAt
         totalOffenders
@@ -158,6 +163,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
           id
           url
           optimised
+          position
         }
       }
       linkedIncidents {
@@ -169,6 +175,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
           id
           url
           optimised
+          position
         }
       }
       linkedOffenders {
@@ -184,6 +191,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
           id
           url
           optimised
+          position
         }
       }
       createdBy {
@@ -204,6 +212,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
           id
           url
           optimised
+          position
           card
         }
         linkedCrimeGroups {
@@ -222,6 +231,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
             id
             url
             optimised
+            position
           }
           updatedAt
           totalOffenders
@@ -235,6 +245,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
             id
             url
             optimised
+            position
           }
         }
         linkedIncidents {
@@ -246,6 +257,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
             id
             url
             optimised
+            position
           }
         }
         linkedOffenders {
@@ -261,6 +273,7 @@ query EditIncident($where: IncidentWhereUniqueInput!) {
             id
             url
             optimised
+            position
           }
         }
         createdBy {

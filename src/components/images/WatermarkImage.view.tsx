@@ -1,3 +1,4 @@
+import { ImagePosition } from 'graphql/generated';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { useStoreState } from 'state';
@@ -52,14 +53,30 @@ const useStyles = createUseStyles({
     backgroundPosition: 'center center',
     color: '#fff',
   },
+  standardImage: {
+    maxHeight: '100vh',
+  },
 });
+
+const getPosition = (position?: ImagePosition): string => {
+  if (position === ImagePosition.CenterBottom) return 'center bottom';
+  if (position === ImagePosition.CenterTop) return 'center top';
+  if (position === ImagePosition.LeftBottom) return 'left bottom';
+  if (position === ImagePosition.LeftCenter) return 'left center';
+  if (position === ImagePosition.LeftTop) return 'left top';
+  if (position === ImagePosition.RightBottom) return 'right bottom';
+  if (position === ImagePosition.RightCenter) return 'right center';
+  if (position === ImagePosition.RightTop) return 'right top';
+  return 'center center';
+};
 
 interface Props {
   url?: string | null;
   image?: boolean;
+  position?: ImagePosition;
 }
 
-const WatermarkImage = ({ url, image }: Props) => {
+const WatermarkImage = ({ url, image, position }: Props) => {
   const classes = useStyles();
   const reference = useStoreState((state) => state.user.reference);
 
@@ -136,10 +153,17 @@ const WatermarkImage = ({ url, image }: Props) => {
           className={classes.image}
           style={{
             backgroundImage: `url(${url})`,
+            backgroundPosition: getPosition(position),
           }}
         />
       )}
-      {image && <img src={url || undefined} alt="lightbox" />}
+      {image && (
+        <img
+          className={classes.standardImage}
+          src={url || undefined}
+          alt="lightbox"
+        />
+      )}
     </div>
   );
 };

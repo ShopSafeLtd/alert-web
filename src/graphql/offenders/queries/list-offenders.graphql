@@ -41,6 +41,7 @@ query listOffenders(
       images {
         id
         optimised
+        position
         optimisedPersisted
       }
       groups {
@@ -86,6 +87,7 @@ query listOffenders(
         images {
           id
           optimised
+          position
         }
       }
     }

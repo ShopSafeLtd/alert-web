@@ -94,6 +94,7 @@ query OffenderReport(
       name
       images {
         optimisedPersisted
+        position
       }
     }
   }

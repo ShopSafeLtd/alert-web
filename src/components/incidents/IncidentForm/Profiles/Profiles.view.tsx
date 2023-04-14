@@ -528,7 +528,10 @@ const Profiles = ({
                             cursor: 'pointer',
                           }}
                         >
-                          <WatermarkImage url={offender.images[0]?.optimised} />
+                          <WatermarkImage
+                            url={offender.images[0]?.optimised}
+                            position={offender.images[0]?.position}
+                          />
                           {/* {offender.images.length === 0 && (
                             <FontAwesomeIcon
                               style={{ color: 'rgb(114, 132, 154)' }}
@@ -607,7 +610,10 @@ const Profiles = ({
                 height: 200,
               }}
             >
-              <WatermarkImage url={addRecentOffender?.images[0]?.optimised} />
+              <WatermarkImage
+                url={addRecentOffender?.images[0]?.optimised}
+                position={addRecentOffender?.images[0]?.position}
+              />
             </div>
           </Col>
         )}

@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import { IncidentSort, storeModel } from 'state';
 import { createStore, StoreProvider } from 'easy-peasy';
-import { Role } from 'graphql/generated';
+import { ImagePosition, Role } from 'graphql/generated';
 import { MockedProvider } from '@apollo/client/testing';
 import IncidentFeed from '../IncidentFeed.view';
 
@@ -52,7 +52,12 @@ describe('Detail Officer View', () => {
             { id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling ' },
           ],
           groups: [{ id: 'ckqtnb4r056540229myw4yk8zvq', name: 'NightSafe' }],
-          images: [{ id: 'cl6owsuzo33227f9pe9zk4wone' }],
+          images: [
+            {
+              id: 'cl6owsuzo33227f9pe9zk4wone',
+              position: ImagePosition.CenterCenter,
+            },
+          ],
           offenders: [],
         },
       ],

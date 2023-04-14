@@ -6,7 +6,6 @@ import type {
   CreateTagMutation,
   Gender,
   IdSource,
-  // ListCrimeGroupsQuery,
   ListVehiclesQuery,
   OffenderUpdateInput,
   Race,
@@ -25,6 +24,7 @@ import {
   useTagsQuery,
   useUpdateOffenderMutation,
   useViewOffenderQuery,
+  ImagePosition,
 } from 'graphql/generated';
 import type { FormInstance } from 'antd';
 import { Form, message, Modal, notification, Upload } from 'antd';
@@ -92,11 +92,10 @@ export interface FormData {
 }
 
 interface Image extends UploadFile {
-  offenders?: {
-    id: string;
-    name?: string | undefined | null;
-  }[];
   optimised?: string | null;
+  position?: ImagePosition;
+  edited?: boolean;
+  new?: boolean;
 }
 
 interface BanType extends BanData {
@@ -118,7 +117,7 @@ interface Return {
   imgChange: UploadProps['onChange'];
   onPreview: (value: UploadFile) => void;
   beforeUpload: (value: RcFile) => void;
-  fileList: UploadFile[];
+  fileList: Image[];
   addOffenderTag: boolean;
   toggleAddOffenderTag: () => void;
   updateOffenderTag: MutationUpdaterFn<CreateTagMutation>;
@@ -170,6 +169,9 @@ interface Return {
   onEditAddress: (data: EditAddressForm) => void;
   onDeleteAddress: (addressId: string) => void;
   onAddVehicles: (data: VehicleData, existing: boolean) => void;
+  onEditImage: (value: Image) => void;
+  toggleEditImage: (value?: Image) => void;
+  editImage: Image | null;
 }
 
 const errorNotification = () => {
@@ -222,6 +224,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   const [bansData, setBansData] = useState<BanType[]>([]);
   const [banData, setBanData] = useState<BanType | null>(null);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [editImage, setEditImage] = useState<Image | null>(null);
 
   const [addNewCrimeGroup, setAddNewCrimeGroup] = useState(false);
   const [addExistingCrimeGroup, setAddExistingCrimeGroup] = useState(false);
@@ -313,6 +316,9 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
             status: 'done',
             url: `${image.optimised || image.url}`,
             optimised: `${image.optimised || image.url}`,
+            position: image.position,
+            edited: false,
+            new: false,
           }))
         );
       }
@@ -621,6 +627,47 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
             : undefined,
       };
     };
+
+    const getImages = (): OffenderUpdateInput['images'] => {
+      const editedImages = fileList.filter((item) => item.edited && !item.new);
+
+      return {
+        upload:
+          imageChange && fileList.length > 0
+            ? fileList
+                .filter((item) => !item.optimised)
+                .map((item) => ({
+                  url: {
+                    filename: item.fileName || '',
+                    mimetype: item.type || '',
+                    url: item.url || '',
+                  },
+                  position: item.position,
+                }))
+            : undefined,
+        delete: imageChange
+          ? offenderData?.offender?.images
+              .filter(
+                (image) => !fileList.map((item) => item.uid).includes(image.id)
+              )
+              .map((image) => ({
+                id: image.id,
+              }))
+          : [],
+        update:
+          editedImages.length > 0
+            ? editedImages.map((item) => ({
+                data: {
+                  position: { set: item.position },
+                },
+                where: {
+                  id: item.uid,
+                },
+              }))
+            : undefined,
+      };
+    };
+
     await updateOffender({
       variables: {
         where: {
@@ -638,10 +685,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           dateSource: { set: ageCheck ? data.dateSource || null : null },
           dateOfBirth: { set: ageCheck ? data.dateOfBirth || null : null },
           groups: {
-            set:
-              groups.length > 1
-                ? data.groups.map((id) => ({ id }))
-                : groups.map(({ id }) => ({ id })),
+            set: data.groups.map((id) => ({ id })),
           },
           tags: {
             set: data.tags.map((id) => ({ id })) || undefined,
@@ -684,30 +728,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
                 id: item.id,
               })),
           },
-          images: {
-            upload:
-              imageChange && fileList.length > 0
-                ? fileList
-                    .filter((item) => !item.optimised)
-                    .map((item) => ({
-                      url: {
-                        filename: item.fileName || '',
-                        mimetype: item.type || '',
-                        url: item.url || '',
-                      },
-                    }))
-                : undefined,
-            delete: imageChange
-              ? offenderData?.offender?.images
-                  .filter(
-                    (image) =>
-                      !fileList.map((item) => item.uid).includes(image.id)
-                  )
-                  .map((image) => ({
-                    id: image.id,
-                  }))
-              : [],
-          },
+          images: getImages(),
         },
       },
     });
@@ -802,12 +823,15 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           url: info.file.response[0].url,
           fileName: info.file.response[0].blobName,
           type: info.file.response[0].mimetype,
+          position: ImagePosition.CenterCenter,
+          edited: false,
+          new: true,
         },
       ]);
 
       setImageChange(true);
     } else {
-      setFileList(info.fileList);
+      setFileList(info.fileList as Image[]);
       setImageChange(true);
     }
   };
@@ -963,6 +987,22 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     });
   };
 
+  const onEditImage = (value: Image) => {
+    setEditImage(null);
+    const index = fileList.map((item) => item.uid).indexOf(value.uid);
+    setFileList(
+      update(fileList, {
+        [index]: {
+          $set: { ...value, edited: !value.new },
+        },
+      })
+    );
+  };
+
+  const toggleEditImage = (image?: Image) => {
+    setEditImage(image || null);
+  };
+
   return {
     onSubmit,
     data: offenderData,
@@ -1034,6 +1074,9 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     onDeleteAddress,
     onEditAddress,
     onAddVehicles,
+    editImage,
+    onEditImage,
+    toggleEditImage,
   };
 };
 

@@ -12,6 +12,7 @@ mutation CreateUpdateOnIncident(
       url
       optimised
       card
+      position
     }
     linkedCrimeGroups {
       totalOffenders
@@ -36,6 +37,7 @@ mutation CreateUpdateOnIncident(
       images {
         id
         optimised
+        position
         url
       }
     }
@@ -48,6 +50,7 @@ mutation CreateUpdateOnIncident(
         id
         url
         optimised
+        position
       }
     }
     linkedOffenders {
@@ -63,6 +66,7 @@ mutation CreateUpdateOnIncident(
         id
         url
         optimised
+        position
       }
     }
     createdBy {
@@ -83,6 +87,7 @@ mutation CreateUpdateOnIncident(
         id
         url
         optimised
+        position
         card
       }
       linkedCrimeGroups {
@@ -109,6 +114,7 @@ mutation CreateUpdateOnIncident(
           id
           url
           optimised
+          position
         }
       }
       linkedIncidents {
@@ -120,6 +126,7 @@ mutation CreateUpdateOnIncident(
           id
           url
           optimised
+          position
         }
       }
       linkedOffenders {
@@ -135,6 +142,7 @@ mutation CreateUpdateOnIncident(
           id
           url
           optimised
+          position
         }
       }
       createdBy {

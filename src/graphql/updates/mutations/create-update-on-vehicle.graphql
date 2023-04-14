@@ -9,6 +9,7 @@ mutation CreateUpdateOnVehicle($vehicle: UniqueId!, $data: CreateUpdateData!) {
       url
       optimised
       card
+      position
     }
     linkedCrimeGroups {
       totalOffenders
@@ -26,6 +27,7 @@ mutation CreateUpdateOnVehicle($vehicle: UniqueId!, $data: CreateUpdateData!) {
         id
         url
         optimised
+        position
       }
       updatedAt
       totalOffenders
@@ -45,6 +47,7 @@ mutation CreateUpdateOnVehicle($vehicle: UniqueId!, $data: CreateUpdateData!) {
         id
         url
         optimised
+        position
       }
     }
     linkedOffenders {
@@ -60,6 +63,7 @@ mutation CreateUpdateOnVehicle($vehicle: UniqueId!, $data: CreateUpdateData!) {
         id
         url
         optimised
+        position
       }
     }
     createdBy {
@@ -80,6 +84,7 @@ mutation CreateUpdateOnVehicle($vehicle: UniqueId!, $data: CreateUpdateData!) {
         id
         url
         optimised
+        position
         card
       }
       linkedCrimeGroups {
@@ -98,6 +103,7 @@ mutation CreateUpdateOnVehicle($vehicle: UniqueId!, $data: CreateUpdateData!) {
           id
           url
           optimised
+          position
         }
         updatedAt
         totalOffenders
@@ -117,6 +123,7 @@ mutation CreateUpdateOnVehicle($vehicle: UniqueId!, $data: CreateUpdateData!) {
           id
           url
           optimised
+          position
         }
       }
       linkedOffenders {
@@ -132,6 +139,7 @@ mutation CreateUpdateOnVehicle($vehicle: UniqueId!, $data: CreateUpdateData!) {
           id
           url
           optimised
+          position
         }
       }
       createdBy {

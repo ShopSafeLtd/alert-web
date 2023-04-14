@@ -10,6 +10,9 @@ describe('List Officer View', () => {
         <AddOffender
           setSelectedItems={jest.fn()}
           selectedItems={[]}
+          editImage={null}
+          onEditImage={jest.fn()}
+          toggleEditImage={jest.fn()}
           form={undefined}
           updateExclusion={jest.fn()}
           adminRights={false}

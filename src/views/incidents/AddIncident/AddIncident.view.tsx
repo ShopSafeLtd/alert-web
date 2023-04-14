@@ -150,6 +150,7 @@ interface Props {
   goodsVisible: boolean;
   dontKnowGoods: () => void;
   knowGoods: () => void;
+  onEditImage: (value: Image) => void;
 }
 
 const EditIncident = ({
@@ -196,6 +197,7 @@ const EditIncident = ({
   dontKnowGoods,
   goodsVisible,
   knowGoods,
+  onEditImage,
 }: Props): JSX.Element => {
   const classes = useStyles();
 
@@ -643,6 +645,7 @@ const EditIncident = ({
             removeImageFromOffender={removeImageFromOffender}
             removeImage={removeImage}
             disabled={saving}
+            onEditImage={onEditImage}
           />
         </Card>
 

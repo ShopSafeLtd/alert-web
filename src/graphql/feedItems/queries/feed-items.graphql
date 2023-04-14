@@ -42,11 +42,13 @@ query FeedItems(
           url
           optimised
           card
+          position
         }
         image {
           id
           url
           optimised
+          position
           card
         }
         previewImage
@@ -80,6 +82,7 @@ query FeedItems(
             id
             url
             optimised
+            position
             card
           }
           linkedCrimeGroups {
@@ -103,6 +106,7 @@ query FeedItems(
               id
               url
               optimised
+              position
             }
             make
             id
@@ -117,6 +121,7 @@ query FeedItems(
               id
               url
               optimised
+              position
             }
           }
           linkedOffenders {
@@ -132,6 +137,7 @@ query FeedItems(
               id
               url
               optimised
+              position
             }
           }
           createdBy {
@@ -159,6 +165,7 @@ query FeedItems(
         images {
           id
           optimised
+          position
           url
         }
         updates(orderBy: { createdAt: desc }) {
@@ -171,6 +178,7 @@ query FeedItems(
             id
             url
             optimised
+            position
             card
           }
           linkedCrimeGroups {
@@ -196,6 +204,7 @@ query FeedItems(
             images {
               id
               url
+              position
               optimised
             }
           }
@@ -208,6 +217,7 @@ query FeedItems(
               id
               url
               optimised
+              position
             }
           }
           linkedOffenders {
@@ -223,6 +233,7 @@ query FeedItems(
               id
               url
               optimised
+              position
             }
           }
           createdBy {
@@ -266,6 +277,7 @@ query FeedItems(
             id
             url
             optimised
+            position
             card
           }
           linkedCrimeGroups {
@@ -290,6 +302,7 @@ query FeedItems(
               id
               url
               optimised
+              position
             }
             id
             colour
@@ -303,6 +316,7 @@ query FeedItems(
               id
               url
               optimised
+              position
             }
           }
           linkedOffenders {
@@ -318,6 +332,7 @@ query FeedItems(
               id
               url
               optimised
+              position
             }
           }
           createdBy {
@@ -357,6 +372,7 @@ query FeedItems(
             id
             url
             optimised
+            position
             card
           }
           linkedCrimeGroups {
@@ -379,6 +395,7 @@ query FeedItems(
             images {
               id
               url
+              position
               optimised
             }
             make
@@ -393,6 +410,7 @@ query FeedItems(
             images {
               id
               url
+              position
               optimised
             }
           }
@@ -409,6 +427,7 @@ query FeedItems(
               id
               url
               optimised
+              position
             }
           }
           createdBy {
@@ -444,6 +463,7 @@ query FeedItems(
           id
           optimised
           url
+          position
         }
         groups {
           id
@@ -493,6 +513,7 @@ query FeedItems(
             id
             url
             optimised
+            position
             card
           }
           linkedCrimeGroups {
@@ -517,6 +538,7 @@ query FeedItems(
             images {
               id
               url
+              position
               optimised
             }
             colour
@@ -529,6 +551,7 @@ query FeedItems(
             images {
               id
               url
+              position
               optimised
             }
           }
@@ -544,6 +567,7 @@ query FeedItems(
             images {
               id
               url
+              position
               optimised
             }
           }
@@ -562,6 +586,7 @@ query FeedItems(
           id
           url
           optimised
+          position
           card
         }
         tags {
@@ -619,6 +644,7 @@ query FeedItems(
           images(orderBy: { createdAt: desc }) {
             id
             optimised
+            position
           }
         }
       }

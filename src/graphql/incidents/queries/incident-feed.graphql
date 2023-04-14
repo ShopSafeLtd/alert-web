@@ -46,6 +46,7 @@ query incidentFeed(
       id
       url
       optimised
+      position
       card
       offenders {
         id

@@ -1,6 +1,7 @@
 import React from 'react';
 import type {
   CreateTagMutation,
+  ImagePosition,
   ListGoodsTypesQuery,
   ListOffendersQuery,
   ViewIncidentQuery,
@@ -87,6 +88,15 @@ interface Image extends UploadFile {
   optimised?: string | null;
 }
 
+interface EditImagePayload extends UploadFile {
+  offenders?: {
+    id: string;
+    name?: string | undefined | null;
+  }[];
+  optimised?: string | null;
+  position: ImagePosition;
+}
+
 type Offender = Exclude<
   ListOffendersQuery['listOffenders'],
   null | undefined
@@ -147,6 +157,7 @@ interface Props {
   onAddOffender: (offender: OffenderDataGlobal, existing: boolean) => void;
   onEditOffender: (offender: OffenderDataGlobal) => void;
   onRemoveOffender: (offenderId: string) => void;
+  onEditImage: (value: EditImagePayload) => void;
 }
 
 const EditIncident = ({
@@ -189,6 +200,7 @@ const EditIncident = ({
   onAddOffender,
   onEditOffender,
   onRemoveOffender,
+  onEditImage,
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader
@@ -631,6 +643,7 @@ const EditIncident = ({
             removeImageFromOffender={removeImageFromOffender}
             removeImage={removeImage}
             onPreview={onPreview}
+            onEditImage={onEditImage}
           />
         </Card>
         {/* {groups.length > 1 && ( */}

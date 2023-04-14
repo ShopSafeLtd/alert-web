@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Row, Typography } from 'antd';
-import type { FeedItemsQuery } from 'graphql/generated';
+import type { FeedItemsQuery, ImagePosition } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationCircle, faUser } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
@@ -20,7 +20,13 @@ interface Props {
   isNewInvestigation?: boolean;
 }
 
-const ImageContainer = ({ src }: { src: string }) => (
+const ImageContainer = ({
+  src,
+  position,
+}: {
+  src: string;
+  position: ImagePosition;
+}) => (
   <div
     style={{
       width: 140,
@@ -28,7 +34,7 @@ const ImageContainer = ({ src }: { src: string }) => (
       borderRadius: 5,
     }}
   >
-    <WatermarkImage url={src} />
+    <WatermarkImage url={src} position={position} />
   </div>
 );
 const InvestigationFeed = ({
@@ -55,6 +61,7 @@ const InvestigationFeed = ({
               src={
                 updates[0].images[0].optimised || updates[0].images[0].url || ''
               }
+              position={updates[0].images[0].position}
             />
           </Col>
         ) : null}

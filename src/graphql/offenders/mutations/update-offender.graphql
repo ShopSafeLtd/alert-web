@@ -20,6 +20,7 @@ mutation updateOffender($where: UniqueId!, $data: OffenderUpdateInput!) {
       id
       url
       optimised
+      position
     }
     groups {
       id

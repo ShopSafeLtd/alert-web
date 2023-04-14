@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Row, Tag, Typography } from 'antd';
-import type { FeedItemsQuery } from 'graphql/generated';
+import type { FeedItemsQuery, ImagePosition } from 'graphql/generated';
 import { ArticlePriority } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
@@ -15,7 +15,13 @@ interface Props {
     | null
     | undefined;
 }
-const ImageContainer = ({ src }: { src: string }) => (
+const ImageContainer = ({
+  src,
+  position,
+}: {
+  src: string;
+  position: ImagePosition;
+}) => (
   <div
     style={{
       width: 140,
@@ -23,7 +29,7 @@ const ImageContainer = ({ src }: { src: string }) => (
       borderRadius: 5,
     }}
   >
-    <WatermarkImage url={src} />
+    <WatermarkImage url={src} position={position} />
   </div>
 );
 const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
@@ -37,7 +43,10 @@ const ArticleFeed = ({ feedItem }: Props): JSX.Element => {
       <Row gutter={15} wrap={false} key={id || ''} style={{ width: '100%' }}>
         {image ? (
           <Col>
-            <ImageContainer src={image.optimised || image.url || ''} />
+            <ImageContainer
+              position={image.position}
+              src={image.optimised || image.url || ''}
+            />
           </Col>
         ) : null}
 

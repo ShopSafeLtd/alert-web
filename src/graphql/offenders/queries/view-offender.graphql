@@ -24,6 +24,7 @@ query ViewOffender(
       id
       url
       optimised
+      position
     }
     addresses {
       id
@@ -112,6 +113,7 @@ query ViewOffender(
         id
         url
         optimised
+        position
         card
       }
       linkedCrimeGroups {
@@ -130,6 +132,7 @@ query ViewOffender(
           id
           url
           optimised
+          position
         }
         updatedAt
         totalOffenders
@@ -149,6 +152,7 @@ query ViewOffender(
           id
           url
           optimised
+          position
         }
       }
       linkedOffenders {
@@ -164,6 +168,7 @@ query ViewOffender(
           id
           url
           optimised
+          position
         }
       }
       createdBy {
@@ -185,6 +190,7 @@ query ViewOffender(
           url
           optimised
           card
+          position
         }
         linkedCrimeGroups {
           totalOffenders
@@ -202,6 +208,7 @@ query ViewOffender(
             id
             url
             optimised
+            position
           }
           updatedAt
           totalOffenders
@@ -221,6 +228,7 @@ query ViewOffender(
             id
             url
             optimised
+            position
           }
         }
         linkedOffenders {
@@ -236,6 +244,7 @@ query ViewOffender(
             id
             url
             optimised
+            position
           }
         }
         createdBy {

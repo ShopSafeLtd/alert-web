@@ -282,7 +282,10 @@ const AddExistingOffender = ({
                   height: 250,
                 }}
               >
-                <WatermarkImage url={selectedOffender?.images[0]?.optimised} />
+                <WatermarkImage
+                  position={selectedOffender?.images[0]?.position}
+                  url={selectedOffender?.images[0]?.optimised}
+                />
               </div>
             </Col>
           )}

@@ -75,7 +75,11 @@ const OffenderCard = ({
   const imagesRef = useRef<CarouselRef>(null);
 
   return (
-    <Card className="offender-card" key={offender.id || ''}>
+    <Card
+      className="offender-card"
+      key={offender.id || ''}
+      style={{ overflow: 'hidden' }}
+    >
       {!offender?.approved && (
         <div className="offender-card-overlay">
           <Title level={4} className="offender-card-approval-title">
@@ -151,7 +155,10 @@ const OffenderCard = ({
           {offender?.images.map((image) => (
             <div key={image.id}>
               <div className="offender-card-image">
-                <WatermarkImage url={image.optimised} />
+                <WatermarkImage
+                  position={image.position}
+                  url={image.optimised}
+                />
               </div>
             </div>
           ))}

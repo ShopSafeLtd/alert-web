@@ -25,6 +25,7 @@ mutation CreateArticle($data: CreateArticleInput!) {
       url
       optimised
       card
+      position
     }
     image {
       id
@@ -64,6 +65,7 @@ mutation CreateArticle($data: CreateArticleInput!) {
           images {
             id
             url
+            position
             optimised
             card
             offenders {
@@ -105,6 +107,7 @@ mutation CreateArticle($data: CreateArticleInput!) {
           images {
             id
             optimised
+            position
           }
           groups {
             id
@@ -150,6 +153,7 @@ mutation CreateArticle($data: CreateArticleInput!) {
             images {
               id
               optimised
+              position
             }
           }
         }
