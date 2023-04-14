@@ -304,7 +304,7 @@ const UseEditIncidentTest = () => {
     loading,
     groups,
     groupsLoading,
-    tags,
+    crimeTypes,
     tagsLoading,
     recentOffenderData,
     recentOffenderLoading,
@@ -326,8 +326,8 @@ const UseEditIncidentTest = () => {
       </div>
     ));
   const Tags =
-    tags &&
-    tags.map((el) => (
+    crimeTypes &&
+    crimeTypes.map((el) => (
       <div key={el.value}>
         <span>{el.value}</span>
         <span>{el.label}</span>

@@ -848,7 +848,6 @@ const EditOffender = ({
             />
           )}
         </Drawer>
-
         <ImageEditor
           submitImage={onEditImage}
           onClose={() => toggleEditImage()}

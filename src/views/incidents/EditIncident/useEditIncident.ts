@@ -10,6 +10,7 @@ import type {
   ViewIncidentQuery,
 } from 'graphql/generated';
 import {
+  TagType,
   ImagePosition,
   Model,
   QueryMode,
@@ -145,7 +146,9 @@ interface Return {
   setAddRecentOffender: (value: Offender | null) => void;
   setAssignToImage: (image: ImagePayload) => void;
   setSearchOffenders: (value: string) => void;
-  tags: { value: string; label: string }[];
+  crimeTypes: { value: string; label: string }[];
+  involvedTags: { value: string; label: string }[];
+  impactTags: { value: string; label: string }[];
   tagsLoading: boolean;
   toggleAddIncidentTag: () => void;
   updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
@@ -1135,8 +1138,18 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     setAddRecentOffender,
     setAssignToImage,
     setSearchOffenders,
-    tags:
-      tagsData?.tags.map((tag) => ({ value: tag.id, label: tag.name })) || [],
+    crimeTypes:
+      tagsData?.tags
+        .filter((item) => item.type === TagType.IncidentCrimeType)
+        .map((tag) => ({ value: tag.id, label: tag.name })) || [],
+    impactTags:
+      tagsData?.tags
+        .filter((item) => item.type === TagType.IncidentImpact)
+        .map((tag) => ({ value: tag.id, label: tag.name })) || [],
+    involvedTags:
+      tagsData?.tags
+        .filter((item) => item.type === TagType.IncidentInvolved)
+        .map((tag) => ({ value: tag.id, label: tag.name })) || [],
     tagsLoading,
     toggleAddIncidentTag,
     updateIncidentTag,
