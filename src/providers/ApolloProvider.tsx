@@ -27,7 +27,14 @@ interface Props {
 
 const Apollo = ({ children }: Props): JSX.Element => {
   const accessToken = localStorage.getItem('accessToken');
-  const { getAccessTokenSilently, isAuthenticated } = useAuth0();
+  const { getAccessTokenSilently, isAuthenticated, loginWithRedirect } =
+    useAuth0();
+  const getNewToken = async () =>
+    getAccessTokenSilently({
+      audience: `https://app.shopsafealert.co.uk`,
+      scope: 'openid read:current_user',
+    });
+
   const currentScheme = useStoreState((state) => state.scheme.id);
   const wsClient = new SubscriptionClient(
     import.meta.env.VITE_GRAPHQL_WS_URL,
@@ -53,42 +60,74 @@ const Apollo = ({ children }: Props): JSX.Element => {
   });
 
   // TODO: Add error handling
-  const errorLink = onError(({ graphQLErrors, networkError }) => {
-    if (graphQLErrors)
-      // eslint-disable-next-line no-restricted-syntax
-      for (const { message, locations, path } of graphQLErrors) {
-        Sentry.captureMessage(
-          `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
-            locations
-          )}, Path: ${path}`
-        );
-        console.log(
-          `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
-            locations
-          )}, Path: ${path}`
-        );
-      }
+  const errorLink = onError(
+    ({ graphQLErrors, networkError, operation, forward }) => {
+      if (graphQLErrors)
+        // eslint-disable-next-line no-restricted-syntax
+        for (const { message, locations, path, extensions } of graphQLErrors) {
+          if (
+            message.startsWith('USER_CONTEXT_ERROR') ||
+            extensions?.code === '401'
+          ) {
+            const oldHeaders = operation.getContext().headers;
+            getNewToken().then((token) => {
+              operation.setContext({
+                headers: {
+                  ...oldHeaders,
+                  authorization: `bearer ${token}`,
+                },
+              });
+              // Retry the request, returning the new observable
+              return forward(operation);
+            });
+          }
+          Sentry.captureMessage(
+            `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
+              locations
+            )}, Path: ${path}`
+          );
+        }
 
-    if (networkError) {
-      console.log(`[Network error]: ${networkError}`);
-      Sentry.captureException(networkError);
+      if (networkError) {
+        Sentry.captureException(networkError);
+      }
     }
-  });
+  );
 
   const middlewareLink = setContext(async (_, { headers, ...context }) => {
     if (isAuthenticated) {
-      const authToken = await getAccessTokenSilently({
-        audience: `https://app.shopsafealert.co.uk`,
-        scope: 'openid read:current_user',
-      });
-      return {
-        headers: {
-          ...headers,
-          Authorization: authToken ? `Bearer ${authToken}` : '',
-          currentScheme,
-        },
-        ...context,
-      };
+      try {
+        const authToken = await getNewToken();
+        return {
+          headers: {
+            ...headers,
+            Authorization: authToken ? `Bearer ${authToken}` : '',
+            currentScheme,
+          },
+          ...context,
+        };
+      } catch (error) {
+        if (error instanceof Error) {
+          if (error.message === 'login_required') {
+            if (localStorage.getItem('logo')?.endsWith('.webp')) {
+              loginWithRedirect({
+                'ext-logo': localStorage.getItem('logo'),
+              });
+            } else {
+              loginWithRedirect();
+            }
+          }
+          if (error.message === 'consent_required') {
+            if (localStorage.getItem('logo')?.endsWith('.webp')) {
+              loginWithRedirect({
+                'ext-logo': localStorage.getItem('logo'),
+              });
+            } else {
+              loginWithRedirect();
+            }
+          }
+        }
+      }
     }
     return {
       headers: {
