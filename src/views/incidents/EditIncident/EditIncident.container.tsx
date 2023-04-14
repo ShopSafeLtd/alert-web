@@ -39,7 +39,9 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
     setAddRecentOffender,
     setAssignToImage,
     setSearchOffenders,
-    tags,
+    crimeTypes,
+    impactTags,
+    involvedTags,
     tagsLoading,
     toggleAddIncidentTag,
     updateIncidentTag,
@@ -85,7 +87,9 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
         setAddRecentOffender={setAddRecentOffender}
         setAssignToImage={setAssignToImage}
         setSearchOffenders={setSearchOffenders}
-        tags={tags}
+        crimeTypes={crimeTypes}
+        impactTags={impactTags}
+        involvedTags={involvedTags}
         tagsLoading={tagsLoading}
         toggleAddIncidentTag={toggleAddIncidentTag}
         updateIncidentTag={updateIncidentTag}
