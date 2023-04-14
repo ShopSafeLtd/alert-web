@@ -13,6 +13,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
             id
             optimised
             url
+            position
         }
         incidents {
             id
@@ -53,6 +54,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
             images {
                 id
                 optimised
+                position
             }
             totalTheftSuccess
             totalRecoveredValue
@@ -81,6 +83,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
                 url
                 optimised
                 card
+                position
             }
             linkedCrimeGroups {
                 totalOffenders
@@ -98,6 +101,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
                     id
                     url
                     optimised
+                    position
                 }
                 updatedAt
                 totalOffenders
@@ -117,6 +121,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
                     id
                     url
                     optimised
+                    position
                 }
             }
             linkedOffenders {
@@ -132,6 +137,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
                     id
                     url
                     optimised
+                    position
                 }
             }
             createdBy {
@@ -153,6 +159,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
                     url
                     optimised
                     card
+                    position
                 }
                 linkedCrimeGroups {
                     totalOffenders
@@ -170,6 +177,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
                         id
                         url
                         optimised
+                        position
                     }
                     updatedAt
                     totalOffenders
@@ -189,6 +197,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
                         id
                         url
                         optimised
+                        position
                     }
                 }
                 linkedOffenders {
@@ -204,6 +213,7 @@ query Vehicle($where: VehicleWhereUniqueInput!) {
                         id
                         url
                         optimised
+                        position
                     }
                 }
                 createdBy {

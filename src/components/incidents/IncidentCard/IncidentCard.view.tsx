@@ -134,7 +134,10 @@ const IncidentCard = ({
             {incident?.images.map((image) => (
               <div key={image.id}>
                 <div className="incident-card-image">
-                  <WatermarkImage url={image.optimised} />
+                  <WatermarkImage
+                    url={image.optimised}
+                    position={image.position}
+                  />
                 </div>
               </div>
             ))}

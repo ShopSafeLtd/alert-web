@@ -15,6 +15,7 @@ import type {
   TagsQuery,
 } from 'graphql/generated';
 import {
+  ImagePosition,
   ListOffendersDocument,
   Model,
   Role,
@@ -33,8 +34,13 @@ import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router-dom';
 import type { BanData, CrimeGroupData, VehicleData } from 'types/DataType';
+import update from 'immutability-helper';
 
 const { confirm } = Modal;
+
+interface Image extends UploadFile {
+  position?: ImagePosition;
+}
 
 export interface FormData {
   name: string;
@@ -77,7 +83,7 @@ interface Return {
   onPreview: (value: UploadFile) => void;
   removeImage: (value: UploadFile) => void;
   beforeUpload: (value: RcFile) => void;
-  fileList: UploadFile[];
+  fileList: Image[];
   addOffenderTag: boolean;
   toggleAddOffenderTag: () => void;
   updateOffenderTag: MutationUpdaterFn<CreateTagMutation>;
@@ -118,7 +124,25 @@ interface Return {
   updateCrimeGroupsData: (value: CrimeGroupData) => void;
   onValuesChange?: (changedValues: FormData, values: FormData) => void;
   idVerified: boolean;
+  onEditImage: (value: Image) => void;
+  toggleEditImage: (value?: Image) => void;
+  editImage: Image | null;
 }
+
+const onPreview = async (file: UploadFile) => {
+  let src = file.url as string;
+  if (!src) {
+    src = await new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file.originFileObj as RcFile);
+      reader.addEventListener('load', () => resolve(reader.result as string));
+    });
+  }
+  const image = new Image();
+  image.src = src;
+  const imgWindow = window.open(src);
+  imgWindow?.document.write(image.outerHTML);
+};
 
 const useAddOffender = (): Return => {
   const [form] = Form.useForm<FormData>();
@@ -141,7 +165,7 @@ const useAddOffender = (): Return => {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   const [imageChange, setImageChange] = useState(false);
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [fileList, setFileList] = useState<Image[]>([]);
 
   const [addExclusion, setAddExclusion] = useState(false);
   const [editExclusion, setEditExclusion] = useState(false);
@@ -157,6 +181,7 @@ const useAddOffender = (): Return => {
   const [addExistingVehicle, setAddExistingVehicle] = useState(false);
   const [editVehicleId, setEditVehicleId] = useState<string>('');
   const [vehiclesData, setVehiclesData] = useState<VehicleData[]>([]);
+  const [editImage, setEditImage] = useState<Image | null>(null);
   const navigate = useNavigate();
 
   const onValuesChange = (changedValues: FormData) => {
@@ -475,6 +500,7 @@ const useAddOffender = (): Return => {
                       mimetype: item.type || '',
                       url: item.url || '',
                     },
+                    position: item.position,
                   }))
                 : undefined,
           },
@@ -533,6 +559,7 @@ const useAddOffender = (): Return => {
           url: info.file.response[0].url,
           fileName: info.file.response[0].blobName,
           type: info.file.response[0].mimetype,
+          position: ImagePosition.CenterCenter,
         },
       ]);
       setImageChange(true);
@@ -540,20 +567,6 @@ const useAddOffender = (): Return => {
       setFileList(info.fileList);
       setImageChange(true);
     }
-  };
-  const onPreview = async (file: UploadFile) => {
-    let src = file.url as string;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj as RcFile);
-        reader.addEventListener('load', () => resolve(reader.result as string));
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
   };
 
   const toggleAddOffenderTag = () => {
@@ -652,6 +665,22 @@ const useAddOffender = (): Return => {
     });
   };
 
+  const onEditImage = (value: Image) => {
+    setEditImage(null);
+    const index = fileList.map((item) => item.uid).indexOf(value.uid);
+    setFileList(
+      update(fileList, {
+        [index]: {
+          $set: value,
+        },
+      })
+    );
+  };
+
+  const toggleEditImage = (image?: Image) => {
+    setEditImage(image || null);
+  };
+
   return {
     onSubmit,
     saving,
@@ -711,6 +740,9 @@ const useAddOffender = (): Return => {
     // listCrimeGroupsData,
     onValuesChange,
     idVerified,
+    onEditImage,
+    toggleEditImage,
+    editImage,
   };
 };
 

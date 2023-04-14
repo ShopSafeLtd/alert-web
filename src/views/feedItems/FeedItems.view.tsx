@@ -443,6 +443,7 @@ Props): JSX.Element => {
                               {/* {offender.images.length > 0 && ( */}
                               <WatermarkImage
                                 url={offender.images[0]?.optimised}
+                                position={offender.images[0]?.position}
                               />
                               {/* )}
                         {offender.images.length === 0 && (

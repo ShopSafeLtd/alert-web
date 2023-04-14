@@ -30,6 +30,7 @@ mutation updateCrimeGroup(
       images {
         id
         optimised
+        position
       }
       totalTheftSuccess
       totalRecoveredValue

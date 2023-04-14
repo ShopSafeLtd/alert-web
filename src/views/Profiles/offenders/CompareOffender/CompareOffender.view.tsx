@@ -270,7 +270,10 @@ const CompareIncident = ({
                             <TransformWrapper>
                               <TransformComponent>
                                 <div className={classes.image}>
-                                  <WatermarkImage url={image.optimised} />
+                                  <WatermarkImage
+                                    url={image.optimised}
+                                    position={image.position}
+                                  />
                                 </div>
                               </TransformComponent>
                             </TransformWrapper>
@@ -392,7 +395,10 @@ const CompareIncident = ({
                     <TransformWrapper>
                       <TransformComponent>
                         <div className={classes.image}>
-                          <WatermarkImage url={image.optimised} />
+                          <WatermarkImage
+                            url={image.optimised}
+                            position={image.position}
+                          />
                         </div>
                       </TransformComponent>
                     </TransformWrapper>

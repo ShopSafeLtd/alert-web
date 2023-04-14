@@ -72,6 +72,9 @@ const EditOffender = ({ reviewed }: Props): JSX.Element => {
     onDeleteAddress,
     onEditAddress,
     onSubmitAddress,
+    editImage,
+    onEditImage,
+    toggleEditImage,
   } = useEditOffender({ offenderId, reviewed });
   return (
     <div>
@@ -139,6 +142,9 @@ const EditOffender = ({ reviewed }: Props): JSX.Element => {
         onSubmitAddress={onSubmitAddress}
         onDeleteAddress={onDeleteAddress}
         onEditAddress={onEditAddress}
+        editImage={editImage}
+        onEditImage={onEditImage}
+        toggleEditImage={toggleEditImage}
       />
     </div>
   );

@@ -9,6 +9,7 @@ import type {
   CreateIncidentData,
   CreateIncidentMutation,
   CreateTagMutation,
+  ImagePosition,
   ListGoodsTypesQuery,
   ListIncidentsQuery,
   ListOffendersQuery,
@@ -87,6 +88,7 @@ interface Image extends UploadFile {
     name?: string | undefined | null;
     new?: boolean;
   }[];
+  position?: ImagePosition;
 }
 
 interface Return {
@@ -154,6 +156,7 @@ interface Return {
   goodsVisible: boolean;
   dontKnowGoods: () => void;
   knowGoods: () => void;
+  onEditImage: (value: Image) => void;
 }
 
 const useEditIncident = (): Return => {
@@ -287,6 +290,7 @@ const useEditIncident = (): Return => {
 
   const { data: recentOffenderData, loading: recentOffenderLoading } =
     useListOffendersQuery({
+      fetchPolicy: 'cache-and-network',
       variables: {
         scheme: {
           id: schemeId,
@@ -419,6 +423,17 @@ const useEditIncident = (): Return => {
   };
   const updateNewAddressData = (address: LocationData | undefined) =>
     setNewAddressData(address);
+
+  const onEditImage = (value: Image) => {
+    const index = fileList.map((item) => item.uid).indexOf(value.uid);
+    setFileList(
+      update(fileList, {
+        [index]: {
+          $set: value,
+        },
+      })
+    );
+  };
 
   const onAddOffender = (offender: GlobalOffenderData, existing: boolean) => {
     setOffendersData([
@@ -843,6 +858,7 @@ const useEditIncident = (): Return => {
                           id: offender.id,
                           new: offender.new || false,
                         })),
+                        position: item.position,
                       }))
                       .filter((object) => object.url !== undefined)
                   : undefined,
@@ -1159,6 +1175,7 @@ const useEditIncident = (): Return => {
     dontKnowGoods,
     goodsVisible,
     knowGoods,
+    onEditImage,
   };
 };
 

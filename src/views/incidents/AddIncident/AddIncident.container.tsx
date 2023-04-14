@@ -47,6 +47,7 @@ const EditIncident = (): JSX.Element => {
     dontKnowGoods,
     goodsVisible,
     knowGoods,
+    onEditImage,
   } = useAddIncident();
 
   return (
@@ -95,6 +96,7 @@ const EditIncident = (): JSX.Element => {
         dontKnowGoods={dontKnowGoods}
         goodsVisible={goodsVisible}
         knowGoods={knowGoods}
+        onEditImage={onEditImage}
       />
     </div>
   );

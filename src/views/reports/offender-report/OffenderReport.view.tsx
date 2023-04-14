@@ -214,6 +214,10 @@ const PerformanceReport = ({
                         data?.offenderReport?.offenderSummary?.images[0]
                           ?.optimisedPersisted
                       }
+                      position={
+                        data?.offenderReport?.offenderSummary?.images[0]
+                          ?.position
+                      }
                     />
                   </div>
                 ) : (

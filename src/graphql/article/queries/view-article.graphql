@@ -24,6 +24,7 @@ query Article($where: ArticleWhereUniqueInput!) {
       url
       optimised
       card
+      position
     }
     image {
       id
@@ -64,6 +65,7 @@ query Article($where: ArticleWhereUniqueInput!) {
           images {
             id
             url
+            position
             optimised
             card
             offenders {
@@ -105,6 +107,7 @@ query Article($where: ArticleWhereUniqueInput!) {
           images {
             id
             optimised
+            position
           }
           groups {
             id
@@ -150,6 +153,7 @@ query Article($where: ArticleWhereUniqueInput!) {
             images {
               id
               optimised
+              position
             }
           }
         }

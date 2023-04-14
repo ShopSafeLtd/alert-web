@@ -11,6 +11,7 @@ mutation updateVehicle($where: UniqueId!, $data: CreateVehicleDataInput!) {
       id
       optimised
       url
+      position
     }
     incidents {
       id

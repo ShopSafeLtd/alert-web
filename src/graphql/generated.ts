@@ -11648,6 +11648,7 @@ export type Image = {
   optimised?: Maybe<Scalars['String']>;
   optimisedPersisted?: Maybe<Scalars['String']>;
   optimisticUri?: Maybe<Scalars['String']>;
+  position: ImagePosition;
   scheme: Scheme;
   update?: Maybe<Update>;
   updatedAt: Scalars['DateTime'];
@@ -33986,6 +33987,7 @@ export type UploadImage = {
 export type UploadIncidentImage = {
   file?: InputMaybe<Scalars['Upload']>;
   offenders?: InputMaybe<Array<InputMaybe<ImageOffender>>>;
+  position?: InputMaybe<ImagePosition>;
   url?: InputMaybe<UrlImage>;
 };
 
@@ -33996,6 +33998,7 @@ export type UploadIncidentOptimisticImage = {
 
 export type UploadOffenderImage = {
   file?: InputMaybe<Scalars['Upload']>;
+  position?: InputMaybe<ImagePosition>;
   url?: InputMaybe<UrlImage>;
 };
 
@@ -41812,6 +41815,7 @@ export type CreateArticleMutation = {
       url?: string | null;
       optimised?: string | null;
       card?: string | null;
+      position: ImagePosition;
     }>;
     image?: {
       __typename?: 'Image';
@@ -41856,6 +41860,7 @@ export type CreateArticleMutation = {
             __typename?: 'Image';
             id: string;
             url?: string | null;
+            position: ImagePosition;
             optimised?: string | null;
             card?: string | null;
             offenders: Array<{ __typename?: 'Offender'; id: string }>;
@@ -41893,6 +41898,7 @@ export type CreateArticleMutation = {
             __typename?: 'Image';
             id: string;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
           groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
           createdBy: {
@@ -41935,6 +41941,7 @@ export type CreateArticleMutation = {
               __typename?: 'Image';
               id: string;
               optimised?: string | null;
+              position: ImagePosition;
             }>;
           }>;
         }>;
@@ -41976,6 +41983,7 @@ export type ArticlesQuery = {
       url?: string | null;
       optimised?: string | null;
       card?: string | null;
+      position: ImagePosition;
     }>;
     image?: {
       __typename?: 'Image';
@@ -42026,6 +42034,7 @@ export type ListArticlesQuery = {
         url?: string | null;
         optimised?: string | null;
         card?: string | null;
+        position: ImagePosition;
       }>;
       image?: {
         __typename?: 'Image';
@@ -42071,6 +42080,7 @@ export type ArticleQuery = {
       url?: string | null;
       optimised?: string | null;
       card?: string | null;
+      position: ImagePosition;
     }>;
     image?: {
       __typename?: 'Image';
@@ -42115,6 +42125,7 @@ export type ArticleQuery = {
             __typename?: 'Image';
             id: string;
             url?: string | null;
+            position: ImagePosition;
             optimised?: string | null;
             card?: string | null;
             offenders: Array<{ __typename?: 'Offender'; id: string }>;
@@ -42152,6 +42163,7 @@ export type ArticleQuery = {
             __typename?: 'Image';
             id: string;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
           groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
           createdBy: {
@@ -42194,6 +42206,7 @@ export type ArticleQuery = {
               __typename?: 'Image';
               id: string;
               optimised?: string | null;
+              position: ImagePosition;
             }>;
           }>;
         }>;
@@ -42762,6 +42775,7 @@ export type CreateChatMutation = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
           incidents: Array<{
             __typename?: 'Incident';
@@ -42904,6 +42918,7 @@ export type UpdateCrimeGroupMutation = {
         __typename?: 'Image';
         id: string;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     vehicles: Array<{ __typename?: 'Vehicle'; id: string }>;
@@ -43000,6 +43015,7 @@ export type CrimeGroupQuery = {
         __typename?: 'Image';
         id: string;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     vehicles: Array<{
@@ -43043,6 +43059,7 @@ export type CrimeGroupQuery = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
         card?: string | null;
       }>;
       linkedCrimeGroups: Array<{
@@ -43072,6 +43089,7 @@ export type CrimeGroupQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -43085,6 +43103,7 @@ export type CrimeGroupQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -43102,6 +43121,7 @@ export type CrimeGroupQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       createdBy: {
@@ -43127,6 +43147,7 @@ export type CrimeGroupQuery = {
           url?: string | null;
           optimised?: string | null;
           card?: string | null;
+          position: ImagePosition;
         }>;
         linkedCrimeGroups: Array<{
           __typename?: 'CrimeGroup';
@@ -43155,6 +43176,7 @@ export type CrimeGroupQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
         }>;
         linkedIncidents: Array<{
@@ -43168,6 +43190,7 @@ export type CrimeGroupQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
         }>;
         linkedOffenders: Array<{
@@ -43185,6 +43208,7 @@ export type CrimeGroupQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
         }>;
         createdBy: {
@@ -43417,12 +43441,14 @@ export type FeedItemsQuery = {
           url?: string | null;
           optimised?: string | null;
           card?: string | null;
+          position: ImagePosition;
         }>;
         image?: {
           __typename?: 'Image';
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
           card?: string | null;
         } | null;
       } | null;
@@ -43450,6 +43476,7 @@ export type FeedItemsQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
             card?: string | null;
           }>;
           linkedCrimeGroups: Array<{
@@ -43479,6 +43506,7 @@ export type FeedItemsQuery = {
               id: string;
               url?: string | null;
               optimised?: string | null;
+              position: ImagePosition;
             }>;
           }>;
           linkedIncidents: Array<{
@@ -43492,6 +43520,7 @@ export type FeedItemsQuery = {
               id: string;
               url?: string | null;
               optimised?: string | null;
+              position: ImagePosition;
             }>;
           }>;
           linkedOffenders: Array<{
@@ -43509,6 +43538,7 @@ export type FeedItemsQuery = {
               id: string;
               url?: string | null;
               optimised?: string | null;
+              position: ImagePosition;
             }>;
           }>;
           createdBy: {
@@ -43539,6 +43569,7 @@ export type FeedItemsQuery = {
           __typename?: 'Image';
           id: string;
           optimised?: string | null;
+          position: ImagePosition;
           url?: string | null;
         }>;
         updates: Array<{
@@ -43553,6 +43584,7 @@ export type FeedItemsQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
             card?: string | null;
           }>;
           linkedCrimeGroups: Array<{
@@ -43581,6 +43613,7 @@ export type FeedItemsQuery = {
               __typename?: 'Image';
               id: string;
               url?: string | null;
+              position: ImagePosition;
               optimised?: string | null;
             }>;
           }>;
@@ -43595,6 +43628,7 @@ export type FeedItemsQuery = {
               id: string;
               url?: string | null;
               optimised?: string | null;
+              position: ImagePosition;
             }>;
           }>;
           linkedOffenders: Array<{
@@ -43612,6 +43646,7 @@ export type FeedItemsQuery = {
               id: string;
               url?: string | null;
               optimised?: string | null;
+              position: ImagePosition;
             }>;
           }>;
           createdBy: {
@@ -43661,6 +43696,7 @@ export type FeedItemsQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
             card?: string | null;
           }>;
           linkedCrimeGroups: Array<{
@@ -43690,6 +43726,7 @@ export type FeedItemsQuery = {
               id: string;
               url?: string | null;
               optimised?: string | null;
+              position: ImagePosition;
             }>;
           }>;
           linkedIncidents: Array<{
@@ -43703,6 +43740,7 @@ export type FeedItemsQuery = {
               id: string;
               url?: string | null;
               optimised?: string | null;
+              position: ImagePosition;
             }>;
           }>;
           linkedOffenders: Array<{
@@ -43720,6 +43758,7 @@ export type FeedItemsQuery = {
               id: string;
               url?: string | null;
               optimised?: string | null;
+              position: ImagePosition;
             }>;
           }>;
           createdBy: {
@@ -43760,6 +43799,7 @@ export type FeedItemsQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
             card?: string | null;
           }>;
           linkedCrimeGroups: Array<{
@@ -43788,6 +43828,7 @@ export type FeedItemsQuery = {
               __typename?: 'Image';
               id: string;
               url?: string | null;
+              position: ImagePosition;
               optimised?: string | null;
             }>;
           }>;
@@ -43801,6 +43842,7 @@ export type FeedItemsQuery = {
               __typename?: 'Image';
               id: string;
               url?: string | null;
+              position: ImagePosition;
               optimised?: string | null;
             }>;
           }>;
@@ -43819,6 +43861,7 @@ export type FeedItemsQuery = {
               id: string;
               url?: string | null;
               optimised?: string | null;
+              position: ImagePosition;
             }>;
           }>;
           createdBy: {
@@ -43851,6 +43894,7 @@ export type FeedItemsQuery = {
           id: string;
           optimised?: string | null;
           url?: string | null;
+          position: ImagePosition;
         }>;
         groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
       } | null;
@@ -43901,6 +43945,7 @@ export type FeedItemsQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
             card?: string | null;
           }>;
           linkedCrimeGroups: Array<{
@@ -43929,6 +43974,7 @@ export type FeedItemsQuery = {
               __typename?: 'Image';
               id: string;
               url?: string | null;
+              position: ImagePosition;
               optimised?: string | null;
             }>;
           }>;
@@ -43942,6 +43988,7 @@ export type FeedItemsQuery = {
               __typename?: 'Image';
               id: string;
               url?: string | null;
+              position: ImagePosition;
               optimised?: string | null;
             }>;
           }>;
@@ -43959,6 +44006,7 @@ export type FeedItemsQuery = {
               __typename?: 'Image';
               id: string;
               url?: string | null;
+              position: ImagePosition;
               optimised?: string | null;
             }>;
           }>;
@@ -43979,6 +44027,7 @@ export type FeedItemsQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
           card?: string | null;
         }>;
         tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
@@ -44022,6 +44071,7 @@ export type FeedItemsQuery = {
             __typename?: 'Image';
             id: string;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
         }>;
       } | null;
@@ -44148,6 +44198,7 @@ export type AddImagesToIncidentMutation = {
       url?: string | null;
       optimised?: string | null;
       card?: string | null;
+      position: ImagePosition;
     }>;
   } | null;
 };
@@ -44199,6 +44250,7 @@ export type CreateIncidentMutation = {
       id: string;
       optimised?: string | null;
       url?: string | null;
+      position: ImagePosition;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     offenders: Array<{
@@ -44224,6 +44276,7 @@ export type CreateIncidentMutation = {
         url?: string | null;
         optimised?: string | null;
         card?: string | null;
+        position: ImagePosition;
       }>;
       tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
     }>;
@@ -44313,6 +44366,7 @@ export type UpdateIncidentMutation = {
       __typename?: 'Image';
       id: string;
       optimised?: string | null;
+      position: ImagePosition;
       url?: string | null;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
@@ -44337,6 +44391,7 @@ export type UpdateIncidentMutation = {
         __typename?: 'Image';
         id: string;
         url?: string | null;
+        position: ImagePosition;
         optimised?: string | null;
         card?: string | null;
       }>;
@@ -44416,6 +44471,7 @@ export type EditIncidentQuery = {
       id: string;
       optimised?: string | null;
       url?: string | null;
+      position: ImagePosition;
       offenders: Array<{
         __typename?: 'Offender';
         id: string;
@@ -44451,6 +44507,7 @@ export type EditIncidentQuery = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     offenders: Array<{
@@ -44477,6 +44534,7 @@ export type EditIncidentQuery = {
         url?: string | null;
         optimised?: string | null;
         card?: string | null;
+        position: ImagePosition;
       }>;
       tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
     }>;
@@ -44491,6 +44549,7 @@ export type EditIncidentQuery = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
         card?: string | null;
       }>;
       linkedCrimeGroups: Array<{
@@ -44520,6 +44579,7 @@ export type EditIncidentQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -44533,6 +44593,7 @@ export type EditIncidentQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -44550,6 +44611,7 @@ export type EditIncidentQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       createdBy: {
@@ -44574,6 +44636,7 @@ export type EditIncidentQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
           card?: string | null;
         }>;
         linkedCrimeGroups: Array<{
@@ -44603,6 +44666,7 @@ export type EditIncidentQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
         }>;
         linkedIncidents: Array<{
@@ -44616,6 +44680,7 @@ export type EditIncidentQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
         }>;
         linkedOffenders: Array<{
@@ -44633,6 +44698,7 @@ export type EditIncidentQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
         }>;
         createdBy: {
@@ -44689,6 +44755,7 @@ export type IncidentFeedQuery = {
       id: string;
       url?: string | null;
       optimised?: string | null;
+      position: ImagePosition;
       card?: string | null;
       offenders: Array<{ __typename?: 'Offender'; id: string }>;
     }>;
@@ -44738,6 +44805,7 @@ export type ListIncidentsQuery = {
       images: Array<{
         __typename?: 'Image';
         id: string;
+        position: ImagePosition;
         optimised?: string | null;
         url?: string | null;
       }>;
@@ -44777,6 +44845,7 @@ export type ListUnapprovedIncidentsQuery = {
         __typename?: 'Image';
         id: string;
         optimised?: string | null;
+        position: ImagePosition;
         url?: string | null;
       }>;
       crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
@@ -44845,6 +44914,7 @@ export type ViewIncidentQuery = {
     images: Array<{
       __typename?: 'Image';
       id: string;
+      position: ImagePosition;
       optimised?: string | null;
       url?: string | null;
     }>;
@@ -44876,6 +44946,7 @@ export type ViewIncidentQuery = {
         __typename?: 'Image';
         id: string;
         url?: string | null;
+        position: ImagePosition;
         optimised?: string | null;
       }>;
     }>;
@@ -44902,6 +44973,7 @@ export type ViewIncidentQuery = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
         card?: string | null;
       }>;
       tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
@@ -44917,6 +44989,7 @@ export type ViewIncidentQuery = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
         card?: string | null;
       }>;
       linkedCrimeGroups: Array<{
@@ -44945,6 +45018,7 @@ export type ViewIncidentQuery = {
           __typename?: 'Image';
           id: string;
           url?: string | null;
+          position: ImagePosition;
           optimised?: string | null;
         }>;
       }>;
@@ -44959,6 +45033,7 @@ export type ViewIncidentQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -44976,6 +45051,7 @@ export type ViewIncidentQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       createdBy: {
@@ -45000,6 +45076,7 @@ export type ViewIncidentQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
           card?: string | null;
         }>;
         linkedCrimeGroups: Array<{
@@ -45029,6 +45106,7 @@ export type ViewIncidentQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
         }>;
         linkedIncidents: Array<{
@@ -45042,6 +45120,7 @@ export type ViewIncidentQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
         }>;
         linkedOffenders: Array<{
@@ -45059,6 +45138,7 @@ export type ViewIncidentQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
         }>;
         createdBy: {
@@ -45313,6 +45393,7 @@ export type ViewInvestigationQuery = {
         optimised?: string | null;
         optimisedPersisted?: string | null;
         card?: string | null;
+        position: ImagePosition;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
@@ -45342,6 +45423,7 @@ export type ViewInvestigationQuery = {
           url?: string | null;
           optimised?: string | null;
           optimisedPersisted?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -45356,6 +45438,7 @@ export type ViewInvestigationQuery = {
           url?: string | null;
           optimised?: string | null;
           optimisedPersisted?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -45374,6 +45457,7 @@ export type ViewInvestigationQuery = {
           url?: string | null;
           optimised?: string | null;
           optimisedPersisted?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       createdBy: {
@@ -45400,6 +45484,7 @@ export type ViewInvestigationQuery = {
           optimisedPersisted?: string | null;
           optimised?: string | null;
           card?: string | null;
+          position: ImagePosition;
         }>;
         linkedCrimeGroups: Array<{
           __typename?: 'CrimeGroup';
@@ -45429,6 +45514,7 @@ export type ViewInvestigationQuery = {
             url?: string | null;
             optimisedPersisted?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
         }>;
         linkedIncidents: Array<{
@@ -45442,6 +45528,7 @@ export type ViewInvestigationQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
         }>;
         linkedOffenders: Array<{
@@ -45460,6 +45547,7 @@ export type ViewInvestigationQuery = {
             url?: string | null;
             optimised?: string | null;
             optimisedPersisted?: string | null;
+            position: ImagePosition;
           }>;
         }>;
         createdBy: {
@@ -45486,6 +45574,7 @@ export type ViewInvestigationQuery = {
         id: string;
         optimised?: string | null;
         optimisedPersisted?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     incidents: Array<{
@@ -45568,6 +45657,7 @@ export type CreateMessageMutation = {
       id: string;
       url?: string | null;
       optimised?: string | null;
+      position: ImagePosition;
     }>;
     crimeGroups: Array<{
       __typename?: 'CrimeGroup';
@@ -45596,6 +45686,7 @@ export type CreateMessageMutation = {
         id: string;
         optimised?: string | null;
         url?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     incidents: Array<{
@@ -45609,6 +45700,7 @@ export type CreateMessageMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     offenders: Array<{
@@ -45626,6 +45718,7 @@ export type CreateMessageMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
   } | null;
@@ -45666,6 +45759,7 @@ export type UpdateMessageMutation = {
       __typename?: 'Image';
       id: string;
       url?: string | null;
+      position: ImagePosition;
       optimised?: string | null;
     }>;
     crimeGroups: Array<{
@@ -45693,6 +45787,7 @@ export type UpdateMessageMutation = {
       images: Array<{
         __typename?: 'Image';
         id: string;
+        position: ImagePosition;
         optimised?: string | null;
         url?: string | null;
       }>;
@@ -45708,6 +45803,7 @@ export type UpdateMessageMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     offenders: Array<{
@@ -45725,6 +45821,7 @@ export type UpdateMessageMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
   } | null;
@@ -45761,6 +45858,7 @@ export type ChatMessagesQuery = {
       __typename?: 'Image';
       id: string;
       url?: string | null;
+      position: ImagePosition;
       optimised?: string | null;
     }>;
     crimeGroups: Array<{
@@ -45790,6 +45888,7 @@ export type ChatMessagesQuery = {
         id: string;
         optimised?: string | null;
         url?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     incidents: Array<{
@@ -45803,6 +45902,7 @@ export type ChatMessagesQuery = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     offenders: Array<{
@@ -45820,6 +45920,7 @@ export type ChatMessagesQuery = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
   }>;
@@ -45849,6 +45950,7 @@ export type MessagesQuery = {
       __typename?: 'Image';
       id: string;
       url?: string | null;
+      position: ImagePosition;
       optimised?: string | null;
     }>;
     crimeGroups: Array<{
@@ -45877,6 +45979,7 @@ export type MessagesQuery = {
         __typename?: 'Image';
         id: string;
         optimised?: string | null;
+        position: ImagePosition;
         url?: string | null;
       }>;
     }>;
@@ -45891,6 +45994,7 @@ export type MessagesQuery = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     offenders: Array<{
@@ -45908,6 +46012,7 @@ export type MessagesQuery = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
   }>;
@@ -45942,6 +46047,7 @@ export type MessagesSubscriptionSubscription = {
       id: string;
       url?: string | null;
       optimised?: string | null;
+      position: ImagePosition;
     }>;
     crimeGroups: Array<{
       __typename?: 'CrimeGroup';
@@ -45970,6 +46076,7 @@ export type MessagesSubscriptionSubscription = {
         id: string;
         optimised?: string | null;
         url?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     incidents: Array<{
@@ -45983,6 +46090,7 @@ export type MessagesSubscriptionSubscription = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     offenders: Array<{
@@ -46000,6 +46108,7 @@ export type MessagesSubscriptionSubscription = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
   } | null> | null;
@@ -46021,6 +46130,7 @@ export type AddImagesToOffenderMutation = {
       url?: string | null;
       optimised?: string | null;
       card?: string | null;
+      position: ImagePosition;
     }>;
   } | null;
 };
@@ -46054,6 +46164,7 @@ export type CreateOffenderMutation = {
       id: string;
       url?: string | null;
       optimised?: string | null;
+      position: ImagePosition;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
@@ -46101,6 +46212,7 @@ export type CreateOffenderMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
   } | null;
@@ -46167,6 +46279,7 @@ export type UpdateOffenderMutation = {
       id: string;
       url?: string | null;
       optimised?: string | null;
+      position: ImagePosition;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
@@ -46211,6 +46324,7 @@ export type ViewOffenderCompareQuery = {
       __typename?: 'Image';
       id: string;
       optimised?: string | null;
+      position: ImagePosition;
     }>;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
     lastActive?: {
@@ -46262,6 +46376,7 @@ export type ListOffendersQuery = {
         __typename?: 'Image';
         id: string;
         optimised?: string | null;
+        position: ImagePosition;
         optimisedPersisted?: string | null;
       }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
@@ -46304,6 +46419,7 @@ export type ListOffendersQuery = {
           __typename?: 'Image';
           id: string;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
     }>;
@@ -46359,6 +46475,7 @@ export type OffenderFeedQuery = {
       url?: string | null;
       optimised?: string | null;
       card?: string | null;
+      position: ImagePosition;
     }>;
     tags: Array<{ __typename?: 'Tag'; id: string; name: string }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
@@ -46400,6 +46517,7 @@ export type SearchOffendersQuery = {
       images: Array<{
         __typename?: 'Image';
         id: string;
+        position: ImagePosition;
         optimised?: string | null;
       }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
@@ -46454,6 +46572,7 @@ export type ViewOffenderQuery = {
       id: string;
       url?: string | null;
       optimised?: string | null;
+      position: ImagePosition;
     }>;
     addresses: Array<{
       __typename?: 'Address';
@@ -46536,6 +46655,7 @@ export type ViewOffenderQuery = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
         card?: string | null;
       }>;
       linkedCrimeGroups: Array<{
@@ -46565,6 +46685,7 @@ export type ViewOffenderQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -46578,6 +46699,7 @@ export type ViewOffenderQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -46595,6 +46717,7 @@ export type ViewOffenderQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       createdBy: {
@@ -46620,6 +46743,7 @@ export type ViewOffenderQuery = {
           url?: string | null;
           optimised?: string | null;
           card?: string | null;
+          position: ImagePosition;
         }>;
         linkedCrimeGroups: Array<{
           __typename?: 'CrimeGroup';
@@ -46648,6 +46772,7 @@ export type ViewOffenderQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
         }>;
         linkedIncidents: Array<{
@@ -46661,6 +46786,7 @@ export type ViewOffenderQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
         }>;
         linkedOffenders: Array<{
@@ -46678,6 +46804,7 @@ export type ViewOffenderQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
         }>;
         createdBy: {
@@ -47300,6 +47427,7 @@ export type OffenderReportQuery = {
       images: Array<{
         __typename?: 'Image';
         optimisedPersisted?: string | null;
+        position: ImagePosition;
       }>;
     } | null;
   } | null;
@@ -47686,6 +47814,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
       url?: string | null;
       optimised?: string | null;
       card?: string | null;
+      position: ImagePosition;
     }>;
     linkedCrimeGroups: Array<{
       __typename?: 'CrimeGroup';
@@ -47714,6 +47843,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     linkedIncidents: Array<{
@@ -47727,6 +47857,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     linkedOffenders: Array<{
@@ -47744,6 +47875,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     createdBy: {
@@ -47764,6 +47896,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
         card?: string | null;
       }>;
       linkedCrimeGroups: Array<{
@@ -47793,6 +47926,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -47806,6 +47940,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -47823,6 +47958,7 @@ export type CreateUpdateOnCrimeGroupMutation = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       createdBy: {
@@ -47859,6 +47995,7 @@ export type CreateUpdateOnIncidentMutation = {
       url?: string | null;
       optimised?: string | null;
       card?: string | null;
+      position: ImagePosition;
     }>;
     linkedCrimeGroups: Array<{
       __typename?: 'CrimeGroup';
@@ -47886,6 +48023,7 @@ export type CreateUpdateOnIncidentMutation = {
         __typename?: 'Image';
         id: string;
         optimised?: string | null;
+        position: ImagePosition;
         url?: string | null;
       }>;
     }>;
@@ -47900,6 +48038,7 @@ export type CreateUpdateOnIncidentMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     linkedOffenders: Array<{
@@ -47917,6 +48056,7 @@ export type CreateUpdateOnIncidentMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     createdBy: {
@@ -47937,6 +48077,7 @@ export type CreateUpdateOnIncidentMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
         card?: string | null;
       }>;
       linkedCrimeGroups: Array<{
@@ -47966,6 +48107,7 @@ export type CreateUpdateOnIncidentMutation = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -47979,6 +48121,7 @@ export type CreateUpdateOnIncidentMutation = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -47996,6 +48139,7 @@ export type CreateUpdateOnIncidentMutation = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       createdBy: {
@@ -48032,6 +48176,7 @@ export type CreateUpdateOnInvestigationMutation = {
       url?: string | null;
       optimised?: string | null;
       card?: string | null;
+      position: ImagePosition;
     }>;
     linkedIncidents: Array<{
       __typename?: 'Incident';
@@ -48044,6 +48189,7 @@ export type CreateUpdateOnInvestigationMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     linkedOffenders: Array<{
@@ -48061,6 +48207,7 @@ export type CreateUpdateOnInvestigationMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     linkedCrimeGroups: Array<{
@@ -48090,6 +48237,7 @@ export type CreateUpdateOnInvestigationMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     createdBy: {
@@ -48111,6 +48259,7 @@ export type CreateUpdateOnInvestigationMutation = {
         url?: string | null;
         optimised?: string | null;
         card?: string | null;
+        position: ImagePosition;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
@@ -48139,6 +48288,7 @@ export type CreateUpdateOnInvestigationMutation = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -48152,6 +48302,7 @@ export type CreateUpdateOnInvestigationMutation = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -48169,6 +48320,7 @@ export type CreateUpdateOnInvestigationMutation = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       createdBy: {
@@ -48205,6 +48357,7 @@ export type CreateUpdateOnOffenderMutation = {
       url?: string | null;
       optimised?: string | null;
       card?: string | null;
+      position: ImagePosition;
     }>;
     linkedCrimeGroups: Array<{
       __typename?: 'CrimeGroup';
@@ -48233,6 +48386,7 @@ export type CreateUpdateOnOffenderMutation = {
         id: string;
         optimised?: string | null;
         url?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     linkedIncidents: Array<{
@@ -48246,6 +48400,7 @@ export type CreateUpdateOnOffenderMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     linkedOffenders: Array<{
@@ -48263,6 +48418,7 @@ export type CreateUpdateOnOffenderMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     createdBy: {
@@ -48284,6 +48440,7 @@ export type CreateUpdateOnOffenderMutation = {
         url?: string | null;
         optimised?: string | null;
         card?: string | null;
+        position: ImagePosition;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
@@ -48312,6 +48469,7 @@ export type CreateUpdateOnOffenderMutation = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -48325,6 +48483,7 @@ export type CreateUpdateOnOffenderMutation = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -48342,6 +48501,7 @@ export type CreateUpdateOnOffenderMutation = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       createdBy: {
@@ -48378,6 +48538,7 @@ export type CreateUpdateOnVehicleMutation = {
       url?: string | null;
       optimised?: string | null;
       card?: string | null;
+      position: ImagePosition;
     }>;
     linkedCrimeGroups: Array<{
       __typename?: 'CrimeGroup';
@@ -48406,6 +48567,7 @@ export type CreateUpdateOnVehicleMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     linkedIncidents: Array<{
@@ -48419,6 +48581,7 @@ export type CreateUpdateOnVehicleMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     linkedOffenders: Array<{
@@ -48436,6 +48599,7 @@ export type CreateUpdateOnVehicleMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     createdBy: {
@@ -48456,6 +48620,7 @@ export type CreateUpdateOnVehicleMutation = {
         id: string;
         url?: string | null;
         optimised?: string | null;
+        position: ImagePosition;
         card?: string | null;
       }>;
       linkedCrimeGroups: Array<{
@@ -48485,6 +48650,7 @@ export type CreateUpdateOnVehicleMutation = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -48498,6 +48664,7 @@ export type CreateUpdateOnVehicleMutation = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -48515,6 +48682,7 @@ export type CreateUpdateOnVehicleMutation = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       createdBy: {
@@ -48837,6 +49005,7 @@ export type UpdateUserChatMutation = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
           vehicles: Array<{
             __typename?: 'Vehicle';
@@ -48917,6 +49086,7 @@ export type UserChatsQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
           incidents: Array<{
             __typename?: 'Incident';
@@ -49182,6 +49352,7 @@ export type CreateVehicleMutation = {
       id: string;
       optimised?: string | null;
       url?: string | null;
+      position: ImagePosition;
     }>;
     incidents: Array<{
       __typename?: 'Incident';
@@ -49259,6 +49430,7 @@ export type UpdateVehicleMutation = {
       id: string;
       optimised?: string | null;
       url?: string | null;
+      position: ImagePosition;
     }>;
     incidents: Array<{
       __typename?: 'Incident';
@@ -49307,6 +49479,7 @@ export type ListVehiclesQuery = {
         id: string;
         optimised?: string | null;
         url?: string | null;
+        position: ImagePosition;
       }>;
       incidents: Array<{
         __typename?: 'Incident';
@@ -49351,6 +49524,7 @@ export type VehicleQuery = {
       id: string;
       optimised?: string | null;
       url?: string | null;
+      position: ImagePosition;
     }>;
     incidents: Array<{
       __typename?: 'Incident';
@@ -49398,6 +49572,7 @@ export type VehicleQuery = {
         __typename?: 'Image';
         id: string;
         optimised?: string | null;
+        position: ImagePosition;
       }>;
     }>;
     crimeGroup: Array<{
@@ -49423,6 +49598,7 @@ export type VehicleQuery = {
         url?: string | null;
         optimised?: string | null;
         card?: string | null;
+        position: ImagePosition;
       }>;
       linkedCrimeGroups: Array<{
         __typename?: 'CrimeGroup';
@@ -49451,6 +49627,7 @@ export type VehicleQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedIncidents: Array<{
@@ -49464,6 +49641,7 @@ export type VehicleQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       linkedOffenders: Array<{
@@ -49481,6 +49659,7 @@ export type VehicleQuery = {
           id: string;
           url?: string | null;
           optimised?: string | null;
+          position: ImagePosition;
         }>;
       }>;
       createdBy: {
@@ -49506,6 +49685,7 @@ export type VehicleQuery = {
           url?: string | null;
           optimised?: string | null;
           card?: string | null;
+          position: ImagePosition;
         }>;
         linkedCrimeGroups: Array<{
           __typename?: 'CrimeGroup';
@@ -49534,6 +49714,7 @@ export type VehicleQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
         }>;
         linkedIncidents: Array<{
@@ -49547,6 +49728,7 @@ export type VehicleQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
         }>;
         linkedOffenders: Array<{
@@ -49564,6 +49746,7 @@ export type VehicleQuery = {
             id: string;
             url?: string | null;
             optimised?: string | null;
+            position: ImagePosition;
           }>;
         }>;
         createdBy: {
@@ -49689,6 +49872,7 @@ export const CreateArticleDocument = gql`
         url
         optimised
         card
+        position
       }
       image {
         id
@@ -49728,6 +49912,7 @@ export const CreateArticleDocument = gql`
             images {
               id
               url
+              position
               optimised
               card
               offenders {
@@ -49769,6 +49954,7 @@ export const CreateArticleDocument = gql`
             images {
               id
               optimised
+              position
             }
             groups {
               id
@@ -49814,6 +50000,7 @@ export const CreateArticleDocument = gql`
               images {
                 id
                 optimised
+                position
               }
             }
           }
@@ -49933,6 +50120,7 @@ export const ArticlesDocument = gql`
         url
         optimised
         card
+        position
       }
       image {
         id
@@ -50030,6 +50218,7 @@ export const ListArticlesDocument = gql`
           url
           optimised
           card
+          position
         }
         image {
           id
@@ -50131,6 +50320,7 @@ export const ArticleDocument = gql`
         url
         optimised
         card
+        position
       }
       image {
         id
@@ -50171,6 +50361,7 @@ export const ArticleDocument = gql`
             images {
               id
               url
+              position
               optimised
               card
               offenders {
@@ -50212,6 +50403,7 @@ export const ArticleDocument = gql`
             images {
               id
               optimised
+              position
             }
             groups {
               id
@@ -50257,6 +50449,7 @@ export const ArticleDocument = gql`
               images {
                 id
                 optimised
+                position
               }
             }
           }
@@ -51690,6 +51883,7 @@ export const CreateChatDocument = gql`
               id
               url
               optimised
+              position
             }
             incidents {
               id
@@ -52061,6 +52255,7 @@ export const UpdateCrimeGroupDocument = gql`
         images {
           id
           optimised
+          position
         }
         totalTheftSuccess
         totalRecoveredValue
@@ -52242,6 +52437,7 @@ export const CrimeGroupDocument = gql`
         images {
           id
           optimised
+          position
         }
         totalTheftSuccess
         totalRecoveredValue
@@ -52286,6 +52482,7 @@ export const CrimeGroupDocument = gql`
           id
           url
           optimised
+          position
           card
         }
         linkedCrimeGroups {
@@ -52312,6 +52509,7 @@ export const CrimeGroupDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         linkedIncidents {
@@ -52323,6 +52521,7 @@ export const CrimeGroupDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         linkedOffenders {
@@ -52338,6 +52537,7 @@ export const CrimeGroupDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         createdBy {
@@ -52359,6 +52559,7 @@ export const CrimeGroupDocument = gql`
             url
             optimised
             card
+            position
           }
           linkedCrimeGroups {
             totalOffenders
@@ -52384,6 +52585,7 @@ export const CrimeGroupDocument = gql`
               id
               url
               optimised
+              position
             }
           }
           linkedIncidents {
@@ -52395,6 +52597,7 @@ export const CrimeGroupDocument = gql`
               id
               url
               optimised
+              position
             }
           }
           linkedOffenders {
@@ -52410,6 +52613,7 @@ export const CrimeGroupDocument = gql`
               id
               url
               optimised
+              position
             }
           }
           createdBy {
@@ -53062,11 +53266,13 @@ export const FeedItemsDocument = gql`
             url
             optimised
             card
+            position
           }
           image {
             id
             url
             optimised
+            position
             card
           }
           previewImage
@@ -53100,6 +53306,7 @@ export const FeedItemsDocument = gql`
               id
               url
               optimised
+              position
               card
             }
             linkedCrimeGroups {
@@ -53123,6 +53330,7 @@ export const FeedItemsDocument = gql`
                 id
                 url
                 optimised
+                position
               }
               make
               id
@@ -53137,6 +53345,7 @@ export const FeedItemsDocument = gql`
                 id
                 url
                 optimised
+                position
               }
             }
             linkedOffenders {
@@ -53152,6 +53361,7 @@ export const FeedItemsDocument = gql`
                 id
                 url
                 optimised
+                position
               }
             }
             createdBy {
@@ -53179,6 +53389,7 @@ export const FeedItemsDocument = gql`
           images {
             id
             optimised
+            position
             url
           }
           updates(orderBy: { createdAt: desc }) {
@@ -53191,6 +53402,7 @@ export const FeedItemsDocument = gql`
               id
               url
               optimised
+              position
               card
             }
             linkedCrimeGroups {
@@ -53216,6 +53428,7 @@ export const FeedItemsDocument = gql`
               images {
                 id
                 url
+                position
                 optimised
               }
             }
@@ -53228,6 +53441,7 @@ export const FeedItemsDocument = gql`
                 id
                 url
                 optimised
+                position
               }
             }
             linkedOffenders {
@@ -53243,6 +53457,7 @@ export const FeedItemsDocument = gql`
                 id
                 url
                 optimised
+                position
               }
             }
             createdBy {
@@ -53286,6 +53501,7 @@ export const FeedItemsDocument = gql`
               id
               url
               optimised
+              position
               card
             }
             linkedCrimeGroups {
@@ -53310,6 +53526,7 @@ export const FeedItemsDocument = gql`
                 id
                 url
                 optimised
+                position
               }
               id
               colour
@@ -53323,6 +53540,7 @@ export const FeedItemsDocument = gql`
                 id
                 url
                 optimised
+                position
               }
             }
             linkedOffenders {
@@ -53338,6 +53556,7 @@ export const FeedItemsDocument = gql`
                 id
                 url
                 optimised
+                position
               }
             }
             createdBy {
@@ -53377,6 +53596,7 @@ export const FeedItemsDocument = gql`
               id
               url
               optimised
+              position
               card
             }
             linkedCrimeGroups {
@@ -53399,6 +53619,7 @@ export const FeedItemsDocument = gql`
               images {
                 id
                 url
+                position
                 optimised
               }
               make
@@ -53413,6 +53634,7 @@ export const FeedItemsDocument = gql`
               images {
                 id
                 url
+                position
                 optimised
               }
             }
@@ -53429,6 +53651,7 @@ export const FeedItemsDocument = gql`
                 id
                 url
                 optimised
+                position
               }
             }
             createdBy {
@@ -53463,6 +53686,7 @@ export const FeedItemsDocument = gql`
             id
             optimised
             url
+            position
           }
           groups {
             id
@@ -53512,6 +53736,7 @@ export const FeedItemsDocument = gql`
               id
               url
               optimised
+              position
               card
             }
             linkedCrimeGroups {
@@ -53536,6 +53761,7 @@ export const FeedItemsDocument = gql`
               images {
                 id
                 url
+                position
                 optimised
               }
               colour
@@ -53548,6 +53774,7 @@ export const FeedItemsDocument = gql`
               images {
                 id
                 url
+                position
                 optimised
               }
             }
@@ -53563,6 +53790,7 @@ export const FeedItemsDocument = gql`
               images {
                 id
                 url
+                position
                 optimised
               }
             }
@@ -53580,6 +53808,7 @@ export const FeedItemsDocument = gql`
             id
             url
             optimised
+            position
             card
           }
           tags {
@@ -53637,6 +53866,7 @@ export const FeedItemsDocument = gql`
             images(orderBy: { createdAt: desc }) {
               id
               optimised
+              position
             }
           }
         }
@@ -54063,6 +54293,7 @@ export const AddImagesToIncidentDocument = gql`
         url
         optimised
         card
+        position
       }
     }
   }
@@ -54152,6 +54383,7 @@ export const CreateIncidentDocument = gql`
         id
         optimised
         url
+        position
       }
       groups {
         id
@@ -54178,6 +54410,7 @@ export const CreateIncidentDocument = gql`
           url
           optimised
           card
+          position
         }
         tags {
           id
@@ -54423,6 +54656,7 @@ export const UpdateIncidentDocument = gql`
       images {
         id
         optimised
+        position
         url
       }
       groups {
@@ -54448,6 +54682,7 @@ export const UpdateIncidentDocument = gql`
         images {
           id
           url
+          position
           optimised
           card
         }
@@ -54620,6 +54855,7 @@ export const EditIncidentDocument = gql`
         id
         optimised
         url
+        position
         offenders {
           id
           name
@@ -54654,6 +54890,7 @@ export const EditIncidentDocument = gql`
           id
           url
           optimised
+          position
         }
       }
       offenders {
@@ -54678,6 +54915,7 @@ export const EditIncidentDocument = gql`
           url
           optimised
           card
+          position
         }
         tags {
           id
@@ -54693,6 +54931,7 @@ export const EditIncidentDocument = gql`
           id
           url
           optimised
+          position
           card
         }
         linkedCrimeGroups {
@@ -54711,6 +54950,7 @@ export const EditIncidentDocument = gql`
             id
             url
             optimised
+            position
           }
           updatedAt
           totalOffenders
@@ -54724,6 +54964,7 @@ export const EditIncidentDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         linkedIncidents {
@@ -54735,6 +54976,7 @@ export const EditIncidentDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         linkedOffenders {
@@ -54750,6 +54992,7 @@ export const EditIncidentDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         createdBy {
@@ -54770,6 +55013,7 @@ export const EditIncidentDocument = gql`
             id
             url
             optimised
+            position
             card
           }
           linkedCrimeGroups {
@@ -54788,6 +55032,7 @@ export const EditIncidentDocument = gql`
               id
               url
               optimised
+              position
             }
             updatedAt
             totalOffenders
@@ -54801,6 +55046,7 @@ export const EditIncidentDocument = gql`
               id
               url
               optimised
+              position
             }
           }
           linkedIncidents {
@@ -54812,6 +55058,7 @@ export const EditIncidentDocument = gql`
               id
               url
               optimised
+              position
             }
           }
           linkedOffenders {
@@ -54827,6 +55074,7 @@ export const EditIncidentDocument = gql`
               id
               url
               optimised
+              position
             }
           }
           createdBy {
@@ -54943,6 +55191,7 @@ export const IncidentFeedDocument = gql`
         id
         url
         optimised
+        position
         card
         offenders {
           id
@@ -55058,6 +55307,7 @@ export const ListIncidentsDocument = gql`
         }
         images {
           id
+          position
           optimised
           url
         }
@@ -55157,6 +55407,7 @@ export const ListUnapprovedIncidentsDocument = gql`
         images {
           id
           optimised
+          position
           url
         }
         crimeTypes {
@@ -55291,6 +55542,7 @@ export const ViewIncidentDocument = gql`
       }
       images {
         id
+        position
         optimised
         url
       }
@@ -55322,6 +55574,7 @@ export const ViewIncidentDocument = gql`
         images {
           id
           url
+          position
           optimised
         }
       }
@@ -55346,6 +55599,7 @@ export const ViewIncidentDocument = gql`
           id
           url
           optimised
+          position
           card
         }
         tags {
@@ -55362,6 +55616,7 @@ export const ViewIncidentDocument = gql`
           id
           url
           optimised
+          position
           card
         }
         linkedCrimeGroups {
@@ -55379,6 +55634,7 @@ export const ViewIncidentDocument = gql`
           images {
             id
             url
+            position
             optimised
           }
           updatedAt
@@ -55393,6 +55649,7 @@ export const ViewIncidentDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         linkedIncidents {
@@ -55404,6 +55661,7 @@ export const ViewIncidentDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         linkedOffenders {
@@ -55419,6 +55677,7 @@ export const ViewIncidentDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         createdBy {
@@ -55439,6 +55698,7 @@ export const ViewIncidentDocument = gql`
             id
             url
             optimised
+            position
             card
           }
           linkedCrimeGroups {
@@ -55457,6 +55717,7 @@ export const ViewIncidentDocument = gql`
               id
               url
               optimised
+              position
             }
             updatedAt
             totalOffenders
@@ -55470,6 +55731,7 @@ export const ViewIncidentDocument = gql`
               id
               url
               optimised
+              position
             }
           }
           linkedIncidents {
@@ -55481,6 +55743,7 @@ export const ViewIncidentDocument = gql`
               id
               url
               optimised
+              position
             }
           }
           linkedOffenders {
@@ -55496,6 +55759,7 @@ export const ViewIncidentDocument = gql`
               id
               url
               optimised
+              position
             }
           }
           createdBy {
@@ -56091,6 +56355,7 @@ export const ViewInvestigationDocument = gql`
           optimised
           optimisedPersisted
           card
+          position
         }
         linkedCrimeGroups {
           totalOffenders
@@ -56109,6 +56374,7 @@ export const ViewInvestigationDocument = gql`
             url
             optimised
             optimisedPersisted
+            position
           }
           updatedAt
           totalOffenders
@@ -56129,6 +56395,7 @@ export const ViewInvestigationDocument = gql`
             url
             optimised
             optimisedPersisted
+            position
           }
         }
         linkedOffenders {
@@ -56145,6 +56412,7 @@ export const ViewInvestigationDocument = gql`
             url
             optimised
             optimisedPersisted
+            position
           }
         }
         createdBy {
@@ -56167,6 +56435,7 @@ export const ViewInvestigationDocument = gql`
             optimisedPersisted
             optimised
             card
+            position
           }
           linkedCrimeGroups {
             totalOffenders
@@ -56185,6 +56454,7 @@ export const ViewInvestigationDocument = gql`
               url
               optimisedPersisted
               optimised
+              position
             }
             updatedAt
             totalOffenders
@@ -56204,6 +56474,7 @@ export const ViewInvestigationDocument = gql`
               id
               url
               optimised
+              position
             }
           }
           linkedOffenders {
@@ -56220,6 +56491,7 @@ export const ViewInvestigationDocument = gql`
               url
               optimised
               optimisedPersisted
+              position
             }
           }
           createdBy {
@@ -56242,6 +56514,7 @@ export const ViewInvestigationDocument = gql`
           id
           optimised
           optimisedPersisted
+          position
         }
       }
       incidents {
@@ -56376,6 +56649,7 @@ export const CreateMessageDocument = gql`
         id
         url
         optimised
+        position
       }
       crimeGroups {
         totalOffenders
@@ -56401,6 +56675,7 @@ export const CreateMessageDocument = gql`
           id
           optimised
           url
+          position
         }
       }
       incidents {
@@ -56412,6 +56687,7 @@ export const CreateMessageDocument = gql`
           id
           url
           optimised
+          position
         }
       }
       offenders {
@@ -56427,6 +56703,7 @@ export const CreateMessageDocument = gql`
           id
           url
           optimised
+          position
         }
       }
     }
@@ -56552,6 +56829,7 @@ export const UpdateMessageDocument = gql`
       images {
         id
         url
+        position
         optimised
       }
       crimeGroups {
@@ -56576,6 +56854,7 @@ export const UpdateMessageDocument = gql`
         colour
         images {
           id
+          position
           optimised
           url
         }
@@ -56589,6 +56868,7 @@ export const UpdateMessageDocument = gql`
           id
           url
           optimised
+          position
         }
       }
       offenders {
@@ -56604,6 +56884,7 @@ export const UpdateMessageDocument = gql`
           id
           url
           optimised
+          position
         }
       }
     }
@@ -56675,6 +56956,7 @@ export const ChatMessagesDocument = gql`
       images {
         id
         url
+        position
         optimised
       }
       crimeGroups {
@@ -56701,6 +56983,7 @@ export const ChatMessagesDocument = gql`
           id
           optimised
           url
+          position
         }
       }
       incidents {
@@ -56712,6 +56995,7 @@ export const ChatMessagesDocument = gql`
           id
           url
           optimised
+          position
         }
       }
       offenders {
@@ -56727,6 +57011,7 @@ export const ChatMessagesDocument = gql`
           id
           url
           optimised
+          position
         }
       }
     }
@@ -56812,6 +57097,7 @@ export const MessagesDocument = gql`
       images {
         id
         url
+        position
         optimised
       }
       crimeGroups {
@@ -56837,6 +57123,7 @@ export const MessagesDocument = gql`
         images {
           id
           optimised
+          position
           url
         }
       }
@@ -56849,6 +57136,7 @@ export const MessagesDocument = gql`
           id
           url
           optimised
+          position
         }
       }
       offenders {
@@ -56864,6 +57152,7 @@ export const MessagesDocument = gql`
           id
           url
           optimised
+          position
         }
       }
     }
@@ -56937,6 +57226,7 @@ export const MessagesSubscriptionDocument = gql`
         id
         url
         optimised
+        position
       }
       crimeGroups {
         totalOffenders
@@ -56962,6 +57252,7 @@ export const MessagesSubscriptionDocument = gql`
           id
           optimised
           url
+          position
         }
       }
       incidents {
@@ -56973,6 +57264,7 @@ export const MessagesSubscriptionDocument = gql`
           id
           url
           optimised
+          position
         }
       }
       offenders {
@@ -56988,6 +57280,7 @@ export const MessagesSubscriptionDocument = gql`
           id
           url
           optimised
+          position
         }
       }
     }
@@ -57040,6 +57333,7 @@ export const AddImagesToOffenderDocument = gql`
         url
         optimised
         card
+        position
       }
     }
   }
@@ -57111,6 +57405,7 @@ export const CreateOffenderDocument = gql`
         id
         url
         optimised
+        position
       }
       groups {
         id
@@ -57163,6 +57458,7 @@ export const CreateOffenderDocument = gql`
           id
           url
           optimised
+          position
         }
       }
     }
@@ -57385,6 +57681,7 @@ export const UpdateOffenderDocument = gql`
         id
         url
         optimised
+        position
       }
       groups {
         id
@@ -57474,6 +57771,7 @@ export const ViewOffenderCompareDocument = gql`
       images {
         id
         optimised
+        position
       }
       tags {
         id
@@ -57581,6 +57879,7 @@ export const ListOffendersDocument = gql`
         images {
           id
           optimised
+          position
           optimisedPersisted
         }
         groups {
@@ -57626,6 +57925,7 @@ export const ListOffendersDocument = gql`
           images {
             id
             optimised
+            position
           }
         }
       }
@@ -57741,6 +58041,7 @@ export const OffenderFeedDocument = gql`
         url
         optimised
         card
+        position
       }
       tags {
         id
@@ -57853,6 +58154,7 @@ export const SearchOffendersDocument = gql`
         peculiarities
         images {
           id
+          position
           optimised
         }
         groups {
@@ -57962,6 +58264,7 @@ export const ViewOffenderDocument = gql`
         id
         url
         optimised
+        position
       }
       addresses {
         id
@@ -58050,6 +58353,7 @@ export const ViewOffenderDocument = gql`
           id
           url
           optimised
+          position
           card
         }
         linkedCrimeGroups {
@@ -58068,6 +58372,7 @@ export const ViewOffenderDocument = gql`
             id
             url
             optimised
+            position
           }
           updatedAt
           totalOffenders
@@ -58087,6 +58392,7 @@ export const ViewOffenderDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         linkedOffenders {
@@ -58102,6 +58408,7 @@ export const ViewOffenderDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         createdBy {
@@ -58123,6 +58430,7 @@ export const ViewOffenderDocument = gql`
             url
             optimised
             card
+            position
           }
           linkedCrimeGroups {
             totalOffenders
@@ -58140,6 +58448,7 @@ export const ViewOffenderDocument = gql`
               id
               url
               optimised
+              position
             }
             updatedAt
             totalOffenders
@@ -58159,6 +58468,7 @@ export const ViewOffenderDocument = gql`
               id
               url
               optimised
+              position
             }
           }
           linkedOffenders {
@@ -58174,6 +58484,7 @@ export const ViewOffenderDocument = gql`
               id
               url
               optimised
+              position
             }
           }
           createdBy {
@@ -59267,6 +59578,7 @@ export const OffenderReportDocument = gql`
         name
         images {
           optimisedPersisted
+          position
         }
       }
     }
@@ -60047,6 +60359,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
         url
         optimised
         card
+        position
       }
       linkedCrimeGroups {
         totalOffenders
@@ -60064,6 +60377,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
           id
           url
           optimised
+          position
         }
         updatedAt
         totalOffenders
@@ -60083,6 +60397,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
           id
           url
           optimised
+          position
         }
       }
       linkedOffenders {
@@ -60098,6 +60413,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
           id
           url
           optimised
+          position
         }
       }
       createdBy {
@@ -60118,6 +60434,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
           id
           url
           optimised
+          position
           card
         }
         linkedCrimeGroups {
@@ -60136,6 +60453,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
             id
             url
             optimised
+            position
           }
           updatedAt
           totalOffenders
@@ -60155,6 +60473,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         linkedOffenders {
@@ -60170,6 +60489,7 @@ export const CreateUpdateOnCrimeGroupDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         createdBy {
@@ -60245,6 +60565,7 @@ export const CreateUpdateOnIncidentDocument = gql`
         url
         optimised
         card
+        position
       }
       linkedCrimeGroups {
         totalOffenders
@@ -60269,6 +60590,7 @@ export const CreateUpdateOnIncidentDocument = gql`
         images {
           id
           optimised
+          position
           url
         }
       }
@@ -60281,6 +60603,7 @@ export const CreateUpdateOnIncidentDocument = gql`
           id
           url
           optimised
+          position
         }
       }
       linkedOffenders {
@@ -60296,6 +60619,7 @@ export const CreateUpdateOnIncidentDocument = gql`
           id
           url
           optimised
+          position
         }
       }
       createdBy {
@@ -60316,6 +60640,7 @@ export const CreateUpdateOnIncidentDocument = gql`
           id
           url
           optimised
+          position
           card
         }
         linkedCrimeGroups {
@@ -60342,6 +60667,7 @@ export const CreateUpdateOnIncidentDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         linkedIncidents {
@@ -60353,6 +60679,7 @@ export const CreateUpdateOnIncidentDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         linkedOffenders {
@@ -60368,6 +60695,7 @@ export const CreateUpdateOnIncidentDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         createdBy {
@@ -60442,6 +60770,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
         url
         optimised
         card
+        position
       }
       linkedIncidents {
         id
@@ -60452,6 +60781,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
           id
           url
           optimised
+          position
         }
       }
       linkedOffenders {
@@ -60467,6 +60797,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
           id
           url
           optimised
+          position
         }
       }
       linkedCrimeGroups {
@@ -60485,6 +60816,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
           id
           url
           optimised
+          position
         }
         updatedAt
         totalOffenders
@@ -60514,6 +60846,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
           url
           optimised
           card
+          position
         }
         linkedCrimeGroups {
           totalOffenders
@@ -60531,6 +60864,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
             id
             url
             optimised
+            position
           }
           updatedAt
           totalOffenders
@@ -60550,6 +60884,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         linkedOffenders {
@@ -60565,6 +60900,7 @@ export const CreateUpdateOnInvestigationDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         createdBy {
@@ -60640,6 +60976,7 @@ export const CreateUpdateOnOffenderDocument = gql`
         url
         optimised
         card
+        position
       }
       linkedCrimeGroups {
         totalOffenders
@@ -60665,6 +61002,7 @@ export const CreateUpdateOnOffenderDocument = gql`
           id
           optimised
           url
+          position
         }
       }
       linkedIncidents {
@@ -60676,6 +61014,7 @@ export const CreateUpdateOnOffenderDocument = gql`
           id
           url
           optimised
+          position
         }
       }
       linkedOffenders {
@@ -60691,6 +61030,7 @@ export const CreateUpdateOnOffenderDocument = gql`
           id
           url
           optimised
+          position
         }
       }
       createdBy {
@@ -60712,6 +61052,7 @@ export const CreateUpdateOnOffenderDocument = gql`
           url
           optimised
           card
+          position
         }
         linkedCrimeGroups {
           totalOffenders
@@ -60729,6 +61070,7 @@ export const CreateUpdateOnOffenderDocument = gql`
             id
             url
             optimised
+            position
           }
           updatedAt
           totalOffenders
@@ -60748,6 +61090,7 @@ export const CreateUpdateOnOffenderDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         linkedOffenders {
@@ -60763,6 +61106,7 @@ export const CreateUpdateOnOffenderDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         createdBy {
@@ -60837,6 +61181,7 @@ export const CreateUpdateOnVehicleDocument = gql`
         url
         optimised
         card
+        position
       }
       linkedCrimeGroups {
         totalOffenders
@@ -60854,6 +61199,7 @@ export const CreateUpdateOnVehicleDocument = gql`
           id
           url
           optimised
+          position
         }
         updatedAt
         totalOffenders
@@ -60873,6 +61219,7 @@ export const CreateUpdateOnVehicleDocument = gql`
           id
           url
           optimised
+          position
         }
       }
       linkedOffenders {
@@ -60888,6 +61235,7 @@ export const CreateUpdateOnVehicleDocument = gql`
           id
           url
           optimised
+          position
         }
       }
       createdBy {
@@ -60908,6 +61256,7 @@ export const CreateUpdateOnVehicleDocument = gql`
           id
           url
           optimised
+          position
           card
         }
         linkedCrimeGroups {
@@ -60926,6 +61275,7 @@ export const CreateUpdateOnVehicleDocument = gql`
             id
             url
             optimised
+            position
           }
           updatedAt
           totalOffenders
@@ -60945,6 +61295,7 @@ export const CreateUpdateOnVehicleDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         linkedOffenders {
@@ -60960,6 +61311,7 @@ export const CreateUpdateOnVehicleDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         createdBy {
@@ -61767,6 +62119,7 @@ export const UpdateUserChatDocument = gql`
               id
               url
               optimised
+              position
             }
             vehicles {
               id
@@ -61879,6 +62232,7 @@ export const UserChatsDocument = gql`
               id
               url
               optimised
+              position
             }
             incidents {
               id
@@ -62579,6 +62933,7 @@ export const CreateVehicleDocument = gql`
         id
         optimised
         url
+        position
       }
       incidents {
         id
@@ -62806,6 +63161,7 @@ export const UpdateVehicleDocument = gql`
         id
         optimised
         url
+        position
       }
       incidents {
         id
@@ -62889,6 +63245,7 @@ export const ListVehiclesDocument = gql`
           id
           optimised
           url
+          position
         }
         incidents {
           id
@@ -62979,6 +63336,7 @@ export const VehicleDocument = gql`
         id
         optimised
         url
+        position
       }
       incidents {
         id
@@ -63019,6 +63377,7 @@ export const VehicleDocument = gql`
         images {
           id
           optimised
+          position
         }
         totalTheftSuccess
         totalRecoveredValue
@@ -63047,6 +63406,7 @@ export const VehicleDocument = gql`
           url
           optimised
           card
+          position
         }
         linkedCrimeGroups {
           totalOffenders
@@ -63064,6 +63424,7 @@ export const VehicleDocument = gql`
             id
             url
             optimised
+            position
           }
           updatedAt
           totalOffenders
@@ -63083,6 +63444,7 @@ export const VehicleDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         linkedOffenders {
@@ -63098,6 +63460,7 @@ export const VehicleDocument = gql`
             id
             url
             optimised
+            position
           }
         }
         createdBy {
@@ -63119,6 +63482,7 @@ export const VehicleDocument = gql`
             url
             optimised
             card
+            position
           }
           linkedCrimeGroups {
             totalOffenders
@@ -63136,6 +63500,7 @@ export const VehicleDocument = gql`
               id
               url
               optimised
+              position
             }
             updatedAt
             totalOffenders
@@ -63155,6 +63520,7 @@ export const VehicleDocument = gql`
               id
               url
               optimised
+              position
             }
           }
           linkedOffenders {
@@ -63170,6 +63536,7 @@ export const VehicleDocument = gql`
               id
               url
               optimised
+              position
             }
           }
           createdBy {

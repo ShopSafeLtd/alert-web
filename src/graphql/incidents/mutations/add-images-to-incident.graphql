@@ -9,6 +9,7 @@ mutation AddImagesToIncident(
       url
       optimised
       card
+      position
     }
   }
 }

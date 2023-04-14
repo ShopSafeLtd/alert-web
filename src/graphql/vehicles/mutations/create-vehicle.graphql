@@ -12,6 +12,7 @@ mutation CreateVehicle($data: CreateVehicleDataInput!) {
       id
       optimised
       url
+      position
     }
     incidents {
       id

@@ -14,6 +14,7 @@ import type {
   UserChatsQueryVariables,
 } from 'graphql/generated';
 import {
+  ImagePosition,
   ChatMessagesDocument,
   MessageItemType,
   MessagesSubscriptionDocument,
@@ -878,6 +879,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                       id: item.fileName || '',
                       optimised: item.url || '',
                       url: item.url || '',
+                      position: ImagePosition.CenterCenter,
                     }))
                     .filter((obj) => obj.url !== undefined)
                 : [],
@@ -887,7 +889,11 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
               offendersData && offendersData.length > 0
                 ? offendersData.map((offender) => ({
                     id: offender.id,
-                    images: offender.images || [],
+                    images:
+                      offender.images?.map((image) => ({
+                        ...image,
+                        position: ImagePosition.CenterCenter,
+                      })) || [],
                     updatedAt: offender.updatedAt,
                     age: offender.age,
                     build: offender.build,

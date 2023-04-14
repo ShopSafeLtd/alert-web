@@ -42,6 +42,7 @@ query userChats(
             id
             url
             optimised
+            position
           }
           incidents {
             id

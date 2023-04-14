@@ -137,7 +137,10 @@ const LinkVehicle = ({
                   height: 250,
                 }}
               >
-                <WatermarkImage url={selectedVehicle?.images[0]?.optimised} />
+                <WatermarkImage
+                  url={selectedVehicle?.images[0]?.optimised}
+                  position={selectedVehicle?.images[0]?.position}
+                />
               </div>
             </Col>
           )}

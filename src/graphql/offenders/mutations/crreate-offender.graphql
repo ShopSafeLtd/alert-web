@@ -20,6 +20,7 @@ mutation createOffender($data: CreateOffenderData!) {
       id
       url
       optimised
+      position
     }
     groups {
       id
@@ -72,6 +73,7 @@ mutation createOffender($data: CreateOffenderData!) {
         id
         url
         optimised
+        position
       }
     }
   }

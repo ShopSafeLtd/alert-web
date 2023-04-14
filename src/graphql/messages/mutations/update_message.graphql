@@ -24,6 +24,7 @@ mutation updateMessage(
     images {
       id
       url
+      position
       optimised
     }
     crimeGroups {
@@ -48,6 +49,7 @@ mutation updateMessage(
       colour
       images {
         id
+        position
         optimised
         url
       }
@@ -61,6 +63,7 @@ mutation updateMessage(
         id
         url
         optimised
+        position
       }
     }
     offenders {
@@ -76,6 +79,7 @@ mutation updateMessage(
         id
         url
         optimised
+        position
       }
     }
   }

@@ -51,6 +51,7 @@ const ArticleCard = ({ article }: Props): JSX.Element => {
             key={id}
           >
             <WatermarkImage
+              position={images[0]?.position}
               url={images[0]?.optimised || images[0]?.url || ''}
             />
           </div>
