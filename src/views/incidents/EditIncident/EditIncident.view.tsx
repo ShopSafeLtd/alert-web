@@ -144,7 +144,9 @@ interface Props {
   setAddRecentOffender: (value: Offender | null) => void;
   setAssignToImage: (image: Image) => void;
   setSearchOffenders: (value: string) => void;
-  tags: { value: string; label: string }[];
+  crimeTypes: { value: string; label: string }[];
+  involvedTags: { value: string; label: string }[];
+  impactTags: { value: string; label: string }[];
   tagsLoading: boolean;
   toggleAddIncidentTag: () => void;
   updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
@@ -191,7 +193,9 @@ const EditIncident = ({
   setAddRecentOffender,
   setAssignToImage,
   setSearchOffenders,
-  tags,
+  crimeTypes,
+  involvedTags,
+  impactTags,
   tagsLoading,
   toggleAddIncidentTag,
   updateIncidentTag,
@@ -283,7 +287,7 @@ const EditIncident = ({
                   maxTagCount={3}
                   placeholder="Search for a crime type..."
                 >
-                  {tags.map((tag) => (
+                  {crimeTypes.map((tag) => (
                     <Select.Option value={tag.value}>{tag.label}</Select.Option>
                   ))}
                 </Select>
@@ -307,7 +311,7 @@ const EditIncident = ({
                   maxTagCount={3}
                   placeholder="Search for a crime type..."
                 >
-                  {tags.map((tag) => (
+                  {involvedTags.map((tag) => (
                     <Select.Option value={tag.value}>{tag.label}</Select.Option>
                   ))}
                 </Select>
@@ -331,7 +335,7 @@ const EditIncident = ({
                   maxTagCount={3}
                   placeholder="Search for a crime type..."
                 >
-                  {tags.map((tag) => (
+                  {impactTags.map((tag) => (
                     <Select.Option value={tag.value}>{tag.label}</Select.Option>
                   ))}
                 </Select>
