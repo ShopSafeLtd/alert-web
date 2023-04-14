@@ -38,6 +38,7 @@ mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
     images {
       id
       optimised
+      position
       url
     }
     groups {
@@ -63,6 +64,7 @@ mutation updateIncident($where: UniqueId!, $data: IncidentUpdateInput!) {
       images {
         id
         url
+        position
         optimised
         card
       }

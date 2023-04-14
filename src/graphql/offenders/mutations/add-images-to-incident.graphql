@@ -9,6 +9,7 @@ mutation AddImagesToOffender(
       url
       optimised
       card
+      position
     }
   }
 }

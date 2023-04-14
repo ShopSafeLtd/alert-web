@@ -38,6 +38,7 @@ mutation createIncident($data: CreateIncidentData!) {
       id
       optimised
       url
+      position
     }
     groups {
       id
@@ -64,6 +65,7 @@ mutation createIncident($data: CreateIncidentData!) {
         url
         optimised
         card
+        position
       }
       tags {
         id

@@ -1,5 +1,9 @@
 import React from 'react';
-import type { CreateTagMutation, ListVehiclesQuery } from 'graphql/generated';
+import type {
+  CreateTagMutation,
+  ImagePosition,
+  ListVehiclesQuery,
+} from 'graphql/generated';
 
 import type { FormInstance } from 'antd';
 import {
@@ -29,6 +33,7 @@ import EditExclusion from 'components/form-components/offender/exclusion/EditExc
 import AddOffenderTag from 'components/form-components/tags/offenderWarnings/AddOffenderWarning';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faEdit,
   faPenToSquare,
   faPlus,
   faTrash,
@@ -39,9 +44,15 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import type { BanData, CrimeGroupData, VehicleData } from 'types/DataType';
 import Profiles from 'components/offenders/OffenderForm/Profiles';
 import OffenderDetails from 'components/offenders/OffenderForm/OffenderDetails';
+import WatermarkImage from 'components/images/WatermarkImage.view';
+import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view';
 import type { FormData } from './useAddOffender';
 
 const { Title, Text, Paragraph } = Typography;
+
+interface Image extends UploadFile {
+  position?: ImagePosition;
+}
 
 interface Props {
   onSubmit: (value: FormData) => void;
@@ -95,6 +106,9 @@ interface Props {
   updateCrimeGroupsData: (value: CrimeGroupData) => void;
   idVerified: boolean;
   onValuesChange?: (changedValues: FormData, values: FormData) => void;
+  onEditImage: (value: Image) => void;
+  toggleEditImage: (value?: Image) => void;
+  editImage: Image | null;
 }
 
 const AddOffender = ({
@@ -149,6 +163,9 @@ const AddOffender = ({
   // listCrimeGroupsData,
   idVerified,
   onValuesChange,
+  editImage,
+  onEditImage,
+  toggleEditImage,
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader onBack={() => window.history.back()} title="Add Offender" />
@@ -466,6 +483,38 @@ const AddOffender = ({
                 onPreview={onPreview}
                 onRemove={removeImage}
                 beforeUpload={beforeUpload}
+                // TODO
+                // eslint-disable-next-line react/no-unstable-nested-components
+                itemRender={(el, file: Image) => (
+                  <Card
+                    key={el.key}
+                    bodyStyle={{
+                      padding: 0,
+                      overflow: 'hidden',
+                      borderRadius: 10,
+                    }}
+                  >
+                    <div style={{ height: 200, width: '100%' }}>
+                      <Button
+                        size="small"
+                        style={{
+                          position: 'absolute',
+                          zIndex: 10,
+                          padding: '6.5px 10px',
+                          top: 5,
+                          left: 5,
+                        }}
+                        onClick={() => toggleEditImage(file)}
+                      >
+                        <FontAwesomeIcon icon={faEdit} />
+                      </Button>
+                      <WatermarkImage
+                        position={file.position}
+                        url={file.url || file.thumbUrl}
+                      />
+                    </div>
+                  </Card>
+                )}
               >
                 {fileList.length < 10 && '+ Upload'}
               </Upload>
@@ -593,6 +642,13 @@ const AddOffender = ({
         <div />
       )}
     </Drawer>
+
+    <ImageEditor
+      submitImage={onEditImage}
+      onClose={() => toggleEditImage()}
+      open={!!editImage}
+      image={editImage}
+    />
   </div>
 );
 export default AddOffender;

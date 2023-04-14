@@ -4,6 +4,7 @@ import type {
   Age,
   Build,
   Gender,
+  ImagePosition,
   ListOffendersQuery,
   Race,
 } from 'graphql/generated';
@@ -40,6 +41,7 @@ export interface OffenderData {
     fileName?: string | null;
     type?: string | null;
     new?: boolean;
+    position: ImagePosition;
   }[];
   imageUid?: string[] | undefined;
   lastActive:
@@ -227,9 +229,10 @@ const useAddExistingOffender = ({
         tags: selectedOffender.tags,
         lastActive: selectedOffender.lastActive || null,
         images:
-          selectedOffender.images.map(({ id, optimised }) => ({
+          selectedOffender.images.map(({ id, optimised, position }) => ({
             id,
             optimised,
+            position,
           })) || null,
       });
     }

@@ -1,6 +1,7 @@
 import React from 'react';
 import type {
   CreateTagMutation,
+  ImagePosition,
   ListVehiclesQuery,
   ViewOffenderQuery,
 } from 'graphql/generated';
@@ -37,6 +38,7 @@ import EditExclusion from 'components/form-components/offender/exclusion/EditExc
 import AddOffenderTag from 'components/form-components/tags/offenderWarnings/AddOffenderWarning';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faEdit,
   faPenToSquare,
   faPlus,
   faTrash,
@@ -48,10 +50,16 @@ import type { BanData, CrimeGroupData, VehicleData } from 'types/DataType';
 import Profiles from 'components/offenders/OffenderForm/Profiles';
 // import ProfileDrawer from 'components/offenders/OffenderForm/ProfileDrawer';
 import NewOffenderAddress from 'components/form-components/addresses/NewOffenderAddress';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 import EditOffenderAddress from 'components/form-components/addresses/EditOffenderAddress';
+import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view';
 import type { FormData } from './useEditOffender';
 
 const { Title, Text, Paragraph } = Typography;
+
+interface Image extends UploadFile {
+  position?: ImagePosition;
+}
 
 interface AddressForm {
   alias: string;
@@ -110,7 +118,7 @@ interface Props {
   imgChange: UploadProps['onChange'];
   onPreview: (value: UploadFile) => void;
   beforeUpload: (value: RcFile) => void;
-  fileList: UploadFile[];
+  fileList: Image[];
   addExclusion: boolean;
   toggleAddExclusion: () => void;
   editExclusion: boolean;
@@ -162,6 +170,9 @@ interface Props {
   toggleEditAddress: (value: string | null) => void;
   onEditAddress: (data: EditAddressForm) => void;
   onDeleteAddress: (addressId: string) => void;
+  onEditImage: (value: Image) => void;
+  toggleEditImage: (value?: Image) => void;
+  editImage: Image | null;
 }
 
 const EditOffender = ({
@@ -228,6 +239,9 @@ const EditOffender = ({
   toggleEditAddress,
   onDeleteAddress,
   onEditAddress,
+  editImage,
+  onEditImage,
+  toggleEditImage,
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader
@@ -641,6 +655,38 @@ const EditOffender = ({
                     onPreview={onPreview}
                     beforeUpload={beforeUpload}
                     accept=".png,.jpeg,.webp"
+                    // TODO
+                    // eslint-disable-next-line react/no-unstable-nested-components
+                    itemRender={(el, file: Image) => (
+                      <Card
+                        key={el.key}
+                        bodyStyle={{
+                          padding: 0,
+                          overflow: 'hidden',
+                          borderRadius: 10,
+                        }}
+                      >
+                        <div style={{ height: 200, width: '100%' }}>
+                          <Button
+                            size="small"
+                            style={{
+                              position: 'absolute',
+                              zIndex: 10,
+                              padding: '6.5px 10px',
+                              top: 5,
+                              left: 5,
+                            }}
+                            onClick={() => toggleEditImage(file)}
+                          >
+                            <FontAwesomeIcon icon={faEdit} />
+                          </Button>
+                          <WatermarkImage
+                            position={file.position}
+                            url={file.url || file.thumbUrl}
+                          />
+                        </div>
+                      </Card>
+                    )}
                   >
                     {fileList.length < 10 && '+ Upload'}
                   </Upload>
@@ -649,60 +695,58 @@ const EditOffender = ({
             </Row>
           </Card>
           <Card>
-            {groups.length > 1 && (
-              <>
-                <Row align="bottom">
-                  <Col>
-                    <Title style={{ marginBottom: 0 }} level={4}>
-                      {adminRights ? 6 : 5}.{' '}
-                    </Title>
-                  </Col>
-                  <Col>
-                    <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
-                      Who is it visible to?
-                    </Title>
-                  </Col>
-                  <Col>
-                    <Paragraph
-                      style={{ marginBottom: 1, marginLeft: 5 }}
-                      type="secondary"
-                      italic
+            <>
+              <Row align="bottom">
+                <Col>
+                  <Title style={{ marginBottom: 0 }} level={4}>
+                    {adminRights ? 6 : 5}.{' '}
+                  </Title>
+                </Col>
+                <Col>
+                  <Title level={4} style={{ marginBottom: 0, marginLeft: 5 }}>
+                    Who is it visible to?
+                  </Title>
+                </Col>
+                <Col>
+                  <Paragraph
+                    style={{ marginBottom: 1, marginLeft: 5 }}
+                    type="secondary"
+                    italic
+                  >
+                    - Please select the groups that this incident is for
+                  </Paragraph>
+                </Col>
+              </Row>
+              <Row>
+                <Col span={8}>
+                  <Form.Item
+                    name="groups"
+                    label="Groups"
+                    tooltip="Select the groups that you would like this offender to be visible to."
+                    rules={[
+                      {
+                        required: true,
+                        message:
+                          'Please select at least one group for the offender.',
+                      },
+                    ]}
+                  >
+                    <Select
+                      loading={groupsLoading}
+                      disabled={saving}
+                      mode="multiple"
+                      maxTagCount={3}
                     >
-                      - Please select the groups that this incident is for
-                    </Paragraph>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col span={8}>
-                    <Form.Item
-                      name="groups"
-                      label="Groups"
-                      tooltip="Select the groups that you would like this offender to be visible to."
-                      rules={[
-                        {
-                          required: true,
-                          message:
-                            'Please select at least one group for the offender.',
-                        },
-                      ]}
-                    >
-                      <Select
-                        loading={groupsLoading}
-                        disabled={saving}
-                        mode="multiple"
-                        maxTagCount={3}
-                      >
-                        {groups.map((group) => (
-                          <Select.Option key={group.value} value={group.value}>
-                            {group.label}
-                          </Select.Option>
-                        ))}
-                      </Select>
-                    </Form.Item>
-                  </Col>
-                </Row>
-              </>
-            )}
+                      {groups.map((group) => (
+                        <Select.Option key={group.value} value={group.value}>
+                          {group.label}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                </Col>
+              </Row>
+            </>
           </Card>
 
           <Form.Item>
@@ -804,6 +848,13 @@ const EditOffender = ({
             />
           )}
         </Drawer>
+
+        <ImageEditor
+          submitImage={onEditImage}
+          onClose={() => toggleEditImage()}
+          open={!!editImage}
+          image={editImage}
+        />
       </>
     )}
   </div>

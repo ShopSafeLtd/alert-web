@@ -87,6 +87,7 @@ const AddUser = ({
       county: '',
       groups: [],
       chats: [],
+      publicName: true,
     }}
     layout="vertical"
     onFinish={onSubmit}

@@ -50,6 +50,7 @@ query offenderFeed(
       url
       optimised
       card
+      position
     }
     tags {
       id

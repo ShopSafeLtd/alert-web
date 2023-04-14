@@ -49,10 +49,12 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
     onAddOffender,
     onEditOffender,
     onRemoveOffender,
+    onEditImage,
   } = useEditIncident({ incidentId, reviewed });
   return (
     <div>
       <View
+        onEditImage={onEditImage}
         addIncidentTag={addIncidentTag}
         addRecentOffender={addRecentOffender}
         assignOffendersToImages={assignOffendersToImages}

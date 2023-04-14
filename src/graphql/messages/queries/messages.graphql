@@ -24,6 +24,7 @@ query messages($chat: String, $before: MessageWhereUniqueInput) {
     images {
       id
       url
+      position
       optimised
     }
     crimeGroups {
@@ -49,6 +50,7 @@ query messages($chat: String, $before: MessageWhereUniqueInput) {
       images {
         id
         optimised
+        position
         url
       }
     }
@@ -61,6 +63,7 @@ query messages($chat: String, $before: MessageWhereUniqueInput) {
         id
         url
         optimised
+        position
       }
     }
     offenders {
@@ -76,6 +79,7 @@ query messages($chat: String, $before: MessageWhereUniqueInput) {
         id
         url
         optimised
+        position
       }
     }
   }

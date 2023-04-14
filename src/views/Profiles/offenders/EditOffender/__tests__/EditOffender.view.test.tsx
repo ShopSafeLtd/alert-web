@@ -3,6 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import EditOffender from '../EditOffender.view';
 import type { ViewOffenderQuery } from '../../../../../graphql/generated';
+import { ImagePosition } from '../../../../../graphql/generated';
 
 describe('List Officer View', () => {
   const data: ViewOffenderQuery = {
@@ -36,6 +37,7 @@ describe('List Officer View', () => {
           id: 'cl6owsuzo33227f9pe9zk4wone',
           optimised: null,
           url: null,
+          position: ImagePosition.CenterCenter,
         },
       ],
       incidents: [],
@@ -50,6 +52,9 @@ describe('List Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <EditOffender
+          editImage={null}
+          onEditImage={jest.fn()}
+          toggleEditImage={jest.fn()}
           selectedItems={[]}
           form={undefined}
           setSelectedItems={jest.fn()}

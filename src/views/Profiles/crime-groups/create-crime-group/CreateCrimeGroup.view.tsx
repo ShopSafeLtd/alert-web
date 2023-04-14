@@ -96,7 +96,10 @@ const CreateCrimeGroup = ({
                       {offender.images.map((image) => (
                         <div key={image.id} className={classes.imageContainer}>
                           <div className={classes.image}>
-                            <WatermarkImage url={image.optimised} />
+                            <WatermarkImage
+                              url={image.optimised}
+                              position={image.position}
+                            />
                           </div>
                         </div>
                       ))}
@@ -201,7 +204,10 @@ const CreateCrimeGroup = ({
                     key={offender.id}
                   >
                     <div className={classes.offenderImage}>
-                      <WatermarkImage url={offender.images[0]?.optimised} />
+                      <WatermarkImage
+                        url={offender.images[0]?.optimised}
+                        position={offender.images[0]?.position}
+                      />
                     </div>
                     <div className={classes.offenderContent}>
                       <Text className={classes.offenderName}>

@@ -56,6 +56,9 @@ const AddOffender = (): JSX.Element => {
     // listCrimeGroupsData,
     idVerified,
     onValuesChange,
+    editImage,
+    onEditImage,
+    toggleEditImage,
   } = useAddOffender();
 
   return (
@@ -112,6 +115,9 @@ const AddOffender = (): JSX.Element => {
         // listCrimeGroupsData={listCrimeGroupsData}
         idVerified={idVerified}
         onValuesChange={onValuesChange}
+        editImage={editImage}
+        onEditImage={onEditImage}
+        toggleEditImage={toggleEditImage}
       />
     </div>
   );

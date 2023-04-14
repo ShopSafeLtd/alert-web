@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import { createStore, StoreProvider } from 'easy-peasy';
 import type { ViewOffenderQuery } from 'graphql/generated';
-import { Role } from 'graphql/generated';
+import { ImagePosition, Role } from 'graphql/generated';
 import { storeModel } from 'state/store';
 
 import { OffenderSort } from 'state';
@@ -49,7 +49,12 @@ describe('Detail Officer View', () => {
       },
       tags: [{ id: 'ckdhdhmr500186mnyy5k9sunm', name: 'Theft & Handling ' }],
       groups: [{ id: 'ckqtnb4r056540229myw4yk8zvq', name: 'NightSafe' }],
-      images: [{ id: 'cl6owsuzo33227f9pe9zk4wone' }],
+      images: [
+        {
+          id: 'cl6owsuzo33227f9pe9zk4wone',
+          position: ImagePosition.CenterCenter,
+        },
+      ],
       bans: [],
       incidents: [],
       vehicles: [],

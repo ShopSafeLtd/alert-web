@@ -261,7 +261,10 @@ const ViewOffender = ({
                           onClick={() => openLightbox(i)}
                           className={classes.image}
                         >
-                          <WatermarkImage url={image.optimised} />
+                          <WatermarkImage
+                            url={image.optimised}
+                            position={image.position}
+                          />
                         </div>
                       </Col>
                     ))}

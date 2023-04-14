@@ -231,7 +231,10 @@ const ViewVehicle = ({
                       className={classes.image}
                       style={{ padding: 0 }}
                     >
-                      <WatermarkImage url={image.optimised} />
+                      <WatermarkImage
+                        url={image.optimised}
+                        position={image.position}
+                      />
                     </Button>
                   </Col>
                 ))}

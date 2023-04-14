@@ -38,7 +38,10 @@ const OffenderItem = ({ item }: Props) => {
     <Row gutter={16}>
       <Col>
         <div className={classes.image}>
-          <WatermarkImage url={item.images[0]?.optimised} />
+          <WatermarkImage
+            url={item.images[0]?.optimised}
+            position={item.images[0]?.position}
+          />
         </div>
       </Col>
       <Col>

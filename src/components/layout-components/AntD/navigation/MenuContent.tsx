@@ -33,6 +33,7 @@ const setDefaultOpen = (key: string) => {
 
 const Icon = ({ icon }: { icon: any }) => (
   <FontAwesomeIcon
+    fixedWidth
     icon={icon}
     style={{ fontSize: 22, marginRight: 10, marginBottom: -3 }}
   />
@@ -40,6 +41,7 @@ const Icon = ({ icon }: { icon: any }) => (
 const SubIcon = ({ icon }: { icon: any }) => (
   <FontAwesomeIcon
     icon={icon}
+    fixedWidth
     style={{ fontSize: 18, marginRight: 10, width: 22, marginLeft: 10 }}
     size="lg"
   />

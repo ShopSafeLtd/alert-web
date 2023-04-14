@@ -1,6 +1,6 @@
 import React from 'react';
 import { Col, Row, Typography } from 'antd';
-import type { FeedItemsQuery } from 'graphql/generated';
+import type { FeedItemsQuery, ImagePosition } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEarth,
@@ -31,7 +31,13 @@ interface Props {
   isNewOffender?: boolean;
 }
 
-const ImageContainer = ({ src }: { src: string }) => (
+const ImageContainer = ({
+  src,
+  position,
+}: {
+  src: string;
+  position: ImagePosition;
+}) => (
   <div
     style={{
       width: 140,
@@ -39,7 +45,7 @@ const ImageContainer = ({ src }: { src: string }) => (
       borderRadius: 5,
     }}
   >
-    <WatermarkImage url={src} />
+    <WatermarkImage url={src} position={position} />
   </div>
 );
 const OffenderFeed = ({
@@ -69,7 +75,10 @@ const OffenderFeed = ({
       <Row gutter={20} wrap={false} style={{ width: '100%' }}>
         {(isNewOffender || isNewImage) && images && images.length > 0 ? (
           <Col>
-            <ImageContainer src={images[0].optimised || images[0].url || ''} />
+            <ImageContainer
+              position={images[0].position}
+              src={images[0].optimised || images[0].url || ''}
+            />
           </Col>
         ) : null}
         {!isNewImage && updates && updates[0]?.images[0] ? (
@@ -78,6 +87,7 @@ const OffenderFeed = ({
               src={
                 updates[0].images[0].optimised || updates[0].images[0].url || ''
               }
+              position={updates[0].images[0].position}
             />
           </Col>
         ) : null}

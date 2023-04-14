@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import { OffenderSort, storeModel } from 'state';
 import { createStore, StoreProvider } from 'easy-peasy';
-import { Role } from 'graphql/generated';
+import { ImagePosition, Role } from 'graphql/generated';
 import { MockedProvider } from '@apollo/client/testing';
 import OffenderFeed from '../OffenderFeed.view';
 
@@ -65,6 +65,7 @@ describe('Detail Officer View', () => {
               id: 'cl6owsuzo33227f9pe9zk4wone',
               optimised: null,
               url: null,
+              position: ImagePosition.CenterCenter,
             },
           ],
           incidents: [],

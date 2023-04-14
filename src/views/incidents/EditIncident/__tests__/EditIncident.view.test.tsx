@@ -1,8 +1,9 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import EditIncident from '../EditIncident.view';
 import type { ViewIncidentQuery } from '../../../../graphql/generated';
+import { ImagePosition } from '../../../../graphql/generated';
+import EditIncident from '../EditIncident.view';
 
 describe('List Officer View', () => {
   const data: ViewIncidentQuery = {
@@ -37,7 +38,12 @@ describe('List Officer View', () => {
       ],
       groups: [{ id: 'ckqtnb4r056540229myw4yk8zvq', name: 'NightSafe' }],
       images: [
-        { id: 'cl6owsuzo33227f9pe9zk4wone', optimised: null, url: null },
+        {
+          id: 'cl6owsuzo33227f9pe9zk4wone',
+          optimised: null,
+          url: null,
+          position: ImagePosition.CenterCenter,
+        },
       ],
       offenders: [],
       crimeGroups: [],
@@ -52,6 +58,7 @@ describe('List Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <EditIncident
+          onEditImage={() => {}}
           onSubmit={jest.fn()}
           data={data}
           loading={false}

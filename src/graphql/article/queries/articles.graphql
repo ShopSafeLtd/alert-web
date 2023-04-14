@@ -15,6 +15,7 @@ query Articles(
       url
       optimised
       card
+      position
     }
     image {
       id

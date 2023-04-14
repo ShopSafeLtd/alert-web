@@ -10,6 +10,7 @@ import type {
   ViewIncidentQuery,
 } from 'graphql/generated';
 import {
+  ImagePosition,
   Model,
   QueryMode,
   Role,
@@ -89,6 +90,17 @@ interface Image extends UploadFile {
     name?: string | undefined | null;
   }[];
   optimised?: string | null;
+  edited?: boolean;
+  position: ImagePosition;
+  new?: boolean;
+}
+
+interface ImagePayload extends UploadFile {
+  offenders?: {
+    id: string;
+    name?: string | undefined | null;
+  }[];
+  optimised?: string | null;
 }
 
 interface Return {
@@ -96,7 +108,7 @@ interface Return {
   addRecentOffender: Offender | null;
   adminRights: boolean;
   assignOffendersToImages: (data: {
-    image: Image;
+    image: ImagePayload;
     offenders: OffenderDataGlobal[];
   }) => void;
   beforeUpload: (value: RcFile) => void;
@@ -114,7 +126,7 @@ interface Return {
   ) => void;
   offendersData: OffenderData[];
   onCancelNewImage: () => void;
-  onPreview: (value: Image) => void;
+  onPreview: (value: ImagePayload) => void;
   onReject: () => void;
   onSearchBusiness: (
     value: string
@@ -123,12 +135,15 @@ interface Return {
   recentOffenderData: ListOffendersQuery | undefined;
   recentOffenderLoading: boolean;
   removeImage: (uid: string) => void;
-  removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
+  removeImageFromOffender: (data: {
+    image: ImagePayload;
+    offenderId: string;
+  }) => void;
   removeVehicle: (vehicleId: string) => void;
   saving: boolean;
   searchOffenders: string;
   setAddRecentOffender: (value: Offender | null) => void;
-  setAssignToImage: (image: Image) => void;
+  setAssignToImage: (image: ImagePayload) => void;
   setSearchOffenders: (value: string) => void;
   tags: { value: string; label: string }[];
   tagsLoading: boolean;
@@ -139,6 +154,7 @@ interface Return {
   onAddOffender: (offender: OffenderDataGlobal, existing: boolean) => void;
   onEditOffender: (offender: OffenderDataGlobal) => void;
   onRemoveOffender: (offenderId: string) => void;
+  onEditImage: (value: Image) => void;
 }
 
 const onPreview = async (file: UploadFile) => {
@@ -236,6 +252,9 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             url: `${image.optimised}`,
             optimised: `${image.optimised}`,
             offenders: image.offenders,
+            edited: false,
+            position: image.position,
+            new: false,
           }))
         );
       }
@@ -444,6 +463,9 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
         url: info.file.response[0].url,
         fileName: info.file.response[0].blobName,
         type: info.file.response[0].mimetype,
+        edited: false,
+        position: ImagePosition.CenterCenter,
+        new: true,
       });
       setFileList([
         ...fileList.filter((item) => item.uid !== info.file.uid),
@@ -452,11 +474,14 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           url: info.file.response[0].url,
           fileName: info.file.response[0].blobName,
           type: info.file.response[0].mimetype,
+          edited: false,
+          position: ImagePosition.CenterCenter,
+          new: true,
         },
       ]);
       setImageChange(true);
     } else {
-      setFileList(info.fileList);
+      setFileList(info.fileList as Image[]);
       setImageChange(true);
     }
   };
@@ -469,6 +494,20 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   };
   const toggleAddExistingOffender = () => {
     setAddExistingOffender(!addExistingOffender);
+  };
+
+  const onEditImage = (value: Image) => {
+    const index = fileList.map((item) => item.uid).indexOf(value.uid);
+    setFileList(
+      update(fileList, {
+        [index]: {
+          $set: {
+            ...value,
+            edited: !value.new,
+          },
+        },
+      })
+    );
   };
 
   const onAddOffender = (offender: OffenderDataGlobal, existing: boolean) => {
@@ -497,6 +536,9 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
               name: offender.name,
             },
           ],
+          edited: false,
+          position: ImagePosition.CenterCenter,
+          new: true,
         })),
       ]);
     }
@@ -574,24 +616,27 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     setFileList(fileList.filter((image) => image.uid !== uid));
   };
   const removeImageFromOffender = (data: {
-    image: Image;
+    image: ImagePayload;
     offenderId: string;
   }) => {
     // find index of file in fileList array
+    const file = fileList.find(({ uid }) => uid === data.image.uid);
     const fileIndex = fileList.map(({ uid }) => uid).indexOf(data.image.uid);
     // update the file object in the array with the new value, update will replace value in same place in array
-    setFileList(
-      update(fileList, {
-        [fileIndex]: {
-          $set: {
-            ...data.image,
-            offenders: data.image.offenders?.filter(
-              ({ id }) => id !== data.offenderId
-            ),
+    if (file)
+      setFileList(
+        update(fileList, {
+          [fileIndex]: {
+            $set: {
+              ...file,
+              ...data.image,
+              offenders: data.image.offenders?.filter(
+                ({ id }) => id !== data.offenderId
+              ),
+            },
           },
-        },
-      })
-    );
+        })
+      );
 
     if (offendersData) {
       // find index of file in fileList array
@@ -619,7 +664,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   ): item is OffenderData => !!item;
 
   const assignOffendersToImages = (data: {
-    image: Image;
+    image: ImagePayload;
     offenders: OffenderDataGlobal[];
   }) => {
     if (offendersData) {
@@ -661,15 +706,21 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     }
 
     // find index of file in fileList array
+    const file = fileList.find(({ uid }) => uid === data.image.uid);
     const fileIndex = fileList.map(({ uid }) => uid).indexOf(data.image.uid);
     // update the file object in the array with the new value, update will replace value in same place in array
-    setFileList(
-      update(fileList, {
-        [fileIndex]: {
-          $set: data.image,
-        },
-      })
-    );
+    if (file) {
+      setFileList(
+        update(fileList, {
+          [fileIndex]: {
+            $set: {
+              ...file,
+              ...data.image,
+            },
+          },
+        })
+      );
+    }
 
     setNewImage(null);
   };
@@ -717,6 +768,9 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           url: info.fileList[0].url,
           fileName: info.fileList[0].fileName,
           type: info.fileList[0].type,
+          edited: false,
+          position: ImagePosition.CenterCenter,
+          new: true,
         },
       ]);
     }
@@ -855,6 +909,47 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
               : undefined,
         };
       };
+      const getImages = (): IncidentUpdateInput['images'] => {
+        const editedImages = fileList.filter(
+          (item) => item.edited && !item.new
+        );
+
+        return {
+          upload:
+            imageChange && fileList.length > 0
+              ? fileList
+                  .filter((item) => !item.optimised)
+                  .map((item) => ({
+                    url: {
+                      filename: item.fileName || '',
+                      mimetype: item.type || '',
+                      url: item.url || '',
+                    },
+                    position: item.position,
+                  }))
+                  .filter((obj) => obj.url !== undefined)
+              : undefined,
+          disconnect: incidentData?.incident?.images
+            .filter(
+              (image) => !fileList.map((item) => item.uid).includes(image.id)
+            )
+            .map(({ id }) => ({
+              id,
+            })),
+          update:
+            editedImages.length > 0
+              ? editedImages.map((item) => ({
+                  data: {
+                    position: { set: item.position },
+                  },
+                  where: {
+                    id: item.uid,
+                  },
+                }))
+              : undefined,
+        };
+      };
+
       updateIncident({
         variables: {
           where: {
@@ -930,30 +1025,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             },
             offenders: getOffenders(),
             vehicles: getVehicles(),
-            images: {
-              upload:
-                imageChange && fileList.length > 0
-                  ? fileList
-                      .filter((item) => !item.optimised)
-                      .map((item) => ({
-                        url: {
-                          filename: item.fileName || '',
-                          mimetype: item.type || '',
-                          url: item.url || '',
-                        },
-                      }))
-                      .filter((obj) => obj.url !== undefined)
-                  : undefined,
-
-              disconnect: incidentData?.incident?.images
-                .filter(
-                  (image) =>
-                    !fileList.map((item) => item.uid).includes(image.id)
-                )
-                .map(({ id }) => ({
-                  id,
-                })),
-            },
+            images: getImages(),
           },
         },
       });
@@ -978,8 +1050,13 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     setNewImage(null);
   };
 
-  const setAssignToImage = (image: Image) => {
-    setNewImage(image);
+  const setAssignToImage = (image: ImagePayload) => {
+    setNewImage({
+      ...image,
+      position: ImagePosition.CenterCenter,
+      edited: false,
+      new: false,
+    });
   };
 
   const onSearchBusiness = async (value: string) => {
@@ -1068,6 +1145,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     onAddOffender,
     onEditOffender,
     onRemoveOffender,
+    onEditImage,
   };
 };
 

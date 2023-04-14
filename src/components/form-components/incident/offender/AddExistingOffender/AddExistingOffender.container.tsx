@@ -1,5 +1,11 @@
 import React from 'react';
-import type { Age, Build, Gender, Race } from 'graphql/generated';
+import type {
+  Age,
+  Build,
+  Gender,
+  ImagePosition,
+  Race,
+} from 'graphql/generated';
 
 import View from './AddExistingOffender.view';
 import useAddExistingOffender from './useAddExistingOffender';
@@ -30,6 +36,7 @@ export interface OffenderData {
     fileName?: string | null;
     type?: string | null;
     new?: boolean;
+    position: ImagePosition;
   }[];
   imageUid?: string[] | undefined;
   tags: {

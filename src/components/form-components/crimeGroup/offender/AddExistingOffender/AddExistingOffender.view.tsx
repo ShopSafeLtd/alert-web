@@ -175,7 +175,10 @@ const AddExistingOffender = ({
                           className="offender-image"
                           onClick={() => openLightbox(i)}
                         >
-                          <WatermarkImage url={image.optimised} />
+                          <WatermarkImage
+                            position={image.position}
+                            url={image.optimised}
+                          />
                         </div>
                       </div>
                     ))}

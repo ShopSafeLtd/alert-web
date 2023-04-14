@@ -16,6 +16,7 @@ import type {
   ViewOffenderQueryVariables,
 } from 'graphql/generated';
 import {
+  ImagePosition,
   CrimeGroupDocument,
   Role,
   SortOrder,
@@ -558,6 +559,7 @@ const useUpdateBar = ({
                       card: image.url,
                       optimised: image.url,
                       url: image.url,
+                      position: ImagePosition.CenterCenter,
                     }))
                   : [],
               replies: [],
@@ -646,6 +648,7 @@ const useUpdateBar = ({
                       card: image.url,
                       optimised: image.url,
                       url: image.url,
+                      position: ImagePosition.CenterCenter,
                     }))
                   : [],
               replies: [],
@@ -734,6 +737,7 @@ const useUpdateBar = ({
                       card: image.url,
                       optimised: image.url,
                       url: image.url,
+                      position: ImagePosition.CenterCenter,
                     }))
                   : [],
               replies: [],
@@ -825,6 +829,7 @@ const useUpdateBar = ({
                       card: image.url,
                       optimised: image.url,
                       url: image.url,
+                      position: ImagePosition.CenterCenter,
                     }))
                   : [],
               replies: [],
@@ -911,6 +916,7 @@ const useUpdateBar = ({
                       card: image.url,
                       optimised: image.url,
                       url: image.url,
+                      position: ImagePosition.CenterCenter,
                     }))
                   : [],
               replies: [],
