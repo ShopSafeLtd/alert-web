@@ -63,7 +63,6 @@ interface Props {
   tagsLoading: boolean;
   imgChange: UploadProps['onChange'];
   onPreview: (value: UploadFile) => void;
-  removeImage: (value: UploadFile) => void;
   beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
   addOffenderTag: boolean;
@@ -85,30 +84,19 @@ interface Props {
   setSelectedItems: (value: string[]) => void;
   form: FormInstance<FormData> | undefined;
   listVehiclesData: ListVehiclesQuery | undefined;
-  // listCrimeGroupsData: ListCrimeGroupsQuery | undefined;
-  addNewVehicle: boolean;
-  addExistingVehicle: boolean;
-  toggleAddNewVehicle: () => void;
-  toggleAddExistingVehicle: () => void;
-  editVehicleId: string;
-  setEditVehicleId: (value: string) => void;
   vehiclesData: VehicleData[];
-  updateVehiclesData: (value: VehicleData) => void;
-  removeVehicle: (vehicleId: string) => void;
-  removeCrimeGroup: (crimeGroupId: string) => void;
-  addNewCrimeGroup: boolean;
-  addExistingCrimeGroup: boolean;
-  toggleAddNewCrimeGroup: () => void;
-  toggleAddExistingCrimeGroup: () => void;
-  editCrimeGroupId: string;
-  setEditCrimeGroupId: (value: string) => void;
   crimeGroupsData: CrimeGroupData[];
-  updateCrimeGroupsData: (value: CrimeGroupData) => void;
   idVerified: boolean;
   onValuesChange?: (changedValues: FormData, values: FormData) => void;
   onEditImage: (value: Image) => void;
   toggleEditImage: (value?: Image) => void;
   editImage: Image | null;
+  onAddVehicle: (value: VehicleData, existing: boolean) => void;
+  onEditVehicle: (value: VehicleData) => void;
+  onRemoveVehicle: (vehicleId: string) => void;
+  onAddCrimeGroup: (value: CrimeGroupData) => void;
+  onRemoveCrimeGroup: (crimeGroupId: string) => void;
+  onRemoveImage: (value: UploadFile) => void;
 }
 
 const AddOffender = ({
@@ -120,7 +108,6 @@ const AddOffender = ({
   tagsLoading,
   imgChange,
   onPreview,
-  removeImage,
   beforeUpload,
   fileList,
   addOffenderTag,
@@ -141,31 +128,20 @@ const AddOffender = ({
   selectedItems,
   setSelectedItems,
   form,
-  addNewVehicle,
-  addExistingVehicle,
-  editVehicleId,
-  setEditVehicleId,
-  toggleAddNewVehicle,
-  toggleAddExistingVehicle,
   vehiclesData,
-  updateVehiclesData,
-  removeVehicle,
-  addNewCrimeGroup,
-  addExistingCrimeGroup,
-  editCrimeGroupId,
-  setEditCrimeGroupId,
-  toggleAddNewCrimeGroup,
-  toggleAddExistingCrimeGroup,
   crimeGroupsData,
-  updateCrimeGroupsData,
-  removeCrimeGroup,
   listVehiclesData,
-  // listCrimeGroupsData,
   idVerified,
   onValuesChange,
   editImage,
   onEditImage,
   toggleEditImage,
+  onAddCrimeGroup,
+  onAddVehicle,
+  onEditVehicle,
+  onRemoveCrimeGroup,
+  onRemoveVehicle,
+  onRemoveImage,
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader onBack={() => window.history.back()} title="Add Offender" />
@@ -253,26 +229,15 @@ const AddOffender = ({
         {/* <Divider /> */}
         <Profiles
           saving={saving}
-          setEditVehicleId={setEditVehicleId}
-          toggleAddNewVehicle={toggleAddNewVehicle}
-          toggleAddExistingVehicle={toggleAddExistingVehicle}
           vehiclesData={vehiclesData}
-          removeVehicle={removeVehicle}
-          removeCrimeGroup={removeCrimeGroup}
-          toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
-          toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
           crimeGroupsData={crimeGroupsData}
           listVehiclesData={listVehiclesData}
           titleNumber={3}
-          addNewVehicle={addNewVehicle}
-          addExistingVehicle={addExistingVehicle}
-          editVehicleId={editVehicleId}
-          updateVehiclesData={updateVehiclesData}
-          addNewCrimeGroup={addNewCrimeGroup}
-          addExistingCrimeGroup={addExistingCrimeGroup}
-          editCrimeGroupId={editCrimeGroupId}
-          setEditCrimeGroupId={setEditCrimeGroupId}
-          updateCrimeGroupsData={updateCrimeGroupsData}
+          onAddCrimeGroup={onAddCrimeGroup}
+          onAddVehicle={onAddVehicle}
+          onEditVehicle={onEditVehicle}
+          onRemoveCrimeGroup={onRemoveCrimeGroup}
+          onRemoveVehicle={onRemoveVehicle}
         />
       </Card>
       <Card>
@@ -481,7 +446,7 @@ const AddOffender = ({
                 fileList={fileList}
                 onChange={imgChange}
                 onPreview={onPreview}
-                onRemove={removeImage}
+                onRemove={onRemoveImage}
                 beforeUpload={beforeUpload}
                 // TODO
                 // eslint-disable-next-line react/no-unstable-nested-components

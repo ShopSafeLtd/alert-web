@@ -13,7 +13,6 @@ const AddOffender = (): JSX.Element => {
     tagsLoading,
     imgChange,
     onPreview,
-    removeImage,
     beforeUpload,
     fileList,
     addOffenderTag,
@@ -34,36 +33,31 @@ const AddOffender = (): JSX.Element => {
     setSelectedItems,
     form,
     adminRights,
-    addNewVehicle,
-    addExistingVehicle,
-    editVehicleId,
-    setEditVehicleId,
-    toggleAddNewVehicle,
-    toggleAddExistingVehicle,
     vehiclesData,
-    updateVehiclesData,
-    removeVehicle,
-    addNewCrimeGroup,
-    addExistingCrimeGroup,
-    editCrimeGroupId,
-    setEditCrimeGroupId,
-    toggleAddNewCrimeGroup,
-    toggleAddExistingCrimeGroup,
     crimeGroupsData,
-    updateCrimeGroupsData,
-    removeCrimeGroup,
     listVehiclesData,
-    // listCrimeGroupsData,
     idVerified,
     onValuesChange,
     editImage,
     onEditImage,
     toggleEditImage,
+    onAddCrimeGroup,
+    onAddVehicle,
+    onEditVehicle,
+    onRemoveCrimeGroup,
+    onRemoveImage,
+    onRemoveVehicle,
   } = useAddOffender();
 
   return (
     <div>
       <View
+        onAddCrimeGroup={onAddCrimeGroup}
+        onAddVehicle={onAddVehicle}
+        onEditVehicle={onEditVehicle}
+        onRemoveCrimeGroup={onRemoveCrimeGroup}
+        onRemoveImage={onRemoveImage}
+        onRemoveVehicle={onRemoveVehicle}
         form={form}
         selectedItems={selectedItems}
         setSelectedItems={setSelectedItems}
@@ -75,7 +69,6 @@ const AddOffender = (): JSX.Element => {
         tags={tags}
         tagsLoading={tagsLoading}
         imgChange={imgChange}
-        removeImage={removeImage}
         onPreview={onPreview}
         beforeUpload={beforeUpload}
         fileList={fileList}
@@ -93,26 +86,9 @@ const AddOffender = (): JSX.Element => {
         ageCheck={ageCheck}
         setAgeCheck={setAgeCheck}
         adminRights={adminRights}
-        addNewVehicle={addNewVehicle}
-        addExistingVehicle={addExistingVehicle}
-        editVehicleId={editVehicleId}
-        setEditVehicleId={setEditVehicleId}
-        toggleAddNewVehicle={toggleAddNewVehicle}
-        toggleAddExistingVehicle={toggleAddExistingVehicle}
         vehiclesData={vehiclesData}
-        updateVehiclesData={updateVehiclesData}
-        removeVehicle={removeVehicle}
-        removeCrimeGroup={removeCrimeGroup}
-        addNewCrimeGroup={addNewCrimeGroup}
-        addExistingCrimeGroup={addExistingCrimeGroup}
-        editCrimeGroupId={editCrimeGroupId}
-        setEditCrimeGroupId={setEditCrimeGroupId}
-        toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
-        toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
         crimeGroupsData={crimeGroupsData}
-        updateCrimeGroupsData={updateCrimeGroupsData}
         listVehiclesData={listVehiclesData}
-        // listCrimeGroupsData={listCrimeGroupsData}
         idVerified={idVerified}
         onValuesChange={onValuesChange}
         editImage={editImage}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { ListOffendersQuery } from 'graphql/generated';
-import type { OffenderData, VehicleData } from 'types/DataType';
+import type { OffenderData } from 'types/DataType';
 import type { UploadChangeParam } from 'antd/lib/upload';
 import type { UploadFile } from 'antd/lib/upload/interface';
 
@@ -16,9 +16,7 @@ interface Props {
   ) => void;
   onChange?: (data: OffenderData[]) => void;
   removeOffenderParent: (offenderId: string) => void;
-  removeVehicleParent: (vehicleId: string) => void;
   updateOffenderParent: (value: OffenderData) => void;
-  updateVehiclesDataParent: (value: VehicleData) => void;
   onAddOffenderParent: (value: OffenderData, existing: boolean) => void;
   value?: OffenderData[];
 }
@@ -36,7 +34,6 @@ interface Return {
     currentId: string
   ) => void;
   removeOffender: (offenderId: string) => void;
-  removeVehicle: (vehicleId: string) => void;
   setAddRecentOffender: (value: Offender | null) => void;
   setEditOffenderId: (value: string) => void;
   setEditVehicleId: (value: string) => void;
@@ -46,7 +43,6 @@ interface Return {
   toggleAddOffender: () => void;
   updateOffender: (value: OffenderData) => void;
   updateOffenderParent: (value: OffenderData) => void;
-  updateVehiclesData: (value: VehicleData) => void;
   onAddOffender: (value: OffenderData, existing: boolean) => void;
 }
 
@@ -54,9 +50,7 @@ const useProfiles = ({
   offenderImgChangeParent,
   onChange,
   removeOffenderParent,
-  removeVehicleParent,
   updateOffenderParent,
-  updateVehiclesDataParent,
   value,
   onAddOffenderParent,
 }: Props): Return => {
@@ -96,9 +90,6 @@ const useProfiles = ({
       }
     }
   };
-  const updateVehiclesData = (data: VehicleData) => {
-    updateVehiclesDataParent(data);
-  };
   const offenderImgChange = (
     info: UploadChangeParam<UploadFile>,
     currentId: string
@@ -108,9 +99,6 @@ const useProfiles = ({
   const removeOffender = (id: string) => {
     removeOffenderParent(id);
     if (onChange && value) onChange(value.filter((item) => item.id !== id));
-  };
-  const removeVehicle = (id: string) => {
-    removeVehicleParent(id);
   };
 
   return {
@@ -131,9 +119,7 @@ const useProfiles = ({
     toggleAddOffender,
     updateOffender,
     onAddOffender,
-    updateVehiclesData,
     removeOffender,
-    removeVehicle,
     updateOffenderParent,
   };
 };

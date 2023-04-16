@@ -2,56 +2,48 @@ import React from 'react';
 import { Drawer } from 'antd';
 
 import EditVehicle from 'components/form-components/profiles/vehicle/EditVehicle';
-// import AddExistingVehicle from 'components/form-components/profiles/vehicle/AddExistingVehicle';
 import AddExistingCrimeGroup from 'components/form-components/profiles/crimeGroup/AddExistingCrimeGroup';
-import AddCrimeGroup from 'components/form-components/profiles/crimeGroup/AddCrimeGroup';
 import type { CrimeGroupData, VehicleData } from 'types/DataType';
 import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 
 interface Props {
-  vehiclesData: VehicleData[];
   addNewVehicle: boolean;
-  addExistingVehicle: boolean;
   toggleAddNewVehicle: () => void;
+  vehiclesData: VehicleData[];
+  addExistingVehicle: boolean;
   toggleAddExistingVehicle: () => void;
   editVehicleId: string;
   setEditVehicleId: (value: string) => void;
-  updateVehiclesData: (value: VehicleData) => void;
   crimeGroupsData: CrimeGroupData[];
-  addNewCrimeGroup: boolean;
   addExistingCrimeGroup: boolean;
-  toggleAddNewCrimeGroup: () => void;
   toggleAddExistingCrimeGroup: () => void;
-  editCrimeGroupId: string;
-  setEditCrimeGroupId: (value: string) => void;
-  updateCrimeGroupsData: (value: CrimeGroupData) => void;
+  onAddCrimeGroup: (value: CrimeGroupData) => void;
   fromOffender?: boolean;
+  onAddVehicle: (data: VehicleData, existing: boolean) => void;
+  onEditVehicle: (data: VehicleData) => void;
 }
 
 const ProfileDrawer = ({
   vehiclesData,
-  addNewVehicle,
   addExistingVehicle,
   editVehicleId,
   setEditVehicleId,
-  toggleAddNewVehicle,
   toggleAddExistingVehicle,
-  updateVehiclesData,
   crimeGroupsData,
-  addNewCrimeGroup,
   addExistingCrimeGroup,
-  editCrimeGroupId,
-  setEditCrimeGroupId,
-  toggleAddNewCrimeGroup,
   toggleAddExistingCrimeGroup,
-  updateCrimeGroupsData,
+  onAddCrimeGroup,
   fromOffender,
+  onAddVehicle,
+  onEditVehicle,
+  addNewVehicle,
+  toggleAddNewVehicle,
 }: Props): JSX.Element => (
   <>
     <Drawer
       title="Add Existing Vehicles"
-      visible={addExistingVehicle}
+      open={addExistingVehicle}
       width="800"
       onClose={toggleAddExistingVehicle}
       zIndex={1001}
@@ -63,7 +55,7 @@ const ProfileDrawer = ({
         //   onClose={toggleAddExistingVehicle}
         // />
         <LinkVehicle
-          update={updateVehiclesData}
+          update={(data) => onAddVehicle(data, true)}
           vehicleIds={vehiclesData.map(({ id }) => id)}
           onClose={toggleAddExistingVehicle}
         />
@@ -73,13 +65,13 @@ const ProfileDrawer = ({
     </Drawer>
     <Drawer
       title="Add New Vehicle"
-      visible={addNewVehicle}
+      open={addNewVehicle}
       width="600"
       onClose={toggleAddNewVehicle}
     >
       {addNewVehicle ? (
         <AddVehicle
-          update={updateVehiclesData}
+          update={(data) => onAddVehicle(data, false)}
           onClose={toggleAddNewVehicle}
           fromOffender={!!fromOffender}
         />
@@ -89,14 +81,14 @@ const ProfileDrawer = ({
     </Drawer>
     <Drawer
       title="Edit Vehicle Details"
-      visible={!!editVehicleId}
+      open={!!editVehicleId}
       width="600"
       onClose={() => setEditVehicleId('')}
     >
       {editVehicleId ? (
         <EditVehicle
           onClose={() => setEditVehicleId('')}
-          update={updateVehiclesData}
+          update={onEditVehicle}
           editData={vehiclesData.find(({ id }) => id === editVehicleId)}
         />
       ) : (
@@ -105,47 +97,16 @@ const ProfileDrawer = ({
     </Drawer>
     <Drawer
       title="Add Existing Crime Groups"
-      visible={addExistingCrimeGroup}
+      open={addExistingCrimeGroup}
       width="800"
       onClose={toggleAddExistingCrimeGroup}
       zIndex={1001}
     >
       {addExistingCrimeGroup ? (
         <AddExistingCrimeGroup
-          update={updateCrimeGroupsData}
+          update={onAddCrimeGroup}
           crimeGroupIds={crimeGroupsData.map(({ id }) => id)}
           onClose={toggleAddExistingCrimeGroup}
-        />
-      ) : (
-        <div />
-      )}
-    </Drawer>
-    <Drawer
-      title="Add New Crime Group"
-      visible={addNewCrimeGroup}
-      width="600"
-      onClose={toggleAddNewCrimeGroup}
-    >
-      {addNewCrimeGroup ? (
-        <AddCrimeGroup
-          update={updateCrimeGroupsData}
-          onClose={toggleAddNewCrimeGroup}
-        />
-      ) : (
-        <div />
-      )}
-    </Drawer>
-    <Drawer
-      title="Edit Crime Group Details"
-      visible={!!editCrimeGroupId}
-      width="600"
-      onClose={() => setEditCrimeGroupId('')}
-    >
-      {editCrimeGroupId ? (
-        <EditVehicle
-          onClose={() => setEditCrimeGroupId('')}
-          update={updateVehiclesData}
-          editData={vehiclesData.find(({ id }) => id === editVehicleId)}
         />
       ) : (
         <div />

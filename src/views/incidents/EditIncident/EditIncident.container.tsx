@@ -33,7 +33,6 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
     recentOffenderLoading,
     removeImage,
     removeImageFromOffender,
-    removeVehicle,
     saving,
     searchOffenders,
     setAddRecentOffender,
@@ -45,13 +44,15 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
     tagsLoading,
     toggleAddIncidentTag,
     updateIncidentTag,
-    updateVehiclesData,
     vehiclesData,
     goodsTypesData,
     onAddOffender,
     onEditOffender,
     onRemoveOffender,
     onEditImage,
+    onAddVehicle,
+    onEditVehicle,
+    onRemoveVehicle,
   } = useEditIncident({ incidentId, reviewed });
   return (
     <div>
@@ -80,7 +81,6 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
         recentOffenderLoading={recentOffenderLoading}
         removeImage={removeImage}
         removeImageFromOffender={removeImageFromOffender}
-        removeVehicle={removeVehicle}
         reviewed={reviewed}
         saving={saving}
         searchOffenders={searchOffenders}
@@ -93,11 +93,13 @@ const EditIncident = ({ reviewed }: Props): JSX.Element => {
         tagsLoading={tagsLoading}
         toggleAddIncidentTag={toggleAddIncidentTag}
         updateIncidentTag={updateIncidentTag}
-        updateVehiclesData={updateVehiclesData}
         vehiclesData={vehiclesData}
         onAddOffender={onAddOffender}
         onEditOffender={onEditOffender}
         onRemoveOffender={onRemoveOffender}
+        onAddVehicle={onAddVehicle}
+        onEditVehicle={onEditVehicle}
+        onRemoveVehicle={onRemoveVehicle}
       />
     </div>
   );

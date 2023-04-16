@@ -16,7 +16,6 @@ describe('List Officer View', () => {
           form={undefined}
           updateExclusion={jest.fn()}
           adminRights={false}
-          removeImage={jest.fn()}
           key={0}
           onSubmit={jest.fn()}
           saving={false}
@@ -41,27 +40,17 @@ describe('List Officer View', () => {
           ageCheck={false}
           setAgeCheck={jest.fn()}
           bansData={[]}
-          addExistingCrimeGroup
-          addExistingVehicle
-          addNewCrimeGroup
-          addNewVehicle
           crimeGroupsData={[]}
-          editCrimeGroupId="test"
-          editVehicleId="test"
           listVehiclesData={{ listVehicles: { total: 0, vehicles: [] } }}
-          removeCrimeGroup={jest.fn()}
-          removeVehicle={jest.fn()}
-          setEditCrimeGroupId={jest.fn()}
-          setEditVehicleId={jest.fn()}
-          toggleAddExistingCrimeGroup={jest.fn()}
-          toggleAddExistingVehicle={jest.fn()}
-          toggleAddNewCrimeGroup={jest.fn()}
-          toggleAddNewVehicle={jest.fn()}
-          updateCrimeGroupsData={jest.fn()}
-          updateVehiclesData={jest.fn()}
           vehiclesData={[]}
           idVerified
           onValuesChange={jest.fn()}
+          onAddCrimeGroup={jest.fn()}
+          onAddVehicle={jest.fn()}
+          onEditVehicle={jest.fn()}
+          onRemoveCrimeGroup={jest.fn()}
+          onRemoveImage={jest.fn()}
+          onRemoveVehicle={jest.fn()}
         />
       </MemoryRouter>
     );

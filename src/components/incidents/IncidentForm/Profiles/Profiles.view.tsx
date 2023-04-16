@@ -60,7 +60,6 @@ interface Props {
   recentOffenderData: ListOffendersQuery | undefined;
   recentOffenderLoading: boolean;
   removeOffender: (offenderId: string) => void;
-  removeVehicle: (vehicleId: string) => void;
   saving: boolean;
   searchOffenders: string;
   setAddRecentOffender: (value: Offender | null) => void;
@@ -73,9 +72,11 @@ interface Props {
   toggleAddNewVehicle: () => void;
   toggleAddOffender: () => void;
   updateOffender: (value: OffenderData) => void;
-  updateVehiclesData: (value: VehicleData) => void;
   vehiclesData: VehicleData[];
   onAddOffender: (value: OffenderData, existing: boolean) => void;
+  onAddVehicle: (data: VehicleData, existing: boolean) => void;
+  onEditVehicle: (data: VehicleData) => void;
+  onRemoveVehicle: (vehicleId: string) => void;
 }
 
 const Profiles = ({
@@ -85,7 +86,6 @@ const Profiles = ({
   toggleAddExistingVehicle,
   setEditVehicleId,
   vehiclesData,
-  removeVehicle,
   offendersData,
   removeOffender,
   setEditOffenderId,
@@ -105,8 +105,10 @@ const Profiles = ({
   editOffenderId,
   editVehicleId,
   updateOffender,
-  updateVehiclesData,
   onAddOffender,
+  onAddVehicle,
+  onEditVehicle,
+  onRemoveVehicle,
 }: Props): JSX.Element => (
   <>
     <Row gutter={10} align="middle">
@@ -426,7 +428,7 @@ const Profiles = ({
                           placement="topLeft"
                           title="Remove the vehicle?"
                           onConfirm={() => {
-                            removeVehicle(record.key);
+                            onRemoveVehicle(record.key);
                           }}
                           okText="Yes"
                           cancelText="No"
@@ -584,9 +586,10 @@ const Profiles = ({
       toggleAddNewVehicle={toggleAddNewVehicle}
       toggleAddOffender={toggleAddOffender}
       updateOffender={updateOffender}
-      updateVehiclesData={updateVehiclesData}
       vehiclesData={vehiclesData}
       onAddOffender={onAddOffender}
+      onAddVehicle={onAddVehicle}
+      onEditVehicle={onEditVehicle}
     />
     <Modal
       onCancel={() => setAddRecentOffender(null)}

@@ -40,7 +40,7 @@ const AddVehicle = ({
     beforeUpload,
     fileList,
   } = useAddVehicle({
-    // onClose,
+    onClose,
     update,
   });
 

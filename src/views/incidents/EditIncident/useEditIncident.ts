@@ -20,7 +20,6 @@ import {
   TagsDocument,
   useListGoodsTypesQuery,
   useListOffendersQuery,
-  useListVehiclesQuery,
   useRecycleIncidentMutation,
   useSchemeGroupsQuery,
   useTagsQuery,
@@ -103,6 +102,12 @@ interface ImagePayload extends UploadFile {
   }[];
   optimised?: string | null;
 }
+interface VehicleType extends VehicleData {
+  edited: boolean;
+  new: boolean;
+  existing: boolean;
+  deleted: boolean;
+}
 
 interface Return {
   addIncidentTag: boolean;
@@ -140,7 +145,6 @@ interface Return {
     image: ImagePayload;
     offenderId: string;
   }) => void;
-  removeVehicle: (vehicleId: string) => void;
   saving: boolean;
   searchOffenders: string;
   setAddRecentOffender: (value: Offender | null) => void;
@@ -152,12 +156,14 @@ interface Return {
   tagsLoading: boolean;
   toggleAddIncidentTag: () => void;
   updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
-  updateVehiclesData: (value: VehicleData) => void;
-  vehiclesData: VehicleData[];
+  vehiclesData: VehicleType[];
   onAddOffender: (offender: OffenderDataGlobal, existing: boolean) => void;
   onEditOffender: (offender: OffenderDataGlobal) => void;
   onRemoveOffender: (offenderId: string) => void;
   onEditImage: (value: Image) => void;
+  onAddVehicle: (data: VehicleData, existing: boolean) => void;
+  onEditVehicle: (data: VehicleData) => void;
+  onRemoveVehicle: (vehicleId: string) => void;
 }
 
 const onPreview = async (file: UploadFile) => {
@@ -208,7 +214,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     OffenderData | undefined
   >();
 
-  const [vehiclesData, setVehiclesData] = useState<VehicleData[]>([]);
+  const [vehiclesData, setVehiclesData] = useState<VehicleType[]>([]);
 
   useEffect(() => {
     if (editedOffender) {
@@ -243,7 +249,15 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
         );
       }
       if (incident?.vehicles && incident.vehicles.length > 0) {
-        setVehiclesData(incident.vehicles);
+        setVehiclesData(
+          incident.vehicles.map((item) => ({
+            ...item,
+            edited: false,
+            deleted: false,
+            existing: false,
+            new: false,
+          }))
+        );
       }
       // imageList
       if (incident?.images && incident.images.length > 0) {
@@ -302,28 +316,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
         dataType: {
           equals: Model.Incident,
         },
-      },
-    },
-  });
-  const { data: listVehiclesData } = useListVehiclesQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        schemes: {
-          some: {
-            id: {
-              equals: schemeId,
-            },
-          },
-        },
-      },
-    },
-  });
-
-  const { data: listOffendersData } = useListOffendersQuery({
-    variables: {
-      scheme: {
-        id: schemeId,
       },
     },
   });
@@ -597,24 +589,59 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     }
   };
 
-  const updateVehiclesData = (vehicle: VehicleData) => {
-    const editedData = vehiclesData.find(({ id }) => id === vehicle.id);
-    if (editedData) {
-      setVehiclesData([
-        ...(vehiclesData?.filter(({ id }) => id !== vehicle.id) || []),
-        {
-          ...vehicle,
-        },
-      ]);
+  const onAddVehicle = (vehicle: VehicleData, existing: boolean) => {
+    setVehiclesData([
+      ...vehiclesData,
+      {
+        ...vehicle,
+        new: !existing,
+        existing,
+        deleted: false,
+        edited: false,
+      },
+    ]);
+  };
+
+  const onRemoveVehicle = (vehicleId: string) => {
+    const vehicle = vehiclesData.find((item) => item.id === vehicleId);
+
+    if (vehicle?.new || vehicle?.existing) {
+      setVehiclesData(vehiclesData.filter((item) => item.id !== vehicleId));
     } else {
-      setVehiclesData([...vehiclesData, vehicle]);
+      const index = vehiclesData.map((item) => item.id).indexOf(vehicleId);
+      setVehiclesData(
+        update(vehiclesData, {
+          [index]: {
+            deleted: {
+              $set: true,
+            },
+            edited: {
+              $set: false,
+            },
+          },
+        })
+      );
     }
   };
-  const removeVehicle = (vehicleId: string) => {
-    setVehiclesData(
-      vehiclesData?.filter((vehicle) => vehicle.id !== vehicleId)
-    );
+
+  const onEditVehicle = (value: VehicleData) => {
+    const vehicle = vehiclesData.find((item) => item.id === value.id);
+    if (vehicle) {
+      const index = vehiclesData.map((item) => item.id).indexOf(value.id);
+      setVehiclesData(
+        update(vehiclesData, {
+          [index]: {
+            $set: {
+              ...vehicle,
+              ...value,
+              edited: !vehicle.new,
+            },
+          },
+        })
+      );
+    }
   };
+
   const removeImage = (uid: string) => {
     setFileList(fileList.filter((image) => image.uid !== uid));
   };
@@ -784,61 +811,53 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
 
     if (offendersData) {
       const getOffenders = (): IncidentUpdateInput['offenders'] => {
-        if (
-          offendersData &&
-          listOffendersData?.listOffenders &&
-          incidentData?.incident
-        ) {
-          const existingOffenders = offendersData.filter(
-            (item) => item.existing
-          );
-          const newOffenders = offendersData.filter((item) => item.new);
-          const deletedOffenders = offendersData.filter((item) => item.deleted);
+        const existingOffenders = offendersData.filter((item) => item.existing);
+        const newOffenders = offendersData.filter((item) => item.new);
+        const deletedOffenders = offendersData.filter((item) => item.deleted);
 
-          return {
-            connect:
-              existingOffenders.length > 0
-                ? existingOffenders.map((offender) => ({ id: offender.id }))
-                : undefined,
-            create:
-              newOffenders.length > 0
-                ? newOffenders.map((offender) => ({
-                    name: offender.name || 'Unidentified Offender',
-                    gender: offender.gender || null,
-                    race: offender.race || null,
-                    build: offender.build || null,
-                    hair: offender.hair || null,
-                    peculiarities: offender.peculiarities || null,
-                    age: offender.age || null,
-                    dateSource: offender.dateSource || null,
-                    dateOfBirth: offender.dateOfBirth || null,
-                    groups:
-                      data.groups.length > 0
-                        ? { connect: data.groups.map((id) => ({ id })) }
-                        : undefined,
-                    scheme: { connect: { id: schemeId } },
-                    createdBy: { connect: { id: userId } },
-                    localId: offender.id,
-                    images:
-                      offender?.images &&
-                      offender.images.length > 0 &&
-                      offender.images?.filter((image) => image.new === true)
-                        ? {
-                            connect: offender.images
-                              ?.filter((image) => image.new === true)
-                              .map((image) => ({
-                                id: image.id,
-                              })),
-                          }
-                        : {},
-                  }))
-                : undefined,
-            disconnect:
-              deletedOffenders.length > 0
-                ? deletedOffenders.map((offender) => ({ id: offender.id }))
-                : undefined,
-          };
-        }
+        return {
+          connect:
+            existingOffenders.length > 0
+              ? existingOffenders.map((offender) => ({ id: offender.id }))
+              : undefined,
+          create:
+            newOffenders.length > 0
+              ? newOffenders.map((offender) => ({
+                  name: offender.name || 'Unidentified Offender',
+                  gender: offender.gender || null,
+                  race: offender.race || null,
+                  build: offender.build || null,
+                  hair: offender.hair || null,
+                  peculiarities: offender.peculiarities || null,
+                  age: offender.age || null,
+                  dateSource: offender.dateSource || null,
+                  dateOfBirth: offender.dateOfBirth || null,
+                  groups:
+                    data.groups.length > 0
+                      ? { connect: data.groups.map((id) => ({ id })) }
+                      : undefined,
+                  scheme: { connect: { id: schemeId } },
+                  createdBy: { connect: { id: userId } },
+                  localId: offender.id,
+                  images:
+                    offender?.images &&
+                    offender.images.length > 0 &&
+                    offender.images?.filter((image) => image.new === true)
+                      ? {
+                          connect: offender.images
+                            ?.filter((image) => image.new === true)
+                            .map((image) => ({
+                              id: image.id,
+                            })),
+                        }
+                      : {},
+                }))
+              : undefined,
+          disconnect:
+            deletedOffenders.length > 0
+              ? deletedOffenders.map((offender) => ({ id: offender.id }))
+              : undefined,
+        };
 
         return {
           connect: undefined,
@@ -847,22 +866,10 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
       };
 
       const getVehicles = (): IncidentUpdateInput['vehicles'] => {
-        const vehiclesIds = listVehiclesData?.listVehicles.vehicles.map(
-          (vehicle) => vehicle.id
-        );
-        const removeVehicles = vehiclesIds?.filter(
-          (vehicleId) => !vehiclesData?.map(({ id }) => id).includes(vehicleId)
-        );
-        const newVehicles = vehiclesData.filter(
-          (item) => !vehiclesIds?.includes(item.id)
-        );
-
-        const existingVehicles = vehiclesData.filter((item) =>
-          vehiclesIds?.includes(item.id)
-        );
-        const editedVehicles = existingVehicles.filter(
-          ({ edited }) => edited === true
-        );
+        const removeVehicles = vehiclesData?.filter((item) => item.deleted);
+        const newVehicles = vehiclesData.filter((item) => item.new);
+        const existingVehicles = vehiclesData.filter((item) => item.existing);
+        const editedVehicles = existingVehicles.filter((item) => item.edited);
         return {
           connect:
             existingVehicles.length > 0
@@ -870,7 +877,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
               : undefined,
           disconnect:
             removeVehicles && removeVehicles.length > 0
-              ? removeVehicles.map((id) => ({ id }))
+              ? removeVehicles.map(({ id }) => ({ id }))
               : undefined,
           update: editedVehicles.map((vehicle) => ({
             where: { id: vehicle.id },
@@ -1132,7 +1139,6 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     recentOffenderLoading,
     removeImage,
     removeImageFromOffender,
-    removeVehicle,
     saving,
     searchOffenders,
     setAddRecentOffender,
@@ -1153,12 +1159,14 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
     tagsLoading,
     toggleAddIncidentTag,
     updateIncidentTag,
-    updateVehiclesData,
-    vehiclesData,
+    vehiclesData: vehiclesData.filter((item) => !item.deleted),
     onAddOffender,
     onEditOffender,
     onRemoveOffender,
     onEditImage,
+    onAddVehicle,
+    onEditVehicle,
+    onRemoveVehicle,
   };
 };
 

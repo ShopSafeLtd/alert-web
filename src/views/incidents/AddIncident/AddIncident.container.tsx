@@ -24,7 +24,6 @@ const EditIncident = (): JSX.Element => {
     removeImage,
     removeImageFromOffender,
     removeOffender,
-    removeVehicle,
     saving,
     searchOffenders,
     setAssignToImage,
@@ -33,7 +32,6 @@ const EditIncident = (): JSX.Element => {
     tagsLoading,
     toggleAddIncidentTag,
     updateIncidentTag,
-    updateVehiclesData,
     vehiclesData,
     formStages,
     onValuesChange,
@@ -48,6 +46,9 @@ const EditIncident = (): JSX.Element => {
     goodsVisible,
     knowGoods,
     onEditImage,
+    onAddVehicle,
+    onEditVehicle,
+    onRemoveVehicle,
   } = useAddIncident();
 
   return (
@@ -73,7 +74,6 @@ const EditIncident = (): JSX.Element => {
         removeImage={removeImage}
         removeImageFromOffender={removeImageFromOffender}
         removeOffender={removeOffender}
-        removeVehicle={removeVehicle}
         saving={saving}
         searchOffenders={searchOffenders}
         setAssignToImage={setAssignToImage}
@@ -82,7 +82,6 @@ const EditIncident = (): JSX.Element => {
         tagsLoading={tagsLoading}
         toggleAddIncidentTag={toggleAddIncidentTag}
         updateIncidentTag={updateIncidentTag}
-        updateVehiclesData={updateVehiclesData}
         vehiclesData={vehiclesData}
         formStages={formStages}
         onValuesChange={onValuesChange}
@@ -97,6 +96,9 @@ const EditIncident = (): JSX.Element => {
         goodsVisible={goodsVisible}
         knowGoods={knowGoods}
         onEditImage={onEditImage}
+        onAddVehicle={onAddVehicle}
+        onEditVehicle={onEditVehicle}
+        onRemoveVehicle={onRemoveVehicle}
       />
     </div>
   );
