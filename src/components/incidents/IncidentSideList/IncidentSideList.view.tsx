@@ -1,6 +1,6 @@
 import React from 'react';
 import type { ListIncidentsQuery } from 'graphql/generated';
-import { Row, Col, Typography, Divider, Pagination, Spin } from 'antd';
+import { Row, Col, Typography, Pagination, Spin, Card } from 'antd';
 import { Link } from 'react-router-dom';
 import useStyles from './IncidentSideList.styles';
 
@@ -42,10 +42,11 @@ const IncidentSideList = ({
       )}
       {data?.listIncidents?.incidents.map((incident) => (
         <Link to={`/app/incidents/view/${incident.id}`} key={incident.id}>
-          <div
+          <Card
             className={`${classes.item} ${
               current === incident.id ? 'current' : undefined
             }`}
+            bodyStyle={{ padding: 0 }}
           >
             <Row wrap={false}>
               <Col className={classes.itemContent} flex={1}>
@@ -81,8 +82,7 @@ const IncidentSideList = ({
                 </Row>
               </Col>
             </Row>
-            <Divider className={classes.itemDivider} />
-          </div>
+          </Card>
         </Link>
       ))}
       {!loading && (

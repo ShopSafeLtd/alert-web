@@ -21599,6 +21599,7 @@ export type Mutation = {
   subscribeToOffender?: Maybe<Offender>;
   subscribeToVehicle?: Maybe<Vehicle>;
   syncGeoCodes?: Maybe<Array<Address>>;
+  syncIncidentLocations?: Maybe<SystemTask>;
   syncNewSchemeTags?: Maybe<SystemTask>;
   toggleUser?: Maybe<User>;
   unsubscribeFromIncident?: Maybe<Incident>;
@@ -45154,6 +45155,12 @@ export type ViewIncidentQuery = {
         };
       }>;
     }>;
+    location?: {
+      __typename?: 'Address';
+      geoLat?: number | null;
+      geoLng?: number | null;
+      id: string;
+    } | null;
   } | null;
 };
 
@@ -55772,6 +55779,11 @@ export const ViewIncidentDocument = gql`
             }
           }
         }
+      }
+      location {
+        geoLat
+        geoLng
+        id
       }
     }
   }

@@ -9,7 +9,14 @@ import {
   getOffenderGender,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
-import type { Age, Build, Gender, Race } from 'graphql/generated';
+import type {
+  Age,
+  Build,
+  Gender,
+  ImagePosition,
+  Race,
+} from 'graphql/generated';
+import WatermarkImage from 'components/images/WatermarkImage.view';
 
 const useStyles = createUseStyles({
   row: { cursor: 'pointer' },
@@ -25,6 +32,11 @@ interface Props {
         race?: Race | null;
         build?: Build | null;
         dateOfBirth?: Date | null;
+        images: {
+          id: string;
+          optimised: string;
+          position: ImagePosition;
+        }[];
       }[];
   hasNavigation: boolean;
 }
@@ -44,6 +56,22 @@ const OffenderTable = ({ offenders, hasNavigation }: Props): JSX.Element => {
           : {}
       }
       columns={[
+        {
+          key: 'images',
+          dataIndex: 'images',
+          title: '',
+          render: (item) => {
+            console.log(item);
+            return (
+              <div style={{ height: 100, width: 80 }}>
+                <WatermarkImage
+                  url={item[0]?.optimised}
+                  position={item[0]?.position}
+                />
+              </div>
+            );
+          },
+        },
         {
           key: 'reference',
           dataIndex: 'reference',
@@ -98,6 +126,7 @@ const OffenderTable = ({ offenders, hasNavigation }: Props): JSX.Element => {
           getOffenderBuild(offender.build) === 'Unknown'
             ? ''
             : getOffenderBuild(offender.build),
+        images: offender.images,
       }))}
       pagination={
         offenders && offenders.length > 5

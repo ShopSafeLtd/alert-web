@@ -161,6 +161,7 @@ interface Props {
   onEditVehicle: (data: VehicleData) => void;
   onAddCrimeGroup: (value: CrimeGroupData) => void;
   onRemoveCrimeGroup: (crimeGroupId: string) => void;
+  onRemoveImage: (imageId: string) => void;
 }
 
 const EditOffender = ({
@@ -218,6 +219,7 @@ const EditOffender = ({
   toggleEditImage,
   onAddCrimeGroup,
   onRemoveCrimeGroup,
+  onRemoveImage,
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader
@@ -641,6 +643,19 @@ const EditOffender = ({
                             onClick={() => toggleEditImage(file)}
                           >
                             <FontAwesomeIcon icon={faEdit} />
+                          </Button>
+                          <Button
+                            size="small"
+                            style={{
+                              position: 'absolute',
+                              zIndex: 10,
+                              padding: '6.5px 10px',
+                              top: 5,
+                              left: 45,
+                            }}
+                            onClick={() => onRemoveImage(file.uid)}
+                          >
+                            <FontAwesomeIcon icon={faTrash} />
                           </Button>
                           <WatermarkImage
                             position={file.position}

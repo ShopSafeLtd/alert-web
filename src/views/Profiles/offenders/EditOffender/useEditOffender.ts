@@ -93,6 +93,7 @@ interface Image extends UploadFile {
   position?: ImagePosition;
   edited?: boolean;
   new?: boolean;
+  deleted?: boolean;
 }
 
 interface BanType extends BanData {
@@ -147,6 +148,7 @@ interface Return {
   onPreview: (value: UploadFile) => void;
   onReject: () => void;
   onRemoveCrimeGroup: (crimeGroupId: string) => void;
+  onRemoveImage: (imageId: string) => void;
   onRemoveVehicle: (vehicleId: string) => void;
   onSubmit: (value: FormData) => void;
   onSubmitAddress: (data: AddAddressForm) => void;
@@ -590,7 +592,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     };
     const getImages = (): OffenderUpdateInput['images'] => {
       const editedImages = fileList.filter((item) => item.edited && !item.new);
-
+      console.log(fileList.filter((image) => image.deleted));
       return {
         upload:
           imageChange && fileList.length > 0
@@ -606,14 +608,12 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
                 }))
             : undefined,
         delete: imageChange
-          ? offenderData?.offender?.images
-              .filter(
-                (image) => !fileList.map((item) => item.uid).includes(image.id)
-              )
+          ? fileList
+              .filter((image) => image.deleted)
               .map((image) => ({
-                id: image.id,
+                id: image.uid,
               }))
-          : [],
+          : undefined,
         update:
           editedImages.length > 0
             ? editedImages.map((item) => ({
@@ -915,6 +915,31 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     }
   };
 
+  const onRemoveImage = (imageId: string) => {
+    confirm({
+      title: 'Do you want to remove the image?',
+      content: 'This action cannot be undone.',
+      onOk() {
+        setImageChange(true);
+        const image = fileList.find((item) => item.uid === imageId);
+        if (image?.new) {
+          setFileList(fileList.filter((item) => item.uid !== imageId));
+        } else {
+          const index = fileList.map((item) => item.uid).indexOf(imageId);
+          setFileList(
+            update(fileList, {
+              [index]: {
+                deleted: {
+                  $set: true,
+                },
+              },
+            })
+          );
+        }
+      },
+    });
+  };
+
   const deleteConfirm = (currentId: string) => {
     confirm({
       title: 'Do you want to delete the exclusion?',
@@ -978,7 +1003,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     imgChange,
     onPreview,
     beforeUpload,
-    fileList,
+    fileList: fileList.filter((item) => !item.deleted),
     addOffenderTag,
     toggleAddOffenderTag,
     updateOffenderTag,
@@ -1020,6 +1045,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     onEditImage,
     toggleEditImage,
     onEditVehicle,
+    onRemoveImage,
   };
 };
 

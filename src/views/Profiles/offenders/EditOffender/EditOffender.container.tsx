@@ -63,6 +63,7 @@ const EditOffender = ({ reviewed }: Props): JSX.Element => {
     onEditVehicle,
     onAddCrimeGroup,
     onRemoveCrimeGroup,
+    onRemoveImage,
   } = useEditOffender({ offenderId, reviewed });
   return (
     <div>
@@ -121,6 +122,7 @@ const EditOffender = ({ reviewed }: Props): JSX.Element => {
         onAddVehicle={onAddVehicle}
         onEditVehicle={onEditVehicle}
         onRemoveVehicle={onRemoveVehicle}
+        onRemoveImage={onRemoveImage}
       />
     </div>
   );

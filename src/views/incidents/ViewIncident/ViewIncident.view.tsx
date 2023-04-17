@@ -11,19 +11,17 @@ import type {
 import { CrimeType, UpdateType } from 'graphql/generated';
 import {
   Button,
+  Card,
   Checkbox,
   Col,
   Descriptions,
   Drawer,
-  Dropdown,
   Empty,
   Input,
-  Menu,
   Modal,
   Popover,
   Row,
   Skeleton,
-  Space,
   Table,
   Tag,
   Tooltip,
@@ -33,16 +31,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBell,
   faBellSlash,
-  faChevronDown,
   faEdit,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
-
 import { Link } from 'react-router-dom';
 import IncidentSideList from 'components/incidents/IncidentSideList';
 import UpdateBar from 'components/MessageInput/UpdateBar';
 import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
-import type { ItemType } from 'antd/lib/menu/hooks/useItems';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
@@ -51,11 +46,11 @@ import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import OffenderTable from 'components/tables/OffenderTable';
 import VehicleTable from 'components/tables/VehicleTable';
-import CrimeGroupTable from 'components/tables/CrimeGroupTable';
+import MapCard from 'components/map/MapCard/MapCard.view';
 import UpdateContent from './Update.view';
 import useStyles from './ViewIncident.styles';
 
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph, Text } = Typography;
 
 interface OffenderData {
   id: string;
@@ -132,7 +127,6 @@ interface Props {
   editUpdateInput: string;
   handleEditUpdate: () => void;
   setEditUpdateInput: (value: string) => void;
-  optionMenuItems: ItemType[];
   lightboxElements: {
     src: string;
   }[];
@@ -142,6 +136,7 @@ interface Props {
   };
   optionRowShow: boolean;
   setOptionRowShow: (value: boolean) => void;
+  onDelete: (incidentId: string) => void;
 }
 
 const ViewIncident = ({
@@ -173,11 +168,11 @@ const ViewIncident = ({
   handleEditUpdate,
   setEditUpdate,
   setEditUpdateInput,
-  optionMenuItems,
   lightboxElements,
   lightBoxOpen,
   optionRowShow,
   setOptionRowShow,
+  onDelete,
 }: Props): JSX.Element => {
   const classes = useStyles();
 
@@ -190,33 +185,9 @@ const ViewIncident = ({
 
         <Col flex={1}>
           <div className={classes.viewIncident}>
-            <Row className={classes.headerBar}>
-              <Col className={classes.detailsHeader} span={12}>
-                <Row>
-                  <Col className={classes.centerCell} flex={1}>
-                    <Title className={classes.headerTitle} level={4}>
-                      {data?.incident?.subject}
-                    </Title>
-                  </Col>
-                  {(editRights || deleteRights) && (
-                    <Dropdown overlay={<Menu items={optionMenuItems} />}>
-                      <Button type="text">
-                        <Space>
-                          Options
-                          <FontAwesomeIcon icon={faChevronDown} />
-                        </Space>
-                      </Button>
-                    </Dropdown>
-                  )}
-                </Row>
-              </Col>
-              <Col span={12}>
-                <Row>
-                  <Col className={classes.centerCell} flex={1}>
-                    <Title className={classes.headerTitle} level={4}>
-                      Updates
-                    </Title>
-                  </Col>
+            <Row className={classes.content}>
+              <Col className={classes.detailsContent} span={16}>
+                <Row gutter={8} className={classes.headerBar} justify="end">
                   <Col>
                     <Tooltip
                       title={
@@ -229,7 +200,7 @@ const ViewIncident = ({
                         onClick={toggleSubscribe}
                         disabled={saving}
                         loading={saving}
-                        type="text"
+                        type="ghost"
                         color={
                           data?.incident?.subscribed ? undefined : 'danger'
                         }
@@ -241,25 +212,45 @@ const ViewIncident = ({
                             data?.incident?.subscribed ? faBellSlash : faBell
                           }
                         />
-                        {data?.incident?.subscribed
-                          ? 'Un-follow Updates'
-                          : 'Follow Updates'}
+                        {data?.incident?.subscribed ? 'Un-follow' : 'Follow'}
                       </Button>
                     </Tooltip>
                   </Col>
+                  {editRights && (
+                    <Col>
+                      <Link to={`/app/incidents/edit/${incidentId}`}>
+                        <Button type="ghost">
+                          <FontAwesomeIcon
+                            size="1x"
+                            style={{ marginRight: 8 }}
+                            icon={faEdit}
+                          />
+                          Edit
+                        </Button>
+                      </Link>
+                    </Col>
+                  )}
+                  {deleteRights && (
+                    <Col>
+                      <Button type="ghost" onClick={() => onDelete(incidentId)}>
+                        <FontAwesomeIcon
+                          size="1x"
+                          style={{ marginRight: 8 }}
+                          icon={faTrash}
+                        />
+                        Delete
+                      </Button>
+                    </Col>
+                  )}
                 </Row>
-              </Col>
-            </Row>
-            <Row className={classes.content}>
-              <Col className={classes.detailsContent} span={12}>
                 {loading ? (
                   <Skeleton />
                 ) : (
                   <Row
-                    gutter={8}
+                    gutter={[8, 8]}
                     justify="start"
                     align="middle"
-                    wrap={false}
+                    wrap
                     className={classes.images}
                     style={{
                       height:
@@ -289,122 +280,152 @@ const ViewIncident = ({
                     <Skeleton />
                   ) : (
                     <div className="incident-tab-content">
-                      <Paragraph type="secondary" style={{ marginTop: 10 }}>
-                        {data?.incident?.description}
-                      </Paragraph>
-                      <Descriptions column={1} className={classes.desc}>
-                        <Descriptions.Item
-                          className={classes.detail}
-                          label="Alert ID"
+                      <Card>
+                        <Title className={classes.headerTitle} level={4}>
+                          {data?.incident?.subject}
+                        </Title>
+                        <Text>Alert ID: {data?.incident?.reference}</Text>
+                        <Paragraph type="secondary" style={{ marginTop: 10 }}>
+                          {data?.incident?.description}
+                        </Paragraph>
+
+                        <Descriptions column={1} className={classes.desc}>
+                          <Descriptions.Item
+                            className={classes.detail}
+                            label={<span>Business</span>}
+                          >
+                            {editRights ? (
+                              <Link
+                                to={`/app/scheme-settings/business/view/${data?.incident?.business?.id}`}
+                              >
+                                {data?.incident?.business?.name}
+                              </Link>
+                            ) : (
+                              data?.incident?.business?.name
+                            )}
+                          </Descriptions.Item>
+                          <Descriptions.Item
+                            className={classes.detail}
+                            label={<span>Date &amp; Time</span>}
+                          >
+                            {data?.incident?.dayTime}
+                          </Descriptions.Item>
+                        </Descriptions>
+                        <Descriptions
+                          column={1}
+                          className={classes.desc}
+                          style={{ marginTop: 5 }}
                         >
-                          {data?.incident?.reference}
-                          {data?.incident?.policeRef
-                            ? ` / Crime Ref: ${data?.incident?.policeRef}`
-                            : ''}
-                        </Descriptions.Item>
-                        <Descriptions.Item
-                          className={classes.detail}
-                          label={<span>Created At</span>}
-                        >
-                          {data?.incident?.dayTime}
-                        </Descriptions.Item>
-                        <Descriptions.Item
-                          className={classes.detail}
-                          label={<span>Created By</span>}
-                        >
-                          {`${data?.incident?.createdBy.fullName} -
-                              ${data?.incident?.createdBy.businesses[0]?.name}`}
-                        </Descriptions.Item>
-                        <Descriptions.Item
-                          className={classes.detail}
-                          label={<span>Value</span>}
-                        >
-                          {data?.incident?.totalValue ? '£' : ''}
-                          {data?.incident?.totalValue || 'Unknown'}
-                        </Descriptions.Item>
-                        <Descriptions.Item
-                          className={classes.detail}
-                          label={<span>Recovered Value</span>}
-                        >
-                          {data?.incident?.totalRecoveredValue ? '£' : ''}
-                          {data?.incident?.totalRecoveredValue || 'Unknown'}
-                        </Descriptions.Item>
-                        <Descriptions.Item
-                          className={classes.detail}
-                          label={<span>Report To Police</span>}
-                        >
-                          {data?.incident?.policeReported ? 'Yes' : 'No'}
-                        </Descriptions.Item>
-                        <Descriptions.Item
-                          className={classes.detail}
-                          label={<span>Police Attended</span>}
-                        >
-                          {data?.incident?.policeInvolved ? 'Yes' : 'No'}
-                        </Descriptions.Item>
-                        <Descriptions.Item
-                          className={classes.detail}
-                          label={<span>Officer Collar Number</span>}
-                        >
-                          {data?.incident?.policeNo || 'None Provided'}
-                        </Descriptions.Item>
-                        <Descriptions.Item
-                          className={classes.detail}
-                          label={<span>Business</span>}
-                        >
-                          {editRights ? (
-                            <Link
-                              to={`/app/scheme-settings/business/view/${data?.incident?.business?.id}`}
+                          <Descriptions.Item
+                            className={classes.detail}
+                            label={<span>Groups</span>}
+                          >
+                            {data?.incident?.groups.map((group) => (
+                              <Tag key={group.id}>{group.name}</Tag>
+                            ))}
+                          </Descriptions.Item>
+                        </Descriptions>
+                        <Descriptions column={1} className={classes.desc}>
+                          <Descriptions.Item
+                            className={classes.detail}
+                            label={<span>Crime Types</span>}
+                          >
+                            {data?.incident?.crimeTypes.map((tag) => (
+                              <Tag color="red" key={tag.id}>
+                                {tag.name}
+                              </Tag>
+                            ))}
+                          </Descriptions.Item>
+                          <Descriptions.Item
+                            className={classes.detail}
+                            label={<span>Involved Tags</span>}
+                          >
+                            {data?.incident?.involvedTags.map((tag) => (
+                              <Tag color="red" key={tag.id}>
+                                {tag.name}
+                              </Tag>
+                            )) || 'None'}
+                          </Descriptions.Item>
+                          <Descriptions.Item
+                            className={classes.detail}
+                            label={<span>Impact Tags</span>}
+                          >
+                            {data?.incident?.impactTags.map((tag) => (
+                              <Tag color="red" key={tag.id}>
+                                {tag.name}
+                              </Tag>
+                            )) || 'None'}
+                          </Descriptions.Item>
+                        </Descriptions>
+                      </Card>
+                      <Row gutter={16}>
+                        <Col xs={24} xl={12}>
+                          <MapCard
+                            width="100%"
+                            height={194}
+                            geoLat={data?.incident?.location?.geoLat}
+                            geoLng={data?.incident?.location?.geoLng}
+                          />
+                        </Col>
+                        <Col xs={24} lg={12}>
+                          <Card>
+                            <Title level={4}>Police Information</Title>
+                            <Descriptions
+                              column={1}
+                              style={{ marginTop: 10 }}
+                              className={classes.desc}
                             >
-                              {data?.incident?.business?.name}
-                            </Link>
-                          ) : (
-                            data?.incident?.business?.name
-                          )}
-                        </Descriptions.Item>
-                        <Descriptions.Item
-                          className={classes.detail}
-                          label={<span>Groups</span>}
-                        >
-                          {data?.incident?.groups.map((group) => (
-                            <Tag key={group.id}>{group.name}</Tag>
-                          ))}
-                        </Descriptions.Item>
-                        <Descriptions.Item
-                          className={classes.detail}
-                          label={<span>Crime Types</span>}
-                        >
-                          {data?.incident?.crimeTypes.map((tag) => (
-                            <Tag color="red" key={tag.id}>
-                              {tag.name}
-                            </Tag>
-                          ))}
-                        </Descriptions.Item>
-                        <Descriptions.Item
-                          className={classes.detail}
-                          label={<span>Involved Tags</span>}
-                        >
-                          {data?.incident?.involvedTags.map((tag) => (
-                            <Tag color="red" key={tag.id}>
-                              {tag.name}
-                            </Tag>
-                          )) || 'None'}
-                        </Descriptions.Item>
-                        <Descriptions.Item
-                          className={classes.detail}
-                          label={<span>Impact Tags</span>}
-                        >
-                          {data?.incident?.impactTags.map((tag) => (
-                            <Tag color="red" key={tag.id}>
-                              {tag.name}
-                            </Tag>
-                          )) || 'None'}
-                        </Descriptions.Item>
-                      </Descriptions>
+                              <Descriptions.Item
+                                className={classes.detail}
+                                label={<span>Report To Police</span>}
+                              >
+                                {data?.incident?.policeReported ? 'Yes' : 'No'}
+                              </Descriptions.Item>
+                              <Descriptions.Item
+                                className={classes.detail}
+                                label={<span>Police Attended</span>}
+                              >
+                                {data?.incident?.policeInvolved ? 'Yes' : 'No'}
+                              </Descriptions.Item>
+                              <Descriptions.Item
+                                className={classes.detail}
+                                label="Crime Ref"
+                              >
+                                {data?.incident?.policeRef || 'Not Provided'}
+                              </Descriptions.Item>
+                              <Descriptions.Item
+                                className={classes.detail}
+                                label={<span>Officer Collar Number</span>}
+                              >
+                                {data?.incident?.policeNo || 'Not Provided'}
+                              </Descriptions.Item>
+                            </Descriptions>
+                          </Card>
+                        </Col>
+                      </Row>
+
                       {data?.incident?.crimeTypes
                         .map((item) => item.crimeType)
                         .includes(CrimeType.TheftHandling) && (
-                        <div style={{ marginBottom: 20 }}>
+                        <Card style={{ marginBottom: 20 }}>
                           <Title level={4}>Goods</Title>
+                          <Descriptions column={1} className={classes.desc}>
+                            <Descriptions.Item
+                              className={classes.detail}
+                              label={<span>Value</span>}
+                            >
+                              {data?.incident?.totalValue ? '£' : ''}
+                              {data?.incident?.totalValue || 'Unknown'}
+                            </Descriptions.Item>
+                            <Descriptions.Item
+                              className={classes.detail}
+                              label={<span>Recovered Value</span>}
+                            >
+                              {data?.incident?.totalRecoveredValue ? '£' : ''}
+                              {data?.incident?.totalRecoveredValue || 'Unknown'}
+                            </Descriptions.Item>
+                          </Descriptions>
+
                           <Table
                             columns={[
                               {
@@ -434,7 +455,6 @@ const ViewIncident = ({
                               })
                             )}
                             size="small"
-                            rowClassName={classes.offenderRow}
                             pagination={false}
                             // TODO
                             // eslint-disable-next-line react/no-unstable-nested-components
@@ -461,59 +481,43 @@ const ViewIncident = ({
                               );
                             }}
                           />
-                        </div>
+                        </Card>
                       )}
 
-                      {/* <Divider>Offender</Divider> */}
-                      <Title level={4} style={{ marginTop: 30 }}>
-                        Offenders
-                      </Title>
-                      {data?.incident?.offenders.length && !loading ? (
-                        <OffenderTable
-                          offenders={data?.incident?.offenders}
-                          hasNavigation
-                        />
-                      ) : (
-                        <Empty
-                          description="No offenders for this incident"
-                          image={Empty.PRESENTED_IMAGE_SIMPLE}
-                        />
-                      )}
+                      <Card>
+                        <Title level={4}>Offenders</Title>
+                        {data?.incident?.offenders.length && !loading ? (
+                          <OffenderTable
+                            offenders={data?.incident?.offenders}
+                            hasNavigation
+                          />
+                        ) : (
+                          <Empty
+                            description="No offenders for this incident"
+                            image={Empty.PRESENTED_IMAGE_SIMPLE}
+                          />
+                        )}
+                      </Card>
 
-                      <Title level={4} style={{ marginTop: 30 }}>
-                        Vehicles
-                      </Title>
-                      {data?.incident?.vehicles.length && !loading ? (
-                        <VehicleTable
-                          vehicles={data?.incident?.vehicles}
-                          hasNavigation
-                        />
-                      ) : (
-                        <Empty
-                          description="No vehicles for this incident"
-                          image={Empty.PRESENTED_IMAGE_SIMPLE}
-                        />
-                      )}
-
-                      <Title level={4} style={{ marginTop: 30 }}>
-                        Crime Groups
-                      </Title>
-                      {data?.incident?.crimeGroups.length && !loading ? (
-                        <CrimeGroupTable
-                          crimeGroups={data?.incident?.crimeGroups}
-                          hasNavigation
-                        />
-                      ) : (
-                        <Empty
-                          description="No crime groups for this incident"
-                          image={Empty.PRESENTED_IMAGE_SIMPLE}
-                        />
-                      )}
+                      <Card style={{ marginTop: 20 }}>
+                        <Title level={4}>Vehicles</Title>
+                        {data?.incident?.vehicles.length && !loading ? (
+                          <VehicleTable
+                            vehicles={data?.incident?.vehicles}
+                            hasNavigation
+                          />
+                        ) : (
+                          <Empty
+                            description="No vehicles for this incident"
+                            image={Empty.PRESENTED_IMAGE_SIMPLE}
+                          />
+                        )}
+                      </Card>
                     </div>
                   )}
                 </div>
               </Col>
-              <Col span={12}>
+              <Col span={8}>
                 <div className={classes.updatesContainer}>
                   <InfiniteScroll
                     // height="calc(100vh - 225px)"
@@ -789,7 +793,7 @@ const ViewIncident = ({
 
       <Modal
         title="Select Images To Add"
-        visible={addImages !== null}
+        open={addImages !== null}
         onOk={() => addUpdateImages(selectedImages.map((id) => ({ id })))}
         onCancel={closeAddImages}
         width={addImages ? addImages.length * 250 : 400}
@@ -823,7 +827,7 @@ const ViewIncident = ({
 
       <Modal
         title="Edit Update Content"
-        visible={editUpdate !== null}
+        open={editUpdate !== null}
         onOk={handleEditUpdate}
         onCancel={() => setEditUpdate(null)}
         okText="Save"
@@ -836,7 +840,7 @@ const ViewIncident = ({
 
       <Drawer
         title="Link Offenders"
-        visible={linkOffender}
+        open={linkOffender}
         width="800"
         onClose={toggleLinkOffender}
       >
