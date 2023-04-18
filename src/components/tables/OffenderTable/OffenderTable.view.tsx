@@ -32,11 +32,14 @@ interface Props {
         race?: Race | null;
         build?: Build | null;
         dateOfBirth?: Date | null;
-        images: {
-          id: string;
-          optimised: string;
-          position: ImagePosition;
-        }[];
+        images?:
+          | {
+              id: string;
+              optimised?: string | null | undefined;
+              position: ImagePosition;
+            }[]
+          | null
+          | undefined;
       }[];
   hasNavigation: boolean;
 }

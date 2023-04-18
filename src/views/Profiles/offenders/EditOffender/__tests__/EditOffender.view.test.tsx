@@ -115,6 +115,7 @@ describe('List Officer View', () => {
           onEditVehicle={jest.fn()}
           onRemoveCrimeGroup={jest.fn()}
           onRemoveVehicle={jest.fn()}
+          onRemoveImage={jest.fn()}
         />
       </MemoryRouter>
     );
