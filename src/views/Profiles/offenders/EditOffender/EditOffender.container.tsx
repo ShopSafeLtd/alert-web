@@ -42,26 +42,9 @@ const EditOffender = ({ reviewed }: Props): JSX.Element => {
     selectedItems,
     setSelectedItems,
     form,
-    addNewVehicle,
-    addExistingVehicle,
-    editVehicleId,
-    setEditVehicleId,
-    toggleAddNewVehicle,
-    toggleAddExistingVehicle,
     vehiclesData,
-    updateVehiclesData,
-    removeVehicle,
-    addNewCrimeGroup,
-    addExistingCrimeGroup,
-    editCrimeGroupId,
-    setEditCrimeGroupId,
-    toggleAddNewCrimeGroup,
-    toggleAddExistingCrimeGroup,
     crimeGroupsData,
-    updateCrimeGroupsData,
-    removeCrimeGroup,
     listVehiclesData,
-    // listCrimeGroupsData,
     idVerified,
     onValuesChange,
     addAddress,
@@ -75,6 +58,12 @@ const EditOffender = ({ reviewed }: Props): JSX.Element => {
     editImage,
     onEditImage,
     toggleEditImage,
+    onAddVehicle,
+    onRemoveVehicle,
+    onEditVehicle,
+    onAddCrimeGroup,
+    onRemoveCrimeGroup,
+    onRemoveImage,
   } = useEditOffender({ offenderId, reviewed });
   return (
     <div>
@@ -112,26 +101,11 @@ const EditOffender = ({ reviewed }: Props): JSX.Element => {
         reviewed={reviewed}
         onReject={onReject}
         adminRights={adminRights}
-        addNewVehicle={addNewVehicle}
-        addExistingVehicle={addExistingVehicle}
-        editVehicleId={editVehicleId}
-        setEditVehicleId={setEditVehicleId}
-        toggleAddNewVehicle={toggleAddNewVehicle}
-        toggleAddExistingVehicle={toggleAddExistingVehicle}
         vehiclesData={vehiclesData}
-        updateVehiclesData={updateVehiclesData}
-        removeVehicle={removeVehicle}
-        removeCrimeGroup={removeCrimeGroup}
-        addNewCrimeGroup={addNewCrimeGroup}
-        addExistingCrimeGroup={addExistingCrimeGroup}
-        editCrimeGroupId={editCrimeGroupId}
-        setEditCrimeGroupId={setEditCrimeGroupId}
-        toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
-        toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
+        onRemoveCrimeGroup={onRemoveCrimeGroup}
         crimeGroupsData={crimeGroupsData}
-        updateCrimeGroupsData={updateCrimeGroupsData}
+        onAddCrimeGroup={onAddCrimeGroup}
         listVehiclesData={listVehiclesData}
-        // listCrimeGroupsData={listCrimeGroupsData}
         idVerified={idVerified}
         onValuesChange={onValuesChange}
         addAddress={addAddress}
@@ -145,6 +119,10 @@ const EditOffender = ({ reviewed }: Props): JSX.Element => {
         editImage={editImage}
         onEditImage={onEditImage}
         toggleEditImage={toggleEditImage}
+        onAddVehicle={onAddVehicle}
+        onEditVehicle={onEditVehicle}
+        onRemoveVehicle={onRemoveVehicle}
+        onRemoveImage={onRemoveImage}
       />
     </div>
   );

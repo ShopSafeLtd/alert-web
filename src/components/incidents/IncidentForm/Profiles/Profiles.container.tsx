@@ -16,16 +16,17 @@ interface Props {
   recentOffenderData: ListOffendersQuery | undefined;
   recentOffenderLoading: boolean;
   removeOffender: (offenderId: string) => void;
-  removeVehicle: (vehicleId: string) => void;
   saving: boolean;
   searchOffenders: string;
   setSearchOffenders: (value: string) => void;
   titleOrder: number;
   updateOffender: (value: OffenderData) => void;
-  updateVehiclesData: (value: VehicleData) => void;
   value?: OffenderData[];
   vehiclesData: VehicleData[];
   onAddOffender: (value: OffenderData, existing: boolean) => void;
+  onAddVehicle: (data: VehicleData, existing: boolean) => void;
+  onEditVehicle: (data: VehicleData) => void;
+  onRemoveVehicle: (vehicleId: string) => void;
 }
 
 const Profiles = ({
@@ -35,16 +36,17 @@ const Profiles = ({
   recentOffenderData,
   recentOffenderLoading,
   removeOffender: removeOffenderParent,
-  removeVehicle: removeVehicleParent,
   saving,
   searchOffenders,
   setSearchOffenders,
   titleOrder,
   updateOffender: updateOffenderParent,
-  updateVehiclesData: updateVehiclesDataParent,
   value,
   vehiclesData,
   onAddOffender: onAddOffenderParent,
+  onAddVehicle,
+  onEditVehicle,
+  onRemoveVehicle,
 }: Props) => {
   const {
     addExistingOffender,
@@ -56,7 +58,6 @@ const Profiles = ({
     editVehicleId,
     offenderImgChange,
     removeOffender,
-    removeVehicle,
     setAddRecentOffender,
     setEditOffenderId,
     setEditVehicleId,
@@ -66,14 +67,11 @@ const Profiles = ({
     toggleAddOffender,
     updateOffender,
     onAddOffender,
-    updateVehiclesData,
   } = useProfiles({
     offenderImgChangeParent,
     onChange,
     removeOffenderParent,
-    removeVehicleParent,
     updateOffenderParent,
-    updateVehiclesDataParent,
     value,
     onAddOffenderParent,
   });
@@ -92,7 +90,6 @@ const Profiles = ({
       recentOffenderData={recentOffenderData}
       recentOffenderLoading={recentOffenderLoading}
       removeOffender={removeOffender}
-      removeVehicle={removeVehicle}
       saving={saving}
       searchOffenders={searchOffenders}
       setAddRecentOffender={setAddRecentOffender}
@@ -105,9 +102,11 @@ const Profiles = ({
       toggleAddNewVehicle={toggleAddNewVehicle}
       toggleAddOffender={toggleAddOffender}
       updateOffender={updateOffender}
-      updateVehiclesData={updateVehiclesData}
       vehiclesData={vehiclesData}
       onAddOffender={onAddOffender}
+      onRemoveVehicle={onRemoveVehicle}
+      onAddVehicle={onAddVehicle}
+      onEditVehicle={onEditVehicle}
     />
   );
 };

@@ -250,7 +250,7 @@ const IncidentCard = ({
 
         <Row justify="center">
           <Col>
-            <Link to={`view/${incident?.id}`}>
+            <Link to={`/app/incidents/view/${incident?.id}`}>
               <Button size="small" type="text">
                 View Full Incident
               </Button>

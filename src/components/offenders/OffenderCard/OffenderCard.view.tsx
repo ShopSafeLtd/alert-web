@@ -61,6 +61,7 @@ interface Props {
   openLightbox: (elements: { src: string }[], index: number) => void;
   onNavigate: (id?: string | undefined, url?: string | undefined) => void;
   onDelete: (id: string) => void;
+  isArticle?: boolean;
 }
 
 const OffenderCard = ({
@@ -71,6 +72,7 @@ const OffenderCard = ({
   openLightbox,
   onNavigate,
   onDelete,
+  isArticle,
 }: Props): JSX.Element => {
   const imagesRef = useRef<CarouselRef>(null);
 
@@ -203,7 +205,13 @@ const OffenderCard = ({
         />
       )}
       <div className="offender-card-content">
-        <Link to={`view/${offender?.id}`}>
+        <Link
+          to={
+            isArticle
+              ? `/app/offenders/view/${offender?.id}`
+              : `view/${offender?.id}`
+          }
+        >
           <div className="offender-card-desc">
             <Row gutter={8}>
               <Col flex={1}>
@@ -321,7 +329,13 @@ const OffenderCard = ({
         </Link>
         <Row justify="center">
           <Col>
-            <Link to={`view/${offender?.id}`}>
+            <Link
+              to={
+                isArticle
+                  ? `/app/offenders/view/${offender?.id}`
+                  : `view/${offender?.id}`
+              }
+            >
               <Button size="small" type="text">
                 View Full Offender
               </Button>

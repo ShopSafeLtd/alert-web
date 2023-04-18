@@ -93,11 +93,6 @@ export interface VehicleData {
     fileName?: string | null;
     type?: string | null;
   }>;
-  edited?: boolean;
-  new?: boolean;
-  existing?: boolean;
-  updated?: boolean;
-  deleted?: boolean;
 }
 
 export interface VehicleCardData {

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import type {
   Age,
   Build,
-  CreateCrimeGroupDataInput,
   CreateTagMutation,
   Gender,
   IdSource,
@@ -16,8 +15,6 @@ import {
   Model,
   Role,
   TagsDocument,
-  useCreateCrimeGroupMutation,
-  useListCrimeGroupsQuery,
   useListVehiclesQuery,
   useRecycleOffenderMutation,
   useSchemeGroupsQuery,
@@ -96,6 +93,7 @@ interface Image extends UploadFile {
   position?: ImagePosition;
   edited?: boolean;
   new?: boolean;
+  deleted?: boolean;
 }
 
 interface BanType extends BanData {
@@ -104,74 +102,73 @@ interface BanType extends BanData {
   deleted: boolean;
 }
 
+interface VehicleType extends VehicleData {
+  new: boolean;
+  existing: boolean;
+  edited: boolean;
+  deleted: boolean;
+}
+
+interface CrimeGroupType extends VehicleData {
+  existing: boolean;
+  deleted: boolean;
+}
+
 interface Return {
-  onSubmit: (value: FormData) => void;
+  addAddress: boolean;
+  addExclusion: boolean;
+  addOffenderTag: boolean;
+  addressesData: AddressesData[] | null;
+  adminRights: boolean;
+  ageCheck: boolean;
+  banData: BanType | null;
+  bansData: BanType[];
+  beforeUpload: (value: RcFile) => void;
+  crimeGroupsData: CrimeGroupType[];
   data: ViewOffenderQuery | undefined;
-  loading: boolean;
-  saving: boolean;
+  deleteConfirm: (value: string) => void;
+  editAddress: string | null;
+  editExclusion: boolean;
+  editImage: Image | null;
+  fileList: Image[];
+  form: FormInstance<FormData>;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
+  idVerified: boolean;
+  imgChange: UploadProps['onChange'];
+  listVehiclesData: ListVehiclesQuery | undefined;
+  loading: boolean;
+  onAddCrimeGroup: (value: CrimeGroupData) => void;
+  onAddExclusion: (value: BanData) => void;
+  onAddVehicle: (data: VehicleData, existing: boolean) => void;
+  onDeleteAddress: (addressId: string) => void;
+  onEditAddress: (data: EditAddressForm) => void;
+  onEditImage: (value: Image) => void;
+  onEditVehicle: (data: VehicleData) => void;
+  onPreview: (value: UploadFile) => void;
+  onReject: () => void;
+  onRemoveCrimeGroup: (crimeGroupId: string) => void;
+  onRemoveImage: (imageId: string) => void;
+  onRemoveVehicle: (vehicleId: string) => void;
+  onSubmit: (value: FormData) => void;
+  onSubmitAddress: (data: AddAddressForm) => void;
+  onUpdateExclusion: (value: BanData) => void;
+  onValuesChange?: (changedValues: FormData, values: FormData) => void;
+  saving: boolean;
+  selectedItems: string[];
+  setAgeCheck: (value: boolean) => void;
+  setBanData: (value: BanType) => void;
+  setSelectedItems: (value: string[]) => void;
   tags: { value: string; label: string }[];
   tagsLoading: boolean;
-
-  imgChange: UploadProps['onChange'];
-  onPreview: (value: UploadFile) => void;
-  beforeUpload: (value: RcFile) => void;
-  fileList: Image[];
-  addOffenderTag: boolean;
-  toggleAddOffenderTag: () => void;
-  updateOffenderTag: MutationUpdaterFn<CreateTagMutation>;
-  addExclusion: boolean;
-  toggleAddExclusion: () => void;
-  editExclusion: boolean;
-  toggleEditExclusion: () => void;
-  onUpdateExclusion: (value: BanData) => void;
-  onAddExclusion: (value: BanData) => void;
-  setBanData: (value: BanType) => void;
-  bansData: BanType[];
-  banData: BanType | null;
-  ageCheck: boolean;
-  setAgeCheck: (value: boolean) => void;
-  onReject: () => void;
-  deleteConfirm: (value: string) => void;
-  adminRights: boolean;
-  form: FormInstance<FormData>;
-  selectedItems: string[];
-  setSelectedItems: (value: string[]) => void;
-  listVehiclesData: ListVehiclesQuery | undefined;
-  // listCrimeGroupsData: ListCrimeGroupsQuery | undefined;
-  addNewVehicle: boolean;
-  addExistingVehicle: boolean;
-  toggleAddNewVehicle: () => void;
-  toggleAddExistingVehicle: () => void;
-  editVehicleId: string;
-  setEditVehicleId: (value: string) => void;
-  vehiclesData: VehicleData[];
-  updateVehiclesData: (value: VehicleData) => void;
-  removeVehicle: (vehicleId: string) => void;
-  removeCrimeGroup: (crimeGroupId: string) => void;
-  addNewCrimeGroup: boolean;
-  addExistingCrimeGroup: boolean;
-  toggleAddNewCrimeGroup: () => void;
-  toggleAddExistingCrimeGroup: () => void;
-  editCrimeGroupId: string;
-  setEditCrimeGroupId: (value: string) => void;
-  crimeGroupsData: CrimeGroupData[];
-  updateCrimeGroupsData: (value: CrimeGroupData) => void;
-  onValuesChange?: (changedValues: FormData, values: FormData) => void;
-  idVerified: boolean;
-  addAddress: boolean;
   toggleAddAddress: () => void;
-  editAddress: string | null;
+  toggleAddExclusion: () => void;
+  toggleAddOffenderTag: () => void;
   toggleEditAddress: (value: string | null) => void;
-  onSubmitAddress: (data: AddAddressForm) => void;
-  addressesData: AddressesData[] | null;
-  onEditAddress: (data: EditAddressForm) => void;
-  onDeleteAddress: (addressId: string) => void;
-  onAddVehicles: (data: VehicleData, existing: boolean) => void;
-  onEditImage: (value: Image) => void;
+  toggleEditExclusion: () => void;
   toggleEditImage: (value?: Image) => void;
-  editImage: Image | null;
+  updateOffenderTag: MutationUpdaterFn<CreateTagMutation>;
+  vehiclesData: VehicleType[];
 }
 
 const errorNotification = () => {
@@ -226,15 +223,9 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [editImage, setEditImage] = useState<Image | null>(null);
 
-  const [addNewCrimeGroup, setAddNewCrimeGroup] = useState(false);
-  const [addExistingCrimeGroup, setAddExistingCrimeGroup] = useState(false);
-  const [editCrimeGroupId, setEditCrimeGroupId] = useState<string>('');
-  const [crimeGroupsData, setCrimeGroupsData] = useState<CrimeGroupData[]>([]);
+  const [crimeGroupsData, setCrimeGroupsData] = useState<CrimeGroupType[]>([]);
 
-  const [addNewVehicle, setAddNewVehicle] = useState(false);
-  const [addExistingVehicle, setAddExistingVehicle] = useState(false);
-  const [editVehicleId, setEditVehicleId] = useState<string>('');
-  const [vehiclesData, setVehiclesData] = useState<VehicleData[]>([]);
+  const [vehiclesData, setVehiclesData] = useState<VehicleType[]>([]);
 
   const onValuesChange = (changedValues: FormData) => {
     if (changedValues.idVerified !== undefined) {
@@ -359,32 +350,24 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
             ...item,
             deleted: false,
             new: false,
-            updated: false,
+            edited: false,
             existing: false,
           }))
         );
       }
       if (offender?.crimeGroups && offender.crimeGroups.length > 0) {
-        setCrimeGroupsData(offender.crimeGroups);
+        setCrimeGroupsData(
+          offender.crimeGroups.map((item) => ({
+            ...item,
+            deleted: false,
+            existing: false,
+          }))
+        );
       }
       if (offender?.idVerified) setIDVerified(true);
     },
   });
   const { data: listVehiclesData } = useListVehiclesQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        schemes: {
-          some: {
-            id: {
-              equals: schemeId,
-            },
-          },
-        },
-      },
-    },
-  });
-  const { data: listCrimeGroupsData } = useListCrimeGroupsQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
@@ -440,40 +423,8 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     },
   });
 
-  const [createCrimeGroup] = useCreateCrimeGroupMutation({});
   const [updateOffender] = useUpdateOffenderMutation({
     onCompleted: async () => {
-      const getOffender = (): CreateCrimeGroupDataInput['offenders'] => {
-        const newCrimeGroups = crimeGroupsData.filter((item) =>
-          listCrimeGroupsData?.listCrimeGroups.crimeGroups.filter(
-            ({ id }) => id !== item.id
-          )
-        );
-        const connectIds = newCrimeGroups
-          .flatMap((crimeGroup) => crimeGroup.offenders?.map((id) => ({ id })))
-          .filter((item) => item !== null && item !== undefined) as {
-          id: string;
-        }[];
-        if (connectIds.map(({ id }) => id).includes(offenderId)) {
-          return { connect: connectIds };
-        }
-        return { connect: [...connectIds, { id: offenderId }] };
-      };
-      await createCrimeGroup({
-        variables: {
-          data: {
-            schemes: {
-              connect: [
-                {
-                  id: schemeId,
-                },
-              ],
-            },
-            vehicles: {},
-            offenders: getOffender(),
-          },
-        },
-      });
       setSaving(false);
       navigate(`/app/offenders/view/${offenderId}`);
       notification.success({
@@ -489,6 +440,38 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
       errorNotification();
     },
   });
+
+  const getAddresses = (): OffenderUpdateInput['addresses'] => {
+    const createAddresses = addressesData.filter((item) => item.new);
+    const updateAddresses = addressesData.filter((item) => item.updated);
+    const deleteAddresses = addressesData.filter((item) => item.deleted);
+    return {
+      create: createAddresses.map((item) => ({
+        postcode: item.postcode,
+        street: item.street,
+        townCity: item.townCity,
+        alias: item.alias,
+        building: item.building,
+        county: item.county,
+      })),
+      update: updateAddresses.map((item) => ({
+        data: {
+          postcode: { set: item.postcode },
+          street: { set: item.street },
+          townCity: { set: item.townCity },
+          alias: { set: item.alias },
+          building: { set: item.building },
+          county: { set: item.county },
+        },
+        where: {
+          id: item.id,
+        },
+      })),
+      delete: deleteAddresses.map((item) => ({
+        id: item.id,
+      })),
+    };
+  };
 
   const onSubmit = async (data: FormData) => {
     setSaving(true);
@@ -539,22 +522,10 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
       };
     };
     const getVehicles = (): OffenderUpdateInput['vehicles'] => {
-      const vehiclesIds =
-        listVehiclesData?.listVehicles.vehicles.map((vehicle) => vehicle.id) ||
-        [];
-      const removeVehicles = vehiclesIds?.filter(
-        (vehicleId) => !vehiclesData?.map(({ id }) => id).includes(vehicleId)
-      );
-      const newVehicles = vehiclesData.filter(
-        (item) => !vehiclesIds.includes(item.id)
-      );
-
-      const existingVehicles = vehiclesData.filter((item) =>
-        vehiclesIds.includes(item.id)
-      );
-      const editedVehicles = existingVehicles.filter(
-        ({ edited }) => edited === true
-      );
+      const removeVehicles = vehiclesData.filter((item) => item.deleted);
+      const newVehicles = vehiclesData.filter((item) => item.new);
+      const existingVehicles = vehiclesData.filter((item) => item.existing);
+      const editedVehicles = vehiclesData.filter((item) => item.edited);
       return {
         connect:
           existingVehicles.length > 0
@@ -562,7 +533,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
             : undefined,
         disconnect:
           removeVehicles && removeVehicles.length > 0
-            ? removeVehicles.map((id) => ({ id }))
+            ? removeVehicles.map(({ id }) => ({ id }))
             : undefined,
         update: editedVehicles.map((vehicle) => ({
           where: { id: vehicle.id },
@@ -584,7 +555,6 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
                 : undefined,
           },
         })),
-
         create:
           newVehicles.length > 0
             ? newVehicles.map((vehicle) => ({
@@ -604,17 +574,9 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
       };
     };
     const getCrimeGroups = (): OffenderUpdateInput['crimeGroups'] => {
-      const crimeGroupsIds =
-        listCrimeGroupsData?.listCrimeGroups.crimeGroups.map(
-          (crimeGroup) => crimeGroup.id
-        );
-      const removeCrimeGroups = crimeGroupsIds?.filter(
-        (crimeGroupId) =>
-          !crimeGroupsData?.map(({ id }) => id).includes(crimeGroupId)
-      );
-
-      const existingCrimeGroups = crimeGroupsData.filter((item) =>
-        crimeGroupsIds?.includes(item.id)
+      const removeCrimeGroups = crimeGroupsData?.filter((item) => item.deleted);
+      const existingCrimeGroups = crimeGroupsData.filter(
+        (item) => item.existing
       );
 
       return {
@@ -624,14 +586,13 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
             : undefined,
         disconnect:
           removeCrimeGroups && removeCrimeGroups.length > 0
-            ? removeCrimeGroups.map((id) => ({ id }))
+            ? removeCrimeGroups.map(({ id }) => ({ id }))
             : undefined,
       };
     };
-
     const getImages = (): OffenderUpdateInput['images'] => {
       const editedImages = fileList.filter((item) => item.edited && !item.new);
-
+      console.log(fileList.filter((image) => image.deleted));
       return {
         upload:
           imageChange && fileList.length > 0
@@ -647,14 +608,12 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
                 }))
             : undefined,
         delete: imageChange
-          ? offenderData?.offender?.images
-              .filter(
-                (image) => !fileList.map((item) => item.uid).includes(image.id)
-              )
+          ? fileList
+              .filter((image) => image.deleted)
               .map((image) => ({
-                id: image.id,
+                id: image.uid,
               }))
-          : [],
+          : undefined,
         update:
           editedImages.length > 0
             ? editedImages.map((item) => ({
@@ -697,38 +656,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
           bans: getBans(),
           vehicles: getVehicles(),
           crimeGroups: getCrimeGroups(),
-          addresses: {
-            create: addressesData
-              .filter((item) => item.new)
-              .map((item) => ({
-                postcode: item.postcode,
-                street: item.street,
-                townCity: item.townCity,
-                alias: item.alias,
-                building: item.building,
-                county: item.county,
-              })),
-            update: addressesData
-              .filter((item) => item.updated)
-              .map((item) => ({
-                data: {
-                  postcode: { set: item.postcode },
-                  street: { set: item.street },
-                  townCity: { set: item.townCity },
-                  alias: { set: item.alias },
-                  building: { set: item.building },
-                  county: { set: item.county },
-                },
-                where: {
-                  id: item.id,
-                },
-              })),
-            delete: addressesData
-              .filter((item) => item.deleted)
-              .map((item) => ({
-                id: item.id,
-              })),
-          },
+          addresses: getAddresses(),
           images: getImages(),
         },
       },
@@ -846,18 +774,6 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
   const toggleEditExclusion = () => {
     setEditExclusion(!editExclusion);
   };
-  const toggleAddNewVehicle = () => {
-    setAddNewVehicle(!addNewVehicle);
-  };
-  const toggleAddExistingVehicle = () => {
-    setAddExistingVehicle(!addExistingVehicle);
-  };
-  const toggleAddNewCrimeGroup = () => {
-    setAddNewCrimeGroup(!addNewCrimeGroup);
-  };
-  const toggleAddExistingCrimeGroup = () => {
-    setAddExistingCrimeGroup(!addExistingCrimeGroup);
-  };
 
   const onUpdateExclusion = (value: BanData) => {
     const exclusion = bansData.find((item) => item.id === value.id);
@@ -929,53 +845,99 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     }
   };
 
-  const onAddVehicles = (vehicle: VehicleData, existing: boolean) => {
+  const onAddVehicle = (vehicle: VehicleData, existing: boolean) => {
     setVehiclesData([
       ...vehiclesData,
       {
         ...vehicle,
         new: !existing,
         existing,
+        deleted: false,
+        edited: false,
       },
     ]);
   };
-  const updateVehiclesData = (vehicle: VehicleData) => {
-    const editedData = vehiclesData.find(({ id }) => id === vehicle.id);
-    if (editedData) {
-      setVehiclesData([
-        ...(vehiclesData?.filter(({ id }) => id !== vehicle.id) || []),
-        {
-          ...vehicle,
-        },
-      ]);
-    } else {
-      setVehiclesData([...vehiclesData, vehicle]);
-    }
-  };
-  const removeVehicle = (vehicleId: string) => {
-    setVehiclesData(
-      vehiclesData?.filter((vehicle) => vehicle.id !== vehicleId)
-    );
-  };
 
-  const updateCrimeGroupsData = (crimeGroup: CrimeGroupData) => {
-    const editedData = crimeGroupsData.find(({ id }) => id === crimeGroup.id);
-    if (editedData) {
-      setCrimeGroupsData([
-        ...(crimeGroupsData?.filter(({ id }) => id !== crimeGroup.id) || []),
-        {
-          ...crimeGroup,
-        },
-      ]);
+  const onRemoveVehicle = (vehicleId: string) => {
+    const vehicle = vehiclesData.find((item) => item.id === vehicleId);
+
+    if (vehicle?.new || vehicle?.existing) {
+      setVehiclesData(vehiclesData.filter((item) => item.id !== vehicleId));
     } else {
-      setCrimeGroupsData([...crimeGroupsData, crimeGroup]);
+      const index = vehiclesData.map((item) => item.id).indexOf(vehicleId);
+      setVehiclesData(
+        update(vehiclesData, {
+          [index]: {
+            deleted: {
+              $set: true,
+            },
+            edited: {
+              $set: false,
+            },
+          },
+        })
+      );
     }
   };
 
-  const removeCrimeGroup = (crimeGroupId: string) => {
-    setCrimeGroupsData(
-      crimeGroupsData?.filter((crimeGroup) => crimeGroup.id !== crimeGroupId)
+  const onAddCrimeGroup = (crimeGroup: CrimeGroupData) => {
+    setCrimeGroupsData([
+      ...crimeGroupsData,
+      {
+        ...crimeGroup,
+        deleted: false,
+        existing: true,
+      },
+    ]);
+  };
+
+  const onRemoveCrimeGroup = (crimeGroupId: string) => {
+    const crimeGroups = crimeGroupsData.find(
+      (item) => item.id === crimeGroupId
     );
+    if (crimeGroups?.existing) {
+      setCrimeGroupsData(
+        crimeGroupsData.filter((item) => item.id !== crimeGroupId)
+      );
+    } else {
+      const index = crimeGroupsData
+        .map((item) => item.id)
+        .indexOf(crimeGroupId);
+      setCrimeGroupsData(
+        update(crimeGroupsData, {
+          [index]: {
+            deleted: {
+              $set: true,
+            },
+          },
+        })
+      );
+    }
+  };
+
+  const onRemoveImage = (imageId: string) => {
+    confirm({
+      title: 'Do you want to remove the image?',
+      content: 'This action cannot be undone.',
+      onOk() {
+        setImageChange(true);
+        const image = fileList.find((item) => item.uid === imageId);
+        if (image?.new) {
+          setFileList(fileList.filter((item) => item.uid !== imageId));
+        } else {
+          const index = fileList.map((item) => item.uid).indexOf(imageId);
+          setFileList(
+            update(fileList, {
+              [index]: {
+                deleted: {
+                  $set: true,
+                },
+              },
+            })
+          );
+        }
+      },
+    });
   };
 
   const deleteConfirm = (currentId: string) => {
@@ -1004,6 +966,24 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     setEditImage(image || null);
   };
 
+  const onEditVehicle = (value: VehicleData) => {
+    const vehicle = vehiclesData.find((item) => item.id === value.id);
+    if (vehicle) {
+      const index = vehiclesData.map((item) => item.id).indexOf(value.id);
+      setVehiclesData(
+        update(vehiclesData, {
+          [index]: {
+            $set: {
+              ...vehicle,
+              ...value,
+              edited: !vehicle.new,
+            },
+          },
+        })
+      );
+    }
+  };
+
   return {
     onSubmit,
     data: offenderData,
@@ -1023,7 +1003,7 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     imgChange,
     onPreview,
     beforeUpload,
-    fileList,
+    fileList: fileList.filter((item) => !item.deleted),
     addOffenderTag,
     toggleAddOffenderTag,
     updateOffenderTag,
@@ -1044,26 +1024,12 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     setSelectedItems,
     adminRights: role !== Role.User,
     form,
-    addNewVehicle,
-    addExistingVehicle,
-    editVehicleId,
-    setEditVehicleId,
-    toggleAddNewVehicle,
-    toggleAddExistingVehicle,
-    vehiclesData,
-    updateVehiclesData,
-    removeVehicle,
-    addNewCrimeGroup,
-    addExistingCrimeGroup,
-    editCrimeGroupId,
-    setEditCrimeGroupId,
-    toggleAddNewCrimeGroup,
-    toggleAddExistingCrimeGroup,
-    crimeGroupsData,
-    updateCrimeGroupsData,
-    removeCrimeGroup,
+    vehiclesData: vehiclesData.filter((item) => !item.deleted),
+    onRemoveVehicle,
+    crimeGroupsData: crimeGroupsData.filter((item) => !item.crimeGroup),
+    onAddCrimeGroup,
+    onRemoveCrimeGroup,
     listVehiclesData,
-    // listCrimeGroupsData,
     onValuesChange,
     idVerified,
     addAddress,
@@ -1074,10 +1040,12 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
     onSubmitAddress,
     onDeleteAddress,
     onEditAddress,
-    onAddVehicles,
+    onAddVehicle,
     editImage,
     onEditImage,
     toggleEditImage,
+    onEditVehicle,
+    onRemoveImage,
   };
 };
 

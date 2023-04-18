@@ -151,8 +151,6 @@ interface Props {
   toggleAddIncidentTag: () => void;
   updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
   vehiclesData: VehicleData[];
-  updateVehiclesData: (value: VehicleData) => void;
-  removeVehicle: (vehicleId: string) => void;
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
@@ -160,6 +158,9 @@ interface Props {
   onEditOffender: (offender: OffenderDataGlobal) => void;
   onRemoveOffender: (offenderId: string) => void;
   onEditImage: (value: EditImagePayload) => void;
+  onAddVehicle: (data: VehicleData, existing: boolean) => void;
+  onEditVehicle: (data: VehicleData) => void;
+  onRemoveVehicle: (vehicleId: string) => void;
 }
 
 const EditIncident = ({
@@ -186,7 +187,6 @@ const EditIncident = ({
   recentOffenderLoading,
   removeImage,
   removeImageFromOffender,
-  removeVehicle,
   reviewed,
   saving,
   searchOffenders,
@@ -199,12 +199,14 @@ const EditIncident = ({
   tagsLoading,
   toggleAddIncidentTag,
   updateIncidentTag,
-  updateVehiclesData,
   vehiclesData,
   onAddOffender,
   onEditOffender,
   onRemoveOffender,
   onEditImage,
+  onAddVehicle,
+  onEditVehicle,
+  onRemoveVehicle,
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader
@@ -626,14 +628,15 @@ const EditIncident = ({
             recentOffenderData={recentOffenderData}
             recentOffenderLoading={recentOffenderLoading}
             removeOffender={onRemoveOffender}
-            removeVehicle={removeVehicle}
             saving={saving}
             searchOffenders={searchOffenders}
             setSearchOffenders={setSearchOffenders}
             titleOrder={4}
             updateOffender={onEditOffender}
             onAddOffender={onAddOffender}
-            updateVehiclesData={updateVehiclesData}
+            onAddVehicle={onAddVehicle}
+            onEditVehicle={onEditVehicle}
+            onRemoveVehicle={onRemoveVehicle}
             vehiclesData={vehiclesData}
           />
         </Card>

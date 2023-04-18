@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-
+import { useEffect, useState } from 'react';
 import type {
   Age,
   Build,
@@ -24,11 +23,6 @@ import update from 'immutability-helper';
 
 import { useStoreState } from 'state';
 import { Modal, notification } from 'antd';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit } from '@fortawesome/pro-solid-svg-icons';
-import { faTrash } from '@fortawesome/pro-light-svg-icons';
-import type { ItemType } from 'antd/lib/menu/hooks/useItems';
-import { useNavigate } from 'react-router';
 
 const { confirm } = Modal;
 
@@ -107,7 +101,6 @@ interface Return {
   handleEditUpdate: () => void;
   editUpdateInput: string;
   setEditUpdateInput: (value: string) => void;
-  optionMenuItems: ItemType[];
   lightboxElements: {
     src: string;
   }[];
@@ -121,8 +114,6 @@ interface Return {
 }
 
 const useViewIncident = (incidentId: string): Return => {
-  const navigate = useNavigate();
-
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
   const [saving, setSaving] = useState(false);
@@ -149,7 +140,6 @@ const useViewIncident = (incidentId: string): Return => {
     createdAt: string;
     createdBy: string;
   } | null>(null);
-  const [optionMenuItems, setOptionsMenuItems] = useState<ItemType[]>([]);
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
   );
@@ -465,27 +455,6 @@ const useViewIncident = (incidentId: string): Return => {
     setEditUpdateInput('');
   };
 
-  useEffect(() => {
-    if (
-      [Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin].includes(role)
-    ) {
-      setOptionsMenuItems([
-        {
-          label: 'Edit',
-          key: '1',
-          icon: <FontAwesomeIcon size="3x" icon={faEdit} />,
-          onClick: () => navigate(`/app/incidents/edit/${incidentId}`),
-        },
-        {
-          label: 'Delete',
-          key: '2',
-          icon: <FontAwesomeIcon icon={faTrash} />,
-          onClick: () => onDelete(incidentId),
-        },
-      ]);
-    }
-  }, [role, incidentId]);
-
   return {
     addImages,
     addOffenderRights: role !== Role.User,
@@ -504,7 +473,6 @@ const useViewIncident = (incidentId: string): Return => {
     loadMore,
     loading: (data === null || data === undefined) && loading,
     onDelete,
-    optionMenuItems,
     replyTo,
     saving,
     scrolledToTop,

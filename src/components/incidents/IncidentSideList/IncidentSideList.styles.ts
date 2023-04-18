@@ -9,18 +9,19 @@ const useStyles = createUseStyles((theme: Theme) => ({
     maxHeight: '100vh',
     width: 250,
     maxWidth: 250,
-    borderLeft: `1px solid ${theme.borderColor}`,
-    borderRight: `1px solid ${theme.borderColor}`,
     overflowY: 'scroll',
 
     '& .ant-pagination': {
       margin: '15px 0',
       textAlign: 'center',
     },
+    padding: 10,
   },
   item: {
     width: '100%',
+    marginBottom: 8,
     backgroundColor: theme.componentBackground,
+    borderRadius: 10,
 
     '&:hover': {
       backgroundColor: theme.itemHoverBackground,

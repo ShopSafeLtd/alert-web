@@ -47,7 +47,11 @@ const ViewArticleView = ({
             <Row>
               {data?.article?.rows[0].columns[0].offenders.map((el) => (
                 <Col sm={24} md={12} lg={12} xl={8} xxl={6} key={el?.id}>
-                  <OffenderCard offender={el} openLightbox={openLightbox} />
+                  <OffenderCard
+                    isArticle
+                    offender={el}
+                    openLightbox={openLightbox}
+                  />
                 </Col>
               ))}
             </Row>

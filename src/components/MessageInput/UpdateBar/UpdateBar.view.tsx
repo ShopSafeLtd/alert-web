@@ -96,7 +96,6 @@ interface Props {
   crimeGroupsData: CrimeGroupData[];
   vehiclesData: VehicleData[];
   saving: boolean;
-  adminRights: boolean;
 }
 
 const UpdateBar = ({
@@ -137,7 +136,6 @@ const UpdateBar = ({
   crimeGroupsData,
   vehiclesData,
   saving,
-  adminRights,
 }: Props) => (
   <>
     <Form
@@ -369,7 +367,11 @@ const UpdateBar = ({
         </Col>
       </Row>
 
-      <Row gutter={5} style={{ height: '45px', margin: '0 10px 10px' }}>
+      <Row
+        wrap={false}
+        gutter={5}
+        style={{ height: '45px', margin: '0 10px 10px', overflow: 'auto' }}
+      >
         <Col>
           <Popover
             placement="topLeft"
@@ -418,76 +420,72 @@ const UpdateBar = ({
             />
           </Upload>
         </Col>
-        {adminRights && (
-          <>
-            <Col>
-              <div>
-                <Button
-                  onClick={toggleLinkUpdateOffender}
-                  disabled={
-                    saving ||
-                    (updateIncidents && updateIncidents.length > 0) ||
-                    (updateFileList && updateFileList.length > 0) ||
-                    (vehiclesData && vehiclesData.length > 0) ||
-                    (crimeGroupsData && crimeGroupsData.length > 0)
-                  }
-                  style={{ paddingLeft: 10, paddingRight: 10 }}
-                  // icon={<FontAwesomeIcon className="button-icon" icon={faPlus} />}
-                >
-                  Offender
-                </Button>
-              </div>
-            </Col>
-            <Col>
-              <Button
-                onClick={toggleLinkUpdateIncident}
-                disabled={
-                  saving ||
-                  (updateFileList && updateFileList.length > 0) ||
-                  (updateOffenders && updateOffenders.length > 0) ||
-                  (vehiclesData && vehiclesData.length > 0) ||
-                  (crimeGroupsData && crimeGroupsData.length > 0)
-                }
-                style={{ paddingLeft: 10, paddingRight: 10 }}
-                // icon={<FontAwesomeIcon className="button-icon" icon={faPlus} />}
-              >
-                Incident
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                onClick={toggleLinkCrimeGroup}
-                disabled={
-                  saving ||
-                  (updateFileList && updateFileList.length > 0) ||
-                  (updateOffenders && updateOffenders.length > 0) ||
-                  (vehiclesData && vehiclesData.length > 0) ||
-                  (updateIncidents && updateIncidents.length > 0)
-                }
-                style={{ paddingLeft: 10, paddingRight: 10 }}
-                // icon={<FontAwesomeIcon className="button-icon" icon={faPlus} />}
-              >
-                Crime Group
-              </Button>
-            </Col>
-            <Col>
-              <Button
-                onClick={toggleLinkVehicle}
-                disabled={
-                  saving ||
-                  (updateFileList && updateFileList.length > 0) ||
-                  (updateOffenders && updateOffenders.length > 0) ||
-                  (updateIncidents && updateIncidents.length > 0) ||
-                  (crimeGroupsData && crimeGroupsData.length > 0)
-                }
-                style={{ paddingLeft: 10, paddingRight: 10 }}
-                // icon={<FontAwesomeIcon className="button-icon" icon={faPlus} />}
-              >
-                Vehicle
-              </Button>
-            </Col>
-          </>
-        )}
+        <Col>
+          <div>
+            <Button
+              onClick={toggleLinkUpdateOffender}
+              disabled={
+                saving ||
+                (updateIncidents && updateIncidents.length > 0) ||
+                (updateFileList && updateFileList.length > 0) ||
+                (vehiclesData && vehiclesData.length > 0) ||
+                (crimeGroupsData && crimeGroupsData.length > 0)
+              }
+              style={{ paddingLeft: 10, paddingRight: 10 }}
+              // icon={<FontAwesomeIcon className="button-icon" icon={faPlus} />}
+            >
+              Offender
+            </Button>
+          </div>
+        </Col>
+        <Col>
+          <Button
+            onClick={toggleLinkUpdateIncident}
+            disabled={
+              saving ||
+              (updateFileList && updateFileList.length > 0) ||
+              (updateOffenders && updateOffenders.length > 0) ||
+              (vehiclesData && vehiclesData.length > 0) ||
+              (crimeGroupsData && crimeGroupsData.length > 0)
+            }
+            style={{ paddingLeft: 10, paddingRight: 10 }}
+            // icon={<FontAwesomeIcon className="button-icon" icon={faPlus} />}
+          >
+            Incident
+          </Button>
+        </Col>
+        <Col>
+          <Button
+            onClick={toggleLinkCrimeGroup}
+            disabled={
+              saving ||
+              (updateFileList && updateFileList.length > 0) ||
+              (updateOffenders && updateOffenders.length > 0) ||
+              (vehiclesData && vehiclesData.length > 0) ||
+              (updateIncidents && updateIncidents.length > 0)
+            }
+            style={{ paddingLeft: 10, paddingRight: 10 }}
+            // icon={<FontAwesomeIcon className="button-icon" icon={faPlus} />}
+          >
+            Crime Group
+          </Button>
+        </Col>
+        <Col>
+          <Button
+            onClick={toggleLinkVehicle}
+            disabled={
+              saving ||
+              (updateFileList && updateFileList.length > 0) ||
+              (updateOffenders && updateOffenders.length > 0) ||
+              (updateIncidents && updateIncidents.length > 0) ||
+              (crimeGroupsData && crimeGroupsData.length > 0)
+            }
+            style={{ paddingLeft: 10, paddingRight: 10 }}
+            // icon={<FontAwesomeIcon className="button-icon" icon={faPlus} />}
+          >
+            Vehicle
+          </Button>
+        </Col>
       </Row>
     </Form>
 

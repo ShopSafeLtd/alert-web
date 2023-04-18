@@ -126,6 +126,7 @@ interface Props {
   addOffenderTag: boolean;
   toggleAddOffenderTag: () => void;
   updateOffenderTag: MutationUpdaterFn<CreateTagMutation>;
+  onAddVehicle: (data: VehicleData, existing: boolean) => void;
   onUpdateExclusion: (value: BanData) => void;
   onAddExclusion: (value: BanData) => void;
   setBanData: (value: BanType) => void;
@@ -142,25 +143,9 @@ interface Props {
   setSelectedItems: (value: string[]) => void;
   form: FormInstance<FormData> | undefined;
   listVehiclesData: ListVehiclesQuery | undefined;
-  // listCrimeGroupsData: ListCrimeGroupsQuery | undefined;
-  addNewVehicle: boolean;
-  addExistingVehicle: boolean;
-  toggleAddNewVehicle: () => void;
-  toggleAddExistingVehicle: () => void;
-  editVehicleId: string;
-  setEditVehicleId: (value: string) => void;
   vehiclesData: VehicleData[];
-  updateVehiclesData: (value: VehicleData) => void;
-  removeVehicle: (vehicleId: string) => void;
-  removeCrimeGroup: (crimeGroupId: string) => void;
-  addNewCrimeGroup: boolean;
-  addExistingCrimeGroup: boolean;
-  toggleAddNewCrimeGroup: () => void;
-  toggleAddExistingCrimeGroup: () => void;
-  editCrimeGroupId: string;
-  setEditCrimeGroupId: (value: string) => void;
+  onRemoveVehicle: (vehicleId: string) => void;
   crimeGroupsData: CrimeGroupData[];
-  updateCrimeGroupsData: (value: CrimeGroupData) => void;
   onValuesChange?: (changedValues: FormData, values: FormData) => void;
   idVerified: boolean;
   onSubmitAddress: (data: AddressForm) => void;
@@ -173,6 +158,10 @@ interface Props {
   onEditImage: (value: Image) => void;
   toggleEditImage: (value?: Image) => void;
   editImage: Image | null;
+  onEditVehicle: (data: VehicleData) => void;
+  onAddCrimeGroup: (value: CrimeGroupData) => void;
+  onRemoveCrimeGroup: (crimeGroupId: string) => void;
+  onRemoveImage: (imageId: string) => void;
 }
 
 const EditOffender = ({
@@ -206,29 +195,15 @@ const EditOffender = ({
   reviewed,
   onReject,
   selectedItems,
+  onAddVehicle,
   setSelectedItems,
   form,
   adminRights,
-  addNewVehicle,
-  addExistingVehicle,
-  editVehicleId,
-  setEditVehicleId,
-  toggleAddNewVehicle,
-  toggleAddExistingVehicle,
   vehiclesData,
-  updateVehiclesData,
-  removeVehicle,
-  addNewCrimeGroup,
-  addExistingCrimeGroup,
-  editCrimeGroupId,
-  setEditCrimeGroupId,
-  toggleAddNewCrimeGroup,
-  toggleAddExistingCrimeGroup,
+  onRemoveVehicle,
+  onEditVehicle,
   crimeGroupsData,
-  updateCrimeGroupsData,
-  removeCrimeGroup,
   listVehiclesData,
-  // listCrimeGroupsData,
   onValuesChange,
   idVerified,
   addAddress,
@@ -242,6 +217,9 @@ const EditOffender = ({
   editImage,
   onEditImage,
   toggleEditImage,
+  onAddCrimeGroup,
+  onRemoveCrimeGroup,
+  onRemoveImage,
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader
@@ -419,29 +397,15 @@ const EditOffender = ({
           <Card>
             <Profiles
               saving={saving}
-              // adminRights={adminRights}
-              setEditVehicleId={setEditVehicleId}
-              toggleAddNewVehicle={toggleAddNewVehicle}
-              toggleAddExistingVehicle={toggleAddExistingVehicle}
               vehiclesData={vehiclesData}
-              removeVehicle={removeVehicle}
-              removeCrimeGroup={removeCrimeGroup}
-              // setEditCrimeGroupId={setEditCrimeGroupId}
-              toggleAddNewCrimeGroup={toggleAddNewCrimeGroup}
-              toggleAddExistingCrimeGroup={toggleAddExistingCrimeGroup}
+              onRemoveVehicle={onRemoveVehicle}
+              onRemoveCrimeGroup={onRemoveCrimeGroup}
               crimeGroupsData={crimeGroupsData}
               listVehiclesData={listVehiclesData}
-              // listCrimeGroupsData={listCrimeGroupsData}
               titleNumber={adminRights ? 3 : 2}
-              addNewVehicle={addNewVehicle}
-              addExistingVehicle={addExistingVehicle}
-              editVehicleId={editVehicleId}
-              updateVehiclesData={updateVehiclesData}
-              addNewCrimeGroup={addNewCrimeGroup}
-              addExistingCrimeGroup={addExistingCrimeGroup}
-              editCrimeGroupId={editCrimeGroupId}
-              setEditCrimeGroupId={setEditCrimeGroupId}
-              updateCrimeGroupsData={updateCrimeGroupsData}
+              onAddVehicle={onAddVehicle}
+              onAddCrimeGroup={onAddCrimeGroup}
+              onEditVehicle={onEditVehicle}
             />
           </Card>
           <Card>
@@ -679,6 +643,19 @@ const EditOffender = ({
                             onClick={() => toggleEditImage(file)}
                           >
                             <FontAwesomeIcon icon={faEdit} />
+                          </Button>
+                          <Button
+                            size="small"
+                            style={{
+                              position: 'absolute',
+                              zIndex: 10,
+                              padding: '6.5px 10px',
+                              top: 5,
+                              left: 45,
+                            }}
+                            onClick={() => onRemoveImage(file.uid)}
+                          >
+                            <FontAwesomeIcon icon={faTrash} />
                           </Button>
                           <WatermarkImage
                             position={file.position}

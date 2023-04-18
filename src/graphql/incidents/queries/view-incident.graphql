@@ -28,6 +28,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
       id
       name
     }
+
     incidentItems {
       id
       name
@@ -282,6 +283,11 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
           }
         }
       }
+    }
+    location {
+      geoLat
+      geoLng
+      id
     }
   }
 }
