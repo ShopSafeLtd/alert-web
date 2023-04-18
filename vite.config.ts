@@ -4,7 +4,6 @@ import viteTsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 import envCompatible from 'vite-plugin-env-compatible';
 // import checker from 'vite-plugin-checker';
-import removeConsole from 'vite-plugin-remove-console';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
 
 // local host launch fix
@@ -28,7 +27,7 @@ export default defineConfig(({ mode }) => {
       viteTsconfigPaths(),
       svgrPlugin(),
       // will remove console from prod builds, remove if testing is needed on live
-      removeConsole(),
+      // removeConsole(),
       // checker({z
       //   // checks for ts and eslint errors on dev, remove if not needed/any issues such as high memory usage
       //   typescript: true,
@@ -45,6 +44,7 @@ export default defineConfig(({ mode }) => {
         sourcemaps: {
           // Specify the directory containing build artifacts
           assets: './build/**',
+          ignore: 'tinymce/**',
         },
       }),
     ],
