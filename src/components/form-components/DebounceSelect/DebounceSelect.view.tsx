@@ -16,7 +16,7 @@ export interface DebounceSelectProps<ValueType = any>
  * @param  debounceTimeout - the timeout to wait before calling the function
  * @param setValue
  * @param  props { SelectProps}
- * @returns {JSX.Element} - returns a select that when searched will only trigger the search after the debounceTimeout or 800ms after the user has stopped typing. This is used to reduce the number of calls to an api
+ * @returns {JSX.Element} - returns a select that when searched will only trigger the search after the debounceTimeout or 200ms after the user has stopped typing. This is used to reduce the number of calls to an api
  * @description - if used in a form, make sure to wrap in a React fragment and use the state as value rather than the form submit value
  * */
 const DebounceSelect = <
@@ -27,7 +27,7 @@ const DebounceSelect = <
   } = any
 >({
   fetchOptions,
-  debounceTimeout = 800,
+  debounceTimeout = 200,
   setValue,
   ...props
 }: DebounceSelectProps) => {
@@ -65,7 +65,7 @@ const DebounceSelect = <
 };
 
 DebounceSelect.defaultProps = {
-  debounceTimeout: 800,
+  debounceTimeout: 200,
   setValue: () => {},
 };
 export default DebounceSelect;

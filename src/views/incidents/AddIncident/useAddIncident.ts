@@ -54,7 +54,7 @@ interface OffenderData extends GlobalOffenderData {
   edited: boolean;
 }
 
-interface FormData {
+export interface FormData {
   subject: string;
   description: string;
   date: Date;
@@ -876,11 +876,8 @@ const useEditIncident = (): Return => {
     }
   };
 
-  const onSearchBusiness = async (value: string) => {
-    if (value.length < 2) {
-      return [];
-    }
-    return client
+  const onSearchBusiness = async (value: string) =>
+    client
       .query<SearchBusinessesQuery, SearchBusinessesQueryVariables>({
         query: SearchBusinessesDocument,
         variables: {
@@ -913,7 +910,6 @@ const useEditIncident = (): Return => {
               },
             ]
       );
-  };
 
   const onValuesChange = (changedValues: FormData, values: FormData) => {
     // when tags are set enable the next form steps
