@@ -446,7 +446,7 @@ const useCreateArticle = (): Props => {
               articleImages && articleImages.length > 0
                 ? articleImages.map((item) => ({
                     url: {
-                      filename: item.fileName || '',
+                      filename: item.fileName || item.name || '',
                       mimetype: item.type || '',
                       url: item.url || '',
                     },
