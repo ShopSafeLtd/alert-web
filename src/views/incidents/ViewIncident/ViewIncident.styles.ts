@@ -10,9 +10,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
   headerBar: {
     width: '100%',
-    borderBottom: `1px solid ${theme.borderColor}`,
-    backgroundColor: theme.componentBackground,
-    padding: '7px 20px',
+    padding: '7px 0px 3px',
     display: 'flex',
     alignItems: 'center',
   },
@@ -25,7 +23,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
   content: {
     width: '100%',
-    height: 'calc(100vh - 55px)',
+    height: '100vh',
   },
   detailsHeader: {
     paddingRight: 20,
@@ -41,7 +39,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     borderRight: `1px solid ${theme.borderColor}`,
   },
   details: {
-    padding: '15px 20px',
+    padding: '0px 15px 0 8px',
   },
   detail: {
     paddingBottom: '8px !important',
@@ -49,41 +47,54 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
   images: {
     width: '100%',
-    height: 180,
     padding: '0px 10px',
+    margin: '10px 0 20px',
     transition: 'all 0.3s ease-in-out',
     overflowY: 'hidden',
     overflowX: 'auto',
-    '@media only screen and (min-height: 800px)': {
-      height: 250,
-    },
   },
   image: {
     height: 160,
-    width: 160,
+    width: 150,
     backgroundColor: theme.imageBackgroundColor,
     cursor: 'pointer',
-    borderRadius: 5,
+    borderRadius: 10,
+    border: `2px solid ${theme.borderColor}`,
     overflow: 'hidden',
     transition: 'all 0.3s ease-in-out',
-    '&:hover': {
-      height: 170,
-      width: 170,
-      '@media only screen and (min-height: 800px)': {
-        height: 240,
-        width: 240,
-      },
-    },
     '@media only screen and (min-height: 800px)': {
       height: 230,
-      width: 230,
+      width: 170,
     },
+  },
+  mapOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 3,
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    transition: 'all 0.2s ease-in-out',
+    opacity: 0,
+    '&:hover': {
+      backgroundColor: 'rgba(0,0,0,.3)',
+      opacity: 1,
+    },
+  },
+  mapText: {
+    color: '#FFF',
+    marginLeft: 10,
+    fontSize: 16,
+    marginBottom: 0,
   },
   descIcon: {
     marginRight: 10,
   },
   desc: {
-    marginBottom: 30,
     width: '100%',
   },
   offenderRow: {

@@ -121,7 +121,6 @@ interface Props {
   removeImage: (uid: string) => void;
   removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
   removeOffender: (offenderId: string) => void;
-  removeVehicle: (vehicleId: string) => void;
   saving: boolean;
   searchOffenders: string;
   setAssignToImage: (image: Image) => void;
@@ -131,7 +130,6 @@ interface Props {
   toggleAddIncidentTag: () => void;
   updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
   onAddOffender: (value: GlobalOffenderData, existing: boolean) => void;
-  updateVehiclesData: (value: VehicleData) => void;
   vehiclesData: VehicleData[];
   formStages: {
     crimeTypes: boolean;
@@ -151,6 +149,9 @@ interface Props {
   dontKnowGoods: () => void;
   knowGoods: () => void;
   onEditImage: (value: Image) => void;
+  onAddVehicle: (value: VehicleData, existing: boolean) => void;
+  onEditVehicle: (value: VehicleData) => void;
+  onRemoveVehicle: (vehicleId: string) => void;
 }
 
 const EditIncident = ({
@@ -178,7 +179,6 @@ const EditIncident = ({
   removeImage,
   removeImageFromOffender,
   removeOffender,
-  removeVehicle,
   saving,
   searchOffenders,
   setAssignToImage,
@@ -188,7 +188,6 @@ const EditIncident = ({
   toggleAddIncidentTag,
   updateIncidentTag,
   onAddOffender,
-  updateVehiclesData,
   vehiclesData,
   addNewAddress,
   toggleAddNewAddress,
@@ -198,6 +197,9 @@ const EditIncident = ({
   goodsVisible,
   knowGoods,
   onEditImage,
+  onAddVehicle,
+  onEditVehicle,
+  onRemoveVehicle,
 }: Props): JSX.Element => {
   const classes = useStyles();
 
@@ -617,15 +619,16 @@ const EditIncident = ({
               recentOffenderData={recentOffenderData}
               recentOffenderLoading={recentOffenderLoading}
               removeOffender={removeOffender}
-              removeVehicle={removeVehicle}
               saving={saving}
               searchOffenders={searchOffenders}
               setSearchOffenders={setSearchOffenders}
               titleOrder={isTheft ? 4 : 3}
               updateOffender={() => {}}
-              updateVehiclesData={updateVehiclesData}
               vehiclesData={vehiclesData}
               onAddOffender={onAddOffender}
+              onAddVehicle={onAddVehicle}
+              onEditVehicle={onEditVehicle}
+              onRemoveVehicle={onRemoveVehicle}
             />
           </Form.Item>
         </Card>

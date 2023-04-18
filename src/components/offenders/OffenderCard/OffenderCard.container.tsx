@@ -14,12 +14,14 @@ interface Props {
   >['offenders'][0];
   openLightbox: (elements: { src: string }[], index: number) => void;
   update?: MutationUpdaterFn<RecycleOffenderMutation>;
+  isArticle?: boolean;
 }
 
 const OffenderCard = ({
   offender,
   openLightbox,
   update,
+  isArticle,
 }: Props): JSX.Element => {
   const { approvalRights, deleteRights, menuRights, onNavigate, onDelete } =
     useOffenderCard({
@@ -29,6 +31,7 @@ const OffenderCard = ({
 
   return (
     <View
+      isArticle={isArticle}
       approvalRights={approvalRights}
       deleteRights={deleteRights}
       menuRights={menuRights}

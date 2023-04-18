@@ -31,7 +31,6 @@ import {
   useCreateIncidentMutation,
   useListGoodsTypesQuery,
   useListOffendersQuery,
-  useListVehiclesQuery,
   useSchemeGroupsQuery,
   useTagsQuery,
 } from 'graphql/generated';
@@ -91,6 +90,12 @@ interface Image extends UploadFile {
   position?: ImagePosition;
 }
 
+interface VehicleType extends VehicleData {
+  new: boolean;
+  existing: boolean;
+  edited: boolean;
+}
+
 interface Return {
   addIncidentTag: boolean;
   addressLoading: boolean;
@@ -127,7 +132,6 @@ interface Return {
   removeImage: (uid: string) => void;
   removeImageFromOffender: (data: { image: Image; offenderId: string }) => void;
   removeOffender: (offenderId: string) => void;
-  removeVehicle: (vehicleId: string) => void;
   saving: boolean;
   searchOffenders: string;
   setAssignToImage: (image: Image) => void;
@@ -137,8 +141,7 @@ interface Return {
   toggleAddIncidentTag: () => void;
   updateIncidentTag: MutationUpdaterFn<CreateTagMutation>;
   onAddOffender: (value: GlobalOffenderData, existing: boolean) => void;
-  updateVehiclesData: (value: VehicleData) => void;
-  vehiclesData: VehicleData[];
+  vehiclesData: VehicleType[];
   formStages: {
     crimeTypes: boolean;
     where: boolean;
@@ -157,6 +160,9 @@ interface Return {
   dontKnowGoods: () => void;
   knowGoods: () => void;
   onEditImage: (value: Image) => void;
+  onAddVehicle: (value: VehicleData, existing: boolean) => void;
+  onEditVehicle: (value: VehicleData) => void;
+  onRemoveVehicle: (vehicleId: string) => void;
 }
 
 const useEditIncident = (): Return => {
@@ -198,7 +204,7 @@ const useEditIncident = (): Return => {
   const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
   const [saving, setSaving] = useState(false);
   const [searchOffenders, setSearchOffenders] = useState<string>('');
-  const [vehiclesData, setVehiclesData] = useState<VehicleData[]>([]);
+  const [vehiclesData, setVehiclesData] = useState<VehicleType[]>([]);
 
   useEffect(() => {
     if (businesses.length > 0) {
@@ -264,21 +270,6 @@ const useEditIncident = (): Return => {
         },
         dataType: {
           equals: Model.Incident,
-        },
-      },
-    },
-  });
-
-  const { data: listVehiclesData } = useListVehiclesQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        schemes: {
-          some: {
-            id: {
-              equals: schemeId,
-            },
-          },
         },
       },
     },
@@ -470,28 +461,43 @@ const useEditIncident = (): Return => {
     }
   };
 
-  const updateVehiclesData = (vehicle: VehicleData) => {
-    const editedData = vehiclesData.find(({ id }) => id === vehicle.id);
-    if (editedData) {
-      setVehiclesData([
-        ...(vehiclesData?.filter(({ id }) => id !== vehicle.id) || []),
-        {
-          ...vehicle,
-        },
-      ]);
-    } else {
-      setVehiclesData([...vehiclesData, vehicle]);
+  const onAddVehicle = (vehicle: VehicleData, existing: boolean) => {
+    setVehiclesData([
+      ...vehiclesData,
+      {
+        ...vehicle,
+        edited: false,
+        existing,
+        new: !existing,
+      },
+    ]);
+  };
+  const onEditVehicle = (value: VehicleData) => {
+    const vehicle = vehiclesData.find((item) => item.id === value.id);
+    if (vehicle) {
+      const index = vehiclesData.map((item) => item.id).indexOf(value.id);
+      setVehiclesData(
+        update(vehiclesData, {
+          [index]: {
+            $set: {
+              ...vehicle,
+              ...value,
+              edited: !vehicle.new,
+            },
+          },
+        })
+      );
     }
+  };
+  const onRemoveVehicle = (vehicleId: string) => {
+    setVehiclesData(
+      vehiclesData?.filter((vehicle) => vehicle.id !== vehicleId)
+    );
   };
 
   const removeOffender = (offenderId: string) => {
     setOffendersData(
       offendersData?.filter((offender) => offender.id !== offenderId)
-    );
-  };
-  const removeVehicle = (vehicleId: string) => {
-    setVehiclesData(
-      vehiclesData?.filter((vehicle) => vehicle.id !== vehicleId)
     );
   };
 
@@ -728,20 +734,10 @@ const useEditIncident = (): Return => {
         };
       };
       const getVehicles = (): CreateIncidentData['vehicles'] => {
-        const vehiclesIds = new Set(
-          listVehiclesData?.listVehicles.vehicles.map((vehicle) => vehicle.id)
-        );
+        const newVehicles = vehiclesData.filter((item) => item.new);
 
-        const newVehicles = vehiclesData.filter(
-          (item) => !vehiclesIds.has(item.id)
-        );
-
-        const existingVehicles = vehiclesData.filter((item) =>
-          vehiclesIds.has(item.id)
-        );
-        const editedVehicles = existingVehicles.filter(
-          ({ edited }) => edited === true
-        );
+        const existingVehicles = vehiclesData.filter((item) => item.existing);
+        const editedVehicles = existingVehicles.filter((item) => item.edited);
         return {
           connect:
             existingVehicles.length > 0
@@ -1161,8 +1157,6 @@ const useEditIncident = (): Return => {
     adminRights: role !== Role.User,
     offenderImgChange,
     vehiclesData,
-    updateVehiclesData,
-    removeVehicle,
     onSearchBusiness,
     formStages,
     onValuesChange,
@@ -1176,6 +1170,9 @@ const useEditIncident = (): Return => {
     goodsVisible,
     knowGoods,
     onEditImage,
+    onAddVehicle,
+    onEditVehicle,
+    onRemoveVehicle,
   };
 };
 

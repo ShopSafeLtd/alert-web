@@ -99,7 +99,6 @@ const useEditVehicle = ({ onClose, update, editData }: Props): Return => {
       model: data.model || '',
       colour: data.colour || '',
       registration: data.registration || '',
-      edited: true,
       crimeGroup:
         data?.crimeGroup && data.crimeGroup.length > 0
           ? data?.crimeGroup?.map((id) => id)

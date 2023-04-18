@@ -17,9 +17,9 @@ import {
 import LogRocket from 'logrocket';
 import { BrowserTracing } from '@sentry/tracing';
 import ApolloProvider from './providers/ApolloProvider';
-
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 import { Store, ThemeConfig } from './state';
 

@@ -25,9 +25,10 @@ interface Props {
   toggleAddNewVehicle: () => void;
   toggleAddOffender: () => void;
   updateOffender: (value: OffenderData) => void;
-  updateVehiclesData: (value: VehicleData) => void;
   vehiclesData: VehicleData[];
   onAddOffender: (value: OffenderData, existing: boolean) => void;
+  onAddVehicle: (data: VehicleData, existing: boolean) => void;
+  onEditVehicle: (data: VehicleData) => void;
 }
 
 const ProfileDrawer = ({
@@ -46,16 +47,17 @@ const ProfileDrawer = ({
   setEditVehicleId,
   toggleAddNewVehicle,
   toggleAddExistingVehicle,
-  updateVehiclesData,
   fromIncident,
   onAddOffender,
+  onAddVehicle,
+  onEditVehicle,
 }: Props): JSX.Element => (
   <>
     {/* offeder */}
 
     <Drawer
       title="Add New Offender"
-      visible={addOffender}
+      open={addOffender}
       width="600"
       onClose={toggleAddOffender}
       zIndex={1001}
@@ -71,7 +73,7 @@ const ProfileDrawer = ({
     </Drawer>
     <Drawer
       title="Add Existing Offenders"
-      visible={addExistingOffender}
+      open={addExistingOffender}
       width="800"
       onClose={toggleAddExistingOffender}
       zIndex={1001}
@@ -88,7 +90,7 @@ const ProfileDrawer = ({
     </Drawer>
     <Drawer
       title="Edit Offender"
-      visible={!!editOffenderId}
+      open={!!editOffenderId}
       width="1000"
       onClose={() => setEditOffenderId('')}
     >
@@ -107,14 +109,14 @@ const ProfileDrawer = ({
     {/* vehicle */}
     <Drawer
       title="Add Existing Vehicles"
-      visible={addExistingVehicle}
+      open={addExistingVehicle}
       width="800"
       onClose={toggleAddExistingVehicle}
       zIndex={1001}
     >
       {addExistingVehicle ? (
         <LinkVehicle
-          update={updateVehiclesData}
+          update={(data) => onAddVehicle(data, true)}
           vehicleIds={vehiclesData.map(({ id }) => id)}
           onClose={toggleAddExistingVehicle}
         />
@@ -124,15 +126,14 @@ const ProfileDrawer = ({
     </Drawer>
     <Drawer
       title="Add New Vehicle"
-      visible={addNewVehicle}
+      open={addNewVehicle}
       width="600"
       onClose={toggleAddNewVehicle}
     >
       {addNewVehicle ? (
         <AddVehicle
-          update={updateVehiclesData}
+          update={(data) => onAddVehicle(data, false)}
           onClose={toggleAddNewVehicle}
-          // fromIncident={fromIncident !== undefined ? fromIncident : false}
           fromIncident={!!fromIncident}
         />
       ) : (
@@ -141,14 +142,14 @@ const ProfileDrawer = ({
     </Drawer>
     <Drawer
       title="Edit Vehicle Details"
-      visible={!!editVehicleId}
+      open={!!editVehicleId}
       width="600"
       onClose={() => setEditVehicleId('')}
     >
       {editVehicleId ? (
         <EditVehicle
           onClose={() => setEditVehicleId('')}
-          update={updateVehiclesData}
+          update={onEditVehicle}
           editData={vehiclesData.find(({ id }) => id === editVehicleId)}
         />
       ) : (

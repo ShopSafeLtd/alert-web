@@ -17,6 +17,7 @@ import type { VehicleData } from 'types/DataType';
 
 interface Props {
   update: (value: VehicleData) => void;
+  onClose: () => void;
 }
 
 interface Return {
@@ -43,7 +44,7 @@ interface Return {
   fileList: UploadFile[];
 }
 
-const useAddVehicle = ({ update }: Props): Return => {
+const useAddVehicle = ({ update, onClose }: Props): Return => {
   const role = useStoreState((state) => state.user.role);
   const schemeId = useStoreState((state) => state.scheme.id);
   const [linkIncident, setLinkIncident] = useState(false);
@@ -147,6 +148,7 @@ const useAddVehicle = ({ update }: Props): Return => {
             }))
           : [],
     });
+    onClose();
   };
   // function
   const toggleLinkIncident = () => {

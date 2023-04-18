@@ -92,14 +92,15 @@ describe('List Officer View', () => {
           setAddRecentOffender={jest.fn()}
           setAssignToImage={jest.fn()}
           setSearchOffenders={jest.fn()}
-          removeVehicle={jest.fn()}
-          updateVehiclesData={jest.fn()}
           onSearchBusiness={jest.fn()}
           onAddOffender={jest.fn()}
           onEditOffender={jest.fn()}
           onRemoveOffender={jest.fn()}
           vehiclesData={[]}
           goodsTypesData={{ listGoodsTypes: { goodsTypes: [], total: 0 } }}
+          onAddVehicle={jest.fn()}
+          onEditVehicle={jest.fn()}
+          onRemoveVehicle={jest.fn()}
         />
       </MemoryRouter>
     );
