@@ -1034,7 +1034,7 @@ const useEditIncident = (): Return => {
       form.setFieldsValue({
         description: `An incident of ${tags
           .map((tag, index) => `${index > 0 ? ' ' : ''}${tag}`)
-          .toString()} occurred at ${values.business.label} at ${moment(
+          .toString()} occurred at ${values.business?.label || ''} at ${moment(
           values.date
         ).format('HH:mm')} on ${moment(values.date).format(
           'dddd Do MMMM YYYY'
