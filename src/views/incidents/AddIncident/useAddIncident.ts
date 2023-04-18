@@ -64,7 +64,7 @@ interface FormData {
   policeInvolved?: boolean;
   policeRef?: string;
   policeNo?: string;
-  business: {
+  business?: {
     label: React.ReactNode;
     value: string;
   };
@@ -807,9 +807,11 @@ const useEditIncident = (): Return => {
             description: data.description,
             date: data.date,
             time: data.date,
-            business: {
-              id: data.business.value,
-            },
+            business: data.business
+              ? {
+                  id: data.business.value,
+                }
+              : undefined,
             items: data.goods
               ?.filter((item) => item.goodsType !== undefined)
               .map((item) => ({
@@ -1034,11 +1036,11 @@ const useEditIncident = (): Return => {
       form.setFieldsValue({
         description: `An incident of ${tags
           .map((tag, index) => `${index > 0 ? ' ' : ''}${tag}`)
-          .toString()} occurred at ${values.business?.label || ''} at ${moment(
+          .toString()} occurred ${
+          values.business ? `at ${values.business.label}` : ''
+        } at ${moment(values.date).format('HH:mm')} on ${moment(
           values.date
-        ).format('HH:mm')} on ${moment(values.date).format(
-          'dddd Do MMMM YYYY'
-        )}. ${
+        ).format('dddd Do MMMM YYYY')}. ${
           tags.includes('Theft & Handling')
             ? `The goods lost in this incident total £${
                 values.goods
