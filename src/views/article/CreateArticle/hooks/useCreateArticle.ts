@@ -498,9 +498,10 @@ const useCreateArticle = (): Props => {
 
   const insertIncident = (incident: Incident) => {
     setIncidents((prev) => [...prev, incident]);
+    // TODO: for some reason it ignores everything in the ${} but if you put just /app/offenders/view/${offender.id} it just returns offenders/view.. which makes no sense
     editorRef.current?.insertContent(
       `
-        <a target="_blank" rel="noopener noreferrer" href="${siteUrl}offenders/view/${incident.incident.id}">
+        <a target="_blank" rel="noopener noreferrer"  href="${siteUrl}/app/incidents/view/${incident.incident.id}">
         <b>${incident.incident.description}</b>
 </a>`,
       { format: 'raw' }
@@ -509,11 +510,10 @@ const useCreateArticle = (): Props => {
 
   const insertOffender = (offender: OffenderData) => {
     setOffenders((prev) => [...prev, offender]);
+    // TODO: for some reason it ignores everything in the ${} but if you put just /app/offenders/view/${offender.id} it just returns offenders/view.. which makes no sense
+    const url = `${siteUrl}/app/offenders/view/${offender.id}`;
     editorRef.current?.insertContent(
-      `
-        <a target="_blank" rel="noopener noreferrer" href="${siteUrl}offenders/view/${offender.id}">
-        <b>${offender.name}</b>
-</a>`,
+      `<a target="_blank" rel="noopener noreferrer" href="${url}">       <b>${offender.name}</b></a>`,
       { format: 'raw' }
     );
   };

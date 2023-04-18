@@ -342,7 +342,7 @@ const CreateArticleView = ({
                           avatar={
                             <Avatar
                               src={
-                                (item.images && item.images[0].optimised) || ''
+                                (item.images && item.images[0]?.optimised) || ''
                               }
                             />
                           }
