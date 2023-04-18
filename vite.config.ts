@@ -29,7 +29,7 @@ export default defineConfig(({ mode }) => {
       svgrPlugin(),
       // will remove console from prod builds, remove if testing is needed on live
       removeConsole(),
-      // checker({
+      // checker({z
       //   // checks for ts and eslint errors on dev, remove if not needed/any issues such as high memory usage
       //   typescript: true,
       //   eslint: {
@@ -40,8 +40,12 @@ export default defineConfig(({ mode }) => {
       sentryVitePlugin({
         org: 'nvoyy-group',
         project: 'alert-web',
-        include: './build',
+        // include: './build',
         authToken: env.SENTRY_AUTH_TOKEN,
+        sourcemaps: {
+          // Specify the directory containing build artifacts
+          assets: './build/**',
+        },
       }),
     ],
     define: {

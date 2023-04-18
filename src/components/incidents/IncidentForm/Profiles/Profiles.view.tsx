@@ -19,7 +19,6 @@ import {
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  // faEdit,
   faMagnifyingGlass,
   faPlus,
   faTrash,
@@ -44,6 +43,7 @@ type Offender = Exclude<
   ListOffendersQuery['listOffenders'],
   null | undefined
 >['offenders'][0];
+
 interface Props {
   addExistingOffender: boolean;
   addExistingVehicle: boolean;
@@ -123,8 +123,17 @@ const Profiles = ({
         </Title>
       </Col>
       <Col style={{ marginRight: 20 }}>
-        <Paragraph style={{ marginBottom: 1 }} type="secondary" italic>
-          - Please add at least one profile that was involved in the incident.
+        <Paragraph
+          style={{ marginBottom: 1 }}
+          type={
+            vehiclesData?.length > 0 || offendersData?.length > 0
+              ? 'secondary'
+              : 'danger'
+          }
+          italic={vehiclesData?.length > 0 || offendersData?.length > 0}
+          strong={vehiclesData?.length === 0 && offendersData?.length === 0}
+        >
+          - Please add at least one offender that was involved in the incident.
         </Paragraph>
       </Col>
       <Col>
@@ -210,8 +219,8 @@ const Profiles = ({
             {offendersData && offendersData.length > 0 ? (
               <>
                 {/* <Title level={4} style={{ marginLeft: 20 }}>
-                  Offenders
-                </Title> */}
+                    Offenders
+                  </Title> */}
                 <Divider>Offenders</Divider>
                 <Table
                   size="small"
@@ -535,12 +544,12 @@ const Profiles = ({
                             position={offender.images[0]?.position}
                           />
                           {/* {offender.images.length === 0 && (
-                            <FontAwesomeIcon
-                              style={{ color: 'rgb(114, 132, 154)' }}
-                              icon={faUser}
-                              size="3x"
-                            />
-                          )} */}
+                              <FontAwesomeIcon
+                                style={{ color: 'rgb(114, 132, 154)' }}
+                                icon={faUser}
+                                size="3x"
+                              />
+                            )} */}
                           <Paragraph
                             style={{
                               whiteSpace: 'nowrap',

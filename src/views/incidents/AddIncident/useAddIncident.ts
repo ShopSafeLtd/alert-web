@@ -54,7 +54,7 @@ interface OffenderData extends GlobalOffenderData {
   edited: boolean;
 }
 
-interface FormData {
+export interface FormData {
   subject: string;
   description: string;
   date: Date;
@@ -64,7 +64,7 @@ interface FormData {
   policeInvolved?: boolean;
   policeRef?: string;
   policeNo?: string;
-  business: {
+  business?: {
     label: React.ReactNode;
     value: string;
   };
@@ -807,9 +807,11 @@ const useEditIncident = (): Return => {
             description: data.description,
             date: data.date,
             time: data.date,
-            business: {
-              id: data.business.value,
-            },
+            business: data.business
+              ? {
+                  id: data.business.value,
+                }
+              : undefined,
             items: data.goods
               ?.filter((item) => item.goodsType !== undefined)
               .map((item) => ({
@@ -874,11 +876,8 @@ const useEditIncident = (): Return => {
     }
   };
 
-  const onSearchBusiness = async (value: string) => {
-    if (value.length < 2) {
-      return [];
-    }
-    return client
+  const onSearchBusiness = async (value: string) =>
+    client
       .query<SearchBusinessesQuery, SearchBusinessesQueryVariables>({
         query: SearchBusinessesDocument,
         variables: {
@@ -911,7 +910,6 @@ const useEditIncident = (): Return => {
               },
             ]
       );
-  };
 
   const onValuesChange = (changedValues: FormData, values: FormData) => {
     // when tags are set enable the next form steps
@@ -1034,11 +1032,11 @@ const useEditIncident = (): Return => {
       form.setFieldsValue({
         description: `An incident of ${tags
           .map((tag, index) => `${index > 0 ? ' ' : ''}${tag}`)
-          .toString()} occurred at ${values.business.label} at ${moment(
+          .toString()} occurred ${
+          values.business ? `at ${values.business.label}` : ''
+        } at ${moment(values.date).format('HH:mm')} on ${moment(
           values.date
-        ).format('HH:mm')} on ${moment(values.date).format(
-          'dddd Do MMMM YYYY'
-        )}. ${
+        ).format('dddd Do MMMM YYYY')}. ${
           tags.includes('Theft & Handling')
             ? `The goods lost in this incident total £${
                 values.goods
