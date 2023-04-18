@@ -44,7 +44,7 @@ export default defineConfig(({ mode }) => {
         sourcemaps: {
           // Specify the directory containing build artifacts
           assets: './build/**',
-          ignore: 'tinymce/**',
+          ignore: '*/tinymce/**',
         },
       }),
     ],
