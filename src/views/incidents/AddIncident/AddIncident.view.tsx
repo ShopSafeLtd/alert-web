@@ -43,6 +43,7 @@ import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import AddLocation from 'components/form-components/incident/location/AddLocation';
 import useStyles from './AddIncident.styles';
+import type { FormData } from './useAddIncident';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -50,33 +51,6 @@ interface OffenderData extends GlobalOffenderData {
   new: boolean;
   existing: boolean;
   edited: boolean;
-}
-
-interface FormData {
-  subject: string;
-  description: string;
-  date: Date;
-  value?: number;
-  recoveredValue?: number;
-  policeReported?: boolean;
-  policeInvolved?: boolean;
-  policeNo?: string;
-  policeRef?: string;
-  business: {
-    label: React.ReactNode;
-    value: string;
-  };
-  groups: string[];
-  tags: string[];
-  images?: { id: string; url: string; optimised: string }[];
-  goods: {
-    goodsType?: string;
-    value?: number;
-    recoveredValue: number;
-  }[];
-  profiles: OffenderData[];
-  involvedTags: [];
-  fellingTags: [];
 }
 
 interface Image extends UploadFile {
