@@ -409,23 +409,6 @@ const ViewIncident = ({
                         .includes(CrimeType.TheftHandling) && (
                         <Card style={{ marginBottom: 20 }}>
                           <Title level={4}>Goods</Title>
-                          <Descriptions column={1} className={classes.desc}>
-                            <Descriptions.Item
-                              className={classes.detail}
-                              label={<span>Value</span>}
-                            >
-                              {data?.incident?.totalValue ? '£' : ''}
-                              {data?.incident?.totalValue || 'Unknown'}
-                            </Descriptions.Item>
-                            <Descriptions.Item
-                              className={classes.detail}
-                              label={<span>Recovered Value</span>}
-                            >
-                              {data?.incident?.totalRecoveredValue ? '£' : ''}
-                              {data?.incident?.totalRecoveredValue || 'Unknown'}
-                            </Descriptions.Item>
-                          </Descriptions>
-
                           <Table
                             columns={[
                               {

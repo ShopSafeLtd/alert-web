@@ -4,6 +4,7 @@ import LogRocket from 'logrocket';
 import { useCurrentUserLazyQuery } from 'graphql/generated';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect } from 'react';
+import * as Sentry from '@sentry/react';
 
 interface Return {
   rehydrateAuth: () => void;
@@ -101,6 +102,8 @@ const useAuth = (): Return => {
       fullName,
       email,
     });
+
+    Sentry.setUser({ email, username: fullName, id });
 
     setUser({
       id,
