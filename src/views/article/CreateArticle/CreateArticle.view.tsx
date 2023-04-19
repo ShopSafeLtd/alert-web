@@ -260,7 +260,7 @@ const CreateArticleView = ({
                     'autoresize',
                   ],
                   elementpath: false,
-
+                  contextmenu: false,
                   menubar: 'file edit view insert format tools table',
                   toolbar:
                     ' insertMenuButton | undo redo | bold italic underline strikethrough | fontfamily fontsize blocks forecolor removeformat | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist |  pagebreak | charmap emoticons | preview print | image media link | ltr rtl',

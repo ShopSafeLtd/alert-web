@@ -1,6 +1,5 @@
 import React from 'react';
 import { Card, Col, List, Row, Typography } from 'antd';
-import { Link } from 'react-router-dom';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
@@ -66,7 +65,9 @@ const ViewArticleView = ({
             <List.Item>
               <Card>
                 <Typography.Title level={4}>
-                  <Link to={item.url}>{item.name}</Link>
+                  <a target="_blank" href={item.url} rel="noreferrer">
+                    {item.name}
+                  </a>
                 </Typography.Title>
               </Card>
             </List.Item>
