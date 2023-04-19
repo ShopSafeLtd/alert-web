@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import type {
   CreateTagMutation,
+  EditIncidentQuery,
   IncidentUpdateInput,
   ListGoodsTypesQuery,
   ListOffendersQuery,
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
   TagsQuery,
-  ViewIncidentQuery,
 } from 'graphql/generated';
 import {
   TagType,
@@ -60,7 +60,14 @@ interface FormData {
   policeReported?: boolean;
   policeInvolved?: boolean;
   policeRef?: string;
-  business: {
+  policeNo?: string;
+  goods: {
+    id: string;
+    goodsType?: string;
+    value?: number;
+    recoveredValue: number;
+  }[];
+  business?: {
     label: React.ReactNode;
     value: string;
   };
@@ -68,13 +75,12 @@ interface FormData {
   tagsCrimeTypes: string[];
   tagsInvolved: string[];
   tagsImpact: string[];
-  images: { id: string; url: string; optimised: string }[];
-  goods: {
-    id: string;
-    goodsType?: string;
-    value?: number;
-    recoveredValue: number;
-  }[];
+  images: [{ id: string; url: string; optimised: string }];
+  building: string;
+  street: string;
+  townCity: string;
+  county: string;
+  postcode: string;
 }
 
 interface OffenderData extends OffenderDataGlobal {
@@ -118,7 +124,7 @@ interface Return {
     offenders: OffenderDataGlobal[];
   }) => void;
   beforeUpload: (value: RcFile) => void;
-  data: ViewIncidentQuery | undefined;
+  data: EditIncidentQuery | undefined;
   fileList: Image[];
   goodsTypesData: ListGoodsTypesQuery | undefined;
   groups: { value: string; label: string }[];
@@ -976,10 +982,26 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             policeInvolved: { set: data.policeInvolved },
             policeRef: { set: data.policeRef },
             policeReported: { set: data.policeReported },
-            business: {
-              connect: {
-                id: data.business.value,
+            location: {
+              update: {
+                building: { set: data.building },
+                street: { set: data.street },
+                townCity: { set: data.townCity },
+                county: { set: data.county },
+                postcode: { set: data.postcode },
               },
+            },
+            business: {
+              connect: data.business
+                ? {
+                    id: data.business.value,
+                  }
+                : undefined,
+              disconnect:
+                incidentData?.incident?.business?.id &&
+                data.business?.value === undefined
+                  ? true
+                  : undefined,
             },
             incidentItems:
               data.goods?.length > 0

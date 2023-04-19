@@ -367,7 +367,7 @@ const ViewIncident = ({
                             geoLng={data?.incident?.location?.geoLng}
                           />
                         </Col>
-                        <Col xs={24} lg={12}>
+                        <Col xs={24} xl={12}>
                           <Card>
                             <Title level={4}>Police Information</Title>
                             <Descriptions

@@ -305,17 +305,7 @@ const EditIncident = ({
                 <Col>
                   <Row>
                     <Col>
-                      <Form.Item
-                        name="business"
-                        label="Business"
-                        rules={[
-                          {
-                            required: !newAddressData,
-                            message:
-                              'Please select a business for the incident.',
-                          },
-                        ]}
-                      >
+                      <Form.Item name="business" label="Business">
                         <DebounceSelect
                           showSearch
                           allowClear
