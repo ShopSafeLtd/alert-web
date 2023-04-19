@@ -8,7 +8,6 @@ import {
   Menu,
   Modal,
   Row,
-  Skeleton,
   Tag,
   Typography,
 } from 'antd';
@@ -30,6 +29,7 @@ import {
 import type { CarouselRef } from 'antd/lib/carousel';
 import { Link } from 'react-router-dom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import SkeletonImage from 'components/images/SkeletonImage.view';
 
 const { Title, Text, Paragraph } = Typography;
 const { confirm } = Modal;
@@ -143,7 +143,7 @@ const IncidentCard = ({
             ))}
           </Carousel>
         ) : (
-          <Skeleton.Image style={{ height: 280 }} />
+          <SkeletonImage />
         )}
       </div>
       {incident && incident.images.length > 1 && (

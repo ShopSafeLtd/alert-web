@@ -8,7 +8,6 @@ import {
   Menu,
   Modal,
   Row,
-  Skeleton,
   Tag,
   Typography,
 } from 'antd';
@@ -46,6 +45,7 @@ import type { CarouselRef } from 'antd/lib/carousel';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import SkeletonImage from 'components/images/SkeletonImage.view';
 
 const { Title, Text } = Typography;
 const { confirm } = Modal;
@@ -166,7 +166,7 @@ const OffenderCard = ({
           ))}
         </Carousel>
       ) : (
-        <Skeleton.Image />
+        <SkeletonImage />
       )}
       {offender && offender.images.length > 1 && (
         <Row className="offender-card-controls">
