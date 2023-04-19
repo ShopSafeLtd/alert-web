@@ -18,11 +18,6 @@ mutation createIncident($data: CreateIncidentData!) {
     approved
     location {
       id
-      building
-      street
-      townCity
-      county
-      postcode
       full
     }
     createdBy {

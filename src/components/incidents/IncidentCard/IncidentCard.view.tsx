@@ -242,7 +242,7 @@ const IncidentCard = ({
             </Col>
             <Col span={23}>
               <Text style={{ width: '100%' }} ellipsis type="secondary">
-                {incident?.business?.name}
+                {incident?.business?.name || incident?.location?.full}
               </Text>
             </Col>
           </Row>

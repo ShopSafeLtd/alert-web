@@ -248,6 +248,7 @@ const themeModel: ThemeModel = {
     state.mobileNav = payload;
   }),
   switchTheme: action((state, payload) => {
+    typedLocalStorage.set(LocalStorageKeys.theme, payload);
     state.currentTheme = payload;
   }),
 };

@@ -376,6 +376,11 @@ const UseEditIncidentTest = () => {
               },
             ],
             goods: [],
+            building: '',
+            county: '',
+            postcode: '',
+            street: '',
+            townCity: '',
           })
         }
       >

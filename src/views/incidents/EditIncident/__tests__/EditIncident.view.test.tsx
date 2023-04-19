@@ -1,12 +1,12 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import type { ViewIncidentQuery } from '../../../../graphql/generated';
+import type { EditIncidentQuery } from '../../../../graphql/generated';
 import { ImagePosition } from '../../../../graphql/generated';
 import EditIncident from '../EditIncident.view';
 
 describe('List Officer View', () => {
-  const data: ViewIncidentQuery = {
+  const data: EditIncidentQuery = {
     incident: {
       policeInvolved: false,
       policeRef: null,
@@ -43,6 +43,7 @@ describe('List Officer View', () => {
           optimised: null,
           url: null,
           position: ImagePosition.CenterCenter,
+          offenders: [],
         },
       ],
       offenders: [],

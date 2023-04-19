@@ -1,10 +1,10 @@
 import React from 'react';
 import type {
   CreateTagMutation,
+  EditIncidentQuery,
   ImagePosition,
   ListGoodsTypesQuery,
   ListOffendersQuery,
-  ViewIncidentQuery,
 } from 'graphql/generated';
 import { CrimeType } from 'graphql/generated';
 
@@ -69,7 +69,7 @@ interface FormData {
     value?: number;
     recoveredValue: number;
   }[];
-  business: {
+  business?: {
     label: React.ReactNode;
     value: string;
   };
@@ -78,6 +78,11 @@ interface FormData {
   tagsInvolved: string[];
   tagsImpact: string[];
   images: [{ id: string; url: string; optimised: string }];
+  building: string;
+  street: string;
+  townCity: string;
+  county: string;
+  postcode: string;
 }
 
 interface Image extends UploadFile {
@@ -117,7 +122,7 @@ interface Props {
     offenders: OffenderDataGlobal[];
   }) => void;
   beforeUpload: (value: RcFile) => void;
-  data: ViewIncidentQuery | undefined;
+  data: EditIncidentQuery | undefined;
   fileList: Image[];
   goodsTypesData: ListGoodsTypesQuery | undefined;
   groups: { value: string; label: string }[];
@@ -237,6 +242,11 @@ const EditIncident = ({
           policeRef: data?.incident?.policeRef,
           policeNo: data?.incident?.policeNo,
           policeReported: data?.incident?.policeReported || false,
+          building: data?.incident?.location?.building,
+          street: data?.incident?.location?.street,
+          townCity: data?.incident?.location?.townCity,
+          county: data?.incident?.location?.county,
+          postcode: data?.incident?.location?.postcode,
           groups:
             data?.incident?.groups && data?.incident?.groups.length > 0
               ? data?.incident?.groups.map(({ id }) => id)
@@ -374,27 +384,6 @@ const EditIncident = ({
                 />
               </Form.Item>
             </Col>
-            <Col>
-              <Form.Item
-                name="business"
-                label="Business"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please select a business for the incident.',
-                  },
-                ]}
-              >
-                <DebounceSelect
-                  showSearch
-                  allowClear
-                  disabled={saving}
-                  placeholder="Search for a business..."
-                  fetchOptions={onSearchBusiness}
-                  style={{ width: 300 }}
-                />
-              </Form.Item>
-            </Col>
           </Row>
           <Form.Item
             name="description"
@@ -410,6 +399,62 @@ const EditIncident = ({
             <Input.TextArea disabled={saving} />
           </Form.Item>
         </Card>
+        <Card style={{ marginBottom: 10 }}>
+          <Row style={{ marginBottom: 20 }}>
+            <Col>
+              <Title style={{ marginBottom: 0 }} level={4}>
+                2.
+              </Title>
+            </Col>
+            <Col>
+              <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                Location
+              </Title>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Form.Item name="business" label="Business">
+                <DebounceSelect
+                  showSearch
+                  allowClear
+                  disabled={saving}
+                  placeholder="Search for a business..."
+                  fetchOptions={onSearchBusiness}
+                  style={{ width: 300 }}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Title level={4}>Address</Title>
+          <Row gutter={16}>
+            <Col span={6}>
+              <Form.Item name="building" label="Building">
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item name="street" label="Street">
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item name="townCity" label="Town/City">
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item name="county" label="County">
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item name="postcode" label="Postcode">
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Card>
         {data?.incident?.crimeTypes
           .map((item) => item.crimeType)
           .includes(CrimeType.TheftHandling) && (
@@ -417,7 +462,7 @@ const EditIncident = ({
             <Row align="bottom" style={{ marginBottom: 20 }}>
               <Col>
                 <Title style={{ marginBottom: 0 }} level={4}>
-                  2.
+                  3.
                 </Title>
               </Col>
               <Col>
@@ -562,7 +607,7 @@ const EditIncident = ({
           <Row align="bottom" style={{ marginBottom: 20 }}>
             <Col>
               <Title style={{ marginBottom: 0 }} level={4}>
-                3.
+                4.
               </Title>
             </Col>
             <Col>
@@ -631,7 +676,7 @@ const EditIncident = ({
             saving={saving}
             searchOffenders={searchOffenders}
             setSearchOffenders={setSearchOffenders}
-            titleOrder={4}
+            titleOrder={5}
             updateOffender={onEditOffender}
             onAddOffender={onAddOffender}
             onAddVehicle={onAddVehicle}
@@ -642,7 +687,7 @@ const EditIncident = ({
         </Card>
         <Card style={{ marginBottom: 10 }}>
           <ImageSection
-            titleOrder={5}
+            titleOrder={6}
             imgChange={imgChange}
             fileList={fileList}
             beforeUpload={beforeUpload}
@@ -658,7 +703,7 @@ const EditIncident = ({
           <Row align="bottom" style={{ marginBottom: 20 }}>
             <Col>
               <Title style={{ marginBottom: 0 }} level={4}>
-                6.
+                7.
               </Title>
             </Col>
             <Col>

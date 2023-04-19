@@ -28,6 +28,10 @@ query listIncidents(
         id
         name
       }
+      location {
+        id
+        full
+      }
       createdBy {
         id
         fullName
