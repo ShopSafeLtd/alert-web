@@ -30,6 +30,7 @@ import {
   faFilter,
   faNewspaper,
   faTrash,
+  faUser,
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
 import ArticleCard from 'components/feedItems/ArticleSection/ArticleCard';
@@ -440,19 +441,19 @@ Props): JSX.Element => {
                                 cursor: 'pointer',
                               }}
                             >
-                              {/* {offender.images.length > 0 && ( */}
-                              <WatermarkImage
-                                url={offender.images[0]?.optimised}
-                                position={offender.images[0]?.position}
-                              />
-                              {/* )}
-                        {offender.images.length === 0 && (
-                          <FontAwesomeIcon
-                            style={{ color: 'rgb(114, 132, 154)' }}
-                            icon={faUser}
-                            size="3x"
-                          />
-                        )} */}
+                              {offender.images.length > 0 && (
+                                <WatermarkImage
+                                  url={offender.images[0]?.optimised}
+                                  position={offender.images[0]?.position}
+                                />
+                              )}
+                              {offender.images.length === 0 && (
+                                <FontAwesomeIcon
+                                  style={{ color: 'rgb(114, 132, 154)' }}
+                                  icon={faUser}
+                                  size="3x"
+                                />
+                              )}
                               <Paragraph
                                 className={classes.offenderParagraph}
                                 style={{

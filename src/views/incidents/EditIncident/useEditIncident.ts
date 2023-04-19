@@ -992,7 +992,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
               },
             },
             business: {
-              connect: data.business
+              connect: data.business?.value
                 ? {
                     id: data.business.value,
                   }
