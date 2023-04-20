@@ -271,20 +271,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       },
     },
   });
-  // const { data: listVehiclesData } = useListVehiclesQuery({
-  //   fetchPolicy: 'cache-and-network',
-  //   variables: {
-  //     where: {
-  //       schemes: {
-  //         some: {
-  //           id: {
-  //             equals: schemeId,
-  //           },
-  //         },
-  //       },
-  //     },
-  //   },
-  // });
 
   const subscribeToNewMessage = () => {
     subscribeToMore({

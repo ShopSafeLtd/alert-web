@@ -55694,7 +55694,7 @@ export const ViewIncidentDocument = gql`
           name
         }
       }
-      updates(orderBy: { createdAt: desc }) {
+      updates(orderBy: { createdAt: asc }) {
         id
         text
         type

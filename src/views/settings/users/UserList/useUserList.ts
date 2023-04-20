@@ -49,7 +49,6 @@ interface Return {
 const useUserList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const { role, groups } = useStoreState((state) => state.user);
-
   const [addUser, setAddUser] = useState(false);
   const [editUser, toggleEditUser] = useState<string | undefined>(undefined);
   const [search, setSearch] = useState('');
@@ -79,30 +78,13 @@ const useUserList = (): Return => {
       createdAt: SortOrder.Asc,
     },
     [UserSort.nameAsc]: {
-      createdAt: SortOrder.Asc,
+      fullName: SortOrder.Asc,
     },
     [UserSort.nameDesc]: {
-      createdAt: SortOrder.Desc,
+      fullName: SortOrder.Desc,
     },
   };
-  // const getOrderBy = () => {
-  //   if ([UserSort.createdAtDesc, UserSort.createdAtDesc].includes(order)) {
-  //     if (order === UserSort.createdAtDesc) {
-  //       return {
-  //         createdAt: SortOrder.Desc,
-  //       };
-  //     }
-  //     return { createdAt: SortOrder.Asc };
-  //   }
-  //   if (order === UserSort.nameAsc) {
-  //     return {
-  //       fullName: SortOrder.Asc,
-  //     };
-  //   }
-  //   return {
-  //     fullName: SortOrder.Desc,
-  //   };
-  // };
+
   const variables = {
     orderBy: getOrderBy[order],
     skip: (page - 1) * pageSize,
