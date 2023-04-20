@@ -65,7 +65,7 @@ const OffenderDetails = ({
         </Paragraph>
       </Col>
     </Row>
-    <Row gutter={60}>
+    <Row gutter={50}>
       <Col span={8}>
         <Form.Item
           name="name"
@@ -76,8 +76,18 @@ const OffenderDetails = ({
           <Input disabled={saving} />
         </Form.Item>
       </Col>
-
-      <Col span={7}>
+      <Col span={14}>
+        <Form.Item
+          name="alias"
+          label="Alias"
+          tooltip="Select the alias of the offender if known."
+        >
+          <Select disabled={saving} mode="tags" />
+        </Form.Item>
+      </Col>
+    </Row>
+    <Row gutter={50}>
+      <Col span={8}>
         <Form.Item
           name="build"
           label="Build"
@@ -95,8 +105,6 @@ const OffenderDetails = ({
           <Select options={genderValues} disabled={saving} />
         </Form.Item>
       </Col>
-    </Row>
-    <Row gutter={60}>
       <Col span={8}>
         <Form.Item
           name="race"
@@ -106,7 +114,9 @@ const OffenderDetails = ({
           <Select options={raceValues} disabled={saving} />
         </Form.Item>
       </Col>
-      <Col span={7}>
+    </Row>
+    <Row gutter={50}>
+      <Col span={8}>
         <Form.Item
           name="hair"
           label="Hair"
@@ -115,7 +125,7 @@ const OffenderDetails = ({
           <Input disabled={saving} />
         </Form.Item>
       </Col>
-      <Col span={8}>
+      <Col span={14}>
         <Row gutter={5} align="middle">
           <Col flex={1}>
             <Form.Item
@@ -158,7 +168,7 @@ const OffenderDetails = ({
       </Col>
     </Row>
 
-    <Row gutter={60}>
+    <Row gutter={50}>
       <Col>
         <Form.Item
           name="ageCheck"
@@ -233,7 +243,7 @@ const OffenderDetails = ({
     </Row>
 
     {adminRights && (
-      <Row gutter={60}>
+      <Row gutter={50}>
         <Col>
           <Form.Item
             name="idVerified"

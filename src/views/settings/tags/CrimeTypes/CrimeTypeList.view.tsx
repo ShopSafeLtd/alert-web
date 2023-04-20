@@ -186,7 +186,7 @@ const CrimeTypeList = ({
       <Row gutter={16} align="middle" style={{ marginBottom: 10 }}>
         <Col>
           <Typography.Title style={{ margin: 0 }} level={4}>
-            Add Involved Tag
+            Involved Tags
           </Typography.Title>
         </Col>
         <Col span={8}>

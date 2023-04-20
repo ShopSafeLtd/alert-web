@@ -192,7 +192,7 @@ const AddOffender = ({
         </Row>
         <Row gutter={16}>
           <Col span={4}>
-            <Form.Item name="alias" label="Alias">
+            <Form.Item name="addressAlias" label="Alias">
               <Input />
             </Form.Item>
           </Col>

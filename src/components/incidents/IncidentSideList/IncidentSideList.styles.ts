@@ -40,11 +40,11 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
   itemDesc: {
     fontSize: 12,
-    marginBottom: 10,
+    marginBottom: '5px !important',
   },
   itemDetail: {
     fontSize: 12,
-    marginBottom: 0,
+    marginBottom: '2px !important',
   },
   itemIcon: {
     marginRight: 8,

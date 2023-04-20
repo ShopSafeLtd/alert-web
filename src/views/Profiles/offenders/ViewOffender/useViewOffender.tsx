@@ -31,7 +31,6 @@ interface Return {
   loading: boolean;
   saving: boolean;
   editRights: boolean;
-
   deleteRights: boolean;
   linkIncident: boolean;
   toggleLinkIncident: () => void;

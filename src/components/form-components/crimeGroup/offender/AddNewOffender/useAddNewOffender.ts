@@ -97,7 +97,7 @@ const useAddNewOffender = ({ onClose }: Props): Return => {
           offenders: {
             create: [
               {
-                name: data.name || 'Unidentified Offender',
+                name: data.name,
                 gender: data.gender || null,
                 race: data.race || null,
                 build: data.build || null,

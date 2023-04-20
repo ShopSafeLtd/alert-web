@@ -231,7 +231,6 @@ const useEditIncident = (): Return => {
       },
     },
     fetchPolicy: 'cache-and-network',
-    skip: role !== Role.SchemeAdmin,
     onCompleted: (result) => {
       setIncidentsState({
         pagination,
@@ -706,7 +705,7 @@ const useEditIncident = (): Return => {
             create:
               newOffenders.length > 0
                 ? newOffenders.map((offender) => ({
-                    name: offender.name || 'Unidentified Offender',
+                    name: offender.name,
                     gender: offender.gender || null,
                     race: offender.race || null,
                     build: offender.build || null,
@@ -1102,6 +1101,7 @@ const useEditIncident = (): Return => {
           recoveredValue: 0,
           value: undefined,
         },
+        // ???
         {
           goodsType: undefined,
           recoveredValue: 0,

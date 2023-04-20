@@ -237,6 +237,7 @@ const EditOffender = ({
           form={form}
           initialValues={{
             name: data?.offender?.name || null,
+            alias: data?.offender?.alias || [],
             age: data?.offender?.age || null,
             gender: data?.offender?.gender || null,
             race: data?.offender?.race || null,
