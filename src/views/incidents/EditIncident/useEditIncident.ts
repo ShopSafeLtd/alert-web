@@ -829,7 +829,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
           create:
             newOffenders.length > 0
               ? newOffenders.map((offender) => ({
-                  name: offender.name || 'Unidentified Offender',
+                  name: offender.name,
                   gender: offender.gender || null,
                   race: offender.race || null,
                   build: offender.build || null,
@@ -981,6 +981,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             recoveredValue: { set: data.recoveredValue || 0 },
             policeInvolved: { set: data.policeInvolved },
             policeRef: { set: data.policeRef },
+            policeNo: { set: data.policeNo },
             policeReported: { set: data.policeReported },
             location: {
               update: {

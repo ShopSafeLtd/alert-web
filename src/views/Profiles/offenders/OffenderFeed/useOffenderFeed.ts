@@ -171,6 +171,7 @@ const useOffenderFeed = (): Return => {
             mode: QueryMode.Insensitive,
           },
         },
+
         {
           reference: {
             equals: Number(variables.search),

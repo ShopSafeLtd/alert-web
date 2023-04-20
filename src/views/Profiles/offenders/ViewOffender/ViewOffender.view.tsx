@@ -40,6 +40,7 @@ import {
   faUserClock,
   faUserHair,
   faUsers,
+  faUser,
   faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
 import {
@@ -360,6 +361,7 @@ const ViewOffender = ({
                           </Descriptions.Item>
                         )}
                       </Descriptions>
+
                       <Descriptions column={1} className={classes.desc}>
                         {data?.offender?.peculiarities && (
                           <Descriptions.Item
@@ -374,6 +376,28 @@ const ViewOffender = ({
                             }
                           >
                             {data?.offender?.peculiarities}
+                          </Descriptions.Item>
+                        )}
+                        {data?.offender?.alias && (
+                          <Descriptions.Item
+                            label={
+                              <span>
+                                <FontAwesomeIcon
+                                  className={classes.descIcon}
+                                  icon={faUser}
+                                />
+                                Alias
+                              </span>
+                            }
+                          >
+                            <Row>
+                              {data?.offender?.alias.map((el, i) => (
+                                // eslint-disable-next-line react/no-array-index-key
+                                <Tag key={i} className={classes.tag}>
+                                  {el}
+                                </Tag>
+                              ))}
+                            </Row>
                           </Descriptions.Item>
                         )}
                         <Descriptions.Item
@@ -448,7 +472,9 @@ const ViewOffender = ({
                             {data?.offender?.crimeGroups &&
                             data?.offender?.crimeGroups.length > 0
                               ? data?.offender?.crimeGroups.map((group) => (
-                                  <Tag key={group.id}>CG-{group.reference}</Tag>
+                                  <Tag key={group.id} className={classes.tag}>
+                                    CG-{group.reference}
+                                  </Tag>
                                 ))
                               : 'None'}
                           </Row>
@@ -467,7 +493,9 @@ const ViewOffender = ({
                         >
                           <Row>
                             {data?.offender?.groups?.map((group) => (
-                              <Tag key={group.id}>{group.name}</Tag>
+                              <Tag key={group.id} className={classes.tag}>
+                                {group.name}
+                              </Tag>
                             ))}
                           </Row>
                         </Descriptions.Item>

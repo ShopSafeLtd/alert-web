@@ -4,6 +4,7 @@ query ViewOffender(
 ) {
   offender(where: $where) {
     id
+    alias
     createdAt
     updatedAt
     age

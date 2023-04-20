@@ -151,7 +151,7 @@ const useAddNewOffender = ({ onClose, update }: Props): Return => {
     setSaving(true);
     update({
       id: Math.floor(Math.random() * 1000).toString(),
-      name: data.name || 'Unidentified Offender',
+      name: data.name,
       gender: data.gender || null,
       race: data.race || null,
       build: data.build || null,

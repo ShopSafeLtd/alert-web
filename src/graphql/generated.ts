@@ -46630,6 +46630,7 @@ export type ViewOffenderQuery = {
   offender?: {
     __typename?: 'Offender';
     id: string;
+    alias: Array<string>;
     createdAt: any;
     updatedAt: any;
     age?: Age | null;
@@ -58335,6 +58336,7 @@ export const ViewOffenderDocument = gql`
   ) {
     offender(where: $where) {
       id
+      alias
       createdAt
       updatedAt
       age

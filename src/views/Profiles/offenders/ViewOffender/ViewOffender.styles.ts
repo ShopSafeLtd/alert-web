@@ -88,6 +88,9 @@ const useStyles = createUseStyles((theme: Theme) => ({
   offenderRow: {
     cursor: 'pointer',
   },
+  tag: {
+    marginTop: -3,
+  },
 }));
 
 export default useStyles;

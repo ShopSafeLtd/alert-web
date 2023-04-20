@@ -218,7 +218,7 @@ const useAddExistingOffender = ({
       update({
         id: selectedOffender.id,
         updatedAt: selectedOffender.updatedAt,
-        name: selectedOffender.name || 'Unidentified Offender',
+        name: selectedOffender.name,
         age: selectedOffender.age || null,
         gender: selectedOffender.gender || null,
         race: selectedOffender.race || null,
