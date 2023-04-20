@@ -42015,7 +42015,7 @@ export type CreateArticleMutation = {
 };
 
 export type DeleteArticleMutationVariables = Exact<{
-  id: Scalars['String'];
+  where: UniqueId;
 }>;
 
 export type DeleteArticleMutation = {
@@ -50133,8 +50133,8 @@ export type CreateArticleMutationOptions = Apollo.BaseMutationOptions<
   CreateArticleMutationVariables
 >;
 export const DeleteArticleDocument = gql`
-  mutation deleteArticle($id: String!) {
-    deleteArticle(where: { id: $id }) {
+  mutation DeleteArticle($where: UniqueId!) {
+    deleteArticle(where: $where) {
       id
     }
   }
@@ -50157,7 +50157,7 @@ export type DeleteArticleMutationFn = Apollo.MutationFunction<
  * @example
  * const [deleteArticleMutation, { data, loading, error }] = useDeleteArticleMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      where: // value for 'where'
  *   },
  * });
  */

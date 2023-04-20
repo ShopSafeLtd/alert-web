@@ -6,8 +6,15 @@ import View from './ViewArticle.view';
 const ViewArticleContainer = () => {
   const id = useParams().id || '';
 
-  const { data, loading, lightboxElements, openLightbox, lightBoxOpen } =
-    useViewArticle({ id });
+  const {
+    data,
+    loading,
+    lightboxElements,
+    openLightbox,
+    lightBoxOpen,
+    onDeleteArticle,
+    role,
+  } = useViewArticle({ id });
 
   return (
     <View
@@ -16,6 +23,8 @@ const ViewArticleContainer = () => {
       lightboxElements={lightboxElements}
       openLightbox={openLightbox}
       lightBoxOpen={lightBoxOpen}
+      onDeleteArticle={onDeleteArticle}
+      role={role}
     />
   );
 };

@@ -11,7 +11,6 @@ const useStyles = createUseStyles((theme: Theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: theme.imageBackgroundColor,
-    height: 280,
   },
   noImageLogo: {
     width: 200,
@@ -19,14 +18,14 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
 }));
 
-const SkeletonImage = () => {
+const SkeletonImage = ({ height = 280 }: { height?: number }) => {
   const classes = useStyles();
   const lightLogo = useStoreState((state) => state.scheme.logo);
   const darkLogo = useStoreState((state) => state.scheme.darkLogo);
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
 
   return (
-    <div className={classes.noImage}>
+    <div className={classes.noImage} style={{ height }}>
       {!darkLogo && <FontAwesomeIcon icon={faImage} size="4x" />}
       {lightLogo && darkLogo && (
         <img
