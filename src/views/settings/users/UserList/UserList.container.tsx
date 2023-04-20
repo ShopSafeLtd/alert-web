@@ -8,7 +8,7 @@ const UserList = (): JSX.Element => {
     loading,
     search,
     setSearch,
-    groupsData,
+    groups,
     groupsLoading,
     selectedGroups,
     setSelectedGroups,
@@ -21,6 +21,15 @@ const UserList = (): JSX.Element => {
     onPaginationChange,
     editUser,
     toggleEditUser,
+    userStatus,
+    setUserStatus,
+    userRole,
+    setUserRole,
+    order,
+    setOrder,
+    sortFilter,
+    toggleSortFilter,
+    clearFilters,
   } = useUserList();
 
   return (
@@ -29,7 +38,7 @@ const UserList = (): JSX.Element => {
       loading={loading}
       search={search}
       setSearch={setSearch}
-      groupsData={groupsData}
+      groups={groups}
       groupsLoading={groupsLoading}
       selectedGroups={selectedGroups}
       setSelectedGroups={setSelectedGroups}
@@ -42,6 +51,15 @@ const UserList = (): JSX.Element => {
       currentPageSize={currentPageSize}
       editUser={editUser}
       toggleEditUser={toggleEditUser}
+      userStatus={userStatus}
+      setUserStatus={setUserStatus}
+      userRole={userRole}
+      setUserRole={setUserRole}
+      sortFilter={sortFilter}
+      toggleSortFilter={toggleSortFilter}
+      order={order}
+      setOrder={setOrder}
+      clearFilters={clearFilters}
     />
   );
 };

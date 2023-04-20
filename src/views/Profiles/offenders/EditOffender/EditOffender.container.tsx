@@ -65,6 +65,9 @@ const EditOffender = ({ reviewed }: Props): JSX.Element => {
     onRemoveCrimeGroup,
     onRemoveImage,
   } = useEditOffender({ offenderId, reviewed });
+  console.log('data.name', data?.offender?.id);
+  console.log('data.alias', data?.offender?.alias);
+
   return (
     <div>
       <View

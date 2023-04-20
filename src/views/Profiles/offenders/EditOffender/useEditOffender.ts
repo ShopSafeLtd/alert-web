@@ -73,6 +73,7 @@ interface Props {
 
 export interface FormData {
   name: string;
+  alias?: string[];
   age: Age;
   gender: Gender;
   race: Race;
@@ -635,7 +636,8 @@ const useEditOffender = ({ offenderId, reviewed }: Props): Return => {
         },
         data: {
           approved: { set: true },
-          name: { set: data.name || 'Unidentified Offender' },
+          name: { set: data.name || null },
+          alias: { set: data.alias },
           gender: { set: data.gender || null },
           race: { set: data.race || null },
           build: { set: data.build || null },

@@ -118,7 +118,7 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
         name
       }
     }
-    updates(orderBy: { createdAt: desc }) {
+    updates(orderBy: { createdAt: asc }) {
       id
       text
       type

@@ -380,17 +380,10 @@ const EditIncident = ({
                 </Col>
                 <Col className={classes.clearButton}>
                   <Button
-                    style={{ color: 'red', marginLeft: 5 }}
+                    style={{ marginLeft: 5 }}
                     onClick={() => updateNewAddressData(undefined)}
-                    icon={
-                      <FontAwesomeIcon
-                        icon={faTrash}
-                        style={{ marginRight: 5 }}
-                      />
-                    }
-                  >
-                    Clear Address
-                  </Button>
+                    icon={<FontAwesomeIcon icon={faTrash} />}
+                  />
                 </Col>
               </Row>
             </>

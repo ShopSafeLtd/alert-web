@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import type {
   ListUsersQuery,
-  SchemeGroupsQuery,
   CreateUserInDatabaseMutation,
   InviteExistingUserMutation,
 } from 'graphql/generated';
@@ -11,16 +10,19 @@ import {
   QueryMode,
   useSchemeGroupsQuery,
   ListUsersDocument,
+  Role,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
+import { UserStatus } from 'types/enums/user_status';
+import { UserSort } from 'types/enums/user_sort';
 
 interface Return {
   data: ListUsersQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
-  groupsData: SchemeGroupsQuery | undefined;
+  groups: { value: string; label: string }[];
   groupsLoading: boolean;
   selectedGroups: string[];
   setSelectedGroups: (value: string[]) => void;
@@ -33,20 +35,58 @@ interface Return {
   currentPageSize: number;
   toggleEditUser: (value?: string | undefined) => void;
   editUser: string | undefined;
+  userStatus: UserStatus | undefined;
+  setUserStatus: (value: UserStatus) => void;
+  userRole: Role | undefined;
+  setUserRole: (value: Role) => void;
+  sortFilter: boolean;
+  toggleSortFilter: () => void;
+  order: UserSort;
+  setOrder: (value: UserSort) => void;
+  clearFilters: () => void;
 }
 
 const useUserList = (): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
-
+  const { role, groups } = useStoreState((state) => state.user);
   const [addUser, setAddUser] = useState(false);
   const [editUser, toggleEditUser] = useState<string | undefined>(undefined);
   const [search, setSearch] = useState('');
   const [pageSize, setPageSize] = useState(50);
   const [page, setPage] = useState(1);
+  const [sortFilter, setSortFilter] = useState(false);
+  const [order, setOrder] = useState<UserSort>(UserSort.nameAsc);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
+  const [userStatus, setUserStatus] = useState<UserStatus>();
+  const [userRole, setUserRole] = useState<Role>();
+
+  const getDisAbled = () => {
+    if (userStatus === UserStatus.DISABLED) return { equals: true };
+    if (userStatus === UserStatus.ACTIVE) return { equals: false };
+    return undefined;
+  };
+  const getNewUser = () => {
+    if (userStatus === UserStatus.INVITED) return { equals: true };
+    if (userStatus === UserStatus.ACTIVE) return { equals: false };
+    return undefined;
+  };
+  const getOrderBy = {
+    [UserSort.createdAtDesc]: {
+      createdAt: SortOrder.Desc,
+    },
+    [UserSort.createdAtAsc]: {
+      createdAt: SortOrder.Asc,
+    },
+    [UserSort.nameAsc]: {
+      fullName: SortOrder.Asc,
+    },
+    [UserSort.nameDesc]: {
+      fullName: SortOrder.Desc,
+    },
+  };
 
   const variables = {
-    orderBy: { fullName: SortOrder.Asc },
+    orderBy: getOrderBy[order],
     skip: (page - 1) * pageSize,
     take: pageSize,
     where: {
@@ -60,11 +100,18 @@ const useUserList = (): Return => {
           recycled: {
             equals: false,
           },
+          role: userRole
+            ? {
+                equals: userRole,
+              }
+            : undefined,
         },
       },
       recycled: {
         equals: false,
       },
+      disabled: getDisAbled(),
+      newUser: getNewUser(),
       groups:
         selectedGroups.length > 0
           ? {
@@ -130,7 +177,15 @@ const useUserList = (): Return => {
   const toggleAddUser = () => {
     setAddUser(!addUser);
   };
-
+  const toggleSortFilter = () => {
+    setSortFilter(!sortFilter);
+  };
+  const clearFilters = () => {
+    setSelectedGroups([]);
+    setUserStatus(undefined);
+    setUserRole(undefined);
+    setOrder(UserSort.nameAsc);
+  };
   const updateUserList: MutationUpdaterFn<CreateUserInDatabaseMutation> = (
     store,
     { data: res }
@@ -206,7 +261,13 @@ const useUserList = (): Return => {
     loading,
     search,
     setSearch,
-    groupsData,
+    groups:
+      role === Role.SchemeAdmin
+        ? groupsData?.groups.map((group) => ({
+            value: group.id,
+            label: group.name,
+          })) || []
+        : groups.map((group) => ({ value: group.id, label: group.name })),
     groupsLoading,
     selectedGroups,
     setSelectedGroups,
@@ -219,6 +280,15 @@ const useUserList = (): Return => {
     currentPageSize: pageSize,
     editUser,
     toggleEditUser,
+    userStatus,
+    setUserStatus,
+    userRole,
+    setUserRole,
+    order,
+    setOrder,
+    sortFilter,
+    toggleSortFilter,
+    clearFilters,
   };
 };
 

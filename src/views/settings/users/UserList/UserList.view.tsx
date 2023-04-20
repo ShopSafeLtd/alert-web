@@ -1,33 +1,27 @@
 import React from 'react';
-import {
-  Table,
-  Row,
-  Col,
-  Input,
-  Typography,
-  Select,
-  Drawer,
-  Button,
-} from 'antd';
+import { Table, Row, Col, Input, Typography, Drawer, Button } from 'antd';
 import type {
   ListUsersQuery,
-  SchemeGroupsQuery,
   CreateUserInDatabaseMutation,
   InviteExistingUserMutation,
+  Role,
 } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import AddUser from 'components/form-components/user/AddUser';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faPlus } from '@fortawesome/pro-light-svg-icons';
+import { faEdit, faFilter, faPlus } from '@fortawesome/pro-light-svg-icons';
 import EditUser from 'components/form-components/user/EditUser';
+import type { UserStatus } from 'types/enums/user_status';
+import type { UserSort } from 'types/enums/user_sort';
+import UserFilter from 'components/users/UserFilter';
 
 interface Props {
   data: ListUsersQuery | undefined;
   loading: boolean;
   search: string;
   setSearch: (value: string) => void;
-  groupsData: SchemeGroupsQuery | undefined;
+  groups: { value: string; label: string }[];
   groupsLoading: boolean;
   selectedGroups: string[];
   setSelectedGroups: (value: string[]) => void;
@@ -40,6 +34,15 @@ interface Props {
   currentPageSize: number;
   toggleEditUser: (value?: string | undefined) => void;
   editUser: string | undefined;
+  userStatus: UserStatus | undefined;
+  setUserStatus: (value: UserStatus) => void;
+  userRole: Role | undefined;
+  setUserRole: (value: Role) => void;
+  sortFilter: boolean;
+  toggleSortFilter: () => void;
+  order: UserSort;
+  setOrder: (value: UserSort) => void;
+  clearFilters: () => void;
 }
 
 const UserList = ({
@@ -47,7 +50,7 @@ const UserList = ({
   loading,
   search,
   setSearch,
-  groupsData,
+  groups,
   groupsLoading,
   selectedGroups,
   setSelectedGroups,
@@ -60,6 +63,15 @@ const UserList = ({
   currentPageSize,
   editUser,
   toggleEditUser,
+  userStatus,
+  setUserStatus,
+  userRole,
+  setUserRole,
+  order,
+  setOrder,
+  sortFilter,
+  toggleSortFilter,
+  clearFilters,
 }: Props): JSX.Element => (
   <div className="list-view">
     <Row gutter={8} style={{ marginBottom: 10 }}>
@@ -71,24 +83,22 @@ const UserList = ({
           allowClear
         />
       </Col>
-      <Col>
-        <Select
-          loading={groupsLoading}
-          style={{ minWidth: 250 }}
-          allowClear
-          mode="multiple"
-          value={selectedGroups}
-          onChange={setSelectedGroups}
-          placeholder="Filter Groups"
-          options={groupsData?.groups.map((group) => ({
-            value: group.id,
-            label: group.name,
-          }))}
-          optionFilterProp="label"
-          optionLabelProp="label"
-        />
-      </Col>
       <Col flex={1} />
+      <Col>
+        <Button
+          onClick={toggleSortFilter}
+          icon={
+            <FontAwesomeIcon
+              icon={faFilter}
+              size="lg"
+              style={{ marginRight: 5 }}
+            />
+          }
+        >
+          Sort &amp; Filter
+        </Button>
+      </Col>
+
       <Col>
         <Button
           type="primary"
@@ -188,7 +198,26 @@ const UserList = ({
         status: user.status,
       }))}
     />
-
+    <Drawer
+      title="User Filters"
+      visible={sortFilter}
+      onClose={toggleSortFilter}
+      width={400}
+    >
+      <UserFilter
+        clearFilters={clearFilters}
+        order={order}
+        setOrder={setOrder}
+        groups={groups}
+        groupsLoading={groupsLoading}
+        groupsFilter={selectedGroups}
+        setGroupsFilter={setSelectedGroups}
+        userStatus={userStatus}
+        setUserStatus={setUserStatus}
+        userRole={userRole}
+        setUserRole={setUserRole}
+      />
+    </Drawer>
     <Drawer
       title="Invite New User"
       open={addUser}

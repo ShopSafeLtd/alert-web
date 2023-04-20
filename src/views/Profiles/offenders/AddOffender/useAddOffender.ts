@@ -40,6 +40,7 @@ interface Image extends UploadFile {
 
 export interface FormData {
   name: string;
+  alias?: string[];
   age: Age;
   gender: Gender;
   race: Race;
@@ -54,7 +55,7 @@ export interface FormData {
   idVerified?: boolean;
   idSource?: IdSource;
   bans?: BanData[];
-  alias?: string;
+  addressAlias?: string;
   building?: string;
   street?: string;
   townCity?: string;
@@ -382,7 +383,8 @@ const useAddOffender = (): Return => {
     createOffender({
       variables: {
         data: {
-          name: data.name || 'Unidentified Offender',
+          name: data.name,
+          alias: [...new Set(data.alias?.map((el) => el.trim().toLowerCase()))],
           gender: data.gender || null,
           race: data.race || null,
           build: data.build || null,
@@ -439,7 +441,7 @@ const useAddOffender = (): Return => {
           address:
             data.street && data.townCity && data.postcode
               ? {
-                  alias: data.alias,
+                  alias: data.addressAlias,
                   building: data.building,
                   street: data.street,
                   townCity: data.townCity,

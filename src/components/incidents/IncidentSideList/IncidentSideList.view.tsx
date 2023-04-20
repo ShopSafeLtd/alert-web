@@ -64,10 +64,11 @@ const IncidentSideList = ({
                   <Col flex={1}>
                     <Typography.Paragraph
                       className={classes.itemDetail}
+                      style={{ marginRight: 10 }}
                       type="secondary"
                       ellipsis
                     >
-                      {incident.business?.name}
+                      {incident.business?.name || incident.location?.full}
                     </Typography.Paragraph>
                   </Col>
                   <Col>
