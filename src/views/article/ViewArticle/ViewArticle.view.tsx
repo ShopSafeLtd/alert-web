@@ -1,9 +1,12 @@
 import React from 'react';
-import { Card, Col, List, Row, Typography } from 'antd';
+import { Button, Card, Col, List, Row, Typography } from 'antd';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import { Role } from 'graphql/generated';
 import type { ReturnProps as Props } from './types/ViewArticle';
 import IncidentCard from '../../../components/incidents/IncidentCard';
 import OffenderCard from '../../../components/offenders/OffenderCard';
@@ -14,9 +17,21 @@ const ViewArticleView = ({
   openLightbox,
   lightBoxOpen,
   lightboxElements,
+  onDeleteArticle,
+  role,
 }: Props) => (
   <>
     <div className="page-view">
+      {role === Role.SchemeAdmin && (
+        <Row style={{ padding: '10px 20px 15px' }} justify="end">
+          <Col>
+            <Button onClick={onDeleteArticle}>
+              <FontAwesomeIcon style={{ marginRight: 10 }} icon={faTrash} />
+              Delete Bulletin
+            </Button>
+          </Col>
+        </Row>
+      )}
       <Card style={{ marginLeft: 20, marginRight: 20 }} loading={loading}>
         <Typography.Title level={2}>{data?.article?.title}</Typography.Title>
         <div

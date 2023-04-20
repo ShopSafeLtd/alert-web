@@ -1,4 +1,4 @@
-import type { ArticleQuery } from '../../../../graphql/generated';
+import type { ArticleQuery, Role } from '../../../../graphql/generated';
 
 export interface Props {
   id: string;
@@ -15,4 +15,6 @@ export interface ReturnProps {
   lightboxElements: {
     src: string;
   }[];
+  onDeleteArticle: () => void;
+  role: Role;
 }

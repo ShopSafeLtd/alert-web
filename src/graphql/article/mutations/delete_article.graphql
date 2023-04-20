@@ -1,5 +1,5 @@
-mutation deleteArticle($id: String!) {
-  deleteArticle(where: { id: $id }) {
+mutation DeleteArticle($where: UniqueId!) {
+  deleteArticle(where: $where) {
     id
   }
 }
