@@ -94,7 +94,7 @@ const ListVideos = () => {
             className={classes.thumbnailRow}
             onClick={() =>
               setModalOpen(
-                'https://www.loom.com/share/4112c7ef431b4d19814164fc15754408'
+                'https://www.loom.com/embed/4112c7ef431b4d19814164fc15754408'
               )
             }
           >
