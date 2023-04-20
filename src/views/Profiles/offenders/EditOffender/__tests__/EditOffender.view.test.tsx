@@ -45,6 +45,7 @@ describe('List Officer View', () => {
       vehicles: [],
       idVerified: false,
       addresses: [],
+      alias: [],
     },
   };
 

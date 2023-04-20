@@ -60,6 +60,7 @@ describe('Detail Officer View', () => {
       vehicles: [],
       idVerified: false,
       addresses: [],
+      alias: [],
     },
   };
   it('renders the page', () => {

@@ -45,7 +45,7 @@ const ArticleCard = ({ article }: Props): JSX.Element => {
           <div
             style={{
               width: '100%',
-              height: 150,
+              height: 200,
               marginBottom: 10,
             }}
             key={id}
@@ -62,24 +62,22 @@ const ArticleCard = ({ article }: Props): JSX.Element => {
           className="feedItem-card-content"
           style={{ padding: '0 20px 20px', alignItems: 'stretch' }}
         >
-          <Title level={4}>
-            {priority === ArticlePriority.High && (
-              <FontAwesomeIcon
-                size="sm"
-                className="feedItem-card-icon"
-                icon={faExclamationCircle}
-                style={{ marginRight: 8 }}
-              />
-            )}
-            {title?.replace(/^\S/, (s) => s.toUpperCase())}
-          </Title>
-          <Paragraph
-            className="feedItem-card-desc"
-            ellipsis={{ rows: 3 }}
-            style={{ height: 100 }}
-          >
-            {previewText}
-          </Paragraph>
+          <div style={{ height: 125 }}>
+            <Title level={4}>
+              {priority === ArticlePriority.High && (
+                <FontAwesomeIcon
+                  size="sm"
+                  className="feedItem-card-icon"
+                  icon={faExclamationCircle}
+                  style={{ marginRight: 8 }}
+                />
+              )}
+              {title?.replace(/^\S/, (s) => s.toUpperCase())}
+            </Title>
+            <Paragraph className="feedItem-card-desc" ellipsis={{ rows: 2 }}>
+              {previewText}
+            </Paragraph>
+          </div>
           <Row style={{ marginBottom: 10, alignItems: 'flex-end' }}>
             <Col flex={1}>
               <FontAwesomeIcon
