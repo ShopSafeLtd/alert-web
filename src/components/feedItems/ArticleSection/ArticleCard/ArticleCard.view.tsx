@@ -1,8 +1,9 @@
 import React from 'react';
-import { Col, Row, Skeleton, Tag, Typography } from 'antd';
+import { Col, Row, Tag, Typography } from 'antd';
 import type { ListArticlesQuery } from 'graphql/generated';
 import { ArticlePriority } from 'graphql/generated';
 import { Link } from 'react-router-dom';
+import SkeletonImage from 'components/images/SkeletonImage.view';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExclamationCircle } from '@fortawesome/pro-solid-svg-icons';
@@ -46,7 +47,6 @@ const ArticleCard = ({ article }: Props): JSX.Element => {
             style={{
               width: '100%',
               height: 200,
-              marginBottom: 10,
             }}
             key={id}
           >
@@ -56,11 +56,11 @@ const ArticleCard = ({ article }: Props): JSX.Element => {
             />
           </div>
         ) : (
-          <Skeleton.Image className={classes.skeletonImage} />
+          <SkeletonImage height={200} />
         )}
         <div
           className="feedItem-card-content"
-          style={{ padding: '0 20px 20px', alignItems: 'stretch' }}
+          style={{ padding: '10px 20px 20px', alignItems: 'stretch' }}
         >
           <div style={{ height: 125 }}>
             <Title level={4}>
