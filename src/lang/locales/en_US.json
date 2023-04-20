@@ -8,5 +8,7 @@
   "sidenav.reports": "Reports",
   "Performance": "Performance",
   "Offender": "Offender",
-  "sidenav.documents": "Resources"
+  "sidenav.documents": "Documents",
+  "sidenav.resources": "Resources",
+  "sidenav.training": "Training"
 }

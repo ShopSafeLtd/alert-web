@@ -225,172 +225,176 @@ const AddOffender = ({
           </Col>
         </Row>
       </Card>
-      <Card>
-        {/* <Divider /> */}
-        <Profiles
-          saving={saving}
-          vehiclesData={vehiclesData}
-          crimeGroupsData={crimeGroupsData}
-          listVehiclesData={listVehiclesData}
-          titleNumber={3}
-          onAddCrimeGroup={onAddCrimeGroup}
-          onAddVehicle={onAddVehicle}
-          onEditVehicle={onEditVehicle}
-          onRemoveCrimeGroup={onRemoveCrimeGroup}
-          onRemoveVehicle={onRemoveVehicle}
-        />
-      </Card>
-      <Card>
-        {/* <Row gutter={5} style={{ marginTop: 50 }}>
+      {adminRights && (
+        <Card>
+          {/* <Divider /> */}
+          <Profiles
+            saving={saving}
+            vehiclesData={vehiclesData}
+            crimeGroupsData={crimeGroupsData}
+            listVehiclesData={listVehiclesData}
+            titleNumber={3}
+            onAddCrimeGroup={onAddCrimeGroup}
+            onAddVehicle={onAddVehicle}
+            onEditVehicle={onEditVehicle}
+            onRemoveCrimeGroup={onRemoveCrimeGroup}
+            onRemoveVehicle={onRemoveVehicle}
+          />
+        </Card>
+      )}
+      {adminRights && (
+        <Card>
+          {/* <Row gutter={5} style={{ marginTop: 50 }}>
           <Col flex={1}> */}
-        <Row align="middle" style={{ marginBottom: 20 }}>
-          <Col>
-            <Title style={{ marginBottom: 0 }} level={4}>
-              4.{' '}
-            </Title>
-          </Col>
-          <Col>
-            <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
-              Exclusions
-            </Title>
-          </Col>
-          <Col style={{ marginRight: 10 }}>
-            <Paragraph
-              style={{ marginBottom: 1, marginLeft: 5 }}
-              type="secondary"
-              italic
-            >
-              - Create exclusions for this offender to exclusion them from areas
-              or premises.
-            </Paragraph>
-          </Col>
-          <Col>
-            <Button
-              disabled={saving}
-              onClick={toggleAddExclusion}
-              style={{ marginTop: -30, marginLeft: 15, color: 'red' }}
-              icon={
-                <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
-              }
-            >
-              Add Exclusion
-            </Button>
-          </Col>
-        </Row>
-        {bansData && bansData.length > 0 ? (
-          <Row gutter={20}>
+          <Row align="middle" style={{ marginBottom: 20 }}>
             <Col>
-              <Table
-                size="small"
-                pagination={{
-                  defaultPageSize: 20,
-                  pageSize: 20,
-                }}
-                columns={[
-                  {
-                    key: 'duration',
-                    title: 'Duration',
-                    dataIndex: 'duration',
-                    width: 350,
-                    render: (value, record) => (
-                      <>
-                        <Text>{value}</Text>
-                        {calcExpired(new Date(record.endDate)) && (
-                          <Tag
-                            color="red"
-                            style={{
-                              marginLeft: 10,
-                            }}
-                          >
-                            EXPIRED
-                          </Tag>
-                        )}
-                      </>
-                    ),
-                  },
-
-                  {
-                    key: 'activeDay',
-                    title: 'Active Days',
-                    dataIndex: 'activeDay',
-                    width: 150,
-                  },
-                  {
-                    key: 'location',
-                    title: 'Location',
-                    dataIndex: 'location',
-                    ellipsis: true,
-                  },
-                  {
-                    key: 'description',
-                    title: 'Description',
-                    dataIndex: 'description',
-                    ellipsis: true,
-                  },
-                  {
-                    key: 'type',
-                    title: 'Type',
-                    dataIndex: 'type',
-                  },
-                  {
-                    key: 'Options',
-                    title: 'Options',
-                    dataIndex: 'Options',
-                    width: 100,
-                    render: (value, record) => (
-                      <>
-                        <Button
-                          disabled={saving}
-                          onClick={() => {
-                            setBanData(record.item);
-                            toggleEditExclusion();
-                          }}
-                          icon={<FontAwesomeIcon icon={faPenToSquare} />}
-                        />
-                        <Button
-                          disabled={saving}
-                          onClick={() => {
-                            deleteConfirm(record.key);
-                          }}
-                          icon={<FontAwesomeIcon icon={faTrash} />}
-                        />
-                      </>
-                    ),
-                  },
-                ]}
-                dataSource={bansData.map((ban) => ({
-                  endDate: ban.endDate,
-                  key: ban.id,
-                  item: ban,
-                  duration: `${new Date(
-                    ban?.startDate
-                  ).toDateString()}  -->  ${new Date(
-                    ban?.endDate
-                  ).toDateString()}`,
-                  activeDay: calcDuration(
-                    new Date(ban?.startDate),
-                    new Date(ban?.endDate)
-                  ),
-                  type: ban.type,
-                  location: ban.location,
-                  description: ban.description,
-                }))}
-              />
+              <Title style={{ marginBottom: 0 }} level={4}>
+                4.{' '}
+              </Title>
+            </Col>
+            <Col>
+              <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
+                Exclusions
+              </Title>
+            </Col>
+            <Col style={{ marginRight: 10 }}>
+              <Paragraph
+                style={{ marginBottom: 1, marginLeft: 5 }}
+                type="secondary"
+                italic
+              >
+                - Create exclusions for this offender to exclusion them from
+                areas or premises.
+              </Paragraph>
+            </Col>
+            <Col>
+              <Button
+                disabled={saving}
+                onClick={toggleAddExclusion}
+                style={{ marginTop: -30, marginLeft: 15, color: 'red' }}
+                icon={
+                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
+                }
+              >
+                Add Exclusion
+              </Button>
             </Col>
           </Row>
-        ) : (
-          <>
-            <Row justify="start">
-              <Empty
-                image={Empty.PRESENTED_IMAGE_SIMPLE}
-                description="You haven't add any exclusion for this offender yet."
-                style={{ marginLeft: 50 }}
-              />
+          {bansData && bansData.length > 0 ? (
+            <Row gutter={20}>
+              <Col>
+                <Table
+                  size="small"
+                  pagination={{
+                    defaultPageSize: 20,
+                    pageSize: 20,
+                  }}
+                  columns={[
+                    {
+                      key: 'duration',
+                      title: 'Duration',
+                      dataIndex: 'duration',
+                      width: 350,
+                      render: (value, record) => (
+                        <>
+                          <Text>{value}</Text>
+                          {calcExpired(new Date(record.endDate)) && (
+                            <Tag
+                              color="red"
+                              style={{
+                                marginLeft: 10,
+                              }}
+                            >
+                              EXPIRED
+                            </Tag>
+                          )}
+                        </>
+                      ),
+                    },
+
+                    {
+                      key: 'activeDay',
+                      title: 'Active Days',
+                      dataIndex: 'activeDay',
+                      width: 150,
+                    },
+                    {
+                      key: 'location',
+                      title: 'Location',
+                      dataIndex: 'location',
+                      ellipsis: true,
+                    },
+                    {
+                      key: 'description',
+                      title: 'Description',
+                      dataIndex: 'description',
+                      ellipsis: true,
+                    },
+                    {
+                      key: 'type',
+                      title: 'Type',
+                      dataIndex: 'type',
+                    },
+                    {
+                      key: 'Options',
+                      title: 'Options',
+                      dataIndex: 'Options',
+                      width: 100,
+                      render: (value, record) => (
+                        <>
+                          <Button
+                            disabled={saving}
+                            onClick={() => {
+                              setBanData(record.item);
+                              toggleEditExclusion();
+                            }}
+                            icon={<FontAwesomeIcon icon={faPenToSquare} />}
+                          />
+                          <Button
+                            disabled={saving}
+                            onClick={() => {
+                              deleteConfirm(record.key);
+                            }}
+                            icon={<FontAwesomeIcon icon={faTrash} />}
+                          />
+                        </>
+                      ),
+                    },
+                  ]}
+                  dataSource={bansData.map((ban) => ({
+                    endDate: ban.endDate,
+                    key: ban.id,
+                    item: ban,
+                    duration: `${new Date(
+                      ban?.startDate
+                    ).toDateString()}  -->  ${new Date(
+                      ban?.endDate
+                    ).toDateString()}`,
+                    activeDay: calcDuration(
+                      new Date(ban?.startDate),
+                      new Date(ban?.endDate)
+                    ),
+                    type: ban.type,
+                    location: ban.location,
+                    description: ban.description,
+                  }))}
+                />
+              </Col>
             </Row>
-            {/* <Divider /> */}
-          </>
-        )}
-      </Card>
+          ) : (
+            <>
+              <Row justify="start">
+                <Empty
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  description="You haven't add any exclusion for this offender yet."
+                  style={{ marginLeft: 50 }}
+                />
+              </Row>
+              {/* <Divider /> */}
+            </>
+          )}
+        </Card>
+      )}
       <Card>
         <Row>
           <Col>

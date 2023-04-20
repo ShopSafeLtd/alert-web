@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import type { Props as Return } from '../types/Documents';
-import { useStoreState } from '../../../../state';
+import { useStoreState } from '../../../../../state';
 import {
   Role,
   useListDocumentsOnSchemeQuery,
-} from '../../../../graphql/generated';
+} from '../../../../../graphql/generated';
 
 const useListDocuments = (): Return => {
   const [addDocument, setAddDocument] = useState(false);

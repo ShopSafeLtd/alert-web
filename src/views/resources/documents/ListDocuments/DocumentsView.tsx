@@ -4,7 +4,7 @@ import TabContent from 'components/TabContent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import type { Props as ViewProps } from './types/Documents';
-import AddDocument from '../../../components/form-components/documents/AddDocument';
+import AddDocument from '../../../../components/form-components/documents/AddDocument';
 
 const DocumentsView = ({
   data,

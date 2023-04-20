@@ -75,7 +75,7 @@ export const AppViews = (): JSX.Element => {
           path="investigations/*"
           element={<Investigations />}
         />
-        <Route key="documents" path="documents/*" element={<Documents />} />
+        <Route key="resources" path="resources/*" element={<Documents />} />
       </Routes>
     </Suspense>
   );

@@ -125,32 +125,32 @@ const OffenderDetails = ({
           <Input disabled={saving} />
         </Form.Item>
       </Col>
-      <Col span={14}>
-        <Row gutter={5} align="middle">
-          <Col flex={1}>
-            <Form.Item
-              name="tags"
-              label="Offender Warnings"
-              tooltip="select any warning labels that are relevant to this offender or add your own."
-            >
-              <Select
-                loading={tagsLoading}
-                disabled={saving}
-                mode="multiple"
-                maxTagCount={3}
-                optionFilterProp="label"
-                value={selectedItems}
-                onChange={setSelectedItems}
+      {adminRights && (
+        <Col span={14}>
+          <Row gutter={5} align="middle">
+            <Col flex={1}>
+              <Form.Item
+                name="tags"
+                label="Offender Warnings"
+                tooltip="select any warning labels that are relevant to this offender or add your own."
               >
-                {tags.map((tag) => (
-                  <Select.Option value={tag.value} label={tag.label}>
-                    {tag.label}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </Col>
-          {adminRights && (
+                <Select
+                  loading={tagsLoading}
+                  disabled={saving}
+                  mode="multiple"
+                  maxTagCount={3}
+                  optionFilterProp="label"
+                  value={selectedItems}
+                  onChange={setSelectedItems}
+                >
+                  {tags.map((tag) => (
+                    <Select.Option value={tag.value} label={tag.label}>
+                      {tag.label}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
             <Col>
               <Button
                 disabled={saving}
@@ -163,9 +163,9 @@ const OffenderDetails = ({
                 Add Label
               </Button>
             </Col>
-          )}
-        </Row>
-      </Col>
+          </Row>
+        </Col>
+      )}
     </Row>
 
     <Row gutter={50}>
@@ -242,64 +242,62 @@ const OffenderDetails = ({
       </Col>
     </Row>
 
-    {adminRights && (
-      <Row gutter={50}>
+    <Row gutter={50}>
+      <Col>
+        <Form.Item
+          name="idVerified"
+          label="Has the offenders ID been verified?"
+          tooltip="Have you confirmed the offenders ID using an accepted method?"
+        >
+          <Radio.Group disabled={saving}>
+            <Radio.Button value>Yes</Radio.Button>
+            <Radio.Button value={false}>No</Radio.Button>
+          </Radio.Group>
+        </Form.Item>
+      </Col>
+      {idVerified && (
         <Col>
           <Form.Item
-            name="idVerified"
-            label="Has the offenders ID been verified?"
-            tooltip="Have you confirmed the offenders ID using an accepted method?"
+            name="idSource"
+            label="ID Source"
+            tooltip="How did you confirm the ID?"
+            rules={[
+              {
+                required: true,
+                message: 'Please enter the source of the ID.',
+              },
+            ]}
           >
-            <Radio.Group disabled={saving}>
-              <Radio.Button value>Yes</Radio.Button>
-              <Radio.Button value={false}>No</Radio.Button>
-            </Radio.Group>
-          </Form.Item>
-        </Col>
-        {idVerified && (
-          <Col>
-            <Form.Item
-              name="idSource"
-              label="ID Source"
-              tooltip="How did you confirm the ID?"
-              rules={[
+            <Select
+              style={{ width: 200 }}
+              disabled={saving}
+              options={[
                 {
-                  required: true,
-                  message: 'Please enter the source of the ID.',
+                  label: 'Driving Licence',
+                  value: IdSource.DrivingLicence,
+                },
+                {
+                  label: 'ID Card',
+                  value: IdSource.IdCard,
+                },
+                {
+                  label: 'Known Offender',
+                  value: IdSource.Known,
+                },
+                {
+                  label: 'Other',
+                  value: IdSource.Other,
+                },
+                {
+                  label: 'Passport',
+                  value: IdSource.Passport,
                 },
               ]}
-            >
-              <Select
-                style={{ width: 200 }}
-                disabled={saving}
-                options={[
-                  {
-                    label: 'Driving Licence',
-                    value: IdSource.DrivingLicence,
-                  },
-                  {
-                    label: 'ID Card',
-                    value: IdSource.IdCard,
-                  },
-                  {
-                    label: 'Known Offender',
-                    value: IdSource.Known,
-                  },
-                  {
-                    label: 'Other',
-                    value: IdSource.Other,
-                  },
-                  {
-                    label: 'Passport',
-                    value: IdSource.Passport,
-                  },
-                ]}
-              />
-            </Form.Item>
-          </Col>
-        )}
-      </Row>
-    )}
+            />
+          </Form.Item>
+        </Col>
+      )}
+    </Row>
   </>
 );
 export default OffenderDetails;
