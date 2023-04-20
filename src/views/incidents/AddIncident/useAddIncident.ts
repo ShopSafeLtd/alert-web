@@ -231,7 +231,6 @@ const useEditIncident = (): Return => {
       },
     },
     fetchPolicy: 'cache-and-network',
-    skip: role !== Role.SchemeAdmin,
     onCompleted: (result) => {
       setIncidentsState({
         pagination,
