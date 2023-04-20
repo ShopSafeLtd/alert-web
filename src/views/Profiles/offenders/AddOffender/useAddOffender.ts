@@ -191,9 +191,18 @@ const useAddOffender = (): Return => {
             equals: schemeId,
           },
         },
+        users:
+          role === Role.User
+            ? {
+                some: {
+                  id: {
+                    equals: userId,
+                  },
+                },
+              }
+            : undefined,
       },
     },
-    skip: role !== Role.SchemeAdmin,
     onCompleted: (result) => {
       setOffendersState({
         pagination,

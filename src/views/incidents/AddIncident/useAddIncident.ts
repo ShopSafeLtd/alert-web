@@ -228,6 +228,16 @@ const useEditIncident = (): Return => {
             equals: schemeId,
           },
         },
+        users:
+          role === Role.User
+            ? {
+                some: {
+                  id: {
+                    equals: userId,
+                  },
+                },
+              }
+            : undefined,
       },
     },
     fetchPolicy: 'cache-and-network',
@@ -689,6 +699,7 @@ const useEditIncident = (): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
+
     if (offendersData) {
       const getOffenders = (): CreateIncidentData['offenders'] => {
         if (offendersData) {
