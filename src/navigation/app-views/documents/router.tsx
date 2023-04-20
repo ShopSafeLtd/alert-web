@@ -1,10 +1,12 @@
 import React from 'react';
 import { Route, Routes } from 'react-router';
-import ListDocuments from '../../../views/documents/ListDocuments/Documents.container';
+import ListDocuments from '../../../views/resources/documents/ListDocuments/Documents.container';
+import ListVideos from '../../../views/resources/training/ListVideos/ListVideos.view';
 
 const Documents = (): JSX.Element => (
   <Routes>
-    <Route index element={<ListDocuments />} />
+    <Route path="documents/*" element={<ListDocuments />} />
+    <Route path="training/*" element={<ListVideos />} />
   </Routes>
 );
 

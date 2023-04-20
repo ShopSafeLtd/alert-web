@@ -1,4 +1,4 @@
-import type { ListDocumentsOnSchemeQuery } from '../../../../graphql/generated';
+import type { ListDocumentsOnSchemeQuery } from '../../../../../graphql/generated';
 
 export interface Props {
   data: ListDocumentsOnSchemeQuery | undefined;
