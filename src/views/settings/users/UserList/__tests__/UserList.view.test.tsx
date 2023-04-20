@@ -1,6 +1,9 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
+import { UserSort } from 'types/enums/user_sort';
+import { Role } from 'graphql/generated';
+import { UserStatus } from 'types/enums/user_status';
 import UserList from '../UserList.view';
 
 describe('List Officer View', () => {
@@ -20,9 +23,6 @@ describe('List Officer View', () => {
       total: 1,
     },
   };
-  const groupsData = {
-    groups: [{ id: 'groupId', name: 'test group' }],
-  };
 
   it('renders the page', () => {
     const { getByText } = render(
@@ -32,7 +32,6 @@ describe('List Officer View', () => {
           loading={false}
           search=""
           setSearch={jest.fn()}
-          groupsData={groupsData}
           groupsLoading={false}
           selectedGroups={['']}
           setSelectedGroups={jest.fn()}
@@ -45,6 +44,16 @@ describe('List Officer View', () => {
           onPaginationChange={jest.fn()}
           editUser=""
           toggleEditUser={jest.fn()}
+          clearFilters={jest.fn()}
+          groups={[]}
+          order={UserSort.createdAtAsc}
+          setOrder={jest.fn()}
+          setUserRole={jest.fn()}
+          setUserStatus={jest.fn()}
+          sortFilter
+          toggleSortFilter={jest.fn()}
+          userRole={Role.SchemeAdmin}
+          userStatus={UserStatus.ACTIVE}
         />
       </MemoryRouter>
     );

@@ -160,7 +160,10 @@ const OffenderFeed = ({
               </Row>
             </>
           ) : updates && updates.length > 0 ? (
-            <UpdateContent title={name} update={updates[0]} />
+            <UpdateContent
+              title={name || 'Unidentified Offender'}
+              update={updates[0]}
+            />
           ) : null}
         </Col>
       </Row>

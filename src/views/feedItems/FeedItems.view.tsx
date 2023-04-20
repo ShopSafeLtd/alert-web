@@ -528,9 +528,9 @@ Props): JSX.Element => {
                 >
                   Recent Bulletins
                 </Title>
-                <Divider style={{ margin: '0 0 10px' }} />
+                <Divider style={{ margin: '0 0' }} />
 
-                <Row gutter={[8, 8]}>
+                <Row gutter={[8, 8]} style={{ padding: 10 }}>
                   {articleLoading ? (
                     Array.from({ length: 24 }).map((_, index) => (
                       // eslint-disable-next-line react/no-array-index-key
@@ -540,7 +540,7 @@ Props): JSX.Element => {
                     ))
                   ) : articleData?.listArticles?.total ? (
                     articleData?.listArticles?.articles.map((article) => (
-                      <Col span={24} xxl={8}>
+                      <Col span={24} xxl={12}>
                         <ArticleCard article={article} />
                       </Col>
                     ))

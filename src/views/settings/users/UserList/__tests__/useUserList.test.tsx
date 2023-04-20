@@ -101,7 +101,7 @@ const mocks = [
 ];
 
 const UseUserListTest = () => {
-  const { data, loading, groupsData, groupsLoading } = useUserList();
+  const { data, loading, groupsLoading } = useUserList();
   const Users =
     data &&
     data.listUsers.users.map((el) => (
@@ -110,20 +110,11 @@ const UseUserListTest = () => {
         <span>{el.fullName}</span>
       </div>
     ));
-  const Groups =
-    groupsData &&
-    groupsData.groups.map((el) => (
-      <div key={el.id}>
-        <span>{el.id}</span>
-        <span>{el.name}</span>
-      </div>
-    ));
 
   return (
     <div>
       {Users}
       <span>{loading ? 'true' : 'false'}</span>
-      {Groups}
       <span>{groupsLoading ? 'true' : 'false'}</span>
     </div>
   );
