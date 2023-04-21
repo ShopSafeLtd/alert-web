@@ -9,13 +9,11 @@ import {
 import Views from 'navigation/router';
 import { ThemeSwitcherProvider } from 'react-css-theme-switcher/src';
 import { LoadScript } from '@react-google-maps/api';
-import {
-  configureScope,
-  init,
-  reactRouterV6Instrumentation,
-} from '@sentry/react';
+import * as Sentry from '@sentry/react';
+import { configureScope, reactRouterV6Instrumentation } from '@sentry/react';
 import LogRocket from 'logrocket';
 import { BrowserTracing } from '@sentry/tracing';
+import { CaptureConsole } from '@sentry/integrations';
 import ApolloProvider from './providers/ApolloProvider';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
@@ -28,9 +26,12 @@ const themes = {
   light: `/css/light-theme.css`,
 };
 
-init({
+Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
   integrations: [
+    new CaptureConsole({
+      levels: ['error'],
+    }),
     new BrowserTracing({
       routingInstrumentation: reactRouterV6Instrumentation(
         React.useEffect,
@@ -44,7 +45,7 @@ init({
   // Set tracesSampleRate to 1.0 to capture 100%
   // of transactions for performance monitoring.
   // Adjust for production
-  tracesSampleRate: 1,
+  tracesSampleRate: 0.3,
   beforeSend(event) {
     const logRocketSession = LogRocket.sessionURL;
     if (logRocketSession !== null && event.extra) {
@@ -89,4 +90,4 @@ const App = (): JSX.Element => (
   </div>
 );
 
-export default App;
+export default Sentry.withProfiler(App);

@@ -4,15 +4,15 @@ import Loading from 'components/shared-components/AntD/Loading';
 import { useAuth } from 'hooks';
 import { useStoreState } from 'state';
 import { useAuth0 } from '@auth0/auth0-react';
-import FeedItems from './feedItems/router';
-import Incidents from './incidents/router';
-import Offenders from './offenders/router';
-import CrimeGroups from './crime-groups/router';
-import Vehicles from './vehicles/router';
+// import Incidents from './incidents/router';
+// import Offenders from './offenders/router';
+// import FeedItems from './feedItems/router';
+// import CrimeGroups from './crime-groups/router';
+// import Vehicles from './vehicles/router';
 
 const Onboarding = lazy(() => import(`./onboarding/router`));
-// const Incidents = lazy(() => import(`./incidents/router`));
-// const Offenders = lazy(() => import(`./offenders/router`));
+const Incidents = lazy(() => import(`./incidents/router`));
+const Offenders = lazy(() => import(`./offenders/router`));
 const Chat = lazy(() => import(`./chat/router`));
 const User = lazy(() => import(`./user-settings/router`));
 const Scheme = lazy(() => import(`./scheme-settings/router`));
@@ -20,6 +20,9 @@ const Article = lazy(() => import(`./article/router`));
 const Reports = lazy(() => import(`./reports/router`));
 const Investigations = lazy(() => import(`./investigations/router`));
 const Documents = lazy(() => import(`./documents/router`));
+const Vehicles = lazy(() => import(`./vehicles/router`));
+const CrimeGroups = lazy(() => import(`./crime-groups/router`));
+const FeedItems = lazy(() => import(`./feedItems/router`));
 
 export const AppViews = (): JSX.Element => {
   const { isLoading } = useAuth0();

@@ -817,9 +817,9 @@ const useEditIncident = (): Return => {
             description: data.description,
             date: data.date,
             time: data.date,
-            business: data.business
+            business: data.business?.value
               ? {
-                  id: data.business.value,
+                  id: data.business?.value,
                 }
               : undefined,
             items: data.goods
@@ -1043,7 +1043,7 @@ const useEditIncident = (): Return => {
         description: `An incident of ${tags
           .map((tag, index) => `${index > 0 ? ' ' : ''}${tag}`)
           .toString()} occurred ${
-          values.business ? `at ${values.business.label}` : ''
+          values.business ? `at ${values.business?.label}` : ''
         } at ${moment(values.date).format('HH:mm')} on ${moment(
           values.date
         ).format('dddd Do MMMM YYYY')}. ${
