@@ -54,11 +54,6 @@ const useAuth = (): Return => {
   }: HandleSuccessArgs) => {
     // const color = `hsl(${Math.random() * 360}, 70%, 30%)`;
 
-    // localStorage.setItem(
-    //   'current-user',
-    //   JSON.stringify({ id, name: fullName, color })
-    // );
-
     const handleNoValidScheme = () => {
       const schemeDetails = schemes[0]?.scheme;
       window.localStorage.setItem('currentScheme', schemeDetails?.id);
@@ -136,7 +131,7 @@ const useAuth = (): Return => {
             currentS?.scheme?.logo?.optimisedPersisted || ''
           );
           if (!currentS?.scheme?.logo?.optimisedPersisted) {
-            window.localStorage.clear();
+            window.localStorage.setItem('logo', '');
           }
           window.localStorage.setItem(
             'logo-dark',
