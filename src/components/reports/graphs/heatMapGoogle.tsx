@@ -22,10 +22,7 @@ const HeatMapGoogle = ({
     height: '600px',
   };
   return (
-    <div
-      style={{ height: '100%', width: '100%%' }}
-      className="printable-graph no-break"
-    >
+    <div style={{ height: '100%', width: '100%%' }} className="no-break">
       <Typography.Title level={4}>{label}</Typography.Title>
       {data && data.length > 0 ? (
         <GoogleMap
