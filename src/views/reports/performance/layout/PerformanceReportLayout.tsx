@@ -563,6 +563,7 @@ const PerformanceReportLayout = ({
         <Title level={4}>Business Contributions</Title>
         <Table
           size="small"
+          className="no-break"
           pagination={{
             onChange: (_, pageSize) => {
               changeSize('businessContributionTable', pageSize);
@@ -597,6 +598,7 @@ const PerformanceReportLayout = ({
         <Title level={4}>Top Contributors</Title>
         <Table<ContributorTable>
           size="small"
+          className="no-break"
           pagination={{
             onChange: (_, pageSize) => {
               changeSize('topContributors', pageSize);
@@ -631,6 +633,7 @@ const PerformanceReportLayout = ({
         <Title level={4}>Offenders Table</Title>
         <Table
           size="small"
+          className="no-break"
           pagination={{
             onChange: (_, pageSize) => {
               changeSize('offendersTable', pageSize);
@@ -665,6 +668,7 @@ const PerformanceReportLayout = ({
         <Title level={4}>Crime group table</Title>
         <Table
           size="small"
+          className="no-break"
           pagination={{
             onChange: (_, pageSize) => {
               changeSize('crimeGroupTable', pageSize);
@@ -699,6 +703,7 @@ const PerformanceReportLayout = ({
         <Title level={4}>Targeted Business</Title>
         <Table
           size="small"
+          className="no-break"
           pagination={{
             onChange: (_, pageSize) => {
               changeSize('targetedBusinessTable', pageSize);
@@ -736,6 +741,7 @@ const PerformanceReportLayout = ({
         <Title level={4}>Targeted Goods</Title>
         <Table
           size="small"
+          className="no-break"
           pagination={{
             onChange: (_, pageSize) => {
               changeSize('targetedGoodsTable', pageSize);

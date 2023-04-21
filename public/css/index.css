@@ -110,6 +110,9 @@
   .ant-table-body {
     overflow-y: unset !important;
   }
+  .ant-table-column-sort {
+    background: 0 0 !important;
+  }
   .print-title {
     width: 100%;
     text-align: center;
