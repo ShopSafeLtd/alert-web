@@ -6,7 +6,7 @@ import AppLocale from 'lang';
 import { ThemeProvider } from 'react-jss';
 import { IntlProvider } from 'react-intl';
 import { ConfigProvider } from 'antd';
-import { useStoreState } from 'state';
+import { useStoreActions, useStoreState } from 'state';
 import { useAuth } from 'hooks';
 import { useAuth0 } from '@auth0/auth0-react';
 import theme from 'configs/ThemeConfig';
@@ -23,6 +23,14 @@ export const Views = (): JSX.Element => {
 
   const locale = useStoreState((state) => state.theme.locale) as 'en' | 'fr';
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
+  const t = localStorage.getItem('theme');
+  const switchTheme = useStoreActions((actions) => actions.theme.switchTheme);
+  if (!t) {
+    // get browser theme preference
+    const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    localStorage.setItem('theme', darkMode ? 'dark' : 'light');
+    switchTheme(darkMode ? 'dark' : 'light');
+  }
 
   const isSet = useStoreState((state) => state.auth.isSet);
   const userId = useStoreState((state) => state.user.id);
