@@ -121,6 +121,7 @@ const useAuth = (): Return => {
   };
 
   const [getCurrentUser, { loading }] = useCurrentUserLazyQuery({
+    nextFetchPolicy: 'cache-and-network',
     onCompleted: ({ currentUser }) => {
       const scheme =
         currentScheme || window.localStorage.getItem('currentScheme');

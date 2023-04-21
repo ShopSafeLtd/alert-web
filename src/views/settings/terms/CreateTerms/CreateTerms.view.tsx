@@ -32,7 +32,7 @@ const EditText = ({
             editorRef.current = editor;
           }}
           tinymceScriptSrc="/tinymce/tinymce.min.js"
-          initialValue={data || '<p>Edit text node...</p>'}
+          initialValue={data || '<p>Create terms here...</p>'}
           init={{
             menubar: false,
             branding: false,
