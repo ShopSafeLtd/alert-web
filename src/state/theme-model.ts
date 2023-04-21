@@ -48,7 +48,9 @@ export const ThemeConfig = {
   mobileNav: false,
   currentTheme:
     (typedLocalStorage.get(LocalStorageKeys.theme) as 'light' | 'dark') ||
-    ('light' as 'light' | 'dark'),
+    (window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light'),
 };
 
 export interface ThemeModel {
