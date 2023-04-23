@@ -77,6 +77,30 @@
 }
 .no-break {
   page-break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  break-inside: avoid;
+}
+.print-body {
+  width: 1100px;
+  -webkit-column-break-inside: auto;
+  break-inside: auto;
+}
+.print-container {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.stats-row {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+}
+.card-remove {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  z-index: 1;
 }
 @media print {
   .no-print,
@@ -89,7 +113,17 @@
     background: white;
   }
   .ant-card-bordered {
-    border: 0px solid #000;
+    border: 0 solid #000;
+  }
+  .ant-card-body {
+    overflow: unset !important;
+  }
+  .react-resizable-handle {
+    display: none !important;
+  }
+  .react-grid-item {
+    -webkit-column-break-inside: avoid;
+    break-inside: avoid;
   }
   .logo {
     display: flex;
@@ -98,10 +132,19 @@
     justify-content: center;
     margin-bottom: 10px;
   }
+  .ant-table-body {
+    overflow-y: unset !important;
+  }
+  .ant-table-column-sort {
+    background: none !important;
+  }
   .print-title {
     width: 100%;
     text-align: center;
     justify-content: center;
+  }
+  .print-container {
+    display: block;
   }
   .printable-graph {
     width: 90% !important;
