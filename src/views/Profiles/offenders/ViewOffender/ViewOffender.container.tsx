@@ -16,7 +16,6 @@ const ViewOffender = (): JSX.Element => {
     linkIncident,
     toggleLinkIncident,
     updateIncidentList,
-    optionMenuItems,
     toggleSubscribe,
     lightboxElements,
     confirmDeleteUpdate,
@@ -40,6 +39,7 @@ const ViewOffender = (): JSX.Element => {
     optionRowShow,
     setOptionRowShow,
     publicOffenderDOB,
+    onDelete,
   } = useViewOffender(offenderId);
 
   return (
@@ -55,7 +55,6 @@ const ViewOffender = (): JSX.Element => {
       linkIncident={linkIncident}
       toggleLinkIncident={toggleLinkIncident}
       updateIncidentList={updateIncidentList}
-      optionMenuItems={optionMenuItems}
       lightboxElements={lightboxElements}
       toggleSubscribe={toggleSubscribe}
       confirmDeleteUpdate={confirmDeleteUpdate}
@@ -78,6 +77,7 @@ const ViewOffender = (): JSX.Element => {
       optionRowShow={optionRowShow}
       setOptionRowShow={setOptionRowShow}
       publicOffenderDOB={publicOffenderDOB}
+      onDelete={onDelete}
     />
   );
 };

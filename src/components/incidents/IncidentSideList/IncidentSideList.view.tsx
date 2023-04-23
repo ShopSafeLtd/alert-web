@@ -1,7 +1,9 @@
 import React from 'react';
 import type { ListIncidentsQuery } from 'graphql/generated';
-import { Row, Col, Typography, Pagination, Spin, Card } from 'antd';
+import { Row, Col, Typography, Pagination, Spin } from 'antd';
 import { Link } from 'react-router-dom';
+import SideList from 'components/side-list/SideList.view';
+import SideListItem from 'components/side-list/SideListItem.view';
 import useStyles from './IncidentSideList.styles';
 
 interface Props {
@@ -26,7 +28,7 @@ const IncidentSideList = ({
   const classes = useStyles();
 
   return (
-    <div className={classes.sideList}>
+    <SideList>
       {loading && (
         <div
           style={{
@@ -42,12 +44,7 @@ const IncidentSideList = ({
       )}
       {data?.listIncidents?.incidents.map((incident) => (
         <Link to={`/app/incidents/view/${incident.id}`} key={incident.id}>
-          <Card
-            className={`${classes.item} ${
-              current === incident.id ? 'current' : undefined
-            }`}
-            bodyStyle={{ padding: 0 }}
-          >
+          <SideListItem current={current === incident.id}>
             <Row wrap={false}>
               <Col className={classes.itemContent} flex={1}>
                 <Typography.Text strong={current === incident.id} ellipsis>
@@ -83,7 +80,7 @@ const IncidentSideList = ({
                 </Row>
               </Col>
             </Row>
-          </Card>
+          </SideListItem>
         </Link>
       ))}
       {!loading && (
@@ -96,7 +93,7 @@ const IncidentSideList = ({
           current={pagination.page}
         />
       )}
-    </div>
+    </SideList>
   );
 };
 

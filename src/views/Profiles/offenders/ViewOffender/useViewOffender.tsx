@@ -82,6 +82,7 @@ interface Return {
   optionRowShow: boolean;
   setOptionRowShow: (value: boolean) => void;
   publicOffenderDOB: boolean;
+  onDelete: (id: string) => void;
 }
 
 const useViewOffender = (offenderId: string): Return => {
@@ -482,6 +483,7 @@ const useViewOffender = (offenderId: string): Return => {
     optionRowShow,
     setOptionRowShow,
     publicOffenderDOB,
+    onDelete,
   };
 };
 

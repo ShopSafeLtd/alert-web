@@ -1,17 +1,11 @@
 import React from 'react';
 import type { ListOffendersQuery } from 'graphql/generated';
-import {
-  Col,
-  Divider,
-  Pagination,
-  Row,
-  Skeleton,
-  Spin,
-  Typography,
-} from 'antd';
+import { Col, Pagination, Row, Skeleton, Spin, Typography } from 'antd';
 import { Link } from 'react-router-dom';
-import { getLastOffence } from 'utils/offender/get-offender-desc';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import SideList from 'components/side-list/SideList.view';
+import SideListItem from 'components/side-list/SideListItem.view';
+import { getAge, getEthnicity, getSex } from 'utils';
 import useStyles from './OffenderSideList.styles';
 
 const { Text, Paragraph } = Typography;
@@ -39,7 +33,7 @@ const OffenderSideList = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   return (
-    <div className={classes.offenderSideList}>
+    <SideList>
       {loading && (
         <div
           style={{
@@ -58,12 +52,7 @@ const OffenderSideList = ({
           to={`${to || '/app/offenders/view/'}${offender.id}`}
           key={offender.id}
         >
-          <div
-            key={offender.id}
-            className={`${classes.offenderItem} ${
-              current === offender.id ? 'current' : ''
-            }`}
-          >
+          <SideListItem current={current === offender.id}>
             <Row wrap={false}>
               <Col>
                 {offender.images.length > 0 ? (
@@ -85,14 +74,18 @@ const OffenderSideList = ({
                 >
                   {offender.name}
                 </Text>
-                <Paragraph className={classes.lastOffence}>
-                  Last Offense:{' '}
-                  {getLastOffence(offender.incidents, true).message}
+                <Paragraph className={classes.detail} ellipsis>
+                  {offender.race && getEthnicity(offender.race)}
+                </Paragraph>
+                <Paragraph className={classes.detail} ellipsis>
+                  {offender.gender && getSex(offender.gender)}
+                </Paragraph>
+                <Paragraph className={classes.detail} ellipsis>
+                  {offender.age && getAge(offender.age)}
                 </Paragraph>
               </Col>
             </Row>
-            <Divider className={classes.divider} />
-          </div>
+          </SideListItem>
         </Link>
       ))}
       {!loading && (
@@ -105,7 +98,7 @@ const OffenderSideList = ({
           current={pagination.page}
         />
       )}
-    </div>
+    </SideList>
   );
 };
 

@@ -363,8 +363,12 @@ const ViewIncident = ({
                           <MapCard
                             width="100%"
                             height={194}
-                            geoLat={data?.incident?.location?.geoLat}
-                            geoLng={data?.incident?.location?.geoLng}
+                            markers={[
+                              {
+                                geoLat: data?.incident?.location?.geoLat,
+                                geoLng: data?.incident?.location?.geoLng,
+                              },
+                            ]}
                           />
                         </Col>
                         <Col xs={24} xl={12}>

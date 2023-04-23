@@ -3607,6 +3607,7 @@ export type ArticleCreateManyCreatedByInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
   start?: InputMaybe<Scalars['DateTime']>;
   title: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -3772,6 +3773,7 @@ export type ArticleCreateWithoutActionsInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
   start?: InputMaybe<Scalars['DateTime']>;
@@ -3797,6 +3799,7 @@ export type ArticleCreateWithoutCreatedByInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
   start?: InputMaybe<Scalars['DateTime']>;
@@ -3822,6 +3825,7 @@ export type ArticleCreateWithoutDocumentsInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
   start?: InputMaybe<Scalars['DateTime']>;
@@ -3847,6 +3851,7 @@ export type ArticleCreateWithoutFeedItemsInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
   start?: InputMaybe<Scalars['DateTime']>;
@@ -3872,6 +3877,7 @@ export type ArticleCreateWithoutGroupsInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
   start?: InputMaybe<Scalars['DateTime']>;
@@ -3897,6 +3903,7 @@ export type ArticleCreateWithoutImageInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
   start?: InputMaybe<Scalars['DateTime']>;
@@ -3922,6 +3929,7 @@ export type ArticleCreateWithoutImagesInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
   start?: InputMaybe<Scalars['DateTime']>;
@@ -3947,6 +3955,7 @@ export type ArticleCreateWithoutImpressionsInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
   start?: InputMaybe<Scalars['DateTime']>;
@@ -3973,6 +3982,7 @@ export type ArticleCreateWithoutRowsInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
   start?: InputMaybe<Scalars['DateTime']>;
   tags?: InputMaybe<TagCreateNestedManyWithoutArticlesInput>;
@@ -3998,6 +4008,7 @@ export type ArticleCreateWithoutSchemesInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   start?: InputMaybe<Scalars['DateTime']>;
   tags?: InputMaybe<TagCreateNestedManyWithoutArticlesInput>;
@@ -4023,6 +4034,7 @@ export type ArticleCreateWithoutTagsInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
   start?: InputMaybe<Scalars['DateTime']>;
@@ -4048,6 +4060,7 @@ export type ArticleCreateWithoutUsersInput = {
   previewText?: InputMaybe<Scalars['String']>;
   priority: ArticlePriority;
   recurring?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
   rows?: InputMaybe<ArticleRowCreateNestedManyWithoutArticleInput>;
   schemes?: InputMaybe<SchemeCreateNestedManyWithoutArticlesInput>;
   start?: InputMaybe<Scalars['DateTime']>;
@@ -4085,6 +4098,7 @@ export type ArticleOrderByWithRelationInput = {
   previewText?: InputMaybe<SortOrder>;
   priority?: InputMaybe<SortOrder>;
   recurring?: InputMaybe<SortOrder>;
+  recycled?: InputMaybe<SortOrder>;
   rows?: InputMaybe<ArticleRowOrderByRelationAggregateInput>;
   schemes?: InputMaybe<SchemeOrderByRelationAggregateInput>;
   start?: InputMaybe<SortOrder>;
@@ -4307,6 +4321,7 @@ export type ArticleScalarWhereInput = {
   previewText?: InputMaybe<StringNullableFilter>;
   priority?: InputMaybe<EnumArticlePriorityFilter>;
   recurring?: InputMaybe<BoolFilter>;
+  recycled?: InputMaybe<BoolFilter>;
   start?: InputMaybe<DateTimeNullableFilter>;
   title?: InputMaybe<StringFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -4332,6 +4347,7 @@ export type ArticleUpdateManyMutationInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   title?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -4573,6 +4589,7 @@ export type ArticleUpdateWithoutActionsInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
   start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -4598,6 +4615,7 @@ export type ArticleUpdateWithoutCreatedByInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
   start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -4623,6 +4641,7 @@ export type ArticleUpdateWithoutDocumentsInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
   start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -4648,6 +4667,7 @@ export type ArticleUpdateWithoutFeedItemsInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
   start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -4673,6 +4693,7 @@ export type ArticleUpdateWithoutGroupsInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
   start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -4698,6 +4719,7 @@ export type ArticleUpdateWithoutImageInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
   start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -4723,6 +4745,7 @@ export type ArticleUpdateWithoutImagesInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
   start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -4748,6 +4771,7 @@ export type ArticleUpdateWithoutImpressionsInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
   start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -4774,6 +4798,7 @@ export type ArticleUpdateWithoutRowsInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
   start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   tags?: InputMaybe<TagUpdateManyWithoutArticlesNestedInput>;
@@ -4799,6 +4824,7 @@ export type ArticleUpdateWithoutSchemesInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
   tags?: InputMaybe<TagUpdateManyWithoutArticlesNestedInput>;
@@ -4824,6 +4850,7 @@ export type ArticleUpdateWithoutTagsInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
   start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -4849,6 +4876,7 @@ export type ArticleUpdateWithoutUsersInput = {
   previewText?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   priority?: InputMaybe<EnumArticlePriorityFieldUpdateOperationsInput>;
   recurring?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   rows?: InputMaybe<ArticleRowUpdateManyWithoutArticleNestedInput>;
   schemes?: InputMaybe<SchemeUpdateManyWithoutArticlesNestedInput>;
   start?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
@@ -4946,6 +4974,7 @@ export type ArticleWhereInput = {
   previewText?: InputMaybe<StringNullableFilter>;
   priority?: InputMaybe<EnumArticlePriorityFilter>;
   recurring?: InputMaybe<BoolFilter>;
+  recycled?: InputMaybe<BoolFilter>;
   rows?: InputMaybe<ArticleRowListRelationFilter>;
   schemes?: InputMaybe<SchemeListRelationFilter>;
   start?: InputMaybe<DateTimeNullableFilter>;
@@ -46723,6 +46752,12 @@ export type ViewOffenderQuery = {
           name: string;
         }>;
       };
+      location?: {
+        __typename?: 'Address';
+        id: string;
+        geoLat?: number | null;
+        geoLng?: number | null;
+      } | null;
     }>;
     updates: Array<{
       __typename?: 'Update';
@@ -58431,6 +58466,11 @@ export const ViewOffenderDocument = gql`
             id
             name
           }
+        }
+        location {
+          id
+          geoLat
+          geoLng
         }
       }
       crimeGroups {
