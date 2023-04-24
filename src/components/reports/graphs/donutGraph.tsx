@@ -5,14 +5,15 @@ import { useStoreState } from '../../../state';
 
 const DonutGraph = ({
   data,
-
   emptyLabel,
+  labelFormat,
 }: {
   data:
     | Array<{ __typename?: 'Graph'; label: string; value: number } | null>
     | null
     | undefined;
   emptyLabel: string;
+  labelFormat?: string;
 }) => {
   const theme = useStoreState((state) => state.theme.currentTheme);
   const darkMode = theme === 'dark';
@@ -59,6 +60,9 @@ const DonutGraph = ({
           arcLinkLabelsStraightLength={0}
           arcLinkLabelsColor={{ from: 'color' }}
           arcLabelsSkipAngle={10}
+          arcLabel={(e) =>
+            labelFormat ? `${labelFormat}${e.value}` : `${e.value}`
+          }
           // arcLinkLabelsTextColor={darkMode ? '#fff' : '#3a3a3a'}
           // arcLabelsTextColor={darkMode ? '#fff' : '#3a3a3a'}
           enableArcLinkLabels={false}

@@ -1,13 +1,14 @@
 import type RGL from 'react-grid-layout';
 
-const PerformanceLayout: RGL.Layout[] = [
+const OffenderLayout: RGL.Layout[] = [
   {
     w: 2,
-    h: 4,
+    h: 9,
     x: 0,
     y: 0,
-    minH: 4,
-    i: 'createdSummary',
+    minW: 2,
+    minH: 9,
+    i: 'offenderSummary',
     moved: false,
     static: false,
   },
@@ -32,6 +33,16 @@ const PerformanceLayout: RGL.Layout[] = [
     static: false,
   },
   {
+    w: 1,
+    h: 8,
+    maxH: 11,
+    x: 0,
+    y: 11,
+    i: 'crimeTypesDonut',
+    moved: false,
+    static: false,
+  },
+  {
     w: 2,
     h: 1,
     x: 0,
@@ -51,24 +62,26 @@ const PerformanceLayout: RGL.Layout[] = [
   },
   {
     w: 1,
-    h: 10,
-    maxH: 11,
-    x: 0,
+    h: 8,
+    x: 1,
     y: 11,
-    i: 'crimeTypesDonut',
+    maxH: 11,
+    i: 'crimeTypesByBusinessRadial',
     moved: false,
     static: false,
   },
   {
-    w: 1,
+    w: 2,
     h: 10,
-    x: 1,
-    y: 11,
+    x: 0,
+    y: 21,
     maxH: 11,
-    i: 'involvedTagsDonut',
+
+    i: 'goodsTypeLossRecoveredRadial',
     moved: false,
     static: false,
   },
+
   {
     w: 1,
     h: 10,
@@ -76,7 +89,7 @@ const PerformanceLayout: RGL.Layout[] = [
     y: 21,
     maxH: 11,
 
-    i: 'goodsTypeDonut',
+    i: 'incidentTimeOfDayDonut',
     moved: false,
     static: false,
   },
@@ -87,7 +100,7 @@ const PerformanceLayout: RGL.Layout[] = [
     y: 21,
     maxH: 11,
 
-    i: 'goodsValueDonut',
+    i: 'incidentMonthDonut',
     moved: false,
     static: false,
   },
@@ -104,7 +117,7 @@ const PerformanceLayout: RGL.Layout[] = [
   },
   {
     w: 2,
-    h: 17,
+    h: 12,
     x: 0,
     y: 41,
     i: 'incidentsHeatMap',
@@ -119,7 +132,7 @@ const PerformanceLayout: RGL.Layout[] = [
     y: 48,
     minH: 5,
 
-    i: 'businessContributionTable',
+    i: 'incidentsTable',
     moved: false,
     static: false,
   },
@@ -130,45 +143,6 @@ const PerformanceLayout: RGL.Layout[] = [
 
     x: 0,
     y: 56,
-    i: 'topContributors',
-    moved: false,
-    static: false,
-  },
-  {
-    w: 2,
-    h: 15,
-    x: 0,
-    minW: 2,
-
-    y: 64,
-    minH: 5,
-
-    i: 'offendersTable',
-    moved: false,
-    static: false,
-  },
-  {
-    w: 2,
-    h: 15,
-    x: 0,
-    minW: 2,
-
-    y: 72,
-    minH: 5,
-
-    i: 'crimeGroupTable',
-    moved: false,
-    static: false,
-  },
-  {
-    w: 2,
-    h: 15,
-    x: 0,
-    minW: 2,
-
-    y: 86,
-    minH: 5,
-
     i: 'targetedBusinessTable',
     moved: false,
     static: false,
@@ -176,10 +150,9 @@ const PerformanceLayout: RGL.Layout[] = [
   {
     w: 2,
     h: 15,
-    minW: 2,
-
     x: 0,
-    y: 92,
+    minW: 2,
+    y: 64,
     minH: 5,
 
     i: 'targetedGoodsTable',
@@ -188,4 +161,4 @@ const PerformanceLayout: RGL.Layout[] = [
   },
 ];
 
-export default PerformanceLayout;
+export default OffenderLayout;

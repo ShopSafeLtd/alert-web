@@ -5,8 +5,7 @@ import {
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import type { RefObject } from 'react';
-import { useEffect, useRef, useState } from 'react';
-import { useReactToPrint } from 'react-to-print';
+import { useEffect, useState } from 'react';
 import type RGL from 'react-grid-layout';
 import type {
   BusinessTableData,
@@ -16,13 +15,14 @@ import type {
   TargetedBusinessTableData,
   TargetedGoodsTableData,
 } from 'components/reports/tableColumns';
-import { PerformanceLayout, tableLengthToHeight } from './utils';
+import useReportPrint from 'utils/reportPrint/usePrintReports';
+import { tableLengthToHeight } from 'components/reports/utils/utils';
+import PerformanceLayout from './utils';
 
 interface Return {
   loading: boolean;
   data: PerformanceReportQuery | undefined;
   groups: SelectOptions[];
-
   dateRange: { startDate: Date; endDate: Date };
   setDateRange: (dateRange: { startDate: Date; endDate: Date }) => void;
   setSelectedGroups: (groups: string[]) => void;
@@ -33,19 +33,19 @@ interface Return {
   isPrinting: boolean;
   editMode: boolean;
   setEditMode: (arg0: boolean) => void;
+  layout: RGL.Layout[];
+  setLayout: (layout: RGL.Layout[]) => void;
+  minDrawer: boolean;
+  setMinDrawer: (arg0: boolean) => void;
+  logo: string | null | undefined;
+  removeItem: (arg0: string) => void;
+  changeSize: (arg0: string, arg1: number) => void;
   businessContributionTableData: BusinessTableData[] | [];
   userContributionTableData: ContributionTableData[] | [];
   offendersTableData: OffenderTableData[] | [];
   crimeGroupPerformanceTableData: CrimeGroupPerformanceTableData[] | [];
   targetedBusinessData: TargetedBusinessTableData[] | [];
   targetedGoodsData: TargetedGoodsTableData[] | [];
-  layout: RGL.Layout[];
-  setLayout: (layout: RGL.Layout[]) => void;
-  minDrawer: boolean;
-  setMinDrawer: (arg0: boolean) => void;
-  logo: string | null;
-  removeItem: (arg0: string) => void;
-  changeSize: (arg0: string, arg1: number) => void;
 }
 
 export interface SelectOptions {
@@ -55,11 +55,10 @@ export interface SelectOptions {
 
 const usePerformanceReport = (): Return => {
   const [editMode, setEditMode] = useState(false);
-  const [isPrinting, setIsPrinting] = useState(false);
-
-  const componentRef = useRef<HTMLDivElement>(null);
-
-  const currentScheme = useStoreState((state) => state.scheme.id);
+  const { componentRef, handlePrint, isPrinting } = useReportPrint();
+  const [minDrawer, setMinDrawer] = useState(false);
+  const [layout, setLayout] = useState<RGL.Layout[]>(PerformanceLayout);
+  const { id: currentScheme, logo } = useStoreState((state) => state.scheme);
   const [groups, setGroups] = useState<SelectOptions[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
   const [dateRange, setDateRangeState] = useState<{
@@ -77,6 +76,7 @@ const usePerformanceReport = (): Return => {
     // today at 23:59:59
     endDate: new Date(new Date().setHours(23, 59, 59)),
   });
+
   const { data: groupsData, loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
       where: {
@@ -128,31 +128,6 @@ const usePerformanceReport = (): Return => {
       endDate: new Date(new Date(dateRangeInput.endDate).setHours(23, 59, 59)),
     });
   };
-
-  const promiseResolveRef = useRef<(() => void) | null>(null);
-  useEffect(() => {
-    if (isPrinting && promiseResolveRef.current) {
-      // Resolves the Promise, letting `react-to-print` know that the DOM updates are completed
-      promiseResolveRef.current();
-    }
-  }, [isPrinting]);
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-    pageStyle:
-      '@page { size: A4; margin: 10mm } @media print { body { -webkit-print-color-adjust: exact; page-break-inside: avoid;} }',
-    onBeforeGetContent: () =>
-      new Promise((resolve) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        promiseResolveRef.current = resolve;
-        setIsPrinting(true);
-      }),
-    onAfterPrint: () => {
-      // Reset the Promise resolve so we can print again
-      promiseResolveRef.current = null;
-      setIsPrinting(false);
-    },
-  });
 
   const businessContributionTableData =
     data?.businessContribution?.businessContributions?.map((business, i) => ({
@@ -240,9 +215,6 @@ const usePerformanceReport = (): Return => {
         avgLost: good?.averageLossValue?.toFixed(2),
       })) || [];
 
-  const [minDrawer, setMinDrawer] = useState(false);
-  const [layout, setLayout] = useState<RGL.Layout[]>(PerformanceLayout);
-  const logo = localStorage.getItem('logo');
   const removeItem = (item: string) => {
     setLayout(layout.filter((i) => i.i !== item));
   };
