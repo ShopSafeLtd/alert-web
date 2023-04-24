@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Modal, Row, Col, Card, Button, Typography } from 'antd';
+import { Button, Card, Col, Modal, Row, Typography } from 'antd';
 import { createUseStyles } from 'react-jss';
-import { ObjectDetector, FilesetResolver } from '@mediapipe/tasks-vision';
+import { FilesetResolver, ObjectDetector } from '@mediapipe/tasks-vision';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore TODO: look more into this, types don't exist that I can see
 import Annotation from 'react-image-annotation';
 
 interface ImageType {
