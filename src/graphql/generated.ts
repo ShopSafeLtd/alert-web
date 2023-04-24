@@ -6000,6 +6000,16 @@ export type BusinessReport = {
   incidentsTable?: Maybe<ListIncidents>;
   involvedTagDonut?: Maybe<Array<Maybe<Graph>>>;
   lossTotals?: Maybe<LossTotals>;
+  targetedGoods?: Maybe<ListTargetedGoods>;
+};
+
+export type BusinessReportInput = {
+  businessId: Scalars['String'];
+  crimeGroupIds: Array<Scalars['String']>;
+  dateRange: DateRangeInput;
+  groupIds: Array<Scalars['String']>;
+  offenderIds?: InputMaybe<Array<Scalars['String']>>;
+  schemeIds: Array<Scalars['String']>;
 };
 
 export type BusinessScalarWhereInput = {
@@ -6929,6 +6939,7 @@ export type CreateUpdateData = {
 
 export type CreateUserData = {
   address?: InputMaybe<AddressCreateWithoutUserInput>;
+  approverGroups?: InputMaybe<Array<InputMaybe<UniqueId>>>;
   businesses?: InputMaybe<Array<BusinessWhereUniqueInput>>;
   chats?: InputMaybe<Array<InputMaybe<UniqueId>>>;
   email: Scalars['String'];
@@ -10901,6 +10912,7 @@ export type Graph = {
 
 export type Group = {
   __typename?: 'Group';
+  approver: Array<User>;
   articles: Array<Article>;
   createdAt: Scalars['DateTime'];
   description?: Maybe<Scalars['String']>;
@@ -10913,6 +10925,13 @@ export type Group = {
   updatedAt: Scalars['DateTime'];
   uploaded: Scalars['Boolean'];
   users: Array<User>;
+};
+
+export type GroupApproverArgs = {
+  after?: InputMaybe<UserWhereUniqueInput>;
+  before?: InputMaybe<UserWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
 };
 
 export type GroupArticlesArgs = {
@@ -10954,6 +10973,7 @@ export type GroupUsersArgs = {
 
 export type GroupCreateInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutGroupInput>;
+  approver?: InputMaybe<UserCreateNestedManyWithoutApproverGroupsInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutGroupsInput>;
   bans?: InputMaybe<BanCreateNestedManyWithoutGroupsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -10981,6 +11001,12 @@ export type GroupCreateManySchemeInput = {
 export type GroupCreateManySchemeInputEnvelope = {
   data?: InputMaybe<Array<GroupCreateManySchemeInput>>;
   skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type GroupCreateNestedManyWithoutApproverInput = {
+  connect?: InputMaybe<Array<GroupWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<GroupCreateOrConnectWithoutApproverInput>>;
+  create?: InputMaybe<Array<GroupCreateWithoutApproverInput>>;
 };
 
 export type GroupCreateNestedManyWithoutArticlesInput = {
@@ -11043,6 +11069,11 @@ export type GroupCreateOrConnectWithoutActionsInput = {
   where: GroupWhereUniqueInput;
 };
 
+export type GroupCreateOrConnectWithoutApproverInput = {
+  create: GroupCreateWithoutApproverInput;
+  where: GroupWhereUniqueInput;
+};
+
 export type GroupCreateOrConnectWithoutArticlesInput = {
   create: GroupCreateWithoutArticlesInput;
   where: GroupWhereUniqueInput;
@@ -11079,6 +11110,24 @@ export type GroupCreateOrConnectWithoutUsersInput = {
 };
 
 export type GroupCreateWithoutActionsInput = {
+  approver?: InputMaybe<UserCreateNestedManyWithoutApproverGroupsInput>;
+  articles?: InputMaybe<ArticleCreateNestedManyWithoutGroupsInput>;
+  bans?: InputMaybe<BanCreateNestedManyWithoutGroupsInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  description?: InputMaybe<Scalars['String']>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutGroupsInput>;
+  id?: InputMaybe<Scalars['String']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutGroupsInput>;
+  name: Scalars['String'];
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutGroupsInput>;
+  scheme: SchemeCreateNestedOneWithoutGroupsInput;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploaded?: InputMaybe<Scalars['Boolean']>;
+  users?: InputMaybe<UserCreateNestedManyWithoutGroupsInput>;
+};
+
+export type GroupCreateWithoutApproverInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutGroupInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutGroupsInput>;
   bans?: InputMaybe<BanCreateNestedManyWithoutGroupsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -11096,6 +11145,7 @@ export type GroupCreateWithoutActionsInput = {
 
 export type GroupCreateWithoutArticlesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutGroupInput>;
+  approver?: InputMaybe<UserCreateNestedManyWithoutApproverGroupsInput>;
   bans?: InputMaybe<BanCreateNestedManyWithoutGroupsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
@@ -11112,6 +11162,7 @@ export type GroupCreateWithoutArticlesInput = {
 
 export type GroupCreateWithoutBansInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutGroupInput>;
+  approver?: InputMaybe<UserCreateNestedManyWithoutApproverGroupsInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutGroupsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   description?: InputMaybe<Scalars['String']>;
@@ -11128,6 +11179,7 @@ export type GroupCreateWithoutBansInput = {
 
 export type GroupCreateWithoutFeedItemsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutGroupInput>;
+  approver?: InputMaybe<UserCreateNestedManyWithoutApproverGroupsInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutGroupsInput>;
   bans?: InputMaybe<BanCreateNestedManyWithoutGroupsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -11144,6 +11196,7 @@ export type GroupCreateWithoutFeedItemsInput = {
 
 export type GroupCreateWithoutIncidentsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutGroupInput>;
+  approver?: InputMaybe<UserCreateNestedManyWithoutApproverGroupsInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutGroupsInput>;
   bans?: InputMaybe<BanCreateNestedManyWithoutGroupsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -11160,6 +11213,7 @@ export type GroupCreateWithoutIncidentsInput = {
 
 export type GroupCreateWithoutOffendersInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutGroupInput>;
+  approver?: InputMaybe<UserCreateNestedManyWithoutApproverGroupsInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutGroupsInput>;
   bans?: InputMaybe<BanCreateNestedManyWithoutGroupsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -11176,6 +11230,7 @@ export type GroupCreateWithoutOffendersInput = {
 
 export type GroupCreateWithoutSchemeInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutGroupInput>;
+  approver?: InputMaybe<UserCreateNestedManyWithoutApproverGroupsInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutGroupsInput>;
   bans?: InputMaybe<BanCreateNestedManyWithoutGroupsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -11192,6 +11247,7 @@ export type GroupCreateWithoutSchemeInput = {
 
 export type GroupCreateWithoutUsersInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutGroupInput>;
+  approver?: InputMaybe<UserCreateNestedManyWithoutApproverGroupsInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutGroupsInput>;
   bans?: InputMaybe<BanCreateNestedManyWithoutGroupsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -11218,6 +11274,7 @@ export type GroupOrderByRelationAggregateInput = {
 
 export type GroupOrderByWithRelationInput = {
   actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
+  approver?: InputMaybe<UserOrderByRelationAggregateInput>;
   articles?: InputMaybe<ArticleOrderByRelationAggregateInput>;
   bans?: InputMaybe<BanOrderByRelationAggregateInput>;
   createdAt?: InputMaybe<SortOrder>;
@@ -11249,6 +11306,7 @@ export type GroupScalarWhereInput = {
 
 export type GroupUpdateInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutGroupNestedInput>;
+  approver?: InputMaybe<UserUpdateManyWithoutApproverGroupsNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutGroupsNestedInput>;
   bans?: InputMaybe<BanUpdateManyWithoutGroupsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -11271,6 +11329,11 @@ export type GroupUpdateManyMutationInput = {
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<BoolFieldUpdateOperationsInput>;
+};
+
+export type GroupUpdateManyWithWhereWithoutApproverInput = {
+  data: GroupUpdateManyMutationInput;
+  where: GroupScalarWhereInput;
 };
 
 export type GroupUpdateManyWithWhereWithoutArticlesInput = {
@@ -11306,6 +11369,19 @@ export type GroupUpdateManyWithWhereWithoutSchemeInput = {
 export type GroupUpdateManyWithWhereWithoutUsersInput = {
   data: GroupUpdateManyMutationInput;
   where: GroupScalarWhereInput;
+};
+
+export type GroupUpdateManyWithoutApproverNestedInput = {
+  connect?: InputMaybe<Array<GroupWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<GroupCreateOrConnectWithoutApproverInput>>;
+  create?: InputMaybe<Array<GroupCreateWithoutApproverInput>>;
+  delete?: InputMaybe<Array<GroupWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<GroupScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<GroupWhereUniqueInput>>;
+  set?: InputMaybe<Array<GroupWhereUniqueInput>>;
+  update?: InputMaybe<Array<GroupUpdateWithWhereUniqueWithoutApproverInput>>;
+  updateMany?: InputMaybe<Array<GroupUpdateManyWithWhereWithoutApproverInput>>;
+  upsert?: InputMaybe<Array<GroupUpsertWithWhereUniqueWithoutApproverInput>>;
 };
 
 export type GroupUpdateManyWithoutArticlesNestedInput = {
@@ -11416,6 +11492,11 @@ export type GroupUpdateOneWithoutActionsNestedInput = {
   upsert?: InputMaybe<GroupUpsertWithoutActionsInput>;
 };
 
+export type GroupUpdateWithWhereUniqueWithoutApproverInput = {
+  data: GroupUpdateWithoutApproverInput;
+  where: GroupWhereUniqueInput;
+};
+
 export type GroupUpdateWithWhereUniqueWithoutArticlesInput = {
   data: GroupUpdateWithoutArticlesInput;
   where: GroupWhereUniqueInput;
@@ -11452,6 +11533,24 @@ export type GroupUpdateWithWhereUniqueWithoutUsersInput = {
 };
 
 export type GroupUpdateWithoutActionsInput = {
+  approver?: InputMaybe<UserUpdateManyWithoutApproverGroupsNestedInput>;
+  articles?: InputMaybe<ArticleUpdateManyWithoutGroupsNestedInput>;
+  bans?: InputMaybe<BanUpdateManyWithoutGroupsNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutGroupsNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutGroupsNestedInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutGroupsNestedInput>;
+  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutGroupsNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploaded?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  users?: InputMaybe<UserUpdateManyWithoutGroupsNestedInput>;
+};
+
+export type GroupUpdateWithoutApproverInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutGroupNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutGroupsNestedInput>;
   bans?: InputMaybe<BanUpdateManyWithoutGroupsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -11469,6 +11568,7 @@ export type GroupUpdateWithoutActionsInput = {
 
 export type GroupUpdateWithoutArticlesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutGroupNestedInput>;
+  approver?: InputMaybe<UserUpdateManyWithoutApproverGroupsNestedInput>;
   bans?: InputMaybe<BanUpdateManyWithoutGroupsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -11485,6 +11585,7 @@ export type GroupUpdateWithoutArticlesInput = {
 
 export type GroupUpdateWithoutBansInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutGroupNestedInput>;
+  approver?: InputMaybe<UserUpdateManyWithoutApproverGroupsNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutGroupsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -11501,6 +11602,7 @@ export type GroupUpdateWithoutBansInput = {
 
 export type GroupUpdateWithoutFeedItemsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutGroupNestedInput>;
+  approver?: InputMaybe<UserUpdateManyWithoutApproverGroupsNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutGroupsNestedInput>;
   bans?: InputMaybe<BanUpdateManyWithoutGroupsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -11517,6 +11619,7 @@ export type GroupUpdateWithoutFeedItemsInput = {
 
 export type GroupUpdateWithoutIncidentsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutGroupNestedInput>;
+  approver?: InputMaybe<UserUpdateManyWithoutApproverGroupsNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutGroupsNestedInput>;
   bans?: InputMaybe<BanUpdateManyWithoutGroupsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -11533,6 +11636,7 @@ export type GroupUpdateWithoutIncidentsInput = {
 
 export type GroupUpdateWithoutOffendersInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutGroupNestedInput>;
+  approver?: InputMaybe<UserUpdateManyWithoutApproverGroupsNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutGroupsNestedInput>;
   bans?: InputMaybe<BanUpdateManyWithoutGroupsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -11549,6 +11653,7 @@ export type GroupUpdateWithoutOffendersInput = {
 
 export type GroupUpdateWithoutSchemeInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutGroupNestedInput>;
+  approver?: InputMaybe<UserUpdateManyWithoutApproverGroupsNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutGroupsNestedInput>;
   bans?: InputMaybe<BanUpdateManyWithoutGroupsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -11565,6 +11670,7 @@ export type GroupUpdateWithoutSchemeInput = {
 
 export type GroupUpdateWithoutUsersInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutGroupNestedInput>;
+  approver?: InputMaybe<UserUpdateManyWithoutApproverGroupsNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutGroupsNestedInput>;
   bans?: InputMaybe<BanUpdateManyWithoutGroupsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -11577,6 +11683,12 @@ export type GroupUpdateWithoutUsersInput = {
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutGroupsNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<BoolFieldUpdateOperationsInput>;
+};
+
+export type GroupUpsertWithWhereUniqueWithoutApproverInput = {
+  create: GroupCreateWithoutApproverInput;
+  update: GroupUpdateWithoutApproverInput;
+  where: GroupWhereUniqueInput;
 };
 
 export type GroupUpsertWithWhereUniqueWithoutArticlesInput = {
@@ -11631,6 +11743,7 @@ export type GroupWhereInput = {
   NOT?: InputMaybe<Array<GroupWhereInput>>;
   OR?: InputMaybe<Array<GroupWhereInput>>;
   actions?: InputMaybe<ActionListRelationFilter>;
+  approver?: InputMaybe<UserListRelationFilter>;
   articles?: InputMaybe<ArticleListRelationFilter>;
   bans?: InputMaybe<BanListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
@@ -20181,6 +20294,12 @@ export type ListTargetedGoods = {
   total: Scalars['Int'];
 };
 
+export type ListTodos = {
+  __typename?: 'ListTodos';
+  todos: Array<Todo>;
+  total: Scalars['Int'];
+};
+
 export type ListUserContribution = {
   __typename?: 'ListUserContribution';
   total: Scalars['Int'];
@@ -21558,6 +21677,7 @@ export type Mutation = {
   createTag: Tag;
   createTermsAndConditions?: Maybe<TermsAndCondition>;
   createTimes?: Maybe<Array<Incident>>;
+  createTodo: Todo;
   createUnlinkedImage?: Maybe<UnlinkedImage>;
   createUpdateOnCrimeGroup?: Maybe<Update>;
   createUpdateOnIncident?: Maybe<Update>;
@@ -21661,6 +21781,8 @@ export type Mutation = {
   updateSchemeDefault?: Maybe<Scheme>;
   updateTag?: Maybe<Tag>;
   updateTagDefault?: Maybe<Tag>;
+  updateTodo?: Maybe<Todo>;
+  updateTodoDefault?: Maybe<Todo>;
   updateUpdate?: Maybe<Update>;
   updateUser?: Maybe<User>;
   updateUserChat?: Maybe<UserChat>;
@@ -21808,6 +21930,10 @@ export type MutationCreateTagArgs = {
 
 export type MutationCreateTermsAndConditionsArgs = {
   data: CreateTermsInput;
+};
+
+export type MutationCreateTodoArgs = {
+  data: TodoCreateInput;
 };
 
 export type MutationCreateUnlinkedImageArgs = {
@@ -22232,6 +22358,16 @@ export type MutationUpdateTagArgs = {
 export type MutationUpdateTagDefaultArgs = {
   data: TagUpdateInput;
   where: TagWhereUniqueInput;
+};
+
+export type MutationUpdateTodoArgs = {
+  data: TodoUpdateInput;
+  where: UniqueId;
+};
+
+export type MutationUpdateTodoDefaultArgs = {
+  data: TodoUpdateInput;
+  where: TodoWhereUniqueInput;
 };
 
 export type MutationUpdateUpdateArgs = {
@@ -26017,6 +26153,7 @@ export type Query = {
   bans: Array<Ban>;
   business?: Maybe<Business>;
   businessContribution?: Maybe<ListBusinessContribution>;
+  businessReport?: Maybe<BusinessReport>;
   chat?: Maybe<Chat>;
   chatMessages: Array<MessageItem>;
   chats: Array<Chat>;
@@ -26047,6 +26184,7 @@ export type Query = {
   listIncidents?: Maybe<ListIncidents>;
   listInvestigations?: Maybe<ListInvestigations>;
   listOffenders?: Maybe<ListOffenders>;
+  listTodos: ListTodos;
   listUsers: ListUsers;
   listVehicles: ListVehicles;
   message?: Maybe<Message>;
@@ -26139,6 +26277,10 @@ export type QueryBusinessArgs = {
 
 export type QueryBusinessContributionArgs = {
   where: UserContributionWhereInput;
+};
+
+export type QueryBusinessReportArgs = {
+  where: BusinessReportInput;
 };
 
 export type QueryChatArgs = {
@@ -26327,6 +26469,13 @@ export type QueryListOffendersArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<OffenderWhereInput>;
+};
+
+export type QueryListTodosArgs = {
+  orderBy?: InputMaybe<Array<TodoOrderBy>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<TodoWhereInput>;
 };
 
 export type QueryListUsersArgs = {
@@ -27149,6 +27298,7 @@ export type SchemeVehiclesArgs = {
 export type SchemeCreateInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -27178,6 +27328,7 @@ export type SchemeCreateInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -27188,11 +27339,13 @@ export type SchemeCreateInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateManyDarkLogoInput = {
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -27208,6 +27361,7 @@ export type SchemeCreateManyDarkLogoInput = {
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
   logoId?: InputMaybe<Scalars['String']>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27219,6 +27373,7 @@ export type SchemeCreateManyDarkLogoInputEnvelope = {
 };
 
 export type SchemeCreateManyLogoInput = {
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
@@ -27234,6 +27389,7 @@ export type SchemeCreateManyLogoInput = {
   id?: InputMaybe<Scalars['String']>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
   incidentRetention?: InputMaybe<Scalars['Int']>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -27306,6 +27462,12 @@ export type SchemeCreateNestedManyWithoutTermsInSchemeInput = {
     Array<SchemeCreateOrConnectWithoutTermsInSchemeInput>
   >;
   create?: InputMaybe<Array<SchemeCreateWithoutTermsInSchemeInput>>;
+};
+
+export type SchemeCreateNestedManyWithoutTodosInput = {
+  connect?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<SchemeCreateOrConnectWithoutTodosInput>>;
+  create?: InputMaybe<Array<SchemeCreateWithoutTodosInput>>;
 };
 
 export type SchemeCreateNestedManyWithoutVehiclesInput = {
@@ -27543,6 +27705,11 @@ export type SchemeCreateOrConnectWithoutTermsInput = {
   where: SchemeWhereUniqueInput;
 };
 
+export type SchemeCreateOrConnectWithoutTodosInput = {
+  create: SchemeCreateWithoutTodosInput;
+  where: SchemeWhereUniqueInput;
+};
+
 export type SchemeCreateOrConnectWithoutVehiclesInput = {
   create: SchemeCreateWithoutVehiclesInput;
   where: SchemeWhereUniqueInput;
@@ -27550,6 +27717,7 @@ export type SchemeCreateOrConnectWithoutVehiclesInput = {
 
 export type SchemeCreateWithoutActionsInSchemeInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -27579,6 +27747,7 @@ export type SchemeCreateWithoutActionsInSchemeInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -27589,12 +27758,14 @@ export type SchemeCreateWithoutActionsInSchemeInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
 
 export type SchemeCreateWithoutActionsInput = {
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -27624,6 +27795,7 @@ export type SchemeCreateWithoutActionsInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -27634,6 +27806,7 @@ export type SchemeCreateWithoutActionsInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -27641,6 +27814,7 @@ export type SchemeCreateWithoutActionsInput = {
 export type SchemeCreateWithoutArticlesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
@@ -27669,6 +27843,7 @@ export type SchemeCreateWithoutArticlesInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -27679,6 +27854,7 @@ export type SchemeCreateWithoutArticlesInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -27686,6 +27862,7 @@ export type SchemeCreateWithoutArticlesInput = {
 export type SchemeCreateWithoutBansInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -27714,6 +27891,7 @@ export type SchemeCreateWithoutBansInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -27724,6 +27902,7 @@ export type SchemeCreateWithoutBansInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -27731,6 +27910,7 @@ export type SchemeCreateWithoutBansInput = {
 export type SchemeCreateWithoutBusinessesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -27759,6 +27939,7 @@ export type SchemeCreateWithoutBusinessesInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -27769,6 +27950,7 @@ export type SchemeCreateWithoutBusinessesInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -27776,6 +27958,7 @@ export type SchemeCreateWithoutBusinessesInput = {
 export type SchemeCreateWithoutChatsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -27804,6 +27987,7 @@ export type SchemeCreateWithoutChatsInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -27814,6 +27998,7 @@ export type SchemeCreateWithoutChatsInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -27821,6 +28006,7 @@ export type SchemeCreateWithoutChatsInput = {
 export type SchemeCreateWithoutCrimeGroupsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -27849,6 +28035,7 @@ export type SchemeCreateWithoutCrimeGroupsInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -27859,6 +28046,7 @@ export type SchemeCreateWithoutCrimeGroupsInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -27866,6 +28054,7 @@ export type SchemeCreateWithoutCrimeGroupsInput = {
 export type SchemeCreateWithoutDarkLogoInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -27894,6 +28083,7 @@ export type SchemeCreateWithoutDarkLogoInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -27904,6 +28094,7 @@ export type SchemeCreateWithoutDarkLogoInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -27911,6 +28102,7 @@ export type SchemeCreateWithoutDarkLogoInput = {
 export type SchemeCreateWithoutDocumentsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -27939,6 +28131,7 @@ export type SchemeCreateWithoutDocumentsInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -27949,6 +28142,7 @@ export type SchemeCreateWithoutDocumentsInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -27956,6 +28150,7 @@ export type SchemeCreateWithoutDocumentsInput = {
 export type SchemeCreateWithoutGroupsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -27984,6 +28179,7 @@ export type SchemeCreateWithoutGroupsInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -27994,6 +28190,7 @@ export type SchemeCreateWithoutGroupsInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -28001,6 +28198,7 @@ export type SchemeCreateWithoutGroupsInput = {
 export type SchemeCreateWithoutImagesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -28029,6 +28227,7 @@ export type SchemeCreateWithoutImagesInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -28039,6 +28238,7 @@ export type SchemeCreateWithoutImagesInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -28046,6 +28246,7 @@ export type SchemeCreateWithoutImagesInput = {
 export type SchemeCreateWithoutIncidentsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -28074,6 +28275,7 @@ export type SchemeCreateWithoutIncidentsInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -28084,6 +28286,7 @@ export type SchemeCreateWithoutIncidentsInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -28091,6 +28294,7 @@ export type SchemeCreateWithoutIncidentsInput = {
 export type SchemeCreateWithoutIntelInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -28119,6 +28323,7 @@ export type SchemeCreateWithoutIntelInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -28129,6 +28334,7 @@ export type SchemeCreateWithoutIntelInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -28136,6 +28342,7 @@ export type SchemeCreateWithoutIntelInput = {
 export type SchemeCreateWithoutInvestigationsInSchemeInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -28164,6 +28371,7 @@ export type SchemeCreateWithoutInvestigationsInSchemeInput = {
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -28174,6 +28382,7 @@ export type SchemeCreateWithoutInvestigationsInSchemeInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -28181,6 +28390,7 @@ export type SchemeCreateWithoutInvestigationsInSchemeInput = {
 export type SchemeCreateWithoutInvestigationsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -28209,6 +28419,7 @@ export type SchemeCreateWithoutInvestigationsInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -28219,6 +28430,7 @@ export type SchemeCreateWithoutInvestigationsInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -28226,6 +28438,7 @@ export type SchemeCreateWithoutInvestigationsInput = {
 export type SchemeCreateWithoutLogoInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -28254,6 +28467,7 @@ export type SchemeCreateWithoutLogoInput = {
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -28264,6 +28478,7 @@ export type SchemeCreateWithoutLogoInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -28271,6 +28486,7 @@ export type SchemeCreateWithoutLogoInput = {
 export type SchemeCreateWithoutMembersInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -28299,6 +28515,7 @@ export type SchemeCreateWithoutMembersInput = {
   investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -28309,6 +28526,7 @@ export type SchemeCreateWithoutMembersInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -28316,6 +28534,7 @@ export type SchemeCreateWithoutMembersInput = {
 export type SchemeCreateWithoutMessagesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -28345,6 +28564,7 @@ export type SchemeCreateWithoutMessagesInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
   offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
@@ -28354,6 +28574,7 @@ export type SchemeCreateWithoutMessagesInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -28361,6 +28582,7 @@ export type SchemeCreateWithoutMessagesInput = {
 export type SchemeCreateWithoutOffendersInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -28390,6 +28612,7 @@ export type SchemeCreateWithoutOffendersInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -28399,6 +28622,7 @@ export type SchemeCreateWithoutOffendersInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -28406,6 +28630,7 @@ export type SchemeCreateWithoutOffendersInput = {
 export type SchemeCreateWithoutRecycledItemsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -28435,6 +28660,7 @@ export type SchemeCreateWithoutRecycledItemsInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -28444,6 +28670,7 @@ export type SchemeCreateWithoutRecycledItemsInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -28451,6 +28678,7 @@ export type SchemeCreateWithoutRecycledItemsInput = {
 export type SchemeCreateWithoutSchemeTagsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -28480,6 +28708,7 @@ export type SchemeCreateWithoutSchemeTagsInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -28489,6 +28718,7 @@ export type SchemeCreateWithoutSchemeTagsInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -28496,6 +28726,7 @@ export type SchemeCreateWithoutSchemeTagsInput = {
 export type SchemeCreateWithoutTagOrdersInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -28525,6 +28756,7 @@ export type SchemeCreateWithoutTagOrdersInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -28534,6 +28766,7 @@ export type SchemeCreateWithoutTagOrdersInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -28541,6 +28774,7 @@ export type SchemeCreateWithoutTagOrdersInput = {
 export type SchemeCreateWithoutTagsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -28570,6 +28804,7 @@ export type SchemeCreateWithoutTagsInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -28579,6 +28814,7 @@ export type SchemeCreateWithoutTagsInput = {
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -28586,6 +28822,7 @@ export type SchemeCreateWithoutTagsInput = {
 export type SchemeCreateWithoutTermsInSchemeInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -28615,6 +28852,7 @@ export type SchemeCreateWithoutTermsInSchemeInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -28624,6 +28862,7 @@ export type SchemeCreateWithoutTermsInSchemeInput = {
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
 };
@@ -28631,6 +28870,7 @@ export type SchemeCreateWithoutTermsInSchemeInput = {
 export type SchemeCreateWithoutTermsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -28660,6 +28900,7 @@ export type SchemeCreateWithoutTermsInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -28668,6 +28909,55 @@ export type SchemeCreateWithoutTermsInput = {
   schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
   tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
+  termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+};
+
+export type SchemeCreateWithoutTodosInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
+  actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
+  articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
+  autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
+  autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
+  businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
+  chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
+  defaultIncidentEmail?: InputMaybe<Scalars['Boolean']>;
+  defaultIncidentPush?: InputMaybe<Scalars['Boolean']>;
+  defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
+  defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
+  defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
+  defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
+  defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  incidentImpact?: InputMaybe<Scalars['Boolean']>;
+  incidentRetention?: InputMaybe<Scalars['Int']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutSchemeInput>;
+  intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
+  investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
+  members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
+  name: Scalars['String'];
+  offenderRetention?: InputMaybe<Scalars['Int']>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
+  recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
+  terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
@@ -28676,6 +28966,7 @@ export type SchemeCreateWithoutTermsInput = {
 export type SchemeCreateWithoutVehiclesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
   actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
   autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
   autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
@@ -28705,6 +28996,7 @@ export type SchemeCreateWithoutVehiclesInput = {
   investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
   logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
   members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
   messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
   name: Scalars['String'];
   offenderRetention?: InputMaybe<Scalars['Int']>;
@@ -28715,6 +29007,7 @@ export type SchemeCreateWithoutVehiclesInput = {
   tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
   terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
   termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
 
@@ -28731,6 +29024,7 @@ export type SchemeOrderByRelationAggregateInput = {
 export type SchemeOrderByWithRelationInput = {
   actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
   actionsInScheme?: InputMaybe<ActionOrderByRelationAggregateInput>;
+  approvalDueDays?: InputMaybe<SortOrder>;
   articles?: InputMaybe<ArticleOrderByRelationAggregateInput>;
   autoApproveIncidents?: InputMaybe<SortOrder>;
   autoApproveOffenders?: InputMaybe<SortOrder>;
@@ -28762,6 +29056,7 @@ export type SchemeOrderByWithRelationInput = {
   logo?: InputMaybe<ImageOrderByWithRelationInput>;
   logoId?: InputMaybe<SortOrder>;
   members?: InputMaybe<UserSchemeOrderByRelationAggregateInput>;
+  mentionDueDays?: InputMaybe<SortOrder>;
   messages?: InputMaybe<MessageOrderByRelationAggregateInput>;
   name?: InputMaybe<SortOrder>;
   offenderRetention?: InputMaybe<SortOrder>;
@@ -28772,6 +29067,7 @@ export type SchemeOrderByWithRelationInput = {
   tags?: InputMaybe<TagOrderByRelationAggregateInput>;
   terms?: InputMaybe<TermsAndConditionOrderByRelationAggregateInput>;
   termsInScheme?: InputMaybe<TermsAndConditionOrderByRelationAggregateInput>;
+  todos?: InputMaybe<TodoOrderByRelationAggregateInput>;
   updatedAt?: InputMaybe<SortOrder>;
   vehicles?: InputMaybe<VehicleOrderByRelationAggregateInput>;
 };
@@ -28780,6 +29076,7 @@ export type SchemeScalarWhereInput = {
   AND?: InputMaybe<Array<SchemeScalarWhereInput>>;
   NOT?: InputMaybe<Array<SchemeScalarWhereInput>>;
   OR?: InputMaybe<Array<SchemeScalarWhereInput>>;
+  approvalDueDays?: InputMaybe<IntNullableFilter>;
   autoApproveIncidents?: InputMaybe<BoolFilter>;
   autoApproveOffenders?: InputMaybe<BoolFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
@@ -28796,6 +29093,7 @@ export type SchemeScalarWhereInput = {
   incidentImpact?: InputMaybe<BoolFilter>;
   incidentRetention?: InputMaybe<IntNullableFilter>;
   logoId?: InputMaybe<StringNullableFilter>;
+  mentionDueDays?: InputMaybe<IntNullableFilter>;
   name?: InputMaybe<StringFilter>;
   offenderRetention?: InputMaybe<IntNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -28804,6 +29102,7 @@ export type SchemeScalarWhereInput = {
 export type SchemeUpdateInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -28833,6 +29132,7 @@ export type SchemeUpdateInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -28843,11 +29143,13 @@ export type SchemeUpdateInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateManyMutationInput = {
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -28862,6 +29164,7 @@ export type SchemeUpdateManyMutationInput = {
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
   incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -28903,6 +29206,11 @@ export type SchemeUpdateManyWithWhereWithoutSchemeTagsInput = {
 };
 
 export type SchemeUpdateManyWithWhereWithoutTermsInSchemeInput = {
+  data: SchemeUpdateManyMutationInput;
+  where: SchemeScalarWhereInput;
+};
+
+export type SchemeUpdateManyWithWhereWithoutTodosInput = {
   data: SchemeUpdateManyMutationInput;
   where: SchemeScalarWhereInput;
 };
@@ -29052,6 +29360,19 @@ export type SchemeUpdateManyWithoutTermsInSchemeNestedInput = {
   upsert?: InputMaybe<
     Array<SchemeUpsertWithWhereUniqueWithoutTermsInSchemeInput>
   >;
+};
+
+export type SchemeUpdateManyWithoutTodosNestedInput = {
+  connect?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<SchemeCreateOrConnectWithoutTodosInput>>;
+  create?: InputMaybe<Array<SchemeCreateWithoutTodosInput>>;
+  delete?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<SchemeScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  set?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  update?: InputMaybe<Array<SchemeUpdateWithWhereUniqueWithoutTodosInput>>;
+  updateMany?: InputMaybe<Array<SchemeUpdateManyWithWhereWithoutTodosInput>>;
+  upsert?: InputMaybe<Array<SchemeUpsertWithWhereUniqueWithoutTodosInput>>;
 };
 
 export type SchemeUpdateManyWithoutVehiclesNestedInput = {
@@ -29253,6 +29574,11 @@ export type SchemeUpdateWithWhereUniqueWithoutTermsInSchemeInput = {
   where: SchemeWhereUniqueInput;
 };
 
+export type SchemeUpdateWithWhereUniqueWithoutTodosInput = {
+  data: SchemeUpdateWithoutTodosInput;
+  where: SchemeWhereUniqueInput;
+};
+
 export type SchemeUpdateWithWhereUniqueWithoutVehiclesInput = {
   data: SchemeUpdateWithoutVehiclesInput;
   where: SchemeWhereUniqueInput;
@@ -29260,6 +29586,7 @@ export type SchemeUpdateWithWhereUniqueWithoutVehiclesInput = {
 
 export type SchemeUpdateWithoutActionsInSchemeInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -29289,6 +29616,7 @@ export type SchemeUpdateWithoutActionsInSchemeInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -29299,12 +29627,14 @@ export type SchemeUpdateWithoutActionsInSchemeInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
 
 export type SchemeUpdateWithoutActionsInput = {
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -29334,6 +29664,7 @@ export type SchemeUpdateWithoutActionsInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -29344,6 +29675,7 @@ export type SchemeUpdateWithoutActionsInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -29351,6 +29683,7 @@ export type SchemeUpdateWithoutActionsInput = {
 export type SchemeUpdateWithoutArticlesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
@@ -29379,6 +29712,7 @@ export type SchemeUpdateWithoutArticlesInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -29389,6 +29723,7 @@ export type SchemeUpdateWithoutArticlesInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -29396,6 +29731,7 @@ export type SchemeUpdateWithoutArticlesInput = {
 export type SchemeUpdateWithoutBansInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -29424,6 +29760,7 @@ export type SchemeUpdateWithoutBansInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -29434,6 +29771,7 @@ export type SchemeUpdateWithoutBansInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -29441,6 +29779,7 @@ export type SchemeUpdateWithoutBansInput = {
 export type SchemeUpdateWithoutBusinessesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -29469,6 +29808,7 @@ export type SchemeUpdateWithoutBusinessesInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -29479,6 +29819,7 @@ export type SchemeUpdateWithoutBusinessesInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -29486,6 +29827,7 @@ export type SchemeUpdateWithoutBusinessesInput = {
 export type SchemeUpdateWithoutChatsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -29514,6 +29856,7 @@ export type SchemeUpdateWithoutChatsInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -29524,6 +29867,7 @@ export type SchemeUpdateWithoutChatsInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -29531,6 +29875,7 @@ export type SchemeUpdateWithoutChatsInput = {
 export type SchemeUpdateWithoutCrimeGroupsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -29559,6 +29904,7 @@ export type SchemeUpdateWithoutCrimeGroupsInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -29569,6 +29915,7 @@ export type SchemeUpdateWithoutCrimeGroupsInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -29576,6 +29923,7 @@ export type SchemeUpdateWithoutCrimeGroupsInput = {
 export type SchemeUpdateWithoutDarkLogoInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -29604,6 +29952,7 @@ export type SchemeUpdateWithoutDarkLogoInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -29614,6 +29963,7 @@ export type SchemeUpdateWithoutDarkLogoInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -29621,6 +29971,7 @@ export type SchemeUpdateWithoutDarkLogoInput = {
 export type SchemeUpdateWithoutDocumentsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -29649,6 +30000,7 @@ export type SchemeUpdateWithoutDocumentsInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -29659,6 +30011,7 @@ export type SchemeUpdateWithoutDocumentsInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -29666,6 +30019,7 @@ export type SchemeUpdateWithoutDocumentsInput = {
 export type SchemeUpdateWithoutGroupsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -29694,6 +30048,7 @@ export type SchemeUpdateWithoutGroupsInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -29704,6 +30059,7 @@ export type SchemeUpdateWithoutGroupsInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -29711,6 +30067,7 @@ export type SchemeUpdateWithoutGroupsInput = {
 export type SchemeUpdateWithoutImagesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -29739,6 +30096,7 @@ export type SchemeUpdateWithoutImagesInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -29749,6 +30107,7 @@ export type SchemeUpdateWithoutImagesInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -29756,6 +30115,7 @@ export type SchemeUpdateWithoutImagesInput = {
 export type SchemeUpdateWithoutIncidentsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -29784,6 +30144,7 @@ export type SchemeUpdateWithoutIncidentsInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -29794,6 +30155,7 @@ export type SchemeUpdateWithoutIncidentsInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -29801,6 +30163,7 @@ export type SchemeUpdateWithoutIncidentsInput = {
 export type SchemeUpdateWithoutIntelInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -29829,6 +30192,7 @@ export type SchemeUpdateWithoutIntelInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -29839,6 +30203,7 @@ export type SchemeUpdateWithoutIntelInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -29846,6 +30211,7 @@ export type SchemeUpdateWithoutIntelInput = {
 export type SchemeUpdateWithoutInvestigationsInSchemeInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -29874,6 +30240,7 @@ export type SchemeUpdateWithoutInvestigationsInSchemeInput = {
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -29884,6 +30251,7 @@ export type SchemeUpdateWithoutInvestigationsInSchemeInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -29891,6 +30259,7 @@ export type SchemeUpdateWithoutInvestigationsInSchemeInput = {
 export type SchemeUpdateWithoutInvestigationsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -29919,6 +30288,7 @@ export type SchemeUpdateWithoutInvestigationsInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -29929,6 +30299,7 @@ export type SchemeUpdateWithoutInvestigationsInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -29936,6 +30307,7 @@ export type SchemeUpdateWithoutInvestigationsInput = {
 export type SchemeUpdateWithoutLogoInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -29964,6 +30336,7 @@ export type SchemeUpdateWithoutLogoInput = {
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -29974,6 +30347,7 @@ export type SchemeUpdateWithoutLogoInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -29981,6 +30355,7 @@ export type SchemeUpdateWithoutLogoInput = {
 export type SchemeUpdateWithoutMembersInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -30009,6 +30384,7 @@ export type SchemeUpdateWithoutMembersInput = {
   investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -30019,6 +30395,7 @@ export type SchemeUpdateWithoutMembersInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -30026,6 +30403,7 @@ export type SchemeUpdateWithoutMembersInput = {
 export type SchemeUpdateWithoutMessagesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -30055,6 +30433,7 @@ export type SchemeUpdateWithoutMessagesInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
@@ -30064,6 +30443,7 @@ export type SchemeUpdateWithoutMessagesInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -30071,6 +30451,7 @@ export type SchemeUpdateWithoutMessagesInput = {
 export type SchemeUpdateWithoutOffendersInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -30100,6 +30481,7 @@ export type SchemeUpdateWithoutOffendersInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -30109,6 +30491,7 @@ export type SchemeUpdateWithoutOffendersInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -30116,6 +30499,7 @@ export type SchemeUpdateWithoutOffendersInput = {
 export type SchemeUpdateWithoutRecycledItemsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -30145,6 +30529,7 @@ export type SchemeUpdateWithoutRecycledItemsInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -30154,6 +30539,7 @@ export type SchemeUpdateWithoutRecycledItemsInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -30161,6 +30547,7 @@ export type SchemeUpdateWithoutRecycledItemsInput = {
 export type SchemeUpdateWithoutSchemeTagsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -30190,6 +30577,7 @@ export type SchemeUpdateWithoutSchemeTagsInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -30199,6 +30587,7 @@ export type SchemeUpdateWithoutSchemeTagsInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -30206,6 +30595,7 @@ export type SchemeUpdateWithoutSchemeTagsInput = {
 export type SchemeUpdateWithoutTagOrdersInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -30235,6 +30625,7 @@ export type SchemeUpdateWithoutTagOrdersInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -30244,6 +30635,7 @@ export type SchemeUpdateWithoutTagOrdersInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -30251,6 +30643,7 @@ export type SchemeUpdateWithoutTagOrdersInput = {
 export type SchemeUpdateWithoutTagsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -30280,6 +30673,7 @@ export type SchemeUpdateWithoutTagsInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -30289,6 +30683,7 @@ export type SchemeUpdateWithoutTagsInput = {
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -30296,6 +30691,7 @@ export type SchemeUpdateWithoutTagsInput = {
 export type SchemeUpdateWithoutTermsInSchemeInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -30325,6 +30721,7 @@ export type SchemeUpdateWithoutTermsInSchemeInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -30334,6 +30731,7 @@ export type SchemeUpdateWithoutTermsInSchemeInput = {
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
 };
@@ -30341,6 +30739,7 @@ export type SchemeUpdateWithoutTermsInSchemeInput = {
 export type SchemeUpdateWithoutTermsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -30370,6 +30769,7 @@ export type SchemeUpdateWithoutTermsInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -30378,6 +30778,55 @@ export type SchemeUpdateWithoutTermsInput = {
   schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
   tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
+  termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+};
+
+export type SchemeUpdateWithoutTodosInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
+  actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
+  autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
+  businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
+  chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
+  defaultIncidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultIncidentPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutSchemeNestedInput>;
+  intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
+  investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
+  investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
+  members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
+  recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
+  terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
@@ -30386,6 +30835,7 @@ export type SchemeUpdateWithoutTermsInput = {
 export type SchemeUpdateWithoutVehiclesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
   actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
   autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
   autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -30415,6 +30865,7 @@ export type SchemeUpdateWithoutVehiclesInput = {
   investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
   logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
   members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
   messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
@@ -30425,6 +30876,7 @@ export type SchemeUpdateWithoutVehiclesInput = {
   tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
   terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
   termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
@@ -30473,6 +30925,12 @@ export type SchemeUpsertWithWhereUniqueWithoutSchemeTagsInput = {
 export type SchemeUpsertWithWhereUniqueWithoutTermsInSchemeInput = {
   create: SchemeCreateWithoutTermsInSchemeInput;
   update: SchemeUpdateWithoutTermsInSchemeInput;
+  where: SchemeWhereUniqueInput;
+};
+
+export type SchemeUpsertWithWhereUniqueWithoutTodosInput = {
+  create: SchemeCreateWithoutTodosInput;
+  update: SchemeUpdateWithoutTodosInput;
   where: SchemeWhereUniqueInput;
 };
 
@@ -30573,6 +31031,7 @@ export type SchemeWhereInput = {
   OR?: InputMaybe<Array<SchemeWhereInput>>;
   actions?: InputMaybe<ActionListRelationFilter>;
   actionsInScheme?: InputMaybe<ActionListRelationFilter>;
+  approvalDueDays?: InputMaybe<IntNullableFilter>;
   articles?: InputMaybe<ArticleListRelationFilter>;
   autoApproveIncidents?: InputMaybe<BoolFilter>;
   autoApproveOffenders?: InputMaybe<BoolFilter>;
@@ -30604,6 +31063,7 @@ export type SchemeWhereInput = {
   logo?: InputMaybe<ImageWhereInput>;
   logoId?: InputMaybe<StringNullableFilter>;
   members?: InputMaybe<UserSchemeListRelationFilter>;
+  mentionDueDays?: InputMaybe<IntNullableFilter>;
   messages?: InputMaybe<MessageListRelationFilter>;
   name?: InputMaybe<StringFilter>;
   offenderRetention?: InputMaybe<IntNullableFilter>;
@@ -30614,6 +31074,7 @@ export type SchemeWhereInput = {
   tags?: InputMaybe<TagListRelationFilter>;
   terms?: InputMaybe<TermsAndConditionListRelationFilter>;
   termsInScheme?: InputMaybe<TermsAndConditionListRelationFilter>;
+  todos?: InputMaybe<TodoListRelationFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   vehicles?: InputMaybe<VehicleListRelationFilter>;
 };
@@ -32242,6 +32703,442 @@ export type TermsAndConditionWhereInput = {
 };
 
 export type TermsAndConditionWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']>;
+};
+
+export type Todo = {
+  __typename?: 'Todo';
+  assignedUsers: Array<User>;
+  completedById?: Maybe<Scalars['String']>;
+  completedDate?: Maybe<Scalars['DateTime']>;
+  createdAt: Scalars['DateTime'];
+  createdBy?: Maybe<User>;
+  createdById?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  dueDate?: Maybe<Scalars['DateTime']>;
+  id: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  schemes: Array<Scheme>;
+  updatedAt: Scalars['DateTime'];
+};
+
+export type TodoAssignedUsersArgs = {
+  after?: InputMaybe<UserWhereUniqueInput>;
+  before?: InputMaybe<UserWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type TodoSchemesArgs = {
+  after?: InputMaybe<SchemeWhereUniqueInput>;
+  before?: InputMaybe<SchemeWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+};
+
+export type TodoCreateInput = {
+  assignedUsers?: InputMaybe<UserCreateNestedManyWithoutAssignedtodosInput>;
+  completedBy?: InputMaybe<UserCreateNestedOneWithoutCompletedtodosInput>;
+  completedDate?: InputMaybe<Scalars['DateTime']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdBy?: InputMaybe<UserCreateNestedOneWithoutCreatedtodosInput>;
+  description?: InputMaybe<Scalars['String']>;
+  dueDate?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutTodosInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type TodoCreateManyCompletedByInput = {
+  completedDate?: InputMaybe<Scalars['DateTime']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdById?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  dueDate?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type TodoCreateManyCompletedByInputEnvelope = {
+  data?: InputMaybe<Array<TodoCreateManyCompletedByInput>>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type TodoCreateManyCreatedByInput = {
+  completedById?: InputMaybe<Scalars['String']>;
+  completedDate?: InputMaybe<Scalars['DateTime']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  description?: InputMaybe<Scalars['String']>;
+  dueDate?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type TodoCreateManyCreatedByInputEnvelope = {
+  data?: InputMaybe<Array<TodoCreateManyCreatedByInput>>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type TodoCreateNestedManyWithoutAssignedUsersInput = {
+  connect?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<TodoCreateOrConnectWithoutAssignedUsersInput>
+  >;
+  create?: InputMaybe<Array<TodoCreateWithoutAssignedUsersInput>>;
+};
+
+export type TodoCreateNestedManyWithoutCompletedByInput = {
+  connect?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<TodoCreateOrConnectWithoutCompletedByInput>
+  >;
+  create?: InputMaybe<Array<TodoCreateWithoutCompletedByInput>>;
+  createMany?: InputMaybe<TodoCreateManyCompletedByInputEnvelope>;
+};
+
+export type TodoCreateNestedManyWithoutCreatedByInput = {
+  connect?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<TodoCreateOrConnectWithoutCreatedByInput>>;
+  create?: InputMaybe<Array<TodoCreateWithoutCreatedByInput>>;
+  createMany?: InputMaybe<TodoCreateManyCreatedByInputEnvelope>;
+};
+
+export type TodoCreateNestedManyWithoutSchemesInput = {
+  connect?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<TodoCreateOrConnectWithoutSchemesInput>>;
+  create?: InputMaybe<Array<TodoCreateWithoutSchemesInput>>;
+};
+
+export type TodoCreateOrConnectWithoutAssignedUsersInput = {
+  create: TodoCreateWithoutAssignedUsersInput;
+  where: TodoWhereUniqueInput;
+};
+
+export type TodoCreateOrConnectWithoutCompletedByInput = {
+  create: TodoCreateWithoutCompletedByInput;
+  where: TodoWhereUniqueInput;
+};
+
+export type TodoCreateOrConnectWithoutCreatedByInput = {
+  create: TodoCreateWithoutCreatedByInput;
+  where: TodoWhereUniqueInput;
+};
+
+export type TodoCreateOrConnectWithoutSchemesInput = {
+  create: TodoCreateWithoutSchemesInput;
+  where: TodoWhereUniqueInput;
+};
+
+export type TodoCreateWithoutAssignedUsersInput = {
+  completedBy?: InputMaybe<UserCreateNestedOneWithoutCompletedtodosInput>;
+  completedDate?: InputMaybe<Scalars['DateTime']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdBy?: InputMaybe<UserCreateNestedOneWithoutCreatedtodosInput>;
+  description?: InputMaybe<Scalars['String']>;
+  dueDate?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutTodosInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type TodoCreateWithoutCompletedByInput = {
+  assignedUsers?: InputMaybe<UserCreateNestedManyWithoutAssignedtodosInput>;
+  completedDate?: InputMaybe<Scalars['DateTime']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdBy?: InputMaybe<UserCreateNestedOneWithoutCreatedtodosInput>;
+  description?: InputMaybe<Scalars['String']>;
+  dueDate?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutTodosInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type TodoCreateWithoutCreatedByInput = {
+  assignedUsers?: InputMaybe<UserCreateNestedManyWithoutAssignedtodosInput>;
+  completedBy?: InputMaybe<UserCreateNestedOneWithoutCompletedtodosInput>;
+  completedDate?: InputMaybe<Scalars['DateTime']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  description?: InputMaybe<Scalars['String']>;
+  dueDate?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutTodosInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type TodoCreateWithoutSchemesInput = {
+  assignedUsers?: InputMaybe<UserCreateNestedManyWithoutAssignedtodosInput>;
+  completedBy?: InputMaybe<UserCreateNestedOneWithoutCompletedtodosInput>;
+  completedDate?: InputMaybe<Scalars['DateTime']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdBy?: InputMaybe<UserCreateNestedOneWithoutCreatedtodosInput>;
+  description?: InputMaybe<Scalars['String']>;
+  dueDate?: InputMaybe<Scalars['DateTime']>;
+  id?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type TodoListRelationFilter = {
+  every?: InputMaybe<TodoWhereInput>;
+  none?: InputMaybe<TodoWhereInput>;
+  some?: InputMaybe<TodoWhereInput>;
+};
+
+export type TodoOrderBy = {
+  createdAt?: InputMaybe<SortOrder>;
+};
+
+export type TodoOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
+export type TodoScalarWhereInput = {
+  AND?: InputMaybe<Array<TodoScalarWhereInput>>;
+  NOT?: InputMaybe<Array<TodoScalarWhereInput>>;
+  OR?: InputMaybe<Array<TodoScalarWhereInput>>;
+  completedById?: InputMaybe<StringNullableFilter>;
+  completedDate?: InputMaybe<DateTimeNullableFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  createdById?: InputMaybe<StringNullableFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  dueDate?: InputMaybe<DateTimeNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringNullableFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type TodoUpdateInput = {
+  assignedUsers?: InputMaybe<UserUpdateManyWithoutAssignedtodosNestedInput>;
+  completedBy?: InputMaybe<UserUpdateOneWithoutCompletedtodosNestedInput>;
+  completedDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdBy?: InputMaybe<UserUpdateOneWithoutCreatedtodosNestedInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  dueDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutTodosNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type TodoUpdateManyMutationInput = {
+  completedDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  dueDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type TodoUpdateManyWithWhereWithoutAssignedUsersInput = {
+  data: TodoUpdateManyMutationInput;
+  where: TodoScalarWhereInput;
+};
+
+export type TodoUpdateManyWithWhereWithoutCompletedByInput = {
+  data: TodoUpdateManyMutationInput;
+  where: TodoScalarWhereInput;
+};
+
+export type TodoUpdateManyWithWhereWithoutCreatedByInput = {
+  data: TodoUpdateManyMutationInput;
+  where: TodoScalarWhereInput;
+};
+
+export type TodoUpdateManyWithWhereWithoutSchemesInput = {
+  data: TodoUpdateManyMutationInput;
+  where: TodoScalarWhereInput;
+};
+
+export type TodoUpdateManyWithoutAssignedUsersNestedInput = {
+  connect?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<TodoCreateOrConnectWithoutAssignedUsersInput>
+  >;
+  create?: InputMaybe<Array<TodoCreateWithoutAssignedUsersInput>>;
+  delete?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<TodoScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  set?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  update?: InputMaybe<
+    Array<TodoUpdateWithWhereUniqueWithoutAssignedUsersInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<TodoUpdateManyWithWhereWithoutAssignedUsersInput>
+  >;
+  upsert?: InputMaybe<
+    Array<TodoUpsertWithWhereUniqueWithoutAssignedUsersInput>
+  >;
+};
+
+export type TodoUpdateManyWithoutCompletedByNestedInput = {
+  connect?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<TodoCreateOrConnectWithoutCompletedByInput>
+  >;
+  create?: InputMaybe<Array<TodoCreateWithoutCompletedByInput>>;
+  createMany?: InputMaybe<TodoCreateManyCompletedByInputEnvelope>;
+  delete?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<TodoScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  set?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  update?: InputMaybe<Array<TodoUpdateWithWhereUniqueWithoutCompletedByInput>>;
+  updateMany?: InputMaybe<
+    Array<TodoUpdateManyWithWhereWithoutCompletedByInput>
+  >;
+  upsert?: InputMaybe<Array<TodoUpsertWithWhereUniqueWithoutCompletedByInput>>;
+};
+
+export type TodoUpdateManyWithoutCreatedByNestedInput = {
+  connect?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<TodoCreateOrConnectWithoutCreatedByInput>>;
+  create?: InputMaybe<Array<TodoCreateWithoutCreatedByInput>>;
+  createMany?: InputMaybe<TodoCreateManyCreatedByInputEnvelope>;
+  delete?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<TodoScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  set?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  update?: InputMaybe<Array<TodoUpdateWithWhereUniqueWithoutCreatedByInput>>;
+  updateMany?: InputMaybe<Array<TodoUpdateManyWithWhereWithoutCreatedByInput>>;
+  upsert?: InputMaybe<Array<TodoUpsertWithWhereUniqueWithoutCreatedByInput>>;
+};
+
+export type TodoUpdateManyWithoutSchemesNestedInput = {
+  connect?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<TodoCreateOrConnectWithoutSchemesInput>>;
+  create?: InputMaybe<Array<TodoCreateWithoutSchemesInput>>;
+  delete?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<TodoScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  set?: InputMaybe<Array<TodoWhereUniqueInput>>;
+  update?: InputMaybe<Array<TodoUpdateWithWhereUniqueWithoutSchemesInput>>;
+  updateMany?: InputMaybe<Array<TodoUpdateManyWithWhereWithoutSchemesInput>>;
+  upsert?: InputMaybe<Array<TodoUpsertWithWhereUniqueWithoutSchemesInput>>;
+};
+
+export type TodoUpdateWithWhereUniqueWithoutAssignedUsersInput = {
+  data: TodoUpdateWithoutAssignedUsersInput;
+  where: TodoWhereUniqueInput;
+};
+
+export type TodoUpdateWithWhereUniqueWithoutCompletedByInput = {
+  data: TodoUpdateWithoutCompletedByInput;
+  where: TodoWhereUniqueInput;
+};
+
+export type TodoUpdateWithWhereUniqueWithoutCreatedByInput = {
+  data: TodoUpdateWithoutCreatedByInput;
+  where: TodoWhereUniqueInput;
+};
+
+export type TodoUpdateWithWhereUniqueWithoutSchemesInput = {
+  data: TodoUpdateWithoutSchemesInput;
+  where: TodoWhereUniqueInput;
+};
+
+export type TodoUpdateWithoutAssignedUsersInput = {
+  completedBy?: InputMaybe<UserUpdateOneWithoutCompletedtodosNestedInput>;
+  completedDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdBy?: InputMaybe<UserUpdateOneWithoutCreatedtodosNestedInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  dueDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutTodosNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type TodoUpdateWithoutCompletedByInput = {
+  assignedUsers?: InputMaybe<UserUpdateManyWithoutAssignedtodosNestedInput>;
+  completedDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdBy?: InputMaybe<UserUpdateOneWithoutCreatedtodosNestedInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  dueDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutTodosNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type TodoUpdateWithoutCreatedByInput = {
+  assignedUsers?: InputMaybe<UserUpdateManyWithoutAssignedtodosNestedInput>;
+  completedBy?: InputMaybe<UserUpdateOneWithoutCompletedtodosNestedInput>;
+  completedDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  dueDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutTodosNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type TodoUpdateWithoutSchemesInput = {
+  assignedUsers?: InputMaybe<UserUpdateManyWithoutAssignedtodosNestedInput>;
+  completedBy?: InputMaybe<UserUpdateOneWithoutCompletedtodosNestedInput>;
+  completedDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdBy?: InputMaybe<UserUpdateOneWithoutCreatedtodosNestedInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  dueDate?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type TodoUpsertWithWhereUniqueWithoutAssignedUsersInput = {
+  create: TodoCreateWithoutAssignedUsersInput;
+  update: TodoUpdateWithoutAssignedUsersInput;
+  where: TodoWhereUniqueInput;
+};
+
+export type TodoUpsertWithWhereUniqueWithoutCompletedByInput = {
+  create: TodoCreateWithoutCompletedByInput;
+  update: TodoUpdateWithoutCompletedByInput;
+  where: TodoWhereUniqueInput;
+};
+
+export type TodoUpsertWithWhereUniqueWithoutCreatedByInput = {
+  create: TodoCreateWithoutCreatedByInput;
+  update: TodoUpdateWithoutCreatedByInput;
+  where: TodoWhereUniqueInput;
+};
+
+export type TodoUpsertWithWhereUniqueWithoutSchemesInput = {
+  create: TodoCreateWithoutSchemesInput;
+  update: TodoUpdateWithoutSchemesInput;
+  where: TodoWhereUniqueInput;
+};
+
+export type TodoWhereInput = {
+  AND?: InputMaybe<Array<TodoWhereInput>>;
+  NOT?: InputMaybe<Array<TodoWhereInput>>;
+  OR?: InputMaybe<Array<TodoWhereInput>>;
+  assignedUsers?: InputMaybe<UserListRelationFilter>;
+  completedBy?: InputMaybe<UserWhereInput>;
+  completedById?: InputMaybe<StringNullableFilter>;
+  completedDate?: InputMaybe<DateTimeNullableFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  createdBy?: InputMaybe<UserWhereInput>;
+  createdById?: InputMaybe<StringNullableFilter>;
+  description?: InputMaybe<StringNullableFilter>;
+  dueDate?: InputMaybe<DateTimeNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  name?: InputMaybe<StringNullableFilter>;
+  schemes?: InputMaybe<SchemeListRelationFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+};
+
+export type TodoWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
 };
 
@@ -34110,6 +35007,7 @@ export type User = {
   actions: Array<Action>;
   actionsByUser: Array<Action>;
   addresses: Array<Address>;
+  approverGroups: Array<Group>;
   articles: Array<Article>;
   auth0Id?: Maybe<Scalars['String']>;
   bans: Array<Ban>;
@@ -34185,6 +35083,15 @@ export type UserAddressesArgs = {
   last?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Array<AddressOrderByWithRelationInput>>;
   where?: InputMaybe<AddressWhereInput>;
+};
+
+export type UserApproverGroupsArgs = {
+  after?: InputMaybe<GroupWhereUniqueInput>;
+  before?: InputMaybe<GroupWhereUniqueInput>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Array<GroupOrderByWithRelationInput>>;
+  where?: InputMaybe<GroupWhereInput>;
 };
 
 export type UserArticlesArgs = {
@@ -34573,15 +35480,19 @@ export type UserCreateInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -34633,10 +35544,26 @@ export type UserCreateInput = {
   vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCreatedByInput>;
 };
 
+export type UserCreateNestedManyWithoutApproverGroupsInput = {
+  connect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<UserCreateOrConnectWithoutApproverGroupsInput>
+  >;
+  create?: InputMaybe<Array<UserCreateWithoutApproverGroupsInput>>;
+};
+
 export type UserCreateNestedManyWithoutArticlesInput = {
   connect?: InputMaybe<Array<UserWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<Array<UserCreateOrConnectWithoutArticlesInput>>;
   create?: InputMaybe<Array<UserCreateWithoutArticlesInput>>;
+};
+
+export type UserCreateNestedManyWithoutAssignedtodosInput = {
+  connect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<UserCreateOrConnectWithoutAssignedtodosInput>
+  >;
+  create?: InputMaybe<Array<UserCreateWithoutAssignedtodosInput>>;
 };
 
 export type UserCreateNestedManyWithoutBusinessesInput = {
@@ -34745,6 +35672,12 @@ export type UserCreateNestedOneWithoutChatsInput = {
   create?: InputMaybe<UserCreateWithoutChatsInput>;
 };
 
+export type UserCreateNestedOneWithoutCompletedtodosInput = {
+  connect?: InputMaybe<UserWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutCompletedtodosInput>;
+  create?: InputMaybe<UserCreateWithoutCompletedtodosInput>;
+};
+
 export type UserCreateNestedOneWithoutCreatedArticlesInput = {
   connect?: InputMaybe<UserWhereUniqueInput>;
   connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutCreatedArticlesInput>;
@@ -34761,6 +35694,12 @@ export type UserCreateNestedOneWithoutCreatedUpdatesInput = {
   connect?: InputMaybe<UserWhereUniqueInput>;
   connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutCreatedUpdatesInput>;
   create?: InputMaybe<UserCreateWithoutCreatedUpdatesInput>;
+};
+
+export type UserCreateNestedOneWithoutCreatedtodosInput = {
+  connect?: InputMaybe<UserWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutCreatedtodosInput>;
+  create?: InputMaybe<UserCreateWithoutCreatedtodosInput>;
 };
 
 export type UserCreateNestedOneWithoutCrimeGroupsInput = {
@@ -34856,8 +35795,18 @@ export type UserCreateOrConnectWithoutAddressesInput = {
   where: UserWhereUniqueInput;
 };
 
+export type UserCreateOrConnectWithoutApproverGroupsInput = {
+  create: UserCreateWithoutApproverGroupsInput;
+  where: UserWhereUniqueInput;
+};
+
 export type UserCreateOrConnectWithoutArticlesInput = {
   create: UserCreateWithoutArticlesInput;
+  where: UserWhereUniqueInput;
+};
+
+export type UserCreateOrConnectWithoutAssignedtodosInput = {
+  create: UserCreateWithoutAssignedtodosInput;
   where: UserWhereUniqueInput;
 };
 
@@ -34876,6 +35825,11 @@ export type UserCreateOrConnectWithoutChatsInput = {
   where: UserWhereUniqueInput;
 };
 
+export type UserCreateOrConnectWithoutCompletedtodosInput = {
+  create: UserCreateWithoutCompletedtodosInput;
+  where: UserWhereUniqueInput;
+};
+
 export type UserCreateOrConnectWithoutCreatedArticlesInput = {
   create: UserCreateWithoutCreatedArticlesInput;
   where: UserWhereUniqueInput;
@@ -34888,6 +35842,11 @@ export type UserCreateOrConnectWithoutCreatedTagsInput = {
 
 export type UserCreateOrConnectWithoutCreatedUpdatesInput = {
   create: UserCreateWithoutCreatedUpdatesInput;
+  where: UserWhereUniqueInput;
+};
+
+export type UserCreateOrConnectWithoutCreatedtodosInput = {
+  create: UserCreateWithoutCreatedtodosInput;
   where: UserWhereUniqueInput;
 };
 
@@ -35004,15 +35963,19 @@ export type UserCreateOrConnectWithoutVehiclesInput = {
 export type UserCreateWithoutActionsByUserInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -35067,15 +36030,19 @@ export type UserCreateWithoutActionsByUserInput = {
 export type UserCreateWithoutActionsInput = {
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -35130,15 +36097,86 @@ export type UserCreateWithoutActionsInput = {
 export type UserCreateWithoutAddressesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
+  crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  demId?: InputMaybe<Scalars['String']>;
+  disabled?: InputMaybe<Scalars['Boolean']>;
+  email: Scalars['String'];
+  expoPushTokens?: InputMaybe<ExpoPushTokenCreateNestedManyWithoutUserInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutCreatedByInput>;
+  fullName: Scalars['String'];
+  groups?: InputMaybe<GroupCreateNestedManyWithoutUsersInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutUploadedByInput>;
+  impressions?: InputMaybe<ImpressionCreateNestedManyWithoutUserInput>;
+  incidentEmail?: InputMaybe<Scalars['Boolean']>;
+  incidentPush?: InputMaybe<Scalars['Boolean']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
+  intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutCreatedByInput>;
+  ipAddress?: InputMaybe<Scalars['String']>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutUserInput>;
+  mentionedUpdated?: InputMaybe<UpdateCreateNestedManyWithoutMentionedUsersInput>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
+  messagePush?: InputMaybe<Scalars['Boolean']>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
+  newUser?: InputMaybe<Scalars['Boolean']>;
+  offenderEmail?: InputMaybe<Scalars['Boolean']>;
+  offenderPush?: InputMaybe<Scalars['Boolean']>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutCreatedByInput>;
+  onboardSteps?: InputMaybe<OnboardSteps>;
+  oneSignalIds?: InputMaybe<OneSignalIdCreateNestedManyWithoutUserInput>;
+  organisation: Scalars['String'];
+  platform?: InputMaybe<Scalars['String']>;
+  publicName?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
+  recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
+  reference?: InputMaybe<Scalars['Int']>;
+  schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
+  subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
+  subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
+  termsSigned?: InputMaybe<Scalars['Boolean']>;
+  timeSigned?: InputMaybe<Scalars['DateTime']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploaded?: InputMaybe<Scalars['Boolean']>;
+  userTerms?: InputMaybe<UserTermCreateNestedManyWithoutUserInput>;
+  vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCreatedByInput>;
+};
+
+export type UserCreateWithoutApproverGroupsInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
+  actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
+  addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
+  auth0Id?: InputMaybe<Scalars['String']>;
+  bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
+  businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
+  chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
+  createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
+  createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -35194,14 +36232,85 @@ export type UserCreateWithoutArticlesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
+  crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  demId?: InputMaybe<Scalars['String']>;
+  disabled?: InputMaybe<Scalars['Boolean']>;
+  email: Scalars['String'];
+  expoPushTokens?: InputMaybe<ExpoPushTokenCreateNestedManyWithoutUserInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutCreatedByInput>;
+  fullName: Scalars['String'];
+  groups?: InputMaybe<GroupCreateNestedManyWithoutUsersInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutUploadedByInput>;
+  impressions?: InputMaybe<ImpressionCreateNestedManyWithoutUserInput>;
+  incidentEmail?: InputMaybe<Scalars['Boolean']>;
+  incidentPush?: InputMaybe<Scalars['Boolean']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
+  intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutCreatedByInput>;
+  ipAddress?: InputMaybe<Scalars['String']>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutUserInput>;
+  mentionedUpdated?: InputMaybe<UpdateCreateNestedManyWithoutMentionedUsersInput>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
+  messagePush?: InputMaybe<Scalars['Boolean']>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
+  newUser?: InputMaybe<Scalars['Boolean']>;
+  offenderEmail?: InputMaybe<Scalars['Boolean']>;
+  offenderPush?: InputMaybe<Scalars['Boolean']>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutCreatedByInput>;
+  onboardSteps?: InputMaybe<OnboardSteps>;
+  oneSignalIds?: InputMaybe<OneSignalIdCreateNestedManyWithoutUserInput>;
+  organisation: Scalars['String'];
+  platform?: InputMaybe<Scalars['String']>;
+  publicName?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
+  recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
+  reference?: InputMaybe<Scalars['Int']>;
+  schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
+  subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
+  subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
+  termsSigned?: InputMaybe<Scalars['Boolean']>;
+  timeSigned?: InputMaybe<Scalars['DateTime']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploaded?: InputMaybe<Scalars['Boolean']>;
+  userTerms?: InputMaybe<UserTermCreateNestedManyWithoutUserInput>;
+  vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCreatedByInput>;
+};
+
+export type UserCreateWithoutAssignedtodosInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
+  actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
+  addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
+  articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  auth0Id?: InputMaybe<Scalars['String']>;
+  bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
+  businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
+  chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
+  createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
+  createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -35257,14 +36366,18 @@ export type UserCreateWithoutBansInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -35320,14 +36433,18 @@ export type UserCreateWithoutBusinessesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -35383,14 +36500,85 @@ export type UserCreateWithoutChatsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
+  crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  demId?: InputMaybe<Scalars['String']>;
+  disabled?: InputMaybe<Scalars['Boolean']>;
+  email: Scalars['String'];
+  expoPushTokens?: InputMaybe<ExpoPushTokenCreateNestedManyWithoutUserInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutCreatedByInput>;
+  fullName: Scalars['String'];
+  groups?: InputMaybe<GroupCreateNestedManyWithoutUsersInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutUploadedByInput>;
+  impressions?: InputMaybe<ImpressionCreateNestedManyWithoutUserInput>;
+  incidentEmail?: InputMaybe<Scalars['Boolean']>;
+  incidentPush?: InputMaybe<Scalars['Boolean']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
+  intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutCreatedByInput>;
+  ipAddress?: InputMaybe<Scalars['String']>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutUserInput>;
+  mentionedUpdated?: InputMaybe<UpdateCreateNestedManyWithoutMentionedUsersInput>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
+  messagePush?: InputMaybe<Scalars['Boolean']>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
+  newUser?: InputMaybe<Scalars['Boolean']>;
+  offenderEmail?: InputMaybe<Scalars['Boolean']>;
+  offenderPush?: InputMaybe<Scalars['Boolean']>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutCreatedByInput>;
+  onboardSteps?: InputMaybe<OnboardSteps>;
+  oneSignalIds?: InputMaybe<OneSignalIdCreateNestedManyWithoutUserInput>;
+  organisation: Scalars['String'];
+  platform?: InputMaybe<Scalars['String']>;
+  publicName?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
+  recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
+  reference?: InputMaybe<Scalars['Int']>;
+  schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
+  subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
+  subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
+  termsSigned?: InputMaybe<Scalars['Boolean']>;
+  timeSigned?: InputMaybe<Scalars['DateTime']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploaded?: InputMaybe<Scalars['Boolean']>;
+  userTerms?: InputMaybe<UserTermCreateNestedManyWithoutUserInput>;
+  vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCreatedByInput>;
+};
+
+export type UserCreateWithoutCompletedtodosInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
+  actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
+  addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
+  articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
+  auth0Id?: InputMaybe<Scalars['String']>;
+  bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
+  businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
+  chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
+  createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -35446,14 +36634,18 @@ export type UserCreateWithoutCreatedArticlesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -35509,14 +36701,18 @@ export type UserCreateWithoutCreatedTagsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -35572,14 +36768,85 @@ export type UserCreateWithoutCreatedUpdatesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
+  crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
+  demId?: InputMaybe<Scalars['String']>;
+  disabled?: InputMaybe<Scalars['Boolean']>;
+  email: Scalars['String'];
+  expoPushTokens?: InputMaybe<ExpoPushTokenCreateNestedManyWithoutUserInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutCreatedByInput>;
+  fullName: Scalars['String'];
+  groups?: InputMaybe<GroupCreateNestedManyWithoutUsersInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutUploadedByInput>;
+  impressions?: InputMaybe<ImpressionCreateNestedManyWithoutUserInput>;
+  incidentEmail?: InputMaybe<Scalars['Boolean']>;
+  incidentPush?: InputMaybe<Scalars['Boolean']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutCreatedByInput>;
+  intel?: InputMaybe<IntelCreateNestedManyWithoutCreatedByInput>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutCreatedByInput>;
+  ipAddress?: InputMaybe<Scalars['String']>;
+  loginEvents?: InputMaybe<LoginEventCreateNestedManyWithoutUserInput>;
+  mentionedUpdated?: InputMaybe<UpdateCreateNestedManyWithoutMentionedUsersInput>;
+  messageMentions?: InputMaybe<MessageCreateNestedManyWithoutMentionsInput>;
+  messagePush?: InputMaybe<Scalars['Boolean']>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutFromInput>;
+  newUser?: InputMaybe<Scalars['Boolean']>;
+  offenderEmail?: InputMaybe<Scalars['Boolean']>;
+  offenderPush?: InputMaybe<Scalars['Boolean']>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutCreatedByInput>;
+  onboardSteps?: InputMaybe<OnboardSteps>;
+  oneSignalIds?: InputMaybe<OneSignalIdCreateNestedManyWithoutUserInput>;
+  organisation: Scalars['String'];
+  platform?: InputMaybe<Scalars['String']>;
+  publicName?: InputMaybe<Scalars['Boolean']>;
+  recycled?: InputMaybe<Scalars['Boolean']>;
+  recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutDeletedByInput>;
+  reference?: InputMaybe<Scalars['Int']>;
+  schemes?: InputMaybe<UserSchemeCreateNestedManyWithoutUserInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
+  subscribedIncidents?: InputMaybe<IncidentCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedInvestigations?: InputMaybe<InvestigationCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
+  subscribedOffenders?: InputMaybe<OffenderCreateNestedManyWithoutSubscribedUsersInput>;
+  subscribedVehicles?: InputMaybe<VehicleCreateNestedManyWithoutSubscribedUsersInput>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutUsersInput>;
+  termsSigned?: InputMaybe<Scalars['Boolean']>;
+  timeSigned?: InputMaybe<Scalars['DateTime']>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  uploaded?: InputMaybe<Scalars['Boolean']>;
+  userTerms?: InputMaybe<UserTermCreateNestedManyWithoutUserInput>;
+  vehicles?: InputMaybe<VehicleCreateNestedManyWithoutCreatedByInput>;
+};
+
+export type UserCreateWithoutCreatedtodosInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
+  actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
+  addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
+  articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
+  auth0Id?: InputMaybe<Scalars['String']>;
+  bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
+  businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
+  chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
+  createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
+  createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -35635,15 +36902,19 @@ export type UserCreateWithoutCrimeGroupsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
   email: Scalars['String'];
@@ -35698,15 +36969,19 @@ export type UserCreateWithoutFeedItemsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -35761,15 +37036,19 @@ export type UserCreateWithoutGroupsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -35824,15 +37103,19 @@ export type UserCreateWithoutImagesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -35887,15 +37170,19 @@ export type UserCreateWithoutImpressionsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -35950,15 +37237,19 @@ export type UserCreateWithoutIncidentsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -36013,15 +37304,19 @@ export type UserCreateWithoutIntelInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -36076,15 +37371,19 @@ export type UserCreateWithoutInvestigationsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -36139,15 +37438,19 @@ export type UserCreateWithoutMentionedUpdatedInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -36202,15 +37505,19 @@ export type UserCreateWithoutMessageMentionsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -36265,15 +37572,19 @@ export type UserCreateWithoutMessagesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -36328,15 +37639,19 @@ export type UserCreateWithoutOffendersInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -36391,15 +37706,19 @@ export type UserCreateWithoutRecycledItemsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -36454,15 +37773,19 @@ export type UserCreateWithoutSchemesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -36517,15 +37840,19 @@ export type UserCreateWithoutSubscribedCrimeGroupsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -36580,15 +37907,19 @@ export type UserCreateWithoutSubscribedIncidentsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -36643,15 +37974,19 @@ export type UserCreateWithoutSubscribedInvestigationsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -36706,15 +38041,19 @@ export type UserCreateWithoutSubscribedOffendersInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -36769,15 +38108,19 @@ export type UserCreateWithoutSubscribedVehiclesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -36832,15 +38175,19 @@ export type UserCreateWithoutTagsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -36895,15 +38242,19 @@ export type UserCreateWithoutUserTermsInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -36958,15 +38309,19 @@ export type UserCreateWithoutVehiclesInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutUserInput>;
   actionsByUser?: InputMaybe<ActionCreateNestedManyWithoutByUserInput>;
   addresses?: InputMaybe<AddressCreateNestedManyWithoutUserInput>;
+  approverGroups?: InputMaybe<GroupCreateNestedManyWithoutApproverInput>;
   articles?: InputMaybe<ArticleCreateNestedManyWithoutUsersInput>;
+  assignedtodos?: InputMaybe<TodoCreateNestedManyWithoutAssignedUsersInput>;
   auth0Id?: InputMaybe<Scalars['String']>;
   bans?: InputMaybe<BanCreateNestedManyWithoutCreatedByInput>;
   businesses?: InputMaybe<BusinessCreateNestedManyWithoutUsersInput>;
   chats?: InputMaybe<UserChatCreateNestedManyWithoutUserInput>;
+  completedtodos?: InputMaybe<TodoCreateNestedManyWithoutCompletedByInput>;
   createdArticles?: InputMaybe<ArticleCreateNestedManyWithoutCreatedByInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdTags?: InputMaybe<TagCreateNestedManyWithoutCreatedByInput>;
   createdUpdates?: InputMaybe<UpdateCreateNestedManyWithoutCreatedByInput>;
+  createdtodos?: InputMaybe<TodoCreateNestedManyWithoutCreatedByInput>;
   crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutCreatedByInput>;
   demId?: InputMaybe<Scalars['String']>;
   disabled?: InputMaybe<Scalars['Boolean']>;
@@ -37044,15 +38399,19 @@ export type UserOrderByWithRelationInput = {
   actions?: InputMaybe<ActionOrderByRelationAggregateInput>;
   actionsByUser?: InputMaybe<ActionOrderByRelationAggregateInput>;
   addresses?: InputMaybe<AddressOrderByRelationAggregateInput>;
+  approverGroups?: InputMaybe<GroupOrderByRelationAggregateInput>;
   articles?: InputMaybe<ArticleOrderByRelationAggregateInput>;
+  assignedtodos?: InputMaybe<TodoOrderByRelationAggregateInput>;
   auth0Id?: InputMaybe<SortOrder>;
   bans?: InputMaybe<BanOrderByRelationAggregateInput>;
   businesses?: InputMaybe<BusinessOrderByRelationAggregateInput>;
   chats?: InputMaybe<UserChatOrderByRelationAggregateInput>;
+  completedtodos?: InputMaybe<TodoOrderByRelationAggregateInput>;
   createdArticles?: InputMaybe<ArticleOrderByRelationAggregateInput>;
   createdAt?: InputMaybe<SortOrder>;
   createdTags?: InputMaybe<TagOrderByRelationAggregateInput>;
   createdUpdates?: InputMaybe<UpdateOrderByRelationAggregateInput>;
+  createdtodos?: InputMaybe<TodoOrderByRelationAggregateInput>;
   crimeGroups?: InputMaybe<CrimeGroupOrderByRelationAggregateInput>;
   demId?: InputMaybe<SortOrder>;
   disabled?: InputMaybe<SortOrder>;
@@ -37611,15 +38970,19 @@ export type UserUpdateInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -37700,7 +39063,17 @@ export type UserUpdateManyMutationInput = {
   uploaded?: InputMaybe<BoolFieldUpdateOperationsInput>;
 };
 
+export type UserUpdateManyWithWhereWithoutApproverGroupsInput = {
+  data: UserUpdateManyMutationInput;
+  where: UserScalarWhereInput;
+};
+
 export type UserUpdateManyWithWhereWithoutArticlesInput = {
+  data: UserUpdateManyMutationInput;
+  where: UserScalarWhereInput;
+};
+
+export type UserUpdateManyWithWhereWithoutAssignedtodosInput = {
   data: UserUpdateManyMutationInput;
   where: UserScalarWhereInput;
 };
@@ -37755,6 +39128,27 @@ export type UserUpdateManyWithWhereWithoutTagsInput = {
   where: UserScalarWhereInput;
 };
 
+export type UserUpdateManyWithoutApproverGroupsNestedInput = {
+  connect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<UserCreateOrConnectWithoutApproverGroupsInput>
+  >;
+  create?: InputMaybe<Array<UserCreateWithoutApproverGroupsInput>>;
+  delete?: InputMaybe<Array<UserWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<UserScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  set?: InputMaybe<Array<UserWhereUniqueInput>>;
+  update?: InputMaybe<
+    Array<UserUpdateWithWhereUniqueWithoutApproverGroupsInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<UserUpdateManyWithWhereWithoutApproverGroupsInput>
+  >;
+  upsert?: InputMaybe<
+    Array<UserUpsertWithWhereUniqueWithoutApproverGroupsInput>
+  >;
+};
+
 export type UserUpdateManyWithoutArticlesNestedInput = {
   connect?: InputMaybe<Array<UserWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<Array<UserCreateOrConnectWithoutArticlesInput>>;
@@ -37766,6 +39160,27 @@ export type UserUpdateManyWithoutArticlesNestedInput = {
   update?: InputMaybe<Array<UserUpdateWithWhereUniqueWithoutArticlesInput>>;
   updateMany?: InputMaybe<Array<UserUpdateManyWithWhereWithoutArticlesInput>>;
   upsert?: InputMaybe<Array<UserUpsertWithWhereUniqueWithoutArticlesInput>>;
+};
+
+export type UserUpdateManyWithoutAssignedtodosNestedInput = {
+  connect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<UserCreateOrConnectWithoutAssignedtodosInput>
+  >;
+  create?: InputMaybe<Array<UserCreateWithoutAssignedtodosInput>>;
+  delete?: InputMaybe<Array<UserWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<UserScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<UserWhereUniqueInput>>;
+  set?: InputMaybe<Array<UserWhereUniqueInput>>;
+  update?: InputMaybe<
+    Array<UserUpdateWithWhereUniqueWithoutAssignedtodosInput>
+  >;
+  updateMany?: InputMaybe<
+    Array<UserUpdateManyWithWhereWithoutAssignedtodosInput>
+  >;
+  upsert?: InputMaybe<
+    Array<UserUpsertWithWhereUniqueWithoutAssignedtodosInput>
+  >;
 };
 
 export type UserUpdateManyWithoutBusinessesNestedInput = {
@@ -38096,6 +39511,26 @@ export type UserUpdateOneWithoutAddressesNestedInput = {
   upsert?: InputMaybe<UserUpsertWithoutAddressesInput>;
 };
 
+export type UserUpdateOneWithoutCompletedtodosNestedInput = {
+  connect?: InputMaybe<UserWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutCompletedtodosInput>;
+  create?: InputMaybe<UserCreateWithoutCompletedtodosInput>;
+  delete?: InputMaybe<Scalars['Boolean']>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+  update?: InputMaybe<UserUpdateWithoutCompletedtodosInput>;
+  upsert?: InputMaybe<UserUpsertWithoutCompletedtodosInput>;
+};
+
+export type UserUpdateOneWithoutCreatedtodosNestedInput = {
+  connect?: InputMaybe<UserWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutCreatedtodosInput>;
+  create?: InputMaybe<UserCreateWithoutCreatedtodosInput>;
+  delete?: InputMaybe<Scalars['Boolean']>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+  update?: InputMaybe<UserUpdateWithoutCreatedtodosInput>;
+  upsert?: InputMaybe<UserUpsertWithoutCreatedtodosInput>;
+};
+
 export type UserUpdateOneWithoutCrimeGroupsNestedInput = {
   connect?: InputMaybe<UserWhereUniqueInput>;
   connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutCrimeGroupsInput>;
@@ -38136,8 +39571,18 @@ export type UserUpdateOneWithoutVehiclesNestedInput = {
   upsert?: InputMaybe<UserUpsertWithoutVehiclesInput>;
 };
 
+export type UserUpdateWithWhereUniqueWithoutApproverGroupsInput = {
+  data: UserUpdateWithoutApproverGroupsInput;
+  where: UserWhereUniqueInput;
+};
+
 export type UserUpdateWithWhereUniqueWithoutArticlesInput = {
   data: UserUpdateWithoutArticlesInput;
+  where: UserWhereUniqueInput;
+};
+
+export type UserUpdateWithWhereUniqueWithoutAssignedtodosInput = {
+  data: UserUpdateWithoutAssignedtodosInput;
   where: UserWhereUniqueInput;
 };
 
@@ -38194,15 +39639,19 @@ export type UserUpdateWithWhereUniqueWithoutTagsInput = {
 export type UserUpdateWithoutActionsByUserInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -38257,15 +39706,19 @@ export type UserUpdateWithoutActionsByUserInput = {
 export type UserUpdateWithoutActionsInput = {
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -38320,15 +39773,86 @@ export type UserUpdateWithoutActionsInput = {
 export type UserUpdateWithoutAddressesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
+  crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  email?: InputMaybe<StringFieldUpdateOperationsInput>;
+  expoPushTokens?: InputMaybe<ExpoPushTokenUpdateManyWithoutUserNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutCreatedByNestedInput>;
+  fullName?: InputMaybe<StringFieldUpdateOperationsInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutUsersNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutUploadedByNestedInput>;
+  impressions?: InputMaybe<ImpressionUpdateManyWithoutUserNestedInput>;
+  incidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidentPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByNestedInput>;
+  intel?: InputMaybe<IntelUpdateManyWithoutCreatedByNestedInput>;
+  investigations?: InputMaybe<InvestigationUpdateManyWithoutCreatedByNestedInput>;
+  ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutUserNestedInput>;
+  mentionedUpdated?: InputMaybe<UpdateUpdateManyWithoutMentionedUsersNestedInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsNestedInput>;
+  messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutFromNestedInput>;
+  newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutCreatedByNestedInput>;
+  onboardSteps?: InputMaybe<EnumOnboardStepsFieldUpdateOperationsInput>;
+  oneSignalIds?: InputMaybe<OneSignalIdUpdateManyWithoutUserNestedInput>;
+  organisation?: InputMaybe<StringFieldUpdateOperationsInput>;
+  platform?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  publicName?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
+  termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploaded?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  userTerms?: InputMaybe<UserTermUpdateManyWithoutUserNestedInput>;
+  vehicles?: InputMaybe<VehicleUpdateManyWithoutCreatedByNestedInput>;
+};
+
+export type UserUpdateWithoutApproverGroupsInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
+  actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
+  addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
+  auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
+  businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
+  chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
+  createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
+  createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -38384,14 +39908,85 @@ export type UserUpdateWithoutArticlesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
+  crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  email?: InputMaybe<StringFieldUpdateOperationsInput>;
+  expoPushTokens?: InputMaybe<ExpoPushTokenUpdateManyWithoutUserNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutCreatedByNestedInput>;
+  fullName?: InputMaybe<StringFieldUpdateOperationsInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutUsersNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutUploadedByNestedInput>;
+  impressions?: InputMaybe<ImpressionUpdateManyWithoutUserNestedInput>;
+  incidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidentPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByNestedInput>;
+  intel?: InputMaybe<IntelUpdateManyWithoutCreatedByNestedInput>;
+  investigations?: InputMaybe<InvestigationUpdateManyWithoutCreatedByNestedInput>;
+  ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutUserNestedInput>;
+  mentionedUpdated?: InputMaybe<UpdateUpdateManyWithoutMentionedUsersNestedInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsNestedInput>;
+  messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutFromNestedInput>;
+  newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutCreatedByNestedInput>;
+  onboardSteps?: InputMaybe<EnumOnboardStepsFieldUpdateOperationsInput>;
+  oneSignalIds?: InputMaybe<OneSignalIdUpdateManyWithoutUserNestedInput>;
+  organisation?: InputMaybe<StringFieldUpdateOperationsInput>;
+  platform?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  publicName?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
+  termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploaded?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  userTerms?: InputMaybe<UserTermUpdateManyWithoutUserNestedInput>;
+  vehicles?: InputMaybe<VehicleUpdateManyWithoutCreatedByNestedInput>;
+};
+
+export type UserUpdateWithoutAssignedtodosInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
+  actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
+  addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
+  articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
+  businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
+  chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
+  createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
+  createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -38447,14 +40042,18 @@ export type UserUpdateWithoutBansInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -38510,14 +40109,18 @@ export type UserUpdateWithoutBusinessesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -38573,14 +40176,85 @@ export type UserUpdateWithoutChatsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
+  crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  email?: InputMaybe<StringFieldUpdateOperationsInput>;
+  expoPushTokens?: InputMaybe<ExpoPushTokenUpdateManyWithoutUserNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutCreatedByNestedInput>;
+  fullName?: InputMaybe<StringFieldUpdateOperationsInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutUsersNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutUploadedByNestedInput>;
+  impressions?: InputMaybe<ImpressionUpdateManyWithoutUserNestedInput>;
+  incidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidentPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByNestedInput>;
+  intel?: InputMaybe<IntelUpdateManyWithoutCreatedByNestedInput>;
+  investigations?: InputMaybe<InvestigationUpdateManyWithoutCreatedByNestedInput>;
+  ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutUserNestedInput>;
+  mentionedUpdated?: InputMaybe<UpdateUpdateManyWithoutMentionedUsersNestedInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsNestedInput>;
+  messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutFromNestedInput>;
+  newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutCreatedByNestedInput>;
+  onboardSteps?: InputMaybe<EnumOnboardStepsFieldUpdateOperationsInput>;
+  oneSignalIds?: InputMaybe<OneSignalIdUpdateManyWithoutUserNestedInput>;
+  organisation?: InputMaybe<StringFieldUpdateOperationsInput>;
+  platform?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  publicName?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
+  termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploaded?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  userTerms?: InputMaybe<UserTermUpdateManyWithoutUserNestedInput>;
+  vehicles?: InputMaybe<VehicleUpdateManyWithoutCreatedByNestedInput>;
+};
+
+export type UserUpdateWithoutCompletedtodosInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
+  actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
+  addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
+  articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
+  auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
+  businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
+  chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
+  createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -38636,14 +40310,18 @@ export type UserUpdateWithoutCreatedArticlesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -38699,14 +40377,18 @@ export type UserUpdateWithoutCreatedTagsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -38762,14 +40444,85 @@ export type UserUpdateWithoutCreatedUpdatesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
+  crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
+  demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  email?: InputMaybe<StringFieldUpdateOperationsInput>;
+  expoPushTokens?: InputMaybe<ExpoPushTokenUpdateManyWithoutUserNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutCreatedByNestedInput>;
+  fullName?: InputMaybe<StringFieldUpdateOperationsInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutUsersNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutUploadedByNestedInput>;
+  impressions?: InputMaybe<ImpressionUpdateManyWithoutUserNestedInput>;
+  incidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidentPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutCreatedByNestedInput>;
+  intel?: InputMaybe<IntelUpdateManyWithoutCreatedByNestedInput>;
+  investigations?: InputMaybe<InvestigationUpdateManyWithoutCreatedByNestedInput>;
+  ipAddress?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  loginEvents?: InputMaybe<LoginEventUpdateManyWithoutUserNestedInput>;
+  mentionedUpdated?: InputMaybe<UpdateUpdateManyWithoutMentionedUsersNestedInput>;
+  messageMentions?: InputMaybe<MessageUpdateManyWithoutMentionsNestedInput>;
+  messagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutFromNestedInput>;
+  newUser?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutCreatedByNestedInput>;
+  onboardSteps?: InputMaybe<EnumOnboardStepsFieldUpdateOperationsInput>;
+  oneSignalIds?: InputMaybe<OneSignalIdUpdateManyWithoutUserNestedInput>;
+  organisation?: InputMaybe<StringFieldUpdateOperationsInput>;
+  platform?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  publicName?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycled?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutDeletedByNestedInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<UserSchemeUpdateManyWithoutUserNestedInput>;
+  subscribedCrimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  subscribedIncidents?: InputMaybe<IncidentUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedInvestigations?: InputMaybe<InvestigationUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  subscribedOffenders?: InputMaybe<OffenderUpdateManyWithoutSubscribedUsersNestedInput>;
+  subscribedVehicles?: InputMaybe<VehicleUpdateManyWithoutSubscribedUsersNestedInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutUsersNestedInput>;
+  termsSigned?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  timeSigned?: InputMaybe<NullableDateTimeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  uploaded?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  userTerms?: InputMaybe<UserTermUpdateManyWithoutUserNestedInput>;
+  vehicles?: InputMaybe<VehicleUpdateManyWithoutCreatedByNestedInput>;
+};
+
+export type UserUpdateWithoutCreatedtodosInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
+  actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
+  addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
+  articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
+  auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
+  businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
+  chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
+  createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
+  createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -38825,15 +40578,19 @@ export type UserUpdateWithoutCrimeGroupsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -38888,15 +40645,19 @@ export type UserUpdateWithoutFeedItemsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -38951,15 +40712,19 @@ export type UserUpdateWithoutGroupsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -39014,15 +40779,19 @@ export type UserUpdateWithoutImagesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -39077,15 +40846,19 @@ export type UserUpdateWithoutImpressionsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -39140,15 +40913,19 @@ export type UserUpdateWithoutIncidentsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -39203,15 +40980,19 @@ export type UserUpdateWithoutIntelInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -39266,15 +41047,19 @@ export type UserUpdateWithoutInvestigationsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -39329,15 +41114,19 @@ export type UserUpdateWithoutMentionedUpdatedInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -39392,15 +41181,19 @@ export type UserUpdateWithoutMessageMentionsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -39455,15 +41248,19 @@ export type UserUpdateWithoutMessagesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -39518,15 +41315,19 @@ export type UserUpdateWithoutOffendersInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -39581,15 +41382,19 @@ export type UserUpdateWithoutRecycledItemsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -39644,15 +41449,19 @@ export type UserUpdateWithoutSchemesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -39707,15 +41516,19 @@ export type UserUpdateWithoutSubscribedCrimeGroupsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -39770,15 +41583,19 @@ export type UserUpdateWithoutSubscribedIncidentsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -39833,15 +41650,19 @@ export type UserUpdateWithoutSubscribedInvestigationsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -39896,15 +41717,19 @@ export type UserUpdateWithoutSubscribedOffendersInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -39959,15 +41784,19 @@ export type UserUpdateWithoutSubscribedVehiclesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -40022,15 +41851,19 @@ export type UserUpdateWithoutTagsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -40085,15 +41918,19 @@ export type UserUpdateWithoutUserTermsInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -40148,15 +41985,19 @@ export type UserUpdateWithoutVehiclesInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutUserNestedInput>;
   actionsByUser?: InputMaybe<ActionUpdateManyWithoutByUserNestedInput>;
   addresses?: InputMaybe<AddressUpdateManyWithoutUserNestedInput>;
+  approverGroups?: InputMaybe<GroupUpdateManyWithoutApproverNestedInput>;
   articles?: InputMaybe<ArticleUpdateManyWithoutUsersNestedInput>;
+  assignedtodos?: InputMaybe<TodoUpdateManyWithoutAssignedUsersNestedInput>;
   auth0Id?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   bans?: InputMaybe<BanUpdateManyWithoutCreatedByNestedInput>;
   businesses?: InputMaybe<BusinessUpdateManyWithoutUsersNestedInput>;
   chats?: InputMaybe<UserChatUpdateManyWithoutUserNestedInput>;
+  completedtodos?: InputMaybe<TodoUpdateManyWithoutCompletedByNestedInput>;
   createdArticles?: InputMaybe<ArticleUpdateManyWithoutCreatedByNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdTags?: InputMaybe<TagUpdateManyWithoutCreatedByNestedInput>;
   createdUpdates?: InputMaybe<UpdateUpdateManyWithoutCreatedByNestedInput>;
+  createdtodos?: InputMaybe<TodoUpdateManyWithoutCreatedByNestedInput>;
   crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutCreatedByNestedInput>;
   demId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   disabled?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -40207,9 +42048,21 @@ export type UserUpdateWithoutVehiclesInput = {
   userTerms?: InputMaybe<UserTermUpdateManyWithoutUserNestedInput>;
 };
 
+export type UserUpsertWithWhereUniqueWithoutApproverGroupsInput = {
+  create: UserCreateWithoutApproverGroupsInput;
+  update: UserUpdateWithoutApproverGroupsInput;
+  where: UserWhereUniqueInput;
+};
+
 export type UserUpsertWithWhereUniqueWithoutArticlesInput = {
   create: UserCreateWithoutArticlesInput;
   update: UserUpdateWithoutArticlesInput;
+  where: UserWhereUniqueInput;
+};
+
+export type UserUpsertWithWhereUniqueWithoutAssignedtodosInput = {
+  create: UserCreateWithoutAssignedtodosInput;
+  update: UserUpdateWithoutAssignedtodosInput;
   where: UserWhereUniqueInput;
 };
 
@@ -40298,6 +42151,11 @@ export type UserUpsertWithoutChatsInput = {
   update: UserUpdateWithoutChatsInput;
 };
 
+export type UserUpsertWithoutCompletedtodosInput = {
+  create: UserCreateWithoutCompletedtodosInput;
+  update: UserUpdateWithoutCompletedtodosInput;
+};
+
 export type UserUpsertWithoutCreatedArticlesInput = {
   create: UserCreateWithoutCreatedArticlesInput;
   update: UserUpdateWithoutCreatedArticlesInput;
@@ -40311,6 +42169,11 @@ export type UserUpsertWithoutCreatedTagsInput = {
 export type UserUpsertWithoutCreatedUpdatesInput = {
   create: UserCreateWithoutCreatedUpdatesInput;
   update: UserUpdateWithoutCreatedUpdatesInput;
+};
+
+export type UserUpsertWithoutCreatedtodosInput = {
+  create: UserCreateWithoutCreatedtodosInput;
+  update: UserUpdateWithoutCreatedtodosInput;
 };
 
 export type UserUpsertWithoutCrimeGroupsInput = {
@@ -40385,15 +42248,19 @@ export type UserWhereInput = {
   actions?: InputMaybe<ActionListRelationFilter>;
   actionsByUser?: InputMaybe<ActionListRelationFilter>;
   addresses?: InputMaybe<AddressListRelationFilter>;
+  approverGroups?: InputMaybe<GroupListRelationFilter>;
   articles?: InputMaybe<ArticleListRelationFilter>;
+  assignedtodos?: InputMaybe<TodoListRelationFilter>;
   auth0Id?: InputMaybe<StringNullableFilter>;
   bans?: InputMaybe<BanListRelationFilter>;
   businesses?: InputMaybe<BusinessListRelationFilter>;
   chats?: InputMaybe<UserChatListRelationFilter>;
+  completedtodos?: InputMaybe<TodoListRelationFilter>;
   createdArticles?: InputMaybe<ArticleListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   createdTags?: InputMaybe<TagListRelationFilter>;
   createdUpdates?: InputMaybe<UpdateListRelationFilter>;
+  createdtodos?: InputMaybe<TodoListRelationFilter>;
   crimeGroups?: InputMaybe<CrimeGroupListRelationFilter>;
   demId?: InputMaybe<StringNullableFilter>;
   disabled?: InputMaybe<BoolFilter>;
@@ -47127,6 +48994,106 @@ export type BusinessEngagementQuery = {
   } | null;
 };
 
+export type TargetedBusinessReportQueryVariables = Exact<{
+  where: BusinessReportInput;
+  businessWhere: BusinessWhereUniqueInput;
+}>;
+
+export type TargetedBusinessReportQuery = {
+  __typename?: 'Query';
+  businessReport?: {
+    __typename?: 'BusinessReport';
+    crimeTypeDonut?: Array<{
+      __typename?: 'Graph';
+      label: string;
+      value: number;
+    } | null> | null;
+    goodsTypeLossRecovered?: Array<{
+      __typename?: 'RadialGraph';
+      label: string;
+      data: Array<{ __typename?: 'Graph'; value: number; label: string }>;
+    } | null> | null;
+    incidentDayOfWeekGraph?: Array<{
+      __typename?: 'Graph';
+      value: number;
+      label: string;
+    } | null> | null;
+    incidentMonthGraph?: Array<{
+      __typename?: 'Graph';
+      value: number;
+      label: string;
+    } | null> | null;
+    targetedGoods?: {
+      __typename?: 'ListTargetedGoods';
+      total: number;
+      targetedGoods: Array<{
+        __typename?: 'TargetedGood';
+        totalSuccessRate: number;
+        totalRecoveredValue: number;
+        totalOffenders: number;
+        totalLostValue: number;
+        totalIncidents: number;
+        name: string;
+        averageLossValue: number;
+        alertId: string;
+      }>;
+    } | null;
+    incidentSummary?: {
+      __typename?: 'IncidentSummary';
+      totalIncidents: number;
+      mostCommonCrimeType: string;
+      lastIncidentDate?: any | null;
+      incidentsWherePoliceAttended: number;
+      incidentsReportedToPolice: number;
+    } | null;
+    incidentTimeOfDayDonut?: Array<{
+      __typename?: 'Graph';
+      value: number;
+      label: string;
+    } | null> | null;
+    incidentsTable?: {
+      __typename?: 'ListIncidents';
+      total: number;
+      incidents: Array<{
+        __typename?: 'Incident';
+        id: string;
+        reference?: number | null;
+        date: any;
+        totalOffenders?: number | null;
+        policeReported: boolean;
+        policeInvolved: boolean;
+        policeRef?: string | null;
+        incidentItems: Array<{
+          __typename?: 'IncidentItem';
+          value: number;
+          recoveredValue: number;
+        }>;
+        location?: {
+          __typename?: 'Address';
+          full?: string | null;
+          alias?: string | null;
+          id: string;
+        } | null;
+        crimeTypes: Array<{ __typename?: 'Tag'; name: string; id: string }>;
+      }>;
+    } | null;
+    involvedTagDonut?: Array<{
+      __typename?: 'Graph';
+      value: number;
+      label: string;
+    } | null> | null;
+    lossTotals?: {
+      __typename?: 'LossTotals';
+      totalRecoveredValue: number;
+      totalLostValue: number;
+      totalIncidents: number;
+      averageSuccessRate: number;
+      averagePerIncident: number;
+    } | null;
+  } | null;
+  business?: { __typename?: 'Business'; id: string; name: string } | null;
+};
+
 export type CrimeGroupReportQueryVariables = Exact<{
   where: CrimeGroupReportInput;
   whereContribution: UserContributionWhereInput;
@@ -47729,6 +49696,29 @@ export type PerformanceReportQuery = {
       } | null;
     }>;
   } | null;
+};
+
+export type SchemeReportFiltersQueryVariables = Exact<{
+  where?: InputMaybe<SchemeWhereInput>;
+}>;
+
+export type SchemeReportFiltersQuery = {
+  __typename?: 'Query';
+  schemes: Array<{
+    __typename?: 'Scheme';
+    crimeGroups: Array<{
+      __typename?: 'CrimeGroup';
+      id: string;
+      alias?: string | null;
+      ref?: string | null;
+    }>;
+    offenders: Array<{
+      __typename?: 'Offender';
+      id: string;
+      name?: string | null;
+      reference?: number | null;
+    }>;
+  }>;
 };
 
 export type CreateTermsAndConditionsMutationVariables = Exact<{
@@ -59176,6 +61166,150 @@ export type BusinessEngagementQueryResult = Apollo.QueryResult<
   BusinessEngagementQuery,
   BusinessEngagementQueryVariables
 >;
+export const TargetedBusinessReportDocument = gql`
+  query TargetedBusinessReport(
+    $where: BusinessReportInput!
+    $businessWhere: BusinessWhereUniqueInput!
+  ) {
+    businessReport(where: $where) {
+      crimeTypeDonut {
+        label
+        value
+      }
+      goodsTypeLossRecovered {
+        data {
+          value
+          label
+        }
+        label
+      }
+      incidentDayOfWeekGraph {
+        value
+        label
+      }
+      incidentMonthGraph {
+        value
+        label
+      }
+      targetedGoods {
+        total
+        targetedGoods {
+          totalSuccessRate
+          totalRecoveredValue
+          totalOffenders
+          totalLostValue
+          totalIncidents
+          name
+          averageLossValue
+          alertId
+        }
+      }
+      incidentSummary {
+        totalIncidents
+        mostCommonCrimeType
+        lastIncidentDate
+        incidentsWherePoliceAttended
+        incidentsReportedToPolice
+      }
+      incidentTimeOfDayDonut {
+        value
+        label
+      }
+      incidentsTable {
+        total
+        incidents {
+          id
+          reference
+          date
+          incidentItems {
+            value
+            recoveredValue
+          }
+          location {
+            full
+            alias
+            id
+          }
+          totalOffenders
+          crimeTypes {
+            name
+            id
+          }
+          policeReported
+          policeInvolved
+          policeRef
+        }
+      }
+      involvedTagDonut {
+        value
+        label
+      }
+      lossTotals {
+        totalRecoveredValue
+        totalLostValue
+        totalIncidents
+        averageSuccessRate
+        averagePerIncident
+      }
+    }
+    business(where: $businessWhere) {
+      id
+      name
+    }
+  }
+`;
+
+/**
+ * __useTargetedBusinessReportQuery__
+ *
+ * To run a query within a React component, call `useTargetedBusinessReportQuery` and pass it any options that fit your needs.
+ * When your component renders, `useTargetedBusinessReportQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTargetedBusinessReportQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      businessWhere: // value for 'businessWhere'
+ *   },
+ * });
+ */
+export function useTargetedBusinessReportQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    TargetedBusinessReportQuery,
+    TargetedBusinessReportQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    TargetedBusinessReportQuery,
+    TargetedBusinessReportQueryVariables
+  >(TargetedBusinessReportDocument, options);
+}
+export function useTargetedBusinessReportLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    TargetedBusinessReportQuery,
+    TargetedBusinessReportQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    TargetedBusinessReportQuery,
+    TargetedBusinessReportQueryVariables
+  >(TargetedBusinessReportDocument, options);
+}
+export type TargetedBusinessReportQueryHookResult = ReturnType<
+  typeof useTargetedBusinessReportQuery
+>;
+export type TargetedBusinessReportLazyQueryHookResult = ReturnType<
+  typeof useTargetedBusinessReportLazyQuery
+>;
+export type TargetedBusinessReportQueryResult = Apollo.QueryResult<
+  TargetedBusinessReportQuery,
+  TargetedBusinessReportQueryVariables
+>;
 export const CrimeGroupReportDocument = gql`
   query CrimeGroupReport(
     $where: CrimeGroupReportInput!
@@ -59972,6 +62106,73 @@ export type PerformanceReportLazyQueryHookResult = ReturnType<
 export type PerformanceReportQueryResult = Apollo.QueryResult<
   PerformanceReportQuery,
   PerformanceReportQueryVariables
+>;
+export const SchemeReportFiltersDocument = gql`
+  query SchemeReportFilters($where: SchemeWhereInput) {
+    schemes(where: $where) {
+      crimeGroups {
+        id
+        alias
+        ref
+      }
+      offenders {
+        id
+        name
+        reference
+      }
+    }
+  }
+`;
+
+/**
+ * __useSchemeReportFiltersQuery__
+ *
+ * To run a query within a React component, call `useSchemeReportFiltersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSchemeReportFiltersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSchemeReportFiltersQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useSchemeReportFiltersQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    SchemeReportFiltersQuery,
+    SchemeReportFiltersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    SchemeReportFiltersQuery,
+    SchemeReportFiltersQueryVariables
+  >(SchemeReportFiltersDocument, options);
+}
+export function useSchemeReportFiltersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SchemeReportFiltersQuery,
+    SchemeReportFiltersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    SchemeReportFiltersQuery,
+    SchemeReportFiltersQueryVariables
+  >(SchemeReportFiltersDocument, options);
+}
+export type SchemeReportFiltersQueryHookResult = ReturnType<
+  typeof useSchemeReportFiltersQuery
+>;
+export type SchemeReportFiltersLazyQueryHookResult = ReturnType<
+  typeof useSchemeReportFiltersLazyQuery
+>;
+export type SchemeReportFiltersQueryResult = Apollo.QueryResult<
+  SchemeReportFiltersQuery,
+  SchemeReportFiltersQueryVariables
 >;
 export const CreateTermsAndConditionsDocument = gql`
   mutation createTermsAndConditions($data: CreateTermsInput!) {

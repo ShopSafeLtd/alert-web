@@ -439,12 +439,12 @@ export const IncidentsColumns: ColumnsType<IncidentsTableData> = [
     dataIndex: 'date',
     title: 'Date',
     sorter: (a, b) => a.date.localeCompare(b.date),
+    defaultSortOrder: 'descend',
   },
   {
     key: 'value',
     dataIndex: 'value',
     title: 'Value lost',
-    defaultSortOrder: 'descend',
     sorter: (a, b) => a.value.localeCompare(b.value),
   },
   {

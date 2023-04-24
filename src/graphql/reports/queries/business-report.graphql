@@ -1,0 +1,87 @@
+query TargetedBusinessReport($where: BusinessReportInput!, $businessWhere: BusinessWhereUniqueInput!) {
+  businessReport(where: $where) {
+    crimeTypeDonut {
+      label
+      value
+    }
+    goodsTypeLossRecovered {
+      data {
+        value
+        label
+      }
+      label
+    }
+    incidentDayOfWeekGraph {
+      value
+      label
+    }
+    incidentMonthGraph {
+      value
+      label
+    }
+      targetedGoods {
+        total
+        targetedGoods {
+          totalSuccessRate
+          totalRecoveredValue
+          totalOffenders
+          totalLostValue
+          totalIncidents
+          name
+          averageLossValue
+          alertId
+        }
+      }
+    incidentSummary {
+      totalIncidents
+      mostCommonCrimeType
+      lastIncidentDate
+      incidentsWherePoliceAttended
+      incidentsReportedToPolice
+    }
+    incidentTimeOfDayDonut {
+      value
+      label
+    }
+    incidentsTable {
+      total
+      incidents {
+        id
+        reference
+        date
+        incidentItems {
+          value
+          recoveredValue
+        }
+        location {
+          full
+          alias
+          id
+        }
+        totalOffenders
+        crimeTypes {
+          name
+          id
+        }
+        policeReported
+        policeInvolved
+        policeRef
+      }
+    }
+    involvedTagDonut {
+      value
+      label
+    }
+    lossTotals {
+      totalRecoveredValue
+      totalLostValue
+      totalIncidents
+      averageSuccessRate
+      averagePerIncident
+    }
+  }
+  business(where: $businessWhere) {
+    id
+    name
+  }
+}
