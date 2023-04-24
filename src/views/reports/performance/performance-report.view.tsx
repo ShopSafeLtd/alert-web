@@ -13,18 +13,17 @@ import type {
   TargetedBusinessTableData,
   TargetedGoodsTableData,
 } from 'components/reports/tableColumns';
+import {
+  LayoutToReadable,
+  margin,
+  rowHeight,
+} from 'components/reports/utils/utils';
 import type { SelectOptions } from './hooks/use-performance-report';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 
 import PerformanceReportLayout from './layout/PerformanceReportLayout';
-import {
-  LayoutToReadable,
-  margin,
-  PerformanceLayout,
-  rowHeight,
-} from './hooks/utils';
-
+import PerformanceLayout from './hooks/utils';
 // const ReactGridLayout = WidthProvider(RGL);
 
 const { Title } = Typography;
@@ -52,7 +51,7 @@ interface Props {
   setLayout: (layout: RGL.Layout[]) => void;
   minDrawer: boolean;
   setMinDrawer: (arg0: boolean) => void;
-  logo: string | null;
+  logo: string | null | undefined;
   removeItem: (arg0: string) => void;
   changeSize: (arg0: string, arg1: number) => void;
   isPrinting: boolean;
@@ -137,7 +136,7 @@ const PerformanceReport = ({
           className="no-print"
           style={{ marginBottom: 10, justifyContent: 'center' }}
         >
-          <Col span={8}>
+          <Col span={6}>
             <Select
               placeholder="Select Groups"
               mode="multiple"
@@ -222,6 +221,7 @@ const PerformanceReport = ({
                 rowHeight,
                 editMode,
                 changeSize,
+                isPrinting,
               })}
             </ReactGridLayout>
           </div>

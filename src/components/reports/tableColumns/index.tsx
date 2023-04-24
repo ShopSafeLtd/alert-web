@@ -1,4 +1,4 @@
-import type { SortOrder } from 'antd/es/table/interface';
+import type { ColumnsType, SortOrder } from 'antd/es/table/interface';
 import { Typography } from 'antd';
 import React from 'react';
 
@@ -12,7 +12,7 @@ export interface BusinessTableData {
   users: number;
 }
 
-export const BusinessColumns = [
+export const BusinessColumns: ColumnsType<BusinessTableData> = [
   {
     key: 'fullName',
     dataIndex: 'fullName',
@@ -71,7 +71,7 @@ export interface ContributionTableData {
   key: string;
 }
 
-export const ContributionColumns = [
+export const ContributionColumns: ColumnsType<ContributionTableData> = [
   {
     key: 'fullName',
     dataIndex: 'fullName',
@@ -125,7 +125,7 @@ export interface OffenderTableData {
   successRate: string;
 }
 
-export const OffenderColumns = [
+export const OffenderColumns: ColumnsType<OffenderTableData> = [
   {
     key: 'fullName',
     dataIndex: 'fullName',
@@ -189,80 +189,81 @@ export interface CrimeGroupPerformanceTableData {
   successRate: string;
 }
 
-export const CrimeGroupPerformanceColumns = [
-  {
-    key: 'fullName',
-    dataIndex: 'fullName',
-    title: 'Alias',
-    sorter: (
-      a: CrimeGroupPerformanceTableData,
-      b: CrimeGroupPerformanceTableData
-    ) => a.fullName.localeCompare(b.fullName),
-  },
-  {
-    key: 'totalIncidents',
-    dataIndex: 'totalIncidents',
-    title: 'Incidents',
-    defaultSortOrder: 'descend' as SortOrder,
-    sorter: (
-      a: CrimeGroupPerformanceTableData,
-      b: CrimeGroupPerformanceTableData
-    ) => a.totalIncidents - b.totalIncidents,
-  },
-  {
-    key: 'totalOffenders',
-    dataIndex: 'totalOffenders',
-    title: 'Offenders',
-    sorter: (
-      a: CrimeGroupPerformanceTableData,
-      b: CrimeGroupPerformanceTableData
-    ) => a.totalOffenders - b.totalOffenders,
-  },
-  {
-    key: 'alertId',
-    dataIndex: 'alertId',
-    title: 'AlertId',
-  },
-  {
-    key: 'lastIncident',
-    dataIndex: 'lastIncident',
-    title: 'Last Incident',
-  },
-  {
-    key: 'lostValue',
-    dataIndex: 'lostValue',
-    title: 'Lost value',
-    sorter: (
-      a: CrimeGroupPerformanceTableData,
-      b: CrimeGroupPerformanceTableData
-    ) =>
-      Number.parseInt(a.lostValue || '0', 10) -
-      Number.parseInt(b.lostValue || '0', 10),
-  },
-  {
-    key: 'recoveredValue',
-    dataIndex: 'recoveredValue',
-    title: 'Recovered value',
-    sorter: (
-      a: CrimeGroupPerformanceTableData,
-      b: CrimeGroupPerformanceTableData
-    ) =>
-      Number.parseInt(a.recoveredValue || '0', 10) -
-      Number.parseInt(b.recoveredValue || '0', 10),
-  },
-  {
-    key: 'successRate',
-    dataIndex: 'successRate',
-    title: 'SuccessRate',
-    sorter: (
-      a: CrimeGroupPerformanceTableData,
-      b: CrimeGroupPerformanceTableData
-    ) =>
-      Number.parseInt(a.successRate || '0', 10) -
-      Number.parseInt(b.successRate || '0', 10),
-    render: (text: string) => <Typography.Text>{text}%</Typography.Text>,
-  },
-];
+export const CrimeGroupPerformanceColumns: ColumnsType<CrimeGroupPerformanceTableData> =
+  [
+    {
+      key: 'fullName',
+      dataIndex: 'fullName',
+      title: 'Alias',
+      sorter: (
+        a: CrimeGroupPerformanceTableData,
+        b: CrimeGroupPerformanceTableData
+      ) => a.fullName.localeCompare(b.fullName),
+    },
+    {
+      key: 'totalIncidents',
+      dataIndex: 'totalIncidents',
+      title: 'Incidents',
+      defaultSortOrder: 'descend' as SortOrder,
+      sorter: (
+        a: CrimeGroupPerformanceTableData,
+        b: CrimeGroupPerformanceTableData
+      ) => a.totalIncidents - b.totalIncidents,
+    },
+    {
+      key: 'totalOffenders',
+      dataIndex: 'totalOffenders',
+      title: 'Offenders',
+      sorter: (
+        a: CrimeGroupPerformanceTableData,
+        b: CrimeGroupPerformanceTableData
+      ) => a.totalOffenders - b.totalOffenders,
+    },
+    {
+      key: 'alertId',
+      dataIndex: 'alertId',
+      title: 'AlertId',
+    },
+    {
+      key: 'lastIncident',
+      dataIndex: 'lastIncident',
+      title: 'Last Incident',
+    },
+    {
+      key: 'lostValue',
+      dataIndex: 'lostValue',
+      title: 'Lost value',
+      sorter: (
+        a: CrimeGroupPerformanceTableData,
+        b: CrimeGroupPerformanceTableData
+      ) =>
+        Number.parseInt(a.lostValue || '0', 10) -
+        Number.parseInt(b.lostValue || '0', 10),
+    },
+    {
+      key: 'recoveredValue',
+      dataIndex: 'recoveredValue',
+      title: 'Recovered value',
+      sorter: (
+        a: CrimeGroupPerformanceTableData,
+        b: CrimeGroupPerformanceTableData
+      ) =>
+        Number.parseInt(a.recoveredValue || '0', 10) -
+        Number.parseInt(b.recoveredValue || '0', 10),
+    },
+    {
+      key: 'successRate',
+      dataIndex: 'successRate',
+      title: 'SuccessRate',
+      sorter: (
+        a: CrimeGroupPerformanceTableData,
+        b: CrimeGroupPerformanceTableData
+      ) =>
+        Number.parseInt(a.successRate || '0', 10) -
+        Number.parseInt(b.successRate || '0', 10),
+      render: (text: string) => <Typography.Text>{text}%</Typography.Text>,
+    },
+  ];
 
 export interface TargetedBusinessTableData {
   fullName: string;
@@ -276,7 +277,7 @@ export interface TargetedBusinessTableData {
   avgLost: string;
 }
 
-export const TargetedBusinessColumns = [
+export const TargetedBusinessColumns: ColumnsType<TargetedBusinessTableData> = [
   {
     key: 'fullName',
     dataIndex: 'fullName',
@@ -356,7 +357,7 @@ export interface TargetedGoodsTableData {
   avgLost: string;
 }
 
-export const TargetGoodsColumns = [
+export const TargetGoodsColumns: ColumnsType<TargetedGoodsTableData> = [
   {
     key: 'fullName',
     dataIndex: 'fullName',
@@ -410,5 +411,78 @@ export const TargetGoodsColumns = [
     sorter: (a: TargetedGoodsTableData, b: TargetedGoodsTableData) =>
       Number.parseInt(a.avgLost || '0', 10) -
       Number.parseInt(b.avgLost || '0', 10),
+  },
+];
+
+export interface IncidentsTableData {
+  key: string;
+  alertId: number | null | undefined;
+  date: string;
+  value: string;
+  valueRec: string;
+  location: string;
+  totalOffenders: number;
+  crimeTypes: string;
+  policeReported: string;
+  policeAttended: string;
+  crimeRef: string;
+}
+
+export const IncidentsColumns: ColumnsType<IncidentsTableData> = [
+  {
+    key: 'alertId',
+    dataIndex: 'alertId',
+    title: 'Alert Id',
+  },
+  {
+    key: 'date',
+    dataIndex: 'date',
+    title: 'Date',
+    sorter: (a, b) => a.date.localeCompare(b.date),
+  },
+  {
+    key: 'value',
+    dataIndex: 'value',
+    title: 'Value lost',
+    defaultSortOrder: 'descend',
+    sorter: (a, b) => a.value.localeCompare(b.value),
+  },
+  {
+    key: 'valueRec',
+    dataIndex: 'valueRec',
+    title: 'Value recovered',
+    sorter: (a, b) => a.valueRec.localeCompare(b.valueRec),
+  },
+  {
+    key: 'location',
+    dataIndex: 'location',
+    title: 'Location',
+    sorter: (a, b) => a.location.localeCompare(b.location),
+  },
+  {
+    key: 'totalOffenders',
+    dataIndex: 'totalOffenders',
+    title: 'Offenders',
+    sorter: (a, b) => a.totalOffenders - b.totalOffenders,
+  },
+  {
+    key: 'crimeTypes',
+    dataIndex: 'crimeTypes',
+    title: 'Crime Types',
+  },
+  {
+    key: 'policeReported',
+    dataIndex: 'policeReported',
+    title: 'Police Reported',
+  },
+  {
+    key: 'policeAttended',
+    dataIndex: 'policeAttended',
+    title: 'Police Attended',
+  },
+  {
+    key: 'crimeRef',
+    dataIndex: 'crimeRef',
+    title: 'Crime Ref',
   },
 ];

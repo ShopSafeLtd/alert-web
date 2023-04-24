@@ -1,11 +1,12 @@
 import { Empty, Typography } from 'antd';
 import React from 'react';
-import { GoogleMap, HeatmapLayer } from '@react-google-maps/api';
+import { GoogleMap, HeatmapLayer, Marker } from '@react-google-maps/api';
 
 const HeatMapGoogle = ({
   data,
   label,
   emptyLabel,
+  markers,
 }: {
   data:
     | Array<{
@@ -16,6 +17,14 @@ const HeatMapGoogle = ({
     | undefined;
   label: string;
   emptyLabel: string;
+  markers?: Array<{
+    label: string;
+    key: string;
+    position: {
+      lat: number;
+      lng: number;
+    };
+  }>;
 }) => {
   const containerStyle = {
     width: '100%',
@@ -142,6 +151,12 @@ const HeatMapGoogle = ({
               opacity: 0.8,
             }}
           />
+          {markers?.map((marker) => (
+            <Marker
+              // eslint-disable-next-line react/jsx-props-no-spreading
+              {...marker}
+            />
+          ))}
         </GoogleMap>
       ) : (
         <Empty description={emptyLabel} />

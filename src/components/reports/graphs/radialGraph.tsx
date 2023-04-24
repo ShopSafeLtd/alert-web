@@ -1,74 +1,102 @@
-import { Empty, Typography } from 'antd';
-import { ResponsivePie } from '@nivo/pie';
+import { Empty } from 'antd';
 import React from 'react';
+import { ResponsiveRadialBar } from '@nivo/radial-bar';
+import { useStoreState } from '../../../state';
 
 const RadialGraph = ({
   data,
-  label,
   emptyLabel,
 }: {
   data:
-    | Array<{ __typename?: 'Graph'; label: string; value: number } | null>
+    | Array<{
+        __typename?: 'RadialGraph' | undefined;
+        label: string;
+        data:
+          | { __typename?: 'Graph' | undefined; value: number; label: string }[]
+          | null;
+      } | null>
     | null
     | undefined;
-  label: string;
   emptyLabel: string;
-}) => (
-  <div style={{ height: '100%', width: '100%%' }}>
-    <Typography.Title level={4}>{label}</Typography.Title>
-    {data && data.length > 0 ? (
-      <ResponsivePie
-        innerRadius={0.5}
-        padAngle={0.7}
-        cornerRadius={3}
-        activeOuterRadiusOffset={8}
-        borderWidth={1}
-        borderColor={{
-          from: 'color',
-          modifiers: [['darker', 0.2]],
-        }}
-        margin={{ top: 40, right: 0, bottom: 80, left: 0 }}
-        legends={[
-          {
-            anchor: 'right',
-            direction: 'column',
-            justify: false,
-            translateX: 0,
-            translateY: 0,
-            itemsSpacing: 6,
-            itemDirection: 'left-to-right',
-            itemWidth: 150,
-            itemHeight: 18,
-            itemTextColor: '#999',
-            symbolSize: 18,
-            symbolShape: 'square',
-            effects: [
-              {
-                on: 'hover',
-                style: {
-                  itemTextColor: '#000',
+}) => {
+  const theme = useStoreState((state) => state.theme.currentTheme);
+  const darkMode = theme === 'dark';
+  return (
+    <div
+      style={{ height: '100%', width: '100%%', marginLeft: 15 }}
+      className="no-break"
+    >
+      {data && data.length > 0 ? (
+        <ResponsiveRadialBar
+          theme={{
+            textColor: darkMode ? '#ffffff' : '#000',
+          }}
+          valueFormat=">-.2f"
+          padding={0.4}
+          cornerRadius={2}
+          borderWidth={1}
+          borderColor={{
+            from: 'color',
+            modifiers: [['darker', 0.2]],
+          }}
+          margin={{ top: 20, right: 0, bottom: 20, left: -120 }}
+          colors={{ scheme: darkMode ? 'dark2' : 'set2' }}
+          legends={[
+            {
+              anchor: 'right',
+              direction: 'column',
+              justify: false,
+              translateX: -40,
+              translateY: -20,
+              itemWidth: 100,
+              itemHeight: 20,
+              itemsSpacing: 0,
+              symbolSize: 20,
+              itemDirection: 'left-to-right',
+              itemTextColor: darkMode ? '#fff' : '#3a3a3a',
+              symbolShape: 'square',
+              effects: [
+                {
+                  on: 'hover',
+                  style: {
+                    itemTextColor: '#000',
+                  },
                 },
-              },
-            ],
-          },
-        ]}
-        arcLinkLabelsSkipAngle={10}
-        arcLinkLabelsThickness={2}
-        arcLinkLabelsDiagonalLength={10}
-        arcLinkLabelsStraightLength={0}
-        arcLinkLabelsColor={{ from: '' }}
-        arcLabelsSkipAngle={3}
-        arcLinkLabelsTextColor={{ from: 'color', modifiers: [] }}
-        data={data?.map((item) => ({
-          id: item?.label || '',
-          label: item?.label || '',
-          value: item?.value || 0,
-        }))}
-      />
-    ) : (
-      <Empty description={emptyLabel} />
-    )}
-  </div>
-);
+              ],
+            },
+          ]}
+          radialAxisStart={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+          }}
+          circularAxisOuter={{
+            tickSize: 5,
+            tickPadding: 12,
+            tickRotation: 0,
+          }}
+          // arcLinkLabelsTextColor={darkMode ? '#fff' : '#3a3a3a'}
+          // arcLabelsTextColor={darkMode ? '#fff' : '#3a3a3a'}
+          data={data?.map((item) => ({
+            id: item?.label || '',
+            data: item?.data
+              ? item?.data?.map((d) => ({
+                  x: d?.label || '',
+                  y: d?.value || 0,
+                }))
+              : [
+                  {
+                    x: 'No data',
+                    y: 0,
+                  },
+                ],
+          }))}
+        />
+      ) : (
+        <Empty description={emptyLabel} />
+      )}
+    </div>
+  );
+};
 
 export default RadialGraph;

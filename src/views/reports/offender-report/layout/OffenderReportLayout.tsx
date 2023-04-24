@@ -1,18 +1,23 @@
-import { Button, Card, Col, Row, Statistic, Table, Typography } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Descriptions,
+  Row,
+  Skeleton,
+  Statistic,
+  Table,
+  Typography,
+} from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendar,
-  faCar,
   faChartLineDown,
   faClipboard,
-  faComments,
-  faExclamationCircle,
   faMoneyBill,
-  faPenToSquare,
   faTrash,
   faUserPolice,
   faUserPoliceTie,
-  faUsers,
 } from '@fortawesome/pro-light-svg-icons';
 import React, { useMemo } from 'react';
 import type RGL from 'react-grid-layout';
@@ -21,37 +26,25 @@ import {
   HeatMapGoogle,
   LineGraph,
 } from 'components/reports/graphs';
-import { shouldPrint } from 'utils';
+import { getAge, getBuild, getEthnicity, getSex, shouldPrint } from 'utils';
 import type {
-  BusinessTableData,
-  ContributionTableData,
-  CrimeGroupPerformanceTableData,
-  OffenderTableData,
+  IncidentsTableData,
   TargetedBusinessTableData,
   TargetedGoodsTableData,
 } from 'components/reports/tableColumns';
 import {
-  BusinessColumns,
-  ContributionColumns,
-  CrimeGroupPerformanceColumns,
-  OffenderColumns,
+  IncidentsColumns,
   TargetedBusinessColumns,
   TargetGoodsColumns,
 } from 'components/reports/tableColumns';
-import type { PerformanceReportQuery } from '../../../../graphql/generated';
+import moment from 'moment';
+import type { OffenderReportQuery } from '../../../../graphql/generated';
+import { Age, Build, Gender, Race } from '../../../../graphql/generated';
 import useStyles from '../../styles/report.styles';
+import WatermarkImage from '../../../../components/images/WatermarkImage.view';
+import RadialGraph from '../../../../components/reports/graphs/radialGraph';
 
-interface ContributorTable {
-  key: string;
-  fullName: string;
-  incidentsCreated: number;
-  offendersCreated: number;
-  updatesCreated: number;
-  messagesSent: number;
-  logins: number;
-}
-
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 type Elements = {
   [key: string]: JSX.Element;
@@ -59,13 +52,11 @@ type Elements = {
 
 interface Props {
   loading: boolean;
-  data: PerformanceReportQuery | undefined;
-  businessContributionTableData: BusinessTableData[] | [];
-  userContributionTableData: ContributionTableData[] | [];
-  offendersTableData: OffenderTableData[] | [];
-  crimeGroupPerformanceTableData: CrimeGroupPerformanceTableData[] | [];
+  data: OffenderReportQuery | undefined;
+
   targetedBusinessData: TargetedBusinessTableData[] | [];
   targetedGoodsData: TargetedGoodsTableData[] | [];
+  incidentsTableData: IncidentsTableData[] | [];
   removeItem: (arg0: string) => void;
   layout: RGL.Layout[];
   margin: [number, number];
@@ -74,13 +65,10 @@ interface Props {
   changeSize: (arg0: string, arg1: number) => void;
   isPrinting: boolean;
 }
-const PerformanceReportLayout = ({
+const OffenderReportLayout = ({
   loading,
   data,
-  businessContributionTableData,
-  userContributionTableData,
-  offendersTableData,
-  crimeGroupPerformanceTableData,
+  incidentsTableData,
   targetedBusinessData,
   targetedGoodsData,
   removeItem,
@@ -88,8 +76,8 @@ const PerformanceReportLayout = ({
   layout,
   margin,
   rowHeight,
-  isPrinting,
   editMode,
+  isPrinting,
 }: Props) => {
   const classes = useStyles();
   const calculateHeight = (key: string, offset?: number) => {
@@ -100,101 +88,107 @@ const PerformanceReportLayout = ({
     }px`;
   };
   const components: Elements = {
-    createdSummary: (
+    offenderSummary: (
       <Card
         style={{ width: '100%' }}
         bodyStyle={{ width: '100%' }}
         loading={loading}
-        key="createdSummary"
+        key="offenderSummary"
       >
-        <Button
-          type="text"
-          shape="circle"
-          className="card-remove no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-          size="small"
-          onClick={() => removeItem('createdSummary')}
-        />
-
-        <Row>
-          <Col span={12}>
-            <Title level={4}>Created Summary</Title>
+        <Row wrap={false}>
+          <Button
+            type="text"
+            shape="circle"
+            className="card-remove no-print"
+            hidden={!editMode}
+            icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
+            size="small"
+            onClick={() => removeItem('offenderSummary')}
+          />
+          <Col className={classes.imageCol} span={6}>
+            {data?.offenderReport?.offenderSummary?.images &&
+            data?.offenderReport?.offenderSummary?.images.length > 0 ? (
+              <div className={classes.image}>
+                <WatermarkImage
+                  url={
+                    data?.offenderReport?.offenderSummary?.images[0]
+                      ?.optimisedPersisted
+                  }
+                  position={
+                    data?.offenderReport?.offenderSummary?.images[0]?.position
+                  }
+                />
+              </div>
+            ) : (
+              <Skeleton.Image className={classes.imageSkeleton} />
+            )}
           </Col>
-          <Row className="stats-row">
-            <Statistic
-              className={classes.stats}
-              title="Incidents Created"
-              value={data?.performanceReport?.createdDataCounts?.incidents || 0}
-              prefix={
-                <FontAwesomeIcon
-                  className={classes.prefixIcon}
-                  icon={faExclamationCircle}
-                />
-              }
-            />
-
-            <Statistic
-              className={classes.stats}
-              title="Offenders Created"
-              value={data?.performanceReport?.createdDataCounts?.offenders || 0}
-              prefix={
-                <FontAwesomeIcon
-                  className={classes.prefixIcon}
-                  icon={faUsers}
-                />
-              }
-            />
-
-            <Statistic
-              className={classes.stats}
-              title="Updated Submitted"
-              value={data?.performanceReport?.createdDataCounts?.updates || 0}
-              prefix={
-                <FontAwesomeIcon
-                  className={classes.prefixIcon}
-                  icon={faPenToSquare}
-                />
-              }
-            />
-
-            <Statistic
-              className={classes.stats}
-              title="Messages Sent"
-              value={data?.performanceReport?.createdDataCounts?.messages || 0}
-              prefix={
-                <FontAwesomeIcon
-                  className={classes.prefixIcon}
-                  icon={faComments}
-                />
-              }
-            />
-
-            <Statistic
-              className={classes.stats}
-              title="Vehicles Created"
-              value={
-                data?.performanceReport?.createdDataCounts?.vehicles || 0 || 0
-              }
-              prefix={
-                <FontAwesomeIcon className={classes.prefixIcon} icon={faCar} />
-              }
-            />
-
-            <Statistic
-              className={classes.stats}
-              title="Crime Groups Created"
-              value={
-                data?.performanceReport?.createdDataCounts?.crimeGroups || 0
-              }
-              prefix={
-                <FontAwesomeIcon
-                  className={classes.prefixIcon}
-                  icon={faUsers}
-                />
-              }
-            />
-          </Row>
+          <Col className={classes.detailsBody}>
+            <Title className={classes.title} level={2}>
+              {data?.offenderReport?.offenderSummary?.name}
+            </Title>
+            <Text type="secondary">
+              Alert ID: {data?.offenderReport?.offenderSummary?.reference}
+            </Text>
+            <Title level={4} type="secondary">
+              Details
+            </Title>
+            <Descriptions column={2} className={classes.descriptions}>
+              <Descriptions.Item className={classes.descItem} label="Gender">
+                {getSex(
+                  data?.offenderReport?.offenderSummary?.gender ||
+                    Gender.Unknown
+                )}
+              </Descriptions.Item>
+              {!data?.offenderReport?.offenderSummary?.dateOfBirth && (
+                <Descriptions.Item className={classes.descItem} label="Age">
+                  {getAge(
+                    data?.offenderReport?.offenderSummary?.age || Age.Unknown
+                  )}
+                </Descriptions.Item>
+              )}
+              {data?.offenderReport?.offenderSummary?.dateOfBirth && (
+                <Descriptions.Item
+                  className={classes.descItem}
+                  label="Date of Birth"
+                >
+                  {moment(
+                    data?.offenderReport?.offenderSummary?.dateOfBirth
+                  ).format('DD/MM/YYYY')}
+                </Descriptions.Item>
+              )}
+              {data?.offenderReport?.offenderSummary?.dateSource && (
+                <Descriptions.Item
+                  className={classes.descItem}
+                  label="DoB Source"
+                >
+                  {data?.offenderReport?.offenderSummary?.dateSource}
+                </Descriptions.Item>
+              )}
+              <Descriptions.Item className={classes.descItem} label="Build">
+                {getBuild(
+                  data?.offenderReport?.offenderSummary?.build || Build.Unknown
+                )}
+              </Descriptions.Item>
+              <Descriptions.Item className={classes.descItem} label="Ethnicity">
+                {getEthnicity(
+                  data?.offenderReport?.offenderSummary?.race || Race.Unknown
+                )}
+              </Descriptions.Item>
+            </Descriptions>
+            <Descriptions column={1}>
+              <Descriptions.Item className={classes.descItem} label="Hair">
+                {data?.offenderReport?.offenderSummary?.hair || 'Unknown'}
+              </Descriptions.Item>
+              <Descriptions.Item
+                className={classes.descItem}
+                label="Peculiarities"
+              >
+                {data?.offenderReport?.offenderSummary?.peculiarities ||
+                  'None documented'}
+              </Descriptions.Item>
+            </Descriptions>
+          </Col>
         </Row>
       </Card>
     ),
@@ -223,9 +217,9 @@ const PerformanceReportLayout = ({
               className={classes.stats}
               title="Last Incident (in range)"
               value={
-                data?.performanceReport?.incidentSummary?.lastIncidentDate
+                data?.offenderReport?.incidentSummary?.lastIncidentDate
                   ? new Date(
-                      data?.performanceReport?.incidentSummary?.lastIncidentDate
+                      data?.offenderReport?.incidentSummary?.lastIncidentDate
                     ).toLocaleDateString()
                   : 'unknown'
               }
@@ -241,7 +235,7 @@ const PerformanceReportLayout = ({
               className={classes.stats}
               title="Reported to Police"
               value={
-                data?.performanceReport?.incidentSummary
+                data?.offenderReport?.incidentSummary
                   ?.incidentsReportedToPolice || 0
               }
               prefix={
@@ -256,7 +250,7 @@ const PerformanceReportLayout = ({
               className={classes.stats}
               title="Police Attended"
               value={
-                data?.performanceReport?.incidentSummary
+                data?.offenderReport?.incidentSummary
                   ?.incidentsWherePoliceAttended || 0
               }
               prefix={
@@ -271,27 +265,12 @@ const PerformanceReportLayout = ({
               className={classes.stats}
               title="Most common crime type"
               value={
-                data?.performanceReport?.incidentSummary?.mostCommonCrimeType ||
-                ''
+                data?.offenderReport?.incidentSummary?.mostCommonCrimeType || ''
               }
               prefix={
                 <FontAwesomeIcon
                   className={classes.prefixIcon}
                   icon={faClipboard}
-                />
-              }
-            />
-
-            <Statistic
-              className={classes.stats}
-              title="Crime Groups"
-              value={
-                data?.performanceReport?.createdDataCounts?.crimeGroups || 0
-              }
-              prefix={
-                <FontAwesomeIcon
-                  className={classes.prefixIcon}
-                  icon={faUsers}
                 />
               }
             />
@@ -324,8 +303,8 @@ const PerformanceReportLayout = ({
               className={classes.stats}
               title="Total lost value"
               value={
-                data?.performanceReport?.lossTotals?.totalLostValue
-                  ? `£${data?.performanceReport?.lossTotals?.totalLostValue.toFixed(
+                data?.offenderReport?.lossTotals?.totalLostValue
+                  ? `£${data?.offenderReport?.lossTotals?.totalLostValue.toFixed(
                       2
                     )}`
                   : 'No Losses'
@@ -342,8 +321,8 @@ const PerformanceReportLayout = ({
               className={classes.stats}
               title="Total recovered value"
               value={
-                data?.performanceReport?.lossTotals?.totalRecoveredValue
-                  ? `£${data?.performanceReport?.lossTotals?.totalRecoveredValue.toFixed(
+                data?.offenderReport?.lossTotals?.totalRecoveredValue
+                  ? `£${data?.offenderReport?.lossTotals?.totalRecoveredValue.toFixed(
                       2
                     )}`
                   : 'No Recoveries'
@@ -360,7 +339,7 @@ const PerformanceReportLayout = ({
               className={classes.stats}
               title="Average Success Rate"
               value={`${(
-                (data?.performanceReport?.lossTotals?.averageSuccessRate || 0) *
+                (data?.offenderReport?.lossTotals?.averageSuccessRate || 0) *
                 100
               ).toFixed(2)}%`}
               prefix={
@@ -374,7 +353,7 @@ const PerformanceReportLayout = ({
               className={classes.stats}
               title="Average Loss per Incident"
               value={
-                `£${data?.performanceReport?.lossTotals?.averagePerIncident.toFixed(
+                `£${data?.offenderReport?.lossTotals?.averagePerIncident.toFixed(
                   2
                 )}` || ''
               }
@@ -408,19 +387,19 @@ const PerformanceReportLayout = ({
           onClick={() => removeItem('crimeTypesDonut')}
         />
         <DonutGraph
-          data={data?.performanceReport?.crimeTypeDonut}
+          data={data?.offenderReport?.crimeTypeDonut}
           emptyLabel="No Crime Types"
         />
       </Card>
     ),
-    involvedTagsDonut: (
+    crimeTypesByBusinessRadial: (
       <Card
-        title="Involved Tags"
+        title="Crime Types By Business"
         className="no-break"
         loading={loading}
-        style={{ height: calculateHeight('involvedTagsDonut') }}
+        style={{ height: calculateHeight('crimeTypesByBusinessRadial') }}
         bodyStyle={{ height: '90%' }}
-        key="involvedTagsDonut"
+        key="crimeTypesByBusinessRadial"
       >
         <Button
           type="text"
@@ -429,22 +408,49 @@ const PerformanceReportLayout = ({
           hidden={!editMode}
           icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
           size="small"
-          onClick={() => removeItem('involvedTagsDonut')}
+          onClick={() => removeItem('crimeTypesByBusinessRadial')}
         />
-        <DonutGraph
-          data={data?.performanceReport?.involvedTagCountDonut}
-          emptyLabel="No Involved Tags"
+        <RadialGraph
+          data={data?.offenderReport?.crimeTypeBusinessRadial}
+          emptyLabel="No Crime Types"
+        />
+      </Card>
+    ),
+    goodsTypeLossRecoveredRadial: (
+      <Card
+        title="Loss/Recovered by Goods Type"
+        className="no-break"
+        loading={loading}
+        style={{
+          height: calculateHeight('goodsTypeLossRecoveredRadial'),
+          pageBreakBefore: 'always',
+        }}
+        bodyStyle={{ height: '90%' }}
+        key="goodsTypeLossRecoveredRadial"
+      >
+        <Button
+          type="text"
+          shape="circle"
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
+          size="small"
+          onClick={() => removeItem('goodsTypeLossRecoveredRadial')}
+        />
+        <RadialGraph
+          data={data?.offenderReport?.goodsTypeLossRecovered}
+          emptyLabel="No Crime Types"
         />
       </Card>
     ),
 
-    goodsTypeDonut: (
+    incidentTimeOfDayDonut: (
       <Card
-        title="Goods type count"
+        title="Incidents Time of Day"
         className="no-break"
         loading={loading}
-        key="goodsTypeDonut"
-        style={{ height: calculateHeight('goodsTypeDonut') }}
+        key="incidentTimeOfDayDonut"
+        style={{ height: calculateHeight('incidentTimeOfDayDonut') }}
         bodyStyle={{ height: '90%' }}
       >
         <Button
@@ -454,21 +460,21 @@ const PerformanceReportLayout = ({
           hidden={!editMode}
           icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
           size="small"
-          onClick={() => removeItem('goodsTypeDonut')}
+          onClick={() => removeItem('incidentTimeOfDayDonut')}
         />
         <DonutGraph
-          data={data?.performanceReport?.goodsTypeCountDonut}
+          data={data?.offenderReport?.incidentTimeOfDayDonut}
           emptyLabel="No goods count"
         />
       </Card>
     ),
-    goodsValueDonut: (
+    incidentMonthDonut: (
       <Card
-        title="Goods type value"
+        title="Incidents Month"
         className="no-break"
         loading={loading}
-        key="goodsValueDonut"
-        style={{ height: calculateHeight('goodsValueDonut') }}
+        key="incidentMonthDonut"
+        style={{ height: calculateHeight('incidentMonthDonut') }}
         bodyStyle={{ height: '90%' }}
       >
         <Button
@@ -478,11 +484,10 @@ const PerformanceReportLayout = ({
           hidden={!editMode}
           icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
           size="small"
-          onClick={() => removeItem('goodsValueDonut')}
+          onClick={() => removeItem('incidentMonthDonut')}
         />
         <DonutGraph
-          labelFormat="£"
-          data={data?.performanceReport?.goodsTypeValueDonut}
+          data={data?.offenderReport?.incidentMonthGraph}
           emptyLabel="No goods values"
         />
       </Card>
@@ -506,52 +511,19 @@ const PerformanceReportLayout = ({
         />
         <LineGraph
           label="Incidents by day of week"
-          data={data?.performanceReport?.incidentDayOfWeekLine}
+          data={data?.offenderReport?.incidentDayOfWeekGraph}
           dataLabel="incidents"
           emptyLabel="No incidents"
         />
       </Card>
     ),
-    incidentsHeatMap: (
-      <Card
-        className={`${shouldPrint(
-          data?.incidentHeatPerformance?.incidents[0]?.location?.geoLat
-        )} no-break`}
-        loading={loading}
-        key="incidentsHeatMap"
-      >
-        <Button
-          type="text"
-          shape="circle"
-          className="card-remove no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-          size="small"
-          onClick={() => removeItem('incidentsHeatMap')}
-        />
-        <HeatMapGoogle
-          label="Incidents heatmap"
-          data={
-            data?.incidentHeatPerformance?.incidents
-              ?.filter(
-                (incident) =>
-                  incident.location?.geoLat && incident.location.geoLng
-              )
-              .map((incident) => ({
-                geoLat: incident?.location?.geoLat || 0,
-                geoLng: incident?.location?.geoLng || 0,
-              })) || []
-          }
-          emptyLabel="No incidents"
-        />
-      </Card>
-    ),
-    businessContributionTable: (
+
+    incidentsTable: (
       <Card
         loading={loading}
         className="no-break"
-        key="businessContributionTable"
-        style={{ height: calculateHeight('businessContributionTable') }}
+        key="incidentsTable"
+        style={{ height: calculateHeight('incidentsTable') }}
         bodyStyle={{ overflow: 'auto' }}
       >
         <Button
@@ -561,128 +533,23 @@ const PerformanceReportLayout = ({
           hidden={!editMode}
           icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
           size="small"
-          onClick={() => removeItem('businessContributionTable')}
+          onClick={() => removeItem('incidentsTable')}
         />
-        <Title level={4}>Business Contributions</Title>
+        <Title level={4}>Incidents</Title>
         <Table
           size="small"
           className="no-break"
           pagination={{
             onChange: (_, pageSize) => {
-              changeSize('businessContributionTable', pageSize);
+              changeSize('incidentsTable', pageSize);
             },
-            total: data?.businessContribution?.total || 0,
+            total: data?.offenderReport?.incidentsTable?.total || 0,
             defaultPageSize: 10,
             showSizeChanger: true,
             showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
           }}
-          columns={BusinessColumns}
-          dataSource={businessContributionTableData}
-        />
-      </Card>
-    ),
-    topContributors: (
-      <Card
-        loading={loading}
-        className="no-break"
-        style={{ height: calculateHeight('topContributors') }}
-        bodyStyle={{ overflow: 'auto' }}
-        key="topContributors"
-      >
-        <Button
-          type="text"
-          shape="circle"
-          className="card-remove no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-          size="small"
-          onClick={() => removeItem('topContributors')}
-        />
-        <Title level={4}>Top Contributors</Title>
-        <Table<ContributorTable>
-          size="small"
-          className="no-break"
-          pagination={{
-            onChange: (_, pageSize) => {
-              changeSize('topContributors', pageSize);
-            },
-            total: data?.userContributions?.total || 0,
-            defaultPageSize: 10,
-            showSizeChanger: true,
-            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
-          }}
-          columns={ContributionColumns}
-          dataSource={userContributionTableData}
-        />
-      </Card>
-    ),
-    offendersTable: (
-      <Card
-        loading={loading}
-        className="no-break"
-        style={{ height: calculateHeight('offendersTable') }}
-        bodyStyle={{ overflow: 'auto' }}
-        key="offendersTable"
-      >
-        <Button
-          type="text"
-          shape="circle"
-          className="card-remove no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-          size="small"
-          onClick={() => removeItem('offendersTable')}
-        />
-        <Title level={4}>Offenders Table</Title>
-        <Table
-          size="small"
-          className="no-break"
-          pagination={{
-            onChange: (_, pageSize) => {
-              changeSize('offendersTable', pageSize);
-            },
-            total: data?.offendersPerformance?.total || 0,
-            defaultPageSize: 10,
-            showSizeChanger: true,
-            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
-          }}
-          columns={OffenderColumns}
-          dataSource={offendersTableData}
-        />
-      </Card>
-    ),
-    crimeGroupTable: (
-      <Card
-        loading={loading}
-        className="no-break"
-        style={{ height: calculateHeight('crimeGroupTable') }}
-        bodyStyle={{ overflow: 'auto' }}
-        key="crimeGroupTable"
-      >
-        <Button
-          type="text"
-          shape="circle"
-          className="card-remove no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-          size="small"
-          onClick={() => removeItem('crimeGroupTable')}
-        />
-        <Title level={4}>Crime group table</Title>
-        <Table
-          size="small"
-          className="no-break"
-          pagination={{
-            onChange: (_, pageSize) => {
-              changeSize('crimeGroupTable', pageSize);
-            },
-            total: data?.crimeGroupPerformance?.total || 0,
-            defaultPageSize: 10,
-            showSizeChanger: true,
-            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
-          }}
-          columns={CrimeGroupPerformanceColumns}
-          dataSource={crimeGroupPerformanceTableData}
+          columns={IncidentsColumns}
+          dataSource={incidentsTableData}
         />
       </Card>
     ),
@@ -762,6 +629,57 @@ const PerformanceReportLayout = ({
         />
       </Card>
     ),
+    incidentsHeatMap: (
+      <Card
+        className={`${shouldPrint(
+          data?.offenderReport?.incidentsTable?.incidents[0]?.location?.geoLat,
+          data?.offenderReport?.offenderSummary?.addresses.length
+        )} no-break`}
+        loading={loading}
+        key="incidentsHeatMap"
+        style={{ height: calculateHeight('incidentsHeatMap') }}
+      >
+        <Button
+          type="text"
+          shape="circle"
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
+          size="small"
+          onClick={() => removeItem('incidentsHeatMap')}
+        />
+        <HeatMapGoogle
+          label="Incidents heatmap"
+          data={
+            data?.offenderReport?.incidentsTable?.incidents
+              ?.filter(
+                (incident) =>
+                  incident.location?.geoLat && incident.location.geoLng
+              )
+              .map((incident) => ({
+                geoLat: incident?.location?.geoLat || 0,
+                geoLng: incident?.location?.geoLng || 0,
+              })) || []
+          }
+          markers={
+            data?.offenderReport?.offenderSummary?.addresses &&
+            data?.offenderReport?.offenderSummary?.addresses.length > 0
+              ? data?.offenderReport?.offenderSummary?.addresses.map(
+                  (address) => ({
+                    label: address.full || '',
+                    key: address.id || '',
+                    position: {
+                      lat: address.geoLat || 0,
+                      lng: address.geoLng || 0,
+                    },
+                  })
+                )
+              : undefined
+          }
+          emptyLabel="No incidents"
+        />
+      </Card>
+    ),
     pageBreak: (
       <div
         className="page-break"
@@ -798,13 +716,11 @@ const PerformanceReportLayout = ({
       layout,
       data,
       loading,
-      businessContributionTableData,
-      userContributionTableData,
-      offendersTableData,
-      crimeGroupPerformanceTableData,
+      incidentsTableData,
       targetedBusinessData,
       targetedGoodsData,
+      isPrinting,
     ]
   );
 };
-export default PerformanceReportLayout;
+export default OffenderReportLayout;
