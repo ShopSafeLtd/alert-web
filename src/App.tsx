@@ -14,6 +14,7 @@ import { configureScope, reactRouterV6Instrumentation } from '@sentry/react';
 import LogRocket from 'logrocket';
 import { BrowserTracing } from '@sentry/tracing';
 import { CaptureConsole } from '@sentry/integrations';
+import mixpanel from 'mixpanel-browser';
 import ApolloProvider from './providers/ApolloProvider';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
@@ -25,6 +26,8 @@ const themes = {
   dark: `/css/dark-theme.css`,
   light: `/css/light-theme.css`,
 };
+
+mixpanel.init(import.meta.env.VITE_MIXPANEL_TOKEN);
 
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,

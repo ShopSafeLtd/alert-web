@@ -5,6 +5,7 @@ import { useCurrentUserLazyQuery } from 'graphql/generated';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect } from 'react';
 import * as Sentry from '@sentry/react';
+import Mixpanel from 'utils/mixpanel';
 
 interface Return {
   rehydrateAuth: () => void;
@@ -96,6 +97,13 @@ const useAuth = (): Return => {
     LogRocket.identify(id, {
       fullName,
       email,
+    });
+
+    Mixpanel.identify(id);
+    Mixpanel.people.set({
+      name: fullName,
+      businessId: businesses[0]?.id,
+      businessName: businesses[0]?.name,
     });
 
     Sentry.setUser({ email, username: fullName, id });
