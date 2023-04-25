@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router';
-import ListVehicles from 'views/Profiles/Vehicles/ListVehicles';
-import ViewVehicle from 'views/Profiles/Vehicles/ViewVehicle';
+import ListVehicles from 'views/profiles/Vehicles/ListVehicles';
+import ViewVehicle from 'views/profiles/Vehicles/ViewVehicle';
 
 const Vehicles = (): JSX.Element => (
   <Routes>

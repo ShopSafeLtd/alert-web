@@ -81,12 +81,11 @@ const useLinkVehicle = ({ onClose, update, vehicleIds }: Props): Return => {
               mode: QueryMode.Insensitive,
             },
           },
-          // {
-          //   reference: {
-          //     contains: search,
-          //     mode: QueryMode.Insensitive,
-          //   },
-          // },
+          {
+            reference: {
+              equals: Number(search),
+            },
+          },
         ],
       },
     },

@@ -1,0 +1,51 @@
+query listTodos(
+  $where: TodoWhereInput
+  $take: Int
+  $skip: Int
+  $orderBy: [TodoOrderBy!]
+) {
+  listTodos(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
+    uncompletedTodos {
+      description
+      dueDate
+      completedDate
+      id
+      name
+      createdBy {
+        id
+        fullName
+      }
+      completedBy {
+        id
+        fullName
+      }
+      assignedUsers {
+        id
+        fullName
+      }
+      completed
+    }
+    completedTodos {
+      description
+      dueDate
+      completedDate
+      id
+      name
+      createdBy {
+        id
+        fullName
+      }
+      completedBy {
+        id
+        fullName
+      }
+      assignedUsers {
+        id
+        fullName
+      }
+      completed
+    }
+    uncompletedTotal
+    completedTotal
+  }
+}

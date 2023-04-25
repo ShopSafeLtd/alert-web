@@ -1,10 +1,11 @@
 import React from 'react';
 import { Badge, Drawer, Tabs, Typography } from 'antd';
-import AddExistingOffender from 'components/form-components/Investigation/AddExistingOffender';
-import AddExistingVehicle from 'components/form-components/Investigation/AddExistingVehicle';
-import LinkIncident from 'components/form-components/Investigation/AddIncident/LinkIncident.container';
-import AddExistingCrimeGroup from 'components/form-components/Investigation/AddExistingCrimeGroup';
+
 import { createUseStyles } from 'react-jss';
+import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
+import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
+import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
+import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import type { ViewInvestigationQuery } from '../../../graphql/generated';
 import Flow from './views/Flow/Flow.container';
 import ViewDetails from './views/Details';
@@ -31,6 +32,10 @@ interface Props {
   crimeGroupIds: string[];
   incidentIds: string[];
   demId: string | undefined | null;
+  submitOffender: (value: string) => void;
+  submitVehicle: (value: string) => void;
+  submitCrimeGroup: (value: string) => void;
+  submitIncident: (value: string) => void;
 }
 
 const useStyles = createUseStyles({
@@ -68,6 +73,10 @@ const ViewInvestigation = ({
   toggleAddDocument,
   addDocument,
   toggleAddDemDocument,
+  submitOffender,
+  submitVehicle,
+  submitCrimeGroup,
+  submitIncident,
 }: Props) => {
   const classes = useStyles();
 
@@ -122,6 +131,7 @@ const ViewInvestigation = ({
           <AddExistingOffender
             offenderIds={offenderIds}
             onClose={toggleAddExistingOffender}
+            update={(submitData) => submitOffender(submitData.id)}
           />
         ) : (
           <div />
@@ -135,9 +145,10 @@ const ViewInvestigation = ({
         zIndex={1001}
       >
         {addExistingVehicle ? (
-          <AddExistingVehicle
-            vehicleIds={vehicleIds}
+          <LinkVehicle
+            update={(submitData) => submitVehicle(submitData.id)}
             onClose={toggleAddExistingVehicle}
+            vehicleIds={vehicleIds}
           />
         ) : (
           <div />
@@ -151,7 +162,8 @@ const ViewInvestigation = ({
         zIndex={1001}
       >
         {addExistingVehicle ? (
-          <AddExistingCrimeGroup
+          <LinkCrimeGroup
+            update={(submitData) => submitCrimeGroup(submitData.id)}
             crimeGroupIds={crimeGroupIds}
             onClose={toggleAddExistingCrimeGroup}
           />
@@ -170,6 +182,7 @@ const ViewInvestigation = ({
           <LinkIncident
             incidentIds={incidentIds}
             onClose={toggleAddExistingIncident}
+            update={(submitData) => submitIncident(submitData.id)}
           />
         ) : (
           <div />

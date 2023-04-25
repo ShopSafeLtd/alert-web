@@ -25,12 +25,12 @@ import type {
   UploadProps,
 } from 'antd/lib/upload/interface';
 import Picker from 'emoji-picker-react';
-import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
+import LinkOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import type {
   CrimeGroupData,
-  IncidentsData,
+  IncidentCardData,
   OffenderData,
   SchemeUserData,
   VehicleData,
@@ -82,12 +82,12 @@ interface Props {
   toggleLinkCrimeGroup: () => void;
   updateFileList: UploadFile[];
   updateForm: FormInstance<FormData>;
-  updateIncidents: IncidentsData;
+  updateIncidents: IncidentCardData[];
   updateInput: string;
-  updateIncidentList: (value: string) => void;
+  updateIncidentList: (value: IncidentCardData) => void;
   updateOffendersList: (value: OffenderData) => void;
   updateVehicleList: (value: VehicleData) => void;
-  updateCrimeGroupList: (value: string) => void;
+  updateCrimeGroupList: (value: CrimeGroupData) => void;
   linkIncident: boolean;
   linkOffender: boolean;
   linkVehicle: boolean;

@@ -1,5 +1,5 @@
 import React from 'react';
-import type { SchemeGroupsQuery, SchemeChatsQuery } from 'graphql/generated';
+
 import { Role } from 'graphql/generated';
 import type { FormInstance } from 'antd';
 import {
@@ -13,35 +13,17 @@ import {
   Typography,
 } from 'antd';
 import DebounceSelect from 'components/form-components/DebounceSelect';
+import type { SelectOptions } from 'types/DataType';
+import type { FormData } from './useAddUser';
 
 const { Title } = Typography;
-
-interface FormData {
-  fullName: string;
-  email: string;
-  business: {
-    value: string;
-    label: string;
-  };
-  role: Role;
-  groups: string[];
-  chats: string[];
-  incidentEmail: boolean;
-  incidentPush: boolean;
-  subscribedIncidentOnly: boolean;
-  subscribedOffenderOnly: boolean;
-  messagePush: boolean;
-  offenderEmail: boolean;
-  offenderPush: boolean;
-  publicName: boolean;
-}
 
 interface Props {
   onSubmit: (value: FormData) => void;
   onClose: () => void;
-  groupsData: SchemeGroupsQuery | undefined;
+  groupsData: SelectOptions[] | undefined;
   groupsLoading: boolean;
-  chatsData: SchemeChatsQuery | undefined;
+  chatsData: SelectOptions[] | undefined;
   chatsLoading: boolean;
   saving: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,6 +35,10 @@ interface Props {
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
   businessProvided: boolean;
   schemeLoading: boolean;
+  selectedRole: Role | undefined;
+  setSelectedRole: (value: Role) => void;
+  selectedGroups: string[] | undefined;
+  setSelectedGroups: (value: string[]) => void;
 }
 
 const AddUser = ({
@@ -69,6 +55,10 @@ const AddUser = ({
   existingUser,
   businessProvided,
   schemeLoading,
+  selectedRole,
+  setSelectedRole,
+  selectedGroups,
+  setSelectedGroups,
 }: Props): JSX.Element => (
   <Form<FormData>
     form={form}
@@ -156,7 +146,10 @@ const AddUser = ({
             { required: true, message: 'Please select a role for the user.' },
           ]}
         >
-          <Select disabled={saving}>
+          <Select
+            disabled={saving}
+            onChange={(value) => setSelectedRole(value)}
+          >
             <Select.Option key={Role.User} value={Role.User}>
               <Typography.Text>User</Typography.Text>
               <Typography.Paragraph
@@ -209,21 +202,13 @@ const AddUser = ({
           <Select
             loading={groupsLoading}
             disabled={saving}
+            onChange={(value) => setSelectedGroups(value)}
             mode="multiple"
-            maxTagCount={2}
-            options={groupsData?.groups.map((group) => ({
-              value: group.id,
-              label: group.name,
-            }))}
+            maxTagCount={3}
+            options={groupsData}
             optionFilterProp="label"
             optionLabelProp="label"
-          >
-            {groupsData?.groups.map((group) => (
-              <Select.Option key={group.id} value={group.id}>
-                {group.name}
-              </Select.Option>
-            ))}
-          </Select>
+          />
         </Form.Item>
       </Col>
       <Col span={12}>
@@ -232,17 +217,35 @@ const AddUser = ({
             loading={chatsLoading}
             disabled={saving}
             mode="multiple"
-            maxTagCount={2}
-            options={chatsData?.chats.map((chat) => ({
-              value: chat.id,
-              label: chat.name,
-            }))}
+            maxTagCount={3}
+            options={chatsData}
             optionFilterProp="label"
             optionLabelProp="label"
           />
         </Form.Item>
       </Col>
     </Row>
+    {selectedRole === Role.SchemeAdmin &&
+      selectedGroups &&
+      selectedGroups.length > 0 && (
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item name="approverGroups" label="Approver Groups">
+              <Select
+                loading={chatsLoading}
+                disabled={saving}
+                mode="multiple"
+                maxTagCount={3}
+                options={groupsData?.filter(({ value }) =>
+                  selectedGroups.includes(value)
+                )}
+                optionFilterProp="label"
+                optionLabelProp="label"
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+      )}
 
     <Form.Item
       label="Show user name in the system"

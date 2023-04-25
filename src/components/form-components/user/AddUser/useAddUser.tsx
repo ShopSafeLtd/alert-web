@@ -3,8 +3,6 @@ import type {
   CreateUserInDatabaseMutation,
   InviteExistingUserMutation,
   Role,
-  SchemeChatsQuery,
-  SchemeGroupsQuery,
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
 } from 'graphql/generated';
@@ -24,17 +22,15 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import { useApolloClient } from '@apollo/client';
 import type { FormInstance } from 'antd';
 import { Form, Modal, notification, Typography } from 'antd';
+import type { SelectOptions } from 'types/DataType';
 
 const { confirm } = Modal;
 const { useForm } = Form;
 
-interface FormData {
+export interface FormData {
   fullName: string;
   email: string;
-  business: {
-    value: string;
-    label: string;
-  };
+  business: SelectOptions;
   role: Role;
   groups: string[];
   chats: string[];
@@ -46,6 +42,7 @@ interface FormData {
   offenderEmail: boolean;
   offenderPush: boolean;
   publicName: boolean;
+  approverGroups: string[];
 }
 
 interface Props {
@@ -60,9 +57,9 @@ interface Props {
 
 interface Return {
   onSubmit: (value: FormData) => void;
-  groupsData: SchemeGroupsQuery | undefined;
+  groupsData: SelectOptions[] | undefined;
   groupsLoading: boolean;
-  chatsData: SchemeChatsQuery | undefined;
+  chatsData: SelectOptions[] | undefined;
   chatsLoading: boolean;
   schemeLoading: boolean;
   saving: boolean;
@@ -73,6 +70,10 @@ interface Return {
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
+  selectedRole: Role | undefined;
+  setSelectedRole: (value: Role) => void;
+  selectedGroups: string[] | undefined;
+  setSelectedGroups: (value: string[]) => void;
 }
 
 const errorNotification = () =>
@@ -95,6 +96,8 @@ const useAddUser = ({
   const [existingUser, setExistingUser] = useState(false);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState<string | null>(null);
+  const [selectedRole, setSelectedRole] = useState<Role>();
+  const [selectedGroups, setSelectedGroups] = useState<string[]>();
 
   useEffect(() => {
     form.setFieldsValue({
@@ -225,6 +228,10 @@ const useAddUser = ({
           },
           data: {
             groups: { connect: data.groups.map((id) => ({ id })) },
+            approverGroups:
+              data.approverGroups && data.approverGroups.length > 0
+                ? { connect: data.approverGroups.map((id) => ({ id })) }
+                : undefined,
             chats:
               data.chats.length > 0
                 ? {
@@ -263,6 +270,7 @@ const useAddUser = ({
             email: data.email,
             fullName: data.fullName,
             groups: data.groups.map((id) => ({ id })),
+            approverGroups: data.approverGroups.map((id) => ({ id })),
             role: data.role,
             publicName: data.publicName,
             incidentEmail: data.incidentEmail,
@@ -345,9 +353,15 @@ const useAddUser = ({
 
   return {
     onSubmit,
-    groupsData,
+    groupsData: groupsData?.groups.map((group) => ({
+      value: group.id,
+      label: group.name,
+    })),
     groupsLoading,
-    chatsData,
+    chatsData: chatsData?.chats.map((chat) => ({
+      value: chat.id,
+      label: chat.name,
+    })),
     chatsLoading,
     saving,
     onValuesChange,
@@ -355,6 +369,10 @@ const useAddUser = ({
     existingUser,
     onSearchBusiness,
     schemeLoading,
+    selectedRole,
+    setSelectedRole,
+    selectedGroups,
+    setSelectedGroups,
   };
 };
 

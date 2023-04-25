@@ -187,6 +187,15 @@ const userDetail = ({
                 )) || 'No Groups'}
               </Row>
             </Descriptions.Item>
+            <Descriptions.Item label="Approver Groups">
+              <Row gutter={[0, 8]}>
+                {data?.user?.approverGroups.map(({ name, id }) => (
+                  <Col key={id}>
+                    <Tag color="blue">{name}</Tag>
+                  </Col>
+                )) || 'No Approver Groups'}
+              </Row>
+            </Descriptions.Item>
             <Descriptions.Item label="Chat Groups">
               <Row gutter={[0, 8]}>
                 {data?.user?.chats

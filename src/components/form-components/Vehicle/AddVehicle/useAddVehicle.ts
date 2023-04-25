@@ -1,19 +1,11 @@
 import { useState } from 'react';
-import type {
-  ListCrimeGroupsQuery,
-  ListIncidentsQuery,
-} from 'graphql/generated';
-import {
-  useListCrimeGroupsQuery,
-  SortOrder,
-  useListIncidentsQuery,
-  Role,
-} from 'graphql/generated';
+import type { ListCrimeGroupsQuery } from 'graphql/generated';
+import { useListCrimeGroupsQuery, Role } from 'graphql/generated';
 import { message, Upload } from 'antd';
 import { useStoreState } from 'state';
 import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import type { VehicleData } from 'types/DataType';
+import type { IncidentCardData, VehicleData } from 'types/DataType';
 
 interface Props {
   update: (value: VehicleData) => void;
@@ -25,17 +17,13 @@ interface Return {
   CrimeGroupsData: ListCrimeGroupsQuery | undefined;
   CrimeGroupsLoading: boolean;
   offendersData: OffenderData[];
-  incidentsData:
-    | Exclude<
-        ListIncidentsQuery['listIncidents'],
-        undefined | null
-      >['incidents'];
+  incidentsData: IncidentCardData[];
   linkIncident: boolean;
   linkOffender: boolean;
   toggleLinkIncident: () => void;
   toggleLinkOffender: () => void;
   updateOffendersList: (value: OffenderData) => void;
-  updateIncidentList: (value: string) => void;
+  updateIncidentList: (value: IncidentCardData) => void;
   removeOffender: (value: string | undefined) => void;
   removeIncident: (value: string | undefined) => void;
   adminRights: boolean;
@@ -50,9 +38,7 @@ const useAddVehicle = ({ update, onClose }: Props): Return => {
   const [linkIncident, setLinkIncident] = useState(false);
   const [linkOffender, setLinkOffender] = useState(false);
   const [offendersData, setOffendersData] = useState<OffenderData[]>([]);
-  const [incidentsData, setIncidentsData] = useState<
-    Exclude<ListIncidentsQuery['listIncidents'], undefined | null>['incidents']
-  >([]);
+  const [incidentsData, setIncidentsData] = useState<IncidentCardData[]>([]);
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [imageChange, setImageChange] = useState(false);
 
@@ -72,54 +58,8 @@ const useAddVehicle = ({ update, onClose }: Props): Return => {
         },
       },
     });
-  const { data: listIncidentsData } = useListIncidentsQuery({
-    variables: {
-      scheme: {
-        id: schemeId,
-      },
-      order: {
-        createdAt: SortOrder.Desc,
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-  });
 
   const onSubmit = (data: VehicleData) => {
-    // createVehicle({
-    //   variables: {
-    //     data: {
-    //       make: data.make || '',
-    //       model: data.model || '',
-    //       colour: data.colour || '',
-    //       registration: data.registration || '',
-    //       crimeGroup:
-    //         data?.crimeGroup && data.crimeGroup.length > 0
-    //           ? data?.crimeGroup?.map((id) => ({ id }))
-    //           : [],
-    //       incidents:
-    //         incidentsData && incidentsData.length > 0
-    //           ? incidentsData.map(({ id }) => ({ id }))
-    //           : [],
-    //       offenders:
-    //         offendersData && offendersData.length > 0
-    //           ? offendersData.map(({ id }) => ({ id }))
-    //           : [],
-    //       schemes: schemeId,
-    //       image: {
-    //         upload:
-    //           imageChange && fileList.length > 0
-    //             ? fileList.map((item) => ({
-    //                 url: {
-    //                   filename: item.fileName || '',
-    //                   mimetype: item.type || '',
-    //                   url: item.url || '',
-    //                 },
-    //               }))
-    //             : undefined,
-    //       },
-    //     },
-    //   },
-    // });
     update({
       id: Math.floor(Math.random() * 1000).toString(),
       make: data.make || '',
@@ -163,16 +103,9 @@ const useAddVehicle = ({ update, onClose }: Props): Return => {
       setOffendersData([...offendersData, selectedOffender]);
     }
   };
-  const updateIncidentList = (selectedIncidentId: string) => {
-    if (
-      listIncidentsData?.listIncidents?.incidents &&
-      listIncidentsData.listIncidents.total > 0
-    ) {
-      const selectedIncident =
-        listIncidentsData?.listIncidents?.incidents.filter(
-          ({ id }) => id === selectedIncidentId
-        );
-      setIncidentsData([...incidentsData, ...selectedIncident]);
+  const updateIncidentList = (selectedIncident: IncidentCardData) => {
+    if (selectedIncident) {
+      setIncidentsData([...incidentsData, selectedIncident]);
     }
   };
   const removeOffender = (offenderId: string | undefined) => {

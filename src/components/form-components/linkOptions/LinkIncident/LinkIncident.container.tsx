@@ -1,4 +1,5 @@
 import React from 'react';
+import type { IncidentCardData } from 'types/DataType';
 import View from './LinkIncident.view';
 import useLinkIncident from './useLinkIncident';
 import type { ListIncidentsQuery } from '../../../../graphql/generated';
@@ -13,7 +14,7 @@ export interface Incident {
 interface Props {
   onClose: () => void;
   incidentIds: string[] | undefined;
-  update?: (value: string) => void;
+  update?: (value: IncidentCardData) => void;
   getIncident?: (value: Incident) => void;
 }
 const LinkIncident = ({

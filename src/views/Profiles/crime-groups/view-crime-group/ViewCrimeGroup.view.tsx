@@ -28,19 +28,19 @@ import {
   faPlus,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
-import AddExistingOffender from 'components/form-components/crimeGroup/offender/AddExistingOffender';
-import AddNewOffender from 'components/form-components/crimeGroup/offender/AddNewOffender';
-import AddExistingVehicle from 'components/form-components/crimeGroup/vehicle/AddExistingVehicle';
+import AddOffender from 'components/form-components/offender/offender/AddNewOffender';
 import AddAlias from 'components/form-components/crimeGroup/Alias';
 import UpdateContent from 'views/incidents/ViewIncident/Update.view';
 import UpdateBar from 'components/MessageInput/UpdateBar';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import type { VehicleData } from 'types/DataType';
+import type { OffenderData, VehicleData } from 'types/DataType';
 import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
 
 import VehicleTable from 'components/tables/VehicleTable';
 import OffenderTable from 'components/tables/OffenderTable';
 import IncidentTable from 'components/tables/IncidentTable';
+import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
+import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import useStyles from './ViewCrimeGroup.styles';
 
 const { Title } = Typography;
@@ -92,6 +92,9 @@ interface Props {
   toggleSubscribe: () => void;
   crimeGroupId: string;
   submitNewVehicle: (value: VehicleData) => void;
+  submitOffender: (value: string) => void;
+  submitVehicle: (value: string) => void;
+  submitNewOffender: (value: OffenderData) => void;
 }
 
 const ViewCrimeGroup = ({
@@ -128,6 +131,9 @@ const ViewCrimeGroup = ({
   toggleSubscribe,
   crimeGroupId,
   submitNewVehicle,
+  submitOffender,
+  submitVehicle,
+  submitNewOffender,
 }: Props) => {
   const classes = useStyles();
 
@@ -690,7 +696,15 @@ const ViewCrimeGroup = ({
         onClose={toggleAddOffender}
         zIndex={1001}
       >
-        {addOffender ? <AddNewOffender onClose={toggleAddOffender} /> : <div />}
+        {addOffender ? (
+          <AddOffender
+            update={submitNewOffender}
+            onClose={toggleAddOffender}
+            // saving={saving}
+          />
+        ) : (
+          <div />
+        )}
       </Drawer>
       <Drawer
         title="Add Existing Offenders"
@@ -703,6 +717,7 @@ const ViewCrimeGroup = ({
           <AddExistingOffender
             offenderIds={offenderIds}
             onClose={toggleAddExistingOffender}
+            update={(submitData) => submitOffender(submitData.id)}
           />
         ) : (
           <div />
@@ -734,9 +749,10 @@ const ViewCrimeGroup = ({
         zIndex={1001}
       >
         {addExistingVehicle ? (
-          <AddExistingVehicle
-            vehicleIds={vehicleIds}
+          <LinkVehicle
+            update={(submitData) => submitVehicle(submitData.id)}
             onClose={toggleAddExistingVehicle}
+            vehicleIds={vehicleIds}
           />
         ) : (
           <div />

@@ -1,0 +1,19 @@
+mutation CreateTodo($data: TodoCreateInput!) {
+  createTodo(data: $data) {
+    description
+    dueDate
+    completedDate
+    completed
+    id
+    name
+    createdBy {
+      id
+      fullName
+    }
+
+    assignedUsers {
+      id
+      fullName
+    }
+  }
+}

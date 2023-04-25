@@ -41,12 +41,12 @@ import { MessageItemType } from 'graphql/generated';
 import { faCircleXmark, faUser } from '@fortawesome/pro-solid-svg-icons';
 import AddUserChat from 'components/form-components/userChat/ManageChatMember';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
+import LinkOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import type {
   CrimeGroupData,
-  IncidentsData,
+  IncidentCardData,
   VehicleData,
 } from 'types/DataType';
 import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
@@ -98,7 +98,7 @@ interface OffenderData {
 // }
 interface MemberData {
   id: string;
-  fullName: string;
+  origName: string;
   businesses: { id: string; name: string }[];
   firstLetter?: string | null;
 }
@@ -127,7 +127,7 @@ interface Props {
   beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
   offendersData: OffenderData[];
-  incidentsData: IncidentsData;
+  incidentsData: IncidentCardData[];
   crimeGroupsData: CrimeGroupData[];
   vehiclesData: VehicleData[];
   linkIncident: boolean;
@@ -139,9 +139,9 @@ interface Props {
   toggleLinkVehicle: () => void;
   toggleLinkCrimeGroup: () => void;
   updateOffendersList: (value: OffenderData) => void;
-  updateIncidentList: (value: string) => void;
+  updateIncidentList: (value: IncidentCardData) => void;
   updateVehicleList: (value: VehicleData) => void;
-  updateCrimeGroupList: (value: string) => void;
+  updateCrimeGroupList: (value: CrimeGroupData) => void;
   removeOffender: (value: string | undefined) => void;
   removeIncident: (value: string | undefined) => void;
   removeCrimeGroup: (value: string | undefined) => void;
@@ -514,21 +514,21 @@ const ViewMessages = ({
                   mentions
                     .map((mention) =>
                       membersData?.find(
-                        (member) => mention.value === member.fullName
+                        (member) => mention.value === member.origName
                       )
                     )
                     .map((item) => ({
                       id: item?.id || '',
-                      value: item?.fullName || '',
+                      value: item?.origName || '',
                     }))
                     .filter((item) => item.value !== '')
                 );
               }}
               prefix="@"
             >
-              {membersData?.map(({ id, fullName, businesses }) => (
-                <Option key={id} value={fullName.replace(' ', '_')}>
-                  {fullName} ({businesses[0]?.name})
+              {membersData?.map(({ id, origName, businesses }) => (
+                <Option key={id} value={origName.replace(' ', '_')}>
+                  {origName} ({businesses[0]?.name})
                 </Option>
               ))}
             </Mentions>

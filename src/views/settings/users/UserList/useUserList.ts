@@ -81,7 +81,7 @@ const useUserList = (): Return => {
       fullName: SortOrder.Asc,
     },
     [UserSort.nameDesc]: {
-      fullName: SortOrder.Desc,
+      fullName: SortOrder.Asc,
     },
   };
 

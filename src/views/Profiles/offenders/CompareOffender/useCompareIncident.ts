@@ -9,7 +9,7 @@ import {
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import type { OffenderData } from 'components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
+import type { OffenderData } from 'components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 
 type Offender = Exclude<ViewOffenderCompareQuery['offender'], undefined | null>;
 export type OffenderField =

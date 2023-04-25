@@ -2,6 +2,7 @@ query currentUser {
   currentUser {
     id
     fullName
+    origName
     email
     reference
     demId
@@ -33,6 +34,7 @@ query currentUser {
         name
         autoApproveIncidents
         autoApproveOffenders
+        defaultPublicOffenderDOB
       }
     }
     incidentEmail

@@ -7,6 +7,7 @@ export interface SetUserPayload {
   id: string;
   email: string;
   fullName: string;
+  origName: string;
   reference: string;
   onboarded: boolean;
   businesses: { name: string; id: string; demId?: string | null | undefined }[];
@@ -35,6 +36,7 @@ export interface Scheme {
     name: string;
     autoApproveIncidents: boolean;
     autoApproveOffenders: boolean;
+    defaultPublicOffenderDOB: boolean;
     logo?:
       | {
           optimisedPersisted?: string | null | undefined;
@@ -54,13 +56,13 @@ export interface UserModel {
   id: string;
   email: string;
   fullName: string;
+  origName: string;
   reference: string;
   picture: string;
   businesses: { name: string; id: string; demId?: string | null | undefined }[];
   onboarded: boolean;
   schemes: Scheme[];
   demId: string | null | undefined;
-
   groups: {
     id: string;
     name: string;
@@ -79,6 +81,7 @@ const userModel: UserModel = {
   id: '',
   email: '',
   fullName: '',
+  origName: '',
   reference: '',
   picture: '',
   businesses: [],
@@ -93,6 +96,7 @@ const userModel: UserModel = {
     state.id = payload.id;
     state.email = payload.email;
     state.fullName = payload.fullName;
+    state.origName = payload.origName;
     state.onboarded = payload.onboarded;
     state.businesses = payload.businesses;
     state.schemes = payload.schemes;
@@ -108,6 +112,7 @@ const userModel: UserModel = {
     state.id = '';
     state.email = '';
     state.fullName = '';
+    state.origName = '';
     state.picture = '';
     state.businesses = [];
     state.onboarded = false;

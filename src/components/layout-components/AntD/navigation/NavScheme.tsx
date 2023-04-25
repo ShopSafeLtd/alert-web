@@ -44,6 +44,7 @@ export const NavScheme = () => {
     setScheme({
       autoApproveIncidents: scheme.scheme.autoApproveIncidents,
       autoApproveOffenders: scheme.scheme.autoApproveOffenders,
+      defaultPublicOffenderDOB: scheme.scheme.defaultPublicOffenderDOB,
       id: scheme.scheme.id,
       name: scheme.scheme.name,
       logo: scheme.scheme.logo?.optimisedPersisted,

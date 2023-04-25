@@ -41,6 +41,7 @@ import WatermarkImage from 'components/images/WatermarkImage.view';
 import OffenderTable from 'components/tables/OffenderTable';
 import CrimeGroupTable from 'components/tables/CrimeGroupTable';
 import IncidentTable from 'components/tables/IncidentTable';
+import type { VehicleData } from 'types/DataType';
 import useStyles from './ViewVehicle.styles';
 
 const { Title } = Typography;
@@ -91,6 +92,7 @@ interface Props {
   editRights: boolean;
   vehicleId: string;
   toggleSubscribe: () => void;
+  submitEditVehicle: (value: VehicleData) => void;
 }
 
 const ViewVehicle = ({
@@ -119,6 +121,7 @@ const ViewVehicle = ({
   confirmDeleteUpdate,
   vehicleId,
   toggleSubscribe,
+  submitEditVehicle,
 }: Props) => {
   const classes = useStyles();
   const optionMenuItems = [
@@ -608,7 +611,21 @@ const ViewVehicle = ({
           width="600"
           onClose={toggleEditVehicle}
         >
-          {editVehicle ? <EditVehicle onClose={toggleEditVehicle} /> : <div />}
+          {editVehicle ? (
+            <EditVehicle
+              onClose={toggleEditVehicle}
+              update={submitEditVehicle}
+              editData={{
+                ...data?.vehicle,
+                id: data?.vehicle?.id || '',
+                crimeGroup: data?.vehicle?.crimeGroup.map(({ id }) => id || ''),
+                incidents: data?.vehicle?.incidents.map(({ id }) => id || ''),
+                offenders: data?.vehicle?.offenders.map(({ id }) => id || ''),
+              }}
+            />
+          ) : (
+            <div />
+          )}
         </Drawer>
         <Modal
           title="Edit Update Content"

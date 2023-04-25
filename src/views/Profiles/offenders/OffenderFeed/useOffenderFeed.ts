@@ -171,12 +171,11 @@ const useOffenderFeed = (): Return => {
             mode: QueryMode.Insensitive,
           },
         },
-        // {
-        //   alias: {
-        //     has: variables.search,
-        //     mode: QueryMode.Insensitive,
-        //   },
-        // },
+        {
+          alias: {
+            hasSome: [variables.search],
+          },
+        },
         {
           reference: {
             equals: Number(variables.search),

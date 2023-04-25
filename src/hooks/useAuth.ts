@@ -45,6 +45,7 @@ const useAuth = (): Return => {
     id,
     accessToken,
     fullName,
+    origName,
     email,
     businesses,
     onboarded,
@@ -62,6 +63,7 @@ const useAuth = (): Return => {
       setScheme({
         autoApproveIncidents: schemeDetails?.autoApproveIncidents,
         autoApproveOffenders: schemeDetails?.autoApproveOffenders,
+        defaultPublicOffenderDOB: schemeDetails?.defaultPublicOffenderDOB,
         id: schemeDetails?.id,
         name: schemeDetails?.name,
         logo: schemeDetails?.logo?.optimisedPersisted,
@@ -82,6 +84,8 @@ const useAuth = (): Return => {
         setScheme({
           autoApproveIncidents: schemeDetails.scheme.autoApproveIncidents,
           autoApproveOffenders: schemeDetails.scheme.autoApproveOffenders,
+          defaultPublicOffenderDOB:
+            schemeDetails.scheme.defaultPublicOffenderDOB,
           id: schemeDetails.scheme.id,
           name: schemeDetails.scheme.name,
           logo: schemeDetails.scheme.logo?.optimisedPersisted,
@@ -112,6 +116,7 @@ const useAuth = (): Return => {
       id,
       email,
       fullName,
+      origName,
       businesses,
       onboarded,
       schemes,
@@ -151,6 +156,7 @@ const useAuth = (): Return => {
         id: currentUser?.id || '',
         email: currentUser?.email || '',
         fullName: currentUser?.fullName || '',
+        origName: currentUser?.origName || '',
         accessToken: window.localStorage.getItem('access_token') || '',
         businesses: currentUser?.businesses || [],
         onboarded: !currentUser?.newUser,
@@ -224,6 +230,7 @@ const useAuth = (): Return => {
       accessToken: data.accessToken,
       email: data.email,
       fullName: data.fullName,
+      origName: data.origName,
       onboarded: data.onboarded,
       businesses: data.businesses,
       schemes: data.schemes,

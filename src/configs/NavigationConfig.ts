@@ -2,6 +2,7 @@ import { APP_PREFIX_PATH } from 'configs/AppConfig';
 import {
   faAddressCard,
   faBuilding,
+  faCalendarCheck,
   faCar,
   faChalkboard,
   faCircleExclamation,
@@ -51,6 +52,15 @@ const userOnlyItems: NavItem[] = [
     path: `${APP_PREFIX_PATH}/dashboard`,
     title: 'Dashboard',
     icon: faHome,
+    breadcrumb: false,
+    submenu: [],
+    roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
+  },
+  {
+    key: 'adminTodo',
+    path: `${APP_PREFIX_PATH}/adminTodo`,
+    title: 'Admin To-DO',
+    icon: faCalendarCheck,
     breadcrumb: false,
     submenu: [],
     roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],

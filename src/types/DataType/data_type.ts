@@ -52,6 +52,7 @@ export interface OffenderData {
 
 export interface OffenderCardData {
   id: string;
+  reference?: number | null;
   updatedAt?: Date | undefined;
   name?: string | null;
   images?: Array<{
@@ -67,7 +68,8 @@ export type IncidentsData =
   | undefined;
 
 export interface IncidentCardData {
-  id?: string;
+  id: string;
+  reference?: number | null;
   subject?: string | null;
   description: string;
   dayTime?: string | null;

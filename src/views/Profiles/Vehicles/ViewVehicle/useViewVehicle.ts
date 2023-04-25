@@ -2,6 +2,7 @@ import { Modal, notification } from 'antd';
 
 import type { VehicleQuery, VehicleQueryVariables } from 'graphql/generated';
 import {
+  useUpdateVehicleMutation,
   useVehicleQuery,
   useDeleteVehicleMutation,
   useDeleteUpdateMutation,
@@ -14,6 +15,8 @@ import {
 import { useEffect, useState } from 'react';
 import update from 'immutability-helper';
 import { useStoreState } from 'state';
+import errorNotification from 'types/error_notification';
+import type { VehicleData } from 'types/DataType';
 
 const { confirm } = Modal;
 
@@ -60,11 +63,13 @@ interface Return {
   // optionMenuItems: ItemType[];
   editRights: boolean;
   toggleSubscribe: () => void;
+  submitEditVehicle: (value: VehicleData) => void;
 }
 
 const useViewVehicle = (vehicleId: string): Return => {
   const userId = useStoreState((state) => state.user.id);
   const role = useStoreState((state) => state.user.role);
+  const schemeId = useStoreState((state) => state.scheme.id);
 
   const [saving, setSaving] = useState(false);
   const [editVehicle, setEditVehicle] = useState(false);
@@ -95,7 +100,7 @@ const useViewVehicle = (vehicleId: string): Return => {
     if (editUpdate) setEditUpdateInput(editUpdate.text);
   }, [editUpdate]);
 
-  const { data, loading } = useVehicleQuery({
+  const { data: vehicleData, loading } = useVehicleQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
       where: {
@@ -110,6 +115,74 @@ const useViewVehicle = (vehicleId: string): Return => {
       );
     },
   });
+  const [updateVehicle] = useUpdateVehicleMutation({
+    onCompleted: () => {
+      setSaving(false);
+      notification.success({
+        message: 'Successfully Updated!',
+        description: 'The vehicle has been updated! ',
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      setSaving(false);
+      errorNotification();
+    },
+  });
+
+  const submitEditVehicle = (data: VehicleData) => {
+    setSaving(true);
+    updateVehicle({
+      variables: {
+        where: {
+          id: vehicleId,
+        },
+        data: {
+          make: data.make || '',
+          model: data.model || '',
+          colour: data.colour || '',
+          registration: data.registration || '',
+          crimeGroup:
+            data?.crimeGroup && data.crimeGroup.length > 0
+              ? data?.crimeGroup?.map((id) => ({ id }))
+              : [],
+          incidents:
+            data.incidents && data.incidents.length > 0
+              ? data.incidents.map((id) => ({ id }))
+              : [],
+          offenders:
+            data.offenders && data.offenders.length > 0
+              ? data.offenders.map((id) => ({ id }))
+              : [],
+          schemes: schemeId,
+          image: {
+            upload:
+              data.images && data.images.length > 0
+                ? data.images.map((item) => ({
+                    url: {
+                      filename: item.fileName || '',
+                      mimetype: item.type || '',
+                      url: item.url || '',
+                    },
+                  }))
+                : undefined,
+            disconnect:
+              vehicleData?.vehicle?.images &&
+              vehicleData.vehicle.images.length > 0
+                ? vehicleData.vehicle.images
+                    .filter(
+                      (image) =>
+                        !data?.images?.map((item) => item.id).includes(image.id)
+                    )
+                    .map(({ id }) => ({
+                      id,
+                    }))
+                : [],
+          },
+        },
+      },
+    });
+  };
   const [deleteVehicle] = useDeleteVehicleMutation({
     onCompleted: () => {
       setSaving(false);
@@ -260,7 +333,7 @@ const useViewVehicle = (vehicleId: string): Return => {
   const [unsubscribeFromVehicle] = useUnsubscribeToVehicleMutation();
 
   const toggleSubscribe = () => {
-    if (data?.vehicle?.subscribed) {
+    if (vehicleData?.vehicle?.subscribed) {
       unsubscribeFromVehicle({
         variables: {
           where: { id: vehicleId },
@@ -301,8 +374,8 @@ const useViewVehicle = (vehicleId: string): Return => {
     setLightBoxOpen({ open: !lightBoxOpen.open, index });
   };
   return {
-    data,
-    loading: (data === null || data === undefined) && loading,
+    data: vehicleData,
+    loading: (vehicleData === null || vehicleData === undefined) && loading,
     editVehicle,
     toggleEditVehicle,
     saving,
@@ -325,6 +398,7 @@ const useViewVehicle = (vehicleId: string): Return => {
     loadMore,
     confirmDeleteUpdate,
     toggleSubscribe,
+    submitEditVehicle,
     // optionMenuItems,
   };
 };

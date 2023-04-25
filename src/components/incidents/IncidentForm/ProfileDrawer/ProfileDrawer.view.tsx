@@ -1,13 +1,12 @@
 import React from 'react';
 import { Drawer } from 'antd';
-import AddOffender from 'components/form-components/incident/offender/AddNewOffender';
-import AddExistingOffender from 'components/form-components/incident/offender/AddExistingOffender';
-import EditOffender from 'components/form-components/incident/offender/EditOffender';
-
-import EditVehicle from 'components/form-components/profiles/vehicle/EditVehicle';
+import AddOffender from 'components/form-components/offender/offender/AddNewOffender';
+import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
+import EditOffender from 'components/form-components/offender/offender/EditOffender';
 import type { OffenderData, VehicleData } from 'types/DataType';
 import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
+import EditVehicle from 'components/form-components/Vehicle/EditVehicle';
 
 interface Props {
   addExistingOffender: boolean;

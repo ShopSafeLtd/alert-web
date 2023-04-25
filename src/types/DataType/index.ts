@@ -1,3 +1,3 @@
 export * from './data_type';
 
-export * from './pagination_model';
+export * from './formate_type';

@@ -852,7 +852,7 @@ const ViewOffender = ({
       >
         {linkIncident ? (
           <LinkIncident
-            update={updateIncidentList}
+            update={(value) => updateIncidentList(value.id || '')}
             onClose={toggleLinkIncident}
             incidentIds={data?.offender?.incidents.map(({ id }) => id) || []}
           />

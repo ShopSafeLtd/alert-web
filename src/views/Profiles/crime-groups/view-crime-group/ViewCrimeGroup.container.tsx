@@ -39,6 +39,9 @@ const ViewCrimeGroup = () => {
     confirmDeleteUpdate,
     toggleSubscribe,
     submitNewVehicle,
+    submitOffender,
+    submitVehicle,
+    submitNewOffender,
   } = useViewCrimeGroup(crimeGroupId);
 
   return (
@@ -76,6 +79,9 @@ const ViewCrimeGroup = () => {
       crimeGroupId={crimeGroupId}
       toggleSubscribe={toggleSubscribe}
       submitNewVehicle={submitNewVehicle}
+      submitOffender={submitOffender}
+      submitVehicle={submitVehicle}
+      submitNewOffender={submitNewOffender}
     />
   );
 };

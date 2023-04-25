@@ -17,7 +17,8 @@ import {
 import { useEffect, useState } from 'react';
 import update from 'immutability-helper';
 import { useStoreState } from 'state';
-import type { VehicleData } from 'types/DataType';
+import type { OffenderData, VehicleData } from 'types/DataType';
+import errorNotification from 'types/error_notification';
 
 const { confirm } = Modal;
 interface Return {
@@ -65,11 +66,15 @@ interface Return {
   editRights: boolean;
   toggleSubscribe: () => void;
   submitNewVehicle: (value: VehicleData) => void;
+  submitOffender: (value: string) => void;
+  submitVehicle: (value: string) => void;
+  submitNewOffender: (value: OffenderData) => void;
 }
 
 const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const userId = useStoreState((state) => state.user.id);
   const role = useStoreState((state) => state.user.role);
+  const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
   const [addOffender, setAddOffender] = useState(false);
   const [addExistingOffender, setAddExistingOffender] = useState(false);
@@ -136,20 +141,90 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
       toggleAddNewVehicle();
       notification.success({
         message: 'Successfully Updated!',
-        description: 'The vehicle has been added to the crime group! ',
+        description: 'The crime group has been updated!',
         placement: 'bottomRight',
       });
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
-
+  const submitNewOffender = (data: OffenderData) => {
+    setSaving(true);
+    updateCrimeGroup({
+      variables: {
+        where: {
+          id: crimeGroupId,
+        },
+        data: {
+          offenders: {
+            create: [
+              {
+                name: data.name,
+                gender: data.gender || null,
+                race: data.race || null,
+                build: data.build || null,
+                hair: data.hair || null,
+                peculiarities: data.peculiarities || null,
+                age: data.age || null,
+                dateSource: data.dateSource || null,
+                dateOfBirth: data.dateOfBirth || null,
+                createdBy: { connect: { id: userId } },
+                scheme: { connect: { id: schemeId } },
+                images: {
+                  upload:
+                    data.images && data.images.length > 0
+                      ? data.images.map((item) => ({
+                          url: {
+                            filename: item.fileName || '',
+                            mimetype: item.type || '',
+                            url: item.url || '',
+                          },
+                        }))
+                      : undefined,
+                },
+              },
+            ],
+          },
+        },
+      },
+    });
+  };
+  const submitOffender = (value: string) => {
+    setSaving(true);
+    if (value) {
+      updateCrimeGroup({
+        variables: {
+          where: {
+            id: crimeGroupId,
+          },
+          data: {
+            offenders: {
+              connect: [{ id: value }],
+            },
+          },
+        },
+      });
+    }
+  };
+  const submitVehicle = (value: string) => {
+    setSaving(true);
+    if (value) {
+      updateCrimeGroup({
+        variables: {
+          where: {
+            id: crimeGroupId,
+          },
+          data: {
+            vehicles: {
+              connect: [{ id: value }],
+            },
+          },
+        },
+      });
+    }
+  };
   const submitNewVehicle = (data: VehicleData) => {
     setSaving(true);
     updateCrimeGroup({
@@ -184,6 +259,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
       },
     });
   };
+
   const [deleteCrimeGroup] = useDeleteCrimeGroupMutation({
     onCompleted: () => {
       setSaving(false);
@@ -405,6 +481,9 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     confirmDeleteUpdate,
     toggleSubscribe,
     submitNewVehicle,
+    submitOffender,
+    submitVehicle,
+    submitNewOffender,
   };
 };
 

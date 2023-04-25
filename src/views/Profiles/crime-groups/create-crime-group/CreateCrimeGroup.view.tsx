@@ -16,7 +16,7 @@ import type {
   SearchOffendersQuery,
 } from 'graphql/generated';
 import { Age, Build, Gender, Race } from 'graphql/generated';
-import AddExisitingOffender from 'components/form-components/incident/offender/AddExistingOffender';
+import AddExisitingOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import {
   getAge,
   getBuild,

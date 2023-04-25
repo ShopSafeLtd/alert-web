@@ -31,6 +31,7 @@ const ViewVehicle = () => {
     loadMore,
     confirmDeleteUpdate,
     toggleSubscribe,
+    submitEditVehicle,
   } = useViewVehicle(vehicleId);
 
   return (
@@ -60,6 +61,7 @@ const ViewVehicle = () => {
       editRights={editRights}
       vehicleId={vehicleId}
       toggleSubscribe={toggleSubscribe}
+      submitEditVehicle={submitEditVehicle}
     />
   );
 };

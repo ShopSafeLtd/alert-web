@@ -14,43 +14,35 @@ import {
   Tooltip,
   Upload,
 } from 'antd';
-import type {
-  ListCrimeGroupsQuery,
-  ListIncidentsQuery,
-  VehicleQuery,
-} from 'graphql/generated';
+import type { ListCrimeGroupsQuery } from 'graphql/generated';
 import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
-import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
+import LinkOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-import type { VehicleData } from './useEditVehicle';
+import type { IncidentCardData, VehicleData } from 'types/DataType';
+
 import useStyles from './EditVehicle.styles';
 
 const { confirm } = Modal;
 
 interface Props {
   onClose: () => void;
-  data: VehicleQuery | undefined;
-  loading: boolean;
+  editData: VehicleData | undefined | null;
   onSubmit: (value: VehicleData) => void;
   CrimeGroupsData: ListCrimeGroupsQuery | undefined;
   CrimeGroupsLoading: boolean;
   saving: boolean;
   offendersData: OffenderData[];
-  incidentsData:
-    | Exclude<
-        ListIncidentsQuery['listIncidents'],
-        undefined | null
-      >['incidents'];
+  incidentsData: IncidentCardData[];
   linkIncident: boolean;
   linkOffender: boolean;
   toggleLinkIncident: () => void;
   toggleLinkOffender: () => void;
   updateOffendersList: (value: OffenderData) => void;
-  updateIncidentList: (value: string) => void;
+  updateIncidentList: (value: IncidentCardData) => void;
   removeOffender: (value: string | undefined) => void;
   removeIncident: (value: string | undefined) => void;
   adminRights: boolean;
@@ -62,8 +54,7 @@ interface Props {
 const EditVehicle = ({
   onClose,
   onSubmit,
-  data,
-  loading,
+  editData,
   CrimeGroupsData,
   CrimeGroupsLoading,
   saving,
@@ -83,19 +74,17 @@ const EditVehicle = ({
   fileList,
 }: Props): JSX.Element => {
   const classes = useStyles();
-  return !data && loading ? (
-    <Skeleton />
-  ) : (
+  return editData ? (
     <div>
       <Form
         initialValues={{
-          make: data?.vehicle?.make || '',
-          model: data?.vehicle?.model || '',
-          colour: data?.vehicle?.colour || '',
-          registration: data?.vehicle?.registration || '',
+          make: editData.make || '',
+          model: editData.model || '',
+          colour: editData.colour || '',
+          registration: editData.registration || '',
           crimeGroup:
-            data?.vehicle?.crimeGroup && data.vehicle.crimeGroup.length > 0
-              ? data.vehicle.crimeGroup.map(({ id }) => id)
+            editData.crimeGroup && editData.crimeGroup.length > 0
+              ? editData.crimeGroup.map((id) => id)
               : [],
         }}
         layout="vertical"
@@ -449,6 +438,8 @@ const EditVehicle = ({
         )}
       </Drawer>
     </div>
+  ) : (
+    <Skeleton />
   );
 };
 

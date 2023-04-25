@@ -3,8 +3,6 @@ import { useStoreState } from 'state';
 import type {
   Role,
   UserQuery,
-  SchemeGroupsQuery,
-  SchemeChatsQuery,
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
 } from 'graphql/generated';
@@ -19,8 +17,9 @@ import {
 } from 'graphql/generated';
 import { notification } from 'antd';
 import { useApolloClient } from '@apollo/client';
+import type { SelectOptions } from 'types/DataType';
 
-interface FormData {
+export interface FormData {
   fullName: string;
   email: string;
   business: {
@@ -29,6 +28,7 @@ interface FormData {
   };
   role: Role;
   groups: string[];
+  approverGroups: string[];
   chats: string[];
   incidentEmail: boolean;
   incidentPush: boolean;
@@ -47,21 +47,26 @@ interface Return {
   onSubmit: (value: FormData) => void;
   data: UserQuery | undefined;
   loading: boolean;
-  groupsData: SchemeGroupsQuery | undefined;
+  groupsData: SelectOptions[] | undefined;
   groupsLoading: boolean;
-  chatsData: SchemeChatsQuery | undefined;
+  chatsData: SelectOptions[] | undefined;
   chatsLoading: boolean;
   saving: boolean;
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: React.ReactNode; value: string }[]>;
+  selectedRole: Role | undefined;
+  setSelectedRole: (value: Role) => void;
+  selectedGroups: string[] | undefined;
+  setSelectedGroups: (value: string[]) => void;
 }
 
 const useEditUser = ({ onClose, userId }: Props): Return => {
   const client = useApolloClient();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
-
+  const [selectedRole, setSelectedRole] = useState<Role>();
+  const [selectedGroups, setSelectedGroups] = useState<string[]>();
   const { data: userData, loading } = useUserQuery({
     variables: {
       where: {
@@ -90,6 +95,10 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
           },
         },
       },
+    },
+    onCompleted: ({ user }) => {
+      setSelectedRole(user?.schemes[0].role);
+      setSelectedGroups(user?.groups.map(({ id }) => id));
     },
   });
 
@@ -196,6 +205,22 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
                 )
                 .map(({ id }) => ({ id })),
             },
+            approverGroups: {
+              connect: data.approverGroups
+                .filter(
+                  (id) =>
+                    !userData?.user?.approverGroups
+                      .map((item) => item.id)
+                      .includes(id)
+                )
+                .map((id) => ({ id })),
+              disconnect: userData?.user?.approverGroups
+                .filter(
+                  ({ id }) =>
+                    !data.approverGroups.map((item) => item).includes(id)
+                )
+                .map(({ id }) => ({ id })),
+            },
             chats: {
               create: data.chats
                 .filter(
@@ -282,12 +307,22 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
     onSubmit,
     data: userData,
     loading,
-    groupsData,
+    groupsData: groupsData?.groups.map((group) => ({
+      value: group.id,
+      label: group.name,
+    })),
     groupsLoading,
-    chatsData,
+    chatsData: chatsData?.chats.map((chat) => ({
+      value: chat.id,
+      label: chat.name,
+    })),
     chatsLoading,
     saving,
     onSearchBusiness,
+    selectedRole,
+    setSelectedRole,
+    selectedGroups,
+    setSelectedGroups,
   };
 };
 

@@ -24,8 +24,8 @@ import {
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import type { Layout } from 'react-grid-layout';
 import GridLayout from 'react-grid-layout';
-import AddExisitingOffender from 'components/form-components/incident/offender/AddExistingOffender';
-import type { OffenderData } from 'components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
+import AddExisitingOffender from 'components/form-components/offender/offender/AddExistingOffender';
+import type { OffenderData } from 'components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import useStyles from './CompareOffender.styles';
 import type { OffenderField, Selected } from './useCompareIncident';
