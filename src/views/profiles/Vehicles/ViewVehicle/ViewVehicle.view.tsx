@@ -274,7 +274,7 @@ const ViewVehicle = ({
                       )}
 
                       {data?.vehicle?.updatedAt && (
-                        <Descriptions.Item label="UpdatedAt" span={2}>
+                        <Descriptions.Item label="Updated At" span={2}>
                           {moment(data.vehicle.updatedAt || moment()).format(
                             `ddd MMM DD YYYY - HH:mm`
                           )}

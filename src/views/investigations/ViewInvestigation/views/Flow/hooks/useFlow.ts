@@ -200,7 +200,13 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
   useEffect(() => {
     if (usedFallbackRef.current) return;
     const fetchFallback = async () => {
-      if (provider.wsconnected && clientCount === 0) {
+      if (
+        provider.wsconnected &&
+        clientCount === 0 &&
+        // eslint-disable-next-line no-underscore-dangle
+        nodesMap?._map.size === 0 &&
+        !usedFallbackRef.current
+      ) {
         const initData = importData?.investigation?.flows[0];
         if (initData?.nodes)
           // eslint-disable-next-line no-restricted-syntax,no-unsafe-optional-chaining
@@ -213,11 +219,11 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
             edgesMap.set(edge.id, edge as Edge);
           }
       }
-
       usedFallbackRef.current = true;
+      return () => {};
     };
-    const timeoutId = window.setTimeout(fetchFallback, 1000);
 
+    const timeoutId = window.setTimeout(fetchFallback, 1000);
     // eslint-disable-next-line consistent-return
     return () => {
       window.clearTimeout(timeoutId);
@@ -229,7 +235,6 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
     clientCount,
     reactFlowInstance,
   ]);
-
   // useEffect(() => {
   //
   //   const timeoutId = window.setTimeout(updateSavedWhen, 1000);
@@ -423,7 +428,6 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
     // }
     []
   );
-
   return {
     nodes,
     onNodesChange,
@@ -442,9 +446,11 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
     wrapperRef,
     nodesMap,
     loading:
-      importData?.investigation?.flows[0] && provider.wsconnected
+      importData?.investigation?.flows[0] &&
+      provider.wsconnected &&
+      usedFallbackRef.current
         ? false
-        : provider.wsconnecting,
+        : provider.wsconnecting || !usedFallbackRef.current,
     offenders,
     setSelected,
     saving,
