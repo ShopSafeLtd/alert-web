@@ -270,7 +270,9 @@ const useAddUser = ({
             email: data.email,
             fullName: data.fullName,
             groups: data.groups.map((id) => ({ id })),
-            approverGroups: data.approverGroups.map((id) => ({ id })),
+            approverGroups: data.approverGroups
+              ? data.approverGroups.map((id) => ({ id }))
+              : undefined,
             role: data.role,
             publicName: data.publicName,
             incidentEmail: data.incidentEmail,

@@ -218,7 +218,7 @@ const adminOnlyItems: NavItem[] = [
         submenu: [],
       },
       {
-        key: 'business engagement',
+        key: 'business-engagement',
         path: `${APP_PREFIX_PATH}/reports/business-engagement`,
         title: 'Business Engagement',
         icon: faBuilding,
@@ -234,7 +234,7 @@ const adminOnlyItems: NavItem[] = [
         submenu: [],
       },
       {
-        key: 'crime-groups',
+        key: 'crime-groups-report',
         path: `${APP_PREFIX_PATH}/reports/crime-groups`,
         title: 'Crime Groups',
         icon: faPeopleGroup,
