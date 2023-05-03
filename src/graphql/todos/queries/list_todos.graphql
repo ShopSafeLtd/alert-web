@@ -45,6 +45,7 @@ query listTodos(
       }
       completed
     }
+    totalUserTodos
     uncompletedTotal
     completedTotal
   }

@@ -10,6 +10,7 @@ export interface SetSchemePayload {
   id: string;
   logo?: string | null | undefined;
   darkLogo?: string | null | undefined;
+  userTodos?: number | null | undefined;
 }
 
 export interface SchemeModel {
@@ -22,6 +23,7 @@ export interface SchemeModel {
   clearScheme: Action<SchemeModel>;
   logo?: string | null | undefined;
   darkLogo?: string | null | undefined;
+  userTodos?: number | null | undefined;
 }
 
 const userModel: SchemeModel = {
@@ -32,6 +34,7 @@ const userModel: SchemeModel = {
   name: 'Loading...',
   logo: '',
   darkLogo: '',
+  userTodos: 0,
 
   setScheme: action((state, payload) => {
     state.id = payload.id;
@@ -41,6 +44,7 @@ const userModel: SchemeModel = {
     state.name = payload.name;
     state.logo = payload.logo;
     state.darkLogo = payload.darkLogo;
+    state.userTodos = payload.userTodos;
   }),
   clearScheme: action((state) => {
     state.id = '';
@@ -50,6 +54,7 @@ const userModel: SchemeModel = {
     state.name = '';
     state.logo = '';
     state.darkLogo = '';
+    state.userTodos = 0;
   }),
 };
 

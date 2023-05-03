@@ -30,7 +30,8 @@ const useAuth = (): Return => {
   const handleSignOut = useStoreActions((actions) => actions.auth.signOut);
   const setUser = useStoreActions((actions) => actions.user.setUser);
   const clearUser = useStoreActions((actions) => actions.user.clearUser);
-  const setRole = useStoreActions((actions) => actions.user.setRole);
+  const { setRole, setTodos } = useStoreActions((actions) => actions.user);
+
   const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
   const setAuthMessage = useStoreActions(
     (actions) => actions.auth.setAuthMessage
@@ -68,7 +69,9 @@ const useAuth = (): Return => {
         name: schemeDetails?.name,
         logo: schemeDetails?.logo?.optimisedPersisted,
         darkLogo: schemeDetails?.darkLogo?.optimisedPersisted,
+        userTodos: schemeDetails.userTodos,
       });
+      setTodos({ userTodos: schemes[0]?.scheme?.userTodos || 0 });
     };
 
     const scheme =
@@ -90,7 +93,9 @@ const useAuth = (): Return => {
           name: schemeDetails.scheme.name,
           logo: schemeDetails.scheme.logo?.optimisedPersisted,
           darkLogo: schemeDetails.scheme.darkLogo?.optimisedPersisted,
+          userTodos: schemeDetails.scheme.userTodos,
         });
+        setTodos({ userTodos: schemeDetails?.scheme?.userTodos || 0 });
       } else {
         handleNoValidScheme();
       }

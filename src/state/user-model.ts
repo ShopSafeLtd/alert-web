@@ -27,6 +27,10 @@ export interface SetUserRole {
   role: Role;
 }
 
+export interface SetUserTodos {
+  userTodos: number;
+}
+
 export interface Scheme {
   id: string;
   role: Role;
@@ -37,6 +41,7 @@ export interface Scheme {
     autoApproveIncidents: boolean;
     autoApproveOffenders: boolean;
     defaultPublicOffenderDOB: boolean;
+    userTodos?: number | null | undefined;
     logo?:
       | {
           optimisedPersisted?: string | null | undefined;
@@ -63,6 +68,7 @@ export interface UserModel {
   onboarded: boolean;
   schemes: Scheme[];
   demId: string | null | undefined;
+  userTodos?: number | null | undefined;
   groups: {
     id: string;
     name: string;
@@ -74,6 +80,7 @@ export interface UserModel {
   isSet: boolean;
   setUser: Action<UserModel, SetUserPayload>;
   setRole: Action<UserModel, SetUserRole>;
+  setTodos: Action<UserModel, SetUserTodos>;
   clearUser: Action<UserModel>;
 }
 
@@ -91,6 +98,7 @@ const userModel: UserModel = {
   schemes: [],
   groups: [],
   demId: '',
+  userTodos: 0,
 
   setUser: action((state, payload) => {
     state.id = payload.id;
@@ -108,6 +116,9 @@ const userModel: UserModel = {
   setRole: action((state, payload) => {
     state.role = payload.role;
   }),
+  setTodos: action((state, payload) => {
+    state.userTodos = payload.userTodos;
+  }),
   clearUser: action((state) => {
     state.id = '';
     state.email = '';
@@ -120,6 +131,7 @@ const userModel: UserModel = {
     state.role = Role.User;
     state.isSet = false;
     state.demId = '';
+    state.userTodos = 0;
   }),
 };
 

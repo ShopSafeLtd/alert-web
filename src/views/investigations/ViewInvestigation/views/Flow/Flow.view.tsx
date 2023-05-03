@@ -60,6 +60,7 @@ interface FlowProps {
   saving: boolean;
   // eslint-disable-next-line
   handlePointMove: (e: React.PointerEvent) => void;
+  downloadImage: () => void;
   // users: Map<number, { [p: string]: any }>;
   // provider: WebsocketProvider;
   // reactFlowInstance: ReactFlowInstance | null;
@@ -85,6 +86,7 @@ const ReactFlowView = ({
   wrapperRef,
   saving,
   handlePointMove,
+  downloadImage,
 }: // users,
 // provider,
 // reactFlowInstance,
@@ -124,10 +126,16 @@ FlowProps) => {
       >
         <div className="dndflow">
           <div className={styles.wrapper}>
+            <Button
+              className="print-btn"
+              onClick={downloadImage}
+              type="default"
+            >
+              Print
+            </Button>
             <Button className="download-btn" onClick={onSave} type="primary">
               Save
             </Button>
-
             <p className="info">
               Synced: <Status success={isSynced || clientCount === 0} />
               Last Saved:{' '}
@@ -160,6 +168,7 @@ FlowProps) => {
                 nodeTypes={nodeTypes}
                 onPointerMove={handlePointMove}
                 proOptions={{ hideAttribution: true }}
+                minZoom={0.1}
               >
                 {/* {Array.from(users.entries()).map(([key, value]) => { */}
                 {/*  if (!value) return null; */}

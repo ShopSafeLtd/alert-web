@@ -30,6 +30,7 @@ query currentUser {
         darkLogo {
           optimisedPersisted
         }
+        userTodos
         id
         name
         autoApproveIncidents

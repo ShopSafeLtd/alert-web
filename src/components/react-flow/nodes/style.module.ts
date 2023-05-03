@@ -13,7 +13,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     /*max-width: 250px;*/
   },
   nodeContainer: {
-    padding: 10,
+    padding: 15,
     height: '100%',
     width: '100%',
   },

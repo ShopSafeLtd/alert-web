@@ -51,6 +51,7 @@ const useViewInvestigation = (investigationId: string): Return => {
         id: investigationId,
       },
     },
+    skip: !investigationId,
     onCompleted: ({ investigation }) => {
       if (investigation?.offenders && investigation.offenders.length > 0) {
         setOffenderIds(investigation.offenders.map(({ id }) => id));

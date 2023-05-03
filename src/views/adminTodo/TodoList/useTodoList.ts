@@ -1,11 +1,11 @@
-import { useStoreState } from 'state';
+import { useStoreActions, useStoreState } from 'state';
 import type { CreateTodoMutation, ListTodosQuery } from 'graphql/generated';
 import {
   ListTodosDocument,
   QueryMode,
-  useUpdateTodoMutation,
-  useListTodosQuery,
   SortOrder,
+  useListTodosQuery,
+  useUpdateTodoMutation,
 } from 'graphql/generated';
 import { useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -36,6 +36,8 @@ const useAdminTodos = (): Return => {
   const [search, setSearch] = useState('');
   const [pageSize, setPageSize] = useState(20);
   const [page, setPage] = useState(1);
+  const setTodoList = useStoreActions((actions) => actions.user.setTodos);
+  const userTodos = useStoreState((state) => state.user.userTodos);
   const variables = {
     orderBy: {
       createdAt: SortOrder.Asc,
@@ -75,6 +77,12 @@ const useAdminTodos = (): Return => {
   };
   const { data, loading } = useListTodosQuery({
     variables,
+    fetchPolicy: 'cache-and-network',
+    onCompleted: (res) => {
+      if (res.listTodos) {
+        setTodoList({ userTodos: res.listTodos.totalUserTodos || 0 });
+      }
+    },
   });
 
   const updateTodoList: MutationUpdaterFn<CreateTodoMutation> = (
@@ -104,7 +112,9 @@ const useAdminTodos = (): Return => {
             ...(<[]>existingData.listTodos.uncompletedTodos),
             res.createTodo,
           ],
+          completedTodos: existingData.listTodos.completedTodos,
           completedTotal: existingData.listTodos.completedTotal,
+          totalUserTodos: existingData.listTodos.totalUserTodos,
         },
         __typename: 'Query',
       },
@@ -129,13 +139,12 @@ const useAdminTodos = (): Return => {
       });
 
       if (!existingData?.listTodos) return;
-
-      // write the new data to the Apollo store
       if (res.updateTodo.completed) {
         store.writeQuery<ListTodosQuery>({
           query: ListTodosDocument,
           data: {
             listTodos: {
+              totalUserTodos: existingData.listTodos.totalUserTodos + 1,
               completedTotal: [
                 ...(<[]>existingData.listTodos.completedTodos),
                 res.updateTodo,
@@ -144,7 +153,10 @@ const useAdminTodos = (): Return => {
                 ...(<[]>existingData.listTodos.completedTodos),
                 res.updateTodo,
               ],
-              uncompletedTotal: existingData.listTodos.uncompletedTotal,
+              uncompletedTotal: existingData.listTodos.uncompletedTotal + 1,
+              uncompletedTodos: existingData.listTodos.uncompletedTodos.filter(
+                (todo) => todo.id !== res?.updateTodo?.id
+              ),
             },
             __typename: 'Query',
           },
@@ -156,6 +168,8 @@ const useAdminTodos = (): Return => {
           query: ListTodosDocument,
           data: {
             listTodos: {
+              totalUserTodos: existingData.listTodos.totalUserTodos - 1,
+
               uncompletedTotal: [
                 ...(<[]>existingData.listTodos.uncompletedTodos),
                 res.updateTodo,
@@ -164,7 +178,10 @@ const useAdminTodos = (): Return => {
                 ...(<[]>existingData.listTodos.uncompletedTodos),
                 res.updateTodo,
               ],
-              completedTotal: existingData.listTodos.completedTotal,
+              completedTodos: existingData.listTodos.completedTodos.filter(
+                (todo) => todo.id !== res?.updateTodo?.id
+              ),
+              completedTotal: existingData.listTodos.completedTotal - 1,
             },
             __typename: 'Query',
           },
@@ -176,6 +193,9 @@ const useAdminTodos = (): Return => {
   // function
   const onCompleteTodo = (todoId: string) => {
     setSaving(true);
+    setTodoList({
+      userTodos: userTodos ? userTodos - 1 : 0,
+    });
     updateTodo({
       variables: {
         where: {
@@ -195,6 +215,7 @@ const useAdminTodos = (): Return => {
   };
   const onUnCompleteTodo = (todoId: string) => {
     setSaving(true);
+
     updateTodo({
       variables: {
         where: {
@@ -206,6 +227,9 @@ const useAdminTodos = (): Return => {
           completedBy: undefined,
         },
       },
+    });
+    setTodoList({
+      userTodos: userTodos ? userTodos + 1 : 1,
     });
   };
   const toggleAddTodo = () => {

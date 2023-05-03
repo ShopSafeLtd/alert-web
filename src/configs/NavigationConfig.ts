@@ -34,6 +34,7 @@ export interface MenuItem {
   icon?: any;
   breadcrumb: boolean;
   roles?: Role[];
+  badge?: boolean;
 }
 
 export interface SubMenuItem extends MenuItem {
@@ -59,11 +60,12 @@ const userOnlyItems: NavItem[] = [
   {
     key: 'adminTodo',
     path: `${APP_PREFIX_PATH}/adminTodo`,
-    title: 'Admin To-DO',
+    title: 'Admin To-Do',
     icon: faCalendarCheck,
     breadcrumb: false,
     submenu: [],
     roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
+    badge: true,
   },
   {
     key: 'incidents',

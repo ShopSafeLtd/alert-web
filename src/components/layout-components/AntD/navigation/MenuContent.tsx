@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Menu, Typography } from 'antd';
+import { Badge, Grid, Menu, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import IntlMessage from '../../../util-components/AntD/IntlMessage';
 import navConfig, { NavItem } from 'configs/NavigationConfig';
@@ -10,6 +10,7 @@ import { APP_NAME } from 'configs/AppConfig';
 import NavScheme from './NavScheme';
 import NavProfile from './NavProfile';
 import Logo from './Logo';
+import { useStore } from 'easy-peasy';
 
 const { SubMenu } = Menu;
 const { useBreakpoint } = Grid;
@@ -52,7 +53,7 @@ interface SideNavContentProps {
   routeInfo: NavItem;
   hideGroupTitle?: boolean;
   localization: boolean;
-
+  todos: number;
   onMobileNavToggle(value: boolean): void;
 }
 
@@ -83,6 +84,7 @@ const SideNavContent = (props: SideNavContentProps) => {
     hideGroupTitle,
     localization,
     onMobileNavToggle,
+    todos,
   } = props;
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const isMobile = !utils.getBreakPoint(useBreakpoint()).includes('lg');
@@ -91,7 +93,6 @@ const SideNavContent = (props: SideNavContentProps) => {
       onMobileNavToggle(false);
     }
   };
-
   const userRole = useStoreState((state) => state.user.role);
   const navigationConfig = navConfig.filter((el) =>
     el.roles?.includes(userRole)
@@ -171,7 +172,13 @@ const SideNavContent = (props: SideNavContentProps) => {
           ) : (
             <Menu.Item key={menu.key}>
               {menu.icon ? <Icon icon={menu?.icon} /> : null}
-              <span>{setLocale(localization, menu?.title)}</span>
+              {menu.badge ? (
+                <Badge offset={[8, 0]} size="small" count={todos} showZero>
+                  <span>{setLocale(localization, menu?.title)}</span>
+                </Badge>
+              ) : (
+                <span>{setLocale(localization, menu?.title)}</span>
+              )}{' '}
               {menu.path ? (
                 <Link onClick={() => closeMobileNav()} to={menu.path} />
               ) : null}
@@ -270,7 +277,14 @@ const TopNavContent = (props: TopNavContentProps) => {
         ) : (
           <Menu.Item key={menu.key}>
             {menu.icon ? <Icon icon={menu?.icon} /> : null}
-            <span>{setLocale(localization, menu?.title)}</span>
+            {menu.badge ? (
+              <Badge offset={[8, 0]} size="small" count={0} showZero>
+                <span>{setLocale(localization, menu?.title)}</span>
+              </Badge>
+            ) : (
+              <span>{setLocale(localization, menu?.title)}</span>
+            )}
+
             {menu.path ? <Link to={menu.path} /> : null}
           </Menu.Item>
         )
@@ -292,10 +306,19 @@ const MenuContent = (props: Props) => {
   const onMobileNavToggle = useStoreActions(
     (actions) => actions.theme.toggleMobileNav
   );
+  const userTodos = useStoreState((state) => state.user.userTodos);
+
+  const [todoCount, setTodoCount] = useState(0);
+  const store = useStore();
+
+  useEffect(() => {
+    setTodoCount(userTodos || 0);
+  }, [userTodos]);
 
   return props.type === NavType.SIDE ? (
     <SideNavContent
       {...props}
+      todos={todoCount}
       onMobileNavToggle={onMobileNavToggle}
       sideNavTheme={sideNavTheme}
     />

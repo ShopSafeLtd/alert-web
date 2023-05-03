@@ -32,12 +32,14 @@ const ReactFlowPro = ({ importData }: Props) => {
     // users,
     // provider,
     // reactFlowInstance,
+    downloadImage,
   } = useFlow({
     investigationId: investigationId || '',
     importData,
   });
   return (
     <ReactFlowView
+      downloadImage={downloadImage}
       // reactFlowInstance={reactFlowInstance}
       // provider={provider}
       // users={users}
