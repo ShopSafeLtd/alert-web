@@ -1,11 +1,11 @@
-import { useStoreState } from 'state';
+import { useStoreActions, useStoreState } from 'state';
 import type { CreateTodoMutation, ListTodosQuery } from 'graphql/generated';
 import {
   ListTodosDocument,
   QueryMode,
-  useUpdateTodoMutation,
-  useListTodosQuery,
   SortOrder,
+  useListTodosQuery,
+  useUpdateTodoMutation,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
@@ -39,6 +39,8 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
   const [search, setSearch] = useState('');
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(1);
+  const setTodoList = useStoreActions((actions) => actions.user.setTodos);
+  const userTodos = useStoreState((state) => state.user.userTodos);
   useEffect(() => {
     if (!search && fullSearch) setSearch(fullSearch);
   }, [fullSearch]);
@@ -82,6 +84,11 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
   };
   const { data, loading } = useListTodosQuery({
     variables,
+    onCompleted: (res) => {
+      if (res.listTodos) {
+        setTodoList({ userTodos: res.listTodos.totalUserTodos || 0 });
+      }
+    },
   });
 
   const updateTodoList: MutationUpdaterFn<CreateTodoMutation> = (
@@ -95,7 +102,6 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
       query: ListTodosDocument,
       variables,
     });
-
     if (!existingData?.listTodos) return;
 
     // write the new data to the Apollo store
@@ -111,7 +117,9 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
             ...(<[]>existingData.listTodos.uncompletedTodos),
             res.createTodo,
           ],
+          completedTodos: existingData.listTodos.completedTodos,
           completedTotal: existingData.listTodos.completedTotal,
+          totalUserTodos: existingData.listTodos.totalUserTodos,
         },
         __typename: 'Query',
       },
@@ -136,13 +144,12 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
       });
 
       if (!existingData?.listTodos) return;
-
-      // write the new data to the Apollo store
       if (res.updateTodo.completed) {
         store.writeQuery<ListTodosQuery>({
           query: ListTodosDocument,
           data: {
             listTodos: {
+              totalUserTodos: existingData.listTodos.totalUserTodos + 1,
               completedTotal: [
                 ...(<[]>existingData.listTodos.completedTodos),
                 res.updateTodo,
@@ -151,7 +158,10 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
                 ...(<[]>existingData.listTodos.completedTodos),
                 res.updateTodo,
               ],
-              uncompletedTotal: existingData.listTodos.uncompletedTotal,
+              uncompletedTotal: existingData.listTodos.uncompletedTotal + 1,
+              uncompletedTodos: existingData.listTodos.uncompletedTodos.filter(
+                (todo) => todo.id !== res?.updateTodo?.id
+              ),
             },
             __typename: 'Query',
           },
@@ -163,6 +173,8 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
           query: ListTodosDocument,
           data: {
             listTodos: {
+              totalUserTodos: existingData.listTodos.totalUserTodos - 1,
+
               uncompletedTotal: [
                 ...(<[]>existingData.listTodos.uncompletedTodos),
                 res.updateTodo,
@@ -171,7 +183,10 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
                 ...(<[]>existingData.listTodos.uncompletedTodos),
                 res.updateTodo,
               ],
-              completedTotal: existingData.listTodos.completedTotal,
+              completedTodos: existingData.listTodos.completedTodos.filter(
+                (todo) => todo.id !== res?.updateTodo?.id
+              ),
+              completedTotal: existingData.listTodos.completedTotal - 1,
             },
             __typename: 'Query',
           },
@@ -183,6 +198,9 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
   // function
   const onCompleteTodo = (todoId: string) => {
     setSaving(true);
+    setTodoList({
+      userTodos: userTodos ? userTodos - 1 : 0,
+    });
     updateTodo({
       variables: {
         where: {
@@ -202,6 +220,9 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
   };
   const onUnCompleteTodo = (todoId: string) => {
     setSaving(true);
+    setTodoList({
+      userTodos: userTodos ? userTodos + 1 : 1,
+    });
     updateTodo({
       variables: {
         where: {
