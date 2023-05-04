@@ -11,6 +11,7 @@ import type {
 import ReactFlow, {
   Background,
   BackgroundVariant,
+  ControlButton,
   Controls,
   MiniMap,
 } from 'reactflow';
@@ -24,6 +25,10 @@ import VehicleNode from 'components/react-flow/nodes/vehicle-node';
 import IncidentListNode from 'components/react-flow/nodes/list-incidents-node';
 import FloatingEdge from 'components/react-flow/edges/floating-edge';
 import { LoadingOutlined } from '@ant-design/icons';
+import type { FullScreenHandle } from 'react-full-screen';
+import { FullScreen } from 'react-full-screen';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExpandArrows } from '@fortawesome/pro-light-svg-icons';
 import Sidebar from './sidebar/Sidebar';
 import 'reactflow/dist/style.css';
 import './styles.css';
@@ -59,11 +64,15 @@ interface FlowProps {
   loading: boolean;
   saving: boolean;
   // eslint-disable-next-line
-  handlePointMove: (e: React.PointerEvent) => void;
+  // handlePointMove: (e: React.PointerEvent) => void;
   downloadImage: () => void;
   // users: Map<number, { [p: string]: any }>;
   // provider: WebsocketProvider;
   // reactFlowInstance: ReactFlowInstance | null;
+  flowScreen: FullScreenHandle;
+  isFullScreen: boolean;
+  setFullScreen: () => void;
+  reportChange: (state: boolean, handle: FullScreenHandle) => void;
 }
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -85,8 +94,12 @@ const ReactFlowView = ({
   loading,
   wrapperRef,
   saving,
-  handlePointMove,
+  // handlePointMove,
   downloadImage,
+  isFullScreen,
+  setFullScreen,
+  flowScreen,
+  reportChange,
 }: // users,
 // provider,
 // reactFlowInstance,
@@ -148,65 +161,87 @@ FlowProps) => {
             <Sidebar />
             {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
             {/* @ts-ignore */}
-            <div className={styles.rfWrapper} ref={wrapperRef}>
-              <ReactFlow
-                style={{
-                  width: '100%',
-                  height: '100%',
-                }}
-                onInit={setReactFlowInstance}
-                nodes={nodes}
-                edges={edges}
-                onNodesChange={onNodesChange}
-                onEdgesChange={onEdgesChange}
-                onNodeClick={onNodeClick}
-                onConnect={onConnect}
-                onDrop={onDrop}
-                onDragOver={onDragOver}
-                fitView
-                edgeTypes={edgeTypes}
-                nodeTypes={nodeTypes}
-                onPointerMove={handlePointMove}
-                proOptions={{ hideAttribution: true }}
-                minZoom={0.1}
-              >
-                {/* {Array.from(users.entries()).map(([key, value]) => { */}
-                {/*  if (!value) return null; */}
-                {/*  if (key === provider.awareness.clientID) return null; */}
-                {/*  if ( */}
-                {/*    !value.cursor || */}
-                {/*    !value.user || */}
-                {/*    !value.user.color || */}
-                {/*    !value.user.name */}
-                {/*  ) */}
-                {/*    return null; */}
-                {/*  return ( */}
-                {/*    <Cursor */}
-                {/*      key={key} */}
-                {/*      cursor={ */}
-                {/*        value.cursor as ComponentProps<typeof Cursor>['cursor'] */}
-                {/*      } */}
-                {/*      color={ */}
-                {/*        value.user.color as ComponentProps< */}
-                {/*          typeof Cursor */}
-                {/*        >['color'] */}
-                {/*      } */}
-                {/*      name={ */}
-                {/*        value.user.name as ComponentProps<typeof Cursor>['name'] */}
-                {/*      } */}
-                {/*    /> */}
-                {/*  ); */}
-                {/* })} */}
-                <Controls />
-                <MiniMap
-                  nodeColor={(node: Node) => nodeColor(node.type as string)}
-                  nodeStrokeWidth={3}
-                  zoomable
-                  pannable
-                />
-                <Background color="#99b3ec" variant={BackgroundVariant.Dots} />
-              </ReactFlow>
-            </div>
+            <FullScreen
+              handle={flowScreen}
+              onChange={reportChange}
+              className="fullscreen-wrapper"
+            >
+              <div className={styles.rfWrapper} ref={wrapperRef}>
+                <ReactFlow
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                  }}
+                  elementsSelectable={!isFullScreen}
+                  nodesConnectable={!isFullScreen}
+                  nodesDraggable={!isFullScreen}
+                  onInit={setReactFlowInstance}
+                  nodes={nodes}
+                  edges={edges}
+                  onNodesChange={onNodesChange}
+                  onEdgesChange={onEdgesChange}
+                  onNodeClick={onNodeClick}
+                  onConnect={onConnect}
+                  onDrop={onDrop}
+                  onDragOver={onDragOver}
+                  fitView
+                  edgeTypes={edgeTypes}
+                  nodeTypes={nodeTypes}
+                  // onPointerMove={handlePointMove}
+                  proOptions={{ hideAttribution: true }}
+                  minZoom={0.1}
+                >
+                  {/* {Array.from(users.entries()).map(([key, value]) => { */}
+                  {/*  if (!value) return null; */}
+                  {/*  if (key === provider.awareness.clientID) return null; */}
+                  {/*  if ( */}
+                  {/*    !value.cursor || */}
+                  {/*    !value.user || */}
+                  {/*    !value.user.color || */}
+                  {/*    !value.user.name */}
+                  {/*  ) */}
+                  {/*    return null; */}
+                  {/*  return ( */}
+                  {/*    <Cursor */}
+                  {/*      key={key} */}
+                  {/*      cursor={ */}
+                  {/*        value.cursor as ComponentProps<typeof Cursor>['cursor'] */}
+                  {/*      } */}
+                  {/*      color={ */}
+                  {/*        value.user.color as ComponentProps< */}
+                  {/*          typeof Cursor */}
+                  {/*        >['color'] */}
+                  {/*      } */}
+                  {/*      name={ */}
+                  {/*        value.user.name as ComponentProps<typeof Cursor>['name'] */}
+                  {/*      } */}
+                  {/*    /> */}
+                  {/*  ); */}
+                  {/* })} */}
+                  <Controls showInteractive={!isFullScreen}>
+                    <ControlButton onClick={setFullScreen} title="fullscreen">
+                      <FontAwesomeIcon
+                        size="sm"
+                        icon={faExpandArrows}
+                        style={{
+                          color: 'black',
+                        }}
+                      />
+                    </ControlButton>
+                  </Controls>
+                  <MiniMap
+                    nodeColor={(node: Node) => nodeColor(node.type as string)}
+                    nodeStrokeWidth={3}
+                    zoomable
+                    pannable
+                  />
+                  <Background
+                    color="#99b3ec"
+                    variant={BackgroundVariant.Dots}
+                  />
+                </ReactFlow>
+              </div>
+            </FullScreen>
           </div>
         </div>
       </Card>

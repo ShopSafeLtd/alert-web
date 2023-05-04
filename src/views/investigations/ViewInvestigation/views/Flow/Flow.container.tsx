@@ -28,22 +28,30 @@ const ReactFlowPro = ({ importData }: Props) => {
     wrapperRef,
     loading,
     saving,
-    handlePointMove,
+    // handlePointMove,
     // users,
     // provider,
     // reactFlowInstance,
     downloadImage,
+    flowScreen,
+    reportChange,
+    isFullScreen,
+    setFullScreen,
   } = useFlow({
     investigationId: investigationId || '',
     importData,
   });
   return (
     <ReactFlowView
+      flowScreen={flowScreen}
+      isFullScreen={isFullScreen}
+      setFullScreen={setFullScreen}
+      reportChange={reportChange}
       downloadImage={downloadImage}
       // reactFlowInstance={reactFlowInstance}
       // provider={provider}
       // users={users}
-      handlePointMove={handlePointMove}
+      // handlePointMove={handlePointMove}
       saving={saving}
       loading={loading}
       nodes={nodes}

@@ -140,3 +140,8 @@ div.targetHandle {
   font-weight: 700;
   cursor: pointer;
 }
+
+.fullscreen-wrapper {
+  width: 100%;
+  height: 100%;
+}

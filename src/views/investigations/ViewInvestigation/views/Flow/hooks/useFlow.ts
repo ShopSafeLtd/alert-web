@@ -16,6 +16,8 @@ import { useDebouncedCallback } from 'use-debounce';
 import type { YMap } from 'yjs/dist/src/internals';
 import { useUsers } from 'y-presence';
 import type { WebsocketProvider } from 'y-websocket';
+import type { FullScreenHandle } from 'react-full-screen';
+import { useFullScreenHandle } from 'react-full-screen';
 import useWebRtcProvider from './useWebRtcProvidor';
 import useNodesStateSynced from './useNodesStateSynced';
 import useEdgesStateSynced from './useEdgesStateSynced';
@@ -61,6 +63,10 @@ interface Return {
   provider: WebsocketProvider;
   reactFlowInstance: ReactFlowInstance | null;
   downloadImage: () => void;
+  flowScreen: FullScreenHandle;
+  isFullScreen: boolean;
+  setFullScreen: () => void;
+  reportChange: (state: boolean, handle: FullScreenHandle) => void;
 }
 
 const TIMEOUT = 3000 + Math.floor(Math.random() * 7000);
@@ -454,6 +460,26 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
     []
   );
 
+  const flowScreen = useFullScreenHandle();
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const setFullScreen = useCallback(() => {
+    setIsFullScreen(!isFullScreen);
+    if (isFullScreen) {
+      flowScreen.exit();
+    } else {
+      flowScreen.enter();
+    }
+  }, [isFullScreen]);
+  const reportChange = useCallback(
+    (state, handle) => {
+      if (handle === flowScreen) {
+        console.log('flowScreen went to', state, handle);
+      }
+    },
+    [flowScreen]
+  );
+
   const downloadImage = useCallback(() => {
     handleDownload();
   }, [handleDownload]);
@@ -487,6 +513,10 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
     handlePointMove,
     provider,
     downloadImage,
+    flowScreen,
+    reportChange,
+    isFullScreen,
+    setFullScreen,
   };
 };
 
