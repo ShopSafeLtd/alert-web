@@ -13231,7 +13231,6 @@ export type ImageUpdateOneWithoutSchemeDarkNestedInput = {
   delete?: InputMaybe<Scalars['Boolean']>;
   disconnect?: InputMaybe<Scalars['Boolean']>;
   update?: InputMaybe<ImageUpdateWithoutSchemeDarkInput>;
-  upload?: InputMaybe<UploadSchemeImage>;
   upsert?: InputMaybe<ImageUpsertWithoutSchemeDarkInput>;
 };
 
@@ -48592,6 +48591,20 @@ export type IncidentFeedQuery = {
   } | null> | null;
 };
 
+export type ListIncidentsFlowQueryVariables = Exact<{
+  where?: InputMaybe<IncidentWhereInput>;
+}>;
+
+export type ListIncidentsFlowQuery = {
+  __typename?: 'Query';
+  incidents: Array<{
+    __typename?: 'Incident';
+    dayTime?: string | null;
+    subject?: string | null;
+    id: string;
+  }>;
+};
+
 export type ListIncidentsQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
   where?: InputMaybe<IncidentWhereInput>;
@@ -59368,6 +59381,66 @@ export type IncidentFeedLazyQueryHookResult = ReturnType<
 export type IncidentFeedQueryResult = Apollo.QueryResult<
   IncidentFeedQuery,
   IncidentFeedQueryVariables
+>;
+export const ListIncidentsFlowDocument = gql`
+  query ListIncidentsFlow($where: IncidentWhereInput) {
+    incidents(where: $where) {
+      dayTime
+      subject
+      id
+    }
+  }
+`;
+
+/**
+ * __useListIncidentsFlowQuery__
+ *
+ * To run a query within a React component, call `useListIncidentsFlowQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListIncidentsFlowQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListIncidentsFlowQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useListIncidentsFlowQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ListIncidentsFlowQuery,
+    ListIncidentsFlowQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ListIncidentsFlowQuery,
+    ListIncidentsFlowQueryVariables
+  >(ListIncidentsFlowDocument, options);
+}
+export function useListIncidentsFlowLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListIncidentsFlowQuery,
+    ListIncidentsFlowQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ListIncidentsFlowQuery,
+    ListIncidentsFlowQueryVariables
+  >(ListIncidentsFlowDocument, options);
+}
+export type ListIncidentsFlowQueryHookResult = ReturnType<
+  typeof useListIncidentsFlowQuery
+>;
+export type ListIncidentsFlowLazyQueryHookResult = ReturnType<
+  typeof useListIncidentsFlowLazyQuery
+>;
+export type ListIncidentsFlowQueryResult = Apollo.QueryResult<
+  ListIncidentsFlowQuery,
+  ListIncidentsFlowQueryVariables
 >;
 export const ListIncidentsDocument = gql`
   query listIncidents(

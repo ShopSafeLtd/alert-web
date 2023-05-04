@@ -13,6 +13,8 @@ interface Props {
   search: string;
   setSearch: (value: string) => void;
   onPaginationChange: (page: number, pageSize: number) => void;
+  selectedRowKeys: React.Key[];
+
   onSelect: (
     selectedRowKeys: React.Key[],
     selectedRows: IncidentTable[]
@@ -38,6 +40,7 @@ const LinkIncident = ({
   setSearch,
   onPaginationChange,
   onSelect,
+  selectedRowKeys,
 }: Props): JSX.Element => (
   <div className="add-existing-offender">
     <Row gutter={8} className="search-offender">
@@ -95,6 +98,8 @@ const LinkIncident = ({
       rowSelection={{
         type: 'checkbox',
         onChange: onSelect,
+        selectedRowKeys,
+        preserveSelectedRowKeys: true,
       }}
       pagination={{
         total: data?.listIncidents?.total,

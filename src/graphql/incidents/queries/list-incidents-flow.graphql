@@ -1,0 +1,8 @@
+query ListIncidentsFlow($where: IncidentWhereInput) {
+  incidents(where: $where) {
+    dayTime
+    subject
+    id
+
+  }
+}

@@ -13,6 +13,7 @@ import { NodeResizer } from '@reactflow/node-resizer';
 export interface Incident {
   description?: string | null | undefined;
   dayTime?: string | null | undefined;
+  id?: string | null | undefined;
 }
 
 interface Props {
@@ -152,6 +153,10 @@ export default memo(({ data, isConnectable, selected, id }: Props) => {
             setIsEditing(false);
             drawer.close();
           }}
+          ids={
+            data.incidentsList?.map((incident) => incident.id || '') ||
+            undefined
+          }
         />
       </Drawer>
     </>
