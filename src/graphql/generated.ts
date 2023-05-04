@@ -51751,6 +51751,7 @@ export type CreateTodoMutation = {
   __typename?: 'Mutation';
   createTodo: {
     __typename?: 'Todo';
+    type?: TodoType | null;
     description?: string | null;
     dueDate?: any | null;
     completedDate?: any | null;
@@ -51771,6 +51772,7 @@ export type UpdateTodoMutation = {
   __typename?: 'Mutation';
   updateTodo?: {
     __typename?: 'Todo';
+    type?: TodoType | null;
     description?: string | null;
     dueDate?: any | null;
     completedDate?: any | null;
@@ -51781,6 +51783,26 @@ export type UpdateTodoMutation = {
     completedBy?: { __typename?: 'User'; id: string; fullName: string } | null;
     assignedUsers: Array<{ __typename?: 'User'; id: string; fullName: string }>;
   } | null;
+};
+
+export type UpdateTodoMentionMutationVariables = Exact<{
+  where: UpdateTodoMention;
+}>;
+
+export type UpdateTodoMentionMutation = {
+  __typename?: 'Mutation';
+  updateTodoMention?: Array<{
+    __typename?: 'Todo';
+    description?: string | null;
+    dueDate?: any | null;
+    completedDate?: any | null;
+    completed?: boolean | null;
+    id: string;
+    name?: string | null;
+    createdBy?: { __typename?: 'User'; id: string; fullName: string } | null;
+    completedBy?: { __typename?: 'User'; id: string; fullName: string } | null;
+    assignedUsers: Array<{ __typename?: 'User'; id: string; fullName: string }>;
+  } | null> | null;
 };
 
 export type ListTodosQueryVariables = Exact<{
@@ -51799,12 +51821,18 @@ export type ListTodosQuery = {
     completedTotal: number;
     uncompletedTodos: Array<{
       __typename?: 'Todo';
+      type?: TodoType | null;
       description?: string | null;
       dueDate?: any | null;
       completedDate?: any | null;
       id: string;
       name?: string | null;
       completed?: boolean | null;
+      vehicleId?: string | null;
+      offenderId?: string | null;
+      crimeGroupId?: string | null;
+      incidentId?: string | null;
+      investigationId?: string | null;
       createdBy?: { __typename?: 'User'; id: string; fullName: string } | null;
       completedBy?: {
         __typename?: 'User';
@@ -51819,6 +51847,7 @@ export type ListTodosQuery = {
     }>;
     completedTodos: Array<{
       __typename?: 'Todo';
+      type?: TodoType | null;
       description?: string | null;
       dueDate?: any | null;
       completedDate?: any | null;
@@ -64630,6 +64659,7 @@ export type TagsQueryResult = Apollo.QueryResult<TagsQuery, TagsQueryVariables>;
 export const CreateTodoDocument = gql`
   mutation CreateTodo($data: TodoCreateInput!) {
     createTodo(data: $data) {
+      type
       description
       dueDate
       completedDate
@@ -64693,6 +64723,7 @@ export type CreateTodoMutationOptions = Apollo.BaseMutationOptions<
 export const UpdateTodoDocument = gql`
   mutation UpdateTodo($data: TodoUpdateInput!, $where: UniqueId!) {
     updateTodo(data: $data, where: $where) {
+      type
       description
       dueDate
       completedDate
@@ -64758,6 +64789,73 @@ export type UpdateTodoMutationOptions = Apollo.BaseMutationOptions<
   UpdateTodoMutation,
   UpdateTodoMutationVariables
 >;
+export const UpdateTodoMentionDocument = gql`
+  mutation UpdateTodoMention($where: UpdateTodoMention!) {
+    updateTodoMention(where: $where) {
+      description
+      dueDate
+      completedDate
+      completed
+      id
+      name
+      createdBy {
+        id
+        fullName
+      }
+      completedBy {
+        id
+        fullName
+      }
+      assignedUsers {
+        id
+        fullName
+      }
+    }
+  }
+`;
+export type UpdateTodoMentionMutationFn = Apollo.MutationFunction<
+  UpdateTodoMentionMutation,
+  UpdateTodoMentionMutationVariables
+>;
+
+/**
+ * __useUpdateTodoMentionMutation__
+ *
+ * To run a mutation, you first call `useUpdateTodoMentionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTodoMentionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTodoMentionMutation, { data, loading, error }] = useUpdateTodoMentionMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUpdateTodoMentionMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateTodoMentionMutation,
+    UpdateTodoMentionMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateTodoMentionMutation,
+    UpdateTodoMentionMutationVariables
+  >(UpdateTodoMentionDocument, options);
+}
+export type UpdateTodoMentionMutationHookResult = ReturnType<
+  typeof useUpdateTodoMentionMutation
+>;
+export type UpdateTodoMentionMutationResult =
+  Apollo.MutationResult<UpdateTodoMentionMutation>;
+export type UpdateTodoMentionMutationOptions = Apollo.BaseMutationOptions<
+  UpdateTodoMentionMutation,
+  UpdateTodoMentionMutationVariables
+>;
 export const ListTodosDocument = gql`
   query listTodos(
     $where: TodoWhereInput
@@ -64767,6 +64865,7 @@ export const ListTodosDocument = gql`
   ) {
     listTodos(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
       uncompletedTodos {
+        type
         description
         dueDate
         completedDate
@@ -64785,8 +64884,14 @@ export const ListTodosDocument = gql`
           fullName
         }
         completed
+        vehicleId
+        offenderId
+        crimeGroupId
+        incidentId
+        investigationId
       }
       completedTodos {
+        type
         description
         dueDate
         completedDate

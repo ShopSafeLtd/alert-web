@@ -72,6 +72,7 @@ const UpdateBar = ({
     crimeGroupsData,
     vehiclesData,
     saving,
+    handleMarkAsRead,
   } = useUpdateBar({
     replyTo,
     incidentId,
@@ -122,6 +123,7 @@ const UpdateBar = ({
       crimeGroupsData={crimeGroupsData}
       vehiclesData={vehiclesData}
       saving={saving}
+      handleMarkAsRead={handleMarkAsRead}
     />
   );
 };

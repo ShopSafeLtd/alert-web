@@ -3,10 +3,9 @@ import { render } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
-
 import { MemoryRouter } from 'react-router-dom';
 import { QueryMode, SchemeGroupsDocument } from 'graphql/generated';
-import useGroupList from '../useTodoList';
+import useAdminTodos from '../useAdminTodos';
 
 const mocks = [
   {
@@ -34,17 +33,15 @@ const mocks = [
     },
     result: {
       data: {
-        uncompletedTodos: [
-          { id: 'testId', name: 'TestName', description: null },
-        ],
+        groups: [{ id: 'testId', name: 'TestName', description: null }],
       },
     },
   },
 ];
 
 const UseGroupListTest = () => {
-  const { data, loading } = useGroupList();
-  const Groups =
+  const { data, loading } = useAdminTodos({ fullSearch: 'a' });
+  const uncompletedTodos =
     data &&
     data.uncompletedTodos?.map((el) => (
       <div key={el.id}>
@@ -55,7 +52,7 @@ const UseGroupListTest = () => {
 
   return (
     <div>
-      {Groups}
+      {uncompletedTodos}
       <span>{loading ? 'true' : 'false'}</span>
     </div>
   );

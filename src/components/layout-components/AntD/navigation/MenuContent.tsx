@@ -173,7 +173,13 @@ const SideNavContent = (props: SideNavContentProps) => {
             <Menu.Item key={menu.key}>
               {menu.icon ? <Icon icon={menu?.icon} /> : null}
               {menu.badge ? (
-                <Badge offset={[8, 0]} size="small" count={todos} showZero>
+                <Badge
+                  offset={[9, 0]}
+                  size="small"
+                  count={todos}
+                  showZero
+                  style={{ height: 20, padding: 3 }}
+                >
                   <span>{setLocale(localization, menu?.title)}</span>
                 </Badge>
               ) : (

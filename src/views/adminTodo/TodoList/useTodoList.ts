@@ -17,8 +17,8 @@ interface Return {
     | undefined;
   loading: boolean;
   saving: boolean;
-  onCompleteTodo: (id: string) => void;
-  onUnCompleteTodo: (id: string) => void;
+  onCompletedTodo: (id: string) => void;
+  onUncompletedTodo: (id: string) => void;
   addTodo: boolean;
   toggleAddTodo: () => void;
   updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
@@ -40,7 +40,7 @@ const useAdminTodos = (): Return => {
   const userTodos = useStoreState((state) => state.user.userTodos);
   const variables = {
     orderBy: {
-      createdAt: SortOrder.Asc,
+      createdAt: SortOrder.Desc,
     },
     skip: (page - 1) * pageSize,
     take: pageSize,
@@ -191,7 +191,7 @@ const useAdminTodos = (): Return => {
     },
   });
   // function
-  const onCompleteTodo = (todoId: string) => {
+  const onCompletedTodo = (todoId: string) => {
     setSaving(true);
     setTodoList({
       userTodos: userTodos ? userTodos - 1 : 0,
@@ -213,7 +213,7 @@ const useAdminTodos = (): Return => {
       },
     });
   };
-  const onUnCompleteTodo = (todoId: string) => {
+  const onUncompletedTodo = (todoId: string) => {
     setSaving(true);
 
     updateTodo({
@@ -243,8 +243,8 @@ const useAdminTodos = (): Return => {
     data: data?.listTodos,
     loading: (data === null || data === undefined) && loading,
     saving,
-    onCompleteTodo,
-    onUnCompleteTodo,
+    onCompletedTodo,
+    onUncompletedTodo,
     addTodo,
     toggleAddTodo,
     updateTodoList,

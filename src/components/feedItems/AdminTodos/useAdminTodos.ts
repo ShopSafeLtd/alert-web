@@ -20,8 +20,8 @@ interface Return {
     | undefined;
   loading: boolean;
   saving: boolean;
-  onCompleteTodo: (id: string) => void;
-  onUnCompleteTodo: (id: string) => void;
+  onCompletedTodo: (id: string) => void;
+  onUncompletedTodo: (id: string) => void;
   addTodo: boolean;
   toggleAddTodo: () => void;
   updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
@@ -39,6 +39,7 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
   const [search, setSearch] = useState('');
   const [pageSize, setPageSize] = useState(10);
   const [page, setPage] = useState(1);
+  // ???
   const setTodoList = useStoreActions((actions) => actions.user.setTodos);
   const userTodos = useStoreState((state) => state.user.userTodos);
   useEffect(() => {
@@ -47,7 +48,7 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
 
   const variables = {
     orderBy: {
-      createdAt: SortOrder.Asc,
+      createdAt: SortOrder.Desc,
     },
     skip: (page - 1) * pageSize,
     take: pageSize,
@@ -196,7 +197,7 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
     },
   });
   // function
-  const onCompleteTodo = (todoId: string) => {
+  const onCompletedTodo = (todoId: string) => {
     setSaving(true);
     setTodoList({
       userTodos: userTodos ? userTodos - 1 : 0,
@@ -218,7 +219,7 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
       },
     });
   };
-  const onUnCompleteTodo = (todoId: string) => {
+  const onUncompletedTodo = (todoId: string) => {
     setSaving(true);
     setTodoList({
       userTodos: userTodos ? userTodos + 1 : 1,
@@ -247,8 +248,8 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
     data: data?.listTodos,
     loading: (data === null || data === undefined) && loading,
     saving,
-    onCompleteTodo,
-    onUnCompleteTodo,
+    onCompletedTodo,
+    onUncompletedTodo,
     addTodo,
     toggleAddTodo,
     updateTodoList,

@@ -6,6 +6,8 @@ import type {
   UserChatsQuery,
 } from 'graphql/generated';
 import {
+  useUpdateTodoMentionMutation,
+  TodoType,
   Role,
   SortOrder,
   UserChatsDocument,
@@ -15,6 +17,9 @@ import {
 import type { MutationUpdaterFn } from '@apollo/client';
 import { useNavigate } from 'react-router';
 
+interface Props {
+  chatId: string;
+}
 interface Return {
   currentId: string;
   data: UserChatsQuery | undefined;
@@ -29,7 +34,7 @@ interface Return {
   refetch: () => void;
 }
 
-const useViewChat = (): Return => {
+const useViewChat = ({ chatId }: Props): Return => {
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -47,7 +52,7 @@ const useViewChat = (): Return => {
       scheme: schemeId,
       orderBy: {
         chat: {
-          name: SortOrder.Asc,
+          updatedAt: SortOrder.Desc,
         },
       },
     },
@@ -59,6 +64,7 @@ const useViewChat = (): Return => {
       }
     },
   });
+
   useEffect(() => {
     refetch();
     navigate('/app/chat');
@@ -70,7 +76,7 @@ const useViewChat = (): Return => {
       refetch();
     },
   });
-
+  const [updateTodoMention] = useUpdateTodoMentionMutation();
   const handleMarkAsRead = (userChatId: string | undefined) => {
     if (userChatId) {
       setSaving(true);
@@ -96,8 +102,21 @@ const useViewChat = (): Return => {
           },
         },
       });
+
+      updateTodoMention({
+        variables: {
+          where: {
+            userId,
+            chatId: userChatId,
+            type: TodoType.ChatMessage,
+          },
+        },
+      });
     }
   };
+  useEffect(() => {
+    if (chatId === currentId) handleMarkAsRead(currentId);
+  }, [chatId]);
 
   const toggleAddChat = () => {
     setAddChat(!addChat);

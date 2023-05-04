@@ -167,6 +167,8 @@ const ViewCrimeGroup = ({
             <Col className={classes.centerCell} flex={1}>
               <Title className={classes.headerTitle} level={4}>
                 {`Alert ID: ${data?.crimeGroup?.reference} `}
+                {data?.crimeGroup?.alias &&
+                  `-- (Alias: ${data?.crimeGroup?.alias})`}
               </Title>
             </Col>
             {editRights && (

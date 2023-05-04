@@ -570,7 +570,7 @@ const FeedItem = ({
             </Col>
             {adminRights && (
               <Col span={12} style={{ height: '100%' }}>
-                <AdminTodos />
+                <AdminTodos fullSearch={search} />
               </Col>
             )}
           </Row>

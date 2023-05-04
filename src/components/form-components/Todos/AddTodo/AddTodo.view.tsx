@@ -30,7 +30,7 @@ const AddTodo = ({
           rules={[
             {
               required: true,
-              message: 'Please enter a name for the new todo item.',
+              message: 'Please enter a name for the new to-do.',
             },
           ]}
         >
@@ -42,11 +42,11 @@ const AddTodo = ({
       <Col span={23}>
         <Form.Item
           name="dueDate"
-          label="End Date"
+          label="Due Date"
           rules={[
             {
               required: true,
-              message: 'Please select a end date for the new exclusion.',
+              message: 'Please select a due date for the new to-do.',
             },
           ]}
         >
@@ -66,8 +66,7 @@ const AddTodo = ({
           rules={[
             {
               required: true,
-              message:
-                'Please selected at least one approver for the new group.',
+              message: 'Please selected at least one admin for the new to-do.',
             },
           ]}
         >

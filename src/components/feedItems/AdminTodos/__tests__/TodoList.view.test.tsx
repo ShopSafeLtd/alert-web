@@ -1,7 +1,7 @@
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
-import TodoList from '../TodoList.view';
+import TodoList from '../AdminTodos.view';
 
 describe('List Officer View', () => {
   const data = {

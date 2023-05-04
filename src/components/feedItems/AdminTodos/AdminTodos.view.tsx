@@ -4,6 +4,7 @@ import {
   Card,
   Checkbox,
   Col,
+  Collapse,
   Drawer,
   Empty,
   Input,
@@ -13,17 +14,18 @@ import {
   Table,
   Typography,
 } from 'antd';
-
 import type { CreateTodoMutation, ListTodosQuery } from 'graphql/generated';
 import moment from 'moment';
 import type { MutationUpdaterFn } from '@apollo/client';
 import AddTodo from 'components/form-components/Todos/AddTodo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import { Link } from 'react-router-dom';
+import getTodoUrl from '../../../utils/get-to-do-url';
 import useStyles from './AdminTodos.styles';
 
-const { Title } = Typography;
-
+const { Title, Text } = Typography;
+const { Panel } = Collapse;
 interface Props {
   data:
     | Exclude<ListTodosQuery['listTodos'], undefined | null>
@@ -31,8 +33,8 @@ interface Props {
     | undefined;
   loading: boolean;
   saving: boolean;
-  onCompleteTodo: (id: string) => void;
-  onUnCompleteTodo: (id: string) => void;
+  onCompletedTodo: (id: string) => void;
+  onUncompletedTodo: (id: string) => void;
   addTodo: boolean;
   toggleAddTodo: () => void;
   updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
@@ -46,8 +48,8 @@ const AdminTodos = ({
   data,
   loading,
   saving,
-  onCompleteTodo,
-  onUnCompleteTodo,
+  onCompletedTodo,
+  onUncompletedTodo,
   addTodo,
   toggleAddTodo,
   updateTodoList,
@@ -57,7 +59,9 @@ const AdminTodos = ({
   currentPageSize,
 }: Props): JSX.Element => {
   const classes = useStyles();
-  if (data?.completedTodos) console.log(data?.completedTodos[0]);
+  const expandedRowRender = (record) => (
+    <Text style={{ fontSize: 14 }}>{record.description}</Text>
+  );
 
   return (
     <Card
@@ -68,7 +72,12 @@ const AdminTodos = ({
         width: '100%',
       }}
     >
-      <Row align="middle" gutter={60}>
+      <Row align="middle" gutter={10} style={{ marginBottom: 10 }} wrap={false}>
+        <Col>
+          <Title className={classes.title} level={4}>
+            Admin To-do
+          </Title>
+        </Col>
         <Col flex={1}>
           <Input
             placeholder="search for a to-do task..."
@@ -83,16 +92,14 @@ const AdminTodos = ({
             size="small"
             danger
             disabled={saving}
-            icon={<FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />}
+            icon={<FontAwesomeIcon icon={faPlus} style={{ marginRight: 0 }} />}
             onClick={toggleAddTodo}
           >
             Todo
           </Button>
         </Col>
       </Row>
-      <Title className={classes.title} level={4}>
-        Admin To do
-      </Title>
+
       {loading ? (
         Array.from({ length: 5 }).map((_, index) => (
           // eslint-disable-next-line react/no-array-index-key
@@ -106,6 +113,7 @@ const AdminTodos = ({
             description: todo?.description,
             dueDate: todo.dueDate,
             completed: todo.completed,
+            todo,
           }))}
           loading={loading}
           size="small"
@@ -131,12 +139,15 @@ const AdminTodos = ({
                 <Popconfirm
                   title="Complete this task?"
                   // description="Do you complete this task?"
-                  onConfirm={() => onCompleteTodo(record.key)}
+                  onConfirm={() => onCompletedTodo(record.key)}
                   okText="Yes"
                   cancelText="No"
                   overlayInnerStyle={{ padding: 10 }}
                 >
-                  <Checkbox checked={!!record.completed} />
+                  <Checkbox
+                    checked={!!record.completed}
+                    style={{ color: 'red' }}
+                  />
                 </Popconfirm>
               ),
             },
@@ -144,20 +155,23 @@ const AdminTodos = ({
               key: 'name',
               dataIndex: 'name',
               title: 'Name',
+              render: (value, record) => (
+                <Link to={`${getTodoUrl(record.todo)}`}>{value}</Link>
+              ),
             },
-            {
-              key: 'description',
-              dataIndex: 'description',
-              title: 'Description',
-            },
+
             {
               key: 'dueDate',
               dataIndex: 'dueDate',
-              title: 'DueDate',
+              title: 'Due Date',
               width: 100,
               render: (value) => moment(value).calendar('dd/mm/yyyy'),
             },
           ]}
+          expandable={{
+            expandedRowRender,
+            rowExpandable: (record) => !!record.description,
+          }}
         />
       ) : (
         <div
@@ -171,88 +185,95 @@ const AdminTodos = ({
           <Empty description="Nothing to complete" />
         </div>
       )}
-      <Title className={classes.title} level={4}>
-        Completed Tasks
-      </Title>
-      {loading ? (
-        Array.from({ length: 5 }).map((_, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <Skeleton key={index} />
-        ))
-      ) : data?.completedTotal ? (
-        <Table
-          dataSource={data?.completedTodos?.map((todo) => ({
-            key: todo.id,
-            name: todo.name,
-            description: todo?.description,
-            completedDate: todo.completedDate,
-            completedBy: todo.completedBy?.fullName,
-            completed: !!todo.completed,
-          }))}
-          loading={loading}
-          size="small"
-          pagination={
-            data?.uncompletedTotal > 10
-              ? {
-                  total: data?.uncompletedTotal,
-                  onChange: onPaginationChange,
-                  pageSize: currentPageSize,
-                  current: currentPage,
-                  showSizeChanger: false,
-                  position: ['bottomCenter'],
-                }
-              : false
-          }
-          columns={[
-            {
-              title: '',
-              dataIndex: 'actions',
-              key: 'actions',
-              width: 30,
-              render: (_, record) => (
-                <Popconfirm
-                  title="Uncompleted this task?"
-                  // description="Do you complete this task?"
-                  onConfirm={() => onUnCompleteTodo(record.key)}
-                  okText="Yes"
-                  cancelText="No"
-                  overlayInnerStyle={{ padding: 10 }}
-                >
-                  <Checkbox checked={record.completed} />
-                </Popconfirm>
-              ),
-            },
-            {
-              key: 'name',
-              dataIndex: 'name',
-              title: 'Name',
-            },
-            {
-              key: 'completedBy',
-              dataIndex: 'completedBy',
-              title: 'CompletedBy',
-            },
-            {
-              key: 'completedDate',
-              dataIndex: 'completedDate',
-              title: 'CompletedDate',
-              width: 120,
-              render: (value) => moment(value).calendar('dd/mm/yyyy'),
-            },
-          ]}
-        />
-      ) : (
-        <div
-          style={{
-            display: 'flex',
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Empty description="Nothing has been completed" />
-        </div>
-      )}
+
+      <Collapse className={classes.title}>
+        <Panel header="Completed Tasks" key="1">
+          {loading ? (
+            Array.from({ length: 5 }).map((_, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <Skeleton key={index} />
+            ))
+          ) : data?.completedTotal ? (
+            <Table
+              dataSource={data?.completedTodos?.map((todo) => ({
+                key: todo.id,
+                name: todo.name,
+                description: todo?.description,
+                completedDate: todo.completedDate,
+                completedBy: todo.completedBy?.fullName,
+                completed: !!todo.completed,
+              }))}
+              loading={loading}
+              size="small"
+              pagination={
+                data?.completedTotal > 10
+                  ? {
+                      total: data?.uncompletedTotal,
+                      onChange: onPaginationChange,
+                      pageSize: currentPageSize,
+                      current: currentPage,
+                      showSizeChanger: false,
+                      position: ['bottomCenter'],
+                    }
+                  : false
+              }
+              columns={[
+                {
+                  title: '',
+                  dataIndex: 'actions',
+                  key: 'actions',
+                  width: 30,
+                  render: (_, record) => (
+                    <Popconfirm
+                      title="Uncompleted this task?"
+                      // description="Do you complete this task?"
+                      onConfirm={() => onUncompletedTodo(record.key)}
+                      okText="Yes"
+                      cancelText="No"
+                      overlayInnerStyle={{ padding: 10 }}
+                    >
+                      <Checkbox checked={record.completed} />
+                    </Popconfirm>
+                  ),
+                },
+                {
+                  key: 'name',
+                  dataIndex: 'name',
+                  title: 'Name',
+                  // ellipsis: true,
+                },
+                // {
+                //   key: 'completedBy',
+                //   dataIndex: 'completedBy',
+                //   title: 'CompletedBy',
+                // },
+                {
+                  key: 'completedDate',
+                  dataIndex: 'completedDate',
+                  title: 'Completed Date',
+                  width: 120,
+                  render: (value) => moment(value).calendar('dd/mm/yyyy'),
+                },
+              ]}
+              // expandable={{
+              //   expandedRowRender,
+              //   rowExpandable: (record) => !!record.description,
+              // }}
+            />
+          ) : (
+            <div
+              style={{
+                display: 'flex',
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Empty description="Nothing has been completed" />
+            </div>
+          )}
+        </Panel>
+      </Collapse>
       <Drawer
         title="Add New Todo"
         open={addTodo}

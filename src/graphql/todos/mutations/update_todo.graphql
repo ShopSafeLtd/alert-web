@@ -1,5 +1,6 @@
 mutation UpdateTodo($data: TodoUpdateInput!, $where: UniqueId!) {
   updateTodo(data: $data, where: $where) {
+    type
     description
     dueDate
     completedDate

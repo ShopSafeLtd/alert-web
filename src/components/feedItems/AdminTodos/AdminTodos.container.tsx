@@ -11,8 +11,8 @@ const AdminTodos = ({ fullSearch }: Props): JSX.Element => {
     data,
     loading,
     saving,
-    onCompleteTodo,
-    onUnCompleteTodo,
+    onCompletedTodo,
+    onUncompletedTodo,
     addTodo,
     toggleAddTodo,
     updateTodoList,
@@ -27,8 +27,8 @@ const AdminTodos = ({ fullSearch }: Props): JSX.Element => {
       data={data}
       loading={loading}
       saving={saving}
-      onCompleteTodo={onCompleteTodo}
-      onUnCompleteTodo={onUnCompleteTodo}
+      onCompletedTodo={onCompletedTodo}
+      onUncompletedTodo={onUncompletedTodo}
       addTodo={addTodo}
       toggleAddTodo={toggleAddTodo}
       updateTodoList={updateTodoList}

@@ -1,6 +1,5 @@
-mutation CreateTodo($data: TodoCreateInput!) {
-  createTodo(data: $data) {
-    type
+mutation UpdateTodoMention($where: UpdateTodoMention!) {
+  updateTodoMention(where: $where) {
     description
     dueDate
     completedDate
@@ -11,7 +10,10 @@ mutation CreateTodo($data: TodoCreateInput!) {
       id
       fullName
     }
-
+    completedBy {
+      id
+      fullName
+    }
     assignedUsers {
       id
       fullName

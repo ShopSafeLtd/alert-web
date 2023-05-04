@@ -1,13 +1,19 @@
 import React from 'react';
 import {
+  faCar,
   faCircleXmark,
   faClose,
+  faExclamationCircle,
   faImage,
+  faPeopleGroup,
   faSmile,
+  faUsers,
 } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { FormInstance } from 'antd';
 import {
+  Dropdown,
+  Menu,
   Button,
   Col,
   Drawer,
@@ -96,12 +102,12 @@ interface Props {
   crimeGroupsData: CrimeGroupData[];
   vehiclesData: VehicleData[];
   saving: boolean;
+  handleMarkAsRead: () => void;
 }
 
 const UpdateBar = ({
   replyTo,
   setReplyTo,
-
   beforeUpdateImageUpload,
   onSubmitUpdate,
   onUpdateImageChange,
@@ -136,6 +142,7 @@ const UpdateBar = ({
   crimeGroupsData,
   vehiclesData,
   saving,
+  handleMarkAsRead,
 }: Props) => (
   <>
     <Form
@@ -148,6 +155,7 @@ const UpdateBar = ({
       }}
       className="update-bar"
       style={{}}
+      onFocus={() => handleMarkAsRead()}
     >
       {replyTo && (
         <div className="reply-to">
@@ -228,65 +236,7 @@ const UpdateBar = ({
             )}
           />
         </Col>
-        {/* {updateIncidents?.map((incident) => (
-          <Col key={incident.id}>
-            <Card size="small" className="update-info-card">
-              <Row gutter={5} wrap={false}>
-                <Popconfirm
-                  placement="topLeft"
-                  trigger="click"
-                  title="Remove the incident?"
-                  onConfirm={() => removeUpdateIncident(incident.id)}
-                  okText="Yes"
-                  cancelText="No"
-                  overlayInnerStyle={{ padding: 10 }}
-                >
-                  <Button
-                    size="small"
-                    className="info-remove-button"
-                    shape="circle"
-                    type="text"
-                    icon={<FontAwesomeIcon icon={faCircleXmark} size="lg" />}
-                  />
-                </Popconfirm>
 
-                <Col>
-                  {incident?.images && incident.images.length > 0 && (
-                    <div style={{ height: 100, width: 100 }}>
-                      <WatermarkImage url={incident.images[0].optimised} />
-                    </div>
-                  )}
-                </Col>
-                <Col flex={1} style={{ marginTop: 10, marginLeft: 5 }}>
-                  <Paragraph
-                    strong
-                    ellipsis
-                    style={{
-                      marginBottom: '0.5rem',
-                      fontSize: 15,
-                    }}
-                  >
-                    {incident.subject}
-                  </Paragraph>
-                  <Descriptions size="small">
-                    <Descriptions.Item label="Created At">
-                      {incident.dayTime}
-                    </Descriptions.Item>
-                  </Descriptions>
-                  <Paragraph
-                    type="secondary"
-                    ellipsis
-                    style={{
-                      marginBottom: '0.5rem',
-                    }}
-                  >
-                    {incident.description}
-                  </Paragraph>
-                </Col>
-              </Row>
-            </Card>
-          </Col>
-        ))} */}
         {updateOffenders?.map((offender) => (
           <Col key={offender.id} style={{ width: 370 }}>
             <OffenderMessageCard
@@ -421,70 +371,84 @@ const UpdateBar = ({
           </Upload>
         </Col>
         <Col>
-          <div>
-            <Button
-              onClick={toggleLinkUpdateOffender}
-              disabled={
-                saving ||
-                (updateIncidents && updateIncidents.length > 0) ||
-                (updateFileList && updateFileList.length > 0) ||
-                (vehiclesData && vehiclesData.length > 0) ||
-                (crimeGroupsData && crimeGroupsData.length > 0)
-              }
-              style={{ paddingLeft: 10, paddingRight: 10 }}
-              // icon={<FontAwesomeIcon className="button-icon" icon={faPlus} />}
-            >
-              Offender
-            </Button>
-          </div>
-        </Col>
-        <Col>
-          <Button
-            onClick={toggleLinkUpdateIncident}
-            disabled={
-              saving ||
-              (updateFileList && updateFileList.length > 0) ||
-              (updateOffenders && updateOffenders.length > 0) ||
-              (vehiclesData && vehiclesData.length > 0) ||
-              (crimeGroupsData && crimeGroupsData.length > 0)
+          <Dropdown
+            overlay={
+              <Menu
+                items={[
+                  {
+                    label: 'Link Offenders',
+                    key: '1',
+                    icon: (
+                      <FontAwesomeIcon
+                        icon={faUsers}
+                        style={{ marginRight: 10 }}
+                      />
+                    ),
+                    disabled:
+                      saving ||
+                      (updateIncidents && updateIncidents.length > 0) ||
+                      (updateFileList && updateFileList.length > 0) ||
+                      (vehiclesData && vehiclesData.length > 0) ||
+                      (crimeGroupsData && crimeGroupsData.length > 0),
+                    onClick: () => toggleLinkUpdateOffender(),
+                  },
+                  {
+                    label: 'Link Incidents',
+                    key: '2',
+                    icon: (
+                      <FontAwesomeIcon
+                        icon={faExclamationCircle}
+                        style={{ marginRight: 10 }}
+                      />
+                    ),
+                    disabled:
+                      saving ||
+                      (updateFileList && updateFileList.length > 0) ||
+                      (updateOffenders && updateOffenders.length > 0) ||
+                      (vehiclesData && vehiclesData.length > 0) ||
+                      (crimeGroupsData && crimeGroupsData.length > 0),
+                    onClick: () => toggleLinkUpdateIncident(),
+                  },
+                  {
+                    label: 'Link Vehicles',
+                    key: '3',
+                    icon: (
+                      <FontAwesomeIcon
+                        icon={faCar}
+                        style={{ marginRight: 10 }}
+                      />
+                    ),
+                    disabled:
+                      saving ||
+                      (updateFileList && updateFileList.length > 0) ||
+                      (updateOffenders && updateOffenders.length > 0) ||
+                      (updateIncidents && updateIncidents.length > 0) ||
+                      (crimeGroupsData && crimeGroupsData.length > 0),
+                    onClick: () => toggleLinkVehicle(),
+                  },
+                  {
+                    label: 'Link Crime Groups',
+                    key: '4',
+                    icon: (
+                      <FontAwesomeIcon
+                        icon={faPeopleGroup}
+                        style={{ marginRight: 10 }}
+                      />
+                    ),
+                    disabled:
+                      saving ||
+                      (updateFileList && updateFileList.length > 0) ||
+                      (updateOffenders && updateOffenders.length > 0) ||
+                      (vehiclesData && vehiclesData.length > 0) ||
+                      (updateIncidents && updateIncidents.length > 0),
+                    onClick: () => toggleLinkCrimeGroup(),
+                  },
+                ]}
+              />
             }
-            style={{ paddingLeft: 10, paddingRight: 10 }}
-            // icon={<FontAwesomeIcon className="button-icon" icon={faPlus} />}
           >
-            Incident
-          </Button>
-        </Col>
-        <Col>
-          <Button
-            onClick={toggleLinkCrimeGroup}
-            disabled={
-              saving ||
-              (updateFileList && updateFileList.length > 0) ||
-              (updateOffenders && updateOffenders.length > 0) ||
-              (vehiclesData && vehiclesData.length > 0) ||
-              (updateIncidents && updateIncidents.length > 0)
-            }
-            style={{ paddingLeft: 10, paddingRight: 10 }}
-            // icon={<FontAwesomeIcon className="button-icon" icon={faPlus} />}
-          >
-            Crime Group
-          </Button>
-        </Col>
-        <Col>
-          <Button
-            onClick={toggleLinkVehicle}
-            disabled={
-              saving ||
-              (updateFileList && updateFileList.length > 0) ||
-              (updateOffenders && updateOffenders.length > 0) ||
-              (updateIncidents && updateIncidents.length > 0) ||
-              (crimeGroupsData && crimeGroupsData.length > 0)
-            }
-            style={{ paddingLeft: 10, paddingRight: 10 }}
-            // icon={<FontAwesomeIcon className="button-icon" icon={faPlus} />}
-          >
-            Vehicle
-          </Button>
+            <Button>Link</Button>
+          </Dropdown>
         </Col>
       </Row>
     </Form>

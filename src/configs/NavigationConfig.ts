@@ -64,7 +64,7 @@ const userOnlyItems: NavItem[] = [
     icon: faCalendarCheck,
     breadcrumb: false,
     submenu: [],
-    roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
+    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
     badge: true,
   },
   {

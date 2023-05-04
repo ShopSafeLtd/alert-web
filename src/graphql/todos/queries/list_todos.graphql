@@ -6,6 +6,7 @@ query listTodos(
 ) {
   listTodos(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
     uncompletedTodos {
+      type
       description
       dueDate
       completedDate
@@ -24,8 +25,14 @@ query listTodos(
         fullName
       }
       completed
+      vehicleId
+      offenderId
+      crimeGroupId
+      incidentId
+      investigationId
     }
     completedTodos {
+      type
       description
       dueDate
       completedDate

@@ -43,14 +43,20 @@ const useAddTodo = ({ update, onClose }: Props): Return => {
       where: {
         schemes: {
           some: {
-            scheme: {
-              id: {
-                equals: schemeId,
+            AND: [
+              {
+                scheme: {
+                  id: {
+                    equals: schemeId,
+                  },
+                },
               },
-              // role: {
-              //   equals: Role.SchemeAdmin,
-              // },
-            },
+              {
+                role: {
+                  in: [Role.SchemeAdmin, Role.ShopsafeAdmin],
+                },
+              },
+            ],
           },
         },
       },
@@ -114,12 +120,10 @@ const useAddTodo = ({ update, onClose }: Props): Return => {
   return {
     onSubmit,
     saving,
-    adminUsersData: usersData?.users
-      .filter((user) => user.schemes[0].role === Role.SchemeAdmin)
-      .map((user) => ({
-        value: user.id,
-        label: user.fullName,
-      })),
+    adminUsersData: usersData?.users.map((user) => ({
+      value: user.id,
+      label: user.fullName,
+    })),
     usersLoading,
   };
 };

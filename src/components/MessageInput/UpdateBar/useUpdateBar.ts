@@ -16,6 +16,8 @@ import type {
   ViewOffenderQueryVariables,
 } from 'graphql/generated';
 import {
+  TodoType,
+  useUpdateTodoMentionMutation,
   ImagePosition,
   CrimeGroupDocument,
   Role,
@@ -88,6 +90,7 @@ interface Return {
   vehiclesData: VehicleData[];
   saving: boolean;
   adminRights: boolean;
+  handleMarkAsRead: () => void;
 }
 
 interface Props {
@@ -1052,6 +1055,27 @@ const useUpdateBar = ({
       setVehiclesData([...vehiclesData, selectedVehicle]);
     }
   };
+  const [updateTodoMention] = useUpdateTodoMentionMutation();
+  const getWhereArgs = () => {
+    if (incidentId) return { incidentId, type: TodoType.IncidentUpdate };
+    if (offenderId) return { offenderId, type: TodoType.OffenderUpdate };
+    if (vehicleId) return { vehicleId, type: TodoType.VehicleUpdate };
+    if (crimeGroupId) return { crimeGroupId, type: TodoType.CrimegroupUpdate };
+    if (investigationId)
+      return { investigationId, type: TodoType.InvestigationUpdate };
+    return { type: TodoType.IncidentUpdate };
+  };
+
+  const handleMarkAsRead = () => {
+    updateTodoMention({
+      variables: {
+        where: {
+          userId,
+          ...getWhereArgs(),
+        },
+      },
+    });
+  };
 
   return {
     updateForm,
@@ -1089,6 +1113,7 @@ const useUpdateBar = ({
     vehiclesData,
     saving,
     adminRights: userRole !== Role.User,
+    handleMarkAsRead,
   };
 };
 
