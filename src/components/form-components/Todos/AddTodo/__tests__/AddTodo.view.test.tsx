@@ -8,11 +8,11 @@ describe('Detail Officer View', () => {
     const { getByText } = render(
       <MemoryRouter>
         <AddExclusion
+          adminUsersData={[]}
+          usersLoading={false}
           onSubmit={jest.fn()}
           onClose={jest.fn()}
           saving={false}
-          setStartDate={jest.fn()}
-          disabledDate={jest.fn()}
         />
       </MemoryRouter>
     );

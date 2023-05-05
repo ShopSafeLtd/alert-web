@@ -18,10 +18,10 @@ const UseAddExclusionTest = () => {
         type="button"
         onClick={() =>
           onSubmit({
-            endDate: new Date('2022-08-31T11:25:32.702Z'),
-            location: 'location',
             description: 'new description',
-            id: '',
+            name: 'new name',
+            dueDate: new Date(),
+            assignedUsers: [],
           })
         }
       >
