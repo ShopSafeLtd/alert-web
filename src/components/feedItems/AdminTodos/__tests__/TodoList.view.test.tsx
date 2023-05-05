@@ -33,6 +33,7 @@ describe('List Officer View', () => {
     ],
     uncompletedTotal: 1,
     completedTotal: 1,
+    totalUserTodos: 1,
   };
   it('renders the page', () => {
     const { getByText } = render(

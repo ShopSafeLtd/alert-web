@@ -15,6 +15,8 @@ describe('Detail Officer View', () => {
         businesses: [{ name: 'user business', id: '', fullName: '' }],
         status: 'enabled',
         groups: [{ id: 'groupId', name: 'test group' }],
+        schemes: [],
+        approverGroups: [],
       },
     ],
   };

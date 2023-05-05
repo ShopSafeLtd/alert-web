@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router';
+import { Route, Routes } from 'react-router';
 import ListVehicles from 'views/profiles/Vehicles/ListVehicles';
 import ViewVehicle from 'views/profiles/Vehicles/ViewVehicle';
 

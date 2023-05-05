@@ -18,6 +18,7 @@ describe('List Officer View', () => {
           businesses: [],
           groups: [{ id: 'groupId', name: 'test group' }],
           publicName: true,
+          approverGroups: [],
         },
       ],
       total: 1,

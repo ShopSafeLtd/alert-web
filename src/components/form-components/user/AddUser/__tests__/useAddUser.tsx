@@ -272,8 +272,8 @@ const UseAddUserTest = () => {
             },
             role: Role.User,
             groups: ['groupId'],
-            approver: ['groupId'],
             chats: ['chatId'],
+            approverGroups: [],
           })
         }
       >

@@ -133,8 +133,11 @@ const useLinkIncident = ({ onClose, onSelect, ids }: Props): Return => {
           id: row?.id || '',
         }))
       );
-      +setSaving(false);
+      setSaving(false);
       onClose();
+    },
+    onError: () => {
+      setSaving(false);
     },
   });
 

@@ -133,11 +133,10 @@ const UseEditGroupTest = () => {
     ));
   const Users =
     usersData &&
-    usersData.users.map((el) => (
-      <div key={el.id}>
-        <span>{el.id}</span>
-        <span>{el.fullName}</span>
-        <span>{el.businesses[0]?.name}</span>
+    usersData.map((el) => (
+      <div key={el.label}>
+        <span>{el.value}</span>
+        <span>{el.label}</span>
       </div>
     ));
   return (
@@ -153,6 +152,7 @@ const UseEditGroupTest = () => {
             name: 'new name',
             description: 'new description',
             users: ['1'],
+            approvers: [],
           })
         }
       >

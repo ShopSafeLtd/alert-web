@@ -6,7 +6,7 @@ interface Return {
 
 const downloadImageFunction = (dataUrl: string) => {
   const a = document.createElement('a');
-  a.setAttribute('download', 'inestigation-flow.png');
+  a.setAttribute('download', 'investigation-flow.png');
   a.setAttribute('href', dataUrl);
   a.click();
 };

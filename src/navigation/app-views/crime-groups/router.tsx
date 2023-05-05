@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router';
+import { Route, Routes } from 'react-router';
 import ListCrimeGroups from 'views/profiles/crime-groups/list-crime-groups';
 import CreateCrimeGroup from 'views/profiles/crime-groups/create-crime-group';
 import ViewCrimeGroup from 'views/profiles/crime-groups/view-crime-group';

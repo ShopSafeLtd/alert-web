@@ -1,6 +1,6 @@
 import { TodoType } from 'graphql/generated';
 
-interface TodoData {
+export interface TodoData {
   type?: TodoType | null;
   vehicleId?: string | null;
   offenderId?: string | null;

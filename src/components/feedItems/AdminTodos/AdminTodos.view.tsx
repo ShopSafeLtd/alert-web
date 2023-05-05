@@ -21,6 +21,7 @@ import AddTodo from 'components/form-components/Todos/AddTodo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
+import type { TodoData } from '../../../utils/get-to-do-url';
 import getTodoUrl from '../../../utils/get-to-do-url';
 import useStyles from './AdminTodos.styles';
 
@@ -43,7 +44,15 @@ interface Props {
   currentPage: number;
   currentPageSize: number;
 }
-
+interface TableItem {
+  key: string;
+  name: string | null | undefined;
+  description: string | null | undefined;
+  completedDate?: Date | null | undefined;
+  completedBy?: string | undefined;
+  completed?: boolean | null | undefined;
+  todo: TodoData;
+}
 const AdminTodos = ({
   data,
   loading,
@@ -59,7 +68,7 @@ const AdminTodos = ({
   currentPageSize,
 }: Props): JSX.Element => {
   const classes = useStyles();
-  const expandedRowRender = (record) => (
+  const expandedRowRender = (record: TableItem) => (
     <Text style={{ fontSize: 14 }}>{record.description}</Text>
   );
 
