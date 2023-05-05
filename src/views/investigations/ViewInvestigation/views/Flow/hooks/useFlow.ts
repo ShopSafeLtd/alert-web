@@ -97,7 +97,7 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
   const [edges, onEdgesChange, onConnect] = useEdgesStateSynced({ edgesMap });
   const [clientCount, setClientCount] = useState<number>(0);
   const [isSynced, setIsSynced] = useState<boolean>(false);
-  const usedFallbackRef = useRef<boolean>(false);
+  const [usedFallbackRef, setUsedFallbackRef] = useState<boolean>(false);
   const [reactFlowInstance, setReactFlowInstance] =
     useState<ReactFlowInstance | null>(null);
   const offenders =
@@ -107,7 +107,7 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
     })) || [];
 
   const onSave = useCallback(() => {
-    if (reactFlowInstance && usedFallbackRef?.current) {
+    if (reactFlowInstance && usedFallbackRef) {
       const flow = reactFlowInstance.toObject();
       if (
         flow.nodes.length <= 0 &&
@@ -153,12 +153,19 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
         },
       });
     }
-  }, [reactFlowInstance]);
+  }, [reactFlowInstance, usedFallbackRef]);
   const handleSave = useCallback(() => {
     if (isSynced || clientCount === 0) {
       onSave();
     }
-  }, [onSave, investigationId, provider.doc, isSynced, clientCount]);
+  }, [
+    onSave,
+    investigationId,
+    provider.doc,
+    isSynced,
+    clientCount,
+    usedFallbackRef,
+  ]);
   const handleSaveDebounced = useDebouncedCallback(handleSave, TIMEOUT);
   const handlePeersChange = useCallback(
     ({ bcconnected }) => {
@@ -229,7 +236,7 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
         clientCount === 0 &&
         // eslint-disable-next-line no-underscore-dangle
         nodesMap?._map.size === 0 &&
-        !usedFallbackRef.current
+        !usedFallbackRef
       ) {
         const initData = importData?.investigation?.flows[0];
         if (initData?.nodes)
@@ -243,12 +250,12 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
             edgesMap.set(edge.id, edge as Edge);
           }
       }
-      usedFallbackRef.current = true;
+      setUsedFallbackRef(true);
     };
 
     const timeoutId = window.setTimeout(async () => {
       await fetchFallback();
-      if (isMounted && usedFallbackRef.current) {
+      if (isMounted && usedFallbackRef) {
         window.clearTimeout(timeoutId);
         // do something
       }
@@ -494,9 +501,9 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
     loading:
       importData?.investigation?.flows[0] &&
       provider.wsconnected &&
-      usedFallbackRef.current
+      usedFallbackRef
         ? false
-        : provider.wsconnecting,
+        : provider.wsconnecting && !usedFallbackRef,
     offenders,
     setSelected,
     saving,
