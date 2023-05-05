@@ -61,6 +61,7 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
       };
       setCategoryIds([...(<[]>categoryIds), newCategoryIds]);
       setCategories([...(<[]>categories), newCategory]);
+      setSelectedCategories([...(<[]>selectedCategories), newCategory]);
     },
   });
 

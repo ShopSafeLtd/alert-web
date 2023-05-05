@@ -1,18 +1,34 @@
 import React from 'react';
-import { Button, Card, Col, Drawer, Image, Row, Skeleton, Table } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Drawer,
+  Dropdown,
+  Image,
+  Menu,
+  Row,
+  Skeleton,
+  Table,
+} from 'antd';
+import AddDocument from 'components/form-components/documents/AddDocument';
+
 import TabContent from 'components/TabContent';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/pro-light-svg-icons';
-import type { Props as ViewProps } from './types/Documents';
-import AddDocument from '../../../../components/form-components/documents/AddDocument';
+import { faMagnifyingGlass, faPlus } from '@fortawesome/pro-light-svg-icons';
+import type { Props } from './types/Documents';
 
+const isImage = (url: string) => {
+  const ext = url.split('.').pop();
+  return ext === 'jpg' || ext === 'png' || ext === 'jpeg';
+};
 const DocumentsView = ({
   data,
   toggleAddDocument,
   addDocument,
   loading,
   isAdmin,
-}: ViewProps) => {
+}: Props) => {
   const tags = new Set(
     data?.scheme?.documents?.flatMap((document) =>
       document.tags.map((tag) => tag.name)
@@ -24,19 +40,44 @@ const DocumentsView = ({
   return (
     <TabContent>
       <Card style={{ marginLeft: 20, marginRight: 20, marginTop: 20 }}>
-        <Row>
+        <Row
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+          }}
+        >
           <Col>
             {isAdmin && (
-              <Button
-                style={{ margin: 10 }}
-                icon={
-                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
+              <Dropdown
+                overlay={
+                  <Menu
+                    items={[
+                      {
+                        label: 'Add Document',
+                        key: '5',
+                        icon: (
+                          <FontAwesomeIcon
+                            icon={faMagnifyingGlass}
+                            style={{ marginRight: 5 }}
+                          />
+                        ),
+                        // disabled: !listVehiclesData?.listVehicles.total,
+                        onClick: () => toggleAddDocument(),
+                      },
+                    ]}
+                  />
                 }
-                type="primary"
-                onClick={() => toggleAddDocument()}
               >
-                Add Document
-              </Button>
+                <Button
+                  key="2"
+                  type="primary"
+                  icon={
+                    <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
+                  }
+                >
+                  Documents
+                </Button>
+              </Dropdown>
             )}
           </Col>
         </Row>
@@ -96,7 +137,9 @@ const DocumentsView = ({
           dataSource={
             data?.scheme?.documents?.map((document) => ({
               key: document.id,
-              thumbnail: document.thumbnailUrl,
+              thumbnail:
+                document.thumbnailUrl ||
+                (isImage(document.url) ? document.url : undefined),
               fileUrl: document.url,
               name: document.name,
               tags: document.tags.map((tag) => ({
