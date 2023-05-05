@@ -72,7 +72,6 @@ interface FlowProps {
   flowScreen: FullScreenHandle;
   isFullScreen: boolean;
   setFullScreen: () => void;
-  reportChange: (state: boolean, handle: FullScreenHandle) => void;
 }
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -99,7 +98,6 @@ const ReactFlowView = ({
   isFullScreen,
   setFullScreen,
   flowScreen,
-  reportChange,
 }: // users,
 // provider,
 // reactFlowInstance,
@@ -159,13 +157,7 @@ FlowProps) => {
               )}
             </p>
             <Sidebar />
-            {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-            {/* @ts-ignore */}
-            <FullScreen
-              handle={flowScreen}
-              onChange={reportChange}
-              className="fullscreen-wrapper"
-            >
+            <FullScreen handle={flowScreen} className="fullscreen-wrapper">
               <div className={styles.rfWrapper} ref={wrapperRef}>
                 <ReactFlow
                   style={{

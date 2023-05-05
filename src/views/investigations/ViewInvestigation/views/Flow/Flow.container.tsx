@@ -34,7 +34,6 @@ const ReactFlowPro = ({ importData }: Props) => {
     // reactFlowInstance,
     downloadImage,
     flowScreen,
-    reportChange,
     isFullScreen,
     setFullScreen,
   } = useFlow({
@@ -46,7 +45,6 @@ const ReactFlowPro = ({ importData }: Props) => {
       flowScreen={flowScreen}
       isFullScreen={isFullScreen}
       setFullScreen={setFullScreen}
-      reportChange={reportChange}
       downloadImage={downloadImage}
       // reactFlowInstance={reactFlowInstance}
       // provider={provider}

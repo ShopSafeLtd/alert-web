@@ -66,7 +66,6 @@ interface Return {
   flowScreen: FullScreenHandle;
   isFullScreen: boolean;
   setFullScreen: () => void;
-  reportChange: (state: boolean, handle: FullScreenHandle) => void;
 }
 
 const TIMEOUT = 3000 + Math.floor(Math.random() * 7000);
@@ -471,14 +470,6 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
       flowScreen.enter();
     }
   }, [isFullScreen]);
-  const reportChange = useCallback(
-    (state, handle) => {
-      if (handle === flowScreen) {
-        console.log('flowScreen went to', state, handle);
-      }
-    },
-    [flowScreen]
-  );
 
   const downloadImage = useCallback(() => {
     handleDownload();
@@ -505,7 +496,7 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
       provider.wsconnected &&
       usedFallbackRef.current
         ? false
-        : provider.wsconnecting || !usedFallbackRef.current,
+        : provider.wsconnecting,
     offenders,
     setSelected,
     saving,
@@ -514,7 +505,6 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
     provider,
     downloadImage,
     flowScreen,
-    reportChange,
     isFullScreen,
     setFullScreen,
   };
