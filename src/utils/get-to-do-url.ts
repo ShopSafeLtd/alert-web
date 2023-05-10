@@ -21,7 +21,7 @@ const getTodoUrl = (todo: TodoData) => {
   if (todo.type === TodoType.IncidentUpdate)
     return `/app/offenders/view/${todo.incidentId}`;
   if (todo.type === TodoType.OffenderUpdate)
-    return `/app/offenders/view/${todo.incidentId}`;
+    return `/app/offenders/view/${todo.offenderId}`;
   if (todo.type === TodoType.InvestigationUpdate)
     return `/app/investigations/view/${todo.investigationId}`;
   if (todo.type === TodoType.VehicleUpdate)

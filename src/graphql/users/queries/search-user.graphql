@@ -5,6 +5,10 @@ query SearchUser($where: UserWhereUniqueInput!) {
     businesses {
       id
       name
+      locations {
+        id
+        full
+      }
     }
     email
     publicName

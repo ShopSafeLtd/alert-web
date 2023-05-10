@@ -54,6 +54,7 @@ const DebounceSelect = <
   return (
     <Select<ValueType>
       labelInValue
+      mode="multiple"
       filterOption={false}
       onSearch={debounceFetcher}
       notFoundContent={fetching ? <Spin size="small" /> : null}

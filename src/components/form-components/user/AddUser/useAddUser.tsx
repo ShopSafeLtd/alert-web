@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import type {
   CreateUserInDatabaseMutation,
   InviteExistingUserMutation,
-  Role,
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
+  Role,
 } from 'graphql/generated';
 import {
+  useLinkBusinessToSchemeMutation,
   QueryMode,
   SearchBusinessesDocument,
   SortOrder,
@@ -22,7 +23,8 @@ import type { MutationUpdaterFn } from '@apollo/client';
 import { useApolloClient } from '@apollo/client';
 import type { FormInstance } from 'antd';
 import { Form, Modal, notification, Typography } from 'antd';
-import type { SelectOptions } from 'types/DataType';
+import type { BusinessData, SelectOptions } from 'types/DataType';
+import errorNotification from 'types/error_notification';
 
 const { confirm } = Modal;
 const { useForm } = Form;
@@ -30,7 +32,7 @@ const { useForm } = Form;
 export interface FormData {
   fullName: string;
   email: string;
-  business: SelectOptions;
+  businesses: SelectOptions[];
   role: Role;
   groups: string[];
   chats: string[];
@@ -74,14 +76,9 @@ interface Return {
   setSelectedRole: (value: Role) => void;
   selectedGroups: string[] | undefined;
   setSelectedGroups: (value: string[]) => void;
+  addBusinessVisible: boolean;
+  toggleAddBusinessVisible: () => void;
 }
-
-const errorNotification = () =>
-  notification.error({
-    message: 'Error!',
-    description: 'Whoops, there are some errors. Please try again. ',
-    placement: 'bottomRight',
-  });
 
 const useAddUser = ({
   onClose,
@@ -91,24 +88,28 @@ const useAddUser = ({
 }: Props): Return => {
   const client = useApolloClient();
   const [form] = useForm<FormData>();
-
   const schemeId = useStoreState((state) => state.scheme.id);
   const [existingUser, setExistingUser] = useState(false);
   const [saving, setSaving] = useState(false);
   const [search, setSearch] = useState<string | null>(null);
   const [selectedRole, setSelectedRole] = useState<Role>();
   const [selectedGroups, setSelectedGroups] = useState<string[]>();
+  const [addBusinessVisible, setAddBusinessVisible] = useState(false);
+  const [businessesData, setBusinessesData] = useState<BusinessData[]>();
 
   useEffect(() => {
-    form.setFieldsValue({
-      business,
-    });
+    if (business)
+      form.setFieldsValue({
+        businesses: [business],
+      });
   }, [business]);
+
+  const [linkBusinessToScheme] = useLinkBusinessToSchemeMutation();
 
   const { data: userData } = useSearchUserQuery({
     variables: {
       where: {
-        email: search,
+        email: search?.toLowerCase(),
       },
     },
     skip: search === null,
@@ -119,11 +120,30 @@ const useAddUser = ({
           content: `A user with the email address ${user.email} already exists, do you want to invite ${user.fullName} to the scheme?`,
           onOk() {
             setExistingUser(true);
+            linkBusinessToScheme({
+              variables: {
+                business: {
+                  id: user.businesses[0].id,
+                },
+                scheme: {
+                  id: schemeId,
+                },
+              },
+              // optimisticResponse: {
+              //   linkBusinessToScheme
+              // }
+            });
             form.setFieldsValue({
               fullName: user.fullName,
               email: user.email,
               publicName: user.publicName,
-              business,
+              businesses:
+                user.businesses && user.businesses.length > 0
+                  ? user.businesses.map(({ id, name }) => ({
+                      value: id,
+                      label: name,
+                    }))
+                  : [],
             });
           },
           onCancel() {
@@ -286,11 +306,7 @@ const useAddUser = ({
               id: schemeId,
             },
             chats: data.chats.map((id) => ({ id })),
-            businesses: [
-              {
-                id: data.business.value,
-              },
-            ],
+            businesses: data.businesses.map(({ value }) => ({ id: value })),
           },
           groupWhere: {
             scheme: {
@@ -318,6 +334,13 @@ const useAddUser = ({
         query: SearchBusinessesDocument,
         variables: {
           where: {
+            schemes: {
+              some: {
+                id: {
+                  equals: schemeId,
+                },
+              },
+            },
             name: {
               contains: value,
               mode: QueryMode.Insensitive,
@@ -327,22 +350,44 @@ const useAddUser = ({
       })
       .then((response) =>
         response.data.listBusinesses.businesses.length > 0
-          ? response.data.listBusinesses.businesses.map((item) => ({
-              label: (
-                <div>
-                  <Typography.Text>{item?.name}</Typography.Text>
-                  {item?.locations[0] && (
-                    <Typography.Paragraph
-                      type="secondary"
-                      style={{ fontSize: 13, margin: 0 }}
-                    >
-                      {item?.locations[0]?.full}
-                    </Typography.Paragraph>
-                  )}
-                </div>
-              ) as React.ReactNode,
-              value: item?.id || '',
-            }))
+          ? businessesData && businessesData.length > 0
+            ? [
+                ...response.data.listBusinesses.businesses,
+                ...businessesData,
+              ].map((item) => ({
+                // label: item?.name || '',
+                // value: item?.id || '',
+                label: (
+                  <div>
+                    <Typography.Text>{item?.name}</Typography.Text>
+                    {item?.locations[0] && (
+                      <Typography.Paragraph
+                        type="secondary"
+                        style={{ fontSize: 13, margin: 0 }}
+                      >
+                        {item?.locations[0]?.full}
+                      </Typography.Paragraph>
+                    )}
+                  </div>
+                ) as React.ReactNode,
+                value: item?.id || '',
+              }))
+            : response.data.listBusinesses.businesses.map((item) => ({
+                label: (
+                  <div>
+                    <Typography.Text>{item?.name}</Typography.Text>
+                    {item?.locations[0] && (
+                      <Typography.Paragraph
+                        type="secondary"
+                        style={{ fontSize: 13, margin: 0 }}
+                      >
+                        {item?.locations[0]?.full}
+                      </Typography.Paragraph>
+                    )}
+                  </div>
+                ) as React.ReactNode,
+                value: item?.id || '',
+              }))
           : [
               {
                 label: 'No results found',
@@ -352,7 +397,9 @@ const useAddUser = ({
             ]
       );
   };
-
+  const toggleAddBusinessVisible = () => {
+    setAddBusinessVisible(!addBusinessVisible);
+  };
   return {
     onSubmit,
     groupsData: groupsData?.groups.map((group) => ({
@@ -375,6 +422,8 @@ const useAddUser = ({
     setSelectedRole,
     selectedGroups,
     setSelectedGroups,
+    addBusinessVisible,
+    toggleAddBusinessVisible,
   };
 };
 

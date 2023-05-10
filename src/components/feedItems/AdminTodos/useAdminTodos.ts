@@ -150,16 +150,17 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
           query: ListTodosDocument,
           data: {
             listTodos: {
-              totalUserTodos: existingData.listTodos.totalUserTodos + 1,
-              completedTotal: [
-                ...(<[]>existingData.listTodos.completedTodos),
-                res.updateTodo,
-              ].length,
+              totalUserTodos: existingData.listTodos.totalUserTodos - 1,
+              // completedTotal: [
+              //   ...(<[]>existingData.listTodos.completedTodos),
+              //   res.updateTodo,
+              // ].length,
+              completedTotal: existingData.listTodos.completedTotal + 1,
               completedTodos: [
                 ...(<[]>existingData.listTodos.completedTodos),
                 res.updateTodo,
               ],
-              uncompletedTotal: existingData.listTodos.uncompletedTotal + 1,
+              uncompletedTotal: existingData.listTodos.uncompletedTotal - 1,
               uncompletedTodos: existingData.listTodos.uncompletedTodos.filter(
                 (todo) => todo.id !== res?.updateTodo?.id
               ),
@@ -174,12 +175,8 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
           query: ListTodosDocument,
           data: {
             listTodos: {
-              totalUserTodos: existingData.listTodos.totalUserTodos - 1,
-
-              uncompletedTotal: [
-                ...(<[]>existingData.listTodos.uncompletedTodos),
-                res.updateTodo,
-              ].length,
+              totalUserTodos: existingData.listTodos.totalUserTodos + 1,
+              uncompletedTotal: existingData.listTodos.uncompletedTotal + 1,
               uncompletedTodos: [
                 ...(<[]>existingData.listTodos.uncompletedTodos),
                 res.updateTodo,
