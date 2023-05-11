@@ -205,22 +205,24 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
                 )
                 .map(({ id }) => ({ id })),
             },
-            approverGroups: {
-              connect: data.approverGroups
-                .filter(
-                  (id) =>
-                    !userData?.user?.approverGroups
-                      .map((item) => item.id)
-                      .includes(id)
-                )
-                .map((id) => ({ id })),
-              disconnect: userData?.user?.approverGroups
-                .filter(
-                  ({ id }) =>
-                    !data.approverGroups.map((item) => item).includes(id)
-                )
-                .map(({ id }) => ({ id })),
-            },
+            approverGroups: data.approverGroups
+              ? {
+                  connect: data.approverGroups
+                    .filter(
+                      (id) =>
+                        !userData?.user?.approverGroups
+                          .map((item) => item.id)
+                          .includes(id)
+                    )
+                    .map((id) => ({ id })),
+                  disconnect: userData?.user?.approverGroups
+                    .filter(
+                      ({ id }) =>
+                        !data.approverGroups.map((item) => item).includes(id)
+                    )
+                    .map(({ id }) => ({ id })),
+                }
+              : undefined,
             chats: {
               create: data.chats
                 .filter(
