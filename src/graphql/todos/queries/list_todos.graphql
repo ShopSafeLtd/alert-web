@@ -30,6 +30,7 @@ query listTodos(
       crimeGroupId
       incidentId
       investigationId
+      chatId
     }
     completedTodos {
       type

@@ -266,10 +266,12 @@ const UseAddUserTest = () => {
             offenderEmail: false,
             offenderPush: false,
             publicName: true,
-            business: {
-              label: '',
-              value: '',
-            },
+            businesses: [
+              {
+                label: '',
+                value: '',
+              },
+            ],
             role: Role.User,
             groups: ['groupId'],
             chats: ['chatId'],

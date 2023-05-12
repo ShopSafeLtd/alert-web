@@ -1,0 +1,40 @@
+query SchemeReportDetails(
+  $where: GroupWhereInput
+  $schemeWhere: SchemeWhereUniqueInput!
+  $orderBy: [GroupOrderByWithRelationInput!]
+  $reportTemplatesWhere: ReportTemplateWhereInput
+) {
+  groups(where: $where, orderBy: $orderBy) {
+    id
+    name
+    description
+    approver {
+      id
+      fullName
+    }
+  }
+  scheme(where: $schemeWhere) {
+    reportIcons{
+    optimisedPersisted
+    }
+    reportTemplates(where: $reportTemplatesWhere) {
+      id
+      metaData
+      name
+      layout {
+        h
+        id
+        i
+        maxH
+        maxW
+        minW
+        minH
+        static
+        moved
+        w
+        x
+        y
+      }
+    }
+  }
+}

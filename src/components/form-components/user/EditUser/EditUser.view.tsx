@@ -137,6 +137,7 @@ const EditUser = ({
             <DebounceSelect
               showSearch
               allowClear
+              mode="multiple"
               disabled={saving}
               placeholder="Search for a business..."
               fetchOptions={onSearchBusiness}

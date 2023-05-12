@@ -1,7 +1,28 @@
+import type RGL from 'react-grid-layout';
+
+export type ExtendedLayout = RGL.Layout;
+
+export interface MetaData {
+  key: string;
+  type:
+    | 'summary'
+    | 'pageBreak'
+    | 'donut'
+    | 'graph'
+    | 'heatmap'
+    | 'table'
+    | 'bar'
+    | 'logo'
+    | 'radial'
+    | 'pie';
+  urls?: string[];
+}
+
 export const LayoutToReadable = [
   {
     i: 'createdSummary',
     readable: 'Created Summary',
+    type: 'summary',
   },
   {
     i: 'incidentsSummary',
@@ -113,8 +134,14 @@ export const LayoutToReadable = [
   },
 ];
 
-export const margin: [number, number] = [10, 10];
-export const rowHeight = 30;
+export interface SelectOptions {
+  label: string;
+  value: string;
+}
 
-export const tableLengthToHeight = (length: number) =>
-  length > 10 ? 12 * (length / 10) : 14;
+export interface IReportTemplate {
+  id: string;
+  name: string;
+  metaData: MetaData[];
+  layout: RGL.Layout[];
+}

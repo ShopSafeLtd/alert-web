@@ -1,0 +1,24 @@
+mutation UpdateReportTemplate($data: ReportTemplateUpdateInput!, $where: ReportTemplateWhereUniqueInput!) {
+  updateReportTemplate(data: $data, where: $where) {
+    id
+    name
+    layout {
+      id
+      createdAt
+      updatedAt
+      h
+      w
+      x
+      y
+      maxW
+      maxH
+      minW
+      minH
+      static
+      i
+      moved
+    }
+    metaData
+    type
+  }
+}

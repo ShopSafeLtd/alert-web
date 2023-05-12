@@ -71,8 +71,26 @@
   src: url('@/assets/fonts/RockSalt-Regular.ttf');
 }
 
+//.logo {
+//  display: none
+//}
+
+.overlay {
+  z-index: 1000
+}
+
 .logo {
-  display: none
+  display: flex;
+  width: 100%;
+  height: 100px;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.print-title {
+  width: 100%;
+  text-align: center;
+  justify-content: center;
 }
 
 .printable-graph {
@@ -107,6 +125,27 @@
 .card-remove {
   position: absolute;
   right: 5px;
+  top: 5px;
+  z-index: 1;
+}
+
+.change-graph1 {
+  position: absolute;
+  right: 40px;
+  top: 5px;
+  z-index: 1;
+}
+
+.change-graph2 {
+  position: absolute;
+  right: 70px;
+  top: 5px;
+  z-index: 1;
+}
+
+.change-graph3 {
+  position: absolute;
+  right: 100px;
   top: 5px;
   z-index: 1;
 }

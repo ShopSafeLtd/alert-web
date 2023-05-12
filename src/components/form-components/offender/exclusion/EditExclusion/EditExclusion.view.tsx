@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Col, DatePicker, Form, Input, Row, Select } from 'antd';
-import moment from 'moment';
 import type { Moment } from 'moment';
+import moment from 'moment';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import type { BanData } from 'types/DataType';
 import { BanTypeValues } from 'types';
@@ -52,6 +52,40 @@ const EditExclusion = ({
       </Col>
     </Row>
     <Row gutter={16}>
+      <Col span={21}>
+        <Form.Item
+          name="type"
+          label="Type"
+          tooltip="select a type for the exclusion."
+        >
+          <Select options={BanTypeValues} disabled={saving} />
+        </Form.Item>
+      </Col>
+    </Row>
+    <Row gutter={16}>
+      <Col span={21}>
+        <Form.Item
+          name="location"
+          label="Exclusion Location "
+          rules={[
+            {
+              required: true,
+              message: 'Please enter a location for the exclusion.',
+            },
+          ]}
+        >
+          <Input disabled={saving} />
+        </Form.Item>
+      </Col>
+    </Row>
+    <Row gutter={16}>
+      <Col span={21}>
+        <Form.Item name="description" label="Exclusion Description">
+          <Input.TextArea disabled={saving} />
+        </Form.Item>
+      </Col>
+    </Row>
+    <Row gutter={16}>
       <Col span={11}>
         <Form.Item
           name="startDate"
@@ -97,40 +131,6 @@ const EditExclusion = ({
           ]}
         >
           <DatePicker disabled={saving} disabledDate={disabledDate} />
-        </Form.Item>
-      </Col>
-    </Row>
-    <Row gutter={16}>
-      <Col span={21}>
-        <Form.Item
-          name="type"
-          label="Type"
-          tooltip="select a type for the exclusion."
-        >
-          <Select options={BanTypeValues} disabled={saving} />
-        </Form.Item>
-      </Col>
-    </Row>
-    <Row gutter={16}>
-      <Col span={21}>
-        <Form.Item
-          name="location"
-          label="Exclusion Location "
-          rules={[
-            {
-              required: true,
-              message: 'Please enter a location for the exclusion.',
-            },
-          ]}
-        >
-          <Input disabled={saving} />
-        </Form.Item>
-      </Col>
-    </Row>
-    <Row gutter={16}>
-      <Col span={21}>
-        <Form.Item name="description" label="Exclusion Description">
-          <Input.TextArea disabled={saving} />
         </Form.Item>
       </Col>
     </Row>

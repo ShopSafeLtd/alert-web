@@ -273,10 +273,12 @@ const UseAddUserTest = () => {
     const value = {
       email: 'email',
       fullName: '',
-      business: {
-        label: '',
-        value: '',
-      },
+      businesses: [
+        {
+          label: '',
+          value: '',
+        },
+      ],
       role: Role.ContentAdmin,
       groups: [],
       approverGroups: [],
@@ -324,10 +326,12 @@ const UseAddUserTest = () => {
           onSubmit({
             email: 'email',
             fullName: 'fullName',
-            business: {
-              label: '',
-              value: '',
-            },
+            businesses: [
+              {
+                label: '',
+                value: '',
+              },
+            ],
             role: Role.User,
             groups: ['groupId'],
             approverGroups: ['approverGroupsId'],

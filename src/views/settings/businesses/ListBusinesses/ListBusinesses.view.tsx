@@ -6,6 +6,7 @@ import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import AddBusiness from 'components/form-components/businesses/AddBusiness';
 import LinkBusiness from 'components/form-components/businesses/LinkBusiness';
+import type { BusinessData } from 'types/DataType';
 import useStyles from './ListBusinesses.styles';
 
 interface TableData {
@@ -26,6 +27,8 @@ interface Props {
   toggleAddVisible: () => void;
   linkVisible: boolean;
   toggleLinkVisible: () => void;
+  onSubmit: (value: BusinessData) => void;
+  saving: boolean;
 }
 
 const ListBusinesses = ({
@@ -37,6 +40,8 @@ const ListBusinesses = ({
   toggleAddVisible,
   linkVisible,
   toggleLinkVisible,
+  onSubmit,
+  saving,
 }: Props) => {
   const classNames = useStyles();
 
@@ -131,7 +136,13 @@ const ListBusinesses = ({
         title="Add New Business"
         width={600}
       >
-        {addVisible && <AddBusiness onClose={toggleAddVisible} />}
+        {addVisible && (
+          <AddBusiness
+            onClose={toggleAddVisible}
+            saving={saving}
+            update={onSubmit}
+          />
+        )}
       </Drawer>
       <Drawer
         open={linkVisible}

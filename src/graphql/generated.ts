@@ -7005,7 +7005,7 @@ export type CreateUpdateData = {
 export type CreateUserData = {
   address?: InputMaybe<AddressCreateWithoutUserInput>;
   approverGroups?: InputMaybe<Array<InputMaybe<UniqueId>>>;
-  businesses?: InputMaybe<Array<BusinessWhereUniqueInput>>;
+  businesses: BusinessCreateNestedManyWithoutUsersInput;
   chats?: InputMaybe<Array<InputMaybe<UniqueId>>>;
   email: Scalars['String'];
   fullName: Scalars['String'];
@@ -47264,13 +47264,7 @@ export type CreateBusinessMutation = {
     publicName: boolean;
     demId?: string | null;
     totalUsers: number;
-    parent?: {
-      __typename?: 'Business';
-      id: string;
-      name: string;
-      fullName: string;
-      publicName: boolean;
-    } | null;
+    parent?: { __typename?: 'Business'; id: string; name: string } | null;
     locations: Array<{
       __typename?: 'Address';
       id: string;
@@ -47503,13 +47497,7 @@ export type ListBusinessesQuery = {
       publicName: boolean;
       demId?: string | null;
       totalUsers: number;
-      parent?: {
-        __typename?: 'Business';
-        id: string;
-        name: string;
-        fullName: string;
-        publicName: boolean;
-      } | null;
+      parent?: { __typename?: 'Business'; id: string; name: string } | null;
       locations: Array<{
         __typename?: 'Address';
         id: string;
@@ -52195,6 +52183,71 @@ export type RecycledItemsQuery = {
   } | null> | null;
 };
 
+export type CreateReportTemplateMutationVariables = Exact<{
+  data: ReportTemplateCreateInput;
+}>;
+
+export type CreateReportTemplateMutation = {
+  __typename?: 'Mutation';
+  createReportTemplate: {
+    __typename?: 'ReportTemplate';
+    id: string;
+    metaData: Array<any>;
+    name?: string | null;
+    type: ReportType;
+    layout: Array<{
+      __typename?: 'ReportLayout';
+      id: string;
+      createdAt: any;
+      updatedAt: any;
+      h: number;
+      w: number;
+      x: number;
+      y: number;
+      maxW?: number | null;
+      maxH?: number | null;
+      minW?: number | null;
+      minH?: number | null;
+      static: boolean;
+      moved: boolean;
+      i: string;
+    }>;
+  };
+};
+
+export type UpdateReportTemplateMutationVariables = Exact<{
+  data: ReportTemplateUpdateInput;
+  where: ReportTemplateWhereUniqueInput;
+}>;
+
+export type UpdateReportTemplateMutation = {
+  __typename?: 'Mutation';
+  updateReportTemplate?: {
+    __typename?: 'ReportTemplate';
+    id: string;
+    name?: string | null;
+    metaData: Array<any>;
+    type: ReportType;
+    layout: Array<{
+      __typename?: 'ReportLayout';
+      id: string;
+      createdAt: any;
+      updatedAt: any;
+      h: number;
+      w: number;
+      x: number;
+      y: number;
+      maxW?: number | null;
+      maxH?: number | null;
+      minW?: number | null;
+      minH?: number | null;
+      static: boolean;
+      i: string;
+      moved: boolean;
+    }>;
+  } | null;
+};
+
 export type BusinessEngagementQueryVariables = Exact<{
   where: UserContributionWhereInput;
 }>;
@@ -52873,6 +52926,7 @@ export type PerformanceReportQuery = {
       totalOffenders: number;
       totalLostValue: number;
       totalIncidents: number;
+      lastIncident?: any | null;
       alias: string;
       alertId: string;
     }>;
@@ -52917,6 +52971,54 @@ export type PerformanceReportQuery = {
         geoLat?: number | null;
         geoLng?: number | null;
       } | null;
+    }>;
+  } | null;
+};
+
+export type SchemeReportDetailsQueryVariables = Exact<{
+  where?: InputMaybe<GroupWhereInput>;
+  schemeWhere: SchemeWhereUniqueInput;
+  orderBy?: InputMaybe<
+    Array<GroupOrderByWithRelationInput> | GroupOrderByWithRelationInput
+  >;
+  reportTemplatesWhere?: InputMaybe<ReportTemplateWhereInput>;
+}>;
+
+export type SchemeReportDetailsQuery = {
+  __typename?: 'Query';
+  groups: Array<{
+    __typename?: 'Group';
+    id: string;
+    name: string;
+    description?: string | null;
+    approver: Array<{ __typename?: 'User'; id: string; fullName: string }>;
+  }>;
+  scheme?: {
+    __typename?: 'Scheme';
+    reportIcons: Array<{
+      __typename?: 'Image';
+      optimisedPersisted?: string | null;
+    }>;
+    reportTemplates: Array<{
+      __typename?: 'ReportTemplate';
+      id: string;
+      metaData: Array<any>;
+      name?: string | null;
+      layout: Array<{
+        __typename?: 'ReportLayout';
+        h: number;
+        id: string;
+        i: string;
+        maxH?: number | null;
+        maxW?: number | null;
+        minW?: number | null;
+        minH?: number | null;
+        static: boolean;
+        moved: boolean;
+        w: number;
+        x: number;
+        y: number;
+      }>;
     }>;
   } | null;
 };
@@ -53214,6 +53316,7 @@ export type ListTodosQuery = {
       crimeGroupId?: string | null;
       incidentId?: string | null;
       investigationId?: string | null;
+      chatId?: string | null;
       createdBy?: { __typename?: 'User'; id: string; fullName: string } | null;
       completedBy?: {
         __typename?: 'User';
@@ -54766,7 +54869,16 @@ export type SearchUserQuery = {
     fullName: string;
     email: string;
     publicName: boolean;
-    businesses: Array<{ __typename?: 'Business'; id: string; name: string }>;
+    businesses: Array<{
+      __typename?: 'Business';
+      id: string;
+      name: string;
+      locations: Array<{
+        __typename?: 'Address';
+        id: string;
+        full?: string | null;
+      }>;
+    }>;
     addresses: Array<{
       __typename?: 'Address';
       id: string;
@@ -56454,8 +56566,6 @@ export const CreateBusinessDocument = gql`
       parent {
         id
         name
-        fullName
-        publicName
       }
       locations {
         id
@@ -56992,8 +57102,6 @@ export const ListBusinessesDocument = gql`
         parent {
           id
           name
-          fullName
-          publicName
         }
         locations {
           id
@@ -64947,6 +65055,148 @@ export type RecycledItemsQueryResult = Apollo.QueryResult<
   RecycledItemsQuery,
   RecycledItemsQueryVariables
 >;
+export const CreateReportTemplateDocument = gql`
+  mutation CreateReportTemplate($data: ReportTemplateCreateInput!) {
+    createReportTemplate(data: $data) {
+      id
+      metaData
+      layout {
+        id
+        createdAt
+        updatedAt
+        h
+        w
+        x
+        y
+        maxW
+        maxH
+        minW
+        minH
+        static
+        moved
+        i
+      }
+      name
+      type
+    }
+  }
+`;
+export type CreateReportTemplateMutationFn = Apollo.MutationFunction<
+  CreateReportTemplateMutation,
+  CreateReportTemplateMutationVariables
+>;
+
+/**
+ * __useCreateReportTemplateMutation__
+ *
+ * To run a mutation, you first call `useCreateReportTemplateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateReportTemplateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createReportTemplateMutation, { data, loading, error }] = useCreateReportTemplateMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useCreateReportTemplateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateReportTemplateMutation,
+    CreateReportTemplateMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateReportTemplateMutation,
+    CreateReportTemplateMutationVariables
+  >(CreateReportTemplateDocument, options);
+}
+export type CreateReportTemplateMutationHookResult = ReturnType<
+  typeof useCreateReportTemplateMutation
+>;
+export type CreateReportTemplateMutationResult =
+  Apollo.MutationResult<CreateReportTemplateMutation>;
+export type CreateReportTemplateMutationOptions = Apollo.BaseMutationOptions<
+  CreateReportTemplateMutation,
+  CreateReportTemplateMutationVariables
+>;
+export const UpdateReportTemplateDocument = gql`
+  mutation UpdateReportTemplate(
+    $data: ReportTemplateUpdateInput!
+    $where: ReportTemplateWhereUniqueInput!
+  ) {
+    updateReportTemplate(data: $data, where: $where) {
+      id
+      name
+      layout {
+        id
+        createdAt
+        updatedAt
+        h
+        w
+        x
+        y
+        maxW
+        maxH
+        minW
+        minH
+        static
+        i
+        moved
+      }
+      metaData
+      type
+    }
+  }
+`;
+export type UpdateReportTemplateMutationFn = Apollo.MutationFunction<
+  UpdateReportTemplateMutation,
+  UpdateReportTemplateMutationVariables
+>;
+
+/**
+ * __useUpdateReportTemplateMutation__
+ *
+ * To run a mutation, you first call `useUpdateReportTemplateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateReportTemplateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateReportTemplateMutation, { data, loading, error }] = useUpdateReportTemplateMutation({
+ *   variables: {
+ *      data: // value for 'data'
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useUpdateReportTemplateMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateReportTemplateMutation,
+    UpdateReportTemplateMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateReportTemplateMutation,
+    UpdateReportTemplateMutationVariables
+  >(UpdateReportTemplateDocument, options);
+}
+export type UpdateReportTemplateMutationHookResult = ReturnType<
+  typeof useUpdateReportTemplateMutation
+>;
+export type UpdateReportTemplateMutationResult =
+  Apollo.MutationResult<UpdateReportTemplateMutation>;
+export type UpdateReportTemplateMutationOptions = Apollo.BaseMutationOptions<
+  UpdateReportTemplateMutation,
+  UpdateReportTemplateMutationVariables
+>;
 export const BusinessEngagementDocument = gql`
   query BusinessEngagement($where: UserContributionWhereInput!) {
     businessContribution(where: $where) {
@@ -65862,6 +66112,7 @@ export const PerformanceReportDocument = gql`
         totalOffenders
         totalLostValue
         totalIncidents
+        lastIncident
         alias
         alertId
       }
@@ -65954,6 +66205,102 @@ export type PerformanceReportLazyQueryHookResult = ReturnType<
 export type PerformanceReportQueryResult = Apollo.QueryResult<
   PerformanceReportQuery,
   PerformanceReportQueryVariables
+>;
+export const SchemeReportDetailsDocument = gql`
+  query SchemeReportDetails(
+    $where: GroupWhereInput
+    $schemeWhere: SchemeWhereUniqueInput!
+    $orderBy: [GroupOrderByWithRelationInput!]
+    $reportTemplatesWhere: ReportTemplateWhereInput
+  ) {
+    groups(where: $where, orderBy: $orderBy) {
+      id
+      name
+      description
+      approver {
+        id
+        fullName
+      }
+    }
+    scheme(where: $schemeWhere) {
+      reportIcons {
+        optimisedPersisted
+      }
+      reportTemplates(where: $reportTemplatesWhere) {
+        id
+        metaData
+        name
+        layout {
+          h
+          id
+          i
+          maxH
+          maxW
+          minW
+          minH
+          static
+          moved
+          w
+          x
+          y
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useSchemeReportDetailsQuery__
+ *
+ * To run a query within a React component, call `useSchemeReportDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSchemeReportDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSchemeReportDetailsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      schemeWhere: // value for 'schemeWhere'
+ *      orderBy: // value for 'orderBy'
+ *      reportTemplatesWhere: // value for 'reportTemplatesWhere'
+ *   },
+ * });
+ */
+export function useSchemeReportDetailsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SchemeReportDetailsQuery,
+    SchemeReportDetailsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    SchemeReportDetailsQuery,
+    SchemeReportDetailsQueryVariables
+  >(SchemeReportDetailsDocument, options);
+}
+export function useSchemeReportDetailsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SchemeReportDetailsQuery,
+    SchemeReportDetailsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    SchemeReportDetailsQuery,
+    SchemeReportDetailsQueryVariables
+  >(SchemeReportDetailsDocument, options);
+}
+export type SchemeReportDetailsQueryHookResult = ReturnType<
+  typeof useSchemeReportDetailsQuery
+>;
+export type SchemeReportDetailsLazyQueryHookResult = ReturnType<
+  typeof useSchemeReportDetailsLazyQuery
+>;
+export type SchemeReportDetailsQueryResult = Apollo.QueryResult<
+  SchemeReportDetailsQuery,
+  SchemeReportDetailsQueryVariables
 >;
 export const SchemeReportFiltersDocument = gql`
   query SchemeReportFilters($where: SchemeWhereInput) {
@@ -66760,6 +67107,7 @@ export const ListTodosDocument = gql`
         crimeGroupId
         incidentId
         investigationId
+        chatId
       }
       completedTodos {
         type
@@ -69328,6 +69676,10 @@ export const SearchUserDocument = gql`
       businesses {
         id
         name
+        locations {
+          id
+          full
+        }
       }
       email
       publicName

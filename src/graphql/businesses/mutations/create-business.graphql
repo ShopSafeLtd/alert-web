@@ -8,8 +8,6 @@ mutation CreateBusiness($data: CreateBusinessDataInput!) {
     parent {
       id
       name
-      fullName
-      publicName
     }
     locations {
       id

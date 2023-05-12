@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { SelectProps } from 'antd';
-import { Select, Spin } from 'antd';
+import { Typography, Select, Spin } from 'antd';
 import React, { useMemo, useRef, useState } from 'react';
 import debounce from 'lodash/debounce';
 
@@ -19,10 +19,12 @@ export interface DebounceSelectProps<ValueType = any>
  * @returns {JSX.Element} - returns a select that when searched will only trigger the search after the debounceTimeout or 200ms after the user has stopped typing. This is used to reduce the number of calls to an api
  * @description - if used in a form, make sure to wrap in a React fragment and use the state as value rather than the form submit value
  * */
-const DebounceSelect = <
+const CopyDebounceSelect = <
   ValueType extends {
     key?: string;
-    label: React.ReactNode;
+    // label: React.ReactNode;
+    label: string;
+    location?: string;
     value: string | number;
   } = any
 >({
@@ -57,17 +59,35 @@ const DebounceSelect = <
       filterOption={false}
       onSearch={debounceFetcher}
       notFoundContent={fetching ? <Spin size="small" /> : null}
-      options={options}
       optionFilterProp="label"
       optionLabelProp="label"
+      // options={options}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
-    />
+    >
+      {options.map((option) => (
+        <Select.Option
+          key={option.value}
+          value={option.value}
+          label={option.label}
+        >
+          <Typography.Text>{option.label}</Typography.Text>
+          {option.location && (
+            <Typography.Paragraph
+              type="secondary"
+              style={{ fontSize: 13, margin: 0 }}
+            >
+              {option.location}
+            </Typography.Paragraph>
+          )}
+        </Select.Option>
+      ))}
+    </Select>
   );
 };
 
-DebounceSelect.defaultProps = {
+CopyDebounceSelect.defaultProps = {
   debounceTimeout: 200,
   setValue: () => {},
 };
-export default DebounceSelect;
+export default CopyDebounceSelect;

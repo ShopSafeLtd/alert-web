@@ -3,7 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendar,
   faCar,
+  faChartBar,
   faChartLineDown,
+  faChartPie,
   faClipboard,
   faComments,
   faExclamationCircle,
@@ -17,6 +19,7 @@ import {
 import React, { useMemo } from 'react';
 import type RGL from 'react-grid-layout';
 import {
+  BarGraph,
   DonutGraph,
   HeatMapGoogle,
   LineGraph,
@@ -40,6 +43,7 @@ import {
 } from 'components/reports/tableColumns';
 import type { PerformanceReportQuery } from '../../../../graphql/generated';
 import useStyles from '../../styles/report.styles';
+import { MetaData } from '../../types';
 
 interface ContributorTable {
   key: string;
@@ -73,6 +77,8 @@ interface Props {
   editMode: boolean;
   changeSize: (arg0: string, arg1: number) => void;
   isPrinting: boolean;
+  metadata: MetaData[];
+  setMetadata: (arg0: MetaData[]) => void;
 }
 const PerformanceReportLayout = ({
   loading,
@@ -90,6 +96,8 @@ const PerformanceReportLayout = ({
   rowHeight,
   isPrinting,
   editMode,
+  metadata,
+  setMetadata,
 }: Props) => {
   const classes = useStyles();
   const calculateHeight = (key: string, offset?: number) => {
@@ -99,6 +107,7 @@ const PerformanceReportLayout = ({
       rowHeight * targetH + margin[1] * (targetH - 1) - (offset || 0)
     }px`;
   };
+
   const components: Elements = {
     createdSummary: (
       <Card
@@ -401,16 +410,67 @@ const PerformanceReportLayout = ({
         <Button
           type="text"
           shape="circle"
+          className="change-graph1 no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
+          size="small"
+          onClick={() => {
+            const updatedMetadata = metadata.map((item) => {
+              if (item.key === 'crimeTypesDonut') {
+                return { ...item, type: 'bar' };
+              }
+              return item;
+            }) satisfies MetaData[];
+            setMetadata(updatedMetadata);
+          }}
+        />
+        <Button
+          type="text"
+          shape="circle"
+          className="change-graph2 no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
+          size="small"
+          onClick={() => {
+            const updatedMetadata = metadata.map((item) => {
+              if (item.key === 'crimeTypesDonut') {
+                if (item.type === 'donut') return { ...item, type: 'pie' };
+                return { ...item, type: 'donut' };
+              }
+              return item;
+            }) satisfies MetaData[];
+            setMetadata(updatedMetadata);
+          }}
+        />
+        <Button
+          type="text"
+          shape="circle"
           className="card-remove no-print"
           hidden={!editMode}
           icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
           size="small"
           onClick={() => removeItem('crimeTypesDonut')}
         />
-        <DonutGraph
-          data={data?.performanceReport?.crimeTypeDonut}
-          emptyLabel="No Crime Types"
-        />
+        {metadata.find((item) => item.key === 'crimeTypesDonut')?.type ===
+          'donut' ||
+        metadata.find((item) => item.key === 'crimeTypesDonut')?.type ===
+          'pie' ? (
+          <DonutGraph
+            data={data?.performanceReport?.crimeTypeDonut}
+            emptyLabel="No Crime Types"
+            type={
+              metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
+                | 'donut'
+                | 'pie'
+            }
+          />
+        ) : (
+          <BarGraph
+            data={data?.performanceReport?.crimeTypeDonut}
+            emptyLabel="No Crime Types"
+            labelFormat="Incidents"
+          />
+        )}
       </Card>
     ),
     involvedTagsDonut: (
@@ -425,16 +485,67 @@ const PerformanceReportLayout = ({
         <Button
           type="text"
           shape="circle"
+          className="change-graph1 no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
+          size="small"
+          onClick={() => {
+            const updatedMetadata = metadata.map((item) => {
+              if (item.key === 'involvedTagsDonut') {
+                return { ...item, type: 'bar' };
+              }
+              return item;
+            }) satisfies MetaData[];
+            setMetadata(updatedMetadata);
+          }}
+        />
+        <Button
+          type="text"
+          shape="circle"
+          className="change-graph2 no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
+          size="small"
+          onClick={() => {
+            const updatedMetadata = metadata.map((item) => {
+              if (item.key === 'involvedTagsDonut') {
+                if (item.type === 'donut') return { ...item, type: 'pie' };
+                return { ...item, type: 'donut' };
+              }
+              return item;
+            }) satisfies MetaData[];
+            setMetadata(updatedMetadata);
+          }}
+        />
+        <Button
+          type="text"
+          shape="circle"
           className="card-remove no-print"
           hidden={!editMode}
           icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
           size="small"
           onClick={() => removeItem('involvedTagsDonut')}
         />
-        <DonutGraph
-          data={data?.performanceReport?.involvedTagCountDonut}
-          emptyLabel="No Involved Tags"
-        />
+
+        {metadata.find((item) => item.key === 'involvedTagsDonut')?.type ===
+          'donut' ||
+        metadata.find((item) => item.key === 'involvedTagsDonut')?.type ===
+          'pie' ? (
+          <DonutGraph
+            data={data?.performanceReport?.involvedTagCountDonut}
+            emptyLabel="No Involved Tags"
+            type={
+              metadata.find((item) => item.key === 'involvedTagsDonut')
+                ?.type as 'donut' | 'pie'
+            }
+          />
+        ) : (
+          <BarGraph
+            data={data?.performanceReport?.involvedTagCountDonut}
+            emptyLabel="No Involved Tags"
+            labelFormat="Incidents"
+          />
+        )}
       </Card>
     ),
 
@@ -450,16 +561,68 @@ const PerformanceReportLayout = ({
         <Button
           type="text"
           shape="circle"
+          className="change-graph1 no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
+          size="small"
+          onClick={() => {
+            const updatedMetadata = metadata.map((item) => {
+              if (item.key === 'goodsTypeDonut') {
+                return { ...item, type: 'bar' };
+              }
+              return item;
+            }) satisfies MetaData[];
+            setMetadata(updatedMetadata);
+          }}
+        />
+        <Button
+          type="text"
+          shape="circle"
+          className="change-graph2 no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
+          size="small"
+          onClick={() => {
+            const updatedMetadata = metadata.map((item) => {
+              if (item.key === 'goodsTypeDonut') {
+                if (item.type === 'donut') return { ...item, type: 'pie' };
+                return { ...item, type: 'donut' };
+              }
+              return item;
+            }) satisfies MetaData[];
+            setMetadata(updatedMetadata);
+          }}
+        />
+        <Button
+          type="text"
+          shape="circle"
           className="card-remove no-print"
           hidden={!editMode}
           icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
           size="small"
           onClick={() => removeItem('goodsTypeDonut')}
         />
-        <DonutGraph
-          data={data?.performanceReport?.goodsTypeCountDonut}
-          emptyLabel="No goods count"
-        />
+
+        {metadata.find((item) => item.key === 'goodsTypeDonut')?.type ===
+          'donut' ||
+        metadata.find((item) => item.key === 'goodsTypeDonut')?.type ===
+          'pie' ? (
+          <DonutGraph
+            data={data?.performanceReport?.goodsTypeCountDonut}
+            emptyLabel="No goods count"
+            type={
+              metadata.find((item) => item.key === 'goodsTypeDonut')?.type as
+                | 'donut'
+                | 'pie'
+            }
+          />
+        ) : (
+          <BarGraph
+            data={data?.performanceReport?.goodsTypeCountDonut}
+            emptyLabel="No goods count"
+            labelFormat="Incidents"
+          />
+        )}
       </Card>
     ),
     goodsValueDonut: (
@@ -474,17 +637,69 @@ const PerformanceReportLayout = ({
         <Button
           type="text"
           shape="circle"
+          className="change-graph1 no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
+          size="small"
+          onClick={() => {
+            const updatedMetadata = metadata.map((item) => {
+              if (item.key === 'goodsValueDonut') {
+                return { ...item, type: 'bar' };
+              }
+              return item;
+            }) satisfies MetaData[];
+            setMetadata(updatedMetadata);
+          }}
+        />
+        <Button
+          type="text"
+          shape="circle"
+          className="change-graph2 no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
+          size="small"
+          onClick={() => {
+            const updatedMetadata = metadata.map((item) => {
+              if (item.key === 'goodsValueDonut') {
+                if (item.type === 'donut') return { ...item, type: 'pie' };
+                return { ...item, type: 'donut' };
+              }
+              return item;
+            }) satisfies MetaData[];
+            setMetadata(updatedMetadata);
+          }}
+        />
+        <Button
+          type="text"
+          shape="circle"
           className="card-remove no-print"
           hidden={!editMode}
           icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
           size="small"
           onClick={() => removeItem('goodsValueDonut')}
         />
-        <DonutGraph
-          labelFormat="£"
-          data={data?.performanceReport?.goodsTypeValueDonut}
-          emptyLabel="No goods values"
-        />
+
+        {metadata.find((item) => item.key === 'goodsValueDonut')?.type ===
+          'donut' ||
+        metadata.find((item) => item.key === 'goodsValueDonut')?.type ===
+          'pie' ? (
+          <DonutGraph
+            labelFormat="£"
+            data={data?.performanceReport?.goodsTypeValueDonut}
+            emptyLabel="No goods values"
+            type={
+              metadata.find((item) => item.key === 'goodsValueDonut')?.type as
+                | 'donut'
+                | 'pie'
+            }
+          />
+        ) : (
+          <BarGraph
+            data={data?.performanceReport?.goodsTypeValueDonut}
+            emptyLabel="No goods values"
+            labelFormat="£"
+          />
+        )}
       </Card>
     ),
     incidentsDayOfWeekGraph: (
@@ -804,6 +1019,7 @@ const PerformanceReportLayout = ({
       crimeGroupPerformanceTableData,
       targetedBusinessData,
       targetedGoodsData,
+      metadata,
     ]
   );
 };

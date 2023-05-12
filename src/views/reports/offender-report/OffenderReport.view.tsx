@@ -1,7 +1,6 @@
-import type { RefObject } from 'react';
 import React, { useMemo } from 'react';
-import { Button, Col, Drawer, Row, Select, Typography } from 'antd';
-import type { OffenderReportQuery } from 'graphql/generated';
+import type { MenuProps } from 'antd';
+import { Button, Col, Drawer, Dropdown, Row, Select, Typography } from 'antd';
 import DatePicker from 'components/util-components/DatePicker';
 import Page from 'components/shared-components/AntD/Page/Page';
 import RGL, { WidthProvider } from 'react-grid-layout';
@@ -10,58 +9,57 @@ import {
   margin,
   rowHeight,
 } from 'components/reports/utils/utils';
-import type { SelectOptions } from './hooks/useOffenderReport';
-import type {
-  IncidentsTableData,
-  TargetedBusinessTableData,
-  TargetedGoodsTableData,
-} from '../../../components/reports/tableColumns';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import OffenderReportLayout from './layout/OffenderReportLayout';
-import OffenderLayout from './hooks/utils';
+import OffenderLayout from './hooks/initLayout';
+import type { Props } from './hooks/types';
+import AddLogo from '../../../components/reports/addLogo';
+import SaveAs from '../../../components/reports/saveAs';
 
 const { Title } = Typography;
 
-interface Props {
-  loading: boolean;
-  data: OffenderReportQuery | undefined;
-  groups: SelectOptions[];
-  dateRange: { startDate: Date; endDate: Date };
-  setDateRange: (dateRange: { startDate: Date; endDate: Date }) => void;
-  setSelectedGroups: (groups: string[]) => void;
-  groupsLoading: boolean;
-  selectedGroups: string[];
-  selectedBusiness: string[];
-  setSelectedBusiness: (businesses: string[]) => void;
-  businesses: SelectOptions[];
-  componentRef: RefObject<HTMLDivElement>;
-  handlePrint: () => void;
-  isPrinting: boolean;
-  layout: RGL.Layout[];
-  setLayout: (layout: RGL.Layout[]) => void;
-  minDrawer: boolean;
-  setMinDrawer: (arg0: boolean) => void;
-  logo: string | null | undefined;
-  removeItem: (arg0: string) => void;
-  changeSize: (arg0: string, arg1: number) => void;
-  targetedBusinessData: TargetedBusinessTableData[] | [];
-  targetedGoodsData: TargetedGoodsTableData[] | [];
-  incidentsTableData: IncidentsTableData[] | [];
-  editMode: boolean;
-  setEditMode: (arg0: boolean) => void;
-}
+// interface Props {
+//   loading: boolean;
+//   data: OffenderReportQuery | undefined;
+//   groups: SelectOptions[];
+//   dateRange: { startDate: Date; endDate: Date };
+//   setDateRange: (dateRange: { startDate: Date; endDate: Date }) => void;
+//   setSelectedGroups: (groups: string[]) => void;
+//   groupsLoading: boolean;
+//   selectedGroups: string[];
+//   selectedBusiness: string[];
+//   setSelectedBusiness: (businesses: string[]) => void;
+//   businesses: SelectOptions[];
+//   componentRef: RefObject<HTMLDivElement>;
+//   handlePrint: () => void;
+//   isPrinting: boolean;
+//   layout: RGL.Layout[];
+//   setLayout: (layout: RGL.Layout[]) => void;
+//   minDrawer: boolean;
+//   setMinDrawer: (arg0: boolean) => void;
+//   logo: string | null | undefined;
+//   removeItem: (arg0: string) => void;
+//   changeSize: (arg0: string, arg1: number) => void;
+//   targetedBusinessData: TargetedBusinessTableData[] | [];
+//   targetedGoodsData: TargetedGoodsTableData[] | [];
+//   incidentsTableData: IncidentsTableData[] | [];
+//   editMode: boolean;
+//   setEditMode: (arg0: boolean) => void;
+// }
 
 const PerformanceReport = ({
-  data,
   loading,
-  setDateRange,
-  dateRange,
+  data,
   groups,
+  dateRange,
+  setDateRange,
   setSelectedGroups,
   groupsLoading,
   selectedGroups,
-  businesses,
   selectedBusiness,
   setSelectedBusiness,
+  businesses,
   componentRef,
   handlePrint,
   isPrinting,
@@ -69,16 +67,47 @@ const PerformanceReport = ({
   setLayout,
   minDrawer,
   setMinDrawer,
-  logo,
   removeItem,
   changeSize,
+  targetedBusinessData,
   targetedGoodsData,
   incidentsTableData,
-  targetedBusinessData,
   editMode,
   setEditMode,
-}: Props) => {
+  addLogo,
+  addLogoDrawer,
+  logos,
+  metadata,
+  removeLogo,
+  saveAsDrawer,
+  saveTemplate,
+  selectTemplate,
+  selectedTemplate,
+  setMetadata,
+  setAddLogoDrawer,
+  setSaveAsDrawer,
+  templates,
+}: Omit<Props, 'selectedOffender'>) => {
   const ReactGridLayout = useMemo(() => WidthProvider(RGL), []);
+  const handleMenuClick: MenuProps['onClick'] = (e) => {
+    if (e.key === '1') {
+      setSaveAsDrawer(true);
+    }
+    if (e.key === '2') {
+      saveTemplate('', 'update');
+    }
+  };
+  const items: MenuProps['items'] = [
+    {
+      key: '1',
+      label: 'Save As',
+    },
+    {
+      key: '2',
+      disabled: selectedTemplate === 'default',
+      label: 'Update current template',
+    },
+  ];
 
   return (
     <Page>
@@ -90,7 +119,6 @@ const PerformanceReport = ({
           alignItems: 'center',
           top: 20,
           right: 20,
-          zIndex: 1000,
         }}
       >
         <Button
@@ -103,7 +131,7 @@ const PerformanceReport = ({
           {minDrawer ? 'Hide Drawer' : 'Show Drawer'}
         </Button>
         <Button
-          style={{ marginRight: 10 }}
+          style={{ marginRight: 10, zIndex: 1000 }}
           key="1"
           onClick={() => setEditMode(!editMode)}
           type={editMode ? 'primary' : 'default'}
@@ -114,13 +142,82 @@ const PerformanceReport = ({
           Print
         </Button>
       </div>
+      <div
+        style={{
+          position: 'absolute',
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          top: 80,
+          right: 20,
+        }}
+      >
+        <Select
+          style={{ width: 200, marginLeft: 10, marginRight: 10, zIndex: 1000 }}
+          onChange={(value) => selectTemplate(value)}
+          defaultValue={templates[0]?.id}
+          value={selectedTemplate}
+        >
+          {templates.map((template) => (
+            <Select.Option value={template.id}>{template.name}</Select.Option>
+          ))}
+        </Select>
+      </div>
+      <div
+        style={{
+          position: 'absolute',
+          display: 'flex',
+          justifyContent: 'flex-end',
+          alignItems: 'center',
+          top: 130,
+          right: 20,
+        }}
+      >
+        {' '}
+        <Dropdown
+          menu={{ items, onClick: handleMenuClick }}
+          placement="bottomLeft"
+          overlayStyle={{ zIndex: 1000 }}
+          className="no-print overlay"
+        >
+          <Button>Save</Button>
+        </Dropdown>
+      </div>
       <div ref={componentRef} className="print-page">
         <div className="logo">
-          <img
-            style={{ height: '100%', width: '25 %' }}
-            src={logo || ''}
-            alt="logo"
-          />
+          {metadata
+            ?.find((item) => item.key === 'logo')
+            ?.urls?.map((url, _i, array) => (
+              <>
+                <Button
+                  type="text"
+                  className="no-print"
+                  hidden={!editMode}
+                  icon={
+                    <FontAwesomeIcon icon={faTrash} color="red" size="lg" />
+                  }
+                  onClick={() => removeLogo(_i)}
+                />
+                <img
+                  style={{
+                    height: '100%',
+                    width: '25 %',
+                    marginRight: array.length - 1 === _i ? 0 : 10,
+                  }}
+                  src={url || ''}
+                  alt="logo"
+                />
+              </>
+            ))}
+          <Button
+            className="no-print"
+            hidden={!editMode}
+            onClick={() => setAddLogoDrawer(true)}
+            type="primary"
+            style={{ marginLeft: 10 }}
+          >
+            Add Logo
+          </Button>
         </div>
         <Title level={2} className="print-title">
           Offender Report: {data?.offenderReport?.offenderSummary?.name} -{' '}
@@ -240,6 +337,8 @@ const PerformanceReport = ({
                 editMode,
                 changeSize,
                 isPrinting,
+                metadata,
+                setMetadata,
               })}
             </ReactGridLayout>
           </div>
@@ -284,6 +383,37 @@ const PerformanceReport = ({
               </Col>
             )}
           </Row>
+        </Drawer>
+        <Drawer
+          title="Add Logo"
+          placement="right"
+          closable
+          open={editMode && addLogoDrawer}
+          width={700}
+          onClose={() => setAddLogoDrawer(!addLogoDrawer)}
+          destroyOnClose
+        >
+          <AddLogo
+            logos={logos}
+            onClose={() => setAddLogoDrawer(false)}
+            onSubmit={addLogo}
+          />
+        </Drawer>
+        <Drawer
+          title="Save As"
+          placement="right"
+          closable
+          open={saveAsDrawer}
+          width={700}
+          onClose={() => setSaveAsDrawer(false)}
+          destroyOnClose
+        >
+          <div>
+            <SaveAs
+              onSubmit={saveTemplate}
+              onClose={() => setSaveAsDrawer(false)}
+            />
+          </div>
         </Drawer>
       </div>
     </Page>
