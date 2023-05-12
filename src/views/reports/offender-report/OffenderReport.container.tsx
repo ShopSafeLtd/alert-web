@@ -6,17 +6,18 @@ import OffenderSideList from '../../../components/offenders/OffenderSideList';
 
 const OffenderReport = () => {
   const {
-    data,
     loading,
-    setDateRange,
-    dateRange,
+    data,
     groups,
+    dateRange,
+    setDateRange,
     setSelectedGroups,
     groupsLoading,
     selectedGroups,
-    businesses,
     selectedBusiness,
     setSelectedBusiness,
+    businesses,
+    selectedOffender,
     componentRef,
     handlePrint,
     isPrinting,
@@ -27,12 +28,24 @@ const OffenderReport = () => {
     logo,
     removeItem,
     changeSize,
+    targetedBusinessData,
     targetedGoodsData,
     incidentsTableData,
-    targetedBusinessData,
     editMode,
     setEditMode,
-    selectedOffender,
+    addLogo,
+    addLogoDrawer,
+    logos,
+    metadata,
+    removeLogo,
+    saveAsDrawer,
+    saveTemplate,
+    selectTemplate,
+    selectedTemplate,
+    setMetadata,
+    setAddLogoDrawer,
+    setSaveAsDrawer,
+    templates,
   } = useOffenderReport();
   return (
     <Row wrap={false}>
@@ -70,6 +83,19 @@ const OffenderReport = () => {
           setSelectedBusiness={setSelectedBusiness}
           selectedBusiness={selectedBusiness}
           businesses={businesses}
+          addLogo={addLogo}
+          addLogoDrawer={addLogoDrawer}
+          logos={logos}
+          metadata={metadata}
+          removeLogo={removeLogo}
+          saveAsDrawer={saveAsDrawer}
+          saveTemplate={saveTemplate}
+          selectTemplate={selectTemplate}
+          selectedTemplate={selectedTemplate}
+          setMetadata={setMetadata}
+          setAddLogoDrawer={setAddLogoDrawer}
+          setSaveAsDrawer={setSaveAsDrawer}
+          templates={templates}
         />
       </Col>
     </Row>

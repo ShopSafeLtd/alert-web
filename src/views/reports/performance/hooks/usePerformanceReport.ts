@@ -6,41 +6,45 @@ import {
   ReportType,
   SchemeReportDetailsDocument,
   useCreateReportTemplateMutation,
-  useOffenderReportQuery,
+  usePerformanceReportQuery,
   useSchemeReportDetailsQuery,
   useUpdateReportTemplateMutation,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
 import type RGL from 'react-grid-layout';
-import moment from 'moment';
+import useReportPrint from 'utils/reportPrint/usePrintReports';
 import { tableLengthToHeight } from 'components/reports/utils/utils';
-import useReportPrint from '../../../../utils/reportPrint/usePrintReports';
-import type { Props as Return } from './types';
+import PerformanceLayout, { PerformanceMetaData } from './initLayout';
 import type { IReportTemplate, MetaData, SelectOptions } from '../../types';
+import type { Props as Return } from './types';
 
-import OffenderLayout, { OffenderMetaData } from './initLayout';
-
-const useOffenderReport = (): Return => {
-  const { id: selectedOffender } = useParams();
+const usePerformanceReport = (): Return => {
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
   const { id: currentScheme, logo } = useStoreState((state) => state.scheme);
-  const businesses = useStoreState((state) => state.user.businesses);
+
+  const defaultTemplate: IReportTemplate = {
+    id: 'default',
+    name: 'Default',
+    metaData: [
+      ...PerformanceMetaData,
+      {
+        key: 'logo',
+        type: 'logo',
+        urls: logo ? [logo] : [],
+      },
+    ],
+    layout: PerformanceLayout,
+  };
 
   const [editMode, setEditMode] = useState(false);
   const [minDrawer, setMinDrawer] = useState(false);
-  const [layout, setLayout] = useState<RGL.Layout[]>(OffenderLayout);
-  const [selectedBusiness, setSelectedBusiness] = useState<string[]>(
-    businesses ? businesses.map((business) => business.id) : []
-  );
   const [groups, setGroups] = useState<SelectOptions[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
   const [dateRange, setDateRangeState] = useState<{
     startDate: Date;
     endDate: Date;
   }>({
-    // new date 1 month ago at 00:00:00
     startDate: new Date(
       new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
         0,
@@ -48,24 +52,9 @@ const useOffenderReport = (): Return => {
         59
       )
     ),
-    // today at 23:59:59
     endDate: new Date(new Date().setHours(23, 59, 59)),
   });
-
-  const defaultTemplate: IReportTemplate = {
-    id: 'default',
-    name: 'Default',
-    metaData: [
-      ...OffenderMetaData,
-      {
-        key: 'logo',
-        type: 'logo',
-        urls: logo ? [logo] : [],
-      },
-    ],
-    layout: OffenderLayout,
-  };
-
+  const [layout, setLayout] = useState<RGL.Layout[]>(PerformanceLayout);
   const [addLogoDrawer, setAddLogoDrawer] = useState(false);
   const [logos, setLogos] = useState<string[]>(logo ? [logo] : []);
   const [metadata, setMetadata] = useState<MetaData[]>(
@@ -91,7 +80,7 @@ const useOffenderReport = (): Return => {
         },
         reportTemplatesWhere: {
           type: {
-            equals: ReportType.Offender,
+            equals: ReportType.Performance,
           },
         },
       },
@@ -127,25 +116,16 @@ const useOffenderReport = (): Return => {
       },
     });
 
-  const { data, loading } = useOffenderReportQuery({
+  const { data, loading } = usePerformanceReportQuery({
     fetchPolicy: 'cache-and-network',
     skip:
       !currentScheme ||
       !groups ||
-      !selectedOffender ||
       groupsLoading ||
       !selectedGroups ||
       selectedGroups.filter(Boolean).length === 0,
     variables: {
       where: {
-        offenderId: selectedOffender || '',
-        businessIds: selectedBusiness,
-        dateRange,
-        schemeIds: [currentScheme],
-        groupIds: selectedGroups,
-      },
-      targetedWhere: {
-        offenderId: selectedOffender || '',
         dateRange,
         schemeIds: [currentScheme],
         groupIds: selectedGroups,
@@ -165,34 +145,60 @@ const useOffenderReport = (): Return => {
     });
   };
 
-  const removeItem = (item: string) => {
-    setLayout(layout.filter((i) => i.i !== item));
-  };
+  const businessContributionTableData =
+    data?.businessContribution?.businessContributions?.map((business, i) => ({
+      key: business.name + i,
+      fullName: business.name,
+      incidentsCreated: business.totalIncidents,
+      offendersCreated: business.totalOffenders,
+      updatesCreated: business.totalUpdates,
+      messagesSent: business.totalMessages,
+      logins: business.totalLogins,
+      users: business.totalUsers,
+    })) || [];
 
-  const changeSize = (item: string, size: number) => {
-    setLayout(
-      layout.map((i) => {
-        if (i.i === item) {
-          return { ...i, h: tableLengthToHeight(size) };
-        }
-        return i;
+  const userContributionTableData =
+    data?.userContributions?.userContributions?.map((user, index) => ({
+      key: user.name + index,
+      fullName: user.name,
+      incidentsCreated: user.totalIncidents,
+      offendersCreated: user.totalOffenders,
+      updatesCreated: user.totalUpdates,
+      messagesSent: user.totalMessages,
+      logins: user.totalLogins,
+    })) || [];
+
+  const offendersTableData =
+    data?.offendersPerformance?.offenderPerformance?.map((offender, i) => ({
+      totalIncidents: offender.totalIncidents,
+      key: offender.name + i,
+      alertId: offender.alertId,
+      fullName: offender.name,
+      image: offender.primaryPhoto,
+      lastIncident: offender.lastIncidentDate
+        ? new Date(offender.lastIncidentDate).toLocaleDateString()
+        : 'N/A',
+      lostValue: offender.totalLostValue.toFixed(2),
+      recoveredValue: offender.totalRecoveredValue.toFixed(2),
+      successRate: ((offender.totalSuccessRate || 0) * 100).toFixed(2),
+    })) || [];
+
+  const crimeGroupPerformanceTableData =
+    data?.crimeGroupPerformance?.crimeGroupPerformance?.map(
+      (crimeGroup, i) => ({
+        totalIncidents: crimeGroup.totalIncidents,
+        key: crimeGroup.alias + i,
+        alertId: crimeGroup.alertId,
+        fullName: crimeGroup.alias,
+        totalOffenders: crimeGroup.totalOffenders,
+        lostValue: crimeGroup.totalLostValue.toFixed(2),
+        lastIncident: crimeGroup.lastIncident
+          ? new Date(crimeGroup.lastIncident).toLocaleDateString()
+          : '',
+        recoveredValue: crimeGroup.totalRecoveredValue.toFixed(2),
+        successRate: ((crimeGroup.totalSuccessRate || 0) * 100).toFixed(2),
       })
-    );
-  };
-
-  const targetedGoodsData =
-    data?.targetedGoods?.targetedGoods
-      ?.filter((good) => good.totalIncidents > 0)
-      .map((good, i) => ({
-        key: good.name + i,
-        fullName: good.name,
-        incidentsCreated: good.totalIncidents,
-        offendersCreated: good.totalOffenders,
-        lostValue: good.totalLostValue.toFixed(2),
-        recoveredValue: good.totalRecoveredValue.toFixed(2),
-        successRate: ((good.totalSuccessRate || 0) * 100).toFixed(2),
-        avgLost: good?.averageLossValue?.toFixed(2),
-      })) || [];
+    ) || [];
 
   const targetedBusinessData =
     data?.businessContribution?.businessContributions
@@ -208,27 +214,38 @@ const useOffenderReport = (): Return => {
         successRate: ((business.totalSuccessRate || 0) * 100).toFixed(2),
         commonLost: business.mostCommonGoodLost || 'unknown',
         highestValueLost: business.highestTotalValueGoodLost || 0,
-        avgLost: business?.averageLossValue?.toFixed(2) || '0',
+        avgLost: business?.averageLossValue?.toFixed(2) || '',
       })) || [];
 
-  const incidentsTableData =
-    data?.offenderReport?.incidentsTable?.incidents?.map((incident) => ({
-      key: incident.id,
-      alertId: incident.reference,
-      date: moment(incident.date).format('DD/MM/YYYY'),
-      value: incident.incidentItems
-        ?.reduce((acc, item) => acc + item.value, 0)
-        .toFixed(2),
-      valueRec: incident.incidentItems
-        ?.reduce((acc, item) => acc + item.recoveredValue, 0)
-        .toFixed(2),
-      location: incident.location?.alias || '',
-      totalOffenders: incident.totalOffenders || 0,
-      crimeTypes: incident.crimeTypes?.map((t) => t.name).join(', ') || '',
-      policeReported: incident.policeInvolved ? 'Yes' : 'No',
-      policeAttended: incident.policeReported ? 'Yes' : 'No',
-      crimeRef: incident.policeRef || '',
-    })) || [];
+  const targetedGoodsData =
+    data?.targetedGoods?.targetedGoods
+      ?.filter((good) => good.totalIncidents > 0)
+
+      .map((good, i) => ({
+        key: good.name + i,
+        fullName: good.name,
+        incidentsCreated: good.totalIncidents,
+        offendersCreated: good.totalOffenders,
+        lostValue: good.totalLostValue.toFixed(2),
+        recoveredValue: good.totalRecoveredValue.toFixed(2),
+        successRate: ((good.totalSuccessRate || 0) * 100).toFixed(2),
+        avgLost: good?.averageLossValue?.toFixed(2),
+      })) || [];
+
+  const removeItem = (item: string) => {
+    setLayout(layout.filter((i) => i.i !== item));
+  };
+
+  const changeSize = (item: string, size: number) => {
+    setLayout(
+      layout.map((i) => {
+        if (i.i === item) {
+          return { ...i, h: tableLengthToHeight(size) };
+        }
+        return i;
+      })
+    );
+  };
 
   const removeLogo = (index: number) => {
     const logoArray = metadata?.find((item) => item.key === 'logo');
@@ -317,7 +334,7 @@ const useOffenderReport = (): Return => {
           },
           reportTemplatesWhere: {
             type: {
-              equals: ReportType.Offender,
+              equals: ReportType.Performance,
             },
           },
         },
@@ -352,7 +369,7 @@ const useOffenderReport = (): Return => {
             },
             reportTemplatesWhere: {
               type: {
-                equals: ReportType.Offender,
+                equals: ReportType.Performance,
               },
             },
           },
@@ -381,7 +398,7 @@ const useOffenderReport = (): Return => {
           },
           reportTemplatesWhere: {
             type: {
-              equals: ReportType.Offender,
+              equals: ReportType.Performance,
             },
           },
         },
@@ -449,7 +466,7 @@ const useOffenderReport = (): Return => {
             },
             reportTemplatesWhere: {
               type: {
-                equals: ReportType.Offender,
+                equals: ReportType.Performance,
               },
             },
           },
@@ -476,7 +493,7 @@ const useOffenderReport = (): Return => {
                 },
               ],
             },
-            type: ReportType.Offender,
+            type: ReportType.Performance,
             layout: {
               createMany: {
                 data: layout,
@@ -503,7 +520,7 @@ const useOffenderReport = (): Return => {
               },
               reportTemplatesWhere: {
                 type: {
-                  equals: ReportType.Offender,
+                  equals: ReportType.Performance,
                 },
               },
             },
@@ -540,7 +557,7 @@ const useOffenderReport = (): Return => {
                 },
                 reportTemplatesWhere: {
                   type: {
-                    equals: ReportType.Offender,
+                    equals: ReportType.Performance,
                   },
                 },
               },
@@ -588,53 +605,47 @@ const useOffenderReport = (): Return => {
       });
     }
   };
+
   return {
-    businesses: businesses
-      ? businesses.map((business) => ({
-          label: business.name,
-          value: business.id,
-        }))
-      : [],
-    selectedOffender: selectedOffender || '',
-    loading,
-    data,
-    groups,
-    dateRange,
-    setDateRange,
-    setSelectedGroups,
-    groupsLoading,
-    selectedGroups,
-    selectedBusiness,
-    setSelectedBusiness,
+    addLogo,
+    addLogoDrawer,
+    businessContributionTableData,
+    changeSize,
     componentRef,
+    crimeGroupPerformanceTableData,
+    data,
+    dateRange,
+    editMode,
+    groups,
+    groupsLoading,
     handlePrint,
     isPrinting,
     layout,
-    setLayout,
-    minDrawer,
-    setMinDrawer,
-    logo,
-    removeItem,
-    changeSize,
-    targetedBusinessData,
-    targetedGoodsData,
-    incidentsTableData,
-    editMode,
-    setEditMode,
-    addLogo,
-    addLogoDrawer,
+    loading,
     logos,
     metadata,
+    minDrawer,
+    offendersTableData,
+    removeItem,
     removeLogo,
     saveAsDrawer,
     saveTemplate,
     selectTemplate,
+    selectedGroups,
     selectedTemplate,
-    setMetadata,
     setAddLogoDrawer,
+    setDateRange,
+    setEditMode,
+    setLayout,
+    setMetadata,
+    setMinDrawer,
     setSaveAsDrawer,
+    setSelectedGroups,
+    targetedBusinessData,
+    targetedGoodsData,
     templates,
+    userContributionTableData,
   };
 };
 
-export default useOffenderReport;
+export default usePerformanceReport;

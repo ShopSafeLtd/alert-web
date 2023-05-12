@@ -81,6 +81,7 @@ query PerformanceReport($where: UserContributionWhereInput!) {
       totalOffenders
       totalLostValue
       totalIncidents
+      lastIncident
       alias
       alertId
     }

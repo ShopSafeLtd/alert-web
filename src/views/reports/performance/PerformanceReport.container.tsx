@@ -1,6 +1,6 @@
 import React from 'react';
-import View from './performance-report.view';
-import usePerformanceReport from './hooks/use-performance-report';
+import View from './PerformanceReport.view';
+import usePerformanceReport from './hooks/usePerformanceReport';
 
 const PerformanceReport = (): JSX.Element => {
   const {
@@ -26,15 +26,39 @@ const PerformanceReport = (): JSX.Element => {
     setMinDrawer,
     layout,
     setLayout,
-    logo,
     removeItem,
     changeSize,
     isPrinting,
+    metadata,
+    setMetadata,
+    removeLogo,
+    setAddLogoDrawer,
+    addLogoDrawer,
+    logos,
+    addLogo,
+    selectTemplate,
+    saveTemplate,
+    templates,
+    selectedTemplate,
+    setSaveAsDrawer,
+    saveAsDrawer,
   } = usePerformanceReport();
   return (
     <View
+      selectedTemplate={selectedTemplate}
+      selectTemplate={selectTemplate}
+      saveTemplate={saveTemplate}
+      saveAsDrawer={saveAsDrawer}
+      setSaveAsDrawer={setSaveAsDrawer}
+      templates={templates}
+      addLogo={addLogo}
+      logos={logos}
+      setAddLogoDrawer={setAddLogoDrawer}
+      addLogoDrawer={addLogoDrawer}
+      removeLogo={removeLogo}
+      metadata={metadata}
+      setMetadata={setMetadata}
       isPrinting={isPrinting}
-      logo={logo}
       removeItem={removeItem}
       changeSize={changeSize}
       layout={layout}

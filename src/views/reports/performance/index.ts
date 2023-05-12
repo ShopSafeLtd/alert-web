@@ -1,1 +1,1 @@
-export { default } from './performance-report.container';
+export { default } from './PerformanceReport.container';
