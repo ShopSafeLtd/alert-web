@@ -4,7 +4,7 @@ import { Card, Modal, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowsMaximize } from '@fortawesome/pro-solid-svg-icons';
 import { useStoreState } from 'state';
-import Map, { Marker } from 'react-map-gl';
+import Map, { Layer, Marker, Source } from 'react-map-gl';
 import MapPin from '../MapPin';
 
 const { Text } = Typography;
@@ -39,11 +39,63 @@ const useStyles = createUseStyles({
 interface Props {
   height: number | string;
   width: number | string;
-  geoLng?: number | null;
-  geoLat?: number | null;
+  markers: {
+    geoLng?: number | null;
+    geoLat?: number | null;
+  }[];
 }
 
-const MapCard = ({ height, width, geoLat, geoLng }: Props) => {
+const ClusterLayer = (
+  <Layer
+    id="clusters"
+    type="circle"
+    source="incidents"
+    filter={['has', 'point_count']}
+    paint={{
+      'circle-color': [
+        'step',
+        ['get', 'point_count'],
+        '#51bbd6',
+        100,
+        '#f1f075',
+        750,
+        '#f28cb1',
+      ],
+      'circle-radius': 20,
+    }}
+  />
+);
+
+const ClusterCountLayer = (
+  <Layer
+    id="cluster-count"
+    type="symbol"
+    source="incidents"
+    filter={['has', 'point_count']}
+    layout={{
+      'text-field': '{point_count_abbreviated}',
+      'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+      'text-size': 12,
+    }}
+  />
+);
+
+const UnClusteredLayer = (
+  <Layer
+    id="unclustered-point"
+    type="circle"
+    source="incidents"
+    filter={['!', ['has', 'point_count']]}
+    paint={{
+      'circle-color': '#11b4da',
+      'circle-radius': 8,
+      'circle-stroke-width': 1,
+      'circle-stroke-color': '#fff',
+    }}
+  />
+);
+
+const MapCard = ({ height, width, markers }: Props) => {
   const classes = useStyles();
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const [largeOpen, setLargeOpen] = useState(false);
@@ -73,8 +125,8 @@ const MapCard = ({ height, width, geoLat, geoLng }: Props) => {
       </div>
       <Map
         mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
-        longitude={geoLng || 0}
-        latitude={geoLat || 0}
+        longitude={markers[0]?.geoLng || 0}
+        latitude={markers[0]?.geoLat || 0}
         zoom={16}
         pitch={45}
         style={{ width, height }}
@@ -84,13 +136,41 @@ const MapCard = ({ height, width, geoLat, geoLng }: Props) => {
             : 'mapbox://styles/wgarrod/clgkn5gb7007u01qmahuhbi6o'
         }
       >
-        <Marker
-          longitude={Number(geoLng) || 0}
-          latitude={Number(geoLat) || 0}
-          anchor="bottom"
-        >
-          <MapPin />
-        </Marker>
+        {markers.length === 1 &&
+          markers.map((marker) => (
+            <Marker
+              longitude={Number(marker.geoLng) || 0}
+              latitude={Number(marker.geoLat) || 0}
+              anchor="bottom"
+            >
+              <MapPin />
+            </Marker>
+          ))}
+        {markers.length > 1 && (
+          <Source
+            id="incidents"
+            type="geojson"
+            data={{
+              type: 'FeatureCollection',
+              features: markers.map((marker) => ({
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                  type: 'Point',
+                  coordinates: [marker.geoLng || 0, marker.geoLat || 0],
+                },
+              })),
+            }}
+            cluster
+            clusterProperties={{}}
+            clusterMaxZoom={20}
+            clusterRadius={0}
+          >
+            {ClusterLayer}
+            {ClusterCountLayer}
+            {UnClusteredLayer}
+          </Source>
+        )}
       </Map>
 
       <Modal
@@ -110,8 +190,8 @@ const MapCard = ({ height, width, geoLat, geoLng }: Props) => {
           <Map
             mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
             initialViewState={{
-              longitude: geoLng || 0,
-              latitude: geoLat || 0,
+              longitude: markers[0]?.geoLng || 0,
+              latitude: markers[0]?.geoLat || 0,
               pitch: 45,
               zoom: 16,
             }}
@@ -122,13 +202,41 @@ const MapCard = ({ height, width, geoLat, geoLng }: Props) => {
                 : 'mapbox://styles/wgarrod/clgkn5gb7007u01qmahuhbi6o'
             }
           >
-            <Marker
-              longitude={Number(geoLng) || 0}
-              latitude={Number(geoLat) || 0}
-              anchor="bottom"
-            >
-              <MapPin />
-            </Marker>
+            {markers.length === 1 &&
+              markers.map((marker) => (
+                <Marker
+                  longitude={Number(marker.geoLng) || 0}
+                  latitude={Number(marker.geoLat) || 0}
+                  anchor="bottom"
+                >
+                  <MapPin />
+                </Marker>
+              ))}
+            {markers.length > 1 && (
+              <Source
+                id="incidents"
+                type="geojson"
+                data={{
+                  type: 'FeatureCollection',
+                  features: markers.map((marker) => ({
+                    type: 'Feature',
+                    properties: {},
+                    geometry: {
+                      type: 'Point',
+                      coordinates: [marker.geoLng || 0, marker.geoLat || 0],
+                    },
+                  })),
+                }}
+                cluster
+                clusterProperties={{}}
+                clusterMaxZoom={20}
+                clusterRadius={0}
+              >
+                {ClusterLayer}
+                {ClusterCountLayer}
+                {UnClusteredLayer}
+              </Source>
+            )}
           </Map>
         )}
       </Modal>

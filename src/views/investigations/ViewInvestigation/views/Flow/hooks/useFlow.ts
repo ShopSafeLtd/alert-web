@@ -16,6 +16,8 @@ import { useDebouncedCallback } from 'use-debounce';
 import type { YMap } from 'yjs/dist/src/internals';
 import { useUsers } from 'y-presence';
 import type { WebsocketProvider } from 'y-websocket';
+import type { FullScreenHandle } from 'react-full-screen';
+import { useFullScreenHandle } from 'react-full-screen';
 import useWebRtcProvider from './useWebRtcProvidor';
 import useNodesStateSynced from './useNodesStateSynced';
 import useEdgesStateSynced from './useEdgesStateSynced';
@@ -24,6 +26,7 @@ import useObservableListener from './useObservableListener';
 import styles from '../style.module.css';
 import type { ViewInvestigationQuery } from '../../../../../../graphql/generated';
 import { useUpdateFlowMutation } from '../../../../../../graphql/generated';
+import useDownloadImage from './useDownloadImage';
 
 interface Return {
   nodes: Node[];
@@ -59,6 +62,10 @@ interface Return {
   handlePointMove: (e: React.PointerEvent) => void;
   provider: WebsocketProvider;
   reactFlowInstance: ReactFlowInstance | null;
+  downloadImage: () => void;
+  flowScreen: FullScreenHandle;
+  isFullScreen: boolean;
+  setFullScreen: () => void;
 }
 
 const TIMEOUT = 3000 + Math.floor(Math.random() * 7000);
@@ -82,47 +89,25 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
       : null
   );
 
-  // const { data: importData, loading } = useViewInvestigationQuery({
-  //   skip: !investigationId,
-  //   variables: {
-  //     where: {
-  //       id: investigationId,
-  //     },
-  //   },
-  //   onCompleted: (TData) => {
-  //     const meta = provider.doc.getMap('meta');
-  //     const lastSaved = meta.get('lastSaved') as number;
-  //     if (
-  //       lastSaved &&
-  //       lastSaved <
-  //         new Date(TData?.investigation?.flows[0].updatedAt || '').getTime()
-  //     ) {
-  //       setSavedWhen(
-  //         moment(TData?.investigation?.flows[0].updatedAt).fromNow()
-  //       );
-  //     }
-  //   },
-  // });
-
   const [updateFlow, { loading: saving }] = useUpdateFlowMutation();
-
+  const { downloadImage: handleDownload } = useDownloadImage();
   const nodesMap = provider.doc.getMap<Node>('nodes');
   const edgesMap = provider.doc.getMap<Edge>('edges');
   const [nodes, onNodesChange] = useNodesStateSynced({ nodesMap, edgesMap });
   const [edges, onEdgesChange, onConnect] = useEdgesStateSynced({ edgesMap });
   const [clientCount, setClientCount] = useState<number>(0);
   const [isSynced, setIsSynced] = useState<boolean>(false);
-  const usedFallbackRef = useRef<boolean>(false);
+  const [usedFallbackRef, setUsedFallbackRef] = useState<boolean>(false);
   const [reactFlowInstance, setReactFlowInstance] =
     useState<ReactFlowInstance | null>(null);
-
   const offenders =
     importData?.investigation?.offenders.map((offender) => ({
       name: offender.name || '',
       url: offender.images?.map((image) => image?.optimised || ''),
     })) || [];
+
   const onSave = useCallback(() => {
-    if (reactFlowInstance && usedFallbackRef?.current && !isSynced) {
+    if (reactFlowInstance && usedFallbackRef) {
       const flow = reactFlowInstance.toObject();
       if (
         flow.nodes.length <= 0 &&
@@ -168,12 +153,19 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
         },
       });
     }
-  }, [reactFlowInstance]);
+  }, [reactFlowInstance, usedFallbackRef]);
   const handleSave = useCallback(() => {
     if (isSynced || clientCount === 0) {
       onSave();
     }
-  }, [onSave, investigationId, provider.doc, isSynced, clientCount]);
+  }, [
+    onSave,
+    investigationId,
+    provider.doc,
+    isSynced,
+    clientCount,
+    usedFallbackRef,
+  ]);
   const handleSaveDebounced = useDebouncedCallback(handleSave, TIMEOUT);
   const handlePeersChange = useCallback(
     ({ bcconnected }) => {
@@ -197,10 +189,55 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
 
   useObservableListener('update', handleYDocUpdate, provider.doc);
 
+  // useEffect(() => {
+  //   if (usedFallbackRef.current) return;
+  //   const fetchFallback = async () => {
+  //     if (
+  //       provider.wsconnected &&
+  //       clientCount === 0 &&
+  //       // eslint-disable-next-line no-underscore-dangle
+  //       nodesMap?._map.size === 0 &&
+  //       !usedFallbackRef.current
+  //     ) {
+  //       const initData = importData?.investigation?.flows[0];
+  //       if (initData?.nodes)
+  //         // eslint-disable-next-line no-restricted-syntax,no-unsafe-optional-chaining
+  //         for (const node of initData?.nodes) {
+  //           nodesMap.set(node.id, node as Node);
+  //         }
+  //       if (initData?.edges)
+  //         // eslint-disable-next-line no-restricted-syntax,no-unsafe-optional-chaining
+  //         for (const edge of initData?.edges) {
+  //           edgesMap.set(edge.id, edge as Edge);
+  //         }
+  //     }
+  //     usedFallbackRef.current = true;
+  //     return () => {};
+  //   };
+  //
+  //   const timeoutId = window.setTimeout(fetchFallback, 1000);
+  //   // eslint-disable-next-line consistent-return
+  //   return () => {
+  //     window.clearTimeout(timeoutId);
+  //   };
+  // }, [
+  //   importData,
+  //   investigationId,
+  //   provider.wsconnected,
+  //   clientCount,
+  //   reactFlowInstance,
+  // ]);
+
   useEffect(() => {
-    if (usedFallbackRef.current) return;
+    let isMounted = true;
     const fetchFallback = async () => {
-      if (provider.wsconnected && clientCount === 0) {
+      if (
+        provider.wsconnected &&
+        clientCount === 0 &&
+        // eslint-disable-next-line no-underscore-dangle
+        nodesMap?._map.size === 0 &&
+        !usedFallbackRef
+      ) {
         const initData = importData?.investigation?.flows[0];
         if (initData?.nodes)
           // eslint-disable-next-line no-restricted-syntax,no-unsafe-optional-chaining
@@ -213,13 +250,19 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
             edgesMap.set(edge.id, edge as Edge);
           }
       }
-
-      usedFallbackRef.current = true;
+      setUsedFallbackRef(true);
     };
-    const timeoutId = window.setTimeout(fetchFallback, 1000);
 
-    // eslint-disable-next-line consistent-return
+    const timeoutId = window.setTimeout(async () => {
+      await fetchFallback();
+      if (isMounted && usedFallbackRef) {
+        window.clearTimeout(timeoutId);
+        // do something
+      }
+    }, 500);
+
     return () => {
+      isMounted = false;
       window.clearTimeout(timeoutId);
     };
   }, [
@@ -399,7 +442,6 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
     },
     []
   );
-
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     // eslint-disable-next-line no-param-reassign
@@ -424,6 +466,21 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
     []
   );
 
+  const flowScreen = useFullScreenHandle();
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  const setFullScreen = useCallback(() => {
+    setIsFullScreen(!isFullScreen);
+    if (isFullScreen) {
+      flowScreen.exit();
+    } else {
+      flowScreen.enter();
+    }
+  }, [isFullScreen]);
+
+  const downloadImage = useCallback(() => {
+    handleDownload();
+  }, [handleDownload]);
   return {
     nodes,
     onNodesChange,
@@ -442,15 +499,21 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
     wrapperRef,
     nodesMap,
     loading:
-      importData?.investigation?.flows[0] && provider.wsconnected
+      importData?.investigation?.flows[0] &&
+      provider.wsconnected &&
+      usedFallbackRef
         ? false
-        : provider.wsconnecting,
+        : provider.wsconnecting && !usedFallbackRef,
     offenders,
     setSelected,
     saving,
     users,
     handlePointMove,
     provider,
+    downloadImage,
+    flowScreen,
+    isFullScreen,
+    setFullScreen,
   };
 };
 

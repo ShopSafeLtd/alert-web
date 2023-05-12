@@ -5,6 +5,7 @@ import { useCurrentUserLazyQuery } from 'graphql/generated';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect } from 'react';
 import * as Sentry from '@sentry/react';
+import Mixpanel from 'utils/mixpanel';
 
 interface Return {
   rehydrateAuth: () => void;
@@ -29,7 +30,8 @@ const useAuth = (): Return => {
   const handleSignOut = useStoreActions((actions) => actions.auth.signOut);
   const setUser = useStoreActions((actions) => actions.user.setUser);
   const clearUser = useStoreActions((actions) => actions.user.clearUser);
-  const setRole = useStoreActions((actions) => actions.user.setRole);
+  const { setRole, setTodos } = useStoreActions((actions) => actions.user);
+
   const setScheme = useStoreActions((actions) => actions.scheme.setScheme);
   const setAuthMessage = useStoreActions(
     (actions) => actions.auth.setAuthMessage
@@ -44,6 +46,7 @@ const useAuth = (): Return => {
     id,
     accessToken,
     fullName,
+    origName,
     email,
     businesses,
     onboarded,
@@ -61,11 +64,14 @@ const useAuth = (): Return => {
       setScheme({
         autoApproveIncidents: schemeDetails?.autoApproveIncidents,
         autoApproveOffenders: schemeDetails?.autoApproveOffenders,
+        defaultPublicOffenderDOB: schemeDetails?.defaultPublicOffenderDOB,
         id: schemeDetails?.id,
         name: schemeDetails?.name,
         logo: schemeDetails?.logo?.optimisedPersisted,
         darkLogo: schemeDetails?.darkLogo?.optimisedPersisted,
+        userTodos: schemeDetails.userTodos,
       });
+      setTodos({ userTodos: schemes[0]?.scheme?.userTodos || 0 });
     };
 
     const scheme =
@@ -81,11 +87,15 @@ const useAuth = (): Return => {
         setScheme({
           autoApproveIncidents: schemeDetails.scheme.autoApproveIncidents,
           autoApproveOffenders: schemeDetails.scheme.autoApproveOffenders,
+          defaultPublicOffenderDOB:
+            schemeDetails.scheme.defaultPublicOffenderDOB,
           id: schemeDetails.scheme.id,
           name: schemeDetails.scheme.name,
           logo: schemeDetails.scheme.logo?.optimisedPersisted,
           darkLogo: schemeDetails.scheme.darkLogo?.optimisedPersisted,
+          userTodos: schemeDetails.scheme.userTodos,
         });
+        setTodos({ userTodos: schemeDetails?.scheme?.userTodos || 0 });
       } else {
         handleNoValidScheme();
       }
@@ -98,12 +108,20 @@ const useAuth = (): Return => {
       email,
     });
 
+    Mixpanel.identify(id);
+    Mixpanel.people.set({
+      name: fullName,
+      businessId: businesses[0]?.id,
+      businessName: businesses[0]?.name,
+    });
+
     Sentry.setUser({ email, username: fullName, id });
 
     setUser({
       id,
       email,
       fullName,
+      origName,
       businesses,
       onboarded,
       schemes,
@@ -143,6 +161,7 @@ const useAuth = (): Return => {
         id: currentUser?.id || '',
         email: currentUser?.email || '',
         fullName: currentUser?.fullName || '',
+        origName: currentUser?.origName || '',
         accessToken: window.localStorage.getItem('access_token') || '',
         businesses: currentUser?.businesses || [],
         onboarded: !currentUser?.newUser,
@@ -216,6 +235,7 @@ const useAuth = (): Return => {
       accessToken: data.accessToken,
       email: data.email,
       fullName: data.fullName,
+      origName: data.origName,
       onboarded: data.onboarded,
       businesses: data.businesses,
       schemes: data.schemes,

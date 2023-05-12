@@ -1,13 +1,13 @@
 import React from 'react';
-import type { CrimeGroupCardData } from 'types/DataType';
+import type { CrimeGroupData } from 'types/DataType';
 import View from './LinkCrimeGroup.view';
 import useLinkCrimeGroup from './useLinkCrimeGroup';
 
 interface Props {
   onClose: () => void;
-  update?: (value: string) => void;
+  update?: (value: CrimeGroupData) => void;
   crimeGroupIds: string[] | undefined;
-  getCrimeGroup?: (value: { crimeGroup: CrimeGroupCardData }) => void;
+  getCrimeGroup?: (value: { crimeGroup: CrimeGroupData }) => void;
 }
 const LinkCrimeGroup = ({
   onClose,

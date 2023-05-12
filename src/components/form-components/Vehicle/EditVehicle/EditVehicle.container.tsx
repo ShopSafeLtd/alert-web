@@ -1,16 +1,23 @@
 import React from 'react';
+import type { VehicleData } from 'types/DataType';
 import View from './EditVehicle.view';
 import useEditVehicle from './useEditVehicle';
 
 interface Props {
   onClose: () => void;
+  update: (value: VehicleData) => void;
+  editData: VehicleData | undefined | null;
+
+  // editData:
+  //   | Exclude<VehicleQuery['vehicle'], undefined | null>
+  //   | undefined
+  //   | null;
 }
 
-const EditVehicle = ({ onClose }: Props): JSX.Element => {
+const EditVehicle = ({ onClose, update, editData }: Props): JSX.Element => {
   const {
     onSubmit,
-    data,
-    loading,
+
     CrimeGroupsData,
     CrimeGroupsLoading,
     saving,
@@ -30,13 +37,13 @@ const EditVehicle = ({ onClose }: Props): JSX.Element => {
     fileList,
   } = useEditVehicle({
     onClose,
+    update,
+    editData,
   });
 
   return (
     <View
       onSubmit={onSubmit}
-      data={data}
-      loading={loading}
       onClose={onClose}
       CrimeGroupsData={CrimeGroupsData}
       CrimeGroupsLoading={CrimeGroupsLoading}
@@ -55,6 +62,7 @@ const EditVehicle = ({ onClose }: Props): JSX.Element => {
       imgChange={imgChange}
       beforeUpload={beforeUpload}
       fileList={fileList}
+      editData={editData}
     />
   );
 };

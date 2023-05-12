@@ -52,6 +52,7 @@ export interface OffenderData {
 
 export interface OffenderCardData {
   id: string;
+  reference?: number | null;
   updatedAt?: Date | undefined;
   name?: string | null;
   images?: Array<{
@@ -67,7 +68,8 @@ export type IncidentsData =
   | undefined;
 
 export interface IncidentCardData {
-  id?: string;
+  id: string;
+  reference?: number | null;
   subject?: string | null;
   description: string;
   dayTime?: string | null;
@@ -188,4 +190,31 @@ export interface DatedMessages {
 export interface DateType {
   startDate: Moment | Date;
   endDate: Moment | Date;
+}
+
+// businessData
+export interface BusinessData {
+  id: string;
+  name: string;
+  publicName?: boolean;
+  parent?:
+    | {
+        id: string;
+        name: string;
+      }
+    | null
+    | undefined;
+  locations:
+    | {
+        id: string;
+        building?: string;
+        county?: string;
+        postcode?: string;
+        street?: string;
+        townCity?: string;
+        full?: string | null | undefined;
+      }[];
+  // | undefined;
+  isConnected?: boolean;
+  isNew?: boolean;
 }

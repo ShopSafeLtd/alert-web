@@ -85,6 +85,11 @@ const useAddExistingOffender = ({ onClose, offenderIds }: Props): Return => {
               mode: QueryMode.Insensitive,
             },
           },
+          {
+            alias: {
+              hasSome: [variables.search],
+            },
+          },
         ],
       },
     },

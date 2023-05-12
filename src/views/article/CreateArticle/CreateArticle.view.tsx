@@ -18,7 +18,7 @@ import {
 import { ArticlePriority } from 'graphql/generated';
 import { UploadOutlined } from '@ant-design/icons';
 import type { ViewProps } from './types/CreateArticle';
-import AddExistingOffender from '../../../components/form-components/incident/offender/AddExistingOffender/AddExistingOffender.container';
+import AddExistingOffender from '../../../components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 import LinkIncident from '../../../components/form-components/linkOptions/LinkIncident';
 import type { FormData } from './hooks/useCreateArticle';
 

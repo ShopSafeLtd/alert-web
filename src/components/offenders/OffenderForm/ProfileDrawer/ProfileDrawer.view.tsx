@@ -1,11 +1,11 @@
 import React from 'react';
 import { Drawer } from 'antd';
 
-import EditVehicle from 'components/form-components/profiles/vehicle/EditVehicle';
-import AddExistingCrimeGroup from 'components/form-components/profiles/crimeGroup/AddExistingCrimeGroup';
 import type { CrimeGroupData, VehicleData } from 'types/DataType';
 import AddVehicle from 'components/form-components/Vehicle/AddVehicle';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
+import EditVehicle from 'components/form-components/Vehicle/EditVehicle';
+import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
 
 interface Props {
   addNewVehicle: boolean;
@@ -103,7 +103,7 @@ const ProfileDrawer = ({
       zIndex={1001}
     >
       {addExistingCrimeGroup ? (
-        <AddExistingCrimeGroup
+        <LinkCrimeGroup
           update={onAddCrimeGroup}
           crimeGroupIds={crimeGroupsData.map(({ id }) => id)}
           onClose={toggleAddExistingCrimeGroup}

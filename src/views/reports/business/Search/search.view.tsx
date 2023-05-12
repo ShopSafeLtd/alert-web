@@ -77,7 +77,7 @@ const SearchBusiness = ({
           total: searchBusinessData?.listBusinesses?.total,
           pageSizeOptions: ['20', '50', '100'],
           defaultPageSize: 20,
-          showTotal: (total) => `Total offenders: ${total}`,
+          showTotal: (total) => `Total businesses: ${total}`,
         }}
         size="small"
       />

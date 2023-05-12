@@ -28,14 +28,8 @@ mutation createMessage($data: MessageCreateWithoutActionsInput!) {
       alias
       id
       reference
-      totalRecoveredValue
-      totalTheftSuccess
-      totalValue
-      updatedAt
     }
     vehicles {
-      updatedAt
-      totalOffenders
       registration
       reference
       model

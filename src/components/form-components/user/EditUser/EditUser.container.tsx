@@ -20,6 +20,10 @@ const EditUser = ({ onClose, id }: Props): JSX.Element => {
     chatsLoading,
     saving,
     onSearchBusiness,
+    selectedRole,
+    setSelectedRole,
+    selectedGroups,
+    setSelectedGroups,
   } = useEditUser({
     onClose,
     userId,
@@ -36,6 +40,10 @@ const EditUser = ({ onClose, id }: Props): JSX.Element => {
       chatsLoading={chatsLoading}
       saving={saving}
       onSearchBusiness={onSearchBusiness}
+      selectedRole={selectedRole}
+      setSelectedRole={setSelectedRole}
+      selectedGroups={selectedGroups}
+      setSelectedGroups={setSelectedGroups}
     />
   );
 };

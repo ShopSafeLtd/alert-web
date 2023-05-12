@@ -1,0 +1,260 @@
+import { useStoreActions, useStoreState } from 'state';
+import type { CreateTodoMutation, ListTodosQuery } from 'graphql/generated';
+import {
+  ListTodosDocument,
+  QueryMode,
+  SortOrder,
+  useListTodosQuery,
+  useUpdateTodoMutation,
+} from 'graphql/generated';
+import { useEffect, useState } from 'react';
+import type { MutationUpdaterFn } from '@apollo/client';
+
+interface Props {
+  fullSearch: string;
+}
+interface Return {
+  data:
+    | Exclude<ListTodosQuery['listTodos'], undefined | null>
+    | null
+    | undefined;
+  loading: boolean;
+  saving: boolean;
+  onCompletedTodo: (id: string) => void;
+  onUncompletedTodo: (id: string) => void;
+  addTodo: boolean;
+  toggleAddTodo: () => void;
+  updateTodoList: MutationUpdaterFn<CreateTodoMutation>;
+  setSearch: (value: string) => void;
+  onPaginationChange: (page: number, pageSize: number) => void;
+  currentPage: number;
+  currentPageSize: number;
+}
+
+const useAdminTodos = ({ fullSearch }: Props): Return => {
+  const userId = useStoreState((state) => state.user.id);
+  const schemeId = useStoreState((state) => state.scheme.id);
+  const [saving, setSaving] = useState(false);
+  const [addTodo, setAddTodo] = useState(false);
+  const [search, setSearch] = useState('');
+  const [pageSize, setPageSize] = useState(10);
+  const [page, setPage] = useState(1);
+  // ???
+  const setTodoList = useStoreActions((actions) => actions.user.setTodos);
+  const userTodos = useStoreState((state) => state.user.userTodos);
+  useEffect(() => {
+    if (!search && fullSearch) setSearch(fullSearch);
+  }, [fullSearch]);
+
+  const variables = {
+    orderBy: {
+      createdAt: SortOrder.Desc,
+    },
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+    where: {
+      schemes: {
+        some: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
+      assignedUsers: {
+        some: {
+          id: {
+            in: [userId],
+          },
+        },
+      },
+      OR: [
+        {
+          name: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+        {
+          description: {
+            contains: search,
+            mode: QueryMode.Insensitive,
+          },
+        },
+      ],
+    },
+  };
+  const { data, loading } = useListTodosQuery({
+    variables,
+    onCompleted: (res) => {
+      if (res.listTodos) {
+        setTodoList({ userTodos: res.listTodos.totalUserTodos || 0 });
+      }
+    },
+  });
+
+  const updateTodoList: MutationUpdaterFn<CreateTodoMutation> = (
+    store,
+    { data: res }
+  ) => {
+    if (res?.createTodo === null || res?.createTodo === undefined) return;
+
+    // get existing group list data from Apollo store
+    const existingData = store.readQuery<ListTodosQuery>({
+      query: ListTodosDocument,
+      variables,
+    });
+    if (!existingData?.listTodos) return;
+
+    // write the new data to the Apollo store
+    store.writeQuery<ListTodosQuery>({
+      query: ListTodosDocument,
+      data: {
+        listTodos: {
+          uncompletedTotal: [
+            ...(<[]>existingData.listTodos.uncompletedTodos),
+            res.createTodo,
+          ].length,
+          uncompletedTodos: [
+            ...(<[]>existingData.listTodos.uncompletedTodos),
+            res.createTodo,
+          ],
+          completedTodos: existingData.listTodos.completedTodos,
+          completedTotal: existingData.listTodos.completedTotal,
+          totalUserTodos: existingData.listTodos.totalUserTodos,
+        },
+        __typename: 'Query',
+      },
+      variables,
+    });
+  };
+
+  const [updateTodo] = useUpdateTodoMutation({
+    onCompleted: () => {
+      setSaving(false);
+    },
+    onError: () => {
+      setSaving(false);
+    },
+    update: (store, { data: res }) => {
+      if (res?.updateTodo === null || res?.updateTodo === undefined) return;
+
+      // get existing group list data from Apollo store
+      const existingData = store.readQuery<ListTodosQuery>({
+        query: ListTodosDocument,
+        variables,
+      });
+
+      if (!existingData?.listTodos) return;
+      if (res.updateTodo.completed) {
+        store.writeQuery<ListTodosQuery>({
+          query: ListTodosDocument,
+          data: {
+            listTodos: {
+              totalUserTodos: existingData.listTodos.totalUserTodos - 1,
+              // completedTotal: [
+              //   ...(<[]>existingData.listTodos.completedTodos),
+              //   res.updateTodo,
+              // ].length,
+              completedTotal: existingData.listTodos.completedTotal + 1,
+              completedTodos: [
+                ...(<[]>existingData.listTodos.completedTodos),
+                res.updateTodo,
+              ],
+              uncompletedTotal: existingData.listTodos.uncompletedTotal - 1,
+              uncompletedTodos: existingData.listTodos.uncompletedTodos.filter(
+                (todo) => todo.id !== res?.updateTodo?.id
+              ),
+            },
+            __typename: 'Query',
+          },
+          variables,
+        });
+      }
+      if (!res.updateTodo.completed) {
+        store.writeQuery<ListTodosQuery>({
+          query: ListTodosDocument,
+          data: {
+            listTodos: {
+              totalUserTodos: existingData.listTodos.totalUserTodos + 1,
+              uncompletedTotal: existingData.listTodos.uncompletedTotal + 1,
+              uncompletedTodos: [
+                ...(<[]>existingData.listTodos.uncompletedTodos),
+                res.updateTodo,
+              ],
+              completedTodos: existingData.listTodos.completedTodos.filter(
+                (todo) => todo.id !== res?.updateTodo?.id
+              ),
+              completedTotal: existingData.listTodos.completedTotal - 1,
+            },
+            __typename: 'Query',
+          },
+          variables,
+        });
+      }
+    },
+  });
+  // function
+  const onCompletedTodo = (todoId: string) => {
+    setSaving(true);
+    setTodoList({
+      userTodos: userTodos ? userTodos - 1 : 0,
+    });
+    updateTodo({
+      variables: {
+        where: {
+          id: todoId,
+        },
+        data: {
+          completed: { set: true },
+          completedDate: { set: new Date() },
+          completedBy: {
+            connect: {
+              id: userId,
+            },
+          },
+        },
+      },
+    });
+  };
+  const onUncompletedTodo = (todoId: string) => {
+    setSaving(true);
+    setTodoList({
+      userTodos: userTodos ? userTodos + 1 : 1,
+    });
+    updateTodo({
+      variables: {
+        where: {
+          id: todoId,
+        },
+        data: {
+          completed: { set: false },
+          completedDate: undefined,
+          completedBy: undefined,
+        },
+      },
+    });
+  };
+  const toggleAddTodo = () => {
+    setAddTodo(!addTodo);
+  };
+  const onPaginationChange = (pageVale: number, pageSizeValue: number) => {
+    setPage(pageVale);
+    setPageSize(pageSizeValue);
+  };
+  return {
+    data: data?.listTodos,
+    loading: (data === null || data === undefined) && loading,
+    saving,
+    onCompletedTodo,
+    onUncompletedTodo,
+    addTodo,
+    toggleAddTodo,
+    updateTodoList,
+    setSearch,
+    onPaginationChange,
+    currentPage: page,
+    currentPageSize: pageSize,
+  };
+};
+
+export default useAdminTodos;

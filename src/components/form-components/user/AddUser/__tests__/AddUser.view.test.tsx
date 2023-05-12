@@ -5,18 +5,17 @@ import { Form } from 'antd';
 import AddUser from '../AddUser.view';
 
 describe('Detail Officer View', () => {
-  const groupsData = {
-    groups: [{ id: 'groupId', name: 'groupName', description: null }],
-  };
-  const chatsData = {
-    chats: [{ id: 'chatId', name: 'chatName', description: null }],
-  };
+  const groupsData = [{ value: 'groupId', label: 'groupName' }];
+  const chatsData = [{ value: 'chatId', label: 'chatName' }];
 
   const FormWrapper = () => {
     const [form] = Form.useForm();
 
     return (
       <AddUser
+        updateNewBusinessData={jest.fn()}
+        addBusinessVisible={false}
+        toggleAddBusinessVisible={jest.fn()}
         onSubmit={jest.fn()}
         onClose={jest.fn()}
         groupsData={groupsData}
@@ -30,6 +29,10 @@ describe('Detail Officer View', () => {
         onSearchBusiness={jest.fn()}
         businessProvided={false}
         schemeLoading={false}
+        selectedRole={undefined}
+        setSelectedRole={jest.fn()}
+        selectedGroups={[]}
+        setSelectedGroups={jest.fn()}
       />
     );
   };

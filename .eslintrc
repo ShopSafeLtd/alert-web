@@ -28,7 +28,14 @@
     ".postInstall.js"
   ],
   "rules": {
-    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ],
     "@typescript-eslint/no-explicit-any": "error",
     "arrow-body-style": [
       "error",
@@ -54,6 +61,8 @@
         "allowForLoopAfterthoughts": true
       }
     ],
+    "import/no-named-as-default": 0,
+
     "react/require-default-props": "off",
     "sonarjs/no-duplicate-string": "warn",
     "sonarjs/cognitive-complexity": "warn",

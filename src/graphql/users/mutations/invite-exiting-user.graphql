@@ -21,6 +21,10 @@ mutation inviteExistingUser(
       id
       name
     }
+    approverGroups {
+      id
+      name
+    }
     loginEvents {
       loginTime
     }

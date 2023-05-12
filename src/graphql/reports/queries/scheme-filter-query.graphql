@@ -1,0 +1,14 @@
+query SchemeReportFilters($where: SchemeWhereInput) {
+  schemes(where: $where) {
+    crimeGroups {
+      id
+      alias
+      ref
+    }
+    offenders {
+      id
+      name
+      reference
+    }
+  }
+}

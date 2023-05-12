@@ -231,18 +231,18 @@ const UseAddUserTest = () => {
 
   const Groups =
     groupsData &&
-    groupsData.groups.map((el) => (
-      <div key={el.id}>
-        <span>{el.id}</span>
-        <span>{el.name}</span>
+    groupsData.map(({ value, label }) => (
+      <div key={value}>
+        <span>{value}</span>
+        <span>{label}</span>
       </div>
     ));
   const Chats =
     chatsData &&
-    chatsData.chats.map((el) => (
-      <div key={el.id}>
-        <span>{el.id}</span>
-        <span>{el.name}</span>
+    chatsData.map(({ value, label }) => (
+      <div key={value}>
+        <span>{value}</span>
+        <span>{label}</span>
       </div>
     ));
 
@@ -266,14 +266,16 @@ const UseAddUserTest = () => {
             offenderEmail: false,
             offenderPush: false,
             publicName: true,
-
-            business: {
-              label: '',
-              value: '',
-            },
+            businesses: [
+              {
+                label: '',
+                value: '',
+              },
+            ],
             role: Role.User,
             groups: ['groupId'],
             chats: ['chatId'],
+            approverGroups: [],
           })
         }
       >

@@ -58,6 +58,8 @@ const DebounceSelect = <
       onSearch={debounceFetcher}
       notFoundContent={fetching ? <Spin size="small" /> : null}
       options={options}
+      optionFilterProp="label"
+      optionLabelProp="label"
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
     />

@@ -3,7 +3,6 @@ import type {
   FeedItemsQuery,
   ListArticlesQuery,
   ListOffendersQuery,
-  ListUnapprovedIncidentsQuery,
   Model,
 } from 'graphql/generated';
 import {
@@ -15,7 +14,6 @@ import {
   useFeedItemsQuery,
   useListArticlesQuery,
   useListOffendersQuery,
-  useListUnapprovedIncidentsQuery,
   useSchemeGroupsQuery,
 } from 'graphql/generated';
 import { useEffect, useState } from 'react';
@@ -48,8 +46,7 @@ interface Return {
   };
   // updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
   onNavigate: () => void;
-  unapprovedIncidents: ListUnapprovedIncidentsQuery | undefined;
-  unapprovedIncidentsLoading: boolean;
+
   onDeleteFeedItem: (value: string) => void;
   saving: boolean;
   adminRights: boolean;
@@ -290,91 +287,6 @@ const useFeedItems = (): Return => {
       skip: articlePagination.pageSize * (articlePagination.page - 1),
     },
   });
-
-  const { data: unapprovedIncidents, loading: unapprovedIncidentsLoading } =
-    useListUnapprovedIncidentsQuery({
-      fetchPolicy: 'cache-and-network',
-      variables: {
-        scheme: {
-          id: schemeId,
-        },
-        order: {
-          createdAt: SortOrder.Desc,
-        },
-        skip: 0,
-        take: 10,
-        where: {
-          createdAt: createdAtFilter
-            ? {
-                gte: createdAtFilter.startDate,
-                lte: createdAtFilter.endDate,
-              }
-            : undefined,
-          approved: {
-            equals: false,
-          },
-          subscribedUsers: gallery.includes('FOLLOWING')
-            ? {
-                some: {
-                  id: {
-                    equals: userId,
-                  },
-                },
-              }
-            : undefined,
-          AND: [
-            {
-              OR: [
-                {
-                  subject: {
-                    contains: search,
-                    mode: QueryMode.Insensitive,
-                  },
-                },
-                {
-                  ref: {
-                    contains: search,
-                    mode: QueryMode.Insensitive,
-                  },
-                },
-                {
-                  createdBy: {
-                    OR: [
-                      {
-                        fullName: {
-                          contains: search,
-                          mode: QueryMode.Insensitive,
-                        },
-                      },
-                      {
-                        businesses: {
-                          some: {
-                            name: {
-                              contains: search,
-                              mode: QueryMode.Insensitive,
-                            },
-                          },
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-            {
-              createdBy: gallery.includes('MYDATA')
-                ? {
-                    id: {
-                      equals: userId,
-                    },
-                  }
-                : undefined,
-            },
-          ],
-        },
-      },
-    });
-
   const { data: recentOffenderData, loading: recentOffenderLoading } =
     useListOffendersQuery({
       fetchPolicy: 'cache-and-network',
@@ -571,8 +483,7 @@ const useFeedItems = (): Return => {
     onGroupsChange,
     variables,
     onNavigate,
-    unapprovedIncidents,
-    unapprovedIncidentsLoading,
+
     onDeleteFeedItem,
     saving,
     adminRights: role !== Role.User,

@@ -1,27 +1,28 @@
 import React from 'react';
 import { Button, Col, Form, Input, Row, Select } from 'antd';
-import type { ListSchemeUsersQuery } from 'graphql/generated';
-
-interface FormData {
-  name: string;
-  description: string;
-  users: string[];
-}
+import type { SelectOptions } from 'types/DataType';
+import type { FormData } from './useAddGroup';
 
 interface Props {
   onSubmit: (value: FormData) => void;
   onClose: () => void;
-  usersData: ListSchemeUsersQuery | undefined;
+  usersData: SelectOptions[] | undefined;
+  adminUsersData: SelectOptions[] | undefined;
   usersLoading: boolean;
   saving: boolean;
+  selectedUsers: string[] | undefined;
+  setSelectedUsers: (value: string[]) => void;
 }
 
 const AddGroup = ({
   onSubmit,
   onClose,
   usersData,
+  adminUsersData,
   usersLoading,
   saving,
+  selectedUsers,
+  setSelectedUsers,
 }: Props): JSX.Element => (
   <Form layout="vertical" onFinish={onSubmit}>
     <Row gutter={16}>
@@ -75,15 +76,31 @@ const AddGroup = ({
             maxTagCount={3}
             filterOption
             optionFilterProp="label"
-            options={usersData?.users.map((user) => ({
-              value: user.id,
-              label: `${user.fullName} (${user.businesses[0]?.name})`,
-            }))}
+            options={usersData}
+            onChange={(value) => setSelectedUsers(value)}
           />
         </Form.Item>
       </Col>
     </Row>
-
+    {selectedUsers && selectedUsers.length > 0 && (
+      <Row gutter={16}>
+        <Col span={23}>
+          <Form.Item name="approvers" label="Approvers">
+            <Select
+              loading={usersLoading}
+              disabled={saving}
+              mode="multiple"
+              maxTagCount={3}
+              options={adminUsersData?.filter(({ value }) =>
+                selectedUsers.includes(value)
+              )}
+              optionFilterProp="label"
+              optionLabelProp="label"
+            />
+          </Form.Item>
+        </Col>
+      </Row>
+    )}
     <Form.Item>
       <Row style={{ marginTop: 30 }} gutter={16} justify="end">
         <Col>

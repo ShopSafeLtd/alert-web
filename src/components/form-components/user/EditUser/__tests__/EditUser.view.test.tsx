@@ -44,20 +44,22 @@ describe('Detail Officer View', () => {
       messagePush: true,
       offenderEmail: true,
       offenderPush: true,
+      approverGroups: [],
     },
   };
 
-  const groupsData = {
-    groups: [{ id: 'groupId', name: 'groupName', description: null }],
-  };
-  const chatsData = {
-    chats: [{ id: 'chatId', name: 'chatName', description: null }],
-  };
+  const groupsData = [{ value: 'groupId', label: 'groupName' }];
+
+  const chatsData = [{ value: 'chatId', label: 'chatName' }];
 
   it('renders the page', () => {
     const { getByText } = render(
       <MemoryRouter>
         <EditUser
+          selectedGroups={[]}
+          selectedRole={Role.ContentAdmin}
+          setSelectedGroups={jest.fn()}
+          setSelectedRole={jest.fn()}
           onSubmit={jest.fn()}
           onClose={jest.fn()}
           data={data}

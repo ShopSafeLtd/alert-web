@@ -20,6 +20,10 @@ mutation createUserInDatabase(
       id
       name
     }
+    approverGroups {
+      id
+      name
+    }
     loginEvents {
       loginTime
     }

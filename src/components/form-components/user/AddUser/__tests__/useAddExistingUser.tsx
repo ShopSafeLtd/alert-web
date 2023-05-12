@@ -45,6 +45,13 @@ const mocks = [
               description: null,
             },
           ],
+          approverGroups: [
+            {
+              id: 'approverGroupsId',
+              name: 'approverGroupsName',
+              description: null,
+            },
+          ],
           chats: [
             {
               id: 'UserChatId',
@@ -109,6 +116,13 @@ const mocks = [
           email: 'email',
           fullName: 'fullName',
           groups: [{ id: 'groupId' }],
+          approverGroups: [
+            {
+              id: 'approverGroupsId',
+              name: 'approverGroupsName',
+              description: null,
+            },
+          ],
           business: {
             label: '',
             value: '',
@@ -140,6 +154,13 @@ const mocks = [
               description: null,
             },
           ],
+          approverGroups: [
+            {
+              id: 'approverGroupsId',
+              name: 'approverGroupsName',
+              description: null,
+            },
+          ],
           chats: [
             {
               id: 'UserChatId',
@@ -167,6 +188,13 @@ const mocks = [
         where: { id: 'userId' },
         data: {
           groups: { connect: [{ id: 'groupId' }] },
+          approverGroups: [
+            {
+              id: 'approverGroupsId',
+              name: 'approverGroupsName',
+              description: null,
+            },
+          ],
           chats: {
             create: [
               { newMessages: false, chat: { connect: { id: 'chatId' } } },
@@ -196,6 +224,13 @@ const mocks = [
             {
               id: 'groupId',
               name: 'test group',
+              description: null,
+            },
+          ],
+          approverGroups: [
+            {
+              id: 'approverGroupsId',
+              name: 'approverGroupsName',
               description: null,
             },
           ],
@@ -238,12 +273,16 @@ const UseAddUserTest = () => {
     const value = {
       email: 'email',
       fullName: '',
-      business: {
-        label: '',
-        value: '',
-      },
+      businesses: [
+        {
+          label: '',
+          value: '',
+        },
+      ],
       role: Role.ContentAdmin,
       groups: [],
+      approverGroups: [],
+      approver: [],
       chats: [],
       incidentEmail: false,
       incidentPush: false,
@@ -260,18 +299,18 @@ const UseAddUserTest = () => {
   };
   const Groups =
     groupsData &&
-    groupsData.groups.map((el) => (
-      <div key={el.id}>
-        <span>{el.id}</span>
-        <span>{el.name}</span>
+    groupsData.map(({ value, label }) => (
+      <div key={value}>
+        <span>{value}</span>
+        <span>{label}</span>
       </div>
     ));
   const Chats =
     chatsData &&
-    chatsData.chats.map((el) => (
-      <div key={el.id}>
-        <span>{el.id}</span>
-        <span>{el.name}</span>
+    chatsData.map(({ value, label }) => (
+      <div key={value}>
+        <span>{value}</span>
+        <span>{label}</span>
       </div>
     ));
 
@@ -287,14 +326,16 @@ const UseAddUserTest = () => {
           onSubmit({
             email: 'email',
             fullName: 'fullName',
-            business: {
-              label: '',
-              value: '',
-            },
+            businesses: [
+              {
+                label: '',
+                value: '',
+              },
+            ],
             role: Role.User,
             groups: ['groupId'],
+            approverGroups: ['approverGroupsId'],
             publicName: true,
-
             chats: ['chatId'],
             incidentEmail: false,
             incidentPush: false,
