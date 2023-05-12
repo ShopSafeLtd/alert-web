@@ -1,13 +1,19 @@
 import React from 'react';
+import type { BusinessData } from 'types/DataType';
 import View from './AddBusiness.view';
 import useAddBusiness from './useAddBusiness';
 
 interface Props {
   onClose: () => void;
+  update: (value: BusinessData) => void;
+  saving: boolean;
 }
 
-const AddBusiness = ({ onClose }: Props) => {
-  const { onSubmit, onSearchBusiness, saving } = useAddBusiness({ onClose });
+const AddBusiness = ({ onClose, update, saving }: Props) => {
+  const { onSubmit, onSearchBusiness } = useAddBusiness({
+    // onClose,
+    update,
+  });
 
   return (
     <View

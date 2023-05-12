@@ -12,6 +12,8 @@ const ListBusinesses = () => {
     toggleAddVisible,
     linkVisible,
     toggleLinkVisible,
+    onSubmit,
+    saving,
   } = useListBusinesses();
 
   return (
@@ -24,6 +26,8 @@ const ListBusinesses = () => {
       toggleAddVisible={toggleAddVisible}
       linkVisible={linkVisible}
       toggleLinkVisible={toggleLinkVisible}
+      onSubmit={onSubmit}
+      saving={saving}
     />
   );
 };

@@ -191,3 +191,30 @@ export interface DateType {
   startDate: Moment | Date;
   endDate: Moment | Date;
 }
+
+// businessData
+export interface BusinessData {
+  id: string;
+  name: string;
+  publicName?: boolean;
+  parent?:
+    | {
+        id: string;
+        name: string;
+      }
+    | null
+    | undefined;
+  locations:
+    | {
+        id: string;
+        building?: string;
+        county?: string;
+        postcode?: string;
+        street?: string;
+        townCity?: string;
+        full?: string | null | undefined;
+      }[];
+  // | undefined;
+  isConnected?: boolean;
+  isNew?: boolean;
+}

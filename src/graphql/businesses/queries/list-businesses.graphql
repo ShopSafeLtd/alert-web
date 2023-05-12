@@ -15,9 +15,6 @@ query ListBusinesses(
       parent {
         id
         name
-
-        fullName
-        publicName
       }
       locations {
         id

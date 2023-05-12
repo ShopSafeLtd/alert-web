@@ -41,6 +41,7 @@ const AddUser = ({
     setSelectedGroups,
     addBusinessVisible,
     toggleAddBusinessVisible,
+    updateNewBusinessData,
   } = useAddUser({ onClose, update, updateSearch, business });
 
   return (
@@ -64,6 +65,7 @@ const AddUser = ({
       setSelectedGroups={setSelectedGroups}
       addBusinessVisible={addBusinessVisible}
       toggleAddBusinessVisible={toggleAddBusinessVisible}
+      updateNewBusinessData={updateNewBusinessData}
     />
   );
 };
