@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import { ReactFlowProvider } from 'reactflow';
-import React from 'react';
+import React, { memo } from 'react';
 import useFlow from './hooks/useFlow';
 import ReactFlowView from './Flow.view';
 import type { ViewInvestigationQuery } from '../../../../../graphql/generated';
@@ -70,9 +70,12 @@ const ReactFlowPro = ({ importData }: Props) => {
   );
 };
 
-const Flow = ({ importData }: Props) => (
-  <ReactFlowProvider>
-    <ReactFlowPro importData={importData} />
-  </ReactFlowProvider>
+const Flow = memo(
+  ({ importData }: Props) => (
+    <ReactFlowProvider>
+      <ReactFlowPro importData={importData} />
+    </ReactFlowProvider>
+  ),
+  (prevProps, nextProps) => prevProps.importData === nextProps.importData
 );
 export default Flow;

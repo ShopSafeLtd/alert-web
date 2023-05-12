@@ -34,6 +34,7 @@ import 'reactflow/dist/style.css';
 import './styles.css';
 import styles from './style.module.css';
 import { visualColours } from '../../../../../utils/node-colour';
+import { useStoreState } from '../../../../../state';
 // import Cursor from './Cursors/Cursor';
 // import { WebsocketProvider } from 'y-websocket';
 
@@ -108,6 +109,9 @@ FlowProps) => {
     }),
     []
   );
+
+  const darkTheme =
+    useStoreState((state) => state.theme.currentTheme) === 'dark';
 
   const nodeTypes = useMemo(
     () => ({
@@ -222,6 +226,9 @@ FlowProps) => {
                     </ControlButton>
                   </Controls>
                   <MiniMap
+                    style={{
+                      backgroundColor: darkTheme ? '#2b2b2b' : '#fff',
+                    }}
                     nodeColor={(node: Node) => nodeColor(node.type as string)}
                     nodeStrokeWidth={3}
                     zoomable

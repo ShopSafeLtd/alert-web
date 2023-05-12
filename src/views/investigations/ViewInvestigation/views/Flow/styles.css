@@ -101,9 +101,6 @@ div.targetHandle {
   margin: 0 0.5rem;
 }
 
-.react-flow__minimap {
-  background: #283041;
-}
 .status.success {
   background: lawngreen;
 }
