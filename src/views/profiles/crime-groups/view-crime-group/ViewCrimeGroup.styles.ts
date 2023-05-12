@@ -5,17 +5,9 @@ const useStyles = createUseStyles((theme: Theme) => ({
   page: {
     padding: 20,
   },
-  viewIncident: {
-    height: '100vh',
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
   headerBar: {
     width: '100%',
-    borderBottom: `1px solid ${theme.borderColor}`,
-    backgroundColor: theme.componentBackground,
-    padding: '7px 20px',
+    padding: '7px 0px 3px',
     display: 'flex',
     alignItems: 'center',
   },

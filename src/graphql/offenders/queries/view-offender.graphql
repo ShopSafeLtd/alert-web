@@ -103,6 +103,7 @@ query ViewOffender(
       }
       location {
         id
+        full
         geoLat
         geoLng
       }

@@ -1,0 +1,53 @@
+query SuggestedCrimeGroupMembers(
+  $where: CrimeGroupWhereUniqueInput!
+  $crimeTypesWhere: TagWhereInput
+  $associatedCrimeGroup: UniqueId
+) {
+  crimeGroup(where: $where) {
+    id
+    suggestedMembers {
+      id
+      name
+      alias
+      reference
+      dateOfBirth
+      age
+      gender
+      build
+      race
+      hair
+      peculiarities
+      images {
+        id
+        optimised
+        position
+      }
+      totalAssociatedIncidents(associatedCrimeGroup: $associatedCrimeGroup)
+      associatedIncidents(associatedCrimeGroup: $associatedCrimeGroup) {
+        id
+        dayTime
+        reference
+        business {
+          id
+          fullName
+        }
+        location {
+          full
+          id
+        }
+        crimeTypes(where: $crimeTypesWhere) {
+          id
+          name
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+}

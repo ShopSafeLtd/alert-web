@@ -16,7 +16,10 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import type { CrimeGroupQuery } from 'graphql/generated';
+import type {
+  CrimeGroupQuery,
+  SuggestedCrimeGroupMembersQuery,
+} from 'graphql/generated';
 import { UpdateType } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -41,6 +44,9 @@ import OffenderTable from 'components/tables/OffenderTable';
 import IncidentTable from 'components/tables/IncidentTable';
 import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
+import CrimeGroupSideList from 'components/crimeGroups/sidelist';
+import SuggestedMembers from 'components/crimeGroups/SuggestedMembers/SuggestedMembers.view';
+import MapCard from 'components/map/MapCard/MapCard.view';
 import useStyles from './ViewCrimeGroup.styles';
 
 const { Title } = Typography;
@@ -95,6 +101,10 @@ interface Props {
   submitOffender: (value: string) => void;
   submitVehicle: (value: string) => void;
   submitNewOffender: (value: OffenderData) => void;
+  suggestedData: SuggestedCrimeGroupMembersQuery | undefined;
+  viewSuggestedOpen: boolean;
+  toggleViewSuggested: () => void;
+  handleAddSuggestion: (id: string) => void;
 }
 
 const ViewCrimeGroup = ({
@@ -134,6 +144,10 @@ const ViewCrimeGroup = ({
   submitOffender,
   submitVehicle,
   submitNewOffender,
+  suggestedData,
+  toggleViewSuggested,
+  viewSuggestedOpen,
+  handleAddSuggestion,
 }: Props) => {
   const classes = useStyles();
 
@@ -161,57 +175,12 @@ const ViewCrimeGroup = ({
   ];
   return (
     <div className="page-container">
-      <Row className={classes.headerBar}>
-        <Col className={classes.detailsHeader} span={12}>
-          <Row>
-            <Col className={classes.centerCell} flex={1}>
-              <Title className={classes.headerTitle} level={4}>
-                {`Alert ID: ${data?.crimeGroup?.reference} `}
-                {data?.crimeGroup?.alias &&
-                  `-- (Alias: ${data?.crimeGroup?.alias})`}
-              </Title>
-            </Col>
-            {editRights && (
-              <Dropdown overlay={<Menu items={optionMenuItems} />}>
-                <Button type="text">
-                  <Space>
-                    Options
-                    <FontAwesomeIcon icon={faChevronDown} />
-                  </Space>
-                </Button>
-              </Dropdown>
-            )}
-            {/* {editRights && (
-              <Button
-                key="1"
-                type="primary"
-                disabled={saving}
-                // style={{ color: 'red' }}
-                onClick={() => {
-                  confirm({
-                    title: 'Do you want to delete the crime group?',
-                    content: 'This action cannot be undone.',
-                    onOk() {
-                      onDeleteCrimeGroup();
-                    },
-                  });
-                }}
-                icon={
-                  <FontAwesomeIcon icon={faTrash} style={{ marginRight: 5 }} />
-                }
-              >
-                Delete Crime Group
-              </Button>
-            )} */}
-          </Row>
+      <Row wrap={false}>
+        <Col>
+          <CrimeGroupSideList current={crimeGroupId} />
         </Col>
-        <Col span={12}>
-          <Row>
-            <Col className={classes.centerCell} flex={1}>
-              <Title className={classes.headerTitle} level={4}>
-                Updates
-              </Title>
-            </Col>
+        <Col flex={1} className={classes.detailsContent}>
+          <Row gutter={8} className={classes.headerBar} justify="end">
             <Col>
               <Tooltip
                 title={
@@ -238,199 +207,261 @@ const ViewCrimeGroup = ({
                 </Button>
               </Tooltip>
             </Col>
+            {editRights && (
+              <Col>
+                <Dropdown overlay={<Menu items={optionMenuItems} />}>
+                  <Button type="text">
+                    <Space>
+                      Options
+                      <FontAwesomeIcon icon={faChevronDown} />
+                    </Space>
+                  </Button>
+                </Dropdown>
+              </Col>
+            )}
           </Row>
-        </Col>
-      </Row>
-      <Row wrap={false} className={classes.content}>
-        <Col span={12} className={classes.detailsContent}>
-          <div className={classes.details}>
-            <Card loading={loading}>
-              <Row gutter={30}>
-                <Col>
-                  <Statistic
-                    title="Total Incidents"
-                    value={data?.crimeGroup?.totalIncidents || 0}
-                  />
-                </Col>
-                <Col>
-                  <Statistic
-                    title="Total Offenders"
-                    value={data?.crimeGroup?.totalOffenders || 0}
-                  />
-                </Col>
-                <Col>
-                  <Statistic
-                    title="Total Lost value"
-                    value={`£${data?.crimeGroup?.totalValue || 0}`}
-                  />
-                </Col>
-                <Col>
-                  <Statistic
-                    title="Total Recovered value"
-                    value={`£${data?.crimeGroup?.totalRecoveredValue || 0}`}
-                  />
-                </Col>
-                <Col>
-                  <Statistic
-                    title="Theft Success Rate"
-                    value={`${
-                      data?.crimeGroup?.totalTheftSuccess?.toFixed(0) || 0
-                    }%`}
-                  />
-                </Col>
-              </Row>
-            </Card>
-            <Card loading={loading}>
-              <Row align="middle" style={{ marginBottom: 10 }}>
-                <Col flex={1}>
-                  <Title level={4}>Offenders</Title>
-                </Col>
-                <Col>
-                  <Dropdown
-                    overlay={
-                      <Menu
-                        items={[
-                          {
-                            label: 'Add Existing Offenders',
-                            key: '1',
-                            icon: (
-                              <FontAwesomeIcon
-                                icon={faMagnifyingGlass}
-                                style={{ marginRight: 5 }}
-                              />
-                            ),
-                            onClick: () => toggleAddExistingOffender(),
-                          },
-                          {
-                            label: 'Create New Offender',
-                            key: '2',
-                            icon: (
-                              <FontAwesomeIcon
-                                icon={faPlus}
-                                style={{ marginRight: 5 }}
-                              />
-                            ),
-                            onClick: () => toggleAddOffender(),
-                          },
-                        ]}
-                      />
-                    }
-                  >
-                    <Button
-                      size="small"
-                      danger
-                      icon={
-                        <FontAwesomeIcon
-                          icon={faPlus}
-                          style={{ marginRight: 5 }}
+          <div className={classes.content}>
+            <div className={classes.details}>
+              <Card loading={loading}>
+                <Title level={3}>
+                  Alert ID: {data?.crimeGroup?.reference}{' '}
+                  {data?.crimeGroup?.alias
+                    ? `(${data?.crimeGroup?.alias})`
+                    : ''}
+                </Title>
+                <Row gutter={32}>
+                  <Col>
+                    <Statistic
+                      title="Total Incidents"
+                      value={data?.crimeGroup?.totalIncidents || 0}
+                    />
+                  </Col>
+                  <Col>
+                    <Statistic
+                      title="Total Offenders"
+                      value={data?.crimeGroup?.totalOffenders || 0}
+                    />
+                  </Col>
+                  <Col>
+                    <Statistic
+                      title="Total Loss"
+                      value={`£${
+                        data?.crimeGroup?.totalValue?.toLocaleString() || 0
+                      }`}
+                    />
+                  </Col>
+                  <Col>
+                    <Statistic
+                      title="Total Value Recovered"
+                      value={`£${
+                        data?.crimeGroup?.totalRecoveredValue?.toLocaleString() ||
+                        0
+                      }`}
+                    />
+                  </Col>
+                  <Col>
+                    <Statistic
+                      title="Loss Rate"
+                      value={`${
+                        data?.crimeGroup?.totalTheftSuccess?.toFixed(0) || 0
+                      }%`}
+                    />
+                  </Col>
+                </Row>
+              </Card>
+              <Card loading={loading}>
+                <Row gutter={8} align="middle" style={{ marginBottom: 10 }}>
+                  <Col flex={1}>
+                    <Title level={4}>Offenders</Title>
+                  </Col>
+                  {suggestedData?.crimeGroup?.suggestedMembers &&
+                    suggestedData.crimeGroup.suggestedMembers.length > 0 && (
+                      <Col>
+                        <Button
+                          onClick={toggleViewSuggested}
+                          danger
+                          size="small"
+                          type="ghost"
+                        >
+                          {suggestedData.crimeGroup.suggestedMembers.length}{' '}
+                          Suggested Members
+                        </Button>
+                      </Col>
+                    )}
+                  <Col>
+                    <Dropdown
+                      overlay={
+                        <Menu
+                          items={[
+                            {
+                              label: 'Add Existing Offenders',
+                              key: '1',
+                              icon: (
+                                <FontAwesomeIcon
+                                  icon={faMagnifyingGlass}
+                                  style={{ marginRight: 5 }}
+                                />
+                              ),
+                              onClick: () => toggleAddExistingOffender(),
+                            },
+                            {
+                              label: 'Create New Offender',
+                              key: '2',
+                              icon: (
+                                <FontAwesomeIcon
+                                  icon={faPlus}
+                                  style={{ marginRight: 5 }}
+                                />
+                              ),
+                              onClick: () => toggleAddOffender(),
+                            },
+                          ]}
                         />
                       }
                     >
-                      Offenders
-                    </Button>
-                  </Dropdown>
-                </Col>
-              </Row>
+                      <Button
+                        size="small"
+                        icon={
+                          <FontAwesomeIcon
+                            icon={faPlus}
+                            style={{ marginRight: 5 }}
+                          />
+                        }
+                      >
+                        Offenders
+                      </Button>
+                    </Dropdown>
+                  </Col>
+                </Row>
 
-              {data?.crimeGroup?.offenders.length && !loading ? (
-                <OffenderTable
-                  offenders={data?.crimeGroup?.offenders}
-                  hasNavigation
-                />
-              ) : (
-                <Empty
-                  description="No offenders for this crime group"
-                  image={Empty.PRESENTED_IMAGE_SIMPLE}
-                />
-              )}
-            </Card>
-            <Card loading={loading}>
-              <Row align="middle" style={{ marginBottom: 10 }}>
-                <Col flex={1}>
-                  <Title level={4}>Vehicles</Title>
-                </Col>
-                <Col>
-                  <Dropdown
-                    overlay={
-                      <Menu
-                        items={[
-                          {
-                            label: 'Add Existing Vehicles',
-                            key: '1',
-                            icon: (
-                              <FontAwesomeIcon
-                                icon={faMagnifyingGlass}
-                                style={{ marginRight: 5 }}
-                              />
-                            ),
-                            onClick: () => toggleAddExistingVehicle(),
-                          },
-                          {
-                            label: 'Create New Vehicle',
-                            key: '2',
-                            icon: (
-                              <FontAwesomeIcon
-                                icon={faPlus}
-                                style={{ marginRight: 5 }}
-                              />
-                            ),
-                            onClick: () => toggleAddNewVehicle(),
-                          },
-                        ]}
-                      />
-                    }
-                  >
-                    <Button
-                      size="small"
-                      danger
-                      icon={
-                        <FontAwesomeIcon
-                          icon={faPlus}
-                          style={{ marginRight: 5 }}
-                        />
-                      }
-                    >
-                      Vehicles
-                    </Button>
-                  </Dropdown>
-                </Col>
-              </Row>
+                {data?.crimeGroup?.offenders.length && !loading ? (
+                  <OffenderTable
+                    offenders={data?.crimeGroup?.offenders}
+                    hasNavigation
+                  />
+                ) : (
+                  <Empty
+                    description="No offenders for this crime group"
+                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  />
+                )}
+              </Card>
 
-              {data?.crimeGroup?.vehicles.length && !loading ? (
-                <VehicleTable
-                  vehicles={data?.crimeGroup?.vehicles}
-                  hasNavigation
-                />
-              ) : (
-                <Empty
-                  description="No vehicles for this crime group"
-                  image={Empty.PRESENTED_IMAGE_SIMPLE}
-                />
-              )}
-            </Card>
-            <Card loading={loading}>
-              <Title level={4}>Incidents</Title>
               {data?.crimeGroup?.incidents &&
-              data?.crimeGroup?.incidents.length > 0 &&
-              !loading ? (
-                <IncidentTable
-                  // TODO
-                  // @ts-expect-error says can be null
-                  incidents={data?.crimeGroup?.incidents.filter(
-                    (incident) => incident !== null
-                  )}
-                  hasNavigation
-                />
-              ) : (
-                <Empty
-                  description="No incidents for this crime group"
-                  image={Empty.PRESENTED_IMAGE_SIMPLE}
-                />
-              )}
-            </Card>
+                data?.crimeGroup?.incidents.length > 0 && (
+                  <MapCard
+                    width="100%"
+                    height={500}
+                    markers={
+                      data?.crimeGroup?.incidents.map((incident) => ({
+                        geoLat: incident?.location?.geoLat,
+                        geoLng: incident?.location?.geoLng,
+                      })) || []
+                    }
+                  />
+                )}
+
+              <Card loading={loading}>
+                <Row align="middle" style={{ marginBottom: 10 }}>
+                  <Col flex={1}>
+                    <Title level={4}>Vehicles</Title>
+                  </Col>
+                  <Col>
+                    <Dropdown
+                      overlay={
+                        <Menu
+                          items={[
+                            {
+                              label: 'Add Existing Vehicles',
+                              key: '1',
+                              icon: (
+                                <FontAwesomeIcon
+                                  icon={faMagnifyingGlass}
+                                  style={{ marginRight: 5 }}
+                                />
+                              ),
+                              onClick: () => toggleAddExistingVehicle(),
+                            },
+                            {
+                              label: 'Create New Vehicle',
+                              key: '2',
+                              icon: (
+                                <FontAwesomeIcon
+                                  icon={faPlus}
+                                  style={{ marginRight: 5 }}
+                                />
+                              ),
+                              onClick: () => toggleAddNewVehicle(),
+                            },
+                          ]}
+                        />
+                      }
+                    >
+                      <Button
+                        size="small"
+                        icon={
+                          <FontAwesomeIcon
+                            icon={faPlus}
+                            style={{ marginRight: 5 }}
+                          />
+                        }
+                      >
+                        Vehicles
+                      </Button>
+                    </Dropdown>
+                  </Col>
+                </Row>
+
+                {data?.crimeGroup?.vehicles.length && !loading ? (
+                  <VehicleTable
+                    vehicles={data?.crimeGroup?.vehicles}
+                    hasNavigation
+                  />
+                ) : (
+                  <Empty
+                    description="No vehicles for this crime group"
+                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  />
+                )}
+              </Card>
+              <Card loading={loading}>
+                <Title level={4}>Incidents</Title>
+                {data?.crimeGroup?.incidents &&
+                data?.crimeGroup?.incidents.length > 0 &&
+                !loading ? (
+                  <IncidentTable
+                    // TODO
+                    // @ts-expect-error says can be null
+                    incidents={data?.crimeGroup?.incidents.filter(
+                      (incident) => incident !== null
+                    )}
+                    hasNavigation
+                    pageSize={20}
+                  />
+                ) : (
+                  <Empty
+                    description="No incidents for this crime group"
+                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  />
+                )}
+              </Card>
+            </div>
+
+            <Modal
+              title="Edit Update Content"
+              visible={editUpdate !== null}
+              onOk={handleEditUpdate}
+              onCancel={() => setEditUpdate(null)}
+              okText="Save"
+            >
+              <Input
+                value={editUpdateInput}
+                onChange={(e) => setEditUpdateInput(e.target.value)}
+              />
+            </Modal>
           </div>
         </Col>
-        <Col span={12}>
+        <Col span={6}>
           <div className={classes.updatesContainer}>
             <InfiniteScroll
               height={
@@ -675,19 +706,6 @@ const ViewCrimeGroup = ({
             />
           </div>
         </Col>
-
-        <Modal
-          title="Edit Update Content"
-          visible={editUpdate !== null}
-          onOk={handleEditUpdate}
-          onCancel={() => setEditUpdate(null)}
-          okText="Save"
-        >
-          <Input
-            value={editUpdateInput}
-            onChange={(e) => setEditUpdateInput(e.target.value)}
-          />
-        </Modal>
       </Row>
 
       {/* offeder */}
@@ -729,7 +747,7 @@ const ViewCrimeGroup = ({
       {/* vehicle */}
       <Drawer
         title="Add New Vehicle"
-        visible={addNewVehicle}
+        open={addNewVehicle}
         width="600"
         onClose={toggleAddNewVehicle}
       >
@@ -745,7 +763,7 @@ const ViewCrimeGroup = ({
       </Drawer>
       <Drawer
         title="Add Existing Vehicles"
-        visible={addExistingVehicle}
+        open={addExistingVehicle}
         width="800"
         onClose={toggleAddExistingVehicle}
         zIndex={1001}
@@ -762,11 +780,26 @@ const ViewCrimeGroup = ({
       </Drawer>
       <Drawer
         title="Add New Alias"
-        visible={addAlias}
+        open={addAlias}
         width="600"
         onClose={toggleAddAlias}
       >
         {addAlias ? <AddAlias onClose={toggleAddAlias} /> : <div />}
+      </Drawer>
+      <Drawer
+        title="Suggested Group Members"
+        open={viewSuggestedOpen}
+        width="900"
+        onClose={toggleViewSuggested}
+        bodyStyle={{ paddingLeft: 0, paddingRight: 0 }}
+      >
+        {viewSuggestedOpen && (
+          <SuggestedMembers
+            suggestedData={suggestedData}
+            onClose={toggleViewSuggested}
+            handleAddSuggestion={handleAddSuggestion}
+          />
+        )}
       </Drawer>
     </div>
   );

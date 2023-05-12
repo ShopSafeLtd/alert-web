@@ -5,6 +5,7 @@ import type {
   ViewOffenderQueryVariables,
 } from 'graphql/generated';
 import {
+  TagType,
   useAssociatedOffendersQuery,
   Role,
   useAddImagesToOffenderMutation,
@@ -209,6 +210,11 @@ const useViewOffender = (offenderId: string): Return => {
         },
         where: {
           id: offenderId,
+        },
+        crimeTypesWhere: {
+          type: {
+            equals: TagType.IncidentCrimeType,
+          },
         },
         groups: role === Role.SchemeAdmin ? undefined : groups,
       },

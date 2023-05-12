@@ -7072,6 +7072,7 @@ export type CrimeGroup = {
   schemes: Array<Scheme>;
   subscribed?: Maybe<Scalars['Boolean']>;
   subscribedUsers: Array<User>;
+  suggestedMembers?: Maybe<Array<Offender>>;
   totalIncidents?: Maybe<Scalars['Int']>;
   totalOffenders?: Maybe<Scalars['Int']>;
   totalRecoveredValue?: Maybe<Scalars['Int']>;
@@ -23794,7 +23795,8 @@ export type OffenderAssociatedCrimeGroupsArgs = {
 };
 
 export type OffenderAssociatedIncidentsArgs = {
-  associatedOffender: UniqueId;
+  associatedCrimeGroup?: InputMaybe<UniqueId>;
+  associatedOffender?: InputMaybe<UniqueId>;
 };
 
 export type OffenderBansArgs = {
@@ -23888,7 +23890,8 @@ export type OffenderTotalAssociatedCrimeGroupsArgs = {
 };
 
 export type OffenderTotalAssociatedIncidentsArgs = {
-  associatedOffender: UniqueId;
+  associatedCrimeGroup?: InputMaybe<UniqueId>;
+  associatedOffender?: InputMaybe<UniqueId>;
 };
 
 export type OffenderUpdatesArgs = {
@@ -47852,6 +47855,68 @@ export type ListCrimeGroupsQuery = {
   };
 };
 
+export type SuggestedCrimeGroupMembersQueryVariables = Exact<{
+  where: CrimeGroupWhereUniqueInput;
+  crimeTypesWhere?: InputMaybe<TagWhereInput>;
+  associatedCrimeGroup?: InputMaybe<UniqueId>;
+}>;
+
+export type SuggestedCrimeGroupMembersQuery = {
+  __typename?: 'Query';
+  crimeGroup?: {
+    __typename?: 'CrimeGroup';
+    id: string;
+    suggestedMembers?: Array<{
+      __typename?: 'Offender';
+      id: string;
+      name?: string | null;
+      alias: Array<string>;
+      reference?: number | null;
+      dateOfBirth?: any | null;
+      age?: Age | null;
+      gender?: Gender | null;
+      build?: Build | null;
+      race?: Race | null;
+      hair?: string | null;
+      peculiarities?: string | null;
+      totalAssociatedIncidents?: number | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        position: ImagePosition;
+      }>;
+      associatedIncidents?: Array<{
+        __typename?: 'Incident';
+        id: string;
+        dayTime?: string | null;
+        reference?: number | null;
+        business?: {
+          __typename?: 'Business';
+          id: string;
+          fullName: string;
+        } | null;
+        location?: {
+          __typename?: 'Address';
+          full?: string | null;
+          id: string;
+        } | null;
+        crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+        createdBy: {
+          __typename?: 'User';
+          id: string;
+          fullName: string;
+          businesses: Array<{
+            __typename?: 'Business';
+            id: string;
+            name: string;
+          }>;
+        };
+      }> | null;
+    }> | null;
+  } | null;
+};
+
 export type CrimeGroupQueryVariables = Exact<{
   where: CrimeGroupWhereUniqueInput;
 }>;
@@ -47927,6 +47992,13 @@ export type CrimeGroupQuery = {
           name: string;
         }>;
       };
+      location?: {
+        __typename?: 'Address';
+        full?: string | null;
+        id: string;
+        geoLat?: number | null;
+        geoLng?: number | null;
+      } | null;
     } | null> | null;
     updates: Array<{
       __typename?: 'Update';
@@ -51617,6 +51689,7 @@ export type ViewOffenderQuery = {
       location?: {
         __typename?: 'Address';
         id: string;
+        full?: string | null;
         geoLat?: number | null;
         geoLng?: number | null;
       } | null;
@@ -57643,6 +57716,114 @@ export type ListCrimeGroupsQueryResult = Apollo.QueryResult<
   ListCrimeGroupsQuery,
   ListCrimeGroupsQueryVariables
 >;
+export const SuggestedCrimeGroupMembersDocument = gql`
+  query SuggestedCrimeGroupMembers(
+    $where: CrimeGroupWhereUniqueInput!
+    $crimeTypesWhere: TagWhereInput
+    $associatedCrimeGroup: UniqueId
+  ) {
+    crimeGroup(where: $where) {
+      id
+      suggestedMembers {
+        id
+        name
+        alias
+        reference
+        dateOfBirth
+        age
+        gender
+        build
+        race
+        hair
+        peculiarities
+        images {
+          id
+          optimised
+          position
+        }
+        totalAssociatedIncidents(associatedCrimeGroup: $associatedCrimeGroup)
+        associatedIncidents(associatedCrimeGroup: $associatedCrimeGroup) {
+          id
+          dayTime
+          reference
+          business {
+            id
+            fullName
+          }
+          location {
+            full
+            id
+          }
+          crimeTypes(where: $crimeTypesWhere) {
+            id
+            name
+          }
+          createdBy {
+            id
+            fullName
+            businesses {
+              id
+              name
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useSuggestedCrimeGroupMembersQuery__
+ *
+ * To run a query within a React component, call `useSuggestedCrimeGroupMembersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSuggestedCrimeGroupMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSuggestedCrimeGroupMembersQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      crimeTypesWhere: // value for 'crimeTypesWhere'
+ *      associatedCrimeGroup: // value for 'associatedCrimeGroup'
+ *   },
+ * });
+ */
+export function useSuggestedCrimeGroupMembersQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SuggestedCrimeGroupMembersQuery,
+    SuggestedCrimeGroupMembersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    SuggestedCrimeGroupMembersQuery,
+    SuggestedCrimeGroupMembersQueryVariables
+  >(SuggestedCrimeGroupMembersDocument, options);
+}
+export function useSuggestedCrimeGroupMembersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SuggestedCrimeGroupMembersQuery,
+    SuggestedCrimeGroupMembersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    SuggestedCrimeGroupMembersQuery,
+    SuggestedCrimeGroupMembersQueryVariables
+  >(SuggestedCrimeGroupMembersDocument, options);
+}
+export type SuggestedCrimeGroupMembersQueryHookResult = ReturnType<
+  typeof useSuggestedCrimeGroupMembersQuery
+>;
+export type SuggestedCrimeGroupMembersLazyQueryHookResult = ReturnType<
+  typeof useSuggestedCrimeGroupMembersLazyQuery
+>;
+export type SuggestedCrimeGroupMembersQueryResult = Apollo.QueryResult<
+  SuggestedCrimeGroupMembersQuery,
+  SuggestedCrimeGroupMembersQueryVariables
+>;
 export const CrimeGroupDocument = gql`
   query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
     crimeGroup(where: $where) {
@@ -57708,6 +57889,12 @@ export const CrimeGroupDocument = gql`
             id
             name
           }
+        }
+        location {
+          full
+          id
+          geoLat
+          geoLng
         }
       }
       updates(orderBy: { createdAt: desc }) {
@@ -63776,6 +63963,7 @@ export const ViewOffenderDocument = gql`
         }
         location {
           id
+          full
           geoLat
           geoLng
         }

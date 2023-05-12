@@ -2,8 +2,13 @@ import { Modal, notification } from 'antd';
 import type {
   CrimeGroupQuery,
   CrimeGroupQueryVariables,
+  SuggestedCrimeGroupMembersQuery,
+  SuggestedCrimeGroupMembersQueryVariables,
 } from 'graphql/generated';
 import {
+  SuggestedCrimeGroupMembersDocument,
+  TagType,
+  useSuggestedCrimeGroupMembersQuery,
   useUpdateCrimeGroupMutation,
   CrimeGroupDocument,
   Role,
@@ -69,6 +74,10 @@ interface Return {
   submitOffender: (value: string) => void;
   submitVehicle: (value: string) => void;
   submitNewOffender: (value: OffenderData) => void;
+  suggestedData: SuggestedCrimeGroupMembersQuery | undefined;
+  viewSuggestedOpen: boolean;
+  toggleViewSuggested: () => void;
+  handleAddSuggestion: (id: string) => void;
 }
 
 const useViewCrimeGroup = (crimeGroupId: string): Return => {
@@ -85,6 +94,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const [addAlias, setAddAlias] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
   const [optionRowShow, setOptionRowShow] = useState(false);
+  const [viewSuggestedOpen, setViewSuggestedOpen] = useState(false);
   const [editUpdateInput, setEditUpdateInput] = useState('');
   const [editUpdate, setEditUpdate] = useState<{
     id: string;
@@ -118,6 +128,22 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     },
   });
 
+  const { data: suggestedData } = useSuggestedCrimeGroupMembersQuery({
+    variables: {
+      where: {
+        id: crimeGroupId,
+      },
+      associatedCrimeGroup: {
+        id: crimeGroupId,
+      },
+      crimeTypesWhere: {
+        type: {
+          equals: TagType.IncidentCrimeType,
+        },
+      },
+    },
+  });
+
   // function
   const toggleAddOffender = () => {
     setAddOffender(!addOffender);
@@ -138,7 +164,6 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const [updateCrimeGroup] = useUpdateCrimeGroupMutation({
     onCompleted: () => {
       setSaving(false);
-      toggleAddNewVehicle();
       notification.success({
         message: 'Successfully Updated!',
         description: 'The crime group has been updated!',
@@ -223,6 +248,7 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
           },
         },
       });
+      toggleAddNewVehicle();
     }
   };
   const submitNewVehicle = (data: VehicleData) => {
@@ -447,6 +473,82 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
   const scrolledToTop = () => {
     setLoadMore(true);
   };
+
+  const toggleViewSuggested = () => {
+    setViewSuggestedOpen(!viewSuggestedOpen);
+  };
+
+  const handleAddSuggestion = (id: string) => {
+    setViewSuggestedOpen(false);
+    updateCrimeGroup({
+      variables: {
+        data: {
+          offenders: {
+            connect: [
+              {
+                id,
+              },
+            ],
+          },
+        },
+        where: {
+          id: crimeGroupId,
+        },
+      },
+      update: (store, result) => {
+        const existingData = store.readQuery<
+          SuggestedCrimeGroupMembersQuery,
+          SuggestedCrimeGroupMembersQueryVariables
+        >({
+          query: SuggestedCrimeGroupMembersDocument,
+          variables: {
+            where: {
+              id: crimeGroupId,
+            },
+            associatedCrimeGroup: {
+              id: crimeGroupId,
+            },
+            crimeTypesWhere: {
+              type: {
+                equals: TagType.IncidentCrimeType,
+              },
+            },
+          },
+        });
+
+        if (existingData?.crimeGroup && result.data?.updateCrimeGroup)
+          store.writeQuery<
+            SuggestedCrimeGroupMembersQuery,
+            SuggestedCrimeGroupMembersQueryVariables
+          >({
+            query: SuggestedCrimeGroupMembersDocument,
+            variables: {
+              where: {
+                id: crimeGroupId,
+              },
+              associatedCrimeGroup: {
+                id: crimeGroupId,
+              },
+              crimeTypesWhere: {
+                type: {
+                  equals: TagType.IncidentCrimeType,
+                },
+              },
+            },
+            data: {
+              crimeGroup: {
+                ...result.data.updateCrimeGroup,
+                suggestedMembers:
+                  existingData.crimeGroup?.suggestedMembers?.filter(
+                    (offender) => offender.id !== id
+                  ),
+              },
+            },
+          });
+      },
+    });
+  };
+
   return {
     data: crimeGroupsData,
     loading:
@@ -484,6 +586,10 @@ const useViewCrimeGroup = (crimeGroupId: string): Return => {
     submitOffender,
     submitVehicle,
     submitNewOffender,
+    suggestedData,
+    viewSuggestedOpen,
+    toggleViewSuggested,
+    handleAddSuggestion,
   };
 };
 
