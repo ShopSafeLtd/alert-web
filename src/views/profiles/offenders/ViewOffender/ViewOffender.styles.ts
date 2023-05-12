@@ -69,10 +69,28 @@ const useStyles = createUseStyles((theme: Theme) => ({
     marginBottom: 30,
   },
   offenderRow: {
-    cursor: 'pointer',
+    overflowX: 'auto',
   },
   tag: {
     marginTop: -3,
+  },
+  offenderParagraph: {
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    background: 'rgba(0,0,0,.5)',
+    color: '#FFF',
+    position: 'absolute',
+    padding: '3px 10px 3px',
+    left: 0,
+    right: 0,
+    margin: 0,
+  },
+  offenderBadge: {
+    position: 'absolute',
+    top: 4,
+    right: 4,
+    zIndex: 2,
   },
 }));
 

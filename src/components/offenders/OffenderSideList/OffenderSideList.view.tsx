@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import SideList from 'components/side-list/SideList.view';
 import SideListItem from 'components/side-list/SideListItem.view';
-import { getAge, getEthnicity, getSex } from 'utils';
+import { getEthnicity, getSex } from 'utils';
 import useStyles from './OffenderSideList.styles';
 
 const { Text, Paragraph } = Typography;
@@ -74,14 +74,18 @@ const OffenderSideList = ({
                 >
                   {offender.name}
                 </Text>
+                <Text
+                  className={classes.reference}
+                  strong={current === offender.id}
+                  ellipsis
+                >
+                  Alert ID: {offender.reference}
+                </Text>
                 <Paragraph className={classes.detail} ellipsis>
                   {offender.race && getEthnicity(offender.race)}
                 </Paragraph>
                 <Paragraph className={classes.detail} ellipsis>
                   {offender.gender && getSex(offender.gender)}
-                </Paragraph>
-                <Paragraph className={classes.detail} ellipsis>
-                  {offender.age && getAge(offender.age)}
                 </Paragraph>
               </Col>
             </Row>

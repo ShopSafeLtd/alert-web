@@ -420,7 +420,6 @@ const FeedItem = ({
                           <Link to={`/app/offenders/view/${offender.id}`}>
                             <Card
                               // onClick={() => setAddRecentOffender(offender)}
-                              className="offender-card"
                               style={{ border: 0 }}
                               bodyStyle={{
                                 width: 120,

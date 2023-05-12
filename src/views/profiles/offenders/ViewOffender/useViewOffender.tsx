@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import type {
+  AssociatedOffendersQuery,
   ViewOffenderQuery,
   ViewOffenderQueryVariables,
 } from 'graphql/generated';
 import {
+  useAssociatedOffendersQuery,
   Role,
   useAddImagesToOffenderMutation,
   useDeleteUpdateMutation,
@@ -24,6 +26,17 @@ import { useNavigate } from 'react-router';
 import update from 'immutability-helper';
 
 const { confirm } = Modal;
+
+const LINKED_INCIDENTS = 'LINKED_INCIDENTS';
+const LINKED_OCG = 'LINKED_OCG';
+
+export type ViewAssociate = Exclude<
+  Exclude<
+    AssociatedOffendersQuery['offender'],
+    null | undefined
+  >['knownAssociates'],
+  undefined | null
+>[0];
 
 interface Return {
   data: ViewOffenderQuery | undefined;
@@ -82,6 +95,12 @@ interface Return {
   setOptionRowShow: (value: boolean) => void;
   publicOffenderDOB: boolean;
   onDelete: (id: string) => void;
+  associatesData: AssociatedOffendersQuery | undefined;
+  associatesLoading: boolean;
+  onAssociateFilterChange: (value: string[]) => void;
+  associateFilters: (string | undefined)[];
+  viewAssociate: ViewAssociate | null;
+  toggleViewAssociate: (value: ViewAssociate | null) => void;
 }
 
 const useViewOffender = (offenderId: string): Return => {
@@ -105,6 +124,12 @@ const useViewOffender = (offenderId: string): Return => {
     open: false,
     index: 0,
   });
+  const [associateFilters, setAssociatedFilters] = useState<
+    (string | undefined)[]
+  >([]);
+  const [viewAssociate, setViewAssociate] = useState<ViewAssociate | null>(
+    null
+  );
 
   const openLightbox = (index: number) => {
     setLightBoxOpen({ open: !lightBoxOpen.open, index });
@@ -131,6 +156,27 @@ const useViewOffender = (offenderId: string): Return => {
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [editUpdateInput, setEditUpdateInput] = useState('');
 
+  useEffect(() => {
+    const incidents =
+      window.localStorage.getItem(LINKED_INCIDENTS) === 'fasle'
+        ? undefined
+        : LINKED_INCIDENTS;
+    const crimeGroups =
+      window.localStorage.getItem(LINKED_OCG) === 'true'
+        ? undefined
+        : LINKED_OCG;
+
+    setAssociatedFilters([incidents, crimeGroups]);
+  }, []);
+
+  useEffect(() => {
+    const incidents = associateFilters.includes(LINKED_INCIDENTS);
+    const crimeGroups = associateFilters.includes(LINKED_OCG);
+
+    window.localStorage.setItem(LINKED_INCIDENTS, incidents ? 'true' : 'false');
+    window.localStorage.setItem(LINKED_OCG, crimeGroups ? 'true' : 'false');
+  }, [associateFilters]);
+
   const { data, loading } = useViewOffenderQuery({
     fetchPolicy: 'cache-and-network',
     variables: {
@@ -152,6 +198,21 @@ const useViewOffender = (offenderId: string): Return => {
       );
     },
   });
+
+  const { data: associatesData, loading: associatesLoading } =
+    useAssociatedOffendersQuery({
+      variables: {
+        linkedCrimeGroup: associateFilters.includes(LINKED_OCG),
+        linkedIncidents: associateFilters.includes(LINKED_INCIDENTS),
+        associatedOffender: {
+          id: offenderId,
+        },
+        where: {
+          id: offenderId,
+        },
+        groups: role === Role.SchemeAdmin ? undefined : groups,
+      },
+    });
 
   const [updateOffender] = useUpdateOffenderMutation({
     onCompleted: () => {
@@ -446,6 +507,10 @@ const useViewOffender = (offenderId: string): Return => {
     }
   }, [role]);
 
+  const onAssociateFilterChange = (value: string[]) => {
+    setAssociatedFilters(value);
+  };
+
   return {
     data,
     loading: data?.offender ? false : loading,
@@ -481,6 +546,12 @@ const useViewOffender = (offenderId: string): Return => {
     setOptionRowShow,
     publicOffenderDOB,
     onDelete,
+    associatesData,
+    associatesLoading,
+    onAssociateFilterChange,
+    associateFilters,
+    viewAssociate,
+    toggleViewAssociate: setViewAssociate,
   };
 };
 

@@ -1,0 +1,68 @@
+query AssociatedOffenders(
+  $where: OffenderWhereUniqueInput!
+  $associatedOffender: UniqueId!
+  $linkedIncidents: Boolean
+  $linkedCrimeGroup: Boolean
+  $crimeTypesWhere: TagWhereInput
+  $groups: [UniqueId!]
+) {
+  offender(where: $where) {
+    id
+    knownAssociates(
+      linkedIncidents: $linkedIncidents
+      linkedCrimeGroup: $linkedCrimeGroup
+      groups: $groups
+    ) {
+      id
+      name
+      alias
+      reference
+      dateOfBirth
+      age
+      gender
+      build
+      race
+      hair
+      peculiarities
+      images {
+        id
+        optimised
+        position
+      }
+      totalAssociatedIncidents(associatedOffender: $associatedOffender)
+      totalAssociatedCrimeGroups(associatedOffender: $associatedOffender)
+      associatedCrimeGroups(associatedOffender: $associatedOffender) {
+        id
+        alias
+        totalIncidents
+        reference
+        totalOffenders
+      }
+      associatedIncidents(associatedOffender: $associatedOffender) {
+        id
+        dayTime
+        reference
+        business {
+          id
+          fullName
+        }
+        location {
+          full
+          id
+        }
+        crimeTypes(where: $crimeTypesWhere) {
+          id
+          name
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+}

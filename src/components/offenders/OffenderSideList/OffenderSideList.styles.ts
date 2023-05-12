@@ -29,6 +29,9 @@ const useStyles = createUseStyles({
   name: {
     fontSize: 14,
   },
+  reference: {
+    fontSize: 12,
+  },
   detail: {
     fontSize: 10,
     marginBottom: '2px !important',

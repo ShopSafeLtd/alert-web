@@ -1,19 +1,25 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import type { ViewOffenderQuery } from 'graphql/generated';
+import type {
+  AssociatedOffendersQuery,
+  ViewOffenderQuery,
+} from 'graphql/generated';
 import { UpdateType } from 'graphql/generated';
 import {
+  Badge,
   Button,
   Card,
   Checkbox,
   Col,
   Descriptions,
   Drawer,
+  Empty,
   Input,
   Modal,
   Popover,
   Row,
+  Skeleton,
   Table,
   Tag,
   Tooltip,
@@ -61,9 +67,13 @@ import VehicleTable from 'components/tables/VehicleTable';
 import CrimeGroupTable from 'components/tables/CrimeGroupTable';
 import { Link } from 'react-router-dom';
 import MapCard from 'components/map/MapCard/MapCard.view';
+import CheckTags from 'components/form-components/check-tags/CheckTags.view';
+import AssociatedOffender from 'components/offenders/AssociatedOffender';
+import { calcDuration } from 'utils';
+import type { ViewAssociate } from './useViewOffender';
 import useStyles from './ViewOffender.styles';
 
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 interface Props {
   data: ViewOffenderQuery | undefined;
@@ -122,6 +132,12 @@ interface Props {
   setOptionRowShow: (value: boolean) => void;
   publicOffenderDOB: boolean;
   onDelete: (offenderId: string) => void;
+  associatesData: AssociatedOffendersQuery | undefined;
+  onAssociateFilterChange: (value: string[]) => void;
+  associateFilters: (string | undefined)[];
+  associatesLoading: boolean;
+  viewAssociate: ViewAssociate | null;
+  toggleViewAssociate: (value: ViewAssociate | null) => void;
 }
 
 const ViewOffender = ({
@@ -159,6 +175,12 @@ const ViewOffender = ({
   setOptionRowShow,
   publicOffenderDOB,
   onDelete,
+  associatesData,
+  onAssociateFilterChange,
+  associateFilters,
+  associatesLoading,
+  toggleViewAssociate,
+  viewAssociate,
 }: Props): JSX.Element => {
   const classes = useStyles();
   return (
@@ -196,7 +218,7 @@ const ViewOffender = ({
             </Col>
             {editRights && (
               <Col>
-                <Link to={`/app/incidents/edit/${offenderId}`}>
+                <Link to={`/app/offenders/edit/${offenderId}`}>
                   <Button type="ghost">
                     <FontAwesomeIcon
                       size="1x"
@@ -250,6 +272,7 @@ const ViewOffender = ({
               <Title style={{ margin: 0 }} level={3}>
                 {data?.offender?.name}
               </Title>
+              <Text>ALert ID: {data?.offender?.reference}</Text>
               <Row
                 style={{ marginTop: 5, marginBottom: 20 }}
                 className="offender-tags"
@@ -439,18 +462,173 @@ const ViewOffender = ({
                 </Card>
               </Col>
               <Col span={12}>
-                <MapCard
-                  width="100%"
-                  height={301}
-                  markers={
-                    data?.offender?.incidents.map((incident) => ({
-                      geoLat: incident.location?.geoLat,
-                      geoLng: incident.location?.geoLng,
-                    })) || []
-                  }
-                />
+                {data?.offender?.incidents &&
+                data?.offender?.incidents.length > 0 ? (
+                  <MapCard
+                    width="100%"
+                    height={301}
+                    markers={
+                      data?.offender?.incidents.map((incident) => ({
+                        geoLat: incident.location?.geoLat,
+                        geoLng: incident.location?.geoLng,
+                      })) || []
+                    }
+                  />
+                ) : (
+                  <Card
+                    style={{
+                      height: 'calc(100% - 20px)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Empty
+                      image={Empty.PRESENTED_IMAGE_SIMPLE}
+                      description="No incidents to map"
+                    />
+                  </Card>
+                )}
               </Col>
             </Row>
+            <Card>
+              <Row style={{ marginBottom: 20 }} align="middle">
+                <Col>
+                  <Title level={4} style={{ marginBottom: 0, marginRight: 20 }}>
+                    Known Associates
+                  </Title>
+                </Col>
+                <Col>
+                  <CheckTags
+                    options={[
+                      {
+                        label: 'Linked Incidents',
+                        value: 'LINKED_INCIDENTS',
+                      },
+                      {
+                        label: 'Linked OCGs',
+                        value: 'LINKED_OCG',
+                      },
+                    ]}
+                    onChange={onAssociateFilterChange}
+                    value={associateFilters as string[]}
+                  />
+                </Col>
+              </Row>
+              <Row gutter={[8, 8]} className={classes.offenderRow} wrap={false}>
+                {associatesLoading && (
+                  <Row gutter={8} className={classes.offenderRow}>
+                    {Array.from({ length: 4 }).map((_, index) => (
+                      // eslint-disable-next-line react/no-array-index-key
+                      <Col key={index}>
+                        <Skeleton.Avatar
+                          active
+                          shape="square"
+                          style={{
+                            height: 200,
+                            width: 150,
+                            borderRadius: '0.625rem',
+                          }}
+                        />
+                      </Col>
+                    ))}
+                  </Row>
+                )}
+                {associatesData?.offender?.knownAssociates &&
+                  associatesData.offender.knownAssociates.length === 0 && (
+                    <Row justify="center" style={{ width: '100%' }}>
+                      <Col>
+                        <Empty
+                          image={Empty.PRESENTED_IMAGE_SIMPLE}
+                          description="No known associated for this offender"
+                        />
+                      </Col>
+                    </Row>
+                  )}
+                {associatesData?.offender?.knownAssociates?.map((associate) => (
+                  <Col key={associate.id}>
+                    <Card
+                      // onClick={() => setAddRecentOffender(offender)}
+                      style={{ border: 0 }}
+                      bodyStyle={{
+                        width: 150,
+                        height: 200,
+                        position: 'relative',
+                        padding: 0,
+                        borderRadius: '0.625rem',
+                        overflow: 'hidden',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => toggleViewAssociate(associate)}
+                    >
+                      <Row gutter={8} className={classes.offenderBadge}>
+                        <Col>
+                          <Badge
+                            color="basic"
+                            count={
+                              associate.totalAssociatedIncidents
+                                ? `Incidents: ${associate.totalAssociatedIncidents}`
+                                : undefined
+                            }
+                          />
+                        </Col>
+                        <Col>
+                          <Badge
+                            color="basic"
+                            count={
+                              associate.totalAssociatedCrimeGroups
+                                ? 'OCG'
+                                : undefined
+                            }
+                          />
+                        </Col>
+                      </Row>
+                      {associate.images.length > 0 && (
+                        <WatermarkImage
+                          url={associate.images[0]?.optimised}
+                          position={associate.images[0]?.position}
+                        />
+                      )}
+                      {associate.images.length === 0 && (
+                        <FontAwesomeIcon
+                          style={{ color: 'rgb(114, 132, 154)' }}
+                          icon={faUser}
+                          size="3x"
+                        />
+                      )}
+                      <Paragraph
+                        className={classes.offenderParagraph}
+                        style={{
+                          bottom: 9,
+                          paddingBottom: 0,
+                        }}
+                      >
+                        {`Alert ID: ${associate.reference}`}
+                      </Paragraph>
+                      <Paragraph
+                        className={classes.offenderParagraph}
+                        style={{
+                          bottom: -15,
+                          paddingTop: 0,
+                        }}
+                      >
+                        {associate.name}
+                      </Paragraph>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
+            </Card>
+            <Card>
+              <Title level={4}>Incidents</Title>
+              <IncidentTable
+                incidents={data?.offender?.incidents || []}
+                hasNavigation
+              />
+            </Card>
             <Card>
               <Title level={4}>Exclusions</Title>
               <Table
@@ -469,6 +647,12 @@ const ViewOffender = ({
                     title: 'Duration',
                     dataIndex: 'duration',
                     render: (value) => <Text>{value}</Text>,
+                  },
+                  {
+                    key: 'activeDay',
+                    title: 'Active Days',
+                    dataIndex: 'activeDay',
+                    width: 150,
                   },
                   {
                     key: 'status',
@@ -501,6 +685,23 @@ const ViewOffender = ({
                     dataIndex: 'location',
                     ellipsis: true,
                   },
+                  {
+                    key: 'description',
+                    title: 'Description',
+                    dataIndex: 'description',
+                    ellipsis: true,
+                    render: (value) => (
+                      <Tooltip title={value} placement="bottomLeft">
+                        {value}
+                      </Tooltip>
+                    ),
+                  },
+                  {
+                    key: 'type',
+                    title: 'Type',
+                    dataIndex: 'type',
+                    ellipsis: true,
+                  },
                 ]}
                 dataSource={data?.offender?.bans.map((ban) => ({
                   endDate: ban.endDate,
@@ -509,12 +710,18 @@ const ViewOffender = ({
                   ).toDateString()}  -->  ${new Date(
                     ban?.endDate
                   ).toDateString()}`,
+                  activeDay: calcDuration(
+                    new Date(ban?.startDate),
+                    new Date(ban?.endDate)
+                  ),
                   status: `${new Date(
                     ban?.startDate
                   ).toDateString()}  -->  ${new Date(
                     ban?.endDate
                   ).toDateString()}`,
                   location: ban.location,
+                  description: ban.description,
+                  type: ban.type,
                 }))}
               />
             </Card>
@@ -553,13 +760,6 @@ const ViewOffender = ({
                 />
               </Card>
             )}
-            <Card>
-              <Title level={4}>Incidents</Title>
-              <IncidentTable
-                incidents={data?.offender?.incidents || []}
-                hasNavigation
-              />
-            </Card>
             <Card>
               <Title level={4}>Vehicles</Title>
               <VehicleTable
@@ -858,6 +1058,20 @@ const ViewOffender = ({
           />
         ) : (
           <div />
+        )}
+      </Drawer>
+
+      <Drawer
+        title="Associated Offender"
+        onClose={() => toggleViewAssociate(null)}
+        width="800"
+        open={viewAssociate !== null}
+      >
+        {viewAssociate && (
+          <AssociatedOffender
+            offender={viewAssociate}
+            onClose={() => toggleViewAssociate(null)}
+          />
         )}
       </Drawer>
 

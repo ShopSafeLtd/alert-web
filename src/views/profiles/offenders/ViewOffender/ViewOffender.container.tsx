@@ -40,10 +40,18 @@ const ViewOffender = (): JSX.Element => {
     setOptionRowShow,
     publicOffenderDOB,
     onDelete,
+    associatesData,
+    associatesLoading,
+    onAssociateFilterChange,
+    associateFilters,
+    toggleViewAssociate,
+    viewAssociate,
   } = useViewOffender(offenderId);
 
   return (
     <View
+      associatesData={associatesData}
+      associatesLoading={associatesLoading}
       lightBoxOpen={lightBoxOpen}
       data={data}
       loading={loading}
@@ -78,6 +86,10 @@ const ViewOffender = (): JSX.Element => {
       setOptionRowShow={setOptionRowShow}
       publicOffenderDOB={publicOffenderDOB}
       onDelete={onDelete}
+      onAssociateFilterChange={onAssociateFilterChange}
+      associateFilters={associateFilters}
+      toggleViewAssociate={toggleViewAssociate}
+      viewAssociate={viewAssociate}
     />
   );
 };

@@ -73,6 +73,8 @@ describe('Detail Officer View', () => {
                 open: false,
                 index: 0,
               }}
+              associatesData={{}}
+              associatesLoading={false}
               addImages={null}
               addUpdateImages={jest.fn()}
               closeAddImages={jest.fn()}
@@ -106,6 +108,10 @@ describe('Detail Officer View', () => {
               optionRowShow={false}
               setOptionRowShow={jest.fn()}
               publicOffenderDOB={false}
+              associateFilters={[]}
+              onAssociateFilterChange={jest.fn()}
+              toggleViewAssociate={jest.fn()}
+              viewAssociate={null}
             />
           </MockedProvider>
         </MemoryRouter>
