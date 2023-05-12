@@ -13,6 +13,8 @@ describe('Detail Officer View', () => {
 
     return (
       <AddUser
+        addBusinessVisible={false}
+        toggleAddBusinessVisible={jest.fn()}
         onSubmit={jest.fn()}
         onClose={jest.fn()}
         groupsData={groupsData}
