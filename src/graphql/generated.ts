@@ -7005,7 +7005,7 @@ export type CreateUpdateData = {
 export type CreateUserData = {
   address?: InputMaybe<AddressCreateWithoutUserInput>;
   approverGroups?: InputMaybe<Array<InputMaybe<UniqueId>>>;
-  businesses?: InputMaybe<Array<BusinessWhereUniqueInput>>;
+  businesses: BusinessCreateNestedManyWithoutUsersInput;
   chats?: InputMaybe<Array<InputMaybe<UniqueId>>>;
   email: Scalars['String'];
   fullName: Scalars['String'];
