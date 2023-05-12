@@ -32,9 +32,18 @@ const ViewDetails = ({
     setEditUpdateInput,
     editUpdateInput,
     editUpdate,
-    toggleSubscribe,
     optionRowShow,
     setOptionRowShow,
+    suggestedData,
+    toggleViewSuggestedOffenders,
+    viewSuggestedOffenders,
+    handleConnectIncident,
+    handleConnectOffender,
+    handleConnectVehicle,
+    toggleViewSuggestedIncidents,
+    toggleViewSuggestedVehicles,
+    viewSuggestedIncidents,
+    viewSuggestedVehicles,
   } = useViewDetails({ investigationId });
 
   return (
@@ -55,12 +64,21 @@ const ViewDetails = ({
       editUpdateInput={editUpdateInput}
       setEditUpdateInput={setEditUpdateInput}
       editUpdate={editUpdate}
-      toggleSubscribe={toggleSubscribe}
       toggleAddExistingOffender={toggleAddExistingOffender}
       toggleAddExistingIncident={toggleAddExistingIncident}
       toggleAddExistingVehicle={toggleAddExistingVehicle}
       optionRowShow={optionRowShow}
       setOptionRowShow={setOptionRowShow}
+      suggestedData={suggestedData}
+      toggleViewSuggestedOffenders={toggleViewSuggestedOffenders}
+      viewSuggestedOffenders={viewSuggestedOffenders}
+      handleConnectIncident={handleConnectIncident}
+      handleConnectOffender={handleConnectOffender}
+      handleConnectVehicle={handleConnectVehicle}
+      toggleViewSuggestedIncidents={toggleViewSuggestedIncidents}
+      toggleViewSuggestedVehicles={toggleViewSuggestedVehicles}
+      viewSuggestedIncidents={viewSuggestedIncidents}
+      viewSuggestedVehicles={viewSuggestedVehicles}
     />
   );
 };

@@ -7,24 +7,27 @@ import {
   Modal,
   Popover,
   Row,
+  Statistic,
   Table,
-  Tooltip,
   Typography,
+  Drawer,
 } from 'antd';
-import type { ViewInvestigationQuery } from 'graphql/generated';
+import type {
+  InvestigationSuggestionsQuery,
+  ViewInvestigationQuery,
+} from 'graphql/generated';
 import { UpdateType } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faBell,
-  faBellSlash,
-  faEdit,
-  faPlus,
-  faTrash,
-} from '@fortawesome/pro-light-svg-icons';
+import { faEdit, faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 
 // import { Link } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useNavigate } from 'react-router';
+import OffenderTable from 'components/tables/OffenderTable/OffenderTable.view';
+import MapCard from 'components/map/MapCard/MapCard.view';
+import SuggestedOffenders from 'components/investigations/SuggestedOffenders';
+import SuggestedVehicles from 'components/investigations/SuggestedVehicles';
+import SuggestedIncidents from 'components/investigations/SuggestedIncidents';
 import useStyles from './ViewDetails.styles';
 import UpdateContent from '../../../../incidents/ViewIncident/Update.view';
 import UpdateBar from '../../../../../components/MessageInput/UpdateBar';
@@ -62,18 +65,26 @@ interface Props {
   editUpdate: { id: string; text: string } | null;
   editUpdateInput: string;
   setEditUpdateInput: (value: string) => void;
-  toggleSubscribe: () => void;
   toggleAddExistingOffender: () => void;
   toggleAddExistingIncident: () => void;
   toggleAddExistingVehicle: () => void;
   optionRowShow: boolean;
   setOptionRowShow: (value: boolean) => void;
+  suggestedData: InvestigationSuggestionsQuery | undefined;
+  viewSuggestedOffenders: boolean;
+  toggleViewSuggestedOffenders: () => void;
+  handleConnectOffender: (id: string) => void;
+  handleConnectIncident: (id: string) => void;
+  handleConnectVehicle: (id: string) => void;
+  viewSuggestedIncidents: boolean;
+  toggleViewSuggestedIncidents: () => void;
+  viewSuggestedVehicles: boolean;
+  toggleViewSuggestedVehicles: () => void;
 }
 
 const ViewInvestigation = ({
   data,
   loading,
-  toggleSubscribe,
   scrolledToTop,
   loadMore,
   userId,
@@ -93,6 +104,16 @@ const ViewInvestigation = ({
   toggleAddExistingVehicle,
   optionRowShow,
   setOptionRowShow,
+  suggestedData,
+  toggleViewSuggestedOffenders,
+  viewSuggestedOffenders,
+  handleConnectIncident,
+  handleConnectOffender,
+  handleConnectVehicle,
+  toggleViewSuggestedIncidents,
+  toggleViewSuggestedVehicles,
+  viewSuggestedIncidents,
+  viewSuggestedVehicles,
 }: Props) => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -100,71 +121,77 @@ const ViewInvestigation = ({
   return (
     <>
       <TabContent>
-        <Row className={classes.headerBar}>
-          <Col className={classes.detailsHeader} span={12}>
-            <Row>
-              <Col flex={1}>
-                <Title className={classes.headerTitle} level={4}>
-                  {data?.investigation?.name}
-                </Title>
-                <Paragraph style={{ margin: 0 }}>
-                  {data?.investigation?.description}
-                </Paragraph>
-              </Col>
-            </Row>
-          </Col>
-          <Col span={12} style={{ height: '100%' }}>
-            <Row>
-              <Col className={classes.centerCell} flex={1}>
-                <Title className={classes.headerTitle} level={4}>
-                  Updates
-                </Title>
-              </Col>
-              <Col>
-                <Tooltip
-                  title={
-                    data?.investigation?.subscribed
-                      ? 'Stop getting notified about updates.'
-                      : 'Get notified about updates.'
-                  }
-                >
-                  <Button
-                    onClick={toggleSubscribe}
-                    disabled={saving}
-                    loading={saving}
-                    type="text"
-                    color={
-                      data?.investigation?.subscribed ? undefined : 'danger'
-                    }
-                  >
-                    <FontAwesomeIcon
-                      size="1x"
-                      style={{ marginRight: 8 }}
-                      icon={
-                        data?.investigation?.subscribed ? faBellSlash : faBell
-                      }
-                    />
-                    {data?.investigation?.subscribed
-                      ? 'Un-follow Updates'
-                      : 'Follow Updates'}
-                  </Button>
-                </Tooltip>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-
         <Row className={classes.content}>
-          <Col span={12} className={classes.detailsContainer}>
+          <Col flex={1} className={classes.detailsContainer}>
+            <Card>
+              <Title className={classes.headerTitle} level={4}>
+                {data?.investigation?.name}
+              </Title>
+              <Paragraph style={{ margin: 0, marginBottom: 10 }}>
+                {data?.investigation?.description}
+              </Paragraph>
+              <Row gutter={32}>
+                <Col>
+                  <Statistic
+                    title="Total Incidents"
+                    value={data?.investigation?.totalIncidents || 0}
+                  />
+                </Col>
+                <Col>
+                  <Statistic
+                    title="Total Offenders"
+                    value={data?.investigation?.totalOffenders || 0}
+                  />
+                </Col>
+                <Col>
+                  <Statistic
+                    title="Total Loss"
+                    value={`£${
+                      data?.investigation?.totalValue?.toLocaleString() || 0
+                    }`}
+                  />
+                </Col>
+                <Col>
+                  <Statistic
+                    title="Total Value Recovered"
+                    value={`£${
+                      data?.investigation?.totalRecoveredValue?.toLocaleString() ||
+                      0
+                    }`}
+                  />
+                </Col>
+                <Col>
+                  <Statistic
+                    title="Loss Rate"
+                    value={`${
+                      data?.investigation?.totalTheftSuccess?.toFixed(0) || 0
+                    }%`}
+                  />
+                </Col>
+              </Row>
+            </Card>
+
             <Card loading={loading}>
-              <Row align="middle">
+              <Row gutter={8} align="middle">
                 <Col flex={1}>
                   <Title level={4}>Offenders</Title>
                 </Col>
+                {suggestedData?.investigation?.suggestedOffenders && (
+                  <Col>
+                    <Button
+                      size="small"
+                      danger
+                      type="ghost"
+                      onClick={toggleViewSuggestedOffenders}
+                    >
+                      {suggestedData.investigation?.suggestedOffenders.length}{' '}
+                      Suggested Offenders
+                    </Button>
+                  </Col>
+                )}
                 <Col>
                   <Button
                     key="3"
-                    danger
                     size="small"
                     onClick={toggleAddExistingOffender}
                     icon={
@@ -178,49 +205,33 @@ const ViewInvestigation = ({
                   </Button>
                 </Col>
               </Row>
-              <Table
-                className={classes.table}
-                columns={[
-                  {
-                    key: 'reference',
-                    dataIndex: 'reference',
-                    title: 'Alert ID',
-                  },
-                  {
-                    key: 'name',
-                    dataIndex: 'name',
-                    title: 'Name',
-                  },
-                  {
-                    key: 'totalIncidents',
-                    dataIndex: 'totalIncidents',
-                    title: 'Total Incidents',
-                  },
-                ]}
-                pagination={{
-                  hideOnSinglePage: true,
-                }}
-                size="small"
-                dataSource={
-                  data?.investigation?.offenders.map((offender) => ({
-                    key: offender.id,
-                    reference: offender.reference,
-                    name: offender.name,
-                    totalIncidents: offender.totalIncidents,
-                  })) || []
-                }
+              <OffenderTable
+                offenders={data?.investigation?.offenders || []}
+                hasNavigation
               />
             </Card>
 
             <Card loading={loading}>
-              <Row align="middle">
+              <Row align="middle" gutter={8}>
                 <Col flex={1}>
                   <Title level={4}>Incidents</Title>
                 </Col>
+                {suggestedData?.investigation?.suggestedIncidents &&
+                  suggestedData.investigation.suggestedIncidents.length > 0 && (
+                    <Col>
+                      <Button
+                        danger
+                        size="small"
+                        onClick={toggleViewSuggestedIncidents}
+                      >
+                        {suggestedData.investigation.suggestedIncidents.length}{' '}
+                        Suggested Incidents
+                      </Button>
+                    </Col>
+                  )}
                 <Col>
                   <Button
                     key="3"
-                    danger
                     size="small"
                     onClick={toggleAddExistingIncident}
                     icon={
@@ -258,19 +269,15 @@ const ViewInvestigation = ({
                     title: 'Date',
                   },
                   {
+                    key: 'loss',
+                    dataIndex: 'loss',
+                    title: 'Loss',
+                    render: (value) => `£${value.toLocaleString()}`,
+                  },
+                  {
                     key: 'location',
                     dataIndex: 'location',
                     title: 'Location',
-                  },
-                  {
-                    key: 'value',
-                    dataIndex: 'value',
-                    title: 'Value',
-                  },
-                  {
-                    key: 'recoveredValue',
-                    dataIndex: 'recoveredValue',
-                    title: 'Recovered Value',
                   },
                 ]}
                 size="small"
@@ -281,22 +288,50 @@ const ViewInvestigation = ({
                     policeRef: incident?.policeRef,
                     subject: incident?.subject,
                     date: incident?.dayTime,
-                    location: incident?.createdBy.organisation,
-                    value: incident?.value,
-                    recoveredValue: incident?.recoveredValue,
+                    location: incident?.location?.full,
+                    loss:
+                      (incident?.totalValue || 0) -
+                      (incident?.totalRecoveredValue || 0),
                   })) || []
                 }
               />
             </Card>
+
+            {data?.investigation?.incidents &&
+              data?.investigation?.incidents.length > 0 && (
+                <MapCard
+                  width="100%"
+                  height={500}
+                  markers={
+                    data?.investigation?.incidents.map((incident) => ({
+                      geoLat: incident?.location?.geoLat,
+                      geoLng: incident?.location?.geoLng,
+                    })) || []
+                  }
+                />
+              )}
+
             <Card loading={loading}>
-              <Row align="middle">
+              <Row align="middle" gutter={8}>
                 <Col flex={1}>
                   <Title level={4}>Vehicles</Title>
                 </Col>
+                {suggestedData?.investigation?.suggestedVehicles &&
+                  suggestedData.investigation.suggestedVehicles.length > 0 && (
+                    <Col>
+                      <Button
+                        danger
+                        size="small"
+                        onClick={toggleViewSuggestedVehicles}
+                      >
+                        {suggestedData.investigation.suggestedVehicles.length}{' '}
+                        Suggested Vehicles
+                      </Button>
+                    </Col>
+                  )}
                 <Col>
                   <Button
                     key="3"
-                    danger
                     size="small"
                     onClick={toggleAddExistingVehicle}
                     icon={
@@ -376,8 +411,8 @@ const ViewInvestigation = ({
             </Card>
           </Col>
           <Col
-            span={12}
-            style={{ display: 'hidden', height: 'calc(100vh - 125px)' }}
+            span={6}
+            style={{ display: 'hidden', height: 'calc(100vh - 65px)' }}
           >
             <div className={classes.updatesContainer}>
               <InfiniteScroll
@@ -636,6 +671,42 @@ const ViewInvestigation = ({
           onChange={(e) => setEditUpdateInput(e.target.value)}
         />
       </Modal>
+
+      <Drawer
+        title="Suggested Offenders"
+        open={viewSuggestedOffenders}
+        onClose={toggleViewSuggestedOffenders}
+        width="900"
+      >
+        <SuggestedOffenders
+          suggestedData={suggestedData}
+          onClose={toggleViewSuggestedOffenders}
+          handleAddSuggestion={handleConnectOffender}
+        />
+      </Drawer>
+      <Drawer
+        title="Suggested Incidents"
+        open={viewSuggestedIncidents}
+        onClose={toggleViewSuggestedIncidents}
+        width="900"
+      >
+        <SuggestedIncidents
+          suggestedData={suggestedData}
+          onClose={toggleViewSuggestedIncidents}
+          handleAddSuggestion={handleConnectIncident}
+        />
+      </Drawer>
+      <Drawer
+        title="Suggested Vehicles"
+        open={viewSuggestedVehicles}
+        onClose={toggleViewSuggestedVehicles}
+        width="900"
+      >
+        <SuggestedVehicles
+          suggestedData={suggestedData}
+          handleAddSuggestion={handleConnectVehicle}
+        />
+      </Drawer>
     </>
   );
 };

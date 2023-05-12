@@ -1,11 +1,13 @@
 import React from 'react';
-import { Badge, Drawer, Tabs, Typography } from 'antd';
+import { Badge, Button, Drawer, Tabs, Tooltip, Typography } from 'antd';
 
 import { createUseStyles } from 'react-jss';
 import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
 import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
 import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
+import { faBell, faBellSlash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ViewInvestigationQuery } from '../../../graphql/generated';
 import Flow from './views/Flow/Flow.container';
 import ViewDetails from './views/Details';
@@ -36,6 +38,7 @@ interface Props {
   submitVehicle: (value: string) => void;
   submitCrimeGroup: (value: string) => void;
   submitIncident: (value: string) => void;
+  toggleSubscribe: () => void;
 }
 
 const useStyles = createUseStyles({
@@ -77,13 +80,39 @@ const ViewInvestigation = ({
   submitVehicle,
   submitCrimeGroup,
   submitIncident,
+  toggleSubscribe,
 }: Props) => {
   const classes = useStyles();
 
   return (
     <div style={{ height: '100vh' }}>
       <div className={classes.sideListContent}>
-        <Tabs>
+        <Tabs
+          tabBarExtraContent={
+            <Tooltip
+              title={
+                data?.investigation?.subscribed
+                  ? 'Stop getting notified about updates.'
+                  : 'Get notified about updates.'
+              }
+            >
+              <Button
+                onClick={toggleSubscribe}
+                type="text"
+                color={data?.investigation?.subscribed ? undefined : 'danger'}
+              >
+                <FontAwesomeIcon
+                  size="1x"
+                  style={{ marginRight: 8 }}
+                  icon={data?.investigation?.subscribed ? faBellSlash : faBell}
+                />
+                {data?.investigation?.subscribed
+                  ? 'Un-follow Updates'
+                  : 'Follow Updates'}
+              </Button>
+            </Tooltip>
+          }
+        >
           <Tabs.TabPane key="Dashboard" tab="Details">
             <ViewDetails
               toggleAddExistingOffender={toggleAddExistingOffender}

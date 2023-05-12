@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Col, Descriptions, Divider, Row, Typography } from 'antd';
-import type { SuggestedCrimeGroupMembersQuery } from 'graphql/generated';
+import type { InvestigationSuggestionsQuery } from 'graphql/generated';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
@@ -24,18 +24,19 @@ import {
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
+import CrimeGroupTable from 'components/tables/CrimeGroupTable/CrimeGroupTable.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
-import useStyles from './SuggestedMembers.style';
+import useStyles from './SuggestedOffenders.style';
 
 const { Paragraph, Title, Text } = Typography;
 
 interface Props {
-  suggestedData: SuggestedCrimeGroupMembersQuery | undefined;
+  suggestedData: InvestigationSuggestionsQuery | undefined;
   handleAddSuggestion: (id: string) => void;
   onClose: () => void;
 }
 
-const SuggestedMembers = ({
+const SuggestedOffenders = ({
   suggestedData,
   onClose,
   handleAddSuggestion,
@@ -69,7 +70,7 @@ const SuggestedMembers = ({
 
   return (
     <div className={classes.container}>
-      {suggestedData?.crimeGroup?.suggestedMembers?.map((offender) => (
+      {suggestedData?.investigation?.suggestedOffenders?.map((offender) => (
         <div>
           <Row
             gutter={8}
@@ -198,10 +199,23 @@ const SuggestedMembers = ({
               <div className={classes.tableContainer}>
                 <Paragraph className={classes.explainText}>
                   This offender shares {offender.totalAssociatedIncidents}{' '}
-                  incidents with offenders in this group
+                  incidents with offenders in this investigation
                 </Paragraph>
                 <IncidentTable
                   incidents={offender?.associatedIncidents || []}
+                  hasNavigation
+                />
+              </div>
+            )}
+          {offender.associatedCrimeGroups &&
+            offender.associatedCrimeGroups.length > 0 && (
+              <div className={classes.tableContainer}>
+                <Paragraph className={classes.explainText}>
+                  This offender shares {offender.totalAssociatedCrimeGroups}{' '}
+                  crime group with offenders in this investigation
+                </Paragraph>
+                <CrimeGroupTable
+                  crimeGroups={offender?.associatedCrimeGroups || []}
                   hasNavigation
                 />
               </div>
@@ -218,7 +232,7 @@ const SuggestedMembers = ({
                 type="ghost"
                 onClick={() => handleAddSuggestion(offender.id)}
               >
-                Add To Group
+                Add To Investigation
               </Button>
             </Col>
           </Row>
@@ -244,4 +258,4 @@ const SuggestedMembers = ({
   );
 };
 
-export default SuggestedMembers;
+export default SuggestedOffenders;

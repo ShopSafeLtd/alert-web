@@ -62,7 +62,7 @@ const CrimeGroupTable = ({
           key: 'totalValue',
           dataIndex: 'totalValue',
           title: 'Lost Value',
-          render: (value) => `£${value || 0}`,
+          render: (value) => `£${value.toLocaleString() || 0}`,
         },
         // {
         //   key: 'totalRecoveredValue',

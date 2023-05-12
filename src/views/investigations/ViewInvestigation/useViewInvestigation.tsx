@@ -1,6 +1,8 @@
 import { notification } from 'antd';
 import type { ViewInvestigationQuery } from 'graphql/generated';
 import {
+  useSubscribeToInvestigationMutation,
+  useUnsubscribeToInvestigationMutation,
   useUpdateInvestigationMutation,
   useViewInvestigationQuery,
 } from 'graphql/generated';
@@ -32,6 +34,7 @@ interface Return {
   submitVehicle: (value: string) => void;
   submitCrimeGroup: (value: string) => void;
   submitIncident: (value: string) => void;
+  toggleSubscribe: () => void;
 }
 const useViewInvestigation = (investigationId: string): Return => {
   const [offenderIds, setOffenderIds] = useState<string[]>([]);
@@ -67,6 +70,11 @@ const useViewInvestigation = (investigationId: string): Return => {
       }
     },
   });
+
+  const [subscribeToInvestigation] = useSubscribeToInvestigationMutation();
+  const [unsubscribeFromInvestigation] =
+    useUnsubscribeToInvestigationMutation();
+
   const [updateInvestigation] = useUpdateInvestigationMutation({
     onCompleted: () => {
       notification.success({
@@ -159,6 +167,38 @@ const useViewInvestigation = (investigationId: string): Return => {
     setAddDemDocument(() => !addDemDocument);
   };
 
+  const toggleSubscribe = () => {
+    if (data?.investigation?.subscribed) {
+      unsubscribeFromInvestigation({
+        variables: {
+          where: { id: investigationId },
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          unsubscribeToInvestigation: {
+            id: investigationId,
+            __typename: 'Investigation',
+            subscribed: false,
+          },
+        },
+      });
+    } else {
+      subscribeToInvestigation({
+        variables: {
+          where: { id: investigationId },
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          subscribeToInvestigation: {
+            id: investigationId,
+            __typename: 'Investigation',
+            subscribed: true,
+          },
+        },
+      });
+    }
+  };
+
   return {
     data,
     loading,
@@ -183,6 +223,7 @@ const useViewInvestigation = (investigationId: string): Return => {
     submitVehicle,
     submitCrimeGroup,
     submitIncident,
+    toggleSubscribe,
   };
 };
 

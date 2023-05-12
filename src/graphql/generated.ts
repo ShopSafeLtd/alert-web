@@ -7674,6 +7674,7 @@ export type CrimeGroupPerformance = {
   __typename?: 'CrimeGroupPerformance';
   alertId: Scalars['String'];
   alias: Scalars['String'];
+  lastIncident?: Maybe<Scalars['DateTime']>;
   totalIncidents: Scalars['Int'];
   totalLostValue: Scalars['Float'];
   totalOffenders: Scalars['Int'];
@@ -19476,10 +19477,16 @@ export type Investigation = {
   schemes: Array<Scheme>;
   subscribed?: Maybe<Scalars['Boolean']>;
   subscribedUsers: Array<User>;
+  suggestedIncidents?: Maybe<Array<Incident>>;
+  suggestedOffenders?: Maybe<Array<Offender>>;
+  suggestedVehicles?: Maybe<Array<Vehicle>>;
   totalCrimeGroups?: Maybe<Scalars['Int']>;
   totalIncidents?: Maybe<Scalars['Int']>;
   totalOffenders?: Maybe<Scalars['Int']>;
+  totalRecoveredValue?: Maybe<Scalars['Int']>;
+  totalTheftSuccess?: Maybe<Scalars['Float']>;
   totalUpdates?: Maybe<Scalars['Int']>;
+  totalValue?: Maybe<Scalars['Int']>;
   updatedAt: Scalars['DateTime'];
   updates: Array<Update>;
   vehicles: Array<Vehicle>;
@@ -23791,11 +23798,13 @@ export type OffenderArticleColumnsArgs = {
 };
 
 export type OffenderAssociatedCrimeGroupsArgs = {
-  associatedOffender: UniqueId;
+  associatedInvestigation?: InputMaybe<UniqueId>;
+  associatedOffender?: InputMaybe<UniqueId>;
 };
 
 export type OffenderAssociatedIncidentsArgs = {
   associatedCrimeGroup?: InputMaybe<UniqueId>;
+  associatedInvestigation?: InputMaybe<UniqueId>;
   associatedOffender?: InputMaybe<UniqueId>;
 };
 
@@ -23886,11 +23895,13 @@ export type OffenderTagsArgs = {
 };
 
 export type OffenderTotalAssociatedCrimeGroupsArgs = {
-  associatedOffender: UniqueId;
+  associatedInvestigation?: InputMaybe<UniqueId>;
+  associatedOffender?: InputMaybe<UniqueId>;
 };
 
 export type OffenderTotalAssociatedIncidentsArgs = {
   associatedCrimeGroup?: InputMaybe<UniqueId>;
+  associatedInvestigation?: InputMaybe<UniqueId>;
   associatedOffender?: InputMaybe<UniqueId>;
 };
 
@@ -50311,6 +50322,134 @@ export type UpdateInvestigationMutation = {
   } | null;
 };
 
+export type InvestigationSuggestionsQueryVariables = Exact<{
+  where: InvestigationWhereUniqueInput;
+  associatedInvestigation?: InputMaybe<UniqueId>;
+  crimeTypesWhere?: InputMaybe<TagWhereInput>;
+}>;
+
+export type InvestigationSuggestionsQuery = {
+  __typename?: 'Query';
+  investigation?: {
+    __typename?: 'Investigation';
+    id: string;
+    suggestedOffenders?: Array<{
+      __typename?: 'Offender';
+      id: string;
+      name?: string | null;
+      alias: Array<string>;
+      reference?: number | null;
+      dateOfBirth?: any | null;
+      age?: Age | null;
+      gender?: Gender | null;
+      build?: Build | null;
+      race?: Race | null;
+      hair?: string | null;
+      peculiarities?: string | null;
+      totalAssociatedIncidents?: number | null;
+      totalAssociatedCrimeGroups?: number | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        position: ImagePosition;
+      }>;
+      associatedIncidents?: Array<{
+        __typename?: 'Incident';
+        id: string;
+        dayTime?: string | null;
+        reference?: number | null;
+        business?: {
+          __typename?: 'Business';
+          id: string;
+          fullName: string;
+        } | null;
+        location?: {
+          __typename?: 'Address';
+          full?: string | null;
+          id: string;
+        } | null;
+        crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+        createdBy: {
+          __typename?: 'User';
+          id: string;
+          fullName: string;
+          businesses: Array<{
+            __typename?: 'Business';
+            id: string;
+            name: string;
+          }>;
+        };
+      }> | null;
+      associatedCrimeGroups?: Array<{
+        __typename?: 'CrimeGroup';
+        id: string;
+        reference?: number | null;
+        alias?: string | null;
+        totalOffenders?: number | null;
+        totalIncidents?: number | null;
+        totalValue?: number | null;
+      }> | null;
+    }> | null;
+    suggestedVehicles?: Array<{
+      __typename?: 'Vehicle';
+      id: string;
+      reference?: number | null;
+      registration?: string | null;
+      make?: string | null;
+      model?: string | null;
+      colour?: string | null;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        position: ImagePosition;
+      }>;
+    }> | null;
+    suggestedIncidents?: Array<{
+      __typename?: 'Incident';
+      id: string;
+      subject?: string | null;
+      reference?: number | null;
+      description: string;
+      dayTime?: string | null;
+      policeRef?: string | null;
+      crimeTypes: Array<{ __typename?: 'Tag'; id: string; name: string }>;
+      images: Array<{
+        __typename?: 'Image';
+        id: string;
+        optimised?: string | null;
+        position: ImagePosition;
+      }>;
+      location?: {
+        __typename?: 'Address';
+        id: string;
+        full?: string | null;
+      } | null;
+      offenders: Array<{
+        __typename?: 'Offender';
+        id: string;
+        name?: string | null;
+        reference?: number | null;
+        age?: Age | null;
+        gender?: Gender | null;
+        race?: Race | null;
+        build?: Build | null;
+        dateOfBirth?: any | null;
+        hair?: string | null;
+        peculiarities?: string | null;
+        alias: Array<string>;
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          position: ImagePosition;
+          optimised?: string | null;
+        }>;
+      }>;
+    }> | null;
+  } | null;
+};
+
 export type ListInvestigationsQueryVariables = Exact<{
   scheme: SchemeWhereUniqueInput;
   take?: InputMaybe<Scalars['Int']>;
@@ -50342,6 +50481,11 @@ export type ViewInvestigationQuery = {
     id: string;
     description?: string | null;
     name: string;
+    totalOffenders?: number | null;
+    totalIncidents?: number | null;
+    totalValue?: number | null;
+    totalRecoveredValue?: number | null;
+    totalTheftSuccess?: number | null;
     subscribed?: boolean | null;
     createdBy: { __typename?: 'User'; id: string; fullName: string };
     documents: Array<{
@@ -50554,6 +50698,11 @@ export type ViewInvestigationQuery = {
       name?: string | null;
       reference?: number | null;
       totalIncidents?: number | null;
+      age?: Age | null;
+      gender?: Gender | null;
+      race?: Race | null;
+      build?: Build | null;
+      dateOfBirth?: any | null;
       images: Array<{
         __typename?: 'Image';
         id: string;
@@ -50570,10 +50719,16 @@ export type ViewInvestigationQuery = {
       reference?: number | null;
       subject?: string | null;
       date: any;
-      value?: number | null;
-      recoveredValue?: number | null;
+      totalValue?: number | null;
+      totalRecoveredValue?: number | null;
       createdBy: { __typename?: 'User'; organisation: string };
-      location?: { __typename?: 'Address'; id: string } | null;
+      location?: {
+        __typename?: 'Address';
+        id: string;
+        full?: string | null;
+        geoLat?: number | null;
+        geoLng?: number | null;
+      } | null;
     }>;
     crimeGroups: Array<{
       __typename?: 'CrimeGroup';
@@ -61754,6 +61909,181 @@ export type UpdateInvestigationMutationOptions = Apollo.BaseMutationOptions<
   UpdateInvestigationMutation,
   UpdateInvestigationMutationVariables
 >;
+export const InvestigationSuggestionsDocument = gql`
+  query InvestigationSuggestions(
+    $where: InvestigationWhereUniqueInput!
+    $associatedInvestigation: UniqueId
+    $crimeTypesWhere: TagWhereInput
+  ) {
+    investigation(where: $where) {
+      id
+      suggestedOffenders {
+        id
+        name
+        alias
+        reference
+        dateOfBirth
+        age
+        gender
+        build
+        race
+        hair
+        peculiarities
+        images {
+          id
+          optimised
+          position
+        }
+        totalAssociatedIncidents(
+          associatedInvestigation: $associatedInvestigation
+        )
+        totalAssociatedCrimeGroups(
+          associatedInvestigation: $associatedInvestigation
+        )
+        associatedIncidents(associatedInvestigation: $associatedInvestigation) {
+          id
+          dayTime
+          reference
+          business {
+            id
+            fullName
+          }
+          location {
+            full
+            id
+          }
+          crimeTypes(where: $crimeTypesWhere) {
+            id
+            name
+          }
+          createdBy {
+            id
+            fullName
+            businesses {
+              id
+              name
+            }
+          }
+        }
+        associatedCrimeGroups(
+          associatedInvestigation: $associatedInvestigation
+        ) {
+          id
+          reference
+          alias
+          totalOffenders
+          totalIncidents
+          totalValue
+        }
+      }
+      suggestedVehicles {
+        id
+        reference
+        registration
+        make
+        model
+        images {
+          id
+          optimised
+          position
+        }
+        colour
+      }
+      suggestedIncidents {
+        id
+        subject
+        reference
+        description
+        dayTime
+        crimeTypes(where: $crimeTypesWhere) {
+          id
+          name
+        }
+        images {
+          id
+          optimised
+          position
+        }
+        policeRef
+        location {
+          id
+          full
+        }
+        offenders {
+          id
+          name
+          reference
+          age
+          gender
+          race
+          build
+          dateOfBirth
+          hair
+          peculiarities
+          alias
+          images {
+            id
+            position
+            optimised
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * __useInvestigationSuggestionsQuery__
+ *
+ * To run a query within a React component, call `useInvestigationSuggestionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useInvestigationSuggestionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useInvestigationSuggestionsQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      associatedInvestigation: // value for 'associatedInvestigation'
+ *      crimeTypesWhere: // value for 'crimeTypesWhere'
+ *   },
+ * });
+ */
+export function useInvestigationSuggestionsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    InvestigationSuggestionsQuery,
+    InvestigationSuggestionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    InvestigationSuggestionsQuery,
+    InvestigationSuggestionsQueryVariables
+  >(InvestigationSuggestionsDocument, options);
+}
+export function useInvestigationSuggestionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    InvestigationSuggestionsQuery,
+    InvestigationSuggestionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    InvestigationSuggestionsQuery,
+    InvestigationSuggestionsQueryVariables
+  >(InvestigationSuggestionsDocument, options);
+}
+export type InvestigationSuggestionsQueryHookResult = ReturnType<
+  typeof useInvestigationSuggestionsQuery
+>;
+export type InvestigationSuggestionsLazyQueryHookResult = ReturnType<
+  typeof useInvestigationSuggestionsLazyQuery
+>;
+export type InvestigationSuggestionsQueryResult = Apollo.QueryResult<
+  InvestigationSuggestionsQuery,
+  InvestigationSuggestionsQueryVariables
+>;
 export const ListInvestigationsDocument = gql`
   query listInvestigations(
     $scheme: SchemeWhereUniqueInput!
@@ -61829,6 +62159,11 @@ export const ViewInvestigationDocument = gql`
       id
       description
       name
+      totalOffenders
+      totalIncidents
+      totalValue
+      totalRecoveredValue
+      totalTheftSuccess
       createdBy {
         id
         fullName
@@ -62022,6 +62357,11 @@ export const ViewInvestigationDocument = gql`
         name
         reference
         totalIncidents
+        age
+        gender
+        race
+        build
+        dateOfBirth
         images {
           id
           optimised
@@ -62041,9 +62381,12 @@ export const ViewInvestigationDocument = gql`
         date
         location {
           id
+          full
+          geoLat
+          geoLng
         }
-        value
-        recoveredValue
+        totalValue
+        totalRecoveredValue
       }
       crimeGroups {
         id
