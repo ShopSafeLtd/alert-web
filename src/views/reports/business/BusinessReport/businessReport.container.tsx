@@ -10,7 +10,6 @@ const BusinessReport = (): JSX.Element => {
     setMinDrawer,
     layout,
     setLayout,
-    logo,
     data,
     loading,
     setDateRange,
@@ -33,11 +32,23 @@ const BusinessReport = (): JSX.Element => {
     setSelectedOffenders,
     selectedOffenders,
     businessName,
+    addLogo,
+    addLogoDrawer,
+    logos,
+    metadata,
+    removeLogo,
+    saveAsDrawer,
+    saveTemplate,
+    selectTemplate,
+    selectedTemplate,
+    setMetadata,
+    setAddLogoDrawer,
+    setSaveAsDrawer,
+    templates,
   } = useBusinessReport();
   return (
     <View
       isPrinting={isPrinting}
-      logo={logo}
       removeItem={removeItem}
       changeSize={changeSize}
       layout={layout}
@@ -65,6 +76,19 @@ const BusinessReport = (): JSX.Element => {
       dateRange={dateRange}
       groups={groups}
       groupsLoading={groupsLoading}
+      addLogo={addLogo}
+      addLogoDrawer={addLogoDrawer}
+      logos={logos}
+      metadata={metadata}
+      removeLogo={removeLogo}
+      saveAsDrawer={saveAsDrawer}
+      saveTemplate={saveTemplate}
+      selectTemplate={selectTemplate}
+      selectedTemplate={selectedTemplate}
+      setMetadata={setMetadata}
+      setAddLogoDrawer={setAddLogoDrawer}
+      setSaveAsDrawer={setSaveAsDrawer}
+      templates={templates}
     />
   );
 };

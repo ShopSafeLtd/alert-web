@@ -1,69 +1,54 @@
-import type {
-  SchemeReportDetailsQuery,
-  SchemeReportDetailsQueryVariables,
-} from 'graphql/generated';
 import {
   ReportType,
-  SchemeReportDetailsDocument,
-  useCreateReportTemplateMutation,
   usePerformanceReportQuery,
   useSchemeReportDetailsQuery,
-  useUpdateReportTemplateMutation,
 } from 'graphql/generated';
-import { useStoreState } from 'state';
-import { useState } from 'react';
 import type RGL from 'react-grid-layout';
 import useReportPrint from 'utils/reportPrint/usePrintReports';
-import { tableLengthToHeight } from 'components/reports/utils/utils';
 import PerformanceLayout, { PerformanceMetaData } from './initLayout';
-import type { IReportTemplate, MetaData, SelectOptions } from '../../types';
+import type { IReportTemplate } from '../../types';
 import type { Props as Return } from './types';
+import useReportState from '../../../../utils/reports/useReportState';
 
 const usePerformanceReport = (): Return => {
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
-  const { id: currentScheme, logo } = useStoreState((state) => state.scheme);
-
-  const defaultTemplate: IReportTemplate = {
-    id: 'default',
-    name: 'Default',
-    metaData: [
-      ...PerformanceMetaData,
-      {
-        key: 'logo',
-        type: 'logo',
-        urls: logo ? [logo] : [],
-      },
-    ],
-    layout: PerformanceLayout,
-  };
-
-  const [editMode, setEditMode] = useState(false);
-  const [minDrawer, setMinDrawer] = useState(false);
-  const [groups, setGroups] = useState<SelectOptions[]>([]);
-  const [selectedGroups, setSelectedGroups] = useState<string[]>([]);
-  const [dateRange, setDateRangeState] = useState<{
-    startDate: Date;
-    endDate: Date;
-  }>({
-    startDate: new Date(
-      new Date(new Date().setMonth(new Date().getMonth() - 1)).setHours(
-        0,
-        0,
-        59
-      )
-    ),
-    endDate: new Date(new Date().setHours(23, 59, 59)),
-  });
-  const [layout, setLayout] = useState<RGL.Layout[]>(PerformanceLayout);
-  const [addLogoDrawer, setAddLogoDrawer] = useState(false);
-  const [logos, setLogos] = useState<string[]>(logo ? [logo] : []);
-  const [metadata, setMetadata] = useState<MetaData[]>(
-    defaultTemplate.metaData
-  );
-  const [templates, setTemplates] = useState<IReportTemplate[]>([
+  const {
+    currentScheme,
+    editMode,
+    setEditMode,
+    minDrawer,
+    setMinDrawer,
+    layout,
+    setLayout,
     defaultTemplate,
-  ]);
-  const [selectedTemplate, setSelectedTemplate] = useState<string>('default');
+    groups,
+    setGroups,
+    selectedGroups,
+    setSelectedGroups,
+    dateRange,
+    setDateRange,
+    addLogoDrawer,
+    setAddLogoDrawer,
+    logos,
+    setLogos,
+    metadata,
+    setMetadata,
+    templates,
+    setTemplates,
+    selectedTemplate,
+    saveAsDrawer,
+    setSaveAsDrawer,
+    removeLogo,
+    removeItem,
+    changeSize,
+    addLogo,
+    selectTemplate,
+    saveTemplate: saveTemplateState,
+  } = useReportState({
+    InitLayout: PerformanceLayout,
+    InitMetaData: PerformanceMetaData,
+    ReportType: ReportType.Performance,
+  });
 
   const { data: reportData, loading: groupsLoading } =
     useSchemeReportDetailsQuery({
@@ -116,6 +101,16 @@ const usePerformanceReport = (): Return => {
       },
     });
 
+  const saveTemplate = (name: string, method: 'create' | 'update') => {
+    const idsToDelete =
+      method === 'create'
+        ? undefined
+        : reportData?.scheme?.reportTemplates
+            .find((item) => item.id === selectedTemplate)
+            ?.layout.map((item) => item.id);
+    saveTemplateState(name, method, idsToDelete);
+  };
+
   const { data, loading } = usePerformanceReportQuery({
     fetchPolicy: 'cache-and-network',
     skip:
@@ -132,18 +127,6 @@ const usePerformanceReport = (): Return => {
       },
     },
   });
-
-  const setDateRange = (dateRangeInput: {
-    startDate: Date;
-    endDate: Date;
-  }): void => {
-    setDateRangeState({
-      startDate: new Date(
-        new Date(dateRangeInput.startDate).setHours(0, 0, 59)
-      ),
-      endDate: new Date(new Date(dateRangeInput.endDate).setHours(23, 59, 59)),
-    });
-  };
 
   const businessContributionTableData =
     data?.businessContribution?.businessContributions?.map((business, i) => ({
@@ -231,380 +214,6 @@ const usePerformanceReport = (): Return => {
         successRate: ((good.totalSuccessRate || 0) * 100).toFixed(2),
         avgLost: good?.averageLossValue?.toFixed(2),
       })) || [];
-
-  const removeItem = (item: string) => {
-    setLayout(layout.filter((i) => i.i !== item));
-  };
-
-  const changeSize = (item: string, size: number) => {
-    setLayout(
-      layout.map((i) => {
-        if (i.i === item) {
-          return { ...i, h: tableLengthToHeight(size) };
-        }
-        return i;
-      })
-    );
-  };
-
-  const removeLogo = (index: number) => {
-    const logoArray = metadata?.find((item) => item.key === 'logo');
-    if (logoArray) {
-      const newLogoArray = logoArray.urls?.filter((item, i) => i !== index);
-      setMetadata(
-        metadata?.map((item) => {
-          if (item.key === 'logo') {
-            return { ...item, urls: newLogoArray };
-          }
-          return item;
-        })
-      );
-    }
-  };
-
-  const addLogo = (url: string) => {
-    // add to logos array but check if it exists first, if it does don't add it
-    const newLogo = logos.find((item) => item === url);
-    if (!newLogo) {
-      setLogos([...logos, url]);
-    }
-
-    const logoArray = metadata?.find((item) => item.key === 'logo');
-    if (logoArray) {
-      const newLogoArray = logoArray.urls?.concat(url);
-      setMetadata(
-        metadata?.map((item) => {
-          if (item.key === 'logo') {
-            return { ...item, urls: newLogoArray };
-          }
-          return item;
-        })
-      );
-      setAddLogoDrawer(false);
-    }
-  };
-
-  const selectTemplate = (arg0: string) => {
-    const newTemplate = templates.find((item) => item.id === arg0);
-    if (newTemplate) {
-      setLayout(newTemplate.layout);
-      setMetadata(newTemplate.metaData);
-      setSelectedTemplate(newTemplate.id);
-    }
-  };
-
-  const [createReportTemplate] = useCreateReportTemplateMutation({
-    onCompleted: (d) => {
-      if (d.createReportTemplate) {
-        setTemplates([
-          ...templates,
-          {
-            id: d.createReportTemplate.id || '',
-            name: d.createReportTemplate.name || '',
-            metaData: d.createReportTemplate.metaData || [],
-            layout:
-              (d.createReportTemplate.layout.map((item) => ({
-                ...item,
-                maxH: item.maxH ?? undefined,
-                maxW: item.maxW ?? undefined,
-                minH: item.minH ?? undefined,
-                minW: item.minW ?? undefined,
-              })) as RGL.Layout[]) || [],
-          },
-        ]);
-        setSelectedTemplate(d.createReportTemplate.id || '');
-      }
-    },
-    update: (cache, { data: d }) => {
-      const existingTemplates = cache.readQuery<
-        SchemeReportDetailsQuery,
-        SchemeReportDetailsQueryVariables
-      >({
-        query: SchemeReportDetailsDocument,
-        variables: {
-          where: {
-            scheme: {
-              id: {
-                equals: currentScheme,
-              },
-            },
-          },
-          schemeWhere: {
-            id: currentScheme,
-          },
-          reportTemplatesWhere: {
-            type: {
-              equals: ReportType.Performance,
-            },
-          },
-        },
-      });
-      if (existingTemplates && d?.createReportTemplate) {
-        cache.writeQuery<
-          SchemeReportDetailsQuery,
-          SchemeReportDetailsQueryVariables
-        >({
-          query: SchemeReportDetailsDocument,
-          data: {
-            groups: existingTemplates.groups,
-            scheme: {
-              ...existingTemplates.scheme,
-              reportIcons: [...(existingTemplates.scheme?.reportIcons || [])],
-              reportTemplates: [
-                ...(existingTemplates?.scheme?.reportTemplates || []),
-                d.createReportTemplate,
-              ],
-            },
-          },
-          variables: {
-            where: {
-              scheme: {
-                id: {
-                  equals: currentScheme,
-                },
-              },
-            },
-            schemeWhere: {
-              id: currentScheme,
-            },
-            reportTemplatesWhere: {
-              type: {
-                equals: ReportType.Performance,
-              },
-            },
-          },
-        });
-      }
-    },
-  });
-
-  const [updateReportTemplate] = useUpdateReportTemplateMutation({
-    update: (cache, { data: d }) => {
-      const existingTemplates = cache.readQuery<
-        SchemeReportDetailsQuery,
-        SchemeReportDetailsQueryVariables
-      >({
-        query: SchemeReportDetailsDocument,
-        variables: {
-          where: {
-            scheme: {
-              id: {
-                equals: currentScheme,
-              },
-            },
-          },
-          schemeWhere: {
-            id: currentScheme,
-          },
-          reportTemplatesWhere: {
-            type: {
-              equals: ReportType.Performance,
-            },
-          },
-        },
-      });
-      if (existingTemplates && d?.updateReportTemplate) {
-        setTemplates([
-          defaultTemplate,
-          ...(existingTemplates?.scheme?.reportTemplates
-            .filter((item) => item.id !== d.updateReportTemplate?.id)
-            .map((template) => ({
-              id: template.id || '',
-              name: template.name || '',
-              metaData: template.metaData || [],
-              layout:
-                (template.layout.map((item) => ({
-                  ...item,
-                  maxH: item.maxH ?? undefined,
-                  maxW: item.maxW ?? undefined,
-                  minH: item.minH ?? undefined,
-                  minW: item.minW ?? undefined,
-                })) as RGL.Layout[]) || [],
-            })) || []),
-          {
-            id: d.updateReportTemplate.id || '',
-            name: d.updateReportTemplate.name || '',
-            metaData: d.updateReportTemplate.metaData || [],
-            layout:
-              (d.updateReportTemplate.layout.map((item) => ({
-                ...item,
-                maxH: item.maxH ?? undefined,
-                maxW: item.maxW ?? undefined,
-                minH: item.minH ?? undefined,
-                minW: item.minW ?? undefined,
-              })) as RGL.Layout[]) || [],
-          },
-        ]);
-        cache.writeQuery<
-          SchemeReportDetailsQuery,
-          SchemeReportDetailsQueryVariables
-        >({
-          query: SchemeReportDetailsDocument,
-          data: {
-            groups: existingTemplates.groups,
-            scheme: {
-              ...existingTemplates.scheme,
-              reportIcons: [...(existingTemplates.scheme?.reportIcons || [])],
-              reportTemplates: [
-                ...(existingTemplates?.scheme?.reportTemplates.filter(
-                  (item) => item.id !== d.updateReportTemplate?.id
-                ) || []),
-                d.updateReportTemplate,
-              ],
-            },
-          },
-          variables: {
-            where: {
-              scheme: {
-                id: {
-                  equals: currentScheme,
-                },
-              },
-            },
-            schemeWhere: {
-              id: currentScheme,
-            },
-            reportTemplatesWhere: {
-              type: {
-                equals: ReportType.Performance,
-              },
-            },
-          },
-        });
-      }
-    },
-  });
-
-  const [saveAsDrawer, setSaveAsDrawer] = useState(false);
-
-  const saveTemplate = async (name: string, method: 'create' | 'update') => {
-    if (method === 'create')
-      await createReportTemplate({
-        variables: {
-          data: {
-            name,
-            metaData: {
-              set: metadata,
-            },
-            schemes: {
-              connect: [
-                {
-                  id: currentScheme,
-                },
-              ],
-            },
-            type: ReportType.Performance,
-            layout: {
-              createMany: {
-                data: layout,
-              },
-            },
-          },
-        },
-        update: (cache, { data: d }) => {
-          const existingTemplates = cache.readQuery<
-            SchemeReportDetailsQuery,
-            SchemeReportDetailsQueryVariables
-          >({
-            query: SchemeReportDetailsDocument,
-            variables: {
-              where: {
-                scheme: {
-                  id: {
-                    equals: currentScheme,
-                  },
-                },
-              },
-              schemeWhere: {
-                id: currentScheme,
-              },
-              reportTemplatesWhere: {
-                type: {
-                  equals: ReportType.Performance,
-                },
-              },
-            },
-          });
-          if (existingTemplates && d?.createReportTemplate) {
-            cache.writeQuery<
-              SchemeReportDetailsQuery,
-              SchemeReportDetailsQueryVariables
-            >({
-              query: SchemeReportDetailsDocument,
-              data: {
-                groups: existingTemplates.groups,
-                scheme: {
-                  ...existingTemplates.scheme,
-                  reportIcons: [
-                    ...(existingTemplates.scheme?.reportIcons || []),
-                  ],
-                  reportTemplates: [
-                    ...(existingTemplates?.scheme?.reportTemplates || []),
-                    d.createReportTemplate,
-                  ],
-                },
-              },
-              variables: {
-                where: {
-                  scheme: {
-                    id: {
-                      equals: currentScheme,
-                    },
-                  },
-                },
-                schemeWhere: {
-                  id: currentScheme,
-                },
-                reportTemplatesWhere: {
-                  type: {
-                    equals: ReportType.Performance,
-                  },
-                },
-              },
-            });
-          }
-        },
-      });
-
-    if (method === 'update') {
-      const idsToDelete = reportData?.scheme?.reportTemplates
-        .find((item) => item.id === selectedTemplate)
-        ?.layout.map((item) => item.id);
-      await updateReportTemplate({
-        variables: {
-          where: {
-            id: selectedTemplate,
-          },
-          data: {
-            metaData: {
-              set: metadata,
-            },
-            schemes: {
-              connect: [
-                {
-                  id: currentScheme,
-                },
-              ],
-            },
-            layout: {
-              createMany: {
-                data: layout,
-              },
-              deleteMany: idsToDelete
-                ? [
-                    {
-                      id: {
-                        in: idsToDelete,
-                      },
-                    },
-                  ]
-                : undefined,
-            },
-          },
-        },
-      });
-    }
-  };
 
   return {
     addLogo,

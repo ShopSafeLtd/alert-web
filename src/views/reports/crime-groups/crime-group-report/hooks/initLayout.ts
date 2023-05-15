@@ -1,17 +1,24 @@
 import type RGL from 'react-grid-layout';
+import type { MetaData } from '../../../types';
 
-const OffenderLayout: RGL.Layout[] = [
-  {
-    w: 2,
-    h: 9,
-    x: 0,
-    y: 0,
-    minW: 2,
-    minH: 9,
-    i: 'offenderSummary',
-    moved: false,
-    static: false,
-  },
+export const CrimeGroupMetaData: MetaData[] = [
+  { key: 'incidentsSummary', type: 'summary' },
+  { key: 'lossSummary', type: 'summary' },
+  { key: 'offendersTable', type: 'table' },
+  { key: 'crimeTypesByOffender', type: 'graph' },
+  { key: 'pageBreak2', type: 'pageBreak' },
+  { key: 'pageBreak', type: 'pageBreak' },
+  { key: 'offenderGoodsTypeValue', type: 'graph' },
+  { key: 'goodsTypeLossRecoveredRadial', type: 'radial' },
+  { key: 'incidentTimeOfDayDonut', type: 'donut' },
+  { key: 'incidentMonthDonut', type: 'donut' },
+  { key: 'incidentsDayOfWeekGraph', type: 'graph' },
+  { key: 'incidentsTable', type: 'table' },
+  { key: 'targetedBusinessTable', type: 'table' },
+  { key: 'targetedGoodsTable', type: 'table' },
+  { key: 'incidentsHeatMap', type: 'summary' },
+];
+const CrimeGroupLayout: RGL.Layout[] = [
   {
     w: 2,
     h: 4,
@@ -33,12 +40,25 @@ const OffenderLayout: RGL.Layout[] = [
     static: false,
   },
   {
+    w: 2,
+    h: 15,
+    x: 0,
+    minW: 2,
+
+    y: 64,
+    minH: 5,
+
+    i: 'offendersTable',
+    moved: false,
+    static: false,
+  },
+  {
     w: 1,
     h: 8,
     maxH: 11,
     x: 0,
     y: 11,
-    i: 'crimeTypesDonut',
+    i: 'crimeTypesByOffender',
     moved: false,
     static: false,
   },
@@ -61,12 +81,12 @@ const OffenderLayout: RGL.Layout[] = [
     static: true,
   },
   {
-    w: 1,
+    w: 2,
     h: 8,
     x: 1,
     y: 11,
     maxH: 11,
-    i: 'crimeTypesByBusinessRadial',
+    i: 'offenderGoodsTypeValue',
     moved: false,
     static: false,
   },
@@ -81,7 +101,6 @@ const OffenderLayout: RGL.Layout[] = [
     moved: false,
     static: false,
   },
-
   {
     w: 1,
     h: 10,
@@ -117,19 +136,11 @@ const OffenderLayout: RGL.Layout[] = [
   },
   {
     w: 2,
-    h: 12,
-    x: 0,
-    y: 41,
-    i: 'incidentsHeatMap',
-    moved: false,
-    static: false,
-  },
-  {
-    w: 2,
-    minW: 2,
     h: 15,
     x: 0,
-    y: 48,
+    minW: 2,
+
+    y: 72,
     minH: 5,
 
     i: 'incidentsTable',
@@ -150,15 +161,25 @@ const OffenderLayout: RGL.Layout[] = [
   {
     w: 2,
     h: 15,
-    x: 0,
     minW: 2,
-    y: 64,
+
+    x: 0,
+    y: 92,
     minH: 5,
 
     i: 'targetedGoodsTable',
     moved: false,
     static: false,
   },
+  {
+    w: 2,
+    h: 12,
+    x: 0,
+    y: 41,
+    i: 'incidentsHeatMap',
+    moved: false,
+    static: false,
+  },
 ];
 
-export default OffenderLayout;
+export default CrimeGroupLayout;

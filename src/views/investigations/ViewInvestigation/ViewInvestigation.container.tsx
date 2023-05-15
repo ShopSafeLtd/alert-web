@@ -30,6 +30,7 @@ const ViewCustomer: React.FC = () => {
     submitVehicle,
     submitCrimeGroup,
     submitIncident,
+    toggleSubscribe,
   } = useViewCustomer(id || '');
   return (
     <View
@@ -55,6 +56,7 @@ const ViewCustomer: React.FC = () => {
       submitVehicle={submitVehicle}
       submitCrimeGroup={submitCrimeGroup}
       submitIncident={submitIncident}
+      toggleSubscribe={toggleSubscribe}
     />
   );
 };

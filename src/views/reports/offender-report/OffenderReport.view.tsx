@@ -19,35 +19,6 @@ import SaveAs from '../../../components/reports/saveAs';
 
 const { Title } = Typography;
 
-// interface Props {
-//   loading: boolean;
-//   data: OffenderReportQuery | undefined;
-//   groups: SelectOptions[];
-//   dateRange: { startDate: Date; endDate: Date };
-//   setDateRange: (dateRange: { startDate: Date; endDate: Date }) => void;
-//   setSelectedGroups: (groups: string[]) => void;
-//   groupsLoading: boolean;
-//   selectedGroups: string[];
-//   selectedBusiness: string[];
-//   setSelectedBusiness: (businesses: string[]) => void;
-//   businesses: SelectOptions[];
-//   componentRef: RefObject<HTMLDivElement>;
-//   handlePrint: () => void;
-//   isPrinting: boolean;
-//   layout: RGL.Layout[];
-//   setLayout: (layout: RGL.Layout[]) => void;
-//   minDrawer: boolean;
-//   setMinDrawer: (arg0: boolean) => void;
-//   logo: string | null | undefined;
-//   removeItem: (arg0: string) => void;
-//   changeSize: (arg0: string, arg1: number) => void;
-//   targetedBusinessData: TargetedBusinessTableData[] | [];
-//   targetedGoodsData: TargetedGoodsTableData[] | [];
-//   incidentsTableData: IncidentsTableData[] | [];
-//   editMode: boolean;
-//   setEditMode: (arg0: boolean) => void;
-// }
-
 const PerformanceReport = ({
   loading,
   data,
@@ -229,7 +200,7 @@ const PerformanceReport = ({
           className="no-print"
           style={{ marginBottom: 10, justifyContent: 'center' }}
         >
-          <Col span={6}>
+          <Col span={5}>
             <Select
               placeholder="Select Groups"
               mode="multiple"
@@ -252,7 +223,7 @@ const PerformanceReport = ({
               ))}
             </Select>
           </Col>
-          <Col span={6}>
+          <Col span={5}>
             <Select
               placeholder="Select Business"
               mode="multiple"
@@ -276,9 +247,9 @@ const PerformanceReport = ({
             </Select>
           </Col>
 
-          <Col span={4}>
+          <Col span={5}>
             <DatePicker.RangePicker
-              style={{ marginLeft: 10 }}
+              style={{ width: '100%', marginLeft: 10 }}
               defaultValue={[dateRange.startDate, dateRange.endDate]}
               value={[dateRange.startDate, dateRange.endDate]}
               onChange={(value) => {

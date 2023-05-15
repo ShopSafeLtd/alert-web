@@ -1,30 +1,33 @@
 import {
   ReportType,
+  useCrimeGroupReportQuery,
   useSchemeReportDetailsQuery,
-  useSchemeReportFiltersQuery,
-  useTargetedBusinessReportQuery,
 } from 'graphql/generated';
-import { useEffect, useState } from 'react';
-import type RGL from 'react-grid-layout';
-import useReportPrint from 'utils/reportPrint/usePrintReports';
 import { useParams } from 'react-router-dom';
-import moment from 'moment/moment';
-import BusinessReportLayout, { BusinessReportMetaData } from './initLayout';
+import type RGL from 'react-grid-layout';
+import moment from 'moment';
 import type { Return } from './types';
-import type { IReportTemplate, SelectOptions } from '../../../types';
+import type { IReportTemplate } from '../../../types';
+import CrimeGroupLayout, { CrimeGroupMetaData } from './initLayout';
+import useReportPrint from '../../../../../utils/reportPrint/usePrintReports';
 import useReportState from '../../../../../utils/reports/useReportState';
 
-const useBusinessReport = (): Return => {
-  const { id: selectedBusiness } = useParams();
+const useCrimeGroupReport = (): Return => {
+  const { id: selectedCrimeGroup } = useParams();
   const { componentRef, handlePrint, isPrinting } = useReportPrint();
+
   const {
     currentScheme,
+    logo,
+    businesses,
     editMode,
     setEditMode,
     minDrawer,
     setMinDrawer,
     layout,
     setLayout,
+    selectedBusiness,
+    setSelectedBusiness,
     defaultTemplate,
     groups,
     setGroups,
@@ -50,15 +53,10 @@ const useBusinessReport = (): Return => {
     selectTemplate,
     saveTemplate: saveTemplateState,
   } = useReportState({
-    InitLayout: BusinessReportLayout,
-    InitMetaData: BusinessReportMetaData,
-    ReportType: ReportType.Business,
+    InitLayout: CrimeGroupLayout,
+    InitMetaData: CrimeGroupMetaData,
+    ReportType: ReportType.CrimeGroup,
   });
-
-  const [crimeGroups, setCrimeGroups] = useState<SelectOptions[]>([]);
-  const [selectedCrimeGroups, setSelectedCrimeGroups] = useState<string[]>([]);
-  const [offenders, setOffenders] = useState<SelectOptions[]>([]);
-  const [selectedOffenders, setSelectedOffenders] = useState<string[]>([]);
 
   const { data: reportData, loading: groupsLoading } =
     useSchemeReportDetailsQuery({
@@ -75,7 +73,7 @@ const useBusinessReport = (): Return => {
         },
         reportTemplatesWhere: {
           type: {
-            equals: ReportType.Business,
+            equals: ReportType.CrimeGroup,
           },
         },
       },
@@ -110,7 +108,6 @@ const useBusinessReport = (): Return => {
         setTemplates([defaultTemplate, ...importedTemplates]);
       },
     });
-
   const saveTemplate = (name: string, method: 'create' | 'update') => {
     const idsToDelete =
       method === 'create'
@@ -120,66 +117,37 @@ const useBusinessReport = (): Return => {
             ?.layout.map((item) => item.id);
     saveTemplateState(name, method, idsToDelete);
   };
-
-  const { data: filterData, loading: filterLoading } =
-    useSchemeReportFiltersQuery({
-      variables: {
-        where: {
-          id: {
-            in: [currentScheme],
-          },
-        },
-      },
-    });
-
-  useEffect(() => {
-    if (filterData) {
-      // TODO change to multi
-      const crimeGroupsFormatted = filterData.schemes[0].crimeGroups.map(
-        (crimeGroup) => ({
-          label: crimeGroup.alias || crimeGroup.ref || 'No Alias',
-          value: crimeGroup.id,
-        })
-      );
-      setCrimeGroups(crimeGroupsFormatted);
-      setSelectedCrimeGroups(crimeGroupsFormatted.map((item) => item.value));
-      const offendersFormatted = filterData.schemes[0].offenders.map(
-        (offender) => ({
-          label: offender.name || offender?.reference?.toString() || 'No Alias',
-          value: offender.id,
-        })
-      );
-      setOffenders(offendersFormatted);
-    }
-  }, [filterData]);
-
-  const { data, loading } = useTargetedBusinessReportQuery({
+  const { data, loading } = useCrimeGroupReportQuery({
     fetchPolicy: 'cache-and-network',
     skip:
       !currentScheme ||
       !groups ||
+      !selectedCrimeGroup ||
       groupsLoading ||
-      filterLoading ||
       !selectedGroups ||
       selectedGroups.filter(Boolean).length === 0,
     variables: {
       where: {
+        crimeGroupId: selectedCrimeGroup || '',
+        businessIds: selectedBusiness,
         dateRange,
         schemeIds: [currentScheme],
         groupIds: selectedGroups,
-        businessId: selectedBusiness || '',
-        crimeGroupIds: selectedCrimeGroups,
-        offenderIds:
-          selectedOffenders.length > 0 ? selectedOffenders : undefined,
       },
-      businessWhere: {
-        id: selectedBusiness || '',
+      whereCrimeGroup: {
+        id: selectedCrimeGroup || '',
+      },
+      whereContribution: {
+        crimeGroupId: selectedCrimeGroup || '',
+        dateRange,
+        schemeIds: [currentScheme],
+        groupIds: selectedGroups,
       },
     },
   });
 
   const targetedGoodsData =
-    data?.businessReport?.targetedGoods?.targetedGoods
+    data?.targetedGoods?.targetedGoods
       ?.filter((good) => good.totalIncidents > 0)
 
       .map((good, i) => ({
@@ -193,8 +161,40 @@ const useBusinessReport = (): Return => {
         avgLost: good?.averageLossValue?.toFixed(2),
       })) || [];
 
+  const targetedBusinessData =
+    data?.businessContribution?.businessContributions
+      ?.filter((business) => business.totalIncidents > 0)
+
+      .map((business, i) => ({
+        key: business.name + i,
+        fullName: business.name,
+        incidentsCreated: business.totalIncidents,
+        offendersCreated: business.totalOffenders,
+        lostValue: business.totalLostValue.toFixed(2),
+        recoveredValue: business.totalRecoveredValue.toFixed(2),
+        successRate: ((business.totalSuccessRate || 0) * 100).toFixed(2),
+        commonLost: business.mostCommonGoodLost || 'unknown',
+        highestValueLost: business.highestTotalValueGoodLost || 0,
+        avgLost: business?.averageLossValue?.toFixed(2) || '0.00',
+      })) || [];
+
+  const offendersTableData =
+    data?.offendersPerformance?.offenderPerformance?.map((offender, i) => ({
+      totalIncidents: offender.totalIncidents,
+      key: offender.name + i,
+      alertId: offender.alertId,
+      fullName: offender.name,
+      image: offender.primaryPhoto,
+      lastIncident: offender.lastIncidentDate
+        ? new Date(offender.lastIncidentDate).toLocaleDateString()
+        : 'N/A',
+      lostValue: offender.totalLostValue.toFixed(2),
+      recoveredValue: offender.totalRecoveredValue.toFixed(2),
+      successRate: ((offender.totalSuccessRate || 0) * 100).toFixed(2),
+    })) || [];
+
   const incidentsTableData =
-    data?.businessReport?.incidentsTable?.incidents?.map((incident) => ({
+    data?.crimeGroupReport?.incidentsTable?.incidents?.map((incident) => ({
       key: incident.id,
       alertId: incident.reference,
       date: moment(incident.date).format('DD/MM/YYYY'),
@@ -211,14 +211,7 @@ const useBusinessReport = (): Return => {
       policeAttended: incident.policeReported ? 'Yes' : 'No',
       crimeRef: incident.policeRef || '',
     })) || [];
-
   return {
-    removeItem,
-    changeSize,
-    minDrawer,
-    setMinDrawer,
-    layout,
-    setLayout,
     data,
     loading,
     setDateRange,
@@ -227,34 +220,45 @@ const useBusinessReport = (): Return => {
     setSelectedGroups,
     groupsLoading,
     selectedGroups,
+    businesses: businesses
+      ? businesses.map((business) => ({
+          label: business.name,
+          value: business.id,
+        }))
+      : [],
+    selectedBusiness,
+    setSelectedBusiness,
+    selectedCrimeGroup: selectedCrimeGroup || '',
     componentRef,
     handlePrint,
-    isPrinting,
-    editMode,
-    setEditMode,
-    incidentsTableData,
-    targetedGoodsData,
-    crimeGroups,
-    setSelectedCrimeGroups,
-    selectedCrimeGroups,
-    offenders,
-    setSelectedOffenders,
-    selectedOffenders,
-    businessName: data?.business?.name || '',
     addLogo,
+    addLogoDrawer,
+    changeSize,
+    editMode,
+    isPrinting,
+    layout,
+    logo,
     logos,
     metadata,
-    setMetadata,
-    saveTemplate,
-    templates,
-    selectedTemplate,
-    addLogoDrawer,
+    minDrawer,
+    removeItem,
     removeLogo,
     saveAsDrawer,
+    saveTemplate,
     selectTemplate,
+    selectedTemplate,
     setAddLogoDrawer,
+    setEditMode,
+    setLayout,
+    setMetadata,
+    setMinDrawer,
     setSaveAsDrawer,
+    templates,
+    targetedBusinessData,
+    targetedGoodsData,
+    offendersTableData,
+    incidentsTableData,
   };
 };
 
-export default useBusinessReport;
+export default useCrimeGroupReport;

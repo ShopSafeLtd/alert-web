@@ -63,17 +63,14 @@ const OffenderTable = ({ offenders, hasNavigation }: Props): JSX.Element => {
           key: 'images',
           dataIndex: 'images',
           title: '',
-          render: (item) => {
-            console.log(item);
-            return (
-              <div style={{ height: 100, width: 80 }}>
-                <WatermarkImage
-                  url={item[0]?.optimised}
-                  position={item[0]?.position}
-                />
-              </div>
-            );
-          },
+          render: (item) => (
+            <div style={{ height: 100, width: 80 }}>
+              <WatermarkImage
+                url={item[0]?.optimised}
+                position={item[0]?.position}
+              />
+            </div>
+          ),
         },
         {
           key: 'reference',

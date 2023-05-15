@@ -1,43 +1,41 @@
 import type { RefObject } from 'react';
 import type RGL from 'react-grid-layout';
-import type { OffenderReportQuery } from '../../../../graphql/generated';
+import type { TargetedBusinessReportQuery } from '../../../../../graphql/generated';
 import type {
   IncidentsTableData,
-  TargetedBusinessTableData,
   TargetedGoodsTableData,
-} from '../../../../components/reports/tableColumns';
-import type { IReportTemplate, MetaData, SelectOptions } from '../../types';
+} from '../../../../../components/reports/tableColumns';
+import type { IReportTemplate, MetaData, SelectOptions } from '../../../types';
 
-export interface Props {
+export interface Return {
   loading: boolean;
-  data: OffenderReportQuery | undefined;
-  groups: SelectOptions[];
+  data: TargetedBusinessReportQuery | undefined;
+  groupsLoading: boolean;
   dateRange: { startDate: Date; endDate: Date };
   setDateRange: (dateRange: { startDate: Date; endDate: Date }) => void;
+  groups: SelectOptions[];
   setSelectedGroups: (groups: string[]) => void;
-  groupsLoading: boolean;
+  crimeGroups: SelectOptions[];
+  setSelectedCrimeGroups: (crimeGroups: string[]) => void;
   selectedGroups: string[];
-  selectedBusiness: string[];
-  setSelectedBusiness: (businesses: string[]) => void;
-  businesses: SelectOptions[];
-  selectedOffender: string;
   componentRef: RefObject<HTMLDivElement>;
   handlePrint: () => void;
-  isPrinting: boolean;
+  editMode: boolean;
+  setEditMode: (editMode: boolean) => void;
+  offenders: SelectOptions[];
+  setSelectedOffenders: (offenders: string[]) => void;
+  targetedGoodsData: TargetedGoodsTableData[] | [];
   layout: RGL.Layout[];
   setLayout: (layout: RGL.Layout[]) => void;
   minDrawer: boolean;
   setMinDrawer: (arg0: boolean) => void;
-  logo: string | null | undefined;
   removeItem: (arg0: string) => void;
   changeSize: (arg0: string, arg1: number) => void;
-  targetedBusinessData: TargetedBusinessTableData[] | [];
-  targetedGoodsData: TargetedGoodsTableData[] | [];
+  isPrinting: boolean;
+  businessName: string;
+  selectedOffenders: string[];
+  selectedCrimeGroups: string[];
   incidentsTableData: IncidentsTableData[] | [];
-  editMode: boolean;
-  setEditMode: (arg0: boolean) => void;
-
-  // template
   addLogo: (arg0: string) => void;
   addLogoDrawer: boolean;
   logos: string[];

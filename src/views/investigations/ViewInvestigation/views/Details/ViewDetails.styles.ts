@@ -27,7 +27,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
   content: {
     width: '100%',
-    height: 'calc(100vh - 125px)',
+    height: 'calc(100vh - 65px)',
   },
   detailsHeader: {
     paddingRight: 20,

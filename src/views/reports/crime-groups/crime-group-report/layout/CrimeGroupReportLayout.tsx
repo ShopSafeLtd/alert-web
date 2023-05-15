@@ -13,18 +13,29 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 import React, { useMemo } from 'react';
 import type RGL from 'react-grid-layout';
-import { BarGraph, DonutGraph, LineGraph } from 'components/reports/graphs';
+import {
+  BarGraph,
+  DonutGraph,
+  HeatMapGoogle,
+  LineGraph,
+} from 'components/reports/graphs';
+import { shouldPrint } from 'utils';
 import type {
   IncidentsTableData,
+  OffenderTableData,
+  TargetedBusinessTableData,
   TargetedGoodsTableData,
 } from 'components/reports/tableColumns';
 import {
   IncidentsColumns,
+  OffenderColumns,
+  TargetedBusinessColumns,
   TargetGoodsColumns,
 } from 'components/reports/tableColumns';
+import RadialGraph from 'components/reports/graphs/radialGraph';
 import useStyles from '../../../styles/report.styles';
-import RadialGraph from '../../../../../components/reports/graphs/radialGraph';
-import type { TargetedBusinessReportQuery } from '../../../../../graphql/generated';
+import type { CrimeGroupReportQuery } from '../../../../../graphql/generated';
+import MultiBarGraph from '../../../../../components/reports/graphs/multiBarGraph';
 import { MetaData } from '../../../types';
 
 const { Title } = Typography;
@@ -35,10 +46,13 @@ type Elements = {
 
 interface Props {
   loading: boolean;
-  data: TargetedBusinessReportQuery | undefined;
-  targetedGoodsData: TargetedGoodsTableData[] | [];
+  data: CrimeGroupReportQuery | undefined;
   incidentsTableData: IncidentsTableData[] | [];
-
+  metadata: MetaData[];
+  setMetadata: (arg0: MetaData[]) => void;
+  targetedBusinessData: TargetedBusinessTableData[] | [];
+  targetedGoodsData: TargetedGoodsTableData[] | [];
+  offendersTableData: OffenderTableData[] | [];
   removeItem: (arg0: string) => void;
   layout: RGL.Layout[];
   margin: [number, number];
@@ -46,23 +60,23 @@ interface Props {
   editMode: boolean;
   changeSize: (arg0: string, arg1: number) => void;
   isPrinting: boolean;
-  metadata: MetaData[];
-  setMetadata: (arg0: MetaData[]) => void;
 }
-const BusinessReport = ({
+const CrimeGroupReport = ({
   loading,
   data,
+  offendersTableData,
+  targetedBusinessData,
   targetedGoodsData,
   removeItem,
   changeSize,
   layout,
   margin,
   rowHeight,
-  isPrinting,
   editMode,
-  incidentsTableData,
+  isPrinting,
   metadata,
   setMetadata,
+  incidentsTableData,
 }: Props) => {
   const classes = useStyles();
   const calculateHeight = (key: string, offset?: number) => {
@@ -72,6 +86,25 @@ const BusinessReport = ({
       rowHeight * targetH + margin[1] * (targetH - 1) - (offset || 0)
     }px`;
   };
+
+  // {
+  //   incidentsSummary: {},
+  //   lossSummary: {},
+  //   offendersTable: {},
+  //   crimeTypesByOffender: {},
+  //   pageBreak: {},
+  //   pageBreak2: {},
+  //   offenderGoodsTypeValue: {},
+  //   goodsTypeLossRecoveredRadial: {},
+  //   incidentTimeOfDayDonut: {},
+  //   incidentMonthDonut: {},
+  //   incidentsDayOfWeekGraph: {},
+  //   incidentsTable: {},
+  //   targetedBusinessTable: {},
+  //   targetedGoodsTable: {},
+  //   incidentsHeatMap: {},
+  // }
+
   const components: Elements = {
     incidentsSummary: (
       <Card
@@ -98,9 +131,9 @@ const BusinessReport = ({
               className={classes.stats}
               title="Last Incident (in range)"
               value={
-                data?.businessReport?.incidentSummary?.lastIncidentDate
+                data?.crimeGroupReport?.incidentSummary?.lastIncidentDate
                   ? new Date(
-                      data?.businessReport?.incidentSummary?.lastIncidentDate
+                      data?.crimeGroupReport?.incidentSummary?.lastIncidentDate
                     ).toLocaleDateString()
                   : 'unknown'
               }
@@ -116,7 +149,7 @@ const BusinessReport = ({
               className={classes.stats}
               title="Reported to Police"
               value={
-                data?.businessReport?.incidentSummary
+                data?.crimeGroupReport?.incidentSummary
                   ?.incidentsReportedToPolice || 0
               }
               prefix={
@@ -131,7 +164,7 @@ const BusinessReport = ({
               className={classes.stats}
               title="Police Attended"
               value={
-                data?.businessReport?.incidentSummary
+                data?.crimeGroupReport?.incidentSummary
                   ?.incidentsWherePoliceAttended || 0
               }
               prefix={
@@ -146,7 +179,8 @@ const BusinessReport = ({
               className={classes.stats}
               title="Most common crime type"
               value={
-                data?.businessReport?.incidentSummary?.mostCommonCrimeType || ''
+                data?.crimeGroupReport?.incidentSummary?.mostCommonCrimeType ||
+                ''
               }
               prefix={
                 <FontAwesomeIcon
@@ -184,8 +218,8 @@ const BusinessReport = ({
               className={classes.stats}
               title="Total lost value"
               value={
-                data?.businessReport?.lossTotals?.totalLostValue
-                  ? `£${data?.businessReport?.lossTotals?.totalLostValue.toFixed(
+                data?.crimeGroupReport?.lossTotals?.totalLostValue
+                  ? `£${data?.crimeGroupReport?.lossTotals?.totalLostValue.toFixed(
                       2
                     )}`
                   : 'No Losses'
@@ -202,8 +236,8 @@ const BusinessReport = ({
               className={classes.stats}
               title="Total recovered value"
               value={
-                data?.businessReport?.lossTotals?.totalRecoveredValue
-                  ? `£${data?.businessReport?.lossTotals?.totalRecoveredValue.toFixed(
+                data?.crimeGroupReport?.lossTotals?.totalRecoveredValue
+                  ? `£${data?.crimeGroupReport?.lossTotals?.totalRecoveredValue.toFixed(
                       2
                     )}`
                   : 'No Recoveries'
@@ -220,7 +254,7 @@ const BusinessReport = ({
               className={classes.stats}
               title="Average Success Rate"
               value={`${(
-                (data?.businessReport?.lossTotals?.averageSuccessRate || 0) *
+                (data?.crimeGroupReport?.lossTotals?.averageSuccessRate || 0) *
                 100
               ).toFixed(2)}%`}
               prefix={
@@ -234,7 +268,7 @@ const BusinessReport = ({
               className={classes.stats}
               title="Average Loss per Incident"
               value={
-                `£${data?.businessReport?.lossTotals?.averagePerIncident.toFixed(
+                `£${data?.crimeGroupReport?.lossTotals?.averagePerIncident.toFixed(
                   2
                 )}` || ''
               }
@@ -249,51 +283,50 @@ const BusinessReport = ({
         </Row>{' '}
       </Card>
     ),
-
-    crimeTypesDonut: (
+    offendersTable: (
+      <Card
+        loading={loading}
+        className="no-break"
+        key="offendersTable"
+        style={{ height: calculateHeight('offendersTable') }}
+        bodyStyle={{ overflow: 'auto' }}
+      >
+        <Button
+          type="text"
+          shape="circle"
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
+          size="small"
+          onClick={() => removeItem('offendersTable')}
+        />
+        <Title level={4}>Offenders</Title>
+        <Table
+          size="small"
+          className="no-break"
+          pagination={{
+            onChange: (_, pageSize) => {
+              changeSize('offendersTable', pageSize);
+            },
+            total: data?.offendersPerformance?.total || 0,
+            defaultPageSize: 10,
+            showSizeChanger: true,
+            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+          }}
+          columns={OffenderColumns}
+          dataSource={offendersTableData}
+        />
+      </Card>
+    ),
+    crimeTypesByOffender: (
       <Card
         title="Crime Types"
         className="no-break"
         loading={loading}
-        style={{ height: calculateHeight('crimeTypesDonut') }}
+        style={{ height: calculateHeight('crimeTypesByOffender') }}
         bodyStyle={{ height: '90%' }}
-        key="crimeTypesDonut"
+        key="crimeTypesByOffender"
       >
-        <Button
-          type="text"
-          shape="circle"
-          className="change-graph1 no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
-          size="small"
-          onClick={() => {
-            const updatedMetadata = metadata.map((item) => {
-              if (item.key === 'crimeTypesDonut') {
-                return { ...item, type: 'bar' };
-              }
-              return item;
-            }) satisfies MetaData[];
-            setMetadata(updatedMetadata);
-          }}
-        />
-        <Button
-          type="text"
-          shape="circle"
-          className="change-graph2 no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
-          size="small"
-          onClick={() => {
-            const updatedMetadata = metadata.map((item) => {
-              if (item.key === 'crimeTypesDonut') {
-                if (item.type === 'donut') return { ...item, type: 'pie' };
-                return { ...item, type: 'donut' };
-              }
-              return item;
-            }) satisfies MetaData[];
-            setMetadata(updatedMetadata);
-          }}
-        />
         <Button
           type="text"
           shape="circle"
@@ -301,112 +334,22 @@ const BusinessReport = ({
           hidden={!editMode}
           icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
           size="small"
-          onClick={() => removeItem('crimeTypesDonut')}
+          onClick={() => removeItem('crimeTypesByOffender')}
         />
-        {metadata.find((item) => item.key === 'crimeTypesDonut')?.type ===
-          'donut' ||
-        metadata.find((item) => item.key === 'crimeTypesDonut')?.type ===
-          'pie' ? (
-          <DonutGraph
-            data={data?.businessReport?.crimeTypeDonut}
-            emptyLabel="No Crime Types"
-            type={
-              metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
-                | 'donut'
-                | 'pie'
-            }
-          />
-        ) : (
-          <BarGraph
-            data={data?.businessReport?.crimeTypeDonut}
-            emptyLabel="No Crime Types"
-            labelFormat="Incidents"
-          />
-        )}
+        <MultiBarGraph
+          data={data?.crimeGroupReport?.crimeTypeByOffender}
+          emptyLabel="No crime types or offenders"
+        />
       </Card>
     ),
-    involvedTagsDonut: (
+    offenderGoodsTypeValue: (
       <Card
-        title="Involved Tags"
+        title="Crime Types"
         className="no-break"
         loading={loading}
-        style={{ height: calculateHeight('involvedTagsDonut') }}
+        style={{ height: calculateHeight('offenderGoodsTypeValue') }}
         bodyStyle={{ height: '90%' }}
-        key="involvedTagsDonut"
-      >
-        <Button
-          type="text"
-          shape="circle"
-          className="change-graph1 no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faChartBar} size="lg" />}
-          size="small"
-          onClick={() => {
-            const updatedMetadata = metadata.map((item) => {
-              if (item.key === 'involvedTagsDonut') {
-                return { ...item, type: 'bar' };
-              }
-              return item;
-            }) satisfies MetaData[];
-            setMetadata(updatedMetadata);
-          }}
-        />
-        <Button
-          type="text"
-          shape="circle"
-          className="change-graph2 no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faChartPie} size="lg" />}
-          size="small"
-          onClick={() => {
-            const updatedMetadata = metadata.map((item) => {
-              if (item.key === 'involvedTagsDonut') {
-                if (item.type === 'donut') return { ...item, type: 'pie' };
-                return { ...item, type: 'donut' };
-              }
-              return item;
-            }) satisfies MetaData[];
-            setMetadata(updatedMetadata);
-          }}
-        />
-        <Button
-          type="text"
-          shape="circle"
-          className="card-remove no-print"
-          hidden={!editMode}
-          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
-          size="small"
-          onClick={() => removeItem('involvedTagsDonut')}
-        />
-
-        {metadata.find((item) => item.key === 'involvedTagsDonut')?.type ===
-          'donut' ||
-        metadata.find((item) => item.key === 'involvedTagsDonut')?.type ===
-          'pie' ? (
-          <DonutGraph
-            data={data?.businessReport?.involvedTagDonut}
-            emptyLabel="No Involved Tags"
-            type={
-              metadata.find((item) => item.key === 'involvedTagsDonut')
-                ?.type as 'donut' | 'pie'
-            }
-          />
-        ) : (
-          <BarGraph
-            data={data?.businessReport?.involvedTagDonut}
-            emptyLabel="No Involved Tags"
-            labelFormat="Incidents"
-          />
-        )}
-      </Card>
-    ),
-    incidentsDayOfWeekGraph: (
-      <Card
-        className="no-break"
-        loading={loading}
-        key="incidentsDayOfWeekGraph"
-        style={{ height: calculateHeight('incidentsDayOfWeekGraph') }}
-        bodyStyle={{ height: '90%' }}
+        key="offenderGoodsTypeValue"
       >
         <Button
           type="text"
@@ -415,13 +358,11 @@ const BusinessReport = ({
           hidden={!editMode}
           icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
           size="small"
-          onClick={() => removeItem('incidentsDayOfWeekGraph')}
+          onClick={() => removeItem('offenderGoodsTypeValue')}
         />
-        <LineGraph
-          label="Incidents by day of week"
-          data={data?.businessReport?.incidentDayOfWeekGraph}
-          dataLabel="incidents"
-          emptyLabel="No incidents"
+        <MultiBarGraph
+          data={data?.crimeGroupReport?.offenderGoodsTypeValue}
+          emptyLabel="No crime types or offenders"
         />
       </Card>
     ),
@@ -447,12 +388,11 @@ const BusinessReport = ({
           onClick={() => removeItem('goodsTypeLossRecoveredRadial')}
         />
         <RadialGraph
-          data={data?.businessReport?.goodsTypeLossRecovered}
+          data={data?.crimeGroupReport?.goodsTypeLossRecovered}
           emptyLabel="No Crime Types"
         />
       </Card>
     ),
-
     incidentTimeOfDayDonut: (
       <Card
         title="Incidents Time of Day"
@@ -511,7 +451,7 @@ const BusinessReport = ({
         metadata.find((item) => item.key === 'incidentTimeOfDayDonut')?.type ===
           'pie' ? (
           <DonutGraph
-            data={data?.businessReport?.incidentTimeOfDayDonut}
+            data={data?.crimeGroupReport?.incidentTimeOfDayDonut}
             emptyLabel="No goods count"
             type={
               metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
@@ -521,14 +461,13 @@ const BusinessReport = ({
           />
         ) : (
           <BarGraph
-            data={data?.businessReport?.incidentTimeOfDayDonut}
+            data={data?.crimeGroupReport?.incidentTimeOfDayDonut}
             emptyLabel="No goods count"
             labelFormat="Incidents"
           />
         )}
       </Card>
     ),
-
     incidentMonthDonut: (
       <Card
         title="Incidents Month"
@@ -587,7 +526,7 @@ const BusinessReport = ({
         metadata.find((item) => item.key === 'incidentMonthDonut')?.type ===
           'pie' ? (
           <DonutGraph
-            data={data?.businessReport?.incidentMonthGraph}
+            data={data?.crimeGroupReport?.incidentMonthGraph}
             emptyLabel="No incidents"
             type={
               metadata.find((item) => item.key === 'crimeTypesDonut')?.type as
@@ -597,7 +536,7 @@ const BusinessReport = ({
           />
         ) : (
           <BarGraph
-            data={data?.businessReport?.incidentMonthGraph}
+            data={data?.crimeGroupReport?.incidentMonthGraph}
             emptyLabel="No incidents"
             labelFormat="Incidents"
           />
@@ -605,13 +544,13 @@ const BusinessReport = ({
       </Card>
     ),
 
-    targetedGoodsTable: (
+    incidentsDayOfWeekGraph: (
       <Card
-        loading={loading}
         className="no-break"
-        style={{ height: calculateHeight('targetedGoodsTable') }}
-        bodyStyle={{ overflow: 'auto' }}
-        key="targetedGoodsTable"
+        loading={loading}
+        key="incidentsDayOfWeekGraph"
+        style={{ height: calculateHeight('incidentsDayOfWeekGraph') }}
+        bodyStyle={{ height: '90%' }}
       >
         <Button
           type="text"
@@ -620,26 +559,17 @@ const BusinessReport = ({
           hidden={!editMode}
           icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
           size="small"
-          onClick={() => removeItem('targetedGoodsTable')}
+          onClick={() => removeItem('incidentsDayOfWeekGraph')}
         />
-        <Title level={4}>Targeted Goods</Title>
-        <Table
-          size="small"
-          className="no-break"
-          pagination={{
-            onChange: (_, pageSize) => {
-              changeSize('targetedGoodsTable', pageSize);
-            },
-            total: data?.businessReport?.targetedGoods?.total,
-            defaultPageSize: 10,
-            showSizeChanger: true,
-            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
-          }}
-          columns={TargetGoodsColumns}
-          dataSource={targetedGoodsData}
+        <LineGraph
+          label="Incidents by day of week"
+          data={data?.crimeGroupReport?.incidentDayOfWeekGraph}
+          dataLabel="incidents"
+          emptyLabel="No incidents"
         />
       </Card>
     ),
+
     incidentsTable: (
       <Card
         loading={loading}
@@ -665,13 +595,137 @@ const BusinessReport = ({
             onChange: (_, pageSize) => {
               changeSize('incidentsTable', pageSize);
             },
-            total: data?.businessReport?.incidentsTable?.total || 0,
+            total: data?.crimeGroupReport?.incidentsTable?.total || 0,
             defaultPageSize: 10,
             showSizeChanger: true,
             showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
           }}
           columns={IncidentsColumns}
           dataSource={incidentsTableData}
+        />
+      </Card>
+    ),
+    targetedBusinessTable: (
+      <Card
+        loading={loading}
+        className="no-break"
+        style={{ height: calculateHeight('targetedBusinessTable') }}
+        bodyStyle={{ overflow: 'auto' }}
+        key="targetedBusinessTable"
+      >
+        <Button
+          type="text"
+          shape="circle"
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
+          size="small"
+          onClick={() => removeItem('targetedBusinessTable')}
+        />
+        <Title level={4}>Targeted Business</Title>
+        <Table
+          size="small"
+          className="no-break"
+          pagination={{
+            onChange: (_, pageSize) => {
+              changeSize('targetedBusinessTable', pageSize);
+            },
+            total:
+              data?.businessContribution?.businessContributions?.filter(
+                (business) => business.totalIncidents > 0
+              ).length || 0,
+            defaultPageSize: 10,
+            showSizeChanger: true,
+            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+          }}
+          columns={TargetedBusinessColumns}
+          dataSource={targetedBusinessData}
+        />
+      </Card>
+    ),
+    targetedGoodsTable: (
+      <Card
+        loading={loading}
+        className="no-break"
+        style={{ height: calculateHeight('targetedGoodsTable') }}
+        bodyStyle={{ overflow: 'auto' }}
+        key="targetedGoodsTable"
+      >
+        <Button
+          type="text"
+          shape="circle"
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
+          size="small"
+          onClick={() => removeItem('targetedGoodsTable')}
+        />
+        <Title level={4}>Targeted Goods</Title>
+        <Table
+          size="small"
+          className="no-break"
+          pagination={{
+            onChange: (_, pageSize) => {
+              changeSize('targetedGoodsTable', pageSize);
+            },
+            total:
+              data?.targetedGoods?.targetedGoods?.filter(
+                (business) => business.totalIncidents > 0
+              ).length || 0,
+            defaultPageSize: 10,
+            showSizeChanger: true,
+            showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
+          }}
+          columns={TargetGoodsColumns}
+          dataSource={targetedGoodsData}
+        />
+      </Card>
+    ),
+    incidentsHeatMap: (
+      <Card
+        className={`${shouldPrint(
+          data?.crimeGroupReport?.crimeGroupMap?.incidentsCoords,
+          data?.crimeGroupReport?.crimeGroupMap?.offenderMarkers?.length
+        )} no-break`}
+        loading={loading}
+        key="incidentsHeatMap"
+        style={{ height: calculateHeight('incidentsHeatMap') }}
+      >
+        <Button
+          type="text"
+          shape="circle"
+          className="card-remove no-print"
+          hidden={!editMode}
+          icon={<FontAwesomeIcon icon={faTrash} color="red" size="lg" />}
+          size="small"
+          onClick={() => removeItem('incidentsHeatMap')}
+        />
+        <HeatMapGoogle
+          label="Incidents heatmap"
+          data={
+            data?.crimeGroupReport?.crimeGroupMap?.incidentsCoords
+              ?.filter((incident) => incident?.lat && incident?.lng)
+              .map((incident) => ({
+                geoLat: incident?.lat || 0,
+                geoLng: incident?.lng || 0,
+              })) || []
+          }
+          markers={
+            data?.crimeGroupReport?.crimeGroupMap?.offenderMarkers &&
+            data?.crimeGroupReport?.crimeGroupMap?.offenderMarkers.length > 0
+              ? data?.crimeGroupReport?.crimeGroupMap?.offenderMarkers.map(
+                  (address, i) => ({
+                    label: address?.name || '',
+                    key: (address?.name || '') + i,
+                    position: {
+                      lat: address?.coords?.lat || 0,
+                      lng: address?.coords?.lng || 0,
+                    },
+                  })
+                )
+              : undefined
+          }
+          emptyLabel="No incidents"
         />
       </Card>
     ),
@@ -707,7 +761,16 @@ const BusinessReport = ({
 
   return useMemo(
     () => layout.map((component) => components[component.i]),
-    [layout, data, loading, incidentsTableData, targetedGoodsData, metadata]
+    [
+      layout,
+      data,
+      loading,
+      offendersTableData,
+      incidentsTableData,
+      targetedBusinessData,
+      targetedGoodsData,
+      isPrinting,
+    ]
   );
 };
-export default BusinessReport;
+export default CrimeGroupReport;

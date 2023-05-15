@@ -3,6 +3,11 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
     id
     description
     name
+    totalOffenders
+    totalIncidents
+    totalValue
+    totalRecoveredValue
+    totalTheftSuccess
     createdBy {
       id
       fullName
@@ -197,6 +202,11 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
       name
       reference
       totalIncidents
+      age
+      gender
+      race
+      build
+      dateOfBirth
       images {
         id
         optimised
@@ -216,9 +226,12 @@ query ViewInvestigation($where: InvestigationWhereUniqueInput!) {
       date
       location {
         id
+        full
+        geoLat
+        geoLng
       }
-      value
-      recoveredValue
+      totalValue
+      totalRecoveredValue
     }
     crimeGroups {
       id

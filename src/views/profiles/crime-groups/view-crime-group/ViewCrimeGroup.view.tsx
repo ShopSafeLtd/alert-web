@@ -793,7 +793,7 @@ const ViewCrimeGroup = ({
         onClose={toggleViewSuggested}
         bodyStyle={{ paddingLeft: 0, paddingRight: 0 }}
       >
-        {viewSuggestedOpen && (
+        {viewSuggestedOpen && editRights && (
           <SuggestedMembers
             suggestedData={suggestedData}
             onClose={toggleViewSuggested}

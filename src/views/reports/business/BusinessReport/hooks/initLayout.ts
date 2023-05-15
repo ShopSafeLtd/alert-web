@@ -1,4 +1,22 @@
 import type RGL from 'react-grid-layout';
+import type { MetaData } from '../../../types';
+
+export const BusinessReportMetaData: MetaData[] = [
+  { key: 'incidentsSummary', type: 'summary' },
+  { key: 'lossSummary', type: 'summary' },
+  { key: 'goodsTypeLossRecoveredRadial', type: 'radial' },
+  { key: 'incidentTimeOfDayDonut', type: 'donut' },
+  { key: 'incidentMonthDonut', type: 'donut' },
+  { key: 'pageBreak', type: 'pageBreak' },
+  { key: 'pageBreak2', type: 'pageBreak' },
+  { key: 'crimeTypesDonut', type: 'donut' },
+  { key: 'involvedTagsDonut', type: 'donut' },
+  { key: 'goodsTypeDonut', type: 'donut' },
+  { key: 'goodsValueDonut', type: 'donut' },
+  { key: 'incidentsDayOfWeekGraph', type: 'graph' },
+  { key: 'incidentsTable', type: 'table' },
+  { key: 'targetedGoodsTable', type: 'table' },
+];
 
 const BusinessReportLayout: RGL.Layout[] = [
   {
