@@ -339,7 +339,6 @@ const CrimeGroupReport = ({
         <MultiBarGraph
           data={data?.crimeGroupReport?.crimeTypeByOffender}
           emptyLabel="No crime types or offenders"
-          labelFormat="Incidents"
         />
       </Card>
     ),
@@ -364,7 +363,6 @@ const CrimeGroupReport = ({
         <MultiBarGraph
           data={data?.crimeGroupReport?.offenderGoodsTypeValue}
           emptyLabel="No crime types or offenders"
-          labelFormat="Incidents"
         />
       </Card>
     ),
