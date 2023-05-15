@@ -95,6 +95,7 @@ Props): JSX.Element => (
         onSelect,
       }}
       // pagination={{
+      // hideOnSinglePage: true,
       //   total: data?.listIncidents?.total,
       //   onChange: onPaginationChange,
       //   pageSize: 24,

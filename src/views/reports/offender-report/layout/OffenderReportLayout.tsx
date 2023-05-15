@@ -703,6 +703,7 @@ const OffenderReportLayout = ({
           size="small"
           className="no-break"
           pagination={{
+            hideOnSinglePage: true,
             onChange: (_, pageSize) => {
               changeSize('incidentsTable', pageSize);
             },
@@ -738,6 +739,7 @@ const OffenderReportLayout = ({
           size="small"
           className="no-break"
           pagination={{
+            hideOnSinglePage: true,
             onChange: (_, pageSize) => {
               changeSize('targetedBusinessTable', pageSize);
             },
@@ -776,6 +778,7 @@ const OffenderReportLayout = ({
           size="small"
           className="no-break"
           pagination={{
+            hideOnSinglePage: true,
             onChange: (_, pageSize) => {
               changeSize('targetedGoodsTable', pageSize);
             },

@@ -126,6 +126,7 @@ const ListBusinesses = ({
         loading={loading}
         size="small"
         pagination={{
+          hideOnSinglePage: true,
           pageSize: 30,
         }}
       />

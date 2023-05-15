@@ -47,6 +47,7 @@ const LinkDemUser = ({
         onSelect,
       }}
       pagination={{
+        hideOnSinglePage: true,
         total: data?.listDemUsers?.total,
         pageSize: 24,
         showSizeChanger: false,

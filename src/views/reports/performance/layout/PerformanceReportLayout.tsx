@@ -783,6 +783,7 @@ const PerformanceReportLayout = ({
           size="small"
           className="no-break"
           pagination={{
+            hideOnSinglePage: true,
             onChange: (_, pageSize) => {
               changeSize('businessContributionTable', pageSize);
             },
@@ -818,6 +819,7 @@ const PerformanceReportLayout = ({
           size="small"
           className="no-break"
           pagination={{
+            hideOnSinglePage: true,
             onChange: (_, pageSize) => {
               changeSize('topContributors', pageSize);
             },
@@ -853,6 +855,7 @@ const PerformanceReportLayout = ({
           size="small"
           className="no-break"
           pagination={{
+            hideOnSinglePage: true,
             onChange: (_, pageSize) => {
               changeSize('offendersTable', pageSize);
             },
@@ -888,6 +891,7 @@ const PerformanceReportLayout = ({
           size="small"
           className="no-break"
           pagination={{
+            hideOnSinglePage: true,
             onChange: (_, pageSize) => {
               changeSize('crimeGroupTable', pageSize);
             },
@@ -923,6 +927,7 @@ const PerformanceReportLayout = ({
           size="small"
           className="no-break"
           pagination={{
+            hideOnSinglePage: true,
             onChange: (_, pageSize) => {
               changeSize('targetedBusinessTable', pageSize);
             },
@@ -961,6 +966,7 @@ const PerformanceReportLayout = ({
           size="small"
           className="no-break"
           pagination={{
+            hideOnSinglePage: true,
             onChange: (_, pageSize) => {
               changeSize('targetedGoodsTable', pageSize);
             },

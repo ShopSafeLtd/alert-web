@@ -83,7 +83,6 @@ interface Return {
   addBusinessVisible: boolean;
   toggleAddBusinessVisible: () => void;
   updateNewBusinessData: (values: BusinessData) => void;
-  businessesData: BusinessData[];
 }
 
 const useAddUser = ({
@@ -452,26 +451,9 @@ const useAddUser = ({
         },
       })
       .then((response) =>
-        // setBusinessesData([
-        //   ...businessesData,
-        //   ...response.data.listBusinesses.businesses,
-        // ])
         response.data.listBusinesses.businesses.length > 0
           ? [...response.data.listBusinesses.businesses, ...businessesData].map(
               (item) => ({
-                // label: (
-                //   <div>
-                //     <div>{item?.name}</div>
-                //     {item?.locations[0] && (
-                //       <Typography.Text
-                //         type="secondary"
-                //         style={{ fontSize: 13, margin: 0 }}
-                //       >
-                //         {item?.locations[0]?.full}
-                //       </Typography.Text>
-                //     )}
-                //   </div>
-                // ) as React.ReactNode,
                 label: item.name || '',
                 value: item?.id || '',
                 location: item?.locations[0].full || '',
@@ -524,7 +506,6 @@ const useAddUser = ({
     addBusinessVisible,
     toggleAddBusinessVisible,
     updateNewBusinessData,
-    businessesData,
   };
 };
 

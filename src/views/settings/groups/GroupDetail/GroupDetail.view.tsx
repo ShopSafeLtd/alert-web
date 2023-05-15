@@ -64,6 +64,7 @@ const GroupDetail = ({
         size="small"
         loading={loading}
         pagination={{
+          hideOnSinglePage: true,
           defaultPageSize: 20,
           pageSize: 20,
         }}

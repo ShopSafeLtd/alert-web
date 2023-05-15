@@ -300,10 +300,12 @@ const UseEditUserTest = () => {
             email: 'email',
             role: Role.User,
             publicName: true,
-            business: {
-              value: '',
-              label: '',
-            },
+            businesses: [
+              {
+                label: '',
+                value: '',
+              },
+            ],
             groups: ['groupId'],
             chats: ['chatId'],
             incidentEmail: false,

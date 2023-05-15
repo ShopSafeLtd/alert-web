@@ -31,10 +31,12 @@ const mocks = [
         user: {
           id: 'userId',
           fullName: 'test user',
-          business: {
-            label: '',
-            value: '',
-          },
+          businesses: [
+            {
+              label: '',
+              value: '',
+            },
+          ],
           email: 'email',
           disabled: false,
           newUser: false,

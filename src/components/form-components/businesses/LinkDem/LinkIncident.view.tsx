@@ -40,6 +40,7 @@ const LinkDemCompany = ({
         onSelect,
       }}
       pagination={{
+        hideOnSinglePage: true,
         total: data?.listDemCompanies?.total,
         pageSize: 24,
         showSizeChanger: false,

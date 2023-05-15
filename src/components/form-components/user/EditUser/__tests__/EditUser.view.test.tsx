@@ -2,6 +2,7 @@ import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import { Role } from 'graphql/generated';
+import { Form } from 'antd';
 import EditUser from '../EditUser.view';
 
 describe('Detail Officer View', () => {
@@ -51,7 +52,7 @@ describe('Detail Officer View', () => {
   const groupsData = [{ value: 'groupId', label: 'groupName' }];
 
   const chatsData = [{ value: 'chatId', label: 'chatName' }];
-
+  const [form] = Form.useForm();
   it('renders the page', () => {
     const { getByText } = render(
       <MemoryRouter>
@@ -70,6 +71,10 @@ describe('Detail Officer View', () => {
           chatsLoading={false}
           saving={false}
           onSearchBusiness={jest.fn()}
+          updateNewBusinessData={jest.fn()}
+          addBusinessVisible={false}
+          toggleAddBusinessVisible={jest.fn()}
+          form={form}
         />
       </MemoryRouter>
     );

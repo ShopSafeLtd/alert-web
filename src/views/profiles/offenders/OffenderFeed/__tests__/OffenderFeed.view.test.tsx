@@ -89,7 +89,11 @@ describe('Detail Officer View', () => {
               lightboxElements={[]}
               openLightbox={jest.fn()}
               onPaginationChange={jest.fn()}
-              pagination={{ page: 1, pageSize: 1, sizeOptions: [] }}
+              pagination={{
+                page: 1,
+                pageSize: 1,
+                sizeOptions: [],
+              }}
               order={OffenderSort.updatedAtAsc}
               setOrder={jest.fn()}
               search=""

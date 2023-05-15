@@ -627,6 +627,7 @@ const BusinessReport = ({
           size="small"
           className="no-break"
           pagination={{
+            hideOnSinglePage: true,
             onChange: (_, pageSize) => {
               changeSize('targetedGoodsTable', pageSize);
             },
@@ -662,6 +663,7 @@ const BusinessReport = ({
           size="small"
           className="no-break"
           pagination={{
+            hideOnSinglePage: true,
             onChange: (_, pageSize) => {
               changeSize('incidentsTable', pageSize);
             },

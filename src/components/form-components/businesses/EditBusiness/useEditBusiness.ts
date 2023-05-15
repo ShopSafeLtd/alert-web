@@ -191,6 +191,7 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
           ? response.data.listBusinesses.businesses.map((item) => ({
               label: item?.name || '',
               value: item?.id || '',
+              location: item?.locations[0].full || '',
             }))
           : [
               {

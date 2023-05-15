@@ -111,6 +111,7 @@ const CrimeTypeList = ({
         size="small"
         loading={loading}
         pagination={{
+          hideOnSinglePage: true,
           defaultPageSize: 20,
           pageSize: 20,
         }}
@@ -218,6 +219,7 @@ const CrimeTypeList = ({
         size="small"
         loading={involvedLoading}
         pagination={{
+          hideOnSinglePage: true,
           defaultPageSize: 20,
           pageSize: 20,
         }}
@@ -325,6 +327,7 @@ const CrimeTypeList = ({
         size="small"
         loading={impactLoading}
         pagination={{
+          hideOnSinglePage: true,
           defaultPageSize: 20,
           pageSize: 20,
         }}

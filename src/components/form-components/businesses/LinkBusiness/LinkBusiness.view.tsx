@@ -59,6 +59,7 @@ const AddBusiness = ({
         })) || []
       }
       pagination={{
+        hideOnSinglePage: true,
         current: currentPage,
         defaultPageSize: 50,
         onChange: onPaginationChange,

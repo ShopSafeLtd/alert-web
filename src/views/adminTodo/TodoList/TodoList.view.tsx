@@ -113,18 +113,15 @@ const AdminTodos = ({
             // }
             loading={loading}
             size="small"
-            pagination={
-              data?.uncompletedTotal > 20
-                ? {
-                    total: data?.uncompletedTotal,
-                    onChange: onPaginationChange,
-                    pageSize: currentPageSize,
-                    current: currentPage,
-                    showSizeChanger: false,
-                    position: ['bottomCenter'],
-                  }
-                : false
-            }
+            pagination={{
+              hideOnSinglePage: true,
+              total: data?.uncompletedTotal,
+              onChange: onPaginationChange,
+              pageSize: currentPageSize,
+              current: currentPage,
+              showSizeChanger: false,
+              position: ['bottomCenter'],
+            }}
             columns={[
               {
                 title: 'Completed',
@@ -208,18 +205,15 @@ const AdminTodos = ({
                 }))}
                 loading={loading}
                 size="small"
-                pagination={
-                  data?.completedTotal > 20
-                    ? {
-                        total: data?.uncompletedTotal,
-                        onChange: onPaginationChange,
-                        pageSize: currentPageSize,
-                        current: currentPage,
-                        showSizeChanger: false,
-                        position: ['bottomCenter'],
-                      }
-                    : false
-                }
+                pagination={{
+                  hideOnSinglePage: true,
+                  total: data?.uncompletedTotal,
+                  onChange: onPaginationChange,
+                  pageSize: currentPageSize,
+                  current: currentPage,
+                  showSizeChanger: false,
+                  position: ['bottomCenter'],
+                }}
                 columns={[
                   {
                     title: 'Completed',
