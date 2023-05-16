@@ -101,7 +101,10 @@ describe('Detail Officer View', () => {
           clearFilters={jest.fn()}
           ethnicity={[]}
           hair=""
-          pagination={{ page: 0, pageSize: 0 }}
+          pagination={{
+            page: 0,
+            pageSize: 0,
+          }}
           peculiarities=""
           setAge={jest.fn()}
           setBuild={jest.fn()}

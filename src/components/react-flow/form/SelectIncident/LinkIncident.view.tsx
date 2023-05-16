@@ -94,6 +94,7 @@ const LinkIncident = ({
         onSelect,
       }}
       pagination={{
+        hideOnSinglePage: true,
         total: data?.listIncidents?.total,
         onChange: onPaginationChange,
         pageSize: 24,

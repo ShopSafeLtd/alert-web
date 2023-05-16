@@ -424,6 +424,7 @@ const EditOffender = ({
                 <Table
                   size="small"
                   pagination={{
+                    hideOnSinglePage: true,
                     defaultPageSize: 20,
                     pageSize: 20,
                   }}

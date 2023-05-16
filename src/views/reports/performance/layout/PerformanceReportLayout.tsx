@@ -43,6 +43,7 @@ import {
 } from 'components/reports/tableColumns';
 import type { PerformanceReportQuery } from '../../../../graphql/generated';
 import useStyles from '../../styles/report.styles';
+import type { AllowedValue, Elements } from '../../types';
 import { MetaData } from '../../types';
 
 interface ContributorTable {
@@ -56,10 +57,6 @@ interface ContributorTable {
 }
 
 const { Title } = Typography;
-
-type Elements = {
-  [key: string]: JSX.Element;
-};
 
 interface Props {
   loading: boolean;
@@ -783,6 +780,7 @@ const PerformanceReportLayout = ({
           size="small"
           className="no-break"
           pagination={{
+            hideOnSinglePage: true,
             onChange: (_, pageSize) => {
               changeSize('businessContributionTable', pageSize);
             },
@@ -818,6 +816,7 @@ const PerformanceReportLayout = ({
           size="small"
           className="no-break"
           pagination={{
+            hideOnSinglePage: true,
             onChange: (_, pageSize) => {
               changeSize('topContributors', pageSize);
             },
@@ -853,6 +852,7 @@ const PerformanceReportLayout = ({
           size="small"
           className="no-break"
           pagination={{
+            hideOnSinglePage: true,
             onChange: (_, pageSize) => {
               changeSize('offendersTable', pageSize);
             },
@@ -888,6 +888,7 @@ const PerformanceReportLayout = ({
           size="small"
           className="no-break"
           pagination={{
+            hideOnSinglePage: true,
             onChange: (_, pageSize) => {
               changeSize('crimeGroupTable', pageSize);
             },
@@ -923,6 +924,7 @@ const PerformanceReportLayout = ({
           size="small"
           className="no-break"
           pagination={{
+            hideOnSinglePage: true,
             onChange: (_, pageSize) => {
               changeSize('targetedBusinessTable', pageSize);
             },
@@ -961,6 +963,7 @@ const PerformanceReportLayout = ({
           size="small"
           className="no-break"
           pagination={{
+            hideOnSinglePage: true,
             onChange: (_, pageSize) => {
               changeSize('targetedGoodsTable', pageSize);
             },
@@ -1008,7 +1011,7 @@ const PerformanceReportLayout = ({
   };
 
   return useMemo(
-    () => layout.map((component) => components[component.i]),
+    () => layout.map((component) => components[component.i as AllowedValue]),
     [
       layout,
       data,

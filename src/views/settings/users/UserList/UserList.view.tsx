@@ -119,6 +119,7 @@ const UserList = ({
       size="small"
       loading={loading}
       pagination={{
+        hideOnSinglePage: true,
         defaultPageSize: 50,
         pageSize: currentPageSize,
         showSizeChanger: true,

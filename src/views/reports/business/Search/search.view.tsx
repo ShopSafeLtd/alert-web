@@ -72,6 +72,7 @@ const SearchBusiness = ({
           })
         )}
         pagination={{
+          hideOnSinglePage: true,
           current: currentSearchPage,
           onChange: onSearchPageChange,
           total: searchBusinessData?.listBusinesses?.total,

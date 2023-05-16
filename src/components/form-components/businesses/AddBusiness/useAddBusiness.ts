@@ -67,11 +67,8 @@ const useAddBusiness = ({ update }: Props): Return => {
     });
   };
 
-  const onSearchBusiness = async (value: string) => {
-    if (value.length < 2) {
-      return [];
-    }
-    return client
+  const onSearchBusiness = async (value: string) =>
+    client
       .query<SearchBusinessesQuery, SearchBusinessesQueryVariables>({
         query: SearchBusinessesDocument,
         variables: {
@@ -95,6 +92,7 @@ const useAddBusiness = ({ update }: Props): Return => {
           ? response.data.listBusinesses.businesses.map((item) => ({
               label: item?.name || '',
               value: item?.id || '',
+              location: item?.locations[0].full || '',
             }))
           : [
               {
@@ -104,7 +102,6 @@ const useAddBusiness = ({ update }: Props): Return => {
               },
             ]
       );
-  };
 
   return {
     onSubmit,

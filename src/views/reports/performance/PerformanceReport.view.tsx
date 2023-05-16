@@ -4,11 +4,7 @@ import { Button, Col, Drawer, Dropdown, Row, Select, Typography } from 'antd';
 import DatePicker from 'components/util-components/DatePicker';
 import Page from 'components/shared-components/AntD/Page/Page';
 import RGL, { WidthProvider } from 'react-grid-layout';
-import {
-  LayoutToReadable,
-  margin,
-  rowHeight,
-} from 'components/reports/utils/utils';
+import { margin, rowHeight } from 'components/reports/utils/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import 'react-grid-layout/css/styles.css';
@@ -19,6 +15,7 @@ import PerformanceReportLayout from './layout/PerformanceReportLayout';
 import PerformanceLayout from './hooks/initLayout';
 import SaveAs from '../../../components/reports/saveAs';
 import type { Props } from './hooks/types';
+import { layoutMap } from '../types';
 
 // const ReactGridLayout = WidthProvider(RGL);
 
@@ -318,7 +315,7 @@ const PerformanceReport = ({
                   setLayout([...layout, item]);
                 }}
               >
-                {LayoutToReadable.find((i) => i.i === item.i)?.readable || ''}
+                {layoutMap.get(item.i) || ''}
               </Button>
             </Col>
           ))}

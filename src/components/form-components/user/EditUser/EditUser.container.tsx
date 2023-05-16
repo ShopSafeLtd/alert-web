@@ -24,6 +24,10 @@ const EditUser = ({ onClose, id }: Props): JSX.Element => {
     setSelectedRole,
     selectedGroups,
     setSelectedGroups,
+    addBusinessVisible,
+    toggleAddBusinessVisible,
+    updateNewBusinessData,
+    form,
   } = useEditUser({
     onClose,
     userId,
@@ -44,6 +48,10 @@ const EditUser = ({ onClose, id }: Props): JSX.Element => {
       setSelectedRole={setSelectedRole}
       selectedGroups={selectedGroups}
       setSelectedGroups={setSelectedGroups}
+      addBusinessVisible={addBusinessVisible}
+      toggleAddBusinessVisible={toggleAddBusinessVisible}
+      updateNewBusinessData={updateNewBusinessData}
+      form={form}
     />
   );
 };

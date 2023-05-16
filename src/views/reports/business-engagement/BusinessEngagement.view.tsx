@@ -120,6 +120,7 @@ const PerformanceReport = ({
             <Table
               size="small"
               pagination={{
+                hideOnSinglePage: true,
                 total: data?.businessContribution?.total || 0,
                 defaultPageSize: 30,
                 showSizeChanger: true,

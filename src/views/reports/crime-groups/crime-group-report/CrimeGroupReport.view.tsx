@@ -6,16 +6,13 @@ import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import DatePicker from 'components/util-components/DatePicker';
 import Page from 'components/shared-components/AntD/Page/Page';
 import RGL, { WidthProvider } from 'react-grid-layout';
-import {
-  LayoutToReadable,
-  margin,
-  rowHeight,
-} from '../../../../components/reports/utils/utils';
+import { margin, rowHeight } from '../../../../components/reports/utils/utils';
 import AddLogo from '../../../../components/reports/addLogo';
 import SaveAs from '../../../../components/reports/saveAs';
 import CrimeGroupLayout from './hooks/initLayout';
 import type { Return as Props } from './hooks/types';
 import CrimeGroupReport from './layout/CrimeGroupReportLayout';
+import { layoutMap } from '../../types';
 
 const { Title } = Typography;
 
@@ -338,7 +335,7 @@ const CrimeGroupReportView = ({
                   setLayout([...layout, item]);
                 }}
               >
-                {LayoutToReadable.find((i) => i.i === item.i)?.readable || ''}
+                {layoutMap.get(item.i) || ''}
               </Button>
             </Col>
           ))}

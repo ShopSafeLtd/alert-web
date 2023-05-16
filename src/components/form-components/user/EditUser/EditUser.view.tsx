@@ -1,7 +1,9 @@
 import React from 'react';
 import type { UserQuery } from 'graphql/generated';
 import { Role } from 'graphql/generated';
+import type { FormInstance } from 'antd';
 import {
+  Drawer,
   Button,
   Col,
   Form,
@@ -13,7 +15,10 @@ import {
   Switch,
 } from 'antd';
 import DebounceSelect from 'components/form-components/DebounceSelect';
-import type { SelectOptions } from 'types/DataType';
+import type { BusinessData, SelectOptions } from 'types/DataType';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/pro-light-svg-icons';
+import AddBusiness from 'components/form-components/businesses/AddBusiness';
 import type { FormData } from './useEditUser';
 
 const { Title } = Typography;
@@ -30,15 +35,20 @@ interface Props {
   saving: boolean;
   onSearchBusiness: (
     value: string
-  ) => Promise<{ label: React.ReactNode; value: string }[]>;
+  ) => Promise<{ label: string; value: string; location?: string }[]>;
   selectedRole: Role | undefined;
   setSelectedRole: (value: Role) => void;
   selectedGroups: string[] | undefined;
   setSelectedGroups: (value: string[]) => void;
+  addBusinessVisible: boolean;
+  toggleAddBusinessVisible: () => void;
+  updateNewBusinessData: (values: BusinessData) => void;
+  form: FormInstance<FormData>;
 }
 
 const EditUser = ({
   onSubmit,
+  form,
   onClose,
   data,
   loading,
@@ -52,11 +62,15 @@ const EditUser = ({
   setSelectedRole,
   selectedGroups,
   setSelectedGroups,
+  addBusinessVisible,
+  toggleAddBusinessVisible,
+  updateNewBusinessData,
 }: Props): JSX.Element =>
   !data && loading ? (
     <Skeleton />
   ) : (
     <Form<FormData>
+      form={form}
       initialValues={{
         fullName: data?.user?.fullName,
         email: data?.user?.email,
@@ -122,29 +136,50 @@ const EditUser = ({
           </Form.Item>
         </Col>
       </Row>
+
       <Row gutter={16}>
-        <Col span={12}>
-          <Form.Item
-            name="business"
-            label="Business"
-            rules={[
-              {
-                required: true,
-                message: 'Please select a business for the new user.',
-              },
-            ]}
-          >
-            <DebounceSelect
-              showSearch
-              allowClear
-              mode="multiple"
-              disabled={saving}
-              placeholder="Search for a business..."
-              fetchOptions={onSearchBusiness}
-              style={{ width: '100%' }}
-            />
-          </Form.Item>
+        <Col flex={1}>
+          <Row gutter={20} align="middle">
+            <Col flex={1}>
+              <Form.Item
+                name="business"
+                label="Business"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please select a business for the new user.',
+                  },
+                ]}
+              >
+                <DebounceSelect
+                  showSearch
+                  allowClear
+                  mode="multiple"
+                  maxTagCount={3}
+                  disabled={saving}
+                  placeholder="Search for a business..."
+                  fetchOptions={onSearchBusiness}
+                  style={{ width: '100%' }}
+                />
+              </Form.Item>
+            </Col>
+
+            <Col>
+              <Button
+                disabled={saving}
+                style={{ color: 'red', padding: 8, marginTop: 3 }}
+                onClick={toggleAddBusinessVisible}
+                icon={
+                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
+                }
+              >
+                New Business
+              </Button>
+            </Col>
+          </Row>
         </Col>
+      </Row>
+      <Row>
         <Col span={12}>
           <Form.Item
             name="role"
@@ -158,19 +193,38 @@ const EditUser = ({
               onChange={(value) => setSelectedRole(value)}
             >
               <Select.Option key={Role.User} value={Role.User}>
-                User
+                <Typography.Text>User</Typography.Text>
+                <Typography.Paragraph
+                  type="secondary"
+                  style={{ fontSize: 13, margin: 0 }}
+                >
+                  A basic user account that all submitting data but <br /> no
+                  admin features.
+                </Typography.Paragraph>
               </Select.Option>
               <Select.Option key={Role.ContentAdmin} value={Role.ContentAdmin}>
-                Content Admin
+                <Typography.Text>Content Admin</Typography.Text>
+                <Typography.Paragraph
+                  type="secondary"
+                  style={{ fontSize: 13, margin: 0, fontWeight: 400 }}
+                >
+                  An account that allows for submitting and administering <br />{' '}
+                  data but no access to settings.
+                </Typography.Paragraph>
               </Select.Option>
               <Select.Option key={Role.SchemeAdmin} value={Role.SchemeAdmin}>
-                Scheme Admin
+                <Typography.Text>Scheme Admin</Typography.Text>
+                <Typography.Paragraph
+                  type="secondary"
+                  style={{ fontSize: 13, margin: 0 }}
+                >
+                  Full administrator account with access to all settings.
+                </Typography.Paragraph>
               </Select.Option>
             </Select>
           </Form.Item>
         </Col>
       </Row>
-
       <Title level={4} style={{ marginBottom: 15 }}>
         User Groups:
       </Title>
@@ -384,6 +438,20 @@ const EditUser = ({
           </Col>
         </Row>
       </Form.Item>
+      <Drawer
+        open={addBusinessVisible}
+        onClose={toggleAddBusinessVisible}
+        title="Add New Business"
+        width={600}
+      >
+        {addBusinessVisible && (
+          <AddBusiness
+            onClose={toggleAddBusinessVisible}
+            saving={saving}
+            update={updateNewBusinessData}
+          />
+        )}
+      </Drawer>
     </Form>
   );
 

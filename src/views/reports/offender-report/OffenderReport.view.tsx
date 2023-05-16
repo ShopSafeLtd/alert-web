@@ -4,11 +4,7 @@ import { Button, Col, Drawer, Dropdown, Row, Select, Typography } from 'antd';
 import DatePicker from 'components/util-components/DatePicker';
 import Page from 'components/shared-components/AntD/Page/Page';
 import RGL, { WidthProvider } from 'react-grid-layout';
-import {
-  LayoutToReadable,
-  margin,
-  rowHeight,
-} from 'components/reports/utils/utils';
+import { margin, rowHeight } from 'components/reports/utils/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/pro-light-svg-icons';
 import OffenderReportLayout from './layout/OffenderReportLayout';
@@ -16,6 +12,7 @@ import OffenderLayout from './hooks/initLayout';
 import type { Props } from './hooks/types';
 import AddLogo from '../../../components/reports/addLogo';
 import SaveAs from '../../../components/reports/saveAs';
+import { layoutMap } from '../types';
 
 const { Title } = Typography;
 
@@ -342,7 +339,7 @@ const PerformanceReport = ({
                     ]);
                   }}
                 >
-                  {LayoutToReadable.find((i) => i.i === item.i)?.readable || ''}
+                  {layoutMap.get(item.i) || ''}
                 </Button>
               </Col>
             ))}

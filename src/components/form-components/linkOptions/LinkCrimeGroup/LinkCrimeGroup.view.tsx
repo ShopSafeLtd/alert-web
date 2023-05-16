@@ -82,6 +82,7 @@ const LinkCrimeGroup = ({
         onSelect,
       }}
       pagination={{
+        hideOnSinglePage: true,
         total: data?.listCrimeGroups?.total,
         onChange: onPaginationChange,
         pageSize: 24,

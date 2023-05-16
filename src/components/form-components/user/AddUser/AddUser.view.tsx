@@ -18,7 +18,6 @@ import type { BusinessData, SelectOptions } from 'types/DataType';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import AddBusiness from 'components/form-components/businesses/AddBusiness';
-import CopyDebounceSelect from 'components/form-components/DebounceSelect/CopyDebounceSelect.view';
 import type { FormData } from './useAddUser';
 
 const { Title } = Typography;
@@ -35,9 +34,6 @@ interface Props {
   onValuesChange: (changedValues: any, values: FormData) => void;
   form: FormInstance<FormData>;
   existingUser: boolean;
-  // onSearchBusiness: (
-  //   value: string
-  // ) => Promise<{ label: React.ReactNode; value: string }[]>;
   onSearchBusiness: (
     value: string
   ) => Promise<{ label: string; value: string; location?: string }[]>;
@@ -199,6 +195,49 @@ const AddUser = ({
       </Row>
     ) : (
       <>
+        <Row gutter={16}>
+          <Col flex={1}>
+            <Row gutter={20} align="middle">
+              <Col flex={1}>
+                <Form.Item
+                  name="businesses"
+                  label="Businesses"
+                  rules={[
+                    {
+                      required: !existingUser,
+                      message:
+                        'Please select at one business for the new user.',
+                    },
+                  ]}
+                >
+                  <DebounceSelect
+                    showSearch
+                    allowClear
+                    mode="multiple"
+                    maxTagCount={3}
+                    disabled={saving || businessProvided}
+                    placeholder="Search for a business..."
+                    fetchOptions={onSearchBusiness}
+                    style={{ width: '100%' }}
+                  />
+                </Form.Item>
+              </Col>
+
+              <Col>
+                <Button
+                  disabled={saving}
+                  style={{ color: 'red', padding: 8, marginTop: 3 }}
+                  onClick={toggleAddBusinessVisible}
+                  icon={
+                    <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
+                  }
+                >
+                  New Business
+                </Button>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
         <Row>
           <Col span={12}>
             <Form.Item
@@ -251,49 +290,6 @@ const AddUser = ({
             </Form.Item>
           </Col>
         </Row>
-        <Row gutter={16}>
-          <Col flex={1}>
-            <Row gutter={20} align="middle">
-              <Col flex={1}>
-                <Form.Item
-                  name="businesses"
-                  label="Businesses"
-                  rules={[
-                    {
-                      required: !existingUser,
-                      message:
-                        'Please select at one business for the new user.',
-                    },
-                  ]}
-                >
-                  <CopyDebounceSelect
-                    showSearch
-                    allowClear
-                    mode="multiple"
-                    maxTagCount={3}
-                    disabled={saving || businessProvided}
-                    placeholder="Search for a business..."
-                    fetchOptions={onSearchBusiness}
-                    style={{ width: '100%' }}
-                  />
-                </Form.Item>
-              </Col>
-
-              <Col>
-                <Button
-                  disabled={saving}
-                  style={{ color: 'red', padding: 8, marginTop: 3 }}
-                  onClick={toggleAddBusinessVisible}
-                  icon={
-                    <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
-                  }
-                >
-                  New Business
-                </Button>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
       </>
     )}
 
@@ -338,6 +334,10 @@ const AddUser = ({
         </Form.Item>
       </Col>
     </Row>
+    {/* {form.getFieldValue('role') === Role.SchemeAdmin &&
+      form.getFieldValue('groups') &&
+      form.getFieldValue('groups').length > 0 && 
+      ( */}
     {selectedRole === Role.SchemeAdmin &&
       selectedGroups &&
       selectedGroups.length > 0 && (
@@ -350,7 +350,7 @@ const AddUser = ({
                 mode="multiple"
                 maxTagCount={3}
                 options={groupsData?.filter(({ value }) =>
-                  selectedGroups.includes(value)
+                  form.getFieldValue('groups').includes(value)
                 )}
                 optionFilterProp="label"
                 optionLabelProp="label"

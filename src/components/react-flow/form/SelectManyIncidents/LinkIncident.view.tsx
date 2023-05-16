@@ -102,6 +102,7 @@ const LinkIncident = ({
         preserveSelectedRowKeys: true,
       }}
       pagination={{
+        hideOnSinglePage: true,
         total: data?.listIncidents?.total,
         onChange: onPaginationChange,
         pageSize: 24,
