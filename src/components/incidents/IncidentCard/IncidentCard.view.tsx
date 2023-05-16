@@ -143,7 +143,7 @@ const IncidentCard = ({
             ))}
           </Carousel>
         ) : (
-          <SkeletonImage />
+          <SkeletonImage height={280} />
         )}
       </div>
       {incident && incident.images.length > 1 && (

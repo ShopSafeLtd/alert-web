@@ -7,6 +7,7 @@ export interface SetUserPayload {
   id: string;
   email: string;
   fullName: string;
+  origName: string;
   reference: string;
   onboarded: boolean;
   businesses: { name: string; id: string; demId?: string | null | undefined }[];
@@ -26,6 +27,10 @@ export interface SetUserRole {
   role: Role;
 }
 
+export interface SetUserTodos {
+  userTodos: number;
+}
+
 export interface Scheme {
   id: string;
   role: Role;
@@ -35,6 +40,8 @@ export interface Scheme {
     name: string;
     autoApproveIncidents: boolean;
     autoApproveOffenders: boolean;
+    defaultPublicOffenderDOB: boolean;
+    userTodos?: number | null | undefined;
     logo?:
       | {
           optimisedPersisted?: string | null | undefined;
@@ -54,13 +61,14 @@ export interface UserModel {
   id: string;
   email: string;
   fullName: string;
+  origName: string;
   reference: string;
   picture: string;
   businesses: { name: string; id: string; demId?: string | null | undefined }[];
   onboarded: boolean;
   schemes: Scheme[];
   demId: string | null | undefined;
-
+  userTodos?: number | null | undefined;
   groups: {
     id: string;
     name: string;
@@ -72,6 +80,7 @@ export interface UserModel {
   isSet: boolean;
   setUser: Action<UserModel, SetUserPayload>;
   setRole: Action<UserModel, SetUserRole>;
+  setTodos: Action<UserModel, SetUserTodos>;
   clearUser: Action<UserModel>;
 }
 
@@ -79,6 +88,7 @@ const userModel: UserModel = {
   id: '',
   email: '',
   fullName: '',
+  origName: '',
   reference: '',
   picture: '',
   businesses: [],
@@ -88,11 +98,13 @@ const userModel: UserModel = {
   schemes: [],
   groups: [],
   demId: '',
+  userTodos: 0,
 
   setUser: action((state, payload) => {
     state.id = payload.id;
     state.email = payload.email;
     state.fullName = payload.fullName;
+    state.origName = payload.origName;
     state.onboarded = payload.onboarded;
     state.businesses = payload.businesses;
     state.schemes = payload.schemes;
@@ -104,10 +116,14 @@ const userModel: UserModel = {
   setRole: action((state, payload) => {
     state.role = payload.role;
   }),
+  setTodos: action((state, payload) => {
+    state.userTodos = payload.userTodos;
+  }),
   clearUser: action((state) => {
     state.id = '';
     state.email = '';
     state.fullName = '';
+    state.origName = '';
     state.picture = '';
     state.businesses = [];
     state.onboarded = false;
@@ -115,6 +131,7 @@ const userModel: UserModel = {
     state.role = Role.User;
     state.isSet = false;
     state.demId = '';
+    state.userTodos = 0;
   }),
 };
 

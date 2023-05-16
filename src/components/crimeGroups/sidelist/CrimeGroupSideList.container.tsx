@@ -5,7 +5,7 @@ import useCrimeGroupSideList from './useCrimeGroupSideList';
 interface Props {
   // eslint-disable-next-line react/require-default-props
   current?: string;
-  to: string;
+  to?: string;
 }
 
 const CrimeGroupSideList = ({ current, to }: Props): JSX.Element => {

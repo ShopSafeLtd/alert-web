@@ -56,10 +56,14 @@ const GroupList = ({
     <Table
       size="small"
       loading={loading}
-      pagination={{
-        defaultPageSize: 20,
-        pageSize: 20,
-      }}
+      pagination={
+        data?.groups && data.groups.length > 50
+          ? {
+              defaultPageSize: 20,
+              pageSize: 20,
+            }
+          : false
+      }
       columns={[
         {
           key: 'name',

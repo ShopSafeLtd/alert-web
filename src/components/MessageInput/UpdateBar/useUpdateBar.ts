@@ -1,5 +1,5 @@
 import type { FormInstance } from 'antd';
-import { Form, Mentions, message, notification } from 'antd';
+import { Form, Mentions, message } from 'antd';
 import type { RcFile } from 'antd/lib/upload';
 import Upload from 'antd/lib/upload';
 import type { UploadFile, UploadProps } from 'antd/lib/upload/interface';
@@ -16,6 +16,8 @@ import type {
   ViewOffenderQueryVariables,
 } from 'graphql/generated';
 import {
+  TodoType,
+  useUpdateTodoMentionMutation,
   ImagePosition,
   CrimeGroupDocument,
   Role,
@@ -27,8 +29,6 @@ import {
   useCreateUpdateOnInvestigationMutation,
   useCreateUpdateOnOffenderMutation,
   useCreateUpdateOnVehicleMutation,
-  useListCrimeGroupsQuery,
-  useListIncidentsQuery,
   useListSchemeUsersQuery,
   useSubscribeToCrimeGroupMutation,
   useSubscribeToIncidentMutation,
@@ -45,11 +45,12 @@ import { useStoreState } from 'state';
 import update from 'immutability-helper';
 import type {
   CrimeGroupData,
-  IncidentsData,
+  IncidentCardData,
   OffenderData,
   SchemeUserData,
   VehicleData,
 } from 'types/DataType';
+import errorNotification from 'types/error_notification';
 
 const { getMentions } = Mentions;
 
@@ -74,12 +75,12 @@ interface Return {
   toggleLinkCrimeGroup: () => void;
   updateFileList: UploadFile[];
   updateForm: FormInstance<FormData>;
-  updateIncidents: IncidentsData;
+  updateIncidents: IncidentCardData[];
   updateInput: string;
-  updateIncidentList: (value: string) => void;
+  updateIncidentList: (value: IncidentCardData) => void;
   updateOffendersList: (value: OffenderData) => void;
   updateVehicleList: (value: VehicleData) => void;
-  updateCrimeGroupList: (value: string) => void;
+  updateCrimeGroupList: (value: CrimeGroupData) => void;
   linkIncident: boolean;
   linkOffender: boolean;
   linkVehicle: boolean;
@@ -89,6 +90,7 @@ interface Return {
   vehiclesData: VehicleData[];
   saving: boolean;
   adminRights: boolean;
+  handleMarkAsRead: () => void;
 }
 
 interface Props {
@@ -154,7 +156,7 @@ const useUpdateBar = ({
   const schemeId = useStoreState((state) => state.scheme.id);
   const userRole = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
-  const fullName = useStoreState((state) => state.user.fullName);
+  const fullName = useStoreState((state) => state.user.origName);
   const businesses = useStoreState((state) => state.user.businesses);
   const userGroups = useStoreState((state) => state.user.groups);
 
@@ -173,7 +175,9 @@ const useUpdateBar = ({
     { id: string; value: string }[]
   >([]);
   const [updateFileList, setUpdateFileList] = useState<UploadFile[]>([]);
-  const [updateIncidents, setUpdateIncidents] = useState<IncidentsData>();
+  const [updateIncidents, setUpdateIncidents] = useState<IncidentCardData[]>(
+    []
+  );
   const [updateOffenders, setUpdateOffenders] = useState<OffenderData[]>([]);
   const [crimeGroupsData, setCrimeGroupsData] = useState<CrimeGroupData[]>([]);
   const [vehiclesData, setVehiclesData] = useState<VehicleData[]>([]);
@@ -238,7 +242,7 @@ const useUpdateBar = ({
           : undefined,
       },
       orderBy: {
-        fullName: SortOrder.Desc,
+        fullName: SortOrder.Asc,
       },
     },
     onCompleted: (res) => {
@@ -246,8 +250,8 @@ const useUpdateBar = ({
         setSchemeUsers(
           appendDuplicates(
             res.users.map((user) => ({
-              fullName: user.fullName,
-              oldFullName: user.fullName,
+              fullName: user.origName,
+              oldFullName: user.origName,
               id: user.id,
               businesses: user.businesses,
               firstLetter: user.firstLetter,
@@ -258,31 +262,6 @@ const useUpdateBar = ({
     },
   });
 
-  const { data: listIncidentsData } = useListIncidentsQuery({
-    variables: {
-      scheme: {
-        id: schemeId,
-      },
-      order: {
-        createdAt: SortOrder.Asc,
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-  });
-  const { data: listCrimeGroupsData } = useListCrimeGroupsQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        schemes: {
-          some: {
-            id: {
-              equals: schemeId,
-            },
-          },
-        },
-      },
-    },
-  });
   const [subscribeToIncident] = useSubscribeToIncidentMutation();
   const [subscribeToOffender] = useSubscribeToOffenderMutation();
   const [subscribeToInvestigation] = useSubscribeToInvestigationMutation();
@@ -304,54 +283,35 @@ const useUpdateBar = ({
     onCompleted: () => {},
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
   const [createOffenderUpdate] = useCreateUpdateOnOffenderMutation({
     onCompleted: () => {},
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
   const [createVehicleUpdate] = useCreateUpdateOnVehicleMutation({
     onCompleted: () => {},
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
   const [createCrimeGroupUpdate] = useCreateUpdateOnCrimeGroupMutation({
     onCompleted: () => {},
     onError: () => {
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      setSaving(false);
+      errorNotification();
     },
   });
   const [createInvestigationUpdate] = useCreateUpdateOnInvestigationMutation({
     onCompleted: () => {},
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
   const beforeUpdateImageUpload = (value: RcFile) => {
@@ -1052,50 +1012,69 @@ const useUpdateBar = ({
   const toggleShowUpdatePicker = () => {
     setShowUpdatePicker(!showUpdatePicker);
   };
-
-  const updateIncidentList = (selectedIncidentId: string) => {
-    if (
-      listIncidentsData?.listIncidents?.incidents &&
-      listIncidentsData?.listIncidents?.total > 0
-    ) {
-      if (updateIncidents && updateIncidents.length > 0) {
-        setUpdateIncidents([
-          ...updateIncidents,
-          // eslint-disable-next-line no-unsafe-optional-chaining
-          ...listIncidentsData?.listIncidents?.incidents.filter(
-            (incident) => selectedIncidentId === incident.id
-          ),
-        ]);
-      } else {
-        setUpdateIncidents(
-          listIncidentsData?.listIncidents?.incidents.filter(
-            (incident) => selectedIncidentId === incident.id
-          )
-        );
-      }
+  const updateIncidentList = (selectedIncident: IncidentCardData) => {
+    if (selectedIncident) {
+      setUpdateIncidents([...updateIncidents, selectedIncident]);
     }
   };
+  // const updateIncidentList = (selectedIncidentId: string) => {
+  //   if (
+  //     listIncidentsData?.listIncidents?.incidents &&
+  //     listIncidentsData?.listIncidents?.total > 0
+  //   ) {
+  //     if (updateIncidents && updateIncidents.length > 0) {
+  //       setUpdateIncidents([
+  //         ...updateIncidents,
+  //         // eslint-disable-next-line no-unsafe-optional-chaining
+  //         ...listIncidentsData?.listIncidents?.incidents.filter(
+  //           (incident) => selectedIncidentId === incident.id
+  //         ),
+  //       ]);
+  //     } else {
+  //       setUpdateIncidents(
+  //         listIncidentsData?.listIncidents?.incidents.filter(
+  //           (incident) => selectedIncidentId === incident.id
+  //         )
+  //       );
+  //     }
+  //   }
+  // };
   const updateOffendersList = (selectedOffender: OffenderData) => {
-    if (!updateOffenders?.find(({ id }) => id === selectedOffender.id)) {
+    if (selectedOffender) {
       setUpdateOffenders([...updateOffenders, selectedOffender]);
     }
   };
-  const updateCrimeGroupList = (selectedCrimeGroupId: string) => {
-    if (
-      listCrimeGroupsData?.listCrimeGroups?.crimeGroups &&
-      listCrimeGroupsData.listCrimeGroups.total > 0
-    ) {
-      const selectedCrimeGroup =
-        listCrimeGroupsData?.listCrimeGroups?.crimeGroups.filter(
-          ({ id }) => id === selectedCrimeGroupId
-        );
-      setCrimeGroupsData([...crimeGroupsData, ...selectedCrimeGroup]);
+  const updateCrimeGroupList = (selectedCrimeGroup: CrimeGroupData) => {
+    if (selectedCrimeGroup) {
+      setCrimeGroupsData([...updateIncidents, selectedCrimeGroup]);
     }
   };
+
   const updateVehicleList = (selectedVehicle: VehicleData) => {
-    if (!vehiclesData?.find(({ id }) => id === selectedVehicle.id)) {
+    if (selectedVehicle) {
       setVehiclesData([...vehiclesData, selectedVehicle]);
     }
+  };
+  const [updateTodoMention] = useUpdateTodoMentionMutation();
+  const getWhereArgs = () => {
+    if (incidentId) return { incidentId, type: TodoType.IncidentUpdate };
+    if (offenderId) return { offenderId, type: TodoType.OffenderUpdate };
+    if (vehicleId) return { vehicleId, type: TodoType.VehicleUpdate };
+    if (crimeGroupId) return { crimeGroupId, type: TodoType.CrimegroupUpdate };
+    if (investigationId)
+      return { investigationId, type: TodoType.InvestigationUpdate };
+    return { type: TodoType.IncidentUpdate };
+  };
+
+  const handleMarkAsRead = () => {
+    updateTodoMention({
+      variables: {
+        where: {
+          userId,
+          ...getWhereArgs(),
+        },
+      },
+    });
   };
 
   return {
@@ -1134,6 +1113,7 @@ const useUpdateBar = ({
     vehiclesData,
     saving,
     adminRights: userRole !== Role.User,
+    handleMarkAsRead,
   };
 };
 

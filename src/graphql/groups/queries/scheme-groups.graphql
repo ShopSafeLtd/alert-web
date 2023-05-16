@@ -1,7 +1,14 @@
-query schemeGroups($where: GroupWhereInput, $orderBy: [GroupOrderByWithRelationInput!]) {
+query schemeGroups(
+  $where: GroupWhereInput
+  $orderBy: [GroupOrderByWithRelationInput!]
+) {
   groups(where: $where, orderBy: $orderBy) {
     id
     name
     description
+    approver {
+      id
+      fullName
+    }
   }
 }

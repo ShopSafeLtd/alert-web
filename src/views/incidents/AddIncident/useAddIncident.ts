@@ -44,6 +44,7 @@ import type {
   OffenderData as GlobalOffenderData,
   VehicleData,
 } from 'types/DataType';
+import Mixpanel from 'utils/mixpanel';
 
 const { confirm } = Modal;
 const { useForm } = Form;
@@ -205,6 +206,10 @@ const useEditIncident = (): Return => {
   const [saving, setSaving] = useState(false);
   const [searchOffenders, setSearchOffenders] = useState<string>('');
   const [vehiclesData, setVehiclesData] = useState<VehicleType[]>([]);
+
+  useEffect(() => {
+    Mixpanel.track('Start new incident form');
+  }, []);
 
   useEffect(() => {
     if (businesses.length > 0) {
@@ -396,6 +401,7 @@ const useEditIncident = (): Return => {
   const [createIncident] = useCreateIncidentMutation({
     onCompleted: () => {
       setSaving(false);
+      Mixpanel.track('Successfully create incident');
       notification.success({
         message: 'Successfully Added!',
         description: 'The Incident has been added!',
@@ -405,6 +411,7 @@ const useEditIncident = (): Return => {
     },
     onError: () => {
       setSaving(false);
+      Mixpanel.track('Unsuccessfully create incident');
       notification.error({
         message: 'Error!',
         description: 'Whoops, there are some errors. Please try again. ',
@@ -810,6 +817,25 @@ const useEditIncident = (): Return => {
         };
       };
 
+      Mixpanel.track('Submit incident', {
+        newOffenders: offendersData.filter((item) => item.new).length,
+        existingOffenders: offendersData.filter((item) => item.existing).length,
+        images: fileList.length,
+        hasBusiness: !!data.business,
+        hasCustomLocation: !!newAddressData?.postcode,
+        crimeTypes: data.tags.length,
+        involvedTags: data.involvedTags.length,
+        impactTags: data.fellingTags.length,
+        hasCrimeRef: !!data.policeRef,
+        completedPoliceReported: !!data.policeReported,
+        completedPoliceInvolved: !!data.policeInvolved,
+        hasPoliceNo: !!data.policeNo,
+        newVehicles: vehiclesData.filter((item) => item.new).length,
+        existingVehicles: vehiclesData.filter((item) => item.existing).length,
+        groups: data.groups?.length || 1,
+        goods: data.goods?.length || 0,
+      });
+
       createIncident({
         variables: {
           data: {
@@ -911,6 +937,7 @@ const useEditIncident = (): Return => {
           ? response.data.listBusinesses.businesses.map((item) => ({
               label: item?.name || '',
               value: item?.id || '',
+              location: item?.locations[0].full || '',
             }))
           : [
               {

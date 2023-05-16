@@ -56,6 +56,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
   },
   name: {
     fontSize: 14,
+    marginBottom: '0px !important',
   },
   lastOffence: {
     fontSize: 10,

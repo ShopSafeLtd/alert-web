@@ -43,8 +43,21 @@
   font-family: 'Rock Salt';
   src: url(@/assets/fonts/RockSalt-Regular.ttf);
 }
+.overlay {
+  z-index: 1000;
+}
+.logo,
+.print-title {
+  width: 100%;
+  justify-content: center;
+}
 .logo {
-  display: none;
+  display: flex;
+  height: 100px;
+  margin-bottom: 15px;
+}
+.print-title {
+  text-align: center;
 }
 .printable-graph {
   width: 90%;
@@ -76,6 +89,21 @@
   right: 5px;
   top: 5px;
   z-index: 1;
+}
+.change-graph1,
+.change-graph2,
+.change-graph3 {
+  position: absolute;
+  right: 40px;
+  top: 5px;
+  z-index: 1;
+}
+.change-graph2,
+.change-graph3 {
+  right: 70px;
+}
+.change-graph3 {
+  right: 100px;
 }
 @media print {
   .no-print,

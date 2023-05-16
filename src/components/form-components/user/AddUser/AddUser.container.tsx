@@ -35,6 +35,13 @@ const AddUser = ({
     existingUser,
     onSearchBusiness,
     schemeLoading,
+    selectedRole,
+    setSelectedRole,
+    selectedGroups,
+    setSelectedGroups,
+    addBusinessVisible,
+    toggleAddBusinessVisible,
+    updateNewBusinessData,
   } = useAddUser({ onClose, update, updateSearch, business });
 
   return (
@@ -52,6 +59,13 @@ const AddUser = ({
       existingUser={existingUser}
       onSearchBusiness={onSearchBusiness}
       businessProvided={!!business}
+      selectedRole={selectedRole}
+      setSelectedRole={setSelectedRole}
+      selectedGroups={selectedGroups}
+      setSelectedGroups={setSelectedGroups}
+      addBusinessVisible={addBusinessVisible}
+      toggleAddBusinessVisible={toggleAddBusinessVisible}
+      updateNewBusinessData={updateNewBusinessData}
     />
   );
 };

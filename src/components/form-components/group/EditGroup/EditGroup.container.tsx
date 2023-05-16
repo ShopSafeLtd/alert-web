@@ -10,11 +10,21 @@ interface Props {
 const EditGroup = ({ onClose }: Props): JSX.Element => {
   const groupId = useParams().id || '';
 
-  const { onSubmit, data, loading, usersData, usersLoading, saving } =
-    useEditGroup({
-      onClose,
-      groupId,
-    });
+  const {
+    onSubmit,
+    data,
+    loading,
+    usersData,
+    usersLoading,
+    saving,
+    selectedUsers,
+    setSelectedUsers,
+    adminUsersData,
+  } = useEditGroup({
+    onClose,
+    groupId,
+  });
+
   return (
     <View
       onSubmit={onSubmit}
@@ -24,6 +34,9 @@ const EditGroup = ({ onClose }: Props): JSX.Element => {
       usersData={usersData}
       usersLoading={usersLoading}
       saving={saving}
+      selectedUsers={selectedUsers}
+      setSelectedUsers={setSelectedUsers}
+      adminUsersData={adminUsersData}
     />
   );
 };

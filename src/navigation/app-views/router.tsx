@@ -4,6 +4,7 @@ import Loading from 'components/shared-components/AntD/Loading';
 import { useAuth } from 'hooks';
 import { useStoreState } from 'state';
 import { useAuth0 } from '@auth0/auth0-react';
+// import TodoList from 'views/adminTodo/TodoList';
 // import Incidents from './incidents/router';
 // import Offenders from './offenders/router';
 // import FeedItems from './feedItems/router';
@@ -23,6 +24,7 @@ const Documents = lazy(() => import(`./documents/router`));
 const Vehicles = lazy(() => import(`./vehicles/router`));
 const CrimeGroups = lazy(() => import(`./crime-groups/router`));
 const FeedItems = lazy(() => import(`./feedItems/router`));
+const AdminTodos = lazy(() => import(`./adminTodo/router`));
 
 export const AppViews = (): JSX.Element => {
   const { isLoading } = useAuth0();
@@ -57,6 +59,7 @@ export const AppViews = (): JSX.Element => {
           />
         )}
         <Route key="dashboard" path="dashboard/*" element={<FeedItems />} />,
+        <Route key="adminTodo" path="adminTodo/*" element={<AdminTodos />} />,
         <Route key="incidents" path="incidents/*" element={<Incidents />} />,
         <Route
           key="crime-groups"

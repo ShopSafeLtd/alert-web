@@ -18,8 +18,8 @@ import {
 } from 'utils/offender/get-offender-desc';
 import type { UploadFile } from 'antd/lib/upload/interface';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import AddExistingOffender from '../../offender/AddExistingOffender';
-import AddOffender from '../../offender/AddNewOffender';
+import AddExistingOffender from '../../../offender/offender/AddExistingOffender';
+import AddOffender from '../../../offender/offender/AddNewOffender';
 
 const { Title, Paragraph, Text } = Typography;
 

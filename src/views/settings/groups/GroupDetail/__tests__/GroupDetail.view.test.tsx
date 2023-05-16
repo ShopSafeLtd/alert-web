@@ -8,6 +8,7 @@ describe('Detail Officer View', () => {
     group: {
       id: 'test groupId',
       name: 'test group',
+      approver: [],
       users: [
         {
           publicName: true,

@@ -1,6 +1,13 @@
+import { notification } from 'antd';
 import type { ViewInvestigationQuery } from 'graphql/generated';
-import { useViewInvestigationQuery } from 'graphql/generated';
+import {
+  useSubscribeToInvestigationMutation,
+  useUnsubscribeToInvestigationMutation,
+  useUpdateInvestigationMutation,
+  useViewInvestigationQuery,
+} from 'graphql/generated';
 import { useState } from 'react';
+import errorNotification from 'types/error_notification';
 import { useStoreState } from '../../../state';
 
 interface Return {
@@ -23,6 +30,11 @@ interface Return {
   toggleAddDemDocument: () => void;
   addDemDocument: boolean;
   demId: string | null | undefined;
+  submitOffender: (value: string) => void;
+  submitVehicle: (value: string) => void;
+  submitCrimeGroup: (value: string) => void;
+  submitIncident: (value: string) => void;
+  toggleSubscribe: () => void;
 }
 const useViewInvestigation = (investigationId: string): Return => {
   const [offenderIds, setOffenderIds] = useState<string[]>([]);
@@ -42,6 +54,7 @@ const useViewInvestigation = (investigationId: string): Return => {
         id: investigationId,
       },
     },
+    skip: !investigationId,
     onCompleted: ({ investigation }) => {
       if (investigation?.offenders && investigation.offenders.length > 0) {
         setOffenderIds(investigation.offenders.map(({ id }) => id));
@@ -57,6 +70,79 @@ const useViewInvestigation = (investigationId: string): Return => {
       }
     },
   });
+
+  const [subscribeToInvestigation] = useSubscribeToInvestigationMutation();
+  const [unsubscribeFromInvestigation] =
+    useUnsubscribeToInvestigationMutation();
+
+  const [updateInvestigation] = useUpdateInvestigationMutation({
+    onCompleted: () => {
+      notification.success({
+        message: 'Successfully Updated!',
+        description: 'The investigation has been updated! ',
+        placement: 'bottomRight',
+      });
+    },
+    onError: () => {
+      errorNotification();
+    },
+  });
+  const submitOffender = (value: string) => {
+    if (value) {
+      updateInvestigation({
+        variables: {
+          where: {
+            id: investigationId,
+          },
+          data: {
+            offenderIds: [value],
+          },
+        },
+      });
+    }
+  };
+  const submitVehicle = (value: string) => {
+    if (value) {
+      updateInvestigation({
+        variables: {
+          where: {
+            id: investigationId,
+          },
+          data: {
+            vehicleIds: [value],
+          },
+        },
+      });
+    }
+  };
+  const submitCrimeGroup = (value: string) => {
+    if (value) {
+      updateInvestigation({
+        variables: {
+          where: {
+            id: investigationId,
+          },
+          data: {
+            crimeGroupIds: [value],
+          },
+        },
+      });
+    }
+  };
+  const submitIncident = (value: string) => {
+    if (value) {
+      updateInvestigation({
+        variables: {
+          where: {
+            id: investigationId,
+          },
+          data: {
+            incidentIds: [value],
+          },
+        },
+      });
+    }
+  };
 
   const toggleAddExistingOffender = () => {
     setAddExistingOffender(() => !addExistingOffender);
@@ -81,10 +167,41 @@ const useViewInvestigation = (investigationId: string): Return => {
     setAddDemDocument(() => !addDemDocument);
   };
 
+  const toggleSubscribe = () => {
+    if (data?.investigation?.subscribed) {
+      unsubscribeFromInvestigation({
+        variables: {
+          where: { id: investigationId },
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          unsubscribeToInvestigation: {
+            id: investigationId,
+            __typename: 'Investigation',
+            subscribed: false,
+          },
+        },
+      });
+    } else {
+      subscribeToInvestigation({
+        variables: {
+          where: { id: investigationId },
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          subscribeToInvestigation: {
+            id: investigationId,
+            __typename: 'Investigation',
+            subscribed: true,
+          },
+        },
+      });
+    }
+  };
+
   return {
     data,
     loading,
-
     offenderIds,
     vehicleIds,
     incidentIds,
@@ -102,6 +219,11 @@ const useViewInvestigation = (investigationId: string): Return => {
     addDocument,
     toggleAddDocument,
     demId,
+    submitOffender,
+    submitVehicle,
+    submitCrimeGroup,
+    submitIncident,
+    toggleSubscribe,
   };
 };
 

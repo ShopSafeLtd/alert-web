@@ -63,6 +63,12 @@ query CrimeGroup($where: CrimeGroupWhereUniqueInput!) {
           name
         }
       }
+      location {
+        full
+        id
+        geoLat
+        geoLng
+      }
     }
     updates(orderBy: { createdAt: desc }) {
       id

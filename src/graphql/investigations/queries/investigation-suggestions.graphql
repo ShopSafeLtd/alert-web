@@ -1,0 +1,122 @@
+query InvestigationSuggestions(
+  $where: InvestigationWhereUniqueInput!
+  $associatedInvestigation: UniqueId
+  $crimeTypesWhere: TagWhereInput
+) {
+  investigation(where: $where) {
+    id
+    suggestedOffenders {
+      id
+      name
+      alias
+      reference
+      dateOfBirth
+      age
+      gender
+      build
+      race
+      hair
+      peculiarities
+      images {
+        id
+        optimised
+        position
+      }
+      totalAssociatedIncidents(
+        associatedInvestigation: $associatedInvestigation
+      )
+      totalAssociatedCrimeGroups(
+        associatedInvestigation: $associatedInvestigation
+      )
+      associatedIncidents(
+        associatedInvestigation: $associatedInvestigation
+      ) {
+        id
+        dayTime
+        reference
+        business {
+          id
+          fullName
+        }
+        location {
+          full
+          id
+        }
+        crimeTypes(where: $crimeTypesWhere) {
+          id
+          name
+        }
+        createdBy {
+          id
+          fullName
+          businesses {
+            id
+            name
+          }
+        }
+      }
+      associatedCrimeGroups(
+        associatedInvestigation: $associatedInvestigation
+      ) {
+        id
+        reference
+        alias
+        totalOffenders
+        totalIncidents
+        totalValue
+      }
+    }
+    suggestedVehicles {
+      id
+      reference
+      registration
+      make
+      model
+      images {
+        id
+        optimised
+        position
+      }
+      colour
+    }
+    suggestedIncidents {
+      id
+      subject
+      reference
+      description
+      dayTime
+      crimeTypes(where: $crimeTypesWhere) {
+        id
+        name
+      }
+      images {
+        id
+        optimised
+        position
+      }
+      policeRef
+      location {
+        id
+        full
+      }
+      offenders {
+        id
+        name
+        reference
+        age
+        gender
+        race
+        build
+        dateOfBirth
+        hair
+        peculiarities
+        alias
+        images {
+          id
+          position
+          optimised
+        }
+      }
+    }
+  }
+}

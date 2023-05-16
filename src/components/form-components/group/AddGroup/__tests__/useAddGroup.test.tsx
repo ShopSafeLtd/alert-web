@@ -96,11 +96,11 @@ const UseAddGroupTest = () => {
   });
   const Users =
     usersData &&
-    usersData.users.map((el) => (
-      <div key={el.id}>
-        <span>{el.id}</span>
-        <span>{el.fullName}</span>
-        <span>{el.businesses[0]?.name}</span>
+    usersData.map((el) => (
+      <div key={el.value}>
+        <span>{el.label}</span>
+        <span>{el.label}</span>
+        <span>{el.label}</span>
       </div>
     ));
 
@@ -115,6 +115,7 @@ const UseAddGroupTest = () => {
             name: 'groupName',
             description: 'group description',
             users: ['id'],
+            approvers: [],
           })
         }
       >

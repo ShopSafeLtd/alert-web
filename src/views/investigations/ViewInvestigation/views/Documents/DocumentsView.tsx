@@ -15,6 +15,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faPlus } from '@fortawesome/pro-light-svg-icons';
 import type { ViewProps } from './types/Documents';
 
+const isImage = (url: string) => {
+  const ext = url.split('.').pop();
+  return ext === 'jpg' || ext === 'png' || ext === 'jpeg';
+};
 const DocumentsView = ({
   data,
   toggleAddDemDocument,
@@ -30,7 +34,12 @@ const DocumentsView = ({
   return (
     <TabContent>
       <Card style={{ marginLeft: 20, marginRight: 20, marginTop: 20 }}>
-        <Row>
+        <Row
+          style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+          }}
+        >
           <Col>
             <Dropdown
               overlay={
@@ -132,7 +141,9 @@ const DocumentsView = ({
           dataSource={
             data?.map((document) => ({
               key: document.id,
-              thumbnail: document.thumbnailUrl,
+              thumbnail:
+                document.thumbnailUrl ||
+                (isImage(document.url) ? document.url : undefined),
               fileUrl: document.url,
               name: document.name,
               tags: document.tags.map((tag) => ({

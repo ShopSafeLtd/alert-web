@@ -1,12 +1,16 @@
 import type {
+  InvestigationSuggestionsQuery,
+  InvestigationSuggestionsQueryVariables,
   ViewInvestigationQuery,
   ViewInvestigationQueryVariables,
 } from 'graphql/generated';
 import {
+  InvestigationSuggestionsDocument,
+  useUpdateInvestigationMutation,
+  TagType,
+  useInvestigationSuggestionsQuery,
   Role,
   useDeleteUpdateMutation,
-  useSubscribeToInvestigationMutation,
-  useUnsubscribeToInvestigationMutation,
   useUpdateUpdateMutation,
   useViewInvestigationQuery,
   ViewInvestigationDocument,
@@ -48,9 +52,18 @@ interface Return {
   editUpdate: { id: string; text: string } | null;
   setEditUpdateInput: (value: string) => void;
   editUpdateInput: string;
-  toggleSubscribe: () => void;
   optionRowShow: boolean;
   setOptionRowShow: (value: boolean) => void;
+  suggestedData: InvestigationSuggestionsQuery | undefined;
+  viewSuggestedOffenders: boolean;
+  toggleViewSuggestedOffenders: () => void;
+  handleConnectOffender: (id: string) => void;
+  handleConnectIncident: (id: string) => void;
+  handleConnectVehicle: (id: string) => void;
+  viewSuggestedIncidents: boolean;
+  toggleViewSuggestedIncidents: () => void;
+  viewSuggestedVehicles: boolean;
+  toggleViewSuggestedVehicles: () => void;
 }
 
 interface Props {
@@ -65,6 +78,9 @@ const useViewDetails = ({ investigationId }: Props): Return => {
 
   const [optionRowShow, setOptionRowShow] = useState(false);
   const [loadMore, setLoadMore] = useState(false);
+  const [viewSuggestedOffenders, setViewSuggestedOffenders] = useState(false);
+  const [viewSuggestedIncidents, setViewSuggestedIncidents] = useState(false);
+  const [viewSuggestedVehicles, setViewSuggestedVehicles] = useState(false);
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
   const [saving] = useState(false);
@@ -84,9 +100,26 @@ const useViewDetails = ({ investigationId }: Props): Return => {
     },
   });
 
+  const { data: suggestedData } = useInvestigationSuggestionsQuery({
+    variables: {
+      where: {
+        id: investigationId,
+      },
+      associatedInvestigation: {
+        id: investigationId,
+      },
+      crimeTypesWhere: {
+        type: {
+          equals: TagType.IncidentCrimeType,
+        },
+      },
+    },
+  });
+
   // function
 
   const [updateUpdate] = useUpdateUpdateMutation();
+  const [updateInvestigation] = useUpdateInvestigationMutation();
 
   const handleEditUpdate = () => {
     if (editUpdate !== null)
@@ -221,40 +254,207 @@ const useViewDetails = ({ investigationId }: Props): Return => {
     });
   };
 
-  const [subscribeToInvestigation] = useSubscribeToInvestigationMutation();
-  const [unsubscribeFromInvestigation] =
-    useUnsubscribeToInvestigationMutation();
+  const toggleViewSuggestedOffenders = () => {
+    setViewSuggestedOffenders(!viewSuggestedOffenders);
+  };
+  const toggleViewSuggestedVehicles = () => {
+    setViewSuggestedVehicles(!viewSuggestedVehicles);
+  };
+  const toggleViewSuggestedIncidents = () => {
+    setViewSuggestedIncidents(!viewSuggestedIncidents);
+  };
 
-  const toggleSubscribe = () => {
-    if (data?.investigation?.subscribed) {
-      unsubscribeFromInvestigation({
-        variables: {
-          where: { id: investigationId },
+  const handleConnectOffender = (offenderId: string) => {
+    toggleViewSuggestedOffenders();
+    updateInvestigation({
+      variables: {
+        data: {
+          offenderIds: [offenderId],
         },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          unsubscribeToInvestigation: {
-            id: investigationId,
-            __typename: 'Investigation',
-            subscribed: false,
+        where: {
+          id: investigationId,
+        },
+      },
+      update: (store, result) => {
+        const existingData = store.readQuery<
+          InvestigationSuggestionsQuery,
+          InvestigationSuggestionsQueryVariables
+        >({
+          query: InvestigationSuggestionsDocument,
+          variables: {
+            where: {
+              id: investigationId,
+            },
+            associatedInvestigation: {
+              id: investigationId,
+            },
+            crimeTypesWhere: {
+              type: {
+                equals: TagType.IncidentCrimeType,
+              },
+            },
           },
+        });
+
+        if (existingData?.investigation && result.data?.updateInvestigation)
+          store.writeQuery<
+            InvestigationSuggestionsQuery,
+            InvestigationSuggestionsQueryVariables
+          >({
+            query: InvestigationSuggestionsDocument,
+            variables: {
+              where: {
+                id: investigationId,
+              },
+              associatedInvestigation: {
+                id: investigationId,
+              },
+              crimeTypesWhere: {
+                type: {
+                  equals: TagType.IncidentCrimeType,
+                },
+              },
+            },
+            data: {
+              investigation: {
+                ...existingData.investigation,
+                suggestedOffenders:
+                  existingData.investigation?.suggestedOffenders?.filter(
+                    (offender) => offender.id !== offenderId
+                  ),
+              },
+            },
+          });
+      },
+    });
+  };
+  const handleConnectIncident = (incidentId: string) => {
+    toggleViewSuggestedIncidents();
+    updateInvestigation({
+      variables: {
+        data: {
+          incidentIds: [incidentId],
         },
-      });
-    } else {
-      subscribeToInvestigation({
-        variables: {
-          where: { id: investigationId },
+        where: {
+          id: investigationId,
         },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          subscribeToInvestigation: {
-            id: investigationId,
-            __typename: 'Investigation',
-            subscribed: true,
+      },
+      update: (store, result) => {
+        const existingData = store.readQuery<
+          InvestigationSuggestionsQuery,
+          InvestigationSuggestionsQueryVariables
+        >({
+          query: InvestigationSuggestionsDocument,
+          variables: {
+            where: {
+              id: investigationId,
+            },
+            associatedInvestigation: {
+              id: investigationId,
+            },
+            crimeTypesWhere: {
+              type: {
+                equals: TagType.IncidentCrimeType,
+              },
+            },
           },
+        });
+
+        if (existingData?.investigation && result.data?.updateInvestigation)
+          store.writeQuery<
+            InvestigationSuggestionsQuery,
+            InvestigationSuggestionsQueryVariables
+          >({
+            query: InvestigationSuggestionsDocument,
+            variables: {
+              where: {
+                id: investigationId,
+              },
+              associatedInvestigation: {
+                id: investigationId,
+              },
+              crimeTypesWhere: {
+                type: {
+                  equals: TagType.IncidentCrimeType,
+                },
+              },
+            },
+            data: {
+              investigation: {
+                ...existingData.investigation,
+                suggestedIncidents:
+                  existingData.investigation?.suggestedIncidents?.filter(
+                    (incident) => incident.id !== incidentId
+                  ),
+              },
+            },
+          });
+      },
+    });
+  };
+  const handleConnectVehicle = (vehicleId: string) => {
+    toggleViewSuggestedVehicles();
+    updateInvestigation({
+      variables: {
+        data: {
+          vehicleIds: [vehicleId],
         },
-      });
-    }
+        where: {
+          id: investigationId,
+        },
+      },
+      update: (store, result) => {
+        const existingData = store.readQuery<
+          InvestigationSuggestionsQuery,
+          InvestigationSuggestionsQueryVariables
+        >({
+          query: InvestigationSuggestionsDocument,
+          variables: {
+            where: {
+              id: investigationId,
+            },
+            associatedInvestigation: {
+              id: investigationId,
+            },
+            crimeTypesWhere: {
+              type: {
+                equals: TagType.IncidentCrimeType,
+              },
+            },
+          },
+        });
+
+        if (existingData?.investigation && result.data?.updateInvestigation)
+          store.writeQuery<
+            InvestigationSuggestionsQuery,
+            InvestigationSuggestionsQueryVariables
+          >({
+            query: InvestigationSuggestionsDocument,
+            variables: {
+              where: {
+                id: investigationId,
+              },
+              associatedInvestigation: {
+                id: investigationId,
+              },
+              crimeTypesWhere: {
+                type: {
+                  equals: TagType.IncidentCrimeType,
+                },
+              },
+            },
+            data: {
+              investigation: {
+                ...existingData.investigation,
+                suggestedVehicles:
+                  existingData.investigation?.suggestedVehicles?.filter(
+                    (vehicle) => vehicle.id !== vehicleId
+                  ),
+              },
+            },
+          });
+      },
+    });
   };
 
   return {
@@ -273,9 +473,18 @@ const useViewDetails = ({ investigationId }: Props): Return => {
     editUpdate,
     setEditUpdateInput,
     editUpdateInput,
-    toggleSubscribe,
     optionRowShow,
     setOptionRowShow,
+    suggestedData,
+    viewSuggestedOffenders,
+    toggleViewSuggestedOffenders,
+    handleConnectOffender,
+    handleConnectIncident,
+    handleConnectVehicle,
+    toggleViewSuggestedIncidents,
+    toggleViewSuggestedVehicles,
+    viewSuggestedIncidents,
+    viewSuggestedVehicles,
   };
 };
 

@@ -49,7 +49,7 @@ export function useNodesStateSynced({
       id,
       ...params,
       type: 'floating',
-      markerEnd: { type: MarkerType.Arrow },
+      markerEnd: { type: MarkerType.Arrow, height: 50, width: 50 },
     });
   }, []);
 

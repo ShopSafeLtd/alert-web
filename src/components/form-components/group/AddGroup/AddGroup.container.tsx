@@ -10,7 +10,15 @@ interface Props {
 }
 
 const AddGroup = ({ onClose, update }: Props): JSX.Element => {
-  const { onSubmit, usersData, usersLoading, saving } = useAddGroup({
+  const {
+    onSubmit,
+    usersData,
+    adminUsersData,
+    usersLoading,
+    saving,
+    selectedUsers,
+    setSelectedUsers,
+  } = useAddGroup({
     onClose,
     update,
   });
@@ -20,8 +28,11 @@ const AddGroup = ({ onClose, update }: Props): JSX.Element => {
       onSubmit={onSubmit}
       onClose={onClose}
       usersData={usersData}
+      adminUsersData={adminUsersData}
       usersLoading={usersLoading}
       saving={saving}
+      selectedUsers={selectedUsers}
+      setSelectedUsers={setSelectedUsers}
     />
   );
 };

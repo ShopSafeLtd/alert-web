@@ -1,37 +1,9 @@
-import type { Theme } from 'configs/ThemeConfig';
 import { createUseStyles } from 'react-jss';
 
-const useStyles = createUseStyles((theme: Theme) => ({
-  '@media print': {
-    offenderSideList: `display: none !important;`,
-  },
-  offenderSideList: {
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100%',
-    overflowY: 'scroll',
-    maxHeight: '100vh',
-    width: 290,
-    borderLeft: `1px solid ${theme.borderColor}`,
-    borderRight: `1px solid ${theme.borderColor}`,
-    '& .ant-pagination': {
-      margin: '15px 0',
-      textAlign: 'center',
-    },
-  },
-  offenderItem: {
-    width: '100%',
-    backgroundColor: theme.componentBackground,
-    '&:hover': {
-      backgroundColor: theme.itemSelectedBackground,
-    },
-    '&.current': {
-      backgroundColor: theme.itemSelectedBackground,
-    },
-  },
+const useStyles = createUseStyles({
   image: {
-    height: 80,
-    width: 80,
+    height: 100,
+    width: 70,
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
@@ -57,9 +29,13 @@ const useStyles = createUseStyles((theme: Theme) => ({
   name: {
     fontSize: 14,
   },
-  lastOffence: {
-    fontSize: 10,
+  reference: {
+    fontSize: 12,
   },
-}));
+  detail: {
+    fontSize: 10,
+    marginBottom: '2px !important',
+  },
+});
 
 export default useStyles;

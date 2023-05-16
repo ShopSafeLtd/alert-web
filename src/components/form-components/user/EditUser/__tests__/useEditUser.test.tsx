@@ -269,18 +269,18 @@ const UseEditUserTest = () => {
   );
   const Groups =
     groupsData &&
-    groupsData.groups.map((el) => (
-      <div key={el.id}>
-        <span>{el.id}</span>
-        <span>{el.name}</span>
+    groupsData.map((el) => (
+      <div key={el.value}>
+        <span>{el.value}</span>
+        <span>{el.label}</span>
       </div>
     ));
   const Chats =
     chatsData &&
-    chatsData.chats.map((el) => (
-      <div key={el.id}>
-        <span>{el.id}</span>
-        <span>{el.name}</span>
+    chatsData.map((el) => (
+      <div key={el.value}>
+        <span>{el.value}</span>
+        <span>{el.label}</span>
       </div>
     ));
 
@@ -300,10 +300,12 @@ const UseEditUserTest = () => {
             email: 'email',
             role: Role.User,
             publicName: true,
-            business: {
-              value: '',
-              label: '',
-            },
+            businesses: [
+              {
+                label: '',
+                value: '',
+              },
+            ],
             groups: ['groupId'],
             chats: ['chatId'],
             incidentEmail: false,
@@ -313,6 +315,7 @@ const UseEditUserTest = () => {
             offenderPush: false,
             subscribedIncidentOnly: false,
             subscribedOffenderOnly: false,
+            approverGroups: [],
           })
         }
       >

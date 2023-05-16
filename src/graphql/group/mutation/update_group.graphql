@@ -12,5 +12,9 @@ mutation updateGroup($where: UniqueId!, $data: GroupUpdateInput!) {
         name
       }
     }
+    approver {
+      id
+      fullName
+    }
   }
 }

@@ -28,14 +28,8 @@ query ChatMessages($where: ChatMessagesWhereInput!, $take: Int, $skip: Int) {
       alias
       id
       reference
-      totalRecoveredValue
-      totalTheftSuccess
-      totalValue
-      updatedAt
     }
     vehicles {
-      updatedAt
-      totalOffenders
       registration
       reference
       model

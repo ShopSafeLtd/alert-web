@@ -37,7 +37,7 @@ import {
 import { Link } from 'react-router-dom';
 import IncidentSideList from 'components/incidents/IncidentSideList';
 import UpdateBar from 'components/MessageInput/UpdateBar';
-import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
+import LinkOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
@@ -363,8 +363,12 @@ const ViewIncident = ({
                           <MapCard
                             width="100%"
                             height={194}
-                            geoLat={data?.incident?.location?.geoLat}
-                            geoLng={data?.incident?.location?.geoLng}
+                            markers={[
+                              {
+                                geoLat: data?.incident?.location?.geoLat,
+                                geoLng: data?.incident?.location?.geoLng,
+                              },
+                            ]}
                           />
                         </Col>
                         <Col xs={24} xl={12}>

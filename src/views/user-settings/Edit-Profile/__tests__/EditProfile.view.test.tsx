@@ -18,6 +18,8 @@ describe('Detail Officer View', () => {
       offenderEmail: true,
       offenderPush: true,
       publicName: true,
+      approverGroups: [],
+      origName: 'test user',
       groups: [
         {
           id: 'test',
@@ -33,6 +35,7 @@ describe('Detail Officer View', () => {
           id: 'schemeId',
           role: Role.ContentAdmin,
           scheme: {
+            defaultPublicOffenderDOB: true,
             autoApproveIncidents: true,
             autoApproveOffenders: true,
             id: 'ckdhbosuv01028oiblmjgeuii',

@@ -9,6 +9,7 @@ describe('Detail Officer View', () => {
       id: 'groupId',
       name: 'test group',
       description: null,
+      approver: [],
       users: [
         {
           id: 'userId',
@@ -18,24 +19,20 @@ describe('Detail Officer View', () => {
       ],
     },
   };
-  const usersData = {
-    users: [
-      {
-        id: 'userId',
-        fullName: 'testUser',
-        origName: 'testUser',
-        email: 'user email',
-        publicName: true,
-        businesses: [{ id: '', name: 'test business', fullName: '' }],
-        status: 'enabled',
-        groups: [{ id: 'groupId', name: 'test group' }],
-      },
-    ],
-  };
+  const usersData = [
+    {
+      value: 'userId',
+      label: 'testUser',
+    },
+  ];
   it('renders the page', () => {
     const { getByText } = render(
       <MemoryRouter>
         <EditGroup
+          setSelectedUsers={jest.fn()}
+          selectedUsers={[]}
+          adminUsersData={usersData}
+          key={data.group.id}
           onSubmit={jest.fn()}
           onClose={jest.fn()}
           data={data}

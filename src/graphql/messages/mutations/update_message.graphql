@@ -33,14 +33,8 @@ mutation updateMessage(
       alias
       id
       reference
-      totalRecoveredValue
-      totalTheftSuccess
-      totalValue
-      updatedAt
     }
     vehicles {
-      updatedAt
-      totalOffenders
       registration
       reference
       model
@@ -49,9 +43,9 @@ mutation updateMessage(
       colour
       images {
         id
-        position
         optimised
         url
+        position
       }
     }
     incidents {

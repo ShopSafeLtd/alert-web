@@ -338,7 +338,7 @@ const ViewBusiness = ({
 
       <Drawer
         title="Edit Business"
-        visible={editVisible}
+        open={editVisible}
         onClose={toggleEdit}
         width={500}
       >
@@ -349,7 +349,7 @@ const ViewBusiness = ({
 
       <Drawer
         title="Link to DEM"
-        visible={linkDemVisible}
+        open={linkDemVisible}
         onClose={toggleLinkDem}
         width={500}
       >
@@ -358,7 +358,7 @@ const ViewBusiness = ({
         )}
       </Drawer>
       <Drawer
-        visible={inviteUserVisible}
+        open={inviteUserVisible}
         onClose={toggleInviteUser}
         width={700}
         title="Invite New User"
@@ -377,7 +377,7 @@ const ViewBusiness = ({
       </Drawer>
 
       <Drawer
-        visible={addUserVisible}
+        open={addUserVisible}
         onClose={toggleAddUser}
         width={700}
         title="Add Existing Users"

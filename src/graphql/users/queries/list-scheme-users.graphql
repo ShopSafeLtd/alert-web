@@ -22,5 +22,13 @@ query ListSchemeUsers(
       id
       name
     }
+    schemes {
+      id
+      role
+    }
+    approverGroups {
+      id
+      name
+    }
   }
 }

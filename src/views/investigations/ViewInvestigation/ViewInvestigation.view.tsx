@@ -1,10 +1,13 @@
 import React from 'react';
-import { Badge, Drawer, Tabs, Typography } from 'antd';
-import AddExistingOffender from 'components/form-components/Investigation/AddExistingOffender';
-import AddExistingVehicle from 'components/form-components/Investigation/AddExistingVehicle';
-import LinkIncident from 'components/form-components/Investigation/AddIncident/LinkIncident.container';
-import AddExistingCrimeGroup from 'components/form-components/Investigation/AddExistingCrimeGroup';
+import { Badge, Button, Drawer, Tabs, Tooltip, Typography } from 'antd';
+
 import { createUseStyles } from 'react-jss';
+import LinkVehicle from 'components/form-components/linkOptions/LinkVehicle';
+import LinkCrimeGroup from 'components/form-components/linkOptions/LinkCrimeGroup';
+import AddExistingOffender from 'components/form-components/offender/offender/AddExistingOffender';
+import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
+import { faBell, faBellSlash } from '@fortawesome/pro-light-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { ViewInvestigationQuery } from '../../../graphql/generated';
 import Flow from './views/Flow/Flow.container';
 import ViewDetails from './views/Details';
@@ -31,6 +34,11 @@ interface Props {
   crimeGroupIds: string[];
   incidentIds: string[];
   demId: string | undefined | null;
+  submitOffender: (value: string) => void;
+  submitVehicle: (value: string) => void;
+  submitCrimeGroup: (value: string) => void;
+  submitIncident: (value: string) => void;
+  toggleSubscribe: () => void;
 }
 
 const useStyles = createUseStyles({
@@ -68,13 +76,43 @@ const ViewInvestigation = ({
   toggleAddDocument,
   addDocument,
   toggleAddDemDocument,
+  submitOffender,
+  submitVehicle,
+  submitCrimeGroup,
+  submitIncident,
+  toggleSubscribe,
 }: Props) => {
   const classes = useStyles();
 
   return (
     <div style={{ height: '100vh' }}>
       <div className={classes.sideListContent}>
-        <Tabs>
+        <Tabs
+          tabBarExtraContent={
+            <Tooltip
+              title={
+                data?.investigation?.subscribed
+                  ? 'Stop getting notified about updates.'
+                  : 'Get notified about updates.'
+              }
+            >
+              <Button
+                onClick={toggleSubscribe}
+                type="text"
+                color={data?.investigation?.subscribed ? undefined : 'danger'}
+              >
+                <FontAwesomeIcon
+                  size="1x"
+                  style={{ marginRight: 8 }}
+                  icon={data?.investigation?.subscribed ? faBellSlash : faBell}
+                />
+                {data?.investigation?.subscribed
+                  ? 'Un-follow Updates'
+                  : 'Follow Updates'}
+              </Button>
+            </Tooltip>
+          }
+        >
           <Tabs.TabPane key="Dashboard" tab="Details">
             <ViewDetails
               toggleAddExistingOffender={toggleAddExistingOffender}
@@ -122,6 +160,7 @@ const ViewInvestigation = ({
           <AddExistingOffender
             offenderIds={offenderIds}
             onClose={toggleAddExistingOffender}
+            update={(submitData) => submitOffender(submitData.id)}
           />
         ) : (
           <div />
@@ -135,9 +174,10 @@ const ViewInvestigation = ({
         zIndex={1001}
       >
         {addExistingVehicle ? (
-          <AddExistingVehicle
-            vehicleIds={vehicleIds}
+          <LinkVehicle
+            update={(submitData) => submitVehicle(submitData.id)}
             onClose={toggleAddExistingVehicle}
+            vehicleIds={vehicleIds}
           />
         ) : (
           <div />
@@ -151,7 +191,8 @@ const ViewInvestigation = ({
         zIndex={1001}
       >
         {addExistingVehicle ? (
-          <AddExistingCrimeGroup
+          <LinkCrimeGroup
+            update={(submitData) => submitCrimeGroup(submitData.id)}
             crimeGroupIds={crimeGroupIds}
             onClose={toggleAddExistingCrimeGroup}
           />
@@ -170,6 +211,7 @@ const ViewInvestigation = ({
           <LinkIncident
             incidentIds={incidentIds}
             onClose={toggleAddExistingIncident}
+            update={(submitData) => submitIncident(submitData.id)}
           />
         ) : (
           <div />

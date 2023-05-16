@@ -2,6 +2,7 @@ query currentUser {
   currentUser {
     id
     fullName
+    origName
     email
     reference
     demId
@@ -29,10 +30,12 @@ query currentUser {
         darkLogo {
           optimisedPersisted
         }
+        userTodos
         id
         name
         autoApproveIncidents
         autoApproveOffenders
+        defaultPublicOffenderDOB
       }
     }
     incidentEmail

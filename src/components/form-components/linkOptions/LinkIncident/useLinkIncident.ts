@@ -1,9 +1,8 @@
 import { useState } from 'react';
-
 import type { ListIncidentsQuery } from 'graphql/generated';
 import { QueryMode, SortOrder, useListIncidentsQuery } from 'graphql/generated';
-
 import { useStoreActions, useStoreState } from 'state';
+import type { IncidentCardData } from 'types/DataType';
 
 interface Incident {
   incident: Exclude<
@@ -13,7 +12,7 @@ interface Incident {
 }
 interface Props {
   onClose: () => void;
-  update?: (value: string) => void;
+  update?: (value: IncidentCardData) => void;
   incidentIds: string[] | undefined;
   getIncident?: (value: Incident) => void;
 }
@@ -67,6 +66,11 @@ const useLinkIncident = ({
             },
           },
           {
+            reference: {
+              equals: Number(variables.search),
+            },
+          },
+          {
             createdBy: {
               OR: [
                 {
@@ -116,9 +120,19 @@ const useLinkIncident = ({
   };
   const onSubmit = () => {
     setSaving(true);
-    if (selected) {
+    const selectedData = data?.listIncidents?.incidents.find(
+      ({ id }) => id === selected
+    );
+    if (selectedData) {
       if (update) {
-        update(selected);
+        update({
+          id: selectedData.id,
+          description: selectedData.description,
+          images: selectedData.images,
+          dayTime: selectedData.dayTime,
+          reference: selectedData.reference,
+          subject: selectedData.subject,
+        });
       }
       if (getIncident) {
         const incident = data?.listIncidents?.incidents?.find(

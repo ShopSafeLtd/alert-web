@@ -16,8 +16,7 @@ const FeedItems = (): JSX.Element => {
     onArticlePaginationChange,
     search,
     setSearch,
-    unapprovedIncidents,
-    unapprovedIncidentsLoading,
+
     // updateIncidentList,
     // onNavigate,
     onDeleteFeedItem,
@@ -53,8 +52,6 @@ const FeedItems = (): JSX.Element => {
       onArticlePaginationChange={onArticlePaginationChange}
       search={search}
       setSearch={setSearch}
-      unapprovedIncidents={unapprovedIncidents}
-      unapprovedIncidentsLoading={unapprovedIncidentsLoading}
       onDeleteFeedItem={onDeleteFeedItem}
       saving={saving}
       adminRights={adminRights}

@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import type {
-  CreateGroupMutation,
-  ListSchemeUsersQuery,
-} from 'graphql/generated';
+import type { CreateGroupMutation } from 'graphql/generated';
 import {
+  Role,
   useCreateGroupMutation,
   useListSchemeUsersQuery,
   SortOrder,
@@ -11,11 +9,14 @@ import {
 import { notification } from 'antd';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
+import type { SelectOptions } from 'types/DataType';
+import errorNotification from 'types/error_notification';
 
-interface FormData {
+export interface FormData {
   name: string;
   description: string;
   users: string[];
+  approvers: string[];
 }
 
 interface Props {
@@ -25,14 +26,18 @@ interface Props {
 
 interface Return {
   onSubmit: (value: FormData) => void;
-  usersData: ListSchemeUsersQuery | undefined;
+  usersData: SelectOptions[] | undefined;
   usersLoading: boolean;
+  adminUsersData: SelectOptions[] | undefined;
   saving: boolean;
+  selectedUsers: string[] | undefined;
+  setSelectedUsers: (value: string[]) => void;
 }
 
 const useAddGroup = ({ onClose, update }: Props): Return => {
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState<string[]>();
 
   const { data: usersData, loading: usersLoading } = useListSchemeUsersQuery({
     fetchPolicy: 'cache-and-network',
@@ -56,7 +61,7 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
         },
       },
       orderBy: {
-        fullName: SortOrder.Desc,
+        fullName: SortOrder.Asc,
       },
     },
   });
@@ -73,11 +78,7 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
     update,
   });
@@ -90,6 +91,10 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
           name: data.name,
           description: data.description,
           users: { connect: data.users.map((id) => ({ id })) },
+          approver:
+            data.approvers && data.approvers.length > 0
+              ? { connect: data.approvers.map((id) => ({ id })) }
+              : undefined,
           scheme: {
             connect: {
               id: schemeId,
@@ -102,9 +107,20 @@ const useAddGroup = ({ onClose, update }: Props): Return => {
 
   return {
     onSubmit,
-    usersData,
+    usersData: usersData?.users.map((user) => ({
+      value: user.id,
+      label: user.fullName,
+    })),
+    adminUsersData: usersData?.users
+      .filter((user) => user.schemes[0].role === Role.SchemeAdmin)
+      .map((user) => ({
+        value: user.id,
+        label: user.fullName,
+      })),
     usersLoading,
     saving,
+    selectedUsers,
+    setSelectedUsers,
   };
 };
 export default useAddGroup;

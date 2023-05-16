@@ -14,18 +14,15 @@ import {
   Tooltip,
   Upload,
 } from 'antd';
-import type {
-  ListCrimeGroupsQuery,
-  ListIncidentsQuery,
-} from 'graphql/generated';
+import type { ListCrimeGroupsQuery } from 'graphql/generated';
 import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
-import LinkOffender from 'components/form-components/incident/offender/AddExistingOffender';
+import LinkOffender from 'components/form-components/offender/offender/AddExistingOffender';
 import LinkIncident from 'components/form-components/linkOptions/LinkIncident';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash } from '@fortawesome/pro-light-svg-icons';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
 import WatermarkImage from 'components/images/WatermarkImage.view';
-import type { VehicleData } from 'types/DataType';
+import type { IncidentCardData, VehicleData } from 'types/DataType';
 import useStyles from './AddVehicle.styles';
 
 const { confirm } = Modal;
@@ -37,17 +34,13 @@ interface Props {
   CrimeGroupsLoading: boolean;
   saving?: boolean;
   offendersData: OffenderData[];
-  incidentsData:
-    | Exclude<
-        ListIncidentsQuery['listIncidents'],
-        undefined | null
-      >['incidents'];
+  incidentsData: IncidentCardData[];
   linkIncident: boolean;
   linkOffender: boolean;
   toggleLinkIncident: () => void;
   toggleLinkOffender: () => void;
   updateOffendersList: (value: OffenderData) => void;
-  updateIncidentList: (value: string) => void;
+  updateIncidentList: (value: IncidentCardData) => void;
   removeOffender: (value: string | undefined) => void;
   removeIncident: (value: string | undefined) => void;
   adminRights: boolean;
@@ -326,26 +319,6 @@ const AddVehicle = ({
               pagination={false}
               size="small"
             />
-            {/* {adminRights && (
-              <Row gutter={16} style={{ marginTop: 5 }}>
-                <Col flex={1} />
-                <Col>
-                  <Button
-                    onClick={toggleLinkOffender}
-                    disabled={saving || linkOffender}
-                    icon={
-                      <FontAwesomeIcon
-                        className="button-icon"
-                        icon={faPlus}
-                        size="lg"
-                      />
-                    }
-                  >
-                    Link Offender
-                  </Button>
-                </Col>
-              </Row>
-            )} */}
           </>
         ) : null}
 

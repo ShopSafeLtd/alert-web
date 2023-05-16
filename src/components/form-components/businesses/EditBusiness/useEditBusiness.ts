@@ -98,6 +98,17 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
   });
 
   const onSubmit = (values: OnSubmitValues) => {
+    const getParent = () => {
+      if (values.parent)
+        return {
+          connect: {
+            id: values.parent.value,
+          },
+        };
+      if (data?.business?.parent?.id) return { disconnect: true };
+      return undefined;
+    };
+
     updateBusiness({
       variables: {
         where: {
@@ -106,13 +117,7 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
         data: {
           name: { set: values.name },
           publicName: values.publicName,
-          parent: values.parent.value
-            ? {
-                connect: {
-                  id: values.parent.value,
-                },
-              }
-            : undefined,
+          parent: getParent(),
           location: {
             where: {
               id: data?.business?.locations[0]?.id,
@@ -134,12 +139,14 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
           fullName: values.name,
           publicName: values.publicName,
           totalUsers: 0,
-          parent: {
-            id: values.parent.value,
-            name: values.parent.label,
-            fullName: values.parent.label,
-            publicName: values.publicName,
-          },
+          parent: values.parent
+            ? {
+                id: values.parent.value,
+                name: values.parent.label,
+                fullName: values.parent.label,
+                publicName: values.publicName,
+              }
+            : undefined,
           locations: [
             {
               id: `${Math.random()}`,
@@ -184,6 +191,7 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
           ? response.data.listBusinesses.businesses.map((item) => ({
               label: item?.name || '',
               value: item?.id || '',
+              location: item?.locations[0].full || '',
             }))
           : [
               {

@@ -26,6 +26,11 @@ const ViewCustomer: React.FC = () => {
     toggleAddDemDocument,
     addDemDocument,
     demId,
+    submitOffender,
+    submitVehicle,
+    submitCrimeGroup,
+    submitIncident,
+    toggleSubscribe,
   } = useViewCustomer(id || '');
   return (
     <View
@@ -47,6 +52,11 @@ const ViewCustomer: React.FC = () => {
       addExistingVehicle={addExistingVehicle}
       offenderIds={offenderIds}
       incidentIds={incidentIds}
+      submitOffender={submitOffender}
+      submitVehicle={submitVehicle}
+      submitCrimeGroup={submitCrimeGroup}
+      submitIncident={submitIncident}
+      toggleSubscribe={toggleSubscribe}
     />
   );
 };

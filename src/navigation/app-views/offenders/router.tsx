@@ -1,10 +1,10 @@
 import React from 'react';
-import { Routes, Route } from 'react-router';
-import OffenderFeed from 'views/Profiles/offenders/OffenderFeed';
-import ViewOffender from 'views/Profiles/offenders/ViewOffender';
-import AddOffender from 'views/Profiles/offenders/AddOffender';
-import EditOffender from 'views/Profiles/offenders/EditOffender';
-import CompareOffender from 'views/Profiles/offenders/CompareOffender';
+import { Route, Routes } from 'react-router';
+import OffenderFeed from 'views/profiles/offenders/OffenderFeed';
+import ViewOffender from 'views/profiles/offenders/ViewOffender';
+import AddOffender from 'views/profiles/offenders/AddOffender';
+import EditOffender from 'views/profiles/offenders/EditOffender';
+import CompareOffender from 'views/profiles/offenders/CompareOffender';
 
 const Offenders = (): JSX.Element => (
   <Routes>

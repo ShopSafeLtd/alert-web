@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import {
   ListIncidentsQuery,
   QueryMode,
   SortOrder,
+  useListIncidentsFlowLazyQuery,
   useListIncidentsQuery,
 } from 'graphql/generated';
 
@@ -14,6 +15,7 @@ import { Incident } from 'components/react-flow/nodes/list-incidents-node';
 interface Props {
   onClose: () => void;
   onSelect: (incidents: Incident[]) => void;
+  ids?: string[];
 }
 
 interface Return {
@@ -24,13 +26,15 @@ interface Return {
   search: string;
   setSearch: (value: string) => void;
   onPaginationChange: (page: number, pageSize: number) => void;
+  selectedRowKeys: React.Key[];
+
   onChange: (
     selectedRowKeys: React.Key[],
     selectedRows: IncidentTable[]
   ) => void;
 }
 
-const useLinkIncident = ({ onClose, onSelect }: Props): Return => {
+const useLinkIncident = ({ onClose, onSelect, ids }: Props): Return => {
   const [saving, setSaving] = useState(false);
   const [selected, setSelected] = useState<string | undefined>();
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -41,6 +45,7 @@ const useLinkIncident = ({ onClose, onSelect }: Props): Return => {
     (actions) => actions.data.setIncidents
   );
   const [selectedRowsData, setSelectedRowsData] = useState<IncidentTable[]>([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const { data, loading } = useListIncidentsQuery({
     variables: {
       scheme: {
@@ -85,7 +90,18 @@ const useLinkIncident = ({ onClose, onSelect }: Props): Return => {
       },
     },
     fetchPolicy: 'cache-and-network',
+    onCompleted: (data) => {
+      if (ids && data && data.listIncidents && data.listIncidents.incidents) {
+        setSelectedRowKeys(ids);
+      }
+    },
   });
+
+  // const setInitialSelected = useCallback(() => {
+  //   if (ids && data && data.listIncidents && data.listIncidents.incidents) {
+  //     setSelectedRowKeys(ids);
+  //   }
+  // }, [data, ids]);
 
   const onPaginationChange = (page: number) => {
     setIncidentsState({
@@ -107,23 +123,42 @@ const useLinkIncident = ({ onClose, onSelect }: Props): Return => {
       order,
     });
   };
-  const onSubmit = () => {
-    setSaving(true);
-    onSelect(
-      selectedRowsData.map((row) => ({
-        dayTime: row?.date || '',
-        description: row?.subject || '',
-      }))
-    );
 
-    setSaving(false);
-    onClose();
-  };
+  const [getIncidentData] = useListIncidentsFlowLazyQuery({
+    onCompleted: (data) => {
+      onSelect(
+        data.incidents.map((row) => ({
+          dayTime: row?.dayTime || '',
+          description: row?.subject || '',
+          id: row?.id || '',
+        }))
+      );
+      setSaving(false);
+      onClose();
+    },
+    onError: () => {
+      setSaving(false);
+    },
+  });
+
+  const onSubmit = useCallback(() => {
+    setSaving(true);
+    getIncidentData({
+      variables: {
+        where: {
+          id: {
+            in: selectedRowKeys as string[],
+          },
+        },
+      },
+    });
+  }, [selectedRowKeys]);
 
   const onChange = (
     selectedRowKeys: React.Key[],
     selectedRows: IncidentTable[]
   ) => {
+    setSelectedRowKeys(selectedRowKeys);
     setSelectedRowsData(selectedRows);
   };
   return {
@@ -135,6 +170,7 @@ const useLinkIncident = ({ onClose, onSelect }: Props): Return => {
     setSearch,
     onPaginationChange,
     onChange,
+    selectedRowKeys,
   };
 };
 

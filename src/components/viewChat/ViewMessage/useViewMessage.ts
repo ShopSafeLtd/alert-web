@@ -25,8 +25,6 @@ import {
   useCreateMessageMutation,
   useDeleteChatMutation,
   useDeleteMessageMutation,
-  useListCrimeGroupsQuery,
-  useListIncidentsQuery,
   UserChatsDocument,
 } from 'graphql/generated';
 import { useStoreState } from 'state';
@@ -40,9 +38,10 @@ import moment from 'moment';
 import update from 'immutability-helper';
 import type {
   CrimeGroupData,
-  IncidentsData,
+  IncidentCardData,
   VehicleData,
 } from 'types/DataType';
+import errorNotification from 'types/error_notification';
 
 const { confirm } = Modal;
 const { getMentions } = Mentions;
@@ -85,7 +84,7 @@ export interface OffenderData {
 
 interface MemberData {
   id: string;
-  fullName: string;
+  origName: string;
   businesses: { id: string; name: string }[];
   firstLetter?: string | null;
 }
@@ -115,7 +114,7 @@ interface Return {
   beforeUpload: (value: RcFile) => void;
   fileList: UploadFile[];
   offendersData: OffenderData[];
-  incidentsData: IncidentsData;
+  incidentsData: IncidentCardData[];
   crimeGroupsData: CrimeGroupData[];
   vehiclesData: VehicleData[];
   linkIncident: boolean;
@@ -127,9 +126,9 @@ interface Return {
   toggleLinkVehicle: () => void;
   toggleLinkCrimeGroup: () => void;
   updateOffendersList: (value: OffenderData) => void;
-  updateIncidentList: (value: string) => void;
+  updateIncidentList: (value: IncidentCardData) => void;
   updateVehicleList: (value: VehicleData) => void;
-  updateCrimeGroupList: (value: string) => void;
+  updateCrimeGroupList: (value: CrimeGroupData) => void;
   removeOffender: (value: string | undefined) => void;
   removeIncident: (value: string | undefined) => void;
   removeCrimeGroup: (value: string | undefined) => void;
@@ -143,20 +142,12 @@ interface Return {
   setMessageSent: (value: boolean) => void;
 }
 
-// TODO: create generic and import it as this is used a lot
-const errorNotification = () =>
-  notification.error({
-    message: 'Error!',
-    description: 'Whoops, there are some errors. Please try again. ',
-    placement: 'bottomRight',
-  });
-
 const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const apolloStore = useApolloClient();
 
   const role = useStoreState((state) => state.user.role);
   const userId = useStoreState((state) => state.user.id);
-  const userFullName = useStoreState((state) => state.user.fullName);
+  const userOrigName = useStoreState((state) => state.user.origName);
   const schemeId = useStoreState((state) => state.scheme.id);
   const navigate = useNavigate();
 
@@ -183,7 +174,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     { id: string; value: string }[]
   >([]);
 
-  const [incidentsData, setIncidentsData] = useState<IncidentsData>([]);
+  const [incidentsData, setIncidentsData] = useState<IncidentCardData[]>([]);
   const [crimeGroupsData, setCrimeGroupsData] = useState<CrimeGroupData[]>([]);
   const [vehiclesData, setVehiclesData] = useState<VehicleData[]>([]);
 
@@ -226,49 +217,23 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
             .map((member, i, arr) => {
               const arrBeforeMember = arr
                 .slice(0, i)
-                .map(({ fullName }) => fullName);
-              if (arrBeforeMember.includes(member.fullName)) {
+                .map(({ origName }) => origName);
+              if (arrBeforeMember.includes(member.origName)) {
                 const { length } = arrBeforeMember.filter(
-                  (item) => item === member.fullName
+                  (item) => item === member.origName
                 );
                 return {
                   ...member,
-                  fullName: `${member.fullName.replace(' ', '_')}_${length}`,
+                  origName: `${member.origName.replace(' ', '_')}_${length}`,
                 };
               }
               return {
                 ...member,
-                fullName: member.fullName.replace(' ', '_'),
+                origName: member.origName.replace(' ', '_'),
               };
             })
         );
       }
-    },
-  });
-
-  const { data: listIncidentsData } = useListIncidentsQuery({
-    variables: {
-      scheme: {
-        id: schemeId,
-      },
-      order: {
-        createdAt: SortOrder.Desc,
-      },
-    },
-    fetchPolicy: 'cache-and-network',
-  });
-  const { data: listCrimeGroupsData } = useListCrimeGroupsQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      where: {
-        schemes: {
-          some: {
-            id: {
-              equals: schemeId,
-            },
-          },
-        },
-      },
     },
   });
 
@@ -636,28 +601,14 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
       setOffendersData([...offendersData, selectedOffender]);
     }
   };
-  const updateIncidentList = (selectedIncidentId: string) => {
-    if (
-      listIncidentsData?.listIncidents?.incidents &&
-      listIncidentsData.listIncidents.total > 0
-    ) {
-      const selectedIncident =
-        listIncidentsData?.listIncidents?.incidents.filter(
-          ({ id }) => id === selectedIncidentId
-        );
-      setIncidentsData([...(<[]>incidentsData), ...selectedIncident]);
+  const updateIncidentList = (selectedIncident: IncidentCardData) => {
+    if (selectedIncident) {
+      setIncidentsData([...incidentsData, selectedIncident]);
     }
   };
-  const updateCrimeGroupList = (selectedCrimeGroupId: string) => {
-    if (
-      listCrimeGroupsData?.listCrimeGroups?.crimeGroups &&
-      listCrimeGroupsData.listCrimeGroups.total > 0
-    ) {
-      const selectedCrimeGroup =
-        listCrimeGroupsData?.listCrimeGroups?.crimeGroups.filter(
-          ({ id }) => id === selectedCrimeGroupId
-        );
-      setCrimeGroupsData([...crimeGroupsData, ...selectedCrimeGroup]);
+  const updateCrimeGroupList = (selectedCrimeGroup: CrimeGroupData) => {
+    if (selectedCrimeGroup) {
+      setCrimeGroupsData([...crimeGroupsData, selectedCrimeGroup]);
     }
   };
   const updateVehicleList = (selectedVehicle: VehicleData) => {
@@ -768,12 +719,12 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
     // eslint-disable-next-line no-restricted-syntax
     for (const mention of mentions) {
       const mentioned = membersData?.find(
-        (member) => mention.value === member.fullName
+        (member) => mention.value === member.origName
       );
       if (mentioned)
         newText = newText.replace(
           `@${mention.value}`,
-          `@[${mentioned.fullName}](${mentioned.id})`
+          `@[${mentioned.origName}](${mentioned.id})`
         );
     }
 
@@ -870,7 +821,20 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                     .filter((obj) => obj.url !== undefined)
                 : [],
             incidents:
-              incidentsData && incidentsData.length > 0 ? incidentsData : [],
+              incidentsData && incidentsData.length > 0
+                ? incidentsData.map((incident) => ({
+                    id: incident.id,
+                    images:
+                      incident.images?.map((image) => ({
+                        ...image,
+                        position: ImagePosition.CenterCenter,
+                      })) || [],
+                    reference: incident.reference,
+                    subject: incident.subject,
+                    description: incident.description,
+                    dayTime: incident.dayTime,
+                  }))
+                : [],
             offenders:
               offendersData && offendersData.length > 0
                 ? offendersData.map((offender) => ({
@@ -889,17 +853,40 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                     race: offender.race,
                   }))
                 : [],
-            vehicles: [],
-            crimeGroups: [],
+            vehicles:
+              incidentsData && vehiclesData.length > 0
+                ? vehiclesData.map((vehicle) => ({
+                    id: vehicle.id,
+                    images:
+                      vehicle.images?.map((image) => ({
+                        ...image,
+                        position: ImagePosition.CenterCenter,
+                      })) || [],
+                    reference: vehicle.reference,
+                    registration: vehicle.registration,
+                    colour: vehicle.colour,
+                    make: vehicle.make,
+                    model: vehicle.model,
+                  }))
+                : [],
+            crimeGroups:
+              crimeGroupsData && crimeGroupsData.length > 0
+                ? crimeGroupsData.map((crimeGroup) => ({
+                    id: crimeGroup.id,
+                    reference: crimeGroup.reference,
+                    alias: crimeGroup.alias,
+                    totalOffenders: crimeGroup.totalOffenders,
+                  }))
+                : [],
             sent: false,
             type: MessageItemType.Message,
             currentUser: true,
             formattedDateTime: moment().format('HH:mm'),
             from: {
-              fullName: userFullName,
+              fullName: userOrigName,
               id: userId,
-              firstLetter: userFullName.slice(1)[0],
-              origName: userFullName,
+              firstLetter: userOrigName.slice(1)[0],
+              origName: userOrigName,
             },
             paddingTop: true,
             showUser: false,

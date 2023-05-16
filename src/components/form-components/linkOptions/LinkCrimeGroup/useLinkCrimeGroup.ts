@@ -8,16 +8,16 @@ import {
 } from 'graphql/generated';
 
 import { useStoreActions, useStoreState } from 'state';
-import type { CrimeGroupCardData } from 'types/DataType';
+import type { CrimeGroupData } from 'types/DataType';
 
 // interface CrimeGroup {
-//   crimeGroup: CrimeGroupCardData;
+//   crimeGroup: CrimeGroupData;
 // }
 interface Props {
   onClose: () => void;
-  update?: (value: string) => void;
+  update?: (value: CrimeGroupData) => void;
   crimeGroupIds: string[] | undefined;
-  getCrimeGroup?: (value: { crimeGroup: CrimeGroupCardData }) => void;
+  getCrimeGroup?: (value: { crimeGroup: CrimeGroupData }) => void;
 }
 
 interface Return {
@@ -108,9 +108,17 @@ const useLinkCrimeGroup = ({
   };
   const onSubmit = () => {
     setSaving(true);
-    if (selected) {
+    const selectedData = data?.listCrimeGroups?.crimeGroups.find(
+      ({ id }) => id === selected
+    );
+    if (selectedData) {
       if (update) {
-        update(selected);
+        update({
+          id: selectedData.id,
+          reference: selectedData.reference,
+          alias: selectedData.alias,
+          totalOffenders: selectedData.totalOffenders || 0,
+        });
       }
       if (getCrimeGroup) {
         const crimeGroup = data?.listCrimeGroups?.crimeGroups?.find(

@@ -7,6 +7,7 @@ import UserDetail from '../UserDetail.view';
 describe('Detail Officer View', () => {
   const data = {
     user: {
+      approverGroups: [],
       id: 'test UserId',
       fullName: 'test user',
       businesses: [],

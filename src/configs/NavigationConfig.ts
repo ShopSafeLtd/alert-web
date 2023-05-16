@@ -2,6 +2,7 @@ import { APP_PREFIX_PATH } from 'configs/AppConfig';
 import {
   faAddressCard,
   faBuilding,
+  faCalendarCheck,
   faCar,
   faChalkboard,
   faCircleExclamation,
@@ -33,6 +34,7 @@ export interface MenuItem {
   icon?: any;
   breadcrumb: boolean;
   roles?: Role[];
+  badge?: boolean;
 }
 
 export interface SubMenuItem extends MenuItem {
@@ -54,6 +56,16 @@ const userOnlyItems: NavItem[] = [
     breadcrumb: false,
     submenu: [],
     roles: [Role.User, Role.ContentAdmin, Role.SchemeAdmin, Role.ShopsafeAdmin],
+  },
+  {
+    key: 'adminTodo',
+    path: `${APP_PREFIX_PATH}/adminTodo`,
+    title: 'Admin To-Do',
+    icon: faCalendarCheck,
+    breadcrumb: false,
+    submenu: [],
+    roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
+    badge: true,
   },
   {
     key: 'incidents',
@@ -208,7 +220,7 @@ const adminOnlyItems: NavItem[] = [
         submenu: [],
       },
       {
-        key: 'business engagement',
+        key: 'business-engagement',
         path: `${APP_PREFIX_PATH}/reports/business-engagement`,
         title: 'Business Engagement',
         icon: faBuilding,
@@ -224,7 +236,7 @@ const adminOnlyItems: NavItem[] = [
         submenu: [],
       },
       {
-        key: 'crime-groups',
+        key: 'crime-groups-report',
         path: `${APP_PREFIX_PATH}/reports/crime-groups`,
         title: 'Crime Groups',
         icon: faPeopleGroup,

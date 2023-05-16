@@ -124,6 +124,7 @@ const OffenderProfile = ({
           })
         )}
         pagination={{
+          hideOnSinglePage: true,
           current: currentSearchPage,
           onChange: onSearchPageChange,
           total: searchOffendersData?.listOffenders?.total,

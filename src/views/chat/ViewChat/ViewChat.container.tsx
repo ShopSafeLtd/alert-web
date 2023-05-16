@@ -4,7 +4,7 @@ import View from './ViewChat.view';
 import useViewChat from './useViewChat';
 
 const ViewChat = (): JSX.Element => {
-  const chatId = useParams().id;
+  const chatId = useParams().id || '';
   const {
     data,
     saving,
@@ -16,7 +16,7 @@ const ViewChat = (): JSX.Element => {
     updateDeletedUserChat,
     adminRights,
     loading,
-  } = useViewChat();
+  } = useViewChat({ chatId });
 
   return (
     <View

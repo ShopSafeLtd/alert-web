@@ -2,6 +2,8 @@ import type { SelectProps, UploadProps } from 'antd';
 import type {
   ListDocumentsOnSchemeQuery,
   ListDocumentsOnSchemeQueryVariables,
+  ViewInvestigationQuery,
+  ViewInvestigationQueryVariables,
 } from 'graphql/generated';
 import {
   ListDocumentsOnSchemeDocument,
@@ -9,6 +11,7 @@ import {
   useCreateDocumentMutation,
   useCreateTagMutation,
   useTagsQuery,
+  ViewInvestigationDocument,
 } from 'graphql/generated';
 import { useState } from 'react';
 import { useStoreState } from 'state';
@@ -58,6 +61,7 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
       };
       setCategoryIds([...(<[]>categoryIds), newCategoryIds]);
       setCategories([...(<[]>categories), newCategory]);
+      setSelectedCategories([...(<[]>selectedCategories), newCategory]);
     },
   });
 
@@ -169,6 +173,41 @@ const useAddDocument = ({ onClose, investigationId }: Props): Return => {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 // @ts-ignore
 
+                documents: [...oldDocuments, ...newDocuments],
+              },
+            },
+          });
+        }
+      } else if (investigationId) {
+        const existingData = store.readQuery<
+          ViewInvestigationQuery,
+          ViewInvestigationQueryVariables
+        >({
+          query: ViewInvestigationDocument,
+          variables: {
+            where: {
+              id: investigationId,
+            },
+          },
+        });
+        if (existingData && result.data) {
+          const oldDocuments = existingData?.investigation?.documents || [];
+          const newDocuments = [result.data.createDocument];
+          store.writeQuery<
+            ViewInvestigationQuery,
+            ViewInvestigationQueryVariables
+          >({
+            query: ViewInvestigationDocument,
+            variables: {
+              where: {
+                id: investigationId,
+              },
+            },
+            data: {
+              investigation: {
+                ...existingData.investigation,
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 documents: [...oldDocuments, ...newDocuments],
               },
             },

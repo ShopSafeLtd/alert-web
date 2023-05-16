@@ -2,16 +2,18 @@ import React from 'react';
 import { Col, Divider, Pagination, Row, Spin, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import type { ListCrimeGroupsQuery } from 'graphql/generated';
+import SideList from 'components/side-list/SideList.view';
+import SideListItem from 'components/side-list/SideListItem.view';
 import useStyles from './CrimeGroupSideList.styles';
 
-const { Text } = Typography;
+const { Paragraph } = Typography;
 
 interface Props {
   data: ListCrimeGroupsQuery | undefined;
   loading: boolean;
   // eslint-disable-next-line react/require-default-props
   current?: string;
-  to: string;
+  to?: string;
 }
 
 const CrimeGroupSideList = ({
@@ -22,7 +24,7 @@ const CrimeGroupSideList = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   return (
-    <div className={classes.offenderSideList}>
+    <SideList>
       {loading && (
         <div
           style={{
@@ -37,26 +39,35 @@ const CrimeGroupSideList = ({
         </div>
       )}
       {data?.listCrimeGroups?.crimeGroups.map((group) => (
-        <Link to={`${to}`} key={group.id}>
-          <div
-            key={group.id}
-            className={`${classes.offenderItem} ${
-              current === group.id ? 'current' : ''
-            }`}
-          >
+        <Link
+          to={`${to || '/app/crime-groups/view/'}${group.id}`}
+          key={group.id}
+        >
+          <SideListItem key={group.id} current={current === group.id}>
             <Row wrap={false}>
               <Col className={classes.content} flex={1}>
-                <Text
-                  className={classes.name}
-                  strong={current === group.id}
-                  ellipsis
-                >
-                  {group.alias ?? `CG-${group.reference}`}
-                </Text>
+                {group.reference && (
+                  <Paragraph
+                    className={classes.name}
+                    strong={current === group.id}
+                    ellipsis
+                  >
+                    {`CG-${group.reference}`}
+                  </Paragraph>
+                )}
+                {group.alias && (
+                  <Paragraph
+                    className={classes.name}
+                    strong={current === group.id}
+                    ellipsis
+                  >
+                    {group.alias}
+                  </Paragraph>
+                )}
               </Col>
             </Row>
             <Divider className={classes.divider} />
-          </div>
+          </SideListItem>
         </Link>
       ))}
       {!loading && (
@@ -66,7 +77,7 @@ const CrimeGroupSideList = ({
           showSizeChanger={false}
         />
       )}
-    </div>
+    </SideList>
   );
 };
 

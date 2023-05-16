@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table } from 'antd';
+import { Table, Tooltip } from 'antd';
 import { useNavigate } from 'react-router';
 import { createUseStyles } from 'react-jss';
 
@@ -18,14 +18,19 @@ interface Props {
           fullName?: string;
           businesses: Array<{ id: string; name: string }>;
         };
+        location?: {
+          id: string;
+          full?: string | undefined | null;
+        } | null;
       }[];
 
   hasNavigation: boolean;
+  pageSize?: number;
 }
 
 const IncidentTable = ({
   incidents,
-
+  pageSize = 5,
   hasNavigation,
 }: Props): JSX.Element => {
   const classes = useStyles();
@@ -62,6 +67,8 @@ const IncidentTable = ({
           key: 'location',
           title: 'Location',
           dataIndex: 'location',
+          ellipsis: true,
+          render: (value) => <Tooltip title={value}>{value}</Tooltip>,
         },
       ]}
       dataSource={incidents.map((incident) => ({
@@ -70,13 +77,13 @@ const IncidentTable = ({
           (type, index) => `${index > 0 ? ' ' : ''}${type.name}`
         ),
         date: incident.dayTime,
-        location: incident?.createdBy.businesses[0]?.name,
+        location: incident.location?.full,
         key: incident.id,
       }))}
       pagination={
-        incidents && incidents.length > 5
+        incidents && incidents.length > pageSize
           ? {
-              pageSize: 5,
+              pageSize,
             }
           : false
       }

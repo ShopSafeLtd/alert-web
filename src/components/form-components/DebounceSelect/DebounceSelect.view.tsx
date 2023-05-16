@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { SelectProps } from 'antd';
-import { Select, Spin } from 'antd';
+import { Typography, Select, Spin } from 'antd';
 import React, { useMemo, useRef, useState } from 'react';
 import debounce from 'lodash/debounce';
 
@@ -22,7 +22,9 @@ export interface DebounceSelectProps<ValueType = any>
 const DebounceSelect = <
   ValueType extends {
     key?: string;
-    label: React.ReactNode;
+    // label: React.ReactNode;
+    label: string;
+    location?: string;
     value: string | number;
   } = any
 >({
@@ -57,10 +59,30 @@ const DebounceSelect = <
       filterOption={false}
       onSearch={debounceFetcher}
       notFoundContent={fetching ? <Spin size="small" /> : null}
-      options={options}
+      optionFilterProp="label"
+      optionLabelProp="label"
+      // options={options}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
-    />
+    >
+      {options.map((option) => (
+        <Select.Option
+          key={option.value}
+          value={option.value}
+          label={option.label}
+        >
+          <Typography.Text>{option.label}</Typography.Text>
+          {option.location && (
+            <Typography.Paragraph
+              type="secondary"
+              style={{ fontSize: 13, margin: 0 }}
+            >
+              {option.location}
+            </Typography.Paragraph>
+          )}
+        </Select.Option>
+      ))}
+    </Select>
   );
 };
 

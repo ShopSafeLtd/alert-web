@@ -3,10 +3,9 @@ import { useStoreState } from 'state';
 import type {
   Role,
   UserQuery,
-  SchemeGroupsQuery,
-  SchemeChatsQuery,
   SearchBusinessesQuery,
   SearchBusinessesQueryVariables,
+  UserUpdateInput,
 } from 'graphql/generated';
 import {
   SortOrder,
@@ -17,18 +16,19 @@ import {
   SearchBusinessesDocument,
   QueryMode,
 } from 'graphql/generated';
+import type { FormInstance } from 'antd';
 import { notification } from 'antd';
 import { useApolloClient } from '@apollo/client';
+import type { BusinessData, SelectOptions } from 'types/DataType';
+import { useForm } from 'antd/lib/form/Form';
 
-interface FormData {
+export interface FormData {
   fullName: string;
   email: string;
-  business: {
-    value: string;
-    label: string;
-  };
+  businesses: SelectOptions[];
   role: Role;
   groups: string[];
+  approverGroups: string[];
   chats: string[];
   incidentEmail: boolean;
   incidentPush: boolean;
@@ -47,20 +47,33 @@ interface Return {
   onSubmit: (value: FormData) => void;
   data: UserQuery | undefined;
   loading: boolean;
-  groupsData: SchemeGroupsQuery | undefined;
+  groupsData: SelectOptions[] | undefined;
   groupsLoading: boolean;
-  chatsData: SchemeChatsQuery | undefined;
+  chatsData: SelectOptions[] | undefined;
   chatsLoading: boolean;
   saving: boolean;
   onSearchBusiness: (
     value: string
-  ) => Promise<{ label: React.ReactNode; value: string }[]>;
+  ) => Promise<{ label: string; value: string; location?: string }[]>;
+  selectedRole: Role | undefined;
+  setSelectedRole: (value: Role) => void;
+  selectedGroups: string[] | undefined;
+  setSelectedGroups: (value: string[]) => void;
+  form: FormInstance<FormData>;
+  addBusinessVisible: boolean;
+  toggleAddBusinessVisible: () => void;
+  updateNewBusinessData: (values: BusinessData) => void;
 }
 
 const useEditUser = ({ onClose, userId }: Props): Return => {
   const client = useApolloClient();
+  const [form] = useForm<FormData>();
   const schemeId = useStoreState((state) => state.scheme.id);
   const [saving, setSaving] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<Role>();
+  const [selectedGroups, setSelectedGroups] = useState<string[]>();
+  const [addBusinessVisible, setAddBusinessVisible] = useState(false);
+  const [businessesData, setBusinessesData] = useState<BusinessData[]>([]);
 
   const { data: userData, loading } = useUserQuery({
     variables: {
@@ -90,6 +103,10 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
           },
         },
       },
+    },
+    onCompleted: ({ user }) => {
+      setSelectedRole(user?.schemes[0].role);
+      setSelectedGroups(user?.groups.map(({ id }) => id));
     },
   });
 
@@ -147,7 +164,57 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
 
   const onSubmit = (data: FormData) => {
     setSaving(true);
-    if (userId)
+
+    if (userId) {
+      const businessIds = new Set(data.businesses.map(({ value }) => value));
+      const newBusinesses = businessesData
+        ?.filter(({ isNew }) => isNew)
+        .filter(({ id }) => [...businessIds].includes(id));
+
+      const connectedBusinesses = data.businesses.filter(
+        ({ value }) =>
+          !newBusinesses?.some(
+            ({ id: newBusinessId }) => newBusinessId === value
+          )
+      );
+      const getBusiness = (): UserUpdateInput['businesses'] => ({
+        connect:
+          connectedBusinesses && connectedBusinesses.length > 0
+            ? connectedBusinesses.map(({ value }) => ({ id: value }))
+            : undefined,
+        create:
+          newBusinesses && newBusinesses.length > 0
+            ? newBusinesses.map((el) => ({
+                name: el.name,
+                publicName: el.publicName || false,
+                schemes: {
+                  connect: [
+                    {
+                      id: schemeId,
+                    },
+                  ],
+                },
+                parent: el.parent
+                  ? {
+                      connect: {
+                        id: el.parent.id,
+                      },
+                    }
+                  : undefined,
+                locations: {
+                  create: [
+                    {
+                      building: el.locations[0].building || null,
+                      county: el.locations[0].county || null,
+                      postcode: el.locations[0].postcode || '',
+                      street: el.locations[0].street || '',
+                      townCity: el.locations[0].townCity || '',
+                    },
+                  ],
+                },
+              }))
+            : undefined,
+      });
       updateUser({
         variables: {
           where: {
@@ -164,13 +231,7 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
             messagePush: { set: data.messagePush },
             offenderEmail: { set: data.offenderEmail },
             offenderPush: { set: data.offenderPush },
-            businesses: {
-              connect: [
-                {
-                  id: data.business.value,
-                },
-              ],
-            },
+            businesses: getBusiness(),
             schemes: {
               update: [
                 {
@@ -196,6 +257,24 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
                 )
                 .map(({ id }) => ({ id })),
             },
+            approverGroups: data.approverGroups
+              ? {
+                  connect: data.approverGroups
+                    .filter(
+                      (id) =>
+                        !userData?.user?.approverGroups
+                          .map((item) => item.id)
+                          .includes(id)
+                    )
+                    .map((id) => ({ id })),
+                  disconnect: userData?.user?.approverGroups
+                    .filter(
+                      ({ id }) =>
+                        !data.approverGroups.map((item) => item).includes(id)
+                    )
+                    .map(({ id }) => ({ id })),
+                }
+              : undefined,
             chats: {
               create: data.chats
                 .filter(
@@ -237,13 +316,11 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
           },
         },
       });
+    }
   };
 
-  const onSearchBusiness = async (value: string) => {
-    if (value.length < 2) {
-      return [];
-    }
-    return client
+  const onSearchBusiness = async (value: string) =>
+    client
       .query<SearchBusinessesQuery, SearchBusinessesQueryVariables>({
         query: SearchBusinessesDocument,
         variables: {
@@ -264,10 +341,13 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
       })
       .then((response) =>
         response.data.listBusinesses.businesses.length > 0
-          ? response.data.listBusinesses.businesses.map((item) => ({
-              label: `${item?.name} (${item?.locations[0]?.full})`,
-              value: item?.id || '',
-            }))
+          ? [...response.data.listBusinesses.businesses, ...businessesData].map(
+              (item) => ({
+                label: item.name || '',
+                value: item?.id || '',
+                location: item?.locations[0].full || '',
+              })
+            )
           : [
               {
                 label: 'No results found',
@@ -276,18 +356,44 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
               },
             ]
       );
+  const toggleAddBusinessVisible = () => {
+    setAddBusinessVisible(!addBusinessVisible);
   };
-
+  const updateNewBusinessData = (values: BusinessData) => {
+    setAddBusinessVisible(false);
+    const selectedBusinesses = form.getFieldValue('businesses');
+    form.setFieldsValue({
+      businesses: [
+        ...selectedBusinesses,
+        { value: values.id, label: values.name },
+      ],
+    });
+    setBusinessesData([...businessesData, { ...values, isNew: true }]);
+  };
   return {
     onSubmit,
     data: userData,
     loading,
-    groupsData,
+    groupsData: groupsData?.groups.map((group) => ({
+      value: group.id,
+      label: group.name,
+    })),
     groupsLoading,
-    chatsData,
+    chatsData: chatsData?.chats.map((chat) => ({
+      value: chat.id,
+      label: chat.name,
+    })),
     chatsLoading,
     saving,
     onSearchBusiness,
+    selectedRole,
+    setSelectedRole,
+    selectedGroups,
+    setSelectedGroups,
+    form,
+    addBusinessVisible,
+    toggleAddBusinessVisible,
+    updateNewBusinessData,
   };
 };
 

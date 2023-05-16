@@ -38,6 +38,10 @@ query User(
       id
       name
     }
+    approverGroups {
+      id
+      name
+    }
     chats(where: $chatWhere) {
       id
       chat {

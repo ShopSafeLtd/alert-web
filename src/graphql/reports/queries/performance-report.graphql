@@ -1,0 +1,125 @@
+query PerformanceReport($where: UserContributionWhereInput!) {
+  performanceReport(where: $where) {
+    createdDataCounts {
+      crimeGroups
+      incidents
+      messages
+      offenders
+      updates
+      vehicles
+    }
+    incidentSummary {
+      totalIncidents
+      lastIncidentDate
+      incidentsReportedToPolice
+      incidentsWherePoliceAttended
+      mostCommonCrimeType
+    }
+    crimeTypeDonut {
+      label
+      value
+    }
+    involvedTagCountDonut {
+      label
+      value
+    }
+    incidentDayOfWeekLine {
+      label
+      value
+    }
+    lossTotals {
+      totalIncidents
+      totalLostValue
+      totalRecoveredValue
+      averagePerIncident
+      averageSuccessRate
+    }
+    goodsTypeCountDonut {
+      label
+      value
+    }
+    goodsTypeValueDonut {
+      label
+      value
+    }
+  }
+  offendersPerformance(where: $where) {
+    total
+    offenderPerformance {
+      primaryPhoto
+      alertId
+      name
+      totalIncidents
+      totalLostValue
+      totalRecoveredValue
+      totalSuccessRate
+      lastIncidentDate
+    }
+  }
+  businessContribution(where: $where) {
+    businessContributions {
+      name
+      totalUsers
+      totalIncidents
+      totalOffenders
+      totalUpdates
+      totalMessages
+      totalLogins
+      totalSuccessRate
+      totalRecoveredValue
+      totalLostValue
+      mostCommonGoodLost
+      highestTotalValueGoodLost
+      averageLossValue
+    }
+    total
+  }
+  crimeGroupPerformance(where: $where) {
+    crimeGroupPerformance {
+      totalSuccessRate
+      totalRecoveredValue
+      totalOffenders
+      totalLostValue
+      totalIncidents
+      lastIncident
+      alias
+      alertId
+    }
+    total
+  }
+  userContributions(where: $where) {
+    total
+    userContributions {
+      name
+      totalIncidents
+      totalOffenders
+      totalUpdates
+      totalMessages
+      totalLogins
+    }
+  }
+  targetedGoods(where: $where) {
+    targetedGoods {
+      alertId
+      name
+      totalIncidents
+      totalOffenders
+      totalLostValue
+      totalRecoveredValue
+      totalSuccessRate
+      averageLossValue
+    }
+    total
+  }
+  incidentHeatPerformance(where: $where) {
+    total
+    incidents {
+      id
+      location {
+        id
+        geoLat
+        geoLng
+      }
+    }
+  }
+}

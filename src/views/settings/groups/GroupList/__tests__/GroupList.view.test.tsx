@@ -10,6 +10,7 @@ describe('List Officer View', () => {
         id: 'test',
         name: 'test group',
         description: null,
+        approver: [],
       },
     ],
   };

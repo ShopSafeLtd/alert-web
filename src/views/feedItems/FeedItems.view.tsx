@@ -3,7 +3,6 @@ import type {
   FeedItemsQuery,
   ListArticlesQuery,
   ListOffendersQuery,
-  ListUnapprovedIncidentsQuery,
   Model,
 } from 'graphql/generated';
 import { FeedItemType } from 'graphql/generated';
@@ -22,7 +21,6 @@ import {
   Tooltip,
   Typography,
 } from 'antd';
-import moment from 'moment';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -50,6 +48,7 @@ import CrimeGroupFeed from 'components/feedItems/FeedItemSection/CrimeGroupFeed'
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import ArticleSkeletonCard from 'components/feedItems/ArticleSection/ArticleSkeletonCard';
 import FeedItemSkeletonCard from 'components/feedItems/FeedItemSection/FeedItemSkeletonCard';
+import AdminTodos from 'components/feedItems/AdminTodos';
 import useStyles from './FeedItem.styles';
 
 const { Title, Paragraph, Text } = Typography;
@@ -68,8 +67,7 @@ interface Props {
   onArticlePaginationChange: (page: number, pageSize: number) => void;
   search: string;
   setSearch: (value: string) => void;
-  unapprovedIncidents: ListUnapprovedIncidentsQuery | undefined;
-  unapprovedIncidentsLoading: boolean;
+
   onDeleteFeedItem: (value: string) => void;
   saving: boolean;
   adminRights: boolean;
@@ -100,8 +98,7 @@ const FeedItem = ({
   pagination,
   search,
   setSearch,
-  unapprovedIncidents,
-  unapprovedIncidentsLoading,
+
   onDeleteFeedItem,
   saving,
   adminRights,
@@ -121,9 +118,7 @@ const FeedItem = ({
   gallery,
   setGallery,
   setCreatedAtFilter,
-}: // updateIncidentList,
-// onNavigate,
-Props): JSX.Element => {
+}: Props): JSX.Element => {
   const classes = useStyles();
 
   return (
@@ -383,7 +378,6 @@ Props): JSX.Element => {
           )}
         </Col>
         <Col span={15} xxl={16} xl={15}>
-          {/* <IncidentSkeletonCard /> */}
           <Card style={{ height: 190, marginBottom: 15 }}>
             <Title
               level={4}
@@ -426,7 +420,6 @@ Props): JSX.Element => {
                           <Link to={`/app/offenders/view/${offender.id}`}>
                             <Card
                               // onClick={() => setAddRecentOffender(offender)}
-                              className="offender-card"
                               style={{ border: 0 }}
                               bodyStyle={{
                                 width: 120,
@@ -458,9 +451,6 @@ Props): JSX.Element => {
                                 className={classes.offenderParagraph}
                                 style={{
                                   top: 0,
-                                  left: 0,
-                                  right: 0,
-                                  margin: 0,
                                 }}
                               >
                                 Alert ID: {offender.reference}
@@ -468,10 +458,7 @@ Props): JSX.Element => {
                               <Paragraph
                                 className={classes.offenderParagraph}
                                 style={{
-                                  bottom: 0,
-                                  left: 0,
-                                  right: 0,
-                                  margin: 0,
+                                  bottom: -15,
                                 }}
                               >
                                 {offender.name}
@@ -505,7 +492,7 @@ Props): JSX.Element => {
           </Card>
 
           <Row gutter={12} style={{ height: 'calc(60vh)' }}>
-            <Col span={12} xxl={16} xl={12} style={{ height: '100%' }}>
+            <Col span={adminRights ? 12 : 24} style={{ height: '100%' }}>
               <Card
                 bodyStyle={{
                   padding: 0,
@@ -581,133 +568,8 @@ Props): JSX.Element => {
               </Card>
             </Col>
             {adminRights && (
-              <Col span={12} xxl={8} xl={12} style={{ height: '100%' }}>
-                <Card
-                  bodyStyle={{
-                    paddingRight: 0,
-                    paddingLeft: 0,
-                    paddingTop: 15,
-                    overflow: 'auto',
-                    height: 'calc(100vh - 300px)',
-                  }}
-                >
-                  <Title
-                    style={{
-                      marginRight: 20,
-                      marginLeft: 20,
-                      marginBottom: 10,
-                      fontSize: 16,
-                    }}
-                    level={4}
-                  >
-                    Awaiting Approval
-                  </Title>
-                  {unapprovedIncidentsLoading ? (
-                    Array.from({ length: 5 }).map((_, index) => (
-                      // eslint-disable-next-line react/no-array-index-key
-                      <FeedItemSkeletonCard key={index} />
-                    ))
-                  ) : (
-                    <div
-                      style={{
-                        display: 'flex',
-                        width: '100%',
-                        flexDirection: 'column',
-                        height: 'calc(100vh - 370px)',
-                      }}
-                    >
-                      <Divider style={{ marginTop: 0, marginBottom: 0 }} />
-                      {unapprovedIncidents?.listIncidents?.total ? (
-                        unapprovedIncidents?.listIncidents?.incidents.map(
-                          (incident) => (
-                            <Link
-                              to={`/app/incidents/review/${incident.id}`}
-                              key={incident.id}
-                            >
-                              <div style={{ padding: '10px 20px' }}>
-                                <div style={{ marginBottom: 10 }}>
-                                  <Text style={{ fontSize: 14 }} strong>
-                                    Incident submitted{' '}
-                                    {moment(incident.date).fromNow()} by{' '}
-                                    {incident.createdBy.fullName}.
-                                  </Text>
-                                </div>
-                                <Row wrap={false} style={{ marginTop: 10 }}>
-                                  {incident.images.length > 0 && (
-                                    <Col style={{ marginRight: 10 }}>
-                                      <div
-                                        style={{
-                                          width: 80,
-                                          height: 80,
-                                          borderRadius: 5,
-                                        }}
-                                      >
-                                        <WatermarkImage
-                                          url={incident.images[0]?.optimised}
-                                        />
-                                      </div>
-                                    </Col>
-                                  )}
-                                  <Col>
-                                    <div>
-                                      <Title
-                                        level={4}
-                                        style={{
-                                          fontSize: 16,
-                                          marginBottom: 2,
-                                        }}
-                                        ellipsis
-                                      >
-                                        {incident.subject}
-                                      </Title>
-                                      <div>
-                                        <Text style={{ fontSize: 14 }}>
-                                          Created At: {incident.dayTime}
-                                        </Text>
-                                      </div>
-                                      <div>
-                                        <Text style={{ fontSize: 14 }}>
-                                          Business: {incident.business?.name}
-                                        </Text>
-                                      </div>
-                                    </div>
-                                  </Col>
-                                </Row>
-                              </div>
-                              <Divider
-                                style={{ marginTop: 0, marginBottom: 0 }}
-                              />
-                            </Link>
-                          )
-                        )
-                      ) : (
-                        <div
-                          style={{
-                            display: 'flex',
-                            flex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          <Empty description="Nothing to approve" />
-                        </div>
-                      )}
-                      {/* {unapprovedIncidents?.listIncidents?.incidents.length ===
-                        0 && (
-                        <div
-                          style={{
-                            display: 'flex',
-                            flex: 1,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          <Empty description="Nothing to approve" />
-                        </div>
-                      )} */}
-                    </div>
-                  )}
-                </Card>
+              <Col span={12} style={{ height: '100%' }}>
+                <AdminTodos fullSearch={search} />
               </Col>
             )}
           </Row>

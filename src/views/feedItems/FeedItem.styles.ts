@@ -16,6 +16,9 @@ const styles = createUseStyles({
     color: '#FFF',
     position: 'absolute',
     padding: '3px 10px 3px',
+    left: 0,
+    right: 0,
+    margin: 0,
   },
 });
 
