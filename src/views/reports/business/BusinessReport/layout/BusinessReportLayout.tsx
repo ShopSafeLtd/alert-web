@@ -25,13 +25,10 @@ import {
 import useStyles from '../../../styles/report.styles';
 import RadialGraph from '../../../../../components/reports/graphs/radialGraph';
 import type { TargetedBusinessReportQuery } from '../../../../../graphql/generated';
+import type { AllowedValue, Elements } from '../../../types';
 import { MetaData } from '../../../types';
 
 const { Title } = Typography;
-
-type Elements = {
-  [key: string]: JSX.Element;
-};
 
 interface Props {
   loading: boolean;
@@ -708,7 +705,7 @@ const BusinessReport = ({
   };
 
   return useMemo(
-    () => layout.map((component) => components[component.i]),
+    () => layout.map((component) => components[component.i as AllowedValue]),
     [layout, data, loading, incidentsTableData, targetedGoodsData, metadata]
   );
 };

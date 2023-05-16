@@ -36,13 +36,10 @@ import RadialGraph from 'components/reports/graphs/radialGraph';
 import useStyles from '../../../styles/report.styles';
 import type { CrimeGroupReportQuery } from '../../../../../graphql/generated';
 import MultiBarGraph from '../../../../../components/reports/graphs/multiBarGraph';
+import type { AllowedValue, Elements } from '../../../types';
 import { MetaData } from '../../../types';
 
 const { Title } = Typography;
-
-type Elements = {
-  [key: string]: JSX.Element;
-};
 
 interface Props {
   loading: boolean;
@@ -86,24 +83,6 @@ const CrimeGroupReport = ({
       rowHeight * targetH + margin[1] * (targetH - 1) - (offset || 0)
     }px`;
   };
-
-  // {
-  //   incidentsSummary: {},
-  //   lossSummary: {},
-  //   offendersTable: {},
-  //   crimeTypesByOffender: {},
-  //   pageBreak: {},
-  //   pageBreak2: {},
-  //   offenderGoodsTypeValue: {},
-  //   goodsTypeLossRecoveredRadial: {},
-  //   incidentTimeOfDayDonut: {},
-  //   incidentMonthDonut: {},
-  //   incidentsDayOfWeekGraph: {},
-  //   incidentsTable: {},
-  //   targetedBusinessTable: {},
-  //   targetedGoodsTable: {},
-  //   incidentsHeatMap: {},
-  // }
 
   const components: Elements = {
     incidentsSummary: (
@@ -760,7 +739,7 @@ const CrimeGroupReport = ({
   };
 
   return useMemo(
-    () => layout.map((component) => components[component.i]),
+    () => layout.map((component) => components[component.i as AllowedValue]),
     [
       layout,
       data,

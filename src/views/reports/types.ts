@@ -2,27 +2,53 @@ import type RGL from 'react-grid-layout';
 
 export type ExtendedLayout = RGL.Layout;
 
-export interface MetaData {
-  key: string;
-  type:
-    | 'summary'
-    | 'pageBreak'
-    | 'donut'
-    | 'graph'
-    | 'heatmap'
-    | 'table'
-    | 'bar'
-    | 'logo'
-    | 'radial'
-    | 'pie';
-  urls?: string[];
-}
+export type AllowedValue =
+  | 'createdSummary'
+  | 'incidentsSummary'
+  | 'lossSummary'
+  | 'crimeTypesDonut'
+  | 'involvedTagsDonut'
+  | 'goodsTypeDonut'
+  | 'goodsValueDonut'
+  | 'incidentsDayOfWeekGraph'
+  | 'incidentsHeatMap'
+  | 'businessContributionTable'
+  | 'topContributors'
+  | 'offendersTable'
+  | 'crimeGroupTable'
+  | 'targetedBusinessTable'
+  | 'targetedGoodsTable'
+  | 'offenderSummary'
+  | 'crimeTypesByBusinessRadial'
+  | 'goodsTypeLossRecoveredRadial'
+  | 'crimeTypesByOffender'
+  | 'offenderGoodsTypeValue'
+  | 'incidentTimeOfDayDonut'
+  | 'incidentMonthDonut'
+  | 'incidentsTable'
+  | 'pageBreak'
+  | 'pageBreak2'
+  | 'logo';
 
-export const LayoutToReadable = [
+type ReportItemTypes =
+  | 'summary'
+  | 'pageBreak'
+  | 'donut'
+  | 'graph'
+  | 'heatmap'
+  | 'table'
+  | 'bar'
+  | 'logo'
+  | 'radial'
+  | 'pie';
+
+export const LayoutToReadable: {
+  i: AllowedValue;
+  readable: string;
+}[] = [
   {
     i: 'createdSummary',
     readable: 'Created Summary',
-    type: 'summary',
   },
   {
     i: 'incidentsSummary',
@@ -133,6 +159,21 @@ export const LayoutToReadable = [
     readable: 'Incidents Table',
   },
 ];
+
+const layoutMap = new Map<string, string>(
+  LayoutToReadable.map(({ i, readable }) => [i, readable])
+);
+export { layoutMap };
+
+export type Elements = {
+  [K in AllowedValue]?: JSX.Element;
+};
+
+export interface MetaData {
+  key: AllowedValue;
+  type: ReportItemTypes;
+  urls?: string[];
+}
 
 export interface SelectOptions {
   label: string;

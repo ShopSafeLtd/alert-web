@@ -43,6 +43,7 @@ import {
 } from 'components/reports/tableColumns';
 import type { PerformanceReportQuery } from '../../../../graphql/generated';
 import useStyles from '../../styles/report.styles';
+import type { AllowedValue, Elements } from '../../types';
 import { MetaData } from '../../types';
 
 interface ContributorTable {
@@ -56,10 +57,6 @@ interface ContributorTable {
 }
 
 const { Title } = Typography;
-
-type Elements = {
-  [key: string]: JSX.Element;
-};
 
 interface Props {
   loading: boolean;
@@ -1014,7 +1011,7 @@ const PerformanceReportLayout = ({
   };
 
   return useMemo(
-    () => layout.map((component) => components[component.i]),
+    () => layout.map((component) => components[component.i as AllowedValue]),
     [
       layout,
       data,

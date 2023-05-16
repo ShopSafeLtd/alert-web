@@ -46,13 +46,10 @@ import { Age, Build, Gender, Race } from '../../../../graphql/generated';
 import useStyles from '../../styles/report.styles';
 import WatermarkImage from '../../../../components/images/WatermarkImage.view';
 import RadialGraph from '../../../../components/reports/graphs/radialGraph';
+import type { AllowedValue, Elements } from '../../types';
 import { MetaData } from '../../types';
 
 const { Title, Text } = Typography;
-
-type Elements = {
-  [key: string]: JSX.Element;
-};
 
 interface Props {
   loading: boolean;
@@ -877,7 +874,7 @@ const OffenderReportLayout = ({
   };
 
   return useMemo(
-    () => layout.map((component) => components[component.i]),
+    () => layout.map((component) => components[component.i as AllowedValue]),
     [
       layout,
       data,
