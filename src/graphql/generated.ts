@@ -54484,18 +54484,23 @@ export type CreateUserChatMutation = {
     __typename?: 'UserChat';
     id: string;
     newMessages?: boolean | null;
+    mentioned?: boolean | null;
     updatedAt: any;
+    createdAt: any;
     user: {
       __typename?: 'User';
       id: string;
       fullName: string;
       firstLetter?: string | null;
+      origFirstLetter?: string | null;
+      origName: string;
     };
     chat: {
       __typename?: 'Chat';
       id: string;
       name: string;
       firstLetter?: string | null;
+      totalMembers?: number | null;
       messages: Array<{
         __typename?: 'Message';
         id: string;
@@ -54507,7 +54512,35 @@ export type CreateUserChatMutation = {
           fullName: string;
           origFirstLetter?: string | null;
           origName: string;
+          firstLetter?: string | null;
         };
+        images: Array<{
+          __typename?: 'Image';
+          id: string;
+          url?: string | null;
+          optimised?: string | null;
+          position: ImagePosition;
+        }>;
+        incidents: Array<{
+          __typename?: 'Incident';
+          id: string;
+          subject?: string | null;
+        }>;
+        offenders: Array<{
+          __typename?: 'Offender';
+          id: string;
+          name?: string | null;
+        }>;
+        vehicles: Array<{
+          __typename?: 'Vehicle';
+          id: string;
+          reference?: number | null;
+        }>;
+        crimeGroups: Array<{
+          __typename?: 'CrimeGroup';
+          id: string;
+          reference?: number | null;
+        }>;
       }>;
     };
   };
@@ -68819,17 +68852,22 @@ export const CreateUserChatDocument = gql`
     createUserChat(data: $data) {
       id
       newMessages
+      mentioned
       updatedAt
+      createdAt
       user {
         id
         fullName
         firstLetter
+        origFirstLetter
+        origName
       }
       chat {
         id
         name
         firstLetter
-        messages {
+        totalMembers
+        messages(first: 1, orderBy: [{ createdAt: desc }]) {
           id
           content
           createdAt
@@ -68838,6 +68876,29 @@ export const CreateUserChatDocument = gql`
             fullName
             origFirstLetter
             origName
+            firstLetter
+          }
+          images {
+            id
+            url
+            optimised
+            position
+          }
+          incidents {
+            id
+            subject
+          }
+          offenders {
+            id
+            name
+          }
+          vehicles {
+            id
+            reference
+          }
+          crimeGroups {
+            id
+            reference
           }
         }
       }
