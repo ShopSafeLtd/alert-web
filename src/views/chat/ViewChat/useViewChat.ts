@@ -6,11 +6,11 @@ import type {
   UserChatsQuery,
 } from 'graphql/generated';
 import {
-  useUpdateTodoMentionMutation,
-  TodoType,
   Role,
   SortOrder,
+  TodoType,
   UserChatsDocument,
+  useUpdateTodoMentionMutation,
   useUpdateUserChatMutation,
   useUserChatsQuery,
 } from 'graphql/generated';
@@ -137,7 +137,7 @@ const useViewChat = ({ chatId }: Props): Return => {
         scheme: schemeId,
         orderBy: {
           chat: {
-            name: SortOrder.Asc,
+            updatedAt: SortOrder.Desc,
           },
         },
       },
@@ -173,7 +173,7 @@ const useViewChat = ({ chatId }: Props): Return => {
         scheme: schemeId,
         orderBy: {
           chat: {
-            name: SortOrder.Asc,
+            name: SortOrder.Desc,
           },
         },
       },
@@ -196,7 +196,7 @@ const useViewChat = ({ chatId }: Props): Return => {
         scheme: schemeId,
         orderBy: {
           chat: {
-            name: SortOrder.Asc,
+            updatedAt: SortOrder.Desc,
           },
         },
       },
@@ -205,15 +205,16 @@ const useViewChat = ({ chatId }: Props): Return => {
     if (existingData === null) return;
     if (
       existingData?.user?.chats === null ||
-      existingData.user?.chats === undefined
+      existingData?.user?.chats === undefined
     )
       return;
 
     store.writeQuery<UserChatsQuery>({
       query: UserChatsDocument,
       data: {
+        ...existingData,
         user: {
-          id: userId,
+          ...existingData.user,
           chats: existingData.user?.chats.filter(
             (userChat) => userChat.chat.id !== res.deleteChat?.id
           ),
@@ -227,7 +228,7 @@ const useViewChat = ({ chatId }: Props): Return => {
         scheme: schemeId,
         orderBy: {
           chat: {
-            name: SortOrder.Asc,
+            name: SortOrder.Desc,
           },
         },
       },
