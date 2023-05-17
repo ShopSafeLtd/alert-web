@@ -69,7 +69,7 @@ const useAuth = (): Return => {
         name: schemeDetails?.name,
         logo: schemeDetails?.logo?.optimisedPersisted,
         darkLogo: schemeDetails?.darkLogo?.optimisedPersisted,
-        userTodos: schemeDetails.userTodos,
+        userTodos: schemeDetails?.userTodos || 0,
       });
       setTodos({ userTodos: schemes[0]?.scheme?.userTodos || 0 });
     };
