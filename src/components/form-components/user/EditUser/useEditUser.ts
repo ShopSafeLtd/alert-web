@@ -166,55 +166,77 @@ const useEditUser = ({ onClose, userId }: Props): Return => {
     setSaving(true);
 
     if (userId) {
-      const businessIds = new Set(data.businesses.map(({ value }) => value));
-      const newBusinesses = businessesData
-        ?.filter(({ isNew }) => isNew)
-        .filter(({ id }) => [...businessIds].includes(id));
+      const getBusiness = (): UserUpdateInput['businesses'] => {
+        if (data.businesses) {
+          const businessIds = new Set(
+            data.businesses.map(({ value }) => value)
+          );
 
-      const connectedBusinesses = data.businesses.filter(
-        ({ value }) =>
-          !newBusinesses?.some(
-            ({ id: newBusinessId }) => newBusinessId === value
-          )
-      );
-      const getBusiness = (): UserUpdateInput['businesses'] => ({
-        connect:
-          connectedBusinesses && connectedBusinesses.length > 0
-            ? connectedBusinesses.map(({ value }) => ({ id: value }))
-            : undefined,
-        create:
-          newBusinesses && newBusinesses.length > 0
-            ? newBusinesses.map((el) => ({
-                name: el.name,
-                publicName: el.publicName || false,
-                schemes: {
-                  connect: [
-                    {
-                      id: schemeId,
+          const newBusinesses = businessesData
+            ?.filter(({ isNew }) => isNew)
+            .filter(({ id }) => businessIds.has(id));
+
+          const connectedBusinesses = data.businesses.filter(
+            ({ value }) =>
+              !newBusinesses?.some(
+                ({ id: newBusinessId }) => newBusinessId === value
+              )
+          );
+          const disconnectedBusinesses = userData?.user?.businesses.filter(
+            ({ id }) => !businessIds.has(id)
+          );
+          return {
+            disconnect:
+              disconnectedBusinesses && disconnectedBusinesses.length > 0
+                ? disconnectedBusinesses.map(({ id }) => ({ id }))
+                : undefined,
+            connect:
+              connectedBusinesses && connectedBusinesses.length > 0
+                ? connectedBusinesses.map(({ value }) => ({ id: value }))
+                : undefined,
+            create:
+              newBusinesses && newBusinesses.length > 0
+                ? newBusinesses.map((el) => ({
+                    name: el.name,
+                    publicName: el.publicName || false,
+                    schemes: {
+                      connect: [
+                        {
+                          id: schemeId,
+                        },
+                      ],
                     },
-                  ],
-                },
-                parent: el.parent
-                  ? {
-                      connect: {
-                        id: el.parent.id,
-                      },
-                    }
-                  : undefined,
-                locations: {
-                  create: [
-                    {
-                      building: el.locations[0].building || null,
-                      county: el.locations[0].county || null,
-                      postcode: el.locations[0].postcode || '',
-                      street: el.locations[0].street || '',
-                      townCity: el.locations[0].townCity || '',
+                    parent: el.parent
+                      ? {
+                          connect: {
+                            id: el.parent.id,
+                          },
+                        }
+                      : undefined,
+                    locations: {
+                      create: [
+                        {
+                          building: el.locations[0].building || null,
+                          county: el.locations[0].county || null,
+                          postcode: el.locations[0].postcode || '',
+                          street: el.locations[0].street || '',
+                          townCity: el.locations[0].townCity || '',
+                        },
+                      ],
                     },
-                  ],
-                },
-              }))
-            : undefined,
-      });
+                  }))
+                : undefined,
+          };
+        }
+        return {
+          connect: undefined,
+          create: undefined,
+          disconnect:
+            userData?.user?.businesses && userData?.user?.businesses.length > 0
+              ? userData?.user?.businesses.map(({ id }) => ({ id }))
+              : undefined,
+        };
+      };
       updateUser({
         variables: {
           where: {
