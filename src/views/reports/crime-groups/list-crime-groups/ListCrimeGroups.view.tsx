@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Col, Input, Row, Table } from 'antd';
+import { Col, Input, Row, Table } from 'antd';
 import type { ListCrimeGroupsQuery } from 'graphql/generated';
 import { Link } from 'react-router-dom';
 import useStyles from './ListCrimeGroups.styles';
@@ -24,11 +24,6 @@ const ListCrimeGroups = ({ data, loading, search, setSearch }: Props) => {
             className={classes.searchInput}
             placeholder="Search crime groups..."
           />
-        </Col>
-        <Col>
-          <Link to="create">
-            <Button type="primary">Create Crime Group</Button>
-          </Link>
         </Col>
       </Row>
       <Table
