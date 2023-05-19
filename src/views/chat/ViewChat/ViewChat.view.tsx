@@ -193,7 +193,7 @@ const ViewOffender = ({
                           </Text>
                         )}
                         {messages && messages.length > 0
-                          ? `${messages?.slice(-1)[0].from.fullName} : ${
+                          ? `${messages?.slice(-1)[0].from.origName} : ${
                               getContent(messages?.slice(-1)[0].content) ||
                               (messages?.slice(-1)[0].images &&
                                 messages?.slice(-1)[0].images.length &&

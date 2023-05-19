@@ -258,7 +258,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
             scheme: schemeId,
             orderBy: {
               chat: {
-                name: SortOrder.Asc,
+                updatedAt: SortOrder.Desc,
               },
             },
           },
@@ -283,7 +283,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                             content: newMessage.content,
                             createdAt: newMessage.createdAt,
                             from: {
-                              fullName: newMessage.from?.fullName || '',
                               origName: newMessage.from?.fullName || '',
                               id: newMessage.id || '',
                             },
@@ -436,7 +435,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                       content: res.createMessage.content,
                       createdAt: res.createMessage.createdAt,
                       from: {
-                        fullName: res.createMessage.from?.fullName || '',
                         origName: res.createMessage.from?.fullName || '',
                         id: res.createMessage.id || '',
                       },

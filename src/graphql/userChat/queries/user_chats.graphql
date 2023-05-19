@@ -15,13 +15,6 @@ query userChats(
       mentioned
       updatedAt
       createdAt
-      user {
-        id
-        fullName
-        firstLetter
-        origFirstLetter
-        origName
-      }
       chat {
         id
         name
@@ -33,32 +26,22 @@ query userChats(
           createdAt
           from {
             id
-            fullName
-            origFirstLetter
             origName
-            firstLetter
           }
           images {
             id
-            url
-            optimised
-            position
           }
           incidents {
             id
-            subject
           }
           offenders {
             id
-            name
           }
           vehicles {
             id
-            reference
           }
           crimeGroups {
             id
-            reference
           }
         }
       }

@@ -11,69 +11,33 @@ mutation createChat($data: ChatCreateInput!) {
       mentioned
       updatedAt
       createdAt
-      user {
+      chat {
         id
-        fullName
+        name
         firstLetter
-        origFirstLetter
-        origName
-        businesses {
-          fullName
+        totalMembers
+        messages {
           id
-          name
-        }
-        chats {
-          id
-          newMessages
-          mentioned
-          updatedAt
+          content
           createdAt
-          user {
+          from {
             id
-            fullName
-            firstLetter
-            origFirstLetter
             origName
           }
-          chat {
+          images {
             id
-            name
-            firstLetter
-            totalMembers
-            messages(first: 1, orderBy: [{ createdAt: desc }]) {
-              id
-              content
-              createdAt
-              from {
-                id
-                fullName
-                origFirstLetter
-                origName
-                firstLetter
-              }
-              images {
-                id
-                url
-                optimised
-                position
-              }
-              incidents {
-                id
-                subject
-              }
-              offenders {
-                id
-                name
-              }
-              vehicles {
-                id
-                reference
-              }
-              crimeGroups {
-                id
-                reference
-              }
-            }
+          }
+          incidents {
+            id
+          }
+          offenders {
+            id
+          }
+          vehicles {
+            id
+          }
+          crimeGroups {
+            id
           }
         }
       }

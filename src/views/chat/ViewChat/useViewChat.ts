@@ -156,11 +156,10 @@ const useViewChat = ({ chatId }: Props): Return => {
       data: {
         user: {
           id: userId,
-          chats: [...existingData.user.chats, { ...res.createChat }],
+          chats: [...existingData.user.chats, res.createChat.members[0]],
         },
         __typename: 'Query',
       },
-
       variables: {
         where: {
           id: userId,
@@ -223,7 +222,7 @@ const useViewChat = ({ chatId }: Props): Return => {
         scheme: schemeId,
         orderBy: {
           chat: {
-            name: SortOrder.Desc,
+            updatedAt: SortOrder.Desc,
           },
         },
       },
