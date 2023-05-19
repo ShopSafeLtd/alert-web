@@ -3,9 +3,12 @@ mutation createChat($data: ChatCreateInput!) {
     id
     name
     description
+    updatedAt
+    createdAt
     members {
       id
       newMessages
+      mentioned
       updatedAt
       createdAt
       user {
@@ -19,41 +22,58 @@ mutation createChat($data: ChatCreateInput!) {
           id
           name
         }
-      }
-      chat {
-        id
-        name
-        firstLetter
-        messages {
+        chats {
           id
-          content
+          newMessages
+          mentioned
+          updatedAt
           createdAt
-          from {
+          user {
             id
             fullName
+            firstLetter
+            origFirstLetter
             origName
           }
-          images {
-            id
-            url
-            optimised
-            position
-          }
-          incidents {
-            id
-            subject
-          }
-          offenders {
+          chat {
             id
             name
-          }
-          vehicles {
-            id
-            reference
-          }
-          crimeGroups {
-            id
-            reference
+            firstLetter
+            totalMembers
+            messages(first: 1, orderBy: [{ createdAt: desc }]) {
+              id
+              content
+              createdAt
+              from {
+                id
+                fullName
+                origFirstLetter
+                origName
+                firstLetter
+              }
+              images {
+                id
+                url
+                optimised
+                position
+              }
+              incidents {
+                id
+                subject
+              }
+              offenders {
+                id
+                name
+              }
+              vehicles {
+                id
+                reference
+              }
+              crimeGroups {
+                id
+                reference
+              }
+            }
           }
         }
       }

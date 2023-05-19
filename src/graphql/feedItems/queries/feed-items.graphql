@@ -20,6 +20,28 @@ query FeedItems(
   ) {
     feedItems {
       type
+      ban {
+        endDate
+        startDate
+        updatedAt
+        title
+        type
+        active
+        expired
+        id
+        location
+        description
+        offender {
+          id
+          images {
+            id
+            url
+            optimised
+            position
+          }
+          name
+        }
+      }
       article {
         id
         title

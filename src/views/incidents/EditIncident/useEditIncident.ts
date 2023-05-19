@@ -985,6 +985,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             policeReported: { set: data.policeReported },
             location: {
               update: {
+                premises: { set: '' },
                 building: { set: data.building || '' },
                 street: { set: data.street || '' },
                 townCity: { set: data.townCity || '' },

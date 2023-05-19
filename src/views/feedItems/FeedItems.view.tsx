@@ -49,6 +49,7 @@ import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import ArticleSkeletonCard from 'components/feedItems/ArticleSection/ArticleSkeletonCard';
 import FeedItemSkeletonCard from 'components/feedItems/FeedItemSection/FeedItemSkeletonCard';
 import AdminTodos from 'components/feedItems/AdminTodos';
+import BanFeed from 'components/feedItems/FeedItemSection/BanFeed';
 import useStyles from './FeedItem.styles';
 
 const { Title, Paragraph, Text } = Typography;
@@ -338,6 +339,10 @@ const FeedItem = ({
                       {/* article */}
                       {feedItem?.type === FeedItemType.NewArticle && (
                         <ArticleFeed feedItem={feedItem} />
+                      )}
+                      {/* ban */}
+                      {feedItem?.type === FeedItemType.NewBan && (
+                        <BanFeed feedItem={feedItem} />
                       )}
                     </div>
                   </>

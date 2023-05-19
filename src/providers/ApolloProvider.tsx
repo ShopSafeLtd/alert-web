@@ -43,6 +43,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
     // 'ws://localhost:4000/graphql',
     {
       reconnect: true,
+      timeout: 20_000,
       connectionParams: {
         ...(accessToken ? { authorization: `Bearer ${accessToken}` } : {}),
       },
