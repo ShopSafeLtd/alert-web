@@ -24,10 +24,6 @@ query ListUsers(
         id
         name
       }
-      approverGroups {
-        id
-        name
-      }
     }
     total
   }

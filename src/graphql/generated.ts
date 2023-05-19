@@ -54855,7 +54855,6 @@ export type ListUsersQuery = {
         fullName: string;
       }>;
       groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
-      approverGroups: Array<{ __typename?: 'Group'; id: string; name: string }>;
     }>;
   };
 };
@@ -69561,10 +69560,6 @@ export const ListUsersDocument = gql`
         }
         status
         groups(where: $groupWhere) {
-          id
-          name
-        }
-        approverGroups {
           id
           name
         }
