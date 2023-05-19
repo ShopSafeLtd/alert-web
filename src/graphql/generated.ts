@@ -48200,82 +48200,23 @@ export type CreateChatMutation = {
       mentioned?: boolean | null;
       updatedAt: any;
       createdAt: any;
-      user: {
-        __typename?: 'User';
+      chat: {
+        __typename?: 'Chat';
         id: string;
-        fullName: string;
+        name: string;
         firstLetter?: string | null;
-        origFirstLetter?: string | null;
-        origName: string;
-        businesses: Array<{
-          __typename?: 'Business';
-          fullName: string;
+        totalMembers?: number | null;
+        messages: Array<{
+          __typename?: 'Message';
           id: string;
-          name: string;
-        }>;
-        chats: Array<{
-          __typename?: 'UserChat';
-          id: string;
-          newMessages?: boolean | null;
-          mentioned?: boolean | null;
-          updatedAt: any;
+          content: string;
           createdAt: any;
-          user: {
-            __typename?: 'User';
-            id: string;
-            fullName: string;
-            firstLetter?: string | null;
-            origFirstLetter?: string | null;
-            origName: string;
-          };
-          chat: {
-            __typename?: 'Chat';
-            id: string;
-            name: string;
-            firstLetter?: string | null;
-            totalMembers?: number | null;
-            messages: Array<{
-              __typename?: 'Message';
-              id: string;
-              content: string;
-              createdAt: any;
-              from: {
-                __typename?: 'User';
-                id: string;
-                fullName: string;
-                origFirstLetter?: string | null;
-                origName: string;
-                firstLetter?: string | null;
-              };
-              images: Array<{
-                __typename?: 'Image';
-                id: string;
-                url?: string | null;
-                optimised?: string | null;
-                position: ImagePosition;
-              }>;
-              incidents: Array<{
-                __typename?: 'Incident';
-                id: string;
-                subject?: string | null;
-              }>;
-              offenders: Array<{
-                __typename?: 'Offender';
-                id: string;
-                name?: string | null;
-              }>;
-              vehicles: Array<{
-                __typename?: 'Vehicle';
-                id: string;
-                reference?: number | null;
-              }>;
-              crimeGroups: Array<{
-                __typename?: 'CrimeGroup';
-                id: string;
-                reference?: number | null;
-              }>;
-            }>;
-          };
+          from: { __typename?: 'User'; id: string; origName: string };
+          images: Array<{ __typename?: 'Image'; id: string }>;
+          incidents: Array<{ __typename?: 'Incident'; id: string }>;
+          offenders: Array<{ __typename?: 'Offender'; id: string }>;
+          vehicles: Array<{ __typename?: 'Vehicle'; id: string }>;
+          crimeGroups: Array<{ __typename?: 'CrimeGroup'; id: string }>;
         }>;
       };
     }>;
@@ -55272,14 +55213,6 @@ export type UserChatsQuery = {
       mentioned?: boolean | null;
       updatedAt: any;
       createdAt: any;
-      user: {
-        __typename?: 'User';
-        id: string;
-        fullName: string;
-        firstLetter?: string | null;
-        origFirstLetter?: string | null;
-        origName: string;
-      };
       chat: {
         __typename?: 'Chat';
         id: string;
@@ -55291,41 +55224,12 @@ export type UserChatsQuery = {
           id: string;
           content: string;
           createdAt: any;
-          from: {
-            __typename?: 'User';
-            id: string;
-            fullName: string;
-            origFirstLetter?: string | null;
-            origName: string;
-            firstLetter?: string | null;
-          };
-          images: Array<{
-            __typename?: 'Image';
-            id: string;
-            url?: string | null;
-            optimised?: string | null;
-            position: ImagePosition;
-          }>;
-          incidents: Array<{
-            __typename?: 'Incident';
-            id: string;
-            subject?: string | null;
-          }>;
-          offenders: Array<{
-            __typename?: 'Offender';
-            id: string;
-            name?: string | null;
-          }>;
-          vehicles: Array<{
-            __typename?: 'Vehicle';
-            id: string;
-            reference?: number | null;
-          }>;
-          crimeGroups: Array<{
-            __typename?: 'CrimeGroup';
-            id: string;
-            reference?: number | null;
-          }>;
+          from: { __typename?: 'User'; id: string; origName: string };
+          images: Array<{ __typename?: 'Image'; id: string }>;
+          incidents: Array<{ __typename?: 'Incident'; id: string }>;
+          offenders: Array<{ __typename?: 'Offender'; id: string }>;
+          vehicles: Array<{ __typename?: 'Vehicle'; id: string }>;
+          crimeGroups: Array<{ __typename?: 'CrimeGroup'; id: string }>;
         }>;
       };
     }>;
@@ -58085,69 +57989,33 @@ export const CreateChatDocument = gql`
         mentioned
         updatedAt
         createdAt
-        user {
+        chat {
           id
-          fullName
+          name
           firstLetter
-          origFirstLetter
-          origName
-          businesses {
-            fullName
+          totalMembers
+          messages {
             id
-            name
-          }
-          chats {
-            id
-            newMessages
-            mentioned
-            updatedAt
+            content
             createdAt
-            user {
+            from {
               id
-              fullName
-              firstLetter
-              origFirstLetter
               origName
             }
-            chat {
+            images {
               id
-              name
-              firstLetter
-              totalMembers
-              messages(first: 1, orderBy: [{ createdAt: desc }]) {
-                id
-                content
-                createdAt
-                from {
-                  id
-                  fullName
-                  origFirstLetter
-                  origName
-                  firstLetter
-                }
-                images {
-                  id
-                  url
-                  optimised
-                  position
-                }
-                incidents {
-                  id
-                  subject
-                }
-                offenders {
-                  id
-                  name
-                }
-                vehicles {
-                  id
-                  reference
-                }
-                crimeGroups {
-                  id
-                  reference
-                }
-              }
+            }
+            incidents {
+              id
+            }
+            offenders {
+              id
+            }
+            vehicles {
+              id
+            }
+            crimeGroups {
+              id
             }
           }
         }
@@ -69782,13 +69650,6 @@ export const UserChatsDocument = gql`
         mentioned
         updatedAt
         createdAt
-        user {
-          id
-          fullName
-          firstLetter
-          origFirstLetter
-          origName
-        }
         chat {
           id
           name
@@ -69800,32 +69661,22 @@ export const UserChatsDocument = gql`
             createdAt
             from {
               id
-              fullName
-              origFirstLetter
               origName
-              firstLetter
             }
             images {
               id
-              url
-              optimised
-              position
             }
             incidents {
               id
-              subject
             }
             offenders {
               id
-              name
             }
             vehicles {
               id
-              reference
             }
             crimeGroups {
               id
-              reference
             }
           }
         }
