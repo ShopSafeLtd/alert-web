@@ -130,12 +130,6 @@ const useFeedItems = (): Return => {
     take: pagination.pageSize,
     skip: (pagination.page - 1) * pagination.pageSize,
     where: {
-      // createdAt: filterCreatedAt
-      //   ? {
-      //       gte: filterCreatedAt.startDate,
-      //       lte: filterCreatedAt.endDate,
-      //     }
-      //   : undefined,
       groups:
         groupsFilter.length > 0
           ? {
@@ -155,12 +149,6 @@ const useFeedItems = (): Return => {
           : undefined,
 
       AND: [
-        // {
-        //   message: {
-        //     contains: search,
-        //     mode: QueryMode.Insensitive,
-        //   },
-        // },
         {
           offender: {
             approved: gallery.includes('NOT APPROVED')

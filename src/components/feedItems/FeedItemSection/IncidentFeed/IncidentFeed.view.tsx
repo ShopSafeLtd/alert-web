@@ -2,11 +2,7 @@ import React from 'react';
 import { Col, Row, Typography } from 'antd';
 import type { FeedItemsQuery, ImagePosition } from 'graphql/generated';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faClock,
-  faLocationDot,
-  faUser,
-} from '@fortawesome/pro-light-svg-icons';
+import { faLocationDot } from '@fortawesome/pro-light-svg-icons';
 
 import { Link } from 'react-router-dom';
 import WatermarkImage from 'components/images/WatermarkImage.view';
@@ -48,7 +44,7 @@ const IncidentFeed = ({
   const {
     updates,
     images,
-    dayTime,
+    // dayTime,
     description,
     business,
     // totalUpdates,
@@ -57,7 +53,7 @@ const IncidentFeed = ({
     // policeRef,
     // createdBy,
     id,
-    totalOffenders,
+    // totalOffenders,
     // offenders,
   } = feedItem?.incident || {};
 
@@ -84,7 +80,9 @@ const IncidentFeed = ({
         ) : null}
 
         <Col flex={1}>
-          {isNewIncident ? (
+          {!isNewIncident && updates && updates.length > 0 ? (
+            <UpdateContent title={subject || ''} update={updates[0]} />
+          ) : (
             <>
               <Title level={4} ellipsis>
                 {subject}
@@ -97,7 +95,7 @@ const IncidentFeed = ({
                 </Col>
               </Row>
 
-              <Row>
+              {/* <Row>
                 <Col>
                   <FontAwesomeIcon
                     size="sm"
@@ -109,8 +107,8 @@ const IncidentFeed = ({
                     Created At: {dayTime}
                   </Text>
                 </Col>
-              </Row>
-              <Row>
+              </Row> */}
+              {/* <Row>
                 <Col>
                   <FontAwesomeIcon
                     size="sm"
@@ -122,20 +120,17 @@ const IncidentFeed = ({
                     Members: {totalOffenders || 0}
                   </Text>
                 </Col>
-              </Row>
-              {/* <Row>
-                <Col>
-                  <FontAwesomeIcon
-                    size="sm"
-                    style={{ marginRight: 5 }}
-                    className="feedItem-card-icon"
-                    icon={faUser}
-                  />
-                  <Text style={{ fontSize: 14 }} type="secondary">
-                    {createdBy?.fullName} - {createdBy?.businesses[0]?.name}
-                  </Text>
-                </Col>
               </Row> */}
+
+              {description && (
+                <Paragraph
+                  type="secondary"
+                  style={{ fontSize: 14, marginTop: 10 }}
+                  ellipsis={{ rows: 3 }}
+                >
+                  {description}
+                </Paragraph>
+              )}
               <Row wrap={false} className="incident-card-location-row">
                 <Col>
                   <FontAwesomeIcon
@@ -151,34 +146,8 @@ const IncidentFeed = ({
                   </Text>
                 </Col>
               </Row>
-              {description && (
-                <Paragraph
-                  type="secondary"
-                  style={{ fontSize: 14, marginTop: 10 }}
-                  ellipsis={{ rows: 3 }}
-                >
-                  {description}
-                </Paragraph>
-              )}
-              {/* {feedItem?.incident&& offenders.length ? (
-                <Row wrap={false} style={{ overflowX: 'auto', marginTop: 10 }}>
-                  {offenders.map((offender) => (
-                    <Link
-                      to={
-                        offender.id ? `/app/offenders/view/${offender.id}` : ``
-                      }
-                    >
-                      <Tag key={offender.id}>
-                        {offender.name || 'Unknown Offender'}
-                      </Tag>
-                    </Link>
-                  ))}
-                </Row>
-              ) : null} */}
             </>
-          ) : updates && updates.length > 0 ? (
-            <UpdateContent title={subject || ''} update={updates[0]} />
-          ) : null}
+          )}
         </Col>
       </Row>
     </Link>

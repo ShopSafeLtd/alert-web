@@ -34,8 +34,9 @@ import update from 'immutability-helper';
 
 const { confirm } = Modal;
 
-interface Image extends UploadFile {
+export interface Image extends UploadFile {
   position?: ImagePosition;
+  primary?: boolean;
 }
 
 export interface FormData {
@@ -131,10 +132,8 @@ const onPreview = async (file: UploadFile) => {
 
 const useAddOffender = (): Return => {
   const [form] = Form.useForm<FormData>();
-
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
-
   const groups = useStoreState((state) => state.user.groups);
   const role = useStoreState((state) => state.user.role);
   const pagination = useStoreState((state) => state.data.offenders.pagination);
@@ -425,6 +424,7 @@ const useAddOffender = (): Return => {
                       url: item.url || '',
                     },
                     position: item.position,
+                    primary: item.primary,
                   }))
                 : undefined,
           },

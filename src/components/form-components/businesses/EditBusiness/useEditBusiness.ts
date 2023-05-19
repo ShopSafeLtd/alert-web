@@ -99,7 +99,7 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
 
   const onSubmit = (values: OnSubmitValues) => {
     const getParent = () => {
-      if (values.parent)
+      if (values.parent.value)
         return {
           connect: {
             id: values.parent.value,
