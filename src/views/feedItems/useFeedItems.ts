@@ -1,7 +1,6 @@
 import type {
   DeleteFeedItemMutation,
   FeedItemsQuery,
-  ListArticlesQuery,
   ListOffendersQuery,
   Model,
 } from 'graphql/generated';
@@ -12,7 +11,6 @@ import {
   SortOrder,
   useDeleteFeedItemMutation,
   useFeedItemsQuery,
-  useListArticlesQuery,
   useListOffendersQuery,
   useSchemeGroupsQuery,
 } from 'graphql/generated';
@@ -26,14 +24,10 @@ import type { DateType, PaginationModel } from 'types/DataType';
 interface Return {
   data: FeedItemsQuery | undefined;
   loading: boolean;
-  articleData: ListArticlesQuery | undefined;
-  articleLoading: boolean;
   recentOffenderData: ListOffendersQuery | undefined;
   recentOffenderLoading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
   pagination: PaginationModel;
-  articlePagination: PaginationModel;
-  onArticlePaginationChange: (page: number, pageSize: number) => void;
   order: FeedItemSort;
   setOrder: (value: FeedItemSort) => void;
   search: string;
@@ -46,7 +40,6 @@ interface Return {
   };
   // updateIncidentList: MutationUpdaterFn<RecycleIncidentMutation>;
   onNavigate: () => void;
-
   onDeleteFeedItem: (value: string) => void;
   saving: boolean;
   adminRights: boolean;
@@ -59,6 +52,7 @@ interface Return {
   clearFilters: () => void;
   gallery: string[];
   setGallery: (values: string[]) => void;
+  createdAtFilter: DateType | undefined;
   setCreatedAtFilter: (value: DateType | undefined) => void;
 }
 
@@ -84,13 +78,6 @@ const useFeedItems = (): Return => {
     DateType | undefined
   >();
   const [gallery, setGallery] = useState<string[]>([]);
-
-  const [articlePagination, setArticlePagination] = useState<PaginationModel>({
-    page: 1,
-    pageSize: 12,
-    sizeOptions: ['12'],
-  });
-
   const itemVariables = {
     createdAt: createdAtFilter
       ? {
@@ -239,42 +226,6 @@ const useFeedItems = (): Return => {
     fetchPolicy: 'cache-and-network',
   });
 
-  const { data: articleData, loading: articleLoading } = useListArticlesQuery({
-    fetchPolicy: 'cache-and-network',
-    variables: {
-      scheme: {
-        id: schemeId,
-      },
-      where: {
-        createdAt: createdAtFilter
-          ? {
-              gte: createdAtFilter.startDate,
-              lte: createdAtFilter.endDate,
-            }
-          : undefined,
-        createdBy: gallery.includes('MYDATA')
-          ? {
-              id: {
-                equals: userId,
-              },
-            }
-          : undefined,
-
-        OR: [
-          {
-            title: {
-              contains: search,
-              mode: QueryMode.Insensitive,
-            },
-          },
-        ],
-      },
-
-      order: { updatedAt: SortOrder.Desc },
-      take: articlePagination.pageSize,
-      skip: articlePagination.pageSize * (articlePagination.page - 1),
-    },
-  });
   const { data: recentOffenderData, loading: recentOffenderLoading } =
     useListOffendersQuery({
       fetchPolicy: 'cache-and-network',
@@ -401,12 +352,7 @@ const useFeedItems = (): Return => {
       order,
     });
   };
-  const onArticlePaginationChange = (page: number, pageSize: number) =>
-    setArticlePagination({
-      ...articlePagination,
-      page,
-      pageSize,
-    });
+
   const onGroupsChange = (values: string[]) => {
     setFeedItemsState({
       pagination,
@@ -444,21 +390,18 @@ const useFeedItems = (): Return => {
     setGroupsFilter([]);
     setTypesFilter([]);
     setOrder(FeedItemSort.updatedAtDesc);
+    setCreatedAtFilter(undefined);
   };
   return {
     data,
     loading: !data && loading,
-    articleData,
-    articleLoading: !articleData && articleLoading,
     recentOffenderData,
     recentOffenderLoading,
     onPaginationChange,
     pagination,
-    articlePagination,
-    onArticlePaginationChange,
     order,
     setOrder,
-    search: variables.search,
+    search,
     setSearch,
     groups:
       role === Role.SchemeAdmin
@@ -471,7 +414,6 @@ const useFeedItems = (): Return => {
     onGroupsChange,
     variables,
     onNavigate,
-
     onDeleteFeedItem,
     saving,
     adminRights: role !== Role.User,
@@ -485,6 +427,7 @@ const useFeedItems = (): Return => {
     gallery,
     setGallery,
     setCreatedAtFilter,
+    createdAtFilter,
   };
 };
 

@@ -6,14 +6,12 @@ const FeedItems = (): JSX.Element => {
   const {
     data,
     loading,
-    articleData,
-    articleLoading,
+
     recentOffenderData,
     recentOffenderLoading,
     onPaginationChange,
     pagination,
-    articlePagination,
-    onArticlePaginationChange,
+
     search,
     setSearch,
 
@@ -36,20 +34,17 @@ const FeedItems = (): JSX.Element => {
     gallery,
     setGallery,
     setCreatedAtFilter,
+    createdAtFilter,
   } = useFeedItems();
 
   return (
     <View
       data={data}
       loading={loading}
-      articleData={articleData}
-      articleLoading={articleLoading}
       recentOffenderData={recentOffenderData}
       recentOffenderLoading={recentOffenderLoading}
       onPaginationChange={onPaginationChange}
       pagination={pagination}
-      articlePagination={articlePagination}
-      onArticlePaginationChange={onArticlePaginationChange}
       search={search}
       setSearch={setSearch}
       onDeleteFeedItem={onDeleteFeedItem}
@@ -71,6 +66,7 @@ const FeedItems = (): JSX.Element => {
       gallery={gallery}
       setGallery={setGallery}
       setCreatedAtFilter={setCreatedAtFilter}
+      createdAtFilter={createdAtFilter}
     />
   );
 };

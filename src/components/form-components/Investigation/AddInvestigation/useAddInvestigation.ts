@@ -4,6 +4,7 @@ import { useCreateInvestigationMutation } from 'graphql/generated';
 import { notification } from 'antd';
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
+import errorNotification from 'types/error_notification';
 
 export interface InvestigationData {
   id?: string;
@@ -36,11 +37,7 @@ const useAddInvestigation = ({ onClose, update }: Props): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
     update,
   });

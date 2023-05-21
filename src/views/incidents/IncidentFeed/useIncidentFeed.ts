@@ -472,6 +472,7 @@ const useIncidentFeed = (): Return => {
     setPeculiarities('');
     setBusinessesFilter([]);
     setOrder(IncidentSort.createdAtDesc);
+    setCreatedAtFilter(undefined);
   };
   return {
     data,
