@@ -35,6 +35,7 @@ const ViewArticleView = ({
       <Card style={{ marginLeft: 20, marginRight: 20 }} loading={loading}>
         <Typography.Title level={2}>{data?.article?.title}</Typography.Title>
         <div
+          style={{ width: '100%', height: '100%' }}
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{
             __html: data?.article?.rows[0].columns[0].text || '',
