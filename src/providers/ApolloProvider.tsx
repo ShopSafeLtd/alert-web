@@ -56,12 +56,29 @@ const Apollo = ({ children }: Props): JSX.Element => {
     uri: import.meta.env.VITE_GRAPHQL_URL,
   });
 
+  let activeSocket: WebSocket;
+  let timedOut: number;
+
   const wsLink = new GraphQLWsLink(
     createClient({
       keepAlive: 10_000,
 
+      on: {
+        // eslint-disable-next-line no-return-assign
+        connected: (socket) => (activeSocket = socket as WebSocket),
+        ping: (received) => {
+          if (!received)
+            // sent
+            timedOut = setTimeout(() => {
+              if (activeSocket.readyState === WebSocket.OPEN)
+                activeSocket.close(4408, 'Request Timeout');
+            }, 5000); // wait 5 seconds for the pong and then close the connection
+        },
+        pong: (received) => {
+          if (received) clearTimeout(timedOut); // pong is received, clear connection close timeout
+        },
+      },
       url: import.meta.env.VITE_GRAPHQL_WS_URL,
-      lazy: true,
       connectionParams: async () => ({
         authorization: `Bearer ${await getNewToken()}`,
       }),
