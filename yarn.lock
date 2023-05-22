@@ -44,7 +44,7 @@
     lodash "^4.17.21"
     resize-observer-polyfill "^1.5.1"
 
-"@apollo/client@^3.1.3", "@apollo/client@^3.3.7":
+"@apollo/client@^3.1.3":
   version "3.4.9"
   resolved "https://registry.npmjs.org/@apollo/client/-/client-3.4.9.tgz"
   integrity sha512-1AlYjRJ/ktDApEUEP2DqHI38tqSyhSlsF/Q3fFb/aCbLHQfcSZ1dCv7ZlC9UXRyDwQYc0w23gYJ7wZde6W8P4A==
@@ -61,6 +61,25 @@
     ts-invariant "^0.9.0"
     tslib "^2.3.0"
     zen-observable-ts "^1.1.0"
+
+"@apollo/client@^3.7.14":
+  version "3.7.14"
+  resolved "https://registry.yarnpkg.com/@apollo/client/-/client-3.7.14.tgz#40ef90390e6690e94917457cd82bdeb29e8b6af9"
+  integrity sha512-BRvdkwq5PAXBkjXjboO12uksDm3nrZEqDi4xF97Fk3Mnaa0zDOEfJa7hoKTY9b9KA1EkeWv9BL3i7hSd4SfGBg==
+  dependencies:
+    "@graphql-typed-document-node/core" "^3.1.1"
+    "@wry/context" "^0.7.0"
+    "@wry/equality" "^0.5.0"
+    "@wry/trie" "^0.3.0"
+    graphql-tag "^2.12.6"
+    hoist-non-react-statics "^3.3.2"
+    optimism "^0.16.2"
+    prop-types "^15.7.2"
+    response-iterator "^0.2.6"
+    symbol-observable "^4.0.0"
+    ts-invariant "^0.10.3"
+    tslib "^2.3.0"
+    zen-observable-ts "^1.2.5"
 
 "@auth0/auth0-react@^1.10.2":
   version "1.10.2"
@@ -1817,6 +1836,11 @@
   version "3.1.0"
   resolved "https://registry.npmjs.org/@graphql-typed-document-node/core/-/core-3.1.0.tgz"
   integrity sha512-wYn6r8zVZyQJ6rQaALBEln5B1pzxb9shV5Ef97kTvn6yVGrqyXVnDqnU24MXnFubR+rZjBY9NWuxX3FB2sTsjg==
+
+"@graphql-typed-document-node/core@^3.1.1":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.2.0.tgz#5f3d96ec6b2354ad6d8a28bf216a1d97b5426861"
+  integrity sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==
 
 "@humanwhocodes/config-array@^0.11.6", "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
@@ -3930,6 +3954,13 @@
   version "0.6.1"
   resolved "https://registry.npmjs.org/@wry/context/-/context-0.6.1.tgz"
   integrity sha512-LOmVnY1iTU2D8tv4Xf6MVMZZ+juIJ87Kt/plMijjN20NMAXGmH4u8bS1t0uT74cZ5gwpocYueV58YwyI8y+GKw==
+  dependencies:
+    tslib "^2.3.0"
+
+"@wry/context@^0.7.0":
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/@wry/context/-/context-0.7.3.tgz#240f6dfd4db5ef54f81f6597f6714e58d4f476a1"
+  integrity sha512-Nl8WTesHp89RF803Se9X3IiHjdmLBrIvPMaJkl+rKVJAYyPsz1TEUbu89943HpvujtSJgDUx9W4vZw3K1Mr3sA==
   dependencies:
     tslib "^2.3.0"
 
@@ -8063,7 +8094,7 @@ graphql-request@^4.0.0:
     extract-files "^9.0.0"
     form-data "^3.0.0"
 
-graphql-tag@^2.11.0:
+graphql-tag@^2.11.0, graphql-tag@^2.12.6:
   version "2.12.6"
   resolved "https://registry.npmjs.org/graphql-tag/-/graphql-tag-2.12.6.tgz"
   integrity sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==
@@ -8077,10 +8108,10 @@ graphql-tag@^2.12.3:
   dependencies:
     tslib "^2.1.0"
 
-graphql-ws@^5.10.0:
-  version "5.10.0"
-  resolved "https://registry.yarnpkg.com/graphql-ws/-/graphql-ws-5.10.0.tgz#3fb47a4e809e0d2e7c197f1bca754fa9f31b940e"
-  integrity sha512-ewbPzHQdRZgNCPDH9Yr6xccSeZfk3fmpO/AGGGg4KkM5gc6oAOJQ10Oui1EqprhVOyRbOll9bw2qAkOiOwfTag==
+graphql-ws@^5.13.1:
+  version "5.13.1"
+  resolved "https://registry.yarnpkg.com/graphql-ws/-/graphql-ws-5.13.1.tgz#96ac9963edb1e94c8e7f21af48ce5fcaab91779a"
+  integrity sha512-eiX7ES/ZQr0q7hSM5UBOEIFfaAUmAY9/CSDyAnsETuybByU7l/v46drRg9DQoTvVABEHp3QnrvwgTRMhqy7zxQ==
 
 graphql-ws@^5.4.1:
   version "5.8.2"
@@ -11330,6 +11361,14 @@ optimism@^0.16.1:
     "@wry/context" "^0.6.0"
     "@wry/trie" "^0.3.0"
 
+optimism@^0.16.2:
+  version "0.16.2"
+  resolved "https://registry.yarnpkg.com/optimism/-/optimism-0.16.2.tgz#519b0c78b3b30954baed0defe5143de7776bf081"
+  integrity sha512-zWNbgWj+3vLEjZNIh/okkY2EUfX+vB9TJopzIZwT1xxaMqC5hRLLraePod4c5n4He08xuXNH+zhKFFCu390wiQ==
+  dependencies:
+    "@wry/context" "^0.7.0"
+    "@wry/trie" "^0.3.0"
+
 optionator@^0.9.1:
   version "0.9.1"
   resolved "https://registry.npmjs.org/optionator/-/optionator-0.9.1.tgz"
@@ -13460,6 +13499,11 @@ resolve@~1.1.6:
   resolved "https://registry.npmjs.org/resolve/-/resolve-1.1.7.tgz"
   integrity sha1-IDEU2CrSxe2ejgQRs5ModeiJ6Xs=
 
+response-iterator@^0.2.6:
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/response-iterator/-/response-iterator-0.2.6.tgz#249005fb14d2e4eeb478a3f735a28fd8b4c9f3da"
+  integrity sha512-pVzEEzrsg23Sh053rmDUvLSkGXluZio0qu8VT6ukrYuvtjVfCbDZH9d6PGXb8HZfzdNZt8feXv/jvUzlhRgLnw==
+
 responselike@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npmjs.org/responselike/-/responselike-1.0.2.tgz"
@@ -14740,6 +14784,13 @@ trough@^1.0.0:
   resolved "https://registry.npmjs.org/trough/-/trough-1.0.5.tgz"
   integrity sha512-rvuRbTarPXmMb79SmzEp8aqXNKcK+y0XaB298IXueQ8I2PsrATcPBCSPyK/dDNa2iWOhKlfNnOjdAOTBU/nkFA==
 
+ts-invariant@^0.10.3:
+  version "0.10.3"
+  resolved "https://registry.yarnpkg.com/ts-invariant/-/ts-invariant-0.10.3.tgz#3e048ff96e91459ffca01304dbc7f61c1f642f6c"
+  integrity sha512-uivwYcQaxAucv1CzRp2n/QdYPo4ILf9VXgH19zEIjFx2EJufV16P0JtJVpYHy89DItG6Kwj2oIUjrcK5au+4tQ==
+  dependencies:
+    tslib "^2.1.0"
+
 ts-invariant@^0.9.0:
   version "0.9.1"
   resolved "https://registry.npmjs.org/ts-invariant/-/ts-invariant-0.9.1.tgz"
@@ -15899,6 +15950,13 @@ zen-observable-ts@^1.1.0:
   integrity sha512-1h4zlLSqI2cRLPJUHJFL8bCWHhkpuXkF+dbGkRaWjgDIG26DmzyshUMrdV/rL3UnR+mhaX4fRq8LPouq0MYYIA==
   dependencies:
     "@types/zen-observable" "0.8.3"
+    zen-observable "0.8.15"
+
+zen-observable-ts@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/zen-observable-ts/-/zen-observable-ts-1.2.5.tgz#6c6d9ea3d3a842812c6e9519209365a122ba8b58"
+  integrity sha512-QZWQekv6iB72Naeake9hS1KxHlotfRpe+WGNbNx5/ta+R3DNjVO2bswf63gXlWDcs+EMd7XY8HfVQyP1X6T4Zg==
+  dependencies:
     zen-observable "0.8.15"
 
 zen-observable@0.8.15:

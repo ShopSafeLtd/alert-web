@@ -4,19 +4,19 @@ import React from 'react';
 import {
   ApolloClient,
   ApolloProvider,
+  HttpLink,
   InMemoryCache,
   split,
 } from '@apollo/client';
 
 import { setContext } from '@apollo/client/link/context';
-import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
-import { createUploadLink } from 'apollo-upload-client';
 
 import type { ReadFieldFunction } from '@apollo/client/cache/core/types/common';
 import { useAuth0 } from '@auth0/auth0-react';
 import { onError } from '@apollo/client/link/error';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+import { createClient } from 'graphql-ws';
 
 import * as Sentry from '@sentry/react';
 import { useStoreState } from '../state';
@@ -36,29 +36,45 @@ const Apollo = ({ children }: Props): JSX.Element => {
     });
 
   const currentScheme = useStoreState((state) => state.scheme.id);
-  const wsClient = new SubscriptionClient(
-    import.meta.env.VITE_GRAPHQL_WS_URL,
-    // "wss://alert-api-dev.azurewebsites.net/graphql",
-    // 'wss://alert-dev-api.herokuapp.com/graphql',
-    // 'ws://localhost:4000/graphql',
-    {
-      reconnect: true,
-      timeout: 20_000,
-      connectionParams: {
-        ...(accessToken ? { authorization: `Bearer ${accessToken}` } : {}),
-      },
-    }
-  );
+  // const wsClient = new SubscriptionClient(
+  //   import.meta.env.VITE_GRAPHQL_WS_URL,
+  //   // "wss://alert-api-dev.azurewebsites.net/graphql",
+  //   // 'wss://alert-dev-api.herokuapp.com/graphql',
+  //   // 'ws://localhost:4000/graphql',
+  //   {
+  //     reconnect: true,
+  //     // timeout: 20_000,
+  //     connectionParams: {
+  //       ...(accessToken ? { authorization: `Bearer ${accessToken}` } : {}),
+  //     },
+  //   }
+  // );
 
-  const wsLink = new WebSocketLink(wsClient);
+  // const wsLink = new WebSocketLink(wsClient);
 
-  const httpLink = createUploadLink({
-    // uri: "https://alert-api-dev.azurewebsites.net/graphql",
-    // uri: "https://alert-api-dev-development.azurewebsites.net/graphql",
-    // uri: 'http://localhost:4000/graphql',
-    // uri: 'https://alert-dev-api.herokuapp.com/graphql',
+  const httpLink = new HttpLink({
     uri: import.meta.env.VITE_GRAPHQL_URL,
   });
+
+  const wsLink = new GraphQLWsLink(
+    createClient({
+      keepAlive: 10_000,
+
+      url: import.meta.env.VITE_GRAPHQL_WS_URL,
+      lazy: true,
+      connectionParams: async () => ({
+        authorization: `Bearer ${await getNewToken()}`,
+      }),
+    })
+  );
+
+  // const httpLink = createUploadLink({
+  //   // uri: "https://alert-api-dev.azurewebsites.net/graphql",
+  //   // uri: "https://alert-api-dev-development.azurewebsites.net/graphql",
+  //   // uri: 'http://localhost:4000/graphql',
+  //   // uri: 'https://alert-dev-api.herokuapp.com/graphql',
+  //   uri: import.meta.env.VITE_GRAPHQL_URL,
+  // });
 
   // TODO: Add error handling
   const errorLink = onError(
@@ -146,6 +162,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
   //   },
   //   ...context,
   // }));
+
   // eslint-disable-next-line unicorn/prefer-spread
   const authHttp = errorLink.concat(middlewareLink).concat(httpLink);
 

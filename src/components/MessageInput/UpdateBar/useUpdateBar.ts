@@ -16,12 +16,11 @@ import type {
   ViewOffenderQueryVariables,
 } from 'graphql/generated';
 import {
-  TodoType,
-  useUpdateTodoMentionMutation,
-  ImagePosition,
   CrimeGroupDocument,
+  ImagePosition,
   Role,
   SortOrder,
+  TodoType,
   UpdateIcon,
   UpdateType,
   useCreateUpdateOnCrimeGroupMutation,
@@ -35,6 +34,7 @@ import {
   useSubscribeToInvestigationMutation,
   useSubscribeToOffenderMutation,
   useSubscribeToVehicleMutation,
+  useUpdateTodoMentionMutation,
   VehicleDocument,
   ViewIncidentDocument,
   ViewInvestigationDocument,
@@ -319,9 +319,7 @@ const useUpdateBar = ({
       (item) => item.name === value.name
     );
     if (isFileDuplicate) {
-      message.error(
-        'This image has already existed, please choose another one.'
-      );
+      message.error('This image already exists, please choose another one.');
     }
     return !isFileDuplicate || Upload.LIST_IGNORE;
   };

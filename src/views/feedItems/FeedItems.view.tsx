@@ -261,7 +261,7 @@ const FeedItem = ({
                               }
                               onClick={() => {
                                 confirm({
-                                  title: 'Do you want to delete the feedItem?',
+                                  title: 'Do you want to delete the feed item?',
                                   content: 'This action cannot be undone.',
                                   onOk() {
                                     onDeleteFeedItem(feedItem.id);

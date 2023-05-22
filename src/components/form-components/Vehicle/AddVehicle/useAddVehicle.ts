@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { ListCrimeGroupsQuery } from 'graphql/generated';
-import { useListCrimeGroupsQuery, Role } from 'graphql/generated';
+import { Role, useListCrimeGroupsQuery } from 'graphql/generated';
 import { message, Upload } from 'antd';
 import { useStoreState } from 'state';
 import type { OffenderData } from 'components/viewChat/ViewMessage/useViewMessage';
@@ -126,9 +126,7 @@ const useAddVehicle = ({ update, onClose }: Props): Return => {
   const beforeUpload = (file: RcFile) => {
     const isFileDuplicate = fileList.find((item) => item.name === file.name);
     if (isFileDuplicate) {
-      message.error(
-        'This image has already existed, please choose another one.'
-      );
+      message.error('This image already exists, please choose another one.');
     }
     return !isFileDuplicate || Upload.LIST_IGNORE;
   };
