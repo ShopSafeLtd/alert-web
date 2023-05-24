@@ -1,10 +1,23 @@
 import React from 'react';
-import { Button, Col, DatePicker, Input, Row, Select, Typography } from 'antd';
+import {
+  Button,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  Row,
+  Select,
+  Typography,
+} from 'antd';
 import { IncidentSort } from 'state';
 import type { DateType } from 'types/DataType';
 import useStyles from './IncidentFilter.styles';
 
 const { RangePicker } = DatePicker;
+const { useForm } = Form;
+interface FormData {
+  date: Date;
+}
 interface Props {
   order: IncidentSort;
   setOrder: (value: IncidentSort) => void;
@@ -57,11 +70,22 @@ const IncidentFilter = ({
   setIncidentDateFilter,
 }: Props): JSX.Element => {
   const classes = useStyles();
+  const [form] = useForm<FormData>();
+
   return (
-    <>
+    <Form<FormData> form={form}>
       <Row justify="end">
         <Col>
-          <Button type="text" danger onClick={clearFilters}>
+          <Button
+            type="text"
+            danger
+            onClick={() => {
+              clearFilters();
+              form.setFieldsValue({
+                date: [],
+              });
+            }}
+          >
             Clear Filters
           </Button>
         </Col>
@@ -94,16 +118,18 @@ const IncidentFilter = ({
             Created Between
           </Typography.Paragraph>
 
-          <RangePicker
-            className={classes.select}
-            onChange={(value) => {
-              if (value && value[0] && value[1])
-                setCreatedAtFilter({
-                  startDate: new Date(value[0].valueOf()),
-                  endDate: new Date(value[1].valueOf()),
-                });
-            }}
-          />
+          <Form.Item name="date">
+            <RangePicker
+              className={classes.select}
+              onChange={(value) => {
+                if (value && value[0] && value[1])
+                  setCreatedAtFilter({
+                    startDate: new Date(value[0].valueOf()),
+                    endDate: new Date(value[1].valueOf()),
+                  });
+              }}
+            />
+          </Form.Item>
         </Col>
       </Row>
       <Row gutter={16}>
@@ -237,7 +263,7 @@ const IncidentFilter = ({
           />
         </Col>
       </Row>
-    </>
+    </Form>
   );
 };
 

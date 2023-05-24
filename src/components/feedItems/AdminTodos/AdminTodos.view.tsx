@@ -69,7 +69,9 @@ const AdminTodos = ({
 }: Props): JSX.Element => {
   const classes = useStyles();
   const expandedRowRender = (record: TableItem) => (
-    <Text style={{ fontSize: 14 }}>{record.description}</Text>
+    <Text style={{ fontSize: 14, padding: 0, margin: 0 }}>
+      {record.description}
+    </Text>
   );
 
   return (
@@ -81,10 +83,10 @@ const AdminTodos = ({
         width: '100%',
       }}
     >
-      <Row align="middle" gutter={10} style={{ marginBottom: 10 }} wrap={false}>
+      <Row align="middle" gutter={8} wrap={false} style={{ marginBottom: 10 }}>
         <Col>
           <Title className={classes.title} level={4}>
-            Admin To-do
+            To-Do
           </Title>
         </Col>
         <Col flex={1}>
@@ -97,11 +99,12 @@ const AdminTodos = ({
         </Col>
         <Col>
           <Button
-            // type="text"
-            size="small"
+            type="text"
+            // size="small"
+            style={{ marginRight: -7 }}
             danger
             disabled={saving}
-            icon={<FontAwesomeIcon icon={faPlus} style={{ marginRight: 0 }} />}
+            icon={<FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />}
             onClick={toggleAddTodo}
           >
             Todo
@@ -137,10 +140,9 @@ const AdminTodos = ({
           }}
           columns={[
             {
-              title: '',
               dataIndex: 'actions',
               key: 'actions',
-              width: 30,
+              width: 40,
               render: (_, record) => (
                 <Popconfirm
                   title="Complete this task?"
@@ -150,10 +152,7 @@ const AdminTodos = ({
                   cancelText="No"
                   overlayInnerStyle={{ padding: 10 }}
                 >
-                  <Checkbox
-                    checked={!!record.completed}
-                    style={{ color: 'red' }}
-                  />
+                  <Checkbox checked={!!record.completed} />
                 </Popconfirm>
               ),
             },
@@ -161,16 +160,16 @@ const AdminTodos = ({
               key: 'name',
               dataIndex: 'name',
               title: 'Name',
+              ellipsis: true,
               render: (value, record) => (
                 <Link to={`${getTodoUrl(record.todo)}`}>{value}</Link>
               ),
             },
-
             {
               key: 'dueDate',
               dataIndex: 'dueDate',
               title: 'Due Date',
-              width: 100,
+              width: 120,
               render: (value) => moment(value).calendar('dd/mm/yyyy'),
             },
           ]}
@@ -225,7 +224,7 @@ const AdminTodos = ({
                   title: '',
                   dataIndex: 'actions',
                   key: 'actions',
-                  width: 30,
+                  width: 40,
                   render: (_, record) => (
                     <Popconfirm
                       title="Uncompleted this task?"
@@ -243,7 +242,7 @@ const AdminTodos = ({
                   key: 'name',
                   dataIndex: 'name',
                   title: 'Name',
-                  // ellipsis: true,
+                  ellipsis: true,
                 },
                 // {
                 //   key: 'completedBy',

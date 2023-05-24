@@ -1,10 +1,8 @@
 import React from 'react';
 import { Button, Col, Row, Select, Typography, DatePicker, Form } from 'antd';
-
-import { FeedItemSort } from 'state';
-import { Model } from 'graphql/generated';
+import { SortOrder, ArticlePriority } from 'graphql/generated';
 import type { DateType } from 'types/DataType';
-import useStyles from './FeedItemFilter.styles';
+import useStyles from './ArticleFilter.styles';
 
 const { RangePicker } = DatePicker;
 const { useForm } = Form;
@@ -12,25 +10,25 @@ interface FormData {
   date: Date;
 }
 interface Props {
-  order: FeedItemSort;
-  setOrder: (value: FeedItemSort) => void;
+  order: SortOrder;
+  setOrder: (value: SortOrder) => void;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
   groupsFilter: string[];
   setGroupsFilter: (value: string[]) => void;
-  typesFilter: Model[];
-  setTypesFilter: (value: Model[]) => void;
+  priorityFilter: ArticlePriority[];
+  setPriorityFilter: (value: ArticlePriority[]) => void;
   clearFilters: () => void;
   setCreatedAtFilter: (value: DateType | undefined) => void;
 }
 
-const FeedItemFilter = ({
+const ArticleFilter = ({
   order,
   setOrder,
   groups,
   groupsLoading,
-  typesFilter,
-  setTypesFilter,
+  priorityFilter,
+  setPriorityFilter,
   groupsFilter,
   setGroupsFilter,
   clearFilters,
@@ -57,9 +55,7 @@ const FeedItemFilter = ({
           </Button>
         </Col>
       </Row>
-      {/* <Typography.Paragraph className={classes.filtersTitle}>
-        FeedItems
-      </Typography.Paragraph> */}
+
       <Row gutter={16}>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
@@ -71,12 +67,8 @@ const FeedItemFilter = ({
             onChange={setOrder}
             size="small"
           >
-            <Select.Option value={FeedItemSort.updatedAtDesc}>
-              Newest First
-            </Select.Option>
-            <Select.Option value={FeedItemSort.updatedAtAsc}>
-              Oldest First
-            </Select.Option>
+            <Select.Option value={SortOrder.Desc}>Newest First</Select.Option>
+            <Select.Option value={SortOrder.Asc}>Oldest First</Select.Option>
           </Select>
         </Col>
       </Row>
@@ -85,7 +77,6 @@ const FeedItemFilter = ({
           <Typography.Paragraph className={classes.selectTitle}>
             Created Between
           </Typography.Paragraph>
-
           <Form.Item name="date">
             <RangePicker
               className={classes.select}
@@ -125,26 +116,21 @@ const FeedItemFilter = ({
       <Row>
         <Col span={23}>
           <Typography.Paragraph className={classes.selectTitle}>
-            Types
+            Priority
           </Typography.Paragraph>
           <Select
             className={classes.select}
-            placeholder="Types"
+            placeholder="Priority"
             mode="multiple"
             size="small"
             allowClear
             maxTagCount={2}
-            onChange={setTypesFilter}
-            value={typesFilter}
+            onChange={setPriorityFilter}
+            value={priorityFilter}
           >
-            <Select.Option value={Model.Incident}>Incident</Select.Option>
-            <Select.Option value={Model.Offender}>Offender</Select.Option>
-            <Select.Option value={Model.Investigation}>
-              Investigation
-            </Select.Option>
-            <Select.Option value={Model.Vehicle}>Vehicle</Select.Option>
-            <Select.Option value={Model.CrimeGroup}>CrimeGroup</Select.Option>
-            <Select.Option value={Model.Article}>Article</Select.Option>
+            <Select.Option value={ArticlePriority.High}>High</Select.Option>
+            <Select.Option value={ArticlePriority.Medium}>Medium</Select.Option>
+            <Select.Option value={ArticlePriority.Normal}>Normal</Select.Option>
           </Select>
         </Col>
       </Row>
@@ -152,4 +138,4 @@ const FeedItemFilter = ({
   );
 };
 
-export default FeedItemFilter;
+export default ArticleFilter;

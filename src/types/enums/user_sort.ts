@@ -22,8 +22,3 @@ export const userSortValues = [
     label: 'Name Z-A',
   },
 ];
-
-// export enum UpdatedAtSort {
-//   updatedAtDesc = 'UPDATED_AT_DESC',
-//   updatedAtAsc = 'UPDATED_AT_ASC',
-// }

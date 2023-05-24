@@ -10,6 +10,7 @@ import {
 import { useStoreState } from 'state';
 import { notification } from 'antd';
 import { useParams } from 'react-router';
+import errorNotification from 'types/error_notification';
 
 interface Props {
   onClose: () => void;
@@ -78,11 +79,7 @@ const useAddExistingCrimeGroup = ({
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
 

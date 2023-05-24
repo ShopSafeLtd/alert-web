@@ -7,7 +7,7 @@ import {
   useListTodosQuery,
   useUpdateTodoMutation,
 } from 'graphql/generated';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { MutationUpdaterFn } from '@apollo/client';
 
 interface Props {
@@ -42,9 +42,9 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
   // ???
   const setTodoList = useStoreActions((actions) => actions.user.setTodos);
   const userTodos = useStoreState((state) => state.user.userTodos);
-  useEffect(() => {
-    if (!search && fullSearch) setSearch(fullSearch);
-  }, [fullSearch]);
+  // useEffect(() => {
+  //   if (!search && fullSearch) setSearch(fullSearch);
+  // }, [fullSearch]);
 
   const variables = {
     orderBy: {
@@ -70,13 +70,13 @@ const useAdminTodos = ({ fullSearch }: Props): Return => {
       OR: [
         {
           name: {
-            contains: search,
+            contains: search || fullSearch,
             mode: QueryMode.Insensitive,
           },
         },
         {
           description: {
-            contains: search,
+            contains: search || fullSearch,
             mode: QueryMode.Insensitive,
           },
         },
