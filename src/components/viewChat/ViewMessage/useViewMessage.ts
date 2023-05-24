@@ -145,12 +145,13 @@ interface Return {
 const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const apolloStore = useApolloClient();
 
-  const role = useStoreState((state) => state.user.role);
-  const userId = useStoreState((state) => state.user.id);
-  const userOrigName = useStoreState((state) => state.user.origName);
+  const {
+    role,
+    id: userId,
+    origName: userOrigName,
+  } = useStoreState((state) => state.user);
   const schemeId = useStoreState((state) => state.scheme.id);
   const navigate = useNavigate();
-
   const [saving, setSaving] = useState(false);
   const [form] = useForm<FormData>();
   const [after, setAfter] = useState(0);
