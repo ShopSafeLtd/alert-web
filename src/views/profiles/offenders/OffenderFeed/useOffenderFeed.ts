@@ -475,6 +475,7 @@ const useOffenderFeed = (): Return => {
     setSex([]);
     setBusinesses([]);
     setOrder(OffenderSort.updatedAtDesc);
+    setCreatedAtFilter(undefined);
   };
 
   return {

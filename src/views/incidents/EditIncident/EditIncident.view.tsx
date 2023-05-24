@@ -434,12 +434,30 @@ const EditIncident = ({
               </Form.Item>
             </Col>
             <Col span={6}>
-              <Form.Item name="street" label="Street">
+              <Form.Item
+                name="street"
+                label="Street"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please enter a street for the incident.',
+                  },
+                ]}
+              >
                 <Input />
               </Form.Item>
             </Col>
             <Col span={6}>
-              <Form.Item name="townCity" label="Town/City">
+              <Form.Item
+                name="townCity"
+                label="Town/City"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please enter a town/city for the incident.',
+                  },
+                ]}
+              >
                 <Input />
               </Form.Item>
             </Col>
@@ -449,7 +467,16 @@ const EditIncident = ({
               </Form.Item>
             </Col>
             <Col span={6}>
-              <Form.Item name="postcode" label="Postcode">
+              <Form.Item
+                name="postcode"
+                label="Postcode"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please enter a postcode for the incident.',
+                  },
+                ]}
+              >
                 <Input />
               </Form.Item>
             </Col>

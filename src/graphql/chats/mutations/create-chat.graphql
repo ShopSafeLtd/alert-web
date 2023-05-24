@@ -3,57 +3,41 @@ mutation createChat($data: ChatCreateInput!) {
     id
     name
     description
+    updatedAt
+    createdAt
     members {
       id
       newMessages
+      mentioned
       updatedAt
       createdAt
-      user {
-        id
-        fullName
-        firstLetter
-        origFirstLetter
-        origName
-        businesses {
-          fullName
-          id
-          name
-        }
-      }
       chat {
         id
         name
         firstLetter
+        totalMembers
         messages {
           id
           content
           createdAt
           from {
             id
-            fullName
             origName
           }
           images {
             id
-            url
-            optimised
-            position
           }
           incidents {
             id
-            subject
           }
           offenders {
             id
-            name
           }
           vehicles {
             id
-            reference
           }
           crimeGroups {
             id
-            reference
           }
         }
       }

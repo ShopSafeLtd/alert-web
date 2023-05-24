@@ -5043,6 +5043,7 @@ export type BanCreateInput = {
   createdBy: UserCreateNestedOneWithoutBansInput;
   description?: InputMaybe<Scalars['String']>;
   endDate: Scalars['DateTime'];
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutBanInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutBansInput>;
   id?: InputMaybe<Scalars['String']>;
   location: Scalars['String'];
@@ -5151,6 +5152,12 @@ export type BanCreateNestedOneWithoutActionsInput = {
   create?: InputMaybe<BanCreateWithoutActionsInput>;
 };
 
+export type BanCreateNestedOneWithoutFeedItemsInput = {
+  connect?: InputMaybe<BanWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<BanCreateOrConnectWithoutFeedItemsInput>;
+  create?: InputMaybe<BanCreateWithoutFeedItemsInput>;
+};
+
 export type BanCreateOrConnectWithoutActionsInput = {
   create: BanCreateWithoutActionsInput;
   where: BanWhereUniqueInput;
@@ -5158,6 +5165,11 @@ export type BanCreateOrConnectWithoutActionsInput = {
 
 export type BanCreateOrConnectWithoutCreatedByInput = {
   create: BanCreateWithoutCreatedByInput;
+  where: BanWhereUniqueInput;
+};
+
+export type BanCreateOrConnectWithoutFeedItemsInput = {
+  create: BanCreateWithoutFeedItemsInput;
   where: BanWhereUniqueInput;
 };
 
@@ -5182,6 +5194,7 @@ export type BanCreateWithoutActionsInput = {
   createdBy: UserCreateNestedOneWithoutBansInput;
   description?: InputMaybe<Scalars['String']>;
   endDate: Scalars['DateTime'];
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutBanInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutBansInput>;
   id?: InputMaybe<Scalars['String']>;
   location: Scalars['String'];
@@ -5198,6 +5211,26 @@ export type BanCreateWithoutCreatedByInput = {
   actions?: InputMaybe<ActionCreateNestedManyWithoutBanInput>;
   active?: InputMaybe<Scalars['Boolean']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
+  description?: InputMaybe<Scalars['String']>;
+  endDate: Scalars['DateTime'];
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutBanInput>;
+  groups?: InputMaybe<GroupCreateNestedManyWithoutBansInput>;
+  id?: InputMaybe<Scalars['String']>;
+  location: Scalars['String'];
+  offender: OffenderCreateNestedOneWithoutBansInput;
+  reference?: InputMaybe<Scalars['Int']>;
+  scheme: SchemeCreateNestedOneWithoutBansInput;
+  startDate: Scalars['DateTime'];
+  title?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<BanType>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type BanCreateWithoutFeedItemsInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutBanInput>;
+  active?: InputMaybe<Scalars['Boolean']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdBy: UserCreateNestedOneWithoutBansInput;
   description?: InputMaybe<Scalars['String']>;
   endDate: Scalars['DateTime'];
   groups?: InputMaybe<GroupCreateNestedManyWithoutBansInput>;
@@ -5219,6 +5252,7 @@ export type BanCreateWithoutGroupsInput = {
   createdBy: UserCreateNestedOneWithoutBansInput;
   description?: InputMaybe<Scalars['String']>;
   endDate: Scalars['DateTime'];
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutBanInput>;
   id?: InputMaybe<Scalars['String']>;
   location: Scalars['String'];
   offender: OffenderCreateNestedOneWithoutBansInput;
@@ -5237,6 +5271,7 @@ export type BanCreateWithoutOffenderInput = {
   createdBy: UserCreateNestedOneWithoutBansInput;
   description?: InputMaybe<Scalars['String']>;
   endDate: Scalars['DateTime'];
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutBanInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutBansInput>;
   id?: InputMaybe<Scalars['String']>;
   location: Scalars['String'];
@@ -5255,6 +5290,7 @@ export type BanCreateWithoutSchemeInput = {
   createdBy: UserCreateNestedOneWithoutBansInput;
   description?: InputMaybe<Scalars['String']>;
   endDate: Scalars['DateTime'];
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutBanInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutBansInput>;
   id?: InputMaybe<Scalars['String']>;
   location: Scalars['String'];
@@ -5284,6 +5320,7 @@ export type BanOrderByWithRelationInput = {
   createdById?: InputMaybe<SortOrder>;
   description?: InputMaybe<SortOrder>;
   endDate?: InputMaybe<SortOrder>;
+  feedItems?: InputMaybe<FeedItemOrderByRelationAggregateInput>;
   groups?: InputMaybe<GroupOrderByRelationAggregateInput>;
   id?: InputMaybe<SortOrder>;
   location?: InputMaybe<SortOrder>;
@@ -5331,6 +5368,7 @@ export type BanUpdateInput = {
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutBansNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   endDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutBanNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutBansNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   location?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -5442,6 +5480,16 @@ export type BanUpdateOneWithoutActionsNestedInput = {
   upsert?: InputMaybe<BanUpsertWithoutActionsInput>;
 };
 
+export type BanUpdateOneWithoutFeedItemsNestedInput = {
+  connect?: InputMaybe<BanWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<BanCreateOrConnectWithoutFeedItemsInput>;
+  create?: InputMaybe<BanCreateWithoutFeedItemsInput>;
+  delete?: InputMaybe<Scalars['Boolean']>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+  update?: InputMaybe<BanUpdateWithoutFeedItemsInput>;
+  upsert?: InputMaybe<BanUpsertWithoutFeedItemsInput>;
+};
+
 export type BanUpdateWithWhereUniqueWithoutCreatedByInput = {
   data: BanUpdateWithoutCreatedByInput;
   where: BanWhereUniqueInput;
@@ -5468,6 +5516,7 @@ export type BanUpdateWithoutActionsInput = {
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutBansNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   endDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutBanNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutBansNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   location?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -5484,6 +5533,26 @@ export type BanUpdateWithoutCreatedByInput = {
   actions?: InputMaybe<ActionUpdateManyWithoutBanNestedInput>;
   active?: InputMaybe<BoolFieldUpdateOperationsInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  endDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutBanNestedInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutBansNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  location?: InputMaybe<StringFieldUpdateOperationsInput>;
+  offender?: InputMaybe<OffenderUpdateOneRequiredWithoutBansNestedInput>;
+  reference?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutBansNestedInput>;
+  startDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  title?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  type?: InputMaybe<NullableEnumBanTypeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+};
+
+export type BanUpdateWithoutFeedItemsInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutBanNestedInput>;
+  active?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdBy?: InputMaybe<UserUpdateOneRequiredWithoutBansNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   endDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutBansNestedInput>;
@@ -5505,6 +5574,7 @@ export type BanUpdateWithoutGroupsInput = {
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutBansNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   endDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutBanNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   location?: InputMaybe<StringFieldUpdateOperationsInput>;
   offender?: InputMaybe<OffenderUpdateOneRequiredWithoutBansNestedInput>;
@@ -5523,6 +5593,7 @@ export type BanUpdateWithoutOffenderInput = {
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutBansNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   endDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutBanNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutBansNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   location?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -5541,6 +5612,7 @@ export type BanUpdateWithoutSchemeInput = {
   createdBy?: InputMaybe<UserUpdateOneRequiredWithoutBansNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   endDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutBanNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutBansNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   location?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -5581,6 +5653,11 @@ export type BanUpsertWithoutActionsInput = {
   update: BanUpdateWithoutActionsInput;
 };
 
+export type BanUpsertWithoutFeedItemsInput = {
+  create: BanCreateWithoutFeedItemsInput;
+  update: BanUpdateWithoutFeedItemsInput;
+};
+
 export type BanWhereInput = {
   AND?: InputMaybe<Array<BanWhereInput>>;
   NOT?: InputMaybe<Array<BanWhereInput>>;
@@ -5592,6 +5669,7 @@ export type BanWhereInput = {
   createdById?: InputMaybe<StringFilter>;
   description?: InputMaybe<StringNullableFilter>;
   endDate?: InputMaybe<DateTimeFilter>;
+  feedItems?: InputMaybe<FeedItemListRelationFilter>;
   groups?: InputMaybe<GroupListRelationFilter>;
   id?: InputMaybe<StringFilter>;
   location?: InputMaybe<StringFilter>;
@@ -9419,6 +9497,8 @@ export type FeedItem = {
   __typename?: 'FeedItem';
   article?: Maybe<Article>;
   articleId?: Maybe<Scalars['String']>;
+  ban?: Maybe<Ban>;
+  banId?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   crimeGroup?: Maybe<CrimeGroup>;
   crimeGroupId?: Maybe<Scalars['String']>;
@@ -9457,6 +9537,7 @@ export type FeedItemImagesArgs = {
 };
 
 export type FeedItemCreateManyArticleInput = {
+  banId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdById?: InputMaybe<Scalars['String']>;
   crimeGroupId?: InputMaybe<Scalars['String']>;
@@ -9477,8 +9558,31 @@ export type FeedItemCreateManyArticleInputEnvelope = {
   skipDuplicates?: InputMaybe<Scalars['Boolean']>;
 };
 
+export type FeedItemCreateManyBanInput = {
+  articleId?: InputMaybe<Scalars['String']>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdById?: InputMaybe<Scalars['String']>;
+  crimeGroupId?: InputMaybe<Scalars['String']>;
+  description?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']>;
+  incidentId?: InputMaybe<Scalars['String']>;
+  investigationId?: InputMaybe<Scalars['String']>;
+  message: Scalars['String'];
+  model?: InputMaybe<Model>;
+  offenderId?: InputMaybe<Scalars['String']>;
+  type: FeedItemType;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicleId?: InputMaybe<Scalars['String']>;
+};
+
+export type FeedItemCreateManyBanInputEnvelope = {
+  data?: InputMaybe<Array<FeedItemCreateManyBanInput>>;
+  skipDuplicates?: InputMaybe<Scalars['Boolean']>;
+};
+
 export type FeedItemCreateManyCreatedByInput = {
   articleId?: InputMaybe<Scalars['String']>;
+  banId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroupId?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
@@ -9500,6 +9604,7 @@ export type FeedItemCreateManyCreatedByInputEnvelope = {
 
 export type FeedItemCreateManyCrimeGroupInput = {
   articleId?: InputMaybe<Scalars['String']>;
+  banId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdById?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
@@ -9521,6 +9626,7 @@ export type FeedItemCreateManyCrimeGroupInputEnvelope = {
 
 export type FeedItemCreateManyIncidentInput = {
   articleId?: InputMaybe<Scalars['String']>;
+  banId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdById?: InputMaybe<Scalars['String']>;
   crimeGroupId?: InputMaybe<Scalars['String']>;
@@ -9542,6 +9648,7 @@ export type FeedItemCreateManyIncidentInputEnvelope = {
 
 export type FeedItemCreateManyInvestigationInput = {
   articleId?: InputMaybe<Scalars['String']>;
+  banId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdById?: InputMaybe<Scalars['String']>;
   crimeGroupId?: InputMaybe<Scalars['String']>;
@@ -9563,6 +9670,7 @@ export type FeedItemCreateManyInvestigationInputEnvelope = {
 
 export type FeedItemCreateManyOffenderInput = {
   articleId?: InputMaybe<Scalars['String']>;
+  banId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdById?: InputMaybe<Scalars['String']>;
   crimeGroupId?: InputMaybe<Scalars['String']>;
@@ -9584,6 +9692,7 @@ export type FeedItemCreateManyOffenderInputEnvelope = {
 
 export type FeedItemCreateManyVehicleInput = {
   articleId?: InputMaybe<Scalars['String']>;
+  banId?: InputMaybe<Scalars['String']>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdById?: InputMaybe<Scalars['String']>;
   crimeGroupId?: InputMaybe<Scalars['String']>;
@@ -9610,6 +9719,13 @@ export type FeedItemCreateNestedManyWithoutArticleInput = {
   >;
   create?: InputMaybe<Array<FeedItemCreateWithoutArticleInput>>;
   createMany?: InputMaybe<FeedItemCreateManyArticleInputEnvelope>;
+};
+
+export type FeedItemCreateNestedManyWithoutBanInput = {
+  connect?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<FeedItemCreateOrConnectWithoutBanInput>>;
+  create?: InputMaybe<Array<FeedItemCreateWithoutBanInput>>;
+  createMany?: InputMaybe<FeedItemCreateManyBanInputEnvelope>;
 };
 
 export type FeedItemCreateNestedManyWithoutCreatedByInput = {
@@ -9673,6 +9789,14 @@ export type FeedItemCreateNestedManyWithoutOffenderInput = {
   createMany?: InputMaybe<FeedItemCreateManyOffenderInputEnvelope>;
 };
 
+export type FeedItemCreateNestedManyWithoutSchemesInput = {
+  connect?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<FeedItemCreateOrConnectWithoutSchemesInput>
+  >;
+  create?: InputMaybe<Array<FeedItemCreateWithoutSchemesInput>>;
+};
+
 export type FeedItemCreateNestedManyWithoutVehicleInput = {
   connect?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<
@@ -9684,6 +9808,11 @@ export type FeedItemCreateNestedManyWithoutVehicleInput = {
 
 export type FeedItemCreateOrConnectWithoutArticleInput = {
   create: FeedItemCreateWithoutArticleInput;
+  where: FeedItemWhereUniqueInput;
+};
+
+export type FeedItemCreateOrConnectWithoutBanInput = {
+  create: FeedItemCreateWithoutBanInput;
   where: FeedItemWhereUniqueInput;
 };
 
@@ -9722,12 +9851,18 @@ export type FeedItemCreateOrConnectWithoutOffenderInput = {
   where: FeedItemWhereUniqueInput;
 };
 
+export type FeedItemCreateOrConnectWithoutSchemesInput = {
+  create: FeedItemCreateWithoutSchemesInput;
+  where: FeedItemWhereUniqueInput;
+};
+
 export type FeedItemCreateOrConnectWithoutVehicleInput = {
   create: FeedItemCreateWithoutVehicleInput;
   where: FeedItemWhereUniqueInput;
 };
 
 export type FeedItemCreateWithoutArticleInput = {
+  ban?: InputMaybe<BanCreateNestedOneWithoutFeedItemsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy?: InputMaybe<UserCreateNestedOneWithoutFeedItemsInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutFeedItemsInput>;
@@ -9740,6 +9875,27 @@ export type FeedItemCreateWithoutArticleInput = {
   message: Scalars['String'];
   model?: InputMaybe<Model>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutFeedItemsInput>;
+  type: FeedItemType;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutFeedItemsInput>;
+};
+
+export type FeedItemCreateWithoutBanInput = {
+  article?: InputMaybe<ArticleCreateNestedOneWithoutFeedItemsInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdBy?: InputMaybe<UserCreateNestedOneWithoutFeedItemsInput>;
+  crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutFeedItemsInput>;
+  description?: InputMaybe<Scalars['String']>;
+  groups?: InputMaybe<GroupCreateNestedManyWithoutFeedItemsInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutFeeditemsInput>;
+  incident?: InputMaybe<IncidentCreateNestedOneWithoutFeedItemsInput>;
+  investigation?: InputMaybe<InvestigationCreateNestedOneWithoutFeedItemsInput>;
+  message: Scalars['String'];
+  model?: InputMaybe<Model>;
+  offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutFeedItemsInput>;
   type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicle?: InputMaybe<VehicleCreateNestedOneWithoutFeedItemsInput>;
@@ -9747,6 +9903,7 @@ export type FeedItemCreateWithoutArticleInput = {
 
 export type FeedItemCreateWithoutCreatedByInput = {
   article?: InputMaybe<ArticleCreateNestedOneWithoutFeedItemsInput>;
+  ban?: InputMaybe<BanCreateNestedOneWithoutFeedItemsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutFeedItemsInput>;
   description?: InputMaybe<Scalars['String']>;
@@ -9758,6 +9915,7 @@ export type FeedItemCreateWithoutCreatedByInput = {
   message: Scalars['String'];
   model?: InputMaybe<Model>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutFeedItemsInput>;
   type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicle?: InputMaybe<VehicleCreateNestedOneWithoutFeedItemsInput>;
@@ -9765,6 +9923,7 @@ export type FeedItemCreateWithoutCreatedByInput = {
 
 export type FeedItemCreateWithoutCrimeGroupInput = {
   article?: InputMaybe<ArticleCreateNestedOneWithoutFeedItemsInput>;
+  ban?: InputMaybe<BanCreateNestedOneWithoutFeedItemsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy?: InputMaybe<UserCreateNestedOneWithoutFeedItemsInput>;
   description?: InputMaybe<Scalars['String']>;
@@ -9776,6 +9935,7 @@ export type FeedItemCreateWithoutCrimeGroupInput = {
   message: Scalars['String'];
   model?: InputMaybe<Model>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutFeedItemsInput>;
   type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicle?: InputMaybe<VehicleCreateNestedOneWithoutFeedItemsInput>;
@@ -9783,6 +9943,7 @@ export type FeedItemCreateWithoutCrimeGroupInput = {
 
 export type FeedItemCreateWithoutGroupsInput = {
   article?: InputMaybe<ArticleCreateNestedOneWithoutFeedItemsInput>;
+  ban?: InputMaybe<BanCreateNestedOneWithoutFeedItemsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy?: InputMaybe<UserCreateNestedOneWithoutFeedItemsInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutFeedItemsInput>;
@@ -9794,6 +9955,7 @@ export type FeedItemCreateWithoutGroupsInput = {
   message: Scalars['String'];
   model?: InputMaybe<Model>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutFeedItemsInput>;
   type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicle?: InputMaybe<VehicleCreateNestedOneWithoutFeedItemsInput>;
@@ -9801,6 +9963,7 @@ export type FeedItemCreateWithoutGroupsInput = {
 
 export type FeedItemCreateWithoutImagesInput = {
   article?: InputMaybe<ArticleCreateNestedOneWithoutFeedItemsInput>;
+  ban?: InputMaybe<BanCreateNestedOneWithoutFeedItemsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy?: InputMaybe<UserCreateNestedOneWithoutFeedItemsInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutFeedItemsInput>;
@@ -9812,6 +9975,7 @@ export type FeedItemCreateWithoutImagesInput = {
   message: Scalars['String'];
   model?: InputMaybe<Model>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutFeedItemsInput>;
   type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicle?: InputMaybe<VehicleCreateNestedOneWithoutFeedItemsInput>;
@@ -9819,6 +9983,7 @@ export type FeedItemCreateWithoutImagesInput = {
 
 export type FeedItemCreateWithoutIncidentInput = {
   article?: InputMaybe<ArticleCreateNestedOneWithoutFeedItemsInput>;
+  ban?: InputMaybe<BanCreateNestedOneWithoutFeedItemsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy?: InputMaybe<UserCreateNestedOneWithoutFeedItemsInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutFeedItemsInput>;
@@ -9830,6 +9995,7 @@ export type FeedItemCreateWithoutIncidentInput = {
   message: Scalars['String'];
   model?: InputMaybe<Model>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutFeedItemsInput>;
   type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicle?: InputMaybe<VehicleCreateNestedOneWithoutFeedItemsInput>;
@@ -9837,6 +10003,7 @@ export type FeedItemCreateWithoutIncidentInput = {
 
 export type FeedItemCreateWithoutInvestigationInput = {
   article?: InputMaybe<ArticleCreateNestedOneWithoutFeedItemsInput>;
+  ban?: InputMaybe<BanCreateNestedOneWithoutFeedItemsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy?: InputMaybe<UserCreateNestedOneWithoutFeedItemsInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutFeedItemsInput>;
@@ -9848,6 +10015,7 @@ export type FeedItemCreateWithoutInvestigationInput = {
   message: Scalars['String'];
   model?: InputMaybe<Model>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutFeedItemsInput>;
   type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicle?: InputMaybe<VehicleCreateNestedOneWithoutFeedItemsInput>;
@@ -9855,6 +10023,7 @@ export type FeedItemCreateWithoutInvestigationInput = {
 
 export type FeedItemCreateWithoutOffenderInput = {
   article?: InputMaybe<ArticleCreateNestedOneWithoutFeedItemsInput>;
+  ban?: InputMaybe<BanCreateNestedOneWithoutFeedItemsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy?: InputMaybe<UserCreateNestedOneWithoutFeedItemsInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutFeedItemsInput>;
@@ -9866,13 +10035,15 @@ export type FeedItemCreateWithoutOffenderInput = {
   investigation?: InputMaybe<InvestigationCreateNestedOneWithoutFeedItemsInput>;
   message: Scalars['String'];
   model?: InputMaybe<Model>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutFeedItemsInput>;
   type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   vehicle?: InputMaybe<VehicleCreateNestedOneWithoutFeedItemsInput>;
 };
 
-export type FeedItemCreateWithoutVehicleInput = {
+export type FeedItemCreateWithoutSchemesInput = {
   article?: InputMaybe<ArticleCreateNestedOneWithoutFeedItemsInput>;
+  ban?: InputMaybe<BanCreateNestedOneWithoutFeedItemsInput>;
   createdAt?: InputMaybe<Scalars['DateTime']>;
   createdBy?: InputMaybe<UserCreateNestedOneWithoutFeedItemsInput>;
   crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutFeedItemsInput>;
@@ -9885,6 +10056,27 @@ export type FeedItemCreateWithoutVehicleInput = {
   message: Scalars['String'];
   model?: InputMaybe<Model>;
   offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
+  type: FeedItemType;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicle?: InputMaybe<VehicleCreateNestedOneWithoutFeedItemsInput>;
+};
+
+export type FeedItemCreateWithoutVehicleInput = {
+  article?: InputMaybe<ArticleCreateNestedOneWithoutFeedItemsInput>;
+  ban?: InputMaybe<BanCreateNestedOneWithoutFeedItemsInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  createdBy?: InputMaybe<UserCreateNestedOneWithoutFeedItemsInput>;
+  crimeGroup?: InputMaybe<CrimeGroupCreateNestedOneWithoutFeedItemsInput>;
+  description?: InputMaybe<Scalars['String']>;
+  groups?: InputMaybe<GroupCreateNestedManyWithoutFeedItemsInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutFeeditemsInput>;
+  incident?: InputMaybe<IncidentCreateNestedOneWithoutFeedItemsInput>;
+  investigation?: InputMaybe<InvestigationCreateNestedOneWithoutFeedItemsInput>;
+  message: Scalars['String'];
+  model?: InputMaybe<Model>;
+  offender?: InputMaybe<OffenderCreateNestedOneWithoutFeedItemsInput>;
+  schemes?: InputMaybe<SchemeCreateNestedManyWithoutFeedItemsInput>;
   type: FeedItemType;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
 };
@@ -9902,6 +10094,8 @@ export type FeedItemOrderByRelationAggregateInput = {
 export type FeedItemOrderByWithRelationInput = {
   article?: InputMaybe<ArticleOrderByWithRelationInput>;
   articleId?: InputMaybe<SortOrder>;
+  ban?: InputMaybe<BanOrderByWithRelationInput>;
+  banId?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
   createdBy?: InputMaybe<UserOrderByWithRelationInput>;
   createdById?: InputMaybe<SortOrder>;
@@ -9919,6 +10113,7 @@ export type FeedItemOrderByWithRelationInput = {
   model?: InputMaybe<SortOrder>;
   offender?: InputMaybe<OffenderOrderByWithRelationInput>;
   offenderId?: InputMaybe<SortOrder>;
+  schemes?: InputMaybe<SchemeOrderByRelationAggregateInput>;
   type?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
   vehicle?: InputMaybe<VehicleOrderByWithRelationInput>;
@@ -9930,6 +10125,7 @@ export type FeedItemScalarWhereInput = {
   NOT?: InputMaybe<Array<FeedItemScalarWhereInput>>;
   OR?: InputMaybe<Array<FeedItemScalarWhereInput>>;
   articleId?: InputMaybe<StringNullableFilter>;
+  banId?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   createdById?: InputMaybe<StringNullableFilter>;
   crimeGroupId?: InputMaybe<StringNullableFilter>;
@@ -9954,6 +10150,7 @@ export enum FeedItemType {
   InvestigationImage = 'INVESTIGATION_IMAGE',
   InvestigationIntel = 'INVESTIGATION_INTEL',
   NewArticle = 'NEW_ARTICLE',
+  NewBan = 'NEW_BAN',
   NewCrimegroup = 'NEW_CRIMEGROUP',
   NewIncident = 'NEW_INCIDENT',
   NewInvestigation = 'NEW_INVESTIGATION',
@@ -9978,6 +10175,11 @@ export type FeedItemUpdateManyMutationInput = {
 };
 
 export type FeedItemUpdateManyWithWhereWithoutArticleInput = {
+  data: FeedItemUpdateManyMutationInput;
+  where: FeedItemScalarWhereInput;
+};
+
+export type FeedItemUpdateManyWithWhereWithoutBanInput = {
   data: FeedItemUpdateManyMutationInput;
   where: FeedItemScalarWhereInput;
 };
@@ -10017,6 +10219,11 @@ export type FeedItemUpdateManyWithWhereWithoutOffenderInput = {
   where: FeedItemScalarWhereInput;
 };
 
+export type FeedItemUpdateManyWithWhereWithoutSchemesInput = {
+  data: FeedItemUpdateManyMutationInput;
+  where: FeedItemScalarWhereInput;
+};
+
 export type FeedItemUpdateManyWithWhereWithoutVehicleInput = {
   data: FeedItemUpdateManyMutationInput;
   where: FeedItemScalarWhereInput;
@@ -10038,6 +10245,20 @@ export type FeedItemUpdateManyWithoutArticleNestedInput = {
     Array<FeedItemUpdateManyWithWhereWithoutArticleInput>
   >;
   upsert?: InputMaybe<Array<FeedItemUpsertWithWhereUniqueWithoutArticleInput>>;
+};
+
+export type FeedItemUpdateManyWithoutBanNestedInput = {
+  connect?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<FeedItemCreateOrConnectWithoutBanInput>>;
+  create?: InputMaybe<Array<FeedItemCreateWithoutBanInput>>;
+  createMany?: InputMaybe<FeedItemCreateManyBanInputEnvelope>;
+  delete?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<FeedItemScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  set?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  update?: InputMaybe<Array<FeedItemUpdateWithWhereUniqueWithoutBanInput>>;
+  updateMany?: InputMaybe<Array<FeedItemUpdateManyWithWhereWithoutBanInput>>;
+  upsert?: InputMaybe<Array<FeedItemUpsertWithWhereUniqueWithoutBanInput>>;
 };
 
 export type FeedItemUpdateManyWithoutCreatedByNestedInput = {
@@ -10172,6 +10393,23 @@ export type FeedItemUpdateManyWithoutOffenderNestedInput = {
   upsert?: InputMaybe<Array<FeedItemUpsertWithWhereUniqueWithoutOffenderInput>>;
 };
 
+export type FeedItemUpdateManyWithoutSchemesNestedInput = {
+  connect?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<FeedItemCreateOrConnectWithoutSchemesInput>
+  >;
+  create?: InputMaybe<Array<FeedItemCreateWithoutSchemesInput>>;
+  delete?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<FeedItemScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  set?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
+  update?: InputMaybe<Array<FeedItemUpdateWithWhereUniqueWithoutSchemesInput>>;
+  updateMany?: InputMaybe<
+    Array<FeedItemUpdateManyWithWhereWithoutSchemesInput>
+  >;
+  upsert?: InputMaybe<Array<FeedItemUpsertWithWhereUniqueWithoutSchemesInput>>;
+};
+
 export type FeedItemUpdateManyWithoutVehicleNestedInput = {
   connect?: InputMaybe<Array<FeedItemWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<
@@ -10192,6 +10430,11 @@ export type FeedItemUpdateManyWithoutVehicleNestedInput = {
 
 export type FeedItemUpdateWithWhereUniqueWithoutArticleInput = {
   data: FeedItemUpdateWithoutArticleInput;
+  where: FeedItemWhereUniqueInput;
+};
+
+export type FeedItemUpdateWithWhereUniqueWithoutBanInput = {
+  data: FeedItemUpdateWithoutBanInput;
   where: FeedItemWhereUniqueInput;
 };
 
@@ -10230,12 +10473,18 @@ export type FeedItemUpdateWithWhereUniqueWithoutOffenderInput = {
   where: FeedItemWhereUniqueInput;
 };
 
+export type FeedItemUpdateWithWhereUniqueWithoutSchemesInput = {
+  data: FeedItemUpdateWithoutSchemesInput;
+  where: FeedItemWhereUniqueInput;
+};
+
 export type FeedItemUpdateWithWhereUniqueWithoutVehicleInput = {
   data: FeedItemUpdateWithoutVehicleInput;
   where: FeedItemWhereUniqueInput;
 };
 
 export type FeedItemUpdateWithoutArticleInput = {
+  ban?: InputMaybe<BanUpdateOneWithoutFeedItemsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneWithoutFeedItemsNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutFeedItemsNestedInput>;
@@ -10248,6 +10497,27 @@ export type FeedItemUpdateWithoutArticleInput = {
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
   model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
   offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutFeedItemsNestedInput>;
+  type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutFeedItemsNestedInput>;
+};
+
+export type FeedItemUpdateWithoutBanInput = {
+  article?: InputMaybe<ArticleUpdateOneWithoutFeedItemsNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdBy?: InputMaybe<UserUpdateOneWithoutFeedItemsNestedInput>;
+  crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutFeedItemsNestedInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutFeedItemsNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutFeeditemsNestedInput>;
+  incident?: InputMaybe<IncidentUpdateOneWithoutFeedItemsNestedInput>;
+  investigation?: InputMaybe<InvestigationUpdateOneWithoutFeedItemsNestedInput>;
+  message?: InputMaybe<StringFieldUpdateOperationsInput>;
+  model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
+  offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutFeedItemsNestedInput>;
   type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicle?: InputMaybe<VehicleUpdateOneWithoutFeedItemsNestedInput>;
@@ -10255,6 +10525,7 @@ export type FeedItemUpdateWithoutArticleInput = {
 
 export type FeedItemUpdateWithoutCreatedByInput = {
   article?: InputMaybe<ArticleUpdateOneWithoutFeedItemsNestedInput>;
+  ban?: InputMaybe<BanUpdateOneWithoutFeedItemsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutFeedItemsNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -10266,6 +10537,7 @@ export type FeedItemUpdateWithoutCreatedByInput = {
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
   model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
   offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutFeedItemsNestedInput>;
   type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicle?: InputMaybe<VehicleUpdateOneWithoutFeedItemsNestedInput>;
@@ -10273,6 +10545,7 @@ export type FeedItemUpdateWithoutCreatedByInput = {
 
 export type FeedItemUpdateWithoutCrimeGroupInput = {
   article?: InputMaybe<ArticleUpdateOneWithoutFeedItemsNestedInput>;
+  ban?: InputMaybe<BanUpdateOneWithoutFeedItemsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneWithoutFeedItemsNestedInput>;
   description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -10284,6 +10557,7 @@ export type FeedItemUpdateWithoutCrimeGroupInput = {
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
   model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
   offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutFeedItemsNestedInput>;
   type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicle?: InputMaybe<VehicleUpdateOneWithoutFeedItemsNestedInput>;
@@ -10291,6 +10565,7 @@ export type FeedItemUpdateWithoutCrimeGroupInput = {
 
 export type FeedItemUpdateWithoutGroupsInput = {
   article?: InputMaybe<ArticleUpdateOneWithoutFeedItemsNestedInput>;
+  ban?: InputMaybe<BanUpdateOneWithoutFeedItemsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneWithoutFeedItemsNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutFeedItemsNestedInput>;
@@ -10302,6 +10577,7 @@ export type FeedItemUpdateWithoutGroupsInput = {
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
   model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
   offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutFeedItemsNestedInput>;
   type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicle?: InputMaybe<VehicleUpdateOneWithoutFeedItemsNestedInput>;
@@ -10309,6 +10585,7 @@ export type FeedItemUpdateWithoutGroupsInput = {
 
 export type FeedItemUpdateWithoutImagesInput = {
   article?: InputMaybe<ArticleUpdateOneWithoutFeedItemsNestedInput>;
+  ban?: InputMaybe<BanUpdateOneWithoutFeedItemsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneWithoutFeedItemsNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutFeedItemsNestedInput>;
@@ -10320,6 +10597,7 @@ export type FeedItemUpdateWithoutImagesInput = {
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
   model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
   offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutFeedItemsNestedInput>;
   type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicle?: InputMaybe<VehicleUpdateOneWithoutFeedItemsNestedInput>;
@@ -10327,6 +10605,7 @@ export type FeedItemUpdateWithoutImagesInput = {
 
 export type FeedItemUpdateWithoutIncidentInput = {
   article?: InputMaybe<ArticleUpdateOneWithoutFeedItemsNestedInput>;
+  ban?: InputMaybe<BanUpdateOneWithoutFeedItemsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneWithoutFeedItemsNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutFeedItemsNestedInput>;
@@ -10338,6 +10617,7 @@ export type FeedItemUpdateWithoutIncidentInput = {
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
   model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
   offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutFeedItemsNestedInput>;
   type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicle?: InputMaybe<VehicleUpdateOneWithoutFeedItemsNestedInput>;
@@ -10345,6 +10625,7 @@ export type FeedItemUpdateWithoutIncidentInput = {
 
 export type FeedItemUpdateWithoutInvestigationInput = {
   article?: InputMaybe<ArticleUpdateOneWithoutFeedItemsNestedInput>;
+  ban?: InputMaybe<BanUpdateOneWithoutFeedItemsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneWithoutFeedItemsNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutFeedItemsNestedInput>;
@@ -10356,6 +10637,7 @@ export type FeedItemUpdateWithoutInvestigationInput = {
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
   model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
   offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutFeedItemsNestedInput>;
   type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicle?: InputMaybe<VehicleUpdateOneWithoutFeedItemsNestedInput>;
@@ -10363,6 +10645,7 @@ export type FeedItemUpdateWithoutInvestigationInput = {
 
 export type FeedItemUpdateWithoutOffenderInput = {
   article?: InputMaybe<ArticleUpdateOneWithoutFeedItemsNestedInput>;
+  ban?: InputMaybe<BanUpdateOneWithoutFeedItemsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneWithoutFeedItemsNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutFeedItemsNestedInput>;
@@ -10374,13 +10657,15 @@ export type FeedItemUpdateWithoutOffenderInput = {
   investigation?: InputMaybe<InvestigationUpdateOneWithoutFeedItemsNestedInput>;
   message?: InputMaybe<StringFieldUpdateOperationsInput>;
   model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutFeedItemsNestedInput>;
   type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   vehicle?: InputMaybe<VehicleUpdateOneWithoutFeedItemsNestedInput>;
 };
 
-export type FeedItemUpdateWithoutVehicleInput = {
+export type FeedItemUpdateWithoutSchemesInput = {
   article?: InputMaybe<ArticleUpdateOneWithoutFeedItemsNestedInput>;
+  ban?: InputMaybe<BanUpdateOneWithoutFeedItemsNestedInput>;
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   createdBy?: InputMaybe<UserUpdateOneWithoutFeedItemsNestedInput>;
   crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutFeedItemsNestedInput>;
@@ -10395,11 +10680,38 @@ export type FeedItemUpdateWithoutVehicleInput = {
   offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsNestedInput>;
   type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicle?: InputMaybe<VehicleUpdateOneWithoutFeedItemsNestedInput>;
+};
+
+export type FeedItemUpdateWithoutVehicleInput = {
+  article?: InputMaybe<ArticleUpdateOneWithoutFeedItemsNestedInput>;
+  ban?: InputMaybe<BanUpdateOneWithoutFeedItemsNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  createdBy?: InputMaybe<UserUpdateOneWithoutFeedItemsNestedInput>;
+  crimeGroup?: InputMaybe<CrimeGroupUpdateOneWithoutFeedItemsNestedInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutFeedItemsNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutFeeditemsNestedInput>;
+  incident?: InputMaybe<IncidentUpdateOneWithoutFeedItemsNestedInput>;
+  investigation?: InputMaybe<InvestigationUpdateOneWithoutFeedItemsNestedInput>;
+  message?: InputMaybe<StringFieldUpdateOperationsInput>;
+  model?: InputMaybe<NullableEnumModelFieldUpdateOperationsInput>;
+  offender?: InputMaybe<OffenderUpdateOneWithoutFeedItemsNestedInput>;
+  schemes?: InputMaybe<SchemeUpdateManyWithoutFeedItemsNestedInput>;
+  type?: InputMaybe<EnumFeedItemTypeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
 export type FeedItemUpsertWithWhereUniqueWithoutArticleInput = {
   create: FeedItemCreateWithoutArticleInput;
   update: FeedItemUpdateWithoutArticleInput;
+  where: FeedItemWhereUniqueInput;
+};
+
+export type FeedItemUpsertWithWhereUniqueWithoutBanInput = {
+  create: FeedItemCreateWithoutBanInput;
+  update: FeedItemUpdateWithoutBanInput;
   where: FeedItemWhereUniqueInput;
 };
 
@@ -10445,6 +10757,12 @@ export type FeedItemUpsertWithWhereUniqueWithoutOffenderInput = {
   where: FeedItemWhereUniqueInput;
 };
 
+export type FeedItemUpsertWithWhereUniqueWithoutSchemesInput = {
+  create: FeedItemCreateWithoutSchemesInput;
+  update: FeedItemUpdateWithoutSchemesInput;
+  where: FeedItemWhereUniqueInput;
+};
+
 export type FeedItemUpsertWithWhereUniqueWithoutVehicleInput = {
   create: FeedItemCreateWithoutVehicleInput;
   update: FeedItemUpdateWithoutVehicleInput;
@@ -10457,6 +10775,8 @@ export type FeedItemWhereInput = {
   OR?: InputMaybe<Array<FeedItemWhereInput>>;
   article?: InputMaybe<ArticleWhereInput>;
   articleId?: InputMaybe<StringNullableFilter>;
+  ban?: InputMaybe<BanWhereInput>;
+  banId?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   createdBy?: InputMaybe<UserWhereInput>;
   createdById?: InputMaybe<StringNullableFilter>;
@@ -10474,6 +10794,7 @@ export type FeedItemWhereInput = {
   model?: InputMaybe<EnumModelNullableFilter>;
   offender?: InputMaybe<OffenderWhereInput>;
   offenderId?: InputMaybe<StringNullableFilter>;
+  schemes?: InputMaybe<SchemeListRelationFilter>;
   type?: InputMaybe<EnumFeedItemTypeFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
   vehicle?: InputMaybe<VehicleWhereInput>;
@@ -12074,6 +12395,7 @@ export type Image = {
   optimisedPersisted?: Maybe<Scalars['String']>;
   optimisticUri?: Maybe<Scalars['String']>;
   position: ImagePosition;
+  primary?: Maybe<Scalars['Boolean']>;
   reportIcons: Array<Scheme>;
   scheme: Scheme;
   update?: Maybe<Update>;
@@ -12129,6 +12451,7 @@ export type ImageCreateInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
@@ -12152,6 +12475,7 @@ export type ImageCreateManyArticleColumnInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   schemeId: Scalars['String'];
   updateId?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -12177,6 +12501,7 @@ export type ImageCreateManyIncidentInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   schemeId: Scalars['String'];
   updateId?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -12202,6 +12527,7 @@ export type ImageCreateManyMessageInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   schemeId: Scalars['String'];
   updateId?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -12228,6 +12554,7 @@ export type ImageCreateManySchemeInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   updateId?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
@@ -12253,6 +12580,7 @@ export type ImageCreateManyUpdateInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   schemeId: Scalars['String'];
   updatedAt?: InputMaybe<Scalars['DateTime']>;
   uploaded?: InputMaybe<Scalars['Boolean']>;
@@ -12278,6 +12606,7 @@ export type ImageCreateManyUploadedByInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   schemeId: Scalars['String'];
   updateId?: InputMaybe<Scalars['String']>;
   updatedAt?: InputMaybe<Scalars['DateTime']>;
@@ -12498,6 +12827,7 @@ export type ImageCreateWithoutActionsInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
@@ -12528,6 +12858,7 @@ export type ImageCreateWithoutArticleColumnInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
@@ -12558,6 +12889,7 @@ export type ImageCreateWithoutArticleInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
@@ -12588,6 +12920,7 @@ export type ImageCreateWithoutArticlesInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
@@ -12618,6 +12951,7 @@ export type ImageCreateWithoutFeeditemsInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
@@ -12648,6 +12982,7 @@ export type ImageCreateWithoutIncidentInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
@@ -12679,6 +13014,7 @@ export type ImageCreateWithoutIntelInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
@@ -12709,6 +13045,7 @@ export type ImageCreateWithoutMessageInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
@@ -12739,6 +13076,7 @@ export type ImageCreateWithoutOffendersInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
@@ -12770,6 +13108,7 @@ export type ImageCreateWithoutReportIconsInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
   update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
@@ -12800,6 +13139,7 @@ export type ImageCreateWithoutSchemeDarkInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
@@ -12830,6 +13170,7 @@ export type ImageCreateWithoutSchemeInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
   update?: InputMaybe<UpdateCreateNestedOneWithoutImagesInput>;
@@ -12860,6 +13201,7 @@ export type ImageCreateWithoutUpdateInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
@@ -12890,6 +13232,7 @@ export type ImageCreateWithoutUploadedByInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
@@ -12920,6 +13263,7 @@ export type ImageCreateWithoutVehiclesInput = {
   optimised?: InputMaybe<Scalars['String']>;
   optimisticUri?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   reportIcons?: InputMaybe<SchemeCreateNestedManyWithoutReportIconsInput>;
   scheme: SchemeCreateNestedOneWithoutImagesInput;
   schemeDark?: InputMaybe<SchemeCreateNestedManyWithoutDarkLogoInput>;
@@ -12972,6 +13316,7 @@ export type ImageOrderByWithRelationInput = {
   optimised?: InputMaybe<SortOrder>;
   optimisticUri?: InputMaybe<SortOrder>;
   position?: InputMaybe<SortOrder>;
+  primary?: InputMaybe<SortOrder>;
   reportIcons?: InputMaybe<SchemeOrderByRelationAggregateInput>;
   scheme?: InputMaybe<SchemeOrderByWithRelationInput>;
   schemeDark?: InputMaybe<SchemeOrderByRelationAggregateInput>;
@@ -13014,6 +13359,7 @@ export type ImageScalarWhereInput = {
   optimised?: InputMaybe<StringNullableFilter>;
   optimisticUri?: InputMaybe<StringNullableFilter>;
   position?: InputMaybe<EnumImagePositionFilter>;
+  primary?: InputMaybe<BoolNullableFilter>;
   schemeId?: InputMaybe<StringFilter>;
   updateId?: InputMaybe<StringNullableFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -13042,6 +13388,7 @@ export type ImageUpdateInput = {
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   optimisticUri?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
+  primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
@@ -13063,6 +13410,7 @@ export type ImageUpdateManyMutationInput = {
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   optimisticUri?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
+  primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   uploaded?: InputMaybe<BoolFieldUpdateOperationsInput>;
   url?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -13424,6 +13772,7 @@ export type ImageUpdateWithoutActionsInput = {
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   optimisticUri?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
+  primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
@@ -13454,6 +13803,7 @@ export type ImageUpdateWithoutArticleColumnInput = {
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   optimisticUri?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
+  primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
@@ -13484,6 +13834,7 @@ export type ImageUpdateWithoutArticleInput = {
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   optimisticUri?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
+  primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
@@ -13514,6 +13865,7 @@ export type ImageUpdateWithoutArticlesInput = {
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   optimisticUri?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
+  primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
@@ -13544,6 +13896,7 @@ export type ImageUpdateWithoutFeeditemsInput = {
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   optimisticUri?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
+  primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
@@ -13574,6 +13927,7 @@ export type ImageUpdateWithoutIncidentInput = {
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   optimisticUri?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
+  primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
@@ -13604,6 +13958,7 @@ export type ImageUpdateWithoutIntelInput = {
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   optimisticUri?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
+  primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
@@ -13634,6 +13989,7 @@ export type ImageUpdateWithoutMessageInput = {
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   optimisticUri?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
+  primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
@@ -13664,6 +14020,7 @@ export type ImageUpdateWithoutOffendersInput = {
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   optimisticUri?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
+  primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
@@ -13695,6 +14052,7 @@ export type ImageUpdateWithoutReportIconsInput = {
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   optimisticUri?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
+  primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
   update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
@@ -13725,6 +14083,7 @@ export type ImageUpdateWithoutSchemeDarkInput = {
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   optimisticUri?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
+  primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
@@ -13755,6 +14114,7 @@ export type ImageUpdateWithoutSchemeInput = {
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   optimisticUri?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
+  primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
   update?: InputMaybe<UpdateUpdateOneWithoutImagesNestedInput>;
@@ -13785,6 +14145,7 @@ export type ImageUpdateWithoutUpdateInput = {
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   optimisticUri?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
+  primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
@@ -13815,6 +14176,7 @@ export type ImageUpdateWithoutUploadedByInput = {
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   optimisticUri?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
+  primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
@@ -13845,6 +14207,7 @@ export type ImageUpdateWithoutVehiclesInput = {
   optimised?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   optimisticUri?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   position?: InputMaybe<EnumImagePositionFieldUpdateOperationsInput>;
+  primary?: InputMaybe<NullableBoolFieldUpdateOperationsInput>;
   reportIcons?: InputMaybe<SchemeUpdateManyWithoutReportIconsNestedInput>;
   scheme?: InputMaybe<SchemeUpdateOneRequiredWithoutImagesNestedInput>;
   schemeDark?: InputMaybe<SchemeUpdateManyWithoutDarkLogoNestedInput>;
@@ -13977,6 +14340,7 @@ export type ImageWhereInput = {
   optimised?: InputMaybe<StringNullableFilter>;
   optimisticUri?: InputMaybe<StringNullableFilter>;
   position?: InputMaybe<EnumImagePositionFilter>;
+  primary?: InputMaybe<BoolNullableFilter>;
   reportIcons?: InputMaybe<SchemeListRelationFilter>;
   scheme?: InputMaybe<SchemeWhereInput>;
   schemeDark?: InputMaybe<SchemeListRelationFilter>;
@@ -28918,6 +29282,7 @@ export type SchemeCreateInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -29034,6 +29399,14 @@ export type SchemeCreateNestedManyWithoutDarkLogoInput = {
   >;
   create?: InputMaybe<Array<SchemeCreateWithoutDarkLogoInput>>;
   createMany?: InputMaybe<SchemeCreateManyDarkLogoInputEnvelope>;
+};
+
+export type SchemeCreateNestedManyWithoutFeedItemsInput = {
+  connect?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<SchemeCreateOrConnectWithoutFeedItemsInput>
+  >;
+  create?: InputMaybe<Array<SchemeCreateWithoutFeedItemsInput>>;
 };
 
 export type SchemeCreateNestedManyWithoutInvestigationsInSchemeInput = {
@@ -29244,6 +29617,11 @@ export type SchemeCreateOrConnectWithoutDocumentsInput = {
   where: SchemeWhereUniqueInput;
 };
 
+export type SchemeCreateOrConnectWithoutFeedItemsInput = {
+  create: SchemeCreateWithoutFeedItemsInput;
+  where: SchemeWhereUniqueInput;
+};
+
 export type SchemeCreateOrConnectWithoutGroupsInput = {
   create: SchemeCreateWithoutGroupsInput;
   where: SchemeWhereUniqueInput;
@@ -29365,6 +29743,7 @@ export type SchemeCreateWithoutActionsInSchemeInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -29415,6 +29794,7 @@ export type SchemeCreateWithoutActionsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -29465,6 +29845,7 @@ export type SchemeCreateWithoutArticlesInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -29515,6 +29896,7 @@ export type SchemeCreateWithoutBansInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -29565,6 +29947,7 @@ export type SchemeCreateWithoutBusinessesInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -29615,6 +29998,7 @@ export type SchemeCreateWithoutChatsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -29665,6 +30049,7 @@ export type SchemeCreateWithoutCrimeGroupsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -29715,6 +30100,7 @@ export type SchemeCreateWithoutDarkLogoInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -29765,6 +30151,58 @@ export type SchemeCreateWithoutDocumentsInput = {
   defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
+  groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
+  id?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
+  incidentImpact?: InputMaybe<Scalars['Boolean']>;
+  incidentRetention?: InputMaybe<Scalars['Int']>;
+  incidents?: InputMaybe<IncidentCreateNestedManyWithoutSchemeInput>;
+  intel?: InputMaybe<IntelCreateNestedManyWithoutSchemeInput>;
+  investigations?: InputMaybe<InvestigationCreateNestedManyWithoutSchemeInput>;
+  investigationsInScheme?: InputMaybe<InvestigationCreateNestedManyWithoutSchemesInput>;
+  logo?: InputMaybe<ImageCreateNestedOneWithoutSchemeInput>;
+  members?: InputMaybe<UserSchemeCreateNestedManyWithoutSchemeInput>;
+  mentionDueDays?: InputMaybe<Scalars['Int']>;
+  messages?: InputMaybe<MessageCreateNestedManyWithoutSchemeInput>;
+  name: Scalars['String'];
+  offenderRetention?: InputMaybe<Scalars['Int']>;
+  offenders?: InputMaybe<OffenderCreateNestedManyWithoutSchemeInput>;
+  recycledItems?: InputMaybe<RecycledItemCreateNestedManyWithoutSchemeInput>;
+  reportIcons?: InputMaybe<ImageCreateNestedManyWithoutReportIconsInput>;
+  reportTemplates?: InputMaybe<ReportTemplateCreateNestedManyWithoutSchemesInput>;
+  schemeTags?: InputMaybe<TagCreateNestedManyWithoutSchemesInput>;
+  tagOrders?: InputMaybe<TagOrderCreateNestedManyWithoutSchemeInput>;
+  tags?: InputMaybe<TagCreateNestedManyWithoutSchemeInput>;
+  terms?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemeInput>;
+  termsInScheme?: InputMaybe<TermsAndConditionCreateNestedManyWithoutSchemesInput>;
+  todos?: InputMaybe<TodoCreateNestedManyWithoutSchemesInput>;
+  updatedAt?: InputMaybe<Scalars['DateTime']>;
+  vehicles?: InputMaybe<VehicleCreateNestedManyWithoutSchemesInput>;
+};
+
+export type SchemeCreateWithoutFeedItemsInput = {
+  actions?: InputMaybe<ActionCreateNestedManyWithoutSchemeInput>;
+  actionsInScheme?: InputMaybe<ActionCreateNestedManyWithoutInSchemeInput>;
+  approvalDueDays?: InputMaybe<Scalars['Int']>;
+  articles?: InputMaybe<ArticleCreateNestedManyWithoutSchemesInput>;
+  autoApproveIncidents?: InputMaybe<Scalars['Boolean']>;
+  autoApproveOffenders?: InputMaybe<Scalars['Boolean']>;
+  bans?: InputMaybe<BanCreateNestedManyWithoutSchemeInput>;
+  businesses?: InputMaybe<BusinessCreateNestedManyWithoutSchemesInput>;
+  chats?: InputMaybe<ChatCreateNestedManyWithoutSchemeInput>;
+  createdAt?: InputMaybe<Scalars['DateTime']>;
+  crimeGroups?: InputMaybe<CrimeGroupCreateNestedManyWithoutSchemesInput>;
+  darkLogo?: InputMaybe<ImageCreateNestedOneWithoutSchemeDarkInput>;
+  defaultIncidentEmail?: InputMaybe<Scalars['Boolean']>;
+  defaultIncidentPush?: InputMaybe<Scalars['Boolean']>;
+  defaultMessagePush?: InputMaybe<Scalars['Boolean']>;
+  defaultOffenderEmail?: InputMaybe<Scalars['Boolean']>;
+  defaultOffenderPush?: InputMaybe<Scalars['Boolean']>;
+  defaultPublicOffenderDOB?: InputMaybe<Scalars['Boolean']>;
+  defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
+  defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
+  documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -29816,6 +30254,7 @@ export type SchemeCreateWithoutGroupsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
@@ -29866,6 +30305,7 @@ export type SchemeCreateWithoutImagesInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   incidentImpact?: InputMaybe<Scalars['Boolean']>;
@@ -29916,6 +30356,7 @@ export type SchemeCreateWithoutIncidentsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -29966,6 +30407,7 @@ export type SchemeCreateWithoutIntelInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -30016,6 +30458,7 @@ export type SchemeCreateWithoutInvestigationsInSchemeInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -30066,6 +30509,7 @@ export type SchemeCreateWithoutInvestigationsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -30116,6 +30560,7 @@ export type SchemeCreateWithoutLogoInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -30166,6 +30611,7 @@ export type SchemeCreateWithoutMembersInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -30216,6 +30662,7 @@ export type SchemeCreateWithoutMessagesInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -30266,6 +30713,7 @@ export type SchemeCreateWithoutOffendersInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -30316,6 +30764,7 @@ export type SchemeCreateWithoutRecycledItemsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -30366,6 +30815,7 @@ export type SchemeCreateWithoutReportIconsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -30416,6 +30866,7 @@ export type SchemeCreateWithoutReportTemplatesInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -30466,6 +30917,7 @@ export type SchemeCreateWithoutSchemeTagsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -30516,6 +30968,7 @@ export type SchemeCreateWithoutTagOrdersInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -30566,6 +31019,7 @@ export type SchemeCreateWithoutTagsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -30616,6 +31070,7 @@ export type SchemeCreateWithoutTermsInSchemeInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -30666,6 +31121,7 @@ export type SchemeCreateWithoutTermsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -30716,6 +31172,7 @@ export type SchemeCreateWithoutTodosInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -30766,6 +31223,7 @@ export type SchemeCreateWithoutVehiclesInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<Scalars['Boolean']>;
   defaultSubscribedOffenderOnly?: InputMaybe<Scalars['Boolean']>;
   documents?: InputMaybe<DocumentCreateNestedManyWithoutSchemeInput>;
+  feedItems?: InputMaybe<FeedItemCreateNestedManyWithoutSchemesInput>;
   groups?: InputMaybe<GroupCreateNestedManyWithoutSchemeInput>;
   id?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<ImageCreateNestedManyWithoutSchemeInput>;
@@ -30827,6 +31285,7 @@ export type SchemeOrderByWithRelationInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<SortOrder>;
   defaultSubscribedOffenderOnly?: InputMaybe<SortOrder>;
   documents?: InputMaybe<DocumentOrderByRelationAggregateInput>;
+  feedItems?: InputMaybe<FeedItemOrderByRelationAggregateInput>;
   groups?: InputMaybe<GroupOrderByRelationAggregateInput>;
   id?: InputMaybe<SortOrder>;
   images?: InputMaybe<ImageOrderByRelationAggregateInput>;
@@ -30906,6 +31365,7 @@ export type SchemeUpdateInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -30973,6 +31433,11 @@ export type SchemeUpdateManyWithWhereWithoutCrimeGroupsInput = {
 };
 
 export type SchemeUpdateManyWithWhereWithoutDarkLogoInput = {
+  data: SchemeUpdateManyMutationInput;
+  where: SchemeScalarWhereInput;
+};
+
+export type SchemeUpdateManyWithWhereWithoutFeedItemsInput = {
   data: SchemeUpdateManyMutationInput;
   where: SchemeScalarWhereInput;
 };
@@ -31084,6 +31549,23 @@ export type SchemeUpdateManyWithoutDarkLogoNestedInput = {
   update?: InputMaybe<Array<SchemeUpdateWithWhereUniqueWithoutDarkLogoInput>>;
   updateMany?: InputMaybe<Array<SchemeUpdateManyWithWhereWithoutDarkLogoInput>>;
   upsert?: InputMaybe<Array<SchemeUpsertWithWhereUniqueWithoutDarkLogoInput>>;
+};
+
+export type SchemeUpdateManyWithoutFeedItemsNestedInput = {
+  connect?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<
+    Array<SchemeCreateOrConnectWithoutFeedItemsInput>
+  >;
+  create?: InputMaybe<Array<SchemeCreateWithoutFeedItemsInput>>;
+  delete?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<SchemeScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  set?: InputMaybe<Array<SchemeWhereUniqueInput>>;
+  update?: InputMaybe<Array<SchemeUpdateWithWhereUniqueWithoutFeedItemsInput>>;
+  updateMany?: InputMaybe<
+    Array<SchemeUpdateManyWithWhereWithoutFeedItemsInput>
+  >;
+  upsert?: InputMaybe<Array<SchemeUpsertWithWhereUniqueWithoutFeedItemsInput>>;
 };
 
 export type SchemeUpdateManyWithoutInvestigationsInSchemeNestedInput = {
@@ -31393,6 +31875,11 @@ export type SchemeUpdateWithWhereUniqueWithoutDarkLogoInput = {
   where: SchemeWhereUniqueInput;
 };
 
+export type SchemeUpdateWithWhereUniqueWithoutFeedItemsInput = {
+  data: SchemeUpdateWithoutFeedItemsInput;
+  where: SchemeWhereUniqueInput;
+};
+
 export type SchemeUpdateWithWhereUniqueWithoutInvestigationsInSchemeInput = {
   data: SchemeUpdateWithoutInvestigationsInSchemeInput;
   where: SchemeWhereUniqueInput;
@@ -31454,6 +31941,7 @@ export type SchemeUpdateWithoutActionsInSchemeInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -31504,6 +31992,7 @@ export type SchemeUpdateWithoutActionsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -31554,6 +32043,7 @@ export type SchemeUpdateWithoutArticlesInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -31604,6 +32094,7 @@ export type SchemeUpdateWithoutBansInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -31654,6 +32145,7 @@ export type SchemeUpdateWithoutBusinessesInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -31704,6 +32196,7 @@ export type SchemeUpdateWithoutChatsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -31754,6 +32247,7 @@ export type SchemeUpdateWithoutCrimeGroupsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -31804,6 +32298,7 @@ export type SchemeUpdateWithoutDarkLogoInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -31854,6 +32349,58 @@ export type SchemeUpdateWithoutDocumentsInput = {
   defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
+  groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
+  id?: InputMaybe<StringFieldUpdateOperationsInput>;
+  images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
+  incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  incidentRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  incidents?: InputMaybe<IncidentUpdateManyWithoutSchemeNestedInput>;
+  intel?: InputMaybe<IntelUpdateManyWithoutSchemeNestedInput>;
+  investigations?: InputMaybe<InvestigationUpdateManyWithoutSchemeNestedInput>;
+  investigationsInScheme?: InputMaybe<InvestigationUpdateManyWithoutSchemesNestedInput>;
+  logo?: InputMaybe<ImageUpdateOneWithoutSchemeNestedInput>;
+  members?: InputMaybe<UserSchemeUpdateManyWithoutSchemeNestedInput>;
+  mentionDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  messages?: InputMaybe<MessageUpdateManyWithoutSchemeNestedInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  offenderRetention?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  offenders?: InputMaybe<OffenderUpdateManyWithoutSchemeNestedInput>;
+  recycledItems?: InputMaybe<RecycledItemUpdateManyWithoutSchemeNestedInput>;
+  reportIcons?: InputMaybe<ImageUpdateManyWithoutReportIconsNestedInput>;
+  reportTemplates?: InputMaybe<ReportTemplateUpdateManyWithoutSchemesNestedInput>;
+  schemeTags?: InputMaybe<TagUpdateManyWithoutSchemesNestedInput>;
+  tagOrders?: InputMaybe<TagOrderUpdateManyWithoutSchemeNestedInput>;
+  tags?: InputMaybe<TagUpdateManyWithoutSchemeNestedInput>;
+  terms?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemeNestedInput>;
+  termsInScheme?: InputMaybe<TermsAndConditionUpdateManyWithoutSchemesNestedInput>;
+  todos?: InputMaybe<TodoUpdateManyWithoutSchemesNestedInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  vehicles?: InputMaybe<VehicleUpdateManyWithoutSchemesNestedInput>;
+};
+
+export type SchemeUpdateWithoutFeedItemsInput = {
+  actions?: InputMaybe<ActionUpdateManyWithoutSchemeNestedInput>;
+  actionsInScheme?: InputMaybe<ActionUpdateManyWithoutInSchemeNestedInput>;
+  approvalDueDays?: InputMaybe<NullableIntFieldUpdateOperationsInput>;
+  articles?: InputMaybe<ArticleUpdateManyWithoutSchemesNestedInput>;
+  autoApproveIncidents?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  autoApproveOffenders?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  bans?: InputMaybe<BanUpdateManyWithoutSchemeNestedInput>;
+  businesses?: InputMaybe<BusinessUpdateManyWithoutSchemesNestedInput>;
+  chats?: InputMaybe<ChatUpdateManyWithoutSchemeNestedInput>;
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  crimeGroups?: InputMaybe<CrimeGroupUpdateManyWithoutSchemesNestedInput>;
+  darkLogo?: InputMaybe<ImageUpdateOneWithoutSchemeDarkNestedInput>;
+  defaultIncidentEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultIncidentPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultMessagePush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultOffenderEmail?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultOffenderPush?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultPublicOffenderDOB?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -31905,6 +32452,7 @@ export type SchemeUpdateWithoutGroupsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -31955,6 +32503,7 @@ export type SchemeUpdateWithoutImagesInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   incidentImpact?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -32005,6 +32554,7 @@ export type SchemeUpdateWithoutIncidentsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -32055,6 +32605,7 @@ export type SchemeUpdateWithoutIntelInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -32105,6 +32656,7 @@ export type SchemeUpdateWithoutInvestigationsInSchemeInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -32155,6 +32707,7 @@ export type SchemeUpdateWithoutInvestigationsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -32205,6 +32758,7 @@ export type SchemeUpdateWithoutLogoInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -32255,6 +32809,7 @@ export type SchemeUpdateWithoutMembersInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -32305,6 +32860,7 @@ export type SchemeUpdateWithoutMessagesInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -32355,6 +32911,7 @@ export type SchemeUpdateWithoutOffendersInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -32405,6 +32962,7 @@ export type SchemeUpdateWithoutRecycledItemsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -32455,6 +33013,7 @@ export type SchemeUpdateWithoutReportIconsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -32505,6 +33064,7 @@ export type SchemeUpdateWithoutReportTemplatesInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -32555,6 +33115,7 @@ export type SchemeUpdateWithoutSchemeTagsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -32605,6 +33166,7 @@ export type SchemeUpdateWithoutTagOrdersInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -32655,6 +33217,7 @@ export type SchemeUpdateWithoutTagsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -32705,6 +33268,7 @@ export type SchemeUpdateWithoutTermsInSchemeInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -32755,6 +33319,7 @@ export type SchemeUpdateWithoutTermsInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -32805,6 +33370,7 @@ export type SchemeUpdateWithoutTodosInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -32855,6 +33421,7 @@ export type SchemeUpdateWithoutVehiclesInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFieldUpdateOperationsInput>;
   documents?: InputMaybe<DocumentUpdateManyWithoutSchemeNestedInput>;
+  feedItems?: InputMaybe<FeedItemUpdateManyWithoutSchemesNestedInput>;
   groups?: InputMaybe<GroupUpdateManyWithoutSchemeNestedInput>;
   id?: InputMaybe<StringFieldUpdateOperationsInput>;
   images?: InputMaybe<ImageUpdateManyWithoutSchemeNestedInput>;
@@ -32904,6 +33471,12 @@ export type SchemeUpsertWithWhereUniqueWithoutCrimeGroupsInput = {
 export type SchemeUpsertWithWhereUniqueWithoutDarkLogoInput = {
   create: SchemeCreateWithoutDarkLogoInput;
   update: SchemeUpdateWithoutDarkLogoInput;
+  where: SchemeWhereUniqueInput;
+};
+
+export type SchemeUpsertWithWhereUniqueWithoutFeedItemsInput = {
+  create: SchemeCreateWithoutFeedItemsInput;
+  update: SchemeUpdateWithoutFeedItemsInput;
   where: SchemeWhereUniqueInput;
 };
 
@@ -33066,6 +33639,7 @@ export type SchemeWhereInput = {
   defaultSubscribedIncidentOnly?: InputMaybe<BoolFilter>;
   defaultSubscribedOffenderOnly?: InputMaybe<BoolFilter>;
   documents?: InputMaybe<DocumentListRelationFilter>;
+  feedItems?: InputMaybe<FeedItemListRelationFilter>;
   groups?: InputMaybe<GroupListRelationFilter>;
   id?: InputMaybe<StringFilter>;
   images?: InputMaybe<ImageListRelationFilter>;
@@ -37819,6 +38393,7 @@ export type UploadIncidentOptimisticImage = {
 export type UploadOffenderImage = {
   file?: InputMaybe<Scalars['Upload']>;
   position?: InputMaybe<ImagePosition>;
+  primary?: InputMaybe<Scalars['Boolean']>;
   url?: InputMaybe<UrlImage>;
 };
 
@@ -47616,69 +48191,32 @@ export type CreateChatMutation = {
     id: string;
     name: string;
     description?: string | null;
+    updatedAt: any;
+    createdAt: any;
     members: Array<{
       __typename?: 'UserChat';
       id: string;
       newMessages?: boolean | null;
+      mentioned?: boolean | null;
       updatedAt: any;
       createdAt: any;
-      user: {
-        __typename?: 'User';
-        id: string;
-        fullName: string;
-        firstLetter?: string | null;
-        origFirstLetter?: string | null;
-        origName: string;
-        businesses: Array<{
-          __typename?: 'Business';
-          fullName: string;
-          id: string;
-          name: string;
-        }>;
-      };
       chat: {
         __typename?: 'Chat';
         id: string;
         name: string;
         firstLetter?: string | null;
+        totalMembers?: number | null;
         messages: Array<{
           __typename?: 'Message';
           id: string;
           content: string;
           createdAt: any;
-          from: {
-            __typename?: 'User';
-            id: string;
-            fullName: string;
-            origName: string;
-          };
-          images: Array<{
-            __typename?: 'Image';
-            id: string;
-            url?: string | null;
-            optimised?: string | null;
-            position: ImagePosition;
-          }>;
-          incidents: Array<{
-            __typename?: 'Incident';
-            id: string;
-            subject?: string | null;
-          }>;
-          offenders: Array<{
-            __typename?: 'Offender';
-            id: string;
-            name?: string | null;
-          }>;
-          vehicles: Array<{
-            __typename?: 'Vehicle';
-            id: string;
-            reference?: number | null;
-          }>;
-          crimeGroups: Array<{
-            __typename?: 'CrimeGroup';
-            id: string;
-            reference?: number | null;
-          }>;
+          from: { __typename?: 'User'; id: string; origName: string };
+          images: Array<{ __typename?: 'Image'; id: string }>;
+          incidents: Array<{ __typename?: 'Incident'; id: string }>;
+          offenders: Array<{ __typename?: 'Offender'; id: string }>;
+          vehicles: Array<{ __typename?: 'Vehicle'; id: string }>;
+          crimeGroups: Array<{ __typename?: 'CrimeGroup'; id: string }>;
         }>;
       };
     }>;
@@ -48366,6 +48904,31 @@ export type FeedItemsQuery = {
       id: string;
       incidentId?: string | null;
       offenderId?: string | null;
+      ban?: {
+        __typename?: 'Ban';
+        endDate: any;
+        startDate: any;
+        updatedAt: any;
+        title?: string | null;
+        type?: BanType | null;
+        active: boolean;
+        expired?: boolean | null;
+        id: string;
+        location: string;
+        description?: string | null;
+        offender: {
+          __typename?: 'Offender';
+          id: string;
+          name?: string | null;
+          images: Array<{
+            __typename?: 'Image';
+            id: string;
+            url?: string | null;
+            optimised?: string | null;
+            position: ImagePosition;
+          }>;
+        };
+      } | null;
       article?: {
         __typename?: 'Article';
         id: string;
@@ -54650,14 +55213,6 @@ export type UserChatsQuery = {
       mentioned?: boolean | null;
       updatedAt: any;
       createdAt: any;
-      user: {
-        __typename?: 'User';
-        id: string;
-        fullName: string;
-        firstLetter?: string | null;
-        origFirstLetter?: string | null;
-        origName: string;
-      };
       chat: {
         __typename?: 'Chat';
         id: string;
@@ -54669,41 +55224,12 @@ export type UserChatsQuery = {
           id: string;
           content: string;
           createdAt: any;
-          from: {
-            __typename?: 'User';
-            id: string;
-            fullName: string;
-            origFirstLetter?: string | null;
-            origName: string;
-            firstLetter?: string | null;
-          };
-          images: Array<{
-            __typename?: 'Image';
-            id: string;
-            url?: string | null;
-            optimised?: string | null;
-            position: ImagePosition;
-          }>;
-          incidents: Array<{
-            __typename?: 'Incident';
-            id: string;
-            subject?: string | null;
-          }>;
-          offenders: Array<{
-            __typename?: 'Offender';
-            id: string;
-            name?: string | null;
-          }>;
-          vehicles: Array<{
-            __typename?: 'Vehicle';
-            id: string;
-            reference?: number | null;
-          }>;
-          crimeGroups: Array<{
-            __typename?: 'CrimeGroup';
-            id: string;
-            reference?: number | null;
-          }>;
+          from: { __typename?: 'User'; id: string; origName: string };
+          images: Array<{ __typename?: 'Image'; id: string }>;
+          incidents: Array<{ __typename?: 'Incident'; id: string }>;
+          offenders: Array<{ __typename?: 'Offender'; id: string }>;
+          vehicles: Array<{ __typename?: 'Vehicle'; id: string }>;
+          crimeGroups: Array<{ __typename?: 'CrimeGroup'; id: string }>;
         }>;
       };
     }>;
@@ -55402,26 +55928,6 @@ export const ListActionsDocument = gql`
     }
   }
 `;
-
-/**
- * __useListActionsQuery__
- *
- * To run a query within a React component, call `useListActionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useListActionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListActionsQuery({
- *   variables: {
- *      take: // value for 'take'
- *      skip: // value for 'skip'
- *      where: // value for 'where'
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
 export function useListActionsQuery(
   baseOptions?: Apollo.QueryHookOptions<
     ListActionsQuery,
@@ -55622,24 +56128,6 @@ export type CreateArticleMutationFn = Apollo.MutationFunction<
   CreateArticleMutation,
   CreateArticleMutationVariables
 >;
-
-/**
- * __useCreateArticleMutation__
- *
- * To run a mutation, you first call `useCreateArticleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateArticleMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createArticleMutation, { data, loading, error }] = useCreateArticleMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateArticleMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateArticleMutation,
@@ -55672,24 +56160,6 @@ export type DeleteArticleMutationFn = Apollo.MutationFunction<
   DeleteArticleMutation,
   DeleteArticleMutationVariables
 >;
-
-/**
- * __useDeleteArticleMutation__
- *
- * To run a mutation, you first call `useDeleteArticleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteArticleMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteArticleMutation, { data, loading, error }] = useDeleteArticleMutation({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useDeleteArticleMutation(
   baseOptions?: Apollo.MutationHookOptions<
     DeleteArticleMutation,
@@ -55752,24 +56222,6 @@ export const ArticlesDocument = gql`
     }
   }
 `;
-
-/**
- * __useArticlesQuery__
- *
- * To run a query within a React component, call `useArticlesQuery` and pass it any options that fit your needs.
- * When your component renders, `useArticlesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useArticlesQuery({
- *   variables: {
- *      where: // value for 'where'
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
 export function useArticlesQuery(
   baseOptions?: Apollo.QueryHookOptions<ArticlesQuery, ArticlesQueryVariables>
 ) {
@@ -55848,27 +56300,6 @@ export const ListArticlesDocument = gql`
     }
   }
 `;
-
-/**
- * __useListArticlesQuery__
- *
- * To run a query within a React component, call `useListArticlesQuery` and pass it any options that fit your needs.
- * When your component renders, `useListArticlesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListArticlesQuery({
- *   variables: {
- *      scheme: // value for 'scheme'
- *      where: // value for 'where'
- *      take: // value for 'take'
- *      skip: // value for 'skip'
- *      order: // value for 'order'
- *   },
- * });
- */
 export function useListArticlesQuery(
   baseOptions: Apollo.QueryHookOptions<
     ListArticlesQuery,
@@ -56067,23 +56498,6 @@ export const ArticleDocument = gql`
     }
   }
 `;
-
-/**
- * __useArticleQuery__
- *
- * To run a query within a React component, call `useArticleQuery` and pass it any options that fit your needs.
- * When your component renders, `useArticleQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useArticleQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useArticleQuery(
   baseOptions: Apollo.QueryHookOptions<ArticleQuery, ArticleQueryVariables>
 ) {
@@ -56119,25 +56533,6 @@ export type CreateUserinAuth0MutationFn = Apollo.MutationFunction<
   CreateUserinAuth0Mutation,
   CreateUserinAuth0MutationVariables
 >;
-
-/**
- * __useCreateUserinAuth0Mutation__
- *
- * To run a mutation, you first call `useCreateUserinAuth0Mutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateUserinAuth0Mutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createUserinAuth0Mutation, { data, loading, error }] = useCreateUserinAuth0Mutation({
- *   variables: {
- *      id: // value for 'id'
- *      password: // value for 'password'
- *   },
- * });
- */
 export function useCreateUserinAuth0Mutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateUserinAuth0Mutation,
@@ -56170,24 +56565,6 @@ export type ResetPasswordMutationFn = Apollo.MutationFunction<
   ResetPasswordMutation,
   ResetPasswordMutationVariables
 >;
-
-/**
- * __useResetPasswordMutation__
- *
- * To run a mutation, you first call `useResetPasswordMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useResetPasswordMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [resetPasswordMutation, { data, loading, error }] = useResetPasswordMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useResetPasswordMutation(
   baseOptions?: Apollo.MutationHookOptions<
     ResetPasswordMutation,
@@ -56221,25 +56598,6 @@ export type SignInMutationFn = Apollo.MutationFunction<
   SignInMutation,
   SignInMutationVariables
 >;
-
-/**
- * __useSignInMutation__
- *
- * To run a mutation, you first call `useSignInMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSignInMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [signInMutation, { data, loading, error }] = useSignInMutation({
- *   variables: {
- *      email: // value for 'email'
- *      password: // value for 'password'
- *   },
- * });
- */
 export function useSignInMutation(
   baseOptions?: Apollo.MutationHookOptions<
     SignInMutation,
@@ -56269,24 +56627,6 @@ export type DeleteBanMutationFn = Apollo.MutationFunction<
   DeleteBanMutation,
   DeleteBanMutationVariables
 >;
-
-/**
- * __useDeleteBanMutation__
- *
- * To run a mutation, you first call `useDeleteBanMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteBanMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteBanMutation, { data, loading, error }] = useDeleteBanMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
 export function useDeleteBanMutation(
   baseOptions?: Apollo.MutationHookOptions<
     DeleteBanMutation,
@@ -56328,25 +56668,6 @@ export type UpdateBanMutationFn = Apollo.MutationFunction<
   UpdateBanMutation,
   UpdateBanMutationVariables
 >;
-
-/**
- * __useUpdateBanMutation__
- *
- * To run a mutation, you first call `useUpdateBanMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateBanMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateBanMutation, { data, loading, error }] = useUpdateBanMutation({
- *   variables: {
- *      where: // value for 'where'
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useUpdateBanMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateBanMutation,
@@ -56384,23 +56705,6 @@ export const BanDocument = gql`
     }
   }
 `;
-
-/**
- * __useBanQuery__
- *
- * To run a query within a React component, call `useBanQuery` and pass it any options that fit your needs.
- * When your component renders, `useBanQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useBanQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useBanQuery(
   baseOptions: Apollo.QueryHookOptions<BanQuery, BanQueryVariables>
 ) {
@@ -56431,24 +56735,6 @@ export type CreateBanMutationFn = Apollo.MutationFunction<
   CreateBanMutation,
   CreateBanMutationVariables
 >;
-
-/**
- * __useCreateBanMutation__
- *
- * To run a mutation, you first call `useCreateBanMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateBanMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createBanMutation, { data, loading, error }] = useCreateBanMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateBanMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateBanMutation,
@@ -56480,23 +56766,6 @@ export const BansDocument = gql`
     }
   }
 `;
-
-/**
- * __useBansQuery__
- *
- * To run a query within a React component, call `useBansQuery` and pass it any options that fit your needs.
- * When your component renders, `useBansQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useBansQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useBansQuery(
   baseOptions: Apollo.QueryHookOptions<BansQuery, BansQueryVariables>
 ) {
@@ -56545,27 +56814,6 @@ export type AddUsersToBusinessMutationFn = Apollo.MutationFunction<
   AddUsersToBusinessMutation,
   AddUsersToBusinessMutationVariables
 >;
-
-/**
- * __useAddUsersToBusinessMutation__
- *
- * To run a mutation, you first call `useAddUsersToBusinessMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddUsersToBusinessMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [addUsersToBusinessMutation, { data, loading, error }] = useAddUsersToBusinessMutation({
- *   variables: {
- *      data: // value for 'data'
- *      where: // value for 'where'
- *      schemeWhere: // value for 'schemeWhere'
- *      groupWhere: // value for 'groupWhere'
- *   },
- * });
- */
 export function useAddUsersToBusinessMutation(
   baseOptions?: Apollo.MutationHookOptions<
     AddUsersToBusinessMutation,
@@ -56611,24 +56859,6 @@ export type CreateBusinessMutationFn = Apollo.MutationFunction<
   CreateBusinessMutation,
   CreateBusinessMutationVariables
 >;
-
-/**
- * __useCreateBusinessMutation__
- *
- * To run a mutation, you first call `useCreateBusinessMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateBusinessMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createBusinessMutation, { data, loading, error }] = useCreateBusinessMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateBusinessMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateBusinessMutation,
@@ -56679,25 +56909,6 @@ export type LinkBusinessToSchemeMutationFn = Apollo.MutationFunction<
   LinkBusinessToSchemeMutation,
   LinkBusinessToSchemeMutationVariables
 >;
-
-/**
- * __useLinkBusinessToSchemeMutation__
- *
- * To run a mutation, you first call `useLinkBusinessToSchemeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLinkBusinessToSchemeMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [linkBusinessToSchemeMutation, { data, loading, error }] = useLinkBusinessToSchemeMutation({
- *   variables: {
- *      business: // value for 'business'
- *      scheme: // value for 'scheme'
- *   },
- * });
- */
 export function useLinkBusinessToSchemeMutation(
   baseOptions?: Apollo.MutationHookOptions<
     LinkBusinessToSchemeMutation,
@@ -56753,27 +56964,6 @@ export type RemoveUserFromBusinessMutationFn = Apollo.MutationFunction<
   RemoveUserFromBusinessMutation,
   RemoveUserFromBusinessMutationVariables
 >;
-
-/**
- * __useRemoveUserFromBusinessMutation__
- *
- * To run a mutation, you first call `useRemoveUserFromBusinessMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRemoveUserFromBusinessMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [removeUserFromBusinessMutation, { data, loading, error }] = useRemoveUserFromBusinessMutation({
- *   variables: {
- *      data: // value for 'data'
- *      where: // value for 'where'
- *      schemeWhere: // value for 'schemeWhere'
- *      groupWhere: // value for 'groupWhere'
- *   },
- * });
- */
 export function useRemoveUserFromBusinessMutation(
   baseOptions?: Apollo.MutationHookOptions<
     RemoveUserFromBusinessMutation,
@@ -56824,25 +57014,6 @@ export type UpdateBusinessMutationFn = Apollo.MutationFunction<
   UpdateBusinessMutation,
   UpdateBusinessMutationVariables
 >;
-
-/**
- * __useUpdateBusinessMutation__
- *
- * To run a mutation, you first call `useUpdateBusinessMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateBusinessMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateBusinessMutation, { data, loading, error }] = useUpdateBusinessMutation({
- *   variables: {
- *      data: // value for 'data'
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useUpdateBusinessMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateBusinessMutation,
@@ -56923,25 +57094,6 @@ export const BusinessReportDocument = gql`
     }
   }
 `;
-
-/**
- * __useBusinessReportQuery__
- *
- * To run a query within a React component, call `useBusinessReportQuery` and pass it any options that fit your needs.
- * When your component renders, `useBusinessReportQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useBusinessReportQuery({
- *   variables: {
- *      where: // value for 'where'
- *      endDate: // value for 'endDate'
- *      startDate: // value for 'startDate'
- *   },
- * });
- */
 export function useBusinessReportQuery(
   baseOptions: Apollo.QueryHookOptions<
     BusinessReportQuery,
@@ -56996,23 +57148,6 @@ export const BusinessDocument = gql`
     }
   }
 `;
-
-/**
- * __useBusinessQuery__
- *
- * To run a query within a React component, call `useBusinessQuery` and pass it any options that fit your needs.
- * When your component renders, `useBusinessQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useBusinessQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useBusinessQuery(
   baseOptions: Apollo.QueryHookOptions<BusinessQuery, BusinessQueryVariables>
 ) {
@@ -57065,23 +57200,6 @@ export const EditBusinessDocument = gql`
     }
   }
 `;
-
-/**
- * __useEditBusinessQuery__
- *
- * To run a query within a React component, call `useEditBusinessQuery` and pass it any options that fit your needs.
- * When your component renders, `useEditBusinessQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useEditBusinessQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useEditBusinessQuery(
   baseOptions: Apollo.QueryHookOptions<
     EditBusinessQuery,
@@ -57144,26 +57262,6 @@ export const ListBusinessesDocument = gql`
     }
   }
 `;
-
-/**
- * __useListBusinessesQuery__
- *
- * To run a query within a React component, call `useListBusinessesQuery` and pass it any options that fit your needs.
- * When your component renders, `useListBusinessesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListBusinessesQuery({
- *   variables: {
- *      where: // value for 'where'
- *      skip: // value for 'skip'
- *      take: // value for 'take'
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
 export function useListBusinessesQuery(
   baseOptions?: Apollo.QueryHookOptions<
     ListBusinessesQuery,
@@ -57220,26 +57318,6 @@ export const SearchBusinessesDocument = gql`
     }
   }
 `;
-
-/**
- * __useSearchBusinessesQuery__
- *
- * To run a query within a React component, call `useSearchBusinessesQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchBusinessesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSearchBusinessesQuery({
- *   variables: {
- *      where: // value for 'where'
- *      skip: // value for 'skip'
- *      take: // value for 'take'
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
 export function useSearchBusinessesQuery(
   baseOptions?: Apollo.QueryHookOptions<
     SearchBusinessesQuery,
@@ -57285,24 +57363,6 @@ export type DeleteChatMutationFn = Apollo.MutationFunction<
   DeleteChatMutation,
   DeleteChatMutationVariables
 >;
-
-/**
- * __useDeleteChatMutation__
- *
- * To run a mutation, you first call `useDeleteChatMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteChatMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteChatMutation, { data, loading, error }] = useDeleteChatMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
 export function useDeleteChatMutation(
   baseOptions?: Apollo.MutationHookOptions<
     DeleteChatMutation,
@@ -57348,25 +57408,6 @@ export type UpdateChatMutationFn = Apollo.MutationFunction<
   UpdateChatMutation,
   UpdateChatMutationVariables
 >;
-
-/**
- * __useUpdateChatMutation__
- *
- * To run a mutation, you first call `useUpdateChatMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateChatMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateChatMutation, { data, loading, error }] = useUpdateChatMutation({
- *   variables: {
- *      where: // value for 'where'
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useUpdateChatMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateChatMutation,
@@ -57413,23 +57454,6 @@ export const ChatDocument = gql`
     }
   }
 `;
-
-/**
- * __useChatQuery__
- *
- * To run a query within a React component, call `useChatQuery` and pass it any options that fit your needs.
- * When your component renders, `useChatQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useChatQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useChatQuery(
   baseOptions: Apollo.QueryHookOptions<ChatQuery, ChatQueryVariables>
 ) {
@@ -57454,57 +57478,41 @@ export const CreateChatDocument = gql`
       id
       name
       description
+      updatedAt
+      createdAt
       members {
         id
         newMessages
+        mentioned
         updatedAt
         createdAt
-        user {
-          id
-          fullName
-          firstLetter
-          origFirstLetter
-          origName
-          businesses {
-            fullName
-            id
-            name
-          }
-        }
         chat {
           id
           name
           firstLetter
+          totalMembers
           messages {
             id
             content
             createdAt
             from {
               id
-              fullName
               origName
             }
             images {
               id
-              url
-              optimised
-              position
             }
             incidents {
               id
-              subject
             }
             offenders {
               id
-              name
             }
             vehicles {
               id
-              reference
             }
             crimeGroups {
               id
-              reference
             }
           }
         }
@@ -57516,24 +57524,6 @@ export type CreateChatMutationFn = Apollo.MutationFunction<
   CreateChatMutation,
   CreateChatMutationVariables
 >;
-
-/**
- * __useCreateChatMutation__
- *
- * To run a mutation, you first call `useCreateChatMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateChatMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createChatMutation, { data, loading, error }] = useCreateChatMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateChatMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateChatMutation,
@@ -57567,24 +57557,6 @@ export const SchemeChatsDocument = gql`
     }
   }
 `;
-
-/**
- * __useSchemeChatsQuery__
- *
- * To run a query within a React component, call `useSchemeChatsQuery` and pass it any options that fit your needs.
- * When your component renders, `useSchemeChatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSchemeChatsQuery({
- *   variables: {
- *      where: // value for 'where'
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
 export function useSchemeChatsQuery(
   baseOptions?: Apollo.QueryHookOptions<
     SchemeChatsQuery,
@@ -57636,24 +57608,6 @@ export type CreateCrimeGroupMutationFn = Apollo.MutationFunction<
   CreateCrimeGroupMutation,
   CreateCrimeGroupMutationVariables
 >;
-
-/**
- * __useCreateCrimeGroupMutation__
- *
- * To run a mutation, you first call `useCreateCrimeGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateCrimeGroupMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createCrimeGroupMutation, { data, loading, error }] = useCreateCrimeGroupMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateCrimeGroupMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateCrimeGroupMutation,
@@ -57686,24 +57640,6 @@ export type DeleteCrimeGroupMutationFn = Apollo.MutationFunction<
   DeleteCrimeGroupMutation,
   DeleteCrimeGroupMutationVariables
 >;
-
-/**
- * __useDeleteCrimeGroupMutation__
- *
- * To run a mutation, you first call `useDeleteCrimeGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteCrimeGroupMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteCrimeGroupMutation, { data, loading, error }] = useDeleteCrimeGroupMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
 export function useDeleteCrimeGroupMutation(
   baseOptions?: Apollo.MutationHookOptions<
     DeleteCrimeGroupMutation,
@@ -57737,24 +57673,6 @@ export type SubscribeToCrimeGroupMutationFn = Apollo.MutationFunction<
   SubscribeToCrimeGroupMutation,
   SubscribeToCrimeGroupMutationVariables
 >;
-
-/**
- * __useSubscribeToCrimeGroupMutation__
- *
- * To run a mutation, you first call `useSubscribeToCrimeGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSubscribeToCrimeGroupMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [subscribeToCrimeGroupMutation, { data, loading, error }] = useSubscribeToCrimeGroupMutation({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useSubscribeToCrimeGroupMutation(
   baseOptions?: Apollo.MutationHookOptions<
     SubscribeToCrimeGroupMutation,
@@ -57788,24 +57706,6 @@ export type UnsubscribeToCrimeGroupMutationFn = Apollo.MutationFunction<
   UnsubscribeToCrimeGroupMutation,
   UnsubscribeToCrimeGroupMutationVariables
 >;
-
-/**
- * __useUnsubscribeToCrimeGroupMutation__
- *
- * To run a mutation, you first call `useUnsubscribeToCrimeGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUnsubscribeToCrimeGroupMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [unsubscribeToCrimeGroupMutation, { data, loading, error }] = useUnsubscribeToCrimeGroupMutation({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useUnsubscribeToCrimeGroupMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UnsubscribeToCrimeGroupMutation,
@@ -57894,25 +57794,6 @@ export type UpdateCrimeGroupMutationFn = Apollo.MutationFunction<
   UpdateCrimeGroupMutation,
   UpdateCrimeGroupMutationVariables
 >;
-
-/**
- * __useUpdateCrimeGroupMutation__
- *
- * To run a mutation, you first call `useUpdateCrimeGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateCrimeGroupMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateCrimeGroupMutation, { data, loading, error }] = useUpdateCrimeGroupMutation({
- *   variables: {
- *      where: // value for 'where'
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useUpdateCrimeGroupMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateCrimeGroupMutation,
@@ -57957,26 +57838,6 @@ export const ListCrimeGroupsDocument = gql`
     }
   }
 `;
-
-/**
- * __useListCrimeGroupsQuery__
- *
- * To run a query within a React component, call `useListCrimeGroupsQuery` and pass it any options that fit your needs.
- * When your component renders, `useListCrimeGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListCrimeGroupsQuery({
- *   variables: {
- *      take: // value for 'take'
- *      skip: // value for 'skip'
- *      where: // value for 'where'
- *      order: // value for 'order'
- *   },
- * });
- */
 export function useListCrimeGroupsQuery(
   baseOptions?: Apollo.QueryHookOptions<
     ListCrimeGroupsQuery,
@@ -58066,25 +57927,6 @@ export const SuggestedCrimeGroupMembersDocument = gql`
     }
   }
 `;
-
-/**
- * __useSuggestedCrimeGroupMembersQuery__
- *
- * To run a query within a React component, call `useSuggestedCrimeGroupMembersQuery` and pass it any options that fit your needs.
- * When your component renders, `useSuggestedCrimeGroupMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSuggestedCrimeGroupMembersQuery({
- *   variables: {
- *      where: // value for 'where'
- *      crimeTypesWhere: // value for 'crimeTypesWhere'
- *      associatedCrimeGroup: // value for 'associatedCrimeGroup'
- *   },
- * });
- */
 export function useSuggestedCrimeGroupMembersQuery(
   baseOptions: Apollo.QueryHookOptions<
     SuggestedCrimeGroupMembersQuery,
@@ -58349,23 +58191,6 @@ export const CrimeGroupDocument = gql`
     }
   }
 `;
-
-/**
- * __useCrimeGroupQuery__
- *
- * To run a query within a React component, call `useCrimeGroupQuery` and pass it any options that fit your needs.
- * When your component renders, `useCrimeGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCrimeGroupQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useCrimeGroupQuery(
   baseOptions: Apollo.QueryHookOptions<
     CrimeGroupQuery,
@@ -58420,25 +58245,6 @@ export type CopyEvidenceMutationFn = Apollo.MutationFunction<
   CopyEvidenceMutation,
   CopyEvidenceMutationVariables
 >;
-
-/**
- * __useCopyEvidenceMutation__
- *
- * To run a mutation, you first call `useCopyEvidenceMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCopyEvidenceMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [copyEvidenceMutation, { data, loading, error }] = useCopyEvidenceMutation({
- *   variables: {
- *      data: // value for 'data'
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useCopyEvidenceMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CopyEvidenceMutation,
@@ -58481,25 +58287,6 @@ export type LinkOrgToDemMutationFn = Apollo.MutationFunction<
   LinkOrgToDemMutation,
   LinkOrgToDemMutationVariables
 >;
-
-/**
- * __useLinkOrgToDemMutation__
- *
- * To run a mutation, you first call `useLinkOrgToDemMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLinkOrgToDemMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [linkOrgToDemMutation, { data, loading, error }] = useLinkOrgToDemMutation({
- *   variables: {
- *      data: // value for 'data'
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useLinkOrgToDemMutation(
   baseOptions?: Apollo.MutationHookOptions<
     LinkOrgToDemMutation,
@@ -58533,25 +58320,6 @@ export type LinkUserToDemMutationFn = Apollo.MutationFunction<
   LinkUserToDemMutation,
   LinkUserToDemMutationVariables
 >;
-
-/**
- * __useLinkUserToDemMutation__
- *
- * To run a mutation, you first call `useLinkUserToDemMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLinkUserToDemMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [linkUserToDemMutation, { data, loading, error }] = useLinkUserToDemMutation({
- *   variables: {
- *      data: // value for 'data'
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useLinkUserToDemMutation(
   baseOptions?: Apollo.MutationHookOptions<
     LinkUserToDemMutation,
@@ -58584,22 +58352,6 @@ export const ListDemCompaniesDocument = gql`
     }
   }
 `;
-
-/**
- * __useListDemCompaniesQuery__
- *
- * To run a query within a React component, call `useListDemCompaniesQuery` and pass it any options that fit your needs.
- * When your component renders, `useListDemCompaniesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListDemCompaniesQuery({
- *   variables: {
- *   },
- * });
- */
 export function useListDemCompaniesQuery(
   baseOptions?: Apollo.QueryHookOptions<
     ListDemCompaniesQuery,
@@ -58649,23 +58401,6 @@ export const ListDemEvidenceDocument = gql`
     }
   }
 `;
-
-/**
- * __useListDemEvidenceQuery__
- *
- * To run a query within a React component, call `useListDemEvidenceQuery` and pass it any options that fit your needs.
- * When your component renders, `useListDemEvidenceQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListDemEvidenceQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useListDemEvidenceQuery(
   baseOptions: Apollo.QueryHookOptions<
     ListDemEvidenceQuery,
@@ -58712,23 +58447,6 @@ export const ListDemUsersDocument = gql`
     }
   }
 `;
-
-/**
- * __useListDemUsersQuery__
- *
- * To run a query within a React component, call `useListDemUsersQuery` and pass it any options that fit your needs.
- * When your component renders, `useListDemUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListDemUsersQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useListDemUsersQuery(
   baseOptions: Apollo.QueryHookOptions<
     ListDemUsersQuery,
@@ -58783,24 +58501,6 @@ export type CreateDocumentMutationFn = Apollo.MutationFunction<
   CreateDocumentMutation,
   CreateDocumentMutationVariables
 >;
-
-/**
- * __useCreateDocumentMutation__
- *
- * To run a mutation, you first call `useCreateDocumentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateDocumentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createDocumentMutation, { data, loading, error }] = useCreateDocumentMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateDocumentMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateDocumentMutation,
@@ -58839,23 +58539,6 @@ export const ListDocumentsOnSchemeDocument = gql`
     }
   }
 `;
-
-/**
- * __useListDocumentsOnSchemeQuery__
- *
- * To run a query within a React component, call `useListDocumentsOnSchemeQuery` and pass it any options that fit your needs.
- * When your component renders, `useListDocumentsOnSchemeQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListDocumentsOnSchemeQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useListDocumentsOnSchemeQuery(
   baseOptions: Apollo.QueryHookOptions<
     ListDocumentsOnSchemeQuery,
@@ -58901,24 +58584,6 @@ export type DeleteFeedItemMutationFn = Apollo.MutationFunction<
   DeleteFeedItemMutation,
   DeleteFeedItemMutationVariables
 >;
-
-/**
- * __useDeleteFeedItemMutation__
- *
- * To run a mutation, you first call `useDeleteFeedItemMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteFeedItemMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteFeedItemMutation, { data, loading, error }] = useDeleteFeedItemMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
 export function useDeleteFeedItemMutation(
   baseOptions?: Apollo.MutationHookOptions<
     DeleteFeedItemMutation,
@@ -58963,6 +58628,28 @@ export const FeedItemsDocument = gql`
     ) {
       feedItems {
         type
+        ban {
+          endDate
+          startDate
+          updatedAt
+          title
+          type
+          active
+          expired
+          id
+          location
+          description
+          offender {
+            id
+            images {
+              id
+              url
+              optimised
+              position
+            }
+            name
+          }
+        }
         article {
           id
           title
@@ -59595,30 +59282,6 @@ export const FeedItemsDocument = gql`
     }
   }
 `;
-
-/**
- * __useFeedItemsQuery__
- *
- * To run a query within a React component, call `useFeedItemsQuery` and pass it any options that fit your needs.
- * When your component renders, `useFeedItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useFeedItemsQuery({
- *   variables: {
- *      schemeId: // value for 'schemeId'
- *      search: // value for 'search'
- *      order: // value for 'order'
- *      where: // value for 'where'
- *      take: // value for 'take'
- *      skip: // value for 'skip'
- *      after: // value for 'after'
- *      groups: // value for 'groups'
- *   },
- * });
- */
 export function useFeedItemsQuery(
   baseOptions: Apollo.QueryHookOptions<FeedItemsQuery, FeedItemsQueryVariables>
 ) {
@@ -59659,22 +59322,6 @@ export const ListGoodsTypesDocument = gql`
     }
   }
 `;
-
-/**
- * __useListGoodsTypesQuery__
- *
- * To run a query within a React component, call `useListGoodsTypesQuery` and pass it any options that fit your needs.
- * When your component renders, `useListGoodsTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListGoodsTypesQuery({
- *   variables: {
- *   },
- * });
- */
 export function useListGoodsTypesQuery(
   baseOptions?: Apollo.QueryHookOptions<
     ListGoodsTypesQuery,
@@ -59720,24 +59367,6 @@ export type DeleteGroupMutationFn = Apollo.MutationFunction<
   DeleteGroupMutation,
   DeleteGroupMutationVariables
 >;
-
-/**
- * __useDeleteGroupMutation__
- *
- * To run a mutation, you first call `useDeleteGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteGroupMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteGroupMutation, { data, loading, error }] = useDeleteGroupMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
 export function useDeleteGroupMutation(
   baseOptions?: Apollo.MutationHookOptions<
     DeleteGroupMutation,
@@ -59785,25 +59414,6 @@ export type UpdateGroupMutationFn = Apollo.MutationFunction<
   UpdateGroupMutation,
   UpdateGroupMutationVariables
 >;
-
-/**
- * __useUpdateGroupMutation__
- *
- * To run a mutation, you first call `useUpdateGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateGroupMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateGroupMutation, { data, loading, error }] = useUpdateGroupMutation({
- *   variables: {
- *      where: // value for 'where'
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useUpdateGroupMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateGroupMutation,
@@ -59847,23 +59457,6 @@ export const GroupDocument = gql`
     }
   }
 `;
-
-/**
- * __useGroupQuery__
- *
- * To run a query within a React component, call `useGroupQuery` and pass it any options that fit your needs.
- * When your component renders, `useGroupQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGroupQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useGroupQuery(
   baseOptions: Apollo.QueryHookOptions<GroupQuery, GroupQueryVariables>
 ) {
@@ -59909,24 +59502,6 @@ export type CreateGroupMutationFn = Apollo.MutationFunction<
   CreateGroupMutation,
   CreateGroupMutationVariables
 >;
-
-/**
- * __useCreateGroupMutation__
- *
- * To run a mutation, you first call `useCreateGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateGroupMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createGroupMutation, { data, loading, error }] = useCreateGroupMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateGroupMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateGroupMutation,
@@ -59964,24 +59539,6 @@ export const SchemeGroupsDocument = gql`
     }
   }
 `;
-
-/**
- * __useSchemeGroupsQuery__
- *
- * To run a query within a React component, call `useSchemeGroupsQuery` and pass it any options that fit your needs.
- * When your component renders, `useSchemeGroupsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSchemeGroupsQuery({
- *   variables: {
- *      where: // value for 'where'
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
 export function useSchemeGroupsQuery(
   baseOptions?: Apollo.QueryHookOptions<
     SchemeGroupsQuery,
@@ -60037,25 +59594,6 @@ export type AddImagesToIncidentMutationFn = Apollo.MutationFunction<
   AddImagesToIncidentMutation,
   AddImagesToIncidentMutationVariables
 >;
-
-/**
- * __useAddImagesToIncidentMutation__
- *
- * To run a mutation, you first call `useAddImagesToIncidentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddImagesToIncidentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [addImagesToIncidentMutation, { data, loading, error }] = useAddImagesToIncidentMutation({
- *   variables: {
- *      incident: // value for 'incident'
- *      images: // value for 'images'
- *   },
- * });
- */
 export function useAddImagesToIncidentMutation(
   baseOptions?: Apollo.MutationHookOptions<
     AddImagesToIncidentMutation,
@@ -60154,24 +59692,6 @@ export type CreateIncidentMutationFn = Apollo.MutationFunction<
   CreateIncidentMutation,
   CreateIncidentMutationVariables
 >;
-
-/**
- * __useCreateIncidentMutation__
- *
- * To run a mutation, you first call `useCreateIncidentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateIncidentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createIncidentMutation, { data, loading, error }] = useCreateIncidentMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateIncidentMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateIncidentMutation,
@@ -60204,24 +59724,6 @@ export type RecycleIncidentMutationFn = Apollo.MutationFunction<
   RecycleIncidentMutation,
   RecycleIncidentMutationVariables
 >;
-
-/**
- * __useRecycleIncidentMutation__
- *
- * To run a mutation, you first call `useRecycleIncidentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRecycleIncidentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [recycleIncidentMutation, { data, loading, error }] = useRecycleIncidentMutation({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useRecycleIncidentMutation(
   baseOptions?: Apollo.MutationHookOptions<
     RecycleIncidentMutation,
@@ -60255,24 +59757,6 @@ export type SubscribeToIncidentMutationFn = Apollo.MutationFunction<
   SubscribeToIncidentMutation,
   SubscribeToIncidentMutationVariables
 >;
-
-/**
- * __useSubscribeToIncidentMutation__
- *
- * To run a mutation, you first call `useSubscribeToIncidentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSubscribeToIncidentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [subscribeToIncidentMutation, { data, loading, error }] = useSubscribeToIncidentMutation({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useSubscribeToIncidentMutation(
   baseOptions?: Apollo.MutationHookOptions<
     SubscribeToIncidentMutation,
@@ -60306,24 +59790,6 @@ export type UnsubscribeFromIncidentMutationFn = Apollo.MutationFunction<
   UnsubscribeFromIncidentMutation,
   UnsubscribeFromIncidentMutationVariables
 >;
-
-/**
- * __useUnsubscribeFromIncidentMutation__
- *
- * To run a mutation, you first call `useUnsubscribeFromIncidentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUnsubscribeFromIncidentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [unsubscribeFromIncidentMutation, { data, loading, error }] = useUnsubscribeFromIncidentMutation({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useUnsubscribeFromIncidentMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UnsubscribeFromIncidentMutation,
@@ -60428,25 +59894,6 @@ export type UpdateIncidentMutationFn = Apollo.MutationFunction<
   UpdateIncidentMutation,
   UpdateIncidentMutationVariables
 >;
-
-/**
- * __useUpdateIncidentMutation__
- *
- * To run a mutation, you first call `useUpdateIncidentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateIncidentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateIncidentMutation, { data, loading, error }] = useUpdateIncidentMutation({
- *   variables: {
- *      where: // value for 'where'
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useUpdateIncidentMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateIncidentMutation,
@@ -60482,23 +59929,6 @@ export const AddressesDocument = gql`
     }
   }
 `;
-
-/**
- * __useAddressesQuery__
- *
- * To run a query within a React component, call `useAddressesQuery` and pass it any options that fit your needs.
- * When your component renders, `useAddressesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAddressesQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useAddressesQuery(
   baseOptions?: Apollo.QueryHookOptions<AddressesQuery, AddressesQueryVariables>
 ) {
@@ -60829,23 +60259,6 @@ export const EditIncidentDocument = gql`
     }
   }
 `;
-
-/**
- * __useEditIncidentQuery__
- *
- * To run a query within a React component, call `useEditIncidentQuery` and pass it any options that fit your needs.
- * When your component renders, `useEditIncidentQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useEditIncidentQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useEditIncidentQuery(
   baseOptions: Apollo.QueryHookOptions<
     EditIncidentQuery,
@@ -60946,30 +60359,6 @@ export const IncidentFeedDocument = gql`
     }
   }
 `;
-
-/**
- * __useIncidentFeedQuery__
- *
- * To run a query within a React component, call `useIncidentFeedQuery` and pass it any options that fit your needs.
- * When your component renders, `useIncidentFeedQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useIncidentFeedQuery({
- *   variables: {
- *      schemeId: // value for 'schemeId'
- *      search: // value for 'search'
- *      order: // value for 'order'
- *      first: // value for 'first'
- *      cursor: // value for 'cursor'
- *      groups: // value for 'groups'
- *      crimeTypes: // value for 'crimeTypes'
- *      approved: // value for 'approved'
- *   },
- * });
- */
 export function useIncidentFeedQuery(
   baseOptions: Apollo.QueryHookOptions<
     IncidentFeedQuery,
@@ -61013,23 +60402,6 @@ export const ListIncidentsFlowDocument = gql`
     }
   }
 `;
-
-/**
- * __useListIncidentsFlowQuery__
- *
- * To run a query within a React component, call `useListIncidentsFlowQuery` and pass it any options that fit your needs.
- * When your component renders, `useListIncidentsFlowQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListIncidentsFlowQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useListIncidentsFlowQuery(
   baseOptions?: Apollo.QueryHookOptions<
     ListIncidentsFlowQuery,
@@ -61126,27 +60498,6 @@ export const ListIncidentsDocument = gql`
     }
   }
 `;
-
-/**
- * __useListIncidentsQuery__
- *
- * To run a query within a React component, call `useListIncidentsQuery` and pass it any options that fit your needs.
- * When your component renders, `useListIncidentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListIncidentsQuery({
- *   variables: {
- *      scheme: // value for 'scheme'
- *      where: // value for 'where'
- *      order: // value for 'order'
- *      take: // value for 'take'
- *      skip: // value for 'skip'
- *   },
- * });
- */
 export function useListIncidentsQuery(
   baseOptions: Apollo.QueryHookOptions<
     ListIncidentsQuery,
@@ -61234,27 +60585,6 @@ export const ListUnapprovedIncidentsDocument = gql`
     }
   }
 `;
-
-/**
- * __useListUnapprovedIncidentsQuery__
- *
- * To run a query within a React component, call `useListUnapprovedIncidentsQuery` and pass it any options that fit your needs.
- * When your component renders, `useListUnapprovedIncidentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListUnapprovedIncidentsQuery({
- *   variables: {
- *      scheme: // value for 'scheme'
- *      where: // value for 'where'
- *      order: // value for 'order'
- *      take: // value for 'take'
- *      skip: // value for 'skip'
- *   },
- * });
- */
 export function useListUnapprovedIncidentsQuery(
   baseOptions: Apollo.QueryHookOptions<
     ListUnapprovedIncidentsQuery,
@@ -61583,23 +60913,6 @@ export const ViewIncidentDocument = gql`
     }
   }
 `;
-
-/**
- * __useViewIncidentQuery__
- *
- * To run a query within a React component, call `useViewIncidentQuery` and pass it any options that fit your needs.
- * When your component renders, `useViewIncidentQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useViewIncidentQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useViewIncidentQuery(
   baseOptions: Apollo.QueryHookOptions<
     ViewIncidentQuery,
@@ -61647,24 +60960,6 @@ export type CreateFlowMutationFn = Apollo.MutationFunction<
   CreateFlowMutation,
   CreateFlowMutationVariables
 >;
-
-/**
- * __useCreateFlowMutation__
- *
- * To run a mutation, you first call `useCreateFlowMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateFlowMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createFlowMutation, { data, loading, error }] = useCreateFlowMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateFlowMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateFlowMutation,
@@ -61699,24 +60994,6 @@ export type CreateInvestigationMutationFn = Apollo.MutationFunction<
   CreateInvestigationMutation,
   CreateInvestigationMutationVariables
 >;
-
-/**
- * __useCreateInvestigationMutation__
- *
- * To run a mutation, you first call `useCreateInvestigationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateInvestigationMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createInvestigationMutation, { data, loading, error }] = useCreateInvestigationMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateInvestigationMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateInvestigationMutation,
@@ -61750,24 +61027,6 @@ export type SubscribeToInvestigationMutationFn = Apollo.MutationFunction<
   SubscribeToInvestigationMutation,
   SubscribeToInvestigationMutationVariables
 >;
-
-/**
- * __useSubscribeToInvestigationMutation__
- *
- * To run a mutation, you first call `useSubscribeToInvestigationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSubscribeToInvestigationMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [subscribeToInvestigationMutation, { data, loading, error }] = useSubscribeToInvestigationMutation({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useSubscribeToInvestigationMutation(
   baseOptions?: Apollo.MutationHookOptions<
     SubscribeToInvestigationMutation,
@@ -61802,24 +61061,6 @@ export type UnsubscribeToInvestigationMutationFn = Apollo.MutationFunction<
   UnsubscribeToInvestigationMutation,
   UnsubscribeToInvestigationMutationVariables
 >;
-
-/**
- * __useUnsubscribeToInvestigationMutation__
- *
- * To run a mutation, you first call `useUnsubscribeToInvestigationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUnsubscribeToInvestigationMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [unsubscribeToInvestigationMutation, { data, loading, error }] = useUnsubscribeToInvestigationMutation({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useUnsubscribeToInvestigationMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UnsubscribeToInvestigationMutation,
@@ -61883,25 +61124,6 @@ export type UpdateFlowMutationFn = Apollo.MutationFunction<
   UpdateFlowMutation,
   UpdateFlowMutationVariables
 >;
-
-/**
- * __useUpdateFlowMutation__
- *
- * To run a mutation, you first call `useUpdateFlowMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateFlowMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateFlowMutation, { data, loading, error }] = useUpdateFlowMutation({
- *   variables: {
- *      data: // value for 'data'
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useUpdateFlowMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateFlowMutation,
@@ -62009,25 +61231,6 @@ export type UpdateInvestigationMutationFn = Apollo.MutationFunction<
   UpdateInvestigationMutation,
   UpdateInvestigationMutationVariables
 >;
-
-/**
- * __useUpdateInvestigationMutation__
- *
- * To run a mutation, you first call `useUpdateInvestigationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateInvestigationMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateInvestigationMutation, { data, loading, error }] = useUpdateInvestigationMutation({
- *   variables: {
- *      where: // value for 'where'
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useUpdateInvestigationMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateInvestigationMutation,
@@ -62171,25 +61374,6 @@ export const InvestigationSuggestionsDocument = gql`
     }
   }
 `;
-
-/**
- * __useInvestigationSuggestionsQuery__
- *
- * To run a query within a React component, call `useInvestigationSuggestionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useInvestigationSuggestionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useInvestigationSuggestionsQuery({
- *   variables: {
- *      where: // value for 'where'
- *      associatedInvestigation: // value for 'associatedInvestigation'
- *      crimeTypesWhere: // value for 'crimeTypesWhere'
- *   },
- * });
- */
 export function useInvestigationSuggestionsQuery(
   baseOptions: Apollo.QueryHookOptions<
     InvestigationSuggestionsQuery,
@@ -62240,25 +61424,6 @@ export const ListInvestigationsDocument = gql`
     }
   }
 `;
-
-/**
- * __useListInvestigationsQuery__
- *
- * To run a query within a React component, call `useListInvestigationsQuery` and pass it any options that fit your needs.
- * When your component renders, `useListInvestigationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListInvestigationsQuery({
- *   variables: {
- *      scheme: // value for 'scheme'
- *      take: // value for 'take'
- *      skip: // value for 'skip'
- *   },
- * });
- */
 export function useListInvestigationsQuery(
   baseOptions: Apollo.QueryHookOptions<
     ListInvestigationsQuery,
@@ -62570,23 +61735,6 @@ export const ViewInvestigationDocument = gql`
     }
   }
 `;
-
-/**
- * __useViewInvestigationQuery__
- *
- * To run a query within a React component, call `useViewInvestigationQuery` and pass it any options that fit your needs.
- * When your component renders, `useViewInvestigationQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useViewInvestigationQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useViewInvestigationQuery(
   baseOptions: Apollo.QueryHookOptions<
     ViewInvestigationQuery,
@@ -62702,24 +61850,6 @@ export type CreateMessageMutationFn = Apollo.MutationFunction<
   CreateMessageMutation,
   CreateMessageMutationVariables
 >;
-
-/**
- * __useCreateMessageMutation__
- *
- * To run a mutation, you first call `useCreateMessageMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateMessageMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createMessageMutation, { data, loading, error }] = useCreateMessageMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateMessageMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateMessageMutation,
@@ -62752,24 +61882,6 @@ export type DeleteMessageMutationFn = Apollo.MutationFunction<
   DeleteMessageMutation,
   DeleteMessageMutationVariables
 >;
-
-/**
- * __useDeleteMessageMutation__
- *
- * To run a mutation, you first call `useDeleteMessageMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteMessageMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteMessageMutation, { data, loading, error }] = useDeleteMessageMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
 export function useDeleteMessageMutation(
   baseOptions?: Apollo.MutationHookOptions<
     DeleteMessageMutation,
@@ -62877,25 +61989,6 @@ export type UpdateMessageMutationFn = Apollo.MutationFunction<
   UpdateMessageMutation,
   UpdateMessageMutationVariables
 >;
-
-/**
- * __useUpdateMessageMutation__
- *
- * To run a mutation, you first call `useUpdateMessageMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateMessageMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateMessageMutation, { data, loading, error }] = useUpdateMessageMutation({
- *   variables: {
- *      where: // value for 'where'
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useUpdateMessageMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateMessageMutation,
@@ -62994,25 +62087,6 @@ export const ChatMessagesDocument = gql`
     }
   }
 `;
-
-/**
- * __useChatMessagesQuery__
- *
- * To run a query within a React component, call `useChatMessagesQuery` and pass it any options that fit your needs.
- * When your component renders, `useChatMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useChatMessagesQuery({
- *   variables: {
- *      where: // value for 'where'
- *      take: // value for 'take'
- *      skip: // value for 'skip'
- *   },
- * });
- */
 export function useChatMessagesQuery(
   baseOptions: Apollo.QueryHookOptions<
     ChatMessagesQuery,
@@ -63135,24 +62209,6 @@ export const MessagesDocument = gql`
     }
   }
 `;
-
-/**
- * __useMessagesQuery__
- *
- * To run a query within a React component, call `useMessagesQuery` and pass it any options that fit your needs.
- * When your component renders, `useMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useMessagesQuery({
- *   variables: {
- *      chat: // value for 'chat'
- *      before: // value for 'before'
- *   },
- * });
- */
 export function useMessagesQuery(
   baseOptions?: Apollo.QueryHookOptions<MessagesQuery, MessagesQueryVariables>
 ) {
@@ -63263,24 +62319,6 @@ export const MessagesSubscriptionDocument = gql`
     }
   }
 `;
-
-/**
- * __useMessagesSubscriptionSubscription__
- *
- * To run a query within a React component, call `useMessagesSubscriptionSubscription` and pass it any options that fit your needs.
- * When your component renders, `useMessagesSubscriptionSubscription` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useMessagesSubscriptionSubscription({
- *   variables: {
- *      chat: // value for 'chat'
- *      user: // value for 'user'
- *   },
- * });
- */
 export function useMessagesSubscriptionSubscription(
   baseOptions: Apollo.SubscriptionHookOptions<
     MessagesSubscriptionSubscription,
@@ -63319,25 +62357,6 @@ export type AddImagesToOffenderMutationFn = Apollo.MutationFunction<
   AddImagesToOffenderMutation,
   AddImagesToOffenderMutationVariables
 >;
-
-/**
- * __useAddImagesToOffenderMutation__
- *
- * To run a mutation, you first call `useAddImagesToOffenderMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddImagesToOffenderMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [addImagesToOffenderMutation, { data, loading, error }] = useAddImagesToOffenderMutation({
- *   variables: {
- *      offender: // value for 'offender'
- *      images: // value for 'images'
- *   },
- * });
- */
 export function useAddImagesToOffenderMutation(
   baseOptions?: Apollo.MutationHookOptions<
     AddImagesToOffenderMutation,
@@ -63445,24 +62464,6 @@ export type CreateOffenderMutationFn = Apollo.MutationFunction<
   CreateOffenderMutation,
   CreateOffenderMutationVariables
 >;
-
-/**
- * __useCreateOffenderMutation__
- *
- * To run a mutation, you first call `useCreateOffenderMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateOffenderMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createOffenderMutation, { data, loading, error }] = useCreateOffenderMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateOffenderMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateOffenderMutation,
@@ -63495,24 +62496,6 @@ export type MergeOffendersMutationFn = Apollo.MutationFunction<
   MergeOffendersMutation,
   MergeOffendersMutationVariables
 >;
-
-/**
- * __useMergeOffendersMutation__
- *
- * To run a mutation, you first call `useMergeOffendersMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useMergeOffendersMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [mergeOffendersMutation, { data, loading, error }] = useMergeOffendersMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useMergeOffendersMutation(
   baseOptions?: Apollo.MutationHookOptions<
     MergeOffendersMutation,
@@ -63545,24 +62528,6 @@ export type RecycleOffenderMutationFn = Apollo.MutationFunction<
   RecycleOffenderMutation,
   RecycleOffenderMutationVariables
 >;
-
-/**
- * __useRecycleOffenderMutation__
- *
- * To run a mutation, you first call `useRecycleOffenderMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRecycleOffenderMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [recycleOffenderMutation, { data, loading, error }] = useRecycleOffenderMutation({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useRecycleOffenderMutation(
   baseOptions?: Apollo.MutationHookOptions<
     RecycleOffenderMutation,
@@ -63596,24 +62561,6 @@ export type SubscribeToOffenderMutationFn = Apollo.MutationFunction<
   SubscribeToOffenderMutation,
   SubscribeToOffenderMutationVariables
 >;
-
-/**
- * __useSubscribeToOffenderMutation__
- *
- * To run a mutation, you first call `useSubscribeToOffenderMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSubscribeToOffenderMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [subscribeToOffenderMutation, { data, loading, error }] = useSubscribeToOffenderMutation({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useSubscribeToOffenderMutation(
   baseOptions?: Apollo.MutationHookOptions<
     SubscribeToOffenderMutation,
@@ -63691,25 +62638,6 @@ export type UpdateOffenderMutationFn = Apollo.MutationFunction<
   UpdateOffenderMutation,
   UpdateOffenderMutationVariables
 >;
-
-/**
- * __useUpdateOffenderMutation__
- *
- * To run a mutation, you first call `useUpdateOffenderMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateOffenderMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateOffenderMutation, { data, loading, error }] = useUpdateOffenderMutation({
- *   variables: {
- *      where: // value for 'where'
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useUpdateOffenderMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateOffenderMutation,
@@ -63801,28 +62729,6 @@ export const AssociatedOffendersDocument = gql`
     }
   }
 `;
-
-/**
- * __useAssociatedOffendersQuery__
- *
- * To run a query within a React component, call `useAssociatedOffendersQuery` and pass it any options that fit your needs.
- * When your component renders, `useAssociatedOffendersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useAssociatedOffendersQuery({
- *   variables: {
- *      where: // value for 'where'
- *      associatedOffender: // value for 'associatedOffender'
- *      linkedIncidents: // value for 'linkedIncidents'
- *      linkedCrimeGroup: // value for 'linkedCrimeGroup'
- *      crimeTypesWhere: // value for 'crimeTypesWhere'
- *      groups: // value for 'groups'
- *   },
- * });
- */
 export function useAssociatedOffendersQuery(
   baseOptions: Apollo.QueryHookOptions<
     AssociatedOffendersQuery,
@@ -63887,23 +62793,6 @@ export const ViewOffenderCompareDocument = gql`
     }
   }
 `;
-
-/**
- * __useViewOffenderCompareQuery__
- *
- * To run a query within a React component, call `useViewOffenderCompareQuery` and pass it any options that fit your needs.
- * When your component renders, `useViewOffenderCompareQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useViewOffenderCompareQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useViewOffenderCompareQuery(
   baseOptions: Apollo.QueryHookOptions<
     ViewOffenderCompareQuery,
@@ -64036,27 +62925,6 @@ export const ListOffendersDocument = gql`
     }
   }
 `;
-
-/**
- * __useListOffendersQuery__
- *
- * To run a query within a React component, call `useListOffendersQuery` and pass it any options that fit your needs.
- * When your component renders, `useListOffendersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListOffendersQuery({
- *   variables: {
- *      scheme: // value for 'scheme'
- *      where: // value for 'where'
- *      order: // value for 'order'
- *      take: // value for 'take'
- *      skip: // value for 'skip'
- *   },
- * });
- */
 export function useListOffendersQuery(
   baseOptions: Apollo.QueryHookOptions<
     ListOffendersQuery,
@@ -64165,35 +63033,6 @@ export const OffenderFeedDocument = gql`
     }
   }
 `;
-
-/**
- * __useOffenderFeedQuery__
- *
- * To run a query within a React component, call `useOffenderFeedQuery` and pass it any options that fit your needs.
- * When your component renders, `useOffenderFeedQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useOffenderFeedQuery({
- *   variables: {
- *      userId: // value for 'userId'
- *      schemeId: // value for 'schemeId'
- *      search: // value for 'search'
- *      order: // value for 'order'
- *      first: // value for 'first'
- *      cursor: // value for 'cursor'
- *      active: // value for 'active'
- *      banned: // value for 'banned'
- *      groups: // value for 'groups'
- *      tags: // value for 'tags'
- *      ethnicity: // value for 'ethnicity'
- *      sex: // value for 'sex'
- *      approved: // value for 'approved'
- *   },
- * });
- */
 export function useOffenderFeedQuery(
   baseOptions: Apollo.QueryHookOptions<
     OffenderFeedQuery,
@@ -64285,27 +63124,6 @@ export const SearchOffendersDocument = gql`
     }
   }
 `;
-
-/**
- * __useSearchOffendersQuery__
- *
- * To run a query within a React component, call `useSearchOffendersQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchOffendersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSearchOffendersQuery({
- *   variables: {
- *      scheme: // value for 'scheme'
- *      where: // value for 'where'
- *      order: // value for 'order'
- *      take: // value for 'take'
- *      skip: // value for 'skip'
- *   },
- * });
- */
 export function useSearchOffendersQuery(
   baseOptions: Apollo.QueryHookOptions<
     SearchOffendersQuery,
@@ -64612,24 +63430,6 @@ export const ViewOffenderDocument = gql`
     }
   }
 `;
-
-/**
- * __useViewOffenderQuery__
- *
- * To run a query within a React component, call `useViewOffenderQuery` and pass it any options that fit your needs.
- * When your component renders, `useViewOffenderQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useViewOffenderQuery({
- *   variables: {
- *      where: // value for 'where'
- *      banWhere: // value for 'banWhere'
- *   },
- * });
- */
 export function useViewOffenderQuery(
   baseOptions: Apollo.QueryHookOptions<
     ViewOffenderQuery,
@@ -64675,24 +63475,6 @@ export type DeleteIncidentMutationFn = Apollo.MutationFunction<
   DeleteIncidentMutation,
   DeleteIncidentMutationVariables
 >;
-
-/**
- * __useDeleteIncidentMutation__
- *
- * To run a mutation, you first call `useDeleteIncidentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteIncidentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteIncidentMutation, { data, loading, error }] = useDeleteIncidentMutation({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useDeleteIncidentMutation(
   baseOptions?: Apollo.MutationHookOptions<
     DeleteIncidentMutation,
@@ -64725,24 +63507,6 @@ export type DeleteOffenderMutationFn = Apollo.MutationFunction<
   DeleteOffenderMutation,
   DeleteOffenderMutationVariables
 >;
-
-/**
- * __useDeleteOffenderMutation__
- *
- * To run a mutation, you first call `useDeleteOffenderMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteOffenderMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteOffenderMutation, { data, loading, error }] = useDeleteOffenderMutation({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useDeleteOffenderMutation(
   baseOptions?: Apollo.MutationHookOptions<
     DeleteOffenderMutation,
@@ -64776,25 +63540,6 @@ export type RestoreIncidentMutationFn = Apollo.MutationFunction<
   RestoreIncidentMutation,
   RestoreIncidentMutationVariables
 >;
-
-/**
- * __useRestoreIncidentMutation__
- *
- * To run a mutation, you first call `useRestoreIncidentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRestoreIncidentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [restoreIncidentMutation, { data, loading, error }] = useRestoreIncidentMutation({
- *   variables: {
- *      id: // value for 'id'
- *      recycledId: // value for 'recycledId'
- *   },
- * });
- */
 export function useRestoreIncidentMutation(
   baseOptions?: Apollo.MutationHookOptions<
     RestoreIncidentMutation,
@@ -64828,25 +63573,6 @@ export type RestoreOffenderMutationFn = Apollo.MutationFunction<
   RestoreOffenderMutation,
   RestoreOffenderMutationVariables
 >;
-
-/**
- * __useRestoreOffenderMutation__
- *
- * To run a mutation, you first call `useRestoreOffenderMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRestoreOffenderMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [restoreOffenderMutation, { data, loading, error }] = useRestoreOffenderMutation({
- *   variables: {
- *      id: // value for 'id'
- *      recycledId: // value for 'recycledId'
- *   },
- * });
- */
 export function useRestoreOffenderMutation(
   baseOptions?: Apollo.MutationHookOptions<
     RestoreOffenderMutation,
@@ -64912,23 +63638,6 @@ export const RecycledItemDocument = gql`
     }
   }
 `;
-
-/**
- * __useRecycledItemQuery__
- *
- * To run a query within a React component, call `useRecycledItemQuery` and pass it any options that fit your needs.
- * When your component renders, `useRecycledItemQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useRecycledItemQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useRecycledItemQuery(
   baseOptions: Apollo.QueryHookOptions<
     RecycledItemQuery,
@@ -65031,28 +63740,6 @@ export const RecycledItemsDocument = gql`
     }
   }
 `;
-
-/**
- * __useRecycledItemsQuery__
- *
- * To run a query within a React component, call `useRecycledItemsQuery` and pass it any options that fit your needs.
- * When your component renders, `useRecycledItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useRecycledItemsQuery({
- *   variables: {
- *      schemeId: // value for 'schemeId'
- *      search: // value for 'search'
- *      order: // value for 'order'
- *      first: // value for 'first'
- *      after: // value for 'after'
- *      dataType: // value for 'dataType'
- *   },
- * });
- */
 export function useRecycledItemsQuery(
   baseOptions: Apollo.QueryHookOptions<
     RecycledItemsQuery,
@@ -65117,24 +63804,6 @@ export type CreateReportTemplateMutationFn = Apollo.MutationFunction<
   CreateReportTemplateMutation,
   CreateReportTemplateMutationVariables
 >;
-
-/**
- * __useCreateReportTemplateMutation__
- *
- * To run a mutation, you first call `useCreateReportTemplateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateReportTemplateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createReportTemplateMutation, { data, loading, error }] = useCreateReportTemplateMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateReportTemplateMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateReportTemplateMutation,
@@ -65189,25 +63858,6 @@ export type UpdateReportTemplateMutationFn = Apollo.MutationFunction<
   UpdateReportTemplateMutation,
   UpdateReportTemplateMutationVariables
 >;
-
-/**
- * __useUpdateReportTemplateMutation__
- *
- * To run a mutation, you first call `useUpdateReportTemplateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateReportTemplateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateReportTemplateMutation, { data, loading, error }] = useUpdateReportTemplateMutation({
- *   variables: {
- *      data: // value for 'data'
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useUpdateReportTemplateMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateReportTemplateMutation,
@@ -65245,23 +63895,6 @@ export const BusinessEngagementDocument = gql`
     }
   }
 `;
-
-/**
- * __useBusinessEngagementQuery__
- *
- * To run a query within a React component, call `useBusinessEngagementQuery` and pass it any options that fit your needs.
- * When your component renders, `useBusinessEngagementQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useBusinessEngagementQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useBusinessEngagementQuery(
   baseOptions: Apollo.QueryHookOptions<
     BusinessEngagementQuery,
@@ -65388,24 +64021,6 @@ export const TargetedBusinessReportDocument = gql`
     }
   }
 `;
-
-/**
- * __useTargetedBusinessReportQuery__
- *
- * To run a query within a React component, call `useTargetedBusinessReportQuery` and pass it any options that fit your needs.
- * When your component renders, `useTargetedBusinessReportQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useTargetedBusinessReportQuery({
- *   variables: {
- *      where: // value for 'where'
- *      businessWhere: // value for 'businessWhere'
- *   },
- * });
- */
 export function useTargetedBusinessReportQuery(
   baseOptions: Apollo.QueryHookOptions<
     TargetedBusinessReportQuery,
@@ -65586,25 +64201,6 @@ export const CrimeGroupReportDocument = gql`
     }
   }
 `;
-
-/**
- * __useCrimeGroupReportQuery__
- *
- * To run a query within a React component, call `useCrimeGroupReportQuery` and pass it any options that fit your needs.
- * When your component renders, `useCrimeGroupReportQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCrimeGroupReportQuery({
- *   variables: {
- *      where: // value for 'where'
- *      whereContribution: // value for 'whereContribution'
- *      whereCrimeGroup: // value for 'whereCrimeGroup'
- *   },
- * });
- */
 export function useCrimeGroupReportQuery(
   baseOptions: Apollo.QueryHookOptions<
     CrimeGroupReportQuery,
@@ -65651,23 +64247,6 @@ export const IncidentMapDocument = gql`
     }
   }
 `;
-
-/**
- * __useIncidentMapQuery__
- *
- * To run a query within a React component, call `useIncidentMapQuery` and pass it any options that fit your needs.
- * When your component renders, `useIncidentMapQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useIncidentMapQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useIncidentMapQuery(
   baseOptions: Apollo.QueryHookOptions<
     IncidentMapQuery,
@@ -65824,26 +64403,6 @@ export const OffenderProfileDocument = gql`
     }
   }
 `;
-
-/**
- * __useOffenderProfileQuery__
- *
- * To run a query within a React component, call `useOffenderProfileQuery` and pass it any options that fit your needs.
- * When your component renders, `useOffenderProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useOffenderProfileQuery({
- *   variables: {
- *      where: // value for 'where'
- *      orderBy: // value for 'orderBy'
- *      first: // value for 'first'
- *      incidentsOrderBy: // value for 'incidentsOrderBy'
- *   },
- * });
- */
 export function useOffenderProfileQuery(
   baseOptions: Apollo.QueryHookOptions<
     OffenderProfileQuery,
@@ -66008,24 +64567,6 @@ export const OffenderReportDocument = gql`
     }
   }
 `;
-
-/**
- * __useOffenderReportQuery__
- *
- * To run a query within a React component, call `useOffenderReportQuery` and pass it any options that fit your needs.
- * When your component renders, `useOffenderReportQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useOffenderReportQuery({
- *   variables: {
- *      where: // value for 'where'
- *      targetedWhere: // value for 'targetedWhere'
- *   },
- * });
- */
 export function useOffenderReportQuery(
   baseOptions: Apollo.QueryHookOptions<
     OffenderReportQuery,
@@ -66187,23 +64728,6 @@ export const PerformanceReportDocument = gql`
     }
   }
 `;
-
-/**
- * __usePerformanceReportQuery__
- *
- * To run a query within a React component, call `usePerformanceReportQuery` and pass it any options that fit your needs.
- * When your component renders, `usePerformanceReportQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = usePerformanceReportQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function usePerformanceReportQuery(
   baseOptions: Apollo.QueryHookOptions<
     PerformanceReportQuery,
@@ -66280,26 +64804,6 @@ export const SchemeReportDetailsDocument = gql`
     }
   }
 `;
-
-/**
- * __useSchemeReportDetailsQuery__
- *
- * To run a query within a React component, call `useSchemeReportDetailsQuery` and pass it any options that fit your needs.
- * When your component renders, `useSchemeReportDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSchemeReportDetailsQuery({
- *   variables: {
- *      where: // value for 'where'
- *      schemeWhere: // value for 'schemeWhere'
- *      orderBy: // value for 'orderBy'
- *      reportTemplatesWhere: // value for 'reportTemplatesWhere'
- *   },
- * });
- */
 export function useSchemeReportDetailsQuery(
   baseOptions: Apollo.QueryHookOptions<
     SchemeReportDetailsQuery,
@@ -66350,23 +64854,6 @@ export const SchemeReportFiltersDocument = gql`
     }
   }
 `;
-
-/**
- * __useSchemeReportFiltersQuery__
- *
- * To run a query within a React component, call `useSchemeReportFiltersQuery` and pass it any options that fit your needs.
- * When your component renders, `useSchemeReportFiltersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSchemeReportFiltersQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useSchemeReportFiltersQuery(
   baseOptions?: Apollo.QueryHookOptions<
     SchemeReportFiltersQuery,
@@ -66413,24 +64900,6 @@ export type CreateTermsAndConditionsMutationFn = Apollo.MutationFunction<
   CreateTermsAndConditionsMutation,
   CreateTermsAndConditionsMutationVariables
 >;
-
-/**
- * __useCreateTermsAndConditionsMutation__
- *
- * To run a mutation, you first call `useCreateTermsAndConditionsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateTermsAndConditionsMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createTermsAndConditionsMutation, { data, loading, error }] = useCreateTermsAndConditionsMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateTermsAndConditionsMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateTermsAndConditionsMutation,
@@ -66489,25 +64958,6 @@ export type UpdateSchemeMutationFn = Apollo.MutationFunction<
   UpdateSchemeMutation,
   UpdateSchemeMutationVariables
 >;
-
-/**
- * __useUpdateSchemeMutation__
- *
- * To run a mutation, you first call `useUpdateSchemeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateSchemeMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateSchemeMutation, { data, loading, error }] = useUpdateSchemeMutation({
- *   variables: {
- *      where: // value for 'where'
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useUpdateSchemeMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateSchemeMutation,
@@ -66539,23 +64989,6 @@ export const CurrentSchemeTermsDocument = gql`
     }
   }
 `;
-
-/**
- * __useCurrentSchemeTermsQuery__
- *
- * To run a query within a React component, call `useCurrentSchemeTermsQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentSchemeTermsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCurrentSchemeTermsQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useCurrentSchemeTermsQuery(
   baseOptions: Apollo.QueryHookOptions<
     CurrentSchemeTermsQuery,
@@ -66620,23 +65053,6 @@ export const SchemeDocument = gql`
     }
   }
 `;
-
-/**
- * __useSchemeQuery__
- *
- * To run a query within a React component, call `useSchemeQuery` and pass it any options that fit your needs.
- * When your component renders, `useSchemeQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSchemeQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useSchemeQuery(
   baseOptions: Apollo.QueryHookOptions<SchemeQuery, SchemeQueryVariables>
 ) {
@@ -66672,24 +65088,6 @@ export type DeleteTagMutationFn = Apollo.MutationFunction<
   DeleteTagMutation,
   DeleteTagMutationVariables
 >;
-
-/**
- * __useDeleteTagMutation__
- *
- * To run a mutation, you first call `useDeleteTagMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteTagMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteTagMutation, { data, loading, error }] = useDeleteTagMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
 export function useDeleteTagMutation(
   baseOptions?: Apollo.MutationHookOptions<
     DeleteTagMutation,
@@ -66725,25 +65123,6 @@ export type UpdateTagMutationFn = Apollo.MutationFunction<
   UpdateTagMutation,
   UpdateTagMutationVariables
 >;
-
-/**
- * __useUpdateTagMutation__
- *
- * To run a mutation, you first call `useUpdateTagMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateTagMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateTagMutation, { data, loading, error }] = useUpdateTagMutation({
- *   variables: {
- *      where: // value for 'where'
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useUpdateTagMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateTagMutation,
@@ -66775,23 +65154,6 @@ export const TagDocument = gql`
     }
   }
 `;
-
-/**
- * __useTagQuery__
- *
- * To run a query within a React component, call `useTagQuery` and pass it any options that fit your needs.
- * When your component renders, `useTagQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useTagQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useTagQuery(
   baseOptions: Apollo.QueryHookOptions<TagQuery, TagQueryVariables>
 ) {
@@ -66822,24 +65184,6 @@ export type CreateTagMutationFn = Apollo.MutationFunction<
   CreateTagMutation,
   CreateTagMutationVariables
 >;
-
-/**
- * __useCreateTagMutation__
- *
- * To run a mutation, you first call `useCreateTagMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateTagMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createTagMutation, { data, loading, error }] = useCreateTagMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateTagMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateTagMutation,
@@ -66871,23 +65215,6 @@ export const TagsDocument = gql`
     }
   }
 `;
-
-/**
- * __useTagsQuery__
- *
- * To run a query within a React component, call `useTagsQuery` and pass it any options that fit your needs.
- * When your component renders, `useTagsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useTagsQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useTagsQuery(
   baseOptions: Apollo.QueryHookOptions<TagsQuery, TagsQueryVariables>
 ) {
@@ -66931,24 +65258,6 @@ export type CreateTodoMutationFn = Apollo.MutationFunction<
   CreateTodoMutation,
   CreateTodoMutationVariables
 >;
-
-/**
- * __useCreateTodoMutation__
- *
- * To run a mutation, you first call `useCreateTodoMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateTodoMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createTodoMutation, { data, loading, error }] = useCreateTodoMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateTodoMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateTodoMutation,
@@ -66999,25 +65308,6 @@ export type UpdateTodoMutationFn = Apollo.MutationFunction<
   UpdateTodoMutation,
   UpdateTodoMutationVariables
 >;
-
-/**
- * __useUpdateTodoMutation__
- *
- * To run a mutation, you first call `useUpdateTodoMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateTodoMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateTodoMutation, { data, loading, error }] = useUpdateTodoMutation({
- *   variables: {
- *      data: // value for 'data'
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useUpdateTodoMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateTodoMutation,
@@ -67067,24 +65357,6 @@ export type UpdateTodoMentionMutationFn = Apollo.MutationFunction<
   UpdateTodoMentionMutation,
   UpdateTodoMentionMutationVariables
 >;
-
-/**
- * __useUpdateTodoMentionMutation__
- *
- * To run a mutation, you first call `useUpdateTodoMentionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateTodoMentionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateTodoMentionMutation, { data, loading, error }] = useUpdateTodoMentionMutation({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useUpdateTodoMentionMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateTodoMentionMutation,
@@ -67168,26 +65440,6 @@ export const ListTodosDocument = gql`
     }
   }
 `;
-
-/**
- * __useListTodosQuery__
- *
- * To run a query within a React component, call `useListTodosQuery` and pass it any options that fit your needs.
- * When your component renders, `useListTodosQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListTodosQuery({
- *   variables: {
- *      where: // value for 'where'
- *      take: // value for 'take'
- *      skip: // value for 'skip'
- *      orderBy: // value for 'orderBy'
- *   },
- * });
- */
 export function useListTodosQuery(
   baseOptions?: Apollo.QueryHookOptions<ListTodosQuery, ListTodosQueryVariables>
 ) {
@@ -67382,25 +65634,6 @@ export type CreateUpdateOnCrimeGroupMutationFn = Apollo.MutationFunction<
   CreateUpdateOnCrimeGroupMutation,
   CreateUpdateOnCrimeGroupMutationVariables
 >;
-
-/**
- * __useCreateUpdateOnCrimeGroupMutation__
- *
- * To run a mutation, you first call `useCreateUpdateOnCrimeGroupMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateUpdateOnCrimeGroupMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createUpdateOnCrimeGroupMutation, { data, loading, error }] = useCreateUpdateOnCrimeGroupMutation({
- *   variables: {
- *      crimeGroup: // value for 'crimeGroup'
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateUpdateOnCrimeGroupMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateUpdateOnCrimeGroupMutation,
@@ -67588,25 +65821,6 @@ export type CreateUpdateOnIncidentMutationFn = Apollo.MutationFunction<
   CreateUpdateOnIncidentMutation,
   CreateUpdateOnIncidentMutationVariables
 >;
-
-/**
- * __useCreateUpdateOnIncidentMutation__
- *
- * To run a mutation, you first call `useCreateUpdateOnIncidentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateUpdateOnIncidentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createUpdateOnIncidentMutation, { data, loading, error }] = useCreateUpdateOnIncidentMutation({
- *   variables: {
- *      incident: // value for 'incident'
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateUpdateOnIncidentMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateUpdateOnIncidentMutation,
@@ -67793,25 +66007,6 @@ export type CreateUpdateOnInvestigationMutationFn = Apollo.MutationFunction<
   CreateUpdateOnInvestigationMutation,
   CreateUpdateOnInvestigationMutationVariables
 >;
-
-/**
- * __useCreateUpdateOnInvestigationMutation__
- *
- * To run a mutation, you first call `useCreateUpdateOnInvestigationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateUpdateOnInvestigationMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createUpdateOnInvestigationMutation, { data, loading, error }] = useCreateUpdateOnInvestigationMutation({
- *   variables: {
- *      investigation: // value for 'investigation'
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateUpdateOnInvestigationMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateUpdateOnInvestigationMutation,
@@ -67999,25 +66194,6 @@ export type CreateUpdateOnOffenderMutationFn = Apollo.MutationFunction<
   CreateUpdateOnOffenderMutation,
   CreateUpdateOnOffenderMutationVariables
 >;
-
-/**
- * __useCreateUpdateOnOffenderMutation__
- *
- * To run a mutation, you first call `useCreateUpdateOnOffenderMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateUpdateOnOffenderMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createUpdateOnOffenderMutation, { data, loading, error }] = useCreateUpdateOnOffenderMutation({
- *   variables: {
- *      offender: // value for 'offender'
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateUpdateOnOffenderMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateUpdateOnOffenderMutation,
@@ -68204,25 +66380,6 @@ export type CreateUpdateOnVehicleMutationFn = Apollo.MutationFunction<
   CreateUpdateOnVehicleMutation,
   CreateUpdateOnVehicleMutationVariables
 >;
-
-/**
- * __useCreateUpdateOnVehicleMutation__
- *
- * To run a mutation, you first call `useCreateUpdateOnVehicleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateUpdateOnVehicleMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createUpdateOnVehicleMutation, { data, loading, error }] = useCreateUpdateOnVehicleMutation({
- *   variables: {
- *      vehicle: // value for 'vehicle'
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateUpdateOnVehicleMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateUpdateOnVehicleMutation,
@@ -68256,24 +66413,6 @@ export type DeleteUpdateMutationFn = Apollo.MutationFunction<
   DeleteUpdateMutation,
   DeleteUpdateMutationVariables
 >;
-
-/**
- * __useDeleteUpdateMutation__
- *
- * To run a mutation, you first call `useDeleteUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteUpdateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteUpdateMutation, { data, loading, error }] = useDeleteUpdateMutation({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useDeleteUpdateMutation(
   baseOptions?: Apollo.MutationHookOptions<
     DeleteUpdateMutation,
@@ -68310,25 +66449,6 @@ export type UpdateUpdateMutationFn = Apollo.MutationFunction<
   UpdateUpdateMutation,
   UpdateUpdateMutationVariables
 >;
-
-/**
- * __useUpdateUpdateMutation__
- *
- * To run a mutation, you first call `useUpdateUpdateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateUpdateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateUpdateMutation, { data, loading, error }] = useUpdateUpdateMutation({
- *   variables: {
- *      where: // value for 'where'
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useUpdateUpdateMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateUpdateMutation,
@@ -68361,25 +66481,6 @@ export type DeleteUserFromSchemeMutationFn = Apollo.MutationFunction<
   DeleteUserFromSchemeMutation,
   DeleteUserFromSchemeMutationVariables
 >;
-
-/**
- * __useDeleteUserFromSchemeMutation__
- *
- * To run a mutation, you first call `useDeleteUserFromSchemeMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteUserFromSchemeMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteUserFromSchemeMutation, { data, loading, error }] = useDeleteUserFromSchemeMutation({
- *   variables: {
- *      id: // value for 'id'
- *      scheme: // value for 'scheme'
- *   },
- * });
- */
 export function useDeleteUserFromSchemeMutation(
   baseOptions?: Apollo.MutationHookOptions<
     DeleteUserFromSchemeMutation,
@@ -68413,24 +66514,6 @@ export type SendInviteMutationFn = Apollo.MutationFunction<
   SendInviteMutation,
   SendInviteMutationVariables
 >;
-
-/**
- * __useSendInviteMutation__
- *
- * To run a mutation, you first call `useSendInviteMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSendInviteMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [sendInviteMutation, { data, loading, error }] = useSendInviteMutation({
- *   variables: {
- *      user: // value for 'user'
- *   },
- * });
- */
 export function useSendInviteMutation(
   baseOptions?: Apollo.MutationHookOptions<
     SendInviteMutation,
@@ -68463,24 +66546,6 @@ export type SignTermsMutationFn = Apollo.MutationFunction<
   SignTermsMutation,
   SignTermsMutationVariables
 >;
-
-/**
- * __useSignTermsMutation__
- *
- * To run a mutation, you first call `useSignTermsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSignTermsMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [signTermsMutation, { data, loading, error }] = useSignTermsMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useSignTermsMutation(
   baseOptions?: Apollo.MutationHookOptions<
     SignTermsMutation,
@@ -68557,28 +66622,6 @@ export type UpdateUserMutationFn = Apollo.MutationFunction<
   UpdateUserMutation,
   UpdateUserMutationVariables
 >;
-
-/**
- * __useUpdateUserMutation__
- *
- * To run a mutation, you first call `useUpdateUserMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateUserMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateUserMutation, { data, loading, error }] = useUpdateUserMutation({
- *   variables: {
- *      where: // value for 'where'
- *      data: // value for 'data'
- *      groupWhere: // value for 'groupWhere'
- *      chatWhere: // value for 'chatWhere'
- *      schemeWhere: // value for 'schemeWhere'
- *   },
- * });
- */
 export function useUpdateUserMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateUserMutation,
@@ -68612,25 +66655,6 @@ export type UpdateUserDisableMutationFn = Apollo.MutationFunction<
   UpdateUserDisableMutation,
   UpdateUserDisableMutationVariables
 >;
-
-/**
- * __useUpdateUserDisableMutation__
- *
- * To run a mutation, you first call `useUpdateUserDisableMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateUserDisableMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateUserDisableMutation, { data, loading, error }] = useUpdateUserDisableMutation({
- *   variables: {
- *      where: // value for 'where'
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useUpdateUserDisableMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateUserDisableMutation,
@@ -68701,22 +66725,6 @@ export const CurrentUserDocument = gql`
     }
   }
 `;
-
-/**
- * __useCurrentUserQuery__
- *
- * To run a query within a React component, call `useCurrentUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useCurrentUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCurrentUserQuery({
- *   variables: {
- *   },
- * });
- */
 export function useCurrentUserQuery(
   baseOptions?: Apollo.QueryHookOptions<
     CurrentUserQuery,
@@ -68808,26 +66816,6 @@ export const UserDocument = gql`
     }
   }
 `;
-
-/**
- * __useUserQuery__
- *
- * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useUserQuery({
- *   variables: {
- *      where: // value for 'where'
- *      groupWhere: // value for 'groupWhere'
- *      chatWhere: // value for 'chatWhere'
- *      schemeWhere: // value for 'schemeWhere'
- *   },
- * });
- */
 export function useUserQuery(
   baseOptions: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>
 ) {
@@ -68908,24 +66896,6 @@ export type CreateUserChatMutationFn = Apollo.MutationFunction<
   CreateUserChatMutation,
   CreateUserChatMutationVariables
 >;
-
-/**
- * __useCreateUserChatMutation__
- *
- * To run a mutation, you first call `useCreateUserChatMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateUserChatMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createUserChatMutation, { data, loading, error }] = useCreateUserChatMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateUserChatMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateUserChatMutation,
@@ -68958,24 +66928,6 @@ export type DeleteUserChatMutationFn = Apollo.MutationFunction<
   DeleteUserChatMutation,
   DeleteUserChatMutationVariables
 >;
-
-/**
- * __useDeleteUserChatMutation__
- *
- * To run a mutation, you first call `useDeleteUserChatMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteUserChatMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteUserChatMutation, { data, loading, error }] = useDeleteUserChatMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
 export function useDeleteUserChatMutation(
   baseOptions?: Apollo.MutationHookOptions<
     DeleteUserChatMutation,
@@ -69059,25 +67011,6 @@ export type UpdateUserChatMutationFn = Apollo.MutationFunction<
   UpdateUserChatMutation,
   UpdateUserChatMutationVariables
 >;
-
-/**
- * __useUpdateUserChatMutation__
- *
- * To run a mutation, you first call `useUpdateUserChatMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateUserChatMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateUserChatMutation, { data, loading, error }] = useUpdateUserChatMutation({
- *   variables: {
- *      where: // value for 'where'
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useUpdateUserChatMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateUserChatMutation,
@@ -69117,13 +67050,6 @@ export const UserChatsDocument = gql`
         mentioned
         updatedAt
         createdAt
-        user {
-          id
-          fullName
-          firstLetter
-          origFirstLetter
-          origName
-        }
         chat {
           id
           name
@@ -69135,32 +67061,22 @@ export const UserChatsDocument = gql`
             createdAt
             from {
               id
-              fullName
-              origFirstLetter
               origName
-              firstLetter
             }
             images {
               id
-              url
-              optimised
-              position
             }
             incidents {
               id
-              subject
             }
             offenders {
               id
-              name
             }
             vehicles {
               id
-              reference
             }
             crimeGroups {
               id
-              reference
             }
           }
         }
@@ -69168,25 +67084,6 @@ export const UserChatsDocument = gql`
     }
   }
 `;
-
-/**
- * __useUserChatsQuery__
- *
- * To run a query within a React component, call `useUserChatsQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserChatsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useUserChatsQuery({
- *   variables: {
- *      where: // value for 'where'
- *      orderBy: // value for 'orderBy'
- *      scheme: // value for 'scheme'
- *   },
- * });
- */
 export function useUserChatsQuery(
   baseOptions: Apollo.QueryHookOptions<UserChatsQuery, UserChatsQueryVariables>
 ) {
@@ -69253,25 +67150,6 @@ export type CreateUserInDatabaseMutationFn = Apollo.MutationFunction<
   CreateUserInDatabaseMutation,
   CreateUserInDatabaseMutationVariables
 >;
-
-/**
- * __useCreateUserInDatabaseMutation__
- *
- * To run a mutation, you first call `useCreateUserInDatabaseMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateUserInDatabaseMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createUserInDatabaseMutation, { data, loading, error }] = useCreateUserInDatabaseMutation({
- *   variables: {
- *      data: // value for 'data'
- *      groupWhere: // value for 'groupWhere'
- *   },
- * });
- */
 export function useCreateUserInDatabaseMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateUserInDatabaseMutation,
@@ -69331,26 +67209,6 @@ export type InviteExistingUserMutationFn = Apollo.MutationFunction<
   InviteExistingUserMutation,
   InviteExistingUserMutationVariables
 >;
-
-/**
- * __useInviteExistingUserMutation__
- *
- * To run a mutation, you first call `useInviteExistingUserMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useInviteExistingUserMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [inviteExistingUserMutation, { data, loading, error }] = useInviteExistingUserMutation({
- *   variables: {
- *      data: // value for 'data'
- *      where: // value for 'where'
- *      groupWhere: // value for 'groupWhere'
- *   },
- * });
- */
 export function useInviteExistingUserMutation(
   baseOptions?: Apollo.MutationHookOptions<
     InviteExistingUserMutation,
@@ -69393,25 +67251,6 @@ export const ListBusinessUsersDocument = gql`
     }
   }
 `;
-
-/**
- * __useListBusinessUsersQuery__
- *
- * To run a query within a React component, call `useListBusinessUsersQuery` and pass it any options that fit your needs.
- * When your component renders, `useListBusinessUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListBusinessUsersQuery({
- *   variables: {
- *      where: // value for 'where'
- *      orderBy: // value for 'orderBy'
- *      groupWhere: // value for 'groupWhere'
- *   },
- * });
- */
 export function useListBusinessUsersQuery(
   baseOptions?: Apollo.QueryHookOptions<
     ListBusinessUsersQuery,
@@ -69482,26 +67321,6 @@ export const ListSchemeUsersDocument = gql`
     }
   }
 `;
-
-/**
- * __useListSchemeUsersQuery__
- *
- * To run a query within a React component, call `useListSchemeUsersQuery` and pass it any options that fit your needs.
- * When your component renders, `useListSchemeUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListSchemeUsersQuery({
- *   variables: {
- *      where: // value for 'where'
- *      orderBy: // value for 'orderBy'
- *      after: // value for 'after'
- *      groupWhere: // value for 'groupWhere'
- *   },
- * });
- */
 export function useListSchemeUsersQuery(
   baseOptions?: Apollo.QueryHookOptions<
     ListSchemeUsersQuery,
@@ -69568,27 +67387,6 @@ export const ListUsersDocument = gql`
     }
   }
 `;
-
-/**
- * __useListUsersQuery__
- *
- * To run a query within a React component, call `useListUsersQuery` and pass it any options that fit your needs.
- * When your component renders, `useListUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListUsersQuery({
- *   variables: {
- *      where: // value for 'where'
- *      orderBy: // value for 'orderBy'
- *      groupWhere: // value for 'groupWhere'
- *      take: // value for 'take'
- *      skip: // value for 'skip'
- *   },
- * });
- */
 export function useListUsersQuery(
   baseOptions?: Apollo.QueryHookOptions<ListUsersQuery, ListUsersQueryVariables>
 ) {
@@ -69667,31 +67465,6 @@ export const SchemeUsersDocument = gql`
     }
   }
 `;
-
-/**
- * __useSchemeUsersQuery__
- *
- * To run a query within a React component, call `useSchemeUsersQuery` and pass it any options that fit your needs.
- * When your component renders, `useSchemeUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSchemeUsersQuery({
- *   variables: {
- *      scheme: // value for 'scheme'
- *      search: // value for 'search'
- *      orderByName: // value for 'orderByName'
- *      orderByBusinesses: // value for 'orderByBusinesses'
- *      orderByCreatedAt: // value for 'orderByCreatedAt'
- *      disabled: // value for 'disabled'
- *      newUser: // value for 'newUser'
- *      role: // value for 'role'
- *      after: // value for 'after'
- *   },
- * });
- */
 export function useSchemeUsersQuery(
   baseOptions?: Apollo.QueryHookOptions<
     SchemeUsersQuery,
@@ -69750,23 +67523,6 @@ export const SearchUserDocument = gql`
     }
   }
 `;
-
-/**
- * __useSearchUserQuery__
- *
- * To run a query within a React component, call `useSearchUserQuery` and pass it any options that fit your needs.
- * When your component renders, `useSearchUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useSearchUserQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useSearchUserQuery(
   baseOptions: Apollo.QueryHookOptions<
     SearchUserQuery,
@@ -69809,23 +67565,6 @@ export const UserNewDocument = gql`
     }
   }
 `;
-
-/**
- * __useUserNewQuery__
- *
- * To run a query within a React component, call `useUserNewQuery` and pass it any options that fit your needs.
- * When your component renders, `useUserNewQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useUserNewQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
 export function useUserNewQuery(
   baseOptions: Apollo.QueryHookOptions<UserNewQuery, UserNewQueryVariables>
 ) {
@@ -69888,24 +67627,6 @@ export type CreateVehicleMutationFn = Apollo.MutationFunction<
   CreateVehicleMutation,
   CreateVehicleMutationVariables
 >;
-
-/**
- * __useCreateVehicleMutation__
- *
- * To run a mutation, you first call `useCreateVehicleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateVehicleMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createVehicleMutation, { data, loading, error }] = useCreateVehicleMutation({
- *   variables: {
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useCreateVehicleMutation(
   baseOptions?: Apollo.MutationHookOptions<
     CreateVehicleMutation,
@@ -69938,24 +67659,6 @@ export type DeleteVehicleMutationFn = Apollo.MutationFunction<
   DeleteVehicleMutation,
   DeleteVehicleMutationVariables
 >;
-
-/**
- * __useDeleteVehicleMutation__
- *
- * To run a mutation, you first call `useDeleteVehicleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteVehicleMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteVehicleMutation, { data, loading, error }] = useDeleteVehicleMutation({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
 export function useDeleteVehicleMutation(
   baseOptions?: Apollo.MutationHookOptions<
     DeleteVehicleMutation,
@@ -69989,24 +67692,6 @@ export type SubscribeToVehicleMutationFn = Apollo.MutationFunction<
   SubscribeToVehicleMutation,
   SubscribeToVehicleMutationVariables
 >;
-
-/**
- * __useSubscribeToVehicleMutation__
- *
- * To run a mutation, you first call `useSubscribeToVehicleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSubscribeToVehicleMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [subscribeToVehicleMutation, { data, loading, error }] = useSubscribeToVehicleMutation({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useSubscribeToVehicleMutation(
   baseOptions?: Apollo.MutationHookOptions<
     SubscribeToVehicleMutation,
@@ -70040,24 +67725,6 @@ export type UnsubscribeToVehicleMutationFn = Apollo.MutationFunction<
   UnsubscribeToVehicleMutation,
   UnsubscribeToVehicleMutationVariables
 >;
-
-/**
- * __useUnsubscribeToVehicleMutation__
- *
- * To run a mutation, you first call `useUnsubscribeToVehicleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUnsubscribeToVehicleMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [unsubscribeToVehicleMutation, { data, loading, error }] = useUnsubscribeToVehicleMutation({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useUnsubscribeToVehicleMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UnsubscribeToVehicleMutation,
@@ -70116,25 +67783,6 @@ export type UpdateVehicleMutationFn = Apollo.MutationFunction<
   UpdateVehicleMutation,
   UpdateVehicleMutationVariables
 >;
-
-/**
- * __useUpdateVehicleMutation__
- *
- * To run a mutation, you first call `useUpdateVehicleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateVehicleMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateVehicleMutation, { data, loading, error }] = useUpdateVehicleMutation({
- *   variables: {
- *      where: // value for 'where'
- *      data: // value for 'data'
- *   },
- * });
- */
 export function useUpdateVehicleMutation(
   baseOptions?: Apollo.MutationHookOptions<
     UpdateVehicleMutation,
@@ -70198,26 +67846,6 @@ export const ListVehiclesDocument = gql`
     }
   }
 `;
-
-/**
- * __useListVehiclesQuery__
- *
- * To run a query within a React component, call `useListVehiclesQuery` and pass it any options that fit your needs.
- * When your component renders, `useListVehiclesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListVehiclesQuery({
- *   variables: {
- *      take: // value for 'take'
- *      skip: // value for 'skip'
- *      where: // value for 'where'
- *      order: // value for 'order'
- *   },
- * });
- */
 export function useListVehiclesQuery(
   baseOptions?: Apollo.QueryHookOptions<
     ListVehiclesQuery,
@@ -70485,23 +68113,6 @@ export const VehicleDocument = gql`
     }
   }
 `;
-
-/**
- * __useVehicleQuery__
- *
- * To run a query within a React component, call `useVehicleQuery` and pass it any options that fit your needs.
- * When your component renders, `useVehicleQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useVehicleQuery({
- *   variables: {
- *      where: // value for 'where'
- *   },
- * });
- */
 export function useVehicleQuery(
   baseOptions: Apollo.QueryHookOptions<VehicleQuery, VehicleQueryVariables>
 ) {

@@ -14,8 +14,8 @@ import type {
   UserChatsQueryVariables,
 } from 'graphql/generated';
 import {
-  ImagePosition,
   ChatMessagesDocument,
+  ImagePosition,
   MessageItemType,
   MessagesSubscriptionDocument,
   Role,
@@ -145,12 +145,13 @@ interface Return {
 const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const apolloStore = useApolloClient();
 
-  const role = useStoreState((state) => state.user.role);
-  const userId = useStoreState((state) => state.user.id);
-  const userOrigName = useStoreState((state) => state.user.origName);
+  const {
+    role,
+    id: userId,
+    origName: userOrigName,
+  } = useStoreState((state) => state.user);
   const schemeId = useStoreState((state) => state.scheme.id);
   const navigate = useNavigate();
-
   const [saving, setSaving] = useState(false);
   const [form] = useForm<FormData>();
   const [after, setAfter] = useState(0);
@@ -258,7 +259,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
             scheme: schemeId,
             orderBy: {
               chat: {
-                name: SortOrder.Asc,
+                updatedAt: SortOrder.Desc,
               },
             },
           },
@@ -283,7 +284,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                             content: newMessage.content,
                             createdAt: newMessage.createdAt,
                             from: {
-                              fullName: newMessage.from?.fullName || '',
                               origName: newMessage.from?.fullName || '',
                               id: newMessage.id || '',
                             },
@@ -436,7 +436,6 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
                       content: res.createMessage.content,
                       createdAt: res.createMessage.createdAt,
                       from: {
-                        fullName: res.createMessage.from?.fullName || '',
                         origName: res.createMessage.from?.fullName || '',
                         id: res.createMessage.id || '',
                       },
@@ -651,9 +650,7 @@ const useViewMessages = ({ chatId, updateUserChatList }: Props): Return => {
   const beforeUpload = (file: RcFile) => {
     const isFileDuplicate = fileList.find((item) => item.name === file.name);
     if (isFileDuplicate) {
-      message.error(
-        'This image has already existed, please choose another one.'
-      );
+      message.error('This image already exists, please choose another one.');
     }
     return !isFileDuplicate || Upload.LIST_IGNORE;
   };

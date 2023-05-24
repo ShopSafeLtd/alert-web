@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import type {
   Age,
+  Build,
   Gender,
   Race,
-  Build,
   SearchOffendersQuery,
   SearchOffendersQueryVariables,
 } from 'graphql/generated';
 import {
-  SearchOffendersDocument,
   QueryMode,
+  SearchOffendersDocument,
   SortOrder,
 } from 'graphql/generated';
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
@@ -85,9 +85,7 @@ const useAddNewOffender = ({ onClose, update }: Props): Return => {
   const beforeUpload = (file: RcFile) => {
     const isFileDuplicate = fileList.find((item) => item.name === file.name);
     if (isFileDuplicate) {
-      message.error(
-        'This image has already existed, please choose another one.'
-      );
+      message.error('This image already exists, please choose another one.');
     }
     return !isFileDuplicate || Upload.LIST_IGNORE;
   };

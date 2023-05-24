@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { UploadFile } from 'antd';
-import { Form, Select, Skeleton, Col, Modal, Row } from 'antd';
+import { Switch, Form, Select, Skeleton, Col, Modal, Row } from 'antd';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import { ImagePosition } from 'graphql/generated';
 import useStyles from './ImageEditor.styles';
@@ -50,7 +50,12 @@ interface Image extends UploadFile {
     name?: string | undefined | null;
   }[];
   position?: ImagePosition;
+  primary?: boolean;
 }
+// interface FormData {
+//   position?: ImagePosition;
+//   primary?: boolean;
+// }
 
 interface Props {
   open: boolean;
@@ -61,8 +66,8 @@ interface Props {
 
 const ImageEditor = ({ open, image, submitImage, onClose }: Props) => {
   const classes = useStyles();
-
   const [position, setPosition] = useState(ImagePosition.CenterCenter);
+  const [primary, setPrimary] = useState(false);
 
   useEffect(() => {
     setPosition(image?.position || ImagePosition.CenterCenter);
@@ -90,14 +95,44 @@ const ImageEditor = ({ open, image, submitImage, onClose }: Props) => {
     >
       <Row wrap={false}>
         <Col className={classes.toolbar}>
-          <Form className={classes.select} layout="vertical">
-            <Form.Item label="Image Position">
-              <Select
-                value={position}
-                onChange={setPosition}
-                options={positionOptions}
-              />
-            </Form.Item>
+          <Form
+            className={classes.select}
+            layout="vertical"
+            // initialValues={{}}
+            // onFinish={onSubmit}
+          >
+            <Row>
+              <Col flex={1}>
+                <Form.Item label="Image Position">
+                  <Select
+                    value={position}
+                    onChange={setPosition}
+                    options={positionOptions}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col flex={1}>
+                <Form.Item
+                  label="Set as primary image"
+                  name="primaryImage"
+                  valuePropName="checked"
+                  style={{
+                    marginBottom: 0,
+                    flexDirection: 'row',
+                    justifyItems: 'center',
+                  }}
+                >
+                  <Switch
+                    // disabled={saving}
+                    checked={primary}
+                    onChange={() => setPrimary(!primary)}
+                    style={{ marginLeft: 10, marginTop: -20 }}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
           </Form>
         </Col>
         <Col flex={1}>

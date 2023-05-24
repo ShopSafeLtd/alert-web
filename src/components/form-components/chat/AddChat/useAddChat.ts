@@ -12,6 +12,7 @@ import {
 import { useStoreState } from 'state';
 import type { MutationUpdaterFn } from '@apollo/client';
 import { notification } from 'antd';
+import errorNotification from 'types/error_notification';
 
 interface FormData {
   name: string;
@@ -71,11 +72,7 @@ const useAddChat = ({ onClose, update }: Props): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
     update,
   });

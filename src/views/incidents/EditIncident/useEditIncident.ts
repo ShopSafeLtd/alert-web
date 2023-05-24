@@ -10,7 +10,6 @@ import type {
   TagsQuery,
 } from 'graphql/generated';
 import {
-  TagType,
   ImagePosition,
   Model,
   QueryMode,
@@ -18,13 +17,14 @@ import {
   SearchBusinessesDocument,
   SortOrder,
   TagsDocument,
+  TagType,
+  useEditIncidentQuery,
   useListGoodsTypesQuery,
   useListOffendersQuery,
   useRecycleIncidentMutation,
   useSchemeGroupsQuery,
   useTagsQuery,
   useUpdateIncidentMutation,
-  useEditIncidentQuery,
 } from 'graphql/generated';
 import { message, Modal, notification, Upload } from 'antd';
 import { useStoreActions, useStoreState } from 'state';
@@ -35,8 +35,8 @@ import { useNavigate } from 'react-router';
 import update from 'immutability-helper';
 import type { UploadChangeParam } from 'antd/lib/upload';
 import type {
-  VehicleData,
   OffenderData as OffenderDataGlobal,
+  VehicleData,
 } from 'types/DataType';
 
 const { confirm } = Modal;
@@ -450,9 +450,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
   const beforeUpload = (file: RcFile) => {
     const isFileDuplicate = fileList.find((item) => item.name === file.name);
     if (isFileDuplicate) {
-      message.error(
-        'This image has already existed, please choose another one.'
-      );
+      message.error('This image already exists, please choose another one.');
     }
 
     return !isFileDuplicate || Upload.LIST_IGNORE;
@@ -985,6 +983,7 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             policeReported: { set: data.policeReported },
             location: {
               update: {
+                premises: { set: '' },
                 building: { set: data.building || '' },
                 street: { set: data.street || '' },
                 townCity: { set: data.townCity || '' },

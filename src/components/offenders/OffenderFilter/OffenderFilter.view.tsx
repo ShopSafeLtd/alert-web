@@ -1,5 +1,14 @@
 import React from 'react';
-import { Button, Col, Input, Row, Select, Typography, DatePicker } from 'antd';
+import {
+  Button,
+  Col,
+  Input,
+  Row,
+  Select,
+  Typography,
+  DatePicker,
+  Form,
+} from 'antd';
 import type { SearchBusinessesQuery } from 'graphql/generated';
 import { Age, Build, Gender, Race } from 'graphql/generated';
 import { OffenderSort } from 'state';
@@ -7,6 +16,10 @@ import type { DateType } from 'types/DataType';
 import useStyles from './OffenderFilter.styles';
 
 const { RangePicker } = DatePicker;
+const { useForm } = Form;
+interface FormData {
+  date: Date;
+}
 interface Props {
   order: OffenderSort;
   setOrder: (value: OffenderSort) => void;
@@ -69,11 +82,22 @@ const OffenderFilter = ({
   setCreatedAtFilter,
 }: Props): JSX.Element => {
   const classes = useStyles();
+  const [form] = useForm<FormData>();
+
   return (
-    <>
+    <Form<FormData> form={form}>
       <Row justify="end">
         <Col>
-          <Button type="text" danger onClick={clearFilters}>
+          <Button
+            type="text"
+            danger
+            onClick={() => {
+              clearFilters();
+              form.setFieldsValue({
+                date: [],
+              });
+            }}
+          >
             Clear Filters
           </Button>
         </Col>
@@ -104,16 +128,18 @@ const OffenderFilter = ({
             Created Between
           </Typography.Paragraph>
 
-          <RangePicker
-            className={classes.select}
-            onChange={(value) => {
-              if (value && value[0] && value[1])
-                setCreatedAtFilter({
-                  startDate: new Date(value[0].valueOf()),
-                  endDate: new Date(value[1].valueOf()),
-                });
-            }}
-          />
+          <Form.Item name="date">
+            <RangePicker
+              className={classes.select}
+              onChange={(value) => {
+                if (value && value[0] && value[1])
+                  setCreatedAtFilter({
+                    startDate: new Date(value[0].valueOf()),
+                    endDate: new Date(value[1].valueOf()),
+                  });
+              }}
+            />
+          </Form.Item>
         </Col>
       </Row>
       <Row gutter={16}>
@@ -302,7 +328,7 @@ const OffenderFilter = ({
           />
         </Col>
       </Row>
-    </>
+    </Form>
   );
 };
 

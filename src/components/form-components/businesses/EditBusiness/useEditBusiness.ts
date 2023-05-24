@@ -13,6 +13,7 @@ import {
 } from 'graphql/generated';
 import { useState } from 'react';
 import { useStoreState } from 'state';
+import errorNotification from 'types/error_notification';
 
 interface OnSubmitValues {
   name: string;
@@ -88,18 +89,13 @@ const useEditBusiness = ({ onClose, businessId }: Props): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Oops, something went wrong',
-        description:
-          'This error has been reported to our team, if it continues to happen reach out to our support team.',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
 
   const onSubmit = (values: OnSubmitValues) => {
     const getParent = () => {
-      if (values.parent)
+      if (values.parent.value)
         return {
           connect: {
             id: values.parent.value,

@@ -1,7 +1,6 @@
 import React from 'react';
 import type {
   FeedItemsQuery,
-  ListArticlesQuery,
   ListOffendersQuery,
   Model,
 } from 'graphql/generated';
@@ -31,14 +30,14 @@ import {
   faUser,
   faUsers,
 } from '@fortawesome/pro-light-svg-icons';
-import ArticleCard from 'components/feedItems/ArticleSection/ArticleCard';
+
 import { Link } from 'react-router-dom';
 
 import { formatDate } from 'utils';
 import IncidentFeed from 'components/feedItems/FeedItemSection/IncidentFeed';
 import OffenderFeed from 'components/feedItems/FeedItemSection/OffenderFeed';
 import ArticleFeed from 'components/feedItems/FeedItemSection/ArticleFeed';
-import type { DateType, PaginationModel } from 'types/DataType';
+import type { DateType } from 'types/DataType';
 import InvestigationFeed from 'components/feedItems/FeedItemSection/investigationFeed';
 import WatermarkImage from 'components/images/WatermarkImage.view';
 import FeedItemFilter from 'components/feedItems/FeedItemFilter';
@@ -46,9 +45,11 @@ import type { FeedItemSort } from 'state';
 import VehicleFeed from 'components/feedItems/FeedItemSection/VehicleFeed';
 import CrimeGroupFeed from 'components/feedItems/FeedItemSection/CrimeGroupFeed';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
-import ArticleSkeletonCard from 'components/feedItems/ArticleSection/ArticleSkeletonCard';
+
 import FeedItemSkeletonCard from 'components/feedItems/FeedItemSection/FeedItemSkeletonCard';
 import AdminTodos from 'components/feedItems/AdminTodos';
+import BanFeed from 'components/feedItems/FeedItemSection/BanFeed';
+import ArticlesSection from 'components/feedItems/Articles/ArticlesSection';
 import useStyles from './FeedItem.styles';
 
 const { Title, Paragraph, Text } = Typography;
@@ -57,14 +58,12 @@ const { confirm } = Modal;
 interface Props {
   data: FeedItemsQuery | undefined;
   loading: boolean;
-  articleData: ListArticlesQuery | undefined;
-  articleLoading: boolean;
+
   recentOffenderData: ListOffendersQuery | undefined;
   recentOffenderLoading: boolean;
   onPaginationChange: (page: number, pageSize: number) => void;
   pagination: { page: number; pageSize: number; sizeOptions: string[] };
-  articlePagination: PaginationModel;
-  onArticlePaginationChange: (page: number, pageSize: number) => void;
+
   search: string;
   setSearch: (value: string) => void;
 
@@ -85,25 +84,21 @@ interface Props {
   gallery: string[];
   setGallery: (values: string[]) => void;
   setCreatedAtFilter: (value: DateType | undefined) => void;
+  createdAtFilter: DateType | undefined;
 }
 
 const FeedItem = ({
   data,
   loading,
-  articleData,
-  articleLoading,
   recentOffenderData,
   recentOffenderLoading,
   onPaginationChange,
   pagination,
   search,
   setSearch,
-
   onDeleteFeedItem,
   saving,
   adminRights,
-  articlePagination,
-  onArticlePaginationChange,
   typesFilter,
   setTypesFilter,
   groupsFilter,
@@ -118,6 +113,7 @@ const FeedItem = ({
   gallery,
   setGallery,
   setCreatedAtFilter,
+  createdAtFilter,
 }: Props): JSX.Element => {
   const classes = useStyles();
 
@@ -260,7 +256,7 @@ const FeedItem = ({
                               }
                               onClick={() => {
                                 confirm({
-                                  title: 'Do you want to delete the feedItem?',
+                                  title: 'Do you want to delete the feed item?',
                                   content: 'This action cannot be undone.',
                                   onOk() {
                                     onDeleteFeedItem(feedItem.id);
@@ -338,6 +334,10 @@ const FeedItem = ({
                       {/* article */}
                       {feedItem?.type === FeedItemType.NewArticle && (
                         <ArticleFeed feedItem={feedItem} />
+                      )}
+                      {/* ban */}
+                      {feedItem?.type === FeedItemType.NewBan && (
+                        <BanFeed feedItem={feedItem} />
                       )}
                     </div>
                   </>
@@ -493,79 +493,15 @@ const FeedItem = ({
 
           <Row gutter={12} style={{ height: 'calc(60vh)' }}>
             <Col span={adminRights ? 12 : 24} style={{ height: '100%' }}>
-              <Card
-                bodyStyle={{
-                  padding: 0,
-                  paddingBottom: 20,
-                }}
-                style={{
-                  margin: 0,
-                  padding: 0,
-                  overflow: 'auto',
-                  overflowX: 'hidden',
-                  height: 'calc(100vh - 300px)',
-                }}
-              >
-                <Title
-                  style={{
-                    margin: '15px 20px 10px',
-                    fontSize: 16,
-                  }}
-                  level={4}
-                >
-                  Recent Bulletins
-                </Title>
-                <Divider style={{ margin: '0 0' }} />
-
-                <Row gutter={[8, 8]} style={{ padding: 10 }}>
-                  {articleLoading ? (
-                    Array.from({ length: 24 }).map((_, index) => (
-                      // eslint-disable-next-line react/no-array-index-key
-                      <Col key={index} xxl={8} span={24}>
-                        <ArticleSkeletonCard />
-                      </Col>
-                    ))
-                  ) : articleData?.listArticles?.total ? (
-                    articleData?.listArticles?.articles.map((article) => (
-                      <Col span={24} xxl={12}>
-                        <ArticleCard article={article} />
-                      </Col>
-                    ))
-                  ) : (
-                    <div
-                      style={{
-                        display: 'flex',
-                        width: '100%',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        height: 'calc(100vh - 400px)',
-                      }}
-                    >
-                      <Empty
-                        description={
-                          search === ''
-                            ? 'No Bulletins'
-                            : 'No bulletins match your search criteria'
-                        }
-                      />
-                    </div>
-                  )}
-                </Row>
-                <Row justify="center" style={{ marginTop: 15 }}>
-                  <Col>
-                    <Pagination
-                      total={articleData?.listArticles.total}
-                      // pageSizeOptions={['12']}
-                      showSizeChanger={false}
-                      pageSize={articlePagination.pageSize}
-                      current={articlePagination.page}
-                      onChange={onArticlePaginationChange}
-                      showTotal={(total) => `Total Bulletins: ${total}`}
-                      hideOnSinglePage
-                    />
-                  </Col>
-                </Row>
-              </Card>
+              <ArticlesSection
+                fullSearch={search}
+                searchMydata={gallery.includes('MYDATA')}
+                fullCreatedAtFilter={createdAtFilter}
+                saving={saving}
+                groups={groups}
+                groupsLoading={groupsLoading}
+                adminRights={adminRights}
+              />
             </Col>
             {adminRights && (
               <Col span={12} style={{ height: '100%' }}>

@@ -178,9 +178,7 @@ const useSchemeDetail = (): Return => {
       : fileList.find((item) => item.name === file.name);
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (isFileDuplicate) {
-      message.error(
-        'This image has already existed, please choose another one.'
-      );
+      message.error('This image already exists, please choose another one.');
     }
     if (!isLt2M) {
       message.error('Image must smaller than 2MB!');
