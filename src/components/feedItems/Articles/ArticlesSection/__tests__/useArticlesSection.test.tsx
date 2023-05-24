@@ -4,65 +4,103 @@ import { MockedProvider } from '@apollo/client/testing';
 import { createStore, StoreProvider } from 'easy-peasy';
 import { storeModel } from 'state';
 import { MemoryRouter } from 'react-router-dom';
-import { QueryMode, SchemeGroupsDocument } from 'graphql/generated';
+import {
+  ArticlePriority,
+  ListArticlesDocument,
+  QueryMode,
+  SortOrder,
+} from 'graphql/generated';
 import useArticlesSection from '../useArticlesSection';
 
 const mocks = [
   {
     request: {
-      query: SchemeGroupsDocument,
+      query: ListArticlesDocument,
       variables: {
+        scheme: {
+          id: 'schemeId',
+        },
         where: {
-          scheme: { id: { equals: 'testScheme' } },
+          createdAt: undefined,
+          createdBy: undefined,
+          priority: undefined,
           OR: [
             {
-              name: {
-                contains: '',
-                mode: QueryMode.Insensitive,
-              },
-            },
-            {
-              description: {
+              title: {
                 contains: '',
                 mode: QueryMode.Insensitive,
               },
             },
           ],
         },
+        order: {
+          updatedAt: SortOrder.Desc,
+        },
+        skip: 0,
+        take: 1,
       },
-    },
-    result: {
-      data: {
-        groups: [{ id: 'testId', name: 'TestName', description: null }],
+      result: {
+        data: {
+          total: 1,
+          articles: [
+            {
+              createdBy: {
+                fullName: 'Alex Nicholls',
+                id: 'cl4y3a97h2589631op4xk29hjc4',
+                organisation: 'Shopsafe',
+              },
+              id: 'clhqk6of6000r070vpc1830ot',
+              image: {
+                card: 'https://shopsafealert.blob.core.windows.net/images…98-6067-4f05-8416-85df6a6d02b0-filename-card.webp',
+                id: 'clhqk6oc6000p070v8zmivigv',
+                optimised:
+                  'https://shopsafealert.blob.core.windows.net/images…=4ml5beAqOP2%2BGGs388WVhWeRi0oU4GYM0CF0GCf2Rj0%3D',
+                url: null,
+              },
+              images: [],
+              previewImage:
+                'https://shopsafealert.blob.core.windows.net/images-1/ed58b498-6067-4f05-8416-85df6a6d02b0-filename-optimised.webp',
+              previewText: null,
+              priority: ArticlePriority.Normal,
+              tags: [],
+              title: 'test',
+              updatedAt: '2023-05-16T17:39:30.210Z',
+            },
+          ],
+        },
       },
     },
   },
 ];
 
-const UseGroupListTest = () => {
-  const { data, loading } = useArticlesSection({ fullSearch: 'a' });
-  const uncompletedTodos =
+const UseArticleListTest = () => {
+  const { data, loading } = useArticlesSection({
+    fullSearch: 'a',
+    searchMydata: false,
+    fullCreatedAtFilter: undefined,
+  });
+  const articles =
     data &&
-    data.uncompletedTodos?.map((el) => (
+    data.articles?.map((el) => (
       <div key={el.id}>
         <span>{el.id}</span>
-        <span>{el.name}</span>
+        <span>{el.title}</span>
       </div>
     ));
 
   return (
     <div>
-      {uncompletedTodos}
+      {articles}
       <span>{loading ? 'true' : 'false'}</span>
     </div>
   );
 };
 
-describe('useListGroups - hook', () => {
+describe('useListArticles - hook', () => {
   const store = createStore(storeModel, {
     initialState: {
       scheme: {
-        id: 'testScheme',
+        id: 'schemeId',
       },
     },
   });
@@ -71,13 +109,13 @@ describe('useListGroups - hook', () => {
       <StoreProvider store={store}>
         <MemoryRouter>
           <MockedProvider mocks={mocks} addTypename={false}>
-            <UseGroupListTest />
+            <UseArticleListTest />
           </MockedProvider>
         </MemoryRouter>
       </StoreProvider>
     );
 
-    expect(await findByText('TestName')).toBeInTheDocument();
+    expect(await findByText('test')).toBeInTheDocument();
     expect(await findByText('false')).toBeInTheDocument();
   });
 });
