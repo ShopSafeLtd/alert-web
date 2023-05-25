@@ -10,7 +10,6 @@ import type {
 } from 'reactflow';
 import ReactFlow, {
   Background,
-  BackgroundVariant,
   ControlButton,
   Controls,
   MiniMap,
@@ -236,7 +235,7 @@ FlowProps) => {
                   />
                   <Background
                     color="#99b3ec"
-                    variant={BackgroundVariant.Dots}
+                    // variant={BackgroundVariant.Dots}
                   />
                 </ReactFlow>
               </div>
