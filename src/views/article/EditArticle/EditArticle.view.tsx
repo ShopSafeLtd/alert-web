@@ -92,7 +92,7 @@ const EditArticleView = ({
   return (
     <>
       <div className="page-view">
-        <PageHeader title="Create Article" />
+        <PageHeader title="Edit Article" />
         <Card style={{ marginLeft: 20, marginRight: 20, minHeight: 600 }}>
           <Form<FormData>
             form={form}
@@ -188,8 +188,8 @@ const EditArticleView = ({
                   data?.content || '<p>Create a new document here...</p>'
                 }
                 init={{
-                  skin: theme ? 'oxide-dark' : '',
-                  content_css: theme ? 'dark' : '',
+                  skin: theme ? 'oxide-dark' : undefined,
+                  content_css: theme ? 'dark' : undefined,
                   setup: (editor) => {
                     editor.ui.registry.addMenuButton('insertMenuButton', {
                       text: 'Insert',

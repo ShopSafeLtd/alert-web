@@ -185,8 +185,8 @@ const CreateArticleView = ({
                 tinymceScriptSrc="/tinymce/tinymce.min.js"
                 initialValue="<p>Create a new document here...</p>"
                 init={{
-                  skin: theme ? 'oxide-dark' : '',
-                  content_css: theme ? 'dark' : '',
+                  skin: theme ? 'oxide-dark' : undefined,
+                  content_css: theme ? 'dark' : undefined,
                   setup: (editor) => {
                     editor.ui.registry.addMenuButton('insertMenuButton', {
                       text: 'Insert',
