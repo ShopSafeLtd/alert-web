@@ -5,6 +5,7 @@ import svgrPlugin from 'vite-plugin-svgr';
 import envCompatible from 'vite-plugin-env-compatible';
 // import checker from 'vite-plugin-checker';
 import { sentryVitePlugin } from '@sentry/vite-plugin';
+import removeConsole from 'vite-plugin-remove-console';
 
 // local host launch fix
 const dns = require('node:dns');
@@ -27,7 +28,7 @@ export default defineConfig(({ mode }) => {
       viteTsconfigPaths(),
       svgrPlugin(),
       // will remove console from prod builds, remove if testing is needed on live
-      // removeConsole(),
+      removeConsole(),
       // checker({z
       //   // checks for ts and eslint errors on dev, remove if not needed/any issues such as high memory usage
       //   typescript: true,
