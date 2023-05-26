@@ -26,7 +26,7 @@ interface FormData {
   title: string;
   content: string;
   groups: string[];
-  categories: string[];
+  categories: SelectProps['options'];
   importance: ArticlePriority;
 }
 
@@ -62,7 +62,7 @@ const useEditArticle = (): Props => {
   const [offenders, setOffenders] = useState<OffenderData[]>([]);
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<
-    { value: string }[]
+    SelectProps['options']
   >([]);
 
   const navigate = useNavigate();
@@ -79,7 +79,11 @@ const useEditArticle = (): Props => {
       title: result?.article?.title || '',
       content: result?.article?.rows[0].columns[0].text || '',
       groups: result?.article?.groups.map((group) => group.id || '') || [],
-      categories: result?.article?.tags.map((tag) => tag.name || '') || [],
+      categories:
+        result?.article?.tags.map((tag) => ({
+          value: tag.name || '',
+          label: tag.name || '',
+        })) || [],
       importance: result?.article?.priority || ArticlePriority.Normal,
     });
 
@@ -99,7 +103,12 @@ const useEditArticle = (): Props => {
         url: document.url,
       })) || []
     );
-
+    setSelectedCategories(
+      result?.article?.tags.map((tag) => ({
+        value: tag.name || '',
+        label: tag.name || '',
+      })) || []
+    );
     const html = result?.article?.rows[0].columns[0].text || '';
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
@@ -133,7 +142,11 @@ const useEditArticle = (): Props => {
       title: result?.article?.title || '',
       content: result?.article?.rows[0].columns[0].text || '',
       groups: result?.article?.groups.map((group) => group.id || '') || [],
-      categories: result?.article?.tags.map((tag) => tag.name || '') || [],
+      categories:
+        result?.article?.tags.map((tag) => ({
+          value: tag.name || '',
+          label: tag.name || '',
+        })) || [],
       importance: result?.article?.priority || ArticlePriority.Normal,
     });
 
@@ -177,7 +190,7 @@ const useEditArticle = (): Props => {
     },
   });
 
-  const { data: TagData, loading: tagsLoading } = useTagsQuery({
+  const { loading: tagsLoading } = useTagsQuery({
     variables: {
       where: {
         schemes: {
@@ -206,16 +219,6 @@ const useEditArticle = (): Props => {
       setCategories(categoriesFormatted);
     },
   });
-
-  useEffect(() => {
-    if (TagData && result) {
-      setSelectedCategories(
-        result?.article?.tags.map((tag) => ({
-          value: tag.name || '',
-        })) || []
-      );
-    }
-  }, [TagData, result]);
 
   const onGroupsChange = (values: string[]) => {
     setSelectedGroups(values);
@@ -257,8 +260,22 @@ const useEditArticle = (): Props => {
       }
     }
 
-    setSelectedCategories(formattedValues.map((value) => ({ value })));
+    setSelectedCategories(
+      formattedValues.map((value) => ({ value, label: value }))
+    );
   };
+
+  useEffect(() => {
+    if (categories && categories?.length > 0 && result) {
+      setSelectedCategories(
+        result?.article?.tags.map((tag) => ({
+          value: tag.name || '',
+          label: tag.name || '',
+        })) || []
+      );
+    }
+  }, [categories, result]);
+
   const log = (): { text: string; img: string; imgSrc: string[] } => {
     if (editorRef.current) {
       const html = editorRef.current.getContent();
@@ -491,14 +508,18 @@ const useEditArticle = (): Props => {
   // });
   const onSubmit = async () => {
     setSaving(true);
-    const selectedCategoryIds = selectedCategories
-      .map((category) => {
-        const selectedCategory = categoryIds.find(
-          (cat) => cat.value === category.value
-        );
-        return selectedCategory?.id;
-      })
-      .map((id) => id || '');
+    const formCategories: SelectProps['options'] =
+      form.getFieldValue('categories');
+    const selectedCategoryIds =
+      formCategories &&
+      formCategories
+        .map((category) => {
+          const selectedCategory = categoryIds.find(
+            (cat) => cat.value === category.value
+          );
+          return selectedCategory?.id;
+        })
+        .map((id) => id || '');
     const priority = form
       .getFieldValue('importance')
       .toString()
@@ -559,13 +580,17 @@ const useEditArticle = (): Props => {
           // },
         },
       },
-    }).then((res) => {
-      if (res && res.data && res.data.editArticle) {
-        setSaving(false);
+    })
+      .then((res) => {
+        if (res && res.data && res.data.editArticle) {
+          setSaving(false);
 
-        navigate(`/app/article/view/${res?.data?.editArticle.id}`);
-      }
-    });
+          navigate(`/app/article/view/${res?.data?.editArticle.id}`);
+        }
+      })
+      .catch(() => {
+        setSaving(false);
+      });
     setSaving(false);
   };
 
@@ -638,7 +663,7 @@ const useEditArticle = (): Props => {
     onGroupsChange,
     selectedGroups,
     categories,
-    categoriesLoading: false,
+    categoriesLoading: tagsLoading,
     categoriesChange,
     selectedCategories,
     form,

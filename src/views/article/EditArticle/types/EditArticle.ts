@@ -22,7 +22,7 @@ export interface Props {
   onGroupsChange: (groups: string[]) => void;
   categories: SelectProps['options'];
   categoriesLoading: boolean;
-  selectedCategories: { value: string }[];
+  selectedCategories: SelectProps['options'];
   categoriesChange: (categories: { value: string }[]) => void;
   filePickerCallback: (
     callback: (arg0: string, arg1: { title: string }) => void,

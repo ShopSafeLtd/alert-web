@@ -87,7 +87,7 @@ const EditArticleView = ({
   //     </Button>
   //   </>
   // );
-
+  console.log(selectedCategories, categories);
   const theme = useStoreState((state) => state.theme).currentTheme === 'dark';
   return (
     <>
@@ -159,9 +159,8 @@ const EditArticleView = ({
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item name="category" label="Category">
+                <Form.Item name="categories" label="Category">
                   <Select
-                    // select mutliple, category, can create new
                     placeholder="Category"
                     mode="tags"
                     size="small"
@@ -172,7 +171,6 @@ const EditArticleView = ({
                     options={categories}
                     optionFilterProp="value"
                     labelInValue
-                    value={selectedCategories}
                   />
                 </Form.Item>
               </Col>
