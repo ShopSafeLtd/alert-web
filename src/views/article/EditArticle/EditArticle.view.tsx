@@ -44,7 +44,7 @@ const EditArticleView = ({
   onSubmit,
   data,
   // loading,
-  selectedCategories,
+  // selectedCategories,
   documentUploadProps,
   fileList,
   drawer,
@@ -87,7 +87,6 @@ const EditArticleView = ({
   //     </Button>
   //   </>
   // );
-  console.log(selectedCategories, categories);
   const theme = useStoreState((state) => state.theme).currentTheme === 'dark';
   return (
     <>
