@@ -1,15 +1,18 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { SelectProps, UploadProps } from 'antd';
 import { Form } from 'antd';
 import type { Editor } from 'tinymce';
 import type { UploadFile } from 'antd/es/upload/interface';
 import { useNavigate } from 'react-router';
-import type { Props } from '../types/CreateArticle';
+import { useParams } from 'react-router-dom';
+import type { Props } from '../types/EditArticle';
+
 import {
   ArticlePriority,
   Model,
-  useCreateArticleMutation,
+  useArticleQuery,
   useCreateTagMutation,
+  useEditArticleMutation,
   useSchemeGroupsQuery,
   useTagsQuery,
 } from '../../../../graphql/generated';
@@ -23,18 +26,19 @@ interface FormData {
   title: string;
   content: string;
   groups: string[];
-  categories: string[];
+  categories: SelectProps['options'];
   importance: ArticlePriority;
 }
 
 export type { FormData };
 
-const useCreateArticle = (): Props => {
+const useEditArticle = (): Props => {
+  const { id: articleId } = useParams();
   const siteUrl = `${window.location.href.split('/app/')[0]}`;
   const schemeId = useStoreState((state) => state.scheme.id);
   const userId = useStoreState((state) => state.user.id);
   const [form] = useForm<FormData>();
-  const [data] = useState<FormData>({
+  const [data, setData] = useState<FormData>({
     title: '',
     content: '',
     groups: [],
@@ -58,10 +62,99 @@ const useCreateArticle = (): Props => {
   const [offenders, setOffenders] = useState<OffenderData[]>([]);
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<
-    { value: string }[]
+    SelectProps['options']
   >([]);
 
   const navigate = useNavigate();
+  const [saving, setSaving] = useState(false);
+  const { data: result, loading } = useArticleQuery({
+    variables: {
+      where: { id: articleId },
+    },
+    fetchPolicy: 'cache-and-network',
+  });
+
+  useEffect(() => {
+    setData({
+      title: result?.article?.title || '',
+      content: result?.article?.rows[0].columns[0].text || '',
+      groups: result?.article?.groups.map((group) => group.id || '') || [],
+      categories:
+        result?.article?.tags.map((tag) => ({
+          value: tag.name || '',
+          label: tag.name || '',
+        })) || [],
+      importance: result?.article?.priority || ArticlePriority.Normal,
+    });
+
+    setOffenders(
+      (result?.article?.rows[0].columns[0].offenders as OffenderData[]) || []
+    );
+    setIncidents(
+      result?.article?.rows[0].columns[0].incidents.map((i) => ({
+        incident: i,
+      })) || []
+    );
+    setFileList(
+      result?.article?.documents.map((document) => ({
+        uid: document.id,
+        name: document.name,
+        status: 'done',
+        url: document.url,
+      })) || []
+    );
+    setSelectedCategories(
+      result?.article?.tags.map((tag) => ({
+        value: tag.name || '',
+        label: tag.name || '',
+      })) || []
+    );
+    const html = result?.article?.rows[0].columns[0].text || '';
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    // // for each td, remove style tag
+    // const tds = doc.body.querySelectorAll('td');
+    // tds.forEach((td) => {
+    //   const { style } = td;
+    //   // console.log(style);
+    //   if (style) {
+    //     style.borderWidth = '0';
+    //   }
+    // });
+    // const table = doc.body.querySelector('table');
+    // if (table) {
+    //   table.style.borderWidth = '0';
+    // }
+    // console.log(doc.body.innerHTML);
+    const images = doc.body.querySelectorAll('img');
+    const imageSrcs = [...images].map((image) => image.src);
+
+    setImageList(
+      imageSrcs?.map((image) => ({
+        uid: image,
+        name: image,
+        status: 'done',
+        url: image || '',
+      })) || []
+    );
+
+    form.setFieldsValue({
+      title: result?.article?.title || '',
+      content: result?.article?.rows[0].columns[0].text || '',
+      groups: result?.article?.groups.map((group) => group.id || '') || [],
+      categories:
+        result?.article?.tags.map((tag) => ({
+          value: tag.name || '',
+          label: tag.name || '',
+        })) || [],
+      importance: result?.article?.priority || ArticlePriority.Normal,
+    });
+
+    editorRef.current?.setContent(
+      result?.article?.rows[0].columns[0].text || ''
+    );
+  }, [result]);
+
   const { loading: groupsLoading } = useSchemeGroupsQuery({
     variables: {
       where: {
@@ -73,8 +166,8 @@ const useCreateArticle = (): Props => {
       },
     },
     fetchPolicy: 'cache-and-network',
-    onCompleted: (result) => {
-      const groupsFormatted = result.groups.map((group) => ({
+    onCompleted: (res) => {
+      const groupsFormatted = res.groups.map((group) => ({
         value: group.id,
         label: group.name,
       }));
@@ -83,14 +176,14 @@ const useCreateArticle = (): Props => {
   });
 
   const [createTag] = useCreateTagMutation({
-    onCompleted: (result) => {
+    onCompleted: (res) => {
       const newCategory = {
-        value: result.createTag.name,
-        label: result.createTag.name,
+        value: res.createTag.name,
+        label: res.createTag.name,
       };
       const newCategoryIds = {
-        value: result.createTag.name,
-        id: result.createTag.id,
+        value: res.createTag.name,
+        id: res.createTag.id,
       };
       setCategoryIds([...(<[]>categoryIds), newCategoryIds]);
       setCategories([...(<[]>categories), newCategory]);
@@ -113,12 +206,12 @@ const useCreateArticle = (): Props => {
       },
     },
     fetchPolicy: 'cache-and-network',
-    onCompleted: (result) => {
-      const categoriesFormatted = result.tags.map((tag) => ({
+    onCompleted: (res) => {
+      const categoriesFormatted = res.tags.map((tag) => ({
         value: tag.name,
         label: tag.name,
       }));
-      const categoryIdsFormatted = result.tags.map((tag) => ({
+      const categoryIdsFormatted = res.tags.map((tag) => ({
         value: tag.name,
         id: tag.id,
       }));
@@ -161,14 +254,28 @@ const useCreateArticle = (): Props => {
               dataType: Model.Article,
             },
           },
-        }).then((result) => {
-          formattedValues.push(result.data?.createTag?.name || '');
+        }).then((res) => {
+          formattedValues.push(res.data?.createTag?.name || '');
         });
       }
     }
 
-    setSelectedCategories(formattedValues.map((value) => ({ value })));
+    setSelectedCategories(
+      formattedValues.map((value) => ({ value, label: value }))
+    );
   };
+
+  useEffect(() => {
+    if (categories && categories?.length > 0 && result) {
+      setSelectedCategories(
+        result?.article?.tags.map((tag) => ({
+          value: tag.name || '',
+          label: tag.name || '',
+        })) || []
+      );
+    }
+  }, [categories, result]);
+
   const log = (): { text: string; img: string; imgSrc: string[] } => {
     if (editorRef.current) {
       const html = editorRef.current.getContent();
@@ -391,7 +498,7 @@ const useCreateArticle = (): Props => {
     // }
   };
 
-  const [submitArticle] = useCreateArticleMutation();
+  const [submitArticle] = useEditArticleMutation();
   // const { img: imgs } = log();
   // const previewImageFile = imageList?.filter(({ url }) => url === imgs);
   // console.log('articleImage1', {
@@ -399,18 +506,20 @@ const useCreateArticle = (): Props => {
   //   mimetype: previewImageFile[0].type || '',
   //   url: previewImageFile[0].url || '',
   // });
-
-  const [saving, setSaving] = useState(false);
   const onSubmit = async () => {
     setSaving(true);
-    const selectedCategoryIds = selectedCategories
-      .map((category) => {
-        const selectedCategory = categoryIds.find(
-          (cat) => cat.value === category.value
-        );
-        return selectedCategory?.id;
-      })
-      .map((id) => id || '');
+    const formCategories: SelectProps['options'] =
+      form.getFieldValue('categories');
+    const selectedCategoryIds =
+      formCategories &&
+      formCategories
+        .map((category) => {
+          const selectedCategory = categoryIds.find(
+            (cat) => cat.value === category.value
+          );
+          return selectedCategory?.id;
+        })
+        .map((id) => id || '');
     const priority = form
       .getFieldValue('importance')
       .toString()
@@ -423,6 +532,9 @@ const useCreateArticle = (): Props => {
 
     await submitArticle({
       variables: {
+        where: {
+          id: articleId || '',
+        },
         data: {
           title: form.getFieldValue('title'),
           categories: selectedCategoryIds,
@@ -470,10 +582,10 @@ const useCreateArticle = (): Props => {
       },
     })
       .then((res) => {
-        if (res && res.data && res.data.createArticle) {
+        if (res && res.data && res.data.editArticle) {
           setSaving(false);
 
-          navigate(`/app/article/view/${res?.data?.createArticle.id}`);
+          navigate(`/app/article/view/${res?.data?.editArticle.id}`);
         }
       })
       .catch(() => {
@@ -551,13 +663,13 @@ const useCreateArticle = (): Props => {
     onGroupsChange,
     selectedGroups,
     categories,
-    categoriesLoading: false,
+    categoriesLoading: tagsLoading,
     categoriesChange,
     selectedCategories,
     form,
     data,
     onSubmit,
-    loading: tagsLoading || saving,
+    loading: tagsLoading || loading || saving,
     fileList,
     documentUploadProps,
     insertOffender,
@@ -569,4 +681,4 @@ const useCreateArticle = (): Props => {
   };
 };
 
-export default useCreateArticle;
+export default useEditArticle;

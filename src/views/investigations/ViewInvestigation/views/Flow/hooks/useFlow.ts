@@ -481,6 +481,33 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
   const downloadImage = useCallback(() => {
     handleDownload();
   }, [handleDownload]);
+
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (
+      importData?.investigation?.flows[0] &&
+      provider.wsconnected &&
+      usedFallbackRef
+    ) {
+      setLoading(false);
+    } else if (provider.wsconnecting && !usedFallbackRef) {
+      setLoading(true);
+    }
+  }, [
+    importData?.investigation,
+    provider.wsconnected,
+    usedFallbackRef,
+    provider.wsconnecting,
+  ]);
+
+  // :
+  //   importData?.investigation?.flows[0] &&
+  //   provider.wsconnected &&
+  //   usedFallbackRef
+  //     ? false
+  //     : provider.wsconnecting && !usedFallbackRef
+  //
   return {
     nodes,
     onNodesChange,
@@ -498,12 +525,7 @@ const useFlow = ({ investigationId, importData }: Props): Return => {
     onDragOver,
     wrapperRef,
     nodesMap,
-    loading:
-      importData?.investigation?.flows[0] &&
-      provider.wsconnected &&
-      usedFallbackRef
-        ? false
-        : provider.wsconnecting && !usedFallbackRef,
+    loading,
     offenders,
     setSelected,
     saving,

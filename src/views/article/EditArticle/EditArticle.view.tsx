@@ -17,13 +17,13 @@ import {
 } from 'antd';
 import { ArticlePriority } from 'graphql/generated';
 import { UploadOutlined } from '@ant-design/icons';
-import type { ViewProps } from './types/CreateArticle';
+import type { ViewProps } from './types/EditArticle';
 import AddExistingOffender from '../../../components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 import LinkIncident from '../../../components/form-components/linkOptions/LinkIncident';
-import type { FormData } from './hooks/useCreateArticle';
+import type { FormData } from './hooks/useEditArticle';
 import { useStoreState } from '../../../state';
 
-const CreateArticleView = ({
+const EditArticleView = ({
   // log,
   editorRef,
   exampleImageUploadHandler,
@@ -43,7 +43,7 @@ const CreateArticleView = ({
   form,
   onSubmit,
   data,
-  loading,
+  // loading,
   selectedCategories,
   documentUploadProps,
   fileList,
@@ -54,6 +54,7 @@ const CreateArticleView = ({
   offenders,
   removeOffender,
   removeIncident,
+  loading,
 }: ViewProps) => {
   const forms = {
     // eslint-disable-next-line react/jsx-no-useless-fragment
@@ -86,12 +87,12 @@ const CreateArticleView = ({
   //     </Button>
   //   </>
   // );
+  console.log(selectedCategories, categories);
   const theme = useStoreState((state) => state.theme).currentTheme === 'dark';
-
   return (
     <>
       <div className="page-view">
-        <PageHeader title="Create Article" />
+        <PageHeader title="Edit Article" />
         <Card style={{ marginLeft: 20, marginRight: 20, minHeight: 600 }}>
           <Form<FormData>
             form={form}
@@ -158,9 +159,8 @@ const CreateArticleView = ({
                 </Form.Item>
               </Col>
               <Col span={8}>
-                <Form.Item name="category" label="Category">
+                <Form.Item name="categories" label="Category">
                   <Select
-                    // select mutliple, category, can create new
                     placeholder="Category"
                     mode="tags"
                     size="small"
@@ -171,7 +171,6 @@ const CreateArticleView = ({
                     options={categories}
                     optionFilterProp="value"
                     labelInValue
-                    value={selectedCategories}
                   />
                 </Form.Item>
               </Col>
@@ -183,7 +182,9 @@ const CreateArticleView = ({
                   editorRef.current = editor;
                 }}
                 tinymceScriptSrc="/tinymce/tinymce.min.js"
-                initialValue="<p>Create a new document here...</p>"
+                initialValue={
+                  data?.content || '<p>Create a new document here...</p>'
+                }
                 init={{
                   skin: theme ? 'oxide-dark' : undefined,
                   content_css: theme ? 'dark' : undefined,
@@ -372,16 +373,21 @@ const CreateArticleView = ({
             <Form.Item>
               <Row style={{ marginTop: 30 }} gutter={10} justify="end">
                 <Col>
-                  <Button onClick={() => window.history.back()}>Cancel</Button>
+                  <Button
+                    loading={loading}
+                    onClick={() => window.history.back()}
+                  >
+                    Cancel
+                  </Button>
                 </Col>
                 <Col>
                   <Button
-                    type="primary"
                     loading={loading}
                     disabled={loading}
+                    type="primary"
                     htmlType="submit"
                   >
-                    Create Article
+                    Save Bulletin
                   </Button>
                 </Col>
               </Row>
@@ -401,4 +407,4 @@ const CreateArticleView = ({
   );
 };
 
-export default CreateArticleView;
+export default EditArticleView;

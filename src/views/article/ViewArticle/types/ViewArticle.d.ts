@@ -17,4 +17,5 @@ export interface ReturnProps {
   }[];
   onDeleteArticle: () => void;
   role: Role;
+  editArticle: () => void;
 }
