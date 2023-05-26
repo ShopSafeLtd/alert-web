@@ -19,7 +19,9 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
   const navigation = useNavigate();
   const schemeId = useStoreState((state) => state.scheme.id);
   const role = useStoreState((state) => state.user.role);
-
+  const editArticle = () => {
+    navigation(`/app/article/edit/${id}`);
+  };
   const [lightboxElements, setLightboxElements] = useState<{ src: string }[]>(
     []
   );
@@ -129,6 +131,7 @@ const useViewArticle = ({ id }: Props): ReturnProps => {
     openLightbox: triggerLightbox,
     onDeleteArticle,
     role,
+    editArticle,
   };
 };
 

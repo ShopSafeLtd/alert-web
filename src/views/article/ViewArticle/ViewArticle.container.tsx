@@ -14,6 +14,7 @@ const ViewArticleContainer = () => {
     lightBoxOpen,
     onDeleteArticle,
     role,
+    editArticle,
   } = useViewArticle({ id });
 
   return (
@@ -25,6 +26,7 @@ const ViewArticleContainer = () => {
       lightBoxOpen={lightBoxOpen}
       onDeleteArticle={onDeleteArticle}
       role={role}
+      editArticle={editArticle}
     />
   );
 };

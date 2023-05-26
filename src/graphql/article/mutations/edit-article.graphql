@@ -1,5 +1,5 @@
-query Article($where: ArticleWhereUniqueInput!) {
-  article(where: $where) {
+mutation EditArticle($data: CreateArticleInput!, $where: UniqueId!) {
+  editArticle(data: $data, where: $where) {
     id
     groups {
       id
@@ -18,8 +18,8 @@ query Article($where: ArticleWhereUniqueInput!) {
     priority
     tags {
       name
-      id
     }
+    title
     images {
       id
       url
@@ -33,7 +33,6 @@ query Article($where: ArticleWhereUniqueInput!) {
       optimised
       card
     }
-    title
     rows {
       columns {
         text

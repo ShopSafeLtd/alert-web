@@ -5,7 +5,7 @@ import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import type { WatermarkSlideType } from 'components/images/WatermartkSlide.view';
 import WatermarkSlide from 'components/images/WatermartkSlide.view';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash } from '@fortawesome/pro-light-svg-icons';
+import { faEdit, faTrash } from '@fortawesome/pro-light-svg-icons';
 import { Role } from 'graphql/generated';
 import type { ReturnProps as Props } from './types/ViewArticle';
 import IncidentCard from '../../../components/incidents/IncidentCard';
@@ -19,11 +19,18 @@ const ViewArticleView = ({
   lightboxElements,
   onDeleteArticle,
   role,
+  editArticle,
 }: Props) => (
   <>
     <div className="page-view">
       {role === Role.SchemeAdmin && (
         <Row style={{ padding: '10px 20px 15px' }} justify="end">
+          <Col style={{ marginRight: 10 }}>
+            <Button onClick={editArticle}>
+              <FontAwesomeIcon style={{ marginRight: 10 }} icon={faEdit} />
+              Edit Bulletin
+            </Button>
+          </Col>
           <Col>
             <Button onClick={onDeleteArticle}>
               <FontAwesomeIcon style={{ marginRight: 10 }} icon={faTrash} />
