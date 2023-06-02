@@ -91,7 +91,7 @@ const AdminTodos = ({
         </Col>
         <Col flex={1}>
           <Input
-            placeholder="search for a to-do task..."
+            placeholder="Search for a task..."
             // value={inputValue}
             onChange={(e) => setSearch(e.target.value)}
             allowClear
@@ -107,7 +107,7 @@ const AdminTodos = ({
             icon={<FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />}
             onClick={toggleAddTodo}
           >
-            Todo
+            New Task
           </Button>
         </Col>
       </Row>
@@ -187,7 +187,10 @@ const AdminTodos = ({
             justifyContent: 'center',
           }}
         >
-          <Empty description="Nothing to complete" />
+          <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description="Nothing to complete"
+          />
         </div>
       )}
 
@@ -271,13 +274,16 @@ const AdminTodos = ({
                 justifyContent: 'center',
               }}
             >
-              <Empty description="Nothing has been completed" />
+              <Empty
+                image={Empty.PRESENTED_IMAGE_SIMPLE}
+                description="Nothing has been completed"
+              />
             </div>
           )}
         </Panel>
       </Collapse>
       <Drawer
-        title="Add New Todo"
+        title="New Task"
         open={addTodo}
         width="400"
         onClose={toggleAddTodo}
