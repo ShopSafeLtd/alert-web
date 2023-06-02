@@ -104,7 +104,7 @@ const AddTodo = ({
             disabled={saving}
             loading={saving}
           >
-            Add Todo
+            New Task
           </Button>
         </Col>
       </Row>

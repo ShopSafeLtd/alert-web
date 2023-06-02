@@ -65,7 +65,7 @@ const AdminTodos = ({
           <Input
             // value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="search for a to-do task..."
+            placeholder="Search for a task..."
             allowClear
           />
         </Col>
@@ -83,7 +83,7 @@ const AdminTodos = ({
               />
             }
           >
-            Todo
+            New Task
           </Button>
         </Col>
       </Row>
@@ -179,7 +179,10 @@ const AdminTodos = ({
               justifyContent: 'center',
             }}
           >
-            <Empty description="Nothing to complete" />
+            <Empty
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              description="Nothing to complete"
+            />
           </div>
         )}
       </Card>
@@ -267,7 +270,10 @@ const AdminTodos = ({
                   justifyContent: 'center',
                 }}
               >
-                <Empty description="Nothing has been completed" />
+                <Empty
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  description="Nothing has been completed"
+                />
               </div>
             )}
           </Card>
@@ -275,7 +281,7 @@ const AdminTodos = ({
       </Collapse>
 
       <Drawer
-        title="Add New Todo"
+        title="New Task"
         open={addTodo}
         width="400"
         onClose={toggleAddTodo}
