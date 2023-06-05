@@ -16,6 +16,7 @@ import {
 import { useStoreState } from '../../../../state';
 import type { OffenderData } from '../../../../components/form-components/offender/offender/AddExistingOffender/AddExistingOffender.container';
 import type { Incident } from '../../../../components/form-components/linkOptions/LinkIncident/LinkIncident.container';
+import extracted from '../../../../utils/add-default-to-article';
 
 const { useForm } = Form;
 
@@ -421,6 +422,10 @@ const useCreateArticle = (): Props => {
       imgSrc.includes(url || '')
     );
 
+    const htmlWithDefaultWidth = extracted(
+      editorRef.current?.getContent() || ''
+    );
+
     await submitArticle({
       variables: {
         data: {
@@ -434,7 +439,7 @@ const useCreateArticle = (): Props => {
               fileType: file.type || '',
               origFileName: file.fileName || '',
             })) || [],
-          htmlBody: editorRef.current?.getContent() || '',
+          htmlBody: htmlWithDefaultWidth || '',
           previewImage: img,
           previewText: text,
           schemeId,
