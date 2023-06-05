@@ -982,13 +982,23 @@ const useEditIncident = ({ incidentId, reviewed }: Props): Return => {
             policeNo: { set: data.policeNo },
             policeReported: { set: data.policeReported },
             location: {
-              update: {
-                premises: { set: '' },
-                building: { set: data.building || '' },
-                street: { set: data.street || '' },
-                townCity: { set: data.townCity || '' },
-                county: { set: data.county || '' },
-                postcode: { set: data.postcode || '' },
+              upsert: {
+                update: {
+                  premises: { set: '' },
+                  building: { set: data.building || '' },
+                  street: { set: data.street || '' },
+                  townCity: { set: data.townCity || '' },
+                  county: { set: data.county || '' },
+                  postcode: { set: data.postcode || '' },
+                },
+                create: {
+                  premises: '',
+                  building: data.building || '',
+                  street: data.street || '',
+                  townCity: data.townCity || '',
+                  county: data.county || '',
+                  postcode: data.postcode || '',
+                },
               },
             },
             business: {

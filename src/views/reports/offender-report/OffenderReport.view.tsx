@@ -106,7 +106,7 @@ const PerformanceReport = ({
         >
           {editMode ? 'Lock' : 'Edit'}
         </Button>
-        <Button type="primary" onClick={handlePrint}>
+        <Button type="primary" style={{ zIndex: 1000 }} onClick={handlePrint}>
           Print
         </Button>
       </div>
