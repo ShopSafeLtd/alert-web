@@ -112,7 +112,7 @@ const HeatMapLayer = (
     paint={{
       'heatmap-radius': 150,
       'heatmap-opacity': 0.6,
-      'heatmap-weight': 1,
+      'heatmap-weight': 2,
     }}
   />
 );
