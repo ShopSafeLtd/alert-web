@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createUseStyles } from 'react-jss';
-import { Card, Modal, Typography } from 'antd';
+import { Card, Col, Form, Modal, Row, Switch, Typography } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowsMaximize } from '@fortawesome/pro-solid-svg-icons';
 import { useStoreState } from 'state';
+import type { MapRef } from 'react-map-gl';
 import Map, { Layer, Marker, Source } from 'react-map-gl';
+import mapboxgl from 'mapbox-gl';
 import MapPin from '../MapPin';
 
 const { Text } = Typography;
@@ -34,6 +36,13 @@ const useStyles = createUseStyles({
     fontSize: 16,
     marginBottom: 0,
   },
+  actions: {
+    marginTop: 60,
+    paddingLeft: 10,
+  },
+  action: {
+    marginTop: -20,
+  },
 });
 
 interface Props {
@@ -61,7 +70,7 @@ const ClusterLayer = (
         750,
         '#f28cb1',
       ],
-      'circle-radius': 20,
+      'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40],
     }}
   />
 );
@@ -95,14 +104,37 @@ const UnClusteredLayer = (
   />
 );
 
+const HeatMapLayer = (
+  <Layer
+    id="heatmap"
+    maxzoom={20}
+    type="heatmap"
+    paint={{
+      'heatmap-radius': 150,
+      'heatmap-opacity': 0.6,
+      'heatmap-weight': 1,
+    }}
+  />
+);
+
 const MapCard = ({ height, width, markers }: Props) => {
+  const mapRef = useRef<MapRef>(null);
+
   const classes = useStyles();
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const [largeOpen, setLargeOpen] = useState(false);
+  const [showHeatmap, setShowHeatmap] = useState(false);
+  const [showMarkers, setShowMarkers] = useState(true);
 
-  const toggleLargeOpen = () => {
-    setLargeOpen(!largeOpen);
-  };
+  const toggleLargeOpen = () => setLargeOpen(!largeOpen);
+  const toggleMarkers = () => setShowMarkers(!showMarkers);
+  const toggleHeatmap = () => setShowHeatmap(!showHeatmap);
+
+  useEffect(() => {
+    mapRef.current?.moveLayer('unclustered-point');
+    mapRef.current?.moveLayer('clusters');
+    mapRef.current?.moveLayer('cluster-count');
+  }, [showHeatmap, showMarkers]);
 
   return (
     <Card
@@ -164,7 +196,7 @@ const MapCard = ({ height, width, markers }: Props) => {
             cluster
             clusterProperties={{}}
             clusterMaxZoom={20}
-            clusterRadius={0}
+            clusterRadius={50}
           >
             {ClusterLayer}
             {ClusterCountLayer}
@@ -186,59 +218,84 @@ const MapCard = ({ height, width, markers }: Props) => {
           },
         }}
       >
-        {largeOpen && (
-          <Map
-            mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
-            initialViewState={{
-              longitude: markers[0]?.geoLng || 0,
-              latitude: markers[0]?.geoLat || 0,
-              pitch: 45,
-              zoom: 16,
-            }}
-            style={{ width: '95vw', height: '80vh' }}
-            mapStyle={
-              currentTheme === 'dark'
-                ? 'mapbox://styles/wgarrod/clgkseekj009o01qz193sacyp'
-                : 'mapbox://styles/wgarrod/clgkn5gb7007u01qmahuhbi6o'
-            }
-          >
-            {markers.length === 1 &&
-              markers.map((marker) => (
-                <Marker
-                  longitude={Number(marker.geoLng) || 0}
-                  latitude={Number(marker.geoLat) || 0}
-                  anchor="bottom"
-                >
-                  <MapPin />
-                </Marker>
-              ))}
-            {markers.length > 1 && (
-              <Source
-                id="incidents"
-                type="geojson"
-                data={{
-                  type: 'FeatureCollection',
-                  features: markers.map((marker) => ({
-                    type: 'Feature',
-                    properties: {},
-                    geometry: {
-                      type: 'Point',
-                      coordinates: [marker.geoLng || 0, marker.geoLat || 0],
-                    },
-                  })),
+        <Row wrap={false}>
+          <Col>
+            {largeOpen && (
+              <Map
+                ref={mapRef}
+                mapLib={mapboxgl}
+                mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
+                initialViewState={{
+                  longitude: markers[0]?.geoLng || 0,
+                  latitude: markers[0]?.geoLat || 0,
+                  pitch: 45,
+                  zoom: 16,
                 }}
-                cluster
-                clusterProperties={{}}
-                clusterMaxZoom={20}
-                clusterRadius={0}
+                style={{ width: '85vw', height: '80vh' }}
+                mapStyle={
+                  currentTheme === 'dark'
+                    ? 'mapbox://styles/wgarrod/clgkseekj009o01qz193sacyp'
+                    : 'mapbox://styles/wgarrod/clgkn5gb7007u01qmahuhbi6o'
+                }
               >
-                {ClusterLayer}
-                {ClusterCountLayer}
-                {UnClusteredLayer}
-              </Source>
+                {markers.length === 1 &&
+                  markers.map((marker) => (
+                    <Marker
+                      longitude={Number(marker.geoLng) || 0}
+                      latitude={Number(marker.geoLat) || 0}
+                      anchor="bottom"
+                    >
+                      <MapPin />
+                    </Marker>
+                  ))}
+                {markers.length > 1 && (
+                  <Source
+                    id="incidents"
+                    type="geojson"
+                    data={{
+                      type: 'FeatureCollection',
+                      features: markers.map((marker) => ({
+                        type: 'Feature',
+                        properties: {},
+                        geometry: {
+                          type: 'Point',
+                          coordinates: [marker.geoLng || 0, marker.geoLat || 0],
+                        },
+                      })),
+                    }}
+                    cluster
+                    // clusterProperties={{}}
+                    clusterMaxZoom={14}
+                    clusterRadius={50}
+                  >
+                    {showHeatmap && HeatMapLayer}
+                    {showMarkers && ClusterLayer}
+                    {showMarkers && ClusterCountLayer}
+                    {showMarkers && UnClusteredLayer}
+                  </Source>
+                )}
+              </Map>
             )}
-          </Map>
-        )}
+          </Col>
+          <Col className={classes.actions}>
+            <Form layout="vertical">
+              <Form.Item style={{ margin: 0 }} label="Show Heatmap">
+                <Switch
+                  className={classes.action}
+                  onClick={toggleHeatmap}
+                  checked={showHeatmap}
+                />
+              </Form.Item>
+              <Form.Item style={{ margin: 0 }} label="Show Markers">
+                <Switch
+                  className={classes.action}
+                  onClick={toggleMarkers}
+                  checked={showMarkers}
+                />
+              </Form.Item>
+            </Form>
+          </Col>
+        </Row>
       </Modal>
     </Card>
   );
