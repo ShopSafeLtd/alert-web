@@ -1,176 +1,332 @@
-import React from 'react';
-import { GoogleMap, HeatmapLayer } from '@react-google-maps/api';
-import type { IncidentMapQuery, SchemeGroupsQuery } from 'graphql/generated';
-import { Col, DatePicker, Row, Select, Spin, Typography } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
+import type {
+  BusinessLocationsQuery,
+  IncidentMapQuery,
+  SchemeGroupsQuery,
+} from 'graphql/generated';
+import {
+  Col,
+  DatePicker,
+  Form,
+  Row,
+  Select,
+  Spin,
+  Switch,
+  Typography,
+} from 'antd';
+import type { MapRef } from 'react-map-gl';
+import { Layer, Map, Source } from 'react-map-gl';
+import type { Scheme } from 'state';
+import { useStoreState } from 'state';
+import mapboxgl from 'mapbox-gl';
 import useStyles from './IncidentMap.styles';
-
-const containerStyle = {
-  width: '100%',
-  height: '600px',
-};
 
 const { Title } = Typography;
 const { RangePicker } = DatePicker;
+
+const ClusterLayer = (
+  <Layer
+    id="clusters"
+    type="circle"
+    source="incidents"
+    filter={['has', 'point_count']}
+    paint={{
+      'circle-color': [
+        'step',
+        ['get', 'point_count'],
+        '#51bbd6',
+        100,
+        '#f1f075',
+        750,
+        '#f28cb1',
+      ],
+      'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40],
+    }}
+  />
+);
+
+const ClusterCountLayer = (
+  <Layer
+    id="cluster-count"
+    type="symbol"
+    source="incidents"
+    filter={['has', 'point_count']}
+    layout={{
+      'text-field': '{point_count_abbreviated}',
+      'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+      'text-size': 12,
+    }}
+  />
+);
+
+const UnClusteredLayer = (
+  <Layer
+    id="unclustered-point"
+    type="circle"
+    source="incidents"
+    filter={['!', ['has', 'point_count']]}
+    paint={{
+      'circle-color': '#11b4da',
+      'circle-radius': 8,
+      'circle-stroke-width': 1,
+      'circle-stroke-color': '#fff',
+    }}
+  />
+);
+
+const BusinessClusterLayer = (
+  <Layer
+    id="clusters"
+    type="circle"
+    source="businesses"
+    filter={['has', 'point_count']}
+    paint={{
+      'circle-color': 'rgb(222, 68, 54)',
+      'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40],
+    }}
+  />
+);
+
+const BusinessClusterCountLayer = (
+  <Layer
+    id="cluster-count"
+    type="symbol"
+    source="businesses"
+    filter={['has', 'point_count']}
+    layout={{
+      'text-field': '{point_count_abbreviated}',
+      'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+      'text-size': 12,
+    }}
+    paint={{
+      'text-color': '#FFF',
+    }}
+  />
+);
+
+const BusinessUnClusteredLayer = (
+  <Layer
+    id="unclustered-point"
+    type="circle"
+    source="businesses"
+    filter={['!', ['has', 'point_count']]}
+    paint={{
+      'circle-color': 'rgb(222, 68, 54)',
+      'circle-radius': 8,
+      'circle-stroke-width': 1,
+      'circle-stroke-color': '#fff',
+    }}
+  />
+);
+
+const HeatMapLayer = (
+  <Layer
+    id="heatmap"
+    maxzoom={20}
+    type="heatmap"
+    paint={{
+      'heatmap-weight': 2,
+      'heatmap-radius': 150,
+      'heatmap-opacity': 0.3,
+    }}
+  />
+);
+
 interface Props {
   data: IncidentMapQuery | undefined;
   loading: boolean;
   groupsData: SchemeGroupsQuery | undefined;
   groupsLoading: boolean;
+  businessData: BusinessLocationsQuery | undefined;
+  schemes: Scheme[];
+  onChangeSchemes: (value: string[]) => void;
+  selectedSchemes: string[];
 }
 
-const IncidentMap = ({ data, loading, groupsData, groupsLoading }: Props) => {
+const IncidentMap = ({
+  data,
+  loading,
+  groupsData,
+  groupsLoading,
+  businessData,
+  schemes,
+  onChangeSchemes,
+  selectedSchemes,
+}: Props) => {
+  const mapRef = useRef<MapRef>(null);
+
+  const currentTheme = useStoreState((state) => state.theme.currentTheme);
+
+  const [showBusinesses, setShowBusinesses] = useState(false);
+  const [showHeatmap, setShowHeatmap] = useState(false);
+  const [showMarkers, setShowMarkers] = useState(true);
+
+  const toggleBusinesses = () => {
+    setShowBusinesses(!showBusinesses);
+    if (!showBusinesses) setShowMarkers(false);
+  };
+  const toggleMarkers = () => {
+    setShowMarkers(!showMarkers);
+    if (!showMarkers) setShowBusinesses(false);
+  };
+  const toggleHeatmap = () => setShowHeatmap(!showHeatmap);
+
+  useEffect(() => {
+    mapRef.current?.moveLayer('unclustered-point');
+    mapRef.current?.moveLayer('clusters');
+    mapRef.current?.moveLayer('cluster-count');
+  }, [showHeatmap, showMarkers]);
+
   const classes = useStyles();
   return (
     <div className={classes.page}>
-      <Row gutter={16} align="middle" className={classes.headerRow}>
-        <Col flex={1}>
-          <Title className={classes.title} level={3}>
-            Incident Map
-          </Title>
-        </Col>
-        <Col>
-          <Select placeholder="Select Groups" className={classes.groupSelect}>
-            {groupsData?.groups.map((group) => (
-              <Select.Option
-                loading={groupsLoading}
-                key={group.id}
-                value={group.id}
+      <Form layout="vertical">
+        <Row gutter={16} align="middle" className={classes.headerRow}>
+          <Col flex={1}>
+            <Title className={classes.title} level={3}>
+              Incident Map
+            </Title>
+          </Col>
+          <Col>
+            <Form.Item label="Show Businesses">
+              <Switch onClick={toggleBusinesses} checked={showBusinesses} />
+            </Form.Item>
+          </Col>
+          <Col>
+            <Form.Item label="Show Incidents">
+              <Switch onClick={toggleMarkers} checked={showMarkers} />
+            </Form.Item>
+          </Col>
+          <Col>
+            <Form.Item label="Show Heatmap">
+              <Switch onClick={toggleHeatmap} checked={showHeatmap} />
+            </Form.Item>
+          </Col>
+          <Col>
+            <Form.Item label="Schemes">
+              <Select
+                placeholder="Select Scheme"
+                className={classes.groupSelect}
+                onChange={onChangeSchemes}
+                value={selectedSchemes}
+                mode="multiple"
+                maxTagCount={2}
               >
-                {group.name}
-              </Select.Option>
-            ))}
-          </Select>
-        </Col>
-        <Col>
-          <RangePicker />
-        </Col>
-      </Row>
-      {loading ? (
+                {schemes.map((scheme) => (
+                  <Select.Option
+                    key={scheme.scheme.id}
+                    value={scheme.scheme.id}
+                  >
+                    {scheme.scheme.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col>
+            <Form.Item label="Groups">
+              <Select
+                placeholder="Select Groups"
+                className={classes.groupSelect}
+              >
+                {groupsData?.groups.map((group) => (
+                  <Select.Option
+                    loading={groupsLoading}
+                    key={group.id}
+                    value={group.id}
+                  >
+                    {group.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col>
+            <Form.Item label="Date Filter">
+              <RangePicker />
+            </Form.Item>
+          </Col>
+        </Row>
+      </Form>
+      {loading && data?.incidents ? (
         <div className={classes.loadingPage}>
           <Spin />
         </div>
       ) : (
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={{
-            lat: data?.incidents[0]?.location?.geoLat || 0,
-            lng: data?.incidents[0]?.location?.geoLng || 0,
+        <Map
+          ref={mapRef}
+          mapLib={mapboxgl}
+          mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
+          initialViewState={{
+            longitude: data?.incidents[0]?.location?.geoLng || 0,
+            latitude: data?.incidents[0]?.location?.geoLng || 0,
+            pitch: 45,
+            zoom: 17,
           }}
-          zoom={10}
-          clickableIcons={false}
-          options={{
-            streetViewControl: false,
-            styles: [
-              { elementType: 'geometry', stylers: [{ color: '#242f3e' }] },
-              {
-                elementType: 'labels.text.stroke',
-                stylers: [{ color: '#242f3e' }],
-              },
-              {
-                elementType: 'labels.text.fill',
-                stylers: [{ color: '#746855' }],
-              },
-              {
-                featureType: 'administrative.locality',
-                elementType: 'labels.text.fill',
-                stylers: [{ color: '#d59563' }],
-              },
-              {
-                featureType: 'poi',
-                elementType: 'labels.text.fill',
-                stylers: [{ color: '#d59563' }],
-              },
-              {
-                featureType: 'poi.park',
-                elementType: 'geometry',
-                stylers: [{ color: '#263c3f' }],
-              },
-              {
-                featureType: 'poi.park',
-                elementType: 'labels.text.fill',
-                stylers: [{ color: '#6b9a76' }],
-              },
-              {
-                featureType: 'road',
-                elementType: 'geometry',
-                stylers: [{ color: '#38414e' }],
-              },
-              {
-                featureType: 'road',
-                elementType: 'geometry.stroke',
-                stylers: [{ color: '#212a37' }],
-              },
-              {
-                featureType: 'road',
-                elementType: 'labels.text.fill',
-                stylers: [{ color: '#9ca5b3' }],
-              },
-              {
-                featureType: 'road.highway',
-                elementType: 'geometry',
-                stylers: [{ color: '#746855' }],
-              },
-              {
-                featureType: 'road.highway',
-                elementType: 'geometry.stroke',
-                stylers: [{ color: '#1f2835' }],
-              },
-              {
-                featureType: 'road.highway',
-                elementType: 'labels.text.fill',
-                stylers: [{ color: '#f3d19c' }],
-              },
-              {
-                featureType: 'transit',
-                elementType: 'geometry',
-                stylers: [{ color: '#2f3948' }],
-              },
-              {
-                featureType: 'transit.station',
-                elementType: 'labels.text.fill',
-                stylers: [{ color: '#d59563' }],
-              },
-              {
-                featureType: 'water',
-                elementType: 'geometry',
-                stylers: [{ color: '#17263c' }],
-              },
-              {
-                featureType: 'water',
-                elementType: 'labels.text.fill',
-                stylers: [{ color: '#515c6d' }],
-              },
-              {
-                featureType: 'water',
-                elementType: 'labels.text.stroke',
-                stylers: [{ color: '#17263c' }],
-              },
-            ],
-          }}
+          style={{ width: '100%', height: '80vh' }}
+          mapStyle={
+            currentTheme === 'dark'
+              ? 'mapbox://styles/wgarrod/clgkseekj009o01qz193sacyp'
+              : 'mapbox://styles/wgarrod/clgkn5gb7007u01qmahuhbi6o'
+          }
         >
-          {/* Child components, such as markers, info windows, etc. */}
-          <HeatmapLayer
-            // required
-            data={
-              data?.incidents
-                .filter(
-                  (incident) =>
-                    incident.location?.geoLat && incident.location.geoLng
-                )
-                .map(
-                  (incident) =>
-                    new google.maps.LatLng(
+          <Source
+            id="incidents"
+            type="geojson"
+            data={{
+              type: 'FeatureCollection',
+              features:
+                data?.incidents.map((incident) => ({
+                  type: 'Feature',
+                  properties: {},
+                  geometry: {
+                    type: 'Point',
+                    coordinates: [
+                      incident.location?.geoLng || 0,
                       incident.location?.geoLat || 0,
-                      incident.location?.geoLng || 0
-                    )
-                ) || []
-            }
-            options={{
-              radius: 50,
-              opacity: 0.8,
+                    ],
+                  },
+                })) || [],
             }}
-          />
-        </GoogleMap>
+            cluster
+            // clusterProperties={{}}
+            clusterMaxZoom={14}
+            clusterRadius={50}
+          >
+            {showHeatmap && HeatMapLayer}
+            {showMarkers && ClusterLayer}
+            {showMarkers && ClusterCountLayer}
+            {showMarkers && UnClusteredLayer}
+          </Source>
+          {showBusinesses && (
+            <Source
+              id="businesses"
+              type="geojson"
+              cluster
+              clusterMaxZoom={14}
+              clusterRadius={50}
+              data={{
+                type: 'FeatureCollection',
+                features:
+                  businessData?.listBusinesses.businesses.map((business) => ({
+                    type: 'Feature',
+                    properties: {},
+                    geometry: {
+                      type: 'Point',
+                      coordinates: [
+                        business.locations[0]?.geoLng || 0,
+                        business.locations[0]?.geoLat || 0,
+                      ],
+                    },
+                  })) || [],
+              }}
+            >
+              {BusinessClusterLayer}
+              {BusinessClusterCountLayer}
+              {BusinessUnClusteredLayer}
+            </Source>
+          )}
+        </Map>
       )}
     </div>
   );
