@@ -4274,6 +4274,16 @@ apexcharts@^3.23.0:
     svg.resize.js "^1.4.3"
     svg.select.js "^3.0.1"
 
+apollo-link-sentry@^3.2.3:
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/apollo-link-sentry/-/apollo-link-sentry-3.2.3.tgz#6fc40409812d0277f68bfb4902ab468d35d6d557"
+  integrity sha512-5btf/XOaxdR1+iK+UWD5oxLyi7MIffZmIJYrhaC6PxofTUg8eW8WDMkFcKS1NLw89DEMNHr1cxDli0dnaxb4ig==
+  dependencies:
+    deepmerge "^4.2.2"
+    dot-prop "^6.0.0"
+    tslib "^2.0.3"
+    zen-observable-ts "^1.2.5"
+
 apollo-upload-client@^16.0.0:
   version "16.0.0"
   resolved "https://registry.npmjs.org/apollo-upload-client/-/apollo-upload-client-16.0.0.tgz"
@@ -6430,6 +6440,13 @@ dot-case@^3.0.4:
   dependencies:
     no-case "^3.0.4"
     tslib "^2.0.3"
+
+dot-prop@^6.0.0:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/dot-prop/-/dot-prop-6.0.1.tgz#fc26b3cf142b9e59b74dbd39ed66ce620c681083"
+  integrity sha512-tE7ztYzXHIeyvc7N+hR3oi7FIbf/NIjVP9hmAt3yMXzrQ072/fpjGLx2GxNxGxUl5V73MEqYzioOMoVhGMJ5cA==
+  dependencies:
+    is-obj "^2.0.0"
 
 dotenv@^16.0.0:
   version "16.0.1"
@@ -9000,6 +9017,11 @@ is-obj@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npmjs.org/is-obj/-/is-obj-1.0.1.tgz"
   integrity sha1-PkcprB9f3gJc19g6iW2rn09n2w8=
+
+is-obj@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/is-obj/-/is-obj-2.0.0.tgz#473fb05d973705e3fd9620545018ca8e22ef4982"
+  integrity sha512-drqDG3cbczxxEJRoOXcOjtdp1J/lyp1mNn0xaznRs8+muBhgQcrnbspox5X5fOw0HnMnbfDzvnEMEtqDEJEo8w==
 
 is-observable@^1.1.0:
   version "1.1.0"

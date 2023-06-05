@@ -53,6 +53,7 @@
     "antd": "^4.20.5",
     "antd-img-crop": "^4.2.3",
     "apexcharts": "^3.23.0",
+    "apollo-link-sentry": "^3.2.3",
     "apollo-upload-client": "^16.0.0",
     "apollo3-cache-persist": "^0.12.1",
     "auth0-js": "^9.14.3",

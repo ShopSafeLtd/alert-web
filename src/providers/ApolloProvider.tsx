@@ -19,6 +19,7 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 
 import * as Sentry from '@sentry/react';
+import { SentryLink } from 'apollo-link-sentry';
 import { useStoreState } from '../state';
 
 interface Props {
@@ -84,6 +85,8 @@ const Apollo = ({ children }: Props): JSX.Element => {
       }),
     })
   );
+
+  const sentryLink = new SentryLink(/* See options */);
 
   // const httpLink = createUploadLink({
   //   // uri: "https://alert-api-dev.azurewebsites.net/graphql",
@@ -180,8 +183,13 @@ const Apollo = ({ children }: Props): JSX.Element => {
   //   ...context,
   // }));
 
-  // eslint-disable-next-line unicorn/prefer-spread
-  const authHttp = errorLink.concat(middlewareLink).concat(httpLink);
+  const authHttp = sentryLink
+    // eslint-disable-next-line unicorn/prefer-spread
+    .concat(errorLink)
+    // eslint-disable-next-line unicorn/prefer-spread
+    .concat(middlewareLink)
+    // eslint-disable-next-line unicorn/prefer-spread
+    .concat(httpLink);
 
   const link = split(
     ({ query }) => {
