@@ -35,9 +35,9 @@ const ClusterLayer = (
         'step',
         ['get', 'point_count'],
         '#51bbd6',
-        100,
+        50,
         '#f1f075',
-        750,
+        100,
         '#f28cb1',
       ],
       'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40],
@@ -141,6 +141,9 @@ interface Props {
   schemes: Scheme[];
   onChangeSchemes: (value: string[]) => void;
   selectedSchemes: string[];
+  onChangeGroups: (value: string[]) => void;
+  selectedGroups: string[];
+  onChangeDateRange: (value: { startDate: Date; endDate: Date }) => void;
 }
 
 const IncidentMap = ({
@@ -152,6 +155,9 @@ const IncidentMap = ({
   schemes,
   onChangeSchemes,
   selectedSchemes,
+  onChangeGroups,
+  selectedGroups,
+  onChangeDateRange,
 }: Props) => {
   const mapRef = useRef<MapRef>(null);
 
@@ -176,6 +182,22 @@ const IncidentMap = ({
     mapRef.current?.moveLayer('clusters');
     mapRef.current?.moveLayer('cluster-count');
   }, [showHeatmap, showMarkers]);
+
+  useEffect(() => {
+    if (data?.incidents && data?.incidents.length > 0) {
+      const arr = data.incidents.map((item) => ({
+        lat: item.location?.geoLat || 0,
+        lng: item.location?.geoLng || 0,
+      }));
+
+      if (arr.length > 2)
+        mapRef.current?.fitBounds(
+          // @ts-expect-error needs 2
+          arr,
+          { animate: false, zoom: 11 }
+        );
+    }
+  }, [data]);
 
   const classes = useStyles();
   return (
@@ -211,6 +233,7 @@ const IncidentMap = ({
                 value={selectedSchemes}
                 mode="multiple"
                 maxTagCount={2}
+                style={{ minWidth: 150 }}
               >
                 {schemes.map((scheme) => (
                   <Select.Option
@@ -228,6 +251,11 @@ const IncidentMap = ({
               <Select
                 placeholder="Select Groups"
                 className={classes.groupSelect}
+                style={{ minWidth: 150 }}
+                onChange={onChangeGroups}
+                value={selectedGroups}
+                mode="multiple"
+                maxTagCount={1}
               >
                 {groupsData?.groups.map((group) => (
                   <Select.Option
@@ -243,7 +271,15 @@ const IncidentMap = ({
           </Col>
           <Col>
             <Form.Item label="Date Filter">
-              <RangePicker />
+              <RangePicker
+                onChange={(value) => {
+                  if (value && value[0] && value[1])
+                    onChangeDateRange({
+                      startDate: new Date(value[0].valueOf()),
+                      endDate: new Date(value[1].valueOf()),
+                    });
+                }}
+              />
             </Form.Item>
           </Col>
         </Row>
@@ -257,12 +293,6 @@ const IncidentMap = ({
           ref={mapRef}
           mapLib={mapboxgl}
           mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
-          initialViewState={{
-            longitude: data?.incidents[0]?.location?.geoLng || 0,
-            latitude: data?.incidents[0]?.location?.geoLng || 0,
-            pitch: 45,
-            zoom: 17,
-          }}
           style={{ width: '100%', height: '80vh' }}
           mapStyle={
             currentTheme === 'dark'

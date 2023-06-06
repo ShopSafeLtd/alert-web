@@ -12,6 +12,9 @@ const IncidentMap = () => {
     schemes,
     onChangeSchemes,
     selectedSchemes,
+    onChangeGroups,
+    selectedGroups,
+    onChangeDateRange,
   } = useIncidentMap();
 
   return (
@@ -24,6 +27,9 @@ const IncidentMap = () => {
       schemes={schemes}
       onChangeSchemes={onChangeSchemes}
       selectedSchemes={selectedSchemes}
+      onChangeGroups={onChangeGroups}
+      selectedGroups={selectedGroups}
+      onChangeDateRange={onChangeDateRange}
     />
   );
 };
