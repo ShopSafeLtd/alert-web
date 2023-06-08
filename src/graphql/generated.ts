@@ -59939,6 +59939,7 @@ export type ListSchemeUsersQueryVariables = Exact<{
   >;
   after?: InputMaybe<UserWhereUniqueInput>;
   groupWhere?: InputMaybe<GroupWhereInput>;
+  schemesWhere?: InputMaybe<UserSchemeWhereInput>;
 }>;
 
 export type ListSchemeUsersQuery = {
@@ -59960,6 +59961,12 @@ export type ListSchemeUsersQuery = {
       fullName: string;
     }>;
     groups: Array<{ __typename?: 'Group'; id: string; name: string }>;
+    schemes: Array<{
+      __typename?: 'UserScheme';
+      id: string;
+      role: Role;
+      scheme: { __typename?: 'Scheme'; id: string };
+    }>;
     approverGroups: Array<{ __typename?: 'Group'; id: string; name: string }>;
   }>;
 };
@@ -72212,6 +72219,7 @@ export const ListSchemeUsersDocument = gql`
     $orderBy: [UserOrderByWithRelationInput!]
     $after: UserWhereUniqueInput
     $groupWhere: GroupWhereInput
+    $schemesWhere: UserSchemeWhereInput
   ) {
     users(where: $where, orderBy: $orderBy, after: $after) {
       id
@@ -72230,6 +72238,13 @@ export const ListSchemeUsersDocument = gql`
       groups(where: $groupWhere) {
         id
         name
+      }
+      schemes(where: $schemesWhere) {
+        id
+        role
+        scheme {
+          id
+        }
       }
       approverGroups(where: $groupWhere) {
         id

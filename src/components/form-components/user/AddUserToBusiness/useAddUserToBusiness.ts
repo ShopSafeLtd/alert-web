@@ -83,6 +83,13 @@ const useAddUserToBusiness = ({
           },
         ],
       },
+      schemesWhere: {
+        scheme: {
+          id: {
+            equals: currentScheme,
+          },
+        },
+      },
     },
   });
 

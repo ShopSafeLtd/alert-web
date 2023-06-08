@@ -244,6 +244,13 @@ const useUpdateBar = ({
       orderBy: {
         fullName: SortOrder.Asc,
       },
+      schemesWhere: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
     },
     onCompleted: (res) => {
       if (res.users) {

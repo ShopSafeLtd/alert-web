@@ -67,9 +67,15 @@ const useAddTodo = ({ update, onClose }: Props): Return => {
           },
         },
       },
-
       orderBy: {
         fullName: SortOrder.Asc,
+      },
+      schemesWhere: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
       },
     },
   });

@@ -63,6 +63,13 @@ const useEditChat = ({ onClose, chatId }: Props): Return => {
       orderBy: {
         fullName: SortOrder.Asc,
       },
+      schemesWhere: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
     },
   });
 

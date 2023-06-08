@@ -86,7 +86,7 @@ const AdminTodos = ({
       <Row align="middle" gutter={8} wrap={false} style={{ marginBottom: 10 }}>
         <Col>
           <Title className={classes.title} level={4}>
-            To-Do
+            Tasks
           </Title>
         </Col>
         <Col flex={1}>
