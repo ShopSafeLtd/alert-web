@@ -179,24 +179,16 @@ const IncidentCard = ({
           }
         />
       )}
-      <div className="incident-card-content">
+      <div style={{ padding: '10px 10px 5px', height: 283, overflow: 'auto' }}>
         <Title level={4} ellipsis style={{ marginBottom: 2 }}>
           {incident?.subject}
         </Title>
-        <Text type="secondary">
-          Alert ID: {incident?.reference}
-          {incident?.policeRef ? `/ Crime Ref: ${incident.policeRef}` : ''}
-        </Text>
-        <Link to={`/app/incidents/view/${incident?.id}`}>
-          <Paragraph
-            style={{ height: incident.offenders.length > 0 ? 24 : 66 }}
-            className="incident-card-desc"
-            type="secondary"
-          >
-            {incident?.description}
-          </Paragraph>
-        </Link>
-
+        <div style={{ marginBottom: 10 }}>
+          <Text type="secondary">
+            Alert ID: {incident?.reference}
+            {incident?.policeRef ? `/ Crime Ref: ${incident.policeRef}` : ''}
+          </Text>
+        </div>
         {incident.offenders.length > 0 && (
           <Row wrap={false} style={{ overflowX: 'auto', marginBottom: 15 }}>
             {incident.offenders.map((offender) => (
@@ -247,7 +239,15 @@ const IncidentCard = ({
             </Col>
           </Row>
         </Link>
-
+        <Link to={`/app/incidents/view/${incident?.id}`}>
+          <Paragraph
+            style={{ height: incident.offenders.length > 0 ? 66 : 106 }}
+            className="incident-card-desc"
+            type="secondary"
+          >
+            {incident?.description}
+          </Paragraph>
+        </Link>
         <Row justify="center">
           <Col>
             <Link to={`/app/incidents/view/${incident?.id}`}>

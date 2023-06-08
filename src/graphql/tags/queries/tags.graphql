@@ -1,5 +1,5 @@
-query tags($where: TagWhereInput!) {
-  tags(where: $where) {
+query tags($where: TagWhereInput!, $orderBy: [TagOrderByWithRelationInput!]) {
+  tags(where: $where, orderBy: $orderBy) {
     id
     name
     description

@@ -25,6 +25,7 @@ const Vehicles = lazy(() => import(`./vehicles/router`));
 const CrimeGroups = lazy(() => import(`./crime-groups/router`));
 const FeedItems = lazy(() => import(`./feedItems/router`));
 const AdminTodos = lazy(() => import(`./adminTodo/router`));
+const FaceAi = lazy(() => import(`./face-ai/router`));
 
 export const AppViews = (): JSX.Element => {
   const { isLoading } = useAuth0();
@@ -82,6 +83,7 @@ export const AppViews = (): JSX.Element => {
           element={<Investigations />}
         />
         <Route key="resources" path="resources/*" element={<Documents />} />
+        <Route key="face-ai" path="face-ai/*" element={<FaceAi />} />
       </Routes>
     </Suspense>
   );
