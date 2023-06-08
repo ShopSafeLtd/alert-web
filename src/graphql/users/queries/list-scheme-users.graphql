@@ -22,11 +22,7 @@ query ListSchemeUsers(
       id
       name
     }
-    schemes {
-      id
-      role
-    }
-    approverGroups {
+    approverGroups(where: $groupWhere) {
       id
       name
     }

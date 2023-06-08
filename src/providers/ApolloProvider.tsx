@@ -103,7 +103,7 @@ const Apollo = ({ children }: Props): JSX.Element => {
         // eslint-disable-next-line no-restricted-syntax
         for (const { message, locations, path, extensions } of graphQLErrors) {
           if (
-            message.startsWith('USER_CONTEXT_ERROR') ||
+            message.includes('USER_CONTEXT_ERROR') ||
             extensions?.code === '401'
           ) {
             const oldHeaders = operation.getContext().headers;
@@ -118,11 +118,13 @@ const Apollo = ({ children }: Props): JSX.Element => {
               return forward(operation);
             });
           }
-          Sentry.captureMessage(
-            `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
-              locations
-            )}, Path: ${path}`
-          );
+          if (!message.startsWith('Not Auth')) {
+            Sentry.captureMessage(
+              `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
+                locations
+              )}, Path: ${path}`
+            );
+          }
         }
 
       if (networkError) {
