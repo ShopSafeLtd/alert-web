@@ -72,6 +72,13 @@ const useEditGroup = ({ onClose, groupId }: Props): Return => {
       orderBy: {
         fullName: SortOrder.Asc,
       },
+      schemesWhere: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
     },
   });
 
