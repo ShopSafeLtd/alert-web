@@ -58,6 +58,13 @@ const useAddChat = ({ onClose, update }: Props): Return => {
       orderBy: {
         fullName: SortOrder.Asc,
       },
+      schemesWhere: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
     },
   });
   const [createChat] = useCreateChatMutation({

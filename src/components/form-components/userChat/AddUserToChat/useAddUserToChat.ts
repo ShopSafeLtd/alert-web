@@ -81,6 +81,13 @@ const useAddUserToChat = ({
       orderBy: {
         fullName: SortOrder.Asc,
       },
+      schemesWhere: {
+        scheme: {
+          id: {
+            equals: schemeId,
+          },
+        },
+      },
     },
   });
   const onSubmit = (data: FormData) => {
