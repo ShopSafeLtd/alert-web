@@ -9,6 +9,7 @@ import {
   Modal,
   Row,
   Tag,
+  Tooltip,
   Typography,
 } from 'antd';
 import type { ListIncidentsQuery } from 'graphql/generated';
@@ -194,7 +195,13 @@ const IncidentCard = ({
               <Tag key={offender.id}>{offender.name || 'Unknown Offender'}</Tag>
             ))}
             {incident.offenders.length > 2 && (
-              <Tag>+ {incident.offenders.length - 1} more</Tag>
+              <Tooltip
+                title={incident.offenders
+                  .map((item) => ` ${item.name}`)
+                  .toString()}
+              >
+                <Tag>+ {incident.offenders.length - 1} more</Tag>
+              </Tooltip>
             )}
           </Row>
         )}
@@ -239,7 +246,7 @@ const IncidentCard = ({
         <Link to={`/app/incidents/view/${incident?.id}`}>
           <Paragraph
             style={{
-              height: incident.offenders.length > 0 ? 60 : 106,
+              height: incident.offenders.length > 0 ? 60 : 95,
               marginBottom: 10,
             }}
             className="incident-card-desc"
@@ -250,23 +257,33 @@ const IncidentCard = ({
         </Link>
 
         <Row
-          gutter={8}
           wrap={false}
           style={{
             overflowX: 'auto',
             marginBottom: incident.offenders.length > 2 ? 3 : 15,
           }}
         >
-          <Col>
+          <Col style={{ minWidth: 60 }}>
             <Text strong type="secondary">
               Groups:
             </Text>
           </Col>
-          {incident.groups.map((group) => (
+          {incident.groups.slice(0, 1).map((group) => (
             <Col key={group.id}>
-              <Text type="secondary">{group.name || 'Unknown Offender'}</Text>
+              <Tag>{group.name || 'Unknown Offender'}</Tag>
             </Col>
           ))}
+          {incident.groups.length > 1 && (
+            <Col>
+              <Tooltip
+                title={incident.groups
+                  .map((item) => ` ${item.name}`)
+                  .toString()}
+              >
+                <Tag>+{incident.groups.length - 1} more</Tag>
+              </Tooltip>
+            </Col>
+          )}
         </Row>
         <Row justify="center">
           <Col>
