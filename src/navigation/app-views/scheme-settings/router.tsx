@@ -22,6 +22,7 @@ import RecycleBin from 'views/settings/recycled/RecycleBin';
 
 import ListBusinesses from 'views/settings/businesses/ListBusinesses';
 import ViewBusiness from 'views/settings/businesses/ViewBusiness';
+import DiscImport from 'views/settings/data-import/disc-import/DiscImport.container';
 import CustomSchemeTerms from '../../../views/settings/terms/ViewCustomTerms/ViewTermsContainer';
 
 const SchemeSettings = (): JSX.Element => (
@@ -61,6 +62,7 @@ const SchemeSettings = (): JSX.Element => (
     {/* businesses */}
     <Route path="businesses/*" element={<ListBusinesses />} />
     <Route path="businesses/view/:id" element={<ViewBusiness />} />
+    <Route path="data-import/disc" element={<DiscImport />} />
   </Routes>
 );
 

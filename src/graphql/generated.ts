@@ -9166,6 +9166,7 @@ export type DeviceInfo = {
 export type DiscImportBusinessesInput = {
   connect: DiscImportConnectBusinessInput;
   create: DiscImportCreateBusinessInput;
+  existing: DiscImportExistingBusinessInput;
 };
 
 export type DiscImportConnectBusinessInput = {
@@ -9207,6 +9208,14 @@ export type DiscImportDataInput = {
   offenders: Array<DiscImportOffendersInput>;
   scheme: UniqueId;
   users: Array<DiscImportUsersInput>;
+};
+
+export type DiscImportExistingBusinessInput = {
+  importId: Scalars['String'];
+};
+
+export type DiscImportExistingUserInput = {
+  importId: Scalars['String'];
 };
 
 export type DiscImportHistoricIncidentsInput = {
@@ -9257,21 +9266,26 @@ export type DiscImportIncidentsInput = {
 };
 
 export type DiscImportOffendersInput = {
-  age?: InputMaybe<Race>;
+  age?: InputMaybe<Age>;
+  build?: InputMaybe<Build>;
   comment?: InputMaybe<Scalars['String']>;
   createdBy?: InputMaybe<UniqueId>;
   dateOfBirth?: InputMaybe<Scalars['DateTime']>;
+  gender?: InputMaybe<Gender>;
   groups?: InputMaybe<Array<UniqueId>>;
   hair?: InputMaybe<Scalars['String']>;
+  height?: InputMaybe<Height>;
   images?: InputMaybe<Array<UniqueId>>;
   importId: Scalars['String'];
   name: Scalars['String'];
   peculiarities?: InputMaybe<Scalars['String']>;
+  race?: InputMaybe<Race>;
 };
 
 export type DiscImportUsersInput = {
   connect: DiscImportConnectUserInput;
   create: DiscImportCreateUserInput;
+  existing: DiscImportExistingUserInput;
 };
 
 export type Document = {
@@ -54316,6 +54330,18 @@ export type SchemeGroupsQuery = {
   }>;
 };
 
+export type DiscImportDataMutationVariables = Exact<{
+  data: DiscImportDataInput;
+}>;
+
+export type DiscImportDataMutation = {
+  __typename?: 'Mutation';
+  discImportData?: {
+    __typename?: 'SystemTask';
+    success?: boolean | null;
+  } | null;
+};
+
 export type AddImagesToIncidentMutationVariables = Exact<{
   incident: IncidentWhereUniqueInput;
   images: Array<ImageWhereUniqueInput> | ImageWhereUniqueInput;
@@ -57362,6 +57388,88 @@ export type RecycledItemsQuery = {
   } | null> | null;
 };
 
+export type ListRekMatchesQueryVariables = Exact<{
+  where?: InputMaybe<RekMatchWhereInput>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type ListRekMatchesQuery = {
+  __typename?: 'Query';
+  listRekMatches: {
+    __typename?: 'ListRekMatches';
+    total: number;
+    matches: Array<{
+      __typename?: 'RekMatch';
+      id: string;
+      createdAt: any;
+      rekFaceId: string;
+      avgSimilarity?: number | null;
+      searchedFace: {
+        __typename?: 'RekFace';
+        boundingHeight?: number | null;
+        boundingLeft?: number | null;
+        boundingTop?: number | null;
+        boundingWidth?: number | null;
+        confidence?: number | null;
+        id: string;
+        qualityBrightness?: number | null;
+        qualitySharpness?: number | null;
+        image: { __typename?: 'Image'; id: string; optimised?: string | null };
+      };
+      matchedFaces: Array<{
+        __typename?: 'RekMatchedFace';
+        id: string;
+        similarity: number;
+        rekFace: {
+          __typename?: 'RekFace';
+          id: string;
+          boundingHeight?: number | null;
+          boundingLeft?: number | null;
+          boundingTop?: number | null;
+          boundingWidth?: number | null;
+          confidence?: number | null;
+          qualityBrightness?: number | null;
+          qualitySharpness?: number | null;
+          image: {
+            __typename?: 'Image';
+            id: string;
+            optimised?: string | null;
+          };
+          offender?: {
+            __typename?: 'Offender';
+            id: string;
+            name?: string | null;
+          } | null;
+        };
+      }>;
+      offender?: {
+        __typename?: 'Offender';
+        id: string;
+        name?: string | null;
+      } | null;
+    }>;
+  };
+};
+
+export type SchemeRekognitionQueryVariables = Exact<{
+  where: SchemeWhereUniqueInput;
+}>;
+
+export type SchemeRekognitionQuery = {
+  __typename?: 'Query';
+  scheme?: {
+    __typename?: 'Scheme';
+    id: string;
+    facialRecognition: boolean;
+    rekCollections: Array<{
+      __typename?: 'RekCollection';
+      id: string;
+      name: string;
+    }>;
+  } | null;
+};
+
 export type CreateReportTemplateMutationVariables = Exact<{
   data: ReportTemplateCreateInput;
 }>;
@@ -58391,6 +58499,9 @@ export type CreateTagMutation = {
 
 export type TagsQueryVariables = Exact<{
   where: TagWhereInput;
+  orderBy?: InputMaybe<
+    Array<TagOrderByWithRelationInput> | TagOrderByWithRelationInput
+  >;
 }>;
 
 export type TagsQuery = {
@@ -64501,6 +64612,38 @@ export type SchemeGroupsQueryResult = Apollo.QueryResult<
   SchemeGroupsQuery,
   SchemeGroupsQueryVariables
 >;
+export const DiscImportDataDocument = gql`
+  mutation DiscImportData($data: DiscImportDataInput!) {
+    discImportData(data: $data) {
+      success
+    }
+  }
+`;
+export type DiscImportDataMutationFn = Apollo.MutationFunction<
+  DiscImportDataMutation,
+  DiscImportDataMutationVariables
+>;
+export function useDiscImportDataMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DiscImportDataMutation,
+    DiscImportDataMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DiscImportDataMutation,
+    DiscImportDataMutationVariables
+  >(DiscImportDataDocument, options);
+}
+export type DiscImportDataMutationHookResult = ReturnType<
+  typeof useDiscImportDataMutation
+>;
+export type DiscImportDataMutationResult =
+  Apollo.MutationResult<DiscImportDataMutation>;
+export type DiscImportDataMutationOptions = Apollo.BaseMutationOptions<
+  DiscImportDataMutation,
+  DiscImportDataMutationVariables
+>;
 export const AddImagesToIncidentDocument = gql`
   mutation AddImagesToIncident(
     $incident: IncidentWhereUniqueInput!
@@ -68702,6 +68845,139 @@ export type RecycledItemsQueryResult = Apollo.QueryResult<
   RecycledItemsQuery,
   RecycledItemsQueryVariables
 >;
+export const ListRekMatchesDocument = gql`
+  query ListRekMatches($where: RekMatchWhereInput, $skip: Int, $take: Int) {
+    listRekMatches(where: $where, skip: $skip, take: $take) {
+      total
+      matches {
+        id
+        createdAt
+        rekFaceId
+        avgSimilarity
+        searchedFace {
+          boundingHeight
+          boundingLeft
+          boundingTop
+          boundingWidth
+          confidence
+          id
+          image {
+            id
+            optimised
+          }
+          qualityBrightness
+          qualitySharpness
+        }
+        matchedFaces {
+          id
+          similarity
+          rekFace {
+            id
+            boundingHeight
+            boundingLeft
+            boundingTop
+            boundingWidth
+            confidence
+            qualityBrightness
+            qualitySharpness
+            image {
+              id
+              optimised
+            }
+            offender {
+              id
+              name
+            }
+          }
+        }
+        offender {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+export function useListRekMatchesQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    ListRekMatchesQuery,
+    ListRekMatchesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ListRekMatchesQuery, ListRekMatchesQueryVariables>(
+    ListRekMatchesDocument,
+    options
+  );
+}
+export function useListRekMatchesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ListRekMatchesQuery,
+    ListRekMatchesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ListRekMatchesQuery, ListRekMatchesQueryVariables>(
+    ListRekMatchesDocument,
+    options
+  );
+}
+export type ListRekMatchesQueryHookResult = ReturnType<
+  typeof useListRekMatchesQuery
+>;
+export type ListRekMatchesLazyQueryHookResult = ReturnType<
+  typeof useListRekMatchesLazyQuery
+>;
+export type ListRekMatchesQueryResult = Apollo.QueryResult<
+  ListRekMatchesQuery,
+  ListRekMatchesQueryVariables
+>;
+export const SchemeRekognitionDocument = gql`
+  query SchemeRekognition($where: SchemeWhereUniqueInput!) {
+    scheme(where: $where) {
+      id
+      facialRecognition
+      rekCollections {
+        id
+        name
+      }
+    }
+  }
+`;
+export function useSchemeRekognitionQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SchemeRekognitionQuery,
+    SchemeRekognitionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    SchemeRekognitionQuery,
+    SchemeRekognitionQueryVariables
+  >(SchemeRekognitionDocument, options);
+}
+export function useSchemeRekognitionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SchemeRekognitionQuery,
+    SchemeRekognitionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    SchemeRekognitionQuery,
+    SchemeRekognitionQueryVariables
+  >(SchemeRekognitionDocument, options);
+}
+export type SchemeRekognitionQueryHookResult = ReturnType<
+  typeof useSchemeRekognitionQuery
+>;
+export type SchemeRekognitionLazyQueryHookResult = ReturnType<
+  typeof useSchemeRekognitionLazyQuery
+>;
+export type SchemeRekognitionQueryResult = Apollo.QueryResult<
+  SchemeRekognitionQuery,
+  SchemeRekognitionQueryVariables
+>;
 export const CreateReportTemplateDocument = gql`
   mutation CreateReportTemplate($data: ReportTemplateCreateInput!) {
     createReportTemplate(data: $data) {
@@ -70133,8 +70409,8 @@ export type CreateTagMutationOptions = Apollo.BaseMutationOptions<
   CreateTagMutationVariables
 >;
 export const TagsDocument = gql`
-  query tags($where: TagWhereInput!) {
-    tags(where: $where) {
+  query tags($where: TagWhereInput!, $orderBy: [TagOrderByWithRelationInput!]) {
+    tags(where: $where, orderBy: $orderBy) {
       id
       name
       description
