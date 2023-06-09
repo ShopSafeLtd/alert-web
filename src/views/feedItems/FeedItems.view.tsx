@@ -32,8 +32,6 @@ import {
 } from '@fortawesome/pro-light-svg-icons';
 
 import { Link } from 'react-router-dom';
-
-import { formatDate } from 'utils';
 import IncidentFeed from 'components/feedItems/FeedItemSection/IncidentFeed';
 import OffenderFeed from 'components/feedItems/FeedItemSection/OffenderFeed';
 import ArticleFeed from 'components/feedItems/FeedItemSection/ArticleFeed';
@@ -45,11 +43,11 @@ import type { FeedItemSort } from 'state';
 import VehicleFeed from 'components/feedItems/FeedItemSection/VehicleFeed';
 import CrimeGroupFeed from 'components/feedItems/FeedItemSection/CrimeGroupFeed';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
-
 import FeedItemSkeletonCard from 'components/feedItems/FeedItemSection/FeedItemSkeletonCard';
 import AdminTodos from 'components/feedItems/AdminTodos';
 import BanFeed from 'components/feedItems/FeedItemSection/BanFeed';
 import ArticlesSection from 'components/feedItems/Articles/ArticlesSection';
+import formatCalendar from 'utils/format-calendar-24h';
 import useStyles from './FeedItem.styles';
 
 const { Title, Paragraph, Text } = Typography;
@@ -186,7 +184,7 @@ const FeedItem = ({
           </Col>
           {adminRights && (
             <Col>
-              <Link to="/app/article ">
+              <Link to="/app/article/add ">
                 <Button size="small" type="primary">
                   <FontAwesomeIcon
                     icon={faNewspaper}
@@ -226,13 +224,17 @@ const FeedItem = ({
                   <>
                     <Row style={{ margin: '8px 8px 4px' }}>
                       <Col flex={1}>
-                        <Title style={{ margin: 0, fontSize: 14 }} level={4}>
+                        <Title
+                          style={{ margin: 0, fontSize: 14 }}
+                          level={4}
+                          ellipsis
+                        >
                           {feedItem?.message}
                         </Title>
                       </Col>
                       <Col>
                         <Text type="secondary" style={{ fontSize: 14 }}>
-                          {formatDate(feedItem?.updatedAt)}
+                          {formatCalendar(feedItem?.updatedAt)}
                         </Text>
                       </Col>
                       {adminRights ? (
@@ -497,6 +499,7 @@ const FeedItem = ({
                 fullSearch={search}
                 searchMydata={gallery.includes('MYDATA')}
                 fullCreatedAtFilter={createdAtFilter}
+                fullGroupFilter={groupsFilter}
                 saving={saving}
                 groups={groups}
                 groupsLoading={groupsLoading}
@@ -505,7 +508,7 @@ const FeedItem = ({
             </Col>
             {adminRights && (
               <Col span={12} style={{ height: '100%' }}>
-                <AdminTodos fullSearch={search} />
+                <AdminTodos fullSearch={search} groupsFilter={groupsFilter} />
               </Col>
             )}
           </Row>

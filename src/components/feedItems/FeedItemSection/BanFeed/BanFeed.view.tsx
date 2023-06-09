@@ -9,8 +9,8 @@ import {
   faUserClock,
 } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import WatermarkImage from 'components/images/WatermarkImage.view';
+import formatCalendar from 'utils/format-calendar-24h';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -47,8 +47,8 @@ const BanFeed = ({ feedItem }: Props): JSX.Element => {
     // updatedAt,
     title,
     type,
-    active,
-    // expired,
+    // active,
+    expired,
     // id,
     location,
     offender,
@@ -82,10 +82,10 @@ const BanFeed = ({ feedItem }: Props): JSX.Element => {
               </Col>
             </Row> */}
             <div style={{ marginTop: -5, marginBottom: 10 }}>
-              {active ? (
-                <Tag color="green">ACTIVE</Tag>
-              ) : (
+              {expired ? (
                 <Tag color="red">EXPIRED</Tag>
+              ) : (
+                <Tag color="green">ACTIVE</Tag>
               )}
             </div>
 
@@ -99,7 +99,7 @@ const BanFeed = ({ feedItem }: Props): JSX.Element => {
                 />
                 <Text style={{ fontSize: 14 }} type="secondary">
                   Start:
-                  {moment(startDate).calendar()}
+                  {formatCalendar(startDate)}
                 </Text>
               </Col>
             </Row>
@@ -113,7 +113,7 @@ const BanFeed = ({ feedItem }: Props): JSX.Element => {
                 />
                 <Text style={{ fontSize: 14 }} type="secondary">
                   End:
-                  {moment(endDate).calendar()}
+                  {formatCalendar(endDate)}
                 </Text>
               </Col>
             </Row>

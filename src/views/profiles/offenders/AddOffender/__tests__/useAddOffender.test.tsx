@@ -13,6 +13,7 @@ import {
   Model,
   Role,
   CreateOffenderDocument,
+  Height,
 } from 'graphql/generated';
 import { OffenderSort, storeModel } from 'state';
 import useAddOffender from '../useAddOffender';
@@ -162,6 +163,9 @@ const UseAddOffenderTest = () => {
             age: Age.Unknown,
             groups: ['groupId'],
             tags: ['tagId'],
+            customGalleries: [],
+            height: Height.Unknown,
+            comment: 'unknown',
           })
         }
       >

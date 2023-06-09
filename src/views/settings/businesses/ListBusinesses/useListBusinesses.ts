@@ -68,9 +68,7 @@ const useListBusinesses = (): Return => {
         placement: 'bottomRight',
       });
     },
-    onError: (err) => {
-      console.log('err', err);
-
+    onError: () => {
       setSaving(false);
       errorNotification();
     },

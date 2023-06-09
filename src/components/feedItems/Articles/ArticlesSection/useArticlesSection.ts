@@ -1,13 +1,14 @@
 import { useStoreState } from 'state';
 import type { ListArticlesQuery, ArticlePriority } from 'graphql/generated';
 import { useListArticlesQuery, QueryMode, SortOrder } from 'graphql/generated';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { DateType } from 'types/DataType';
 
 interface Props {
   fullSearch: string;
   searchMydata: boolean;
   fullCreatedAtFilter: DateType | undefined;
+  fullGroupFilter: string[];
 }
 interface Return {
   data:
@@ -36,6 +37,7 @@ const useArticlesSection = ({
   fullSearch,
   searchMydata,
   fullCreatedAtFilter,
+  fullGroupFilter,
 }: Props): Return => {
   const userId = useStoreState((state) => state.user.id);
   const schemeId = useStoreState((state) => state.scheme.id);
@@ -49,9 +51,7 @@ const useArticlesSection = ({
   const [createdAtFilter, setCreatedAtFilter] = useState<
     DateType | undefined
   >();
-  useEffect(() => {
-    if (!search && fullSearch) setSearch(fullSearch);
-  }, [fullSearch]);
+
   const getCreatedAtFilter = () => {
     if (createdAtFilter) {
       return {
@@ -67,6 +67,27 @@ const useArticlesSection = ({
     }
     return undefined;
   };
+  const getGroupFilter = () => {
+    if (groupsFilter && groupsFilter.length > 0) {
+      return {
+        some: {
+          id: {
+            in: groupsFilter,
+          },
+        },
+      };
+    }
+    if (fullGroupFilter && fullGroupFilter.length > 0) {
+      return {
+        some: {
+          id: {
+            in: fullGroupFilter,
+          },
+        },
+      };
+    }
+    return undefined;
+  };
 
   const variables = {
     scheme: {
@@ -74,6 +95,7 @@ const useArticlesSection = ({
     },
     where: {
       createdAt: getCreatedAtFilter(),
+
       createdBy: searchMydata
         ? {
             id: {
@@ -87,10 +109,11 @@ const useArticlesSection = ({
               in: priorityFilter,
             }
           : undefined,
+      groups: getGroupFilter(),
       OR: [
         {
           title: {
-            contains: search,
+            contains: search || fullSearch,
             mode: QueryMode.Insensitive,
           },
         },

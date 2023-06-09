@@ -31,8 +31,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBell,
   faBellSlash,
+  faBuilding,
+  faClock,
   faEdit,
+  faSirenOn,
+  faTags,
   faTrash,
+  faUsers,
+  faUserTag,
 } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
 import IncidentSideList from 'components/incidents/IncidentSideList';
@@ -292,7 +298,15 @@ const ViewIncident = ({
                         <Descriptions column={1} className={classes.desc}>
                           <Descriptions.Item
                             className={classes.detail}
-                            label={<span>Business</span>}
+                            label={
+                              <span>
+                                <FontAwesomeIcon
+                                  className={classes.descIcon}
+                                  icon={faBuilding}
+                                />
+                                Business
+                              </span>
+                            }
                           >
                             {editRights ? (
                               <Link
@@ -306,55 +320,113 @@ const ViewIncident = ({
                           </Descriptions.Item>
                           <Descriptions.Item
                             className={classes.detail}
-                            label={<span>Date &amp; Time</span>}
+                            label={
+                              <span>
+                                <FontAwesomeIcon
+                                  className={classes.descIcon}
+                                  icon={faClock}
+                                />
+                                Date &amp; Time
+                              </span>
+                            }
                           >
                             {data?.incident?.dayTime}
                           </Descriptions.Item>
                         </Descriptions>
-                        <Descriptions
-                          column={1}
-                          className={classes.desc}
-                          style={{ marginTop: 5 }}
-                        >
-                          <Descriptions.Item
-                            className={classes.detail}
-                            label={<span>Groups</span>}
-                          >
-                            {data?.incident?.groups.map((group) => (
-                              <Tag key={group.id}>{group.name}</Tag>
-                            ))}
-                          </Descriptions.Item>
-                        </Descriptions>
+
                         <Descriptions column={1} className={classes.desc}>
                           <Descriptions.Item
-                            className={classes.detail}
-                            label={<span>Crime Types</span>}
+                            className={classes.detailTag}
+                            label={
+                              <span className={classes.tagLabel}>
+                                <FontAwesomeIcon
+                                  className={classes.descIcon}
+                                  icon={faUsers}
+                                />
+                                Groups
+                              </span>
+                            }
                           >
-                            {data?.incident?.crimeTypes.map((tag) => (
-                              <Tag color="red" key={tag.id}>
-                                {tag.name}
-                              </Tag>
-                            ))}
+                            <Row>
+                              {data?.incident?.groups.map((group) => (
+                                <Tag key={group.id} className={classes.tag}>
+                                  {group.name}
+                                </Tag>
+                              ))}
+                            </Row>
                           </Descriptions.Item>
                           <Descriptions.Item
-                            className={classes.detail}
-                            label={<span>Involved Tags</span>}
+                            className={classes.detailTag}
+                            label={
+                              <span className={classes.tagLabel}>
+                                <FontAwesomeIcon
+                                  className={classes.descIcon}
+                                  icon={faSirenOn}
+                                />
+                                Crime Types
+                              </span>
+                            }
                           >
-                            {data?.incident?.involvedTags.map((tag) => (
-                              <Tag color="red" key={tag.id}>
-                                {tag.name}
-                              </Tag>
-                            )) || 'None'}
+                            <Row>
+                              {data?.incident?.crimeTypes.map((tag) => (
+                                <Tag
+                                  color="red"
+                                  key={tag.id}
+                                  className={classes.tag}
+                                >
+                                  {tag.name}
+                                </Tag>
+                              )) || 'None'}
+                            </Row>
                           </Descriptions.Item>
                           <Descriptions.Item
-                            className={classes.detail}
-                            label={<span>Impact Tags</span>}
+                            className={classes.detailTag}
+                            label={
+                              <span className={classes.tagLabel}>
+                                <FontAwesomeIcon
+                                  className={classes.descIcon}
+                                  icon={faTags}
+                                />
+                                Involved Tags
+                              </span>
+                            }
                           >
-                            {data?.incident?.impactTags.map((tag) => (
-                              <Tag color="red" key={tag.id}>
-                                {tag.name}
-                              </Tag>
-                            )) || 'None'}
+                            <Row>
+                              {data?.incident?.involvedTags.map((tag) => (
+                                <Tag
+                                  color="red"
+                                  key={tag.id}
+                                  className={classes.tag}
+                                >
+                                  {tag.name}
+                                </Tag>
+                              )) || 'None'}
+                            </Row>
+                          </Descriptions.Item>
+
+                          <Descriptions.Item
+                            className={classes.detailTag}
+                            label={
+                              <span className={classes.tagLabel}>
+                                <FontAwesomeIcon
+                                  className={classes.descIcon}
+                                  icon={faUserTag}
+                                />
+                                Impact Tags
+                              </span>
+                            }
+                          >
+                            <Row justify="start" align="middle">
+                              {data?.incident?.impactTags.map((tag) => (
+                                <Tag
+                                  color="red"
+                                  key={tag.id}
+                                  className={classes.tag}
+                                >
+                                  {tag.name}
+                                </Tag>
+                              )) || 'None'}
+                            </Row>
                           </Descriptions.Item>
                         </Descriptions>
                       </Card>

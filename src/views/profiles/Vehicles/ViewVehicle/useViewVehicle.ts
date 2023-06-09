@@ -1,6 +1,10 @@
 import { Modal, notification } from 'antd';
 
-import type { VehicleQuery, VehicleQueryVariables } from 'graphql/generated';
+import type {
+  CreateVehicleDataInput,
+  VehicleQuery,
+  VehicleQueryVariables,
+} from 'graphql/generated';
 import {
   useUpdateVehicleMutation,
   useVehicleQuery,
@@ -132,6 +136,64 @@ const useViewVehicle = (vehicleId: string): Return => {
 
   const submitEditVehicle = (data: VehicleData) => {
     setSaving(true);
+    const getCustomGalleries =
+      (): CreateVehicleDataInput['customGalleries'] => {
+        const existingCustomGalleryIds =
+          vehicleData?.vehicle?.customGalleries.map(({ id }) => id);
+        const customGalleryIds = data.customGalleries;
+
+        if (customGalleryIds) {
+          const newCustomGalleries = data.newCustomGalleriesData;
+          const connectedCustomGalleries = customGalleryIds?.filter(
+            (id) =>
+              !(
+                newCustomGalleries?.map((el) => el.id).includes(id) ||
+                existingCustomGalleryIds?.includes(id)
+              )
+          );
+          // const disconnectedCustomGalleries = existingCustomGalleryIds?.filter(
+          //   (id) => !customGalleryIds?.includes(id)
+          // );
+
+          return {
+            // ???
+            // disconnect:
+            //   disconnectedCustomGalleries &&
+            //   disconnectedCustomGalleries.length > 0
+            //     ? disconnectedCustomGalleries.map((id) => ({ id }))
+            //     : undefined,
+
+            connect:
+              connectedCustomGalleries.length > 0
+                ? connectedCustomGalleries.map((id) => ({ id }))
+                : undefined,
+            create:
+              newCustomGalleries && newCustomGalleries.length > 0
+                ? newCustomGalleries.map((value) => ({
+                    name: value.name,
+                    description: value.description || '',
+                    schemes: { connect: [{ id: schemeId }] },
+                    groups: {
+                      connect:
+                        // ???
+                        data.groups && data.groups.length > 0
+                          ? data.groups.map((id) => ({ id }))
+                          : [],
+                    },
+                  }))
+                : undefined,
+          };
+        }
+        return {
+          connect: undefined,
+          create: undefined,
+          // disconnect:
+          //   existingCustomGalleryIds && existingCustomGalleryIds.length > 0
+          //     ? existingCustomGalleryIds.map((id) => ({ id }))
+          //     : undefined,
+        };
+      };
+
     updateVehicle({
       variables: {
         where: {
@@ -155,29 +217,39 @@ const useViewVehicle = (vehicleId: string): Return => {
               ? data.offenders.map((id) => ({ id }))
               : [],
           schemes: schemeId,
+          // ???
+          groups:
+            data.groups && data.groups.length > 0
+              ? data.groups.map((id) => ({ id }))
+              : [],
+          customGalleries: getCustomGalleries(),
           image: {
             upload:
               data.images && data.images.length > 0
-                ? data.images.map((item) => ({
-                    url: {
-                      filename: item.fileName || '',
-                      mimetype: item.type || '',
-                      url: item.url || '',
-                    },
-                  }))
+                ? data.images
+                    .filter((image) => image.new)
+                    .map((item) => ({
+                      url: {
+                        filename: item.fileName || '',
+                        mimetype: item.type || '',
+                        url: item.url || '',
+                      },
+                      position: item.position,
+                      primary: item.primary,
+                      policeImage: item.policeImage,
+                    }))
                 : undefined,
+            // ???  update
             disconnect:
-              vehicleData?.vehicle?.images &&
-              vehicleData.vehicle.images.length > 0
-                ? vehicleData.vehicle.images
-                    .filter(
-                      (image) =>
-                        !data?.images?.map((item) => item.id).includes(image.id)
-                    )
+              data.images && data.images.length > 0
+                ? data.images
+                    .filter((image) => image.deleted)
                     .map(({ id }) => ({
                       id,
                     }))
-                : [],
+                : vehicleData?.vehicle?.images.map(({ id }) => ({
+                    id,
+                  })),
           },
         },
       },
@@ -195,11 +267,7 @@ const useViewVehicle = (vehicleId: string): Return => {
     },
     onError: () => {
       setSaving(false);
-      notification.error({
-        message: 'Error!',
-        description: 'Whoops, there are some errors. Please try again. ',
-        placement: 'bottomRight',
-      });
+      errorNotification();
     },
   });
 

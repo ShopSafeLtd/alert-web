@@ -46,6 +46,7 @@ describe('List Officer View', () => {
       idVerified: false,
       addresses: [],
       alias: [],
+      customGalleries: [],
     },
   };
 
@@ -56,9 +57,7 @@ describe('List Officer View', () => {
           editImage={null}
           onEditImage={jest.fn()}
           toggleEditImage={jest.fn()}
-          selectedItems={[]}
           form={undefined}
-          setSelectedItems={jest.fn()}
           adminRights
           banData={{
             id: 'ckqtnb4r056540229myw4yk8zvq',
@@ -86,7 +85,6 @@ describe('List Officer View', () => {
           fileList={[]}
           addOffenderTag={false}
           toggleAddOffenderTag={jest.fn()}
-          updateOffenderTag={jest.fn()}
           addExclusion={false}
           toggleAddExclusion={jest.fn()}
           editExclusion={false}
@@ -117,6 +115,14 @@ describe('List Officer View', () => {
           onRemoveCrimeGroup={jest.fn()}
           onRemoveVehicle={jest.fn()}
           onRemoveImage={jest.fn()}
+          primaryImage="primaryImage"
+          setPrimaryImage={jest.fn()}
+          customGalleries={[]}
+          customGalleriesLoading={false}
+          addCustomGallery={false}
+          toggleAddCustomGallery={jest.fn()}
+          updateNewCustomGalleryData={jest.fn()}
+          updateNewOffenderTagData={jest.fn()}
         />
       </MemoryRouter>
     );

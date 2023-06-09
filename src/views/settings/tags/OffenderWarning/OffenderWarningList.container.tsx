@@ -10,11 +10,11 @@ const OffenderWarningList = (): JSX.Element => {
     setSearch,
     offenderId,
     setOffenderId,
-    editOffender,
-    toggleEditOffender,
-    addOffender,
-    toggleAddOffender,
-    updateOffenderWarningList,
+    editOffenderWarning,
+    toggleEditOffenderWarning,
+    addOffenderWarning,
+    toggleAddOffenderWarning,
+    onAddOffenderWarning,
     saving,
     deleteConfirm,
   } = useOffenderWarningList();
@@ -26,11 +26,11 @@ const OffenderWarningList = (): JSX.Element => {
       setSearch={setSearch}
       offenderId={offenderId}
       setOffenderId={setOffenderId}
-      editOffender={editOffender}
-      toggleEditOffender={toggleEditOffender}
-      addOffender={addOffender}
-      toggleAddOffender={toggleAddOffender}
-      updateOffenderWarningList={updateOffenderWarningList}
+      editOffenderWarning={editOffenderWarning}
+      toggleEditOffenderWarning={toggleEditOffenderWarning}
+      addOffenderWarning={addOffenderWarning}
+      toggleAddOffenderWarning={toggleAddOffenderWarning}
+      onAddOffenderWarning={onAddOffenderWarning}
       saving={saving}
       deleteConfirm={deleteConfirm}
     />

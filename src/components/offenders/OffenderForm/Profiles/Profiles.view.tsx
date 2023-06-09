@@ -366,7 +366,7 @@ const Profiles = ({
             <Row justify="start">
               <Empty
                 image={Empty.PRESENTED_IMAGE_SIMPLE}
-                description="No Data!"
+                description="There are no profiles for this offender."
                 style={{ marginLeft: 150 }}
               />
             </Row>

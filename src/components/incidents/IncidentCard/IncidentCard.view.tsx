@@ -20,6 +20,7 @@ import {
   faLocationDot,
   faTrash,
   faUser,
+  faUsers,
 } from '@fortawesome/pro-light-svg-icons';
 import {
   faAngleLeft,
@@ -189,27 +190,16 @@ const IncidentCard = ({
         </Text>
         <Link to={`/app/incidents/view/${incident?.id}`}>
           <Paragraph
-            style={{ height: incident.offenders.length > 0 ? 24 : 66 }}
-            className="incident-card-desc"
+            // style={{ height: incident.offenders.length > 0 ? 24 : 66 }}
+            // className="incident-card-desc"
             type="secondary"
+            ellipsis={{ rows: 2 }}
+            style={{ marginBottom: 10 }}
           >
             {incident?.description}
           </Paragraph>
         </Link>
 
-        {incident.offenders.length > 0 && (
-          <Row wrap={false} style={{ overflowX: 'auto', marginBottom: 15 }}>
-            {incident.offenders.map((offender) => (
-              <Link
-                to={offender.id ? `/app/offenders/view/${offender.id}` : ``}
-              >
-                <Tag key={offender.id}>
-                  {offender.name || 'Unknown Offender'}
-                </Tag>
-              </Link>
-            ))}
-          </Row>
-        )}
         <Link to={`/app/incidents/view/${incident?.id}`}>
           <Row>
             <Col flex={1}>
@@ -232,6 +222,7 @@ const IncidentCard = ({
               </Text>
             </Col>
           </Row>
+
           <Row gutter={8} className="incident-card-location-row">
             <Col span={1}>
               <FontAwesomeIcon
@@ -246,9 +237,74 @@ const IncidentCard = ({
               </Text>
             </Col>
           </Row>
+          {incident.offenders.length > 0 && (
+            <Row
+              wrap={false}
+              style={{ overflowX: 'auto', marginBottom: 8 }}
+              gutter={3}
+              align="middle"
+            >
+              <FontAwesomeIcon
+                size="sm"
+                className="incident-card-icon"
+                icon={faUsers}
+              />
+
+              {incident.offenders.map((offender) => (
+                <>
+                  <Col>
+                    <Link
+                      to={
+                        offender.id ? `/app/offenders/view/${offender.id}` : ``
+                      }
+                    >
+                      <Text code ellipsis key={offender.id}>
+                        {offender.name || 'Unknown Offender'}
+                      </Text>
+                    </Link>
+                  </Col>
+                  <Col>
+                    <Link
+                      to={
+                        offender.id ? `/app/offenders/view/${offender.id}` : ``
+                      }
+                    >
+                      <Text code ellipsis key={offender.id}>
+                        {offender.name || 'Unknown Offender'}
+                      </Text>
+                    </Link>
+                  </Col>
+                  <Col>
+                    <Link
+                      to={
+                        offender.id ? `/app/offenders/view/${offender.id}` : ``
+                      }
+                    >
+                      <Text code ellipsis key={offender.id}>
+                        {offender.name || 'Unknown Offender'}
+                      </Text>
+                    </Link>
+                  </Col>
+                </>
+              ))}
+            </Row>
+          )}
+          {incident?.groups && incident.groups.length > 0 && (
+            <Row wrap={false} style={{ overflowX: 'auto' }} align="middle">
+              {/* <Col style={{ marginRight: 8, color: 'black' }}>Groups:</Col> */}
+              {incident.groups.map((group) => (
+                <Col key={group.id}>
+                  <Tag color="red">{group.name}</Tag>
+                </Col>
+              ))}
+            </Row>
+          )}
         </Link>
 
-        <Row justify="center">
+        <Row
+          justify="center"
+          style={{ marginTop: 5, marginBottom: -10, padding: 0 }}
+        >
           <Col>
             <Link to={`/app/incidents/view/${incident?.id}`}>
               <Button size="small" type="text">

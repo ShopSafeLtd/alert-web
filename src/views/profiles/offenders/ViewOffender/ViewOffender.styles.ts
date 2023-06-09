@@ -71,9 +71,11 @@ const useStyles = createUseStyles((theme: Theme) => ({
   offenderRow: {
     overflowX: 'auto',
   },
+  tagLabel: { marginTop: 2 },
   tag: {
-    marginTop: -3,
+    marginBottom: 3,
   },
+
   offenderParagraph: {
     whiteSpace: 'nowrap',
     overflow: 'hidden',

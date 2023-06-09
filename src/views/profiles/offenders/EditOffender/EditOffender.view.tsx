@@ -1,11 +1,9 @@
 import React from 'react';
 import type {
-  CreateTagMutation,
   ImagePosition,
   ListVehiclesQuery,
   ViewOffenderQuery,
 } from 'graphql/generated';
-
 import type { FormInstance } from 'antd';
 import {
   Button,
@@ -20,46 +18,33 @@ import {
   Select,
   Skeleton,
   Table,
-  Tag,
   Typography,
-  Upload,
 } from 'antd';
-
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface';
-
-import {
-  calcDuration,
-  calcExpired,
-} from 'utils/offender/get-offender-exclusion';
-import type { MutationUpdaterFn } from '@apollo/client';
-import AddExclusion from 'components/form-components/offender/exclusion/AddExclusion';
-import EditExclusion from 'components/form-components/offender/exclusion/EditExclusion';
-
-import AddOffenderTag from 'components/form-components/tags/offenderWarnings/AddOffenderWarning';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faEdit,
   faPenToSquare,
   faPlus,
   faTrash,
-  faUpload,
 } from '@fortawesome/pro-light-svg-icons';
 import moment from 'moment';
 import OffenderDetails from 'components/offenders/OffenderForm/OffenderDetails';
-import type { BanData, CrimeGroupData, VehicleData } from 'types/DataType';
+import type {
+  BanData,
+  CrimeGroupData,
+  CustomGalleryData,
+  TagData,
+  VehicleData,
+} from 'types/DataType';
 import Profiles from 'components/offenders/OffenderForm/Profiles';
 // import ProfileDrawer from 'components/offenders/OffenderForm/ProfileDrawer';
 import NewOffenderAddress from 'components/form-components/addresses/NewOffenderAddress';
-import WatermarkImage from 'components/images/WatermarkImage.view';
 import EditOffenderAddress from 'components/form-components/addresses/EditOffenderAddress';
-import ImageEditor from 'components/form-components/ImageEditor/ImageEditor.view';
-import type { FormData } from './useEditOffender';
+import OffenderExclusions from 'components/offenders/OffenderForm/OffenderExclusions';
+import OffenderImage from 'components/offenders/OffenderForm/OffenderImage';
+import type { BanType, FormData } from './useEditOffender';
 
-const { Title, Text, Paragraph } = Typography;
-
-interface Image extends UploadFile {
-  position?: ImagePosition;
-}
+const { Title, Paragraph } = Typography;
 
 interface AddressForm {
   alias: string;
@@ -90,20 +75,10 @@ interface EditAddressForm {
   postcode: string;
 }
 
-// interface BanType {
-//   id: string;
-//   endDate: Date;
-//   startDate: Date;
-//   location: string;
-//   description?: string | null;
-//   new: boolean;
-//   updated: boolean;
-//   deleted: boolean;
-// }
-interface BanType extends BanData {
-  new: boolean;
-  updated: boolean;
-  deleted: boolean;
+interface Image extends UploadFile {
+  position?: ImagePosition;
+  primary?: boolean;
+  policeImage?: boolean;
 }
 
 interface Props {
@@ -125,7 +100,6 @@ interface Props {
   toggleEditExclusion: () => void;
   addOffenderTag: boolean;
   toggleAddOffenderTag: () => void;
-  updateOffenderTag: MutationUpdaterFn<CreateTagMutation>;
   onAddVehicle: (data: VehicleData, existing: boolean) => void;
   onUpdateExclusion: (value: BanData) => void;
   onAddExclusion: (value: BanData) => void;
@@ -139,8 +113,7 @@ interface Props {
   reviewed: boolean;
   onReject: () => void;
   adminRights: boolean;
-  selectedItems: string[];
-  setSelectedItems: (value: string[]) => void;
+
   form: FormInstance<FormData> | undefined;
   listVehiclesData: ListVehiclesQuery | undefined;
   vehiclesData: VehicleData[];
@@ -162,6 +135,14 @@ interface Props {
   onAddCrimeGroup: (value: CrimeGroupData) => void;
   onRemoveCrimeGroup: (crimeGroupId: string) => void;
   onRemoveImage: (imageId: string) => void;
+  primaryImage: string;
+  setPrimaryImage: (value: string) => void;
+  customGalleries: { value: string; label: string }[];
+  customGalleriesLoading: boolean;
+  addCustomGallery: boolean;
+  toggleAddCustomGallery: () => void;
+  updateNewCustomGalleryData: (values: CustomGalleryData) => void;
+  updateNewOffenderTagData: (values: TagData) => void;
 }
 
 const EditOffender = ({
@@ -179,7 +160,6 @@ const EditOffender = ({
   fileList,
   addOffenderTag,
   toggleAddOffenderTag,
-  updateOffenderTag,
   addExclusion,
   toggleAddExclusion,
   editExclusion,
@@ -194,9 +174,9 @@ const EditOffender = ({
   setAgeCheck,
   reviewed,
   onReject,
-  selectedItems,
+
   onAddVehicle,
-  setSelectedItems,
+
   form,
   adminRights,
   vehiclesData,
@@ -220,6 +200,14 @@ const EditOffender = ({
   onAddCrimeGroup,
   onRemoveCrimeGroup,
   onRemoveImage,
+  primaryImage,
+  setPrimaryImage,
+  customGalleries,
+  customGalleriesLoading,
+  toggleAddCustomGallery,
+  updateNewOffenderTagData,
+  addCustomGallery,
+  updateNewCustomGalleryData,
 }: Props): JSX.Element => (
   <div className="list-view">
     <PageHeader
@@ -257,14 +245,17 @@ const EditOffender = ({
               data?.offender?.tags && data?.offender?.tags.length > 0
                 ? data?.offender?.tags.map(({ id }) => id)
                 : [],
+            customGalleries:
+              data?.offender?.customGalleries &&
+              data.offender.customGalleries.length > 0
+                ? data.offender.customGalleries.map(({ id }) => id)
+                : [],
             idVerified: data?.offender?.idVerified || false,
             idSource: data?.offender?.idSource,
           }}
         >
           <Card>
             <OffenderDetails
-              selectedItems={selectedItems}
-              setSelectedItems={setSelectedItems}
               tags={tags}
               tagsLoading={tagsLoading}
               saving={saving}
@@ -273,6 +264,13 @@ const EditOffender = ({
               adminRights={adminRights}
               toggleAddOffenderTag={toggleAddOffenderTag}
               idVerified={idVerified}
+              customGalleries={customGalleries}
+              customGalleriesLoading={customGalleriesLoading}
+              toggleAddCustomGallery={toggleAddCustomGallery}
+              addOffenderTag={addOffenderTag}
+              updateNewOffenderTagData={updateNewOffenderTagData}
+              addCustomGallery={addCustomGallery}
+              updateNewCustomGalleryData={updateNewCustomGalleryData}
             />
           </Card>
           {adminRights && (
@@ -317,369 +315,151 @@ const EditOffender = ({
                   </>
                 )}
               </Row>
-              <Table
-                size="small"
-                pagination={{
-                  hideOnSinglePage: true,
-                  defaultPageSize: 20,
-                  pageSize: 20,
-                }}
-                columns={[
-                  {
-                    key: 'alias',
-                    title: 'Alias',
-                    dataIndex: 'alias',
-                  },
-                  {
-                    key: 'street',
-                    title: 'Street',
-                    dataIndex: 'street',
-                  },
-                  {
-                    key: 'townCity',
-                    title: 'City',
-                    dataIndex: 'townCity',
-                  },
-                  {
-                    key: 'county',
-                    title: 'County',
-                    dataIndex: 'county',
-                  },
-                  {
-                    key: 'postcode',
-                    title: 'Postcode',
-                    dataIndex: 'postcode',
-                  },
-                  {
-                    key: 'Edit',
-                    title: 'Edit',
-                    width: 50,
-                    dataIndex: 'Edit',
-                    render: (_, record) => (
-                      <Button
-                        disabled={saving}
-                        onClick={() => toggleEditAddress(record.key)}
-                        icon={<FontAwesomeIcon icon={faPenToSquare} />}
-                      />
-                    ),
-                  },
-                  {
-                    key: 'Delete',
-                    title: 'Delete',
-                    dataIndex: 'Delete',
-                    width: 60,
-                    render: (_, record) => (
-                      <Popconfirm
-                        title="Are you sure?"
-                        okText="Delete"
-                        onConfirm={() => onDeleteAddress(record.key)}
-                        overlayInnerStyle={{ padding: 10 }}
-                      >
+              {addressesData && addressesData.length > 0 ? (
+                <Table
+                  size="small"
+                  pagination={{
+                    hideOnSinglePage: true,
+                    defaultPageSize: 20,
+                    pageSize: 20,
+                  }}
+                  columns={[
+                    {
+                      key: 'alias',
+                      title: 'Label',
+                      dataIndex: 'alias',
+                    },
+                    {
+                      key: 'street',
+                      title: 'Street',
+                      dataIndex: 'street',
+                    },
+                    {
+                      key: 'townCity',
+                      title: 'City',
+                      dataIndex: 'townCity',
+                    },
+                    {
+                      key: 'county',
+                      title: 'County',
+                      dataIndex: 'county',
+                    },
+                    {
+                      key: 'postcode',
+                      title: 'Postcode',
+                      dataIndex: 'postcode',
+                    },
+                    {
+                      key: 'Edit',
+                      title: 'Edit',
+                      width: 50,
+                      dataIndex: 'Edit',
+                      render: (_, record) => (
                         <Button
                           disabled={saving}
-                          icon={<FontAwesomeIcon icon={faTrash} />}
+                          onClick={() => toggleEditAddress(record.key)}
+                          icon={<FontAwesomeIcon icon={faPenToSquare} />}
                         />
-                      </Popconfirm>
-                    ),
-                  },
-                ]}
-                dataSource={
-                  addressesData?.map((address) => ({
-                    key: address.id,
-                    alias: address.alias,
-                    street: address.street,
-                    townCity: address.townCity,
-                    county: address.county,
-                    postcode: address.postcode,
-                  })) || []
-                }
-              />
-            </Card>
-          )}
-          <Card>
-            <Profiles
-              saving={saving}
-              vehiclesData={vehiclesData}
-              onRemoveVehicle={onRemoveVehicle}
-              onRemoveCrimeGroup={onRemoveCrimeGroup}
-              crimeGroupsData={crimeGroupsData}
-              listVehiclesData={listVehiclesData}
-              titleNumber={adminRights ? 3 : 2}
-              onAddVehicle={onAddVehicle}
-              onAddCrimeGroup={onAddCrimeGroup}
-              onEditVehicle={onEditVehicle}
-            />
-          </Card>
-          <Card>
-            <Row align="middle" style={{ marginBottom: 20 }}>
-              <Col>
-                <Title style={{ marginBottom: 0 }} level={4}>
-                  {adminRights ? 4 : 3}.
-                </Title>
-              </Col>
-              <Col>
-                <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
-                  Exclusions
-                </Title>
-              </Col>
-              <Col style={{ marginRight: 5 }}>
-                <Paragraph
-                  style={{ marginBottom: 1, marginLeft: 5 }}
-                  type="secondary"
-                  italic
-                >
-                  - Create exclusions for this offender to exclusion them from
-                  areas or premises.
-                </Paragraph>
-              </Col>
-              <Col>
-                <Button
-                  disabled={saving}
-                  onClick={toggleAddExclusion}
-                  style={{ marginTop: -30, marginLeft: 15, color: 'red' }}
-                  icon={
-                    <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
-                  }
-                >
-                  Add Exclusion
-                </Button>
-              </Col>
-            </Row>
-
-            {bansData && bansData.length > 0 ? (
-              <Row gutter={20}>
-                <Col>
-                  <Table
-                    size="small"
-                    pagination={{
-                      hideOnSinglePage: true,
-                      defaultPageSize: 20,
-                      pageSize: 20,
-                    }}
-                    columns={[
-                      {
-                        key: 'duration',
-                        title: 'Duration',
-                        dataIndex: 'duration',
-                        width: 350,
-                        render: (value, record) => (
-                          <>
-                            <Text>{value}</Text>
-                            {calcExpired(new Date(record.endDate)) && (
-                              <Tag
-                                color="red"
-                                style={{
-                                  marginLeft: 10,
-                                }}
-                              >
-                                EXPIRED
-                              </Tag>
-                            )}
-                          </>
-                        ),
-                      },
-
-                      {
-                        key: 'activeDay',
-                        title: 'Active Days',
-                        dataIndex: 'activeDay',
-                        width: 150,
-                      },
-                      {
-                        key: 'location',
-                        title: 'Location',
-                        dataIndex: 'location',
-                        ellipsis: true,
-                      },
-                      {
-                        key: 'description',
-                        title: 'Description',
-                        dataIndex: 'description',
-                        ellipsis: true,
-                      },
-                      {
-                        key: 'type',
-                        title: 'Type',
-                        dataIndex: 'type',
-                      },
-                      {
-                        key: 'Edit',
-                        title: 'Edit',
-                        width: 50,
-                        dataIndex: 'Edit',
-                        render: (_, record) => (
+                      ),
+                    },
+                    {
+                      key: 'Delete',
+                      title: 'Delete',
+                      dataIndex: 'Delete',
+                      width: 60,
+                      render: (_, record) => (
+                        <Popconfirm
+                          title="Are you sure?"
+                          okText="Delete"
+                          onConfirm={() => onDeleteAddress(record.key)}
+                          overlayInnerStyle={{ padding: 10 }}
+                        >
                           <Button
                             disabled={saving}
-                            onClick={() => {
-                              setBanData(record.item);
-                              toggleEditExclusion();
-                            }}
-                            icon={<FontAwesomeIcon icon={faPenToSquare} />}
-                          />
-                        ),
-                      },
-                      {
-                        key: 'Delete',
-                        title: 'Delete',
-                        dataIndex: 'Delete',
-                        width: 60,
-                        render: (_, record) => (
-                          <Button
-                            disabled={saving}
-                            onClick={() => {
-                              deleteConfirm(record.key || '');
-                            }}
                             icon={<FontAwesomeIcon icon={faTrash} />}
                           />
-                        ),
-                      },
-                    ]}
-                    dataSource={bansData.map((ban) => ({
-                      endDate: ban.endDate,
-                      key: ban.id,
-                      item: ban,
-                      duration: `${new Date(
-                        ban?.startDate
-                      ).toDateString()}  -->  ${new Date(
-                        ban?.endDate
-                      ).toDateString()}`,
-                      activeDay: calcDuration(
-                        new Date(ban?.startDate),
-                        new Date(ban?.endDate)
+                        </Popconfirm>
                       ),
-                      location: ban.location,
-                      description: ban.description,
-                      type: ban.type,
-                    }))}
-                  />
-                </Col>
-              </Row>
-            ) : (
-              <>
+                    },
+                  ]}
+                  dataSource={
+                    addressesData?.map((address) => ({
+                      key: address.id,
+                      alias: address.alias,
+                      street: address.street,
+                      townCity: address.townCity,
+                      county: address.county,
+                      postcode: address.postcode,
+                    })) || []
+                  }
+                />
+              ) : (
                 <Row justify="start">
                   <Empty
                     image={Empty.PRESENTED_IMAGE_SIMPLE}
-                    description="There are no exclusion for this offender."
-                    style={{ marginLeft: 50 }}
+                    description="There are no addresses for this offender."
+                    style={{ marginLeft: 150 }}
                   />
                 </Row>
-                {/* <Divider /> */}
-              </>
-            )}
-          </Card>
-          <Card>
-            <Row>
-              <Col>
-                <Row align="middle" style={{ marginBottom: 20 }}>
-                  <Col>
-                    <Title style={{ marginBottom: 0 }} level={4}>
-                      {adminRights ? 5 : 4}.{' '}
-                    </Title>
-                  </Col>
-                  <Col>
-                    <Title style={{ marginBottom: 0, marginLeft: 5 }} level={4}>
-                      Images
-                    </Title>
-                  </Col>
-                  <Col>
-                    <Paragraph
-                      style={{ marginBottom: 1, marginLeft: 5 }}
-                      type="secondary"
-                      italic
-                    >
-                      - Please add any images that you have of the offender.
-                    </Paragraph>
-                  </Col>
-                  <Col style={{ marginLeft: 30 }}>
-                    <Upload
-                      action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
-                      fileList={fileList}
-                      onChange={imgChange}
-                      beforeUpload={beforeUpload}
-                      showUploadList={false}
-                    >
-                      <Button
-                        icon={
-                          <FontAwesomeIcon
-                            icon={faUpload}
-                            style={{ marginRight: 5 }}
-                          />
-                        }
-                        style={{ color: 'red' }}
-                      >
-                        Upload Image
-                      </Button>
-                    </Upload>
-                  </Col>
-                </Row>
+              )}
+            </Card>
+          )}
+          {adminRights && (
+            <Card>
+              <Profiles
+                saving={saving}
+                vehiclesData={vehiclesData}
+                onRemoveVehicle={onRemoveVehicle}
+                onRemoveCrimeGroup={onRemoveCrimeGroup}
+                crimeGroupsData={crimeGroupsData}
+                listVehiclesData={listVehiclesData}
+                // titleNumber={adminRights ? 3 : 2}
+                titleNumber={3}
+                onAddVehicle={onAddVehicle}
+                onAddCrimeGroup={onAddCrimeGroup}
+                onEditVehicle={onEditVehicle}
+              />
+            </Card>
+          )}
+          {adminRights && (
+            <OffenderExclusions
+              addExclusion={addExclusion}
+              toggleAddExclusion={toggleAddExclusion}
+              onAddExclusion={onAddExclusion}
+              editExclusion={editExclusion}
+              toggleEditExclusion={toggleEditExclusion}
+              onUpdateExclusion={onUpdateExclusion}
+              bansData={bansData}
+              banData={banData}
+              setBanData={setBanData}
+              deleteConfirm={deleteConfirm}
+              saving={saving}
+              titleOrder={4}
+              emptyDescription={
+                "You haven't add any exclusion for this offender yet."
+              }
+            />
+          )}
+          <OffenderImage
+            titleOrder={adminRights ? 5 : 2}
+            imgChange={imgChange}
+            onPreview={onPreview}
+            beforeUpload={beforeUpload}
+            fileList={fileList}
+            editImage={editImage}
+            onEditImage={onEditImage}
+            toggleEditImage={toggleEditImage}
+            onRemoveImage={onRemoveImage}
+            primaryImage={primaryImage}
+            setPrimaryImage={setPrimaryImage}
+          />
 
-                <Form.Item name="images">
-                  <Upload
-                    action={import.meta.env.VITE_APP_IMAGE_UPLOAD_ENDPOINT}
-                    listType="picture-card"
-                    fileList={fileList}
-                    onChange={imgChange}
-                    onPreview={onPreview}
-                    beforeUpload={beforeUpload}
-                    accept=".png,.jpeg,.webp"
-                    // TODO
-                    // eslint-disable-next-line react/no-unstable-nested-components
-                    itemRender={(el, file: Image) => (
-                      <Card
-                        key={el.key}
-                        bodyStyle={{
-                          padding: 0,
-                          overflow: 'hidden',
-                          borderRadius: 10,
-                        }}
-                      >
-                        <div style={{ height: 200, width: '100%' }}>
-                          <Button
-                            size="small"
-                            style={{
-                              position: 'absolute',
-                              zIndex: 10,
-                              padding: '6.5px 10px',
-                              top: 5,
-                              left: 5,
-                            }}
-                            onClick={() => toggleEditImage(file)}
-                          >
-                            <FontAwesomeIcon icon={faEdit} />
-                          </Button>
-                          <Button
-                            size="small"
-                            style={{
-                              position: 'absolute',
-                              zIndex: 10,
-                              padding: '6.5px 10px',
-                              top: 5,
-                              left: 45,
-                            }}
-                            onClick={() => onRemoveImage(file.uid)}
-                          >
-                            <FontAwesomeIcon icon={faTrash} />
-                          </Button>
-                          <WatermarkImage
-                            position={file.position}
-                            url={file.url || file.thumbUrl}
-                          />
-                        </div>
-                      </Card>
-                    )}
-                  >
-                    {fileList.length < 10 && '+ Upload'}
-                  </Upload>
-                </Form.Item>
-              </Col>
-            </Row>
-          </Card>
           <Card>
             <>
               <Row align="bottom">
                 <Col>
                   <Title style={{ marginBottom: 0 }} level={4}>
-                    {adminRights ? 6 : 5}.{' '}
+                    {adminRights ? 6 : 3}.
                   </Title>
                 </Col>
                 <Col>
@@ -754,53 +534,7 @@ const EditOffender = ({
             </Row>
           </Form.Item>
         </Form>
-        <Drawer
-          title="Add Offender Warning"
-          visible={addOffenderTag}
-          width="400"
-          onClose={toggleAddOffenderTag}
-        >
-          {addOffenderTag ? (
-            <AddOffenderTag
-              update={updateOffenderTag}
-              onClose={toggleAddOffenderTag}
-            />
-          ) : (
-            <div />
-          )}
-        </Drawer>
-        <Drawer
-          title="Add Exclusion"
-          visible={addExclusion}
-          width="400"
-          onClose={toggleAddExclusion}
-        >
-          {addExclusion ? (
-            <AddExclusion
-              update={onAddExclusion}
-              onClose={toggleAddExclusion}
-              // offenderId={data?.offender?.id}
-            />
-          ) : (
-            <div />
-          )}
-        </Drawer>
-        <Drawer
-          title="Edit Exclusion"
-          visible={editExclusion}
-          width="400"
-          onClose={toggleEditExclusion}
-        >
-          {editExclusion ? (
-            <EditExclusion
-              update={onUpdateExclusion}
-              onClose={toggleEditExclusion}
-              banData={banData}
-            />
-          ) : (
-            <div />
-          )}
-        </Drawer>
+
         <Drawer
           title="Add Address"
           visible={addAddress}
@@ -828,12 +562,6 @@ const EditOffender = ({
             />
           )}
         </Drawer>
-        <ImageEditor
-          submitImage={onEditImage}
-          onClose={() => toggleEditImage()}
-          open={!!editImage}
-          image={editImage}
-        />
       </>
     )}
   </div>

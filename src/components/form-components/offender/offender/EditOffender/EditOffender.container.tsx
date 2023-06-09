@@ -26,7 +26,7 @@ const EditOffender = ({ id, onClose, update }: Props): JSX.Element => {
     fileList,
     addOffenderTag,
     toggleAddOffenderTag,
-    updateOffenderTag,
+    updateNewOffenderTagData,
     addExclusion,
     toggleAddExclusion,
     editExclusion,
@@ -63,7 +63,7 @@ const EditOffender = ({ id, onClose, update }: Props): JSX.Element => {
         fileList={fileList}
         addOffenderTag={addOffenderTag}
         toggleAddOffenderTag={toggleAddOffenderTag}
-        updateOffenderTag={updateOffenderTag}
+        updateNewOffenderTagData={updateNewOffenderTagData}
         addExclusion={addExclusion}
         toggleAddExclusion={toggleAddExclusion}
         editExclusion={editExclusion}

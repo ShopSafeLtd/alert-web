@@ -608,7 +608,8 @@ const ViewVehicle = ({
         <Drawer
           title="Edit Vehicle Details"
           visible={editVehicle}
-          width="600"
+          width="700"
+          zIndex={999}
           onClose={toggleEditVehicle}
         >
           {editVehicle ? (
@@ -621,7 +622,11 @@ const ViewVehicle = ({
                 crimeGroup: data?.vehicle?.crimeGroup.map(({ id }) => id || ''),
                 incidents: data?.vehicle?.incidents.map(({ id }) => id || ''),
                 offenders: data?.vehicle?.offenders.map(({ id }) => id || ''),
+                customGalleries: data?.vehicle?.customGalleries.map(
+                  ({ id }) => id || ''
+                ),
               }}
+              showGroups
             />
           ) : (
             <div />

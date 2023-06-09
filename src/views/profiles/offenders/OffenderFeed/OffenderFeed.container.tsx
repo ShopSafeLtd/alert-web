@@ -47,6 +47,11 @@ const OffenderFeed = (): JSX.Element => {
     setBusinesses,
     businessesLoading,
     setCreatedAtFilter,
+    customGalleriesData,
+    onSelectGallery,
+    adminRights,
+    onSelectCustomGalleries,
+    customGalleries,
   } = useOffenderFeed();
   return (
     <View
@@ -93,6 +98,11 @@ const OffenderFeed = (): JSX.Element => {
       setBusinesses={setBusinesses}
       businessesLoading={businessesLoading}
       setCreatedAtFilter={setCreatedAtFilter}
+      customGalleriesData={customGalleriesData}
+      onSelectGallery={onSelectGallery}
+      adminRights={adminRights}
+      onSelectCustomGalleries={onSelectCustomGalleries}
+      customGalleries={customGalleries}
     />
   );
 };

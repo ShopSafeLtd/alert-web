@@ -74,10 +74,10 @@ const EditUser = ({
       initialValues={{
         fullName: data?.user?.fullName,
         email: data?.user?.email,
-        business: {
-          label: data?.user?.businesses[0]?.name,
-          value: data?.user?.businesses[0]?.id,
-        },
+        business: data?.user?.businesses.map(({ id, name }) => ({
+          label: name,
+          value: id,
+        })),
         role: data?.user?.schemes && data?.user?.schemes[0].role,
         groups:
           data?.user?.groups && data.user.groups.length > 0

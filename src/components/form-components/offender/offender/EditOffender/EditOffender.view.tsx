@@ -1,5 +1,5 @@
 import React from 'react';
-import type { CreateTagMutation, ViewOffenderQuery } from 'graphql/generated';
+import type { ViewOffenderQuery } from 'graphql/generated';
 
 import type { FormInstance } from 'antd';
 import {
@@ -26,7 +26,7 @@ import {
   calcDuration,
   calcExpired,
 } from 'utils/offender/get-offender-exclusion';
-import type { MutationUpdaterFn } from '@apollo/client';
+
 import AddExclusion from 'components/form-components/offender/exclusion/AddExclusion';
 import EditExclusion from 'components/form-components/offender/exclusion/EditExclusion';
 
@@ -40,6 +40,7 @@ import {
   faUpload,
 } from '@fortawesome/pro-light-svg-icons';
 import moment from 'moment';
+import type { TagData } from 'types/DataType';
 import type { FormData } from './useEditOffender';
 
 const { Title, Text, Paragraph } = Typography;
@@ -87,7 +88,8 @@ interface Props {
   toggleEditExclusion: () => void;
   addOffenderTag: boolean;
   toggleAddOffenderTag: () => void;
-  updateOffenderTag: MutationUpdaterFn<CreateTagMutation>;
+  updateNewOffenderTagData: (values: TagData) => void;
+
   updateExclusion: (value: BanData) => void;
   bansData: BanData[];
   banData: BanData | null;
@@ -117,7 +119,7 @@ const EditOffender = ({
   fileList,
   addOffenderTag,
   toggleAddOffenderTag,
-  updateOffenderTag,
+  updateNewOffenderTagData,
   addExclusion,
   toggleAddExclusion,
   editExclusion,
@@ -625,7 +627,7 @@ const EditOffender = ({
         >
           {addOffenderTag ? (
             <AddOffenderTag
-              update={updateOffenderTag}
+              update={updateNewOffenderTagData}
               onClose={toggleAddOffenderTag}
             />
           ) : (

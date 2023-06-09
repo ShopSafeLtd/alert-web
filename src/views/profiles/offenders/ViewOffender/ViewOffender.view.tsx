@@ -41,6 +41,8 @@ import {
   faUsers,
   faUser,
   faUserTag,
+  faHeadSide,
+  faComment,
 } from '@fortawesome/pro-light-svg-icons';
 import {
   calcAge,
@@ -48,6 +50,7 @@ import {
   getOffenderAge,
   getOffenderBuild,
   getOffenderGender,
+  getOffenderHeight,
   getOffenderRace,
 } from 'utils/offender/get-offender-desc';
 import { calcExpired } from 'utils/offender/get-offender-exclusion';
@@ -70,6 +73,7 @@ import MapCard from 'components/map/MapCard/MapCard.view';
 import CheckTags from 'components/form-components/check-tags/CheckTags.view';
 import AssociatedOffender from 'components/offenders/AssociatedOffender';
 import { calcDuration } from 'utils';
+import formatCalendar from 'utils/format-calendar-24h';
 import type { ViewAssociate } from './useViewOffender';
 import useStyles from './ViewOffender.styles';
 
@@ -269,25 +273,32 @@ const ViewOffender = ({
           </Row>
           <div className={classes.content}>
             <Card>
-              <Title style={{ margin: 0 }} level={3}>
-                {data?.offender?.name}
-              </Title>
-              <Text>ALert ID: {data?.offender?.reference}</Text>
-              <Row
-                style={{ marginTop: 5, marginBottom: 20 }}
-                className="offender-tags"
-              >
+              <Row align="middle" gutter={10}>
+                <Col>
+                  <Title style={{ margin: 0 }} level={3}>
+                    {data?.offender?.name}
+                  </Title>
+                </Col>
+                <Col>
+                  <Text>- - ALert ID: {data?.offender?.reference}</Text>
+                </Col>
+              </Row>
+
+              <Row style={{ marginTop: 5 }}>
                 {data?.offender?.tags.map((tag) => (
                   <Col key={tag.id}>
-                    <Tag color="red">{tag.name}</Tag>
+                    <Tag color="red" className={classes.tag}>
+                      {tag.name}
+                    </Tag>
                   </Col>
                 ))}
               </Row>
-              <Descriptions column={1}>
+
+              <Descriptions column={1} style={{ marginTop: 10 }}>
                 {data?.offender?.alias && data.offender.alias.length > 0 && (
                   <Descriptions.Item
                     label={
-                      <span>
+                      <span className={classes.tagLabel}>
                         <FontAwesomeIcon
                           className={classes.descIcon}
                           icon={faUser}
@@ -338,13 +349,11 @@ const ViewOffender = ({
                     </span>
                   }
                 >
-                  {moment(data?.offender?.updatedAt || moment()).format(
-                    `ddd MMM DD YYYY - HH:mm`
-                  )}
+                  {formatCalendar(data?.offender?.updatedAt || moment())}
                 </Descriptions.Item>
                 <Descriptions.Item
                   label={
-                    <span>
+                    <span className={classes.tagLabel}>
                       <FontAwesomeIcon
                         className={classes.descIcon}
                         icon={faUsers}
@@ -418,6 +427,19 @@ const ViewOffender = ({
                         <span>
                           <FontAwesomeIcon
                             className={classes.descIcon}
+                            icon={faHeadSide}
+                          />
+                          Height
+                        </span>
+                      }
+                    >
+                      {getOffenderHeight(data?.offender?.height)}
+                    </Descriptions.Item>
+                    <Descriptions.Item
+                      label={
+                        <span>
+                          <FontAwesomeIcon
+                            className={classes.descIcon}
                             icon={faEarth}
                           />
                           Ethnicity
@@ -456,6 +478,23 @@ const ViewOffender = ({
                         }
                       >
                         {data?.offender?.peculiarities}
+                      </Descriptions.Item>
+                    )}
+                  </Descriptions>
+                  <Descriptions column={1}>
+                    {data?.offender?.comment && (
+                      <Descriptions.Item
+                        label={
+                          <span>
+                            <FontAwesomeIcon
+                              className={classes.descIcon}
+                              icon={faComment}
+                            />
+                            Comment
+                          </span>
+                        }
+                      >
+                        {data?.offender?.comment}
                       </Descriptions.Item>
                     )}
                   </Descriptions>
@@ -776,7 +815,7 @@ const ViewOffender = ({
             </Card>
           </div>
         </Col>
-        <Col span={6}>
+        <Col span={8}>
           <div className={classes.updatesContainer}>
             <InfiniteScroll
               height={

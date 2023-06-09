@@ -73,6 +73,19 @@ describe('Detail Officer View', () => {
       ],
     },
   };
+  const customGalleriesData = {
+    listCustomGalleries: {
+      total: 1,
+      customGalleries: [
+        {
+          description: '',
+          groups: [],
+          id: 'climwxd55000tup0vezppswfi',
+          name: 'new test 3',
+        },
+      ],
+    },
+  };
   it('renders the page', () => {
     const { getByText } = render(
       <StoreProvider store={store}>
@@ -129,6 +142,11 @@ describe('Detail Officer View', () => {
               businesses={[]}
               setBusinesses={jest.fn()}
               setCreatedAtFilter={jest.fn()}
+              customGalleriesData={customGalleriesData}
+              adminRights={false}
+              onSelectCustomGalleries={jest.fn()}
+              customGalleries={[]}
+              onSelectGallery={jest.fn()}
             />
           </MockedProvider>
         </MemoryRouter>

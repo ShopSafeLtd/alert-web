@@ -3,6 +3,7 @@ import {
   Button,
   Col,
   DatePicker,
+  Drawer,
   Form,
   Input,
   Radio,
@@ -15,6 +16,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/pro-light-svg-icons';
 import { ageValues, buildValues, genderValues, raceValues } from 'types/enums';
 import { IdSource } from 'graphql/generated';
+import { heightValues } from 'types/enums/height';
+import AddCustomGallery from 'components/form-components/customGalleries/AddCustomGallery';
+import AddOffenderTag from 'components/form-components/tags/offenderWarnings/AddOffenderWarning';
+import type { CustomGalleryData, TagData } from 'types/DataType';
 
 const { Title, Paragraph } = Typography;
 
@@ -23,12 +28,17 @@ interface Props {
   saving: boolean;
   tags: { value: string; label: string }[];
   tagsLoading: boolean;
+  customGalleries: { value: string; label: string }[];
+  customGalleriesLoading: boolean;
   toggleAddOffenderTag: () => void;
   ageCheck: boolean;
   setAgeCheck: (value: boolean) => void;
-  selectedItems: string[];
-  setSelectedItems: (value: string[]) => void;
   idVerified?: boolean;
+  toggleAddCustomGallery: () => void;
+  addOffenderTag: boolean;
+  updateNewOffenderTagData: (values: TagData) => void;
+  addCustomGallery: boolean;
+  updateNewCustomGalleryData: (values: CustomGalleryData) => void;
 }
 
 const OffenderDetails = ({
@@ -38,10 +48,15 @@ const OffenderDetails = ({
   saving,
   ageCheck,
   setAgeCheck,
-  selectedItems,
-  setSelectedItems,
   toggleAddOffenderTag,
   idVerified,
+  customGalleries,
+  customGalleriesLoading,
+  toggleAddCustomGallery,
+  addOffenderTag,
+  updateNewOffenderTagData,
+  addCustomGallery,
+  updateNewCustomGalleryData,
 }: Props): JSX.Element => (
   <>
     <Row align="bottom" style={{ marginBottom: 30 }}>
@@ -76,13 +91,22 @@ const OffenderDetails = ({
           <Input disabled={saving} />
         </Form.Item>
       </Col>
-      <Col span={14}>
+      <Col span={8}>
         <Form.Item
           name="alias"
           label="Alias"
           tooltip="Select the alias of the offender if known."
         >
           <Select disabled={saving} mode="tags" />
+        </Form.Item>
+      </Col>
+      <Col span={8}>
+        <Form.Item
+          name="gender"
+          label="Sex"
+          tooltip="Select the gender of the offender if known."
+        >
+          <Select options={genderValues} disabled={saving} />
         </Form.Item>
       </Col>
     </Row>
@@ -98,11 +122,11 @@ const OffenderDetails = ({
       </Col>
       <Col span={8}>
         <Form.Item
-          name="gender"
-          label="Sex"
-          tooltip="Select the gender of the offender if known."
+          name="height"
+          label="Height"
+          tooltip="Select the height of the offender if known."
         >
-          <Select options={genderValues} disabled={saving} />
+          <Select options={heightValues} disabled={saving} />
         </Form.Item>
       </Col>
       <Col span={8}>
@@ -125,8 +149,11 @@ const OffenderDetails = ({
           <Input disabled={saving} />
         </Form.Item>
       </Col>
-      {adminRights && (
-        <Col span={14}>
+    </Row>
+
+    {adminRights && (
+      <Row gutter={50}>
+        <Col span={10}>
           <Row gutter={5} align="middle">
             <Col flex={1}>
               <Form.Item
@@ -140,8 +167,6 @@ const OffenderDetails = ({
                   mode="multiple"
                   maxTagCount={3}
                   optionFilterProp="label"
-                  value={selectedItems}
-                  onChange={setSelectedItems}
                 >
                   {tags.map((tag) => (
                     <Select.Option value={tag.value} label={tag.label}>
@@ -165,9 +190,70 @@ const OffenderDetails = ({
             </Col>
           </Row>
         </Col>
-      )}
-    </Row>
+        <Col span={10}>
+          <Row gutter={5} align="middle">
+            <Col flex={1}>
+              <Form.Item
+                name="customGalleries"
+                label="Custom Galleries"
+                tooltip="select any custom galleries that are relevant to this offender or add your own."
+              >
+                <Select
+                  loading={customGalleriesLoading}
+                  disabled={saving}
+                  mode="multiple"
+                  maxTagCount={3}
+                  optionFilterProp="label"
+                  // value={selectedItems}
+                  // onChange={onSelectCustomGallery}
+                >
+                  {customGalleries.map((el) => (
+                    <Select.Option value={el.value} label={el.label}>
+                      {el.label}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col>
+              <Button
+                disabled={saving}
+                style={{ color: 'red', padding: 8 }}
+                onClick={toggleAddCustomGallery}
+                icon={
+                  <FontAwesomeIcon icon={faPlus} style={{ marginRight: 5 }} />
+                }
+              >
+                Add Custom Gallery
+              </Button>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    )}
 
+    <Row gutter={16}>
+      <Col span={23}>
+        <Form.Item
+          name="peculiarities"
+          label="Peculiarities"
+          tooltip="Enter any distinctive features of the offender."
+        >
+          <Input.TextArea disabled={saving} />
+        </Form.Item>
+      </Col>
+    </Row>
+    <Row gutter={16}>
+      <Col span={23}>
+        <Form.Item
+          name="comment"
+          label="Comment"
+          tooltip="Leave a comment for the offender."
+        >
+          <Input.TextArea disabled={saving} />
+        </Form.Item>
+      </Col>
+    </Row>
     <Row gutter={50}>
       <Col>
         <Form.Item
@@ -229,19 +315,6 @@ const OffenderDetails = ({
         </Col>
       )}
     </Row>
-
-    <Row gutter={16}>
-      <Col span={23}>
-        <Form.Item
-          name="peculiarities"
-          label="Peculiarities"
-          tooltip="Enter any distinctive features of the offender."
-        >
-          <Input.TextArea disabled={saving} />
-        </Form.Item>
-      </Col>
-    </Row>
-
     <Row gutter={50}>
       <Col>
         <Form.Item
@@ -298,6 +371,36 @@ const OffenderDetails = ({
         </Col>
       )}
     </Row>
+    <Drawer
+      title="Add Offender Warning"
+      visible={addOffenderTag}
+      width="400"
+      onClose={toggleAddOffenderTag}
+    >
+      {addOffenderTag ? (
+        <AddOffenderTag
+          update={updateNewOffenderTagData}
+          onClose={toggleAddOffenderTag}
+        />
+      ) : (
+        <div />
+      )}
+    </Drawer>
+    <Drawer
+      title="Add Custom Gallery"
+      visible={addCustomGallery}
+      width="400"
+      onClose={toggleAddCustomGallery}
+    >
+      {addCustomGallery ? (
+        <AddCustomGallery
+          update={updateNewCustomGalleryData}
+          onClose={toggleAddCustomGallery}
+        />
+      ) : (
+        <div />
+      )}
+    </Drawer>
   </>
 );
 export default OffenderDetails;

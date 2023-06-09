@@ -8,6 +8,7 @@ interface Props {
   fullSearch: string;
   searchMydata: boolean;
   fullCreatedAtFilter: DateType | undefined;
+  fullGroupFilter: string[];
   saving: boolean;
   groups: { value: string; label: string }[];
   groupsLoading: boolean;
@@ -21,6 +22,7 @@ const ArticlesSection = ({
   groups,
   groupsLoading,
   adminRights,
+  fullGroupFilter,
 }: Props): JSX.Element => {
   const {
     data,
@@ -40,7 +42,12 @@ const ArticlesSection = ({
     order,
     setOrder,
     setCreatedAtFilter,
-  } = useArticlesSection({ fullSearch, searchMydata, fullCreatedAtFilter });
+  } = useArticlesSection({
+    fullSearch,
+    fullGroupFilter,
+    searchMydata,
+    fullCreatedAtFilter,
+  });
 
   return (
     <View

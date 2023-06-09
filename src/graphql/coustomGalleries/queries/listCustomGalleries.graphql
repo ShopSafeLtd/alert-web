@@ -1,0 +1,19 @@
+query listCustomGalleries(
+  $take: Int
+  $skip: Int
+  $where: CustomGalleryWhereInput
+  $order: CustomGalleryOrderByWithRelationInput
+) {
+  listCustomGalleries(take: $take, skip: $skip, where: $where, order: $order) {
+    customGalleries {
+      description
+      groups {
+        id
+        name
+      }
+      id
+      name
+    }
+    total
+  }
+}

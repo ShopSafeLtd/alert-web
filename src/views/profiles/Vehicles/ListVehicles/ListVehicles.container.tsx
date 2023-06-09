@@ -12,6 +12,21 @@ const ListVehicles = () => {
     toggleAddVehicle,
     // updateVehicleList,
     onSubmit,
+    groups,
+    groupsLoading,
+    groupsFilter,
+    setGroupsFilter,
+    setCreatedAtFilter,
+    clearFilters,
+    sortFilter,
+    toggleSortFilter,
+    customGalleriesData,
+    customGalleries,
+    onSelectCustomGalleries,
+    gallery,
+    setGallery,
+    order,
+    setOrder,
   } = useListVehicles();
 
   return (
@@ -24,6 +39,21 @@ const ListVehicles = () => {
       toggleAddVehicle={toggleAddVehicle}
       // updateVehicleList={updateVehicleList}
       onSubmit={onSubmit}
+      sortFilter={sortFilter}
+      clearFilters={clearFilters}
+      toggleSortFilter={toggleSortFilter}
+      groups={groups}
+      groupsLoading={groupsLoading}
+      gallery={gallery}
+      groupsFilter={groupsFilter}
+      setGallery={setGallery}
+      setGroupsFilter={setGroupsFilter}
+      setCreatedAtFilter={setCreatedAtFilter}
+      customGalleriesData={customGalleriesData}
+      onSelectCustomGalleries={onSelectCustomGalleries}
+      customGalleries={customGalleries}
+      order={order}
+      setOrder={setOrder}
     />
   );
 };
