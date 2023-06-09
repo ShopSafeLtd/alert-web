@@ -25,6 +25,7 @@ import {
   faTrash,
   faUser,
   faUsers,
+  faUsersViewfinder,
 } from '@fortawesome/pro-light-svg-icons';
 import { Role } from 'graphql/generated';
 
@@ -147,6 +148,15 @@ const userOnlyItems: NavItem[] = [
     submenu: [],
     roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
   },
+  // {
+  //   key: 'face-ai',
+  //   path: `${APP_PREFIX_PATH}/face-ai`,
+  //   title: 'sidenav.faceAi',
+  //   icon: faUsersViewfinder,
+  //   breadcrumb: true,
+  //   submenu: [],
+  //   roles: [Role.SchemeAdmin, Role.ShopsafeAdmin],
+  // },
   {
     key: 'resources',
     path: `${APP_PREFIX_PATH}/resources`,

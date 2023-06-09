@@ -306,16 +306,7 @@ const EditIncident = ({
               </Form.Item>
             </Col>
             <Col flex={1}>
-              <Form.Item
-                name="tagsInvolved"
-                label="Aggravating Factors"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please add at least one crime type.',
-                  },
-                ]}
-              >
+              <Form.Item name="tagsInvolved" label="Aggravating Factors">
                 <Select
                   loading={tagsLoading}
                   disabled={saving}
@@ -330,16 +321,7 @@ const EditIncident = ({
               </Form.Item>
             </Col>
             <Col flex={1}>
-              <Form.Item
-                name="tagsImpact"
-                label="Incident Impact"
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please add at least one crime type.',
-                  },
-                ]}
-              >
+              <Form.Item name="tagsImpact" label="Incident Impact">
                 <Select
                   loading={tagsLoading}
                   disabled={saving}

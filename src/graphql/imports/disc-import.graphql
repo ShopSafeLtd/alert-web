@@ -1,0 +1,5 @@
+mutation DiscImportData($data: DiscImportDataInput!) {
+  discImportData(data: $data) {
+    success
+  }
+}
