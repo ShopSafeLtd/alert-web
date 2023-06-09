@@ -19,7 +19,6 @@ import {
   faEllipsisV,
   faLocationDot,
   faTrash,
-  faUser,
 } from '@fortawesome/pro-light-svg-icons';
 import {
   faAngleLeft,
@@ -116,7 +115,7 @@ const IncidentCard = ({
           </Button>
         </Dropdown>
       )}
-      <div className="incident-card-tags">
+      {/* <div className="incident-card-tags">
         <Row gutter={8}>
           {incident?.crimeTypes.map((crimeType, i) => (
             // eslint-disable-next-line react/no-array-index-key
@@ -127,7 +126,7 @@ const IncidentCard = ({
             </Col>
           ))}
         </Row>
-      </div>
+      </div> */}
       <div>
         {incident && incident.images.length > 0 ? (
           <Carousel ref={imagesRef}>
@@ -190,64 +189,85 @@ const IncidentCard = ({
           </Text>
         </div>
         {incident.offenders.length > 0 && (
-          <Row wrap={false} style={{ overflowX: 'auto', marginBottom: 15 }}>
-            {incident.offenders.map((offender) => (
-              <Link
-                to={offender.id ? `/app/offenders/view/${offender.id}` : ``}
-              >
-                <Tag key={offender.id}>
-                  {offender.name || 'Unknown Offender'}
-                </Tag>
-              </Link>
+          <Row wrap={false} style={{ overflowX: 'auto', marginBottom: 10 }}>
+            {incident.offenders.slice(0, 2).map((offender) => (
+              <Tag key={offender.id}>{offender.name || 'Unknown Offender'}</Tag>
             ))}
+            {incident.offenders.length > 2 && (
+              <Tag>+ {incident.offenders.length - 1} more</Tag>
+            )}
           </Row>
         )}
         <Link to={`/app/incidents/view/${incident?.id}`}>
-          <Row>
-            <Col flex={1}>
-              <FontAwesomeIcon
-                size="sm"
-                className="incident-card-icon"
-                icon={faClock}
-              />
-              <Text type="secondary">{incident?.dayTime}</Text>
+          <Row
+            wrap={false}
+            gutter={8}
+            style={{ marginBottom: 5, maxWidth: '100%' }}
+          >
+            <Col span={12}>
+              <Row wrap={false}>
+                <Col>
+                  <FontAwesomeIcon
+                    size="sm"
+                    className="incident-card-icon"
+                    icon={faClock}
+                  />
+                </Col>
+                <Col>
+                  <Text type="secondary">{incident?.dayTime}</Text>
+                </Col>
+              </Row>
             </Col>
-            <Col>
-              <FontAwesomeIcon
-                size="sm"
-                className="incident-card-icon"
-                icon={faUser}
-              />
-              <Text type="secondary">
-                {incident?.createdBy.fullName} -{' '}
-                {incident?.createdBy.businesses[0]?.name}
-              </Text>
-            </Col>
-          </Row>
-          <Row gutter={8} className="incident-card-location-row">
-            <Col span={1}>
-              <FontAwesomeIcon
-                size="sm"
-                className="incident-card-icon"
-                icon={faLocationDot}
-              />
-            </Col>
-            <Col span={23}>
-              <Text style={{ width: '100%' }} ellipsis type="secondary">
-                {incident?.business?.name || incident?.location?.full}
-              </Text>
+            <Col span={12}>
+              <Row wrap={false}>
+                <Col>
+                  <FontAwesomeIcon
+                    size="sm"
+                    className="incident-card-icon"
+                    icon={faLocationDot}
+                  />
+                </Col>
+                <Col>
+                  <Text style={{ flex: 1 }} ellipsis type="secondary">
+                    {incident?.business?.name || incident?.location?.full}
+                  </Text>
+                </Col>
+              </Row>
             </Col>
           </Row>
         </Link>
         <Link to={`/app/incidents/view/${incident?.id}`}>
           <Paragraph
-            style={{ height: incident.offenders.length > 0 ? 66 : 106 }}
+            style={{
+              height: incident.offenders.length > 0 ? 60 : 106,
+              marginBottom: 10,
+            }}
             className="incident-card-desc"
             type="secondary"
           >
             {incident?.description}
           </Paragraph>
         </Link>
+
+        <Row
+          gutter={8}
+          wrap={false}
+          style={{
+            overflowX: 'auto',
+            marginBottom: incident.offenders.length > 2 ? 3 : 15,
+          }}
+        >
+          <Col>
+            <Text strong type="secondary">
+              Groups:
+            </Text>
+          </Col>
+          {incident.groups.map((group) => (
+            <Col key={group.id}>
+              <Text type="secondary">{group.name || 'Unknown Offender'}</Text>
+            </Col>
+          ))}
+        </Row>
         <Row justify="center">
           <Col>
             <Link to={`/app/incidents/view/${incident?.id}`}>
