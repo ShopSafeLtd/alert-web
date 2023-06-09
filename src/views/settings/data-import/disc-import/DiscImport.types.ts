@@ -287,7 +287,7 @@ export interface HistoricIncident {
 
 export interface GenerateData {
   excludeDate: Moment;
-  defaultGroup: string | undefined;
+  defaultGroup: string[] | undefined;
   assaultViolenceAffray: string[];
   beggingPersistent: string[];
   begging: string[];

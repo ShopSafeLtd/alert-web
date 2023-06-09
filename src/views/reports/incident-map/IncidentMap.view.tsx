@@ -125,9 +125,26 @@ const HeatMapLayer = (
     maxzoom={20}
     type="heatmap"
     paint={{
-      'heatmap-weight': 2,
-      'heatmap-radius': 150,
+      'heatmap-weight': 1,
+      'heatmap-intensity': {
+        stops: [
+          [11, 1],
+          [15, 3],
+        ],
+      },
+      'heatmap-radius': {
+        stops: [
+          [11, 15],
+          [15, 30],
+        ],
+      },
       'heatmap-opacity': 0.3,
+      // 'heatmap-intensity': {
+      //   stops: [
+      //     [11, 1],
+      //     [15, 3]
+      //   ]
+      // },
     }}
   />
 );
@@ -183,21 +200,21 @@ const IncidentMap = ({
     mapRef.current?.moveLayer('cluster-count');
   }, [showHeatmap, showMarkers]);
 
-  useEffect(() => {
-    if (data?.incidents && data?.incidents.length > 0) {
-      const arr = data.incidents.map((item) => ({
-        lat: item.location?.geoLat || 0,
-        lng: item.location?.geoLng || 0,
-      }));
+  // useEffect(() => {
+  //   if (data?.incidents && data?.incidents.length > 0) {
+  //     const arr = data.incidents.map((item) => ({
+  //       lat: item.location?.geoLat || 0,
+  //       lng: item.location?.geoLng || 0,
+  //     }));
 
-      if (arr.length > 2)
-        mapRef.current?.fitBounds(
-          // @ts-expect-error needs 2
-          arr,
-          { animate: false, zoom: 11 }
-        );
-    }
-  }, [data]);
+  //     if (arr.length > 2)
+  //       mapRef.current?.fitBounds(
+  //         // @ts-expect-error needs 2
+  //         arr,
+  //         { animate: false, zoom: 11 }
+  //       );
+  //   }
+  // }, [data]);
 
   const classes = useStyles();
   return (
@@ -323,10 +340,30 @@ const IncidentMap = ({
             clusterMaxZoom={14}
             clusterRadius={50}
           >
-            {showHeatmap && HeatMapLayer}
             {showMarkers && ClusterLayer}
             {showMarkers && ClusterCountLayer}
             {showMarkers && UnClusteredLayer}
+          </Source>
+          <Source
+            id="incidents-heatmap"
+            type="geojson"
+            data={{
+              type: 'FeatureCollection',
+              features:
+                data?.incidents.map((incident) => ({
+                  type: 'Feature',
+                  properties: {},
+                  geometry: {
+                    type: 'Point',
+                    coordinates: [
+                      incident.location?.geoLng || 0,
+                      incident.location?.geoLat || 0,
+                    ],
+                  },
+                })) || [],
+            }}
+          >
+            {showHeatmap && HeatMapLayer}
           </Source>
           {showBusinesses && (
             <Source

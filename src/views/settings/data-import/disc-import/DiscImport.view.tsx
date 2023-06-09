@@ -247,6 +247,7 @@ const DiscImport = ({
           <Col>
             <Form.Item name="defaultGroup" label="Default Group">
               <Select
+                mode="multiple"
                 style={{ width: 200 }}
                 options={groupsData?.groups.map((group) => ({
                   value: group.id,

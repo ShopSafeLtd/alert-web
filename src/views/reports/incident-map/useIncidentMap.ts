@@ -51,9 +51,6 @@ const useIncidentMap = (): Return => {
   const { data, loading } = useIncidentMapQuery({
     variables: {
       where: {
-        recycled: {
-          equals: false,
-        },
         scheme: {
           id: {
             in: selectedSchemes,

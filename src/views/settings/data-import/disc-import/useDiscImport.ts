@@ -606,7 +606,9 @@ const useDiscImport = (): Return => {
           )?.id,
           email: user.email,
           fullName: `${user.firstName} ${user.lastName}`,
-          groups: [values.defaultGroup || ''].filter((item) => item !== ''),
+          groups: [...(values.defaultGroup || '')].filter(
+            (item) => item !== ''
+          ),
           role: undefined,
         });
       });
@@ -635,7 +637,9 @@ const useDiscImport = (): Return => {
           peculiarities: offender.distinguishingFeatures,
           comments: offender.comments,
           age: calcAge(offender.ageRange),
-          groups: [values.defaultGroup || ''].filter((item) => item !== ''),
+          groups: [...(values.defaultGroup || '')].filter(
+            (item) => item !== ''
+          ),
         });
       });
 
@@ -966,7 +970,9 @@ const useDiscImport = (): Return => {
           createdBy: newUserData.find(
             (user) => user.email === incident.memberEmail
           )?.id,
-          groups: [values.defaultGroup || ''].filter((item) => item !== ''),
+          groups: [...(values.defaultGroup || '')].filter(
+            (item) => item !== ''
+          ),
         });
       });
 
@@ -1311,26 +1317,25 @@ const useDiscImport = (): Return => {
       variables: {
         data: {
           businesses: [],
-          historicIncidents: [],
-          // historicIncidents: newHistoricIncidents.map((incident) => ({
-          //   importId: incident.id,
-          //   building: '',
-          //   county: '',
-          //   crimeTypes: [
-          //     ...incident.crimeTypes,
-          //     ...incident.impactTypes,
-          //     ...incident.involvedTypes,
-          //   ].map((id) => ({ id })),
-          //   date: incident.date,
-          //   lostValue: incident.lostValue,
-          //   policeInvolved: incident.policeInvolved,
-          //   policeReported: incident.policeReported,
-          //   postcode: incident.postcode,
-          //   recoveredValue: incident.recoveredValue,
-          //   street: incident.street,
-          //   time: incident.time,
-          //   townCity: '',
-          // })),
+          historicIncidents: newHistoricIncidents.map((incident) => ({
+            importId: incident.id,
+            building: '',
+            county: '',
+            crimeTypes: [
+              ...incident.crimeTypes,
+              ...incident.impactTypes,
+              ...incident.involvedTypes,
+            ].map((id) => ({ id })),
+            date: incident.date,
+            lostValue: incident.lostValue,
+            policeInvolved: incident.policeInvolved,
+            policeReported: incident.policeReported,
+            postcode: incident.postcode,
+            recoveredValue: incident.recoveredValue,
+            street: incident.street,
+            time: incident.time,
+            townCity: '',
+          })),
           images: images.map((image) => ({
             fileName: image.fileName,
             importId: image.id,
@@ -1365,20 +1370,22 @@ const useDiscImport = (): Return => {
             time: incident.time,
             townCity: '',
           })),
-          offenders: newOffenders.map((offender) => ({
-            importId: offender.id,
-            name: offender.name,
-            age: offender.age,
-            build: offender.build,
-            comment: offender.comments,
-            dateOfBirth: offender.dateOfBirth,
-            gender: offender.gender,
-            groups: offender.groups.map((id) => ({ id })),
-            height: offender.height,
-            images: offender.images.map(({ id }) => ({ id })),
-            peculiarities: offender.peculiarities,
-            race: offender.race,
-          })),
+          offenders: newOffenders
+            .map((offender) => ({
+              importId: offender.id,
+              name: offender.name,
+              age: offender.age,
+              build: offender.build,
+              comment: offender.comments,
+              dateOfBirth: offender.dateOfBirth,
+              gender: offender.gender,
+              groups: offender.groups.map((id) => ({ id })),
+              height: offender.height,
+              images: offender.images.map(({ id }) => ({ id })),
+              peculiarities: offender.peculiarities,
+              race: offender.race,
+            }))
+            .reverse(),
           scheme: {
             id: schemeId,
           },
