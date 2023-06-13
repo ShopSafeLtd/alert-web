@@ -20,9 +20,12 @@ const LoginOne = (props: Props): JSX.Element => {
       if (localStorage.getItem('logo')?.endsWith('.webp')) {
         loginWithRedirect({
           'ext-logo': localStorage.getItem('logo'),
+          appState: { returnTo: window.location.pathname },
         });
       } else {
-        loginWithRedirect();
+        loginWithRedirect({
+          appState: { returnTo: window.location.pathname },
+        });
       }
     }
   }, []);

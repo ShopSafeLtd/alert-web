@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router';
+import { Route, Routes } from 'react-router';
 import IncidentFeed from 'views/incidents/IncidentFeed';
 import ViewIncident from 'views/incidents/ViewIncident';
 import AddIncident from 'views/incidents/AddIncident';

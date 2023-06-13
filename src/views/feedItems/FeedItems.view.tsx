@@ -118,7 +118,10 @@ const FeedItem = ({
   const classes = useStyles();
 
   return (
-    <div className="feed-container" style={{ height: '100vh', padding: 15 }}>
+    <div
+      className="feed-container"
+      style={{ height: '100vh', padding: 15, overflow: 'hidden' }}
+    >
       <Card bodyStyle={{ padding: 10 }} style={{ marginBottom: 10 }}>
         <Row align="middle" gutter={16}>
           <Col span={4} xxl={6}>

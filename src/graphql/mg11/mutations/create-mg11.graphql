@@ -1,0 +1,5 @@
+mutation CreateMg11($data: MG11CreateInput!, $schemeId: String!) {
+  createMg11(data: $data, schemeId: $schemeId) {
+    id
+  }
+}

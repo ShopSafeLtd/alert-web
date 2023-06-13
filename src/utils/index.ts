@@ -276,3 +276,4 @@ export { default as isAuthorised } from './is-authorised';
 export { default as formatDate } from './formatDate';
 export { default as getMentionContent } from './formatDate';
 export { default as shouldPrint } from './should-print';
+export * from './generate-text';
