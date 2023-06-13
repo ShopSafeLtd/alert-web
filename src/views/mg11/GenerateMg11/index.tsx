@@ -1,6 +1,6 @@
 import React from 'react';
 import './styles.css';
-import { processText } from '../../../utils/generate-text';
+import processText from '../../../utils/generate-text';
 
 interface Mg11Data {
   name: string;
