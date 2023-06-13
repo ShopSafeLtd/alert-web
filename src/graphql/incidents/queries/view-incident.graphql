@@ -15,6 +15,15 @@ query ViewIncident($where: IncidentWhereUniqueInput!) {
     subscribed
     totalValue
     totalRecoveredValue
+    evidence {
+    id
+    name
+    url
+    fileType
+    }
+    scheme {
+    mg11Available
+    }
     crimeTypes {
       id
       name

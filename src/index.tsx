@@ -1,21 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Auth0Provider } from '@auth0/auth0-react';
+import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
 import '~/yet-another-react-lightbox/dist/styles.css';
+import Auth0ProviderWithNavigate from './providers/Auth0Provider';
 
 ReactDOM.render(
-  <Auth0Provider
-    domain="auth.shopsafealert.co.uk"
-    clientId="c2MqDavoao6lbVplyQTN8jq90m4PL6Io" // client id for portal in auth0
-    redirectUri={window.location.origin}
-    audience="https://app.shopsafealert.co.uk"
-    scope="read:current_user update:current_user_metadata"
-  >
-    <App />
-  </Auth0Provider>,
+  <React.StrictMode>
+    <BrowserRouter>
+      <Auth0ProviderWithNavigate>
+        <App />
+      </Auth0ProviderWithNavigate>
+    </BrowserRouter>
+  </React.StrictMode>,
   document.getElementById('root')
 );
 

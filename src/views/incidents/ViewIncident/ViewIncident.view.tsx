@@ -32,6 +32,7 @@ import {
   faBell,
   faBellSlash,
   faEdit,
+  faPage,
   faTrash,
 } from '@fortawesome/pro-light-svg-icons';
 import { Link } from 'react-router-dom';
@@ -49,6 +50,7 @@ import VehicleTable from 'components/tables/VehicleTable';
 import MapCard from 'components/map/MapCard/MapCard.view';
 import UpdateContent from './Update.view';
 import useStyles from './ViewIncident.styles';
+import EvidenceTable from '../../../components/tables/EvidenceTable';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -226,6 +228,21 @@ const ViewIncident = ({
                             icon={faEdit}
                           />
                           Edit
+                        </Button>
+                      </Link>
+                    </Col>
+                  )}
+
+                  {data?.incident?.scheme.mg11Available && (
+                    <Col>
+                      <Link to={`/app/mg11/create/${incidentId}`}>
+                        <Button type="ghost">
+                          <FontAwesomeIcon
+                            size="1x"
+                            style={{ marginRight: 8 }}
+                            icon={faPage}
+                          />
+                          Create MG11
                         </Button>
                       </Link>
                     </Col>
@@ -500,6 +517,21 @@ const ViewIncident = ({
                           />
                         )}
                       </Card>
+                      {data?.incident?.scheme.mg11Available && (
+                        <Card style={{ marginTop: 20 }}>
+                          <Title level={4}>Evidence</Title>
+                          {data?.incident?.evidence.length && !loading ? (
+                            <EvidenceTable
+                              evidence={data?.incident?.evidence}
+                            />
+                          ) : (
+                            <Empty
+                              description="No evidence for this incident"
+                              image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            />
+                          )}
+                        </Card>
+                      )}
                     </div>
                   )}
                 </div>

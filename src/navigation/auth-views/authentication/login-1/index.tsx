@@ -26,16 +26,17 @@ const LoginOne = (props: Props): JSX.Element => {
         ? 'linear-gradient(to right, #cb2d3e, #ef473b)'
         : 'linear-gradient(to right, #cb2d3e, #ef473a)',
   };
-
   useEffect(() => {
     if (!isAuthenticated && !isLoading) {
       if (localStorage.getItem('logo')?.endsWith('.webp')) {
         loginWithRedirect({
           'ext-logo': localStorage.getItem('logo'),
+          appState: { returnTo: window.location.pathname },
           redirectUri: getRedirect(),
         });
       } else {
         loginWithRedirect({
+          appState: { returnTo: window.location.pathname },
           redirectUri: getRedirect(),
         });
       }

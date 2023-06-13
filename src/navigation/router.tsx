@@ -15,12 +15,16 @@ import { useNavigate } from 'react-router';
 import { ErrorBoundary, withSentryReactRouterV6Routing } from '@sentry/react';
 import PrimaryOnboarding from '../views/onboard/SetPassword';
 import Loading from '../components/loading';
+import { GuestLayout } from '../layouts/guest-layout';
 
 const SentryRoutes = withSentryReactRouterV6Routing(Routes);
 
 export const Views = (): JSX.Element => {
   const { isLoading } = useAuth0();
-
+  const location = useLocation();
+  const currentRoute = location.pathname;
+  const guestRoutes = ['/generated', '/ext/'];
+  const guestRoute = guestRoutes.some((route) => currentRoute.includes(route));
   const locale = useStoreState((state) => state.theme.locale) as 'en' | 'fr';
   const currentTheme = useStoreState((state) => state.theme.currentTheme);
   const t = localStorage.getItem('theme');
@@ -34,14 +38,13 @@ export const Views = (): JSX.Element => {
 
   const isSet = useStoreState((state) => state.auth.isSet);
   const userId = useStoreState((state) => state.user.id);
-  const location = useLocation();
   const navigate = useNavigate();
   const currentAppLocale = AppLocale[locale];
 
   const { rehydrateAuth, loading } = useAuth();
 
   useEffect(() => {
-    rehydrateAuth();
+    if (!guestRoute) rehydrateAuth();
     // eslint-disable-next-line
   }, []);
 
@@ -66,14 +69,25 @@ export const Views = (): JSX.Element => {
     variables: {
       id: userId,
     },
+    skip: guestRoute,
     onCompleted: (res) => {
       if (res.userNew?.newUser) {
         navigate('/app/onboarding');
       }
     },
   });
-  if (loading || isLoading || !isSet) return <Loading />;
+  if ((loading || isLoading || !isSet) && !guestRoute) return <Loading />;
 
+  if (guestRoute)
+    return (
+      <div style={{ colorScheme: currentTheme }}>
+        <ThemeProvider theme={theme[currentTheme]}>
+          <Routes>
+            <Route path="ext/*" element={<GuestLayout />} />
+          </Routes>
+        </ThemeProvider>
+      </div>
+    );
   return (
     <ErrorBoundary>
       <div style={{ colorScheme: currentTheme }}>
