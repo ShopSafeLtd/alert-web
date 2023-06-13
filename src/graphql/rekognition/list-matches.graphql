@@ -42,7 +42,7 @@ query ListRekMatches($where: RekMatchWhereInput, $skip: Int, $take: Int) {
           }
         }
       }
-      offender {
+      matchedOffender {
         id
         name
       }

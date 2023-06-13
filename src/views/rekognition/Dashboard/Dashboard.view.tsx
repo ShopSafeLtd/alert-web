@@ -113,7 +113,7 @@ const MatchRow = ({ match }: RowProps) => {
     <Card>
       <Row>
         <Col>
-          <Title level={4}>{match.offender?.name}</Title>
+          <Title level={4}>{match.matchedOffender?.name}</Title>
 
           <canvas ref={canvasRef} width={width} height={height} />
         </Col>

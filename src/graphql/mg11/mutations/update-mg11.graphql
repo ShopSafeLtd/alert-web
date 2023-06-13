@@ -1,0 +1,5 @@
+mutation UpdateOneMG11($data: MG11UpdateInput!, $where: MG11WhereUniqueInput!) {
+  updateOneMG11(data: $data, where: $where) {
+    id
+  }
+}

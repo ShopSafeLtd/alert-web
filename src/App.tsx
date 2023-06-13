@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  BrowserRouter as Router,
   createRoutesFromChildren,
   matchRoutes,
   useLocation,
@@ -81,9 +80,7 @@ const App = (): JSX.Element => (
       >
         <Store>
           <ApolloProvider>
-            <Router>
-              <Views />
-            </Router>
+            <Views />
           </ApolloProvider>
         </Store>
       </LoadScript>

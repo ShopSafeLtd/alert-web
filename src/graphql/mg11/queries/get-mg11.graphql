@@ -1,0 +1,42 @@
+query FetchMg11($where: MG11WhereUniqueInput!) {
+  mg11(where: $where) {
+    id
+    status
+    statement
+    address
+    postcode
+    homeTel
+    workTel
+    mobileTel
+    email
+    name
+    age
+    urn
+    occupation
+    visualRecording
+    prefContact
+    gender
+    dobPlace
+    formerName
+    incidentId
+    height
+    ethnicity
+    availability
+    likelyToAttend
+    likelyToAttendReason
+    specialMeasures
+    careNeeds
+    careNeedsDetails
+    detailsExplained
+    leafletReceived
+    medicalReleasedPolice
+    medicalReleasedDefence
+    civilProceedingsRelease
+    witnessServiceDisclose
+    witnessSignature
+    witnessSignatureDate
+    interviewerSignature
+    station
+    statementWhereWhen
+  }
+}
