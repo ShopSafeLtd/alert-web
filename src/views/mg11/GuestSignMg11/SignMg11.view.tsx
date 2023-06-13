@@ -70,7 +70,7 @@ const CreateMg11 = ({
   if (status !== Mg11Status.Sent) {
     return (
       <div>
-        This statement either doesn&apos;t exisit or has been completed. Please
+        This statement either doesn&apos;t exist or has been completed. Please
         contact support for more
       </div>
     );
