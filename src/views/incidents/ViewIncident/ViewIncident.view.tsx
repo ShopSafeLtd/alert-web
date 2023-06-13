@@ -232,7 +232,8 @@ const ViewIncident = ({
                       </Link>
                     </Col>
                   )}
-                  {editRights && (
+
+                  {data?.incident?.scheme.mg11Available && (
                     <Col>
                       <Link to={`/app/mg11/create/${incidentId}`}>
                         <Button type="ghost">
