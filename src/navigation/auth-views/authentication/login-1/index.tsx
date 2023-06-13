@@ -6,6 +6,17 @@ import type { Props } from '../../components/LoginForm';
 import { LoginForm } from '../../components/LoginForm';
 import Loading from '../../../../components/loading';
 
+const getRedirect = () => {
+  const location = window.location.origin;
+  if (location.includes('localhost')) {
+    return location;
+  }
+  if (location.includes('staging')) {
+    return 'https://app.shopsafealert.co.uk/';
+  }
+  return location;
+};
+
 const LoginOne = (props: Props): JSX.Element => {
   const theme = useStoreState((state) => state.theme.currentTheme);
   const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
@@ -21,10 +32,12 @@ const LoginOne = (props: Props): JSX.Element => {
         loginWithRedirect({
           'ext-logo': localStorage.getItem('logo'),
           appState: { returnTo: window.location.pathname },
+          redirectUri: getRedirect(),
         });
       } else {
         loginWithRedirect({
           appState: { returnTo: window.location.pathname },
+          redirectUri: getRedirect(),
         });
       }
     }
