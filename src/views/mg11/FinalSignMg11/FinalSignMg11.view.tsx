@@ -152,9 +152,9 @@ const generateMg11 = ({
                 <div className="field-date">
                   Date:{' '}
                   {data.witnessSignatureDate
-                    ? new Date(data.witnessSignatureDate).toLocaleDateString(
-                        'en-GB'
-                      )
+                    ? new Date(
+                        new Date(data.witnessSignatureDate)
+                      ).toLocaleDateString('en-GB')
                     : new Date().toLocaleDateString('en-GB')}
                 </div>
               </div>
@@ -467,18 +467,18 @@ const generateMg11 = ({
           <section className="section" style={{ borderBottom: 0 }}>
             <div className="fields" style={{ marginLeft: 0, marginTop: 15 }}>
               <div className="field">
-                <div className="field-label">
+                <div className="field-label" style={{ width: '90%' }}>
                   Statement taken by (print name):{'   '}{' '}
                   {data.statementTakerName}
                 </div>
               </div>
               <div className="field">
-                <div className="field-label">
+                <div className="field-label" style={{ width: '90%' }}>
                   Station:{'   '} {data.station}
                 </div>
               </div>
               <div className="field">
-                <div className="field-label">
+                <div className="field-label" style={{ width: '90%' }}>
                   Time and place statement taken:{'   '}{' '}
                   {data.statementWhereWhen}
                 </div>{' '}
