@@ -118,7 +118,10 @@ const Apollo = ({ children }: Props): JSX.Element => {
               return forward(operation);
             });
           }
-          if (!message.startsWith('Not Auth')) {
+          if (
+            !message.includes('Not Auth') ||
+            !message.includes('USER_CONTEXT_ERROR')
+          ) {
             Sentry.captureMessage(
               `[GraphQL error]: Message: ${message}, Location: ${JSON.stringify(
                 locations
