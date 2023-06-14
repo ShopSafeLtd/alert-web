@@ -110,6 +110,7 @@ export const Views = (): JSX.Element => {
                       path="onboarding/password"
                       element={<PrimaryOnboarding userId={userId} />}
                     />
+                    <Route path="*" element={<Navigate to="app" />} />
                   </Route>
                 </SentryRoutes>
               ) : (
